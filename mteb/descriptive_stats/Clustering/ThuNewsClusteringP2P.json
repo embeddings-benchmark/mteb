@@ -1,0 +1,58 @@
+{
+    "test": {
+        "num_samples": 10,
+        "number_of_characters": 100000,
+        "min_text_length": 10000,
+        "average_text_length": 10000.0,
+        "max_text_length": 10000,
+        "unique_texts": 99850,
+        "min_labels_per_text": 425,
+        "average_labels_per_text": 10000.0,
+        "max_labels_per_text": 19563,
+        "unique_labels": 14,
+        "labels": {
+            "\u4f53\u80b2": {
+                "count": 15757
+            },
+            "\u5a31\u4e50": {
+                "count": 10896
+            },
+            "\u79d1\u6280": {
+                "count": 19563
+            },
+            "\u6559\u80b2": {
+                "count": 4986
+            },
+            "\u80a1\u7968": {
+                "count": 18551
+            },
+            "\u6e38\u620f": {
+                "count": 2920
+            },
+            "\u8d22\u7ecf": {
+                "count": 4517
+            },
+            "\u5bb6\u5c45": {
+                "count": 3908
+            },
+            "\u793e\u4f1a": {
+                "count": 6031
+            },
+            "\u65f6\u653f": {
+                "count": 7510
+            },
+            "\u623f\u4ea7": {
+                "count": 2459
+            },
+            "\u65f6\u5c1a": {
+                "count": 1588
+            },
+            "\u661f\u5ea7": {
+                "count": 425
+            },
+            "\u5f69\u7968": {
+                "count": 889
+            }
+        }
+    }
+}

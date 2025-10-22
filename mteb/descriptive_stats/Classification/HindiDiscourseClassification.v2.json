@@ -1,0 +1,78 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 149629,
+            "min_text_length": 10,
+            "average_text_length": 73.06103515625,
+            "max_text_length": 579,
+            "unique_texts": 2048
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 6,
+            "labels": {
+                "4": {
+                    "count": 651
+                },
+                "2": {
+                    "count": 597
+                },
+                "1": {
+                    "count": 755
+                },
+                "0": {
+                    "count": 26
+                },
+                "3": {
+                    "count": 18
+                },
+                "5": {
+                    "count": 1
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 2048,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 149896,
+            "min_text_length": 10,
+            "average_text_length": 73.19140625,
+            "max_text_length": 553,
+            "unique_texts": 2048
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 6,
+            "labels": {
+                "1": {
+                    "count": 755
+                },
+                "2": {
+                    "count": 598
+                },
+                "3": {
+                    "count": 18
+                },
+                "4": {
+                    "count": 650
+                },
+                "0": {
+                    "count": 26
+                },
+                "5": {
+                    "count": 1
+                }
+            }
+        }
+    }
+}

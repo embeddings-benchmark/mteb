@@ -1,0 +1,62 @@
+"""Models for GeoGPT-Research-Project"""
+
+import torch
+
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
+from mteb.models.model_meta import ModelMeta
+
+geoembedding = ModelMeta(
+    name="GeoGPT-Research-Project/GeoEmbedding",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="29803c28ea7ef6871194a8ebc85ad7bfe174928e",
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template="Instruct: {instruction}\nQuery: ",
+        apply_instruction_to_passages=False,
+        model_kwargs={"torch_dtype": torch.bfloat16},
+        trust_remote_code=True,
+    ),
+    release_date="2025-04-22",
+    n_parameters=7241732096,
+    memory_usage_mb=27625,
+    embed_dim=4096,
+    license="apache-2.0",
+    max_tokens=32768,
+    reference="https://huggingface.co/GeoGPT-Research-Project/GeoEmbedding",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={
+        "ArguAna",
+        "FEVER",
+        "MSMARCO",
+        "FiQA2018",
+        "HotpotQA",
+        "NFCorpus",
+        "SciFact",
+        "AmazonCounterfactualClassification",
+        "AmazonPolarityClassification",
+        "AmazonReviewsClassification",
+        "Banking77Classification",
+        "EmotionClassification",
+        "MassiveIntentClassification",
+        "MTOPDomainClassification",
+        "MTOPIntentClassification",
+        "ToxicConversationsClassification",
+        "TweetSentimentExtractionClassification",
+        "ArxivClusteringS2S",
+        "ArxivClusteringP2P",
+        "MedrixvClusteringS2S",
+        "MedrixvClusteringP2P",
+        "BiorxivClusteringS2S",
+        "BiorxivClusteringP2P",
+        "TwentyNewsgroupsClustering",
+        "STS12",
+        "STS22",
+        "STSBenchmark",
+        "StackOverflowDupQuestions",
+    },
+)

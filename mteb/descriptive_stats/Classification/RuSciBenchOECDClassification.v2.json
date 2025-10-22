@@ -1,0 +1,648 @@
+{
+    "test": {
+        "num_samples": 6179,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 5316955,
+            "min_text_length": 96,
+            "average_text_length": 860.4879430328532,
+            "max_text_length": 8942,
+            "unique_texts": 6179
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 29,
+            "labels": {
+                "303": {
+                    "count": 213
+                },
+                "508": {
+                    "count": 212
+                },
+                "604": {
+                    "count": 214
+                },
+                "502": {
+                    "count": 212
+                },
+                "501": {
+                    "count": 214
+                },
+                "106": {
+                    "count": 210
+                },
+                "105": {
+                    "count": 213
+                },
+                "507": {
+                    "count": 213
+                },
+                "403": {
+                    "count": 208
+                },
+                "205": {
+                    "count": 213
+                },
+                "203": {
+                    "count": 214
+                },
+                "302": {
+                    "count": 212
+                },
+                "506": {
+                    "count": 214
+                },
+                "104": {
+                    "count": 214
+                },
+                "207": {
+                    "count": 213
+                },
+                "204": {
+                    "count": 213
+                },
+                "503": {
+                    "count": 214
+                },
+                "401": {
+                    "count": 212
+                },
+                "602": {
+                    "count": 214
+                },
+                "603": {
+                    "count": 212
+                },
+                "601": {
+                    "count": 214
+                },
+                "201": {
+                    "count": 214
+                },
+                "103": {
+                    "count": 214
+                },
+                "211": {
+                    "count": 214
+                },
+                "402": {
+                    "count": 214
+                },
+                "505": {
+                    "count": 214
+                },
+                "504": {
+                    "count": 214
+                },
+                "101": {
+                    "count": 213
+                },
+                "202": {
+                    "count": 214
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "oecd_ru": {
+                "num_samples": 3197,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 2649950,
+                    "min_text_length": 96,
+                    "average_text_length": 828.8864560525493,
+                    "max_text_length": 4416,
+                    "unique_texts": 3197
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 29,
+                    "labels": {
+                        "303": {
+                            "count": 110
+                        },
+                        "508": {
+                            "count": 109
+                        },
+                        "604": {
+                            "count": 111
+                        },
+                        "502": {
+                            "count": 109
+                        },
+                        "501": {
+                            "count": 111
+                        },
+                        "106": {
+                            "count": 107
+                        },
+                        "105": {
+                            "count": 111
+                        },
+                        "507": {
+                            "count": 111
+                        },
+                        "403": {
+                            "count": 106
+                        },
+                        "205": {
+                            "count": 110
+                        },
+                        "203": {
+                            "count": 111
+                        },
+                        "302": {
+                            "count": 110
+                        },
+                        "506": {
+                            "count": 111
+                        },
+                        "104": {
+                            "count": 111
+                        },
+                        "207": {
+                            "count": 111
+                        },
+                        "204": {
+                            "count": 110
+                        },
+                        "503": {
+                            "count": 111
+                        },
+                        "401": {
+                            "count": 109
+                        },
+                        "602": {
+                            "count": 111
+                        },
+                        "603": {
+                            "count": 109
+                        },
+                        "601": {
+                            "count": 111
+                        },
+                        "201": {
+                            "count": 111
+                        },
+                        "103": {
+                            "count": 111
+                        },
+                        "211": {
+                            "count": 111
+                        },
+                        "402": {
+                            "count": 111
+                        },
+                        "505": {
+                            "count": 111
+                        },
+                        "504": {
+                            "count": 111
+                        },
+                        "101": {
+                            "count": 110
+                        },
+                        "202": {
+                            "count": 111
+                        }
+                    }
+                }
+            },
+            "oecd_en": {
+                "num_samples": 2982,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 2667005,
+                    "min_text_length": 113,
+                    "average_text_length": 894.3678739101274,
+                    "max_text_length": 8942,
+                    "unique_texts": 2982
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 29,
+                    "labels": {
+                        "502": {
+                            "count": 103
+                        },
+                        "103": {
+                            "count": 103
+                        },
+                        "105": {
+                            "count": 102
+                        },
+                        "205": {
+                            "count": 103
+                        },
+                        "101": {
+                            "count": 103
+                        },
+                        "601": {
+                            "count": 103
+                        },
+                        "604": {
+                            "count": 103
+                        },
+                        "207": {
+                            "count": 102
+                        },
+                        "505": {
+                            "count": 103
+                        },
+                        "303": {
+                            "count": 103
+                        },
+                        "402": {
+                            "count": 103
+                        },
+                        "201": {
+                            "count": 103
+                        },
+                        "603": {
+                            "count": 103
+                        },
+                        "211": {
+                            "count": 103
+                        },
+                        "106": {
+                            "count": 103
+                        },
+                        "202": {
+                            "count": 103
+                        },
+                        "501": {
+                            "count": 103
+                        },
+                        "302": {
+                            "count": 102
+                        },
+                        "507": {
+                            "count": 102
+                        },
+                        "203": {
+                            "count": 103
+                        },
+                        "401": {
+                            "count": 103
+                        },
+                        "403": {
+                            "count": 102
+                        },
+                        "104": {
+                            "count": 103
+                        },
+                        "506": {
+                            "count": 103
+                        },
+                        "508": {
+                            "count": 103
+                        },
+                        "504": {
+                            "count": 103
+                        },
+                        "602": {
+                            "count": 103
+                        },
+                        "204": {
+                            "count": 103
+                        },
+                        "503": {
+                            "count": 103
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 53204,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 45981970,
+            "min_text_length": 76,
+            "average_text_length": 864.2577625742425,
+            "max_text_length": 9998,
+            "unique_texts": 53203
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 29,
+            "labels": {
+                "502": {
+                    "count": 1837
+                },
+                "402": {
+                    "count": 1828
+                },
+                "501": {
+                    "count": 1837
+                },
+                "403": {
+                    "count": 1819
+                },
+                "201": {
+                    "count": 1838
+                },
+                "507": {
+                    "count": 1835
+                },
+                "211": {
+                    "count": 1835
+                },
+                "205": {
+                    "count": 1836
+                },
+                "401": {
+                    "count": 1834
+                },
+                "503": {
+                    "count": 1836
+                },
+                "105": {
+                    "count": 1833
+                },
+                "106": {
+                    "count": 1821
+                },
+                "103": {
+                    "count": 1838
+                },
+                "506": {
+                    "count": 1833
+                },
+                "207": {
+                    "count": 1838
+                },
+                "202": {
+                    "count": 1838
+                },
+                "603": {
+                    "count": 1836
+                },
+                "602": {
+                    "count": 1839
+                },
+                "303": {
+                    "count": 1837
+                },
+                "302": {
+                    "count": 1833
+                },
+                "204": {
+                    "count": 1835
+                },
+                "604": {
+                    "count": 1835
+                },
+                "203": {
+                    "count": 1839
+                },
+                "504": {
+                    "count": 1836
+                },
+                "104": {
+                    "count": 1829
+                },
+                "101": {
+                    "count": 1837
+                },
+                "508": {
+                    "count": 1836
+                },
+                "601": {
+                    "count": 1837
+                },
+                "505": {
+                    "count": 1839
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "oecd_ru": {
+                "num_samples": 27680,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 22977072,
+                    "min_text_length": 76,
+                    "average_text_length": 830.0965317919075,
+                    "max_text_length": 9998,
+                    "unique_texts": 27680
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 29,
+                    "labels": {
+                        "502": {
+                            "count": 957
+                        },
+                        "402": {
+                            "count": 948
+                        },
+                        "501": {
+                            "count": 957
+                        },
+                        "403": {
+                            "count": 940
+                        },
+                        "201": {
+                            "count": 957
+                        },
+                        "507": {
+                            "count": 954
+                        },
+                        "211": {
+                            "count": 955
+                        },
+                        "205": {
+                            "count": 956
+                        },
+                        "401": {
+                            "count": 954
+                        },
+                        "503": {
+                            "count": 955
+                        },
+                        "105": {
+                            "count": 954
+                        },
+                        "106": {
+                            "count": 941
+                        },
+                        "103": {
+                            "count": 957
+                        },
+                        "506": {
+                            "count": 954
+                        },
+                        "207": {
+                            "count": 958
+                        },
+                        "202": {
+                            "count": 957
+                        },
+                        "603": {
+                            "count": 956
+                        },
+                        "602": {
+                            "count": 958
+                        },
+                        "303": {
+                            "count": 956
+                        },
+                        "302": {
+                            "count": 955
+                        },
+                        "204": {
+                            "count": 955
+                        },
+                        "604": {
+                            "count": 957
+                        },
+                        "203": {
+                            "count": 958
+                        },
+                        "504": {
+                            "count": 956
+                        },
+                        "104": {
+                            "count": 948
+                        },
+                        "101": {
+                            "count": 957
+                        },
+                        "508": {
+                            "count": 956
+                        },
+                        "601": {
+                            "count": 956
+                        },
+                        "505": {
+                            "count": 958
+                        }
+                    }
+                }
+            },
+            "oecd_en": {
+                "num_samples": 25524,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 23004898,
+                    "min_text_length": 77,
+                    "average_text_length": 901.3045760852531,
+                    "max_text_length": 8248,
+                    "unique_texts": 25523
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 29,
+                    "labels": {
+                        "302": {
+                            "count": 878
+                        },
+                        "506": {
+                            "count": 879
+                        },
+                        "402": {
+                            "count": 880
+                        },
+                        "504": {
+                            "count": 880
+                        },
+                        "501": {
+                            "count": 880
+                        },
+                        "602": {
+                            "count": 881
+                        },
+                        "403": {
+                            "count": 879
+                        },
+                        "604": {
+                            "count": 878
+                        },
+                        "106": {
+                            "count": 880
+                        },
+                        "211": {
+                            "count": 880
+                        },
+                        "207": {
+                            "count": 880
+                        },
+                        "202": {
+                            "count": 881
+                        },
+                        "104": {
+                            "count": 881
+                        },
+                        "502": {
+                            "count": 880
+                        },
+                        "401": {
+                            "count": 880
+                        },
+                        "101": {
+                            "count": 880
+                        },
+                        "303": {
+                            "count": 881
+                        },
+                        "201": {
+                            "count": 881
+                        },
+                        "508": {
+                            "count": 880
+                        },
+                        "601": {
+                            "count": 881
+                        },
+                        "204": {
+                            "count": 880
+                        },
+                        "105": {
+                            "count": 879
+                        },
+                        "505": {
+                            "count": 881
+                        },
+                        "503": {
+                            "count": 881
+                        },
+                        "603": {
+                            "count": 880
+                        },
+                        "507": {
+                            "count": 881
+                        },
+                        "205": {
+                            "count": 880
+                        },
+                        "203": {
+                            "count": 881
+                        },
+                        "103": {
+                            "count": 881
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

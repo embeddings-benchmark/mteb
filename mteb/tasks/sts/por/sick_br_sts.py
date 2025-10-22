@@ -1,0 +1,70 @@
+from mteb.abstasks.sts import AbsTaskSTS
+from mteb.abstasks.task_metadata import TaskMetadata
+
+N_SAMPLES = 1000
+
+
+class SickBrSTS(AbsTaskSTS):
+    metadata = TaskMetadata(
+        name="SICK-BR-STS",
+        dataset={
+            "path": "eduagarcia/sick-br",
+            "revision": "0cdfb1d51ef339011c067688a3b75b82f927c097",
+        },
+        description="SICK-BR is a Portuguese inference corpus, human translated from SICK",
+        reference="https://linux.ime.usp.br/~thalen/SICK_PT.pdf",
+        type="STS",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["por-Latn"],
+        main_score="cosine_spearman",
+        date=("2018-01-01", "2018-09-01"),  # rough estimate
+        domains=["Web", "Written"],
+        task_subtypes=["Textual Entailment"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="human-translated and localized",
+        bibtex_citation=r"""
+@inproceedings{real18,
+  author = {Real, Livy
+and Rodrigues, Ana
+and Vieira e Silva, Andressa
+and Albiero, Beatriz
+and Thalenberg, Bruna
+and Guide, Bruno
+and Silva, Cindy
+and de Oliveira Lima, Guilherme
+and Camara, Igor C. S.
+and Stanojevi{\'{c}}, Milo{\v{s}}
+and Souza, Rodrigo
+and de Paiva, Valeria},
+  booktitle = {{Computational Processing of the Portuguese Language. PROPOR 2018.}},
+  doi = {10.1007/978-3-319-99722-3_31},
+  isbn = {978-3-319-99722-3},
+  title = {{SICK-BR: A Portuguese Corpus for Inference}},
+  year = {2018},
+}
+""",
+    )
+
+    min_score = 1
+    max_score = 5
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            seed=42,
+            splits=self.metadata.eval_splits,
+            label="entailment_label",
+        )
+
+        self.dataset = self.dataset.rename_columns(
+            {
+                "sentence_A": "sentence1",
+                "sentence_B": "sentence2",
+                "relatedness_score": "score",
+                "pair_ID": "id",
+            }
+        )

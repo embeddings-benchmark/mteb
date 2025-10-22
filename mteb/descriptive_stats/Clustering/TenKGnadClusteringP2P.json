@@ -1,0 +1,43 @@
+{
+    "test": {
+        "num_samples": 10,
+        "number_of_characters": 45914,
+        "min_text_length": 1436,
+        "average_text_length": 4591.4,
+        "max_text_length": 9962,
+        "unique_texts": 10275,
+        "min_labels_per_text": 2371,
+        "average_labels_per_text": 4591.4,
+        "max_labels_per_text": 7537,
+        "unique_labels": 9,
+        "labels": {
+            "Panorama": {
+                "count": 7537
+            },
+            "Inland": {
+                "count": 4525
+            },
+            "International": {
+                "count": 6765
+            },
+            "Wirtschaft": {
+                "count": 6371
+            },
+            "Web": {
+                "count": 7438
+            },
+            "Wissenschaft": {
+                "count": 2578
+            },
+            "Sport": {
+                "count": 5310
+            },
+            "Kultur": {
+                "count": 2371
+            },
+            "Etat": {
+                "count": 3019
+            }
+        }
+    }
+}

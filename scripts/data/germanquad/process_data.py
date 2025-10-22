@@ -2,8 +2,6 @@
 beir.datasets.data_loader_hf.HFDataLoader for BEIR format.
 """
 
-from __future__ import annotations
-
 from datasets import Dataset, DatasetDict, Features, Value, load_dataset
 
 dataset = load_dataset("deepset/germanquad")

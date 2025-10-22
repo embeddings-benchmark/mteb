@@ -1,0 +1,99 @@
+{
+    "test": {
+        "num_samples": 53787,
+        "text_statistics": {
+            "total_text_length": 89499827,
+            "min_text_length": 139,
+            "average_text_length": 1663.9676315838399,
+            "max_text_length": 8912,
+            "unique_texts": 53784
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 26,
+            "labels": {
+                "bioinformatics": {
+                    "count": 4324
+                },
+                "evolutionary biology": {
+                    "count": 2548
+                },
+                "synthetic biology": {
+                    "count": 480
+                },
+                "genetics": {
+                    "count": 1668
+                },
+                "plant biology": {
+                    "count": 2005
+                },
+                "neuroscience": {
+                    "count": 9821
+                },
+                "zoology": {
+                    "count": 297
+                },
+                "biophysics": {
+                    "count": 2700
+                },
+                "developmental biology": {
+                    "count": 1720
+                },
+                "cell biology": {
+                    "count": 3179
+                },
+                "bioengineering": {
+                    "count": 1626
+                },
+                "microbiology": {
+                    "count": 5368
+                },
+                "ecology": {
+                    "count": 2467
+                },
+                "biochemistry": {
+                    "count": 2167
+                },
+                "genomics": {
+                    "count": 2423
+                },
+                "animal behavior and cognition": {
+                    "count": 816
+                },
+                "cancer biology": {
+                    "count": 2105
+                },
+                "immunology": {
+                    "count": 2632
+                },
+                "scientific communication and education": {
+                    "count": 245
+                },
+                "systems biology": {
+                    "count": 1078
+                },
+                "molecular biology": {
+                    "count": 2094
+                },
+                "physiology": {
+                    "count": 936
+                },
+                "epidemiology": {
+                    "count": 4
+                },
+                "pharmacology and toxicology": {
+                    "count": 634
+                },
+                "pathology": {
+                    "count": 364
+                },
+                "paleontology": {
+                    "count": 86
+                }
+            }
+        }
+    }
+}

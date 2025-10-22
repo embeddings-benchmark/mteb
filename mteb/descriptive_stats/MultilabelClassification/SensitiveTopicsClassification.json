@@ -1,0 +1,156 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 195229,
+            "min_text_length": 18,
+            "average_text_length": 95.32666015625,
+            "max_text_length": 248,
+            "unique_texts": 2048
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 0,
+            "average_label_per_text": 1.26416015625,
+            "max_labels_per_text": 4,
+            "unique_labels": 19,
+            "labels": {
+                "None": {
+                    "count": 373
+                },
+                "0": {
+                    "count": 163
+                },
+                "13": {
+                    "count": 248
+                },
+                "12": {
+                    "count": 315
+                },
+                "16": {
+                    "count": 166
+                },
+                "4": {
+                    "count": 256
+                },
+                "15": {
+                    "count": 119
+                },
+                "2": {
+                    "count": 133
+                },
+                "10": {
+                    "count": 148
+                },
+                "1": {
+                    "count": 52
+                },
+                "8": {
+                    "count": 53
+                },
+                "17": {
+                    "count": 238
+                },
+                "9": {
+                    "count": 221
+                },
+                "14": {
+                    "count": 138
+                },
+                "6": {
+                    "count": 46
+                },
+                "5": {
+                    "count": 110
+                },
+                "11": {
+                    "count": 163
+                },
+                "7": {
+                    "count": 11
+                },
+                "3": {
+                    "count": 9
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 29177,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 3484328,
+            "min_text_length": 16,
+            "average_text_length": 119.42036535627378,
+            "max_text_length": 249,
+            "unique_texts": 29177
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 0,
+            "average_label_per_text": 0.9729581519690167,
+            "max_labels_per_text": 6,
+            "unique_labels": 19,
+            "labels": {
+                "5": {
+                    "count": 1002
+                },
+                "None": {
+                    "count": 2867
+                },
+                "7": {
+                    "count": 1371
+                },
+                "2": {
+                    "count": 3604
+                },
+                "9": {
+                    "count": 1888
+                },
+                "10": {
+                    "count": 902
+                },
+                "11": {
+                    "count": 1453
+                },
+                "14": {
+                    "count": 3814
+                },
+                "15": {
+                    "count": 1647
+                },
+                "1": {
+                    "count": 901
+                },
+                "0": {
+                    "count": 1404
+                },
+                "13": {
+                    "count": 983
+                },
+                "17": {
+                    "count": 1371
+                },
+                "6": {
+                    "count": 905
+                },
+                "3": {
+                    "count": 2020
+                },
+                "16": {
+                    "count": 1181
+                },
+                "4": {
+                    "count": 1372
+                },
+                "12": {
+                    "count": 1423
+                },
+                "8": {
+                    "count": 1147
+                }
+            }
+        }
+    }
+}
