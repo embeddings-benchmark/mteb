@@ -340,7 +340,7 @@ def get_task(
     """
     if languages is not None:
         for lang in languages:
-            if (
+            if not (
                 len(lang) == 3  # ISO 639-3 language code
                 or len(lang) == 4  # script code
                 or len(lang) == 8  # language-script code
