@@ -206,6 +206,8 @@ _HISTORIC_DATASETS = [
     "VGClustering",
     "VisualSTS17Eng",
     "VisualSTS17Multilingual",
+    "FEVERHardNegatives.v2",
+    "QuoraRetrievalHardNegatives.v2",
 ]
 
 
