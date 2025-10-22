@@ -3,6 +3,8 @@ from dataclasses import dataclass
 
 from typing_extensions import Self
 
+from mteb.languages import ISO_TO_LANGUAGE, check_language_code
+
 
 @dataclass
 class LanguageScripts:
@@ -49,6 +51,13 @@ class LanguageScripts:
                     script_codes.add(lang_script[1])
                 else:
                     normalized_langs.add(lang)
+
+        for lang in normalized_langs:
+            if lang not in ISO_TO_LANGUAGE:
+                raise ValueError(f"Invalid ISO 639-3 language code '{lang}'.")
+
+        for script in script_codes:
+            check_language_code(script)
 
         return cls(
             language_scripts=lang_script_codes,
