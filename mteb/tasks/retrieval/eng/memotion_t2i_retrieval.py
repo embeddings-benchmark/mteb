@@ -18,7 +18,6 @@ def _load_data(path: str, splits: str, revision: str | None = None):
     def map_function(split_name):
         return lambda x, idx: {
             "id": f"corpus-{split_name}-{idx}",
-            "text": None,
             "modality": "image",
         }
 
@@ -56,7 +55,6 @@ def _load_data(path: str, splits: str, revision: str | None = None):
                 "id": f"query-{split}-{idx}",
                 "text": x["text_corrected"],
                 "modality": "text",
-                "image": None,
             },
             with_indices=True,
             remove_columns=[
