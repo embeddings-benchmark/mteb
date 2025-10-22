@@ -14,6 +14,30 @@ from .birco_whats_that_book_reranking import BIRCOWhatsThatBookReranking
 from .blink_it2i_retrieval import BLINKIT2IRetrieval
 from .blink_it2t_retrieval import BLINKIT2TRetrieval
 from .bright_retrieval import BrightLongRetrieval, BrightRetrieval
+from .bright_subset_long_retrieval import (
+    BrightBiologyLongRetrieval,
+    BrightEarthScienceLongRetrieval,
+    BrightEconomicsLongRetrieval,
+    BrightPonyLongRetrieval,
+    BrightPsychologyLongRetrieval,
+    BrightRoboticsLongRetrieval,
+    BrightStackoverflowLongRetrieval,
+    BrightSustainableLivingLongRetrieval,
+)
+from .bright_subsets_retrieval import (
+    BrightAopsRetrieval,
+    BrightBiologyRetrieval,
+    BrightEarthScienceRetrieval,
+    BrightEconomicsRetrieval,
+    BrightLeetcodeRetrieval,
+    BrightPonyRetrieval,
+    BrightPsychologyRetrieval,
+    BrightRoboticsRetrieval,
+    BrightStackoverflowRetrieval,
+    BrightSustainableLivingRetrieval,
+    BrightTheoremQAQuestionsRetrieval,
+    BrightTheoremQATheoremsRetrieval,
+)
 from .built_bench_retrieval import BuiltBenchRetrieval
 from .chat_doctor_retrieval import ChatDoctorRetrieval
 from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval
@@ -226,8 +250,28 @@ __all__ = [
     "BarExamQARetrieval",
     "BillSumCARetrieval",
     "BillSumUSRetrieval",
+    "BrightAopsRetrieval",
+    "BrightBiologyLongRetrieval",
+    "BrightBiologyRetrieval",
+    "BrightEarthScienceLongRetrieval",
+    "BrightEarthScienceRetrieval",
+    "BrightEconomicsLongRetrieval",
+    "BrightEconomicsRetrieval",
+    "BrightLeetcodeRetrieval",
     "BrightLongRetrieval",
+    "BrightPonyLongRetrieval",
+    "BrightPonyRetrieval",
+    "BrightPsychologyLongRetrieval",
+    "BrightPsychologyRetrieval",
     "BrightRetrieval",
+    "BrightRoboticsLongRetrieval",
+    "BrightRoboticsRetrieval",
+    "BrightStackoverflowLongRetrieval",
+    "BrightStackoverflowRetrieval",
+    "BrightSustainableLivingLongRetrieval",
+    "BrightSustainableLivingRetrieval",
+    "BrightTheoremQAQuestionsRetrieval",
+    "BrightTheoremQATheoremsRetrieval",
     "BuiltBenchRetrieval",
     "CIRRIT2IRetrieval",
     "CQADupstackAndroidRetrieval",
