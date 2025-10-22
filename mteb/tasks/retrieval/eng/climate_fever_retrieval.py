@@ -80,7 +80,7 @@ class ClimateFEVERHardNegatives(AbsTaskRetrieval):
             "revision": "3a309e201f3c2c4b13bd4a367a8f37eee2ec1d21",
         },
         adapted_from=["ClimateFEVER"],
-        superseded_by=["ClimateFEVERHardNegatives.v2"],
+        superseded_by="ClimateFEVERHardNegatives.v2",
         **_climate_fever_metadata,
     )
 
