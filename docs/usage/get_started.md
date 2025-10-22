@@ -37,9 +37,9 @@ tasks = mteb.get_tasks(tasks=["Banking77Classification"])
 results = mteb.evaluate(model, tasks=tasks)
 ```
 
-!!! Note   
-    While `mteb.evalute` supports `SentenceTransformers` we do recommend that the user use `mteb.get_model` to fetch the model as this prioritizes the
-    implementation in `mteb`, which might not match 1-1 its `SentenceTransformers` implementation. For leaderboards results we see the `mteb` 
+!!! Note
+    While `mteb.evaluate` supports `SentenceTransformers` we do recommend that the user use `mteb.get_model` to fetch the model as this prioritizes the
+    implementation in `mteb`, which might not match 1-1 its `SentenceTransformers` implementation. For leaderboards results we see the `mteb`
     implementation as the reference implementation.
 
 

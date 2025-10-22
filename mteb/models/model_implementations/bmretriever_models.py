@@ -48,7 +48,7 @@ class BMRetrieverWrapper(InstructSentenceTransformerModel):
         if padding_side is not None:
             tokenizer_params["padding_side"] = padding_side
         kwargs.setdefault("tokenizer_args", {}).update(tokenizer_params)
-        kwargs.setdefault("config_args", {}).update(revison=revision)
+        kwargs.setdefault("config_args", {}).update(revision=revision)
 
         transformer = Transformer(
             model_name,

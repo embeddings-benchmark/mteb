@@ -10,7 +10,7 @@ class UkrFormalityClassification(AbsTaskClassification):
         trainslating English GYAFC data.
         English data source: https://aclanthology.org/N18-1012/
         Translation into Ukrainian language using model: https://huggingface.co/facebook/nllb-200-distilled-600M
-        Additionally, the dataset was balanced, witha labels: 0 - informal, 1 - formal.
+        Additionally, the dataset was balanced, with labels: 0 - informal, 1 - formal.
         """,
         dataset={
             "path": "ukr-detect/ukr-formality-dataset-translated-gyafc",
@@ -61,7 +61,7 @@ class UkrFormalityClassificationV2(AbsTaskClassification):
         trainslating English GYAFC data.
         English data source: https://aclanthology.org/N18-1012/
         Translation into Ukrainian language using model: https://huggingface.co/facebook/nllb-200-distilled-600M
-        Additionally, the dataset was balanced, witha labels: 0 - informal, 1 - formal.
+        Additionally, the dataset was balanced, with labels: 0 - informal, 1 - formal.
 
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         dataset={

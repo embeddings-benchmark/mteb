@@ -7,7 +7,7 @@ class JaGovFaqsRetrieval(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="JaGovFaqsRetrieval",
-        description="JaGovFaqs is a dataset consisting of FAQs manully extracted from the website of Japanese bureaus. The dataset consists of 22k FAQs, where the queries (questions) and corpus (answers) have been shuffled, and the goal is to match the answer with the question.",
+        description="JaGovFaqs is a dataset consisting of FAQs manually extracted from the website of Japanese bureaus. The dataset consists of 22k FAQs, where the queries (questions) and corpus (answers) have been shuffled, and the goal is to match the answer with the question.",
         reference="https://github.com/sbintuitions/JMTEB",
         dataset={
             "path": "mteb/JaGovFaqsRetrieval",
