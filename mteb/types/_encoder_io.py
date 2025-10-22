@@ -163,7 +163,7 @@ CorpusDatasetType = Dataset
 """Retrieval corpus dataset, containing documents. Should have columns `id`, `title`, `body`."""
 InstructionDatasetType = Dataset
 """Retrieval instruction dataset, containing instructions. Should have columns `query-id`, `instruction`."""
-RelevantDocumentsType = Mapping[str, Mapping[str, float]]
+RelevantDocumentsType = Mapping[str, Mapping[str, int]]
 """Relevant documents for each query, mapping query IDs to a mapping of document IDs and their relevance
 scores. Should have columns `query-id`, `corpus-id`, `score`."""
 TopRankedDocumentsType = Mapping[str, list[str]]

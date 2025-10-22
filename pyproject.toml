@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.0.1"
+version = "2.1.0"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -18,14 +18,14 @@ maintainers = [
     { name = "Roman Solomatin", email = "risolomatin@gmail.com" },
     { name = "Isaac Chung", email = "chungisaac1217@gmail.com" },
 ]
-license = { file = "LICENSE" }
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 keywords = ["deep learning", "text embeddings", "embeddings", "multimodal", "benchmark", "retrieval", "information retrieval"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
-    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
 ]
@@ -260,23 +260,6 @@ convention = "google"
 [tool.ruff.lint.flake8-annotations]
 mypy-init-return = true
 suppress-none-returning = true
-
-[tool.semantic_release]
-branch = "main"
-version_toml = ["pyproject.toml:project.version"]
-build_command = "python -m pip install build; python -m build"
-tag_format = "{version}"
-
-[tool.semantic_release.commit_parser_options]
-major_tags = ["breaking"]
-minor_tags = ["minor", "feat"]
-patch_tags = [
-    "patch",
-    "fix",
-    "perf",
-    "model",
-    "dataset",
-]
 
 [tool.pytest.ini_options]
 addopts = """

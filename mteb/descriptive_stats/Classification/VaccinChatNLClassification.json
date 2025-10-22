@@ -1,0 +1,1068 @@
+{
+    "test": {
+        "num_samples": 1170,
+        "number_texts_intersect_with_train": 21,
+        "text_statistics": {
+            "total_text_length": 52630,
+            "min_text_length": 1,
+            "average_text_length": 44.98290598290598,
+            "max_text_length": 306,
+            "unique_texts": 1170
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 161,
+            "labels": {
+                "faq_ask_derde_prik": {
+                    "count": 14
+                },
+                "faq_ask_tijd_tot_tweede_dosis": {
+                    "count": 9
+                },
+                "faq_ask_astrazeneca_bloedklonters": {
+                    "count": 21
+                },
+                "faq_ask_bijwerking_algemeen": {
+                    "count": 57
+                },
+                "faq_ask_allergisch_na_vaccinatie": {
+                    "count": 5
+                },
+                "faq_ask_geen_antwoord": {
+                    "count": 35
+                },
+                "faq_ask_vrijwilliger": {
+                    "count": 3
+                },
+                "faq_ask_beschermingspercentage": {
+                    "count": 35
+                },
+                "nlu_fallback": {
+                    "count": 81
+                },
+                "faq_ask_keuze": {
+                    "count": 25
+                },
+                "faq_ask_sneller_aan_de_beurt": {
+                    "count": 6
+                },
+                "faq_ask_prioritaire_gropen": {
+                    "count": 45
+                },
+                "faq_ask_bijwerking_lange_termijn": {
+                    "count": 11
+                },
+                "faq_ask_geen_uitnodiging": {
+                    "count": 5
+                },
+                "faq_ask_betrouwbaar": {
+                    "count": 28
+                },
+                "faq_ask_auto-immuun": {
+                    "count": 3
+                },
+                "faq_ask_waarom": {
+                    "count": 11
+                },
+                "faq_ask_groepsimmuniteit": {
+                    "count": 12
+                },
+                "faq_ask_reproductiegetal": {
+                    "count": 4
+                },
+                "faq_ask_kinderen": {
+                    "count": 18
+                },
+                "faq_ask_chronisch_ziek": {
+                    "count": 2
+                },
+                "faq_ask_betalen_voor_vaccin": {
+                    "count": 8
+                },
+                "faq_ask_mrna_vs_andere_vaccins": {
+                    "count": 3
+                },
+                "faq_ask_uitnodiging_afspraak_kwijt": {
+                    "count": 2
+                },
+                "faq_ask_verschillen": {
+                    "count": 18
+                },
+                "faq_ask_geen_risicopatient": {
+                    "count": 18
+                },
+                "faq_ask_iedereen": {
+                    "count": 7
+                },
+                "faq_ask_janssen_een_dosis": {
+                    "count": 7
+                },
+                "faq_ask_borstvoeding": {
+                    "count": 2
+                },
+                "chitchat_ask_thanks": {
+                    "count": 17
+                },
+                "faq_ask_tweede_dosis_vervroegen": {
+                    "count": 7
+                },
+                "faq_ask_algemeen_info": {
+                    "count": 55
+                },
+                "faq_ask_pijnstiller": {
+                    "count": 4
+                },
+                "faq_ask_goedkeuring": {
+                    "count": 1
+                },
+                "faq_ask_planning_eerstelijnszorg": {
+                    "count": 2
+                },
+                "faq_ask_beschermingsduur": {
+                    "count": 24
+                },
+                "faq_ask_kosjer_halal": {
+                    "count": 2
+                },
+                "faq_ask_complottheorie_Bill_Gates": {
+                    "count": 5
+                },
+                "faq_ask_contra_ind": {
+                    "count": 15
+                },
+                "faq_ask_waar_en_wanneer": {
+                    "count": 14
+                },
+                "faq_ask_vakantie": {
+                    "count": 23
+                },
+                "faq_ask_hoe_weet_overheid": {
+                    "count": 2
+                },
+                "faq_ask_wanneer_iedereen_gevaccineerd": {
+                    "count": 6
+                },
+                "faq_ask_vegan": {
+                    "count": 2
+                },
+                "faq_ask_eerst_weigeren": {
+                    "count": 6
+                },
+                "faq_ask_logistiek": {
+                    "count": 3
+                },
+                "faq_ask_aantal_gevaccineerd": {
+                    "count": 11
+                },
+                "faq_ask_wie_is_risicopatient": {
+                    "count": 5
+                },
+                "faq_ask_gif_in_vaccin": {
+                    "count": 2
+                },
+                "faq_ask_wat_na_vaccinatie": {
+                    "count": 13
+                },
+                "faq_ask_wanneer_algemene_bevolking": {
+                    "count": 4
+                },
+                "faq_ask_onvruchtbaar": {
+                    "count": 6
+                },
+                "faq_ask_welk_vaccin_krijg_ik": {
+                    "count": 12
+                },
+                "faq_ask_quarantaine": {
+                    "count": 4
+                },
+                "faq_ask_astrazeneca": {
+                    "count": 5
+                },
+                "faq_ask_beschermen": {
+                    "count": 18
+                },
+                "faq_ask_magnetisch": {
+                    "count": 2
+                },
+                "faq_ask_alternatieve_medicatie": {
+                    "count": 10
+                },
+                "faq_ask_maximaal_een_dosis": {
+                    "count": 6
+                },
+                "faq_ask_besmetten_na_vaccin": {
+                    "count": 11
+                },
+                "faq_ask_aantal_gevaccineerd_wereldwijd": {
+                    "count": 4
+                },
+                "faq_ask_wie_nu": {
+                    "count": 4
+                },
+                "faq_ask_dna": {
+                    "count": 3
+                },
+                "chitchat_ask_bye": {
+                    "count": 17
+                },
+                "faq_ask_astrazeneca_prik_2": {
+                    "count": 3
+                },
+                "faq_ask_autisme_na_vaccinatie": {
+                    "count": 1
+                },
+                "faq_ask_snel_ontwikkeld": {
+                    "count": 10
+                },
+                "faq_ask_hoeveel_dosissen": {
+                    "count": 6
+                },
+                "faq_ask_in_vaccin": {
+                    "count": 5
+                },
+                "faq_ask_veelgestelde_vragen": {
+                    "count": 4
+                },
+                "faq_ask_info_vaccins": {
+                    "count": 5
+                },
+                "chitchat_ask_hi_de": {
+                    "count": 1
+                },
+                "faq_ask_wat_is_corona": {
+                    "count": 4
+                },
+                "faq_ask_risicopatient_immuunziekte": {
+                    "count": 2
+                },
+                "faq_ask_wat_is_rna": {
+                    "count": 9
+                },
+                "faq_ask_gezondheidstoestand_gekend": {
+                    "count": 2
+                },
+                "faq_ask_curevac": {
+                    "count": 2
+                },
+                "faq_ask_vaccine_covid_gehad_effect": {
+                    "count": 1
+                },
+                "faq_ask_afspraak_gemist": {
+                    "count": 4
+                },
+                "faq_ask_wie_ben_ik": {
+                    "count": 6
+                },
+                "faq_ask_afspraak_afzeggen": {
+                    "count": 27
+                },
+                "faq_ask_testen": {
+                    "count": 3
+                },
+                "faq_ask_combi": {
+                    "count": 2
+                },
+                "faq_ask_vaccinatiecentrum": {
+                    "count": 5
+                },
+                "faq_ask_waarom_niet_verplicht": {
+                    "count": 4
+                },
+                "faq_ask_duur_vaccinatie": {
+                    "count": 12
+                },
+                "faq_ask_hoe_dodelijk": {
+                    "count": 4
+                },
+                "faq_ask_phishing": {
+                    "count": 3
+                },
+                "faq_ask_huisarts": {
+                    "count": 2
+                },
+                "faq_ask_wilsonbekwaam": {
+                    "count": 2
+                },
+                "faq_ask_covid_door_vaccin": {
+                    "count": 2
+                },
+                "faq_ask_planning_ouderen": {
+                    "count": 3
+                },
+                "faq_ask_timing_andere_vaccins": {
+                    "count": 3
+                },
+                "faq_ask_pfizer": {
+                    "count": 7
+                },
+                "faq_ask_verplicht": {
+                    "count": 15
+                },
+                "faq_ask_man_vrouw_verschillen": {
+                    "count": 2
+                },
+                "chitchat_ask_hi": {
+                    "count": 3
+                },
+                "faq_ask_minder_mobiel": {
+                    "count": 2
+                },
+                "faq_ask_taxi": {
+                    "count": 4
+                },
+                "faq_ask_keuze_vaccinatiecentrum": {
+                    "count": 2
+                },
+                "faq_ask_welke_vaccin": {
+                    "count": 8
+                },
+                "faq_ask_meer_bijwerkingen_tweede_dosis": {
+                    "count": 2
+                },
+                "faq_ask_complottheorie_5G": {
+                    "count": 3
+                },
+                "faq_ask_nadelen": {
+                    "count": 3
+                },
+                "faq_ask_risicopatient_hartvaat": {
+                    "count": 1
+                },
+                "faq_ask_moderna": {
+                    "count": 4
+                },
+                "faq_ask_positieve_test_na_vaccin": {
+                    "count": 2
+                },
+                "faq_ask_andere_vaccins": {
+                    "count": 3
+                },
+                "faq_ask_risicopatient_diabetes": {
+                    "count": 1
+                },
+                "faq_ask_logistiek_veilig": {
+                    "count": 2
+                },
+                "faq_ask_oplopen_vaccinatie": {
+                    "count": 16
+                },
+                "faq_ask_vaccin_doorgeven": {
+                    "count": 3
+                },
+                "faq_ask_janssen": {
+                    "count": 8
+                },
+                "faq_ask_waarom_twee_prikken": {
+                    "count": 4
+                },
+                "faq_ask_attest": {
+                    "count": 11
+                },
+                "faq_ask_betrouwbare_bronnen": {
+                    "count": 5
+                },
+                "faq_ask_wie_doet_inenting": {
+                    "count": 5
+                },
+                "faq_ask_essentieel_beroep": {
+                    "count": 3
+                },
+                "faq_ask_mondmasker": {
+                    "count": 3
+                },
+                "faq_ask_risicopatient_luchtwegaandoening": {
+                    "count": 3
+                },
+                "faq_ask_motiveren": {
+                    "count": 5
+                },
+                "faq_ask_probleem_registratie": {
+                    "count": 1
+                },
+                "chitchat_ask_hoe_gaat_het": {
+                    "count": 1
+                },
+                "faq_ask_complottheorie": {
+                    "count": 5
+                },
+                "faq_ask_nuchter": {
+                    "count": 3
+                },
+                "faq_ask_experimenteel": {
+                    "count": 2
+                },
+                "faq_ask_vaccine_covid_gehad": {
+                    "count": 2
+                },
+                "faq_ask_gestockeerd": {
+                    "count": 1
+                },
+                "faq_ask_wat_is_vaccin": {
+                    "count": 9
+                },
+                "faq_ask_zwanger": {
+                    "count": 5
+                },
+                "faq_ask_huisdieren": {
+                    "count": 3
+                },
+                "faq_ask_tweede_dosis_afspraak": {
+                    "count": 2
+                },
+                "faq_ask_privacy": {
+                    "count": 2
+                },
+                "chitchat_ask_hi_en": {
+                    "count": 2
+                },
+                "faq_ask_vrijwillig_Janssen": {
+                    "count": 1
+                },
+                "faq_ask_uit_flacon": {
+                    "count": 1
+                },
+                "faq_ask_problemen_uitnodiging": {
+                    "count": 2
+                },
+                "faq_ask_mantelzorger": {
+                    "count": 2
+                },
+                "faq_ask_ontwikkeling": {
+                    "count": 5
+                },
+                "faq_ask_corona_is_griep": {
+                    "count": 1
+                },
+                "faq_ask_bloed_geven": {
+                    "count": 2
+                },
+                "faq_ask_eerste_prik_buitenland": {
+                    "count": 1
+                },
+                "faq_ask_qvax_probleem": {
+                    "count": 1
+                },
+                "faq_ask_risicopatient_kanker": {
+                    "count": 2
+                },
+                "faq_ask_waarom_ouderen_eerst": {
+                    "count": 4
+                },
+                "faq_ask_test_voor_vaccin": {
+                    "count": 1
+                },
+                "faq_ask_twijfel_vaccins_zelf": {
+                    "count": 1
+                },
+                "faq_ask_buitenlander": {
+                    "count": 2
+                },
+                "faq_ask_naaldangst": {
+                    "count": 4
+                },
+                "faq_ask_astrazeneca_bij_ouderen": {
+                    "count": 2
+                },
+                "faq_ask_corona_vermijden": {
+                    "count": 2
+                },
+                "faq_ask_hersenziekte": {
+                    "count": 1
+                },
+                "faq_ask_uitnodiging_na_vaccinatie": {
+                    "count": 2
+                },
+                "faq_ask_foetus": {
+                    "count": 1
+                },
+                "faq_ask_begeleiding": {
+                    "count": 1
+                },
+                "faq_ask_bijsluiter": {
+                    "count": 1
+                },
+                "faq_ask_smaakverlies": {
+                    "count": 1
+                },
+                "faq_ask_hartspierontsteking": {
+                    "count": 1
+                },
+                "chitchat_ask_name": {
+                    "count": 1
+                },
+                "faq_ask_trage_start": {
+                    "count": 1
+                },
+                "chitchat_ask_hi_fr": {
+                    "count": 1
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 10542,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 471783,
+            "min_text_length": 1,
+            "average_text_length": 44.752703471826976,
+            "max_text_length": 531,
+            "unique_texts": 10542
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 181,
+            "labels": {
+                "chitchat_ask_name": {
+                    "count": 26
+                },
+                "chitchat_ask_hoe_gaat_het": {
+                    "count": 21
+                },
+                "faq_ask_waarom": {
+                    "count": 127
+                },
+                "nlu_fallback": {
+                    "count": 740
+                },
+                "faq_ask_corona_is_griep": {
+                    "count": 26
+                },
+                "faq_ask_geen_risicopatient": {
+                    "count": 200
+                },
+                "faq_ask_verplicht": {
+                    "count": 109
+                },
+                "faq_ask_attest": {
+                    "count": 99
+                },
+                "faq_ask_algemeen_info": {
+                    "count": 200
+                },
+                "faq_ask_magnetisch": {
+                    "count": 36
+                },
+                "faq_ask_bijwerking_algemeen": {
+                    "count": 303
+                },
+                "faq_ask_risicopatient": {
+                    "count": 6
+                },
+                "faq_ask_vakantie": {
+                    "count": 188
+                },
+                "faq_ask_quarantaine": {
+                    "count": 50
+                },
+                "faq_ask_groepsimmuniteit": {
+                    "count": 75
+                },
+                "faq_ask_vaccine_covid_gehad": {
+                    "count": 52
+                },
+                "faq_ask_alternatieve_medicatie": {
+                    "count": 52
+                },
+                "faq_ask_corona_vermijden": {
+                    "count": 40
+                },
+                "faq_ask_motiveren": {
+                    "count": 51
+                },
+                "faq_ask_beschermingspercentage": {
+                    "count": 225
+                },
+                "faq_ask_waarom_twee_prikken": {
+                    "count": 74
+                },
+                "faq_ask_eerst_weigeren": {
+                    "count": 77
+                },
+                "faq_ask_betrouwbaar": {
+                    "count": 137
+                },
+                "faq_ask_astrazeneca_bloedklonters": {
+                    "count": 189
+                },
+                "faq_ask_naaldangst": {
+                    "count": 57
+                },
+                "faq_ask_waarom_ouderen_eerst": {
+                    "count": 44
+                },
+                "faq_ask_betrouwbare_bronnen": {
+                    "count": 66
+                },
+                "faq_ask_info_vaccins": {
+                    "count": 59
+                },
+                "faq_ask_complottheorie": {
+                    "count": 76
+                },
+                "faq_ask_wat_is_corona": {
+                    "count": 31
+                },
+                "faq_ask_complottheorie_Bill_Gates": {
+                    "count": 75
+                },
+                "faq_ask_kinderen": {
+                    "count": 116
+                },
+                "faq_ask_hoe_dodelijk": {
+                    "count": 55
+                },
+                "faq_ask_planning_ouderen": {
+                    "count": 48
+                },
+                "faq_ask_testen": {
+                    "count": 48
+                },
+                "faq_ask_bijsluiter": {
+                    "count": 17
+                },
+                "faq_ask_wat_is_rna": {
+                    "count": 76
+                },
+                "faq_ask_leveringen": {
+                    "count": 17
+                },
+                "faq_ask_welk_vaccin_krijg_ik": {
+                    "count": 109
+                },
+                "faq_ask_ontwikkeling": {
+                    "count": 62
+                },
+                "test": {
+                    "count": 2
+                },
+                "faq_ask_contra_ind": {
+                    "count": 189
+                },
+                "faq_ask_goedkeuring": {
+                    "count": 13
+                },
+                "faq_ask_buitenlander": {
+                    "count": 48
+                },
+                "faq_ask_afspraak_afzeggen": {
+                    "count": 102
+                },
+                "faq_ask_vaccine_covid_gehad_effect": {
+                    "count": 23
+                },
+                "faq_ask_pfizer": {
+                    "count": 69
+                },
+                "faq_ask_derde_prik": {
+                    "count": 45
+                },
+                "faq_ask_wie_is_risicopatient": {
+                    "count": 50
+                },
+                "faq_ask_logistiek": {
+                    "count": 44
+                },
+                "faq_ask_wat_is_vaccin": {
+                    "count": 65
+                },
+                "faq_ask_maximaal_een_dosis": {
+                    "count": 70
+                },
+                "faq_ask_vaccin_variant": {
+                    "count": 15
+                },
+                "faq_ask_tweede_dosis_vervroegen": {
+                    "count": 89
+                },
+                "faq_ask_nadelen": {
+                    "count": 52
+                },
+                "faq_ask_waar_en_wanneer": {
+                    "count": 126
+                },
+                "faq_ask_beschermen": {
+                    "count": 92
+                },
+                "faq_ask_wat_na_vaccinatie": {
+                    "count": 121
+                },
+                "faq_ask_in_vaccin": {
+                    "count": 60
+                },
+                "faq_ask_duur_vaccinatie": {
+                    "count": 73
+                },
+                "faq_ask_astrazeneca": {
+                    "count": 50
+                },
+                "faq_ask_verschillen": {
+                    "count": 121
+                },
+                "faq_ask_astrazeneca_prik_2": {
+                    "count": 38
+                },
+                "faq_ask_risicopatient_immuunziekte": {
+                    "count": 37
+                },
+                "faq_ask_eerste_prik_buitenland": {
+                    "count": 6
+                },
+                "faq_ask_vaccin_immuunsysteem": {
+                    "count": 16
+                },
+                "faq_ask_hartspierontsteking": {
+                    "count": 24
+                },
+                "faq_ask_experimenteel": {
+                    "count": 26
+                },
+                "faq_ask_vrijwillig_Janssen": {
+                    "count": 22
+                },
+                "faq_ask_geen_antwoord": {
+                    "count": 174
+                },
+                "chitchat_ask_bye": {
+                    "count": 47
+                },
+                "faq_ask_janssen": {
+                    "count": 77
+                },
+                "faq_ask_veelgestelde_vragen": {
+                    "count": 51
+                },
+                "faq_ask_wie_ben_ik": {
+                    "count": 95
+                },
+                "faq_ask_nuchter": {
+                    "count": 30
+                },
+                "faq_ask_taxi": {
+                    "count": 31
+                },
+                "faq_ask_foetus": {
+                    "count": 32
+                },
+                "chitchat_ask_hi_en": {
+                    "count": 37
+                },
+                "faq_ask_keuze": {
+                    "count": 131
+                },
+                "faq_ask_gif_in_vaccin": {
+                    "count": 50
+                },
+                "faq_ask_vegan": {
+                    "count": 33
+                },
+                "faq_ask_allergisch_na_vaccinatie": {
+                    "count": 43
+                },
+                "faq_ask_welke_vaccin": {
+                    "count": 86
+                },
+                "faq_ask_waarom_niet_verplicht": {
+                    "count": 52
+                },
+                "faq_ask_betalen_voor_vaccin": {
+                    "count": 37
+                },
+                "faq_ask_beschermingsduur": {
+                    "count": 153
+                },
+                "faq_ask_hoeveel_dosissen": {
+                    "count": 68
+                },
+                "faq_ask_tijd_tot_tweede_dosis": {
+                    "count": 88
+                },
+                "faq_ask_auto-immuun": {
+                    "count": 46
+                },
+                "faq_ask_meer_bijwerkingen_tweede_dosis": {
+                    "count": 45
+                },
+                "faq_ask_hersenziekte": {
+                    "count": 17
+                },
+                "faq_ask_bijwerking_lange_termijn": {
+                    "count": 86
+                },
+                "faq_ask_covid_door_vaccin": {
+                    "count": 37
+                },
+                "faq_ask_oplopen_vaccinatie": {
+                    "count": 89
+                },
+                "faq_ask_smaakverlies": {
+                    "count": 15
+                },
+                "faq_ask_besmetten_na_vaccin": {
+                    "count": 78
+                },
+                "faq_ask_test_voor_vaccin": {
+                    "count": 44
+                },
+                "faq_ask_snel_ontwikkeld": {
+                    "count": 56
+                },
+                "faq_ask_mrna_vs_andere_vaccins": {
+                    "count": 35
+                },
+                "faq_ask_dna": {
+                    "count": 64
+                },
+                "faq_ask_borstvoeding": {
+                    "count": 25
+                },
+                "faq_ask_zwanger": {
+                    "count": 64
+                },
+                "faq_ask_chronisch_ziek": {
+                    "count": 27
+                },
+                "faq_ask_risicopatient_hartvaat": {
+                    "count": 21
+                },
+                "faq_ask_risicopatient_diabetes": {
+                    "count": 21
+                },
+                "faq_ask_iedereen": {
+                    "count": 96
+                },
+                "faq_ask_prioritaire_gropen": {
+                    "count": 291
+                },
+                "faq_ask_wanneer_algemene_bevolking": {
+                    "count": 70
+                },
+                "faq_ask_risicopatient_kanker": {
+                    "count": 37
+                },
+                "faq_ask_essentieel_beroep": {
+                    "count": 37
+                },
+                "faq_ask_vaccinatiecentrum": {
+                    "count": 43
+                },
+                "faq_ask_wanneer_iedereen_gevaccineerd": {
+                    "count": 62
+                },
+                "faq_ask_huisarts": {
+                    "count": 38
+                },
+                "faq_ask_wie_doet_inenting": {
+                    "count": 51
+                },
+                "faq_ask_trage_start": {
+                    "count": 25
+                },
+                "faq_ask_gestockeerd": {
+                    "count": 32
+                },
+                "faq_ask_logistiek_veilig": {
+                    "count": 32
+                },
+                "chitchat_ask_hi": {
+                    "count": 43
+                },
+                "chitchat_ask_hi_fr": {
+                    "count": 28
+                },
+                "get_started": {
+                    "count": 2
+                },
+                "chitchat_ask_thanks": {
+                    "count": 84
+                },
+                "faq_ask_combi": {
+                    "count": 44
+                },
+                "faq_ask_timing_andere_vaccins": {
+                    "count": 57
+                },
+                "faq_ask_reproductiegetal": {
+                    "count": 36
+                },
+                "faq_ask_aantal_gevaccineerd": {
+                    "count": 66
+                },
+                "faq_ask_minder_mobiel": {
+                    "count": 42
+                },
+                "faq_ask_man_vrouw_verschillen": {
+                    "count": 10
+                },
+                "faq_ask_mantelzorger": {
+                    "count": 40
+                },
+                "faq_ask_wilsonbekwaam": {
+                    "count": 40
+                },
+                "faq_ask_complottheorie_5G": {
+                    "count": 62
+                },
+                "faq_ask_autisme_na_vaccinatie": {
+                    "count": 28
+                },
+                "faq_ask_risicopatient_luchtwegaandoening": {
+                    "count": 36
+                },
+                "faq_ask_planning_eerstelijnszorg": {
+                    "count": 43
+                },
+                "faq_ask_onvruchtbaar": {
+                    "count": 76
+                },
+                "faq_ask_curevac": {
+                    "count": 17
+                },
+                "faq_ask_keuze_vaccinatiecentrum": {
+                    "count": 33
+                },
+                "faq_ask_hoe_weet_overheid": {
+                    "count": 28
+                },
+                "faq_ask_aantal_gevaccineerd_wereldwijd": {
+                    "count": 41
+                },
+                "faq_ask_janssen_een_dosis": {
+                    "count": 54
+                },
+                "faq_ask_astrazeneca_bij_ouderen": {
+                    "count": 36
+                },
+                "faq_ask_uit_flacon": {
+                    "count": 30
+                },
+                "faq_ask_moderna": {
+                    "count": 32
+                },
+                "chitchat_ask_hi_de": {
+                    "count": 30
+                },
+                "faq_ask_problemen_uitnodiging": {
+                    "count": 37
+                },
+                "faq_ask_uitnodiging_na_vaccinatie": {
+                    "count": 35
+                },
+                "faq_ask_afspraak_gemist": {
+                    "count": 24
+                },
+                "faq_ask_kosjer_halal": {
+                    "count": 29
+                },
+                "faq_ask_phishing": {
+                    "count": 47
+                },
+                "faq_ask_huisdieren": {
+                    "count": 41
+                },
+                "faq_ask_waarom_twijfel": {
+                    "count": 2
+                },
+                "faq_ask_jong_en_gezond": {
+                    "count": 2
+                },
+                "faq_ask_sneller_aan_de_beurt": {
+                    "count": 59
+                },
+                "faq_ask_andere_vaccins": {
+                    "count": 49
+                },
+                "faq_ask_geen_uitnodiging": {
+                    "count": 38
+                },
+                "faq_ask_uitnodiging_afspraak_kwijt": {
+                    "count": 39
+                },
+                "faq_ask_vrijwilliger": {
+                    "count": 34
+                },
+                "faq_ask_vaccin_doorgeven": {
+                    "count": 49
+                },
+                "faq_ask_mondmasker": {
+                    "count": 21
+                },
+                "faq_ask_qvax_probleem": {
+                    "count": 28
+                },
+                "faq_ask_probleem_registratie": {
+                    "count": 17
+                },
+                "faq_ask_wie_nu": {
+                    "count": 39
+                },
+                "faq_ask_gezondheidstoestand_gekend": {
+                    "count": 35
+                },
+                "faq_ask_begeleiding": {
+                    "count": 33
+                },
+                "faq_ask_pijnstiller": {
+                    "count": 39
+                },
+                "faq_ask_tweede_dosis_afspraak": {
+                    "count": 34
+                },
+                "faq_ask_privacy": {
+                    "count": 43
+                },
+                "faq_ask_bloed_geven": {
+                    "count": 26
+                },
+                "faq_ask_positieve_test_na_vaccin": {
+                    "count": 43
+                },
+                "faq_ask_twijfel_noodzaak": {
+                    "count": 1
+                },
+                "faq_ask_twijfel_praktisch": {
+                    "count": 2
+                },
+                "faq_ask_twijfel_vrijheid": {
+                    "count": 1
+                },
+                "faq_ask_twijfel_effectiviteit": {
+                    "count": 1
+                },
+                "faq_ask_twijfel_inhoud": {
+                    "count": 1
+                },
+                "faq_ask_twijfel_ontwikkeling": {
+                    "count": 1
+                },
+                "faq_ask_twijfel_bijwerkingen": {
+                    "count": 1
+                },
+                "faq_ask_twijfel_vaccins_zelf": {
+                    "count": 1
+                },
+                "faq_ask_twijfel_ivm_vaccinatie": {
+                    "count": 1
+                },
+                "faq_ask_bijwerking_AZ": {
+                    "count": 1
+                },
+                "faq_ask_bijwerking_JJ": {
+                    "count": 1
+                },
+                "faq_ask_bijwerking_pfizer": {
+                    "count": 2
+                },
+                "faq_ask_bijwerking_moderna": {
+                    "count": 1
+                }
+            }
+        }
+    }
+}

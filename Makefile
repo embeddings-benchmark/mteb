@@ -33,18 +33,18 @@ pr:
 	make lint
 	make test
 
-
-build-tables:
-	@echo "--- 📚 Building tables ---"
-	# This just build tables for the .md files
-	python docs/create_tasks_table.py
-	python docs/create_benchmarks_table.py
-
 build-docs:
 	@echo "--- 📚 Building documentation ---"
+	make build-docs-overview
+	python -m mkdocs build
+
+
+build-docs-overview:
+	@echo "--- 📚 Building documentation overview ---"
 	python docs/overview/create_available_tasks.py
 	python docs/overview/create_available_models.py
 	python docs/overview/create_available_benchmarks.py
+
 
 serve-docs:
 	@echo "--- 📚 Serving documentation ---"

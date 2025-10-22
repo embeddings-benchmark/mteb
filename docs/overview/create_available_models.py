@@ -5,9 +5,6 @@ from pathlib import Path
 import mteb
 from mteb.models import ModelMeta
 
-START_INSERT = "<!-- START TASK DESCRIPTION -->"
-END_INSERT = "<!-- END TASK DESCRIPTION -->"
-
 model_entry = """
 ####  {model_name_w_link}
 
@@ -60,7 +57,7 @@ def human_readable_number(num: int) -> str:
     """
     for unit in ["", "K", "M", "B", "T"]:
         if abs(num) < 1000:
-            return f"{num:.1f}{unit}" if unit else str(num)
+            return f"{num:.1f}{unit}" if unit else str(int(num))
         num /= 1000
     return f"{num:.2f}P"
 
@@ -96,11 +93,7 @@ def format_model_entry(meta: ModelMeta) -> str:
         if meta.max_tokens is not None
         else "not specified"
     )
-    embed_dim = (
-        human_readable_number(meta.embed_dim)
-        if meta.embed_dim is not None
-        else "not specified"
-    )
+    embed_dim = meta.embed_dim if meta.embed_dim is not None else "not specified"
     n_parameters = (
         human_readable_number(meta.n_parameters)
         if meta.n_parameters is not None
@@ -178,5 +171,5 @@ def main(folder: Path) -> None:
 
 
 if __name__ == "__main__":
-    root = Path(__file__).parent / ".." / ".."
-    main(root / "docs" / "overview" / "available_models")
+    root = Path(__file__).parent
+    main(root / "available_models")

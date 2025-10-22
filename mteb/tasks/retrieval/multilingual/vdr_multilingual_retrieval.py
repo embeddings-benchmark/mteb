@@ -101,7 +101,7 @@ class VDRMultilingualRetrieval(AbsTaskRetrieval):
             "revision": "9e26ae152f5950ab1a5ff1c58edade3acc894793",
         },
         type="Retrieval",
-        category="it2it",
+        category="t2i",
         modalities=["text", "image"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGS,

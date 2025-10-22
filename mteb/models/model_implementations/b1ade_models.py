@@ -33,4 +33,13 @@ b1ade_embed = ModelMeta(
     # BAAI/bge-large-en-v1.5
     # mixedbread-ai/mxbai-embed-large-v1
     # avsolatorio/GIST-large-Embedding-v0
+    citation="""
+    @misc{bigscience_workshop_2022,
+    author       = { {Shreyas Subramanian} },
+    title        = { {b1ade series of models} },
+    year         = 2024,
+    url          = { https://huggingface.co/w601sxs/b1ade-embed },
+    publisher    = { Hugging Face }
+}
+""",
 )

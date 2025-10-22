@@ -1,4 +1,6 @@
 # This workflow will
+# - will be triggered on each commit
+#  - based on commit prefix will be created patch, minor, major release using `uv`
 # - Find the latest version tag based on the commit history
 #   - Create a git tag for the new version
 #   - Update the version number in pyproject.toml based on the commit history
@@ -6,45 +8,124 @@
 # - Create a release on GitHub
 
 # This workflow required the following secrets to be set:
-# - a GitHub personal access token with the `repo` scope called `RELEASE`
-# - and that you setup trusted publishing using PyPI as described here: https://blog.pypi.org/posts/2023-04-20-introducing-trusted-publishers/
+# repo setup trusted publishing using PyPI as described here: https://docs.pypi.org/trusted-publishers/
 
-name: Release
+name: Version & Release on Commit Prefix
 on:
   workflow_run:
-    workflows: ["test"]
+    workflows: [ "test" ]
     types:
       - completed
+  push:
+    branches:
+      - main
+
 jobs:
-  release:
+  bump_and_release:
     runs-on: ubuntu-latest
     concurrency: release
+    environment:
+      name: pypi
     permissions:
-      id-token: write # IMPORTANT: this permission is mandatory for trusted publishing using PyPI
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing using PyPI
+      contents: write  # for updating pyproject
 
-    if: ${{ github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success'}}
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
-          token: ${{ secrets.RELEASE }}
 
-      - name: Python Semantic Release
-        id: release
-        uses: python-semantic-release/python-semantic-release@v9.8.9
-        with:
-          github_token: ${{ secrets.RELEASE }}
-          changelog: "false"
+      - name: Get last commit message
+        id: last_commit
+        run: |
+          msg=$(git log -1 --pretty=%B)
+          echo "commit message: '$msg'"
+          {
+            echo "msg<<EOF"
+            echo "$msg"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
-      - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        if: steps.release.outputs.released == 'true'
-        # This action supports PyPI's trusted publishing implementation, which allows authentication to PyPI without a manually
-        # configured API token or username/password combination. To perform trusted publishing with this action, your project's
-        # publisher must already be configured on PyPI.
+      - name: Determine bump type
+        id: bump_type
+        run: |
+          msg="${{ steps.last_commit.outputs.msg }}"
+          low=$(echo "$msg" | tr '[:upper:]' '[:lower:]')
+          echo "lowercase message: '$low'"
 
-      - name: Publish package distributions to GitHub Releases
-        uses: python-semantic-release/upload-to-gh-release@v9.8.9
-        if: steps.release.outputs.released == 'true'
-        with:
-          github_token: ${{ secrets.RELEASE }}
+          bump="none"
+          if [[ $low == breaking:* ]]; then
+            bump="major"
+          elif [[ $low == feat:* ]] || [[ $low == benchmark:* ]]; then
+            bump="minor"
+          elif [[ $low == fix:* ]] || [[ $low == dataset:* ]] || [[ $low == model:* ]]; then
+            bump="patch"
+          fi
+
+          echo "bump=$bump" >> "$GITHUB_OUTPUT"
+          echo "Determined bump type: $bump"
+
+      - name: Exit if no bump
+        if: ${{ steps.bump_type.outputs.bump == 'none' }}
+        run: |
+          echo "No recognized prefix for version bump. Exiting."
+          exit 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Bump version
+        id: version_bump
+        run: |
+          echo "Running uv version --bump ${{ steps.bump_type.outputs.bump }}"
+          uv version --bump "${{ steps.bump_type.outputs.bump }}"
+
+          # Capture the new version (second token from `uv version`)
+          ver=$(uv version | awk '{print $2}')
+          echo "New version detected: $ver"
+          echo "new_version=$ver" >> "$GITHUB_OUTPUT"
+
+      - name: Commit version bump and tag
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add pyproject.toml
+          git commit -m "chore: bump version to ${{ steps.version_bump.outputs.new_version }}" || echo "No changes to commit."
+
+          # push changes and tag safely
+          git push origin HEAD:main
+
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="v${{ steps.version_bump.outputs.new_version }}"
+          echo "Creating release for tag $tag"
+          gh release create "$tag" --generate-notes --repo "${{ github.repository }}"
+
+      - name: Build
+        run: uv build
+
+      # Check that basic features work and we didn't miss to include crucial files
+      - name: Smoke test (wheel)
+        run: uv run --isolated --no-project --with dist/*.whl python -c "import mteb"
+      - name: Smoke test (source distribution)
+        run: uv run --isolated --no-project --with dist/*.tar.gz python -c "import mteb"
+
+      - name: Publish
+        run: uv publish
+
+      - name: Upload artifacts to Release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        # Upload to GitHub Release using the `gh` CLI.
+        # `dist/` contains the built packages, and the
+        # sigstore-produced signatures and certificates.
+        run: >-
+          gh release upload
+          '${{ github.ref_name }}' dist/**
+          --repo '${{ github.repository }}'

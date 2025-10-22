@@ -5,6 +5,7 @@ from .fra import *
 from .jpn import *
 from .kor import *
 from .multilingual import *
+from .nld import *
 from .nob import *
 from .pol import *
 from .rom import *
