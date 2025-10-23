@@ -13,7 +13,15 @@ def check_language_code(code: str) -> None:
     Args:
         code: The language code to check.
     """
-    lang, script = code.split("-")
+    lang = None
+    script = None
+    if "-" in code:
+        lang, script = code.split("-")
+    elif code[0].isupper():
+        script = code
+    else:
+        lang = code
+
     if script == "Code":
         if lang in PROGRAMMING_LANGS:
             return  # override for code
@@ -21,11 +29,11 @@ def check_language_code(code: str) -> None:
             raise ValueError(
                 f"Programming language {lang} is not a valid programming language."
             )
-    if lang not in ISO_TO_LANGUAGE:
+    if lang is not None and lang not in ISO_TO_LANGUAGE:
         raise ValueError(
             f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
         )
-    if script not in ISO_TO_SCRIPT:
+    if script is not None and script not in ISO_TO_SCRIPT:
         raise ValueError(
             f"Invalid script code: {script}, you can find valid ISO 15924 codes in {path_to_lang_scripts}"
         )
