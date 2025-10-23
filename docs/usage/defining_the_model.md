@@ -45,7 +45,7 @@ However, we do recommend checking if mteb includes an implementation of the mode
 
 ## Using a Custom Model
 
-It is also possible to implement your own custom model in MTEB as long as it adheres to the [EncoderProtocol](https://embeddings-benchmark.github.io/mteb/api/model/#mteb.models.EncoderProtocol).
+It is also possible to implement your own custom model in MTEB as long as it adheres to the [EncoderProtocol][mteb.models.EncoderProtocol].
 
 This entails implementing an `encode` function taking as input a list of sentences, and returning a list of embeddings (embeddings can be `np.array`, `torch.tensor`, etc.).
 
