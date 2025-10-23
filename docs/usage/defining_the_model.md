@@ -45,7 +45,7 @@ However, we do recommend checking if mteb includes an implementation of the mode
 
 ## Using a Custom Model
 
-It is also possible to implement your own custom model in MTEB as long as it adheres to the [encoder interface](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/encoder_interface.py#L21).
+It is also possible to implement your own custom model in MTEB as long as it adheres to the [EncoderProtocol](https://embeddings-benchmark.github.io/mteb/api/model/#mteb.models.EncoderProtocol).
 
 This entails implementing an `encode` function taking as input a list of sentences, and returning a list of embeddings (embeddings can be `np.array`, `torch.tensor`, etc.).
 
@@ -87,4 +87,4 @@ tasks = mteb.get_tasks(tasks=["Banking77Classification"])
 model = mteb.evaluate(model, tasks=tasks)
 ```
 
-If you want to submit your implementation to be included in the leaderboard see the section on [submitting a model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md).
+If you want to submit your implementation to be included in the leaderboard see the section on [submitting a model](../contributing/adding_a_model.md).
