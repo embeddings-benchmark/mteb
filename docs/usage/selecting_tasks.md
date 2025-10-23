@@ -91,7 +91,7 @@ task = mteb.get_task("AmazonReviewsClassification", hf_subsets=["en", "fr"])
 ### Using a Custom Task
 
 To evaluate on a custom task, you can run the following code on your custom task.
-See [how to add a new task](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_dataset.md), for how to create a new task in MTEB.
+See [how to add a new task](../contributing/adding_a_dataset.md), for how to create a new task in MTEB.
 
 
 ```python
