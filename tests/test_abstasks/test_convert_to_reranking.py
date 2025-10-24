@@ -18,7 +18,9 @@ def test_two_stage_reranking(tmp_path: Path):
         prediction_folder=results_folder,
         cache=cache,
     )
-    task = task.convert_to_reranking(results_folder)
+    task = task.convert_to_reranking(results_folder, top_k=1)
+    assert len(task.dataset["default"]["test"]["top_ranked"]["q1"]) == 1
+
     ce_results = mteb.evaluate(
         ce,
         task,

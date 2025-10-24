@@ -54,8 +54,14 @@ from tests.mock_tasks import (
         (
             MockRetrievalTask(),
             {
-                "q1": {"d1": pytest.approx(0.7787374258041382)},
-                "q2": {"d1": pytest.approx(0.7900890707969666)},
+                "q1": {
+                    "d2": pytest.approx(0.7302242517471313),
+                    "d1": pytest.approx(0.7787374258041382),
+                },
+                "q2": {
+                    "d2": pytest.approx(0.7675943970680237),
+                    "d1": pytest.approx(0.7900890707969666),
+                },
             },
         ),
         (
