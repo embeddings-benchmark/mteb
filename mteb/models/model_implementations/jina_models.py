@@ -312,14 +312,14 @@ class JinaV4Wrapper(AbsEncoder):
         if "text" in inputs.dataset.features:
             text_embeddings = self.get_text_embeddings(
                 inputs,
-                task_metadata=task_matadata,
+                task_metadata=task_metadata,
                 prompt_type=prompt_type,
                 **kwargs,
             )
         if "image" in inputs.dataset.features:
             image_embeddings = self.get_image_embeddings(
                 inputs,
-                task_metadata=task_matadata,
+                task_metadata=task_metadata,
                 prompt_type=prompt_type,
                 **kwargs,
             )
