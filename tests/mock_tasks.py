@@ -1704,7 +1704,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
 
 
 class MockRetrievalTask(AbsTaskRetrieval):
-    _top_k = 1
+    _top_k = 2
     expected_stats = {
         "val": {
             "num_samples": 4,

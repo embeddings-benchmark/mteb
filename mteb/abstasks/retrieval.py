@@ -653,6 +653,8 @@ class AbsTaskRetrieval(AbsTask):
             FileNotFoundError: If the specified path does not exist.
             ValueError: If the loaded top ranked results are not in the expected format.
         """
+        self._top_k = top_k
+
         top_ranked_path = Path(top_ranked_path)
         if top_ranked_path.is_dir():
             top_ranked_path = self._predictions_path(top_ranked_path)
@@ -682,7 +684,6 @@ class AbsTaskRetrieval(AbsTask):
                     top_k_sorted[query_id] = sorted_keys[: self._top_k]
 
                 self.dataset[subset][split]["top_ranked"] = top_k_sorted
-        self._top_k = top_k
         return self
 
 
