@@ -491,6 +491,11 @@ class AbsTask(ABC):
                 if lang_scripts.contains_languages(langs):
                     subsets_to_keep.append(hf_subset)
 
+        if len(subsets_to_keep) == 0:
+            raise ValueError(
+                f"No subsets were found for {self.metadata.name} with filters: language code {languages}, script {script}, hf subsets {hf_subsets}."
+            )
+
         self.hf_subsets = subsets_to_keep
         return self
 

@@ -3,6 +3,8 @@ from dataclasses import dataclass
 
 from typing_extensions import Self
 
+from mteb.languages import check_language_code
+
 
 @dataclass
 class LanguageScripts:
@@ -46,8 +48,10 @@ class LanguageScripts:
                 if len(lang_script) == 2:
                     normalized_langs.add(lang_script[0])
                     lang_script_codes.add(lang)
+                    check_language_code(lang)
                     script_codes.add(lang_script[1])
                 else:
+                    check_language_code(lang)
                     normalized_langs.add(lang)
 
         return cls(
