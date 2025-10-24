@@ -14,7 +14,11 @@ from tests.mock_tasks import (
 )
 
 mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 0.5)
-mock_retrieval = (MockSentenceTransformer(), MockRetrievalTask(), 0.0)
+mock_retrieval = (
+    MockSentenceTransformer(),
+    MockRetrievalTask(),
+    pytest.approx(0.63093),
+)
 
 
 @pytest.mark.parametrize(
