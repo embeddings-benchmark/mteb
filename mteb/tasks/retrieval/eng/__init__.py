@@ -14,7 +14,7 @@ from .birco_whats_that_book_reranking import BIRCOWhatsThatBookReranking
 from .blink_it2i_retrieval import BLINKIT2IRetrieval
 from .blink_it2t_retrieval import BLINKIT2TRetrieval
 from .bright_retrieval import BrightLongRetrieval, BrightRetrieval
-from .bright_subset_long_retrieval import (
+from .bright_subsets_long_retrieval import (
     BrightBiologyLongRetrieval,
     BrightEarthScienceLongRetrieval,
     BrightEconomicsLongRetrieval,
