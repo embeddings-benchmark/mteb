@@ -51,7 +51,13 @@ def _downsample_image(
 def voyage_v_loader(model_name, **kwargs):
     requires_package(
         voyage_v_loader,
-        "voyageai and tenacity",
+        "voyageai",
+        model_name,
+        "pip install 'mteb[voyage_v]'",
+    )
+    requires_package(
+        voyage_v_loader,
+        "tenacity",
         model_name,
         "pip install 'mteb[voyage_v]'",
     )
@@ -65,11 +71,9 @@ def voyage_v_loader(model_name, **kwargs):
             **kwargs: Any,
         ):
             requires_image_dependencies()
-            from torchvision import transforms
 
             self.model_name = model_name.split("/")[-1]
             self.vo = voyageai.Client()
-            self.tensor_to_image = transforms.Compose([transforms.PILToTensor()])
 
         @retry(
             stop=stop_after_attempt(6),  # Stop after 6 attempts
@@ -126,10 +130,7 @@ def voyage_v_loader(model_name, **kwargs):
             for batch in tqdm(
                 images, disable=not show_progress_bar, desc="Image Encoding"
             ):
-                batch_images = [
-                    [_downsample_image(self.tensor_to_image(image))]
-                    for image in batch["image"]
-                ]
+                batch_images = [[_downsample_image(image)] for image in batch["image"]]
                 embeddings = self._multimodal_embed(
                     batch_images, model=self.model_name, input_type=input_type
                 ).embeddings
@@ -163,8 +164,7 @@ def voyage_v_loader(model_name, **kwargs):
                     inputs, disable=not show_progress_bar, desc="Interleaved Encoding"
                 ):
                     batch_images = [
-                        _downsample_image(self.tensor_to_image(image))
-                        for image in batch["image"]
+                        _downsample_image(image) for image in batch["image"]
                     ]
                     batch_texts = batch["text"]
                     interleaved_inputs = [
