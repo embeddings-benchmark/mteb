@@ -1,12 +1,11 @@
 import logging
 from collections.abc import Callable
 
-import faiss
 import numpy as np
 import torch
-from faiss import IndexFlatIP, IndexFlatL2
 
 from mteb import EncoderProtocol
+from mteb._requires_package import requires_package
 from mteb.models.model_meta import ScoringFunction
 from mteb.types import Array, TopRankedDocumentsType
 
@@ -26,6 +25,16 @@ class FaissEncoderSearchBackend:
     _normalize: bool = False
 
     def __init__(self, model: EncoderProtocol) -> None:
+        requires_package(
+            self,
+            "faiss",
+            "FAISS-based search",
+            install_instruction="pip install mteb[faiss-cpu]",
+        )
+
+        import faiss
+        from faiss import IndexFlatIP, IndexFlatL2
+
         # https://github.com/facebookresearch/faiss/wiki/Faiss-indexes
         if (
             model.mteb_model_meta.similarity_fn_name == "dot"
@@ -41,6 +50,8 @@ class FaissEncoderSearchBackend:
 
     def add_document(self, embeddings: Array, idxs: list[str]) -> None:
         """Add all document embeddings and their IDs to FAISS index."""
+        import faiss
+
         if isinstance(embeddings, torch.Tensor):
             embeddings = embeddings.detach().cpu().numpy()
 
@@ -66,6 +77,8 @@ class FaissEncoderSearchBackend:
         query_idx_to_id: dict[int, str] | None = None,
     ) -> tuple[list[list[float]], list[list[int]]]:
         """Search using FAISS."""
+        import faiss
+
         if self.index is None:
             raise ValueError("No index built. Call add_document() first.")
 
