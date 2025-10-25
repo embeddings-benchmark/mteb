@@ -132,7 +132,7 @@ _LANGUAGES = [
 
 
 def get_lang_pairs() -> dict[str, list[str]]:
-    # add pairs with same langauge as the source and target
+    # add pairs with same language as the source and target
     # add pairs with english as source or target
     lang_pairs = {}
     for x in _LANGUAGES:

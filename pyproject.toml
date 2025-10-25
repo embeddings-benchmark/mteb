@@ -98,7 +98,8 @@ faiss-cpu = ["faiss-cpu>=1.12.0"]
 lint = [
     "ruff==0.14.0", # locked so we don't get PRs which fail only due to a lint update
     "pre-commit>=4.1.0",
-    "bibtexparser>=1.4.3" # used for tests/test_citation_formatting.py
+    "bibtexparser>=1.4.3", # used for tests/test_citation_formatting.py
+    "typos>1",
 ]
 test = [
     "pytest>=8.3.4,<8.4.0",
@@ -318,3 +319,73 @@ ignore_errors = true
 # mypy can't resolve dataset dict
 module = ["mteb.abstasks.*"]
 disable_error_code = ["index"]
+
+[tool.typos.default]
+binary = false
+locale = "en"
+extend-ignore-words-re = [
+    # authors
+    "Stap",
+    "Asai",
+    "Tung",
+    "Gool",
+    "Winn",
+    "STIL",
+    "Sherif",
+    "Mor",
+    "Ond",
+    "Mehta",
+    "Parth",
+    # languages/bibtext artifacts
+    "ba",
+    "creen",
+    "Accademia",
+]
+extend-ignore-re = [
+    "author.*",  # ignore authors in citations
+]
+
+[tool.typos.files]
+extend-exclude = [
+    "*.json",
+    "*.jsonl",
+    "*.cff",
+    "*.txt",  # zero shot labels
+    "docs/mmteb",
+    "scripts/",
+    "docs/references.bib",
+    "mteb/models/model_implementations/gme_v_models.py",  # video_grid_thw `thw`
+    "mteb/models/model_implementations/vista_models.py",  # self.normlized: in visual bge
+    "tests/mock_tasks.py",  #  "denne her matche ikke den ovenstående",
+    "mteb/models/model_implementations/kalm_models.py",  # prompt:  classify ist topic",
+    "mteb/tasks/reranking/eng/built_bench_reranking.py",  # prompt:   descriptions from buit asset
+    "mteb/tasks/retrieval/eng/built_bench_retrieval.py",
+    "mteb/tasks/retrieval/eng/llava_it2t_retrieval.py",
+]
+
+[tool.typos.type.py]
+extend-ignore-re = [
+    # ignore lang identifiers
+    "...-....",
+    "..._....",
+]
+
+[tool.typos.type.py.extend-identifiers]
+BulgarianStoreReviewSentimentClassfication = "BulgarianStoreReviewSentimentClassfication"
+
+[tool.typos.type.py.extend-words]
+wdth = "wdth"
+Allo = "Allo"   # AlloProfClusteringS2S.v2
+# langs/splits
+som = "som"
+yor = "yor"
+Beng = "Beng"
+als = "als"
+tha = "tha"
+mak = "mak"
+Maka = "Maka"
+Mape = "Mape"
+Mian = "Mian"
+Ono = "Ono"
+Yau = "Yau"
+Altas = "Altas"

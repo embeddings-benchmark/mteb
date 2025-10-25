@@ -35,7 +35,7 @@ def test_filter_tasks(
     task_types: list[TaskType] | None,  # type: ignore
 ):
     """Tests that get_tasks filters tasks correctly. This could in principle be combined with the following tests, but they have been kept
-    seperate to reduce the grid size.
+    separate to reduce the grid size.
     """
     tasks = filter_tasks(
         all_tasks,

@@ -27,7 +27,7 @@ SFR_TRAINING_DATA = {  # inherits from e5
     "HotpotQA-PL",  # translation not trained on
     "HotpotQA-NL",  # translation not trained on
     # source: https://github.com/embeddings-benchmark/leaderboard/issues/41
-    # qoute: In the realm of Semantic Textual Similarity (STS), it is trained on STS12, STS22, and STSBenchmark
+    # quote: In the realm of Semantic Textual Similarity (STS), it is trained on STS12, STS22, and STSBenchmark
     "STS12",
     "STS22",
     "STSBenchmark",

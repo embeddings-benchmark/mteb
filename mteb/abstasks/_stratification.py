@@ -134,7 +134,7 @@ def _get_most_desired_combination(samples_with_combination: dict):
 class IterativeStratification(_BaseKFold):
     """Iteratively stratify a multi-label data set into folds
 
-    Construct an interative stratifier that splits the data set into folds trying to maintain balanced representation
+    Construct an iterative stratifier that splits the data set into folds trying to maintain balanced representation
     with respect to order-th label combinations.
     """
 

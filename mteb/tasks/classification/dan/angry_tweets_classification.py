@@ -9,7 +9,7 @@ class AngryTweetsClassification(AbsTaskClassification):
             "path": "DDSC/angry-tweets",
             "revision": "20b0e6081892e78179356fada741b7afa381443d",
         },
-        description="A sentiment dataset with 3 classes (positiv, negativ, neutral) for Danish tweets",
+        description="A sentiment dataset with 3 classes (positive, negative, neutral) for Danish tweets",
         reference="https://aclanthology.org/2021.nodalida-main.53/",
         type="Classification",
         category="t2c",
@@ -47,7 +47,7 @@ class AngryTweetsClassificationV2(AbsTaskClassification):
             "path": "mteb/angry_tweets",
             "revision": "b9475fb66a13befda4fa9871cd92343bb2c0eb77",
         },
-        description="""A sentiment dataset with 3 classes (positiv, negativ, neutral) for Danish tweets
+        description="""A sentiment dataset with 3 classes (positive, negative, neutral) for Danish tweets
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://aclanthology.org/2021.nodalida-main.53/",
         type="Classification",

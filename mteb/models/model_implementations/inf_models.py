@@ -4,7 +4,7 @@ from mteb.models.model_meta import (
 )
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
-inf_retreiver_v1_training_data = {
+inf_retriever_v1_training_data = {
     # eng_Latn
     "ArguAna",
     "CQADupstackRetrieval",
@@ -66,7 +66,7 @@ inf_retriever_v1 = ModelMeta(
     adapted_from="Alibaba-NLP/gte-Qwen2-7B-instruct",
     public_training_code=None,
     public_training_data=None,
-    training_datasets=inf_retreiver_v1_training_data,
+    training_datasets=inf_retriever_v1_training_data,
     citation=INF_RETRIEVER_CITATION,
 )
 
@@ -92,6 +92,6 @@ inf_retriever_v1_1_5b = ModelMeta(
     adapted_from="Alibaba-NLP/gte-Qwen2-1.5B-instruct",
     public_training_code=None,
     public_training_data=None,
-    training_datasets=inf_retreiver_v1_training_data,
+    training_datasets=inf_retriever_v1_training_data,
     citation=INF_RETRIEVER_CITATION,
 )

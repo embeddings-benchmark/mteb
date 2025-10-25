@@ -5,7 +5,7 @@ from mteb.models.model_meta import (
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 mixedbread_training_data = {
-    # from correspondance:
+    # from correspondence:
     # as mentioned in our blog post
     # (https://www.mixedbread.com/blog/mxbai-embed-large-v1#built-for-rag-and-real-world-use-cases:~:text=During%20the%20whole,related%20use%20cases.)
     # We do not train on any data (except the MSMarco training split) of MTEB. We have a strong filtering process to ensure the OOD setting. That's true

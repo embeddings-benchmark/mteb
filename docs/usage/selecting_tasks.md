@@ -70,7 +70,7 @@ tasks = [
     mteb.get_task("BUCCBitextMining", languages = ["deu"]), # all subsets containing "deu"
 ]
 ```
-For more information see the documention for [`get_tasks`](../api/task.md#mteb.get_tasks) and [`get_task`](../api/task.md#mteb.get_task).
+For more information see the documentation for [`get_tasks`](../api/task.md#mteb.get_tasks) and [`get_task`](../api/task.md#mteb.get_task).
 
 ### Selecting Evaluation Split or Subsets
 A task in `mteb` mirrors the structure of a dataset on Huggingface. It includes a splits (i.e. "test") and a subset.

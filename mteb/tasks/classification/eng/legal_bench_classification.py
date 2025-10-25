@@ -2641,7 +2641,7 @@ class InternationalCitizenshipQuestionsLegalBenchClassification(AbsTaskClassific
 class JCrewBlockerLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="JCrewBlockerLegalBenchClassification",
-        description="The J.Crew Blocker, also known as the J.Crew Protection, is a provision included in leveraged loan documents to prevent companies from removing security by transferring intellectual property (IP) into new subsidiaries and raising additional debt. The task consists of detemining whether the J.Crew Blocker is present in the document.",
+        description="The J.Crew Blocker, also known as the J.Crew Protection, is a provision included in leveraged loan documents to prevent companies from removing security by transferring intellectual property (IP) into new subsidiaries and raising additional debt. The task consists of determining whether the J.Crew Blocker is present in the document.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "mteb/JCrewBlockerLegalBenchClassification",
@@ -2677,7 +2677,7 @@ class JCrewBlockerLegalBenchClassification(AbsTaskClassification):
 class JCrewBlockerLegalBenchClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="JCrewBlockerLegalBenchClassification.v2",
-        description="""The J.Crew Blocker, also known as the J.Crew Protection, is a provision included in leveraged loan documents to prevent companies from removing security by transferring intellectual property (IP) into new subsidiaries and raising additional debt. The task consists of detemining whether the J.Crew Blocker is present in the document.
+        description="""The J.Crew Blocker, also known as the J.Crew Protection, is a provision included in leveraged loan documents to prevent companies from removing security by transferring intellectual property (IP) into new subsidiaries and raising additional debt. The task consists of determining whether the J.Crew Blocker is present in the document.
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
@@ -4500,7 +4500,7 @@ class OverrulingLegalBenchClassificationV2(AbsTaskClassification):
 class PersonalJurisdictionLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PersonalJurisdictionLegalBenchClassification",
-        description="""Given a fact pattern describing the set of contacts between a plaintiff, defendant, and forum, determine if a court in that forum could excercise personal jurisdiction over the defendant.""",
+        description="""Given a fact pattern describing the set of contacts between a plaintiff, defendant, and forum, determine if a court in that forum could exercise personal jurisdiction over the defendant.""",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "mteb/PersonalJurisdictionLegalBenchClassification",

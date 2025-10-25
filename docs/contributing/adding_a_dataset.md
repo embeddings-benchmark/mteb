@@ -100,7 +100,7 @@ Often the dataset from HuggingFace is not in the format expected by MTEB. To res
             ... # some processing
             self.data_loaded = True
 
-        # dataset trasform will be called if `load_dataset` is not overridden
+        # dataset transform will be called if `load_dataset` is not overridden
         def dataset_transform(self):
             self.dataset = self.stratified_subsampling(
                 self.dataset, seed=self.seed, splits=["train", "test"]

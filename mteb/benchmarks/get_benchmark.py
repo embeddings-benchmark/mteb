@@ -14,7 +14,7 @@ def _build_registry() -> dict[str, Benchmark]:
 
     benchmark_registry = {
         inst.name: inst
-        for nam, inst in benchmark_module.__dict__.items()
+        for _, inst in benchmark_module.__dict__.items()
         if isinstance(inst, Benchmark)
     }
     return benchmark_registry

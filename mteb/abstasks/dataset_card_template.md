@@ -85,7 +85,7 @@ desc_stats = task.metadata.descriptive_stats
 ```
 
 ```json
-{{ descritptive_stats | default("{}", true) }}
+{{ descriptive_stats | default("{}", true) }}
 ```
 
 </details>

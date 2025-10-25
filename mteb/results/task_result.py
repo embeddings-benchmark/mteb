@@ -32,7 +32,7 @@ from mteb.types import (
 logger = logging.getLogger(__name__)
 
 
-class Criterias(HelpfulStrEnum):
+class Criteria(HelpfulStrEnum):
     """Enum for criteria to check when merging TaskResult objects."""
 
     MTEB_VERSION = "mteb_version"
@@ -671,7 +671,7 @@ class TaskResult(BaseModel):
     def is_mergeable(
         self,
         result: TaskResult | AbsTask,
-        criteria: list[str] | list[Criterias] = [
+        criteria: list[str] | list[Criteria] = [
             "mteb_version",
             "dataset_revision",
         ],
@@ -688,9 +688,7 @@ class TaskResult(BaseModel):
         Returns:
             True if the TaskResult object can be merged with the other object, False otherwise.
         """
-        criteria = [
-            Criterias.from_str(c) if isinstance(c, str) else c for c in criteria
-        ]
+        criteria = [Criteria.from_str(c) if isinstance(c, str) else c for c in criteria]
         if isinstance(result, TaskResult):
             name = result.task_name
             revision = result.dataset_revision
@@ -709,14 +707,14 @@ class TaskResult(BaseModel):
                 )
             return False
 
-        if Criterias.MTEB_VERSION in criteria and self.mteb_version != mteb_version:
+        if Criteria.MTEB_VERSION in criteria and self.mteb_version != mteb_version:
             if raise_error:
                 raise ValueError(
                     f"Cannot merge TaskResult objects as they are derived from different MTEB versions ({self.mteb_version} and {mteb_version})"
                 )
             return False
 
-        if Criterias.DATASET_REVISION in criteria and self.dataset_revision != revision:
+        if Criteria.DATASET_REVISION in criteria and self.dataset_revision != revision:
             if raise_error:
                 raise ValueError(
                     f"Cannot merge TaskResult objects as they are derived from different dataset revisions ({self.dataset_revision} and {revision})"
@@ -728,7 +726,7 @@ class TaskResult(BaseModel):
     def merge(
         self,
         new_results: TaskResult,
-        criteria: list[str] | list[Criterias] = [
+        criteria: list[str] | list[Criteria] = [
             "mteb_version",
             "dataset_revision",
         ],

@@ -19,7 +19,7 @@ body:
     id: contribute
     attributes:
       label: Are you interested in contributing to the evaluation of this model?
-      description: By default MTEB maintainters will only handle evaluation on private subsets due to resource constraints. If you are interested in contributing to the evaluation, please let us know. 
+      description: By default MTEB maintainers will only handle evaluation on private subsets due to resource constraints. If you are interested in contributing to the evaluation, please let us know.
       options:
         - "Yes"
         - "No"

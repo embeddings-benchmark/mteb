@@ -62,7 +62,7 @@ bge_m3_training_data = {
     # mMARCO-ZH
     # LawGPT
     # NLI-zh2, LeCaRDv2,
-    # NLI, MultiLongDoc (their syntetic)
+    # NLI, MultiLongDoc (their synthetic)
     # + synthetic data
 }
 
@@ -141,7 +141,6 @@ bge_chinese_training_data = {
 # https://huggingface.co/BAAI/bge-m3/discussions/29
 bgem3_languages = [
     "afr-Latn",  # af
-    # als
     "amh-Ethi",  # am
     # an
     # ar
@@ -151,7 +150,6 @@ bgem3_languages = [
     # av
     # az
     "azj-Latn",  # azb
-    # ba
     # bar
     # bcl
     "ben-Beng",  # be

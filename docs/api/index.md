@@ -34,8 +34,8 @@ as well as the correct documents to retrieve for a given query. In addition to t
 
 A model implementation is simply an implementation of an embedding model or API to ensure that others can reproduce the *exact* results on a given task.
 For instance, when running the OpenAI embedding API on a document larger than the maximum amount of tokens a user will have to decide how they want to
-deal with this limitations (e.g. by truncating the sequence). Having a shared implementation allow us to examine these implementtion assumptions and allow
-for reproducible workflow. To ensure consistency we define a [standard interface/protocol](./model.md#model-protocols) that models should follow to be implemented. These implementations additionally come with [metadata](./model.md#metadata), that for exampe include license, compatible frameworks, and whether the weight are public or not.
+deal with this limitations (e.g. by truncating the sequence). Having a shared implementation allow us to examine these implementation assumptions and allow
+for reproducible workflow. To ensure consistency we define a [standard interface/protocol](./model.md#model-protocols) that models should follow to be implemented. These implementations additionally come with [metadata](./model.md#metadata), that for example include license, compatible frameworks, and whether the weight are public or not.
 
 <figure markdown="span">
     ![](../images/visualizations/modelmeta_explainer.png){ width="80%" }

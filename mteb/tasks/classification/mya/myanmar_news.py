@@ -9,7 +9,7 @@ class MyanmarNews(AbsTaskClassification):
             "path": "mteb/MyanmarNews",
             "revision": "644419f24bc820bbf8af24e0b4714a069812e0a3",
         },
-        description="The Myanmar News dataset on Hugging Face contains news articles in Burmese. It is designed for tasks such as text classification, sentiment analysis, and language modeling. The dataset includes a variety of news topics in 4 categorie, providing a rich resource for natural language processing applications involving Burmese which is a low resource language.",
+        description="The Myanmar News dataset on Hugging Face contains news articles in Burmese. It is designed for tasks such as text classification, sentiment analysis, and language modeling. The dataset includes a variety of news topics in 4 categories, providing a rich resource for natural language processing applications involving Burmese which is a low resource language.",
         reference="https://huggingface.co/datasets/myanmar_news",
         type="Classification",
         category="t2c",
@@ -45,7 +45,7 @@ class MyanmarNewsV2(AbsTaskClassification):
             "path": "mteb/myanmar_news",
             "revision": "475b43ffbdb5138ad67a01a2c860bc7db502f3c5",
         },
-        description="""The Myanmar News dataset on Hugging Face contains news articles in Burmese. It is designed for tasks such as text classification, sentiment analysis, and language modeling. The dataset includes a variety of news topics in 4 categorie, providing a rich resource for natural language processing applications involving Burmese which is a low resource language.
+        description="""The Myanmar News dataset on Hugging Face contains news articles in Burmese. It is designed for tasks such as text classification, sentiment analysis, and language modeling. The dataset includes a variety of news topics in 4 categories, providing a rich resource for natural language processing applications involving Burmese which is a low resource language.
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/myanmar_news",
         type="Classification",

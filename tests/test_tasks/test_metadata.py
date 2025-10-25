@@ -230,6 +230,6 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         return
 
     assert task.metadata.descriptive_stats is not None, (
-        f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask().calculate_descriptive_statistics()`"
+        f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YourTask().calculate_descriptive_statistics()`"
     )
     assert task.metadata.n_samples is not None
