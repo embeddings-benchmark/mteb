@@ -4,9 +4,9 @@ from collections.abc import Callable
 import numpy as np
 import torch
 
-from mteb import EncoderProtocol
 from mteb._requires_package import requires_package
 from mteb.models.model_meta import ScoringFunction
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import Array, TopRankedDocumentsType
 
 logger = logging.getLogger(__name__)
