@@ -2,7 +2,6 @@ import heapq
 import logging
 from typing import Any
 
-import torch
 from datasets import Dataset
 from torch.utils.data import DataLoader
 
@@ -21,6 +20,8 @@ from mteb.types import (
 )
 
 from .models_protocols import CrossEncoderProtocol, EncoderProtocol
+from .search_encoder_index.default_backend_search import DefaultEncoderSearchBackend
+from .search_encoder_index.search_backend_protocol import IndexEncoderSearchProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -28,13 +29,19 @@ logger = logging.getLogger(__name__)
 class SearchEncoderWrapper:
     """Wrapper for Encoder models to be used in search tasks."""
 
-    corpus_chunk_size = 50_000
     task_corpus: CorpusDatasetType | None
 
-    def __init__(self, model: EncoderProtocol):
+    def __init__(
+        self,
+        model: EncoderProtocol,
+        corpus_chunk_size: int = 50_000,
+        index_backend: IndexEncoderSearchProtocol = DefaultEncoderSearchBackend(),
+    ) -> None:
         self.model = model
         self.task_corpus = None
         self.mteb_model_meta = model.mteb_model_meta
+        self.corpus_chunk_size = corpus_chunk_size
+        self.index_backend = index_backend
 
     def index(
         self,
@@ -129,6 +136,7 @@ class SearchEncoderWrapper:
 
         # Reset the task corpus dataloader to None to free up memory
         self.task_corpus = None
+        self.index_backend.clear()
 
         results = {qid: {} for qid in query_idx_to_id.values()}
         for qid in result_heaps:
@@ -173,23 +181,13 @@ class SearchEncoderWrapper:
                 prompt_type=PromptType.document,
                 **encode_kwargs,
             )
-
+            self.index_backend.add_document(sub_corpus_embeddings, sub_corpus_ids)
             # Compute similarities using either cosine-similarity or dot product
             logger.info("Computing Similarities...")
-            scores = self.model.similarity(query_embeddings, sub_corpus_embeddings)
 
-            # get top-k values
-            cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
-                torch.tensor(scores),
-                min(
-                    top_k + 1,
-                    len(scores[1]) if len(scores) > 1 else len(scores[-1]),
-                ),
-                dim=1,
-                largest=True,
+            cos_scores_top_k_values, cos_scores_top_k_idx = self.index_backend.search(
+                query_embeddings, top_k, self.model.similarity
             )
-            cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
-            cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
 
             for query_itr in range(len(query_embeddings)):
                 query_id = query_idx_to_id[query_itr]
@@ -217,14 +215,10 @@ class SearchEncoderWrapper:
         hf_split: str,
         encode_kwargs: dict[str, Any],
     ) -> dict[str, list[tuple[float, str]]]:
-        """Rerank documents based on pre-ranked documents.
-
-        Returns:
-            A dictionary mapping query IDs to a list of tuples, each containing a relevance score and a document ID.
-        """
+        """Rerank documents using backend's search with top_ranked support."""
         result_heaps = {qid: [] for qid in query_idx_to_id.values()}
-        doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
 
+        # Encode corpus
         all_doc_embeddings = self.model.encode(
             create_dataloader(
                 self.task_corpus,
@@ -238,53 +232,28 @@ class SearchEncoderWrapper:
             prompt_type=PromptType.document,
             **encode_kwargs,
         )
+        all_doc_ids = [doc["id"] for doc in self.task_corpus]
+        self.index_backend.add_document(all_doc_embeddings, all_doc_ids)
 
-        # Process each query
-        for query_idx, query_embedding in enumerate(query_embeddings):
-            query_id = query_idx_to_id[query_idx]
-            if query_id not in top_ranked:
-                logger.warning(f"No pre-ranked documents found for query {query_id}")
-                continue
+        # Unified search call
+        cos_scores_top_k_values, cos_scores_top_k_idx = self.index_backend.search(
+            query_embeddings,
+            top_k,
+            similarity_fn=self.model.similarity,
+            top_ranked=top_ranked,
+            query_idx_to_id=query_idx_to_id,
+        )
 
-            ranked_ids = top_ranked[query_id]
-            doc_indices = torch.tensor([doc_id_to_idx[doc_id] for doc_id in ranked_ids])
-            query_doc_embeddings = torch.as_tensor(all_doc_embeddings[doc_indices])
-
-            # Ensure query embedding is on the correct device and has correct shape
-            query_embedding = torch.as_tensor(query_embedding).unsqueeze(0)
-
-            scores = self.model.similarity(
-                query_embedding,
-                query_doc_embeddings,
-            )
-            scores = torch.as_tensor(scores)
-
-            # Handle NaN values
-            is_nan = torch.isnan(scores)
-            if is_nan.sum() > 0:
-                raise ValueError(
-                    f"NaN values detected in the similarity scores: {is_nan.sum()}"
-                )
-
-            # Compute top-k scores
-            scores_top_k_values, scores_top_k_idx = torch.topk(
-                scores,
-                min(top_k, len(ranked_ids)),
-                dim=1,
-                largest=True,
-            )
-
-            # Move results back to CPU for heap operations
-            scores_top_k_values = scores_top_k_values.cpu()
-            scores_top_k_idx = scores_top_k_idx.cpu()
-
-            # Build result heap
-            for doc_idx, score in zip(
-                scores_top_k_idx[0].tolist(),
-                scores_top_k_values[0].tolist(),
+        # Populate results
+        for query_itr, query_id in query_idx_to_id.items():
+            ranked_ids = top_ranked.get(query_id, [])
+            for score, idx in zip(
+                cos_scores_top_k_values[query_itr],
+                cos_scores_top_k_idx[query_itr],
             ):
-                corpus_id = ranked_ids[doc_idx]
-                heapq.heappush(result_heaps[query_id], (score, corpus_id))
+                if idx < len(ranked_ids):
+                    corpus_id = ranked_ids[idx]
+                    heapq.heappush(result_heaps[query_id], (score, corpus_id))
 
         return result_heaps
 
