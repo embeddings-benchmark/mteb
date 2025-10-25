@@ -16,7 +16,6 @@ on:
     workflows: [ "test" ]
     types:
       - completed
-  push:
     branches:
       - main
 
