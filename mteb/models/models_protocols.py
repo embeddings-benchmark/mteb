@@ -1,3 +1,4 @@
+from collections.abc import Iterable, Sequence
 from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
 from torch.utils.data import DataLoader
@@ -227,3 +228,43 @@ class CrossEncoderProtocol(Protocol):
 
 MTEBModels = EncoderProtocol | CrossEncoderProtocol | SearchProtocol
 """Type alias for all MTEB model types as many models implement multiple protocols and many tasks can be solved by multiple model types."""
+
+AudioBatch = Iterable[Array] | DataLoader | Iterable[tuple[Array, str]]
+
+
+class AudioEncoder:
+    """Interface for audio encoders."""
+
+    def __init__(
+        self, device: str | None = None, sample_rate: int = 16000, **kwargs: Any
+    ):
+        self.device = device
+        self.sample_rate = sample_rate
+
+    def encode(
+        self,
+        sentences: Sequence[str],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        """Pass"""
+        pass
+
+    def get_audio_embeddings(self, audio: AudioBatch, **kwargs: Any) -> Array:
+        """Pass"""
+        pass
+
+    def get_text_embeddings(self, texts: list[str], **kwargs: Any) -> Array:
+        """Pass"""
+        pass
+
+    def get_fused_embeddings(
+        self,
+        audio: AudioBatch | None = None,
+        texts: list[str] | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        """Pass"""
+        pass
