@@ -55,11 +55,11 @@ jobs:
           echo "lowercase message: '$low'"
 
           bump="none"
-          if [[ $low == breaking:* ]]; then
+          if [[ "$low" =~ ^breaking: ]]; then
             bump="major"
-          elif [[ $low == feat:* ]] || [[ $low == benchmark:* ]]; then
+          elif [[ "$low" =~ ^(feat:|benchmark:) ]]; then
             bump="minor"
-          elif [[ $low == fix:* ]] || [[ $low == dataset:* ]] || [[ $low == model:* ]]; then
+          elif [[ "$low" =~ ^(fix:|dataset:|model:) ]]; then
             bump="patch"
           fi
 
@@ -88,7 +88,7 @@ jobs:
 
       - name: Commit version bump and tag
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -103,7 +103,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          tag="v${{ steps.version_bump.outputs.new_version }}"
+          tag="${{ steps.version_bump.outputs.new_version }}"
           echo "Creating release for tag $tag"
           gh release create "$tag" --generate-notes --repo "${{ github.repository }}"
 
