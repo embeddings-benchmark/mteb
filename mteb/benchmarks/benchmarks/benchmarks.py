@@ -1682,7 +1682,7 @@ MTEB_NL = Benchmark(
                 "SciFact-NL",
                 "NFCorpus-NL",
                 "BelebeleRetrieval",
-                # "WebFAQRetrieval",
+                "WebFAQRetrieval",
                 "DutchNewsArticlesRetrieval",
                 "bBSARDNLRetrieval",
                 "LegalQANLRetrieval",
