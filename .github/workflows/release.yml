@@ -80,11 +80,9 @@ jobs:
           fetch-depth: 0
 
       - name: Install uv
-        if: ${{ steps.bump_type.outputs.bump != 'none' }}
         uses: astral-sh/setup-uv@v6
 
       - name: Bump version
-        if: ${{ steps.bump_type.outputs.bump != 'none' }}
         id: version_bump
         run: |
           echo "Running uv version --bump ${{ needs.check_bump_type.outputs.bump }}"
@@ -96,7 +94,6 @@ jobs:
           echo "new_version=$ver" >> "$GITHUB_OUTPUT"
 
       - name: Commit version bump and tag
-        if: ${{ steps.bump_type.outputs.bump != 'none' }}
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE }}
         run: |
@@ -110,7 +107,6 @@ jobs:
           git push origin HEAD:main
 
       - name: Create GitHub Release
-        if: ${{ steps.bump_type.outputs.bump != 'none' }}
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE }}
         run: |
@@ -119,25 +115,20 @@ jobs:
           gh release create "$tag" --generate-notes --repo "${{ github.repository }}"
 
       - name: Build
-        if: ${{ steps.bump_type.outputs.bump != 'none' }}
         run: uv build
 
       # Check that basic features work and we didn't miss to include crucial files
       - name: Smoke test (wheel)
-        if: ${{ steps.bump_type.outputs.bump != 'none' }}
         run: uv run --isolated --no-project --with dist/*.whl python -c "import mteb"
       - name: Smoke test (source distribution)
-        if: ${{ steps.bump_type.outputs.bump != 'none' }}
         run: uv run --isolated --no-project --with dist/*.tar.gz python -c "import mteb"
 
       - name: Publish
-        if: ${{ steps.bump_type.outputs.bump != 'none' }}
         run: uv publish
 
       - name: Upload artifacts to Release
-        if: ${{ steps.bump_type.outputs.bump != 'none' }}
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE }}
         # Upload to GitHub Release using the `gh` CLI.
         # `dist/` contains the built packages, and the
         # sigstore-produced signatures and certificates.
