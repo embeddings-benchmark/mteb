@@ -5,7 +5,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class AudioSetMultilingualClassification(AbsTaskAudioMultilabelClassification):
-    superseded_by = "AudioSetMini"
     metadata = TaskMetadata(
         name="AudioSet",
         description="AudioSet consists of an expanding ontology of 632 audio event classes and a collection of 2,084,320 human-labeled 10-second sound clips drawn from YouTube videos.",
@@ -44,6 +43,7 @@ class AudioSetMultilingualClassification(AbsTaskAudioMultilabelClassification):
   year = {2017},
 }
 """,
+        superseded_by="AudioSetMini",
     )
 
     audio_column_name: str = "audio"
