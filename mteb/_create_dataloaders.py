@@ -448,7 +448,7 @@ def _create_audio_dataloader_from_audio_list(
     audio_array: list[AudioInputItem],
     batch_size: int = 32,
 ):
-    # todo temporary fix until full refactoring of tasks
+    # todo temporary until full refactoring of tasks
     from torch.utils.data import DataLoader, Dataset
 
     class CustomAudioDataset(Dataset):

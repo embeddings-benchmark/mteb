@@ -31,7 +31,6 @@ class AbsTaskAudioPairClassification(AbsTask):
         super().__init__(**kwargs)
 
     def _add_main_score(self, scores: ScoresDict) -> None:
-        # print(scores)
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _evaluate_subset(

@@ -5,7 +5,12 @@ from datasets import Audio, Dataset, DatasetDict
 from PIL import Image
 from sklearn.linear_model import LogisticRegression
 
-from mteb.abstasks import AbsTaskAudioClustering
+from mteb.abstasks import (
+    AbsTaskAudioClassification,
+    AbsTaskAudioClustering,
+    AbsTaskAudioPairClassification,
+)
+from mteb.abstasks.audio.abs_task_adio_reranking import AbsTaskAudioReranking
 from mteb.abstasks.audio.abs_task_multilabel_classification import (
     AbsTaskAudioMultilabelClassification,
 )
@@ -4544,4 +4549,110 @@ class MockAny2AnyRetrievalA2ATask(AbsTaskAny2AnyRetrieval):
                 "q1": {"d1": 0, "d2": 1},
             },
         }
+        self.data_loaded = True
+
+
+class MockAudioReranking(AbsTaskAudioReranking):
+    metadata = TaskMetadata(
+        type="AudioReranking",
+        name="MockAudioReranking",
+        main_score="map",
+        **general_args,  # type: ignore
+    )
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "query": mock_audio,
+                        "positive": mock_audio,
+                        "negative": mock_audio,
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("query", Audio())
+        self.dataset = self.dataset.cast_column("positive", Audio())
+        self.dataset = self.dataset.cast_column("negative", Audio())
+
+        self.data_loaded = True
+
+
+class MockAudioClassification(AbsTaskAudioClassification):
+    metadata = TaskMetadata(
+        type="AudioClassification",
+        name="MockAudioClassification",
+        main_score="accuracy",
+        **general_args,  # type: ignore
+    )
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "audio": mock_audio,
+                        "labels": [1, 2],
+                    }
+                ),
+                "train": Dataset.from_dict(
+                    {
+                        "audio": mock_audio * 5,
+                        "labels": [1, 2] * 5,
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("audio", Audio())
+
+        self.data_loaded = True
+
+
+class MockAudioPairClassification(AbsTaskAudioPairClassification):
+    metadata = TaskMetadata(
+        type="AudioPairClassification",
+        name="AbsTaskAudioPairClassification",
+        main_score="max_ap",
+        **general_args,  # type: ignore
+    )
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "audio1": mock_audio,
+                        "audio2": mock_audio,
+                        "label": [0, 1],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("audio1", Audio())
+        self.dataset = self.dataset.cast_column("audio2", Audio())
         self.data_loaded = True

@@ -93,7 +93,7 @@ class AudioPairClassificationEvaluator(Evaluator):
             logger.warning(
                 f"Found {n_duplicates}/{total_audios} duplicates in the input data. Only encoding unique sentences."
             )
-        audios = [np.array(audio) for audio in audios]
+        audios = [{"array": np.array(audio)} for audio in audios]
         embeddings = model.encode(
             _create_audio_dataloader_from_audio_list(
                 audios, encode_kwargs["batch_size"]
@@ -105,11 +105,11 @@ class AudioPairClassificationEvaluator(Evaluator):
         )
 
         emb_dict = {
-            tuple(audio.tolist()): embedding
+            tuple(audio["array"].tolist()): embedding
             for audio, embedding in zip(audios, embeddings)
         }
-        embeddings1 = [emb_dict[tuple(audio)] for audio in self.audio1]
-        embeddings2 = [emb_dict[tuple(audio)] for audio in self.audio2]
+        embeddings1 = np.array([emb_dict[tuple(audio)] for audio in self.audio1])
+        embeddings2 = np.array([emb_dict[tuple(audio)] for audio in self.audio2])
 
         logger.info("Computing similarity distances.")
         cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)
