@@ -59,10 +59,9 @@ mteb = "mteb.cli:main"
 [project.optional-dependencies]
 image = ["torchvision>0.2.1"]
 audio = [
-    "torchaudio>=2.6.0",
+    "torchaudio>=2.6.0,<2.9.0",
     "librosa>=0.11.0",
     "soundfile>=0.13.1",
-    "torchcodec>=0.8.0",
 ]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
