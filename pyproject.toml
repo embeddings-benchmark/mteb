@@ -60,6 +60,7 @@ mteb = "mteb.cli:main"
 image = ["torchvision>0.2.1"]
 audio = [
     "torchaudio>=2.6.0,<2.9.0",
+    "torch<2.9.0",
     "librosa>=0.11.0",
     "soundfile>=0.13.1",
 ]
