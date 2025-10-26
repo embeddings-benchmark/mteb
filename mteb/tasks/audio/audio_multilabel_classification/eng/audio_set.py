@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.abstasks.audio.abs_task_multilabel_classification import (
     AbsTaskAudioMultilabelClassification,
 )

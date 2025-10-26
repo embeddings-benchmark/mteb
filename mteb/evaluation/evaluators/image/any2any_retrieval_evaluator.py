@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import heapq
 import io
 import json

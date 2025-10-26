@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.models import ModelMeta, sentence_transformers_loader
 from mteb.types import PromptType
 

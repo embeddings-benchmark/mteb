@@ -1,12 +1,10 @@
-from __future__ import annotations
-
 from mteb.abstasks.audio.abs_task_zero_shot_classification import (
     AbsTaskAudioZeroshotClassification,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SpeechCommandsZeroshotClassificationv01(AbsTaskAudioZeroshotClassification):
+class SpeechCommandsZeroshotClassificationV01(AbsTaskAudioZeroshotClassification):
     metadata = TaskMetadata(
         name="SpeechCommandsZeroshotv0.01",
         description="Sound Classification/Keyword Spotting Dataset. This is a set of one-second audio clips containing a single spoken English word or background noise. These words are from a small set of commands such as 'yes', 'no', and 'stop' spoken by various speakers. With a total of 10 labels/commands for keyword spotting and a total of 30 labels for other auxiliary tasks",

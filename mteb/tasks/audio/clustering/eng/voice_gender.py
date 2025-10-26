@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.abstasks.audio.abs_task_audio_clustering import AbsTaskAudioClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 

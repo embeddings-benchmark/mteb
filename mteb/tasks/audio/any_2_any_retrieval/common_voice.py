@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from collections import defaultdict
 
 import datasets
@@ -7,7 +5,6 @@ from datasets import Dataset, DatasetDict
 from tqdm import tqdm
 
 from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _EVAL_LANGS = {
@@ -59,7 +56,7 @@ _EVAL_LANGS = {
 }
 
 
-class CommonVoice17A2TRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class CommonVoice17A2TRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="CommonVoice17A2TRetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
@@ -150,7 +147,7 @@ class CommonVoice17A2TRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
                 )
 
 
-class CommonVoice17T2ARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class CommonVoice17T2ARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="CommonVoice17T2ARetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
@@ -234,7 +231,7 @@ class CommonVoice17T2ARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
                 self.relevant_docs[lang][split] = relevant_docs_
 
 
-class CommonVoice21A2TRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class CommonVoice21A2TRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="CommonVoice21A2TRetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
@@ -325,7 +322,7 @@ class CommonVoice21A2TRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
                 )
 
 
-class CommonVoice21T2ARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class CommonVoice21T2ARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="CommonVoice21T2ARetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",

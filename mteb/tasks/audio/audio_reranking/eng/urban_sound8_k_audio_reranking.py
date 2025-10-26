@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.abstasks.audio.abs_task_adio_reranking import AbsTaskAudioReranking
 from mteb.abstasks.task_metadata import TaskMetadata
 

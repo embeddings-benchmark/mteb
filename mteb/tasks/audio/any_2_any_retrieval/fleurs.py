@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from collections import defaultdict
 
 import datasets
@@ -7,7 +5,6 @@ from datasets import Dataset, DatasetDict
 from tqdm import tqdm
 
 from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _FLEURS_EVAL_LANGS = {
@@ -116,7 +113,7 @@ _FLEURS_EVAL_LANGS = {
 }
 
 
-class FleursA2TRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class FleursA2TRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="FleursA2TRetrieval",
         description="Speech recordings with corresponding text transcriptions from the FLEURS dataset.",
@@ -204,7 +201,7 @@ class FleursA2TRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
                 self.relevant_docs[lang][split] = relevant_docs_
 
 
-class FleursT2ARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class FleursT2ARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="FleursT2ARetrieval",
         description="Speech recordings with corresponding text transcriptions from the FLEURS dataset.",

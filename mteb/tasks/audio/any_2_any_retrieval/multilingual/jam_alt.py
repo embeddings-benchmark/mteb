@@ -1,10 +1,7 @@
-from __future__ import annotations
-
 import polars as pl
 from datasets import Audio, DatasetDict, load_dataset
 
 from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _EVAL_LANGS = {
@@ -120,7 +117,7 @@ def _load_jam_alt_data(
     return corpus, queries, relevant_docs
 
 
-class JamAltArtist(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class JamAltArtist(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JamAltArtistA2ARetrieval",
         description="Given audio clip of a song (query), retrieve all songs from the same artist in the Jam-Alt-Lines dataset",
@@ -181,7 +178,7 @@ Music Information Retrieval Conference},
         self.data_loaded = True
 
 
-class JamAltLyricsT2A(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class JamAltLyricsT2A(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JamAltLyricT2ARetrieval",
         description="From textual lyrics (query), retrieve corresponding audio clips of songs from the Jam-Alt-Lines dataset",
@@ -239,7 +236,7 @@ Music Information Retrieval Conference},
         self.data_loaded = True
 
 
-class JamAltLyricsA2T(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class JamAltLyricsA2T(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JamAltLyricA2TRetrieval",
         description="From audio clips of songs (query), retrieve corresponding textual lyric from the Jam-Alt-Lines dataset",

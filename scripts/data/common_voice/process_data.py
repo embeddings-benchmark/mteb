@@ -4,8 +4,6 @@ decompress it into the current project folder, aggregate clip names,
 compress audio files into tar archives with adaptive paths, and update metadata files.
 """
 
-from __future__ import annotations
-
 import argparse
 import csv
 import hashlib

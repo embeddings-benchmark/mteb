@@ -1,7 +1,4 @@
-from __future__ import annotations
-
 from mteb.abstasks.audio.abs_task_audio_classification import AbsTaskAudioClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.task_metadata import TaskMetadata
 
 EVAL_LANGS_MAP = {
@@ -20,7 +17,7 @@ EVAL_LANGS_MAP = {
 }
 
 
-class MInDS14Classification(MultilingualTask, AbsTaskAudioClassification):
+class MInDS14Classification(AbsTaskAudioClassification):
     metadata = TaskMetadata(
         name="MInDS14",
         description="MInDS-14 is an evaluation resource for intent detection with spoken data in 14 diverse languages.",

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import itertools
 import logging
 from collections import Counter, defaultdict
@@ -15,7 +13,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import HFSubset
-from mteb.models.models_protocols import AudioEncoder
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
 
@@ -146,7 +144,7 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
 
     def evaluate(
         self,
-        model: AudioEncoder,
+        model: EncoderProtocol,
         eval_split: str = "test",
         *,
         encode_kwargs: dict[str, Any] = {},
@@ -180,7 +178,7 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: AudioEncoder,
+        model: EncoderProtocol,
         dataset,
         eval_split: str = "test",
         *,

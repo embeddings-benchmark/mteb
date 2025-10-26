@@ -106,6 +106,7 @@ TaskSubtype = Literal[
     "Speech Retrieval",
     "Question Answering Retrieval",
     "Reading Comprehension",
+    "Intent Classification",
 ]
 """The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". This list can be updated as needed."""
 
@@ -137,6 +138,8 @@ TaskDomain = Literal[
     "AudioScene",
     "Speech",
     "Spoken",
+    "Music",
+    "Bioacoustics",
 ]
 """
 The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import logging
 
 from datasets import Dataset
@@ -8,7 +6,7 @@ from mteb.abstasks import AbsTask
 from mteb.evaluation.evaluators.audio.audio_pair_classification_evaluator import (
     AudioPairClassificationEvaluator,
 )
-from mteb.models.models_protocols import AudioEncoder
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import ScoresDict
 
 logger = logging.getLogger(__name__)
@@ -38,7 +36,7 @@ class AbsTaskAudioPairClassification(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: AudioEncoder,
+        model: EncoderProtocol,
         dataset: Dataset,
         *,
         encode_kwargs: dict[str, str] = {},
