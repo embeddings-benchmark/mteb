@@ -59,8 +59,8 @@ mteb = "mteb.cli:main"
 [project.optional-dependencies]
 image = ["torchvision>0.2.1"]
 audio = [
-    "torchaudio>=2.6.0,<2.9.0",
-    "torch<2.9.0",
+    "torchaudio>=2.6.0",
+    "datasets<4",  # https://github.com/huggingface/datasets/issues/7707
     "librosa>=0.11.0",
     "soundfile>=0.13.1",
 ]
