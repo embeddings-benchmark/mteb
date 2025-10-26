@@ -9,7 +9,6 @@ from transformers import CLIPModel, CLIPProcessor
 
 from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
-from mteb.models.models_protocols import AudioBatch
 from mteb.types import Array, PromptType
 
 
@@ -104,7 +103,7 @@ class Wav2ClipZeroShotWrapper:
 
     def get_audio_embeddings(
         self,
-        audio: AudioBatch,
+        audio,
         *,
         show_progress_bar: bool = True,
         task_name: str | None = None,

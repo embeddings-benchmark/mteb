@@ -9,7 +9,6 @@ from transformers import MCTCTFeatureExtractor, MCTCTModel
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.models_protocols import AudioBatch
 from mteb.types import Array, PromptType
 
 COMMON_VOICE_LANGUAGES = [
@@ -90,7 +89,7 @@ class MCTCTWrapper(AbsEncoder):
         self.feature_extractor = MCTCTFeatureExtractor.from_pretrained(model_name)
         self.sampling_rate = self.feature_extractor.sampling_rate  # 16000 Hz
 
-    def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
+    def _process_audio(self, audio) -> list[torch.Tensor]:
         processed_audio = []
 
         if isinstance(audio, DataLoader):
@@ -166,7 +165,7 @@ class MCTCTWrapper(AbsEncoder):
 
     def get_audio_embeddings(
         self,
-        audio: AudioBatch,
+        audio,
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
@@ -233,7 +232,7 @@ class MCTCTWrapper(AbsEncoder):
 
     def encode(
         self,
-        inputs: AudioBatch,
+        inputs,
         *,
         task_name: str,
         prompt_type: PromptType | None = None,

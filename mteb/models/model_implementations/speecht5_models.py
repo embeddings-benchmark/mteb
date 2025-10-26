@@ -14,7 +14,6 @@ from transformers import (
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.models_protocols import AudioBatch
 from mteb.types import Array, PromptType
 
 
@@ -43,7 +42,7 @@ class SpeechT5Wrapper(AbsEncoder):
 
         self.sampling_rate = self.asr_processor.feature_extractor.sampling_rate
 
-    def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
+    def _process_audio(self, audio) -> list[torch.Tensor]:
         processed_audio = []
 
         if isinstance(audio, DataLoader):
@@ -117,7 +116,7 @@ class SpeechT5Wrapper(AbsEncoder):
 
     def get_audio_embeddings(
         self,
-        audio: AudioBatch,
+        audio,
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,

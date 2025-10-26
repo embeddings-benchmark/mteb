@@ -10,7 +10,6 @@ from transformers import AutoProcessor, EncodecModel
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.models_protocols import AudioBatch
 from mteb.types import Array, PromptType
 
 logger = logging.getLogger(__name__)
@@ -32,7 +31,7 @@ class EncodecWrapper(AbsEncoder):
         self.processor = AutoProcessor.from_pretrained(model_name)
         self.sampling_rate = self.processor.sampling_rate  # 24000 Hz typically
 
-    def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
+    def _process_audio(self, audio) -> list[torch.Tensor]:
         processed_audio = []
 
         if isinstance(audio, DataLoader):
@@ -155,7 +154,7 @@ class EncodecWrapper(AbsEncoder):
 
     def get_audio_embeddings(
         self,
-        audio: AudioBatch,
+        audio,
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
@@ -227,7 +226,7 @@ class EncodecWrapper(AbsEncoder):
 
     def encode(
         self,
-        inputs: AudioBatch,
+        inputs,
         *,
         task_name: str,
         prompt_type: PromptType | None = None,

@@ -10,7 +10,6 @@ from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.models_protocols import AudioBatch
 from mteb.types import Array, PromptType
 
 
@@ -36,7 +35,7 @@ class Qwen2AudioWrapper(AbsEncoder):
         self.embed_dim = getattr(cfg, "d_model", getattr(cfg, "hidden_size", None))
         self.sampling_rate = 16000
 
-    def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
+    def _process_audio(self, audio) -> list[torch.Tensor]:
         processed: list[torch.Tensor] = []
         if isinstance(audio, DataLoader):
             for batch in audio:
@@ -107,7 +106,7 @@ class Qwen2AudioWrapper(AbsEncoder):
 
     def get_audio_embeddings(
         self,
-        audio: AudioBatch,
+        audio,
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
@@ -152,7 +151,7 @@ class Qwen2AudioWrapper(AbsEncoder):
 
     def encode(
         self,
-        inputs: AudioBatch,
+        inputs,
         *,
         task_name: str,
         prompt_type: PromptType | None = None,

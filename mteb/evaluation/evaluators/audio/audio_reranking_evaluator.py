@@ -11,6 +11,7 @@ from torch.utils.data import DataLoader
 
 from mteb._evaluators import Evaluator
 from mteb._evaluators.retrieval_metrics import confidence_scores, nauc
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.evaluation.evaluators.dataset_utils import AudioDataset
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.similarity_functions import cos_sim
@@ -40,7 +41,7 @@ class AudioRerankingEvaluator(Evaluator):
         query_column_name: str = "query",
         positive_column_name: str = "positive",
         negative_column_name: str = "negative",
-        task_name: str | None = None,
+        task_metadata: TaskMetadata | None = None,
         mrr_at_k: int = 10,
         name: str = "",
         encode_kwargs: dict[str, Any] = {},
@@ -60,7 +61,7 @@ class AudioRerankingEvaluator(Evaluator):
         self.name = name
         self.mrr_at_k = mrr_at_k
         self.use_batched_encoding = use_batched_encoding
-        self.task_name = task_name
+        self.task_metadata = task_metadata
         self.k_values = k_values
         self.encode_kwargs = encode_kwargs
         self.transform = transform
@@ -111,10 +112,12 @@ class AudioRerankingEvaluator(Evaluator):
         )
 
         all_query_embs = np.asarray(
-            model.get_audio_embeddings(
+            model.encode(
                 query_dataloader,
-                task_name=self.task_name,
+                task_metadata=self.task_metadata,
                 prompt_type=PromptType.query,
+                hf_subset="test",
+                hf_split="test",
                 **self.encode_kwargs,
             )
         )
@@ -139,10 +142,12 @@ class AudioRerankingEvaluator(Evaluator):
         )
 
         all_docs_embs = np.asarray(
-            model.get_audio_embeddings(
+            model.encode(
                 docs_dataloader,
-                task_name=self.task_name,
+                task_metadata=self.task_metadata,
                 prompt_type=PromptType.document,
+                hf_subset="test",
+                hf_split="test",
                 **self.encode_kwargs,
             )
         )
@@ -218,19 +223,23 @@ class AudioRerankingEvaluator(Evaluator):
 
             # Encode query and documents
             query_emb = np.asarray(
-                model.get_audio_embeddings(
+                model.encode(
                     query_dataloader,
-                    task_name=self.task_name,
+                    task_metadata=self.task_metadata,
                     prompt_type=PromptType.query,
+                    hf_subset="test",
+                    hf_split="test",
                     **self.encode_kwargs,
                 )
             )
 
             docs_emb = np.asarray(
-                model.get_audio_embeddings(
+                model.encode(
                     docs_dataloader,
-                    task_name=self.task_name,
+                    task_metadata=self.task_metadata,
                     prompt_type=PromptType.document,
+                    hf_subset="test",
+                    hf_split="test",
                     **self.encode_kwargs,
                 )
             )

@@ -8,7 +8,6 @@ from tqdm import tqdm
 
 from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
-from mteb.models.models_protocols import AudioBatch
 from mteb.types import Array, PromptType
 
 
@@ -31,7 +30,7 @@ class MuQMuLanWrapper:
         # Load the model
         self.model = MuQMuLan.from_pretrained(model_name).eval().to(self.device)
 
-    def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
+    def _process_audio(self, audio) -> list[torch.Tensor]:
         """Process audio batch and return list of tensors."""
         processed_audio = []
 
@@ -117,7 +116,7 @@ class MuQMuLanWrapper:
 
     def get_audio_embeddings(
         self,
-        audio: AudioBatch,
+        audio,
         *,
         show_progress_bar: bool = True,
         task_name: str | None = None,

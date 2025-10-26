@@ -10,7 +10,6 @@ from transformers import AutoProcessor, SeamlessM4Tv2Model
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.models_protocols import AudioBatch
 from mteb.types import Array, PromptType
 
 
@@ -35,7 +34,7 @@ class SeamlessM4TWrapper(AbsEncoder):
         self.model = self.model.to(device)
         self.speech_encoder = self.speech_encoder.to(device)
 
-    def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
+    def _process_audio(self, audio) -> list[torch.Tensor]:
         processed_audio = []
 
         if isinstance(audio, DataLoader):
@@ -106,7 +105,7 @@ class SeamlessM4TWrapper(AbsEncoder):
 
     def get_audio_embeddings(
         self,
-        audio: AudioBatch,
+        audio,
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
@@ -205,7 +204,7 @@ class SeamlessM4TWrapper(AbsEncoder):
 
     def encode(
         self,
-        inputs: AudioBatch,
+        inputs,
         *,
         task_name: str,
         prompt_type: PromptType | None = None,

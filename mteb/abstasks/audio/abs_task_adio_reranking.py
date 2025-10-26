@@ -87,7 +87,7 @@ class AbsTaskAudioReranking(AbsTask):
             self.audio_query_column_name,
             self.audio_positive_column_name,
             self.audio_negative_column_name,
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )

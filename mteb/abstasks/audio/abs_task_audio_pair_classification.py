@@ -50,7 +50,7 @@ class AbsTaskAudioPairClassification(AbsTask):
             data_split[self.audio1_column_name],
             data_split[self.audio2_column_name],
             data_split[self.label_column_name],
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
             **kwargs,
         )
         scores = evaluator.compute_metrics(model, encode_kwargs=encode_kwargs)

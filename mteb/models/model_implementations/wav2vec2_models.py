@@ -9,7 +9,6 @@ from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2ForCTC, Wav2Vec2Model
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.models_protocols import AudioBatch
 from mteb.types import Array, PromptType
 
 # ISO 639-3 codes for languages supported by wav2vec2 models
@@ -96,7 +95,7 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
+    def _process_audio(self, audio) -> list[torch.Tensor]:
         processed_audio = []
 
         if isinstance(audio, DataLoader):
@@ -168,7 +167,7 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
 
     def get_audio_embeddings(
         self,
-        audio: AudioBatch,
+        audio,
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
@@ -288,7 +287,7 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
 
     def encode(
         self,
-        inputs: AudioBatch,
+        inputs,
         *,
         task_name: str,
         prompt_type: PromptType | None = None,

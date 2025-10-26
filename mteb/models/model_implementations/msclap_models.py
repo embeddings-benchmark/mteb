@@ -10,7 +10,6 @@ from tqdm import tqdm
 
 from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
-from mteb.models.models_protocols import AudioBatch
 from mteb.types import Array, PromptType
 
 logger = logging.getLogger(__name__)
@@ -51,7 +50,7 @@ class MSClapWrapper:
         self.model.clap = self.model.clap.to(self.device)
         self.tokenizer = self.model.tokenizer
 
-    def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
+    def _process_audio(self, audio) -> list[torch.Tensor]:
         processed_audio = []
 
         if isinstance(audio, DataLoader):
@@ -155,7 +154,7 @@ class MSClapWrapper:
 
     def get_audio_embeddings(
         self,
-        audio: AudioBatch,
+        audio,
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,

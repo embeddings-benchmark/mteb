@@ -9,7 +9,6 @@ from tqdm import tqdm
 from transformers import ClapModel, ClapProcessor
 
 from mteb.models import ModelMeta
-from mteb.models.models_protocols import AudioBatch
 from mteb.types import Array, PromptType
 
 
@@ -31,7 +30,7 @@ class ClapZeroShotWrapper:
         # with 48000 and not 44100.
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
-    def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
+    def _process_audio(self, audio) -> list[torch.Tensor]:
         processed_audio = []
 
         if isinstance(audio, DataLoader):
@@ -106,7 +105,7 @@ class ClapZeroShotWrapper:
 
     def get_audio_embeddings(
         self,
-        audio: AudioBatch,
+        audio,
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,

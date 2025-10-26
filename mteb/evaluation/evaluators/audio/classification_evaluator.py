@@ -14,6 +14,7 @@ from sklearn.metrics import (
 from torch.utils.data import DataLoader
 
 from mteb._evaluators import Evaluator
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.evaluation.evaluators.dataset_utils import AudioDataset, custom_collate_fn
 
 logger = logging.getLogger(__name__)
@@ -36,7 +37,7 @@ class AudiologRegClassificationEvaluator(Evaluator):
         dataset_test,
         audio_column_name,
         label_column_name,
-        task_name: str,
+        task_metadata: TaskMetadata,
         max_iter: int = 100,
         encode_kwargs: dict[str, Any] = {},
         limit: int | None = None,
@@ -62,7 +63,7 @@ class AudiologRegClassificationEvaluator(Evaluator):
         self.y_test = dataset_test[label_column_name]
 
         self.max_iter = max_iter
-        self.task_name = task_name
+        self.task_metadata = task_metadata
 
     def __call__(self, model, test_cache=None):
         scores = {}
@@ -79,8 +80,12 @@ class AudiologRegClassificationEvaluator(Evaluator):
             collate_fn=custom_collate_fn,
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
-        X_train = model.get_audio_embeddings(
-            dataloader_train, batch_size=self.encode_kwargs["batch_size"]
+        X_train = model.encode(
+            dataloader_train,
+            task_metadata=self.task_metadata,
+            hf_split="train",
+            hf_subset="default",
+            batch_size=self.encode_kwargs["batch_size"],
         )
         dataloader = DataLoader(
             self.dataset_test,
@@ -90,8 +95,12 @@ class AudiologRegClassificationEvaluator(Evaluator):
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
 
-        X_test = model.get_audio_embeddings(
-            dataloader, batch_size=self.encode_kwargs["batch_size"]
+        X_test = model.encode(
+            dataloader,
+            task_metadata=self.task_metadata,
+            hf_split="train",
+            hf_subset="default",
+            batch_size=self.encode_kwargs["batch_size"],
         )
         test_cache = X_test
 

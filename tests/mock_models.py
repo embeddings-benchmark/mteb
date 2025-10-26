@@ -12,7 +12,6 @@ from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import AudioBatch
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import Array, BatchedInput, PromptType
 
@@ -155,66 +154,3 @@ class MockSentenceTransformerWrapper(SentenceTransformerEncoderWrapper):
         if isinstance(embeddings, torch.Tensor):
             embeddings = embeddings.cpu().detach().float().numpy()
         return embeddings
-
-
-class MockAudioEncoder:
-    mteb_model_meta = ModelMeta(
-        loader=None,
-        name="mock/MockAudioEncoder",
-        languages=["eng-Latn"],
-        revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
-        release_date="2024-01-01",
-        modalities=["audio"],
-        n_parameters=86_600_000,
-        memory_usage_mb=330,
-        max_tokens=None,
-        embed_dim=768,
-        license=None,
-        open_weights=True,
-        public_training_code=None,
-        public_training_data=None,
-        framework=["PyTorch"],
-        reference="https://huggingface.co/facebook/wav2vec2-large-xlsr-53-english",
-        similarity_fn_name=None,
-        use_instructions=False,
-        training_datasets=None,
-    )
-    model_card_data = mteb_model_meta
-
-    def __init__(self):
-        self.embedding_dim = 768
-
-    def get_audio_embeddings(
-        self,
-        audio: AudioBatch,
-        **kwargs,
-    ):
-        if isinstance(audio, DataLoader):
-            all_embeddings = []
-            for batch in audio:
-                batch_size = len(batch)
-                all_embeddings.append(np.random.rand(batch_size, self.embedding_dim))
-            return np.concatenate(all_embeddings)
-        else:
-            total_samples = len(audio)
-            return np.random.rand(total_samples, self.embedding_dim)
-
-    def get_text_embeddings(
-        self,
-        texts,
-        **kwargs,
-    ):
-        return np.random.rand(len(texts), self.embedding_dim)
-
-    def calculate_probs(
-        self, text_embeddings: np.ndarray, audio_embeddings: np.ndarray
-    ):
-        return torch.randn(text_embeddings.shape[0], audio_embeddings.shape[0])
-
-    def get_fused_embeddings(
-        self,
-        audio: AudioBatch | None = None,
-        texts: list[str] | None = None,
-        **kwargs: Any,
-    ):
-        return torch.randn(len(texts), self.embedding_dim)

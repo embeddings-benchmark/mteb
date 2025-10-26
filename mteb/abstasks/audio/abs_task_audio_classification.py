@@ -68,7 +68,9 @@ class AbsTaskAudioClassification(AbsTask):
             self.load_data()
 
         scores = {}
-        hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
+        hf_subsets = (
+            list(self.dataset) if self.metadata.is_multilingual else ["default"]
+        )
 
         for hf_subset in hf_subsets:
             logger.info(
@@ -203,7 +205,7 @@ class AbsTaskAudioClassification(AbsTask):
                     eval_split,
                     self.audio_column_name,
                     self.label_column_name,
-                    task_name=self.metadata.name,
+                    task_metadata=self.metadata,
                     encode_kwargs=encode_kwargs,
                     **params,
                 )

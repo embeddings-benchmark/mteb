@@ -25,6 +25,7 @@ class AudioDataset(torch.utils.data.Dataset):
             # Handle HuggingFace dataset with columns
             audio = self.dataset[idx][self.audio_column_name]
 
+        sample_rate = None
         if isinstance(audio, bytes):
             waveform, sample_rate = torchaudio.load(io.BytesIO(audio))
         elif isinstance(audio, str):
@@ -41,7 +42,10 @@ class AudioDataset(torch.utils.data.Dataset):
 
         if self.transform is not None:
             waveform = self.transform(waveform)
-        return waveform
+        return {
+            "array": waveform,
+            "sampling_rate": sample_rate,
+        }
 
 
 def custom_collate_fn(batch):
