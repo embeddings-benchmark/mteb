@@ -119,7 +119,7 @@ class AbsTaskAudioClustering(AbsTask):
         v_std = np.std(v_measures)
 
         scores = {
-            "v_measures": v_measures,
+            "v_measures": all_v_scores,
             "v_measure": float(mean_v_measure),
             "v_measure_std": v_std,
         }

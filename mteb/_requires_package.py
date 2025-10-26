@@ -67,3 +67,12 @@ def requires_image_dependencies() -> None:
             "You are trying to running the image subset of mteb without having installed the required dependencies (`torchvision`). "
             + "You can install the required dependencies using `pip install 'mteb[image]'` to install the required dependencies."
         )
+
+
+def requires_audio_dependencies() -> None:
+    """Check if the required dependencies for audio tasks are available."""
+    if not _is_package_available("torchaudio"):
+        raise ImportError(
+            "You are trying to running the audio subset of mteb without having installed the required dependencies (`torchaudio`). "
+            + "You can install the required dependencies using `pip install 'mteb[audio]'` to install the required dependencies."
+        )

@@ -461,6 +461,11 @@ def _create_audio_dataloader_from_audio_list(
         def __getitem__(self, idx):
             return {"audio": self.audio_array[idx]}
 
+        @property
+        def features(self) -> dict[str, Any]:
+            # for correct wrapper handling
+            return {"audio": []}
+
     return DataLoader(
         CustomAudioDataset(audio_array),
         batch_size=batch_size,
