@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import logging
 import math
 import os
@@ -14,7 +12,7 @@ from torch.utils.data import DataLoader
 from mteb._evaluators import Evaluator
 from mteb._evaluators.retrieval_metrics import confidence_scores, nauc
 from mteb.evaluation.evaluators.dataset_utils import AudioDataset
-from mteb.models.models_protocols import AudioEncoder
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.similarity_functions import cos_sim
 from mteb.types import PromptType
 
@@ -26,7 +24,7 @@ def custom_collate_fn(batch):
 
 
 class AudioRerankingEvaluator(Evaluator):
-    """This class evaluates an AudioEncoder model for the task of audio re-ranking.
+    """This class evaluates an EncoderProtocol model for the task of audio re-ranking.
     Given an audio query and a list of audio documents, it computes the score [query, doc_i] for all possible
     documents and sorts them in decreasing order. Then, MRR@10 and MAP are computed to measure the quality of the ranking.
 
@@ -86,18 +84,18 @@ class AudioRerankingEvaluator(Evaluator):
                 "No valid samples found with non-empty positive and negative sets"
             )
 
-    def __call__(self, model: AudioEncoder):
+    def __call__(self, model: EncoderProtocol):
         scores = self.compute_metrics(model)
         return scores
 
-    def compute_metrics(self, model: AudioEncoder):
+    def compute_metrics(self, model: EncoderProtocol):
         return (
             self.compute_metrics_batched(model)
             if self.use_batched_encoding
             else self.compute_metrics_individual(model)
         )
 
-    def compute_metrics_batched(self, model: AudioEncoder):
+    def compute_metrics_batched(self, model: EncoderProtocol):
         """Computes the metrics in a batched way, by batching all queries and
         all documents together
         """
@@ -180,7 +178,7 @@ class AudioRerankingEvaluator(Evaluator):
 
         return self._collect_results(all_mrr_scores, all_ap_scores, all_conf_scores)
 
-    def compute_metrics_individual(self, model: AudioEncoder):
+    def compute_metrics_individual(self, model: EncoderProtocol):
         """Encodes and evaluates each (query, positive, negative) tuple individually.
         Slower but more memory efficient.
         """

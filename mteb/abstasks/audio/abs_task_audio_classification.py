@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import logging
 from collections import defaultdict
 from typing import Any
@@ -10,7 +8,7 @@ from sklearn.model_selection import KFold
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import HFSubset
 from mteb.evaluation.evaluators import AudiologRegClassificationEvaluator
-from mteb.models.models_protocols import AudioEncoder
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import ScoresDict
 
 logger = logging.getLogger(__name__)
@@ -59,7 +57,7 @@ class AbsTaskAudioClassification(AbsTask):
 
     def evaluate(
         self,
-        model: AudioEncoder,
+        model: EncoderProtocol,
         eval_split: str = "test",
         train_split: str = "train",
         *,
@@ -106,7 +104,7 @@ class AbsTaskAudioClassification(AbsTask):
 
     def _evaluate_subset_cross_validation(
         self,
-        model: AudioEncoder,
+        model: EncoderProtocol,
         dataset,
         eval_split: str = "test",
         train_split: str = "train",
@@ -170,7 +168,7 @@ class AbsTaskAudioClassification(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: AudioEncoder,
+        model: EncoderProtocol,
         dataset,
         eval_split: str = "test",
         train_split: str = "train",

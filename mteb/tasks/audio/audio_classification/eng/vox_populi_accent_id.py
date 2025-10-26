@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.abstasks.audio.abs_task_audio_classification import (
     AbsTaskAudioClassification,
 )
@@ -73,7 +71,6 @@ Dupoux, Emmanuel},
             return True
 
         filtered_test = test_ds.filter(is_valid_audio)
-        print(f"Kept {len(filtered_test)} valid samples out of {len(test_ds)} total")
 
         # Create a new DatasetDict that has both "train" and "test" = filtered_test
         self.dataset = DatasetDict(

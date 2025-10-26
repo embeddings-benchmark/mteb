@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .abstask import AbsTask
 from .audio.abs_task_audio_classification import AbsTaskAudioClassification
 from .audio.abs_task_audio_clustering import AbsTaskAudioClustering

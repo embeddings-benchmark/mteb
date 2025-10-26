@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 

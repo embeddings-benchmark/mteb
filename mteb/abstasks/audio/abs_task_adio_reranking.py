@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import Any
 
 from datasets import Dataset
@@ -8,7 +6,7 @@ from mteb.abstasks import AbsTask
 from mteb.evaluation.evaluators.audio.audio_reranking_evaluator import (
     AudioRerankingEvaluator,
 )
-from mteb.models.models_protocols import AudioEncoder
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
 
@@ -78,7 +76,7 @@ class AbsTaskAudioReranking(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: AudioEncoder,
+        model: EncoderProtocol,
         data_split: Dataset,
         *,
         encode_kwargs: dict[str, Any] = {},

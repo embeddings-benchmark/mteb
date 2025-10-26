@@ -8,8 +8,6 @@ Examples:
     TaskP2PEncoder.py     -> task_p2p_encoder.py
 """
 
-from __future__ import annotations
-
 import argparse
 import re
 from pathlib import Path

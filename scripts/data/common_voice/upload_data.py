@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Script to upload Common Voice raw files (tar and tsv) directly to HuggingFace Hub"""
 
-from __future__ import annotations
-
 import argparse
 import os
 import time
