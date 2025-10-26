@@ -1,7 +1,5 @@
 """test that mteb works with various output types of encoders"""
 
-from __future__ import annotations
-
 import logging
 
 import pytest

@@ -1,0 +1,188 @@
+from collections.abc import Iterable
+from functools import partial
+from typing import Any
+
+import numpy as np
+import torch
+from torch.utils.data import DataLoader
+from tqdm import tqdm
+from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
+
+from mteb.models import ModelMeta
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.models_protocols import AudioBatch
+from mteb.types import Array, PromptType
+
+
+class Qwen2AudioWrapper(AbsEncoder):
+    def __init__(
+        self,
+        model_name: str = "Qwen/Qwen2-Audio-7B",
+        device: str | None = None,
+        max_audio_length_seconds: float = 30.0,
+        **kwargs: Any,
+    ):
+        self.model_name = model_name
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.max_audio_length_seconds = max_audio_length_seconds
+        self.processor = AutoProcessor.from_pretrained(model_name)
+        self.model = Qwen2AudioForConditionalGeneration.from_pretrained(model_name)
+
+        self.audio_encoder = self.model.audio_tower
+        self.model = self.model.to(self.device)
+        self.audio_encoder = self.audio_encoder.to(self.device)
+
+        cfg = self.model.config.audio_config
+        self.embed_dim = getattr(cfg, "d_model", getattr(cfg, "hidden_size", None))
+        self.sampling_rate = 16000
+
+    def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
+        processed: list[torch.Tensor] = []
+        if isinstance(audio, DataLoader):
+            for batch in audio:
+                processed.extend(self._handle_batch(batch))
+        else:
+            processed = self._handle_batch(audio)
+        return processed
+
+    def _handle_batch(
+        self, batch: Array | Iterable[tuple[Array, str]]
+    ) -> list[torch.Tensor]:
+        waveforms: list[torch.Tensor] = []
+        import torchaudio
+
+        if isinstance(batch, tuple):
+            for audio, _ in batch:
+                waveforms.append(self._convert_audio_from_numpy(audio))
+        else:
+            for item in batch:
+                if isinstance(item, dict):
+                    if "array" in item:
+                        arr = item["array"]
+                        sr = item.get("sampling_rate", None)
+                        if isinstance(arr, np.ndarray):
+                            tensor = torch.from_numpy(arr).float()
+                        elif isinstance(arr, list):
+                            tensor = torch.tensor(arr).float()
+                        else:
+                            tensor = arr.float()
+                        if sr and sr != self.sampling_rate:
+                            resampler = torchaudio.transforms.Resample(
+                                sr, self.sampling_rate
+                            )
+                            tensor = resampler(tensor)
+                        waveforms.append(self._convert_audio_from_numpy(tensor))
+                    elif "path" in item:
+                        waveforms.append(self._load_audio_file(item["path"]))
+                elif isinstance(item, (np.ndarray, torch.Tensor)):
+                    waveforms.append(self._convert_audio_from_numpy(item))
+                elif isinstance(item, str):
+                    waveforms.append(self._load_audio_file(item))
+        return waveforms
+
+    def _convert_audio_from_numpy(self, audio: Array) -> torch.Tensor:
+        if isinstance(audio, np.ndarray):
+            audio = torch.from_numpy(audio)
+        if audio.ndim == 2:
+            audio = audio.mean(dim=0)
+        audio = audio.squeeze()
+        return audio
+
+    def _load_audio_file(self, path: str) -> torch.Tensor:
+        import torchaudio
+
+        waveform, sr = torchaudio.load(path)
+        if waveform.ndim == 2:
+            waveform = waveform.mean(dim=0)
+        if sr != self.sampling_rate:
+            resampler = torchaudio.transforms.Resample(sr, self.sampling_rate)
+            waveform = resampler(waveform)
+        waveform = waveform.squeeze()
+        return waveform
+
+    def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:
+        max_len = max(w.shape[0] for w in batch)
+        padded = [torch.nn.functional.pad(w, (0, max_len - w.shape[0])) for w in batch]
+        return torch.stack(padded)
+
+    def get_audio_embeddings(
+        self,
+        audio: AudioBatch,
+        *,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
+        batch_size: int = 4,
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ) -> torch.Tensor:
+        processed = self._process_audio(audio)
+        embeddings_list: list[torch.Tensor] = []
+
+        with torch.no_grad():
+            for i in tqdm(
+                range(0, len(processed), batch_size), disable=not show_progress_bar
+            ):
+                batch = processed[i : i + batch_size]
+
+                audio_list = [w.numpy() for w in batch]
+                prompt = " ".join(["<|AUDIO|>"] * len(audio_list))
+
+                inputs = self.processor(
+                    text=prompt,
+                    audios=audio_list,
+                    sampling_rate=self.processor.feature_extractor.sampling_rate,
+                    return_tensors="pt",
+                    padding=True,
+                    truncation=True,
+                    max_length=int(self.max_audio_length_seconds * self.sampling_rate),
+                )
+
+                input_features = inputs.input_features.to(self.device)
+
+                outputs = self.audio_encoder(
+                    input_features=input_features,
+                    output_hidden_states=True,
+                )
+
+                last_hidden = outputs.hidden_states[-1]
+                emb = last_hidden.mean(dim=1).cpu()
+                embeddings_list.append(emb)
+
+        return torch.cat(embeddings_list, dim=0)
+
+    def encode(
+        self,
+        inputs: AudioBatch,
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        raise ValueError("Qwen2Audio models only support audio encoding.")
+
+
+qwen2_audio_meta = ModelMeta(
+    loader=partial(
+        Qwen2AudioWrapper,
+        model_name="Qwen/Qwen2-Audio-7B",
+        model_revision="dd84470756e6277a71d4d7188773a43cde92696e",
+    ),
+    name="Qwen/Qwen2-Audio-7B",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="dd84470756e6277a71d4d7188773a43cde92696e",
+    release_date="2024-08-09",
+    max_tokens=131_072,
+    n_parameters=7_000_000_000,
+    memory_usage_mb=None,
+    embed_dim=1280,
+    license="mit",
+    reference="https://huggingface.co/Qwen/Qwen2-Audio-7B",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    modalities=["audio"],
+)
