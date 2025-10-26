@@ -77,7 +77,7 @@ class ASTWrapper(AbsEncoder):
 
             # AST's pooled output is the [CLS] token embedding
             embeddings = outputs.pooler_output
-            all_embeddings.append(embeddings.cpu())
+            all_embeddings.append(embeddings.cpu().detach())
         return torch.cat(all_embeddings, dim=0).numpy()
 
     def encode(

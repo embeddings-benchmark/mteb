@@ -4257,6 +4257,7 @@ class MockAudioClusteringTask(AbsTaskAudioClustering):
         main_score="v_measure",
         **general_args,
     )
+    metadata.modalities = ["audio"]
 
     def load_data(self, **kwargs):
         mock_audio = [
@@ -4313,6 +4314,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification
         main_score="accuracy",
         **general_args,
     )
+    metadata.modalities = ["audio"]
 
     def load_data(self, **kwargs):
         mock_audio = [
@@ -4359,6 +4361,7 @@ class MockAudioZeroshotClassificationTask(AbsTaskAudioZeroshotClassification):
         main_score="accuracy",
         **general_args,
     )
+    metadata.modalities = ["audio"]
 
     def load_data(self, **kwargs):
         # Create mock audio data as numpy arrays
@@ -4559,6 +4562,8 @@ class MockAudioReranking(AbsTaskAudioReranking):
         main_score="map",
         **general_args,  # type: ignore
     )
+    metadata.category = "a2a"
+    metadata.modalities = ["audio"]
 
     def load_data(self, **kwargs):
         mock_audio = [
@@ -4594,6 +4599,7 @@ class MockAudioClassification(AbsTaskAudioClassification):
         main_score="accuracy",
         **general_args,  # type: ignore
     )
+    metadata.modalities = ["audio"]
 
     def load_data(self, **kwargs):
         mock_audio = [
@@ -4632,6 +4638,7 @@ class MockAudioPairClassification(AbsTaskAudioPairClassification):
         main_score="max_ap",
         **general_args,  # type: ignore
     )
+    metadata.modalities = ["audio"]
 
     def load_data(self, **kwargs):
         mock_audio = [
