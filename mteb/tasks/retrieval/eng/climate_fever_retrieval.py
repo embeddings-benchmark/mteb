@@ -91,7 +91,7 @@ class ClimateFEVERHardNegativesV2(AbsTaskRetrieval):
         description=(
             "CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. "
             "The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct. "
-            "V2 uses a more appropriate prompt rather than the default prompt for retrieval."
+            "V2 uses a more appropriate prompt rather than the default prompt for retrieval. You can get more information on the effect of different prompt in the [PR](https://github.com/embeddings-benchmark/mteb/pull/3469#issuecomment-3436467106)"
         ),
         reference="https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html",
         dataset={

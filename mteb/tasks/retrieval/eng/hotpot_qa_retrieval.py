@@ -90,7 +90,7 @@ class HotpotQAHardNegativesV2(AbsTaskRetrieval):
             "HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong "
             "supervision for supporting facts to enable more explainable question answering systems. "
             "The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct."
-            "V2 uses a more appropriate prompt rather than the default prompt for retrieval."
+            "V2 uses a more appropriate prompt rather than the default prompt for retrieval. You can get more information on the effect of different prompt in the [PR](https://github.com/embeddings-benchmark/mteb/pull/3469#issuecomment-3436467106)"
         ),
         adapted_from=["HotpotQA"],
         prompt={
