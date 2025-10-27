@@ -1,4 +1,5 @@
 import json
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
@@ -6,6 +7,7 @@ import pytest
 import mteb
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.models import SearchEncoderWrapper
+from mteb.models.model_meta import ScoringFunction
 from mteb.models.search_encoder_index import (
     DefaultEncoderSearchBackend,
     FaissEncoderSearchBackend,
@@ -141,9 +143,18 @@ def test_predictions(tmp_path: Path, task, expected):
         MockRerankingTask(),
     ],
 )
-def test_retrieval_backends(task: AbsTaskRetrieval, tmp_path: Path):
+@pytest.mark.parametrize(
+    "similarity",
+    [ScoringFunction.DOT_PRODUCT, ScoringFunction.COSINE, ScoringFunction.EUCLIDEAN],
+)
+def test_retrieval_backends(
+    task: AbsTaskRetrieval, similarity: ScoringFunction, tmp_path: Path
+):
     """Test different retrieval backends for retrieval and reranking tasks."""
     model = mteb.get_model("baseline/random-encoder-baseline")
+    model_meta = deepcopy(model.mteb_model_meta)
+    model_meta.similarity_fn_name = similarity
+    model.mteb_model_meta = model_meta
 
     python_backend = SearchEncoderWrapper(
         model, index_backend=DefaultEncoderSearchBackend()

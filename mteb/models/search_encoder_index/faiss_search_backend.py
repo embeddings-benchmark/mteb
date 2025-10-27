@@ -36,14 +36,18 @@ class FaissEncoderSearchBackend:
         from faiss import IndexFlatIP, IndexFlatL2
 
         # https://github.com/facebookresearch/faiss/wiki/Faiss-indexes
-        if (
-            model.mteb_model_meta.similarity_fn_name == "dot"
-            or model.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT
-        ):
-            self.index_type = IndexFlatL2
-        else:
+        if model.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
+            self.index_type = IndexFlatIP
+        elif model.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
             self.index_type = IndexFlatIP
             self._normalize = True
+        elif model.mteb_model_meta.similarity_fn_name is ScoringFunction.EUCLIDEAN:
+            self.index_type = IndexFlatL2
+        else:
+            raise ValueError(
+                f"FAISS backend does not support similarity function {model.mteb_model_meta.similarity_fn_name}. "
+                f"Available: {ScoringFunction.DOT_PRODUCT}, {ScoringFunction.COSINE}."
+            )
 
         self.idxs: list[str] = []
         self.index: faiss.Index | None = None
@@ -92,15 +96,21 @@ class FaissEncoderSearchBackend:
             if query_idx_to_id is None:
                 raise ValueError("query_idx_to_id must be provided when reranking.")
 
-            return self._reranking(
+            similarities, ids = self._reranking(
                 embeddings,
                 top_k,
                 top_ranked=top_ranked,
                 query_idx_to_id=query_idx_to_id,
             )
+        else:
+            similarities, ids = self.index.search(embeddings.astype(np.float32), top_k)
+            similarities = similarities.tolist()
+            ids = ids.tolist()
 
-        documents, ids = self.index.search(embeddings.astype(np.float32), top_k)
-        return documents.tolist(), ids.tolist()
+        if isinstance(self.index, faiss.IndexFlatL2):
+            similarities = -np.sqrt(np.maximum(similarities, 0))
+
+        return similarities, ids
 
     def _reranking(
         self,
