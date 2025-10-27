@@ -92,43 +92,54 @@ class FaissEncoderSearchBackend:
             if query_idx_to_id is None:
                 raise ValueError("query_idx_to_id must be provided when reranking.")
 
-            doc_id_to_idx = {doc_id: i for i, doc_id in enumerate(self.idxs)}
-            scores_all: list[list[float]] = []
-            idxs_all: list[list[int]] = []
-
-            for query_idx, query_emb in enumerate(embeddings):
-                query_id = query_idx_to_id[query_idx]
-                ranked_ids = top_ranked.get(query_id)
-                if not ranked_ids:
-                    logger.warning(f"No top-ranked documents for query {query_id}")
-                    scores_all.append([])
-                    idxs_all.append([])
-                    continue
-
-                candidate_indices = [doc_id_to_idx[doc_id] for doc_id in ranked_ids]
-                d = self.index.d
-                candidate_embs = np.zeros((len(candidate_indices), d), dtype=np.float32)
-                for j, idx in enumerate(candidate_indices):
-                    candidate_embs[j] = self.index.reconstruct(idx)
-
-                scores = similarity_fn(
-                    torch.as_tensor(query_emb).unsqueeze(0),
-                    torch.as_tensor(candidate_embs),
-                )
-
-                values, indices = torch.topk(
-                    torch.as_tensor(scores),
-                    k=min(top_k, len(candidate_indices)),
-                    dim=1,
-                    largest=True,
-                )
-                scores_all.append(values.squeeze(0).cpu().tolist())
-                idxs_all.append(indices.squeeze(0).cpu().tolist())
-
-            return scores_all, idxs_all
+            return self._reranking(
+                embeddings,
+                top_k,
+                top_ranked=top_ranked,
+                query_idx_to_id=query_idx_to_id,
+            )
 
         documents, ids = self.index.search(embeddings.astype(np.float32), top_k)
         return documents.tolist(), ids.tolist()
+
+    def _reranking(
+        self,
+        embeddings: Array,
+        top_k: int,
+        top_ranked: TopRankedDocumentsType | None = None,
+        query_idx_to_id: dict[int, str] | None = None,
+    ) -> tuple[list[list[float]], list[list[int]]]:
+        doc_id_to_idx = {doc_id: i for i, doc_id in enumerate(self.idxs)}
+        scores_all: list[list[float]] = []
+        idxs_all: list[list[int]] = []
+
+        for query_idx, query_emb in enumerate(embeddings):
+            query_id = query_idx_to_id[query_idx]
+            ranked_ids = top_ranked.get(query_id)
+            if not ranked_ids:
+                logger.warning(f"No top-ranked documents for query {query_id}")
+                scores_all.append([])
+                idxs_all.append([])
+                continue
+
+            candidate_indices = [doc_id_to_idx[doc_id] for doc_id in ranked_ids]
+            d = self.index.d
+            candidate_embs = np.vstack(
+                [self.index.reconstruct(idx) for idx in candidate_indices]
+            )
+            sub_reranking_index = self.index_type(d)
+            sub_reranking_index.add(candidate_embs)
+
+            # Search returns scores and indices in one call
+            scores, local_indices = sub_reranking_index.search(
+                query_emb.reshape(1, -1).astype(np.float32),
+                min(top_k, len(candidate_indices)),
+            )
+            # faiss will output 2d arrays even for single query
+            scores_all.append(scores[0].tolist())
+            idxs_all.append(local_indices[0].tolist())
+
+        return scores_all, idxs_all
 
     def clear(self) -> None:
         """Clear all stored documents and embeddings from the backend."""
