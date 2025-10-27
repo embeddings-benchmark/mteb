@@ -107,7 +107,7 @@ class FaissEncoderSearchBackend:
             similarities = similarities.tolist()
             ids = ids.tolist()
 
-        if isinstance(self.index, faiss.IndexFlatL2):
+        if issubclass(self.index_type, faiss.IndexFlatL2):
             similarities = -np.sqrt(np.maximum(similarities, 0))
 
         return similarities, ids
