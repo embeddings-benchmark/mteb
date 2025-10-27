@@ -975,8 +975,6 @@ MTEB_INDIC = Benchmark(
                 # Bitext
                 "IN22ConvBitextMining",
                 "IN22GenBitextMining",
-                "IndicGenBenchFloresBitextMining",
-                "LinceMTBitextMining",
                 # clustering
                 "SIB200ClusteringS2S",
                 # classification
@@ -985,7 +983,6 @@ MTEB_INDIC = Benchmark(
                 "HindiDiscourseClassification",
                 "SentimentAnalysisHindi",
                 "MalayalamNewsClassification",
-                "IndicLangClassification",
                 "MTOPIntentClassification",
                 "MultiHateClassification",
                 "TweetSentimentClassification",
@@ -1084,7 +1081,6 @@ MTEB_EU = Benchmark(
             "AmazonCounterfactualClassification",
             "MassiveScenarioClassification",
             "MultiHateClassification",
-            "NordicLangClassification",
             "ScalaClassification",
             "SwissJudgementClassification",
             "TweetSentimentClassification",
