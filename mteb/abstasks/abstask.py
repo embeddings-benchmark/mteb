@@ -459,7 +459,7 @@ class AbsTask(ABC):
         """Filter the languages of the task.
 
         Args:
-            languages: list of languages to filter the task by can be either a 3-letter langauge code (e.g. "eng") or also include the script
+            languages: list of languages to filter the task by can be either a 3-letter language code (e.g. "eng") or also include the script
                 (e.g. "eng-Latn")
             script: A list of scripts to filter the task by. Will be ignored if language code specified the script. If None, all scripts are included.
                 If the language code does not specify the script the intersection of the language and script will be used.

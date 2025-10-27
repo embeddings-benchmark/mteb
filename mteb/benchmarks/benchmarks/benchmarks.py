@@ -641,7 +641,7 @@ MTEB_KOR = Benchmark(
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
     tasks=get_tasks(
         languages=["kor"],
-        tasks=[  # @KennethEnevoldsen: We could probably expand this to a more solid benchamrk, but for now I have left it as is.
+        tasks=[  # @KennethEnevoldsen: We could probably expand this to a more solid benchmark, but for now I have left it as is.
             # Classification
             "KLUE-TC",
             # Reranking
@@ -1008,7 +1008,7 @@ MTEB_INDIC = Benchmark(
         # STS
         (get_task("IndicCrosslingualSTS"),)
     ),
-    description="A regional geopolitical text embedding benchmark targetting embedding performance on Indic languages.",
+    description="A regional geopolitical text embedding benchmark targeting embedding performance on Indic languages.",
     reference=None,
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
@@ -1016,7 +1016,7 @@ MTEB_INDIC = Benchmark(
 
 
 eu_languages = [
-    # official EU languages (56) - we could include the whole economic area e.g. Norway - additioanlly we could include minority languages (probably a good idea?)
+    # official EU languages (56) - we could include the whole economic area e.g. Norway - additionally we could include minority languages (probably a good idea?)
     # germanic
     "dan",
     "eng",
@@ -1142,7 +1142,7 @@ MTEB_EU = Benchmark(
         languages=eu_languages,
         exclusive_language_filter=True,
     ),
-    description="A regional geopolitical text embedding benchmark targetting embedding performance on European languages.",
+    description="A regional geopolitical text embedding benchmark targeting embedding performance on European languages.",
     reference=None,
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
@@ -1858,7 +1858,7 @@ MIEB_ENG = MIEBBenchmark(
     ),
     description="""MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 125 tasks.
     In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation,
-    document undestanding, visual STS, and CV-centric tasks.""",
+    document understanding, visual STS, and CV-centric tasks.""",
     reference="https://arxiv.org/abs/2504.10471",
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation=r"""
@@ -1892,7 +1892,7 @@ MIEB_MULTILINGUAL = MIEBBenchmark(
     ),
     description="""MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 130 tasks and a total of 39 languages.
     In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation,
-    document undestanding, visual STS, and CV-centric tasks. This benchmark consists of MIEB(eng) + 3 multilingual retrieval
+    document understanding, visual STS, and CV-centric tasks. This benchmark consists of MIEB(eng) + 3 multilingual retrieval
     datasets + the multilingual parts of VisualSTS-b and VisualSTS-16.""",
     reference="https://arxiv.org/abs/2504.10471",
     contacts=["gowitheflow-1998", "isaac-chung"],
@@ -2113,7 +2113,7 @@ BUILT_MTEB = Benchmark(
             "BuiltBenchReranking",
         ],
     ),
-    description='"Built-Bench" is an ongoing effort aimed at evaluating text embedding models in the context of built asset management, spanning over various dicsiplines such as architeture, engineering, constrcution, and operations management of the built environment.',
+    description='"Built-Bench" is an ongoing effort aimed at evaluating text embedding models in the context of built asset management, spanning over various disciplines such as architecture, engineering, construction, and operations management of the built environment.',
     reference="https://arxiv.org/abs/2411.12056",
     citation=r"""
 @article{shahinmoghadam2024benchmarking,

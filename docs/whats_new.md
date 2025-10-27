@@ -276,7 +276,7 @@ The previous approach to evaluate would require you to first create `MTEB` objec
 The `MTEB` object was initially a sort of catch all object intended for both filtering tasks, selecting tasks, evaluating and few other cases.
 
 This overload of functionality made it hard to change. We have already for a while made it easier to filter and select tasks using `get_tasks` and
-`mteb.evaluate` now superseeded `MTEB` as the method for evaluation.
+`mteb.evaluate` now superseded `MTEB` as the method for evaluation.
 
 ```py
 # Approach before 2.0.0:

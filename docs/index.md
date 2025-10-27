@@ -10,7 +10,7 @@ MTEB is the go-to documentation for evaluating embeddings models across a variet
 This package was initially introduced as a package for evaluating text embeddings predominantly for English[@mteb_2023], but have since been extended for broad languages coverage[@mmteb_2025] and to support multiple modalities[@mieb_2025].
 
 
-## Installation 
+## Installation
 
 Installation is as simple as:
 
@@ -54,7 +54,7 @@ To see more check out the [installation guide](./installation.md).
 
     To run a model from the cli simply specify the `--model/-m` and the `--tasks/-t`
     ```bash
-    mteb run \ 
+    mteb run \
         -m sentence-transformers/all-MiniLM-L6-v2 \
         -t Banking77Classification \
         --output-folder results

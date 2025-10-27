@@ -382,7 +382,7 @@ Mihaiii__Venusaur = ModelMeta(
     reference="https://huggingface.co/Mihaiii/Venusaur",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
-    training_datasets=None,  # source model is unkown
+    training_datasets=None,  # source model is unknown
     # {"Mihaiii/qa-assistant"},
     adapted_from="Mihaiii/test14",
     superseded_by=None,
@@ -1516,7 +1516,7 @@ openbmb__minicpm_embedding = ModelMeta(
     superseded_by=None,
 )
 
-silma_ai__silma_embeddding_matryoshka_v0_1 = ModelMeta(
+silma_ai__silma_embedding_matryoshka_v0_1 = ModelMeta(
     name="silma-ai/silma-embeddding-matryoshka-v0.1",
     revision="a520977a9542ebdb8a7206df6b7ff6977f1886ea",
     release_date="2024-10-12",

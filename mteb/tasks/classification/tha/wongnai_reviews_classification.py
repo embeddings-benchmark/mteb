@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class WongnaiReviewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WongnaiReviewsClassification",
-        description="Wongnai features over 200,000 restaurants, beauty salons, and spas across Thailand on its platform, with detailed information about each merchant and user reviews. In this dataset there are 5 classes corressponding each star rating",
+        description="Wongnai features over 200,000 restaurants, beauty salons, and spas across Thailand on its platform, with detailed information about each merchant and user reviews. In this dataset there are 5 classes corresponding each star rating",
         reference="https://github.com/wongnai/wongnai-corpus",
         dataset={
             "path": "Wongnai/wongnai_reviews",

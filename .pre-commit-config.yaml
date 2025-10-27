@@ -19,6 +19,10 @@ repos:
     -   id: end-of-file-fixer # generated a lot of changes
     -   id: trailing-whitespace
     -   id: check-toml
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.38.1
+    hooks:
+    - id: typos
 
   - repo: local
     hooks:
