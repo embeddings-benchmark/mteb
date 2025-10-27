@@ -1638,7 +1638,7 @@ BEIR_NL = Benchmark(
 
 MTEB_NL = Benchmark(
     name="MTEB(nld, v1)",
-    display_name="MTEB-NL",
+    display_name="Dutch",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/nl.svg",
     tasks=MTEBTasks(
         get_tasks(
