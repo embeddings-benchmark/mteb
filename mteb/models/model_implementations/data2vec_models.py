@@ -1,15 +1,17 @@
-from collections.abc import Iterable
+import warnings
 from typing import Any
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import Data2VecAudioModel, Wav2Vec2FeatureExtractor
 
+from mteb import TaskMetadata
+from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, PromptType
+from mteb.types import Array, BatchedInput, PromptType
+from mteb.types._encoder_io import AudioInput
 
 
 class Data2VecAudioWrapper(AbsEncoder):
@@ -20,6 +22,7 @@ class Data2VecAudioWrapper(AbsEncoder):
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
+        requires_audio_dependencies()
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -29,114 +32,52 @@ class Data2VecAudioWrapper(AbsEncoder):
         self.model = Data2VecAudioModel.from_pretrained(model_name).to(self.device)
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def _process_audio(self, audio) -> list[torch.Tensor]:
-        processed_audio = []
-
-        if isinstance(audio, DataLoader):
-            for batch in audio:
-                processed_audio.extend(self._handle_batch(batch))
-        else:
-            processed_audio = self._handle_batch(audio)
-
-        return processed_audio
-
-    def _handle_batch(
-        self, batch: Array | Iterable[tuple[Array, str]]
-    ) -> list[torch.Tensor]:
-        import torchaudio
-
-        waveforms = []
-
-        if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
-            for audio, _ in batch:
-                waveforms.append(self._convert_audio_from_numpy(audio))
-        else:
-            for item in batch:
-                if isinstance(item, dict):
-                    if "array" in item:
-                        audio = item["array"]
-                        if isinstance(audio, np.ndarray):
-                            audio = torch.from_numpy(audio).float()
-                        elif isinstance(audio, list):
-                            audio = torch.tensor(audio).float()
-                        else:
-                            audio = audio.float()
-                        if item["sampling_rate"] != self.sampling_rate:
-                            resampler = torchaudio.transforms.Resample(
-                                item["sampling_rate"], self.sampling_rate
-                            )
-                            audio = resampler(audio)
-                        waveforms.append(self._convert_audio_from_numpy(audio))
-                    elif "path" in item:
-                        waveforms.append(self._load_audio_file(item["path"]))
-                elif isinstance(item, (np.ndarray, torch.Tensor)):
-                    waveforms.append(self._convert_audio_from_numpy(item))
-                elif isinstance(item, str):
-                    waveforms.append(self._load_audio_file(item))
-
-        return waveforms
-
-    def _convert_audio_from_numpy(self, audio: Array) -> torch.Tensor:
-        if isinstance(audio, np.ndarray):
-            audio = torch.from_numpy(audio)
-        return audio.squeeze()
-
-    def _load_audio_file(self, path: str) -> torch.Tensor:
-        import torchaudio
-
-        waveform, sample_rate = torchaudio.load(path)
-        if sample_rate != self.sampling_rate:
-            resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
-            waveform = resampler(waveform)
-        return waveform.squeeze()
-
-    def _pad_audio_batch(self, batch):
-        batch = [x.reshape(-1) if x.ndim == 0 else x for x in batch]
-        max_length = max(audio.shape[0] for audio in batch)
-        padded_batch = [
-            torch.nn.functional.pad(audio, (0, max_length - audio.shape[0]))
-            for audio in batch
-        ]
-        return torch.stack(padded_batch)
-
     def get_audio_embeddings(
         self,
-        audio,
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 4,
+        inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ) -> torch.Tensor:
-        processed_audio = self._process_audio(audio)
+    ) -> Array:
+        import torchaudio
+
         all_embeddings = []
 
-        with torch.no_grad():
-            for i in tqdm(
-                range(0, len(processed_audio), batch_size),
-                disable=not show_progress_bar,
-            ):
-                batch = processed_audio[i : i + batch_size]
+        for batch in tqdm(
+            inputs,
+            disable=not show_progress_bar,
+        ):
+            audio_arrays = []
+            for a in batch["audio"]:
+                array = torch.tensor(a["array"], dtype=torch.float32)
+                sr = a.get("sampling_rate", None)
+                if sr is None:
+                    warnings.warn(
+                        f"No sampling_rate provided for an audio sample. "
+                        f"Assuming {self.sampling_rate} Hz (model default)."
+                    )
+                    sr = self.sampling_rate
 
-                # Let feature extractor handle all padding
-                batch_numpy = [
-                    b.cpu().numpy() if isinstance(b, torch.Tensor) else b for b in batch
-                ]
+                if sr != self.sampling_rate:
+                    resampler = torchaudio.transforms.Resample(
+                        orig_freq=sr, new_freq=self.sampling_rate
+                    )
+                    array = resampler(array)
+                audio_arrays.append(array.numpy())
 
-                inputs = self.feature_extractor(
-                    batch_numpy,
-                    sampling_rate=self.sampling_rate,
-                    return_tensors="pt",
-                    padding="longest",
-                    truncation=True,
-                    max_length=int(self.max_audio_length_seconds * self.sampling_rate),
-                    return_attention_mask=True,
-                ).to(self.device)
+            feature_inputs = self.feature_extractor(
+                audio_arrays,
+                sampling_rate=self.sampling_rate,
+                return_tensors="pt",
+                padding="longest",
+                truncation=True,
+                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
+                return_attention_mask=True,
+            ).to(self.device)
 
+            with torch.no_grad():
                 outputs = self.model(
-                    inputs.input_values,
-                    attention_mask=inputs.attention_mask,
+                    feature_inputs.input_values,
+                    attention_mask=feature_inputs.attention_mask,
                     output_hidden_states=True,
                 )
 
@@ -147,8 +88,8 @@ class Data2VecAudioWrapper(AbsEncoder):
                 device = last_hidden_state.device
 
                 # Calculate proper hidden lengths based on input attention mask
-                input_lengths = inputs.attention_mask.sum(dim=1)
-                downsample_ratio = inputs.input_values.shape[1] / hidden_seq_len
+                input_lengths = feature_inputs.attention_mask.sum(dim=1)
+                downsample_ratio = feature_inputs.input_values.shape[1] / hidden_seq_len
                 hidden_lengths = (input_lengths.float() / downsample_ratio).long()
                 hidden_lengths = torch.clamp(hidden_lengths, min=0, max=hidden_seq_len)
 
@@ -164,22 +105,23 @@ class Data2VecAudioWrapper(AbsEncoder):
                 valid_tokens = hidden_attention_mask.sum(dim=1)
                 embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
 
-                all_embeddings.append(embeddings.cpu())
+                all_embeddings.append(embeddings.cpu().detach())
 
-        if all_embeddings:
-            return torch.cat(all_embeddings, dim=0)
-        else:
-            return torch.zeros((0, self.model.config.hidden_size))
+        return torch.cat(all_embeddings, dim=0).numpy()
 
     def encode(
         self,
-        inputs,
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        raise ValueError("Data2Vec models only support audio encoding.")
+    ) -> Array:
+        if "audio" not in inputs.dataset.features:
+            raise ValueError("Data2VecAudioWrapper only supports audio inputs.")
+        return self.get_audio_embeddings(inputs, **kwargs)
 
 
 # Base model
