@@ -218,7 +218,6 @@ class SearchEncoderWrapper:
         """Rerank documents using backend's search with top_ranked support."""
         result_heaps = {qid: [] for qid in query_idx_to_id.values()}
 
-        # Encode corpus
         all_doc_embeddings = self.model.encode(
             create_dataloader(
                 self.task_corpus,
@@ -235,7 +234,6 @@ class SearchEncoderWrapper:
         all_doc_ids = [doc["id"] for doc in self.task_corpus]
         self.index_backend.add_document(all_doc_embeddings, all_doc_ids)
 
-        # Unified search call
         cos_scores_top_k_values, cos_scores_top_k_idx = self.index_backend.search(
             query_embeddings,
             top_k,
@@ -244,16 +242,14 @@ class SearchEncoderWrapper:
             query_idx_to_id=query_idx_to_id,
         )
 
-        # Populate results
         for query_itr, query_id in query_idx_to_id.items():
             ranked_ids = top_ranked.get(query_id, [])
             for score, idx in zip(
                 cos_scores_top_k_values[query_itr],
                 cos_scores_top_k_idx[query_itr],
             ):
-                if idx < len(ranked_ids):
-                    corpus_id = ranked_ids[idx]
-                    heapq.heappush(result_heaps[query_id], (score, corpus_id))
+                corpus_id = ranked_ids[idx]
+                heapq.heappush(result_heaps[query_id], (score, corpus_id))
 
         return result_heaps
 
