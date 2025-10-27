@@ -12,7 +12,7 @@ from mteb.types import Array, TopRankedDocumentsType
 logger = logging.getLogger(__name__)
 
 
-class FaissEncoderSearchBackend:
+class FaissSearchIndex:
     """FAISS-based backend for encoder-based search.
 
     Supports both full-corpus retrieval and reranking (via `top_ranked`).

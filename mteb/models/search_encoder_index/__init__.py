@@ -1,9 +1,8 @@
-from .default_backend_search import DefaultEncoderSearchBackend
-from .faiss_search_backend import FaissEncoderSearchBackend
 from .search_backend_protocol import IndexEncoderSearchProtocol
+from .search_indexes import FaissSearchIndex, StreamingSearchIndex
 
 __all__ = [
-    "DefaultEncoderSearchBackend",
-    "FaissEncoderSearchBackend",
+    "FaissSearchIndex",
     "IndexEncoderSearchProtocol",
+    "StreamingSearchIndex",
 ]

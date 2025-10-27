@@ -8,7 +8,7 @@ from mteb.types import Array, TopRankedDocumentsType
 logger = logging.getLogger(__name__)
 
 
-class DefaultEncoderSearchBackend:
+class StreamingSearchIndex:
     """Streaming backend for encoder-based search.
 
     - Does not store the entire corpus in memory.
