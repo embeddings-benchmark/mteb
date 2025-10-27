@@ -318,7 +318,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             """
         ## Embedding Leaderboard
 
-        This leaderboard compares 100+ text and image embedding models across 1000+ languages. We refer to the publication of each selectable benchmark for details on metrics, languages, tasks, and task types. Anyone is welcome [to add a model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/contributing/adding_a_model.md), [add benchmarks](https://github.com/embeddings-benchmark/mteb/blob/main/docs/contributing/adding_a_benchmark.md), [help us improve zero-shot annotations](https://github.com/embeddings-benchmark/mteb/blob/06489abca007261c7e6b11f36d4844c5ed5efdcb/mteb/models/bge_models.py#L91) or [propose other changes to the leaderboard](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/leaderboard).
+        This leaderboard compares 100+ text and image embedding models across 1000+ languages. We refer to the publication of each selectable benchmark for details on metrics, languages, tasks, and task types. Anyone is welcome [to add a model](https://embeddings-benchmark.github.io/mteb/contributing/adding_a_model/), [add benchmarks](https://embeddings-benchmark.github.io/mteb/contributing/adding_a_benchmark/), [help us improve zero-shot annotations](https://github.com/embeddings-benchmark/mteb/blob/06489abca007261c7e6b11f36d4844c5ed5efdcb/mteb/models/bge_models.py#L91) or [propose other changes to the leaderboard](https://github.com/embeddings-benchmark/mteb/issues/new?template=enhancement.yaml).
         """
         )
         gr.Markdown(
