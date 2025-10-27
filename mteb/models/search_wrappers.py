@@ -20,7 +20,7 @@ from mteb.types import (
 )
 
 from .models_protocols import CrossEncoderProtocol, EncoderProtocol
-from .search_encoder_index.default_backend_search import DefaultEncoderSearchBackend
+from .search_encoder_index import StreamingSearchIndex
 from .search_encoder_index.search_backend_protocol import IndexEncoderSearchProtocol
 
 logger = logging.getLogger(__name__)
@@ -35,7 +35,7 @@ class SearchEncoderWrapper:
         self,
         model: EncoderProtocol,
         corpus_chunk_size: int = 50_000,
-        index_backend: IndexEncoderSearchProtocol = DefaultEncoderSearchBackend(),
+        index_backend: IndexEncoderSearchProtocol = StreamingSearchIndex(),
     ) -> None:
         self.model = model
         self.task_corpus = None
