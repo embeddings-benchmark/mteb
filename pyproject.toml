@@ -100,6 +100,10 @@ xet = ["huggingface_hub>=0.32.0"]
 youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lkeap>=3.0.1451"]
 llama-embed-nemotron = ["transformers==4.51.0"]
 faiss-cpu = ["faiss-cpu>=1.12.0"]
+speechbrain = ["speechbrain>=0.5.12"]
+muq = ["muq==0.1.0"]
+wav2clip = ["wav2clip==0.1.0"]
+torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 
 [dependency-groups]
 lint = [
