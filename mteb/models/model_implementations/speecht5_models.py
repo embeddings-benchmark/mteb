@@ -31,18 +31,18 @@ class SpeechT5Wrapper(AbsEncoder):
         self.max_audio_length_s = max_audio_length_s
 
         self.asr_processor = SpeechT5Processor.from_pretrained(
-            "microsoft/speecht5_asr", revision=revision
+            model_name, revision=revision
         )
         self.tts_processor = SpeechT5Processor.from_pretrained(
-            "microsoft/speecht5_tts", revision=revision
+            model_name, revision=revision
         )
 
         # Initialize models for both audio and text encoding
         self.asr_model = SpeechT5ForSpeechToText.from_pretrained(
-            "microsoft/speecht5_asr", revision=revision
+            model_name, revision=revision
         ).to(self.device)
         self.tts_model = SpeechT5ForTextToSpeech.from_pretrained(
-            "microsoft/speecht5_tts", revision=revision
+            model_name, revision=revision
         ).to(self.device)
         self.asr_model.eval()
         self.tts_model.eval()
