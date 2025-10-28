@@ -127,10 +127,7 @@ class HubertWrapper(AbsEncoder):
 
 # Base model
 hubert_base = ModelMeta(
-    loader=partial(
-        HubertWrapper,
-        model_name="facebook/hubert-base-ls960",
-    ),
+    loader=HubertWrapper,
     name="facebook/hubert-base-ls960",
     languages=["eng-Latn"],
     open_weights=True,
@@ -153,10 +150,7 @@ hubert_base = ModelMeta(
 
 # Fine-tuned large model
 hubert_large_ft = ModelMeta(
-    loader=partial(
-        HubertWrapper,
-        model_name="facebook/hubert-large-ls960-ft",
-    ),
+    loader=HubertWrapper,
     name="facebook/hubert-large-ls960-ft",
     languages=["eng-Latn"],
     open_weights=True,
