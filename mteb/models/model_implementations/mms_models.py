@@ -144,10 +144,7 @@ class MMSWrapper(AbsEncoder):
 
 
 mms_1b_all = ModelMeta(
-    loader=partial(
-        MMSWrapper,
-        model_name="facebook/mms-1b-all",
-    ),
+    loader=MMSWrapper,
     name="facebook/mms-1b-all",
     languages=[
         "eng-Latn",
@@ -177,10 +174,7 @@ mms_1b_all = ModelMeta(
 )
 
 mms_1b_fl102 = ModelMeta(
-    loader=partial(
-        MMSWrapper,
-        model_name="facebook/mms-1b-fl102",
-    ),
+    loader=MMSWrapper,
     name="facebook/mms-1b-fl102",
     languages=["eng-Latn"],  # Supports 102 languages
     open_weights=True,
@@ -202,10 +196,7 @@ mms_1b_fl102 = ModelMeta(
 )
 
 mms_1b_l1107 = ModelMeta(
-    loader=partial(
-        MMSWrapper,
-        model_name="facebook/mms-1b-l1107",
-    ),
+    loader=MMSWrapper,
     name="facebook/mms-1b-l1107",
     languages=["eng-Latn"],  # Supports 1107 languages
     open_weights=True,
