@@ -78,17 +78,19 @@ class Qwen2AudioWrapper(AbsEncoder):
 
             processor_inputs = self.processor(
                 text=prompt,
-                audios=audio_arrays,
+                audio=audio_arrays,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding=True,
                 truncation=True,
                 max_length=int(self.max_audio_length_seconds * self.sampling_rate),
-            ).to(self.device)
+            )
+
+            input_features = processor_inputs.input_features.to(self.device)
 
             with torch.no_grad():
                 outputs = self.audio_encoder(
-                    input_features=processor_inputs.input_features,
+                    input_features=input_features,
                     output_hidden_states=True,
                 )
 
