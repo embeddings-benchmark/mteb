@@ -125,7 +125,7 @@ class RepLLaMAModel(AbsEncoder):
                         sequence_lengths,
                     ]
                     embeddings = F.normalize(reps, p=2, dim=-1)
-                    all_embeddings.append(embeddings.cpu().numpy())
+                    all_embeddings.append(embeddings.cpu().detach().numpy())
 
         return np.concatenate(all_embeddings, axis=0)
 

@@ -10,7 +10,9 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
+from mteb._create_dataloaders import _create_audio_dataloader_from_audio_list
 from mteb._evaluators import Evaluator
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.models_protocols import EncoderProtocol
 
 logger = logging.getLogger(__name__)
@@ -38,14 +40,14 @@ class AudioPairClassificationEvaluator(Evaluator):
         audio1,
         audio2,
         labels,
-        task_name: str | None = None,
+        task_metadata: TaskMetadata,
         **kwargs,
     ):
         super().__init__(**kwargs)
         self.audio1 = audio1
         self.audio2 = audio2
         self.labels = labels
-        self.task_name = task_name
+        self.task_metadata = task_metadata
 
         assert len(self.audio1) == len(self.audio2)
         assert len(self.audio1) == len(self.labels)
@@ -91,19 +93,23 @@ class AudioPairClassificationEvaluator(Evaluator):
             logger.warning(
                 f"Found {n_duplicates}/{total_audios} duplicates in the input data. Only encoding unique sentences."
             )
-        audios = [np.array(audio) for audio in audios]
-        embeddings = model.get_audio_embeddings(
-            audios,
-            task_name=self.task_name,
+        audios = [{"array": np.array(audio)} for audio in audios]
+        embeddings = model.encode(
+            _create_audio_dataloader_from_audio_list(
+                audios, encode_kwargs["batch_size"]
+            ),
+            task_metadata=self.task_metadata,
+            hf_split="test",
+            hf_subset="test",
             **encode_kwargs,
         )
 
         emb_dict = {
-            tuple(audio.tolist()): embedding
+            tuple(audio["array"].tolist()): embedding
             for audio, embedding in zip(audios, embeddings)
         }
-        embeddings1 = [emb_dict[tuple(audio)] for audio in self.audio1]
-        embeddings2 = [emb_dict[tuple(audio)] for audio in self.audio2]
+        embeddings1 = np.array([emb_dict[tuple(audio)] for audio in self.audio1])
+        embeddings2 = np.array([emb_dict[tuple(audio)] for audio in self.audio2])
 
         logger.info("Computing similarity distances.")
         cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)

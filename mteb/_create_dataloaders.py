@@ -14,7 +14,13 @@ from mteb.types import (
     PromptType,
     QueryDatasetType,
 )
-from mteb.types._encoder_io import CorpusInput, ImageInput, QueryInput, TextInput
+from mteb.types._encoder_io import (
+    AudioInputItem,
+    CorpusInput,
+    ImageInput,
+    QueryInput,
+    TextInput,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +58,7 @@ def _corpus_to_dict(
         "text": text,
         "body": row["text"],
     }
-    # dataloders can't handle None
+    # dataloaders can't handle None
     if "title" in row and row["title"] is not None and len(row["title"]) > 0:
         new_row["title"] = row["title"]
     return new_row
@@ -273,8 +279,11 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
     """
     collated: dict[str, Any] = {}
     for key in batch[0]:
-        if key in ("image", "conversation"):
-            # Leave the images as a list to avoid stacking errors.
+        if key in (
+            "image",  # images can be with different sizes
+            "conversation",  # conversations are lists of varying lengths
+            "audio",  # audio can have different lengths
+        ):
             collated[key] = [item[key] for item in batch]
         else:
             if any(item[key] is None for item in batch):
@@ -432,4 +441,33 @@ def create_dataloader(
     return DataLoader(
         dataset,
         batch_size=batch_size,
+    )
+
+
+def _create_audio_dataloader_from_audio_list(
+    audio_array: list[AudioInputItem],
+    batch_size: int = 32,
+):
+    # todo temporary until full refactoring of tasks
+    from torch.utils.data import DataLoader, Dataset
+
+    class CustomAudioDataset(Dataset):
+        def __init__(self, audio_array):
+            self.audio_array = audio_array
+
+        def __len__(self):
+            return len(self.audio_array)
+
+        def __getitem__(self, idx):
+            return {"audio": self.audio_array[idx]}
+
+        @property
+        def features(self) -> dict[str, Any]:
+            # for correct wrapper handling
+            return {"audio": []}
+
+    return DataLoader(
+        CustomAudioDataset(audio_array),
+        batch_size=batch_size,
+        collate_fn=_custom_collate_fn,
     )

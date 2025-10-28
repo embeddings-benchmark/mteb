@@ -8,8 +8,8 @@ from datasets import Dataset
 from torch.utils.data import DataLoader
 
 import mteb
-from mteb import TaskMetadata
 from mteb.abstasks import AbsTask
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.cache_wrappers.cache_backend_protocol import CacheBackendProtocol
 from mteb.models.cache_wrappers.cache_backends.faiss_cache import FaissCache
 from mteb.models.cache_wrappers.cache_backends.numpy_cache import NumpyCache

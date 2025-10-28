@@ -5,7 +5,7 @@ from typing import Any
 import torch
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
-from transformers import AutoProcessor, EncodecModel
+from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
 
 from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies
@@ -17,7 +17,7 @@ from mteb.types._encoder_io import AudioInput
 logger = logging.getLogger(__name__)
 
 
-class EncodecWrapper(AbsEncoder):
+class Qwen2AudioWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -31,13 +31,17 @@ class EncodecWrapper(AbsEncoder):
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
 
-        self.model = EncodecModel.from_pretrained(model_name, revision=revision).to(
-            device
-        )
+        self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
+        self.model = Qwen2AudioForConditionalGeneration.from_pretrained(
+            model_name, revision=revision
+        ).to(self.device)
         self.model.eval()
 
-        self.processor = AutoProcessor.from_pretrained(model_name)
-        self.sampling_rate = self.processor.sampling_rate  # 24000 Hz typically
+        self.audio_encoder = self.model.audio_tower
+
+        cfg = self.model.config.audio_config
+        self.embed_dim = getattr(cfg, "d_model", getattr(cfg, "hidden_size", None))
+        self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
     def get_audio_embeddings(
         self,
@@ -54,10 +58,9 @@ class EncodecWrapper(AbsEncoder):
             disable=not show_progress_bar,
         ):
             audio_arrays = []
-            for idx, a in enumerate(batch["audio"]):
+            for a in batch["audio"]:
                 array = torch.tensor(a["array"], dtype=torch.float32)
                 sr = a.get("sampling_rate", None)
-
                 if sr is None:
                     warnings.warn(
                         f"No sampling_rate provided for an audio sample. "
@@ -65,41 +68,38 @@ class EncodecWrapper(AbsEncoder):
                     )
                     sr = self.sampling_rate
 
-                # Convert to mono if needed
-                if array.dim() > 1 and array.shape[0] > 1:
-                    array = torch.mean(array, dim=0, keepdim=True)
-
                 if sr != self.sampling_rate:
                     resampler = torchaudio.transforms.Resample(
                         orig_freq=sr, new_freq=self.sampling_rate
                     )
                     array = resampler(array)
-
-                array = array.squeeze()
                 audio_arrays.append(array.numpy())
 
+            # Qwen2Audio specific: create prompt with <|AUDIO|> tokens
+            prompt = " ".join(["<|AUDIO|>"] * len(audio_arrays))
+
+            processor_inputs = self.processor(
+                text=prompt,
+                audio=audio_arrays,
+                sampling_rate=self.sampling_rate,
+                return_tensors="pt",
+                padding=True,
+                truncation=True,
+                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
+            )
+
+            input_features = processor_inputs.input_features.to(self.device)
+
             with torch.no_grad():
-                # Process audio through EnCodec's processor
-                max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
+                outputs = self.audio_encoder(
+                    input_features=input_features,
+                    output_hidden_states=True,
+                )
 
-                feature_inputs = self.processor(
-                    raw_audio=audio_arrays,
-                    sampling_rate=self.sampling_rate,
-                    return_tensors="pt",
-                    padding="max_length",
-                    max_length=max_samples,
-                ).to(self.device)
-
-                # Get the latent representations directly from the encoder
-                latent = self.model.encoder(feature_inputs.input_values)
-
-                # Apply mean pooling over the time dimension to get fixed-size embeddings
-                embeddings = torch.mean(latent, dim=2)  # Average over time dimension
-
-                # Normalize embeddings
-                embeddings = embeddings / embeddings.norm(dim=-1, keepdim=True)
-
-                all_embeddings.append(embeddings.cpu().detach())
+                # Use last hidden state and mean pool
+                last_hidden = outputs.hidden_states[-1]
+                embeddings = last_hidden.mean(dim=1).cpu().detach()
+                all_embeddings.append(embeddings)
 
         return torch.cat(all_embeddings, dim=0).numpy()
 
@@ -114,28 +114,28 @@ class EncodecWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         if "audio" not in inputs.dataset.features:
-            raise ValueError("EncodecWrapper only supports audio inputs.")
+            raise ValueError("Qwen2AudioWrapper only supports audio inputs.")
         return self.get_audio_embeddings(inputs, **kwargs)
 
 
-encodec_24khz = ModelMeta(
-    loader=EncodecWrapper,
-    name="facebook/encodec_24khz",
+qwen2_audio_meta = ModelMeta(
+    loader=Qwen2AudioWrapper,
+    name="Qwen/Qwen2-Audio-7B",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="c1dbe2ae3f1de713481a3b3e7c47f357092ee040",
-    release_date="2022-10-25",
-    max_tokens=None,
-    n_parameters=23_273_218,
-    memory_usage_mb=88,
-    embed_dim=128,
-    license="cc-by-nc-4.0",
-    reference="https://huggingface.co/facebook/encodec_24khz",
+    revision="dd84470756e6277a71d4d7188773a43cde92696e",
+    release_date="2024-08-09",
+    max_tokens=131_072,
+    n_parameters=7_000_000_000,
+    memory_usage_mb=None,
+    embed_dim=1280,
+    license="mit",
+    reference="https://huggingface.co/Qwen/Qwen2-Audio-7B",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
-    use_instructions=False,
-    public_training_code="https://github.com/facebookresearch/encodec",
+    use_instructions=True,
+    public_training_code=None,
     public_training_data=None,
-    training_datasets=None,  # ["AudioSet", "VCTK", "DNS-Challenge"],
+    training_datasets=None,
     modalities=["audio"],
 )

@@ -5,7 +5,9 @@ from typing import Any
 
 import numpy as np
 from datasets import DatasetDict
+from torch.utils.data import DataLoader
 
+from mteb._create_dataloaders import _custom_collate_fn
 from mteb.abstasks import AbsTask
 from mteb.abstasks.clustering import _evaluate_clustering_bootstrapped
 from mteb.abstasks.task_metadata import HFSubset
@@ -79,13 +81,21 @@ class AbsTaskAudioClustering(AbsTask):
             example_indices = rng_state.sample(
                 range(len(dataset)), k=max_documents_to_embed
             )
-            downsampled_dataset = dataset.select(example_indices)  # type: ignore
+            downsampled_dataset = dataset.select(example_indices)
 
-        if "batch_size" not in encode_kwargs:
-            encode_kwargs["batch_size"] = 32
-        embeddings = model.get_audio_embeddings(
-            downsampled_dataset[self.audio_column_name],  # type: ignore
+        dataloader = DataLoader(
+            downsampled_dataset,
             batch_size=encode_kwargs["batch_size"],
+            collate_fn=_custom_collate_fn,
+        )
+
+        embeddings = model.encode(
+            dataloader,
+            batch_size=encode_kwargs["batch_size"],
+            task_metadata=self.metadata,
+            # todo: temporary fix, until full refactoring of task
+            hf_subset="test",
+            hf_split="test",
         )
 
         labels = []
@@ -94,7 +104,7 @@ class AbsTaskAudioClustering(AbsTask):
                 label = [label]
             labels.append(label)
 
-        all_v_scores = _evaluate_clustering_bootstrapped(
+        all_v_scores, all_assignments = _evaluate_clustering_bootstrapped(
             embeddings,
             labels,
             n_clusters=self.n_clusters,

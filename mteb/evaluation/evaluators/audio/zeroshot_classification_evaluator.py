@@ -1,14 +1,15 @@
 import logging
-import math
-import os
 from typing import Any
 
 import torch
 from sklearn import metrics
-from torch.utils.data import DataLoader
 
+from mteb._create_dataloaders import (
+    _create_audio_dataloader_from_audio_list,
+    _create_dataloader_from_texts,
+)
 from mteb._evaluators import Evaluator
-from mteb.evaluation.evaluators.dataset_utils import AudioDataset, custom_collate_fn
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.models_protocols import EncoderProtocol
 
 logger = logging.getLogger(__name__)
@@ -21,7 +22,7 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
         audio_column_name: str,
         label_column_name: str,
         candidate_labels: list[str],
-        task_name: str | None = None,
+        task_metadata: TaskMetadata,
         transform=None,
         batch_size: int = 32,
         **kwargs,
@@ -33,18 +34,16 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
             audio_column_name: Name of column containing audio data
             label_column_name: Name of column containing label indices
             candidate_labels: List of text descriptions for possible classes
-            task_name: Optional name of the task
+            task_metadata: Optional name of the task
             transform: Optional audio transforms
             batch_size: Batch size for processing
             **kwargs: Additional keyword arguments
         """
         super().__init__(**kwargs)
-        self.dataset = AudioDataset(
-            dataset, audio_column_name=audio_column_name, transform=transform
-        )
+        self.dataset = dataset
         self.labels = dataset[label_column_name]
         self.candidate_labels = candidate_labels
-        self.task_name = task_name
+        self.task_metadata = task_metadata
         self.batch_size = batch_size
 
     def __call__(
@@ -53,17 +52,26 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
         """Evaluate zero-shot classification performance."""
         logger.info("Getting text embeddings for candidate labels...")
 
-        text_embeddings = model.get_text_embeddings(self.candidate_labels)
-
-        logger.info("Processing audio data...")
-        dataloader = DataLoader(
-            self.dataset,
-            batch_size=encode_kwargs.get("batch_size", self.batch_size),
-            collate_fn=custom_collate_fn,
-            num_workers=min(math.floor(os.cpu_count() / 2), 16),
+        text_embeddings = model.encode(
+            _create_dataloader_from_texts(self.candidate_labels),
+            task_metadata=self.task_metadata,
+            hf_subset="zeroshot_texts",
+            hf_split="test",
+            **encode_kwargs,
         )
 
-        audio_embeddings = model.get_audio_embeddings(dataloader)
+        logger.info("Processing audio data...")
+        dataloader = _create_audio_dataloader_from_audio_list(
+            self.dataset["audio"], batch_size=self.batch_size
+        )
+
+        audio_embeddings = model.encode(
+            dataloader,
+            task_metadata=self.task_metadata,
+            hf_subset="zeroshot_texts",
+            hf_split="test",
+            **encode_kwargs,
+        )
 
         # Calculate similarity scores
         similarity = (

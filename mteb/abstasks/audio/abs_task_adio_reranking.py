@@ -87,7 +87,7 @@ class AbsTaskAudioReranking(AbsTask):
             self.audio_query_column_name,
             self.audio_positive_column_name,
             self.audio_negative_column_name,
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )
@@ -99,7 +99,7 @@ class AbsTaskAudioReranking(AbsTask):
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
-    def _calculate_metrics_from_split(
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> AudioRerankingDescriptiveStatistics:
         if hf_subset:
