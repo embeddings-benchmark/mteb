@@ -152,7 +152,7 @@ class AbsTaskAudioClassification(AbsTask):
                     eval_split,
                     self.audio_column_name,
                     self.label_column_name,
-                    task_name=self.metadata.name,
+                    task_metadata=self.metadata,
                     encode_kwargs=encode_kwargs,
                     **params,
                 )

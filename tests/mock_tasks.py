@@ -4663,3 +4663,43 @@ class MockAudioPairClassification(AbsTaskAudioPairClassification):
         self.dataset = self.dataset.cast_column("audio1", Audio())
         self.dataset = self.dataset.cast_column("audio2", Audio())
         self.data_loaded = True
+
+
+class MockAudioClassificationCrossVal(AbsTaskAudioClassification):
+    metadata = TaskMetadata(
+        type="AudioClassification",
+        name="MockAudioClassification",
+        main_score="accuracy",
+        **general_args,  # type: ignore
+    )
+    metadata.modalities = ["audio"]
+    is_cross_validation = True
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "audio": mock_audio,
+                        "labels": [1, 2],
+                    }
+                ),
+                "train": Dataset.from_dict(
+                    {
+                        "audio": mock_audio * 5,
+                        "labels": [1, 2] * 5,
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("audio", Audio())
+
+        self.data_loaded = True
