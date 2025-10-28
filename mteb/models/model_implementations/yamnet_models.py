@@ -16,7 +16,7 @@ from mteb.types._encoder_io import AudioInput
 logger = logging.getLogger(__name__)
 
 
-def yamnet_loader(**kwargs):
+def yamnet_loader(*args, **kwargs):
     """Factory function to create a YAMNet model wrapper."""
     requires_package(
         yamnet_loader,

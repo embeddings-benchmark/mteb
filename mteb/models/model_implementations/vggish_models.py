@@ -16,7 +16,7 @@ from mteb.types._encoder_io import AudioInput
 logger = logging.getLogger(__name__)
 
 
-def vggish_loader(**kwargs):
+def vggish_loader(*args, **kwargs):
     """Factory function to create a VGGish model wrapper."""
     requires_package(
         vggish_loader,
