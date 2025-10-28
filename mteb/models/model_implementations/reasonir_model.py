@@ -18,7 +18,7 @@ def instruction_template(
 ) -> str:
     return (
         # https://github.com/facebookresearch/ReasonIR/blob/0aac96269e455965949df16520fab72da68ffc22/evaluation/bright/configs/reasonir/economics.json#L3
-        f"<|user|>\n{instruction}<|embed|>\n"
+        f"<|user|>\n{instruction}\n<|embed|>\n"
         if (prompt_type is None or prompt_type == PromptType.query) and instruction
         else "<|embed|>\n"
     )
