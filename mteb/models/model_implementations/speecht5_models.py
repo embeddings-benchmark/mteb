@@ -17,7 +17,7 @@ from mteb.types import Array, PromptType
 from mteb.types._encoder_io import AudioInput, BatchedInput, TextInput
 
 
-class SpeechT5Wrapper(AbsEncoder):
+class SpeechT5Audio(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -26,26 +26,18 @@ class SpeechT5Wrapper(AbsEncoder):
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
-        self.model_name = model_name
         self.device = device
         self.max_audio_length_s = max_audio_length_s
 
         self.asr_processor = SpeechT5Processor.from_pretrained(
-            model_name, revision=revision
+            "microsoft/speecht5_asr",
+            revision="53615c10408485422e09a12cda191a747f4bbe34",
         )
-        self.tts_processor = SpeechT5Processor.from_pretrained(
-            model_name, revision=revision
-        )
-
-        # Initialize models for both audio and text encoding
         self.asr_model = SpeechT5ForSpeechToText.from_pretrained(
-            model_name, revision=revision
-        ).to(self.device)
-        self.tts_model = SpeechT5ForTextToSpeech.from_pretrained(
-            model_name, revision=revision
+            "microsoft/speecht5_asr",
+            revision="53615c10408485422e09a12cda191a747f4bbe34",
         ).to(self.device)
         self.asr_model.eval()
-        self.tts_model.eval()
 
         self.sampling_rate = self.asr_processor.feature_extractor.sampling_rate
 
@@ -128,6 +120,40 @@ class SpeechT5Wrapper(AbsEncoder):
 
         return torch.cat(all_embeddings, dim=0)
 
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        if "audio" not in inputs.dataset.features:
+            raise ValueError("ASTWrapper only supports audio inputs.")
+        return self.get_audio_embeddings(inputs, **kwargs)
+
+
+class SpeechT5Text(AbsEncoder):
+    def __init__(
+        self,
+        model_name: str,
+        revision: str,
+        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        **kwargs: Any,
+    ):
+        self.device = device
+        self.tts_processor = SpeechT5Processor.from_pretrained(
+            "microsoft/speecht5_tts",
+            revision="30fcde30f19b87502b8435427b5f5068e401d5f6",
+        )
+        self.tts_model = SpeechT5ForTextToSpeech.from_pretrained(
+            "microsoft/speecht5_tts",
+            revision="30fcde30f19b87502b8435427b5f5068e401d5f6",
+        ).to(self.device)
+        self.tts_model.eval()
+
     def get_text_embeddings(
         self,
         inputs: DataLoader[TextInput],
@@ -179,13 +205,64 @@ class SpeechT5Wrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        if "text" not in inputs.dataset.features:
+            raise ValueError("ASTWrapper only supports audio inputs.")
+        return self.get_text_embeddings(inputs, **kwargs)
+
+
+class SpeechT2Multimodal(AbsEncoder):
+    def __init__(
+        self,
+        model_name: str,
+        revision: str,
+        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        max_audio_length_s: float = 30.0,
+        **kwargs: Any,
+    ):
+        self.asr_encoder = SpeechT5Audio(
+            model_name=model_name,
+            revision=revision,
+            device=device,
+            max_audio_length_s=max_audio_length_s,
+            **kwargs,
+        )
+        self.tts_encoder = SpeechT5Text(
+            model_name=model_name,
+            revision=revision,
+            device=device,
+            **kwargs,
+        )
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
         text_embeddings = None
         audio_embeddings = None
-
         if "text" in inputs.dataset.features:
-            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+            text_embeddings = self.tts_encoder.encode(
+                inputs,
+                task_metadata=task_metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                prompt_type=prompt_type,
+                **kwargs,
+            )
         if "audio" in inputs.dataset.features:
-            audio_embeddings = self.get_audio_embeddings(inputs, **kwargs)
+            audio_embeddings = self.asr_encoder.encode(
+                inputs,
+                task_metadata=task_metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                prompt_type=prompt_type,
+                **kwargs,
+            )
 
         if text_embeddings is not None and audio_embeddings is not None:
             if len(text_embeddings) != len(audio_embeddings):
@@ -203,7 +280,7 @@ class SpeechT5Wrapper(AbsEncoder):
 
 # ASR model - Optimized for Speech Recognition tasks
 speecht5_asr = ModelMeta(
-    loader=SpeechT5Wrapper,
+    loader=SpeechT5Audio,
     name="microsoft/speecht5_asr",
     languages=["eng-Latn"],
     open_weights=True,
@@ -226,7 +303,7 @@ speecht5_asr = ModelMeta(
 
 # TTS model - Optimized for Text-to-Speech tasks
 speecht5_tts = ModelMeta(
-    loader=SpeechT5Wrapper,
+    loader=SpeechT5Text,
     name="microsoft/speecht5_tts",
     languages=["eng-Latn"],
     open_weights=True,
@@ -249,7 +326,7 @@ speecht5_tts = ModelMeta(
 
 # Voice Conversion model - Optimized for Speech-to-Speech conversion tasks
 speecht5_multimodal = ModelMeta(
-    loader=SpeechT5Wrapper,
+    loader=SpeechT2Multimodal,
     name="microsoft/speecht5_multimodal",
     languages=["eng-Latn"],
     open_weights=True,
