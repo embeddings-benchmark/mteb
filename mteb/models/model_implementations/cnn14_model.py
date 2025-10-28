@@ -127,10 +127,7 @@ class CNN14Wrapper(AbsEncoder):
 
 
 cnn14_esc50 = ModelMeta(
-    loader=partial(
-        CNN14Wrapper,
-        model_name="speechbrain/cnn14-esc50",
-    ),
+    loader=CNN14Wrapper,
     name="speechbrain/cnn14-esc50",
     languages=["eng-Latn"],
     open_weights=True,
