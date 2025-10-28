@@ -53,8 +53,7 @@ class EncodecWrapper(AbsEncoder):
             inputs,
             disable=not show_progress_bar,
         ):
-            audio_tensors = []
-
+            audio_arrays = []
             for idx, a in enumerate(batch["audio"]):
                 array = torch.tensor(a["array"], dtype=torch.float32)
                 sr = a.get("sampling_rate", None)
@@ -77,14 +76,14 @@ class EncodecWrapper(AbsEncoder):
                     array = resampler(array)
 
                 array = array.squeeze()
-                audio_tensors.append(array)
+                audio_arrays.append(array.numpy())
 
             with torch.no_grad():
                 # Process audio through EnCodec's processor
                 max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
                 feature_inputs = self.processor(
-                    raw_audio=audio_tensors,
+                    raw_audio=audio_arrays,
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding="max_length",
