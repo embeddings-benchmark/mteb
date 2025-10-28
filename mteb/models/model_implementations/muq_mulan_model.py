@@ -69,15 +69,17 @@ class MuQMuLanWrapper(AbsEncoder):
                 # Apply audio truncation (30 seconds max)
                 if array.shape[-1] > self.max_length_samples:
                     array = array[..., : self.max_length_samples]
-                audio_arrays.append(array.numpy())
+                audio_arrays.append(array)
 
             # Find max length and pad all tensors
-            max_length = max(tensor.shape[-1] for tensor in batch)
-            batch_tensor = torch.zeros(len(batch), max_length, dtype=torch.float32)
+            max_length = max(arr.shape[-1] for arr in audio_arrays)
+            batch_tensor = torch.zeros(
+                len(audio_arrays), max_length, dtype=torch.float32
+            )
 
-            for idx, tensor in enumerate(batch):
-                length = tensor.shape[-1]
-                batch_tensor[idx, :length] = tensor
+            for idx, arr in enumerate(audio_arrays):
+                length = arr.shape[-1]
+                batch_tensor[idx, :length] = arr
 
             batch_tensor = batch_tensor.to(self.device)
 
