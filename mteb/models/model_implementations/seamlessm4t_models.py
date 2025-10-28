@@ -51,6 +51,8 @@ class SeamlessM4TWrapper(AbsEncoder):
             disable=not show_progress_bar,
         ):
             audio_arrays = []
+            max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
+
             for a in batch["audio"]:
                 array = torch.tensor(a["array"], dtype=torch.float32)
                 sr = a.get("sampling_rate", None)
@@ -66,18 +68,12 @@ class SeamlessM4TWrapper(AbsEncoder):
                         orig_freq=sr, new_freq=self.sampling_rate
                     )
                     array = resampler(array)
-                audio_arrays.append(array.numpy())
-
-                max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
-                truncated_audio = []
-                for w in batch:
-                    audio_np = w.cpu().detach().numpy()
-                    if len(audio_np) > max_samples:
-                        audio_np = audio_np[:max_samples]
-                    truncated_audio.append(audio_np)
+                # truncate audio
+                array = array.cpu().detach().numpy()[:max_samples]
+                audio_arrays.append(array)
 
                 features = self.processor(
-                    audios=truncated_audio,
+                    audios=audio_arrays,
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding=True,
