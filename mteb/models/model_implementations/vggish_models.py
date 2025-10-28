@@ -130,11 +130,7 @@ def vggish_loader(*args, **kwargs):
 
                 for a in batch["audio"]:
                     array = torch.tensor(a["array"], dtype=torch.float32)
-                    sr = (
-                        a.get("sampling_rate")
-                        if isinstance(a, dict)
-                        else a["sampling_rate"]
-                    )
+                    sr = a.get("sampling_rate", None)
                     if sr is None:
                         warnings.warn(
                             f"No sampling_rate provided for an audio sample. "
@@ -169,11 +165,7 @@ def vggish_loader(*args, **kwargs):
 
                 all_embeddings.extend(batch_embeddings)
 
-            return (
-                np.array(all_embeddings)
-                if all_embeddings
-                else np.zeros((0, self.embed_dim))
-            )
+            return np.array(all_embeddings)
 
         def encode(
             self,

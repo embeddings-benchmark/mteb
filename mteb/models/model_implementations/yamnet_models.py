@@ -176,11 +176,7 @@ def yamnet_loader(*args, **kwargs):
 
                 all_embeddings.extend(batch_embeddings)
 
-            return (
-                np.array(all_embeddings)
-                if all_embeddings
-                else np.zeros((0, self.embed_dim))
-            )
+            return np.array(all_embeddings)
 
         def encode(
             self,

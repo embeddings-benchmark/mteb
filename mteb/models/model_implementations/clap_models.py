@@ -1,28 +1,34 @@
-from collections.abc import Iterable
+import warnings
 from functools import partial
 from typing import Any
 
 import numpy as np
 import torch
+import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import ClapModel, ClapProcessor
 
+from mteb import TaskMetadata
 from mteb.models import ModelMeta
-from mteb.types import Array, PromptType
+from mteb.types import Array, BatchedInput, PromptType
+from mteb.types._encoder_io import AudioInput, TextInput
 
 
 class ClapZeroShotWrapper:
     def __init__(
         self,
-        model_name: str = "laion/clap_htsat_fused",
+        model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
-        self.model = ClapModel.from_pretrained(model_name).to(self.device)
-        self.processor = ClapProcessor.from_pretrained(model_name)
+        self.model = ClapModel.from_pretrained(model_name, revision=revision).to(
+            self.device
+        )
+        self.processor = ClapProcessor.from_pretrained(model_name, revision=revision)
         # CLAP's expected sampling rate. If the input audio is not sampled at this rate,
         # it will raise a ValueError similar to: ValueError: The model corresponding to
         # this feature extractor: ClapFeatureExtractor was trained using a sampling rate
@@ -30,110 +36,46 @@ class ClapZeroShotWrapper:
         # with 48000 and not 44100.
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
-    def _process_audio(self, audio) -> list[torch.Tensor]:
-        processed_audio = []
-
-        if isinstance(audio, DataLoader):
-            for batch in audio:
-                processed_audio.extend(self._handle_batch(batch))
-        else:
-            processed_audio = self._handle_batch(audio)
-
-        return processed_audio
-
-    def _handle_batch(
-        self, batch: Array | Iterable[tuple[Array, str]]
-    ) -> list[torch.Tensor]:
-        import torchaudio
-
-        waveforms = []
-
-        if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
-            for audio, _ in batch:
-                waveforms.append(self._convert_audio(audio))
-        else:
-            for item in batch:
-                if isinstance(item, dict):
-                    if "array" in item:
-                        audio_array = item["array"]
-                        # Convert to torch tensor and ensure float32
-                        if isinstance(audio_array, np.ndarray):
-                            audio_array = torch.from_numpy(audio_array).float()
-                        elif isinstance(audio_array, list):
-                            # Convert list to numpy array first, then to tensor
-                            audio_array = torch.from_numpy(
-                                np.array(audio_array)
-                            ).float()
-                        else:
-                            # Already a tensor
-                            audio_array = audio_array.float()
-                        # Handle resampling if needed
-                        if (
-                            "sampling_rate" in item
-                            and item["sampling_rate"] != self.sampling_rate
-                        ):
-                            resampler = torchaudio.transforms.Resample(
-                                item["sampling_rate"], self.sampling_rate
-                            )
-                            audio_array = resampler(audio_array)
-
-                        # Only squeeze here, don't call _convert_audio again
-                        waveforms.append(audio_array.squeeze())
-                    elif "path" in item:
-                        waveforms.append(self._load_audio_file(item["path"]))
-                elif isinstance(item, (np.ndarray, torch.Tensor)):
-                    waveforms.append(self._convert_audio(item))
-                elif isinstance(item, str):
-                    waveforms.append(self._load_audio_file(item))
-
-        return waveforms
-
-    def _convert_audio(self, audio: Array) -> torch.Tensor:
-        if isinstance(audio, np.ndarray):
-            audio = torch.from_numpy(audio)
-        return audio.squeeze().float()  # Ensure float32
-
-    def _load_audio_file(self, path: str) -> torch.Tensor:
-        import torchaudio
-
-        waveform, sample_rate = torchaudio.load(path)
-        waveform = waveform.float()  # Ensure float32
-        if sample_rate != self.sampling_rate:
-            resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
-            waveform = resampler(waveform)
-        return waveform.squeeze()
-
     def get_audio_embeddings(
         self,
-        audio,
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 4,
+        inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
         all_features = []
-        processed_audio = self._process_audio(audio)
 
-        for i in tqdm(
-            range(0, len(processed_audio), batch_size),
-            desc="Processing audio batches",
+        for batch in tqdm(
+            inputs,
             disable=not show_progress_bar,
         ):
-            batch = processed_audio[i : i + batch_size]
-            batch_arrays = [tensor.numpy() for tensor in batch]
+            audio_arrays = []
+            for a in batch["audio"]:
+                array = torch.tensor(a["array"], dtype=torch.float32)
+                sr = a.get("sampling_rate", None)
+                if sr is None:
+                    warnings.warn(
+                        f"No sampling_rate provided for an audio sample. "
+                        f"Assuming {self.sampling_rate} Hz (model default)."
+                    )
+                    sr = self.sampling_rate
 
-            inputs = self.processor(
-                audios=batch_arrays,
+                if sr != self.sampling_rate:
+                    resampler = torchaudio.transforms.Resample(
+                        orig_freq=sr, new_freq=self.sampling_rate
+                    )
+                    array = resampler(array)
+                audio_arrays.append(array.numpy())
+
+            features = self.processor(
+                audios=audio_arrays,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding=True,
             )
-            inputs = {k: v.to(self.device) for k, v in inputs.items()}
+            features = {k: v.to(self.device) for k, v in features.items()}
 
             with torch.no_grad():
-                audio_features = self.model.get_audio_features(**inputs)
+                audio_features = self.model.get_audio_features(**features)
                 audio_features = audio_features / audio_features.norm(
                     dim=-1, keepdim=True
                 )
@@ -143,28 +85,55 @@ class ClapZeroShotWrapper:
 
     def get_text_embeddings(
         self,
-        texts: list[str],
+        inputs: DataLoader[TextInput],
+        show_progress_bar: bool = True,
         **kwargs: Any,
-    ) -> np.ndarray:
-        inputs = self.processor(text=texts, return_tensors="pt", padding=True)
-        inputs = {k: v.to(self.device) for k, v in inputs.items()}
+    ) -> Array:
+        text_embeddings = []
+        for batch in tqdm(
+            inputs, disable=not show_progress_bar, desc="Processing text batches"
+        ):
+            texts = batch["text"]
+            inputs = self.processor(text=texts, return_tensors="pt", padding=True)
+            inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
-        with torch.no_grad():
             text_features = self.model.get_text_features(**inputs)
             # Normalize embeddings
             text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+            text_embeddings.append(text_features.cpu().numpy())
 
-        return text_features.cpu().numpy()
+        return np.vstack(text_embeddings)
 
     def encode(
         self,
-        inputs: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        return self.get_text_embeddings(inputs)
+    ) -> Array:
+        text_embeddings = None
+        audio_embeddings = None
+
+        if "text" in inputs.dataset.features:
+            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+        if "audio" in inputs.dataset.features:
+            audio_embeddings = self.get_audio_embeddings(inputs, **kwargs)
+
+        if text_embeddings is not None and audio_embeddings is not None:
+            if len(text_embeddings) != len(audio_embeddings):
+                raise ValueError(
+                    "The number of texts and images must have the same length"
+                )
+            fused_embeddings = text_embeddings + audio_embeddings
+            return fused_embeddings
+        elif text_embeddings is not None:
+            return text_embeddings
+        elif audio_embeddings is not None:
+            return audio_embeddings
+        raise ValueError
 
 
 # Model metadata

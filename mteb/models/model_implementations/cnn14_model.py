@@ -121,7 +121,7 @@ class CNN14Wrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         if "audio" not in inputs.dataset.features:
-            raise ValueError("CNN14Wrapper only supports audio inputs.")
+            raise ValueError("ASTWrapper only supports audio inputs.")
         return self.get_audio_embeddings(inputs, **kwargs)
 
 

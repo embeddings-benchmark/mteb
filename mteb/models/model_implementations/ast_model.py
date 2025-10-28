@@ -68,7 +68,7 @@ class ASTWrapper(AbsEncoder):
                     array = resampler(array)
                 audio_arrays.append(array.numpy())
 
-            inputs = self.feature_extractor(
+            features = self.feature_extractor(
                 audio_arrays,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
@@ -76,7 +76,7 @@ class ASTWrapper(AbsEncoder):
                 padding=True,
             ).to(self.device)
 
-            outputs = self.model(**inputs)
+            outputs = self.model(**features)
 
             # AST's pooled output is the [CLS] token embedding
             embeddings = outputs.pooler_output

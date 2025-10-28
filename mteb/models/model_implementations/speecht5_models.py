@@ -1,8 +1,7 @@
-from collections.abc import Iterable
+import warnings
 from functools import partial
 from typing import Any
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
@@ -12,15 +11,18 @@ from transformers import (
     SpeechT5Processor,
 )
 
+from mteb import TaskMetadata
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, PromptType
+from mteb.types._encoder_io import AudioInput, BatchedInput, TextInput
 
 
 class SpeechT5Wrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
@@ -29,221 +31,175 @@ class SpeechT5Wrapper(AbsEncoder):
         self.device = device
         self.max_audio_length_s = max_audio_length_s
 
-        self.asr_processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_asr")
-        self.tts_processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
+        self.asr_processor = SpeechT5Processor.from_pretrained(
+            "microsoft/speecht5_asr", revision=revision
+        )
+        self.tts_processor = SpeechT5Processor.from_pretrained(
+            "microsoft/speecht5_tts", revision=revision
+        )
 
         # Initialize models for both audio and text encoding
         self.asr_model = SpeechT5ForSpeechToText.from_pretrained(
-            "microsoft/speecht5_asr"
+            "microsoft/speecht5_asr", revision=revision
         ).to(self.device)
         self.tts_model = SpeechT5ForTextToSpeech.from_pretrained(
-            "microsoft/speecht5_tts"
+            "microsoft/speecht5_tts", revision=revision
         ).to(self.device)
+        self.asr_model.eval()
+        self.tts_model.eval()
 
         self.sampling_rate = self.asr_processor.feature_extractor.sampling_rate
 
-    def _process_audio(self, audio) -> list[torch.Tensor]:
-        processed_audio = []
-
-        if isinstance(audio, DataLoader):
-            for batch in audio:
-                processed_audio.extend(self._handle_batch(batch))
-        else:
-            processed_audio = self._handle_batch(audio)
-
-        return processed_audio
-
-    def _handle_batch(
-        self, batch: Array | Iterable[tuple[Array, str]]
-    ) -> list[torch.Tensor]:
-        import torchaudio
-
-        waveforms = []
-
-        if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
-            for audio, _ in batch:
-                waveforms.append(self._convert_audio_from_numpy(audio))
-        else:
-            for item in batch:
-                if isinstance(item, dict):
-                    if "array" in item:
-                        audio = item["array"]
-                        if isinstance(audio, np.ndarray):
-                            audio = torch.from_numpy(audio).float()
-                        elif isinstance(audio, torch.Tensor):
-                            audio = audio.float()
-                        elif isinstance(audio, list):
-                            audio = torch.tensor(audio, dtype=torch.float32)
-                        else:
-                            raise TypeError(f"Unsupported audio type: {type(audio)}")
-                        if item["sampling_rate"] != self.sampling_rate:
-                            resampler = torchaudio.transforms.Resample(
-                                item["sampling_rate"], self.sampling_rate
-                            )
-                            audio = resampler(audio)
-                        waveforms.append(self._convert_audio_from_numpy(audio))
-                    elif "path" in item:
-                        waveforms.append(self._load_audio_file(item["path"]))
-                elif isinstance(item, (np.ndarray, torch.Tensor)):
-                    waveforms.append(self._convert_audio_from_numpy(item))
-                elif isinstance(item, str):
-                    waveforms.append(self._load_audio_file(item))
-
-        return waveforms
-
-    def _convert_audio_from_numpy(self, audio: Array) -> torch.Tensor:
-        if isinstance(audio, np.ndarray):
-            audio = torch.from_numpy(audio)
-        return audio.squeeze()
-
-    def _load_audio_file(self, path: str) -> torch.Tensor:
-        import torchaudio
-
-        waveform, sample_rate = torchaudio.load(path)
-        if sample_rate != self.sampling_rate:
-            resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
-            waveform = resampler(waveform)
-        return waveform.squeeze()
-
-    # def _pad_audio_batch(self, batch):
-    #     batch = [x.reshape(-1) if x.ndim == 0 else x for x in batch]
-    #     max_length = max(audio.shape[0] for audio in batch)
-    #     padded_batch = [
-    #         torch.nn.functional.pad(audio, (0, max_length - audio.shape[0]))
-    #         for audio in batch
-    #     ]
-    #     return torch.stack(padded_batch)
-
     def get_audio_embeddings(
         self,
-        audio,
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 4,
-        hidden_layer: float = 1.0,
+        inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ) -> torch.Tensor:
-        processed_audio = self._process_audio(audio)
+    ) -> Array:
+        import torchaudio
+
         all_embeddings = []
 
-        with torch.no_grad():
-            for i in tqdm(
-                range(0, len(processed_audio), batch_size),
-                disable=not show_progress_bar,
-            ):
-                batch = processed_audio[i : i + batch_size]
+        for batch in tqdm(
+            inputs,
+            disable=not show_progress_bar,
+        ):
+            batch_arrays = []
+            for a in batch["audio"]:
+                array = torch.tensor(a["array"], dtype=torch.float32)
+                sr = a.get("sampling_rate", None)
+                if sr is None:
+                    warnings.warn(
+                        f"No sampling_rate provided for an audio sample. "
+                        f"Assuming {self.sampling_rate} Hz (model default)."
+                    )
+                    sr = self.sampling_rate
 
-                # batch_tensor = self._pad_audio_batch(batch) # Removed call to _pad_audio_batch
-                # SpeechT5Processor expects a list of numpy arrays for audio input
-                batch_arrays = [tensor.cpu().numpy() for tensor in batch]
+                if sr != self.sampling_rate:
+                    resampler = torchaudio.transforms.Resample(
+                        orig_freq=sr, new_freq=self.sampling_rate
+                    )
+                    array = resampler(array)
+                batch_arrays.append(array.numpy())
 
-                if batch_arrays[0].ndim == 0:
-                    batch_arrays = [x.reshape(-1) for x in batch_arrays]
-                elif batch_arrays[0].ndim > 1:
-                    batch_arrays = [x.reshape(x.size(0), -1) for x in batch_arrays]
+            if batch_arrays[0].ndim == 0:
+                batch_arrays = [x.reshape(-1) for x in batch_arrays]
+            elif batch_arrays[0].ndim > 1:
+                batch_arrays = [x.reshape(x.size(0), -1) for x in batch_arrays]
 
-                inputs = self.asr_processor(
-                    audio=batch_arrays,
-                    sampling_rate=self.sampling_rate,
-                    return_tensors="pt",
-                    padding="longest",
-                    truncation=True,
-                    max_length=int(self.max_audio_length_s * self.sampling_rate),
-                    return_attention_mask=True,
-                ).to(self.device)
+            features = self.asr_processor(
+                audio=batch_arrays,
+                sampling_rate=self.sampling_rate,
+                return_tensors="pt",
+                padding="longest",
+                truncation=True,
+                max_length=int(self.max_audio_length_s * self.sampling_rate),
+                return_attention_mask=True,
+            ).to(self.device)
 
-                outputs = self.asr_model.speecht5.encoder(
-                    input_values=inputs.input_values,
-                    attention_mask=inputs.attention_mask,
-                )
-                last_hidden = outputs.last_hidden_state
+            outputs = self.asr_model.speecht5.encoder(
+                input_values=features.input_values,
+                attention_mask=features.attention_mask,
+            )
+            last_hidden = outputs.last_hidden_state
 
-                # Apply attention-masked pooling to exclude padding tokens
-                batch_size, hidden_seq_len, hidden_size = last_hidden.shape
-                device = last_hidden.device
+            # Apply attention-masked pooling to exclude padding tokens
+            batch_size, hidden_seq_len, hidden_size = last_hidden.shape
+            device = last_hidden.device
 
-                # Calculate proper hidden lengths based on input attention mask
-                input_lengths = inputs.attention_mask.sum(dim=1)
-                downsample_ratio = inputs.input_values.shape[1] / hidden_seq_len
-                hidden_lengths = (input_lengths.float() / downsample_ratio).long()
-                hidden_lengths = torch.clamp(hidden_lengths, min=0, max=hidden_seq_len)
+            # Calculate proper hidden lengths based on input attention mask
+            input_lengths = features.attention_mask.sum(dim=1)
+            downsample_ratio = features.input_values.shape[1] / hidden_seq_len
+            hidden_lengths = (input_lengths.float() / downsample_ratio).long()
+            hidden_lengths = torch.clamp(hidden_lengths, min=0, max=hidden_seq_len)
 
-                # Create attention mask for hidden states
-                seq_range = torch.arange(hidden_seq_len, device=device).unsqueeze(0)
-                hidden_attention_mask = (seq_range < hidden_lengths.unsqueeze(1)).to(
-                    last_hidden.dtype
-                )
+            # Create attention mask for hidden states
+            seq_range = torch.arange(hidden_seq_len, device=device).unsqueeze(0)
+            hidden_attention_mask = (seq_range < hidden_lengths.unsqueeze(1)).to(
+                last_hidden.dtype
+            )
 
-                # Apply masked mean pooling
-                hidden_attention_mask = hidden_attention_mask.unsqueeze(-1)
-                masked_embeddings = last_hidden * hidden_attention_mask
-                valid_tokens = hidden_attention_mask.sum(dim=1)
-                embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
+            # Apply masked mean pooling
+            hidden_attention_mask = hidden_attention_mask.unsqueeze(-1)
+            masked_embeddings = last_hidden * hidden_attention_mask
+            valid_tokens = hidden_attention_mask.sum(dim=1)
+            embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
 
-                all_embeddings.append(embeddings.cpu())
+            all_embeddings.append(embeddings.cpu())
 
-        if all_embeddings:
-            return torch.cat(all_embeddings, dim=0)
-        else:
-            return torch.zeros((0, self.asr_model.config.hidden_size))
+        return torch.cat(all_embeddings, dim=0)
 
     def get_text_embeddings(
         self,
-        texts: list[str],
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 4,
+        inputs: DataLoader[TextInput],
+        show_progress_bar: bool = True,
         **kwargs: Any,
-    ) -> torch.Tensor:
+    ) -> Array:
         """Get text embeddings using the text encoder."""
         all_embeddings = []
 
-        with torch.no_grad():
-            for i in range(0, len(texts), batch_size):
-                batch_texts = texts[i : i + batch_size]
+        for batch in tqdm(
+            inputs, disable=not show_progress_bar, desc="Processing text batches"
+        ):
+            texts = batch["text"]
 
-                # Process text through tokenizer
-                inputs = self.tts_processor(
-                    text=batch_texts,
-                    return_tensors="pt",
-                    padding="longest",
-                    truncation=True,
-                ).to(self.device)
+            # Process text through tokenizer
+            inputs = self.tts_processor(
+                text=texts,
+                return_tensors="pt",
+                padding="longest",
+                truncation=True,
+            ).to(self.device)
 
-                outputs = self.tts_model.speecht5.encoder(
-                    input_values=inputs["input_ids"],
-                    attention_mask=inputs["attention_mask"],
-                )
+            outputs = self.tts_model.speecht5.encoder(
+                input_values=inputs["input_ids"],
+                attention_mask=inputs["attention_mask"],
+            )
 
-                last_hidden = outputs.last_hidden_state
+            last_hidden = outputs.last_hidden_state
 
-                # Apply attention-masked pooling to exclude padding tokens
-                attention_mask = (
-                    inputs["attention_mask"].unsqueeze(-1).to(last_hidden.dtype)
-                )
-                masked_embeddings = last_hidden * attention_mask
-                valid_tokens = attention_mask.sum(dim=1)
-                embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
+            # Apply attention-masked pooling to exclude padding tokens
+            attention_mask = (
+                inputs["attention_mask"].unsqueeze(-1).to(last_hidden.dtype)
+            )
+            masked_embeddings = last_hidden * attention_mask
+            valid_tokens = attention_mask.sum(dim=1)
+            embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
 
-                all_embeddings.append(embeddings.cpu())
+            all_embeddings.append(embeddings.cpu())
 
-        if all_embeddings:
-            return torch.cat(all_embeddings, dim=0)
-        else:
-            return torch.zeros((0, self.tts_model.config.hidden_size))
+        return torch.cat(all_embeddings, dim=0)
 
     def encode(
         self,
-        inputs: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        return self.get_text_embeddings(inputs, **kwargs).numpy()
+    ) -> Array:
+        text_embeddings = None
+        audio_embeddings = None
+
+        if "text" in inputs.dataset.features:
+            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+        if "audio" in inputs.dataset.features:
+            audio_embeddings = self.get_audio_embeddings(inputs, **kwargs)
+
+        if text_embeddings is not None and audio_embeddings is not None:
+            if len(text_embeddings) != len(audio_embeddings):
+                raise ValueError(
+                    "The number of texts and images must have the same length"
+                )
+            fused_embeddings = text_embeddings + audio_embeddings
+            return fused_embeddings
+        elif text_embeddings is not None:
+            return text_embeddings
+        elif audio_embeddings is not None:
+            return audio_embeddings
+        raise ValueError
 
 
 # ASR model - Optimized for Speech Recognition tasks

@@ -1,4 +1,4 @@
-from collections.abc import Iterable
+import warnings
 from typing import Any
 
 import numpy as np
@@ -7,14 +7,18 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import CLIPModel, CLIPProcessor
 
+from mteb import TaskMetadata
 from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
-from mteb.types import Array, PromptType
+from mteb.types import Array, BatchedInput, PromptType
+from mteb.types._encoder_io import AudioInput, TextInput
 
 
 class Wav2ClipZeroShotWrapper:
     def __init__(
         self,
+        model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
@@ -30,194 +34,124 @@ class Wav2ClipZeroShotWrapper:
         self.max_audio_length_s = max_audio_length_s
 
         # text side (CLIP)
-        self.clip = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(device)
+        self.clip = CLIPModel.from_pretrained(model_name, revision=revision).to(device)
+        self.clip.eval()
         self.clip_processor = CLIPProcessor.from_pretrained(
-            "openai/clip-vit-base-patch32"
+            model_name, revision=revision
         )
-
-    def _handle_batch(
-        self, batch: Array | Iterable[tuple[Array, str]]
-    ) -> list[torch.Tensor]:
-        import torchaudio
-
-        waveforms: list[torch.Tensor] = []
-
-        if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
-            items = [batch]
-        else:
-            items = batch
-
-        for item in items:
-            # dict with array and sampling_rate
-            if isinstance(item, dict) and "array" in item:
-                audio = item["array"]
-                if isinstance(audio, np.ndarray):
-                    tensor = torch.from_numpy(audio)
-                elif isinstance(audio, list):
-                    tensor = torch.tensor(audio, dtype=torch.float32)
-                else:
-                    tensor = audio  # assume it's already a torch.Tensor
-                tensor = tensor.float().squeeze()
-                if item.get("sampling_rate", self.sampling_rate) != self.sampling_rate:
-                    resampler = torchaudio.transforms.Resample(
-                        item["sampling_rate"], self.sampling_rate
-                    )
-                    tensor = resampler(tensor)
-
-                # Apply audio truncation (30 seconds max)
-                max_length_samples = int(self.max_audio_length_s * self.sampling_rate)
-                if tensor.shape[-1] > max_length_samples:
-                    tensor = tensor[..., :max_length_samples]
-
-                waveforms.append(tensor)
-
-            # dict with path
-            elif isinstance(item, dict) and "path" in item:
-                waveform, sr = torchaudio.load(item["path"])
-                tensor = waveform.float().squeeze()
-                if sr != self.sampling_rate:
-                    resampler = torchaudio.transforms.Resample(sr, self.sampling_rate)
-                    tensor = resampler(tensor)
-                waveforms.append(tensor)
-
-            # direct numpy or torch
-            elif isinstance(item, (np.ndarray, torch.Tensor, list)):
-                if isinstance(item, np.ndarray):
-                    tensor = torch.from_numpy(item)
-                elif isinstance(item, list):
-                    tensor = torch.tensor(item, dtype=torch.float32)
-                else:
-                    tensor = item
-                waveforms.append(tensor.float().squeeze())
-
-            # file path string
-            elif isinstance(item, str):
-                waveform, sr = torchaudio.load(item)
-                tensor = waveform.float().squeeze()
-                if sr != self.sampling_rate:
-                    resampler = torchaudio.transforms.Resample(sr, self.sampling_rate)
-                    tensor = resampler(tensor)
-                waveforms.append(tensor)
-
-        return waveforms
 
     def get_audio_embeddings(
         self,
-        audio,
-        *,
+        inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 4,
         **kwargs: Any,
     ) -> np.ndarray:
-        all_embeddings = []
-
-        if isinstance(audio, DataLoader):
-            # Process each DataLoader batch separately
-            for batch in tqdm(
-                audio, desc="Processing audio batches", disable=not show_progress_bar
-            ):
-                wavs = self._handle_batch(batch)
-                batch_embeddings = self._process_audio_batch(wavs, batch_size)
-                all_embeddings.extend(batch_embeddings)
-
-            return np.vstack(all_embeddings)
-        else:
-            # Process single batch with internal batching
-            wavs = self._handle_batch(audio)
-            batch_embeddings = self._process_audio_batch(wavs, batch_size)
-            return np.vstack(batch_embeddings)
-
-    def _process_audio_batch(
-        self, wavs: list[torch.Tensor], batch_size: int
-    ) -> list[np.ndarray]:
-        """Process audio waveforms in batches for efficiency."""
-        import logging
-
-        logger = logging.getLogger(__name__)
+        import torchaudio
 
         all_embeddings = []
 
-        for i in tqdm(
-            range(0, len(wavs), batch_size),
-            desc="Processing audio batches",
-            disable=len(wavs) <= batch_size,
+        # Process each DataLoader batch separately
+        for batch in tqdm(
+            inputs, desc="Processing audio batches", disable=not show_progress_bar
         ):
-            batch_wavs = wavs[i : i + batch_size]
+            audio_arrays = []
+            for a in batch["audio"]:
+                array = torch.tensor(a["array"], dtype=torch.float32)
+                sr = a.get("sampling_rate", None)
+                if sr is None:
+                    warnings.warn(
+                        f"No sampling_rate provided for an audio sample. "
+                        f"Assuming {self.sampling_rate} Hz (model default)."
+                    )
+                    sr = self.sampling_rate
 
-            # Try batch processing first
-            try:
-                # Stack waveforms into a batch - pad to same length if needed
-                max_length = max(wav.shape[-1] for wav in batch_wavs)
-                padded_wavs = []
-                for wav in batch_wavs:
-                    if wav.shape[-1] < max_length:
-                        # Pad with zeros
-                        pad_length = max_length - wav.shape[-1]
-                        padded_wav = torch.nn.functional.pad(wav, (0, pad_length))
-                    else:
-                        padded_wav = wav
-                    padded_wavs.append(padded_wav)
+                if sr != self.sampling_rate:
+                    resampler = torchaudio.transforms.Resample(
+                        orig_freq=sr, new_freq=self.sampling_rate
+                    )
+                    array = resampler(array)
+                audio_arrays.append(array.numpy())
 
-                # Stack into batch tensor
-                batch_tensor = torch.stack(padded_wavs).cpu().numpy()
+            max_length = max(wav.shape[-1] for wav in audio_arrays)
+            padded_wavs = []
+            for wav in audio_arrays:
+                if wav.shape[-1] < max_length:
+                    # Pad with zeros
+                    pad_length = max_length - wav.shape[-1]
+                    padded_wav = torch.nn.functional.pad(wav, (0, pad_length))
+                else:
+                    padded_wav = wav
+                padded_wavs.append(padded_wav)
 
-                # Process entire batch at once
-                batch_embeds = self.embed_audio(batch_tensor, self.audio_model)
+            # Stack into batch tensor
+            batch_tensor = torch.stack(padded_wavs).cpu().numpy()
 
-                # Normalize each embedding in the batch
-                norms = np.linalg.norm(batch_embeds, axis=-1, keepdims=True)
-                normalized_embeds = batch_embeds / norms
+            # Process entire batch at once
+            batch_embeds = self.embed_audio(batch_tensor, self.audio_model)
 
-                # Add each embedding from the batch
-                for embed in normalized_embeds:
-                    all_embeddings.append(embed.reshape(1, -1))
+            # Normalize each embedding in the batch
+            norms = np.linalg.norm(batch_embeds, axis=-1, keepdims=True)
+            normalized_embeds = batch_embeds / norms
 
-            except Exception as e:
-                logger.warning(
-                    f"⚠️  BATCH processing failed, falling back to individual processing: {e}"
-                )
-                # Fallback to individual processing if batch processing fails
-                for wav in batch_wavs:
-                    wav_np = wav.unsqueeze(0).cpu().numpy()  # Add batch dimension
-                    embed = self.embed_audio(wav_np, self.audio_model)
+            # Add each embedding from the batch
+            for embed in normalized_embeds:
+                all_embeddings.append(embed.reshape(1, -1))
 
-                    # Normalize
-                    norm = np.linalg.norm(embed, axis=-1, keepdims=True)
-                    normalized_embed = embed / norm
-                    all_embeddings.append(normalized_embed)
-                logger.info(
-                    f"🔄 Individual processing completed for {len(batch_wavs)} audio files"
-                )
-
-        return all_embeddings
+        return np.vstack(all_embeddings)
 
     def get_text_embeddings(
         self,
-        texts: list[str],
+        inputs: DataLoader[TextInput],
+        show_progress_bar: bool = True,
         **kwargs: Any,
-    ) -> np.ndarray:
-        inputs = self.clip_processor(
-            text=texts, return_tensors="pt", padding=True, truncation=True
-        )
-        inputs = {k: v.to(self.device) for k, v in inputs.items()}
+    ) -> Array:
+        text_embeddings = []
+        for batch in tqdm(
+            inputs, disable=not show_progress_bar, desc="Processing text batches"
+        ):
+            texts = batch["text"]
+            features = self.clip_processor(
+                text=texts, return_tensors="pt", padding=True, truncation=True
+            )
+            features = {k: v.to(self.device) for k, v in features.items()}
 
-        with torch.no_grad():
-            text_features = self.clip.get_text_features(**inputs)
-            text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+            with torch.no_grad():
+                text_features = self.clip.get_text_features(**features)
+                text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+            text_embeddings.append(text_features.cpu().numpy())
 
-        return text_features.cpu().numpy()
+        return np.vstack(text_embeddings)
 
     def encode(
         self,
-        inputs: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        return self.get_text_embeddings(inputs, **kwargs)
+    ) -> Array:
+        text_embeddings = None
+        audio_embeddings = None
+
+        if "text" in inputs.dataset.features:
+            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+        if "audio" in inputs.dataset.features:
+            audio_embeddings = self.get_audio_embeddings(inputs, **kwargs)
+
+        if text_embeddings is not None and audio_embeddings is not None:
+            if len(text_embeddings) != len(audio_embeddings):
+                raise ValueError(
+                    "The number of texts and images must have the same length"
+                )
+            fused_embeddings = text_embeddings + audio_embeddings
+            return fused_embeddings
+        elif text_embeddings is not None:
+            return text_embeddings
+        elif audio_embeddings is not None:
+            return audio_embeddings
+        raise ValueError
 
 
 wav2clip_zero = ModelMeta(

@@ -76,7 +76,8 @@ WAV2VEC2_LANGUAGES = [
 class Wav2Vec2AudioWrapper(AbsEncoder):
     def __init__(
         self,
-        model_name: str = "facebook/wav2vec2-base",
+        model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
@@ -88,12 +89,18 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
 
         # Try to load base model first, fallback to CTC if needed
         try:
-            self.model = Wav2Vec2Model.from_pretrained(model_name).to(self.device)
+            self.model = Wav2Vec2Model.from_pretrained(
+                model_name, revision=revision
+            ).to(self.device)
             self.is_ctc_model = False
         except Exception:
             # Fallback to CTC model for models that don't have base versions
-            self.model = Wav2Vec2ForCTC.from_pretrained(model_name).to(self.device)
+            self.model = Wav2Vec2ForCTC.from_pretrained(
+                model_name, revision=revision
+            ).to(self.device)
             self.is_ctc_model = True
+
+        self.model.eval()
 
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
         self.sampling_rate = self.feature_extractor.sampling_rate
@@ -115,11 +122,7 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
             audio_arrays = []
             for a in batch["audio"]:
                 array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = (
-                    a.get("sampling_rate")
-                    if isinstance(a, dict)
-                    else a["sampling_rate"]
-                )
+                sr = a.get("sampling_rate", None)
                 if sr is None:
                     warnings.warn(
                         f"No sampling_rate provided for an audio sample. "
