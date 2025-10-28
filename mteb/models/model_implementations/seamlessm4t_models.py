@@ -1,5 +1,4 @@
 import warnings
-from functools import partial
 from typing import Any
 
 import torch
@@ -20,7 +19,7 @@ class SeamlessM4TWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 30.0,
+        max_audio_length_seconds: float = 5.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
@@ -160,15 +159,12 @@ class SeamlessM4TWrapper(AbsEncoder):
 
 
 seamless_m4t_v2_large = ModelMeta(
-    loader=partial(
-        SeamlessM4TWrapper,
-        model_name="facebook/seamless-m4t-v2-large",
-        max_audio_length_seconds=5.0,  # Conservative default for memory efficiency
-    ),
+    loader=SeamlessM4TWrapper,
     name="facebook/seamless-m4t-v2-large",
     languages=[
+        # multilingual: supported languages can be found in the reference
         "eng-Latn"
-    ],  # multilingual: supported languages can be found in the reference
+    ],
     open_weights=True,
     revision="5f8cc790b19fc3f67a61c105133b20b34e3dcb76",
     release_date="2023-11-06",

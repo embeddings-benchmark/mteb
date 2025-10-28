@@ -1,5 +1,4 @@
 import warnings
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -237,9 +236,7 @@ larger_clap_music = ModelMeta(
 )
 
 larger_clap_music_and_speech = ModelMeta(
-    loader=partial(
-        ClapZeroShotWrapper, model_name="laion/larger_clap_music_and_speech"
-    ),
+    loader=ClapZeroShotWrapper,
     name="laion/larger_clap_music_and_speech",
     languages=["eng-Latn"],
     revision="195c3a3e68faebb3e2088b9a79e79b43ddbda76b",

@@ -1,5 +1,4 @@
 import warnings
-from functools import partial
 from typing import Any
 
 import torch
@@ -204,10 +203,7 @@ class SpeechT5Wrapper(AbsEncoder):
 
 # ASR model - Optimized for Speech Recognition tasks
 speecht5_asr = ModelMeta(
-    loader=partial(
-        SpeechT5Wrapper,
-        model_name="microsoft/speecht5_asr",
-    ),
+    loader=SpeechT5Wrapper,
     name="microsoft/speecht5_asr",
     languages=["eng-Latn"],
     open_weights=True,
@@ -230,10 +226,7 @@ speecht5_asr = ModelMeta(
 
 # TTS model - Optimized for Text-to-Speech tasks
 speecht5_tts = ModelMeta(
-    loader=partial(
-        SpeechT5Wrapper,
-        model_name="microsoft/speecht5_tts",
-    ),
+    loader=SpeechT5Wrapper,
     name="microsoft/speecht5_tts",
     languages=["eng-Latn"],
     open_weights=True,
@@ -256,10 +249,7 @@ speecht5_tts = ModelMeta(
 
 # Voice Conversion model - Optimized for Speech-to-Speech conversion tasks
 speecht5_multimodal = ModelMeta(
-    loader=partial(
-        SpeechT5Wrapper,
-        model_name="microsoft/speecht5_multimodal",
-    ),
+    loader=SpeechT5Wrapper,
     name="microsoft/speecht5_multimodal",
     languages=["eng-Latn"],
     open_weights=True,

@@ -1,6 +1,5 @@
 import logging
 import warnings
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -160,7 +159,7 @@ class MSClapWrapper(AbsEncoder):
 
 # Microsoft CLAP Model metadata
 ms_clap_2022 = ModelMeta(
-    loader=partial(MSClapWrapper, model_name="microsoft/msclap-2022"),
+    loader=MSClapWrapper,
     name="microsoft/msclap-2022",
     languages=["eng-Latn"],
     revision="N/A",
@@ -182,7 +181,7 @@ ms_clap_2022 = ModelMeta(
 )
 
 ms_clap_2023 = ModelMeta(
-    loader=partial(MSClapWrapper, model_name="microsoft/msclap-2023"),
+    loader=MSClapWrapper,
     name="microsoft/msclap-2023",
     languages=["eng-Latn"],
     revision="N/A",
