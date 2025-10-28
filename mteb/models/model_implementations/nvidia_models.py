@@ -5,7 +5,7 @@ import torch
 import torch.nn.functional as F
 from packaging.version import Version
 from torch.utils.data import DataLoader
-from tqdm import tqdm
+from tqdm.auto import tqdm
 from transformers import AutoModel, AutoTokenizer
 from transformers import __version__ as transformers_version
 

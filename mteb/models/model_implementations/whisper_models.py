@@ -3,7 +3,7 @@ from typing import Any
 
 import torch
 from torch.utils.data import DataLoader
-from tqdm import tqdm
+from tqdm.auto import tqdm
 from transformers import WhisperModel, WhisperProcessor
 
 from mteb import TaskMetadata

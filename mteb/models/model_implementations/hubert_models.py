@@ -3,7 +3,7 @@ from typing import Any
 
 import torch
 from torch.utils.data import DataLoader
-from tqdm import tqdm
+from tqdm.auto import tqdm
 from transformers import HubertModel, Wav2Vec2FeatureExtractor
 
 from mteb import TaskMetadata

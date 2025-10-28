@@ -3,7 +3,7 @@ from typing import Any
 
 import torch
 from torch.utils.data import DataLoader
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies, requires_package
