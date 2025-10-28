@@ -4,7 +4,6 @@ from typing import Any
 
 import numpy as np
 import torch
-import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import ClapModel, ClapProcessor
@@ -42,6 +41,8 @@ class ClapZeroShotWrapper:
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
+        import torchaudio
+
         all_features = []
 
         for batch in tqdm(
