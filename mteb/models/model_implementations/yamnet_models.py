@@ -153,7 +153,9 @@ def yamnet_loader(*args, **kwargs):
                             zero_embedding = torch.zeros(
                                 self.embed_dim, device=self.device
                             )
-                            batch_embeddings.append(zero_embedding.cpu().numpy())
+                            batch_embeddings.append(
+                                zero_embedding.cpu().detach().numpy()
+                            )
                             continue
 
                         # discard logits
@@ -172,7 +174,7 @@ def yamnet_loader(*args, **kwargs):
                         if len(embedding.shape) > 1:
                             embedding = torch.mean(embedding, dim=0)
 
-                        batch_embeddings.append(embedding.cpu().numpy())
+                        batch_embeddings.append(embedding.cpu().detach().numpy())
 
                 all_embeddings.extend(batch_embeddings)
 

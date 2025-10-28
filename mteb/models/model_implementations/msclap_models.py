@@ -93,7 +93,7 @@ class MSClapWrapper:
                 audio_features = audio_features / audio_features.norm(
                     dim=-1, keepdim=True
                 )
-                all_embeddings.append(audio_features.cpu().numpy())
+                all_embeddings.append(audio_features.cpu().detach().numpy())
 
         return np.vstack(all_embeddings)
 
@@ -121,7 +121,7 @@ class MSClapWrapper:
             with torch.no_grad():
                 text_features = self.model.clap.caption_encoder(features)
                 text_features = text_features / text_features.norm(dim=-1, keepdim=True)
-            text_embeddings.append(text_features.cpu().numpy())
+            text_embeddings.append(text_features.cpu().detach().numpy())
 
         return np.vstack(text_embeddings)
 

@@ -166,7 +166,11 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
 
                 # inputs.attention_mask is per-sample mask over input_values
                 input_lengths = (
-                    feature_inputs.attention_mask.sum(dim=1).cpu().numpy().astype(int)
+                    feature_inputs.attention_mask.sum(dim=1)
+                    .cpu()
+                    .detach()
+                    .numpy()
+                    .astype(int)
                 )  # shape (B,)
 
                 hidden_lengths = [

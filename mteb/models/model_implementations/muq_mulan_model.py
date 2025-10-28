@@ -84,7 +84,10 @@ class MuQMuLanWrapper:
                 # Process entire batch at once
                 audio_embeds = self.model(wavs=batch_tensor)
                 all_features.extend(
-                    [embed.cpu().numpy().reshape(1, -1) for embed in audio_embeds]
+                    [
+                        embed.cpu().detach().numpy().reshape(1, -1)
+                        for embed in audio_embeds
+                    ]
                 )
 
         return np.vstack(all_features)
@@ -98,7 +101,7 @@ class MuQMuLanWrapper:
         texts = [text for batch in inputs for text in batch["text"]]
         text_embeds = self.model(texts=texts)
 
-        return text_embeds.cpu().numpy()
+        return text_embeds.cpu().detach().numpy()
 
     def encode(
         self,
@@ -143,7 +146,7 @@ class MuQMuLanWrapper:
         with torch.no_grad():
             similarity = self.model.calc_similarity(embeddings1, embeddings2)
 
-        return similarity.cpu().numpy()
+        return similarity.cpu().detach().numpy()
 
 
 muq_mulan_large = ModelMeta(

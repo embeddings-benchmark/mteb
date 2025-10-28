@@ -72,7 +72,7 @@ class SeamlessM4TWrapper(AbsEncoder):
                 max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
                 truncated_audio = []
                 for w in batch:
-                    audio_np = w.cpu().numpy()
+                    audio_np = w.cpu().detach().numpy()
                     if len(audio_np) > max_samples:
                         audio_np = audio_np[:max_samples]
                     truncated_audio.append(audio_np)

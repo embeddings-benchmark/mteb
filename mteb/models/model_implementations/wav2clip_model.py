@@ -84,7 +84,7 @@ class Wav2ClipZeroShotWrapper:
                 padded_wavs.append(padded_wav)
 
             # Stack into batch tensor
-            batch_tensor = torch.stack(padded_wavs).cpu().numpy()
+            batch_tensor = torch.stack(padded_wavs).cpu().detach().numpy()
 
             # Process entire batch at once
             batch_embeds = self.embed_audio(batch_tensor, self.audio_model)
@@ -118,7 +118,7 @@ class Wav2ClipZeroShotWrapper:
             with torch.no_grad():
                 text_features = self.clip.get_text_features(**features)
                 text_features = text_features / text_features.norm(dim=-1, keepdim=True)
-            text_embeddings.append(text_features.cpu().numpy())
+            text_embeddings.append(text_features.cpu().detach().numpy())
 
         return np.vstack(text_embeddings)
 

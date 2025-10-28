@@ -80,7 +80,7 @@ class ClapZeroShotWrapper:
                 audio_features = audio_features / audio_features.norm(
                     dim=-1, keepdim=True
                 )
-                all_features.append(audio_features.cpu().numpy())
+                all_features.append(audio_features.cpu().detach().numpy())
 
         return np.vstack(all_features)
 
@@ -101,7 +101,7 @@ class ClapZeroShotWrapper:
             text_features = self.model.get_text_features(**inputs)
             # Normalize embeddings
             text_features = text_features / text_features.norm(dim=-1, keepdim=True)
-            text_embeddings.append(text_features.cpu().numpy())
+            text_embeddings.append(text_features.cpu().detach().numpy())
 
         return np.vstack(text_embeddings)
 
