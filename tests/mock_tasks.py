@@ -4668,13 +4668,13 @@ class MockAudioPairClassification(AbsTaskAudioPairClassification):
 class MockAudioClassificationCrossVal(AbsTaskAudioClassification):
     metadata = TaskMetadata(
         type="AudioClassification",
-        name="MockAudioClassification",
+        name="MockAudioClassificationCrossVal",
         main_score="accuracy",
         **general_args,  # type: ignore
     )
     metadata.modalities = ["audio"]
+    metadata.eval_splits = ["train"]
     is_cross_validation = True
-    train_split = "val"
 
     def load_data(self, **kwargs):
         mock_audio = [
@@ -4687,12 +4687,6 @@ class MockAudioClassificationCrossVal(AbsTaskAudioClassification):
 
         self.dataset = DatasetDict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "audio": mock_audio,
-                        "labels": [1, 2],
-                    }
-                ),
                 "train": Dataset.from_dict(
                     {
                         "audio": mock_audio * 5,
