@@ -11,13 +11,14 @@ from tqdm.auto import tqdm
 from mteb import TaskMetadata
 from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 from mteb.types._encoder_io import AudioInput, TextInput
 
 logger = logging.getLogger(__name__)
 
 
-class MSClapWrapper:
+class MSClapWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str = "microsoft/msclap-2023",

@@ -10,11 +10,12 @@ from transformers import CLIPModel, CLIPProcessor
 from mteb import TaskMetadata
 from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 from mteb.types._encoder_io import AudioInput, TextInput
 
 
-class Wav2ClipZeroShotWrapper:
+class Wav2ClipZeroShotWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
