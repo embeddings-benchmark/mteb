@@ -324,7 +324,7 @@ speecht5_tts = ModelMeta(
     modalities=["text"],
 )
 
-# Voice Conversion model - Optimized for Speech-to-Speech conversion tasks
+# This is model meta is for a multimodal model that combined from asr and tts.
 speecht5_multimodal = ModelMeta(
     loader=SpeechT2Multimodal,
     name="microsoft/speecht5_multimodal",
