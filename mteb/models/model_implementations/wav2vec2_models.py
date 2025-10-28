@@ -114,8 +114,14 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
         ):
             audio_arrays = []
             for a in batch["audio"]:
-                array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate", None)
+                # Handle both dict and AudioDecoder objects
+                if isinstance(a, dict):
+                    array = torch.tensor(a["array"], dtype=torch.float32)
+                    sr = a.get("sampling_rate", None)
+                else:
+                    # AudioDecoder object - access attributes directly
+                    array = torch.tensor(a.array, dtype=torch.float32)
+                    sr = getattr(a, "sampling_rate", None)
                 if sr is None:
                     warnings.warn(
                         f"No sampling_rate provided for an audio sample. "
