@@ -18,23 +18,23 @@ class WavlmWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
-        model_revision: str | None = None,
+        revision: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
         requires_audio_dependencies()
         self.model_name = model_name
-        self.model_revision = model_revision
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
 
-        self.model = WavLMModel.from_pretrained(
-            self.model_name, revision=self.model_revision
-        ).to(self.device)
+        self.model = WavLMModel.from_pretrained(self.model_name, revision=revision).to(
+            self.device
+        )
+        self.model.eval()
 
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
-            self.model_name
+            self.model_name, revision=revision
         )
         self.sampling_rate = self.feature_extractor.sampling_rate
 
@@ -55,7 +55,7 @@ class WavlmWrapper(AbsEncoder):
             audio_arrays = []
             for a in batch["audio"]:
                 array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate") if isinstance(a, dict) else a["sampling_rate"]
+                sr = a.get("sampling_rate", None)
                 if sr is None:
                     warnings.warn(
                         f"No sampling_rate provided for an audio sample. "

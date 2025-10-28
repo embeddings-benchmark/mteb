@@ -21,6 +21,7 @@ class ASTWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
@@ -29,7 +30,9 @@ class ASTWrapper(AbsEncoder):
         self.device = device
 
         self.feature_extractor = ASTFeatureExtractor.from_pretrained(model_name)
-        self.model = ASTModel.from_pretrained(model_name).to(self.device)
+        self.model = ASTModel.from_pretrained(model_name, revision=revision).to(
+            self.device
+        )
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
@@ -50,7 +53,7 @@ class ASTWrapper(AbsEncoder):
             audio_arrays = []
             for a in batch["audio"]:
                 array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate") if isinstance(a, dict) else a["sampling_rate"]
+                sr = a.get("sampling_rate", None)
                 if sr is None:
                     warnings.warn(
                         f"No sampling_rate provided for an audio sample. "

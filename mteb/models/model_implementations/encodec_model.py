@@ -2,7 +2,6 @@ import logging
 import warnings
 from typing import Any
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
@@ -22,6 +21,7 @@ class EncodecWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
@@ -31,7 +31,11 @@ class EncodecWrapper(AbsEncoder):
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
 
-        self.model = EncodecModel.from_pretrained(model_name).to(device)
+        self.model = EncodecModel.from_pretrained(model_name, revision=revision).to(
+            device
+        )
+        self.model.eval()
+
         self.processor = AutoProcessor.from_pretrained(model_name)
         self.sampling_rate = self.processor.sampling_rate  # 24000 Hz typically
 
@@ -50,21 +54,11 @@ class EncodecWrapper(AbsEncoder):
             disable=not show_progress_bar,
         ):
             audio_tensors = []
-            null_indices = []  # Track which samples are null markers
-            
+
             for idx, a in enumerate(batch["audio"]):
                 array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate") if isinstance(a, dict) else a["sampling_rate"]
-                
-                # Check for empty audio before resampling
-                if array.numel() == 0:
-                    logger.warning(
-                        "Empty audio array from dataset - creating null audio marker"
-                    )
-                    min_samples = max(500, int(0.1 * self.sampling_rate))
-                    array = torch.full((min_samples,), -999.0, dtype=torch.float32)
-                    null_indices.append(idx)
-                
+                sr = a.get("sampling_rate", None)
+
                 if sr is None:
                     warnings.warn(
                         f"No sampling_rate provided for an audio sample. "
@@ -81,36 +75,16 @@ class EncodecWrapper(AbsEncoder):
                         orig_freq=sr, new_freq=self.sampling_rate
                     )
                     array = resampler(array)
-                
+
                 array = array.squeeze()
-                
-                # Handle empty audio after processing
-                if array.numel() == 0:
-                    logger.warning("Empty audio tensor encountered - creating null audio marker")
-                    min_samples = max(500, int(0.1 * self.sampling_rate))
-                    array = torch.full((min_samples,), -999.0, dtype=torch.float32)
-                    if idx not in null_indices:
-                        null_indices.append(idx)
-                
                 audio_tensors.append(array)
 
             with torch.no_grad():
                 # Process audio through EnCodec's processor
                 max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
-                batch_np = []
-                
-                for idx, audio in enumerate(audio_tensors):
-                    audio_np = audio[:max_samples].cpu().numpy()
-                    
-                    # Check if this is a null marker (all values are -999.0)
-                    if len(audio_np) > 0 and np.all(np.abs(audio_np + 999.0) < 1e-6):
-                        # Replace with minimal silence for processing
-                        audio_np = np.zeros_like(audio_np) + 1e-6
-                    
-                    batch_np.append(audio_np)
 
                 feature_inputs = self.processor(
-                    raw_audio=batch_np,
+                    raw_audio=audio_tensors,
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding="max_length",
@@ -125,12 +99,6 @@ class EncodecWrapper(AbsEncoder):
 
                 # Normalize embeddings
                 embeddings = embeddings / embeddings.norm(dim=-1, keepdim=True)
-
-                # Replace null marker embeddings with special null embeddings
-                if null_indices:
-                    for idx in null_indices:
-                        embeddings[idx] = torch.zeros_like(embeddings[idx])
-                        logger.debug(f"Created null embedding for empty audio at batch index {idx}")
 
                 all_embeddings.append(embeddings.cpu().detach())
 

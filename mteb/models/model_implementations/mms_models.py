@@ -1,5 +1,4 @@
 import warnings
-from functools import partial
 from typing import Any
 
 import torch
@@ -19,7 +18,7 @@ class MMSWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
-        model_revision: str | None = None,
+        revision: str | None = None,
         target_lang: str = "eng",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         max_audio_length_seconds: float = 30.0,
@@ -27,19 +26,19 @@ class MMSWrapper(AbsEncoder):
     ):
         requires_audio_dependencies()
         self.model_name = model_name
-        self.model_revision = model_revision
+        self.model_revision = revision
         self.target_lang = target_lang
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
 
         # Standard feature extractor used by audio models
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
-            model_name, revision=model_revision
+            model_name, revision=revision
         )
 
         # Load model
         self.model = Wav2Vec2Model.from_pretrained(
-            model_name, revision=model_revision, ignore_mismatched_sizes=True
+            model_name, revision=revision, ignore_mismatched_sizes=True
         ).to(self.device)
 
         # Load language adapter if available
@@ -68,7 +67,7 @@ class MMSWrapper(AbsEncoder):
             audio_arrays = []
             for a in batch["audio"]:
                 array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate") if isinstance(a, dict) else a["sampling_rate"]
+                sr = a.get("sampling_rate", None)
                 if sr is None:
                     warnings.warn(
                         f"No sampling_rate provided for an audio sample. "

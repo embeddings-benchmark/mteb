@@ -17,7 +17,8 @@ from mteb.types._encoder_io import AudioInput
 class SewDWrapper(AbsEncoder):
     def __init__(
         self,
-        model_name: str = "facebook/hubert-base-ls960",
+        model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
@@ -28,8 +29,13 @@ class SewDWrapper(AbsEncoder):
         self.max_audio_length_seconds = max_audio_length_seconds
 
         # SewD uses the same feature extractor as Wav2Vec2
-        self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
-        self.model = SEWDForCTC.from_pretrained(model_name).to(self.device)
+        self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
+            model_name, revision=revision
+        )
+        self.model = SEWDForCTC.from_pretrained(model_name, revision=revision).to(
+            self.device
+        )
+        self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
     def get_audio_embeddings(
@@ -49,7 +55,11 @@ class SewDWrapper(AbsEncoder):
             audio_arrays = []
             for a in batch["audio"]:
                 array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate") if isinstance(a, dict) else a["sampling_rate"]
+                sr = (
+                    a.get("sampling_rate")
+                    if isinstance(a, dict)
+                    else a["sampling_rate"]
+                )
                 if sr is None:
                     warnings.warn(
                         f"No sampling_rate provided for an audio sample. "

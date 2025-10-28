@@ -127,10 +127,14 @@ def vggish_loader(*args, **kwargs):
                 disable=not show_progress_bar,
             ):
                 batch_embeddings = []
-                
+
                 for a in batch["audio"]:
                     array = torch.tensor(a["array"], dtype=torch.float32)
-                    sr = a.get("sampling_rate") if isinstance(a, dict) else a["sampling_rate"]
+                    sr = (
+                        a.get("sampling_rate")
+                        if isinstance(a, dict)
+                        else a["sampling_rate"]
+                    )
                     if sr is None:
                         warnings.warn(
                             f"No sampling_rate provided for an audio sample. "
@@ -142,7 +146,7 @@ def vggish_loader(*args, **kwargs):
                     audio = self._resample_audio(array.float(), sr)
                     # Normalize
                     audio = self._normalize_audio(audio)
-                    
+
                     with torch.no_grad():
                         input_tensor = self._prepare_input_tensor(audio)
 

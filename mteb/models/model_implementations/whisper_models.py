@@ -17,21 +17,21 @@ from mteb.types._encoder_io import AudioInput
 class WhisperAudioWrapper(AbsEncoder):
     def __init__(
         self,
-        model_name: str = "openai/whisper-tiny",
+        model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        revision: str = "main",
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
         requires_audio_dependencies()
         self.model_name = model_name
         self.device = device
-        self.revision = revision
         self.max_audio_length_seconds = max_audio_length_seconds
 
         self.model = WhisperModel.from_pretrained(model_name, revision=revision).to(
             device
         )
+        self.model.eval()
         self.processor = WhisperProcessor.from_pretrained(model_name, revision=revision)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
@@ -53,7 +53,11 @@ class WhisperAudioWrapper(AbsEncoder):
             audio_arrays = []
             for a in batch["audio"]:
                 array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate") if isinstance(a, dict) else a["sampling_rate"]
+                sr = (
+                    a.get("sampling_rate")
+                    if isinstance(a, dict)
+                    else a["sampling_rate"]
+                )
                 if sr is None:
                     warnings.warn(
                         f"No sampling_rate provided for an audio sample. "

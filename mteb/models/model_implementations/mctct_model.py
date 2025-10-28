@@ -79,6 +79,7 @@ class MCTCTWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
@@ -88,8 +89,13 @@ class MCTCTWrapper(AbsEncoder):
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
 
-        self.model = MCTCTModel.from_pretrained(model_name).to(device)
-        self.feature_extractor = MCTCTFeatureExtractor.from_pretrained(model_name)
+        self.model = MCTCTModel.from_pretrained(model_name, revision=revision).to(
+            device
+        )
+        self.model.eval()
+        self.feature_extractor = MCTCTFeatureExtractor.from_pretrained(
+            model_name, revision=revision
+        )
         self.sampling_rate = self.feature_extractor.sampling_rate  # 16000 Hz
 
     def get_audio_embeddings(
@@ -109,7 +115,7 @@ class MCTCTWrapper(AbsEncoder):
             audio_arrays = []
             for a in batch["audio"]:
                 array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate") if isinstance(a, dict) else a["sampling_rate"]
+                sr = a.get("sampling_rate", None)
                 if sr is None:
                     warnings.warn(
                         f"No sampling_rate provided for an audio sample. "
@@ -126,7 +132,7 @@ class MCTCTWrapper(AbsEncoder):
                         orig_freq=sr, new_freq=self.sampling_rate
                     )
                     array = resampler(array)
-                
+
                 audio_arrays.append(array.squeeze().numpy())
 
             feature_inputs = self.feature_extractor(
@@ -154,7 +160,9 @@ class MCTCTWrapper(AbsEncoder):
 
                 # Calculate proper hidden lengths based on input attention mask
                 input_lengths = feature_inputs.attention_mask.sum(dim=1)
-                downsample_ratio = feature_inputs.attention_mask.shape[1] / hidden_seq_len
+                downsample_ratio = (
+                    feature_inputs.attention_mask.shape[1] / hidden_seq_len
+                )
                 hidden_lengths = (input_lengths.float() / downsample_ratio).long()
                 hidden_lengths = torch.clamp(hidden_lengths, min=0, max=hidden_seq_len)
 

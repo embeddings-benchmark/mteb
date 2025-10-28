@@ -1,6 +1,5 @@
 import logging
 import warnings
-from functools import partial
 from typing import Any
 
 import torch
@@ -21,7 +20,8 @@ logger = logging.getLogger(__name__)
 class Qwen2AudioWrapper(AbsEncoder):
     def __init__(
         self,
-        model_name: str = "Qwen/Qwen2-Audio-7B",
+        model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
@@ -30,13 +30,15 @@ class Qwen2AudioWrapper(AbsEncoder):
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
-        
-        self.processor = AutoProcessor.from_pretrained(model_name)
-        self.model = Qwen2AudioForConditionalGeneration.from_pretrained(model_name).to(self.device)
+
+        self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
+        self.model = Qwen2AudioForConditionalGeneration.from_pretrained(
+            model_name, revision=revision
+        ).to(self.device)
         self.model.eval()
-        
+
         self.audio_encoder = self.model.audio_tower
-        
+
         cfg = self.model.config.audio_config
         self.embed_dim = getattr(cfg, "d_model", getattr(cfg, "hidden_size", None))
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
@@ -58,7 +60,7 @@ class Qwen2AudioWrapper(AbsEncoder):
             audio_arrays = []
             for a in batch["audio"]:
                 array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate") if isinstance(a, dict) else a["sampling_rate"]
+                sr = a.get("sampling_rate", None)
                 if sr is None:
                     warnings.warn(
                         f"No sampling_rate provided for an audio sample. "

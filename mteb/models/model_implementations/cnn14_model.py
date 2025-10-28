@@ -1,5 +1,4 @@
 import warnings
-from functools import partial
 from typing import Any
 
 import torch
@@ -68,7 +67,7 @@ class CNN14Wrapper(AbsEncoder):
             audio_tensors = []
             for a in batch["audio"]:
                 array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate") if isinstance(a, dict) else a["sampling_rate"]
+                sr = a.get("sampling_rate", None)
                 if sr is None:
                     warnings.warn(
                         f"No sampling_rate provided for an audio sample. "
@@ -81,14 +80,14 @@ class CNN14Wrapper(AbsEncoder):
                         orig_freq=sr, new_freq=self.sampling_rate
                     )
                     array = resampler(array)
-                
+
                 array = array.squeeze()
-                
+
                 # Apply audio truncation (configurable limit)
                 max_length = int(self.max_audio_length_s * self.sampling_rate)
                 if array.shape[-1] > max_length:
                     array = array[..., :max_length]
-                
+
                 audio_tensors.append(array)
 
             with torch.no_grad():
