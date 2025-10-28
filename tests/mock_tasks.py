@@ -4674,6 +4674,7 @@ class MockAudioClassificationCrossVal(AbsTaskAudioClassification):
     )
     metadata.modalities = ["audio"]
     is_cross_validation = True
+    train_split = "val"
 
     def load_data(self, **kwargs):
         mock_audio = [
