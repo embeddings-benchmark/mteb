@@ -1,6 +1,7 @@
 import torch
 
 from mteb.models import EncoderProtocol
+from mteb.models.model_meta import ScoringFunction
 from mteb.types import Array
 
 
@@ -36,6 +37,54 @@ def compute_pairwise_similarity(
     if hasattr(model, "similarity_pairwise"):
         return model.similarity_pairwise(embedding1, embedding2)
     return pairwise_cos_sim(embedding1, embedding2)
+
+
+def select_similarity(
+    embedding1: Array,
+    embedding2: Array,
+    similarity_fn: ScoringFunction,
+) -> Array:
+    """Compute similarity between two sets of embeddings using the specified similarity function.
+
+    Args:
+        embedding1: The first set of embeddings.
+        embedding2: The second set of embeddings.
+        similarity_fn: The similarity function to use (COSINE, DOT_PRODUCT, EUCLIDEAN).
+
+    Returns:
+        Array: The computed similarity scores.
+    """
+    if similarity_fn is ScoringFunction.COSINE:
+        return cos_sim(embedding1, embedding2)
+    elif similarity_fn is ScoringFunction.DOT_PRODUCT:
+        return dot_score(embedding1, embedding2)
+    elif similarity_fn is ScoringFunction.EUCLIDEAN:
+        return euclidean_sim(embedding1, embedding2)
+    raise ValueError(f"Unsupported similarity function: {similarity_fn}")
+
+
+def select_pairwise_similarity(
+    embedding1: Array,
+    embedding2: Array,
+    similarity_fn: ScoringFunction,
+) -> Array:
+    """Compute pairwise similarity between two sets of embeddings using the specified similarity function.
+
+    Args:
+        embedding1: The first set of embeddings.
+        embedding2: The second set of embeddings.
+        similarity_fn: The similarity function to use (COSINE, DOT_PRODUCT, EUCLIDEAN).
+
+    Returns:
+        Array: The computed pairwise similarity scores.
+    """
+    if similarity_fn is ScoringFunction.COSINE:
+        return pairwise_cos_sim(embedding1, embedding2)
+    elif similarity_fn is ScoringFunction.DOT_PRODUCT:
+        return pairwise_dot_score(embedding1, embedding2)
+    elif similarity_fn is ScoringFunction.EUCLIDEAN:
+        return pairwise_euclidean_sim(embedding1, embedding2)
+    raise ValueError(f"Unsupported similarity function: {similarity_fn}")
 
 
 def _normalize_embeddings(embeddings: Array) -> torch.Tensor:
