@@ -81,6 +81,16 @@ from .vidore2_bench_retrieval import (
     Vidore2ESGReportsHLRetrieval,
     Vidore2ESGReportsRetrieval,
 )
+from .vidore3_bench_retrieval import (
+    Vidore3FinanceBankReportsRetrieval,
+    Vidore3MilitaryTechnicalReportsRetrieval,
+    Vidore3EducationComputerScienceRetrieval,
+    Vidore3HealthCareFdaRetrieval,
+    Vidore3HrEuropeanReportsRetrieval,
+    Vidore3LuxuryFinancialReportsRetrieval,
+    Vidore3EducationPhysicsRetrieval,
+    Vidore3EnergyReportsRetrieval,  
+)
 from .web_faq_retrieval import WebFAQRetrieval
 from .wikipedia_retrieval_multilingual import WikipediaRetrievalMultilingual
 from .wit_t2i_retrieval import WITT2IRetrieval
