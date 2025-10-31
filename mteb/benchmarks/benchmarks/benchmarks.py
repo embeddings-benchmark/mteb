@@ -2214,6 +2214,25 @@ VIDORE_V2 = Benchmark(
 """,
 )
 
+VIDORE_V3 = Benchmark(
+    name="ViDoRe(v3)",
+    tasks=get_tasks(
+        tasks=[
+            "Vidore3FinanceBankReportsRetrieval",
+            "Vidore3MilitaryTechnicalReportsRetrieval",
+            "Vidore3EducationComputerScienceRetrieval",
+            "Vidore3HealthCareFdaRetrieval",
+            "Vidore3HrEuropeanReportsRetrieval",
+            "Vidore3LuxuryFinancialReportsRetrieval",
+            "Vidore3EducationPhysicsRetrieval",
+            "Vidore3EnergyReportsRetrieval",
+        ]
+    ),
+    description="Retrieve associated pages according to questions.",
+    reference="TO BE ADDED", # TODO
+    citation=r"""TO BE ADDED""", # TODO
+)
+
 VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
     name="VisualDocumentRetrieval",
     display_name="Visual Document Retrieval",
