@@ -2221,7 +2221,7 @@ VIDORE_V3 = Benchmark(
             "Vidore3FinanceBankReportsRetrieval",
             "Vidore3MilitaryTechnicalReportsRetrieval",
             "Vidore3EducationComputerScienceRetrieval",
-            "Vidore3HealthCareFdaRetrieval",
+            "Vidore3HealthcareFdaRetrieval",
             "Vidore3HrEuropeanReportsRetrieval",
             "Vidore3LuxuryFinancialReportsRetrieval",
             "Vidore3EducationPhysicsRetrieval",
@@ -2229,8 +2229,8 @@ VIDORE_V3 = Benchmark(
         ]
     ),
     description="Retrieve associated pages according to questions.",
-    reference="TO BE ADDED", # TODO
-    citation=r"""TO BE ADDED""", # TODO
+    reference="TO BE ADDED",  # TODO
+    citation=r"""TO BE ADDED""",  # TODO
 )
 
 VISUAL_DOCUMENT_RETRIEVAL = Benchmark(

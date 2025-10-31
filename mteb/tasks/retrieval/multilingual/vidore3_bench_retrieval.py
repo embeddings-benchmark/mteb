@@ -118,7 +118,7 @@ def _load_data(
 
 class Vidore3FinanceBankReportsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3FinanceBankReportsEn",
+        name="Vidore3FinanceBankReportsRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
@@ -211,7 +211,7 @@ class Vidore3LuxuryFinancialReportsRetrieval(AbsTaskRetrieval):
 
 class Vidore3MilitaryTechnicalReportsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3MilitaryTechnicalReports",
+        name="Vidore3MilitaryTechnicalReportsRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
@@ -256,9 +256,9 @@ class Vidore3MilitaryTechnicalReportsRetrieval(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class Vidore3HealthCareFdaRetrieval(AbsTaskRetrieval):
+class Vidore3HealthcareFdaRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3HealthCareFdaRetrieval",
+        name="Vidore3HealthcareFdaRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
