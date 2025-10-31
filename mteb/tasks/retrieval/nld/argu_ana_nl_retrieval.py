@@ -42,7 +42,7 @@ class ArguAnaNL(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="ArguAna-NL",
-        dapted_from=["ArguAna"],
+        adapted_from=["ArguAna"],
         **_argu_ana_nl_metadata,
     )
 
