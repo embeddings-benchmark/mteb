@@ -81,6 +81,16 @@ from .vidore2_bench_retrieval import (
     Vidore2ESGReportsHLRetrieval,
     Vidore2ESGReportsRetrieval,
 )
+from .vidore3_bench_retrieval import (
+    Vidore3EducationComputerScienceRetrieval,
+    Vidore3EducationPhysicsRetrieval,
+    Vidore3EnergyReportsRetrieval,
+    Vidore3FinanceBankReportsRetrieval,
+    Vidore3HealthcareFdaRetrieval,
+    Vidore3HrEuropeanReportsRetrieval,
+    Vidore3LuxuryFinancialReportsRetrieval,
+    Vidore3MilitaryTechnicalReportsRetrieval,
+)
 from .web_faq_retrieval import WebFAQRetrieval
 from .wikipedia_retrieval_multilingual import WikipediaRetrievalMultilingual
 from .wit_t2i_retrieval import WITT2IRetrieval
@@ -161,6 +171,14 @@ __all__ = [
     "Vidore2ESGReportsHLRetrieval",
     "Vidore2ESGReportsRetrieval",
     "Vidore2EconomicsReportsRetrieval",
+    "Vidore3EducationComputerScienceRetrieval",
+    "Vidore3EducationPhysicsRetrieval",
+    "Vidore3EnergyReportsRetrieval",
+    "Vidore3FinanceBankReportsRetrieval",
+    "Vidore3HealthcareFdaRetrieval",
+    "Vidore3HrEuropeanReportsRetrieval",
+    "Vidore3LuxuryFinancialReportsRetrieval",
+    "Vidore3MilitaryTechnicalReportsRetrieval",
     "WITT2IRetrieval",
     "WebFAQRetrieval",
     "WikipediaRetrievalMultilingual",
