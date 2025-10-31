@@ -40,7 +40,7 @@ class VABBClusteringP2P(AbsTaskClustering):
 }
 """,
         prompt={
-            "query": "Identify the main category of tenders based on the titles and descriptions"
+            "query": "Identify the main category of scientific papers based on the titles and abstracts"
         },
     )
 
