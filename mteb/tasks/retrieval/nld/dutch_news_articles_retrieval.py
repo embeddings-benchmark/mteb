@@ -27,4 +27,7 @@ class DutchNewsArticlesRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
+        prompt={
+            "query": "Given a title, retrieve a news article that best fits the title"
+        },
     )

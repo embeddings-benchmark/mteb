@@ -61,6 +61,9 @@ Yih, Scott Wen-tau},
   year = {2021},
 }
 """,
+        prompt={
+            "query": "Classify COVID-19-related social media posts into all applicable disinformation categories"
+        },
     )
 
     def dataset_transform(self) -> None:

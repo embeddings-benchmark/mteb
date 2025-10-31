@@ -38,6 +38,9 @@ class OpenTenderClusteringP2P(AbsTaskClustering):
   year = {2025},
 }
 """,
+        prompt={
+            "query": "Identify the main category of tenders based on the titles and descriptions"
+        },
     )
 
     def dataset_transform(self):

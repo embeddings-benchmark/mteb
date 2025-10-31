@@ -28,6 +28,9 @@ class DutchNewsArticlesClusteringP2P(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
+        prompt={
+            "query": "Identify the main category of news articles based on the titles and content"
+        },
     )
 
     def dataset_transform(self):

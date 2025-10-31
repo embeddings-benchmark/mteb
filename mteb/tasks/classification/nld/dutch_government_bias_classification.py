@@ -34,4 +34,7 @@ class DutchGovernmentBiasClassification(AbsTaskClassification):
   year = {2025},
 }
 """,
+        prompt={
+            "query": "Classify the given government document as either biased or not biased"
+        },
     )

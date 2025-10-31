@@ -1,31 +1,28 @@
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-
-class NFCorpusNL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
-        name="NFCorpus-NL",
-        dataset={
-            "path": "clips/beir-nl-nfcorpus",
-            "revision": "942953e674fd0f619ff89897abb806dc3df5dd39",
-        },
-        description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval. NFCorpus-NL is "
-        "a Dutch translation.",
-        reference="https://huggingface.co/datasets/clips/beir-nl-nfcorpus",
-        type="Retrieval",
-        category="t2t",
-        modalities=["text"],
-        eval_splits=["test"],
-        eval_langs=["nld-Latn"],
-        main_score="ndcg_at_10",
-        date=("2016-03-01", "2016-03-01"),  # best guess: based on publication date
-        domains=["Medical", "Academic", "Written"],
-        task_subtypes=[],
-        license="cc-by-4.0",
-        annotations_creators="derived",
-        dialect=[],
-        sample_creation="machine-translated and verified",  # manually checked a small subset
-        bibtex_citation=r"""
+_nf_corpus_metadata = dict(
+    dataset={
+        "path": "clips/beir-nl-nfcorpus",
+        "revision": "942953e674fd0f619ff89897abb806dc3df5dd39",
+    },
+    description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval. NFCorpus-NL is "
+    "a Dutch translation.",
+    reference="https://huggingface.co/datasets/clips/beir-nl-nfcorpus",
+    type="Retrieval",
+    category="t2t",
+    modalities=["text"],
+    eval_splits=["test"],
+    eval_langs=["nld-Latn"],
+    main_score="ndcg_at_10",
+    date=("2016-03-01", "2016-03-01"),  # best guess: based on publication date
+    domains=["Medical", "Academic", "Written"],
+    task_subtypes=[],
+    license="cc-by-4.0",
+    annotations_creators="derived",
+    dialect=[],
+    sample_creation="machine-translated and verified",  # manually checked a small subset
+    bibtex_citation=r"""
 @misc{banar2024beirnlzeroshotinformationretrieval,
   archiveprefix = {arXiv},
   author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -36,5 +33,21 @@ class NFCorpusNL(AbsTaskRetrieval):
   year = {2024},
 }
 """,
-        adapted_from=["NFCorpus"],
+)
+
+
+class NFCorpusNL(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="NFCorpus-NL", adapted_from=["NFCorpus"], **_nf_corpus_metadata
+    )
+
+
+class NFCorpusNLv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="NFCorpus-NL.v2",
+        adapted_from=["NFCorpus-NL"],
+        prompt={
+            "query": "Given a question, retrieve relevant documents that best answer the question"
+        },
+        **_nf_corpus_metadata,
     )

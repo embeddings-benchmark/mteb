@@ -38,4 +38,7 @@ class BBSARDNLRetrieval(AbsTaskRetrieval):
   year = {2025},
 }
 """,
+        prompt={
+            "query": "Given a legal question, retrieve documents that can help answer the question"
+        },
     )

@@ -35,4 +35,7 @@ class OpenTenderRetrieval(AbsTaskRetrieval):
   year = {2025},
 }
 """,
+        prompt={
+            "query": "Given a title, retrieve a description of a tender that best fits the title"
+        },
     )
