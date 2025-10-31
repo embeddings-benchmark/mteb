@@ -38,4 +38,7 @@ class VABBRetrieval(AbsTaskRetrieval):
   year = {2024},
 }
 """,
+        prompt={
+            "query": "Given a title, retrieve a scientific abstract that best fits the title"
+        },
     )

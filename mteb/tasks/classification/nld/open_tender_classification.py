@@ -35,4 +35,7 @@ class OpenTenderClassification(AbsTaskClassification):
   year = {2025},
 }
 """,
+        prompt={
+            "query": "Classify the given tender description into the appropriate topic or theme"
+        },
     )

@@ -27,4 +27,7 @@ class DutchNewsArticlesClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
+        prompt={
+            "query": "Classify the given news article into the appropriate topic or theme"
+        },
     )

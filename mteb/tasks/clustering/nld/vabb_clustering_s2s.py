@@ -39,6 +39,7 @@ class VABBClusteringS2S(AbsTaskClustering):
   year = {2024},
 }
 """,
+        prompt={"query": "Identify the topic or theme of artworks based on the titles"},
     )
 
     def dataset_transform(self):

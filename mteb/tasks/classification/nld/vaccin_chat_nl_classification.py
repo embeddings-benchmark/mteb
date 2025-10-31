@@ -37,6 +37,7 @@ class VaccinChatNLClassification(AbsTaskClassification):
   year = {2022},
 }
 """,
+        prompt={"query": "Given a user utterance as a query, find the user intents"},
     )
 
     def dataset_transform(self):

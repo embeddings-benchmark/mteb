@@ -35,4 +35,7 @@ class DutchColaClassification(AbsTaskClassification):
   year = {2024},
 }
 """,
+        prompt={
+            "query": "Classify the given sentence as either grammatically acceptable or not acceptable"
+        },
     )
