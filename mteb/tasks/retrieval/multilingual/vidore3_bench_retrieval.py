@@ -62,7 +62,6 @@ def _load_data(
             lambda x: {
                 "id": f"query-{split}-{x['query_id']}",
                 "text": x["query"],
-                "modality": "text",
             },
             remove_columns=query_columns_to_remove,
         )
@@ -76,7 +75,6 @@ def _load_data(
         corpus_ds = corpus_ds.map(
             lambda x: {
                 "id": f"corpus-{split}-{x['corpus_id']}",
-                "modality": "image",
             },
             remove_columns=corpus_columns_to_remove,
         )
@@ -146,7 +144,7 @@ class Vidore3FinanceBankReportsRetrieval(AbsTaskRetrieval):
   year = {2025},
 }
 """,
-        prompt={"query": "Find a screenshot that relevant to the user's question."},
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
 
     def load_data(self, **kwargs):
@@ -192,7 +190,8 @@ class Vidore3LuxuryFinancialReportsRetrieval(AbsTaskRetrieval):
   year = {2025},
 }""
 """,
-        prompt={"query": "Find a screenshot that relevant to the user's question."},
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
     )
 
     def load_data(self, **kwargs):
@@ -239,7 +238,8 @@ class Vidore3MilitaryTechnicalReportsRetrieval(AbsTaskRetrieval):
   year = {2025},
 }""
 """,
-        prompt={"query": "Find a screenshot that relevant to the user's question."},
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
     )
 
     def load_data(self, **kwargs):
@@ -286,7 +286,8 @@ class Vidore3HealthcareFdaRetrieval(AbsTaskRetrieval):
   year = {2025},
 }""
 """,
-        prompt={"query": "Find a screenshot that relevant to the user's question."},
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
     )
 
     def load_data(self, **kwargs):
@@ -333,7 +334,8 @@ class Vidore3EducationComputerScienceRetrieval(AbsTaskRetrieval):
   year = {2025},
 }""
 """,
-        prompt={"query": "Find a screenshot that relevant to the user's question."},
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
     )
 
     def load_data(self, **kwargs):
@@ -380,7 +382,8 @@ class Vidore3HrEuropeanReportsRetrieval(AbsTaskRetrieval):
   year = {2025},
 }""
 """,
-        prompt={"query": "Find a screenshot that relevant to the user's question."},
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
     )
 
     def load_data(self, **kwargs):
@@ -427,7 +430,8 @@ class Vidore3EnergyReportsRetrieval(AbsTaskRetrieval):
   year = {2025},
 }""
 """,
-        prompt={"query": "Find a screenshot that relevant to the user's question."},
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
     )
 
     def load_data(self, **kwargs):
@@ -474,7 +478,104 @@ class Vidore3EducationPhysicsRetrieval(AbsTaskRetrieval):
   year = {2025},
 }""
 """,
-        prompt={"query": "Find a screenshot that relevant to the user's question."},
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs = _load_data(
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
+            langs=["english", "french", "spanish", "german", "italian", "portuguese"],
+            # revision=self.metadata.dataset["revision"],
+        )
+
+        self.data_loaded = True
+
+
+class Vidore3EnergyNuclearRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3EnergyNuclearRetrieval",
+        description="Retrieve associated pages according to questions.",
+        reference="https://arxiv.org/pdf/2407.01449",
+        dataset={
+            "path": "mysecretorga/energy_nuclear_en",
+            "revision": "test",
+        },
+        type="DocumentUnderstanding",
+        category="t2i",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Academic"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@article{mace2025vidorev2,
+  author = {Macé, Quentin and Loison António and Faysse, Manuel},
+  journal = {arXiv preprint arXiv:2505.17166},
+  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+  year = {2025},
+}""
+""",
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=False,
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs = _load_data(
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
+            langs=["english", "french", "spanish", "german", "italian", "portuguese"],
+            # revision=self.metadata.dataset["revision"],
+        )
+
+        self.data_loaded = True
+
+
+class Vidore3TelecomTechnicalRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3TelecomTechnicalRetrieval",
+        description="Retrieve associated pages according to questions.",
+        reference="https://arxiv.org/pdf/2407.01449",
+        dataset={
+            "path": "mysecretorga/telecom_technical_en",
+            "revision": "test",
+        },
+        type="DocumentUnderstanding",
+        category="t2i",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Academic"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@article{mace2025vidorev2,
+  author = {Macé, Quentin and Loison António and Faysse, Manuel},
+  journal = {arXiv preprint arXiv:2505.17166},
+  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+  year = {2025},
+}""
+""",
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=False,
     )
 
     def load_data(self, **kwargs):

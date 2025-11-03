@@ -90,6 +90,8 @@ from .vidore3_bench_retrieval import (
     Vidore3HrEuropeanReportsRetrieval,
     Vidore3LuxuryFinancialReportsRetrieval,
     Vidore3MilitaryTechnicalReportsRetrieval,
+    Vidore3EnergyNuclearRetrieval,
+    Vidore3TelecomTechnicalRetrieval,
 )
 from .web_faq_retrieval import WebFAQRetrieval
 from .wikipedia_retrieval_multilingual import WikipediaRetrievalMultilingual
@@ -179,6 +181,8 @@ __all__ = [
     "Vidore3HrEuropeanReportsRetrieval",
     "Vidore3LuxuryFinancialReportsRetrieval",
     "Vidore3MilitaryTechnicalReportsRetrieval",
+    "Vidore3TelecomTechnicalRetrieval",
+    "Vidore3EnergyNuclearRetrieval",
     "WITT2IRetrieval",
     "WebFAQRetrieval",
     "WikipediaRetrievalMultilingual",

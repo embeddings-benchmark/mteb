@@ -2226,6 +2226,8 @@ VIDORE_V3 = Benchmark(
             "Vidore3LuxuryFinancialReportsRetrieval",
             "Vidore3EducationPhysicsRetrieval",
             "Vidore3EnergyReportsRetrieval",
+            "Vidore3TelecomTechnicalRetrieval",
+            "Vidore3EnergyNuclearRetrieval",
         ]
     ),
     description="Retrieve associated pages according to questions.",
