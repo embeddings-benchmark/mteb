@@ -1,9 +1,7 @@
-from __future__ import annotations
-
 from datasets import load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 def _load_data(
@@ -29,8 +27,6 @@ def _load_data(
             lambda x: {
                 "id": f"query-{split}-{x['query-id']}",
                 "text": x[text_col],
-                "image": None,
-                "modality": "text",
             },
             remove_columns=["query-id", "query"],
         )
@@ -45,8 +41,6 @@ def _load_data(
         corpus_ds = corpus_ds.map(
             lambda x: {
                 "id": f"corpus-{split}-{x['corpus-id']}",
-                "text": None,
-                "modality": "image",
             },
             remove_columns=["corpus-id"],
         )
@@ -105,17 +99,6 @@ class RealMMRagFinReportRetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 141.5,
-                    "num_documents": 19,
-                    "num_queries": 853,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -165,17 +148,6 @@ class RealMMRagFinSlidesRetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 35,
-                    "num_documents": 65,
-                    "num_queries": 1052,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -224,17 +196,6 @@ class RealMMRagTechReportRetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 98.5,
-                    "num_documents": 17,
-                    "num_queries": 1294,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -283,17 +244,6 @@ class RealMMRagTechSlidesRetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 31.7,
-                    "num_documents": 62,
-                    "num_queries": 1354,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
