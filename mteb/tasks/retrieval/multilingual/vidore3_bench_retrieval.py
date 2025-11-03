@@ -502,7 +502,7 @@ class Vidore3EnergyNuclearRetrieval(AbsTaskRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "mysecretorga/energy_nuclear_en",
+            "path": "mysecretorga/energy_nuclear_plant_en",
             "revision": "test",
         },
         type="DocumentUnderstanding",
@@ -550,7 +550,7 @@ class Vidore3TelecomTechnicalRetrieval(AbsTaskRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "mysecretorga/telecom_technical_en",
+            "path": "mysecretorga/telecom_internet_protocols",
             "revision": "test",
         },
         type="DocumentUnderstanding",
