@@ -99,6 +99,7 @@ kalm_training_data = {
     "ArxivClusteringP2P.v2",
     "TRECCOVID",
     "DBPedia",
+    "ESCIReranking",
     "FEVER",
     "FiQA2018",
     "FEVERHardNegatives",
