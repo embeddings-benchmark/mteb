@@ -191,6 +191,7 @@ class SearchEncoderWrapper:
             cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
             cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
 
+            sub_corpus_ids = list(sub_corpus_ids)
             for query_itr in range(len(query_embeddings)):
                 query_id = query_idx_to_id[query_itr]
                 for sub_corpus_id, score in zip(
