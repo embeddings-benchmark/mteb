@@ -1,19 +1,25 @@
-from mteb.models.model_meta import ModelMeta
 from mteb.models.model_implementations.google_models import gemma_embedding_loader
+from mteb.models.model_meta import ModelMeta
 
-Tarka_Embedding_150M_V1_CITATION = '''@misc{tarka_ai_research_2025,
+Tarka_Embedding_150M_V1_CITATION = """@misc{tarka_ai_research_2025,
 	author       = { Tarka AI Research },
 	title        = { Tarka-Embedding-150M-V1 (Revision c5f4f43) },
 	year         = 2025,
 	url          = { https://huggingface.co/Tarka-AIR/Tarka-Embedding-150M-V1 },
 	doi          = { 10.57967/hf/6875 },
 	publisher    = { Hugging Face }
-}'''
+}"""
 
 MULTILINGUAL_EVALUATED_LANGUAGES = [
+    "arb-Arab",
     "eng-Latn",
+    "spa-Latn",
+    "deu-Latn",
+    "fra-Latn",
+    "jpn-Jpan",
+    "kor-Hang",
+    "zho-Hans",
 ]
-
 
 training_data = {
     "T2Retrieval",
@@ -40,7 +46,7 @@ tarka_embedding_150m_v1 = ModelMeta(
     embed_dim=768,
     max_tokens=2048,
     license="gemma",
-    reference="https://ai.google.dev/gemma/docs/embeddinggemma/model_card",
+    reference="https://huggingface.co/Tarka-AIR/Tarka-Embedding-150M-V1",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
