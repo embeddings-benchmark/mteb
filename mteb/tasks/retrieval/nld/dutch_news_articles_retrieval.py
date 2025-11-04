@@ -28,6 +28,6 @@ class DutchNewsArticlesRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation="",
         prompt={
-            "query": "Given a title, retrieve a news article that best fits the title"
+            "query": "Gegeven een titel, haal het nieuwsartikel op dat het beste bij de titel past"
         },
     )

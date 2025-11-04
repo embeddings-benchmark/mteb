@@ -29,7 +29,7 @@ class DutchNewsArticlesClusteringP2P(AbsTaskClustering):
         sample_creation="found",
         bibtex_citation="",
         prompt={
-            "query": "Identify the main category of news articles based on the titles and content"
+            "query": "Identificeer de hoofdcategorie van nieuwsartikelen op basis van de titels en de inhoud"
         },
     )
 

@@ -39,6 +39,6 @@ class IconclassClassification(AbsTaskClassification):
 }
 """,
         prompt={
-            "query": "Classify the given artwork title into the appropriate topic or theme"
+            "query": "Classificeer de gegeven titel van het kunstwerk in het juiste onderwerp of thema"
         },
     )

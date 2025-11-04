@@ -37,6 +37,6 @@ class LegalQANLRetrieval(AbsTaskRetrieval):
 }
 """,
         prompt={
-            "query": "Given a legal question, retrieve documents that can help answer the question"
+            "query": "Gegeven een juridische vraag, haal documenten op die kunnen helpen bij het beantwoorden van de vraag"
         },
     )

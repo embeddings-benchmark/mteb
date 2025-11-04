@@ -47,7 +47,7 @@ class NFCorpusNLv2(AbsTaskRetrieval):
         name="NFCorpus-NL.v2",
         adapted_from=["NFCorpus-NL"],
         prompt={
-            "query": "Given a question, retrieve relevant documents that best answer the question"
+            "query": "Gegeven een vraag, haal relevante documenten op die de vraag het beste beantwoorden"
         },
         **_nf_corpus_metadata,
     )

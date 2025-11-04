@@ -38,7 +38,9 @@ class IconclassClusteringS2S(AbsTaskClustering):
   year = {2023},
 }
 """,
-        prompt={"query": "Identify the topic or theme of artworks based on the titles"},
+        prompt={
+            "query": "Identificeer het onderwerp of thema van kunstwerken op basis van de titels"
+        },
     )
 
     def dataset_transform(self):

@@ -36,6 +36,6 @@ class OpenTenderRetrieval(AbsTaskRetrieval):
 }
 """,
         prompt={
-            "query": "Given a title, retrieve a description of a tender that best fits the title"
+            "query": "Gegeven een titel, haal de aanbestedingsbeschrijving op die het beste bij de titel past"
         },
     )

@@ -38,5 +38,7 @@ class OpenTenderClusteringS2S(AbsTaskClustering):
   year = {2025},
 }
 """,
-        prompt={"query": "Identify the main category of tenders based on the titles"},
+        prompt={
+            "query": "Identificeer de hoofdcategorie van aanbestedingen op basis van de titels"
+        },
     )

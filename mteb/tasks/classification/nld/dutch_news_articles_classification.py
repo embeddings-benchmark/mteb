@@ -28,6 +28,6 @@ class DutchNewsArticlesClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="",
         prompt={
-            "query": "Classify the given news article into the appropriate topic or theme"
+            "query": "Classificeer het gegeven nieuwsartikel in het juiste onderwerp of thema"
         },
     )

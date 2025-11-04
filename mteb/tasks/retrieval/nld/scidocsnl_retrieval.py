@@ -52,6 +52,6 @@ class SCIDOCSNLv2(AbsTaskRetrieval):
         adapted_from=["SCIDOCS-NL"],
         **_scidocsnl_metadata,
         prompt={
-            "query": "Given a scientific paper title, retrieve paper abstracts that are cited by the given paper"
+            "query": "Gegeven de titel van een wetenschappelijk artikel, haal de abstracts op van artikelen die door het gegeven artikel worden geciteerd"
         },
     )

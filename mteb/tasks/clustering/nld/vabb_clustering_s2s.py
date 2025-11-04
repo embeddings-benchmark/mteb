@@ -40,7 +40,7 @@ class VABBClusteringS2S(AbsTaskClustering):
 }
 """,
         prompt={
-            "query": "Identify the main category of scientific papers based on the titles"
+            "query": "Identificeer de hoofdcategorie van wetenschappelijke artikelen op basis van de titels"
         },
     )
 

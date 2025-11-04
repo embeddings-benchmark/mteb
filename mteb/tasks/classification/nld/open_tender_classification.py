@@ -36,6 +36,6 @@ class OpenTenderClassification(AbsTaskClassification):
 }
 """,
         prompt={
-            "query": "Classify the given tender description into the appropriate topic or theme"
+            "query": "Classificeer de gegeven aanbestedingsbeschrijving in het juiste onderwerp of thema"
         },
     )

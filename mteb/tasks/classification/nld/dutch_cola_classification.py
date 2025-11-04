@@ -36,6 +36,6 @@ class DutchColaClassification(AbsTaskClassification):
 }
 """,
         prompt={
-            "query": "Classify the given sentence as either grammatically acceptable or not acceptable"
+            "query": "Classificeer de gegeven zin als grammaticaal aanvaardbaar of niet aanvaardbaar"
         },
     )

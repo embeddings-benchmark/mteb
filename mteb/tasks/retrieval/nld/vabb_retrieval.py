@@ -39,6 +39,6 @@ class VABBRetrieval(AbsTaskRetrieval):
 }
 """,
         prompt={
-            "query": "Given a title, retrieve a scientific abstract that best fits the title"
+            "query": "Gegeven een titel, haal de wetenschappelijke abstract op die het beste bij de titel past"
         },
     )

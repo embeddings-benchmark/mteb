@@ -52,7 +52,9 @@ class ArguAnaNLv2(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="ArguAna-NL.v2",
-        prompt={"query": "Given a claim, find documents that refute the claim"},
+        prompt={
+            "query": "Gegeven een bewering, vind documenten die de bewering weerleggen"
+        },
         adapted_from=["ArguAna-NL"],
         **_argu_ana_nl_metadata,
     )

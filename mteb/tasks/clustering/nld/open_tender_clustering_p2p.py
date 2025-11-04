@@ -39,7 +39,7 @@ class OpenTenderClusteringP2P(AbsTaskClustering):
 }
 """,
         prompt={
-            "query": "Identify the main category of tenders based on the titles and descriptions"
+            "query": "Identificeer de hoofdcategorie van aanbestedingen op basis van de titels en beschrijvingen"
         },
     )
 

@@ -35,6 +35,6 @@ class DutchGovernmentBiasClassification(AbsTaskClassification):
 }
 """,
         prompt={
-            "query": "Classify the given government document as either biased or not biased"
+            "query": "Classificeer het gegeven overheidsdocument als bevooroordeeld of niet bevooroordeeld"
         },
     )

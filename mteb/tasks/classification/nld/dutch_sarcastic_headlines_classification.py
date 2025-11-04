@@ -28,7 +28,7 @@ class DutchSarcasticHeadlinesClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="""""",
         prompt={
-            "query": "Classify the given news article headline as either sarcastic or not sarcastic"
+            "query": "Classificeer de gegeven krantenkop als sarcastisch of niet sarcastisch"
         },
     )
 

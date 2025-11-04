@@ -62,7 +62,7 @@ Yih, Scott Wen-tau},
 }
 """,
         prompt={
-            "query": "Classify COVID-19-related social media posts into all applicable disinformation categories"
+            "query": "Classificeer COVID-19-gerelateerde sociale media-berichten in alle toepasselijke desinformatiecategorieën"
         },
     )
 

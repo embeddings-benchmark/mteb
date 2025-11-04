@@ -42,6 +42,6 @@ class VABBMultiLabelClassification(AbsTaskMultilabelClassification):
 }
 """,
         prompt={
-            "query": "Classify the topics of a scientific paper based on the abstract"
+            "query": "Classificeer de onderwerpen van een wetenschappelijk artikel op basis van de abstract"
         },
     )

@@ -40,7 +40,7 @@ class VABBClusteringP2P(AbsTaskClustering):
 }
 """,
         prompt={
-            "query": "Identify the main category of scientific papers based on the titles and abstracts"
+            "query": "Identificeer de hoofdcategorie van wetenschappelijke artikelen op basis van de titels en abstracts"
         },
     )
 

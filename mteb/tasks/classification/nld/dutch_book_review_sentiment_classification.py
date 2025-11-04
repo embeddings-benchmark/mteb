@@ -87,6 +87,6 @@ Suzan, Verberne},
 """,
         adapted_from=["DutchBookReviewSentimentClassification"],
         prompt={
-            "query": "Classify the given book review into positive or negative sentiment"
+            "query": "Classificeer de gegeven boekrecensie als positieve of negatieve sentiment"
         },
     )
