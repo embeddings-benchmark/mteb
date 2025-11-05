@@ -15,6 +15,7 @@ from mteb.types import (
     QueryDatasetType,
 )
 from mteb.types._encoder_io import (
+    AudioInput,
     AudioInputItem,
     CorpusInput,
     ImageInput,
@@ -342,7 +343,8 @@ def _create_queries_dataloader(
     task_metadata: TaskMetadata,
     input_column: str | None = None,
     batch_size: int = 32,
-) -> DataLoader[QueryInput | ImageInput]:
+    num_workers: int = 1,
+) -> DataLoader[QueryInput | ImageInput | AudioInput]:
     """Create a dataloader for queries."""
     queries_type = task_metadata.get_modalities(PromptType.query)
     if queries_type == ["text"]:  # text only
@@ -356,6 +358,14 @@ def _create_queries_dataloader(
             image_column_name="image",
             batch_size=batch_size,
         )
+    if "audio" in task_metadata.modalities:
+        return _create_audio_dataloader(
+            dataset,
+            task_metadata,
+            input_column="audio",
+            batch_size=batch_size,
+            num_workers=num_workers,
+        )
     raise ValueError(f"Can't handle queries type {queries_type}")
 
 
@@ -364,7 +374,8 @@ def _create_document_dataloader(
     task_metadata: TaskMetadata,
     input_column: str | None = None,
     batch_size: int = 32,
-) -> DataLoader[CorpusInput | ImageInput]:
+    num_workers: int = 1,
+) -> DataLoader[CorpusInput | ImageInput | AudioInput]:
     """Create a dataloader for documents.
 
     Args:
@@ -372,6 +383,7 @@ def _create_document_dataloader(
         task_metadata: Metadata of the task to determine the document type.
         input_column: The column to use as input. If None, it will use the first column that matches the modality.
         batch_size: Batch size for the dataloader.
+        num_workers: The number of workers for the dataloader.
     """
     document_type = task_metadata.get_modalities(PromptType.document)
     if document_type == ["text"]:  # text only
@@ -385,7 +397,50 @@ def _create_document_dataloader(
             image_column_name="image",
             batch_size=batch_size,
         )
+    if "audio" in task_metadata.modalities:
+        return _create_audio_dataloader(
+            dataset,
+            task_metadata,
+            input_column="audio",
+            batch_size=batch_size,
+            num_workers=num_workers,
+        )
     raise ValueError(f"Can't handle queries type {document_type}")
+
+
+def _create_audio_dataloader(
+    dataset: Dataset,
+    task_metadata: TaskMetadata,
+    input_column: str | None = None,
+    batch_size: int = 32,
+    num_workers: int = 1,
+) -> DataLoader[AudioInput]:
+    """Create a dataloader for audio.
+
+    Args:
+        dataset: The dataset containing the audio.
+        task_metadata: Metadata of the task to determine the audio type.
+        input_column: The column to use as input. If None, it will use the first column that matches the audio.
+        batch_size: Batch size for the dataloader.
+        num_workers: The number of workers for the dataloader.
+
+    Returns:
+        A DataLoader with the audio dataset.
+    """
+    if (
+        input_column
+        and input_column in dataset.column_names
+        and "audio" not in dataset.column_names
+    ):
+        dataset = dataset.rename_column(input_column, "audio")
+
+    return DataLoader(
+        dataset,
+        batch_size=batch_size,
+        collate_fn=_custom_collate_fn,
+        num_workers=num_workers,
+        shuffle=False,
+    )
 
 
 def create_dataloader(
@@ -394,6 +449,7 @@ def create_dataloader(
     prompt_type: PromptType | None = None,
     input_column: str | None = None,
     batch_size: int = 32,
+    num_workers: int = 1,
     **kwargs: dict[str, Any],
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a dataset.
@@ -407,6 +463,7 @@ def create_dataloader(
         prompt_type: The type of prompt to create a dataloader for. If None, it will be inferred from the task metadata.
         input_column: The column to use as input. If None, it will use the first column that matches the modality.
         batch_size: The batch size for the dataloader.
+        num_workers: The number of workers for the dataloader.
         **kwargs: Additional arguments to pass to the dataloader creation functions.
 
     Returns:
@@ -432,6 +489,14 @@ def create_dataloader(
             dataset,
             image_column_name=input_column,
             batch_size=batch_size,
+        )
+    if "audio" in task_metadata.modalities:
+        return _create_audio_dataloader(
+            dataset,
+            task_metadata,
+            input_column=input_column,
+            batch_size=batch_size,
+            num_workers=num_workers,
         )
     if "text" in task_metadata.modalities and input_column is not None:
         return _create_dataloader_from_texts(

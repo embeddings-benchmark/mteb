@@ -529,6 +529,7 @@ class TaskMetadata(BaseModel):
         category_to_modality: dict[str, Modalities] = {
             "t": "text",
             "i": "image",
+            "a": "audio",
         }
         if prompt_type == PromptType.query:
             return [

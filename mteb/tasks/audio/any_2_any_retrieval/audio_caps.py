@@ -1,8 +1,10 @@
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
+from datasets import Audio
+
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AudioCapsA2TRetrieval(AbsTaskAny2AnyRetrieval):
+class AudioCapsA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AudioCapsA2TRetrieval",
         description="Natural language description for any kind of audio in the wild.",
@@ -36,8 +38,21 @@ class AudioCapsA2TRetrieval(AbsTaskAny2AnyRetrieval):
         # prompt={"query": "Retrieve the answer to the question."},
     )
 
+    def dataset_transform(self):
+        for subset in self.dataset:
+            for split in self.dataset[subset]:
+                sampling_rate = self.dataset[subset][split]["queries"][0]["audio"][
+                    "sampling_rate"
+                ]
+                self.dataset[subset][split]["queries"] = self.dataset[subset][split][
+                    "queries"
+                ].cast_column(
+                    "audio",
+                    Audio(sampling_rate=sampling_rate),
+                )
 
-class AudioCapsT2ARetrieval(AbsTaskAny2AnyRetrieval):
+
+class AudioCapsT2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AudioCapsT2ARetrieval",
         description="Natural language description for any kind of audio in the wild.",
@@ -69,3 +84,16 @@ class AudioCapsT2ARetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
     )
+
+    def dataset_transform(self):
+        for subset in self.dataset:
+            for split in self.dataset[subset]:
+                sampling_rate = self.dataset[subset][split]["corpus"][0]["audio"][
+                    "sampling_rate"
+                ]
+                self.dataset[subset][split]["corpus"] = self.dataset[subset][split][
+                    "corpus"
+                ].cast_column(
+                    "audio",
+                    Audio(sampling_rate=sampling_rate),
+                )
