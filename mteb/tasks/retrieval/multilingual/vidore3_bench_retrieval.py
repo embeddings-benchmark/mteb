@@ -117,7 +117,7 @@ def _load_data(
 class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceEnRetrieval",
-        description="Retrieve associated pages according to questions.",
+        description="Retrieve associated pages according to questions. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/vidore_v3_finance_en",
@@ -168,7 +168,7 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
 class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceFrRetrieval",
-        description="Retrieve associated pages according to questions.",
+        description="Retrieve associated pages according to questions. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/vidore_v3_finance_fr",
@@ -219,7 +219,7 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
 class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3IndustrialRetrieval",
-        description="Retrieve associated pages according to questions.",
+        description="Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircrafts (fueling, mechanics...), intended for complex-document understanding tasks.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/vidore_v3_industrial",
@@ -271,7 +271,7 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
 class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PharmaceuticalsRetrieval",
-        description="Retrieve associated pages according to questions.",
+        description="Retrieve associated pages according to questions. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/vidore_v3_pharmaceuticals",
@@ -323,7 +323,7 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
 class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3ComputerScienceRetrieval",
-        description="Retrieve associated pages according to questions.",
+        description="Retrieve associated pages according to questions. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/vidore_v3_computer_science",
@@ -375,7 +375,7 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
 class Vidore3HrRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3HrRetrieval",
-        description="Retrieve associated pages according to questions.",
+        description="Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/vidore_v3_hr",
@@ -427,7 +427,7 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
 class Vidore3EnergyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3EnergyRetrieval",
-        description="Retrieve associated pages according to questions.",
+        description="Retrieve associated pages according to questions. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/vidore_v3_energy",
@@ -479,7 +479,7 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
 class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PhysicsRetrieval",
-        description="Retrieve associated pages according to questions.",
+        description="Retrieve associated pages according to questions. This dataset, Physics, is a corpus of course slides on bachelor level physics lectures, intended for complex visual understanding tasks.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/vidore_v3_physics",
