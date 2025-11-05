@@ -30,7 +30,7 @@ def _load_data(
         "query_generation_pipeline",
         "source_type",
         "query_type_for_generation",
-        "gold_answer",
+        "answer",
     ]
 
     qrel_columns_to_remove = ["content_type", "bounding_boxes"]
@@ -114,14 +114,14 @@ def _load_data(
     return corpus, queries, relevant_docs
 
 
-class Vidore3FinanceBankReportsRetrieval(AbsTaskRetrieval):
+class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3FinanceBankReportsRetrieval",
+        name="Vidore3FinanceEnRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "mysecretorga/finance_bank_reports_en",
-            "revision": "test",
+            "path": "vidore/vidore_v3_finance_en",
+            "revision": "be999a840e5b4fb8b31f54b6876f3acefddbe43c",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -137,11 +137,15 @@ class Vidore3FinanceBankReportsRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mace2025vidorev2,
-  author = {Macé, Quentin and Loison António and Faysse, Manuel},
-  journal = {arXiv preprint arXiv:2505.17166},
-  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-  year = {2025},
+@misc{mace2025vidorev3,
+  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year      = {2025},
+  month     = {November},
+  day       = {5},
+  publisher = {Hugging Face},
+  journal   = {Hugging Face Blog},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
 }
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
@@ -155,20 +159,20 @@ class Vidore3FinanceBankReportsRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            # revision=self.metadata.dataset["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class Vidore3LuxuryFinancialReportsRetrieval(AbsTaskRetrieval):
+class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3LuxuryFinancialReportsRetrieval",
+        name="Vidore3FinanceFrRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "mysecretorga/luxury_financial_reports_fr",
-            "revision": "198cc9f5d95cdb0e4ca20fbbae4af183ed0ab824",
+            "path": "vidore/vidore_v3_finance_fr",
+            "revision": "2ed5848423237e00b691f0bdb4ac1057e63c4cea",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -183,12 +187,16 @@ class Vidore3LuxuryFinancialReportsRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mace2025vidorev2,
-  author = {Macé, Quentin and Loison António and Faysse, Manuel},
-  journal = {arXiv preprint arXiv:2505.17166},
-  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-  year = {2025},
-}""
+@misc{mace2025vidorev3,
+  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year      = {2025},
+  month     = {November},
+  day       = {5},
+  publisher = {Hugging Face},
+  journal   = {Hugging Face Blog},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
+}
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
@@ -202,68 +210,20 @@ class Vidore3LuxuryFinancialReportsRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            # revision=self.metadata.dataset["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class Vidore3MilitaryTechnicalReportsRetrieval(AbsTaskRetrieval):
+class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3MilitaryTechnicalReportsRetrieval",
+        name="Vidore3IndustrialRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "mysecretorga/military_technical_reports",
-            "revision": "test",
-        },
-        type="DocumentUnderstanding",
-        category="t2i",
-        eval_splits=["test"],
-        eval_langs=_LANGS,
-        main_score="ndcg_at_10",
-        date=("2025-10-01", "2025-11-01"),
-        domains=["Academic"],
-        task_subtypes=["Image Text Retrieval"],
-        license="cc-by-4.0",
-        annotations_creators="derived",
-        dialect=[],
-        modalities=["text", "image"],
-        sample_creation="found",
-        bibtex_citation=r"""
-@article{mace2025vidorev2,
-  author = {Macé, Quentin and Loison António and Faysse, Manuel},
-  journal = {arXiv preprint arXiv:2505.17166},
-  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-  year = {2025},
-}""
-""",
-        prompt={"query": "Find a screenshot that is relevant to the user's question."},
-        is_public=True,
-    )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            # revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
-
-
-class Vidore3HealthcareFdaRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
-        name="Vidore3HealthcareFdaRetrieval",
-        description="Retrieve associated pages according to questions.",
-        reference="https://arxiv.org/pdf/2407.01449",
-        dataset={
-            "path": "mysecretorga/healthcare_fda_en",
-            "revision": "test",
+            "path": "vidore/vidore_v3_industrial",
+            "revision": "117029c7cc97b54c232ce0aa2a349c03d23765fc",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -279,12 +239,16 @@ class Vidore3HealthcareFdaRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mace2025vidorev2,
-  author = {Macé, Quentin and Loison António and Faysse, Manuel},
-  journal = {arXiv preprint arXiv:2505.17166},
-  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-  year = {2025},
-}""
+@misc{mace2025vidorev3,
+  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year      = {2025},
+  month     = {November},
+  day       = {5},
+  publisher = {Hugging Face},
+  journal   = {Hugging Face Blog},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
+}
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
@@ -298,20 +262,20 @@ class Vidore3HealthcareFdaRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            # revision=self.metadata.dataset["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class Vidore3EducationComputerScienceRetrieval(AbsTaskRetrieval):
+class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3EducationComputerScienceRetrieval",
+        name="Vidore3PharmaceuticalsRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "mysecretorga/education_computer_science_en",
-            "revision": "test",
+            "path": "vidore/vidore_v3_pharmaceuticals",
+            "revision": "5a8773cc6b087467d12d32aa8f3b9e8da96d79ec",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -327,12 +291,16 @@ class Vidore3EducationComputerScienceRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mace2025vidorev2,
-  author = {Macé, Quentin and Loison António and Faysse, Manuel},
-  journal = {arXiv preprint arXiv:2505.17166},
-  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-  year = {2025},
-}""
+@misc{mace2025vidorev3,
+  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year      = {2025},
+  month     = {November},
+  day       = {5},
+  publisher = {Hugging Face},
+  journal   = {Hugging Face Blog},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
+}
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
@@ -346,20 +314,20 @@ class Vidore3EducationComputerScienceRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            # revision=self.metadata.dataset["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class Vidore3HrEuropeanReportsRetrieval(AbsTaskRetrieval):
+class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3HrEuropeanReportsRetrieval",
+        name="Vidore3ComputerScienceRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "mysecretorga/hr_european_reports_en",
-            "revision": "test",
+            "path": "vidore/vidore_v3_computer_science",
+            "revision": "bfa5037fd6f3e8762ba86ed2eb75919cef9c85b7",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -375,12 +343,16 @@ class Vidore3HrEuropeanReportsRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mace2025vidorev2,
-  author = {Macé, Quentin and Loison António and Faysse, Manuel},
-  journal = {arXiv preprint arXiv:2505.17166},
-  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-  year = {2025},
-}""
+@misc{mace2025vidorev3,
+  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year      = {2025},
+  month     = {November},
+  day       = {5},
+  publisher = {Hugging Face},
+  journal   = {Hugging Face Blog},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
+}
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
@@ -394,20 +366,20 @@ class Vidore3HrEuropeanReportsRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            # revision=self.metadata.dataset["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class Vidore3EnergyReportsRetrieval(AbsTaskRetrieval):
+class Vidore3HrRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3EnergyReportsRetrieval",
+        name="Vidore3HrRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "mysecretorga/energy_reports_fr",
-            "revision": "test",
+            "path": "vidore/vidore_v3_hr",
+            "revision": "c78df6d9bf205f8e61b06e561cce813e23afaae3",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -423,12 +395,16 @@ class Vidore3EnergyReportsRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mace2025vidorev2,
-  author = {Macé, Quentin and Loison António and Faysse, Manuel},
-  journal = {arXiv preprint arXiv:2505.17166},
-  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-  year = {2025},
-}""
+@misc{mace2025vidorev3,
+  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year      = {2025},
+  month     = {November},
+  day       = {5},
+  publisher = {Hugging Face},
+  journal   = {Hugging Face Blog},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
+}
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
@@ -442,20 +418,20 @@ class Vidore3EnergyReportsRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            # revision=self.metadata.dataset["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class Vidore3EducationPhysicsRetrieval(AbsTaskRetrieval):
+class Vidore3EnergyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3EducationPhysicsRetrieval",
+        name="Vidore3EnergyRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "mysecretorga/education_physics_fr",
-            "revision": "test",
+            "path": "vidore/vidore_v3_energy",
+            "revision": "cc2b94db52bc287de194bb37c6fd67501099aaf0",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -471,12 +447,16 @@ class Vidore3EducationPhysicsRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mace2025vidorev2,
-  author = {Macé, Quentin and Loison António and Faysse, Manuel},
-  journal = {arXiv preprint arXiv:2505.17166},
-  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-  year = {2025},
-}""
+@misc{mace2025vidorev3,
+  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year      = {2025},
+  month     = {November},
+  day       = {5},
+  publisher = {Hugging Face},
+  journal   = {Hugging Face Blog},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
+}
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
@@ -490,20 +470,72 @@ class Vidore3EducationPhysicsRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            # revision=self.metadata.dataset["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class Vidore3EnergyNuclearRetrieval(AbsTaskRetrieval):
+class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3EnergyNuclearRetrieval",
+        name="Vidore3PhysicsRetrieval",
+        description="Retrieve associated pages according to questions.",
+        reference="https://arxiv.org/pdf/2407.01449",
+        dataset={
+            "path": "vidore/vidore_v3_physics",
+            "revision": "8445ba57662e2bfd18c1c83d8e8bad3a041d1e24",
+        },
+        type="DocumentUnderstanding",
+        category="t2i",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Academic"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@misc{mace2025vidorev3,
+  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year      = {2025},
+  month     = {November},
+  day       = {5},
+  publisher = {Hugging Face},
+  journal   = {Hugging Face Blog},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
+}
+""",
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs = _load_data(
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
+            langs=["english", "french", "spanish", "german", "italian", "portuguese"],
+            revision=self.metadata.dataset["revision"],
+        )
+
+        self.data_loaded = True
+
+
+class Vidore3NuclearRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3NuclearRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "mysecretorga/energy_nuclear_plant_en",
-            "revision": "test",
+            "revision": "ce6c1e966eb26d094ce206897dd87452fed1fdaa",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -519,12 +551,16 @@ class Vidore3EnergyNuclearRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mace2025vidorev2,
-  author = {Macé, Quentin and Loison António and Faysse, Manuel},
-  journal = {arXiv preprint arXiv:2505.17166},
-  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-  year = {2025},
-}""
+@misc{mace2025vidorev3,
+  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year      = {2025},
+  month     = {November},
+  day       = {5},
+  publisher = {Hugging Face},
+  journal   = {Hugging Face Blog},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
+}
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
@@ -538,20 +574,20 @@ class Vidore3EnergyNuclearRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            # revision=self.metadata.dataset["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class Vidore3TelecomTechnicalRetrieval(AbsTaskRetrieval):
+class Vidore3TelecomRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3TelecomTechnicalRetrieval",
+        name="Vidore3TelecomRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "mysecretorga/telecom_internet_protocols",
-            "revision": "test",
+            "revision": "1dbb47240bd521108cf82b58a885555cce4c5612",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -567,12 +603,16 @@ class Vidore3TelecomTechnicalRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mace2025vidorev2,
-  author = {Macé, Quentin and Loison António and Faysse, Manuel},
-  journal = {arXiv preprint arXiv:2505.17166},
-  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-  year = {2025},
-}""
+@misc{mace2025vidorev3,
+  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year      = {2025},
+  month     = {November},
+  day       = {5},
+  publisher = {Hugging Face},
+  journal   = {Hugging Face Blog},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
+}
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
@@ -586,7 +626,7 @@ class Vidore3TelecomTechnicalRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            # revision=self.metadata.dataset["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
