@@ -89,6 +89,9 @@ class BrightBiologyRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Biology StackExchange answers.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Biology post for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["standard"],
         eval_langs=["eng-Latn"],
@@ -130,6 +133,9 @@ class BrightEarthScienceRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Earth Science StackExchange answers.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Earth Science post for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["standard"],
         eval_langs=["eng-Latn"],
@@ -171,6 +177,9 @@ class BrightEconomicsRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Economics StackExchange answers.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Economics post for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["standard"],
         eval_langs=["eng-Latn"],
@@ -212,6 +221,9 @@ class BrightPsychologyRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Psychology StackExchange answers.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Psychology post for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["standard"],
         eval_langs=["eng-Latn"],
@@ -253,6 +265,9 @@ class BrightRoboticsRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Robotics StackExchange answers.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Robotics post for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["standard"],
         eval_langs=["eng-Latn"],
@@ -294,6 +309,9 @@ class BrightStackoverflowRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Stack Overflow answers.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Stack Overflow post for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["standard"],
         eval_langs=["eng-Latn"],
@@ -335,6 +353,9 @@ class BrightSustainableLivingRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Sustainable Living StackExchange answers.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Sustainable Living post for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["standard"],
         eval_langs=["eng-Latn"],
@@ -376,6 +397,9 @@ class BrightPonyRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of Pony programming language syntax documentation.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Pony question for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["standard"],
         eval_langs=["eng-Latn"],
@@ -417,6 +441,9 @@ class BrightLeetcodeRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of similar algorithmic problems based on shared solution techniques.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Coding problem for searching relevant examples: "
+        },
         category="t2t",
         eval_splits=["standard"],
         eval_langs=["eng-Latn"],
@@ -458,6 +485,9 @@ class BrightAopsRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of similar Math Olympiad problems from Art of Problem Solving.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Math problem for searching relevant examples: "
+        },
         category="t2t",
         eval_splits=["standard"],
         eval_langs=["eng-Latn"],
@@ -499,6 +529,9 @@ class BrightTheoremQATheoremsRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of theorem definitions and proofs from ProofWiki.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Math problem for searching relevant theorems: "
+        },
         category="t2t",
         eval_splits=["standard"],
         eval_langs=["eng-Latn"],
@@ -540,6 +573,9 @@ class BrightTheoremQAQuestionsRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of theorem definitions from ProofWiki given questions rephrased as real-world scenarios.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Math problem for searching relevant examples: "
+        },
         category="t2t",
         eval_splits=["standard"],
         eval_langs=["eng-Latn"],

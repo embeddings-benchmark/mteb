@@ -89,6 +89,9 @@ class BrightBiologyLongRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Biology StackExchange answers with long documents.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Biology post for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["long"],
         eval_langs=["eng-Latn"],
@@ -130,6 +133,9 @@ class BrightEarthScienceLongRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Earth Science StackExchange answers with long documents.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Earth Science post for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["long"],
         eval_langs=["eng-Latn"],
@@ -171,6 +177,9 @@ class BrightEconomicsLongRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Economics StackExchange answers with long documents.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Economics post for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["long"],
         eval_langs=["eng-Latn"],
@@ -212,6 +221,9 @@ class BrightPsychologyLongRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Psychology StackExchange answers with long documents.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Psychology post for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["long"],
         eval_langs=["eng-Latn"],
@@ -253,6 +265,9 @@ class BrightRoboticsLongRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Robotics StackExchange answers with long documents.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Robotics post for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["long"],
         eval_langs=["eng-Latn"],
@@ -294,6 +309,9 @@ class BrightStackoverflowLongRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Stack Overflow answers with long documents.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Stack Overflow post for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["long"],
         eval_langs=["eng-Latn"],
@@ -335,6 +353,9 @@ class BrightSustainableLivingLongRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Sustainable Living StackExchange answers with long documents.",
         type="Retrieval",
+        prompt={
+            "query": "Represent thisSustainable Living post for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["long"],
         eval_langs=["eng-Latn"],
@@ -376,6 +397,9 @@ class BrightPonyLongRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of Pony programming language syntax documentation with long documents.",
         type="Retrieval",
+        prompt={
+            "query": "Represent this Pony question for searching relevant passages: "
+        },
         category="t2t",
         eval_splits=["long"],
         eval_langs=["eng-Latn"],
