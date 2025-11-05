@@ -25,7 +25,7 @@ def _load_data(
         "query_types",
         "query_format",
         "content_type",
-        "written_answers",
+        "raw_answers",
         "query_generator",
         "query_generation_pipeline",
         "source_type",
