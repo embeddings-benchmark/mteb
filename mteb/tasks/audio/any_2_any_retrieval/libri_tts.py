@@ -1,8 +1,8 @@
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class LibriTTSA2TRetrieval(AbsTaskAny2AnyRetrieval):
+class LibriTTSA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="LibriTTSA2TRetrieval",
         description=(
@@ -42,7 +42,7 @@ class LibriTTSA2TRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
 
-class LibriTTST2ARetrieval(AbsTaskAny2AnyRetrieval):
+class LibriTTST2ARetrieval(AbsTaskRetrieval):
     """Retrieval of speech segments given text queries, on the LibriTTS dataset."""
 
     metadata = TaskMetadata(

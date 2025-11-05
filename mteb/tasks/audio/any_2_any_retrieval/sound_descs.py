@@ -1,8 +1,8 @@
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SoundDescsA2TRetrieval(AbsTaskAny2AnyRetrieval):
+class SoundDescsA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SoundDescsA2TRetrieval",
         description="Natural language description for different audio sources from the BBC Sound Effects webpage.",
@@ -35,7 +35,7 @@ class SoundDescsA2TRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
 
-class SoundDescsT2ARetrieval(AbsTaskAny2AnyRetrieval):
+class SoundDescsT2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SoundDescsT2ARetrieval",
         description="Natural language description for different audio sources from the BBC Sound Effects webpage.",

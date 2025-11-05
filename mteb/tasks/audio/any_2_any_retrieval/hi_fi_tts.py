@@ -1,8 +1,8 @@
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HiFiTTSA2TRetrieval(AbsTaskAny2AnyRetrieval):
+class HiFiTTSA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HiFiTTSA2TRetrieval",
         description="Sentence-level text captions aligned to 44.1 kHz audiobook speech segments from the Hi‑Fi Multi‑Speaker English TTS dataset. Dataset is based on public audiobooks from LibriVox and texts from Project Gutenberg.",
@@ -35,7 +35,7 @@ class HiFiTTSA2TRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
 
-class HiFiTTST2ARetrieval(AbsTaskAny2AnyRetrieval):
+class HiFiTTST2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HiFiTTST2ARetrieval",
         description="Sentence-level text captions aligned to 44.1 kHz audiobook speech segments from the Hi‑Fi Multi‑Speaker English TTS dataset. Dataset is based on public audiobooks from LibriVox and texts from Project Gutenberg.",

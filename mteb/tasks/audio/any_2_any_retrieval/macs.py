@@ -1,8 +1,8 @@
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MACSA2TRetrieval(AbsTaskAny2AnyRetrieval):
+class MACSA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MACSA2TRetrieval",
         description="Audio captions and tags for urban acoustic scenes in TAU Urban Acoustic Scenes 2019 development dataset.",
@@ -38,7 +38,7 @@ class MACSA2TRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
 
-class MACST2ARetrieval(AbsTaskAny2AnyRetrieval):
+class MACST2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MACST2ARetrieval",
         description="Audio captions and tags for urban acoustic scenes in TAU Urban Acoustic Scenes 2019 development dataset.",

@@ -1,8 +1,8 @@
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CMUArcticA2TRetrieval(AbsTaskAny2AnyRetrieval):
+class CMUArcticA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CMUArcticA2TRetrieval",
         description=(
@@ -41,7 +41,7 @@ class CMUArcticA2TRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
 
-class CMUArcticT2ARetrieval(AbsTaskAny2AnyRetrieval):
+class CMUArcticT2ARetrieval(AbsTaskRetrieval):
     """Text-to-audio retrieval on CMU Arctic transcription ↔ audio pairs."""
 
     metadata = TaskMetadata(

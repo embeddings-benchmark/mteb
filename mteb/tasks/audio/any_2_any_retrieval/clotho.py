@@ -3,11 +3,11 @@ from collections import defaultdict
 from datasets import Dataset, DatasetDict, load_dataset
 from tqdm import tqdm
 
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ClothoA2TRetrieval(AbsTaskAny2AnyRetrieval):
+class ClothoA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ClothoA2TRetrieval",
         description="An audio captioning datasetst containing audio clips and their corresponding captions.",
@@ -102,7 +102,7 @@ class ClothoA2TRetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class ClothoT2ARetrieval(AbsTaskAny2AnyRetrieval):
+class ClothoT2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ClothoT2ARetrieval",
         description="An audio captioning datasetst containing audio clips from the Freesound platform and their corresponding captions.",

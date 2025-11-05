@@ -1,8 +1,8 @@
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class GigaSpeechA2TRetrieval(AbsTaskAny2AnyRetrieval):
+class GigaSpeechA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="GigaSpeechA2TRetrieval",
         description=(
@@ -40,7 +40,7 @@ class GigaSpeechA2TRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
 
-class GigaSpeechT2ARetrieval(AbsTaskAny2AnyRetrieval):
+class GigaSpeechT2ARetrieval(AbsTaskRetrieval):
     """Text-to-audio retrieval on the GigaSpeech transcription ↔ audio pairs."""
 
     metadata = TaskMetadata(

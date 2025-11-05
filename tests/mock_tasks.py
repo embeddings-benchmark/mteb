@@ -20,7 +20,6 @@ from mteb.abstasks.audio.abs_task_zero_shot_classification import (
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.image.image_text_pair_classification import (
     AbsTaskImageTextPairClassification,
 )
@@ -4392,7 +4391,7 @@ class MockAudioZeroshotClassificationTask(AbsTaskAudioZeroshotClassification):
         return ["This is sound type 0", "This is sound type 1"]
 
 
-class MockAny2AnyRetrievalT2ATask(AbsTaskAny2AnyRetrieval):
+class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
     metadata = TaskMetadata(
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalT2A",
@@ -4447,7 +4446,7 @@ class MockAny2AnyRetrievalT2ATask(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class MockAny2AnyRetrievalA2TTask(AbsTaskAny2AnyRetrieval):
+class MockAny2AnyRetrievalA2TTask(AbsTaskRetrieval):
     metadata = TaskMetadata(
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalA2T",
@@ -4501,7 +4500,7 @@ class MockAny2AnyRetrievalA2TTask(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class MockAny2AnyRetrievalA2ATask(AbsTaskAny2AnyRetrieval):
+class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
     metadata = TaskMetadata(
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalA2A",

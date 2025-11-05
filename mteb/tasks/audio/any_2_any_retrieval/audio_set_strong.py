@@ -1,8 +1,8 @@
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AudioSetStrongA2TRetrieval(AbsTaskAny2AnyRetrieval):
+class AudioSetStrongA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AudioSetStrongA2TRetrieval",
         description=(
@@ -41,7 +41,7 @@ class AudioSetStrongA2TRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
 
-class AudioSetStrongT2ARetrieval(AbsTaskAny2AnyRetrieval):
+class AudioSetStrongT2ARetrieval(AbsTaskRetrieval):
     """Text-to-audio retrieval on AudioSet Strong labels ↔ audio segments."""
 
     metadata = TaskMetadata(

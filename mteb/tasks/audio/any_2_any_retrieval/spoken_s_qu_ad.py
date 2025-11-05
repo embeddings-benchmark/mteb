@@ -1,8 +1,8 @@
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SpokenSQuADT2ARetrieval(AbsTaskAny2AnyRetrieval):
+class SpokenSQuADT2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SpokenSQuADT2ARetrieval",
         description="Text-to-audio retrieval task based on SpokenSQuAD dataset. Given a text question, retrieve relevant audio segments that contain the answer. Questions are derived from SQuAD reading comprehension dataset with corresponding spoken passages.",

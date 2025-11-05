@@ -1,8 +1,8 @@
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class EmoVDBA2TRetrieval(AbsTaskAny2AnyRetrieval):
+class EmoVDBA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="EmoVDBA2TRetrieval",
         description="Natural language emotional captions for speech segments from the EmoV-DB emotional voices database.",
@@ -35,7 +35,7 @@ class EmoVDBA2TRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
 
-class EmoVDBT2ARetrieval(AbsTaskAny2AnyRetrieval):
+class EmoVDBT2ARetrieval(AbsTaskRetrieval):
     """Text-to-audio retrieval on the EmoV-DB emotional voice captions ↔ audio pairs."""
 
     metadata = TaskMetadata(
