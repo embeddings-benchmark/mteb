@@ -59,9 +59,10 @@ mteb = "mteb.cli:main"
 [project.optional-dependencies]
 image = ["torchvision>0.2.1"]
 audio = [
-    "torchaudio>=2.6.0",
-    "librosa>=0.11.0",
-    "soundfile>=0.13.1",
+    "datasets[audio]>4",
+    "torchcodec~=0.8.1",
+    # tochcodec compatibility table https://github.com/meta-pytorch/torchcodec?tab=readme-ov-file#installing-cpu-only-torchcodec
+    "torch~=2.9.0",
 ]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
@@ -103,6 +104,10 @@ speechbrain = ["speechbrain>=0.5.12"]
 muq = ["muq==0.1.0"]
 wav2clip = ["wav2clip==0.1.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
+
+# for torchcodec
+[tool.uv.pip]
+torch-backend = "auto"
 
 [dependency-groups]
 lint = [
@@ -303,6 +308,10 @@ conflicts = [
     [{ extra = "jina-v4" }, { extra = "llm2vec" }],
     [{ extra = "jina-v4" }, { extra = "llama-embed-nemotron" }], # conflicting versions of transformers
     [{ extra = "msclap" }, { extra = "audio" }],
+    [{ extra = "colpali-engine" }, { extra = "audio" }],
+    [{ extra = "xformers"}, { extra = "audio" }],
+    [{ extra = "pylate"}, { extra = "audio" }],
+    [{ extra = "cohere"}, { group = "typing" }],
 ]
 
 [tool.uv.extra-build-dependencies]
