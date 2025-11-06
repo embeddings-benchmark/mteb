@@ -122,7 +122,7 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_finance_en_mteb_format",
-            "revision": "be999a840e5b4fb8b31f54b6876f3acefddbe43c",
+            "revision": "fa78cb14152b3dde8c5defdc4e3ddf50de69dfeb",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -150,20 +150,6 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
-
-
 class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceFrRetrieval",
@@ -171,7 +157,7 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_finance_fr_mteb_format",
-            "revision": "2ed5848423237e00b691f0bdb4ac1057e63c4cea",
+            "revision": "8a2adfda85a7967c7252129703d9b3c7c9f038a9",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -198,19 +184,6 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
 
 
 class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
@@ -220,7 +193,7 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_industrial_mteb_format",
-            "revision": "117029c7cc97b54c232ce0aa2a349c03d23765fc",
+            "revision": "f732b725cf4a70803210edfe265a04f8bd5328f6",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -248,19 +221,6 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
 
 
 class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
@@ -270,7 +230,7 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_pharmaceuticals_mteb_format",
-            "revision": "5a8773cc6b087467d12d32aa8f3b9e8da96d79ec",
+            "revision": "237ed4f43c7fb3c4df07ec4e9dd0a4366be555b0",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -298,20 +258,6 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
-
 
 class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -320,7 +266,7 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_computer_science_mteb_format",
-            "revision": "bfa5037fd6f3e8762ba86ed2eb75919cef9c85b7",
+            "revision": "fb7fb69f81f7db62790f40494124b8ad22b424ab",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -348,19 +294,6 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
 
 
 class Vidore3HrRetrieval(AbsTaskRetrieval):
@@ -370,7 +303,7 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_hr_mteb_format",
-            "revision": "c78df6d9bf205f8e61b06e561cce813e23afaae3",
+            "revision": "bc7d43d64815ed30f664168c8052106484aba7fd",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -398,19 +331,6 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
 
 
 class Vidore3EnergyRetrieval(AbsTaskRetrieval):
@@ -420,7 +340,7 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_energy_mteb_format",
-            "revision": "cc2b94db52bc287de194bb37c6fd67501099aaf0",
+            "revision": "84fca99e5978604bae30f2436eacb6dbaa0532e9",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -448,19 +368,6 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
 
 
 class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
@@ -470,7 +377,7 @@ class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_physics_mteb_format",
-            "revision": "8445ba57662e2bfd18c1c83d8e8bad3a041d1e24",
+            "revision": "2c18ef90ab3ef93a9d86ecc6521cdae2a29f8300",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -498,19 +405,6 @@ class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
 
 
 class Vidore3NuclearRetrieval(AbsTaskRetrieval):
