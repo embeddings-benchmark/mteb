@@ -40,6 +40,7 @@ __all__ = [
     "FleursT2ARetrieval",
     "GigaSpeechA2TRetrieval",
     "GigaSpeechT2ARetrieval",
+    "GoogleSVQA2TRetrieval",
     "HiFiTTSA2TRetrieval",
     "HiFiTTST2ARetrieval",
     "JLCorpusA2TRetrieval",
