@@ -26,6 +26,7 @@ def _load_data(
         "query_format",
         "content_type",
         "raw_answers",
+        "raw_answers",
         "query_generator",
         "query_generation_pipeline",
         "source_type",
@@ -118,9 +119,9 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceEnRetrieval",
         description="Retrieve associated pages according to questions. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks.",
-        reference="https://arxiv.org/pdf/2407.01449",
+        reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
-            "path": "vidore/vidore_v3_finance_en",
+            "path": "vidore/vidore_v3_finance_en_mteb_format",
             "revision": "be999a840e5b4fb8b31f54b6876f3acefddbe43c",
         },
         type="DocumentUnderstanding",
@@ -136,8 +137,7 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{mace2025vidorev3,
+        bibtex_citation=r"""@misc{mace2025vidorev3,
   author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
   title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
   year      = {2025},
@@ -146,8 +146,7 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
   publisher = {Hugging Face},
   journal   = {Hugging Face Blog},
   howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}
-""",
+}""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
 
@@ -169,9 +168,9 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceFrRetrieval",
         description="Retrieve associated pages according to questions. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks.",
-        reference="https://arxiv.org/pdf/2407.01449",
+        reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
-            "path": "vidore/vidore_v3_finance_fr",
+            "path": "vidore/vidore_v3_finance_fr_mteb_format",
             "revision": "2ed5848423237e00b691f0bdb4ac1057e63c4cea",
         },
         type="DocumentUnderstanding",
@@ -186,8 +185,7 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{mace2025vidorev3,
+        bibtex_citation=r"""@misc{mace2025vidorev3,
   author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
   title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
   year      = {2025},
@@ -196,8 +194,7 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
   publisher = {Hugging Face},
   journal   = {Hugging Face Blog},
   howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}
-""",
+}""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
@@ -220,9 +217,9 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3IndustrialRetrieval",
         description="Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircrafts (fueling, mechanics...), intended for complex-document understanding tasks.",
-        reference="https://arxiv.org/pdf/2407.01449",
+        reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
-            "path": "vidore/vidore_v3_industrial",
+            "path": "vidore/vidore_v3_industrial_mteb_format",
             "revision": "117029c7cc97b54c232ce0aa2a349c03d23765fc",
         },
         type="DocumentUnderstanding",
@@ -238,8 +235,7 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{mace2025vidorev3,
+        bibtex_citation=r"""@misc{mace2025vidorev3,
   author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
   title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
   year      = {2025},
@@ -248,8 +244,7 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
   publisher = {Hugging Face},
   journal   = {Hugging Face Blog},
   howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}
-""",
+}""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
@@ -272,9 +267,9 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PharmaceuticalsRetrieval",
         description="Retrieve associated pages according to questions. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks.",
-        reference="https://arxiv.org/pdf/2407.01449",
+        reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
-            "path": "vidore/vidore_v3_pharmaceuticals",
+            "path": "vidore/vidore_v3_pharmaceuticals_mteb_format",
             "revision": "5a8773cc6b087467d12d32aa8f3b9e8da96d79ec",
         },
         type="DocumentUnderstanding",
@@ -290,8 +285,7 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{mace2025vidorev3,
+        bibtex_citation=r"""@misc{mace2025vidorev3,
   author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
   title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
   year      = {2025},
@@ -300,8 +294,7 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
   publisher = {Hugging Face},
   journal   = {Hugging Face Blog},
   howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}
-""",
+}""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
@@ -324,9 +317,9 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3ComputerScienceRetrieval",
         description="Retrieve associated pages according to questions. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks.",
-        reference="https://arxiv.org/pdf/2407.01449",
+        reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
-            "path": "vidore/vidore_v3_computer_science",
+            "path": "vidore/vidore_v3_computer_science_mteb_format",
             "revision": "bfa5037fd6f3e8762ba86ed2eb75919cef9c85b7",
         },
         type="DocumentUnderstanding",
@@ -342,8 +335,7 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{mace2025vidorev3,
+        bibtex_citation=r"""@misc{mace2025vidorev3,
   author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
   title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
   year      = {2025},
@@ -352,8 +344,7 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
   publisher = {Hugging Face},
   journal   = {Hugging Face Blog},
   howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}
-""",
+}""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
@@ -376,9 +367,9 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3HrRetrieval",
         description="Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks.",
-        reference="https://arxiv.org/pdf/2407.01449",
+        reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
-            "path": "vidore/vidore_v3_hr",
+            "path": "vidore/vidore_v3_hr_mteb_format",
             "revision": "c78df6d9bf205f8e61b06e561cce813e23afaae3",
         },
         type="DocumentUnderstanding",
@@ -394,8 +385,7 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{mace2025vidorev3,
+        bibtex_citation=r"""@misc{mace2025vidorev3,
   author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
   title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
   year      = {2025},
@@ -404,8 +394,7 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
   publisher = {Hugging Face},
   journal   = {Hugging Face Blog},
   howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}
-""",
+}""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
@@ -428,9 +417,9 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3EnergyRetrieval",
         description="Retrieve associated pages according to questions. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks.",
-        reference="https://arxiv.org/pdf/2407.01449",
+        reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
-            "path": "vidore/vidore_v3_energy",
+            "path": "vidore/vidore_v3_energy_mteb_format",
             "revision": "cc2b94db52bc287de194bb37c6fd67501099aaf0",
         },
         type="DocumentUnderstanding",
@@ -446,8 +435,7 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{mace2025vidorev3,
+        bibtex_citation=r"""@misc{mace2025vidorev3,
   author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
   title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
   year      = {2025},
@@ -456,8 +444,7 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
   publisher = {Hugging Face},
   journal   = {Hugging Face Blog},
   howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}
-""",
+}""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
@@ -480,9 +467,9 @@ class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PhysicsRetrieval",
         description="Retrieve associated pages according to questions. This dataset, Physics, is a corpus of course slides on bachelor level physics lectures, intended for complex visual understanding tasks.",
-        reference="https://arxiv.org/pdf/2407.01449",
+        reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
-            "path": "vidore/vidore_v3_physics",
+            "path": "vidore/vidore_v3_physics_mteb_format",
             "revision": "8445ba57662e2bfd18c1c83d8e8bad3a041d1e24",
         },
         type="DocumentUnderstanding",
@@ -498,8 +485,7 @@ class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{mace2025vidorev3,
+        bibtex_citation=r"""@misc{mace2025vidorev3,
   author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
   title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
   year      = {2025},
@@ -508,8 +494,7 @@ class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
   publisher = {Hugging Face},
   journal   = {Hugging Face Blog},
   howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}
-""",
+}""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
@@ -532,7 +517,7 @@ class Vidore3NuclearRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3NuclearRetrieval",
         description="Retrieve associated pages according to questions.",
-        reference="https://arxiv.org/pdf/2407.01449",
+        reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "mysecretorga/energy_nuclear_plant_en",
             "revision": "ce6c1e966eb26d094ce206897dd87452fed1fdaa",
@@ -550,8 +535,7 @@ class Vidore3NuclearRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{mace2025vidorev3,
+        bibtex_citation=r"""@misc{mace2025vidorev3,
   author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
   title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
   year      = {2025},
@@ -560,8 +544,7 @@ class Vidore3NuclearRetrieval(AbsTaskRetrieval):
   publisher = {Hugging Face},
   journal   = {Hugging Face Blog},
   howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}
-""",
+}""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
     )
@@ -584,7 +567,7 @@ class Vidore3TelecomRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3TelecomRetrieval",
         description="Retrieve associated pages according to questions.",
-        reference="https://arxiv.org/pdf/2407.01449",
+        reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "mysecretorga/telecom_internet_protocols",
             "revision": "1dbb47240bd521108cf82b58a885555cce4c5612",
@@ -602,8 +585,7 @@ class Vidore3TelecomRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{mace2025vidorev3,
+        bibtex_citation=r"""@misc{mace2025vidorev3,
   author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
   title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
   year      = {2025},
@@ -612,8 +594,7 @@ class Vidore3TelecomRetrieval(AbsTaskRetrieval):
   publisher = {Hugging Face},
   journal   = {Hugging Face Blog},
   howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}
-""",
+}""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
     )
