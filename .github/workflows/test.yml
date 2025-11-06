@@ -46,6 +46,8 @@ jobs:
         if: runner.os != 'Windows'
         shell: bash
         run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
           make test
 
       - name: Run tests on Windows
