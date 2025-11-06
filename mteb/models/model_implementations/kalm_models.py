@@ -104,19 +104,25 @@ kalm_training_data = {
     "FiQA2018",
     "FEVERHardNegatives",
     "NanoFEVERRetrieval",
+    "FEVER-NL",  # translation not trained on
+    "FiQA2018-NL",  # translation not trained on
+    "HotpotQA-PL",  # translation not trained on
+    "HotpotQA-NL",  # translation not trained on
     "HotpotQAHardNegatives",
     "MultiLongDocRetrieval",
     "MSMARCO",
     "MSMARCOHardNegatives",
     "NanoMSMARCORetrieval",
+    "MSMARCO-PL",  # translation not trained on
+    "mMARCO-NL",  # translation not trained on
     "MSMARCOv2",
     "NFCorpus",
     "SciFact",
     "NQ",
     "NQHardNegatives",
     "NanoNQRetrieval",
-    "NQ-PL",
-    "NQ-NL",
+    "NQ-PL",  # translation not trained on
+    "NQ-NL",  # translation not trained on
     "YahooAnswersTopicsClassification",
     "ContractNLIConfidentialityOfAgreementLegalBenchClassification",
     "ContractNLIExplicitIdentificationLegalBenchClassification",
