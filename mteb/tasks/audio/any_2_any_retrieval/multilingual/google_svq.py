@@ -1,7 +1,6 @@
 from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-
 # Google SVQ supports 17 languages
 _EVAL_LANGS = {
     "ar_eg": ["arz"],
@@ -20,8 +19,9 @@ _EVAL_LANGS = {
     "ko_kr": ["kor"],
     "ru_ru": ["rus"],
     "sw": ["swa"],
-    "te_in": ["tel"]
+    "te_in": ["tel"],
 }
+
 
 class GoogleSVQA2TRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
@@ -56,5 +56,3 @@ class GoogleSVQA2TRetrieval(AbsTaskAny2AnyRetrieval):
         }
         """,
     )
-
-
