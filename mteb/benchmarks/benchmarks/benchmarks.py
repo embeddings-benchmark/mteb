@@ -2216,6 +2216,8 @@ VIDORE_V2 = Benchmark(
 
 VIDORE_V3 = Benchmark(
     name="ViDoRe(v3)",
+    display_name="ViDoRe V3",
+    icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
     tasks=get_tasks(
         tasks=[
             "Vidore3FinanceEnRetrieval",
@@ -2230,7 +2232,7 @@ VIDORE_V3 = Benchmark(
             "Vidore3NuclearRetrieval",
         ]
     ),
-    description="Retrieve associated pages according to questions.",
+    description="ViDoRe V3 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents. The benchmark includes both open and closed datasets: to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues).",
     reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
     citation=r"""
 @misc{mace2025vidorev3,
