@@ -1,0 +1,120 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "number_texts_intersect_with_train": 4,
+        "text_statistics": {
+            "total_text_length": 3404227,
+            "min_text_length": 161,
+            "average_text_length": 1662.22021484375,
+            "max_text_length": 14619,
+            "unique_texts": 2048
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 13,
+            "labels": {
+                "6": {
+                    "count": 1091
+                },
+                "3": {
+                    "count": 284
+                },
+                "9": {
+                    "count": 139
+                },
+                "12": {
+                    "count": 164
+                },
+                "1": {
+                    "count": 37
+                },
+                "0": {
+                    "count": 60
+                },
+                "8": {
+                    "count": 33
+                },
+                "4": {
+                    "count": 59
+                },
+                "2": {
+                    "count": 149
+                },
+                "10": {
+                    "count": 3
+                },
+                "11": {
+                    "count": 10
+                },
+                "5": {
+                    "count": 15
+                },
+                "7": {
+                    "count": 4
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 220574,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 364935023,
+            "min_text_length": 1,
+            "average_text_length": 1654.4788733032906,
+            "max_text_length": 58089,
+            "unique_texts": 220301
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 13,
+            "labels": {
+                "6": {
+                    "count": 117566
+                },
+                "9": {
+                    "count": 15018
+                },
+                "2": {
+                    "count": 16104
+                },
+                "1": {
+                    "count": 4008
+                },
+                "4": {
+                    "count": 6356
+                },
+                "8": {
+                    "count": 3501
+                },
+                "0": {
+                    "count": 6447
+                },
+                "3": {
+                    "count": 30558
+                },
+                "12": {
+                    "count": 17635
+                },
+                "10": {
+                    "count": 269
+                },
+                "5": {
+                    "count": 1599
+                },
+                "11": {
+                    "count": 1046
+                },
+                "7": {
+                    "count": 467
+                }
+            }
+        }
+    }
+}

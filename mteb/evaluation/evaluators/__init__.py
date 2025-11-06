@@ -1,22 +1,13 @@
-from __future__ import annotations
+from .audio.audio_pair_classification_evaluator import AudioPairClassificationEvaluator
+from .audio.classification_evaluator import AudiologRegClassificationEvaluator
+from .audio.clustering_evaluator import AudioClusteringEvaluator
+from .audio.zeroshot_classification_evaluator import (
+    AudioZeroshotClassificationEvaluator,
+)
 
-from .Audio.Any2AnyRetrievalEvaluator import *
-from .Audio.ClassificationEvaluator import *
-from .Audio.ClusteringEvaluator import *
-from .Audio.ZeroshotClassificationEvaluator import *
-from .BitextMiningEvaluator import *
-from .ClassificationEvaluator import *
-from .ClusteringEvaluator import *
-from .Image.Any2AnyMultiChoiceEvaluator import *
-from .Image.Any2AnyRetrievalEvaluator import *
-from .Image.Any2TextMultipleChoiceEvaluator import *
-from .Image.ClassificationEvaluator import *
-from .Image.ClusteringEvaluator import *
-from .Image.ImageTextPairClassificationEvaluator import *
-from .Image.VisualSTSEvaluator import *
-from .Image.ZeroshotClassificationEvaluator import *
-from .PairClassificationEvaluator import *
-from .RerankingEvaluator import *
-from .RetrievalEvaluator import *
-from .STSEvaluator import *
-from .SummarizationEvaluator import *
+__all__ = [
+    "AudioClusteringEvaluator",
+    "AudioPairClassificationEvaluator",
+    "AudioZeroshotClassificationEvaluator",
+    "AudiologRegClassificationEvaluator",
+]

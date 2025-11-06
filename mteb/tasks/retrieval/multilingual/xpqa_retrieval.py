@@ -1,0 +1,91 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
+
+_EVAL_LANGS = {
+    "ara-ara": ["ara-Arab", "ara-Arab"],
+    "eng-ara": ["eng-Latn", "ara-Arab"],
+    "ara-eng": ["ara-Arab", "eng-Latn"],
+    "deu-deu": ["deu-Latn", "deu-Latn"],
+    "eng-deu": ["eng-Latn", "deu-Latn"],
+    "deu-eng": ["deu-Latn", "eng-Latn"],
+    "spa-spa": ["spa-Latn", "spa-Latn"],
+    "eng-spa": ["eng-Latn", "spa-Latn"],
+    "spa-eng": ["spa-Latn", "eng-Latn"],
+    "fra-fra": ["fra-Latn", "fra-Latn"],
+    "eng-fra": ["eng-Latn", "fra-Latn"],
+    "fra-eng": ["fra-Latn", "eng-Latn"],
+    "hin-hin": ["hin-Deva", "hin-Deva"],
+    "eng-hin": ["eng-Latn", "hin-Deva"],
+    "hin-eng": ["hin-Deva", "eng-Latn"],
+    "ita-ita": ["ita-Latn", "ita-Latn"],
+    "eng-ita": ["eng-Latn", "ita-Latn"],
+    "ita-eng": ["ita-Latn", "eng-Latn"],
+    "jpn-jpn": ["jpn-Hira", "jpn-Hira"],
+    "eng-jpn": ["eng-Latn", "jpn-Hira"],
+    "jpn-eng": ["jpn-Hira", "eng-Latn"],
+    "kor-kor": ["kor-Hang", "kor-Hang"],
+    "eng-kor": ["eng-Latn", "kor-Hang"],
+    "kor-eng": ["kor-Hang", "eng-Latn"],
+    "pol-pol": ["pol-Latn", "pol-Latn"],
+    "eng-pol": ["eng-Latn", "pol-Latn"],
+    "pol-eng": ["pol-Latn", "eng-Latn"],
+    "por-por": ["por-Latn", "por-Latn"],
+    "eng-por": ["eng-Latn", "por-Latn"],
+    "por-eng": ["por-Latn", "eng-Latn"],
+    "tam-tam": ["tam-Taml", "tam-Taml"],
+    "eng-tam": ["eng-Latn", "tam-Taml"],
+    "tam-eng": ["tam-Taml", "eng-Latn"],
+    "cmn-cmn": ["cmn-Hans", "cmn-Hans"],
+    "eng-cmn": ["eng-Latn", "cmn-Hans"],
+    "cmn-eng": ["cmn-Hans", "eng-Latn"],
+}
+
+_LANG_CONVERSION = {
+    "ara": "ar",
+    "deu": "de",
+    "spa": "es",
+    "fra": "fr",
+    "hin": "hi",
+    "ita": "it",
+    "jpn": "ja",
+    "kor": "ko",
+    "pol": "pl",
+    "por": "pt",
+    "tam": "ta",
+    "cmn": "zh",
+    "eng": "en",
+}
+
+
+class XPQARetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="XPQARetrieval",
+        description="XPQARetrieval",
+        reference="https://arxiv.org/abs/2305.09249",
+        dataset={
+            "path": "mteb/XPQARetrieval",
+            "revision": "fc4624be978945a0ceebbc4b85737258fe26330b",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=_EVAL_LANGS,
+        main_score="ndcg_at_10",
+        date=("2022-01-01", "2023-07-31"),  # best guess
+        domains=["Reviews", "Written"],
+        task_subtypes=["Question answering"],
+        license="cdla-sharing-1.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{shen2023xpqa,
+  author = {Shen, Xiaoyu and Asai, Akari and Byrne, Bill and De Gispert, Adria},
+  booktitle = {Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 5: Industry Track)},
+  pages = {103--115},
+  title = {xPQA: Cross-Lingual Product Question Answering in 12 Languages},
+  year = {2023},
+}
+""",
+    )

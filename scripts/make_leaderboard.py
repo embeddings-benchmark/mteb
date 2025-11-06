@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import argparse
 import logging
 import os
@@ -7,7 +5,10 @@ import os
 import pandas as pd
 
 import mteb
-from mteb.leaderboard.table import scores_to_tables
+from mteb.leaderboard.table import (
+    apply_per_task_styling_from_benchmark,
+    apply_summary_styling_from_benchmark,
+)
 from mteb.load_results import load_results
 
 logging.basicConfig(level=logging.INFO)
@@ -56,15 +57,18 @@ def load_leaderboard(
     )
 
     # Filter results for the selected benchmark
-    benchmark_results_filtered = benchmark.load_results(
+    benchmark_results_filtered = benchmark._load_results(
         base_results=benchmark_results
     ).join_revisions()
 
-    # Convert scores into long format
-    scores_long = benchmark_results_filtered.get_scores(format="long")
-
     # Convert scores into leaderboard tables
-    summary_gr_df, per_task_gr_df = scores_to_tables(scores_long=scores_long)
+    loaded_benchmark = mteb.get_benchmark(benchmark.name)
+    summary_gr_df = apply_summary_styling_from_benchmark(
+        loaded_benchmark, benchmark_results_filtered
+    )
+    per_task_gr_df = apply_per_task_styling_from_benchmark(
+        loaded_benchmark, benchmark_results_filtered
+    )
 
     # Convert Gradio DataFrames to Pandas
     summary_df = pd.DataFrame(

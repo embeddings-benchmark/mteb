@@ -1,0 +1,324 @@
+{
+    "test": {
+        "num_samples": 174637,
+        "text_statistics": {
+            "total_text_length": 115974538,
+            "min_text_length": 79,
+            "average_text_length": 664.0891563643444,
+            "max_text_length": 4878,
+            "unique_texts": 18084
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 101,
+            "labels": {
+                "Literatur & Unterhaltung": {
+                    "count": 41457
+                },
+                "Sachbuch": {
+                    "count": 9327
+                },
+                "Ratgeber": {
+                    "count": 7761
+                },
+                "Kinderbuch & Jugendbuch": {
+                    "count": 5682
+                },
+                "Ganzheitliches Bewusstsein": {
+                    "count": 3199
+                },
+                "Architektur & Garten": {
+                    "count": 665
+                },
+                "K\u00fcnste": {
+                    "count": 671
+                },
+                "Glaube & Ethik": {
+                    "count": 2382
+                },
+                "Romane & Erz\u00e4hlungen": {
+                    "count": 13187
+                },
+                "Fantasy": {
+                    "count": 4876
+                },
+                "Erotik": {
+                    "count": 1433
+                },
+                "Frauenunterhaltung": {
+                    "count": 8559
+                },
+                "Science Fiction": {
+                    "count": 8061
+                },
+                "Comic & Cartoon": {
+                    "count": 176
+                },
+                "Krimi & Thriller": {
+                    "count": 15734
+                },
+                "Mystery": {
+                    "count": 1012
+                },
+                "Historische Romane": {
+                    "count": 2786
+                },
+                "Romantasy": {
+                    "count": 1007
+                },
+                "Romance": {
+                    "count": 960
+                },
+                "Literatur & Unterhaltung Satire": {
+                    "count": 317
+                },
+                "Musik": {
+                    "count": 60
+                },
+                "Horror": {
+                    "count": 870
+                },
+                "Klassiker & Lyrik": {
+                    "count": 1014
+                },
+                "Lebenshilfe & Psychologie": {
+                    "count": 1772
+                },
+                "Essen & Trinken": {
+                    "count": 2113
+                },
+                "Eltern & Familie": {
+                    "count": 1504
+                },
+                "Fitness & Sport": {
+                    "count": 812
+                },
+                "Gesundheit & Ern\u00e4hrung": {
+                    "count": 1724
+                },
+                "Freizeit & Hobby": {
+                    "count": 1509
+                },
+                "Wissen & Nachschlagewerke": {
+                    "count": 300
+                },
+                "Kommunikation & Beruf": {
+                    "count": 467
+                },
+                "Ratgeber Partnerschaft & Sexualit\u00e4t": {
+                    "count": 850
+                },
+                "Beauty & Wellness": {
+                    "count": 161
+                },
+                "Geld & Investment": {
+                    "count": 86
+                },
+                "Recht & Steuern": {
+                    "count": 30
+                },
+                "Fotografie": {
+                    "count": 281
+                },
+                "Mode & Lifestyle": {
+                    "count": 144
+                },
+                "Kunst": {
+                    "count": 545
+                },
+                "Design": {
+                    "count": 43
+                },
+                "Glaube und Grenzerfahrungen": {
+                    "count": 188
+                },
+                "Politik & Gesellschaft": {
+                    "count": 2248
+                },
+                "Kabarett & Satire": {
+                    "count": 894
+                },
+                "Infotainment & erz\u00e4hlendes Sachbuch": {
+                    "count": 637
+                },
+                "Psychologie": {
+                    "count": 851
+                },
+                "Natur, Wissenschaft, Technik": {
+                    "count": 1232
+                },
+                "Biographien & Autobiographien": {
+                    "count": 1929
+                },
+                "Lifestyle": {
+                    "count": 458
+                },
+                "Kunst & Kultur": {
+                    "count": 560
+                },
+                "(Zeit-) Geschichte": {
+                    "count": 1782
+                },
+                "Schicksalsberichte": {
+                    "count": 938
+                },
+                "Wirtschaft & Recht": {
+                    "count": 483
+                },
+                "Sport": {
+                    "count": 232
+                },
+                "Sachbuch Philosophie": {
+                    "count": 296
+                },
+                "Abenteuer, Reisen, fremde Kulturen": {
+                    "count": 588
+                },
+                "Briefe, Essays, Gespr\u00e4che": {
+                    "count": 158
+                },
+                "Regionalia": {
+                    "count": 23
+                },
+                "Lebensgestaltung": {
+                    "count": 79
+                },
+                "Theologie": {
+                    "count": 1531
+                },
+                "Gemeindearbeit": {
+                    "count": 916
+                },
+                "Spiritualit\u00e4t & Religion": {
+                    "count": 656
+                },
+                "Sterben, Tod und Trauer": {
+                    "count": 220
+                },
+                "Religi\u00f6se Literatur": {
+                    "count": 13
+                },
+                "Religionsunterricht": {
+                    "count": 89
+                },
+                "Psychologie & Spiritualit\u00e4t": {
+                    "count": 57
+                },
+                "Krimis und Thriller": {
+                    "count": 784
+                },
+                "Abenteuer": {
+                    "count": 1188
+                },
+                "Tiergeschichten": {
+                    "count": 369
+                },
+                "Religion, Glaube, Ethik, Philosophie": {
+                    "count": 67
+                },
+                "Fantasy und Science Fiction": {
+                    "count": 1604
+                },
+                "Liebe, Beziehung und Freundschaft": {
+                    "count": 1537
+                },
+                "Echtes Leben, Realistischer Roman": {
+                    "count": 563
+                },
+                "Detektivgeschichten": {
+                    "count": 107
+                },
+                "Natur, Tiere, Umwelt, Mensch": {
+                    "count": 422
+                },
+                "Besch\u00e4ftigung, Malen, R\u00e4tseln": {
+                    "count": 283
+                },
+                "Historische Romane, Zeitgeschichte": {
+                    "count": 121
+                },
+                "Schulgeschichten": {
+                    "count": 112
+                },
+                "Geschichte, Politik": {
+                    "count": 116
+                },
+                "Sportgeschichten": {
+                    "count": 194
+                },
+                "M\u00e4rchen, Sagen": {
+                    "count": 182
+                },
+                "Kunst, Musik": {
+                    "count": 250
+                },
+                "Familie": {
+                    "count": 191
+                },
+                "Schullekt\u00fcre": {
+                    "count": 131
+                },
+                "Lustige Geschichten, Witze": {
+                    "count": 72
+                },
+                "Geister- und Gruselgeschichten": {
+                    "count": 85
+                },
+                "Lyrik, Anthologien, Jahrb\u00fccher": {
+                    "count": 25
+                },
+                "Biographien": {
+                    "count": 7
+                },
+                "Energieheilung": {
+                    "count": 429
+                },
+                "Ganzheitliche Psychologie": {
+                    "count": 1290
+                },
+                "Weisheiten der Welt": {
+                    "count": 726
+                },
+                "K\u00f6rper & Seele": {
+                    "count": 615
+                },
+                "\u00dcbernat\u00fcrliches": {
+                    "count": 656
+                },
+                "Ganzheitlich Leben": {
+                    "count": 277
+                },
+                "Naturheilweisen": {
+                    "count": 258
+                },
+                "Mondkr\u00e4fte": {
+                    "count": 95
+                },
+                "Schicksalsdeutung": {
+                    "count": 224
+                },
+                "Esoterische Romane": {
+                    "count": 57
+                },
+                "Handwerk Holz": {
+                    "count": 32
+                },
+                "Architektur": {
+                    "count": 313
+                },
+                "Wohnen & Innenarchitektur": {
+                    "count": 231
+                },
+                "Handwerk Farbe": {
+                    "count": 83
+                },
+                "Garten & Landschaftsarchitektur": {
+                    "count": 346
+                }
+            }
+        }
+    }
+}

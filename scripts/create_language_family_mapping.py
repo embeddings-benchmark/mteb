@@ -1,10 +1,8 @@
-from __future__ import annotations
-
 import json
 from pathlib import Path
 
 from pyglottolog.api import Glottolog, lls
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 glottolog = Glottolog(
     "/home/ubuntu/isaac/work/glottolog"

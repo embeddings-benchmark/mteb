@@ -1,3 +1,6 @@
+
+**NOTE**: This open collaboration have been finalized and the [paper](https://arxiv.org/abs/2502.13595) released. This document remains for documentation.
+
 # Welcome to MMTEB! 👋
 
 The Massive Multilingual Text Embedding Benchmark (MMTEB) is a community-led extension of [MTEB](https://arxiv.org/abs/2210.07316) to cover embedding tasks for a massive number of languages.
@@ -16,7 +19,7 @@ Win some SWAG, and become a co-author of our upcoming paper. We aim to publish t
 
 ### 🗃️ 1: Contribute a new dataset
 
-For this segment, you open a PR in the MTEB repository where you create an implementation (subclass) of a task using a new language dataset uploaded to huggingface. Read more about how to add a dataset [here](../adding_a_dataset.md) and check out [one of the previous additions](https://github.com/embeddings-benchmark/mteb/pull/247) for an example.
+For this segment, you open a PR in the MTEB repository where you create an implementation (subclass) of a task using a new language dataset uploaded to huggingface. Read more about how to add a dataset [here](../contributing/adding_a_dataset.md) and check out [one of the previous additions](https://github.com/embeddings-benchmark/mteb/pull/247) for an example.
 
 ### 🖥️ 2: Contribute a new task
 

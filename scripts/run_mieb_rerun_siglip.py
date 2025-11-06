@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import mteb
 
 for model_name in [
@@ -17,7 +15,7 @@ for model_name in [
         task_types=[
             "Any2AnyRetrieval",
             "Any2AnyMultiChoice",
-            "VisionCentric",
+            "VisionCentricQA",
             "ImageClustering",
             "ImageClassification",
             "ImageMultilabelClassification",

@@ -1,43 +1,47 @@
-from __future__ import annotations
-
 from importlib.metadata import version
 
-from mteb.benchmarks.benchmarks import (
-    MTEB_ENG_CLASSIC,
-    MTEB_MAIN_RU,
-    MTEB_RETRIEVAL_LAW,
-    MTEB_RETRIEVAL_MEDICAL,
-    MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
-    CoIR,
+from mteb import types
+from mteb.abstasks import AbsTask
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.deprecated_evaluator import MTEB
+from mteb.evaluate import evaluate
+from mteb.filter_tasks import filter_tasks
+from mteb.get_tasks import get_task, get_tasks
+from mteb.load_results import load_results
+from mteb.models import (
+    CrossEncoderProtocol,
+    EncoderProtocol,
+    SearchProtocol,
+    SentenceTransformerEncoderWrapper,
 )
-from mteb.evaluation import *
-from mteb.load_results import BenchmarkResults, load_results
-from mteb.models import get_model, get_model_meta, get_model_metas
-from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
+from mteb.models.get_model_meta import get_model, get_model_meta, get_model_metas
+from mteb.results import BenchmarkResults, TaskResult
 
-from .benchmarks.benchmarks import Benchmark
-from .benchmarks.get_benchmark import BENCHMARK_REGISTRY, get_benchmark, get_benchmarks
+from .benchmarks.benchmark import Benchmark
+from .benchmarks.get_benchmark import get_benchmark, get_benchmarks
 
 __version__ = version("mteb")  # fetch version from install metadata
 
-
 __all__ = [
-    "MTEB_ENG_CLASSIC",
-    "MTEB_MAIN_RU",
-    "MTEB_RETRIEVAL_LAW",
-    "MTEB_RETRIEVAL_MEDICAL",
-    "MTEB_RETRIEVAL_WITH_INSTRUCTIONS",
-    "CoIR",
-    "TASKS_REGISTRY",
-    "get_tasks",
-    "get_task",
+    "MTEB",
+    "AbsTask",
+    "Benchmark",
+    "BenchmarkResults",
+    "CrossEncoderProtocol",
+    "EncoderProtocol",
+    "SearchProtocol",
+    "SentenceTransformerEncoderWrapper",
+    "TaskMetadata",
+    "TaskResult",
+    "evaluate",
+    "filter_tasks",
+    "get_benchmark",
+    "get_benchmarks",
     "get_model",
     "get_model_meta",
     "get_model_metas",
+    "get_task",
+    "get_tasks",
     "load_results",
-    "Benchmark",
-    "get_benchmark",
-    "get_benchmarks",
-    "BenchmarkResults",
-    "BENCHMARK_REGISTRY",
+    "types",
 ]

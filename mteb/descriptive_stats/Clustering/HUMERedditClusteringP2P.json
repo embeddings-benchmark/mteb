@@ -1,0 +1,39 @@
+{
+    "test": {
+        "num_samples": 30,
+        "text_statistics": {
+            "total_text_length": 21941,
+            "min_text_length": 100,
+            "average_text_length": 731.3666666666667,
+            "max_text_length": 3475,
+            "unique_texts": 30
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 6,
+            "labels": {
+                "relationship_advice": {
+                    "count": 5
+                },
+                "buildapc": {
+                    "count": 5
+                },
+                "teenagers": {
+                    "count": 5
+                },
+                "ApplyingToCollege": {
+                    "count": 5
+                },
+                "gaming": {
+                    "count": 5
+                },
+                "anime": {
+                    "count": 5
+                }
+            }
+        }
+    }
+}

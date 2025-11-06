@@ -1,0 +1,84 @@
+{
+    "test": {
+        "num_samples": 312,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 84152,
+            "min_text_length": 4,
+            "average_text_length": 269.71794871794873,
+            "max_text_length": 2152,
+            "unique_texts": 312
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 7,
+            "labels": {
+                "Background": {
+                    "count": 57
+                },
+                "Clarification": {
+                    "count": 83
+                },
+                "Communicate": {
+                    "count": 14
+                },
+                "Criticism": {
+                    "count": 51
+                },
+                "Humor": {
+                    "count": 28
+                },
+                "Implications": {
+                    "count": 67
+                },
+                "Support": {
+                    "count": 12
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 7,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 2184,
+            "min_text_length": 72,
+            "average_text_length": 312.0,
+            "max_text_length": 928,
+            "unique_texts": 7
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 7,
+            "labels": {
+                "Background": {
+                    "count": 1
+                },
+                "Clarification": {
+                    "count": 1
+                },
+                "Communicate": {
+                    "count": 1
+                },
+                "Criticism": {
+                    "count": 1
+                },
+                "Humor": {
+                    "count": 1
+                },
+                "Implications": {
+                    "count": 1
+                },
+                "Support": {
+                    "count": 1
+                }
+            }
+        }
+    }
+}

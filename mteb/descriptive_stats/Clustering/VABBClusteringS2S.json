@@ -1,0 +1,60 @@
+{
+    "test": {
+        "num_samples": 195,
+        "text_statistics": {
+            "total_text_length": 14155,
+            "min_text_length": 13,
+            "average_text_length": 72.58974358974359,
+            "max_text_length": 182,
+            "unique_texts": 195
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 13,
+            "labels": {
+                "Art History": {
+                    "count": 15
+                },
+                "Sociology": {
+                    "count": 15
+                },
+                "Law": {
+                    "count": 15
+                },
+                "History": {
+                    "count": 15
+                },
+                "Linguistics": {
+                    "count": 15
+                },
+                "Social Health Sciences": {
+                    "count": 15
+                },
+                "Political Sciences": {
+                    "count": 15
+                },
+                "Educational Sciences": {
+                    "count": 15
+                },
+                "Literature": {
+                    "count": 15
+                },
+                "Theology": {
+                    "count": 15
+                },
+                "Economics & Business": {
+                    "count": 15
+                },
+                "Philosophy": {
+                    "count": 15
+                },
+                "Criminology": {
+                    "count": 15
+                }
+            }
+        }
+    }
+}

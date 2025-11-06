@@ -1,16 +1,239 @@
-from __future__ import annotations
+"""Test if the metadata of all tasks is filled and valid."""
 
 import pytest
 
-from tests.test_benchmark.task_grid import MOCK_TASK_TEST_GRID
+from mteb.abstasks import AbsTask
+from mteb.get_tasks import get_tasks
+
+# Historic datasets without filled metadata. Do NOT add new datasets to this list.
+_HISTORIC_DATASETS = [
+    "PolEmo2.0-IN",
+    "PolEmo2.0-OUT",
+    "PolEmo2.0-OUT.v2",
+    "PAC",
+    "PAC.v2",
+    "TNews",
+    "TNews.v2",
+    "IFlyTek",
+    "IFlyTek.v2",
+    "MultilingualSentiment",
+    "MultilingualSentiment.v2",
+    "JDReview",
+    "JDReview.v2",
+    "OnlineShopping",
+    "Waimai",
+    "Waimai.v2",
+    "BlurbsClusteringP2P",
+    "BlurbsClusteringS2S",
+    "TenKGnadClusteringP2P",
+    "TenKGnadClusteringS2S",
+    "ArxivClusteringP2P",
+    "ArxivClusteringS2S",
+    "RedditClustering",
+    "RedditClusteringP2P",
+    "StackExchangeClustering",
+    "StackExchangeClusteringP2P",
+    "TwentyNewsgroupsClustering",
+    "WikiCitiesClustering",
+    "AlloProfClusteringP2P",
+    "AlloProfClusteringS2S",
+    "HALClusteringS2S",
+    "MLSUMClusteringP2P",
+    "MLSUMClusteringS2S",
+    "MasakhaNEWSClusteringP2P",
+    "MasakhaNEWSClusteringS2S",
+    "EightTagsClustering",
+    "RomaniBibleClustering",
+    "SpanishNewsClusteringP2P",
+    "SwednClustering",
+    "CLSClusteringS2S",
+    "CLSClusteringP2P",
+    "ThuNewsClusteringS2S",
+    "ThuNewsClusteringP2P",
+    "TV2Nordretrieval",
+    "TwitterHjerneRetrieval",
+    "GerDaLIR",
+    "GerDaLIRSmall",
+    "LegalQuAD",
+    "AILACasedocs",
+    "AILAStatutes",
+    "ArguAna",
+    "ClimateFEVER",
+    "CQADupstackRetrieval",
+    "CQADupstackAndroidRetrieval",
+    "CQADupstackEnglishRetrieval",
+    "CQADupstackGamingRetrieval",
+    "CQADupstackGisRetrieval",
+    "CQADupstackMathematicaRetrieval",
+    "CQADupstackPhysicsRetrieval",
+    "CQADupstackProgrammersRetrieval",
+    "CQADupstackStatsRetrieval",
+    "CQADupstackTexRetrieval",
+    "CQADupstackUnixRetrieval",
+    "CQADupstackWebmastersRetrieval",
+    "CQADupstackWordpressRetrieval",
+    "DBPedia",
+    "FEVER",
+    "FiQA2018",
+    "HagridRetrieval",
+    "LegalBenchConsumerContractsQA",
+    "LegalBenchCorporateLobbying",
+    "LegalSummarization",
+    "LEMBNeedleRetrieval",
+    "LEMBPasskeyRetrieval",
+    "MSMARCO",
+    "MSMARCOv2",
+    "NarrativeQARetrieval",
+    "NFCorpus",
+    "NQ",
+    "QuoraRetrieval",
+    "SCIDOCS",
+    "SciFact",
+    "Touche2020",
+    "TRECCOVID",
+    "AlloprofRetrieval",
+    "BSARDRetrieval",
+    "SyntecRetrieval",
+    "JaQuADRetrieval",
+    "Ko-miracl",
+    "Ko-StrategyQA",
+    "MintakaRetrieval",
+    "MIRACLRetrieval",
+    "MultiLongDocRetrieval",
+    "XMarket",
+    "SNLRetrieval",
+    "ArguAna-PL",
+    "DBPedia-PL",
+    "FiQA-PL",
+    "HotpotQA-PL",
+    "MSMARCO-PL",
+    "NFCorpus-PL",
+    "NQ-PL",
+    "Quora-PL",
+    "SCIDOCS-PL",
+    "SciFact-PL",
+    "TRECCOVID-PL",
+    "SpanishPassageRetrievalS2P",
+    "SpanishPassageRetrievalS2S",
+    "SweFaqRetrieval",
+    "T2Retrieval",
+    "MMarcoRetrieval",
+    "DuRetrieval",
+    "CovidRetrieval",
+    "CmedqaRetrieval",
+    "EcomRetrieval",
+    "MedicalRetrieval",
+    "VideoRetrieval",
+    "LeCaRDv2",
+    "SprintDuplicateQuestions",
+    "TwitterSemEval2015",
+    "TwitterURLCorpus",
+    "OpusparcusPC",
+    "PawsX",
+    "SICK-E-PL",
+    "PpcPC",
+    "CDSC-E",
+    "PSC",
+    "Ocnli",
+    "Cmnli",
+    "AskUbuntuDupQuestions",
+    "MindSmallReranking",
+    "SciDocsRR",
+    "StackOverflowDupQuestions",
+    "AlloprofReranking",
+    "SyntecReranking",
+    "T2Reranking",
+    "MMarcoReranking",
+    "CMedQAv1-reranking",
+    "CMedQAv2-reranking",
+    "GermanSTSBenchmark",
+    "BIOSSES",
+    "SICK-R",
+    "STS12",
+    "STS13",
+    "STS14",
+    "STS15",
+    "STS16",
+    "STSBenchmark",
+    "HUMESTSBenchmark",
+    "HUMESICK-R",
+    "FinParaSTS",
+    "SICKFr",
+    "KLUE-STS",
+    "KorSTS",
+    "STS17",
+    "STS22",
+    "STSBenchmarkMultilingualSTS",
+    "SICK-R-PL",
+    "CDSC-R",
+    "RonSTS",
+    "STSES",
+    "ATEC",
+    "BQ",
+    "LCQMC",
+    "PAWSX",
+    "STSB",
+    "AFQMC",
+    "QBQTC",
+    "SummEval",
+    "SummEvalFr",
+    "MalayalamNewsClassification",
+    "TamilNewsClassification",
+    "TenKGnadClusteringP2P.v2",
+    "TenKGnadClusteringS2S.v2",
+    "ClimateFEVERHardNegatives",
+    "DBPediaHardNegatives",
+    "FEVERHardNegatives",
+    "HotpotQAHardNegatives",
+    "MSMARCOHardNegatives",
+    "NQHardNegatives",
+    "QuoraRetrievalHardNegatives",
+    "TopiOCQAHardNegatives",
+    "MIRACLRetrievalHardNegatives",
+    "NeuCLIR2022RetrievalHardNegatives",
+    "NeuCLIR2023RetrievalHardNegatives",
+    "DBPedia-PLHardNegatives",
+    "HotpotQA-PLHardNegatives",
+    "MSMARCO-PLHardNegatives",
+    "NQ-PLHardNegatives",
+    "Quora-PLHardNegatives",
+    "RiaNewsRetrievalHardNegatives",
+    "SynPerChatbotConvSAClassification",
+    "CQADupstackRetrieval-Fa",
+    "IndicXnliPairClassification",
+    "CQADupstackRetrieval-PL",
+    "WikiClusteringP2P",
+    "VGClustering",
+    "VisualSTS17Eng",
+    "VisualSTS17Multilingual",
+]
 
 
-@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
-def test_descriptive_stats(task):
-    result_stat = task.calculate_metadata_metrics()
-    # remove descriptive task file
-    task.metadata.descriptive_stat_path.unlink()
-    task_stat = task.expected_stats
-    for key, value in result_stat.items():
-        assert key in task_stat
-        assert value == task_stat[key]
+@pytest.mark.parametrize(
+    "task", get_tasks(exclude_superseded=False, exclude_aggregate=False)
+)
+def test_all_metadata_is_filled_and_valid(task: AbsTask):
+    # --- test metadata is filled and valid ---
+    if task.metadata.name not in _HISTORIC_DATASETS:
+        task.metadata._validate_metadata()
+        assert task.metadata.is_filled(), (
+            f"Metadata for {task.metadata.name} is not filled"
+        )
+
+    # --- Check that no dataset trusts remote code ---
+    assert task.metadata.dataset.get("trust_remote_code", False) is False, (
+        f"Dataset {task.metadata.name} should not trust remote code"
+    )
+
+    # --- Test is descriptive stats are present for all datasets ---
+    if task.is_aggregate:  # aggregate tasks do not have descriptive stats
+        return
+
+    # TODO https://github.com/embeddings-benchmark/mteb/issues/3279
+    if task.metadata.name in ["MIRACLVisionRetrieval", "VDRMultilingualRetrieval"]:
+        return
+
+    assert task.metadata.descriptive_stats is not None, (
+        f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask().calculate_descriptive_statistics()`"
+    )
+    assert task.metadata.n_samples is not None

@@ -1,28 +1,37 @@
-from __future__ import annotations
+from .abstask import AbsTask
+from .audio.abs_task_audio_classification import AbsTaskAudioClassification
+from .audio.abs_task_audio_clustering import AbsTaskAudioClustering
+from .audio.abs_task_audio_pair_classification import AbsTaskAudioPairClassification
+from .classification import AbsTaskClassification
+from .clustering import AbsTaskClustering
+from .clustering_legacy import AbsTaskClusteringLegacy
+from .image.image_text_pair_classification import AbsTaskImageTextPairClassification
+from .multilabel_classification import AbsTaskMultilabelClassification
+from .pair_classification import AbsTaskPairClassification
+from .regression import AbsTaskRegression
+from .retrieval import AbsTaskRetrieval
+from .sts import AbsTaskSTS
+from .text.bitext_mining import AbsTaskBitextMining
+from .text.reranking import AbsTaskReranking
+from .text.summarization import AbsTaskSummarization
+from .zeroshot_classification import AbsTaskZeroShotClassification
 
-from ..evaluation.LangMapping import *
-from .AbsTask import *
-from .AbsTaskBitextMining import *
-from .AbsTaskClassification import *
-from .AbsTaskClustering import *
-from .AbsTaskInstructionRetrieval import *
-from .AbsTaskMultilabelClassification import *
-from .AbsTaskPairClassification import *
-from .AbsTaskReranking import *
-from .AbsTaskRetrieval import *
-from .AbsTaskSpeedTask import *
-from .AbsTaskSTS import *
-from .AbsTaskSummarization import *
-from .Audio.AbsTaskAny2AnyRetrieval import *
-from .Audio.AbsTaskAudioClassification import *
-from .Audio.AbsTaskAudioClustering import *
-from .Image.AbsTaskAny2AnyMultiChoice import *
-from .Image.AbsTaskAny2AnyRetrieval import *
-from .Image.AbsTaskAny2TextMultipleChoice import *
-from .Image.AbsTaskImageClassification import *
-from .Image.AbsTaskImageClustering import *
-from .Image.AbsTaskImageMultilabelClassification import *
-from .Image.AbsTaskImageTextPairClassification import *
-from .Image.AbsTaskVisualSTS import *
-from .Image.AbsTaskZeroshotClassification import *
-from .MultilingualTask import *
+__all__ = [
+    "AbsTask",
+    "AbsTaskAudioClassification",
+    "AbsTaskAudioClustering",
+    "AbsTaskAudioPairClassification",
+    "AbsTaskBitextMining",
+    "AbsTaskClassification",
+    "AbsTaskClustering",
+    "AbsTaskClusteringLegacy",
+    "AbsTaskImageTextPairClassification",
+    "AbsTaskMultilabelClassification",
+    "AbsTaskPairClassification",
+    "AbsTaskRegression",
+    "AbsTaskReranking",
+    "AbsTaskRetrieval",
+    "AbsTaskSTS",
+    "AbsTaskSummarization",
+    "AbsTaskZeroShotClassification",
+]

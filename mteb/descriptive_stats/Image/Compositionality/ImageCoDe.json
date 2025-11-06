@@ -1,0 +1,21 @@
+{
+    "test": {
+        "num_samples": 2302,
+        "text_statistics": {
+            "total_text_length": 236457,
+            "min_text_length": 1,
+            "average_text_length": 102.71807124239791,
+            "max_text_length": 350,
+            "unique_texts": 2302
+        },
+        "image_statistics": {
+            "min_image_width": 256,
+            "average_image_width": 256.0,
+            "max_image_width": 256,
+            "min_image_height": 256,
+            "average_image_height": 256.0,
+            "max_image_height": 256,
+            "unique_images": 10359
+        }
+    }
+}

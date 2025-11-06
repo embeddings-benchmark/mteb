@@ -15,14 +15,21 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest] #, macos-latest, windows-latest]
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
         include:
-          # Add Windows with Python 3.8 only to avoid tests taking too long
+          # Add Windows with Python 3.10 only to avoid tests taking too long
           - os: windows-latest
-            python-version: "3.9"
+            python-version: "3.10"
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Cache Hugging Face
+        id: cache-hf
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: ${{ runner.os }}-hf
 
       - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4

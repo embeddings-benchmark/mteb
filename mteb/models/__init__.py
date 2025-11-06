@@ -1,24 +1,28 @@
-from __future__ import annotations
-
-import logging
-
-from mteb.models.overview import (
-    MODEL_REGISTRY,
-    ModelMeta,
-    get_model,
-    get_model_meta,
-    get_model_metas,
-    model_meta_from_sentence_transformers,
+from .cache_wrappers import CachedEmbeddingWrapper
+from .model_meta import ModelMeta
+from .models_protocols import (
+    CrossEncoderProtocol,
+    EncoderProtocol,
+    MTEBModels,
+    SearchProtocol,
+)
+from .search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
+from .sentence_transformer_wrapper import (
+    CrossEncoderWrapper,
+    SentenceTransformerEncoderWrapper,
+    sentence_transformers_loader,
 )
 
-logger = logging.getLogger(__name__)
-
-
 __all__ = [
-    "MODEL_REGISTRY",
+    "CachedEmbeddingWrapper",
+    "CrossEncoderProtocol",
+    "CrossEncoderWrapper",
+    "EncoderProtocol",
+    "MTEBModels",
     "ModelMeta",
-    "get_model",
-    "get_model_meta",
-    "get_model_metas",
-    "model_meta_from_sentence_transformers",
+    "SearchCrossEncoderWrapper",
+    "SearchEncoderWrapper",
+    "SearchProtocol",
+    "SentenceTransformerEncoderWrapper",
+    "sentence_transformers_loader",
 ]

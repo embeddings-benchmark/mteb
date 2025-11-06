@@ -1,0 +1,135 @@
+site_name: Massive Text Embedding Benchmark
+docs_dir: "docs/"
+repo_url: https://github.com/embeddings-benchmark/mteb
+watch: [mteb/, docs/]
+edit_uri: "blob/main/docs/"
+theme:
+  name: material
+  favicon: images/logos/mteb_logo/dots-icon.png
+  logo: images/logos/mteb_logo/dots-icon.png
+  features:
+    - navigation.tracking
+    - navigation.instant
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.tooltips
+    - navigation.footer
+    - navigation.indexes
+    - toc.follow
+  palette:
+    # System preference (auto)
+    - media: "(prefers-color-scheme)"
+      scheme: default
+      primary: white
+      accent: light blue
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: white
+      accent: light blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - footnotes
+  - attr_list
+  - md_in_html
+  - tables
+
+copyright: This text is freely available under a Creative Commons Attribution 4.0 license
+
+nav:
+  - Get Started:
+      - index.md
+      - whats_new.md
+      - Installation: installation.md
+      - Usage:
+        - Get Started: usage/get_started.md
+        - Defining the Model: usage/defining_the_model.md
+        - Selecting Tasks: usage/selecting_tasks.md
+        - Running the Evaluation: usage/running_the_evaluation.md
+        - Loading Results: usage/loading_results.md
+        - Command Line Interface: usage/cli.md
+        - Running the Leaderboard: usage/leaderboard.md
+      - Advanced Usage:
+        - Two stage reranking: advanced_usage/two_stage_reranking.md
+        - Cache embeddings: advanced_usage/cache_embeddings.md
+  - Contributing:
+      - Adding a Model: contributing/adding_a_model.md
+      - Adding a Task: contributing/adding_a_dataset.md
+      - Adding a Benchmark: contributing/adding_a_benchmark.md
+      - Guidelines: CONTRIBUTING.md
+  - Overview:
+      - overview/index.md
+      - Benchmarks:
+        - Available Benchmarks: overview/available_benchmarks.md
+      - Tasks:
+        - Available Tasks: overview/available_tasks
+      - Models:
+        - Available Models: overview/available_models
+  - API:
+      - Overview: api/index.md
+      - Evaluation: api/evaluation.md
+      - Benchmark: api/benchmark.md
+      - Task: api/task.md
+      - Model: api/model.md
+      - Results: api/results.md
+      - Additional Types: api/types.md
+  - Leaderboard: https://huggingface.co/spaces/mteb/leaderboard
+
+plugins:
+  - include_dir_to_nav
+  - search
+  - exclude:
+      glob:
+        # projects
+        - mieb/*
+        - mmteb/*
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [mteb]
+          type: python
+          root_package: mteb
+          docstring_style: google
+          options:
+            heading_level: 3
+            show_source: true
+            show_root_heading: true
+
+  - bibtex:
+      bib_file: "docs/references.bib"
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/embeddings-benchmark/mteb
