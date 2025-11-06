@@ -1,4 +1,4 @@
-from mteb.abstasks.audio.abs_task_adio_reranking import AbsTaskAudioReranking
+from mteb.abstasks.audio.abs_task_audio_reranking import AbsTaskAudioReranking
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
