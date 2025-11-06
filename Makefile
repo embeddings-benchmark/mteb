@@ -6,7 +6,7 @@ install:
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	pip install ".[bm25s,pylate,image,audio,codecarbon,faiss-cpu]" --group dev
+	pip install ".[image,audio,faiss-cpu]" --group dev
 
 lint:
 	@echo "--- 🧹 Running linters ---"
