@@ -6,6 +6,7 @@ import torch
 from datasets import Dataset
 from torch.utils.data import DataLoader, default_collate
 
+from mteb._log_once import LogOnce
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.types import (
     BatchedInput,
@@ -40,7 +41,7 @@ def _create_dataloader_from_texts(
         A dataloader with the text.
     """
     dataset = Dataset.from_dict({"text": text})
-    return torch.utils.data.DataLoader(
+    return DataLoader(
         dataset,
         batch_size=batch_size,
     )
@@ -68,18 +69,22 @@ def _corpus_to_dict(
 def _create_dataloader_for_retrieval_corpus(
     dataset: Dataset,
     batch_size: int = 32,
+    num_workers: int = 1,
 ) -> DataLoader[CorpusInput]:
     """Create a dataloader from a corpus.
 
     Args:
         dataset: Corpus
         batch_size: Batch size for the dataloader.
+        num_workers: Number of workers.
 
     Returns:
         A dataloader with the corpus.
     """
-    new_ds = dataset.map(_corpus_to_dict, desc="Converting corpus dict")
-    return torch.utils.data.DataLoader(
+    new_ds = dataset.map(
+        _corpus_to_dict, desc="Converting corpus dict", num_proc=num_workers
+    )
+    return DataLoader(
         new_ds,
         batch_size=batch_size,
     )
@@ -98,27 +103,27 @@ def _combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str
 def _create_text_dataloader_for_queries(
     queries: QueryDatasetType,
     batch_size: int = 32,
+    num_workers: int = 1,
 ) -> DataLoader[QueryInput]:
     """Create a dataloader from a list of queries.
 
     Args:
         queries: A list of queries.
         batch_size: Batch size for the dataloader.
+        num_workers: Number of workers.
 
     Returns:
         A dataloader with the queries.
     """
     queries = queries.map(
         _combine_queries_with_instruction_text,
-        desc="Processing queries for dataloading",
+        desc="Processing queries for data loading",
+        num_proc=num_workers,
     )
-    return torch.utils.data.DataLoader(
+    return DataLoader(
         queries,
         batch_size=batch_size,
     )
-
-
-_warned_about_user_role = False
 
 
 def _convert_conv_history_to_query(
@@ -132,8 +137,6 @@ def _convert_conv_history_to_query(
     Returns:
         The updated row with the "query" and "text" fields set to the conversation string, and the "conversation" field set to the list of ConversationTurn.
     """
-    global _warned_about_user_role
-
     conversation = row["text"]
     # if it's a list of strings, just join them
     if isinstance(conversation, list) and isinstance(conversation[0], str):
@@ -142,11 +145,9 @@ def _convert_conv_history_to_query(
         current_conversation = [
             ConversationTurn(role="user", content=message) for message in conversation
         ]
-        if not _warned_about_user_role:
-            logger.warning(
-                "Conversations are a list of strings. Used 'user' role for all turns."
-            )
-            _warned_about_user_role = True
+        LogOnce(logger).warning(
+            "Conversations are a list of strings. Used 'user' role for all turns."
+        )
     # otherwise, it's a list of dictionaries, which we need to convert to strings
     elif isinstance(conversation, list) and isinstance(conversation[0], dict):
         conv = []
@@ -189,19 +190,23 @@ def _convert_conv_history_to_query(
 def _create_dataloader_for_queries_conversation(
     queries: QueryDatasetType,
     batch_size: int = 32,
+    num_workers: int = 1,
 ) -> DataLoader[QueryInput]:
     """Create a dataloader from a list of queries.
 
     Args:
         queries: A list of queries.
         batch_size: Batch size for the dataloader.
+        num_workers: Number of workers.
 
     Returns:
         A dataloader with the queries.
     """
     return DataLoader(
         queries.map(
-            _convert_conv_history_to_query, desc="Converting conversations to queries"
+            _convert_conv_history_to_query,
+            desc="Converting conversations to queries",
+            num_proc=num_workers,
         ),
         collate_fn=_custom_collate_fn,
         batch_size=batch_size,
@@ -249,6 +254,7 @@ def _prepare_image_dataset(
     dataset: Dataset,
     image_column_name: str | None = None,
     transform: Callable[[Any], Any] | None = None,
+    num_workers: int = 1,
 ) -> Dataset:
     """Prepare the image dataset by converting images to RGB and applying transformations."""
     # If the dataset uses a different column name for images, rename it to "image".
@@ -263,6 +269,7 @@ def _prepare_image_dataset(
         _convert_images_to_rgb,
         fn_kwargs={"image_col_name": "image", "transform": transform},
         desc="Converting images to RGB",
+        num_proc=num_workers,
     )
 
 
@@ -298,6 +305,7 @@ def _create_image_dataloader(
     image_column_name: str | None = None,
     batch_size: int = 32,
     transform: Callable[[Any], Any] | None = None,
+    num_workers: int = 1,
     collate_fn: Callable[[list[dict[str, Any]]], dict[str, Any]] = _custom_collate_fn,
 ) -> DataLoader[ImageInput]:
     """Creates a DataLoader with the image dataset prepared using the explicit transformation.
@@ -308,33 +316,41 @@ def _create_image_dataloader(
         batch_size: Batch size for the dataloader.
         transform: A transformation function to apply to each image (e.g., converting to tensor).
         collate_fn: A custom collate function to handle batching.
+        num_workers: The number of workers for the dataloader.
 
     Returns:
         A DataLoader with the image dataset.
     """
     dataset = _prepare_image_dataset(
-        dataset, image_column_name, transform
+        dataset,
+        image_column_name=image_column_name,
+        transform=transform,
+        num_workers=num_workers,
     ).select_columns(["image"])
     return DataLoader(
         dataset,
         batch_size=batch_size,
         collate_fn=collate_fn,
         shuffle=False,
+        num_workers=num_workers,
     )
 
 
 def _create_text_queries_dataloader(
     dataset: Dataset,
     batch_size: int = 32,
+    num_workers: int = 1,
 ) -> DataLoader[QueryInput]:
     if not isinstance(dataset["text"][0], list):
         return _create_text_dataloader_for_queries(
             dataset,
             batch_size=batch_size,
+            num_workers=num_workers,
         )
     return _create_dataloader_for_queries_conversation(
         dataset,
         batch_size=batch_size,
+        num_workers=num_workers,
     )
 
 
@@ -351,12 +367,14 @@ def _create_queries_dataloader(
         return _create_text_queries_dataloader(
             dataset,
             batch_size=batch_size,
+            num_workers=num_workers,
         )
     if "image" in queries_type:  # contains image
         return _create_image_dataloader(
             dataset,
             image_column_name="image",
             batch_size=batch_size,
+            num_workers=num_workers,
         )
     if "audio" in task_metadata.modalities:
         return _create_audio_dataloader(
@@ -390,12 +408,14 @@ def _create_document_dataloader(
         return _create_dataloader_for_retrieval_corpus(
             dataset,
             batch_size=batch_size,
+            num_workers=num_workers,
         )
     if "image" in document_type:  # contains image
         return _create_image_dataloader(
             dataset,
             image_column_name="image",
             batch_size=batch_size,
+            num_workers=num_workers,
         )
     if "audio" in task_metadata.modalities:
         return _create_audio_dataloader(
@@ -463,7 +483,7 @@ def create_dataloader(
         prompt_type: The type of prompt to create a dataloader for. If None, it will be inferred from the task metadata.
         input_column: The column to use as input. If None, it will use the first column that matches the modality.
         batch_size: The batch size for the dataloader.
-        num_workers: The number of workers for the dataloader.
+        num_workers: The number of workers for the dataloader and mapping pocessing.
         **kwargs: Additional arguments to pass to the dataloader creation functions.
 
     Returns:
@@ -475,6 +495,7 @@ def create_dataloader(
             task_metadata,
             batch_size=batch_size,
             input_column=input_column,
+            num_workers=num_workers,
         )
     if prompt_type == PromptType.document:
         return _create_document_dataloader(
@@ -482,6 +503,7 @@ def create_dataloader(
             task_metadata,
             input_column=input_column,
             batch_size=batch_size,
+            num_workers=num_workers,
         )
 
     if "image" in task_metadata.modalities:
@@ -489,6 +511,7 @@ def create_dataloader(
             dataset,
             image_column_name=input_column,
             batch_size=batch_size,
+            num_workers=num_workers,
         )
     if "audio" in task_metadata.modalities:
         return _create_audio_dataloader(
