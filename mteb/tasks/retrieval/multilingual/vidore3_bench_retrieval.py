@@ -1,5 +1,3 @@
-from datasets import load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -11,108 +9,6 @@ _LANGS = {
     "italian": ["ita-Latn"],
     "portuguese": ["por-Latn"],
 }
-
-
-def _load_data(
-    path: str,
-    splits: list[str],
-    langs: list | None = None,
-    revision: str | None = None,
-):
-    query_columns_to_remove = [
-        "query_id",
-        "query",
-        "query_types",
-        "query_format",
-        "content_type",
-        "raw_answers",
-        "raw_answers",
-        "query_generator",
-        "query_generation_pipeline",
-        "source_type",
-        "query_type_for_generation",
-        "answer",
-    ]
-
-    qrel_columns_to_remove = ["content_type", "bounding_boxes"]
-
-    corpus_columns_to_remove = [
-        "corpus_id",
-        "doc_id",
-        "markdown",
-        "page_number_in_doc",
-    ]
-
-    if langs is None:
-        corpus = {}
-        queries = {}
-        relevant_docs = {}
-    else:
-        corpus = {lang: {} for lang in langs}
-        queries = {lang: {} for lang in langs}
-        relevant_docs = {lang: {} for lang in langs}
-
-    for split in splits:
-        query_ds = load_dataset(
-            path,
-            "queries",
-            split=split,
-            revision=revision,
-        )
-        query_ds = query_ds.map(
-            lambda x: {
-                "id": f"query-{split}-{x['query_id']}",
-                "text": x["query"],
-            },
-            remove_columns=query_columns_to_remove,
-        )
-
-        corpus_ds = load_dataset(
-            path,
-            "corpus",
-            split=split,
-            revision=revision,
-        )
-        corpus_ds = corpus_ds.map(
-            lambda x: {
-                "id": f"corpus-{split}-{x['corpus_id']}",
-            },
-            remove_columns=corpus_columns_to_remove,
-        )
-
-        qrels_ds = load_dataset(
-            path,
-            "qrels",
-            split=split,
-            revision=revision,
-        )
-        qrels_ds = qrels_ds.remove_columns(qrel_columns_to_remove)
-
-        if langs is None:
-            queries[split] = query_ds
-            corpus[split] = corpus_ds
-            relevant_docs[split] = {}
-            for row in qrels_ds:
-                qid = f"query-{split}-{row['query_id']}"
-                did = f"corpus-{split}-{row['corpus_id']}"
-                if qid not in relevant_docs[split]:
-                    relevant_docs[split][qid] = {}
-                relevant_docs[split][qid][did] = int(row["score"])
-        else:
-            for lang in langs:
-                queries[lang][split] = query_ds.filter(lambda x: x["language"] == lang)
-
-                corpus[lang][split] = corpus_ds
-
-                relevant_docs[lang][split] = {}
-                for row in qrels_ds:
-                    qid = f"query-{split}-{row['query_id']}"
-                    did = f"corpus-{split}-{row['corpus_id']}"
-                    if qid not in relevant_docs[lang][split]:
-                        relevant_docs[lang][split][qid] = {}
-                    relevant_docs[lang][split][qid][did] = int(row["score"])
-
-    return corpus, queries, relevant_docs
 
 
 class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
@@ -137,18 +33,21 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""@misc{mace2025vidorev3,
-  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
-  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
-  year      = {2025},
-  month     = {November},
-  day       = {5},
+        bibtex_citation=r"""
+@misc{mace2025vidorev3,
+  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  day = {5},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
+  journal = {Hugging Face Blog},
+  month = {November},
   publisher = {Hugging Face},
-  journal   = {Hugging Face Blog},
-  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}""",
+  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year = {2025},
+}
+""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
+
 
 class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -171,16 +70,18 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""@misc{mace2025vidorev3,
-  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
-  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
-  year      = {2025},
-  month     = {November},
-  day       = {5},
+        bibtex_citation=r"""
+@misc{mace2025vidorev3,
+  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  day = {5},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
+  journal = {Hugging Face Blog},
+  month = {November},
   publisher = {Hugging Face},
-  journal   = {Hugging Face Blog},
-  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}""",
+  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year = {2025},
+}
+""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
@@ -189,7 +90,7 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
 class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3IndustrialRetrieval",
-        description="Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircrafts (fueling, mechanics...), intended for complex-document understanding tasks.",
+        description="Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks.",
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_industrial_mteb_format",
@@ -208,16 +109,18 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""@misc{mace2025vidorev3,
-  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
-  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
-  year      = {2025},
-  month     = {November},
-  day       = {5},
+        bibtex_citation=r"""
+@misc{mace2025vidorev3,
+  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  day = {5},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
+  journal = {Hugging Face Blog},
+  month = {November},
   publisher = {Hugging Face},
-  journal   = {Hugging Face Blog},
-  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}""",
+  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year = {2025},
+}
+""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
@@ -245,19 +148,22 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""@misc{mace2025vidorev3,
-  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
-  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
-  year      = {2025},
-  month     = {November},
-  day       = {5},
+        bibtex_citation=r"""
+@misc{mace2025vidorev3,
+  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  day = {5},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
+  journal = {Hugging Face Blog},
+  month = {November},
   publisher = {Hugging Face},
-  journal   = {Hugging Face Blog},
-  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}""",
+  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year = {2025},
+}
+""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
+
 
 class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -281,16 +187,18 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""@misc{mace2025vidorev3,
-  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
-  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
-  year      = {2025},
-  month     = {November},
-  day       = {5},
+        bibtex_citation=r"""
+@misc{mace2025vidorev3,
+  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  day = {5},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
+  journal = {Hugging Face Blog},
+  month = {November},
   publisher = {Hugging Face},
-  journal   = {Hugging Face Blog},
-  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}""",
+  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year = {2025},
+}
+""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
@@ -318,16 +226,18 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""@misc{mace2025vidorev3,
-  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
-  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
-  year      = {2025},
-  month     = {November},
-  day       = {5},
+        bibtex_citation=r"""
+@misc{mace2025vidorev3,
+  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  day = {5},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
+  journal = {Hugging Face Blog},
+  month = {November},
   publisher = {Hugging Face},
-  journal   = {Hugging Face Blog},
-  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}""",
+  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year = {2025},
+}
+""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
@@ -355,16 +265,18 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""@misc{mace2025vidorev3,
-  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
-  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
-  year      = {2025},
-  month     = {November},
-  day       = {5},
+        bibtex_citation=r"""
+@misc{mace2025vidorev3,
+  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  day = {5},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
+  journal = {Hugging Face Blog},
+  month = {November},
   publisher = {Hugging Face},
-  journal   = {Hugging Face Blog},
-  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}""",
+  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year = {2025},
+}
+""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
@@ -392,16 +304,18 @@ class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""@misc{mace2025vidorev3,
-  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
-  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
-  year      = {2025},
-  month     = {November},
-  day       = {5},
+        bibtex_citation=r"""
+@misc{mace2025vidorev3,
+  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  day = {5},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
+  journal = {Hugging Face Blog},
+  month = {November},
   publisher = {Hugging Face},
-  journal   = {Hugging Face Blog},
-  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}""",
+  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year = {2025},
+}
+""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
     )
@@ -413,8 +327,8 @@ class Vidore3NuclearRetrieval(AbsTaskRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
-            "path": "mysecretorga/energy_nuclear_plant_en",
-            "revision": "ce6c1e966eb26d094ce206897dd87452fed1fdaa",
+            "path": "mteb-private/Vidore3NuclearRetrieval",
+            "revision": "a463fc67fefc01152153101e88a32d5f9515e3e3",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -429,32 +343,21 @@ class Vidore3NuclearRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""@misc{mace2025vidorev3,
-  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
-  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
-  year      = {2025},
-  month     = {November},
-  day       = {5},
+        bibtex_citation=r"""
+@misc{mace2025vidorev3,
+  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  day = {5},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
+  journal = {Hugging Face Blog},
+  month = {November},
   publisher = {Hugging Face},
-  journal   = {Hugging Face Blog},
-  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}""",
+  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year = {2025},
+}
+""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
 
 
 class Vidore3TelecomRetrieval(AbsTaskRetrieval):
@@ -463,8 +366,8 @@ class Vidore3TelecomRetrieval(AbsTaskRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
-            "path": "mysecretorga/telecom_internet_protocols",
-            "revision": "1dbb47240bd521108cf82b58a885555cce4c5612",
+            "path": "mteb-private/Vidore3TelecomRetrieval",
+            "revision": "a54635a274ef2835721b7cbe3eb27483b9ec964b",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -479,29 +382,18 @@ class Vidore3TelecomRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation=r"""@misc{mace2025vidorev3,
-  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
-  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
-  year      = {2025},
-  month     = {November},
-  day       = {5},
+        bibtex_citation=r"""
+@misc{mace2025vidorev3,
+  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  day = {5},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
+  journal = {Hugging Face Blog},
+  month = {November},
   publisher = {Hugging Face},
-  journal   = {Hugging Face Blog},
-  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}""",
+  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year = {2025},
+}
+""",
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            langs=["english", "french", "spanish", "german", "italian", "portuguese"],
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
