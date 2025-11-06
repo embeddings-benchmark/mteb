@@ -226,16 +226,16 @@ def _transform_image_to_rgb(
 
 
 def _convert_images_to_rgb(
-    example: dict[str, Any],
+    examples: dict[str, list[Any]],
     image_col_name: str = "image",
     transform: Callable[[Any], Any] | None = None,
-) -> dict[str, Any]:
-    if image_col_name not in example:
-        return example
-    example[image_col_name] = _transform_image_to_rgb(
-        example[image_col_name], transform
-    )
-    return example
+) -> dict[str, list[Any]]:
+    if image_col_name not in examples:
+        return examples
+    examples[image_col_name] = [
+        _transform_image_to_rgb(img, transform) for img in examples[image_col_name]
+    ]
+    return examples
 
 
 def _prepare_image_dataset(
@@ -244,17 +244,17 @@ def _prepare_image_dataset(
     transform: Callable[[Any], Any] | None = None,
 ) -> Dataset:
     """Prepare the image dataset by converting images to RGB and applying transformations."""
-    # If the dataset uses a different column name for images, rename it to "image".
     if (
         image_column_name
         and image_column_name in dataset.column_names
         and "image" not in dataset.column_names
     ):
         dataset = dataset.rename_column(image_column_name, "image")
-    # Map the conversion function over the dataset.
     return dataset.map(
         _convert_images_to_rgb,
         fn_kwargs={"image_col_name": "image", "transform": transform},
+        batched=True,
+        batch_size=1_000,
         desc="Converting images to RGB",
     )
 
