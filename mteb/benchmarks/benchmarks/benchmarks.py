@@ -2232,16 +2232,18 @@ VIDORE_V3 = Benchmark(
     ),
     description="Retrieve associated pages according to questions.",
     reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
-    citation=r"""@misc{mace2025vidorev3,
-  author    = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
-  title     = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
-  year      = {2025},
-  month     = {November},
-  day       = {5},
+    citation=r"""
+@misc{mace2025vidorev3,
+  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  day = {5},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
+  journal = {Hugging Face Blog},
+  month = {November},
   publisher = {Hugging Face},
-  journal   = {Hugging Face Blog},
-  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}}
-}""",
+  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year = {2025},
+}
+""",
 )
 
 VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
