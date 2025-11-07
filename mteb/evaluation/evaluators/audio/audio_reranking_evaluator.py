@@ -4,7 +4,6 @@ from typing import Any
 import numpy as np
 import torch
 import tqdm
-from datasets.features._torchcodec import AudioDecoder
 from sklearn.metrics import average_precision_score
 
 from mteb._create_dataloaders import _create_audio_dataloader_from_audio_list
@@ -49,6 +48,8 @@ class AudioRerankingEvaluator(Evaluator):
         transform=None,
         **kwargs,
     ):
+        from datasets.features._torchcodec import AudioDecoder
+
         super().__init__(**kwargs)
         if limit:
             samples = samples.train_test_split(limit)["test"]
