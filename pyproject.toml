@@ -59,7 +59,7 @@ mteb = "mteb.cli:main"
 [project.optional-dependencies]
 image = ["torchvision>0.2.1"]
 audio = [
-    "datasets[audio]>4",
+    "datasets[audio]",
 ]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
@@ -101,9 +101,6 @@ speechbrain = ["speechbrain>=0.5.12"]
 muq = ["muq==0.1.0"]
 wav2clip = ["wav2clip==0.1.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
-
-# [tool.uv.pip]
-# torch-backend = "auto"
 
 [dependency-groups]
 lint = [
