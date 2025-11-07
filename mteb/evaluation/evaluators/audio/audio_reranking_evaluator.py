@@ -4,6 +4,7 @@ from typing import Any
 import numpy as np
 import torch
 import tqdm
+from datasets.features._torchcodec import AudioDecoder
 from sklearn.metrics import average_precision_score
 
 from mteb._create_dataloaders import _create_audio_dataloader_from_audio_list
@@ -70,6 +71,9 @@ class AudioRerankingEvaluator(Evaluator):
         filtered_samples = []
         for sample in self.samples:
             if (
+                isinstance(sample[self.positive_column_name], AudioDecoder)
+                and isinstance(sample[self.negative_column_name], AudioDecoder)
+            ) or (
                 len(sample[self.positive_column_name]) > 0
                 and len(sample[self.negative_column_name]) > 0
             ):

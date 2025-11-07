@@ -83,8 +83,10 @@ class AudioPairClassificationEvaluator(Evaluator):
             encode_kwargs["batch_size"] = 32
 
         audios = set()
-        for audio in self.audio1 + self.audio2:
-            audios.add(tuple(audio))
+        for audio in self.audio1:
+            audios.add(tuple(audio["array"].tolist()))
+        for audio in self.audio2:
+            audios.add(tuple(audio["array"].tolist()))
         audios = list(audios)
 
         total_audios = len(self.audio1) + len(self.audio2)
@@ -108,8 +110,12 @@ class AudioPairClassificationEvaluator(Evaluator):
             tuple(audio["array"].tolist()): embedding
             for audio, embedding in zip(audios, embeddings)
         }
-        embeddings1 = np.array([emb_dict[tuple(audio)] for audio in self.audio1])
-        embeddings2 = np.array([emb_dict[tuple(audio)] for audio in self.audio2])
+        embeddings1 = np.array(
+            [emb_dict[tuple(audio["array"])] for audio in self.audio1]
+        )
+        embeddings2 = np.array(
+            [emb_dict[tuple(audio["array"])] for audio in self.audio2]
+        )
 
         logger.info("Computing similarity distances.")
         cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)

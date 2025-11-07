@@ -60,9 +60,6 @@ mteb = "mteb.cli:main"
 image = ["torchvision>0.2.1"]
 audio = [
     "datasets[audio]>4",
-    "torchcodec~=0.8.1",
-    # tochcodec compatibility table https://github.com/meta-pytorch/torchcodec?tab=readme-ov-file#installing-cpu-only-torchcodec
-    "torch~=2.9.0",
 ]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
@@ -105,9 +102,8 @@ muq = ["muq==0.1.0"]
 wav2clip = ["wav2clip==0.1.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 
-# for torchcodec
-[tool.uv.pip]
-torch-backend = "auto"
+# [tool.uv.pip]
+# torch-backend = "auto"
 
 [dependency-groups]
 lint = [
