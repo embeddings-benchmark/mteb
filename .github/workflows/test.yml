@@ -42,17 +42,15 @@ jobs:
         run: |
           make install-for-tests
 
-#      - name: Setup FFmpeg
-#        uses: AnimMouse/setup-ffmpeg@v1
-#        with:
-#          version: 7.1
+      - name: Setup FFmpeg
+        uses: FedericoCarboni/setup-ffmpeg@v3
+        with:
+          ffmpeg-version: 7.1
 
       - name: Run tests
         if: runner.os != 'Windows'
         shell: bash
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
           make test
 
       - name: Run tests on Windows
