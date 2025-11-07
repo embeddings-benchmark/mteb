@@ -36,4 +36,7 @@ class LegalQANLRetrieval(AbsTaskRetrieval):
   year = {2024},
 }
 """,
+        prompt={
+            "query": "Gegeven een juridische vraag, haal documenten op die kunnen helpen bij het beantwoorden van de vraag"
+        },
     )

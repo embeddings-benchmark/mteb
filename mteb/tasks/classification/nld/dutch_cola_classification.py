@@ -35,4 +35,7 @@ class DutchColaClassification(AbsTaskClassification):
   year = {2024},
 }
 """,
+        prompt={
+            "query": "Classificeer de gegeven zin als grammaticaal aanvaardbaar of niet aanvaardbaar"
+        },
     )
