@@ -6,7 +6,6 @@ _sci_fact_nl_metadata = dict(
         "path": "clips/beir-nl-scifact",
         "revision": "856d8dfc294b138856bbf3042450e3782321e44e",
     },
-    description="SciFactNL verifies scientific claims in Dutch using evidence from the research literature containing scientific paper abstracts.",
     reference="https://huggingface.co/datasets/clips/beir-nl-scifact",
     type="Retrieval",
     category="t2t",
@@ -38,6 +37,8 @@ _sci_fact_nl_metadata = dict(
 class SciFactNL(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SciFact-NL",
+        description="SciFactNL verifies scientific claims in Dutch using evidence from the research literature "
+        "containing scientific paper abstracts.",
         adapted_from=["SciFact"],
         **_sci_fact_nl_metadata,
     )
@@ -46,6 +47,8 @@ class SciFactNL(AbsTaskRetrieval):
 class SciFactNLv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SciFact-NL.v2",
+        description="SciFactNL verifies scientific claims in Dutch using evidence from the research literature "
+        "containing scientific paper abstracts. This version adds a Dutch prompt to the dataset.",
         adapted_from=["SciFact-NL"],
         prompt={
             "query": "Given a scientific claim, retrieve documents that support or refute the claim"

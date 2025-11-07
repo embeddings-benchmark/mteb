@@ -1,10 +1,10 @@
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
+#
+# This
+# version
 _argu_ana_nl_metadata = dict(
-    description="ArguAna involves the task of retrieval of the best counterargument to an "
-    "argument. ArguAna-NL is "
-    "a Dutch translation.",
     reference="https://huggingface.co/datasets/clips/beir-nl-arguana",
     dataset={
         "path": "clips/beir-nl-arguana",
@@ -42,6 +42,8 @@ class ArguAnaNL(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="ArguAna-NL",
+        description="ArguAna involves the task of retrieval of the best counterargument to an argument. ArguAna-NL is "
+        "a Dutch translation.",
         adapted_from=["ArguAna"],
         **_argu_ana_nl_metadata,
     )
@@ -52,6 +54,8 @@ class ArguAnaNLv2(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="ArguAna-NL.v2",
+        description="ArguAna involves the task of retrieval of the best counterargument to an argument. ArguAna-NL is "
+        "a Dutch translation. This version adds a Dutch prompt to the dataset.",
         prompt={
             "query": "Gegeven een bewering, vind documenten die de bewering weerleggen"
         },

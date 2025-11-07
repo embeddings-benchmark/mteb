@@ -6,10 +6,6 @@ _scidocsnl_metadata = dict(
         "path": "clips/beir-nl-scidocs",
         "revision": "4e018aa220029f9d1bd5a31de3650e322e32ea38",
     },
-    description=(
-        "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation"
-        + " prediction, to document classification and recommendation. SciDocs-NL is a Dutch translation."
-    ),
     reference="https://huggingface.co/datasets/clips/beir-nl-scidocs",
     type="Retrieval",
     category="t2t",
@@ -41,6 +37,9 @@ _scidocsnl_metadata = dict(
 class SCIDOCSNL(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SCIDOCS-NL",
+        description="SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from "
+        "citation prediction, to document classification and recommendation. SciDocs-NL is a Dutch "
+        "translation.",
         adapted_from=["SCIDOCS"],
         **_scidocsnl_metadata,
     )
@@ -49,6 +48,9 @@ class SCIDOCSNL(AbsTaskRetrieval):
 class SCIDOCSNLv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SCIDOCS-NL.v2",
+        description="SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from "
+        "citation prediction, to document classification and recommendation. SciDocs-NL is a Dutch "
+        "translation. This version adds a Dutch prompt to the dataset.",
         adapted_from=["SCIDOCS-NL"],
         **_scidocsnl_metadata,
         prompt={

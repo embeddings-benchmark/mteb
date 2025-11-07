@@ -6,8 +6,6 @@ _nf_corpus_metadata = dict(
         "path": "clips/beir-nl-nfcorpus",
         "revision": "942953e674fd0f619ff89897abb806dc3df5dd39",
     },
-    description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval. NFCorpus-NL is "
-    "a Dutch translation.",
     reference="https://huggingface.co/datasets/clips/beir-nl-nfcorpus",
     type="Retrieval",
     category="t2t",
@@ -38,13 +36,19 @@ _nf_corpus_metadata = dict(
 
 class NFCorpusNL(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="NFCorpus-NL", adapted_from=["NFCorpus"], **_nf_corpus_metadata
+        name="NFCorpus-NL",
+        description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval. NFCorpus-NL is "
+        "a Dutch translation.",
+        adapted_from=["NFCorpus"],
+        **_nf_corpus_metadata,
     )
 
 
 class NFCorpusNLv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NFCorpus-NL.v2",
+        description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval. NFCorpus-NL is "
+        "a Dutch translation. This version adds a Dutch prompt to the dataset.",
         adapted_from=["NFCorpus-NL"],
         prompt={
             "query": "Gegeven een vraag, haal relevante documenten op die de vraag het beste beantwoorden"
