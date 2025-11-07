@@ -48,10 +48,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg
+          ffmpeg -version
 
       - name: Setup Windows FFmpeg
         if: runner.os == 'Windows'
-        run: choco install ffmpeg --version=7.1.1 -y
+        run: |
+          choco install ffmpeg --version=7.1.1 -y
+          ffmpeg -version
         shell: powershell
 
       - name: Run tests
