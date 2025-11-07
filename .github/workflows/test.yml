@@ -42,10 +42,17 @@ jobs:
         run: |
           make install-for-tests
 
-      - name: Setup FFmpeg
-        uses: FedericoCarboni/setup-ffmpeg@v3
-        with:
-          ffmpeg-version: 7.1
+      - name: Setup Ubuntu FFmpeg
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Setup Windows FFmpeg
+        if: runner.os == 'Windows'
+        run: choco install ffmpeg -y
+        shell: powershell
 
       - name: Run tests
         if: runner.os != 'Windows'
