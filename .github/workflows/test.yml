@@ -51,7 +51,7 @@ jobs:
 
       - name: Setup Windows FFmpeg
         if: runner.os == 'Windows'
-        run: choco install ffmpeg -y
+        run: choco install ffmpeg --version=7.1.1 -y
         shell: powershell
 
       - name: Run tests
