@@ -14,7 +14,7 @@ _LANGS = {
 class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceEnRetrieval",
-        description="Retrieve associated pages according to questions. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks.",
+        description="Retrieve associated pages according to questions. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.",
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_finance_en_mteb_format",
@@ -32,7 +32,7 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],
-        sample_creation="found",
+        sample_creation="created and machine-translated",
         bibtex_citation=r"""
 @misc{mace2025vidorev3,
   author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
@@ -52,7 +52,7 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
 class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceFrRetrieval",
-        description="Retrieve associated pages according to questions. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks.",
+        description="Retrieve associated pages according to questions. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.",
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_finance_fr_mteb_format",
@@ -69,7 +69,7 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="found",
+        sample_creation="created and machine-translated",
         bibtex_citation=r"""
 @misc{mace2025vidorev3,
   author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
@@ -90,7 +90,7 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
 class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3IndustrialRetrieval",
-        description="Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks.",
+        description="Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.",
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_industrial_mteb_format",
@@ -108,7 +108,7 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],
-        sample_creation="found",
+        sample_creation="created and machine-translated",
         bibtex_citation=r"""
 @misc{mace2025vidorev3,
   author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
@@ -129,7 +129,7 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
 class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PharmaceuticalsRetrieval",
-        description="Retrieve associated pages according to questions. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks.",
+        description="Retrieve associated pages according to questions. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.",
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_pharmaceuticals_mteb_format",
@@ -147,7 +147,7 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],
-        sample_creation="found",
+        sample_creation="created and machine-translated",
         bibtex_citation=r"""
 @misc{mace2025vidorev3,
   author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
@@ -168,7 +168,7 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
 class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3ComputerScienceRetrieval",
-        description="Retrieve associated pages according to questions. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks.",
+        description="Retrieve associated pages according to questions. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.",
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_computer_science_mteb_format",
@@ -186,7 +186,7 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],
-        sample_creation="found",
+        sample_creation="created and machine-translated",
         bibtex_citation=r"""
 @misc{mace2025vidorev3,
   author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
@@ -207,7 +207,7 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
 class Vidore3HrRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3HrRetrieval",
-        description="Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks.",
+        description="Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.",
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_hr_mteb_format",
@@ -225,7 +225,7 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],
-        sample_creation="found",
+        sample_creation="created and machine-translated",
         bibtex_citation=r"""
 @misc{mace2025vidorev3,
   author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
@@ -246,7 +246,7 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
 class Vidore3EnergyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3EnergyRetrieval",
-        description="Retrieve associated pages according to questions. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks.",
+        description="Retrieve associated pages according to questions. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.",
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_energy_mteb_format",
@@ -264,7 +264,7 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],
-        sample_creation="found",
+        sample_creation="created and machine-translated",
         bibtex_citation=r"""
 @misc{mace2025vidorev3,
   author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
@@ -285,7 +285,7 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
 class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PhysicsRetrieval",
-        description="Retrieve associated pages according to questions. This dataset, Physics, is a corpus of course slides on bachelor level physics lectures, intended for complex visual understanding tasks.",
+        description="Retrieve associated pages according to questions. This dataset, Physics, is a corpus of course slides on french bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.",
         reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
         dataset={
             "path": "vidore/vidore_v3_physics_mteb_format",
@@ -303,7 +303,7 @@ class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],
-        sample_creation="found",
+        sample_creation="created and machine-translated",
         bibtex_citation=r"""
 @misc{mace2025vidorev3,
   author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
@@ -342,7 +342,7 @@ class Vidore3NuclearRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],
-        sample_creation="found",
+        sample_creation="created and machine-translated",
         bibtex_citation=r"""
 @misc{mace2025vidorev3,
   author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
@@ -381,7 +381,7 @@ class Vidore3TelecomRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],
-        sample_creation="found",
+        sample_creation="created and machine-translated",
         bibtex_citation=r"""
 @misc{mace2025vidorev3,
   author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},

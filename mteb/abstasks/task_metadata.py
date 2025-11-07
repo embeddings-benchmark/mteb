@@ -107,6 +107,7 @@ The domains follow the categories used in the [Universal Dependencies project](h
 SampleCreationMethod = Literal[
     "found",
     "created",
+    "created and machine-translated",
     "human-translated and localized",
     "human-translated",
     "machine-translated",
