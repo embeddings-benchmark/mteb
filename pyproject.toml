@@ -60,6 +60,7 @@ mteb = "mteb.cli:main"
 image = ["torchvision>0.2.1"]
 audio = [
     "datasets[audio]",
+    "torchaudio>=2.6.0",
 ]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
