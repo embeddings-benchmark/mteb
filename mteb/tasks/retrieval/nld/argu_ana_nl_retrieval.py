@@ -1,9 +1,6 @@
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-#
-# This
-# version
 _argu_ana_nl_metadata = dict(
     reference="https://huggingface.co/datasets/clips/beir-nl-arguana",
     dataset={
