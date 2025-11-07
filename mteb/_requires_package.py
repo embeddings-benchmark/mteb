@@ -76,3 +76,8 @@ def requires_audio_dependencies() -> None:
             "You are trying to running the audio subset of mteb without having installed the required dependencies (`torchaudio`). "
             + "You can install the required dependencies using `pip install 'mteb[audio]'` to install the required dependencies."
         )
+    if not _is_package_available("torchcodec"):
+        raise ImportError(
+            "You are trying to running the audio subset of mteb without having installed the required dependencies (`torchcodec`). "
+            + "You can install the required dependencies using `pip install 'mteb[audio]'` to install the required dependencies."
+        )

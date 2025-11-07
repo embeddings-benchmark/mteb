@@ -5,7 +5,6 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
-from transformers import CLIPModel, CLIPProcessor
 
 from mteb import TaskMetadata
 from mteb._requires_package import requires_package
@@ -25,6 +24,7 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         **kwargs: Any,
     ):
         requires_package(self, "wav2clip", "pip install 'mteb[wav2clip]'")
+        from transformers import CLIPModel, CLIPProcessor
         from wav2clip import embed_audio, get_model
 
         self.embed_audio = embed_audio

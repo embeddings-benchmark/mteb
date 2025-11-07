@@ -5,7 +5,6 @@ from typing import Any
 import torch
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
-from transformers import AutoProcessor, EncodecModel
 
 from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies
@@ -27,6 +26,8 @@ class EncodecWrapper(AbsEncoder):
         **kwargs: Any,
     ):
         requires_audio_dependencies()
+        from transformers import AutoProcessor, EncodecModel
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds

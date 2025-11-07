@@ -4,7 +4,6 @@ from typing import Any
 import torch
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
-from transformers import UniSpeechSatForCTC, Wav2Vec2FeatureExtractor
 
 from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies
@@ -23,6 +22,8 @@ class UniSpeechWrapper(AbsEncoder):
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
+        from transformers import UniSpeechSatForCTC, Wav2Vec2FeatureExtractor
+
         requires_audio_dependencies()
         self.model_name = model_name
         self.device = device

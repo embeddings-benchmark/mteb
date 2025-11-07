@@ -2,8 +2,6 @@ from collections.abc import Callable
 from typing import Any
 
 import torch
-from sentence_transformers import SentenceTransformer
-from sentence_transformers.models import Pooling, Transformer
 
 from mteb.models import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
@@ -35,6 +33,9 @@ class BMRetrieverWrapper(InstructSentenceTransformerModel):
         prompts_dict: dict[str, str] | None = None,
         **kwargs: Any,
     ):
+        from sentence_transformers import SentenceTransformer
+        from sentence_transformers.models import Pooling, Transformer
+
         self.model_name = model_name
         self.instruction_template = instruction_template
         self.apply_instruction_to_passages = apply_instruction_to_passages

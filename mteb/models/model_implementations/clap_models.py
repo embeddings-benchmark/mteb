@@ -5,7 +5,6 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
-from transformers import ClapModel, ClapProcessor
 
 from mteb import TaskMetadata
 from mteb.models import ModelMeta
@@ -22,6 +21,8 @@ class ClapZeroShotWrapper(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
+        from transformers import ClapModel, ClapProcessor
+
         self.model_name = model_name
         self.device = device
         self.model = ClapModel.from_pretrained(model_name, revision=revision).to(

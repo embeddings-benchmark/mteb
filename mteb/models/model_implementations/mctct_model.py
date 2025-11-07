@@ -4,7 +4,6 @@ from typing import Any
 import torch
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
-from transformers import MCTCTFeatureExtractor, MCTCTModel
 
 from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies
@@ -85,6 +84,8 @@ class MCTCTWrapper(AbsEncoder):
         **kwargs: Any,
     ):
         requires_audio_dependencies()
+        from transformers import MCTCTFeatureExtractor, MCTCTModel
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
