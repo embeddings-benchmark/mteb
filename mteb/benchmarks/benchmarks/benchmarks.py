@@ -1,4 +1,9 @@
-from mteb.benchmarks.benchmark import Benchmark, HUMEBenchmark, MIEBBenchmark
+from mteb.benchmarks.benchmark import (
+    Benchmark,
+    HUMEBenchmark,
+    MIEBBenchmark,
+    Vidore3Benchmark,
+)
 from mteb.get_tasks import MTEBTasks, get_task, get_tasks
 
 MMTEB_CITATION = r"""@article{enevoldsen2025mmtebmassivemultilingualtext,
@@ -2214,7 +2219,7 @@ VIDORE_V2 = Benchmark(
 """,
 )
 
-VIDORE_V3 = Benchmark(
+VIDORE_V3 = Vidore3Benchmark(
     name="ViDoRe(v3)",
     display_name="ViDoRe V3",
     icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
