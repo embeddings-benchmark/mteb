@@ -1,13 +1,20 @@
+from .air_dialogue import AirDialogueClassification
 from .amazon_polarity_classification import (
     AmazonPolarityClassification,
     AmazonPolarityClassificationV2,
 )
 from .arxiv_classification import ArxivClassification, ArxivClassificationV2
+from .atis_intent_classification import AtisIntentClassification
 from .banking77_classification import Banking77Classification, Banking77ClassificationV2
 from .birdsnap_classification import BirdsnapClassification
 from .caltech101_classification import Caltech101Classification
 from .cifar import CIFAR10Classification, CIFAR100Classification
+from .clinc_classification import ClincIntentClassification
 from .country211_classification import Country211Classification
+from .daily_dialog_classification import (
+    DailyDialogClassificationAct,
+    DailyDialogClassificationEmotion,
+)
 from .dbpedia_classification import DBpediaClassification, DBpediaClassificationV2
 from .dtd_classification import DTDClassification
 from .emotion_classification import EmotionClassification, EmotionClassificationV2
@@ -28,6 +35,7 @@ from .hume_toxic_conversations_classification import (
 from .hume_tweet_sentiment_extraction_classification import (
     HUMETweetSentimentExtractionClassification,
 )
+from .hwu_intent_classification import HWUIntentClassification
 from .imagenet1k import Imagenet1kClassification
 from .imdb_classification import ImdbClassification, ImdbClassificationV2
 from .legal_bench_classification import (
@@ -191,6 +199,7 @@ from .tweet_topic_single_classification import (
     TweetTopicSingleClassificationV2,
 )
 from .ucf101_classification import UCF101Classification
+from .vira_intent_classification import ViraIntentClassification
 from .wikipedia_bio_met_chem_classification import (
     WikipediaBioMetChemClassification,
     WikipediaBioMetChemClassificationV2,
@@ -249,10 +258,12 @@ from .yelp_review_full_classification import (
 )
 
 __all__ = [
+    "AirDialogueClassification",
     "AmazonPolarityClassification",
     "AmazonPolarityClassificationV2",
     "ArxivClassification",
     "ArxivClassificationV2",
+    "AtisIntentClassification",
     "Banking77Classification",
     "Banking77ClassificationV2",
     "BirdsnapClassification",
@@ -298,6 +309,7 @@ __all__ = [
     "CUADWarrantyDurationLegalBenchClassification",
     "Caltech101Classification",
     "CanadaTaxCourtOutcomesLegalBenchClassification",
+    "ClincIntentClassification",
     "ContractNLIConfidentialityOfAgreementLegalBenchClassification",
     "ContractNLIExplicitIdentificationLegalBenchClassification",
     "ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification",
@@ -317,6 +329,8 @@ __all__ = [
     "DBpediaClassification",
     "DBpediaClassificationV2",
     "DTDClassification",
+    "DailyDialogClassificationAct",
+    "DailyDialogClassificationEmotion",
     "DefinitionClassificationLegalBenchClassification",
     "Diversity1LegalBenchClassification",
     "Diversity2LegalBenchClassification",
@@ -339,6 +353,7 @@ __all__ = [
     "HUMEEmotionClassification",
     "HUMEToxicConversationsClassification",
     "HUMETweetSentimentExtractionClassification",
+    "HWUIntentClassification",
     "Imagenet1kClassification",
     "ImdbClassification",
     "ImdbClassificationV2",
@@ -427,6 +442,7 @@ __all__ = [
     "UCCVCommonLawLegalBenchClassification",
     "UCF101Classification",
     "UnfairTOSLegalBenchClassification",
+    "ViraIntentClassification",
     "WikipediaBioMetChemClassification",
     "WikipediaBioMetChemClassificationV2",
     "WikipediaBiolumNeurochemClassification",

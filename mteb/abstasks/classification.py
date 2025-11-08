@@ -164,8 +164,6 @@ class AbsTaskClassification(AbsTask):
             else:
                 ds = self.dataset[hf_subset]
 
-            if isinstance(ds, Dataset | DatasetDict):
-                ds = ds.select_columns([self.label_column_name, self.input_column_name])
             scores[hf_subset] = self._evaluate_subset(
                 model,
                 ds,
@@ -190,6 +188,11 @@ class AbsTaskClassification(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
+        if isinstance(data_split, Dataset | DatasetDict):
+            data_split = data_split.select_columns(
+                [self.label_column_name, self.input_column_name]
+            )
+
         train_split = data_split[self.train_split]
         eval_split = data_split[hf_split]
 

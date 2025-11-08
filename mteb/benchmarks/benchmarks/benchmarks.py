@@ -2463,3 +2463,38 @@ HUME = HUMEBenchmark(
     citation=None,
     contacts=["AdnanElAssadi56", "KennethEnevoldsen", "isaac-chung", "Samoed"],
 )
+
+DIALOG_MTEB_ENG_V1 = Benchmark(
+    name="DialogMTEB(v1, eng)",
+    display_name="Dialog MTEB",
+    description="",
+    reference="null",
+    citation=None,
+    contacts=["Samoed"],
+    tasks=get_tasks(
+        tasks=[
+            "AtisIntentClassification",
+            "Banking77Classification.v2",
+            "ViraIntentClassification",
+            "ClincIntentClassification",
+            "HWUIntentClassification",
+            "MTOPIntentClassification",
+            "MassiveIntentClassification",
+            # "XRiSAWOZ",
+            "XRisaWozPC",
+            "XRisaWozAttraction",
+            "XRisaWozCar",
+            "XRisaWozClass",
+            "XRisaWozHospital",
+            "XRisaWozMovie",
+            "XRisaWozTrain",
+            "XRisaWozTransport",
+            "DailyDialogClassification",
+            "StatcanDialogueDatasetRetrieval",
+            "WebLINXCandidatesReranking",
+            "FaithDial",
+            "MultiWoz21",
+            "AirDialogueClassification",
+        ]
+    ),
+)
