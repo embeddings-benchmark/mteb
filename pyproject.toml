@@ -377,6 +377,13 @@ extend-exclude = [
     "mteb/tasks/reranking/eng/built_bench_reranking.py",  # prompt:   descriptions from buit asset
     "mteb/tasks/retrieval/eng/built_bench_retrieval.py",
     "mteb/tasks/retrieval/eng/llava_it2t_retrieval.py",
+    # dutch prompts
+    "mteb/tasks/classification/nld/",
+    "mteb/tasks/clustering/nld/",
+    "mteb/tasks/multilabel_classification/nld/",
+    "mteb/tasks/pair_classification/nld/",
+    "mteb/tasks/sts/nld/",
+    "mteb/tasks/retrieval/nld/",
 ]
 
 [tool.typos.type.py]
