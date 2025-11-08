@@ -11,7 +11,7 @@ from .caltech101_classification import Caltech101Classification
 from .cifar import CIFAR10Classification, CIFAR100Classification
 from .clinc_classification import ClincIntentClassification
 from .country211_classification import Country211Classification
-from .daily_dialog_classification import DailyDialogClassificationAct
+from .daily_dialog_classification import DailyDialogClassificationAct, DailyDialogClassificationEmotion
 from .dbpedia_classification import DBpediaClassification, DBpediaClassificationV2
 from .dtd_classification import DTDClassification
 from .emotion_classification import EmotionClassification, EmotionClassificationV2
@@ -352,6 +352,7 @@ __all__ = [
     "HWUIntentClassification",
     "Imagenet1kClassification",
     "ImdbClassification",
+    "DailyDialogClassificationEmotion",
     "ImdbClassificationV2",
     "InsurancePolicyInterpretationLegalBenchClassification",
     "InternationalCitizenshipQuestionsLegalBenchClassification",

@@ -1,7 +1,12 @@
-from .presto import PrestoClassification
-from .xrisawoz import XRisaWozPC
+from .xrisawoz import XRisaWozPC, XRisaWozAttraction, XRisaWozCar, XRisaWozTransport, XRisaWozClass, XRisaWozMovie, XRisaWozTrain, XRisaWozHospital
 
 __all__ = [
-    "PrestoClassification",
     "XRisaWozPC",
+    "XRisaWozAttraction",
+    "XRisaWozCar",
+    "XRisaWozTransport",
+    "XRisaWozClass",
+    "XRisaWozMovie",
+    "XRisaWozTrain",
+    "XRisaWozHospital",
 ]
