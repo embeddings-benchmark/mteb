@@ -19,7 +19,7 @@ class RuAtisIntentClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
         main_score="accuracy",
-        date=("01-01-1990", "01-01-1990"),
+        date=("1990-01-01", "1990-01-01"),
         domains=["Spoken"],
         task_subtypes=["Intent classification"],
         license="not specified",

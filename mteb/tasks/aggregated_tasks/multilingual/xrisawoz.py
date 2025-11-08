@@ -1,6 +1,15 @@
 from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
-from mteb.tasks.dialog_state_tracking import XRisaWozPC, XRisaWozAttraction, XRisaWozCar, XRisaWozTransport, XRisaWozClass, XRisaWozMovie, XRisaWozTrain, XRisaWozHospital
+from mteb.tasks.dialog_state_tracking import (
+    XRisaWozAttraction,
+    XRisaWozCar,
+    XRisaWozClass,
+    XRisaWozHospital,
+    XRisaWozMovie,
+    XRisaWozPC,
+    XRisaWozTrain,
+    XRisaWozTransport,
+)
 
 
 class XRisaWoz(AbsTaskAggregate):

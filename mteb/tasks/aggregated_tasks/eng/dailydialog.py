@@ -1,5 +1,8 @@
 from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
-from mteb.tasks import DailyDialogClassificationAct, DailyDialogClassificationEmotion
+from mteb.tasks.classification.eng import (
+    DailyDialogClassificationAct,
+    DailyDialogClassificationEmotion,
+)
 
 
 class DailyDialogClassification(AbsTaskAggregate):
@@ -8,7 +11,8 @@ class DailyDialogClassification(AbsTaskAggregate):
         description="",
         reference="",
         tasks=[
-            DailyDialogClassificationAct(), DailyDialogClassificationEmotion(),
+            DailyDialogClassificationAct(),
+            DailyDialogClassificationEmotion(),
         ],
         category="t2c",
         license="not specified",

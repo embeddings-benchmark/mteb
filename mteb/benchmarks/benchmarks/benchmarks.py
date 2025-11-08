@@ -2464,7 +2464,7 @@ HUME = HUMEBenchmark(
     contacts=["AdnanElAssadi56", "KennethEnevoldsen", "isaac-chung", "Samoed"],
 )
 
-dialog_mteb = Benchmark(
+DIALOG_MTEB_ENG_V1 = Benchmark(
     name="DialogMTEB(v1, eng)",
     display_name="Dialog MTEB",
     description="",
@@ -2484,7 +2484,7 @@ dialog_mteb = Benchmark(
             "DailyDialogClassification",
             "StatcanDialogueDatasetRetrieval",
             "WebLINXCandidatesReranking",
-            "FaithDialRetrieval",
+            "FaithDial",
             "MultiWoz21",
             "AirDialogueClassification",
         ]

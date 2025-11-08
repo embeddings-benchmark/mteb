@@ -19,7 +19,7 @@ class RuHWUIntentClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
         main_score="f1",
-        date=("26-03-2019", "26-03-2019"),
+        date=("2019-03-26", "2019-03-26"),
         domains=[],
         task_subtypes=["Intent classification"],
         license="not specified",

@@ -19,7 +19,7 @@ class RuViraIntentClassification(AbsTaskClassification):
         eval_splits=["val", "test"],
         eval_langs=["rus-Cyrl"],
         main_score="accuracy",
-        date=("01-01-2020", "06-07-2022"),
+        date=("2020-01-01", "2022-07-06"),
         domains=["Medical"],
         task_subtypes=["Intent classification"],
         license="not specified",

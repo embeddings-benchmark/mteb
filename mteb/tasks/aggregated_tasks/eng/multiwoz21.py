@@ -1,7 +1,11 @@
 from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
-from mteb.tasks import DailyDialogClassificationAct, DailyDialogClassificationEmotion
-from mteb.tasks.dialog_state_tracking import MultiWoz21Attraction, MultiWoz21Hospital, MultiWoz21Hotel, \
-    MultiWoz21Restaurant, MultiWoz21Train
+from mteb.tasks.dialog_state_tracking.eng.multi_woz import (
+    MultiWoz21Attraction,
+    MultiWoz21Hospital,
+    MultiWoz21Hotel,
+    MultiWoz21Restaurant,
+    MultiWoz21Train,
+)
 
 
 class MultiWoz21(AbsTaskAggregate):
