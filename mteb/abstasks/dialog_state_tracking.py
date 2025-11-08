@@ -3,14 +3,15 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 from collections.abc import Sequence
+from pathlib import Path
 from typing import Any
 
 import numpy as np
 from datasets import Dataset, DatasetDict
 from tqdm import tqdm
 
-from mteb.models.model_implementations.gme_v_models import Encoder
-from mteb.types import HFSubset, ScoresDict
+from mteb.models.models_protocols import EncoderProtocol
+from mteb.types import ScoresDict
 
 from .classification import AbsTaskClassification
 
@@ -22,58 +23,19 @@ class AbsTaskDST(AbsTaskClassification):
 
     classification_columns: Sequence[str]
 
-    def evaluate(
-        self,
-        model: Encoder,
-        split: str = "test",
-        subsets_to_run: list[HFSubset] | None = None,
-        *,
-        encode_kwargs: dict[str, Any],
-        **kwargs: Any,
-    ) -> dict[HFSubset, ScoresDict]:
-        """Evaluate the model on the specified split and subsets."""
-        if not self.data_loaded:
-            self.load_data()
-
-        scores = {}
-        hf_subsets = self.hf_subsets
-        if subsets_to_run is not None:
-            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
-
-        for hf_subset in hf_subsets:
-            logger.info(
-                f"Task: {self.metadata.name}, split: {split}, subset: {hf_subset}. Running..."
-            )
-
-            if hf_subset not in self.dataset and hf_subset == "default":
-                ds = self.dataset
-            else:
-                ds = self.dataset[hf_subset]
-            scores[hf_subset] = self._evaluate_subset(
-                model,
-                ds,
-                hf_split=split,
-                hf_subset=hf_subset,
-                encode_kwargs=encode_kwargs,
-                **kwargs,
-            )
-            self._add_main_score(scores[hf_subset])
-
-        return scores
-
     def _evaluate_subset(
         self,
-        model: Encoder,
-        dataset: DatasetDict | Dataset,
+        model: EncoderProtocol,
+        data_split: DatasetDict,
+        *,
+        encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
-        **kwargs,
+        prediction_folder: Path | None = None,
+        **kwargs: Any,
     ) -> ScoresDict:
-        train_split = dataset[self.train_split]
-        eval_split = dataset[hf_split]
-        params = {"k": self.k}
-        params.update(kwargs)
+        train_split = data_split[self.train_split]
+        eval_split = data_split[hf_split]
         total_scores = {}
 
         for column in tqdm(self.classification_columns):
@@ -87,9 +49,7 @@ class AbsTaskDST(AbsTaskClassification):
             )  # we store idxs to make the shuffling reproducible
 
             for i in range(self.n_experiments):
-                logger.info(
-                    "=" * 10 + f" Experiment {i + 1}/{self.n_experiments} " + "=" * 10
-                )
+                logger.info(f"Running experiment ({i}/{self.n_experiments})")
                 # Bootstrap `self.samples_per_label` samples per label for each split
                 train_dataset, idxs = self._undersample_data(
                     current_train_split,
@@ -104,17 +64,26 @@ class AbsTaskDST(AbsTaskClassification):
                     task_metadata=self.metadata,
                     hf_split=hf_split,
                     hf_subset=hf_subset,
-                    classifier=self.evaluator_model,
-                    **params,
+                    evaluator_model=self.evaluator_model,
                 )
 
-                scores_exp, test_cache = evaluator(
+                y_pred, test_cache = evaluator(
                     model, encode_kwargs=encode_kwargs, test_cache=test_cache
                 )
+                # if prediction_folder:
+                #     all_predictions.append(y_pred.tolist())
+                y_test = current_eval_split["label"]
+                scores_exp = self._calculate_scores(y_test, y_pred)
                 scores.append(scores_exp)
 
             avg_scores: dict[str, Any] = {
-                k: np.mean([s[k] for s in scores]) for k in scores[0].keys()
+                # ap will be none for non binary classification tasks
+                k: (
+                    float(np.mean(values))
+                    if (values := [s[k] for s in scores if s[k] is not None])
+                    else np.nan
+                )
+                for k in scores[0].keys()
             }
             avg_scores["scores_per_experiment"] = scores
             total_scores[column] = avg_scores

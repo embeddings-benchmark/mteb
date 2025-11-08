@@ -76,7 +76,7 @@ class MultiWoz21Hospital(AbsTaskDST):
         type="Classification",
         category="t2c",
         modalities=["text"],
-        eval_splits=["dev"],
+        eval_splits=["test"],
         eval_langs={"hospital": ["eng-Latn"]},
         main_score="accuracy",
         date=None,
