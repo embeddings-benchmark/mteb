@@ -107,7 +107,6 @@ R_BENCHMARK_ENTRIES = [
         benchmarks=[
             mteb.get_benchmark("RTEB(beta)"),
             mteb.get_benchmark("RTEB(eng, beta)"),
-            mteb.get_benchmark("ViDoRe(v3)"),
             MenuEntry(
                 "Image",
                 description=None,
