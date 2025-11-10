@@ -3,7 +3,7 @@ from collections.abc import Callable
 from typing import Any, cast
 
 import torch
-from datasets import Dataset
+from datasets import Dataset, Image
 from torch.utils.data import DataLoader, default_collate
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -244,14 +244,15 @@ def _prepare_image_dataset(
     transform: Callable[[Any], Any] | None = None,
 ) -> Dataset:
     """Prepare the image dataset by converting images to RGB and applying transformations."""
-    # If the dataset uses a different column name for images, rename it to "image".
     if (
         image_column_name
         and image_column_name in dataset.column_names
         and "image" not in dataset.column_names
     ):
         dataset = dataset.rename_column(image_column_name, "image")
-    # Map the conversion function over the dataset.
+    # don't process image if it's already in the correct format
+    if isinstance(dataset.features["image"], Image):
+        return dataset
     return dataset.map(
         _convert_images_to_rgb,
         fn_kwargs={"image_col_name": "image", "transform": transform},

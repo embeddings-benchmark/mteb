@@ -1,4 +1,9 @@
-from mteb.benchmarks.benchmark import Benchmark, HUMEBenchmark, MIEBBenchmark
+from mteb.benchmarks.benchmark import (
+    Benchmark,
+    HUMEBenchmark,
+    MIEBBenchmark,
+    Vidore3Benchmark,
+)
 from mteb.get_tasks import MTEBTasks, get_task, get_tasks
 
 MMTEB_CITATION = r"""@article{enevoldsen2025mmtebmassivemultilingualtext,
@@ -2209,6 +2214,40 @@ VIDORE_V2 = Benchmark(
   author = {Macé, Quentin and Loison António and Faysse, Manuel},
   journal = {arXiv preprint arXiv:2505.17166},
   title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+  year = {2025},
+}
+""",
+)
+
+VIDORE_V3 = Vidore3Benchmark(
+    name="ViDoRe(v3)",
+    display_name="ViDoRe V3",
+    icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
+    tasks=get_tasks(
+        tasks=[
+            "Vidore3FinanceEnRetrieval",
+            "Vidore3IndustrialRetrieval",
+            "Vidore3ComputerScienceRetrieval",
+            "Vidore3PharmaceuticalsRetrieval",
+            "Vidore3HrRetrieval",
+            "Vidore3FinanceFrRetrieval",
+            "Vidore3PhysicsRetrieval",
+            "Vidore3EnergyRetrieval",
+            "Vidore3TelecomRetrieval",
+            "Vidore3NuclearRetrieval",
+        ]
+    ),
+    description="ViDoRe V3 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents. The benchmark includes both open and closed datasets: to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
+    reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
+    citation=r"""
+@misc{mace2025vidorev3,
+  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  day = {5},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
+  journal = {Hugging Face Blog},
+  month = {November},
+  publisher = {Hugging Face},
+  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
   year = {2025},
 }
 """,
