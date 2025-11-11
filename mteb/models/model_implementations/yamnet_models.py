@@ -147,18 +147,6 @@ def yamnet_loader(*args, **kwargs):
 
                     with torch.no_grad():
                         input_tensor = self._prepare_input_tensor(audio)
-
-                        if input_tensor is None:
-                            # Create zero embedding for empty tensor
-                            logger.debug("Creating zero embedding for empty tensor")
-                            zero_embedding = torch.zeros(
-                                self.embed_dim, device=self.device
-                            )
-                            batch_embeddings.append(
-                                zero_embedding.cpu().detach().numpy()
-                            )
-                            continue
-
                         # discard logits
                         embedding, _ = self.model(input_tensor)
 
