@@ -1,7 +1,7 @@
 import logging
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import Any
 
 import torch
 from datasets import Dataset, concatenate_datasets
@@ -11,7 +11,7 @@ from mteb.abstasks._statistics_calculation import (
     calculate_image_statistics,
     calculate_text_statistics,
 )
-from mteb.abstasks.abstask import AbsTask
+from mteb.abstasks.abstask import AbsMetrics, AbsTask
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.types.statistics import (
     ImageStatistics,
@@ -36,7 +36,7 @@ class ImageTextPairClassificationDescriptiveStatistics(SplitDescriptiveStatistic
     image_statistics: ImageStatistics
 
 
-class ImageTextPairClassificationMetrics(TypedDict):
+class ImageTextPairClassificationMetrics(AbsMetrics):
     """ImageTextPairClassification metrics.
 
     Attributes:

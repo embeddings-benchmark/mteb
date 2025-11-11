@@ -1,4 +1,5 @@
 import logging
+from collections.abc import Sequence
 from typing import Any
 
 import torch
@@ -56,8 +57,8 @@ class ImageTextPairClassificationEvaluator(Evaluator):
     def __init__(
         self,
         dataset,
-        images_column_names: str | list[str],
-        texts_column_names: str | list[str],
+        images_column_names: str | Sequence[str],
+        texts_column_names: str | Sequence[str],
         num_images_per_sample: int,
         num_texts_per_sample: int,
         task_metadata: TaskMetadata,

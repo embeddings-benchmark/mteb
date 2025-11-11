@@ -4,7 +4,7 @@ import json
 import logging
 from argparse import Namespace
 from collections import defaultdict
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Mapping
 from functools import cached_property
 from importlib.metadata import version
 from pathlib import Path
@@ -166,7 +166,7 @@ class TaskResult(BaseModel):
     def from_task_results(
         cls,
         task: AbsTask | type[AbsTask],
-        scores: dict[SplitName, dict[HFSubset, ScoresDict]],
+        scores: dict[SplitName, Mapping[HFSubset, ScoresDict]],
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
     ) -> Self:

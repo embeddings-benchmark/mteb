@@ -83,10 +83,10 @@ def instruct_wrapper(
                 f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
             )
             embeddings = super().encode(  # type: ignore[safe-super]
-                _inputs,
+                _inputs,  # type: ignore[arg-type]
                 instruction=instruction,
                 *args,
-                **kwargs,  # type: ignore[arg-type]
+                **kwargs,
             )
             if isinstance(embeddings, torch.Tensor):
                 # sometimes in kwargs can be return_tensors=True

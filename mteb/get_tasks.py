@@ -22,12 +22,11 @@ logger = logging.getLogger(__name__)
 def _gather_tasks() -> tuple[type[AbsTask], ...]:
     import mteb.tasks as tasks
 
-    tasks = [
+    return tuple(
         t
         for t in tasks.__dict__.values()
         if isinstance(t, type) and issubclass(t, AbsTask)
-    ]
-    return tuple(tasks)
+    )
 
 
 def _create_name_to_task_mapping(
@@ -194,8 +193,7 @@ class MTEBTasks(tuple[AbsTask]):
             string with a LaTeX table.
         """
         if include_citation_in_name and "name" in properties:
-            properties += ["intext_citation"]
-            df = self.to_dataframe(properties)
+            df = self.to_dataframe(tuple(properties) + ("intext_citation",))
             df["name"] = df["name"] + " " + df["intext_citation"]
             df = df.drop(columns=["intext_citation"])
         else:
@@ -287,7 +285,7 @@ def get_tasks(
         ]
         return MTEBTasks(_tasks)
 
-    _tasks = filter_tasks(
+    tasks_: list[type[AbsTask]] = filter_tasks(
         TASK_LIST,
         languages=languages,
         script=script,
@@ -300,12 +298,12 @@ def get_tasks(
         exclude_aggregate=exclude_aggregate,
         exclude_private=exclude_private,
     )
-    _tasks = [
-        cls().filter_languages(languages, script).filter_eval_splits(eval_splits)
-        for cls in _tasks
-    ]
-
-    return MTEBTasks(_tasks)
+    return MTEBTasks(
+        [
+            cls().filter_languages(languages, script).filter_eval_splits(eval_splits)
+            for cls in tasks_
+        ]
+    )
 
 
 _TASK_RENAMES = {"PersianTextTone": "SynPerTextToneClassification"}

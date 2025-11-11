@@ -5,7 +5,7 @@ import logging
 import os
 import sys
 import traceback
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
@@ -460,7 +460,7 @@ class MTEB:
                 task.check_if_dataset_is_superseded()
                 task.load_data()
 
-                task_results: dict[str, dict[str, dict[str, Any]]] = {}
+                task_results: dict[str, Mapping[str, dict[str, Any]]] = {}
                 evaluation_time = 0
                 kg_co2_emissions: int | None = 0 if co2_tracker else None
 
@@ -485,8 +485,8 @@ class MTEB:
 
                     if co2_tracker:
                         try:
-                            from codecarbon import (
-                                EmissionsTracker,  # type: ignore[import-not-found]
+                            from codecarbon import (  # type: ignore[import-not-found]
+                                EmissionsTracker,
                             )
                         except ImportError:
                             raise ImportError(
