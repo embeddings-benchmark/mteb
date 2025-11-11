@@ -9,7 +9,7 @@ from mteb.abstasks.zeroshot_classification import (
 class GTSRBZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="GTSRBZeroShot",
-        description="""The German Traffic Sign Recognition Benchmark (GTSRB) is a multi-class classification dataset for traffic signs. It consists of dataset of more than 50,000 traffic sign images. The dataset comprises 43 classes with unbalanced class frequencies.""",
+        description="The German Traffic Sign Recognition Benchmark (GTSRB) is a multi-class classification dataset for traffic signs. It consists of dataset of more than 50,000 traffic sign images. The dataset comprises 43 classes with unbalanced class frequencies.",
         reference="https://benchmark.ini.rub.de/",
         dataset={
             "path": "clip-benchmark/wds_gtsrb",

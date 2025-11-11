@@ -12,8 +12,7 @@ _LANGS = {
 class ScalaClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ScalaClassification",
-        description="""ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks.
-        Published as part of 'ScandEval: A Benchmark for Scandinavian Natural Language Processing'""",
+        description="ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks. Published as part of 'ScandEval: A Benchmark for Scandinavian Natural Language Processing'",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
         dataset={
             "path": "mteb/multilingual-scala-classification",

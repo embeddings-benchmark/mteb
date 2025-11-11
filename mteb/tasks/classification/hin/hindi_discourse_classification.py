@@ -59,8 +59,7 @@ class HindiDiscourseClassificationV2(AbsTaskClassification):
             "path": "mteb/hindi_discourse",
             "revision": "9d10173a3df9858adc90711d8da9abf3df0a1259",
         },
-        description="""A Hindi Discourse dataset in Hindi with values for coherence.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="A Hindi Discourse dataset in Hindi with values for coherence. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://aclanthology.org/2020.lrec-1.149/",
         type="Classification",
         category="t2c",

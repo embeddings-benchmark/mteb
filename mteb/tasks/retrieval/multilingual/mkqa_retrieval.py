@@ -34,8 +34,7 @@ _EVAL_LANGS = {
 class MKQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MKQARetrieval",
-        description="""Multilingual Knowledge Questions & Answers (MKQA)contains 10,000 queries sampled from the Google Natural Questions dataset.
-        For each query we collect new passage-independent answers. These queries and answers are then human translated into 25 Non-English languages.""",
+        description="Multilingual Knowledge Questions & Answers (MKQA)contains 10,000 queries sampled from the Google Natural Questions dataset. For each query we collect new passage-independent answers. These queries and answers are then human translated into 25 Non-English languages.",
         reference="https://github.com/apple/ml-mkqa",
         dataset={
             "path": "mteb/MKQARetrieval",

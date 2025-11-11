@@ -55,8 +55,7 @@ class RuReviewsClassificationV2(AbsTaskClassification):
             "path": "mteb/ru_reviews",
             "revision": "46d80ee5ac51be8234725558677e59050b9c418e",
         },
-        description="""Product review classification (3-point scale) based on RuRevies dataset
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Product review classification (3-point scale) based on RuRevies dataset This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://github.com/sismetanin/rureviews",
         type="Classification",
         category="t2c",

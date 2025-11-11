@@ -9,10 +9,7 @@ class JaCWIRRetrieval(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="JaCWIRRetrieval",
-        description="""JaCWIR is a small-scale Japanese information retrieval evaluation dataset consisting of
-5000 question texts and approximately 500k web page titles and web page introductions or summaries
-(meta descriptions, etc.). The question texts are created based on one of the 500k web pages,
-and that data is used as a positive example for the question text.""",
+        description="JaCWIR is a small-scale Japanese information retrieval evaluation dataset consisting of 5000 question texts and approximately 500k web page titles and web page introductions or summaries (meta descriptions, etc.). The question texts are created based on one of the 500k web pages, and that data is used as a positive example for the question text.",
         reference="https://huggingface.co/datasets/hotchpotch/JaCWIR",
         dataset={
             "path": "mteb/JaCWIRRetrieval",

@@ -63,8 +63,7 @@ class WRIMEClassificationV2(AbsTaskClassification):
             "revision": "6687c3bd031a0b144189958bad57db0b95a48dec",
             "name": "ver2",
         },
-        description="""A dataset of Japanese social network rated for sentiment
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="A dataset of Japanese social network rated for sentiment This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://aclanthology.org/2021.naacl-main.169/",
         type="Classification",
         category="t2c",

@@ -11,12 +11,7 @@ class AmazonCounterfactualVNClassification(AbsTaskClassification):
             "path": "GreenNode/amazon-counterfactual-vn",
             "revision": "b48bc27d383cfca5b6a47135a52390fa5f66b253",
         },
-        description="""A collection of translated Amazon customer reviews annotated for counterfactual detection pair classification.
-        The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-        - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-        - Applies advanced embedding models to filter the translations.
-        - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
-        """,
+        description="A collection of translated Amazon customer reviews annotated for counterfactual detection pair classification. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://arxiv.org/abs/2104.06893",
         category="t2c",
         type="Classification",

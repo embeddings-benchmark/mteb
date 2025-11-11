@@ -40,8 +40,7 @@ class TurkishProductSentimentClassification(AbsTaskClassification):
 class TurkishProductSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TurkishProductSentimentClassification.v2",
-        description="""Turkish Product Review Dataset
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Turkish Product Review Dataset This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://www.win.tue.nl/~mpechen/publications/pubs/MT_WISDOM2013.pdf",
         dataset={
             "path": "mteb/turkish_product_sentiment",
