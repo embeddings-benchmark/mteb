@@ -1,5 +1,14 @@
+from typing import Any
+
+import torch
+from torch.utils.data import DataLoader
+
+import mteb
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_implementations.google_models import gemma_embedding_loader
 from mteb.models.model_meta import ModelMeta
+from mteb.types import Array, BatchedInput, PromptType
 
 Tarka_Embedding_150M_V1_CITATION = """@misc{tarka_ai_research_2025,
 	author       = { Tarka AI Research },
@@ -9,6 +18,282 @@ Tarka_Embedding_150M_V1_CITATION = """@misc{tarka_ai_research_2025,
 	doi          = { 10.57967/hf/6875 },
 	publisher    = { Hugging Face }
 }"""
+Tarka_Embedding_350M_V1_CITATION = """@misc{tarka_ai_research_2025,
+	author       = { Tarka AI Research },
+	title        = { Tarka-Embedding-350M-V1 (Revision f4b5de8) },
+	year         = 2025,
+	url          = { https://huggingface.co/Tarka-AIR/Tarka-Embedding-350M-V1 },
+	doi          = { 10.57967/hf/6979 },
+	publisher    = { Hugging Face }
+}"""
+
+# Reference: Original prompt definitions adapted from Qwen3-Embedding
+# Source: https://github.com/QwenLM/Qwen3-Embedding/blob/main/evaluation/task_prompts.json
+tarka_embedding_350_v1_instruction_prompts = {
+    "AmazonCounterfactualClassification": "Classify a given Amazon customer review text as either counterfactual or not-counterfactual",
+    "AmazonPolarityClassification": "Classify Amazon reviews into positive or negative sentiment",
+    "AmazonReviewsClassification": "Classify the given Amazon review into its appropriate rating category",
+    "Banking77Classification": "Given a online banking query, find the corresponding intents",
+    "Banking77Classification.v2": "Given a online banking query, find the corresponding intents",
+    "EmotionClassification": "Classify the emotion expressed in the given Twitter message into one of the six emotions: anger, fear, joy, love, sadness, and surprise",
+    "ImdbClassification": "Classify the sentiment expressed in the given movie review text from the IMDB dataset",
+    "MassiveIntentClassification": "Given a user utterance as query, find the user intents",
+    "MassiveScenarioClassification": "Given a user utterance as query, find the user scenarios",
+    "MTOPDomainClassification": "Classify the intent domain of the given utterance in task-oriented conversation",
+    "MTOPIntentClassification": "Classify the intent of the given utterance in task-oriented conversation",
+    "ToxicConversationsClassification": "Classify the given comments as either toxic or not toxic",
+    "TweetSentimentExtractionClassification": "Classify the sentiment of a given tweet as either positive, negative, or neutral",
+    "TNews": "Classify the fine-grained category of the given news title",
+    "IFlyTek": "Given an App description text, find the appropriate fine-grained category",
+    "MultilingualSentiment": "Classify sentiment of the customer review into positive, neutral, or negative",
+    "JDReview": "Classify the customer review for iPhone on e-commerce platform into positive or negative",
+    "OnlineShopping": "Classify the customer review for online shopping into positive or negative",
+    "Waimai": "Classify the customer review from a food takeaway platform into positive or negative",
+    "ArxivClusteringP2P": "Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
+    "ArxivClusteringS2S": "Identify the main and secondary category of Arxiv papers based on the titles",
+    "BiorxivClusteringP2P": "Identify the main category of Biorxiv papers based on the titles and abstracts",
+    "BiorxivClusteringP2P.v2": "Identify the main category of Biorxiv papers based on the titles and abstracts",
+    "BiorxivClusteringS2S": "Identify the main category of Biorxiv papers based on the titles",
+    "MedrxivClusteringP2P": "Identify the main category of Medrxiv papers based on the titles and abstracts",
+    "MedrxivClusteringP2P.v2": "Identify the main category of Medrxiv papers based on the titles and abstracts",
+    "MedrxivClusteringS2S": "Identify the main category of Medrxiv papers based on the titles",
+    "RedditClustering": "Identify the topic or theme of Reddit posts based on the titles",
+    "RedditClusteringP2P": "Identify the topic or theme of Reddit posts based on the titles and posts",
+    "StackExchangeClustering": "Identify the topic or theme of StackExchange posts based on the titles",
+    "StackExchangeClusteringP2P": "Identify the topic or theme of StackExchange posts based on the given paragraphs",
+    "TwentyNewsgroupsClustering": "Identify the topic or theme of the given news articles",
+    "CLSClusteringS2S": "Identify the main category of scholar papers based on the titles",
+    "CLSClusteringP2P": "Identify the main category of scholar papers based on the titles and abstracts",
+    "ThuNewsClusteringS2S": "Identify the topic or theme of the given news articles based on the titles",
+    "ThuNewsClusteringP2P": "Identify the topic or theme of the given news articles based on the titles and contents",
+    "AskUbuntuDupQuestions": "Retrieve duplicate questions from AskUbuntu forum",
+    "MindSmallReranking": "Retrieve relevant news articles based on user browsing history",
+    "SciDocsRR": "Given a title of a scientific paper, retrieve the titles of other relevant papers",
+    "StackOverflowDupQuestions": "Retrieve duplicate questions from StackOverflow forum",
+    "SprintDuplicateQuestions": "Retrieve duplicate questions from Sprint forum",
+    "TwitterSemEval2015": "Retrieve tweets that are semantically similar to the given tweet",
+    "TwitterURLCorpus": "Retrieve tweets that are semantically similar to the given tweet",
+    "T2Reranking": "Given a Chinese search query, retrieve web passages that answer the question",
+    "MmarcoReranking": "Given a Chinese search query, retrieve web passages that answer the question",
+    "CMedQAv1": "Given a Chinese community medical question, retrieve replies that best answer the question",
+    "CMedQAv2": "Given a Chinese community medical question, retrieve replies that best answer the question",
+    "Ocnli": "Retrieve semantically similar text.",
+    "Cmnli": "Retrieve semantically similar text.",
+    "ArguAna": {
+        "query": "Given a claim, find documents that refute the claim",
+        "passage": "Given a claim, find documents that refute the claim",
+    },
+    "ClimateFEVER": "Given a claim about climate change, retrieve documents that support or refute the claim",
+    "ClimateFEVERHardNegatives": "Given a claim about climate change, retrieve documents that support or refute the claim",
+    "DBPedia": "Given a query, retrieve relevant entity descriptions from DBPedia",
+    "FEVER": "Given a claim, retrieve documents that support or refute the claim",
+    "FEVERHardNegatives": "Given a claim, retrieve documents that support or refute the claim",
+    "FiQA2018": "Given a financial question, retrieve user replies that best answer the question",
+    "HotpotQA": "Given a multi-hop question, retrieve documents that can help answer the question",
+    "HotpotQAHardNegatives": "Given a multi-hop question, retrieve documents that can help answer the question",
+    "MSMARCO": "Given a web search query, retrieve relevant passages that answer the query",
+    "NFCorpus": "Given a question, retrieve relevant documents that best answer the question",
+    "NQ": "Given a question, retrieve Wikipedia passages that answer the question",
+    "QuoraRetrieval": "Given a question, retrieve questions that are semantically equivalent to the given question",
+    "SCIDOCS": "Given a scientific paper title, retrieve paper abstracts that are cited by the given paper",
+    "SciFact": "Given a scientific claim, retrieve documents that support or refute the claim",
+    "Touche2020": "Given a question, retrieve detailed and persuasive arguments that answer the question",
+    "Touche2020Retrieval.v3": "Given a question, retrieve detailed and persuasive arguments that answer the question",
+    "TRECCOVID": "Given a query on COVID-19, retrieve documents that answer the query",
+    "T2Retrieval": "Given a Chinese search query, retrieve web passages that answer the question",
+    "MMarcoRetrieval": "Given a web search query, retrieve relevant passages that answer the query",
+    "DuRetrieval": "Given a Chinese search query, retrieve web passages that answer the question",
+    "CovidRetrieval": "Given a question on COVID-19, retrieve news articles that answer the question",
+    "CmedqaRetrieval": "Given a Chinese community medical question, retrieve replies that best answer the question",
+    "EcomRetrieval": "Given a user query from an e-commerce website, retrieve description sentences of relevant products",
+    "MedicalRetrieval": "Given a medical question, retrieve user replies that best answer the question",
+    "VideoRetrieval": "Given a video search query, retrieve the titles of relevant videos",
+    "STSBenchmarkMultilingualSTS": "Retrieve semantically similar text",
+    "SICKFr": "Retrieve semantically similar text",
+    "SummEvalFr": "Given a news summary, retrieve other semantically similar summaries",
+    "MasakhaNEWSClassification": "Classify the News in the given texts into one of the seven category: politics,sports,health,business,entertainment,technology,religion ",
+    "OpusparcusPC": "Retrieve semantically similar text",
+    "PawsX": "Retrieve semantically similar text",
+    "AlloProfClusteringP2P": "Identify the main category of Allo Prof document based on the titles and descriptions",
+    "AlloProfClusteringS2S": "Identify the main category of Allo Prof document based on the titles",
+    "HALClusteringS2S": "Identify the main category of academic passage based on the titles and contents",
+    "MasakhaNEWSClusteringP2P": "Identify the topic or theme of the given news articles based on the titles and contents",
+    "MasakhaNEWSClusteringS2S": "Identify the topic or theme of the given news articles based on the titles",
+    "MLSUMClusteringP2P": "Identify the topic or theme of the given articles based on the titles and contents",
+    "MLSUMClusteringS2S": "Identify the topic or theme of the given articles based on the titles",
+    "SyntecReranking": "Given a question, retrieve passages that answer the question",
+    "AlloprofReranking": "Given a question, retrieve passages that answer the question",
+    "AlloprofRetrieval": "Given a question, retrieve passages that answer the question",
+    "BSARDRetrieval": "Given a question, retrieve passages that answer the question",
+    "SyntecRetrieval": "Given a question, retrieve passages that answer the question",
+    "XPQARetrieval": "Given a question, retrieve passages that answer the question",
+    "MintakaRetrieval": "Given a question, retrieve passages that answer the question",
+    "CBD": "Classify the sentiment of polish tweet reviews",
+    "PolEmo2.0-IN": "Classify the sentiment of in-domain (medicine and hotels) online reviews",
+    "PolEmo2.0-OUT": "Classify the sentiment of out-of-domain (products and school) online reviews",
+    "AllegroReviews": "Classify the sentiment of reviews from e-commerce marketplace Allegro",
+    "PAC": 'Classify the sentence into one of the two types: "BEZPIECZNE_POSTANOWIENIE_UMOWNE" and "KLAUZULA_ABUZYWNA"',
+    "SICK-E-PL": "Retrieve semantically similar text",
+    "SICK-R-PL": "Retrieve semantically similar text",
+    "STS22": "Retrieve semantically similar text",
+    "AFQMC": "Retrieve semantically similar text",
+    "BQ": "Retrieve semantically similar text",
+    "LCQMC": "Retrieve semantically similar text",
+    "PAWSX": "Retrieve semantically similar text",
+    "QBQTC": "Retrieve semantically similar text",
+    "STS12": "Retrieve semantically similar text",
+    "PPC": "Retrieve semantically similar text",
+    "CDSC-E": "Retrieve semantically similar text",
+    "PSC": "Retrieve semantically similar text",
+    "8TagsClustering": "Identify of headlines from social media posts in Polish  into 8 categories: film, history, food, medicine, motorization, work, sport and technology",
+    "ArguAna-PL": "Given a claim, find documents that refute the claim",
+    "DBPedia-PL": "Given a query, retrieve relevant entity descriptions from DBPedia",
+    "FiQA-PL": "Given a financial question, retrieve user replies that best answer the question",
+    "HotpotQA-PL": "Given a multi-hop question, retrieve documents that can help answer the question",
+    "MSMARCO-PL": "Given a web search query, retrieve relevant passages that answer the query",
+    "NFCorpus-PL": "Given a question, retrieve relevant documents that best answer the question",
+    "NQ-PL": "Given a question, retrieve Wikipedia passages that answer the question",
+    "Quora-PL": "Given a question, retrieve questions that are semantically equivalent to the given question",
+    "SCIDOCS-PL": "Given a scientific paper title, retrieve paper abstracts that are cited by the given paper",
+    "SciFact-PL": "Given a scientific claim, retrieve documents that support or refute the claim",
+    "TRECCOVID-PL": "Given a query on COVID-19, retrieve documents that answer the query",
+    "GeoreviewClassification": "Classify the organization rating based on the reviews",
+    "HeadlineClassification": "Classify the topic or theme of the given news headline",
+    "InappropriatenessClassification": "Classify the given message as either sensitive topic or not",
+    "KinopoiskClassification": "Classify the sentiment expressed in the given movie review text",
+    "RuReviewsClassification": "Classify product reviews into positive, negative or neutral sentiment",
+    "RuSciBenchGRNTIClassification": "Classify the category of scientific papers based on the titles and abstracts",
+    "RuSciBenchOECDClassification": "Classify the category of scientific papers based on the titles and abstracts",
+    "GeoreviewClusteringP2P": "Identify the organization category based on the reviews",
+    "RuSciBenchGRNTIClusteringP2P": "Identify the category of scientific papers based on the titles and abstracts",
+    "RuSciBenchOECDClusteringP2P": "Identify the category of scientific papers based on the titles and abstracts",
+    "TERRa": "Given a premise, retrieve a hypothesis that is entailed by the premise",
+    "RuBQReranking": "Given a question, retrieve Wikipedia passages that answer the question",
+    "RiaNewsRetrieval": "Given a headline, retrieval relevant articles",
+    "RuBQRetrieval": "Given a question, retrieve Wikipedia passages that answer the question",
+    "RUParaPhraserSTS": "Retrieve semantically similar text",
+    "RuSTSBenchmarkSTS": "Retrieve semantically similar text",
+    "AppsRetrieval": "Given a question about code problem, retrieval code that can solve user's problem",
+    "COIRCodeSearchNetRetrieval": "Given a code snippet, retrieve the comment corresponding to that code.",
+    "CodeEditSearchRetrieval": "Given a piece of code, retrieval code that in the ",
+    "CodeFeedbackMT": "Given a question about coding, retrieval code or passage that can solve user's question",
+    "CodeFeedbackST": "Given a question about coding, retrieval code or passage that can solve user's question",
+    "CodeSearchNetCCRetrieval": "Given a code comment, retrieve the code snippet corresponding to that comment.",
+    "CodeSearchNetRetrieval": "Given a code snippet, retrieve the comment corresponding to that code.",
+    "CodeTransOceanContest": "Given a piece for code, retrieval semantically similar code",
+    "CodeTransOceanDL": "Given a piece for code, retrieval semantically similar code",
+    "CosQA": "Given a question about coding, retrieval code or passage that can solve user's question",
+    "StackOverflowQA": "Given a question about coding, retrieval code or passage that can solve user's question",
+    "SyntheticText2SQL": "Given a user's question, retrieve SQL queries that are appropriate responses to the question",
+    "BibleNLPBitextMining": "Retrieve parallel sentences",
+    "BUCC.v2": "Retrieve parallel sentences",
+    "DiaBlaBitextMining": "Retrieve parallel sentences",
+    "FloresBitextMining": "Retrieve parallel sentences",
+    "IN22GenBitextMining": "Retrieve parallel sentences",
+    "IndicGenBenchFloresBitextMining": "Retrieve parallel sentences",
+    "NollySentiBitextMining": "Retrieve parallel sentences",
+    "NTREXBitextMining": "Retrieve parallel sentences",
+    "NusaTranslationBitextMining": "Retrieve parallel sentences",
+    "NusaXBitextMining": "Retrieve parallel sentences",
+    "Tatoeba": "Retrieve parallel sentences",
+    "BulgarianStoreReviewSentimentClassfication": "Classify user reviews into positive or negative sentiment",
+    "CzechProductReviewSentimentClassification": "Classify product reviews into positive or negative sentiment",
+    "GreekLegalCodeClassification": "Given a greek legal text, classify its topic",
+    "DBpediaClassification": "Given a Wikipedia articles, categorized it into classes based on its DBpedia ontology",
+    "FinancialPhrasebankClassification": "Given financial news, categorized by sentiment into positive, negative, or neutral",
+    "PoemSentimentClassification": "Gvien a poem, categorized by sentiment into positive, no_impact, negative or mixed",
+    "TweetTopicSingleClassification": "Gvien a twitter, classify its topic",
+    "EstonianValenceClassification": "Given a news article, categorized by sentiment into negatiivne, positiivne, neutraalne or vastuolulin",
+    "FilipinoShopeeReviewsClassification": "Given a shop review, classify its rating on a scale from 1 to 5",
+    "GujaratiNewsClassification": "Given a Gujarati news articles, classify its topic",
+    "SentimentAnalysisHindi": "Given a hindi text, categorized by sentiment into positive, negative or neutral",
+    "IndonesianIdClickbaitClassification": "Given an Indonesian news headlines, classify its into clickbait or non-clickbait",
+    "ItaCaseholdClassification": "Given a judgments, classify its topic",
+    "KorSarcasmClassification": "Given a twitter, categorized it into sarcasm or not_sarcasm",
+    "KurdishSentimentClassification": "Given a text, categorized by sentiment into positive or negative",
+    "MacedonianTweetSentimentClassification": "Given a Macedonian tweet, categorized by sentiment into positive, negative, or neutral",
+    "AfriSentiClassification": "Given a text, categorized by sentiment into positive, negative, or neutral",
+    "CataloniaTweetClassification": "Given a tweet, categorized by sentiment into AGAINST, FAVOR or NEUTRAL",
+    "CyrillicTurkicLangClassification": "Given a text, classify its language",
+    "IndicLangClassification": "Given a text, classify its language",
+    "MultiHateClassification": "Given a text, categorized by sentiment into hate or non-hate",
+    "NusaParagraphEmotionClassification": "Given a paragraph, classify its emotion",
+    "NusaX-senti": "Given a text, categorized by sentiment into positive or negative",
+    "SwissJudgementClassification": "Given a news article, categorized it into approval or dismissal",
+    "NepaliNewsClassification": "Given a news article, categorized it into business, entertainment or sports",
+    "OdiaNewsClassification": "Given a news article, categorized it into business, entertainment or sports",
+    "PunjabiNewsClassification": "Given a news article, categorized it into two-classes",
+    "SinhalaNewsClassification": "Given a news article, categorized it into political, business, technology, sports and Entertainment",
+    "CSFDSKMovieReviewSentimentClassification": "Given a movie review, classify its rating on a scale from 0 to 5",
+    "SiswatiNewsClassification": "Given a news article, classify its topic",
+    "SlovakMovieReviewSentimentClassification": "Given a movie review, categorized it into positive or negative",
+    "SwahiliNewsClassification": "Given a news article, classify its domain",
+    "TswanaNewsClassification": "Given a news article, classify its topic",
+    "IsiZuluNewsClassification": "Given a news article, classify its topic",
+    "WikiCitiesClustering": "Identify of Wikipedia articles of cities by country",
+    "RomaniBibleClustering": "Identify verses from the Bible in Kalderash Romani by book.",
+    "ArXivHierarchicalClusteringP2P": "Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
+    "ArXivHierarchicalClusteringS2S": "Identify the main and secondary category of Arxiv papers based on the titles",
+    "BigPatentClustering.v2": "Identify the category of documents from the Big Patent dataset",
+    "AlloProfClusteringS2S.v2": "Identify the topic of document titles from Allo Prof dataset",
+    "HALClusteringS2S.v2": "Identify the topic of titles from HAL",
+    "SIB200ClusteringS2S": "Identify the category of documents",
+    "WikiClusteringP2P.v2": "Identify the category of wiki passages",
+    "PlscClusteringP2P.v2": "Identify the category of titles+abstracts from Library of Science",
+    "KorHateSpeechMLClassification": "Given a Korean online news comments, classify its fine-grained hate speech classes",
+    "MalteseNewsClassification": "Given a maltese new, classify its topic",
+    "MultiEURLEXMultilabelClassification": "Given a text, classify its topic",
+    "BrazilianToxicTweetsClassification": "Given a tweet, classify its topic",
+    "CTKFactsNLI": "Retrieve semantically similar text",
+    "indonli": "Retrieve semantically similar text",
+    "ArmenianParaphrasePC": "Retrieve semantically similar text",
+    "PawsXPairClassification": "Retrieve semantically similar text",
+    "RTE3": "Retrieve semantically similar text",
+    "XNLI": "Retrieve semantically similar text",
+    "PpcPC": "Retrieve semantically similar text",
+    "GermanSTSBenchmark": "Retrieve semantically similar text",
+    "SICK-R": "Retrieve semantically similar text",
+    "STS13": "Retrieve semantically similar text",
+    "STS14": "Retrieve semantically similar text",
+    "STSBenchmark": "Retrieve semantically similar text",
+    "FaroeseSTS": "Retrieve semantically similar text",
+    "FinParaSTS": "Retrieve semantically similar text",
+    "JSICK": "Retrieve semantically similar text",
+    "IndicCrosslingualSTS": "Retrieve semantically similar text",
+    "SemRel24STS": "Retrieve semantically similar text",
+    "STS17": "Retrieve semantically similar text",
+    "STS22.v2": "Retrieve semantically similar text",
+    "STSES": "Retrieve semantically similar text",
+    "STSB": "Retrieve semantically similar text",
+    "AILAStatutes": "Identifying the most relevant statutes for a given situation",
+    "HagridRetrieval": "Retrieval the relevant passage for the given query",
+    "LegalBenchCorporateLobbying": "Retrieval the relevant passage for the given query",
+    "LEMBPasskeyRetrieval": "Retrieval the relevant passage for the given query",
+    "BelebeleRetrieval": "Retrieval the relevant passage for the given query",
+    "MLQARetrieval": "Retrieval the relevant passage for the given query",
+    "StatcanDialogueDatasetRetrieval": "Retrieval the relevant passage for the given query",
+    "WikipediaRetrievalMultilingual": "Retrieval the relevant passage for the given query",
+    "Core17InstructionRetrieval": "Retrieval the relevant passage for the given query",
+    "News21InstructionRetrieval": "Retrieval the relevant passage for the given query",
+    "Robust04InstructionRetrieval": "Retrieval the relevant passage for the given query",
+    "WebLINXCandidatesReranking": "Retrieval the relevant passage for the given query",
+    "WikipediaRerankingMultilingual": "Retrieval the relevant passage for the given query",
+    "STS15": "Retrieve semantically similar text",
+    "MIRACLRetrievalHardNegatives": "Retrieval relevant passage for the given query",
+    "BIOSSES": "Retrieve semantically similar text",
+    "CQADupstackRetrieval": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackGamingRetrieval": {
+        "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    },
+    "CQADupstackUnixRetrieval": {
+        "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    },
+    "STS16": "Retrieve semantically similar text",
+    "SummEval": "Retrieve semantically similar text",
+    "ATEC": "Retrieve semantically similar text",
+}
 
 MULTILINGUAL_EVALUATED_LANGUAGES = [
     "arb-Arab",
@@ -35,6 +320,71 @@ training_data = {
     "CodeSearchNet",
 }
 
+
+class TarkaSentenceTransformer(InstructSentenceTransformerModel):
+    # Adopted from https://github.com/QwenLM/Qwen3-Embedding/tree/main/evaluation
+    def get_instruction(self, task_name, task_metadata, prompt_type):
+        sym_task = False
+        if task_name in self.prompts_dict:
+            instruction = self.prompts_dict[task_name.strip()]
+            if isinstance(instruction, dict):
+                instruction = instruction.get(prompt_type, "")
+                sym_task = True
+        elif task_name.split(".")[0].strip() in self.prompts_dict:
+            instruction = self.prompts_dict[task_name.split(".")[0].strip()]
+            if isinstance(instruction, dict):
+                instruction = instruction.get(prompt_type, "")
+                sym_task = True
+        else:
+            print(task_name, "not found in prompts_dict")
+            instruction = super().get_instruction(task_metadata, prompt_type)
+        task_type = mteb.get_tasks(tasks=[task_name])[0].metadata.type
+        if "Retrieval" in task_type and not sym_task and prompt_type != "query":
+            return ""
+        if task_type in ["STS", "PairClassification"]:
+            return "Retrieve semantically similar text"
+        if task_type in "Bitext Mining":
+            return "Retrieve parallel sentences"
+        if "Retrieval" in task_type and prompt_type == "query" and instruction is None:
+            instruction = "Retrieval relevant passage for the given query."
+        return instruction
+
+    def format_instruction(self, instruction, prompt_type):
+        if instruction is not None and len(instruction.strip()) > 0:
+            instruction = self.instruction_template.format(instruction=instruction)
+            return instruction
+        return ""
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        _inputs = [text for batch in inputs for text in batch["text"]]
+
+        instruction = self.get_instruction(
+            task_metadata.name, task_metadata, prompt_type
+        )
+        instruction = self.format_instruction(instruction, prompt_type)
+        print("Using instruction:", instruction)
+
+        embeddings = self.model.encode(
+            _inputs,
+            prompt=instruction,
+            **kwargs,
+        )
+
+        if isinstance(embeddings, torch.Tensor):
+            # sometimes in kwargs can be return_tensors=True
+            embeddings = embeddings.cpu().detach().float().numpy()
+        return embeddings
+
+
 tarka_embedding_150m_v1 = ModelMeta(
     loader=gemma_embedding_loader,
     name="Tarka-AIR/Tarka-Embedding-150M-V1",
@@ -55,4 +405,40 @@ tarka_embedding_150m_v1 = ModelMeta(
     similarity_fn_name="cosine",
     memory_usage_mb=576,
     citation=Tarka_Embedding_150M_V1_CITATION,
+)
+
+tark_embedding_350_v1_kwargs = dict(
+    device="cuda",  # use a gpu
+    model_kwargs={
+        "attn_implementation": "flash_attention_2",
+        "device_map": "cuda",
+        "torch_dtype": "bfloat16",
+    },  # use low-precision
+    trust_remote_code=True,
+    prompts_dict=tarka_embedding_350_v1_instruction_prompts,
+    apply_instruction_to_passages=True,
+    instruction_template="Instruct: {instruction}\nQuery:",
+)
+
+tarka_embedding_350m_v1 = ModelMeta(
+    loader=TarkaSentenceTransformer,
+    loader_kwargs=tark_embedding_350_v1_kwargs,
+    name="Tarka-AIR/Tarka-Embedding-350M-V1",
+    languages=MULTILINGUAL_EVALUATED_LANGUAGES,
+    open_weights=True,
+    revision="f4b5de82060cf3a833e52580e7ce59adeacb6fb5",  # Commit of @tomaarsen
+    release_date="2025-11-11",
+    n_parameters=354_483_968,
+    memory_usage_mb=676,
+    embed_dim=1024,
+    max_tokens=128000,
+    license=None,
+    reference="https://huggingface.co/Tarka-AIR/Tarka-Embedding-350M-V1",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=training_data,
+    citation=Tarka_Embedding_350M_V1_CITATION,
 )
