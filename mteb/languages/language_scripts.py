@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from typing_extensions import Self
 
-from mteb.languages import check_language_code
+from mteb.languages.check_language_code import check_language_code
 
 
 @dataclass
