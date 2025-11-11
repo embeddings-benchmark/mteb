@@ -103,7 +103,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         text_embeddings = model.encode(
             DataLoader(
                 Dataset.from_dict({"text": texts}),
-                batch_size=encode_kwargs["batch_size"],
+                **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,
@@ -124,6 +124,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
                 CustomImageDataset(images),
                 batch_size=encode_kwargs["batch_size"],
                 collate_fn=lambda x: {"image": [item["image"] for item in x]},
+                **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,

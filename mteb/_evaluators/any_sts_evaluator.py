@@ -8,7 +8,7 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
-from mteb._create_dataloaders import create_dataloader
+from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import EncoderProtocol
 from mteb.similarity_functions import compute_pairwise_similarity
@@ -45,16 +45,8 @@ class AnySTSEvaluator(Evaluator):
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
-        self.first_column = create_dataloader(
-            dataset,
-            task_metadata,
-            input_column=sentences_column_names[0],
-        )
-        self.second_column = create_dataloader(
-            dataset,
-            task_metadata,
-            input_column=sentences_column_names[1],
-        )
+        self.first_column = dataset[sentences_column_names[0]]
+        self.second_column = dataset[sentences_column_names[1]]
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
@@ -67,7 +59,10 @@ class AnySTSEvaluator(Evaluator):
     ) -> STSEvaluatorScores:
         logger.info("Running semantic similarity - Encoding samples (1/2)")
         embeddings1 = model.encode(
-            self.first_column,
+            _create_dataloader_from_texts(
+                self.first_column,
+                **encode_kwargs,
+            ),
             task_metadata=self.task_metadata,
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
@@ -76,7 +71,10 @@ class AnySTSEvaluator(Evaluator):
 
         logger.info("Running semantic similarity - Encoding samples (2/2)...")
         embeddings2 = model.encode(
-            self.second_column,
+            _create_dataloader_from_texts(
+                self.second_column,
+                **encode_kwargs,
+            ),
             task_metadata=self.task_metadata,
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
