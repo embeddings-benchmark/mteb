@@ -308,7 +308,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
         """Pass"""
         retriever = Any2AnyRetrievalEvaluator(
             retriever=model,
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )

@@ -49,7 +49,7 @@ class AbsTaskAudioZeroshotClassification(AbsTask):
             self.audio_column_name,
             self.label_column_name,
             candidate_labels,
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
             **kwargs,
         )
         metrics = evaluator(model, encode_kwargs=encode_kwargs)

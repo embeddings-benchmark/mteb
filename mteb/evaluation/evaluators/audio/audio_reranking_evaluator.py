@@ -1,17 +1,15 @@
 import logging
-import math
-import os
 from typing import Any
 
 import numpy as np
 import torch
 import tqdm
 from sklearn.metrics import average_precision_score
-from torch.utils.data import DataLoader
 
+from mteb._create_dataloaders import _create_audio_dataloader_from_audio_list
 from mteb._evaluators import Evaluator
 from mteb._evaluators.retrieval_metrics import confidence_scores, nauc
-from mteb.evaluation.evaluators.dataset_utils import AudioDataset
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.similarity_functions import cos_sim
 from mteb.types import PromptType
@@ -40,7 +38,7 @@ class AudioRerankingEvaluator(Evaluator):
         query_column_name: str = "query",
         positive_column_name: str = "positive",
         negative_column_name: str = "negative",
-        task_name: str | None = None,
+        task_metadata: TaskMetadata | None = None,
         mrr_at_k: int = 10,
         name: str = "",
         encode_kwargs: dict[str, Any] = {},
@@ -60,7 +58,7 @@ class AudioRerankingEvaluator(Evaluator):
         self.name = name
         self.mrr_at_k = mrr_at_k
         self.use_batched_encoding = use_batched_encoding
-        self.task_name = task_name
+        self.task_metadata = task_metadata
         self.k_values = k_values
         self.encode_kwargs = encode_kwargs
         self.transform = transform
@@ -101,20 +99,15 @@ class AudioRerankingEvaluator(Evaluator):
         """
         logger.info("Encoding queries...")
         all_query_audios = [sample[self.query_column_name] for sample in self.samples]
-        query_dataset = AudioDataset(all_query_audios, transform=self.transform)
-        query_dataloader = DataLoader(
-            query_dataset,
-            batch_size=self.encode_kwargs["batch_size"],
-            shuffle=False,
-            collate_fn=custom_collate_fn,
-            num_workers=min(math.floor(os.cpu_count() / 2), 4),
-        )
+        query_dataloader = _create_audio_dataloader_from_audio_list(all_query_audios)
 
         all_query_embs = np.asarray(
-            model.get_audio_embeddings(
+            model.encode(
                 query_dataloader,
-                task_name=self.task_name,
+                task_metadata=self.task_metadata,
                 prompt_type=PromptType.query,
+                hf_subset="test",
+                hf_split="test",
                 **self.encode_kwargs,
             )
         )
@@ -126,23 +119,16 @@ class AudioRerankingEvaluator(Evaluator):
         # Collect all documents
         all_docs = []
         for sample in self.samples:
-            all_docs.extend(sample[self.positive_column_name])
-            all_docs.extend(sample[self.negative_column_name])
-
-        docs_dataset = AudioDataset(all_docs, transform=self.transform)
-        docs_dataloader = DataLoader(
-            docs_dataset,
-            batch_size=self.encode_kwargs["batch_size"],
-            shuffle=False,
-            collate_fn=custom_collate_fn,
-            num_workers=min(math.floor(os.cpu_count() / 2), 4),
-        )
+            all_docs.append(sample[self.positive_column_name])
+            all_docs.append(sample[self.negative_column_name])
 
         all_docs_embs = np.asarray(
-            model.get_audio_embeddings(
-                docs_dataloader,
-                task_name=self.task_name,
+            model.encode(
+                _create_audio_dataloader_from_audio_list(all_docs),
+                task_metadata=self.task_metadata,
                 prompt_type=PromptType.document,
+                hf_subset="test",
+                hf_split="test",
                 **self.encode_kwargs,
             )
         )
@@ -153,8 +139,8 @@ class AudioRerankingEvaluator(Evaluator):
         for i, instance in enumerate(self.samples):
             query_emb = all_query_embs[i : i + 1]  # Single query embedding
 
-            num_pos = len(instance[self.positive_column_name])
-            num_neg = len(instance[self.negative_column_name])
+            num_pos = 1
+            num_neg = 1
             docs_emb = all_docs_embs[docs_idx : docs_idx + num_pos + num_neg]
             docs_idx += num_pos + num_neg
 
@@ -197,40 +183,25 @@ class AudioRerankingEvaluator(Evaluator):
             docs_audios = positive_audios + negative_audios
             is_relevant = [True] * len(positive_audios) + [False] * len(negative_audios)
 
-            # Prepare audio for encoding
-            query_dataset = AudioDataset([query_audio], transform=self.transform)
-            query_dataloader = DataLoader(
-                query_dataset,
-                batch_size=1,
-                shuffle=False,
-                collate_fn=custom_collate_fn,
-                num_workers=1,
-            )
-
-            docs_dataset = AudioDataset(docs_audios, transform=self.transform)
-            docs_dataloader = DataLoader(
-                docs_dataset,
-                batch_size=self.encode_kwargs["batch_size"],
-                shuffle=False,
-                collate_fn=custom_collate_fn,
-                num_workers=min(math.floor(os.cpu_count() / 2), 4),
-            )
-
             # Encode query and documents
             query_emb = np.asarray(
-                model.get_audio_embeddings(
-                    query_dataloader,
-                    task_name=self.task_name,
+                model.encode(
+                    _create_audio_dataloader_from_audio_list([query_audio]),
+                    task_metadata=self.task_metadata,
                     prompt_type=PromptType.query,
+                    hf_subset="test",
+                    hf_split="test",
                     **self.encode_kwargs,
                 )
             )
 
             docs_emb = np.asarray(
-                model.get_audio_embeddings(
-                    docs_dataloader,
-                    task_name=self.task_name,
+                model.encode(
+                    _create_audio_dataloader_from_audio_list(docs_audios),
+                    task_metadata=self.task_metadata,
                     prompt_type=PromptType.document,
+                    hf_subset="test",
+                    hf_split="test",
                     **self.encode_kwargs,
                 )
             )

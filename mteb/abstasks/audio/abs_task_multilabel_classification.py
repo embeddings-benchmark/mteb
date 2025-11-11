@@ -11,6 +11,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
+from mteb._create_dataloaders import (
+    _create_audio_dataloader_from_audio_list,
+)
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import HFSubset
 from mteb.models.models_protocols import EncoderProtocol
@@ -206,7 +209,16 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
         # Get unique training embeddings
         unique_indices = list(set(itertools.chain.from_iterable(train_samples)))
         unique_audio = train_split.select(unique_indices)[self.audio_column_name]
-        _unique_embeddings = model.get_audio_embeddings(unique_audio, **kwargs)
+        dataloader = _create_audio_dataloader_from_audio_list(unique_audio)
+
+        _unique_embeddings = model.encode(
+            dataloader,
+            batch_size=encode_kwargs["batch_size"],
+            task_metadata=self.metadata,
+            # todo: temporary fix, until full refactoring of task
+            hf_subset="test",
+            hf_split="test",
+        )
         unique_train_embeddings = dict(zip(unique_indices, _unique_embeddings))
         test_audio = eval_split[self.audio_column_name]
         binarizer = MultiLabelBinarizer()
@@ -221,9 +233,17 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
         except ValueError:
             logger.warning("Could not stratify test set. Using all samples.")
 
-        X_test = model.get_audio_embeddings(
+        dataloader = _create_audio_dataloader_from_audio_list(
             test_audio,
-            **kwargs,
+        )
+
+        X_test = model.encode(
+            dataloader,
+            batch_size=encode_kwargs["batch_size"],
+            task_metadata=self.metadata,
+            # todo: temporary fix, until full refactoring of task
+            hf_subset="test",
+            hf_split="train",
         )
 
         all_scores = []

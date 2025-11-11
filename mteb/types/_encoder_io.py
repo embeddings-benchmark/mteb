@@ -90,6 +90,20 @@ class ImageInput(TypedDict):
     image: list[Image.Image]
 
 
+class AudioInputItem(TypedDict):
+    """An audio item for the AudioInput.
+
+    Dataset based on `datasets.Audio` will be converted to this format during encoding.
+
+    Attributes:
+        array: The audio array as bytes.
+        sampling_rate: The sampling rate of the audio.
+    """
+
+    array: np.ndarray
+    sampling_rate: int | None
+
+
 class AudioInput(TypedDict):
     """The input to the encoder for audio.
 
@@ -97,7 +111,7 @@ class AudioInput(TypedDict):
         audio: The audio to encode. Can be a list of audio files or a list of lists of audio files.
     """
 
-    audio: list[list[bytes]]
+    audio: list[AudioInputItem]
 
 
 class MultimodalInput(TextInput, CorpusInput, QueryInput, ImageInput, AudioInput):  # type: ignore[misc]
@@ -158,9 +172,19 @@ TextBatchedInput = TextInput | CorpusInput | QueryInput
 """The input to the encoder for a batch of text data."""
 
 QueryDatasetType = Dataset
-"""Retrieval query dataset, containing queries. Should have columns `id`, `text`."""
+"""Retrieval query dataset, containing queries. Should have columns:
+1. `id`, `text`, `instruction` (optionally) for text queries
+2. `id`, `image` for image queries
+3. `id`, `audio` for audio queries
+or a combination of these for multimodal queries.
+ """
 CorpusDatasetType = Dataset
-"""Retrieval corpus dataset, containing documents. Should have columns `id`, `title`, `body`."""
+"""Retrieval corpus dataset, containing documents. Should have columns:
+ 1. `id`, `title` (optionally), `body` for text corpus
+ 2. `id`, `image` for image corpus
+ 3. `id`, `audio` for audio corpus
+ or a combination of these for multimodal corpus.
+ """
 InstructionDatasetType = Dataset
 """Retrieval instruction dataset, containing instructions. Should have columns `query-id`, `instruction`."""
 RelevantDocumentsType = Mapping[str, Mapping[str, int]]

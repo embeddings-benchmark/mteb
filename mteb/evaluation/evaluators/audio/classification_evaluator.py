@@ -1,6 +1,4 @@
 import logging
-import math
-import os
 from typing import Any
 
 import numpy as np
@@ -11,10 +9,10 @@ from sklearn.metrics import (
     average_precision_score,
     f1_score,
 )
-from torch.utils.data import DataLoader
 
+from mteb._create_dataloaders import _create_audio_dataloader_from_audio_list
 from mteb._evaluators import Evaluator
-from mteb.evaluation.evaluators.dataset_utils import AudioDataset, custom_collate_fn
+from mteb.abstasks.task_metadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +34,7 @@ class AudiologRegClassificationEvaluator(Evaluator):
         dataset_test,
         audio_column_name,
         label_column_name,
-        task_name: str,
+        task_metadata: TaskMetadata,
         max_iter: int = 100,
         encode_kwargs: dict[str, Any] = {},
         limit: int | None = None,
@@ -51,18 +49,14 @@ class AudiologRegClassificationEvaluator(Evaluator):
         if limit is not None:
             dataset_train = dataset_train.select(list(range(limit)))
 
-        self.dataset_train = AudioDataset(
-            dataset_train, audio_column_name=audio_column_name, transform=None
-        )
-
+        self.dataset_train = dataset_train
         self.y_train = dataset_train[label_column_name]
-        self.dataset_test = AudioDataset(
-            dataset_test, audio_column_name=audio_column_name, transform=None
-        )
+
+        self.dataset_test = dataset_test
         self.y_test = dataset_test[label_column_name]
 
         self.max_iter = max_iter
-        self.task_name = task_name
+        self.task_metadata = task_metadata
 
     def __call__(self, model, test_cache=None):
         scores = {}
@@ -72,26 +66,25 @@ class AudiologRegClassificationEvaluator(Evaluator):
             max_iter=self.max_iter,
             verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
         )
-        dataloader_train = DataLoader(
-            self.dataset_train,
+        dataloader_train = _create_audio_dataloader_from_audio_list(
+            self.dataset_train["audio"]
+        )
+        X_train = model.encode(
+            dataloader_train,
+            task_metadata=self.task_metadata,
+            hf_split="train",
+            hf_subset="default",
             batch_size=self.encode_kwargs["batch_size"],
-            shuffle=False,
-            collate_fn=custom_collate_fn,
-            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
-        X_train = model.get_audio_embeddings(
-            dataloader_train, batch_size=self.encode_kwargs["batch_size"]
+        dataloader = _create_audio_dataloader_from_audio_list(
+            self.dataset_test["audio"]
         )
-        dataloader = DataLoader(
-            self.dataset_test,
+        X_test = model.encode(
+            dataloader,
+            task_metadata=self.task_metadata,
+            hf_split="train",
+            hf_subset="default",
             batch_size=self.encode_kwargs["batch_size"],
-            shuffle=False,
-            collate_fn=custom_collate_fn,
-            num_workers=min(math.floor(os.cpu_count() / 2), 16),
-        )
-
-        X_test = model.get_audio_embeddings(
-            dataloader, batch_size=self.encode_kwargs["batch_size"]
         )
         test_cache = X_test
 

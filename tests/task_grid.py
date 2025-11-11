@@ -9,8 +9,12 @@ from .mock_tasks import (
     MockAny2AnyRetrievalI2TTask,
     MockAny2AnyRetrievalT2ATask,
     MockAny2AnyRetrievalT2ITask,
+    MockAudioClassification,
+    MockAudioClassificationCrossVal,
     MockAudioClusteringTask,
     MockAudioMultilabelClassificationTask,
+    MockAudioPairClassification,
+    MockAudioReranking,
     MockAudioZeroshotClassificationTask,
     MockBitextMiningTask,
     MockClassificationTask,
@@ -150,6 +154,10 @@ MOCK_MAEB_TASK_GRID = [
     MockAny2AnyRetrievalT2ATask(),
     MockAny2AnyRetrievalA2TTask(),
     MockAny2AnyRetrievalA2ATask(),
+    MockAudioReranking(),
+    MockAudioClassification(),
+    MockAudioClassificationCrossVal(),
+    MockAudioPairClassification(),
 ]
 
 MOCK_MIEB_TASK_GRID_AS_STRING = [

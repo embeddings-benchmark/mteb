@@ -2,7 +2,6 @@ import heapq
 import io
 import json
 import logging
-import math
 import os
 from collections import defaultdict
 from typing import Any
@@ -10,13 +9,14 @@ from typing import Any
 import numpy as np
 import pytrec_eval
 import torch
-from datasets import Dataset
 from PIL import Image
-from torch.utils.data import DataLoader
+from datasets import Dataset
 
+from mteb._create_dataloaders import (
+    _create_audio_dataloader_from_audio_list,
+    _create_dataloader_from_texts,
+)
 from mteb._evaluators import Evaluator
-from mteb.models.models_protocols import EncoderProtocol
-
 from mteb._evaluators._download import download
 from mteb._evaluators.retrieval_metrics import (
     confidence_scores,
@@ -27,7 +27,8 @@ from mteb._evaluators.retrieval_metrics import (
     top_k_accuracy,
 )
 from mteb._requires_package import requires_image_dependencies
-from mteb.evaluation.evaluators.dataset_utils import AudioDataset
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.similarity_functions import cos_sim, dot_score
 from mteb.types import PromptType
 
@@ -112,7 +113,7 @@ class Any2AnyDenseRetrievalExactSearch:
         queries: Dataset,  # solve memoery issues
         top_k: int,
         score_function: str,
-        task_name: str,
+        task_metadata: TaskMetadata,
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
@@ -137,57 +138,24 @@ class Any2AnyDenseRetrievalExactSearch:
 
         if q_modality == "text":
             query_texts = queries["text"]
-            query_embeddings = self.model.get_text_embeddings(
-                texts=query_texts,
-                task_name=task_name,
+            dataloader = _create_dataloader_from_texts(query_texts)
+            query_embeddings = self.model.encode(
+                dataloader,
+                task_metadata=task_metadata,
+                hf_subset="test",
+                hf_split="test",
                 prompt_type=PromptType.query,
                 **self.encode_kwargs,
             )
         elif q_modality == "audio":
-            queries_dataset = AudioDataset(
-                queries,
-                audio_column_name="audio",
-            )
-            query_audio_dataloader = DataLoader(
-                queries_dataset,
-                batch_size=self.encode_kwargs["batch_size"],
-                shuffle=False,
-                collate_fn=custom_collate_fn,
-                num_workers=min(math.floor(os.cpu_count() / 2), 16),
-            )
-            query_embeddings = self.model.get_audio_embeddings(
-                audio=query_audio_dataloader,
-                task_name=task_name,
+            query_embeddings = self.model.encode(
+                _create_audio_dataloader_from_audio_list(queries["audio"]),
+                task_metadata=task_metadata,
                 prompt_type=PromptType.query,
+                hf_subset="test",
+                hf_split="test",
                 **self.encode_kwargs,
             )
-        elif "image" in q_modality:
-            queries_dataset = ImageDataset(
-                queries, image_column_name="image", transform=self.transform
-            )
-            query_image_dataloader = DataLoader(
-                queries_dataset,
-                batch_size=self.encode_kwargs["batch_size"],
-                shuffle=False,
-                collate_fn=custom_collate_fn,
-                num_workers=min(math.floor(os.cpu_count() / 2), 16),
-            )
-            if q_modality == "image":
-                query_embeddings = self.model.get_image_embeddings(
-                    images=query_image_dataloader,
-                    task_name=task_name,
-                    prompt_type=PromptType.query,
-                    **self.encode_kwargs,
-                )
-            elif q_modality == "image,text":
-                query_texts = queries["text"]
-                query_embeddings = self.model.get_fused_embeddings(
-                    texts=query_texts,
-                    images=query_image_dataloader,
-                    task_name=task_name,
-                    prompt_type=PromptType.query,
-                    **self.encode_kwargs,
-                )
         else:
             raise ValueError(f"Unsupported query modality: {q_modality}")
 
@@ -209,63 +177,38 @@ class Any2AnyDenseRetrievalExactSearch:
 
             if corpus_modality == "text":
                 corpus_texts = chunk["text"]
-                sub_corpus_embeddings = self.model.get_text_embeddings(
-                    texts=corpus_texts,
-                    task_name=task_name,
+                dataloader = _create_dataloader_from_texts(corpus_texts)
+                sub_corpus_embeddings = self.model.encode(
+                    dataloader,
+                    task_metadata=task_metadata,
                     prompt_type=PromptType.document,
+                    hf_subset="test",
+                    hf_split="test",
                     **self.encode_kwargs,
                 )
             elif corpus_modality == "audio":
-                corpus_dataset = AudioDataset(chunk, audio_column_name="audio")
-                corpus_audio_dataloader = DataLoader(
-                    corpus_dataset,
-                    batch_size=self.encode_kwargs["batch_size"],
-                    shuffle=False,
-                    collate_fn=custom_collate_fn,
-                    num_workers=min(math.floor(os.cpu_count() / 2), 16),
+                corpus_audio_dataloader = _create_audio_dataloader_from_audio_list(
+                    chunk["audio"]
                 )
-                sub_corpus_embeddings = self.model.get_audio_embeddings(
-                    audio=corpus_audio_dataloader,
-                    task_name=task_name,
+                sub_corpus_embeddings = self.model.encode(
+                    corpus_audio_dataloader,
+                    task_metadata=task_metadata,
                     prompt_type=PromptType.document,
+                    hf_subset="test",
+                    hf_split="test",
                     **self.encode_kwargs,
                 )
-            elif "image" in corpus_modality:
-                corpus_dataset = ImageDataset(
-                    chunk, image_column_name="image", transform=self.transform
-                )
-                corpus_image_dataloader = DataLoader(
-                    corpus_dataset,
-                    batch_size=self.encode_kwargs["batch_size"],
-                    shuffle=False,
-                    collate_fn=custom_collate_fn,
-                    num_workers=min(math.floor(os.cpu_count() / 2), 16),
-                )
-                if corpus_modality == "image":
-                    sub_corpus_embeddings = self.model.get_image_embeddings(
-                        images=corpus_image_dataloader,
-                        task_name=task_name,
-                        prompt_type=PromptType.document,
-                        **self.encode_kwargs,
-                    )
-                elif corpus_modality == "image,text":
-                    corpus_texts = chunk["text"]
-                    sub_corpus_embeddings = self.model.get_fused_embeddings(
-                        texts=corpus_texts,
-                        images=corpus_image_dataloader,
-                        task_name=task_name,
-                        prompt_type=PromptType.document,
-                        **self.encode_kwargs,
-                    )
             else:
                 raise ValueError(f"Unsupported modality: {corpus_modality}")
 
-            cos_scores = score_function(query_embeddings, sub_corpus_embeddings)
-            cos_scores[torch.isnan(cos_scores)] = -1
+            scores = self.model.similarity(query_embeddings, sub_corpus_embeddings)
 
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
-                cos_scores,
-                min(top_k, cos_scores.size(1)),
+                torch.tensor(scores),
+                min(
+                    top_k + 1,
+                    len(scores[1]) if len(scores) > 1 else len(scores[-1]),
+                ),
                 dim=1,
                 largest=True,
                 sorted=return_sorted,
@@ -319,8 +262,8 @@ class Any2AnyDenseRetrievalExactSearch:
 class Any2AnyRetrievalEvaluator(Evaluator):
     def __init__(
         self,
-        retriever=None,
-        task_name: str | None = None,
+        retriever,
+        task_metadata: TaskMetadata,
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
         score_function: str = "cos_sim",
         encode_kwargs: dict[str, Any] = {},
@@ -336,7 +279,7 @@ class Any2AnyRetrievalEvaluator(Evaluator):
             max(k_values) if "top_k" not in kwargs else kwargs["top_k"]
         )  # can lower it if reranking
         self.score_function = score_function
-        self.task_name = task_name
+        self.task_metadata = task_metadata
 
     def __call__(
         self,
@@ -351,7 +294,7 @@ class Any2AnyRetrievalEvaluator(Evaluator):
             queries,
             self.top_k,
             self.score_function,
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
         )
 
     @staticmethod

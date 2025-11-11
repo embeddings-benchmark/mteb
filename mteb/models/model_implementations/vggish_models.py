@@ -1,18 +1,22 @@
 import logging
+import warnings
 from typing import Any
 
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
+from mteb import TaskMetadata
+from mteb._requires_package import requires_audio_dependencies, requires_package
 from mteb.models import ModelMeta
+from mteb.types import Array, BatchedInput, PromptType
+from mteb.types._encoder_io import AudioInput
 
 logger = logging.getLogger(__name__)
 
 
-def vggish_loader(**kwargs):
+def vggish_loader(*args, **kwargs):
     """Factory function to create a VGGish model wrapper."""
     requires_package(
         vggish_loader,
@@ -31,6 +35,7 @@ def vggish_loader(**kwargs):
             max_audio_length_seconds: float = 30.0,
             **kwargs: Any,
         ):
+            requires_audio_dependencies()
             self.device = device
             self.max_audio_length_seconds = max_audio_length_seconds
             self.model = vggish.get_vggish(with_classifier=False, pretrained=True)
@@ -75,55 +80,6 @@ def vggish_loader(**kwargs):
 
             return audio
 
-        def _process_audio_item(self, item):
-            """Process a single audio item into normalized tensor."""
-            if isinstance(item, dict):
-                if "array" in item:
-                    audio = (
-                        torch.from_numpy(item["array"])
-                        if isinstance(item["array"], np.ndarray)
-                        else item["array"]
-                    )
-                    audio = self._resample_audio(audio.float(), item["sampling_rate"])
-                    return self._normalize_audio(audio)
-                elif "path" in item:
-                    return self._load_audio_file(item["path"])
-            elif isinstance(item, (np.ndarray, torch.Tensor)):
-                return item
-            elif isinstance(item, str):
-                return self._load_audio_file(item)
-
-            return item
-
-        def _process_audio(self, audio):
-            """Process audio input into list of normalized tensors."""
-            if isinstance(audio, DataLoader):
-                # Force single-threaded processing to avoid pickling issues
-                audio.num_workers = 0
-
-                processed = []
-                for batch in audio:
-                    processed.extend(self._process_batch(batch))
-                return processed
-            else:
-                return self._process_batch(audio)
-
-        def _process_batch(self, batch):
-            """Process a batch of audio items."""
-            if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
-                waveforms = []
-                for audio, _ in batch:
-                    waveforms.append(self._normalize_audio(audio))
-                return waveforms
-
-            return [self._process_audio_item(item) for item in batch]
-
-        def _load_audio_file(self, path):
-            """Load and process audio file."""
-            waveform, sample_rate = torchaudio.load(path)
-            waveform = self._resample_audio(waveform.squeeze().float(), sample_rate)
-            return self._normalize_audio(waveform)
-
         def _prepare_input_tensor(self, audio_data):
             """Convert audio to VGGish input format and handle tensor dimensions."""
             if isinstance(audio_data, np.ndarray):
@@ -135,9 +91,6 @@ def vggish_loader(**kwargs):
             input_tensor = self.converter(audio_data.float(), self.sampling_rate).to(
                 self.device
             )
-
-            if input_tensor.numel() == 0:
-                return None
 
             # Handle different tensor dimensions
             if input_tensor.dim() == 4 and input_tensor.shape[1] == 3:
@@ -153,65 +106,67 @@ def vggish_loader(**kwargs):
             elif input_tensor.dim() == 2:
                 # [height, width] -> [1, 1, height, width]
                 input_tensor = input_tensor.unsqueeze(0).unsqueeze(0)
-            elif input_tensor.dim() == 3:
-                # [batch, height, width] -> [batch, 1, height, width]
-                input_tensor = input_tensor.unsqueeze(1)
 
             return input_tensor
 
         def get_audio_embeddings(
             self,
-            audio,
-            *,
-            task_name=None,
-            prompt_type=None,
-            batch_size=4,
+            inputs: DataLoader[AudioInput],
             show_progress_bar=True,
             **kwargs,
         ):
             """Generate embeddings for audio inputs."""
-            processed_audio = self._process_audio(audio)
             all_embeddings = []
 
-            with torch.no_grad():
-                for i in tqdm(
-                    range(0, len(processed_audio), batch_size),
-                    desc="Processing audio",
-                    disable=not show_progress_bar,
-                ):
-                    batch = processed_audio[i : i + batch_size]
-                    batch_embeddings = []
+            for batch in tqdm(
+                inputs,
+                desc="Processing audio",
+                disable=not show_progress_bar,
+            ):
+                batch_embeddings = []
 
-                    for audio_data in batch:
-                        input_tensor = self._prepare_input_tensor(audio_data)
+                for a in batch["audio"]:
+                    array = torch.tensor(a["array"], dtype=torch.float32)
+                    sr = a.get("sampling_rate", None)
+                    if sr is None:
+                        warnings.warn(
+                            f"No sampling_rate provided for an audio sample. "
+                            f"Assuming {self.sampling_rate} Hz (model default)."
+                        )
+                        sr = self.sampling_rate
 
-                        if input_tensor is None:
-                            # Create zero embedding for empty tensor
-                            logger.debug("Creating zero embedding for empty tensor")
-                            zero_embedding = torch.zeros(
-                                self.embed_dim, device=self.device
-                            )
-                            batch_embeddings.append(zero_embedding.cpu().numpy())
-                            continue
+                    # Resample if needed
+                    audio = self._resample_audio(array.float(), sr)
+                    # Normalize
+                    audio = self._normalize_audio(audio)
 
+                    with torch.no_grad():
+                        input_tensor = self._prepare_input_tensor(audio)
                         embedding = self.model(input_tensor)
 
                         # Use mean pooling if needed
                         if len(embedding.shape) > 1:
                             embedding = torch.mean(embedding, dim=0)
 
-                        batch_embeddings.append(embedding.cpu().numpy())
+                        batch_embeddings.append(embedding.cpu().detach().numpy())
 
-                    all_embeddings.extend(batch_embeddings)
+                all_embeddings.extend(batch_embeddings)
 
-            return (
-                np.array(all_embeddings)
-                if all_embeddings
-                else np.zeros((0, self.embed_dim))
-            )
+            return np.array(all_embeddings)
 
-        def encode(self, inputs, *, task_name, prompt_type=None, **kwargs):
-            raise ValueError("vggish models only support audio encoding.")
+        def encode(
+            self,
+            inputs: DataLoader[BatchedInput],
+            *,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
+            prompt_type: PromptType | None = None,
+            **kwargs: Any,
+        ) -> Array:
+            if "audio" not in inputs.dataset.features:
+                raise ValueError("VGGishWrapper only supports audio inputs.")
+            return self.get_audio_embeddings(inputs, **kwargs)
 
     return VGGishWrapper(**kwargs)
 
