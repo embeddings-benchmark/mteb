@@ -122,7 +122,6 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         image_embeddings = model.encode(
             DataLoader(
                 CustomImageDataset(images),
-                batch_size=encode_kwargs["batch_size"],
                 collate_fn=lambda x: {"image": [item["image"] for item in x]},
                 **encode_kwargs,
             ),
