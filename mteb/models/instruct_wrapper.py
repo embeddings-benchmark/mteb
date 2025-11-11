@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def instruct_wrapper(
     model_name_or_path: str,
     mode: str,
-    instruction_template: str | Callable[[str], str] | None = None,
+    instruction_template: str | Callable[[str, PromptType], str] | None = None,
     **kwargs,
 ):
     """Instruct wrapper for models. Uses GritLM to pass instructions to the model.
@@ -82,8 +82,11 @@ def instruct_wrapper(
             logger.info(
                 f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
             )
-            embeddings = super().encode(
-                _inputs, instruction=instruction, *args, **kwargs
+            embeddings = super().encode(  # type: ignore[safe-super]
+                _inputs,
+                instruction=instruction,
+                *args,
+                **kwargs,  # type: ignore[arg-type]
             )
             if isinstance(embeddings, torch.Tensor):
                 # sometimes in kwargs can be return_tensors=True
@@ -140,7 +143,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             )
 
         self.instruction_template = instruction_template
-        tokenizer_params = {}
+        tokenizer_params: dict[str, Any] = {}
         if add_eos_token:
             tokenizer_params["add_eos_token"] = add_eos_token
         if max_seq_length is not None:
@@ -189,7 +192,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
         """
         sentences = [text for batch in inputs for text in batch["text"]]
-        instruction = self.get_task_instruction(task_metadata, prompt_type)
+        instruction: str | None = self.get_task_instruction(task_metadata, prompt_type)
 
         # to passage prompts won't be applied to passages
         if (

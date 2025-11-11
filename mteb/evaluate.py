@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 from tqdm.auto import tqdm
 
+from mteb import Benchmark
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.abstask import AbsTask
@@ -86,27 +87,28 @@ def _sanitize_model(
 ) -> tuple[MTEBModels | ModelMeta, ModelMeta, ModelName, Revision]:
     from sentence_transformers import CrossEncoder, SentenceTransformer
 
+    wrapped: MTEBModels | ModelMeta
     if isinstance(model, SentenceTransformer):
-        _mdl = SentenceTransformerEncoderWrapper(model)
-        meta = _mdl.mteb_model_meta
-        _mdl = cast(EncoderProtocol, _mdl)
-        model = _mdl
+        wrapper = SentenceTransformerEncoderWrapper(model)
+        meta = wrapper.mteb_model_meta
+        wrapped = cast(EncoderProtocol, wrapper)
     elif isinstance(model, CrossEncoder):
-        _mdl = CrossEncoderWrapper(model)
-        _mdl = cast(CrossEncoderProtocol, _mdl)
-        meta = _mdl.mteb_model_meta
-        model = _mdl
+        cross_encoder_wrapper = CrossEncoderWrapper(model)
+        meta = cross_encoder_wrapper.mteb_model_meta
+        wrapped = cast(CrossEncoderProtocol, cross_encoder_wrapper)
     elif hasattr(model, "mteb_model_meta"):
-        meta = model.mteb_model_meta  # type: ignore[attr-defined]
+        meta = getattr(model, "mteb_model_meta")
         if not isinstance(meta, ModelMeta):
             meta = _create_empty_model_meta()
+        wrapped = cast(MTEBModels | ModelMeta, model)
     else:
         meta = _create_empty_model_meta() if not isinstance(model, ModelMeta) else model
+        wrapped = meta
 
     model_name = cast(str, meta.name)
     model_revision = cast(str, meta.revision)
 
-    return model, meta, model_name, model_revision
+    return wrapped, meta, model_name, model_revision
 
 
 def _evaluate_task(
@@ -161,7 +163,7 @@ def _evaluate_task(
     if not data_loaded:
         task.load_data()
 
-    evaluation_time = 0
+    evaluation_time = 0.0
 
     for split, hf_subsets in splits.items():
         tick = time()
@@ -194,7 +196,7 @@ def _evaluate_task(
 
 def _check_model_modalities(
     model: ModelMeta,
-    tasks: AbsTask | Iterable[AbsTask],
+    tasks: AbsTask | Benchmark | Iterable[AbsTask | Benchmark],
 ) -> None:
     """Check that model modalities are compatible with task modalities.
 
@@ -208,12 +210,21 @@ def _check_model_modalities(
         return
 
     model_modalities = set(model.modalities)
+    check_tasks: Iterable[AbsTask] = []
     if isinstance(tasks, AbsTask):
-        tasks = [tasks]
+        check_tasks = [tasks]
+    elif isinstance(tasks, list) and all(isinstance(task, Benchmark) for task in tasks):
+        benchmarks = cast(Iterable[Benchmark], tasks)
+        check_tasks = [task for benchmark in benchmarks for task in benchmark.tasks]
+    elif isinstance(tasks, Benchmark):
+        benchmark = cast(Benchmark, tasks)
+        check_tasks = benchmark.tasks
+    else:
+        check_tasks = cast(Iterable[AbsTask], tasks)
 
     warnings, errors = [], []
 
-    for task in tasks:
+    for task in check_tasks:
         # only retrieval tasks have different modalities for query and document and can be run with partial overlaps
         if isinstance(task, AbsTaskRetrieval):
             query_mods = set(task.metadata.get_modalities(PromptType.query))
@@ -258,7 +269,7 @@ def _check_model_modalities(
 
 def evaluate(
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
-    tasks: AbsTask | Iterable[AbsTask],
+    tasks: AbsTask | Benchmark | Iterable[AbsTask | Benchmark],
     *,
     co2_tracker: bool | None = None,
     raise_error: bool = True,
@@ -330,10 +341,10 @@ def evaluate(
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
-        task = cast(AbsTaskAggregate, tasks)
+        aggregated_task = cast(AbsTaskAggregate, tasks)
         results = evaluate(
             model,
-            task.metadata.tasks,
+            aggregated_task.metadata.tasks,
             co2_tracker=co2_tracker,
             raise_error=raise_error,
             encode_kwargs=encode_kwargs,
@@ -342,7 +353,7 @@ def evaluate(
             prediction_folder=prediction_folder,
             show_progress_bar=show_progress_bar,
         )
-        result = task.combine_task_results(results.task_results)
+        result = aggregated_task.combine_task_results(results.task_results)
         return ModelResult(
             model_name=results.model_name,
             model_revision=results.model_revision,
@@ -352,7 +363,8 @@ def evaluate(
     if isinstance(tasks, AbsTask):
         task = tasks
     else:
-        results = []
+        tasks = cast(Iterable[AbsTask], tasks)
+        evaluate_results = []
         tasks_tqdm = tqdm(
             tasks,
             desc="Evaluating tasks",
@@ -371,20 +383,20 @@ def evaluate(
                 prediction_folder=prediction_folder,
                 show_progress_bar=False,
             )
-            results.extend(_res.task_results)
+            evaluate_results.extend(_res.task_results)
         return ModelResult(
             model_name=_res.model_name,
             model_revision=_res.model_revision,
-            task_results=results,
+            task_results=evaluate_results,
         )
 
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
 
-    existing_results = None
+    existing_results: TaskResult | None = None
     if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
-        results = cache.load_task_result(task.metadata.name, meta)
-        if results:
-            existing_results = results
+        cache_results = cache.load_task_result(task.metadata.name, meta)
+        if cache_results:
+            existing_results = cache_results
 
     if (
         existing_results
