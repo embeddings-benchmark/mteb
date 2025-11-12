@@ -341,7 +341,6 @@ tarka_embedding_150m_v1 = ModelMeta(
 )
 
 tark_embedding_350_v1_kwargs = dict(
-    device="cuda",  # use a gpu
     model_kwargs={
         "attn_implementation": "flash_attention_2",
         "torch_dtype": "bfloat16",
