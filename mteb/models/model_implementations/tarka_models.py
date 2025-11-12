@@ -1,14 +1,6 @@
-from typing import Any
-
-import torch
-from torch.utils.data import DataLoader
-
-import mteb
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_implementations.google_models import gemma_embedding_loader
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
 
 Tarka_Embedding_150M_V1_CITATION = """@misc{tarka_ai_research_2025,
 	author       = { Tarka AI Research },
@@ -57,11 +49,15 @@ tarka_embedding_350_v1_instruction_prompts = {
     "MedrxivClusteringP2P": "Identify the main category of Medrxiv papers based on the titles and abstracts",
     "MedrxivClusteringP2P.v2": "Identify the main category of Medrxiv papers based on the titles and abstracts",
     "MedrxivClusteringS2S": "Identify the main category of Medrxiv papers based on the titles",
+    "MedrxivClusteringS2S.v2": "Identify the main category of Medrxiv papers based on the titles",
     "RedditClustering": "Identify the topic or theme of Reddit posts based on the titles",
     "RedditClusteringP2P": "Identify the topic or theme of Reddit posts based on the titles and posts",
     "StackExchangeClustering": "Identify the topic or theme of StackExchange posts based on the titles",
     "StackExchangeClusteringP2P": "Identify the topic or theme of StackExchange posts based on the given paragraphs",
+    "StackExchangeClustering.v2": "Identify the topic or theme of StackExchange posts based on the titles",
+    "StackExchangeClusteringP2P.v2": "Identify the topic or theme of StackExchange posts based on the given paragraphs",
     "TwentyNewsgroupsClustering": "Identify the topic or theme of the given news articles",
+    "TwentyNewsgroupsClustering.v2": "Identify the topic or theme of the given news articles",
     "CLSClusteringS2S": "Identify the main category of scholar papers based on the titles",
     "CLSClusteringP2P": "Identify the main category of scholar papers based on the titles and abstracts",
     "ThuNewsClusteringS2S": "Identify the topic or theme of the given news articles based on the titles",
@@ -293,6 +289,7 @@ tarka_embedding_350_v1_instruction_prompts = {
     "STS16": "Retrieve semantically similar text",
     "SummEval": "Retrieve semantically similar text",
     "ATEC": "Retrieve semantically similar text",
+    "SummEvalSummarization.v2": "Given a news summary, retrieve other semantically similar summaries.",
 }
 
 MULTILINGUAL_EVALUATED_LANGUAGES = [
@@ -319,70 +316,6 @@ training_data = {
     "MIRACLRetrieval",
     "CodeSearchNet",
 }
-
-
-class TarkaSentenceTransformer(InstructSentenceTransformerModel):
-    # Adopted from https://github.com/QwenLM/Qwen3-Embedding/tree/main/evaluation
-    def get_instruction(self, task_name, task_metadata, prompt_type):
-        sym_task = False
-        if task_name in self.prompts_dict:
-            instruction = self.prompts_dict[task_name.strip()]
-            if isinstance(instruction, dict):
-                instruction = instruction.get(prompt_type, "")
-                sym_task = True
-        elif task_name.split(".")[0].strip() in self.prompts_dict:
-            instruction = self.prompts_dict[task_name.split(".")[0].strip()]
-            if isinstance(instruction, dict):
-                instruction = instruction.get(prompt_type, "")
-                sym_task = True
-        else:
-            print(task_name, "not found in prompts_dict")
-            instruction = super().get_instruction(task_metadata, prompt_type)
-        task_type = mteb.get_tasks(tasks=[task_name])[0].metadata.type
-        if "Retrieval" in task_type and not sym_task and prompt_type != "query":
-            return ""
-        if task_type in ["STS", "PairClassification"]:
-            return "Retrieve semantically similar text"
-        if task_type in "Bitext Mining":
-            return "Retrieve parallel sentences"
-        if "Retrieval" in task_type and prompt_type == "query" and instruction is None:
-            instruction = "Retrieval relevant passage for the given query."
-        return instruction
-
-    def format_instruction(self, instruction, prompt_type):
-        if instruction is not None and len(instruction.strip()) > 0:
-            instruction = self.instruction_template.format(instruction=instruction)
-            return instruction
-        return ""
-
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        _inputs = [text for batch in inputs for text in batch["text"]]
-
-        instruction = self.get_instruction(
-            task_metadata.name, task_metadata, prompt_type
-        )
-        instruction = self.format_instruction(instruction, prompt_type)
-        print("Using instruction:", instruction)
-
-        embeddings = self.model.encode(
-            _inputs,
-            prompt=instruction,
-            **kwargs,
-        )
-
-        if isinstance(embeddings, torch.Tensor):
-            # sometimes in kwargs can be return_tensors=True
-            embeddings = embeddings.cpu().detach().float().numpy()
-        return embeddings
 
 
 tarka_embedding_150m_v1 = ModelMeta(
@@ -416,12 +349,12 @@ tark_embedding_350_v1_kwargs = dict(
     },  # use low-precision
     trust_remote_code=True,
     prompts_dict=tarka_embedding_350_v1_instruction_prompts,
-    apply_instruction_to_passages=True,
+    apply_instruction_to_passages=False,
     instruction_template="Instruct: {instruction}\nQuery:",
 )
 
 tarka_embedding_350m_v1 = ModelMeta(
-    loader=TarkaSentenceTransformer,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=tark_embedding_350_v1_kwargs,
     name="Tarka-AIR/Tarka-Embedding-350M-V1",
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
