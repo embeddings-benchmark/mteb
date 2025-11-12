@@ -118,7 +118,7 @@ class BenchmarkResults(BaseModel):
         for name, revision in zip(names, _revisions):
             if isinstance(name, ModelMeta):
                 if name.name is None:
-                    raise ValueError("ModelMeta must have a name.")
+                    raise ValueError("name in ModelMeta is None. It must be a string.")
                 name_rev[name.name] = name.revision
             else:
                 name_ = cast(str, name)
