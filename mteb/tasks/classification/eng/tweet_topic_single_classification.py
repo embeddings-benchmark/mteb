@@ -5,12 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class TweetTopicSingleClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TweetTopicSingleClassification",
-        description="""Topic classification dataset on Twitter with 6 labels. Each instance of
-        TweetTopic comes with a timestamp which distributes from September 2019 to August 2021.
-        Tweets were preprocessed before the annotation to normalize some artifacts, converting
-        URLs into a special token {{URL}} and non-verified usernames into {{USERNAME}}. For verified
-        usernames, we replace its display name (or account name) with symbols {@}.
-        """,
+        description="Topic classification dataset on Twitter with 6 labels. Each instance of TweetTopic comes with a timestamp which distributes from September 2019 to August 2021. Tweets were preprocessed before the annotation to normalize some artifacts, converting URLs into a special token {{URL}} and non-verified usernames into {{USERNAME}}. For verified usernames, we replace its display name (or account name) with symbols {@}.",
         dataset={
             "path": "mteb/TweetTopicSingleClassification",
             "revision": "b4280e921a2760ce34d2dd80a9e5dc8bcbf61785",
@@ -55,13 +50,7 @@ Barbieri, Francesco},
 class TweetTopicSingleClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TweetTopicSingleClassification.v2",
-        description="""Topic classification dataset on Twitter with 6 labels. Each instance of
-        TweetTopic comes with a timestamp which distributes from September 2019 to August 2021.
-        Tweets were preprocessed before the annotation to normalize some artifacts, converting
-        URLs into a special token {{URL}} and non-verified usernames into {{USERNAME}}. For verified
-        usernames, we replace its display name (or account name) with symbols {@}.
-
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Topic classification dataset on Twitter with 6 labels. Each instance of TweetTopic comes with a timestamp which distributes from September 2019 to August 2021. Tweets were preprocessed before the annotation to normalize some artifacts, converting URLs into a special token {{URL}} and non-verified usernames into {{USERNAME}}. For verified usernames, we replace its display name (or account name) with symbols {@}. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         dataset={
             "path": "mteb/tweet_topic_single",
             "revision": "a7904e26081f987da81ad2cc063e09e714e875d0",

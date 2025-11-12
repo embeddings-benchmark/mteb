@@ -46,8 +46,7 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
 class SlovakMovieReviewSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SlovakMovieReviewSentimentClassification.v2",
-        description="""User reviews of movies on the CSFD movie database, with 2 sentiment classes (positive, negative)
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="User reviews of movies on the CSFD movie database, with 2 sentiment classes (positive, negative) This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://arxiv.org/pdf/2304.01922",
         dataset={
             "path": "mteb/slovak_movie_review_sentiment",

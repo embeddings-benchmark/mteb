@@ -42,8 +42,7 @@ class CbdClassification(AbsTaskClassification):
 class CbdClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CBD.v2",
-        description="""Polish Tweets annotated for cyberbullying detection.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Polish Tweets annotated for cyberbullying detection. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="http://2019.poleval.pl/files/poleval2019.pdf",
         dataset={
             "path": "mteb/cbd",
@@ -274,8 +273,7 @@ Tetreault, Joel},
 class AllegroReviewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AllegroReviews.v2",
-        description="""A Polish dataset for sentiment classification on reviews from e-commerce marketplace Allegro.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="A Polish dataset for sentiment classification on reviews from e-commerce marketplace Allegro. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://aclanthology.org/2020.acl-main.111.pdf",
         dataset={
             "path": "mteb/allegro_reviews",
@@ -362,8 +360,7 @@ class PacClassification(AbsTaskClassification):
 class PacClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PAC.v2",
-        description="""Polish Paraphrase Corpus
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Polish Paraphrase Corpus This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://arxiv.org/pdf/2211.13112.pdf",
         dataset={
             "path": "mteb/pac",

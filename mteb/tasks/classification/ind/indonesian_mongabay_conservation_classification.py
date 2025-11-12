@@ -104,8 +104,7 @@ Purwarianti, Ayu},
 class IndonesianMongabayConservationClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="IndonesianMongabayConservationClassification.v2",
-        description="""Conservation dataset that was collected from mongabay.co.id contains topic-classification task (multi-label format) and sentiment classification. This task only covers sentiment analysis (positive, neutral negative)
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Conservation dataset that was collected from mongabay.co.id contains topic-classification task (multi-label format) and sentiment classification. This task only covers sentiment analysis (positive, neutral negative) This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://aclanthology.org/2023.sealp-1.4/",
         dataset={
             "path": "mteb/indonesian_mongabay_conservation",

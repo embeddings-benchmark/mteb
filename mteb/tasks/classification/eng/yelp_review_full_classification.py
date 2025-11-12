@@ -51,8 +51,7 @@ class YelpReviewFullClassification(AbsTaskClassification):
 class YelpReviewFullClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="YelpReviewFullClassification.v2",
-        description="""Yelp Review Full is a dataset for sentiment analysis, containing 5 classes corresponding to ratings 1-5.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Yelp Review Full is a dataset for sentiment analysis, containing 5 classes corresponding to ratings 1-5. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://arxiv.org/abs/1509.01626",
         dataset={
             "path": "mteb/yelp_review_full",

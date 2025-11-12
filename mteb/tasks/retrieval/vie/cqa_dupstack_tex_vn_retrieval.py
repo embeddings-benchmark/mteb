@@ -5,11 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class CQADupstackTexVN(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CQADupstackTex-VN",
-        description="""A translated dataset from CQADupStack: A Benchmark Data Set for Community Question-Answering Research
-            The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-            - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-            - Applies advanced embedding models to filter the translations.
-            - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
+        description="A translated dataset from CQADupStack: A Benchmark Data Set for Community Question-Answering Research The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="http://nlp.cis.unimelb.edu.au/resources/cqadupstack/",
         dataset={
             "path": "GreenNode/cqadupstack-tex-vn",

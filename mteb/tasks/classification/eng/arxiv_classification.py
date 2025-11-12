@@ -43,8 +43,7 @@ class ArxivClassification(AbsTaskClassification):
 class ArxivClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ArxivClassification.v2",
-        description="""Classification Dataset of Arxiv Papers
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Classification Dataset of Arxiv Papers This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         dataset={
             "path": "mteb/arxiv",
             "revision": "202e10e9a5d37a5068397b48184d0728346a7b4a",

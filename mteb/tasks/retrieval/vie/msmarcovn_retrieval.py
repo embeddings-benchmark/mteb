@@ -9,11 +9,7 @@ class MSMARCOVN(AbsTaskRetrieval):
             "path": "GreenNode/msmarco-vn",
             "revision": "85d1ad4cc9070b8d019d65f5af1631a2ab91e294",
         },
-        description="""A translated dataset from MS MARCO is a collection of datasets focused on deep learning in search
-            The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-            - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-            - Applies advanced embedding models to filter the translations.
-            - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
+        description="A translated dataset from MS MARCO is a collection of datasets focused on deep learning in search The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://microsoft.github.io/msmarco/",
         type="Retrieval",
         category="t2t",
