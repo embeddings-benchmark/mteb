@@ -361,6 +361,10 @@ def _create_summary_table_mean_public_private(
     # For RTEB: all tasks are Retrieval type, so Retrieval column = Mean (Task)
     if "Retrieval" in joint_table.columns:
         rename_dict["Retrieval"] = "Mean (Task)"
+    # For ViDoRe V3: all tasks are Document Understanding type, so Document Understanding column = Mean (Task)
+    elif "Document Understanding" in joint_table.columns:
+        rename_dict["Document Understanding"] = "Mean (Task)"
+
     joint_table = joint_table.rename(columns=rename_dict)
 
     # Move borda rank to front
