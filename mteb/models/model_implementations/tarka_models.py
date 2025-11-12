@@ -344,7 +344,6 @@ tark_embedding_350_v1_kwargs = dict(
     device="cuda",  # use a gpu
     model_kwargs={
         "attn_implementation": "flash_attention_2",
-        "device_map": "cuda",
         "torch_dtype": "bfloat16",
     },  # use low-precision
     trust_remote_code=True,
@@ -359,7 +358,7 @@ tarka_embedding_350m_v1 = ModelMeta(
     name="Tarka-AIR/Tarka-Embedding-350M-V1",
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
     open_weights=True,
-    revision="f4b5de82060cf3a833e52580e7ce59adeacb6fb5",  # Commit of @tomaarsen
+    revision="f4b5de82060cf3a833e52580e7ce59adeacb6fb5",
     release_date="2025-11-11",
     n_parameters=354_483_968,
     memory_usage_mb=676,
