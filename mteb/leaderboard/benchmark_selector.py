@@ -107,14 +107,14 @@ R_BENCHMARK_ENTRIES = [
         benchmarks=[
             mteb.get_benchmark("RTEB(beta)"),
             mteb.get_benchmark("RTEB(eng, beta)"),
-            mteb.get_benchmark("ViDoRe(v3)"),
             MenuEntry(
                 "Image",
                 description=None,
-                open=False,
+                open=True,
                 benchmarks=[
-                    mteb.get_benchmark("VisualDocumentRetrieval"),
+                    mteb.get_benchmark("ViDoRe(v3)"),
                     mteb.get_benchmark("JinaVDR"),
+                    MenuEntry("Other", [mteb.get_benchmark("ViDoRe(v1&v2)")]),
                 ],
             ),
             MenuEntry(
