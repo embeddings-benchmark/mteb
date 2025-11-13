@@ -230,10 +230,11 @@ class BelebeleRetrieval(AbsTaskRetrieval):
             ds_corpus = self.dataset[lang_corpus]
             ds_question = self.dataset[lang_question]
 
-            question_ids = {
-                question: _id
-                for _id, question in enumerate(set(ds_question["question"]))
-            }
+            question_ids = {}
+            for row in ds_question:
+                question = row["question"]
+                if question not in question_ids:
+                    question_ids[question] = len(question_ids)
 
             link_to_context_id = {}
             context_idx = 0
