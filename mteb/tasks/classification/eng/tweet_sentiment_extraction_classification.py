@@ -46,8 +46,7 @@ class TweetSentimentExtractionClassification(AbsTaskClassification):
 class TweetSentimentExtractionClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TweetSentimentExtractionClassification.v2",
-        description="""
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://www.kaggle.com/competitions/tweet-sentiment-extraction/overview",
         dataset={
             "path": "mteb/tweet_sentiment_extraction",

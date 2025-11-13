@@ -9,11 +9,7 @@ class MassiveScenarioVNClassification(AbsTaskClassification):
             "path": "GreenNode/amazon-massive-scenario-vn",
             "revision": "a82e282d9f5aec1a8cf7d868ce40f70669c16b89",
         },
-        description="""A translated dataset from MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages
-            The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-            - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-            - Applies advanced embedding models to filter the translations.
-            - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
+        description="A translated dataset from MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://arxiv.org/abs/2204.08582#:~:text=MASSIVE%20contains%201M%20realistic%2C%20parallel,diverse%20languages%20from%2029%20genera.",
         category="t2c",
         type="Classification",

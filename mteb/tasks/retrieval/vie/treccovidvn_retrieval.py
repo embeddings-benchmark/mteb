@@ -5,11 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class TRECCOVIDVN(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="TRECCOVID-VN",
-        description="""A translated dataset from TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing scientific articles related to the COVID-19 pandemic.
-            The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-            - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-            - Applies advanced embedding models to filter the translations.
-            - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
+        description="A translated dataset from TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing scientific articles related to the COVID-19 pandemic. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://ir.nist.gov/covidSubmit/index.html",
         dataset={
             "path": "GreenNode/trec-covid-vn",

@@ -106,3 +106,12 @@ class MIEBBenchmark(Benchmark):
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
         return _create_summary_table_mean_task_type(benchmark_results)
+
+
+class Vidore3Benchmark(Benchmark):
+    """Wrapper for Vidore3 benchmark."""
+
+    def _create_summary_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        return _create_summary_table_mean_public_private(benchmark_results)

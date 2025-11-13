@@ -220,3 +220,60 @@ colnomic_7b = ModelMeta(
     training_datasets=COLNOMIC_TRAINING_DATA,
     citation=COLNOMIC_CITATION,
 )
+
+
+EVOQWEN_TRAINING_DATA = {
+    "colpali_train_set",
+    "VisRAG-Ret-Train-Synthetic-data",
+    "VisRAG-Ret-Train-In-domain-data",
+}
+
+evoqwen25_vl_retriever_3b_v1 = ModelMeta(
+    loader=ColQwen2_5Wrapper,
+    loader_kwargs=dict(
+        torch_dtype=torch.float16, attn_implementation="flash_attention_2"
+    ),
+    name="ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-3B-v1",
+    languages=["eng-Latn"],
+    revision="aeacaa2775f2758d82721eb1cf2f5daf1a392da9",
+    release_date="2025-11-04",
+    modalities=["image", "text"],
+    n_parameters=3_000_000_000,
+    memory_usage_mb=7200,
+    max_tokens=128000,
+    embed_dim=128,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/illuin-tech/colpali",
+    public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
+    framework=["ColPali"],
+    reference="https://huggingface.co/ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-3B-v1",
+    similarity_fn_name="MaxSim",
+    use_instructions=True,
+    training_datasets=EVOQWEN_TRAINING_DATA,
+)
+
+evoqwen25_vl_retriever_7b_v1 = ModelMeta(
+    loader=ColQwen2_5Wrapper,
+    loader_kwargs=dict(
+        torch_dtype=torch.float16, attn_implementation="flash_attention_2"
+    ),
+    name="ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-7B-v1",
+    languages=["eng-Latn"],
+    revision="8952ac6ee0e7de2e9211b165921518caf9202110",
+    release_date="2025-11-04",
+    modalities=["image", "text"],
+    n_parameters=7_000_000_000,
+    memory_usage_mb=14400,
+    max_tokens=128000,
+    embed_dim=128,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/illuin-tech/colpali",
+    public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
+    framework=["ColPali"],
+    reference="https://huggingface.co/ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-7B-v1",
+    similarity_fn_name="MaxSim",
+    use_instructions=True,
+    training_datasets=EVOQWEN_TRAINING_DATA,
+)

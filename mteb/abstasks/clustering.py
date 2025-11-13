@@ -200,7 +200,7 @@ class AbsTaskClustering(AbsTask):
                 downsampled_dataset,
                 self.metadata,
                 input_column=self.input_column_name,
-                batch_size=encode_kwargs["batch_size"],
+                **encode_kwargs,
             ),
             task_metadata=self.metadata,
             hf_subset=hf_subset,

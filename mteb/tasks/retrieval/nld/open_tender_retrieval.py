@@ -35,4 +35,7 @@ class OpenTenderRetrieval(AbsTaskRetrieval):
   year = {2025},
 }
 """,
+        prompt={
+            "query": "Gegeven een titel, haal de aanbestedingsbeschrijving op die het beste bij de titel past"
+        },
     )

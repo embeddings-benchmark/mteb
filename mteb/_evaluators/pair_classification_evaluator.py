@@ -106,6 +106,7 @@ class PairClassificationEvaluator(Evaluator):
                     self.dataset,
                     task_metadata=self.task_metadata,
                     input_column=self.input1_column_name,
+                    **encode_kwargs,
                 ),
                 task_metadata=self.task_metadata,
                 hf_split=self.hf_split,
@@ -117,6 +118,7 @@ class PairClassificationEvaluator(Evaluator):
                     self.dataset,
                     task_metadata=self.task_metadata,
                     input_column=self.input2_column_name,
+                    **encode_kwargs,
                 ),
                 task_metadata=self.task_metadata,
                 hf_split=self.hf_split,
@@ -168,7 +170,7 @@ class PairClassificationEvaluator(Evaluator):
         )
         all_unique_texts_embs = np.asarray(
             model.encode(
-                _create_dataloader_from_texts(all_unique_texts),
+                _create_dataloader_from_texts(all_unique_texts, **encode_kwargs),
                 task_metadata=task_metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,

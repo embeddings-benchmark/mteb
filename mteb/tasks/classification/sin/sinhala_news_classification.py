@@ -54,8 +54,7 @@ class SinhalaNewsClassification(AbsTaskClassification):
 class SinhalaNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SinhalaNewsClassification.v2",
-        description="""This file contains news texts (sentences) belonging to 5 different news categories (political, business, technology, sports and Entertainment). The original dataset was released by Nisansa de Silva (Sinhala Text Classification: Observations from the Perspective of a Resource Poor Language, 2015).
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="This file contains news texts (sentences) belonging to 5 different news categories (political, business, technology, sports and Entertainment). The original dataset was released by Nisansa de Silva (Sinhala Text Classification: Observations from the Perspective of a Resource Poor Language, 2015). This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         dataset={
             "path": "mteb/sinhala_news",
             "revision": "e0b6e93ed5f086fe358595dff1aaad9eb877667a",

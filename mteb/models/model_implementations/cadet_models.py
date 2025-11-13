@@ -3,6 +3,13 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 
 from .bge_models import bge_m3_training_data
 
+CADET_CITATION = """@article{tamber2025conventionalcontrastivelearningfalls,
+    title={Conventional Contrastive Learning Often Falls Short: Improving Dense Retrieval with Cross-Encoder Listwise Distillation and Synthetic Data},
+    author={Manveer Singh Tamber and Suleman Kazi and Vivek Sourabh and Jimmy Lin},
+    journal={arXiv:2505.19274},
+    year={2025}
+}"""
+
 cadet_training_data = {
     # we train with the corpora of FEVER, MSMARCO, and DBPEDIA. We only train with synthetic generated queries.
     # However, we do use queries from MSMARCO as examples for synthetic query generation.
@@ -46,4 +53,5 @@ cadet_embed = ModelMeta(
     public_training_data="https://github.com/manveertamber/cadet-dense-retrieval",
     training_datasets=cadet_training_data,
     adapted_from="intfloat/e5-base-unsupervised",
+    citation=CADET_CITATION,
 )

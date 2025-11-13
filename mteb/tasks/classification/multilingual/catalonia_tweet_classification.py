@@ -10,12 +10,7 @@ _LANGS = {
 class CataloniaTweetClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CataloniaTweetClassification",
-        description="""This dataset contains two corpora in Spanish and Catalan that consist of annotated Twitter
-        messages for automatic stance detection. The data was collected over 12 days during February and March
-        of 2019 from tweets posted in Barcelona, and during September of 2018 from tweets posted in the town of Terrassa, Catalonia.
-        Each corpus is annotated with three classes: AGAINST, FAVOR and NEUTRAL, which express the stance
-        towards the target - independence of Catalonia.
-        """,
+        description="This dataset contains two corpora in Spanish and Catalan that consist of annotated Twitter messages for automatic stance detection. The data was collected over 12 days during February and March of 2019 from tweets posted in Barcelona, and during September of 2018 from tweets posted in the town of Terrassa, Catalonia. Each corpus is annotated with three classes: AGAINST, FAVOR and NEUTRAL, which express the stance towards the target - independence of Catalonia.",
         reference="https://aclanthology.org/2020.lrec-1.171/",
         dataset={
             "path": "community-datasets/catalonia_independence",

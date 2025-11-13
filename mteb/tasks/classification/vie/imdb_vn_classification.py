@@ -5,11 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class ImdbVNClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ImdbVNClassification",
-        description="""A translated dataset of large movie reviews annotated for sentiment classification.
-            The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-            - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-            - Applies advanced embedding models to filter the translations.
-            - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
+        description="A translated dataset of large movie reviews annotated for sentiment classification. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         dataset={
             "path": "GreenNode/imdb-vn",
             "revision": "0dccb383ee26c90c99d03c8674cf40de642f099a",

@@ -7,11 +7,7 @@ class TweetSentimentExtractionVNClassification(AbsTaskClassification):
 
     metadata = TaskMetadata(
         name="TweetSentimentExtractionVNClassification",
-        description="""A collection of translated tweets annotated for sentiment extraction.
-            The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-            - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-            - Applies advanced embedding models to filter the translations.
-            - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
+        description="A collection of translated tweets annotated for sentiment extraction. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://www.kaggle.com/competitions/tweet-sentiment-extraction/overview",
         dataset={
             "path": "GreenNode/tweet-sentiment-extraction-vn",

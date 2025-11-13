@@ -8,9 +8,7 @@ class MewsC16JaClustering(AbsTaskClustering):
 
     metadata = TaskMetadata(
         name="MewsC16JaClustering",
-        description="""MewsC-16 (Multilingual Short Text Clustering Dataset for News in 16 languages) is constructed from Wikinews.
-        This dataset is the Japanese split of MewsC-16, containing topic sentences from Wikinews articles in 12 categories.
-        More detailed information is available in the Appendix E of the citation.""",
+        description="MewsC-16 (Multilingual Short Text Clustering Dataset for News in 16 languages) is constructed from Wikinews. This dataset is the Japanese split of MewsC-16, containing topic sentences from Wikinews articles in 12 categories. More detailed information is available in the Appendix E of the citation.",
         reference="https://github.com/sbintuitions/JMTEB",
         dataset={
             "path": "mteb/MewsC16JaClustering",

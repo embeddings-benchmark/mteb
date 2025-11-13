@@ -2,6 +2,18 @@ from mteb.models import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.types import PromptType
 
+F2LLM_CITATION = """@article{2025F2LLM,
+    title={F2LLM Technical Report: Matching SOTA Embedding Performance with 6 Million Open-Source Data},
+    author={Ziyin Zhang and Zihan Liao and Hang Yu and Peng Di and Rui Wang},
+    journal={CoRR},
+    volume={abs/2510.02294},
+    year={2025},
+    url={https://doi.org/10.48550/arXiv.2510.02294},
+    doi={10.48550/ARXIV.2510.02294},
+    eprinttype={arXiv},
+    eprint={2510.02294}
+}"""
+
 training_datasets = {
     "MSMARCO",
     "ArguAna",
@@ -146,6 +158,7 @@ F2LLM_0B6 = ModelMeta(
     public_training_code="https://github.com/codefuse-ai/F2LLM",
     public_training_data="https://huggingface.co/datasets/codefuse-ai/F2LLM",
     training_datasets=training_datasets,
+    citation=F2LLM_CITATION,
 )
 
 F2LLM_1B7 = ModelMeta(
@@ -174,6 +187,7 @@ F2LLM_1B7 = ModelMeta(
     public_training_code="https://github.com/codefuse-ai/F2LLM",
     public_training_data="https://huggingface.co/datasets/codefuse-ai/F2LLM",
     training_datasets=training_datasets,
+    citation=F2LLM_CITATION,
 )
 
 F2LLM_4B = ModelMeta(
@@ -202,4 +216,5 @@ F2LLM_4B = ModelMeta(
     public_training_code="https://github.com/codefuse-ai/F2LLM",
     public_training_data="https://huggingface.co/datasets/codefuse-ai/F2LLM",
     training_datasets=training_datasets,
+    citation=F2LLM_CITATION,
 )
