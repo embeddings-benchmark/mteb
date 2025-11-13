@@ -54,8 +54,8 @@ mmbert_scandi = ModelMeta(
     open_weights=True,
     revision="82d74c7a5d8e1ddf31b132865df2d16b2b0294ee",
     release_date="2025-10-17",
-    # n_parameters=595776512,
-    # memory_usage_mb=NA,
+    n_parameters=306939648,
+    memory_usage_mb=1171,
     embed_dim=768,
     max_tokens=8192,
     license="apache-2.0",
@@ -68,4 +68,3 @@ mmbert_scandi = ModelMeta(
     similarity_fn_name="cosine",  # type: ignore[arg-type]
     adapted_from="jonasaise/scandmmBERT-base-scandinavian",
 )
-
