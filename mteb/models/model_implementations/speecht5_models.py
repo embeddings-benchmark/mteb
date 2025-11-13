@@ -4,6 +4,11 @@ from typing import Any
 import torch
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
+from transformers import (
+    SpeechT5ForSpeechToText,
+    SpeechT5ForTextToSpeech,
+    SpeechT5Processor,
+)
 
 from mteb import TaskMetadata
 from mteb.models import ModelMeta
@@ -21,11 +26,6 @@ class SpeechT5Audio(AbsEncoder):
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
-        from transformers import (
-            SpeechT5ForSpeechToText,
-            SpeechT5Processor,
-        )
-
         self.device = device
         self.max_audio_length_s = max_audio_length_s
 
@@ -143,8 +143,6 @@ class SpeechT5Text(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
-        from transformers import SpeechT5ForTextToSpeech, SpeechT5Processor
-
         self.device = device
         self.tts_processor = SpeechT5Processor.from_pretrained(
             "microsoft/speecht5_tts",

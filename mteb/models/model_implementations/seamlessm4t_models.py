@@ -4,6 +4,7 @@ from typing import Any
 import torch
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
+from transformers import AutoProcessor, SeamlessM4Tv2Model
 
 from mteb import TaskMetadata
 from mteb.models import ModelMeta
@@ -21,8 +22,6 @@ class SeamlessM4TWrapper(AbsEncoder):
         max_audio_length_seconds: float = 5.0,
         **kwargs: Any,
     ):
-        from transformers import AutoProcessor, SeamlessM4Tv2Model
-
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds

@@ -92,9 +92,6 @@ def vggish_loader(*args, **kwargs):
                 self.device
             )
 
-            if input_tensor.numel() == 0:
-                return None
-
             # Handle different tensor dimensions
             if input_tensor.dim() == 4 and input_tensor.shape[1] == 3:
                 # [batch, 3, height, width] -> [batch, 1, height, width]
@@ -145,18 +142,6 @@ def vggish_loader(*args, **kwargs):
 
                     with torch.no_grad():
                         input_tensor = self._prepare_input_tensor(audio)
-
-                        if input_tensor is None:
-                            # Create zero embedding for empty tensor
-                            logger.debug("Creating zero embedding for empty tensor")
-                            zero_embedding = torch.zeros(
-                                self.embed_dim, device=self.device
-                            )
-                            batch_embeddings.append(
-                                zero_embedding.cpu().detach().numpy()
-                            )
-                            continue
-
                         embedding = self.model(input_tensor)
 
                         # Use mean pooling if needed

@@ -5,6 +5,7 @@ from typing import Any
 import torch
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
+from transformers import ASTFeatureExtractor, ASTModel
 
 from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies
@@ -25,8 +26,6 @@ class ASTWrapper(AbsEncoder):
         **kwargs: Any,
     ):
         requires_audio_dependencies()
-        from transformers import ASTFeatureExtractor, ASTModel
-
         self.model_name = model_name
         self.device = device
 

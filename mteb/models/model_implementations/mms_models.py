@@ -4,6 +4,7 @@ from typing import Any
 import torch
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
+from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2Model
 
 from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies
@@ -24,8 +25,6 @@ class MMSWrapper(AbsEncoder):
         **kwargs: Any,
     ):
         requires_audio_dependencies()
-        from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2Model
-
         self.model_name = model_name
         self.model_revision = revision
         self.target_lang = target_lang

@@ -59,8 +59,8 @@ mteb = "mteb.cli:main"
 [project.optional-dependencies]
 image = ["torchvision>0.2.1"]
 audio = [
-    "datasets[audio]",
     "torchaudio>=2.6.0",
+    "datasets[audio]",
 ]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
@@ -302,10 +302,6 @@ conflicts = [
     [{ extra = "jina-v4" }, { extra = "llm2vec" }],
     [{ extra = "jina-v4" }, { extra = "llama-embed-nemotron" }], # conflicting versions of transformers
     [{ extra = "msclap" }, { extra = "audio" }],
-    [{ extra = "colpali-engine" }, { extra = "audio" }],
-    [{ extra = "xformers"}, { extra = "audio" }],
-    [{ extra = "pylate"}, { extra = "audio" }],
-    [{ extra = "cohere"}, { group = "typing" }],
 ]
 
 [tool.uv.extra-build-dependencies]

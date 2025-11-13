@@ -94,7 +94,6 @@ class AudioInputItem(TypedDict):
     """An audio item for the AudioInput.
 
     Dataset based on `datasets.Audio` will be converted to this format during encoding.
-    For full list of features you can refer to [datasets.features._torchcodec.AudioDecoder](https://github.com/huggingface/datasets/blob/3356d748ee4b34706db95e4074e240f8fd1a287f/src/datasets/features/_torchcodec.py#L5)
 
     Attributes:
         array: The audio array as bytes.
