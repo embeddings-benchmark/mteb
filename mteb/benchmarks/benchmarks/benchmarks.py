@@ -1,7 +1,6 @@
 from mteb.benchmarks.benchmark import (
     Benchmark,
     HUMEBenchmark,
-    JinaVisualDocumentBenchmark,
     MIEBBenchmark,
     VidoreBenchmark,
 )
@@ -2402,7 +2401,7 @@ VN_MTEB = Benchmark(
     contacts=["BaoLocPham"],
 )
 
-JINA_VDR = JinaVisualDocumentBenchmark(
+JINA_VDR = Benchmark(
     name="JinaVDR",
     display_name="Jina Visual Document Retrieval",
     tasks=get_tasks(
