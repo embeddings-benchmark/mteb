@@ -22,12 +22,14 @@ logger = logging.getLogger(__name__)
 def _create_dataloader_from_texts(
     text: list[str],
     batch_size: int = 32,
+    **kwargs: dict[str, Any],
 ) -> DataLoader[TextInput]:
     """Create a dataloader from a list of text.
 
     Args:
         text: A list of text to create a dataloader from.
         batch_size: Batch size for the dataloader.
+        kwargs: Not used, present catching extra arguments.
 
     Returns:
         A dataloader with the text.

@@ -44,7 +44,7 @@ class ClusteringEvaluator(Evaluator):
             self.dataset,
             self.task_metadata,
             input_column=self.input_column_name,
-            batch_size=encode_kwargs["batch_size"],
+            **encode_kwargs,
         )
 
         logger.info("Running clustering - Encoding samples...")

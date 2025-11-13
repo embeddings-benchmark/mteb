@@ -46,7 +46,10 @@ class BitextMiningEvaluator(Evaluator):
 
         embeddings = {}
         for sub in tqdm(subsets):
-            dataloader = _create_dataloader_from_texts(self.sentences[sub])
+            dataloader = _create_dataloader_from_texts(
+                self.sentences[sub],
+                **encode_kwargs,
+            )
             embeddings[sub] = model.encode(
                 dataloader,
                 task_metadata=self.task_metadata,

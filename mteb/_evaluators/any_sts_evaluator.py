@@ -45,16 +45,8 @@ class AnySTSEvaluator(Evaluator):
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
-        self.first_column = create_dataloader(
-            dataset,
-            task_metadata,
-            input_column=sentences_column_names[0],
-        )
-        self.second_column = create_dataloader(
-            dataset,
-            task_metadata,
-            input_column=sentences_column_names[1],
-        )
+        self.dataset = dataset
+        self.input_columns = sentences_column_names
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
@@ -67,7 +59,12 @@ class AnySTSEvaluator(Evaluator):
     ) -> STSEvaluatorScores:
         logger.info("Running semantic similarity - Encoding samples (1/2)")
         embeddings1 = model.encode(
-            self.first_column,
+            create_dataloader(
+                self.dataset,
+                self.task_metadata,
+                input_column=self.input_columns[0],
+                **encode_kwargs,
+            ),
             task_metadata=self.task_metadata,
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
@@ -76,7 +73,12 @@ class AnySTSEvaluator(Evaluator):
 
         logger.info("Running semantic similarity - Encoding samples (2/2)...")
         embeddings2 = model.encode(
-            self.second_column,
+            create_dataloader(
+                self.dataset,
+                self.task_metadata,
+                input_column=self.input_columns[1],
+                **encode_kwargs,
+            ),
             task_metadata=self.task_metadata,
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
