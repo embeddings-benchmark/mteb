@@ -1,8 +1,8 @@
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class UrbanSound8KA2TRetrieval(AbsTaskAny2AnyRetrieval):
+class UrbanSound8KA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="UrbanSound8KA2TRetrieval",
         description="UrbanSound8K: Audio-to-text retrieval of urban sound events.",
@@ -37,7 +37,7 @@ class UrbanSound8KA2TRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
 
-class UrbanSound8KT2ARetrieval(AbsTaskAny2AnyRetrieval):
+class UrbanSound8KT2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="UrbanSound8KT2ARetrieval",
         description="UrbanSound8K: Text-to-audio retrieval of urban sound events.",

@@ -1,8 +1,8 @@
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class JLCorpusA2TRetrieval(AbsTaskAny2AnyRetrieval):
+class JLCorpusA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JLCorpusA2TRetrieval",
         description=(
@@ -38,7 +38,7 @@ class JLCorpusA2TRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
 
-class JLCorpusT2ARetrieval(AbsTaskAny2AnyRetrieval):
+class JLCorpusT2ARetrieval(AbsTaskRetrieval):
     """Text-to-audio retrieval on JL-Corpus emotional speech captions ↔ audio pairs."""
 
     metadata = TaskMetadata(

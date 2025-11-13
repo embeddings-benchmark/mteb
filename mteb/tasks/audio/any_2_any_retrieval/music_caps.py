@@ -1,8 +1,8 @@
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MusicCapsA2TRetrieval(AbsTaskAny2AnyRetrieval):
+class MusicCapsA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MusicCapsA2TRetrieval",
         description="Natural language description for music audio.",
@@ -38,7 +38,7 @@ class MusicCapsA2TRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
 
-class MusicCapsT2ARetrieval(AbsTaskAny2AnyRetrieval):
+class MusicCapsT2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MusicCapsT2ARetrieval",
         description="Natural language description for music audio.",

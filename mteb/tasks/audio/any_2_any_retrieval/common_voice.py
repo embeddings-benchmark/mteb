@@ -4,7 +4,7 @@ import datasets
 from datasets import Dataset, DatasetDict
 from tqdm import tqdm
 
-from mteb.abstasks.image.abs_task_any2any_retrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _EVAL_LANGS = {
@@ -56,7 +56,7 @@ _EVAL_LANGS = {
 }
 
 
-class CommonVoice17A2TRetrieval(AbsTaskAny2AnyRetrieval):
+class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CommonVoice17A2TRetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
@@ -147,7 +147,7 @@ class CommonVoice17A2TRetrieval(AbsTaskAny2AnyRetrieval):
                 )
 
 
-class CommonVoice17T2ARetrieval(AbsTaskAny2AnyRetrieval):
+class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CommonVoice17T2ARetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
@@ -231,7 +231,7 @@ class CommonVoice17T2ARetrieval(AbsTaskAny2AnyRetrieval):
                 self.relevant_docs[lang][split] = relevant_docs_
 
 
-class CommonVoice21A2TRetrieval(AbsTaskAny2AnyRetrieval):
+class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CommonVoice21A2TRetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
@@ -322,7 +322,7 @@ class CommonVoice21A2TRetrieval(AbsTaskAny2AnyRetrieval):
                 )
 
 
-class CommonVoice21T2ARetrieval(AbsTaskAny2AnyRetrieval):
+class CommonVoice21T2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CommonVoice21T2ARetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
