@@ -2254,7 +2254,7 @@ VIDORE_V3 = VidoreBenchmark(
 """,
 )
 
-VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
+VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
     name="ViDoRe(v1&v2)",
     display_name="ViDoRe (V1&V2)",
     tasks=get_tasks(
