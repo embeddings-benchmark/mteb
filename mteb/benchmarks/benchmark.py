@@ -131,7 +131,7 @@ class JinaVisualDocumentBenchmark(Benchmark):
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        joint_table = _create_summary_table_mean_public_private(benchmark_results)
+        joint_table = _create_summary_table_from_benchmark_results(benchmark_results)
         # For Jina Visual Document: all tasks are Document Understanding type, so Document Understanding column = Mean (Task)
         joint_table = joint_table.rename(
             columns={"Document Understanding": "Mean (Task)"}
