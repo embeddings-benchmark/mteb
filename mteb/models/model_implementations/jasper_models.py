@@ -157,7 +157,8 @@ Jasper_Token_Compression_600M = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
-    public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
+    # public_training_data: unsupervised data for distillation
+    public_training_data="https://huggingface.co/datasets/infgrad/jasper_text_distill_dataset",
     training_datasets=bge_m3_training_data
     | bge_chinese_training_data
     | bge_full_data
