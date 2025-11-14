@@ -107,7 +107,9 @@ def _update_description(
     description += f" - **Number of task types**: {n_task_types}\n"
     description += f" - **Number of domains**: {n_domains}\n"
     if benchmark.reference is not None:
-        description += f"\n[Click for More Info]({benchmark.reference})"
+        description += (
+            f'\n<a href="{benchmark.reference}" target="_blank">Click for More Info</a>'
+        )
 
     return description
 
