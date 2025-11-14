@@ -7,12 +7,32 @@ from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
+from mteb.models.model_implementations.bge_models import (
+    bge_chinese_training_data,
+    bge_full_data,
+    bge_m3_training_data,
+)
+from mteb.models.model_implementations.e5_instruct import E5_MISTRAL_TRAINING_DATA
+from mteb.models.model_implementations.nvidia_models import nvidia_training_datasets
+from mteb.models.model_implementations.qzhou_models import qzhou_training_data
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
-from .nvidia_models import nvidia_training_datasets
-
 logger = logging.getLogger(__name__)
+
+
+def instruction_template(
+    instruction: str, prompt_type: PromptType | None = None
+) -> str:
+    if not instruction or prompt_type == PromptType.document:
+        return ""
+    if isinstance(instruction, dict):
+        if prompt_type is None:
+            instruction = "Given a web search query, retrieve relevant passages that answer the query"
+        else:
+            instruction = instruction[prompt_type]
+    return f"Instruct: {instruction}\nQuery:"
 
 
 class JasperModel(AbsEncoder):
@@ -113,4 +133,34 @@ jasper_en_v1 = ModelMeta(
       url={https://arxiv.org/abs/2412.19048},
 }
 """,
+)
+
+Jasper_Token_Compression_600M = ModelMeta(
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template=instruction_template,
+        apply_instruction_to_passages=False,
+        trust_remote_code=True,
+    ),
+    name="infgrad/Jasper-Token-Compression-600M",
+    languages=["eng-Latn", "zho-Hans"],
+    open_weights=True,
+    revision="06a100f753a5a96d9e583b3af79c6fcdfacc4719",
+    release_date="2025-11-14",
+    n_parameters=595776512,
+    memory_usage_mb=2272,
+    embed_dim=2048,
+    license="mit",
+    max_tokens=32768,
+    reference="https://huggingface.co/infgrad/Jasper-Token-Compression-600M",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
+    training_datasets=bge_m3_training_data
+    | bge_chinese_training_data
+    | bge_full_data
+    | E5_MISTRAL_TRAINING_DATA
+    | qzhou_training_data,
 )
