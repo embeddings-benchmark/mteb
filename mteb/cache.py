@@ -62,7 +62,7 @@ class ResultCache:
         Returns:
             The path to the results of the task.
         """
-        results_folder = "results" if not remote else "remote"
+        results_folder = self.cache_path / "results" if not remote else self.cache_path / "remote" / "results"
 
         if isinstance(model_name, ModelMeta):
             if model_revision is not None:
@@ -74,7 +74,7 @@ class ResultCache:
         elif isinstance(model_name, str):
             model_name = model_name.replace("/", "__").replace(" ", "_")
 
-        model_path = self.cache_path / results_folder / model_name
+        model_path = results_folder / model_name
 
         if model_revision is None:
             logger.warning(
