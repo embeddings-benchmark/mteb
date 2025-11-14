@@ -77,6 +77,18 @@ def test_evaluate_with_cache(
         "main score should match the expected value"
     )
 
+    # test cache re-use
+    cached_results = mteb.evaluate(
+        model, task, cache=cache, overwrite_strategy="only-cache"
+    )
+    cached_result = cached_results[0]
+    assert cached_result.task_name == task.metadata.name, (
+        "results should match the task"
+    )
+    assert cached_result.get_score() == expected_score, (
+        "main score should match the expected value"
+    )
+
 
 @pytest.mark.parametrize(
     "model, task, expected_score,splits",
