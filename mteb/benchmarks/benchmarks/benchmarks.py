@@ -1647,7 +1647,7 @@ MTEB_NL = Benchmark(
             exclusive_language_filter=True,
             tasks=[
                 # Classification
-                "DutchBookReviewSentimentClassification",
+                "DutchBookReviewSentimentClassification.v2",
                 "MassiveIntentClassification",
                 "MassiveScenarioClassification",
                 "SIB200Classification",
@@ -1678,10 +1678,10 @@ MTEB_NL = Benchmark(
                 # # Reranking
                 "WikipediaRerankingMultilingual",
                 # # Retrieval
-                "ArguAna-NL",
-                "SCIDOCS-NL",
-                "SciFact-NL",
-                "NFCorpus-NL",
+                "ArguAna-NL.v2",
+                "SCIDOCS-NL.v2",
+                "SciFact-NL.v2",
+                "NFCorpus-NL.v2",
                 "BelebeleRetrieval",
                 "WebFAQRetrieval",
                 "DutchNewsArticlesRetrieval",
