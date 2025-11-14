@@ -1,5 +1,6 @@
 """This implements minimal viable mock tasks for testing the benchmarking framework."""
 
+import datasets
 from datasets import Dataset, DatasetDict
 from PIL import Image
 from sklearn.linear_model import LogisticRegression
@@ -3963,6 +3964,8 @@ class MockVisualSTSTask(AbsTaskSTS):
                 ),
             }
         )
+        self.dataset = self.dataset.cast_column("sentence1", datasets.Image())
+        self.dataset = self.dataset.cast_column("sentence2", datasets.Image())
         self.data_loaded = True
 
 

@@ -5,13 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class UkrFormalityClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="UkrFormalityClassification",
-        description="""
-        This dataset contains Ukrainian Formality Classification dataset obtained by
-        trainslating English GYAFC data.
-        English data source: https://aclanthology.org/N18-1012/
-        Translation into Ukrainian language using model: https://huggingface.co/facebook/nllb-200-distilled-600M
-        Additionally, the dataset was balanced, with labels: 0 - informal, 1 - formal.
-        """,
+        description="This dataset contains Ukrainian Formality Classification dataset obtained by trainslating English GYAFC data. English data source: https://aclanthology.org/N18-1012/ Translation into Ukrainian language using model: https://huggingface.co/facebook/nllb-200-distilled-600M Additionally, the dataset was balanced, with labels: 0 - informal, 1 - formal.",
         dataset={
             "path": "ukr-detect/ukr-formality-dataset-translated-gyafc",
             "revision": "671d1e6bbf45a74ef21af351fd4ef7b32b7856f8",
@@ -56,14 +50,7 @@ Tetreault, Joel},
 class UkrFormalityClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="UkrFormalityClassification.v2",
-        description="""
-        This dataset contains Ukrainian Formality Classification dataset obtained by
-        trainslating English GYAFC data.
-        English data source: https://aclanthology.org/N18-1012/
-        Translation into Ukrainian language using model: https://huggingface.co/facebook/nllb-200-distilled-600M
-        Additionally, the dataset was balanced, with labels: 0 - informal, 1 - formal.
-
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="This dataset contains Ukrainian Formality Classification dataset obtained by trainslating English GYAFC data. English data source: https://aclanthology.org/N18-1012/ Translation into Ukrainian language using model: https://huggingface.co/facebook/nllb-200-distilled-600M Additionally, the dataset was balanced, with labels: 0 - informal, 1 - formal. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         dataset={
             "path": "mteb/ukr_formality",
             "revision": "e0b2dfa57d505f207deb571e58b0bd0b81180bd4",

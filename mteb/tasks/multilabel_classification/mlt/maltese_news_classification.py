@@ -7,12 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class MalteseNewsClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
         name="MalteseNewsClassification",
-        description="""A multi-label topic classification dataset for Maltese News
-        Articles. The data was collected from the press_mt subset from Korpus
-        Malti v4.0. Article contents were cleaned to filter out JavaScript, CSS,
-        & repeated non-Maltese sub-headings. The labels are based on the category
-        field from this corpus.
-        """,
+        description="A multi-label topic classification dataset for Maltese News Articles. The data was collected from the press_mt subset from Korpus Malti v4.0. Article contents were cleaned to filter out JavaScript, CSS, & repeated non-Maltese sub-headings. The labels are based on the category field from this corpus.",
         reference="https://huggingface.co/datasets/MLRS/maltese_news_categories",
         dataset={
             "path": "MLRS/maltese_news_categories",

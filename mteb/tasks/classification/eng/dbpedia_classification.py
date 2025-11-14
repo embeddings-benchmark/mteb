@@ -50,8 +50,7 @@ class DBpediaClassification(AbsTaskClassification):
 class DBpediaClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DBpediaClassification.v2",
-        description="""DBpedia14 is a dataset of English texts from Wikipedia articles, categorized into 14 non-overlapping classes based on their DBpedia ontology.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="DBpedia14 is a dataset of English texts from Wikipedia articles, categorized into 14 non-overlapping classes based on their DBpedia ontology. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://arxiv.org/abs/1509.01626",
         dataset={
             "path": "mteb/d_bpedia",

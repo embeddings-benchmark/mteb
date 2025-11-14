@@ -9,11 +9,7 @@ class STSBenchmarkSTSVN(AbsTaskSTS):
             "path": "GreenNode/stsbenchmark-sts-vn",
             "revision": "f24d66738cda4a02138ada5af7689a92ce1fcad6",
         },
-        description="""A translated dataset from Semantic Textual Similarity Benchmark (STSbenchmark) dataset.
-            The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-            - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-            - Applies advanced embedding models to filter the translations.
-            - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
+        description="A translated dataset from Semantic Textual Similarity Benchmark (STSbenchmark) dataset. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://github.com/PhilipMay/stsb-multi-mt/",
         type="STS",
         category="t2c",

@@ -45,8 +45,7 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
 class BengaliHateSpeechClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="BengaliHateSpeechClassification.v2",
-        description="""The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles collected from various Bengali media sources and categorized based on the type of hate in the text.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",
+        description="The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles collected from various Bengali media sources and categorized based on the type of hate in the text. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)",
         reference="https://huggingface.co/datasets/bn_hate_speech",
         dataset={
             "path": "mteb/bengali_hate_speech",
