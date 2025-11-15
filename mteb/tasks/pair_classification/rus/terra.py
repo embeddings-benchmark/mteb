@@ -1,8 +1,12 @@
 from mteb.abstasks.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.types import PromptType
 
 
 class TERRa(AbsTaskPairClassification):
+    input1_prompt_type = PromptType.document
+    input2_prompt_type = PromptType.query
+
     metadata = TaskMetadata(
         name="TERRa",
         dataset={
@@ -43,6 +47,7 @@ and Evlampiev, Andrey},
 }
 """,
         prompt="Given a premise, retrieve a hypothesis that is entailed by the premise",
+        asymmetric_type="q2d",
     )
 
     def dataset_transform(self):
