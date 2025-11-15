@@ -89,7 +89,7 @@ def run(args: argparse.Namespace) -> None:
         overwrite_strategy=overwrite_strategy,
         encode_kwargs=encode_kwargs,
         prediction_folder=prediction_folder,
-        public_only=args.public_only,
+        public_only=args.allow_private,
     )
 
 
@@ -265,9 +265,9 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
         help="Folder to save the model predictions in. If None, predictions will not be saved.",
     )
     parser.add_argument(
-        "--public-only",
-        type=bool,
-        default=True,
+        "--allow-private",
+        action="store_true",
+        default=False,
         help="Weather to run public or private tasks.",
     )
 
