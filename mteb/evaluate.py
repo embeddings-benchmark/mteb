@@ -412,6 +412,8 @@ def evaluate(
         missing_eval = existing_results.get_missing_evaluations(task)
     else:
         missing_eval = dict.fromkeys(task.eval_splits, task.hf_subsets)
+        # Will be fully recomputed so we set it to None to avoid merging:
+        existing_results = None
 
     if (
         existing_results
