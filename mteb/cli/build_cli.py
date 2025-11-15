@@ -263,6 +263,12 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
         default=None,
         help="Folder to save the model predictions in. If None, predictions will not be saved.",
     )
+    parser.add_argument(
+        "--public-only",
+        type=bool,
+        default=True,
+        help="Weather to run public or private tasks.",
+    )
 
     parser.set_defaults(func=run)
 
