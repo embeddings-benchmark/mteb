@@ -89,6 +89,7 @@ def run(args: argparse.Namespace) -> None:
         overwrite_strategy=overwrite_strategy,
         encode_kwargs=encode_kwargs,
         prediction_folder=prediction_folder,
+        public_only=args.public_only,
     )
 
 
