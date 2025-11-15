@@ -267,6 +267,7 @@ def evaluate(
     overwrite_strategy: str | OverwriteStrategy = "only-missing",
     prediction_folder: Path | str | None = None,
     show_progress_bar: bool = True,
+    public_only: bool = True,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -290,6 +291,7 @@ def evaluate(
         prediction_folder: Optional folder in which to save model predictions for the task. Predictions of the tasks will be sabed in `prediction_folder/{task_name}_predictions.json`
         show_progress_bar: Whether to show a progress bar when running the evaluation. Default is True. Setting this to False will also set the
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
+        public_only: Run only public tasks.
 
     Returns:
         The results of the evaluation.
@@ -376,6 +378,14 @@ def evaluate(
             model_name=_res.model_name,
             model_revision=_res.model_revision,
             task_results=results,
+        )
+
+    if public_only and not task.metadata.is_public:
+        logger.warning(f"{task.metadata.name} is private. Skipping it.")
+        return ModelResult(
+            model_name=model_name,
+            model_revision=model_revision,
+            task_results=[],
         )
 
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)

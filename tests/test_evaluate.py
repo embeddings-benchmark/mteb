@@ -1,3 +1,5 @@
+import logging
+from copy import copy
 from pathlib import Path
 
 import pytest
@@ -187,3 +189,23 @@ def test_evaluate_aggregated_task():
     model = mteb.get_model("baseline/random-encoder-baseline")
     task = MockAggregatedTask()
     mteb.evaluate(model, task, cache=None)
+
+
+def test_run_private_task_warning(caplog):
+    task = mteb.get_task("Code1Retrieval")
+    model = mteb.get_model("baseline/random-encoder-baseline")
+
+    with caplog.at_level(logging.WARNING):
+        result = mteb.evaluate(model, task, cache=None)
+        assert len(result.task_results) == 0
+        assert "Code1Retrieval is private. Skipping it." in caplog.text
+
+
+def test_run_private_task():
+    task = MockRetrievalTask()
+    task_metadata = copy(task.metadata)
+    task_metadata.is_public = False
+    task.metadata = task_metadata
+    model = mteb.get_model("baseline/random-encoder-baseline")
+    results = mteb.evaluate(model, task, cache=None, public_only=False)
+    assert len(results.task_results) == 1
