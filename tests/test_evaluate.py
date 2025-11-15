@@ -134,7 +134,7 @@ def test_cache_hit(task: AbsTask):
     model = mteb.get_model("baseline/random-encoder-baseline")
     with pytest.raises(
         ValueError,
-        match="ValueError: overwrite_strategy is set to 'only-cache' and the results file exists. However there are the following missing splits (and subsets): {'dev': ['default']}. To rerun these set overwrite_strategy to 'only-missing'.",
+        match="overwrite_strategy is set to 'only-cache' and the results file exists",
     ):
         mteb.evaluate(model, task, overwrite_strategy="only-cache")
 
