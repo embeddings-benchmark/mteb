@@ -21,7 +21,7 @@ class AudioCapsMiniReranking(AbsTaskAudioReranking):
         modalities=["audio"],
         eval_splits=["test"],  # The mini dataset has only one split
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2019-04-01", "2019-04-01"),
         domains=["Speech"],
         task_subtypes=["Environment Sound Reranking"],

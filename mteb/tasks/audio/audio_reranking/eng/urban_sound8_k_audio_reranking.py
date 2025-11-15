@@ -30,7 +30,7 @@ class UrbanSound8KAudioReranking(AbsTaskAudioReranking):
         modalities=["audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2014-11-01", "2014-11-03"),
         domains=["Spoken"],
         task_subtypes=["Environment Sound Reranking"],

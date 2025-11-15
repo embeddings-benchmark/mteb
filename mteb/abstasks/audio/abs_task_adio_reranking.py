@@ -1,198 +1,193 @@
-from typing import Any
+import logging
+from collections import defaultdict
+from copy import copy
 
-from datasets import Dataset
+import datasets
+from datasets import Audio, Dataset
 
-from mteb.abstasks import AbsTask
-from mteb.evaluation.evaluators.audio.audio_reranking_evaluator import (
-    AudioRerankingEvaluator,
-)
-from mteb.models.models_protocols import EncoderProtocol
-from mteb.types import ScoresDict
-from mteb.types.statistics import DescriptiveStatistics
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
+
+logger = logging.getLogger(__name__)
+
+OLD_FORMAT_RERANKING_TASKS = [
+    "AudioCapsMiniReranking",
+    "ESC50AudioReranking",
+    "FSDnoisy18kAudioReranking",
+    "GTZANAudioReranking",
+    "UrbanSound8KAudioReranking",
+    "VocalSoundAudioReranking",
+]
 
 
-class AudioRerankingDescriptiveStatistics(DescriptiveStatistics):
-    """Descriptive statistics for Audio Reranking
+class AbsTaskAudioReranking(AbsTaskRetrieval):
+    """Reranking task class.
 
-    Attributes:
-        num_samples: number of samples in the dataset.
-        total_audio_duration: Total duration of all audio in seconds.
-        num_positive: Number of positive examples
-        num_negative: Number of negative examples
-
-        min_query_duration: Minimum duration of query audio in seconds
-        avg_query_duration: Average duration of query audio in seconds
-        max_query_duration: Maximum duration of query audio in seconds
-        unique_query: Number of unique queries
-
-        min_positive_duration: Minimum duration of positive examples in seconds
-        avg_positive_duration: Average duration of positive examples in seconds
-        max_positive_duration: Maximum duration of positive examples in seconds
-        unique_positive: Number of unique positive examples
-
-        min_negative_duration: Minimum duration of negative examples in seconds
-        avg_negative_duration: Average duration of negative examples in seconds
-        max_negative_duration: Maximum duration of negative examples in seconds
-        unique_negative: Number of unique negative examples
+    Warning: Deprecated
+        This class is deprecated and will be removed in future versions. Please use the updated retrieval tasks instead.
+        You can add your task name to mteb.abstasks.text.reranking.OLD_FORMAT_RERANKING_TASKS to load it in new format.
+        You can reupload it using `task.push_dataset_to_hub('your/repository')` after loading the data.
+        For dataformat and other information, see [AbsTaskRetrieval][mteb.abstasks.retrieval.AbsTaskRetrieval].
     """
 
-    num_samples: int
-    total_audio_duration: float
-    num_positive: int
-    num_negative: int
+    def load_data(self) -> None:
+        """Load the dataset."""
+        if self.data_loaded:
+            return
 
-    min_query_duration: float
-    avg_query_duration: float
-    max_query_duration: float
-    unique_query: int
-
-    min_positive_duration: float
-    avg_positive_duration: float
-    max_positive_duration: float
-    unique_positive: int
-
-    min_negative_duration: float
-    avg_negative_duration: float
-    max_negative_duration: float
-    unique_negative: int
-
-
-class AbsTaskAudioReranking(AbsTask):
-    """Abstract class for audio re-ranking experiments.
-
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
-        query: Audio object with 'array' and 'sampling_rate' fields
-        positive: list of Audio objects (relevant audio samples)
-        negative: list of Audio objects (irrelevant audio samples)
-    """
-
-    abstask_prompt = "Retrieve audio based on user audio query."
-    audio_query_column_name: str = "query"
-    audio_positive_column_name: str = "positive"
-    audio_negative_column_name: str = "negative"
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def _evaluate_subset(
-        self,
-        model: EncoderProtocol,
-        data_split: Dataset,
-        *,
-        encode_kwargs: dict[str, Any] = {},
-        **kwargs: Any,
-    ) -> ScoresDict:
-        evaluator = AudioRerankingEvaluator(
-            data_split,
-            self.audio_query_column_name,
-            self.audio_positive_column_name,
-            self.audio_negative_column_name,
-            task_metadata=self.metadata,
-            encode_kwargs=encode_kwargs,
-            **kwargs,
-        )
-        scores = evaluator(model)
-
-        self._add_main_score(scores)
-        return scores
-
-    def _add_main_score(self, scores: ScoresDict) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
-
-    def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
-    ) -> AudioRerankingDescriptiveStatistics:
-        if hf_subset:
-            query = self.dataset[hf_subset][split][self.audio_query_column_name]
-            positive = transform_audio_reranking_data(
-                self.dataset[hf_subset][split][self.audio_positive_column_name]
-            )
-            negative = transform_audio_reranking_data(
-                self.dataset[hf_subset][split][self.audio_negative_column_name]
-            )
-        elif compute_overall:
-            query = []
-            positive = []
-            negative = []
-            for hf_subset in self.metadata.eval_langs:
-                query.extend(
-                    self.dataset[hf_subset][split][self.audio_query_column_name]
-                )
-                positive.extend(
-                    transform_audio_reranking_data(
-                        self.dataset[hf_subset][split][self.audio_positive_column_name]
-                    )
-                )
-                negative.extend(
-                    transform_audio_reranking_data(
-                        self.dataset[hf_subset][split][self.audio_negative_column_name]
-                    )
-                )
+        if self.metadata.name in OLD_FORMAT_RERANKING_TASKS:
+            self.transform_old_dataset_format()
+            self.dataset_transform()
+            return
         else:
-            query = self.dataset[split][self.audio_query_column_name]
-            positive = transform_audio_reranking_data(
-                self.dataset[split][self.audio_positive_column_name]
-            )
-            negative = transform_audio_reranking_data(
-                self.dataset[split][self.audio_negative_column_name]
-            )
+            # use AbsTaskRetrieval default to load the data
+            return super().load_data()
 
-        def get_audio_duration(audio_obj):
-            """Calculate audio duration in seconds"""
-            if (
-                isinstance(audio_obj, dict)
-                and "array" in audio_obj
-                and "sampling_rate" in audio_obj
-            ):
-                return len(audio_obj["array"]) / audio_obj["sampling_rate"]
-            return 0.0  # Default if duration can't be calculated
+    def _process_example(self, example: dict, split: str, query_idx: int) -> dict:
+        """Process a single example from the dataset.
 
-        query_durations = [get_audio_duration(q) for q in query]
-        positive_durations = [get_audio_duration(p) for p in positive]
-        negative_durations = [get_audio_duration(n) for n in negative]
+        Args:
+            example: A single example from the dataset containing 'query', 'positive', and 'negative' fields.
+            split: The dataset split (e.g., 'train', 'validation', 'test').
+            query_idx: The index of the query in the dataset split.
 
-        total_duration = (
-            sum(query_durations) + sum(positive_durations) + sum(negative_durations)
+        Returns:
+            A dictionary containing the processed example with query_id, query text, document ids, document texts, and relevance scores.
+        """
+        query = example["query"]
+        positive_docs = example["positive"]
+        negative_docs = example["negative"]
+
+        query_id = f"{split}_query{query_idx}"
+
+        # Initialize the structures for this example
+        example_data = {
+            "query_id": query_id,
+            "query": query,
+            "doc_ids": [],
+            "doc_audio": [],
+            "relevance_scores": [],
+        }
+
+        for i, pos_audio in enumerate(positive_docs):
+            # format i as a five digit number
+            formatted_i = str(i).zfill(5)
+            # have "a" in front so that positives are first, then negatives
+            #   this shouldn't matter except for ties, and the previous reranking results
+            #   had the positives first
+            doc_id = f"apositive_{query_id}_{formatted_i}"
+            example_data["doc_ids"].append(doc_id)
+            example_data["doc_audio"].append(pos_audio)
+            example_data["relevance_scores"].append(1)
+
+        for i, neg_audio in enumerate(negative_docs):
+            formatted_i = str(i).zfill(5)
+            doc_id = f"negative_{query_id}_{formatted_i}"
+            example_data["doc_ids"].append(doc_id)
+            example_data["doc_audio"].append(neg_audio)
+            example_data["relevance_scores"].append(0)
+
+        return example_data
+
+    def transform_old_dataset_format(self, given_dataset: Dataset | None = None):
+        """Transform the old format to the new format using HF datasets mapping. This is a one-time transformation for datasets which are in the old format.
+
+        Args:
+            given_dataset (Dataset, optional): The dataset to transform. Defaults to None. This is helpful for some older datasets which are loaded with custom code, but need to be transformed still.
+        """
+        if self.metadata.name not in OLD_FORMAT_RERANKING_TASKS:
+            return
+
+        logging.info(
+            f"Transforming old format to standard format for {self.metadata.name}"
         )
 
-        return AudioRerankingDescriptiveStatistics(
-            num_samples=len(query),
-            total_audio_duration=total_duration,
-            num_positive=len(positive),
-            num_negative=len(negative),
-            min_query_duration=min(query_durations) if query_durations else 0.0,
-            avg_query_duration=sum(query_durations) / len(query_durations)
-            if query_durations
-            else 0.0,
-            max_query_duration=max(query_durations) if query_durations else 0.0,
-            unique_query=len(
-                {str(q) for q in query}
-            ),  # Use string representation for uniqueness
-            min_positive_duration=min(positive_durations)
-            if positive_durations
-            else 0.0,
-            avg_positive_duration=sum(positive_durations) / len(positive_durations)
-            if positive_durations
-            else 0.0,
-            max_positive_duration=max(positive_durations)
-            if positive_durations
-            else 0.0,
-            unique_positive=len({str(p) for p in positive}),
-            min_negative_duration=min(negative_durations)
-            if negative_durations
-            else 0.0,
-            avg_negative_duration=sum(negative_durations) / len(negative_durations)
-            if negative_durations
-            else 0.0,
-            max_negative_duration=max(negative_durations)
-            if negative_durations
-            else 0.0,
-            unique_negative=len({str(n) for n in negative}),
-        )
+        given_dataset = copy(given_dataset)
+        self.dataset = defaultdict(lambda: defaultdict(dict))
 
+        hf_subsets = self.hf_subsets
 
-def transform_audio_reranking_data(data: list[list[Any]] | list[Any]) -> list[Any]:
-    """Transforms a list of lists of audio objects into a list of audio objects"""
-    if not isinstance(data[0], list):
-        return data
-    return [item for sublist in data for item in sublist]
+        for hf_subset in hf_subsets:
+            if given_dataset:
+                cur_dataset = given_dataset
+                if hf_subset in cur_dataset:
+                    cur_dataset = cur_dataset[hf_subset]
+            elif "name" in self.metadata.dataset:
+                cur_dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+                assert hf_subset == "default", (
+                    f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
+                )
+            else:
+                cur_dataset = datasets.load_dataset(
+                    **self.metadata.dataset, name=hf_subset
+                )  # type: ignore
+
+            for split in cur_dataset:
+                corpus = []
+                queries = []
+                relevant_docs = defaultdict(dict)
+                top_ranked = defaultdict(list)
+
+                # Create an enumerated dataset to pass indices
+                enumerated_dataset = Dataset.from_dict(
+                    {
+                        "index": range(len(cur_dataset[split])),
+                        "query": cur_dataset[split]["query"],
+                        "positive": cur_dataset[split]["positive"],
+                        "negative": cur_dataset[split]["negative"],
+                    }
+                )
+
+                # first, filter out the ones that have no positive or no negatives
+                enumerated_dataset = enumerated_dataset.filter(
+                    lambda example: len(example["positive"]) > 0
+                    and len(example["negative"]) > 0
+                )
+
+                logger.info(
+                    f"Filtered out {len(cur_dataset[split]) - len(enumerated_dataset)} examples with no positive or no negative examples. {len(enumerated_dataset)} examples remaining."
+                )
+
+                # Map the transformation function over the dataset
+                processed_dataset = enumerated_dataset.map(
+                    lambda example, idx: self._process_example(example, split, idx),
+                    with_indices=True,
+                    remove_columns=enumerated_dataset.column_names,
+                )
+
+                # Populate the data structures
+                for item in processed_dataset:
+                    query_id = item["query_id"]
+                    queries.append({"id": query_id, "audio": item["query"]})
+
+                    # Add documents and relevance information
+                    for doc_id, doc_audio, relevance in zip(
+                        item["doc_ids"], item["doc_audio"], item["relevance_scores"]
+                    ):
+                        corpus.append(
+                            {
+                                "audio": doc_audio,
+                                "id": doc_id,
+                            }
+                        )
+                        top_ranked[query_id].append(doc_id)
+                        relevant_docs[query_id][doc_id] = relevance
+
+                corpus = Dataset.from_list(corpus)
+                corpus = corpus.cast_column(
+                    "audio",
+                    Audio(),
+                )
+                queries = Dataset.from_list(queries)
+                queries = queries.cast_column(
+                    "audio",
+                    Audio(),
+                )
+
+                self.dataset[hf_subset][split] = RetrievalSplitData(
+                    corpus=corpus,
+                    queries=queries,
+                    relevant_docs=relevant_docs,
+                    top_ranked=top_ranked,
+                )
+        self.data_loaded = True

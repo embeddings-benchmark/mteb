@@ -30,7 +30,7 @@ class GTZANAudioReranking(AbsTaskAudioReranking):
         modalities=["audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2001-01-01", "2001-12-31"),
         domains=["Music"],
         task_subtypes=["Music Genre Reranking"],

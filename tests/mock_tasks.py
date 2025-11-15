@@ -10,7 +10,6 @@ from mteb.abstasks import (
     AbsTaskAudioClustering,
     AbsTaskAudioPairClassification,
 )
-from mteb.abstasks.audio.abs_task_adio_reranking import AbsTaskAudioReranking
 from mteb.abstasks.audio.abs_task_multilabel_classification import (
     AbsTaskAudioMultilabelClassification,
 )
@@ -4554,11 +4553,11 @@ class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class MockAudioReranking(AbsTaskAudioReranking):
+class MockAudioReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         type="AudioReranking",
         name="MockAudioReranking",
-        main_score="map",
+        main_score="map_at_1",
         **general_args,  # type: ignore
     )
     metadata.category = "a2a"
@@ -4573,20 +4572,38 @@ class MockAudioReranking(AbsTaskAudioReranking):
             for _ in range(2)
         ]
 
-        self.dataset = DatasetDict(
+        queries = Dataset.from_dict(
             {
-                "test": Dataset.from_dict(
-                    {
-                        "query": mock_audio,
-                        "positive": mock_audio,
-                        "negative": mock_audio,
-                    }
-                ),
+                "id": ["q1", "q2"],
+                "audio": mock_audio,
             }
         )
-        self.dataset = self.dataset.cast_column("query", Audio())
-        self.dataset = self.dataset.cast_column("positive", Audio())
-        self.dataset = self.dataset.cast_column("negative", Audio())
+        corpus = Dataset.from_dict(
+            {
+                "id": ["d1", "d2"],
+                "audio": mock_audio,
+            }
+        )
+
+        queries = queries.cast_column("audio", Audio())
+        corpus = corpus.cast_column("audio", Audio())
+
+        self.dataset = {
+            "default": {
+                "test": RetrievalSplitData(
+                    queries=queries,
+                    corpus=corpus,
+                    relevant_docs={
+                        "q1": {"d1": 1, "d2": 0},
+                        "q2": {"d1": 0, "d2": 1},
+                    },
+                    top_ranked={
+                        "q1": ["d1", "d2"],
+                        "q2": ["d2", "d1"],
+                    },
+                )
+            }
+        }
 
         self.data_loaded = True
 

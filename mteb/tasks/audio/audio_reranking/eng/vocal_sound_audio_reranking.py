@@ -31,7 +31,7 @@ class VocalSoundAudioReranking(AbsTaskAudioReranking):
         modalities=["audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2022-01-01", "2022-12-31"),
         domains=["Spoken"],
         task_subtypes=["Emotion Reranking"],

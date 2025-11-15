@@ -29,7 +29,7 @@ class ESC50AudioReranking(AbsTaskAudioReranking):
         modalities=["audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2015-01-01", "2015-12-31"),
         domains=["AudioScene"],
         task_subtypes=["Environment Sound Reranking"],
