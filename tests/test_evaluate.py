@@ -127,6 +127,19 @@ def test_evaluate_w_missing_splits(
 
 
 @pytest.mark.parametrize(
+    "task", [MockClassificationTask()], ids=["mock_classification"]
+)
+def test_cache_hit(task: AbsTask):
+    """Test that evaluating with 'only-cache' raises an error when there are no cache hit."""
+    model = mteb.get_model("baseline/random-encoder-baseline")
+    with pytest.raises(
+        ValueError,
+        match="ValueError: overwrite_strategy is set to 'only-cache' and the results file exists. However there are the following missing splits (and subsets): {'dev': ['default']}. To rerun these set overwrite_strategy to 'only-missing'.",
+    ):
+        mteb.evaluate(model, task, overwrite_strategy="only-cache")
+
+
+@pytest.mark.parametrize(
     "model, task, expected_score",
     [(MockSentenceTransformer(), MockMultilingualRetrievalTask(), 0.63093)],
     ids=["mock_retrieval"],
