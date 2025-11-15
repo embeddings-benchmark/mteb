@@ -19,7 +19,7 @@ embedding_gemma_300m_scandi = ModelMeta(
     public_training_data="https://huggingface.co/datasets/DDSC/nordic-embedding-training-data",
     training_datasets=set(),
     similarity_fn_name="cosine",  # type: ignore[arg-type]
-    adapted_from="emillykkejensen/EmbeddingGemma-Scandi-300m",
+    adapted_from="google/embeddinggemma-300m",
     memory_usage_mb=578,
 )
 
