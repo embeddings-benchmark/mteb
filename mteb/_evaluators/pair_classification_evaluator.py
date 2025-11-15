@@ -87,7 +87,7 @@ class PairClassificationEvaluator(Evaluator):
         model: EncoderProtocol,
         encode_kwargs: dict[str, Any],
     ) -> PairClassificationDistances:
-        logger.info("Running pair classification - Encoding inputs...")
+        logger.info("Running pair classification - Encoding samples (1/2)")
         embeddings1 = model.encode(
             create_dataloader(
                 self.dataset,
@@ -101,6 +101,7 @@ class PairClassificationEvaluator(Evaluator):
             prompt_type=self.input1_prompt_type,
             **encode_kwargs,
         )
+        logger.info("Running pair classification - Encoding samples (2/2)")
         embeddings2 = model.encode(
             create_dataloader(
                 self.dataset,
