@@ -149,6 +149,7 @@ def voyage_v_loader(model_name, **kwargs):
             show_progress_bar: bool = True,
             **kwargs: Any,
         ) -> Array:
+            input_type = "document"  # default
             if prompt_type is not None:
                 if prompt_type == PromptType.document:
                     input_type = "document"
