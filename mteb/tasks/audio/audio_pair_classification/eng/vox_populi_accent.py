@@ -4,15 +4,13 @@ import datasets
 import numpy as np
 import tqdm
 
-from mteb.abstasks.audio.abs_task_audio_pair_classification import (
-    AbsTaskAudioPairClassification,
-)
+from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
 
 
-class VoxPopuliAccentPairClassification(AbsTaskAudioPairClassification):
+class VoxPopuliAccentPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="VoxPopuliAccentPairClassification",
         description="Classifying same or different regional accent of English",
@@ -65,10 +63,9 @@ Navigli, Roberto},
 
     # Override default column name in the subclass
 
-    audio1_column_name: str = "audio1"
-    audio2_column_name: str = "audio2"
+    input1_column_name: str = "audio1"
+    input2_column_name: str = "audio2"
     label_column_name: str = "label"
-    samples_per_label: int = 2
 
     def dataset_transform(self):
         ds = self.dataset["test"]
@@ -137,8 +134,8 @@ Navigli, Roberto},
         pairs = similar_pairs + dissimilar_pairs
         rng.shuffle(pairs)
 
-        audio1 = [ds[idx1]["audio"]["array"] for idx1, idx2, _ in pairs]
-        audio2 = [ds[idx2]["audio"]["array"] for idx1, idx2, _ in pairs]
+        audio1 = [ds[idx1]["audio"] for idx1, idx2, _ in pairs]
+        audio2 = [ds[idx2]["audio"] for idx1, idx2, _ in pairs]
         label = [[lbl] for _, _, lbl in pairs]
 
         ds = datasets.Dataset.from_dict(

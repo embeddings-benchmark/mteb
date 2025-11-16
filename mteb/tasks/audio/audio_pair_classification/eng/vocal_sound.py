@@ -4,15 +4,13 @@ import datasets
 import numpy as np
 from tqdm import tqdm
 
-from mteb.abstasks.audio.abs_task_audio_pair_classification import (
-    AbsTaskAudioPairClassification,
-)
+from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
 
 
-class VocalSoundPairClassification(AbsTaskAudioPairClassification):
+class VocalSoundPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="VocalSoundPairClassification",
         description="Recognizing whether two audio clips are the same human vocal expression (laughing, sighing, etc.)",
@@ -48,10 +46,9 @@ class VocalSoundPairClassification(AbsTaskAudioPairClassification):
 
     # Override default column name in the subclass
 
-    audio1_column_name: str = "audio1"
-    audio2_column_name: str = "audio2"
+    input1_column_name: str = "audio1"
+    input2_column_name: str = "audio2"
     label_column_name: str = "label"
-    samples_per_label: int = 2
 
     def dataset_transform(self):
         ds = self.dataset["test"]
@@ -118,8 +115,8 @@ class VocalSoundPairClassification(AbsTaskAudioPairClassification):
         pairs = similar_pairs + dissimilar_pairs
         rng.shuffle(pairs)
 
-        audio1 = [ds[idx1]["audio"]["array"] for idx1, idx2, _ in pairs]
-        audio2 = [ds[idx2]["audio"]["array"] for idx1, idx2, _ in pairs]
+        audio1 = [ds[idx1]["audio"] for idx1, idx2, _ in pairs]
+        audio2 = [ds[idx2]["audio"] for idx1, idx2, _ in pairs]
         label = [[lbl] for _, _, lbl in pairs]
 
         ds = datasets.Dataset.from_dict(

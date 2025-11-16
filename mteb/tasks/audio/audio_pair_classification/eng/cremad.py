@@ -2,17 +2,15 @@ import logging
 
 import datasets
 import numpy as np
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
-from mteb.abstasks.audio.abs_task_audio_pair_classification import (
-    AbsTaskAudioPairClassification,
-)
+from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
 
 
-class CREMADPairClassification(AbsTaskAudioPairClassification):
+class CREMADPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="CREMADPairClassification",
         description="Classifying pairs as having same or different emotions in actor's voice recordings of text spoken in 6 different emotions",
@@ -56,10 +54,9 @@ voice expression},
 
     # Override default column name in the subclass
 
-    audio1_column_name: str = "audio1"
-    audio2_column_name: str = "audio2"
+    input1_column_name: str = "audio1"
+    input2_column_name: str = "audio2"
     label_column_name: str = "label"
-    samples_per_label: int = 2
 
     def dataset_transform(self):
         ds = self.dataset["train"]
@@ -128,12 +125,14 @@ voice expression},
         pairs = similar_pairs + dissimilar_pairs
         rng.shuffle(pairs)
 
-        audio1 = [ds[idx1]["audio"]["array"] for idx1, idx2, _ in pairs]
-        audio2 = [ds[idx2]["audio"]["array"] for idx1, idx2, _ in pairs]
+        audio1 = [ds[idx1]["audio"] for idx1, idx2, _ in pairs]
+        audio2 = [ds[idx2]["audio"] for idx1, idx2, _ in pairs]
         label = [[lbl] for _, _, lbl in pairs]
 
         ds = datasets.Dataset.from_dict(
             {"audio1": audio1, "audio2": audio2, "label": label}
         )
+        ds = ds.cast_column("audio1", datasets.Audio())
+        ds = ds.cast_column("audio2", datasets.Audio())
 
         self.dataset = datasets.DatasetDict({"test": ds})

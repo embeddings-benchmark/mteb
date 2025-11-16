@@ -4,15 +4,13 @@ import datasets
 import numpy as np
 from tqdm import tqdm
 
-from mteb.abstasks.audio.abs_task_audio_pair_classification import (
-    AbsTaskAudioPairClassification,
-)
+from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
 
 
-class ESC50PairClassification(AbsTaskAudioPairClassification):
+class ESC50PairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="ESC50PairClassification",
         description="Environmental Sound Classification Dataset.",
@@ -50,10 +48,9 @@ class ESC50PairClassification(AbsTaskAudioPairClassification):
 """,
     )
 
-    audio1_column_name: str = "audio1"
-    audio2_column_name: str = "audio2"
+    input1_column_name: str = "audio1"
+    input2_column_name: str = "audio2"
     label_column_name: str = "label"
-    samples_per_label: int = 2
 
     def dataset_transform(self):
         ds = self.dataset["train"]
@@ -115,8 +112,8 @@ class ESC50PairClassification(AbsTaskAudioPairClassification):
         pairs = similar_pairs + dissimilar_pairs
         rng.shuffle(pairs)
 
-        audio1 = [ds[idx1]["audio"]["array"] for idx1, idx2, _ in pairs]
-        audio2 = [ds[idx2]["audio"]["array"] for idx1, idx2, _ in pairs]
+        audio1 = [ds[idx1]["audio"] for idx1, idx2, _ in pairs]
+        audio2 = [ds[idx2]["audio"] for idx1, idx2, _ in pairs]
         label = [[lbl] for _, _, lbl in pairs]
 
         ds = datasets.Dataset.from_dict(

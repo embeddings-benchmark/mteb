@@ -9,7 +9,6 @@ from sklearn.linear_model import LogisticRegression
 from mteb.abstasks import (
     AbsTaskAudioClassification,
     AbsTaskAudioClustering,
-    AbsTaskAudioPairClassification,
 )
 from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
@@ -4648,7 +4647,7 @@ class MockAudioClassification(AbsTaskAudioClassification):
         self.data_loaded = True
 
 
-class MockAudioPairClassification(AbsTaskAudioPairClassification):
+class MockAudioPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         type="AudioPairClassification",
         name="AbsTaskAudioPairClassification",

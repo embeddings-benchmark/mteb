@@ -2,15 +2,13 @@ import logging
 
 from datasets import DatasetDict, concatenate_datasets
 
-from mteb.abstasks.audio.abs_task_audio_pair_classification import (
-    AbsTaskAudioPairClassification,
-)
+from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
 
 
-class NMSQAPairClassification(AbsTaskAudioPairClassification):
+class NMSQAPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="NMSQAPairClassification",
         description="A textless Q&A dataset. Given a pair of audio question and audio answer, is the answer relevant to the question?",
@@ -47,10 +45,9 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
 
     # Override default column name in the subclass
 
-    audio1_column_name: str = "audio1"
-    audio2_column_name: str = "audio2"
+    input1_column_name: str = "audio1"
+    input2_column_name: str = "audio2"
     label_column_name: str = "label"
-    samples_per_label: int = 2
 
     def _extract_waveform_from_df(
         self,
@@ -58,8 +55,8 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
         audio1_name: str = "question_audio_path",
         audio2_name: str = "content_segment_audio_path",
     ):
-        df.loc[:, audio1_name] = df.apply(lambda row: row[audio1_name]["array"], axis=1)
-        df.loc[:, audio2_name] = df.apply(lambda row: row[audio2_name]["array"], axis=1)
+        df.loc[:, audio1_name] = df.apply(lambda row: row[audio1_name], axis=1)
+        df.loc[:, audio2_name] = df.apply(lambda row: row[audio2_name], axis=1)
 
     def dataset_transform(self):
         ds = self.dataset["test"]
@@ -77,20 +74,18 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
         # extract waveforms for similar pairs
         ds_sim = ds_sim.map(
             lambda row: {
-                "question_audio_path": row["question_audio_path"]["array"],
-                "content_segment_audio_path": row["content_segment_audio_path"][
-                    "array"
-                ],
+                "question_audio_path": row["question_audio_path"],
+                "content_segment_audio_path": row["content_segment_audio_path"],
             },
             batched=False,
         )
 
         ds_dissim = ds_dissim.map(
             lambda row, idx: {
-                "question_audio_path": row["question_audio_path"]["array"],
+                "question_audio_path": row["question_audio_path"],
                 "content_segment_audio_path": ds_dissim[(idx + 1) % len(ds_dissim)][
                     "content_segment_audio_path"
-                ]["array"],
+                ],
                 "label": 0,
             },
             with_indices=True,
