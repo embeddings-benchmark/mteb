@@ -1,4 +1,4 @@
-"""ATLES Champion Embedding Model for MTEB."
+"""ATLES Champion Embedding Model for MTEB."""
 
 from mteb.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
