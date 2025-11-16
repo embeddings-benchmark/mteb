@@ -270,10 +270,7 @@ class AbsTaskClassification(AbsTask):
         num_samples = len(ds)
 
         scores = []
-        test_cache, idxs = (
-            None,
-            None,
-        )
+        idxs = None
         cross_validation_splitter = self.cross_validation_splitter(
             n_splits=self.n_splits, shuffle=True, random_state=self.seed
         )
@@ -284,13 +281,13 @@ class AbsTaskClassification(AbsTask):
             train_split = ds.select(train_idx)
             eval_split = ds.select(val_idx)
             logger.info(f"Running experiment ({i}/{self.n_experiments})")
-            scores_exp, predictions, idxs, test_cache = self._run_experiment(
+            scores_exp, predictions, idxs, _ = self._run_experiment(
                 model,
                 train_split,
                 eval_split,
                 experiment_num=i,
                 idxs=idxs,
-                test_cache=test_cache,
+                test_cache=None,
                 encode_kwargs=encode_kwargs,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
