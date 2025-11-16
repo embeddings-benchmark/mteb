@@ -20,6 +20,7 @@ spartan8806_atles_champion_embedding = ModelMeta(
     reference="https://huggingface.co/spartan8806/atles-champion-embedding",
     use_instructions=False,
     training_datasets={"STSBenchmark"},
-    public_training_code=True,
-    public_training_data=True,
+    adapted_from="sentence-transformers/all-mpnet-base-v2",
+    public_training_code="https://huggingface.co/spartan8806/atles-champion-embedding",
+    public_training_data="https://huggingface.co/datasets/sentence-transformers/stsb",
 )
