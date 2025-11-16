@@ -18,6 +18,7 @@ from sklearn.metrics import (
 from sklearn.model_selection import KFold
 from typing_extensions import Self
 
+from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
 from mteb.models import EncoderProtocol, MTEBModels
 from mteb.types import HFSubset, ScoresDict
@@ -275,11 +276,28 @@ class AbsTaskClassification(AbsTask):
             n_splits=self.n_splits, shuffle=True, random_state=self.seed
         )
         all_predictions = []
+        dataloader_train = create_dataloader(
+            ds,
+            self.metadata,
+            input_column=self.input_column_name,
+            **encode_kwargs,
+        )
+        logger.info("Running cross-validation - Encoding samples...")
+        # precompute all embeddings for cross-validation to not recomupute them in different k-folds
+        dataset_embeddings = model.encode(
+            dataloader_train,
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            **encode_kwargs,
+        )
         for i, (train_idx, val_idx) in enumerate(
             cross_validation_splitter.split(range(num_samples))
         ):
             train_split = ds.select(train_idx)
             eval_split = ds.select(val_idx)
+            train_cache = dataset_embeddings[train_idx]
+            test_cache = dataset_embeddings[val_idx]
             logger.info(f"Running experiment ({i}/{self.n_experiments})")
             scores_exp, predictions, idxs, _ = self._run_experiment(
                 model,
@@ -287,10 +305,11 @@ class AbsTaskClassification(AbsTask):
                 eval_split,
                 experiment_num=i,
                 idxs=idxs,
-                test_cache=None,
                 encode_kwargs=encode_kwargs,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
+                test_cache=test_cache,
+                train_cache=train_cache,
             )
 
             if prediction_folder:
@@ -319,12 +338,16 @@ class AbsTaskClassification(AbsTask):
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
+        train_cache: np.ndarray | None = None,
     ) -> tuple[ClassificationMetrics, list[float], Iterable[int], np.ndarray]:
-        train_dataset, idxs = self._undersample_data(
+        train_dataset, idxs, selected_idx = self._undersample_data(
             train_split,
             experiment_num,
             idxs,
         )
+        sub_train_cache = None
+        if train_cache is not None:
+            sub_train_cache = train_cache[selected_idx]
 
         evaluator = self.evaluator(
             train_dataset,
@@ -337,7 +360,10 @@ class AbsTaskClassification(AbsTask):
             evaluator_model=self.evaluator_model,
         )
         y_pred, test_cache = evaluator(
-            model, encode_kwargs=encode_kwargs, test_cache=test_cache
+            model,
+            encode_kwargs=encode_kwargs,
+            test_cache=test_cache,
+            train_cache=sub_train_cache,
         )
         y_test = eval_split[self.label_column_name]
         return self._calculate_scores(y_test, y_pred), y_pred.tolist(), idxs, test_cache
@@ -387,7 +413,7 @@ class AbsTaskClassification(AbsTask):
 
     def _undersample_data(
         self, dataset: Dataset, experiment_num: int, idxs: list[int] | None = None
-    ) -> tuple[Dataset, list[int]]:
+    ) -> tuple[Dataset, list[int], list[int]]:
         """Undersample data to have `samples_per_label` samples of each label.
 
         Args:
@@ -396,8 +422,10 @@ class AbsTaskClassification(AbsTask):
             idxs: Optional indices to shuffle and sample from.
 
         Returns:
-            A new Dataset containing undersampled examples.
-            The shuffled indices used for sampling.
+            Tuple of:
+            - A new Dataset containing undersampled examples.
+            - The shuffled indices used for sampling.
+            - Selected indexes
         """
         if idxs is None:
             idxs = list(range(len(dataset)))
@@ -415,7 +443,7 @@ class AbsTaskClassification(AbsTask):
                 sampled_idxs.append(i)
                 label_counter[label] += 1
 
-        return dataset.select(sampled_idxs), idxs
+        return dataset.select(sampled_idxs), idxs, sampled_idxs
 
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
