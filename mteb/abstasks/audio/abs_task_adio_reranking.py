@@ -4,6 +4,7 @@ from copy import copy
 
 import datasets
 from datasets import Audio, Dataset
+from tqdm.auto import tqdm
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
@@ -154,9 +155,12 @@ class AbsTaskAudioReranking(AbsTaskRetrieval):
                     with_indices=True,
                     remove_columns=enumerated_dataset.column_names,
                 )
+                del enumerated_dataset
 
                 # Populate the data structures
-                for item in processed_dataset:
+                for item in tqdm(
+                    processed_dataset, desc="Splitting datasets into query, corpus"
+                ):
                     query_id = item["query_id"]
                     queries.append({"id": query_id, "audio": item["query"]})
 
@@ -173,6 +177,7 @@ class AbsTaskAudioReranking(AbsTaskRetrieval):
                         top_ranked[query_id].append(doc_id)
                         relevant_docs[query_id][doc_id] = relevance
 
+                del processed_dataset
                 corpus = Dataset.from_list(corpus)
                 corpus = corpus.cast_column(
                     "audio",
