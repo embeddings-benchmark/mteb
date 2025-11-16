@@ -2,7 +2,7 @@ import logging
 from collections import defaultdict
 from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import Any, Protocol, Self, TypedDict
+from typing import Any, Protocol, TypedDict
 
 import numpy as np
 from datasets import Dataset, DatasetDict
@@ -16,6 +16,7 @@ from sklearn.metrics import (
     recall_score,
 )
 from sklearn.model_selection import KFold
+from typing_extensions import Self
 
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
 from mteb.models import EncoderProtocol, MTEBModels
