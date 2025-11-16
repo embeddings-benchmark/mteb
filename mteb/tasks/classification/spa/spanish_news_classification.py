@@ -39,8 +39,7 @@ class SpanishNewsClassification(AbsTaskClassification):
 class SpanishNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SpanishNewsClassification.v2",
-        description="""A Spanish dataset for news classification. The dataset includes articles from reputable Spanish news sources spanning 12 different categories.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="A Spanish dataset for news classification. The dataset includes articles from reputable Spanish news sources spanning 12 different categories. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://huggingface.co/datasets/MarcOrfilaCarreras/spanish-news",
         dataset={
             "path": "mteb/spanish_news",

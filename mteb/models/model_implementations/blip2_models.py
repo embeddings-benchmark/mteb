@@ -10,6 +10,13 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
+BLIP2_CITATION = """@inproceedings{li2023blip2,
+    title={{BLIP-2:} Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models},
+    author={Junnan Li and Dongxu Li and Silvio Savarese and Steven Hoi},
+    year={2023},
+    booktitle={ICML},
+}"""
+
 
 def blip2_loader(model_name, **kwargs):
     requires_package(
@@ -176,6 +183,7 @@ blip2_opt_2_7b = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=blip2_training_datasets,
+    citation=BLIP2_CITATION,
 )
 
 blip2_opt_6_7b_coco = ModelMeta(
@@ -198,4 +206,5 @@ blip2_opt_6_7b_coco = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=blip2_training_datasets,
+    citation=BLIP2_CITATION,
 )

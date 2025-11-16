@@ -19,7 +19,7 @@ from .mridingham_tonic import MridinghamTonic
 from .n_synth import NSynth
 from .speech_commands import SpeechCommandsClassification
 from .spoke_n import SpokeNEnglishClassification
-from .spoken_q_afor_ic import SpokenQAforIC
+from .spoken_q_afor_ic import SpokenQAForIC
 from .tut_acoustic_scenes import TUTAcousticScenesClassification
 from .urban_sound8k import UrbanSound8kZeroshotClassification
 from .vocal_sound import VocalSoundClassification
@@ -47,7 +47,7 @@ __all__ = [
     "NSynth",
     "SpeechCommandsClassification",
     "SpokeNEnglishClassification",
-    "SpokenQAforIC",
+    "SpokenQAForIC",
     "TUTAcousticScenesClassification",
     "UrbanSound8kZeroshotClassification",
     "VocalSoundClassification",

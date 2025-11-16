@@ -206,6 +206,8 @@ _HISTORIC_DATASETS = [
     "VGClustering",
     "VisualSTS17Eng",
     "VisualSTS17Multilingual",
+    "FEVERHardNegatives.v2",
+    "QuoraRetrievalHardNegatives.v2",
 ]
 
 
@@ -245,6 +247,6 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         pytest.skip("Skipping audio tasks for now, see issue #3498")
 
     assert task.metadata.descriptive_stats is not None, (
-        f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask().calculate_descriptive_statistics()`"
+        f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YourTask().calculate_descriptive_statistics()`"
     )
     assert task.metadata.n_samples is not None

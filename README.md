@@ -100,10 +100,10 @@ For more on how to use the CLI check out the [related documentation](https://emb
 [Tasks]: https://embeddings-benchmark.github.io/mteb/overview/available_tasks/any2anymultilingualretrieval/
 [Benchmarks]: https://embeddings-benchmark.github.io/mteb/overview/available_benchmarks/
 [Models]: https://embeddings-benchmark.github.io/mteb/overview/available_models/text/
-[Contributing]: docs/CONTRIBUTING.md
-[Adding a model]: docs/contributing/adding_a_model.md
-[Adding a dataset]: docs/contributing/adding_a_dataset.md
-[Adding a benchmark]: docs/contributing/adding_a_benchmark.md
+[Contributing]: https://embeddings-benchmark.github.io/mteb/CONTRIBUTING/
+[Adding a model]: https://embeddings-benchmark.github.io/mteb/contributing/adding_a_model/
+[Adding a dataset]: https://embeddings-benchmark.github.io/mteb/contributing/adding_a_dataset/
+[Adding a benchmark]: https://embeddings-benchmark.github.io/mteb/contributing/adding_a_benchmark/
 [Leaderboard]: https://huggingface.co/spaces/mteb/leaderboard
 
 ## Citing

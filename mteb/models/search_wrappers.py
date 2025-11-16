@@ -90,7 +90,7 @@ class SearchEncoderWrapper:
             queries,
             task_metadata,
             prompt_type=PromptType.query,
-            batch_size=encode_kwargs.get("batch_size", 32),
+            **encode_kwargs,
         )
 
         query_embeddings = self.model.encode(
@@ -165,7 +165,7 @@ class SearchEncoderWrapper:
                     sub_corpus,
                     task_metadata,
                     prompt_type=PromptType.document,
-                    batch_size=encode_kwargs.get("batch_size", 32),
+                    **encode_kwargs,
                 ),
                 task_metadata=task_metadata,
                 hf_split=hf_split,
@@ -191,6 +191,7 @@ class SearchEncoderWrapper:
             cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
             cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
 
+            sub_corpus_ids = list(sub_corpus_ids)
             for query_itr in range(len(query_embeddings)):
                 query_id = query_idx_to_id[query_itr]
                 for sub_corpus_id, score in zip(
@@ -230,7 +231,7 @@ class SearchEncoderWrapper:
                 self.task_corpus,
                 task_metadata,
                 prompt_type=PromptType.document,
-                batch_size=encode_kwargs.get("batch_size", 32),
+                **encode_kwargs,
             ),
             task_metadata=task_metadata,
             hf_split=hf_split,
@@ -407,13 +408,13 @@ class SearchCrossEncoderWrapper:
             Dataset.from_list(total_queries),
             task_metadata,
             prompt_type=PromptType.document,
-            batch_size=encode_kwargs.get("batch_size", 32),
+            **encode_kwargs,
         )
         corpus_loader = create_dataloader(
             Dataset.from_list(total_docs),
             task_metadata,
             prompt_type=PromptType.document,
-            batch_size=encode_kwargs.get("batch_size", 32),
+            **encode_kwargs,
         )
         predictions = self.model.predict(
             inputs1=queries_loader,

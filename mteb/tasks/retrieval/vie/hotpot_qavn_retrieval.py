@@ -9,12 +9,7 @@ class HotpotQAVN(AbsTaskRetrieval):
             "path": "GreenNode/hotpotqa-vn",
             "revision": "8a5220c7af5084f0d5d2afeb74f9c2b41b759ff0",
         },
-        description="""A translated dataset from HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong
-            supervision for supporting facts to enable more explainable question answering systems.
-            The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-            - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-            - Applies advanced embedding models to filter the translations.
-            - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
+        description="A translated dataset from HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://hotpotqa.github.io/",
         type="Retrieval",
         category="t2t",

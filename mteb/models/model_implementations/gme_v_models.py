@@ -39,7 +39,7 @@ class Encoder(torch.nn.Module):
         self.max_length = max_length
         self.normalize = normalize
         self.processor.tokenizer.padding_side = "right"
-        self.defualt_instruction = "You are a helpful assistant."
+        self.default_instruction = "You are a helpful assistant."
 
     def forward(
         self,
@@ -103,7 +103,7 @@ class Encoder(torch.nn.Module):
         instruction=None,
         **kwargs,
     ):
-        instruction = instruction or self.defualt_instruction
+        instruction = instruction or self.default_instruction
         # Inputs must be batched
         input_texts, input_images = [], []
         for t, i in zip(texts, images):

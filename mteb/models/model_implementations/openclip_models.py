@@ -10,6 +10,14 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
+OPENCLIP_CITATION = """@inproceedings{cherti2023reproducible,
+    title={Reproducible scaling laws for contrastive language-image learning},
+    author={Cherti, Mehdi and Beaumont, Romain and Wightman, Ross and Wortsman, Mitchell and Ilharco, Gabriel and Gordon, Cade and Schuhmann, Christoph and Schmidt, Ludwig and Jitsev, Jenia},
+    booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+    pages={2818--2829},
+    year={2023}
+}"""
+
 
 def openclip_loader(model_name, **kwargs):
     requires_package(
@@ -133,6 +141,7 @@ CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(
     training_datasets=set(
         # DataComp-1B
     ),
+    citation=OPENCLIP_CITATION,
 )
 
 CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
@@ -157,6 +166,7 @@ CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
     training_datasets=set(
         # DataComp-1B
     ),
+    citation=OPENCLIP_CITATION,
 )
 
 CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
@@ -181,6 +191,7 @@ CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
     training_datasets=set(
         # DataComp-1B
     ),
+    citation=OPENCLIP_CITATION,
 )
 
 CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
@@ -205,6 +216,7 @@ CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
     training_datasets=set(
         # 2 Billion sample English subset of LAION-5B
     ),
+    citation=OPENCLIP_CITATION,
 )
 
 CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
@@ -229,6 +241,7 @@ CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
     training_datasets=set(
         # 2 Billion sample English subset of LAION-5B
     ),
+    citation=OPENCLIP_CITATION,
 )
 
 CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
@@ -253,6 +266,7 @@ CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
     training_datasets=set(
         # 2 Billion sample English subset of LAION-5B
     ),
+    citation=OPENCLIP_CITATION,
 )
 
 CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
@@ -277,6 +291,7 @@ CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
     training_datasets=set(
         # 2 Billion sample English subset of LAION-5B
     ),
+    citation=OPENCLIP_CITATION,
 )
 
 CLIP_ViT_B_32_laion2B_s34B_b79K = ModelMeta(
@@ -301,4 +316,5 @@ CLIP_ViT_B_32_laion2B_s34B_b79K = ModelMeta(
     training_datasets=set(
         # 2 Billion sample English subset of LAION-5B
     ),
+    citation=OPENCLIP_CITATION,
 )

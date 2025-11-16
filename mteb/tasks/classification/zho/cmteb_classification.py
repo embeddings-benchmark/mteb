@@ -79,8 +79,7 @@ Lan, Zhenzhong },
 class TNewsV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TNews.v2",
-        description="""Short Text Classification for News
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Short Text Classification for News This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://www.cluebenchmarks.com/introduce.html",
         dataset={
             "path": "mteb/t_news",
@@ -229,8 +228,7 @@ Lan, Zhenzhong },
 class IFlyTekV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="IFlyTek.v2",
-        description="""Long Text classification for the description of Apps
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Long Text classification for the description of Apps This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://www.cluebenchmarks.com/introduce.html",
         dataset={
             "path": "mteb/i_fly_tek",
@@ -335,8 +333,7 @@ class MultilingualSentiment(AbsTaskClassification):
 class MultilingualSentimentV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MultilingualSentiment.v2",
-        description="""A collection of multilingual sentiments datasets grouped into 3 classes -- positive, neutral, negative
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="A collection of multilingual sentiments datasets grouped into 3 classes -- positive, neutral, negative This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://github.com/tyqiangz/multilingual-sentiment-datasets",
         dataset={
             "path": "mteb/multilingual_sentiment",
@@ -403,8 +400,7 @@ class JDReview(AbsTaskClassification):
 class JDReviewV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="JDReview.v2",
-        description="""review for iphone
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="review for iphone This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
         dataset={
             "path": "mteb/jd_review",
@@ -514,8 +510,7 @@ class Waimai(AbsTaskClassification):
 class WaimaiV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Waimai.v2",
-        description="""Sentiment Analysis of user reviews on takeaway platforms
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Sentiment Analysis of user reviews on takeaway platforms This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
         dataset={
             "path": "mteb/waimai",

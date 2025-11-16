@@ -1,4 +1,9 @@
-from mteb.benchmarks.benchmark import Benchmark, HUMEBenchmark, MIEBBenchmark
+from mteb.benchmarks.benchmark import (
+    Benchmark,
+    HUMEBenchmark,
+    MIEBBenchmark,
+    VidoreBenchmark,
+)
 from mteb.get_tasks import MTEBTasks, get_task, get_tasks
 
 MMTEB_CITATION = r"""@article{enevoldsen2025mmtebmassivemultilingualtext,
@@ -641,7 +646,7 @@ MTEB_KOR = Benchmark(
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
     tasks=get_tasks(
         languages=["kor"],
-        tasks=[  # @KennethEnevoldsen: We could probably expand this to a more solid benchamrk, but for now I have left it as is.
+        tasks=[  # @KennethEnevoldsen: We could probably expand this to a more solid benchmark, but for now I have left it as is.
             # Classification
             "KLUE-TC",
             # Reranking
@@ -975,8 +980,6 @@ MTEB_INDIC = Benchmark(
                 # Bitext
                 "IN22ConvBitextMining",
                 "IN22GenBitextMining",
-                "IndicGenBenchFloresBitextMining",
-                "LinceMTBitextMining",
                 # clustering
                 "SIB200ClusteringS2S",
                 # classification
@@ -985,7 +988,6 @@ MTEB_INDIC = Benchmark(
                 "HindiDiscourseClassification",
                 "SentimentAnalysisHindi",
                 "MalayalamNewsClassification",
-                "IndicLangClassification",
                 "MTOPIntentClassification",
                 "MultiHateClassification",
                 "TweetSentimentClassification",
@@ -1008,7 +1010,7 @@ MTEB_INDIC = Benchmark(
         # STS
         (get_task("IndicCrosslingualSTS"),)
     ),
-    description="A regional geopolitical text embedding benchmark targetting embedding performance on Indic languages.",
+    description="A regional geopolitical text embedding benchmark targeting embedding performance on Indic languages.",
     reference=None,
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
@@ -1016,7 +1018,7 @@ MTEB_INDIC = Benchmark(
 
 
 eu_languages = [
-    # official EU languages (56) - we could include the whole economic area e.g. Norway - additioanlly we could include minority languages (probably a good idea?)
+    # official EU languages (56) - we could include the whole economic area e.g. Norway - additionally we could include minority languages (probably a good idea?)
     # germanic
     "dan",
     "eng",
@@ -1084,7 +1086,6 @@ MTEB_EU = Benchmark(
             "AmazonCounterfactualClassification",
             "MassiveScenarioClassification",
             "MultiHateClassification",
-            "NordicLangClassification",
             "ScalaClassification",
             "SwissJudgementClassification",
             "TweetSentimentClassification",
@@ -1142,7 +1143,7 @@ MTEB_EU = Benchmark(
         languages=eu_languages,
         exclusive_language_filter=True,
     ),
-    description="A regional geopolitical text embedding benchmark targetting embedding performance on European languages.",
+    description="A regional geopolitical text embedding benchmark targeting embedding performance on European languages.",
     reference=None,
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
@@ -1638,7 +1639,7 @@ BEIR_NL = Benchmark(
 
 MTEB_NL = Benchmark(
     name="MTEB(nld, v1)",
-    display_name="MTEB-NL",
+    display_name="Dutch",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/nl.svg",
     tasks=MTEBTasks(
         get_tasks(
@@ -1646,7 +1647,7 @@ MTEB_NL = Benchmark(
             exclusive_language_filter=True,
             tasks=[
                 # Classification
-                "DutchBookReviewSentimentClassification",
+                "DutchBookReviewSentimentClassification.v2",
                 "MassiveIntentClassification",
                 "MassiveScenarioClassification",
                 "SIB200Classification",
@@ -1677,12 +1678,12 @@ MTEB_NL = Benchmark(
                 # # Reranking
                 "WikipediaRerankingMultilingual",
                 # # Retrieval
-                "ArguAna-NL",
-                "SCIDOCS-NL",
-                "SciFact-NL",
-                "NFCorpus-NL",
+                "ArguAna-NL.v2",
+                "SCIDOCS-NL.v2",
+                "SciFact-NL.v2",
+                "NFCorpus-NL.v2",
                 "BelebeleRetrieval",
-                # "WebFAQRetrieval",
+                "WebFAQRetrieval",
                 "DutchNewsArticlesRetrieval",
                 "bBSARDNLRetrieval",
                 "LegalQANLRetrieval",
@@ -1858,7 +1859,7 @@ MIEB_ENG = MIEBBenchmark(
     ),
     description="""MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 125 tasks.
     In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation,
-    document undestanding, visual STS, and CV-centric tasks.""",
+    document understanding, visual STS, and CV-centric tasks.""",
     reference="https://arxiv.org/abs/2504.10471",
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation=r"""
@@ -1892,7 +1893,7 @@ MIEB_MULTILINGUAL = MIEBBenchmark(
     ),
     description="""MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 130 tasks and a total of 39 languages.
     In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation,
-    document undestanding, visual STS, and CV-centric tasks. This benchmark consists of MIEB(eng) + 3 multilingual retrieval
+    document understanding, visual STS, and CV-centric tasks. This benchmark consists of MIEB(eng) + 3 multilingual retrieval
     datasets + the multilingual parts of VisualSTS-b and VisualSTS-16.""",
     reference="https://arxiv.org/abs/2504.10471",
     contacts=["gowitheflow-1998", "isaac-chung"],
@@ -2113,7 +2114,7 @@ BUILT_MTEB = Benchmark(
             "BuiltBenchReranking",
         ],
     ),
-    description='"Built-Bench" is an ongoing effort aimed at evaluating text embedding models in the context of built asset management, spanning over various dicsiplines such as architeture, engineering, constrcution, and operations management of the built environment.',
+    description='"Built-Bench" is an ongoing effort aimed at evaluating text embedding models in the context of built asset management, spanning over various disciplines such as architecture, engineering, construction, and operations management of the built environment.',
     reference="https://arxiv.org/abs/2411.12056",
     citation=r"""
 @article{shahinmoghadam2024benchmarking,
@@ -2218,10 +2219,43 @@ VIDORE_V2 = Benchmark(
 """,
 )
 
-VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
-    name="VisualDocumentRetrieval",
-    display_name="Visual Document Retrieval",
-    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-picture.svg",
+VIDORE_V3 = VidoreBenchmark(
+    name="ViDoRe(v3)",
+    display_name="ViDoRe V3",
+    icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
+    tasks=get_tasks(
+        tasks=[
+            "Vidore3FinanceEnRetrieval",
+            "Vidore3IndustrialRetrieval",
+            "Vidore3ComputerScienceRetrieval",
+            "Vidore3PharmaceuticalsRetrieval",
+            "Vidore3HrRetrieval",
+            "Vidore3FinanceFrRetrieval",
+            "Vidore3PhysicsRetrieval",
+            "Vidore3EnergyRetrieval",
+            "Vidore3TelecomRetrieval",
+            "Vidore3NuclearRetrieval",
+        ]
+    ),
+    description="ViDoRe V3 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents. The benchmark includes both open and closed datasets: to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
+    reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
+    citation=r"""
+@misc{mace2025vidorev3,
+  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  day = {5},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
+  journal = {Hugging Face Blog},
+  month = {November},
+  publisher = {Hugging Face},
+  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year = {2025},
+}
+""",
+)
+
+VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
+    name="ViDoRe(v1&v2)",
+    display_name="ViDoRe (V1&V2)",
     tasks=get_tasks(
         tasks=[
             # v1

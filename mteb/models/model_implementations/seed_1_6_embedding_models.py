@@ -344,7 +344,7 @@ TASK_NAME_TO_INSTRUCTION = {
     "SprintDuplicateQuestions": "Retrieve semantically similar text\n{}",
     "TwitterSemEval2015": "Retrieve semantically similar text\n{}",
     "TwitterURLCorpus": "Retrieve semantically similar text\n{}",
-    "CQADupstackGamingRetrieval": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given questionn\n{}",
+    "CQADupstackGamingRetrieval": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question\n{}",
     "CQADupstackUnixRetrieval": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question\n{}",
     "DuRetrieval": "为这个句子生成表示以用于检索相关内容：{}",
     "T2Retrieval": "为这个句子生成表示以用于检索相关内容：{}",

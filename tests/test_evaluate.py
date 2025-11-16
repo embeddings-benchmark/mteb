@@ -8,13 +8,18 @@ from mteb.cache import ResultCache
 from mteb.models.models_protocols import EncoderProtocol
 from tests.mock_models import MockSentenceTransformer
 from tests.mock_tasks import (
+    MockAggregatedTask,
     MockClassificationTask,
     MockMultilingualRetrievalTask,
     MockRetrievalTask,
 )
 
 mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 0.5)
-mock_retrieval = (MockSentenceTransformer(), MockRetrievalTask(), 0.0)
+mock_retrieval = (
+    MockSentenceTransformer(),
+    MockRetrievalTask(),
+    pytest.approx(0.63093),
+)
 
 
 @pytest.mark.parametrize(
@@ -176,3 +181,9 @@ def test_evaluate_overwrites(
     assert results[0].get_score() == expected_score, (
         "main score should match the expected value"
     )
+
+
+def test_evaluate_aggregated_task():
+    model = mteb.get_model("baseline/random-encoder-baseline")
+    task = MockAggregatedTask()
+    mteb.evaluate(model, task, cache=None)

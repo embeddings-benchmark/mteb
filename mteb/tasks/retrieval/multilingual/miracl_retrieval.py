@@ -92,7 +92,7 @@ class MIRACLRetrievalHardNegativesV2(AbsTaskRetrieval):
             "MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval "
             "dataset that focuses on search across 18 different languages. The hard negative version has been "
             "created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct."
-            "V2 uses a more appropriate prompt rather than the default prompt for retrieval."
+            "V2 uses a more appropriate prompt rather than the default prompt for retrieval. You can get more information on the effect of different prompt in the [PR](https://github.com/embeddings-benchmark/mteb/pull/3469#issuecomment-3436467106)"
         ),
         dataset={
             "path": "mteb/MIRACLRetrievalHardNegatives",

@@ -1,5 +1,6 @@
 """This implements minimal viable mock tasks for testing the benchmarking framework."""
 
+import datasets
 import numpy as np
 from datasets import Audio, Dataset, DatasetDict
 from PIL import Image
@@ -10,6 +11,8 @@ from mteb.abstasks import (
     AbsTaskAudioClustering,
     AbsTaskAudioPairClassification,
 )
+from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.audio.abs_task_adio_reranking import AbsTaskAudioReranking
 from mteb.abstasks.audio.abs_task_multilabel_classification import (
     AbsTaskAudioMultilabelClassification,
@@ -1717,7 +1720,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
 
 
 class MockRetrievalTask(AbsTaskRetrieval):
-    _top_k = 1
+    _top_k = 2
     expected_stats = {
         "val": {
             "num_samples": 4,
@@ -2638,6 +2641,19 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
             "fra": {"test": base_datasplit, "val": base_datasplit},
         }
         self.data_loaded = True
+
+
+class MockAggregatedTask(AbsTaskAggregate):
+    metadata = AggregateTaskMetadata(
+        type="InstructionReranking",
+        name="MockMultilingualInstructionReranking",
+        main_score="ndcg_at_10",
+        tasks=[
+            MockRetrievalTask(),
+            MockRerankingTask(),
+        ],
+        **general_args,  # type: ignore
+    )
 
 
 class MockMultiChoiceTask(AbsTaskRetrieval):
@@ -3961,6 +3977,8 @@ class MockVisualSTSTask(AbsTaskSTS):
                 ),
             }
         )
+        self.dataset = self.dataset.cast_column("sentence1", datasets.Image())
+        self.dataset = self.dataset.cast_column("sentence2", datasets.Image())
         self.data_loaded = True
 
 

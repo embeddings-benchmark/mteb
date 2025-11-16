@@ -61,8 +61,7 @@ class EstonianValenceClassificationV2(AbsTaskClassification):
             "path": "mteb/estonian_valence",
             "revision": "8795961e2af5b83bcb8a6928636845ac2b92f92e",
         },
-        description="""Dataset containing annotated Estonian news data from the Postimees and Õhtuleht newspapers.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Dataset containing annotated Estonian news data from the Postimees and Õhtuleht newspapers. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054",
         type="Classification",
         category="t2c",

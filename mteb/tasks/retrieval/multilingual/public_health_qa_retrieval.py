@@ -32,10 +32,15 @@ def _load_publichealthqa_data(
             split=split,
             revision=revision,
         )
-        question_ids = {
-            question: _id for _id, question in enumerate(set(data["question"]))
-        }
-        answer_ids = {answer: _id for _id, answer in enumerate(set(data["answer"]))}
+
+        question_ids = {}
+        answer_ids = {}
+
+        for row in data:
+            if row["question"] is not None and row["question"] not in question_ids:
+                question_ids[row["question"]] = len(question_ids)
+            if row["answer"] is not None and row["answer"] not in answer_ids:
+                answer_ids[row["answer"]] = len(answer_ids)
 
         for row in data:
             if row["question"] is None or row["answer"] is None:
