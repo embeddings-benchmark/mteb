@@ -18,5 +18,5 @@ spartan8806_atles_champion_embedding = ModelMeta(
     framework=["Sentence Transformers"],
     reference="https://huggingface.co/spartan8806/atles-champion-embedding",
     use_instructions=False,
-    training_datasets={"STSBenchmark": ["train"]},
+    training_datasets={"STSBenchmark"},
 )
