@@ -82,16 +82,16 @@ Here is an example implementing a zero-shot image classification from scratch. L
 To solve this task, we need to encode the `images`, encode the `class label candidates with prompts` (e.g. "this is a dog pic", "this is a cat pic"), and compare them by calculating similarity, and then argmax out the class prediction for each image. We begin by implementing a model wrapper.
 
 #### Model Wrapper
-See the [`ImageEncoder` class](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/encoder_interface.py) for more details. The model class implements `get_text_embeddings`, `get_image_embeddings`, and `calculate_probs` methods.
-As an example,  [`OpenCLIPWrapper`](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/models/openclip_models.py) is first implemented, with metadata defined below.
+See the [`AbsEncoder` base class](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/abs_encoder.py) for more details. The model class implements `get_text_embeddings`, `get_image_embeddings`, and `calculate_probs` methods.
+As an example,  [`OpenCLIPWrapper`](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/model_implementations/openclip_models.py) is first implemented, with metadata defined below.
 ```python
 class OpenCLIPWrapper:
     ...
 ```
-See also [adding a model](adding_a_model.md) for reference.
+See also [adding a model](../contributing/adding_a_model.md) for reference.
 
 #### X Evaluator
-With the model, [ZeroShotClassificationEvaluator](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/evaluation/evaluators/Image/ZeroShotClassificationEvaluator.py) is implemented here. This defines how the model are used to do zero-shot classification and get back results on desired metrics.
+With the model, [ZeroShotClassificationEvaluator](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/_evaluators/zeroshot_classification_evaluator.py) is implemented here. This defines how the model are used to do zero-shot classification and get back results on desired metrics.
 ```python
 class ZeroShotClassificationEvaluator(Evaluator):
     def __init__(self, ...):
@@ -102,7 +102,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
 ```
 
 #### AbsTask X
-With the evaluator, [AbsTaskZeroShotClassification](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/abstasks/Image/AbsTaskZeroShotClassification.py) is defined, operating on the dataset, calling the defined Evaluator, and gives out results.
+With the evaluator, [AbsTaskZeroShotClassification](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/abstasks/zeroshot_classification.py) is defined, operating on the dataset, calling the defined Evaluator, and gives out results.
 ```python
 class AbsTaskZeroShotClassification(AbsTask):
     ...
@@ -110,7 +110,7 @@ class AbsTaskZeroShotClassification(AbsTask):
 
 
 #### Dataset class
-With all these, we can then define the dataset. [CIFAR10](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/tasks/Image/ZeroShotClassification/eng/CIFAR.py) is implemented like this, subclassing `AbsTaskZeroShotClassification`, and overwrite the `get_candidate_labels` function, which gives `["a photo of {label_name}"]` to be used in the evaluator.
+With all these, we can then define the dataset. [CIFAR10](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/tasks/zeroshot_classification/eng/cifar.py) is implemented like this, subclassing `AbsTaskZeroShotClassification`, and overwrite the `get_candidate_labels` function, which gives `["a photo of {label_name}"]` to be used in the evaluator.
 ```python
 class CIFAR10ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(...)
@@ -118,7 +118,7 @@ class CIFAR10ZeroShotClassification(AbsTaskZeroShotClassification):
     def get_candidate_labels(self) -> list[str]:
         ...
 ```
-See also [adding a dataset](adding_a_dataset.md) for reference.
+See also [adding a dataset](../contributing/adding_a_dataset.md) for reference.
 
 #### Putting them all together
 With all these, we can then

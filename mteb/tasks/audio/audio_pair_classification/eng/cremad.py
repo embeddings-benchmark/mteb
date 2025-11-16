@@ -36,31 +36,10 @@ class CREMADPairClassification(AbsTaskAudioPairClassification):
         sample_creation="created",
         bibtex_citation=r"""
 @article{Cao2014-ih,
-  abstract = {People convey their emotional state in their face and voice. We
-present an audio-visual data set uniquely suited for the study
-of multi-modal emotion expression and perception. The data set
-consists of facial and vocal emotional expressions in sentences
-spoken in a range of basic emotional states (happy, sad, anger,
-fear, disgust, and neutral). 7,442 clips of 91 actors with
-diverse ethnic backgrounds were rated by multiple raters in
-three modalities: audio, visual, and audio-visual. Categorical
-emotion labels and real-value intensity values for the perceived
-emotion were collected using crowd-sourcing from 2,443 raters.
-The human recognition of intended emotion for the audio-only,
-visual-only, and audio-visual data are 40.9\%, 58.2\% and 63.6\%
-respectively. Recognition rates are highest for neutral,
-followed by happy, anger, disgust, fear, and sad. Average
-intensity levels of emotion are rated highest for visual-only
-perception. The accurate recognition of disgust and fear
-requires simultaneous audio-visual cues, while anger and
-happiness can be well recognized based on evidence from a single
-modality. The large dataset we introduce can be used to probe
-other questions concerning the audio-visual perception of
-emotion.},
   author = {Cao, Houwei and Cooper, David G and Keutmann, Michael K and Gur,
 Ruben C and Nenkova, Ani and Verma, Ragini},
   copyright = {https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/IEEE.html},
-  journal = {IEEE Trans. Affect. Comput.},
+  journal = {IEEE Transactions on Affective Computing},
   keywords = {Emotional corpora; facial expression; multi-modal recognition;
 voice expression},
   language = {en},

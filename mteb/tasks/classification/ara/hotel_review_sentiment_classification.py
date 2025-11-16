@@ -45,8 +45,7 @@ class HotelReviewSentimentClassificationV2(AbsTaskClassification):
             "path": "mteb/HotelReviewSentimentClassification",
             "revision": "f5e6a24acbed4182114ffdf46747090b3f51e836",
         },
-        description="""HARD is a dataset of Arabic hotel reviews collected from the Booking.com website.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",
+        description="HARD is a dataset of Arabic hotel reviews collected from the Booking.com website. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-67056-0_3",
         type="Classification",
         category="t2c",

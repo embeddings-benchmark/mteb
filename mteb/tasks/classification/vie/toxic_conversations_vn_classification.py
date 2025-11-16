@@ -7,11 +7,7 @@ class ToxicConversationsVNClassification(AbsTaskClassification):
 
     metadata = TaskMetadata(
         name="ToxicConversationsVNClassification",
-        description="""A translated dataset from Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not.
-            The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-            - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-            - Applies advanced embedding models to filter the translations.
-            - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
+        description="A translated dataset from Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/overview",
         dataset={
             "path": "GreenNode/toxic-conversations-50k-vn",

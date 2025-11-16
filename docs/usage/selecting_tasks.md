@@ -70,7 +70,7 @@ tasks = [
     mteb.get_task("BUCCBitextMining", languages = ["deu"]), # all subsets containing "deu"
 ]
 ```
-For more information see the documention for [`get_tasks`](../api/task.md#mteb.get_tasks) and [`get_task`](../api/task.md#mteb.get_task).
+For more information see the documentation for [`get_tasks`](../api/task.md#mteb.get_tasks) and [`get_task`](../api/task.md#mteb.get_task).
 
 ### Selecting Evaluation Split or Subsets
 A task in `mteb` mirrors the structure of a dataset on Huggingface. It includes a splits (i.e. "test") and a subset.
@@ -91,7 +91,7 @@ task = mteb.get_task("AmazonReviewsClassification", hf_subsets=["en", "fr"])
 ### Using a Custom Task
 
 To evaluate on a custom task, you can run the following code on your custom task.
-See [how to add a new task](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_dataset.md), for how to create a new task in MTEB.
+See [how to add a new task](../contributing/adding_a_dataset.md), for how to create a new task in MTEB.
 
 
 ```python

@@ -9,11 +9,7 @@ class NFCorpusVN(AbsTaskRetrieval):
             "path": "GreenNode/nfcorpus-vn",
             "revision": "a13d72fbb859be3dc19ab669d1ec9510407d2dcd",
         },
-        description="""A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
-            The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-            - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-            - Applies advanced embedding models to filter the translations.
-            - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
+        description="A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/",
         type="Retrieval",
         category="t2t",

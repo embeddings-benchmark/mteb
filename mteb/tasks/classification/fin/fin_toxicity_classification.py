@@ -5,11 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class FinToxicityClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FinToxicityClassification",
-        description="""
-        This dataset is a DeepL -based machine translated version of the Jigsaw toxicity dataset for Finnish. The dataset is originally from a Kaggle competition https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/data.
-        The original dataset poses a multi-label text classification problem and includes the labels identity_attack, insult, obscene, severe_toxicity, threat and toxicity.
-        Here adapted for toxicity classification, which is the most represented class.
-        """,
+        description="This dataset is a DeepL -based machine translated version of the Jigsaw toxicity dataset for Finnish. The dataset is originally from a Kaggle competition https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/data. The original dataset poses a multi-label text classification problem and includes the labels identity_attack, insult, obscene, severe_toxicity, threat and toxicity. Here adapted for toxicity classification, which is the most represented class.",
         dataset={
             "path": "TurkuNLP/jigsaw_toxicity_pred_fi",
             "revision": "6e7340e6be87124f319e25290778760c14df64d3",
@@ -57,12 +53,7 @@ Laippala, Veronika},
 class FinToxicityClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FinToxicityClassification.v2",
-        description="""
-        This dataset is a DeepL -based machine translated version of the Jigsaw toxicity dataset for Finnish. The dataset is originally from a Kaggle competition https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/data.
-        The original dataset poses a multi-label text classification problem and includes the labels identity_attack, insult, obscene, severe_toxicity, threat and toxicity.
-        Here adapted for toxicity classification, which is the most represented class.
-
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="This dataset is a DeepL -based machine translated version of the Jigsaw toxicity dataset for Finnish. The dataset is originally from a Kaggle competition https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/data. The original dataset poses a multi-label text classification problem and includes the labels identity_attack, insult, obscene, severe_toxicity, threat and toxicity. Here adapted for toxicity classification, which is the most represented class. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         dataset={
             "path": "mteb/fin_toxicity",
             "revision": "1deba6e874be1d5632a4ac0d1fb71f4bc3dea0d6",

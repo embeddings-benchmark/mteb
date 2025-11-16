@@ -46,8 +46,7 @@ class SentimentAnalysisHindi(AbsTaskClassification):
 class SentimentAnalysisHindiV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SentimentAnalysisHindi.v2",
-        description="""Hindi Sentiment Analysis Dataset
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Hindi Sentiment Analysis Dataset This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://huggingface.co/datasets/OdiaGenAI/sentiment_analysis_hindi",
         dataset={
             "path": "mteb/sentiment_analysis_hindi",

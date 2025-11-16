@@ -60,9 +60,9 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
         self.data_loaded = True
 
     def dataset_transform(self) -> None:
-        """And transform to a retrieval datset, which have the following attributes
+        """And transform to a retrieval dataset, which have the following attributes
 
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document datas like title and text
+        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
         self.queries = Dict[query_id, str] #id => query
         self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
         """
@@ -117,9 +117,9 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
         self.data_loaded = True
 
     def dataset_transform(self) -> None:
-        """And transform to a retrieval datset, which have the following attributes
+        """And transform to a retrieval dataset, which have the following attributes
 
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document datas like title and text
+        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
         self.queries = Dict[query_id, str] #id => query
         self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
         """
@@ -177,9 +177,9 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
         self.data_loaded = True
 
     def dataset_transform(self) -> None:
-        """And transform to a retrieval datset, which have the following attributes
+        """And transform to a retrieval dataset, which have the following attributes
 
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document datas like title and text
+        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
         self.queries = Dict[query_id, str] #id => query
         self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
         """
@@ -234,9 +234,9 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         self.data_loaded = True
 
     def dataset_transform(self) -> None:
-        """And transform to a retrieval datset, which have the following attributes
+        """And transform to a retrieval dataset, which have the following attributes
 
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document datas like title and text
+        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
         self.queries = Dict[query_id, str] #id => query
         self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
         """

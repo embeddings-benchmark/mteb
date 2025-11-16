@@ -48,8 +48,7 @@ Suzan, Verberne},
 class DutchBookReviewSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DutchBookReviewSentimentClassification.v2",
-        description="""A Dutch book review for sentiment classification.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="A Dutch book review for sentiment classification. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900). Additionally, a Dutch prompt was included.",
         reference="https://github.com/benjaminvdb/DBRD",
         dataset={
             "path": "mteb/dutch_book_review_sentiment",
@@ -86,4 +85,7 @@ Suzan, Verberne},
 }
 """,
         adapted_from=["DutchBookReviewSentimentClassification"],
+        prompt={
+            "query": "Classificeer de gegeven boekrecensie als positieve of negatieve sentiment"
+        },
     )

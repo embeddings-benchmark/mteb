@@ -10,6 +10,17 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
+BLIP_CITATION = """@misc{https://doi.org/10.48550/arxiv.2201.12086,
+    doi = {10.48550/ARXIV.2201.12086},
+    url = {https://arxiv.org/abs/2201.12086},
+    author = {Li, Junnan and Li, Dongxu and Xiong, Caiming and Hoi, Steven},
+    keywords = {Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences},
+    title = {BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation},
+    publisher = {arXiv},
+    year = {2022},
+    copyright = {Creative Commons Attribution 4.0 International}
+}"""
+
 
 class BLIPModel(AbsEncoder):
     def __init__(
@@ -140,6 +151,7 @@ blip_image_captioning_large = ModelMeta(
         # CC3M+CC12M+SBU
         # LAION115M
     ),
+    citation=BLIP_CITATION,
 )
 
 blip_image_captioning_base = ModelMeta(
@@ -166,6 +178,7 @@ blip_image_captioning_base = ModelMeta(
         # CC3M+CC12M+SBU
         # LAION115M
     ),
+    citation=BLIP_CITATION,
 )
 
 
@@ -192,6 +205,7 @@ blip_vqa_base = ModelMeta(
         # CC3M+CC12M+SBU
         # LAION115M
     ),
+    citation=BLIP_CITATION,
 )
 
 blip_vqa_capfilt_large = ModelMeta(
@@ -217,6 +231,7 @@ blip_vqa_capfilt_large = ModelMeta(
         # CC3M+CC12M+SBU
         # LAION115M
     ),
+    citation=BLIP_CITATION,
 )
 
 blip_itm_base_coco = ModelMeta(
@@ -242,6 +257,7 @@ blip_itm_base_coco = ModelMeta(
         # CC3M+CC12M+SBU
         # LAION115M
     ),
+    citation=BLIP_CITATION,
 )
 
 blip_itm_large_coco = ModelMeta(
@@ -268,6 +284,7 @@ blip_itm_large_coco = ModelMeta(
         # CC3M+CC12M+SBU
         # LAION115M
     ),
+    citation=BLIP_CITATION,
 )
 
 blip_itm_base_flickr = ModelMeta(
@@ -294,6 +311,7 @@ blip_itm_base_flickr = ModelMeta(
         # LAION115M
         # Flickr30k
     ),
+    citation=BLIP_CITATION,
 )
 
 blip_itm_large_flickr = ModelMeta(
@@ -319,4 +337,5 @@ blip_itm_large_flickr = ModelMeta(
         # CC3M+CC12M+SBU
         # LAION115M
     ),
+    citation=BLIP_CITATION,
 )

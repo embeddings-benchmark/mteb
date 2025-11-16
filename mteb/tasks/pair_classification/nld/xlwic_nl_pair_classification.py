@@ -38,4 +38,7 @@ class XLWICNLPairClassification(AbsTaskPairClassification):
   year = {2020},
 }
 """,
+        prompt={
+            "query": "Zoek tekst die semantisch vergelijkbaar is met de gegeven tekst."
+        },
     )

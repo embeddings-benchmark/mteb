@@ -49,8 +49,7 @@ class DanishPoliticalCommentsClassificationV2(AbsTaskClassification):
             "path": "mteb/danish_political_comments",
             "revision": "476a9e7327aba70ad3e97a169d7310b86be9b245",
         },
-        description="""A dataset of Danish political comments rated for sentiment
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="A dataset of Danish political comments rated for sentiment This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://huggingface.co/datasets/danish_political_comments",
         type="Classification",
         category="t2c",

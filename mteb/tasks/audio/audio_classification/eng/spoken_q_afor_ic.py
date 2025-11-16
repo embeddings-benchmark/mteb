@@ -4,9 +4,9 @@ from mteb.abstasks.audio.abs_task_audio_classification import (
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SpokenQAforIC(AbsTaskAudioClassification):
+class SpokenQAForIC(AbsTaskAudioClassification):
     metadata = TaskMetadata(
-        name="SpokenQAforIC",
+        name="SpokenQAForIC",
         description="SpokenQA dataset reformulated as Intent Classification (IC) task",
         reference="https://huggingface.co/datasets/DynamicSuperb/SpokenQA_SLUE",
         dataset={

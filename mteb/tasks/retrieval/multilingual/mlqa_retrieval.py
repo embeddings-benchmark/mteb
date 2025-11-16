@@ -75,10 +75,7 @@ _EVAL_LANGS = extend_lang_pairs()
 class MLQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MLQARetrieval",
-        description="""MLQA (MultiLingual Question Answering) is a benchmark dataset for evaluating cross-lingual question answering performance.
-        MLQA consists of over 5K extractive QA instances (12K in English) in SQuAD format in seven languages - English, Arabic,
-        German, Spanish, Hindi, Vietnamese and Simplified Chinese. MLQA is highly parallel, with QA instances parallel between
-        4 different languages on average.""",
+        description="MLQA (MultiLingual Question Answering) is a benchmark dataset for evaluating cross-lingual question answering performance. MLQA consists of over 5K extractive QA instances (12K in English) in SQuAD format in seven languages - English, Arabic, German, Spanish, Hindi, Vietnamese and Simplified Chinese. MLQA is highly parallel, with QA instances parallel between 4 different languages on average.",
         reference="https://huggingface.co/datasets/mlqa",
         dataset={
             "path": "mteb/MLQARetrieval",
