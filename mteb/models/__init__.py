@@ -1,4 +1,4 @@
-.cache_wrappers import CachedEmbeddingWrapper
+from .cache_wrappers import CachedEmbeddingWrapper
 from .model_meta import ModelMeta
 from .models_protocols import (
     CrossEncoderProtocol,
@@ -12,7 +12,6 @@ from .sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
     sentence_transformers_loader,
 )
-from .spartan8806_atles_champion import spartan8806_atles_champion_embedding
 
 __all__ = [
     "CachedEmbeddingWrapper",
@@ -26,5 +25,4 @@ __all__ = [
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
     "sentence_transformers_loader",
-    "spartan8806_atles_champion_embedding",
 ]
