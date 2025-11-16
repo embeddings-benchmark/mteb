@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SpeechCommandsClassification(AbsTaskAudioClassification):
+class SpeechCommandsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SpeechCommands",
         description="A set of one-second .wav audio files, each containing a single spoken English word or background noise. To keep evaluation fast, we use a downsampled version of the original dataset by keeping ~50 samples per class for training.",
@@ -36,7 +34,7 @@ class SpeechCommandsClassification(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "label"
     samples_per_label: int = 50
     is_cross_validation: bool = False

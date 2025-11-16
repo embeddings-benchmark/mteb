@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class FSDD(AbsTaskAudioClassification):
+class FSDD(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FSDD",
         description="Spoken digit classification of audio into one of 10 classes: 0-9",
@@ -37,6 +35,6 @@ class FSDD(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "label"
     samples_per_label: int = 10

@@ -7,7 +7,6 @@ from PIL import Image
 from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks import (
-    AbsTaskAudioClassification,
     AbsTaskAudioClustering,
     AbsTaskAudioPairClassification,
 )
@@ -4609,7 +4608,7 @@ class MockAudioReranking(AbsTaskAudioReranking):
         self.data_loaded = True
 
 
-class MockAudioClassification(AbsTaskAudioClassification):
+class MockAudioClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         type="AudioClassification",
         name="MockAudioClassification",
@@ -4617,6 +4616,7 @@ class MockAudioClassification(AbsTaskAudioClassification):
         **general_args,  # type: ignore
     )
     metadata.modalities = ["audio"]
+    input_column_name = "audio"
 
     def load_data(self, **kwargs):
         mock_audio = [
@@ -4632,13 +4632,13 @@ class MockAudioClassification(AbsTaskAudioClassification):
                 "test": Dataset.from_dict(
                     {
                         "audio": mock_audio,
-                        "labels": [1, 2],
+                        "label": [1, 2],
                     }
                 ),
                 "train": Dataset.from_dict(
                     {
                         "audio": mock_audio * 5,
-                        "labels": [1, 2] * 5,
+                        "label": [1, 2] * 5,
                     }
                 ),
             }
@@ -4682,7 +4682,7 @@ class MockAudioPairClassification(AbsTaskAudioPairClassification):
         self.data_loaded = True
 
 
-class MockAudioClassificationCrossVal(AbsTaskAudioClassification):
+class MockAudioClassificationCrossVal(AbsTaskClassification):
     metadata = TaskMetadata(
         type="AudioClassification",
         name="MockAudioClassificationCrossVal",
@@ -4691,6 +4691,7 @@ class MockAudioClassificationCrossVal(AbsTaskAudioClassification):
     )
     metadata.modalities = ["audio"]
     metadata.eval_splits = ["train"]
+    input_column_name = "audio"
     is_cross_validation = True
 
     def load_data(self, **kwargs):
@@ -4707,7 +4708,7 @@ class MockAudioClassificationCrossVal(AbsTaskAudioClassification):
                 "train": Dataset.from_dict(
                     {
                         "audio": mock_audio * 5,
-                        "labels": [1, 2] * 5,
+                        "label": [1, 2] * 5,
                     }
                 ),
             }

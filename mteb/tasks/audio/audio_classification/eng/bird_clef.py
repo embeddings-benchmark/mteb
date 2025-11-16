@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BirdCLEFClassification(AbsTaskAudioClassification):
+class BirdCLEFClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="BirdCLEF",
         description="BirdCLEF+ 2025 dataset for species identification from audio, focused on birds, amphibians, mammals and insects from the Middle Magdalena Valley of Colombia. Downsampled to 50 classes with 20 samples each.",
@@ -39,7 +37,7 @@ class BirdCLEFClassification(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "recording"
+    input_column_name: str = "recording"
     label_column_name: str = "primary_label"
     samples_per_label: int = 20
     is_cross_validation: bool = True

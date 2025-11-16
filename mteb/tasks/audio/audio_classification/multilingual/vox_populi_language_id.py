@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class VoxPopuliLanguageID(AbsTaskAudioClassification):
+class VoxPopuliLanguageID(AbsTaskClassification):
     metadata = TaskMetadata(
         name="VoxPopuliLanguageID",
         description="Subsampled Dataset for classification of speech samples into one of 5 European languages (English, German, French, Spanish, Polish) from European Parliament recordings.",
@@ -56,7 +54,7 @@ Dupoux, Emmanuel},
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "language"
     samples_per_label: int = 30
     is_cross_validation: bool = True

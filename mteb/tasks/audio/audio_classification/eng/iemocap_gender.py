@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class IEMOCAPGenderClassification(AbsTaskAudioClassification):
+class IEMOCAPGenderClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="IEMOCAPGender",
         description="Classification of speech samples by speaker gender (male/female) from the IEMOCAP database of interactive emotional dyadic conversations.",
@@ -40,7 +38,7 @@ class IEMOCAPGenderClassification(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "gender_id"
     samples_per_label: int = 100
     is_cross_validation: bool = True

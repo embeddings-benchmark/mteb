@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TUTAcousticScenesClassification(AbsTaskAudioClassification):
+class TUTAcousticScenesClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TUTAcousticScenes",
         description="TUT Urban Acoustic Scenes 2018 dataset consists of 10-second audio segments from 10 acoustic scenes recorded in six European cities. This is a stratified subsampled version of the original dataset.",
@@ -41,7 +39,7 @@ class TUTAcousticScenesClassification(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "scene_label"
     samples_per_label: int = 50
     is_cross_validation: bool = True

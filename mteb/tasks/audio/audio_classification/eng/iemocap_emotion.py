@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class IEMOCAPEmotionClassification(AbsTaskAudioClassification):
+class IEMOCAPEmotionClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="IEMOCAPEmotion",
         description="Classification of speech samples into emotions (angry, happy, sad, neutral, frustrated, excited, fearful, surprised, disgusted) from interactive emotional dyadic conversations.",
@@ -40,7 +38,7 @@ class IEMOCAPEmotionClassification(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "emotion"
     samples_per_label: int = 10
     is_cross_validation: bool = True

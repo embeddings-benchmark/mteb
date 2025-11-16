@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MridinghamStroke(AbsTaskAudioClassification):
+class MridinghamStroke(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MridinghamStroke",
         description='Stroke classification of Mridingham (a pitched percussion instrument) into one of 10 classes: ["bheem", "cha", "dheem", "dhin", "num", "tham", "ta", "tha", "thi", "thom"]',
@@ -41,7 +39,7 @@ class MridinghamStroke(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "label"
     samples_per_label: int = 10
     is_cross_validation: bool = True

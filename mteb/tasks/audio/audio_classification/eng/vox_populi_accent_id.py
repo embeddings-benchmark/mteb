@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class VoxPopuliAccentID(AbsTaskAudioClassification):
+class VoxPopuliAccentID(AbsTaskClassification):
     metadata = TaskMetadata(
         name="VoxPopuliAccentID",
         description="Classification of English speech samples into one of 15 non-native accents from European Parliament recordings. This is a stratified subsampled version of the original VoxPopuli dataset.",
@@ -50,7 +48,7 @@ Dupoux, Emmanuel},
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "accent"
     samples_per_label: int = 50
     is_cross_validation: bool = True

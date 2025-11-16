@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ESC50Classification(AbsTaskAudioClassification):
+class ESC50Classification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ESC50",
         description="Environmental Sound Classification Dataset.",
@@ -44,7 +42,7 @@ class ESC50Classification(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "target"
     samples_per_label: int = 50
     is_cross_validation: bool = True

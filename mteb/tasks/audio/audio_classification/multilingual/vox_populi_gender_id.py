@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class VoxPopuliGenderID(AbsTaskAudioClassification):
+class VoxPopuliGenderID(AbsTaskClassification):
     metadata = TaskMetadata(
         name="VoxPopuliGenderID",
         description="Subsampled Dataset Classification of speech samples by speaker gender (male/female) from European Parliament recordings.",
@@ -56,7 +54,7 @@ Dupoux, Emmanuel},
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "gender_id"
     samples_per_label: int = 30
     is_cross_validation: bool = True
