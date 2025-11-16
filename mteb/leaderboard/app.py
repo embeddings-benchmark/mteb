@@ -139,7 +139,7 @@ def _update_task_info(task_names: str) -> gr.DataFrame:
     df["languages"] = df["languages"].map(_format_list)
     df = df.sort_values("name")
     df["domains"] = df["domains"].map(_format_list)
-    df["name"] = "[" + df["name"] + "](" + df["reference"] + ")"
+    df["name"] = f'<a href="{df["reference"]}" target="_blank">{df["name"]}</a>'
     df["modalities"] = df["modalities"].map(_format_list)
     df = df.rename(
         columns={
