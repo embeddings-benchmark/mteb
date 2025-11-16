@@ -1,8 +1,8 @@
-from mteb.abstasks.audio.abs_task_adio_reranking import AbsTaskAudioReranking
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class UrbanSound8KAudioReranking(AbsTaskAudioReranking):
+class UrbanSound8KAudioReranking(AbsTaskRetrieval):
     """UrbanSound8K dataset adapted for audio reranking task.
 
     The UrbanSound8K dataset contains 8732 labeled sound excerpts (≤4s) of urban sounds from 10 classes:
@@ -22,8 +22,8 @@ class UrbanSound8KAudioReranking(AbsTaskAudioReranking):
         description="UrbanSound8K urban sound dataset adapted for audio reranking. Given a query audio of urban sounds, rank 4 relevant audio samples higher than 16 irrelevant ones from different urban sound classes. Contains 200 queries across 10 urban sound categories for comprehensive evaluation.",
         reference="https://urbansounddataset.weebly.com/urbansound8k.html",
         dataset={
-            "path": "AdnanElAssadi/urbansound8k-audio-reranking",
-            "revision": "71a0190434dcd2ed2bf9bfc5d850a83b94759255",
+            "path": "mteb/UrbanSound8KAudioReranking",
+            "revision": "39896c7e1c66f809915490a1277198fe5ac3639d",
         },
         type="AudioReranking",
         category="a2a",
@@ -48,8 +48,3 @@ class UrbanSound8KAudioReranking(AbsTaskAudioReranking):
 }
 """,
     )
-
-    # Column names from our preprocessed dataset
-    audio_query_column_name: str = "query"
-    audio_positive_column_name: str = "positive"
-    audio_negative_column_name: str = "negative"

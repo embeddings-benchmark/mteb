@@ -1,8 +1,8 @@
-from mteb.abstasks.audio.abs_task_adio_reranking import AbsTaskAudioReranking
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class GTZANAudioReranking(AbsTaskAudioReranking):
+class GTZANAudioReranking(AbsTaskRetrieval):
     """GTZAN music genre dataset adapted for audio reranking task.
 
     The GTZAN dataset consists of 1000 audio tracks each 30 seconds long, containing 10 music genres:
@@ -22,8 +22,8 @@ class GTZANAudioReranking(AbsTaskAudioReranking):
         description="GTZAN music genre dataset adapted for audio reranking. Given a query audio from one of 10 music genres, rank 3 relevant audio samples higher than 10 irrelevant ones from different genres. Contains 100 queries across 10 music genres for comprehensive evaluation.",
         reference="https://www.kaggle.com/datasets/andradaolteanu/gtzan-dataset-music-genre-classification",
         dataset={
-            "path": "AdnanElAssadi/gtzan-audio-reranking",
-            "revision": "5bcb200531714f6154690ad4914e8a71188579c3",
+            "path": "mteb/GTZANAudioReranking",
+            "revision": "e6cf8c1771177dbf88550dbdd8c867d676d15119",
         },
         type="AudioReranking",
         category="a2a",
@@ -52,8 +52,3 @@ class GTZANAudioReranking(AbsTaskAudioReranking):
 }
 """,
     )
-
-    # Column names from our preprocessed dataset
-    audio_query_column_name: str = "query"
-    audio_positive_column_name: str = "positive"
-    audio_negative_column_name: str = "negative"

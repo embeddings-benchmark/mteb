@@ -1,8 +1,8 @@
-from mteb.abstasks.audio.abs_task_adio_reranking import AbsTaskAudioReranking
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ESC50AudioReranking(AbsTaskAudioReranking):
+class ESC50AudioReranking(AbsTaskRetrieval):
     """ESC-50 dataset adapted for audio reranking task.
 
     The Environmental Sound Classification 50 (ESC-50) dataset consists of 2000 environmental audio recordings
@@ -21,8 +21,8 @@ class ESC50AudioReranking(AbsTaskAudioReranking):
         description="ESC-50 environmental sound dataset adapted for audio reranking. Given a query audio of environmental sounds, rank 5 relevant audio samples higher than 16 irrelevant ones from different sound classes. Contains 200 queries across 50 environmental sound categories for robust evaluation.",
         reference="https://github.com/karolpiczak/ESC-50",
         dataset={
-            "path": "AdnanElAssadi/esc-50-audio-reranking",
-            "revision": "5e0a9d84912522db2eb6b825cbfd09fb20df2a61",
+            "path": "mteb/ESC50AudioReranking",
+            "revision": "eff5c3112d71c4038377656f4d3ccb755fb7265f",
         },
         type="AudioReranking",
         category="a2a",
@@ -47,8 +47,3 @@ class ESC50AudioReranking(AbsTaskAudioReranking):
 }
 """,
     )
-
-    # Column names from our preprocessed dataset
-    audio_query_column_name: str = "query"
-    audio_positive_column_name: str = "positive"
-    audio_negative_column_name: str = "negative"
