@@ -1,5 +1,4 @@
 import logging
-import warnings
 from typing import Any
 
 import torch
@@ -57,39 +56,37 @@ class Qwen2AudioWrapper(AbsEncoder):
 
         all_embeddings = []
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-        ):
+        for batch in tqdm(inputs, disable=not show_progress_bar):
             audio_arrays = []
             texts = []
-            for row in batch:
-                text = ""
-                if "audio" in row:
-                    a = row["audio"]
-                    array = torch.tensor(a["array"], dtype=torch.float32)
-                    sr = a.get("sampling_rate", None)
-                    if sr is None:
-                        warnings.warn(
-                            f"No sampling_rate provided for an audio sample. "
-                            f"Assuming {self.sampling_rate} Hz (model default)."
-                        )
-                        sr = self.sampling_rate
+            audio_list = batch.get("audio", [])
+            text_list = batch.get("text", [])
+            batch_size = max(len(audio_list), len(text_list))
 
+            for i in range(batch_size):
+                cur_text = ""
+                audio_row = audio_list[i] if i < len(audio_list) else None
+                if audio_row is not None:
+                    array = torch.tensor(audio_row["array"], dtype=torch.float32)
+                    sr = audio_row.get("sampling_rate", self.sampling_rate)
                     if sr != self.sampling_rate:
-                        resampler = torchaudio.transforms.Resample(
-                            orig_freq=sr, new_freq=self.sampling_rate
-                        )
-                        array = resampler(array)
-                    text = "<|audio_bos|><|AUDIO|><|audio_eos|>"
+                        array = torchaudio.transforms.Resample(
+                            orig_freq=sr,
+                            new_freq=self.sampling_rate,
+                        )(array)
+                    cur_text += "<|audio_bos|><|AUDIO|><|audio_eos|>"
                     audio_arrays.append(array.numpy())
-                if "text" in row:
-                    text += row["text"] if len(text) == 0 else " " + text
-                texts.append(text)
+                else:
+                    audio_arrays.append(None)
+
+                text_row = text_list[i] if i < len(text_list) else None
+                if text_row is not None:
+                    cur_text += text_row
+                texts.append(cur_text)
 
             processor_inputs = self.processor(
                 text=texts,
-                audio=audio_arrays,
+                audio=audio_arrays if len(audio_arrays) > 0 else None,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding=True,
