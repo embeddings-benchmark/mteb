@@ -4656,6 +4656,10 @@ class MockAudioPairClassification(AbsTaskPairClassification):
     )
     metadata.modalities = ["audio"]
 
+    input1_column_name = "audio1"
+    input2_column_name = "audio1"
+    label_column_name = "label"
+
     def load_data(self, **kwargs):
         mock_audio = [
             {
