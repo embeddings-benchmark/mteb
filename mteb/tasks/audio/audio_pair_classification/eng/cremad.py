@@ -1,9 +1,5 @@
-import logging
-
 from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
-
-logger = logging.getLogger(__name__)
 
 
 class CREMADPairClassification(AbsTaskPairClassification):
