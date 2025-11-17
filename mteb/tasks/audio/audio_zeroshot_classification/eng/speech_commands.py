@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_zero_shot_classification import (
-    AbsTaskAudioZeroshotClassification,
-)
+from mteb.abstasks import AbsTaskZeroShotClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SpeechCommandsZeroshotClassificationV01(AbsTaskAudioZeroshotClassification):
+class SpeechCommandsZeroshotClassificationV01(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="SpeechCommandsZeroshotv0.01",
         description="Sound Classification/Keyword Spotting Dataset. This is a set of one-second audio clips containing a single spoken English word or background noise. These words are from a small set of commands such as 'yes', 'no', and 'stop' spoken by various speakers. With a total of 10 labels/commands for keyword spotting and a total of 30 labels for other auxiliary tasks",
@@ -44,7 +42,7 @@ class SpeechCommandsZeroshotClassificationV01(AbsTaskAudioZeroshotClassification
 }
 """,
     )
-
+    input_column_name: str = "audio"
     label_column_name: str = "label"
 
     def get_candidate_labels(self) -> list[str]:
@@ -71,7 +69,7 @@ class SpeechCommandsZeroshotClassificationV01(AbsTaskAudioZeroshotClassification
         )
 
 
-class SpeechCommandsZeroshotClassificationv02(AbsTaskAudioZeroshotClassification):
+class SpeechCommandsZeroshotClassificationv02(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="SpeechCommandsZeroshotv0.02",
         description="Sound Classification/Keyword Spotting Dataset. This is a set of one-second audio clips containing a single spoken English word or background noise. These words are from a small set of commands such as 'yes', 'no', and 'stop' spoken by various speakers. With a total of 10 labels/commands for keyword spotting and a total of 30 labels for other auxiliary tasks",

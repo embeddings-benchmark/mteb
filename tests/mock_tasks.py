@@ -17,9 +17,6 @@ from mteb.abstasks.audio.abs_task_adio_reranking import AbsTaskAudioReranking
 from mteb.abstasks.audio.abs_task_multilabel_classification import (
     AbsTaskAudioMultilabelClassification,
 )
-from mteb.abstasks.audio.abs_task_zero_shot_classification import (
-    AbsTaskAudioZeroshotClassification,
-)
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
@@ -4355,8 +4352,8 @@ class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification
         self.data_loaded = True
 
 
-class MockAudioZeroshotClassificationTask(AbsTaskAudioZeroshotClassification):
-    audio_column_name: str = "audio"
+class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
+    input_column_name: str = "audio"
     label_column_name: str = "label"
 
     expected_stats = {
