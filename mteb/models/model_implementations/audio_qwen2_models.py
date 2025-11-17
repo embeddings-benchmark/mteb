@@ -63,8 +63,8 @@ class Qwen2AudioWrapper(AbsEncoder):
         ):
             audio_arrays = []
             texts = []
-            text = ""
             for row in batch:
+                text = ""
                 if "audio" in row:
                     a = row["audio"]
                     array = torch.tensor(a["array"], dtype=torch.float32)
