@@ -1,4 +1,5 @@
 import logging
+import warnings
 from typing import Any
 
 import torch
@@ -68,12 +69,19 @@ class Qwen2AudioWrapper(AbsEncoder):
                 audio_row = audio_list[i] if i < len(audio_list) else None
                 if audio_row is not None:
                     array = torch.tensor(audio_row["array"], dtype=torch.float32)
-                    sr = audio_row.get("sampling_rate", self.sampling_rate)
+                    sr = audio_row.get("sampling_rate", None)
+                    if sr is None:
+                        warnings.warn(
+                            f"No sampling_rate provided for an audio sample. "
+                            f"Assuming {self.sampling_rate} Hz (model default)."
+                        )
+                        sr = self.sampling_rate
+
                     if sr != self.sampling_rate:
-                        array = torchaudio.transforms.Resample(
-                            orig_freq=sr,
-                            new_freq=self.sampling_rate,
-                        )(array)
+                        resampler = torchaudio.transforms.Resample(
+                            orig_freq=sr, new_freq=self.sampling_rate
+                        )
+                        array = resampler(array)
                     cur_text += "<|audio_bos|><|AUDIO|><|audio_eos|>"
                     audio_arrays.append(array.numpy())
                 else:
