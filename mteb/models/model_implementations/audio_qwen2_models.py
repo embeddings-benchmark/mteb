@@ -12,7 +12,6 @@ from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput
 
 logger = logging.getLogger(__name__)
 
@@ -43,9 +42,14 @@ class Qwen2AudioWrapper(AbsEncoder):
         self.embed_dim = getattr(cfg, "d_model", getattr(cfg, "hidden_size", None))
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def encode(
         self,
-        inputs: DataLoader[AudioInput],
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
@@ -58,28 +62,33 @@ class Qwen2AudioWrapper(AbsEncoder):
             disable=not show_progress_bar,
         ):
             audio_arrays = []
-            for a in batch["audio"]:
-                array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate", None)
-                if sr is None:
-                    warnings.warn(
-                        f"No sampling_rate provided for an audio sample. "
-                        f"Assuming {self.sampling_rate} Hz (model default)."
-                    )
-                    sr = self.sampling_rate
+            texts = []
+            text = ""
+            for row in batch:
+                if "audio" in row:
+                    a = row["audio"]
+                    array = torch.tensor(a["array"], dtype=torch.float32)
+                    sr = a.get("sampling_rate", None)
+                    if sr is None:
+                        warnings.warn(
+                            f"No sampling_rate provided for an audio sample. "
+                            f"Assuming {self.sampling_rate} Hz (model default)."
+                        )
+                        sr = self.sampling_rate
 
-                if sr != self.sampling_rate:
-                    resampler = torchaudio.transforms.Resample(
-                        orig_freq=sr, new_freq=self.sampling_rate
-                    )
-                    array = resampler(array)
-                audio_arrays.append(array.numpy())
-
-            # Qwen2Audio specific: create prompt with <|AUDIO|> tokens
-            prompt = " ".join(["<|AUDIO|>"] * len(audio_arrays))
+                    if sr != self.sampling_rate:
+                        resampler = torchaudio.transforms.Resample(
+                            orig_freq=sr, new_freq=self.sampling_rate
+                        )
+                        array = resampler(array)
+                    text = "<|audio_bos|><|AUDIO|><|audio_eos|>"
+                    audio_arrays.append(array.numpy())
+                if "text" in row:
+                    text += row["text"] if len(text) == 0 else " " + text
+                texts.append(text)
 
             processor_inputs = self.processor(
-                text=prompt,
+                text=texts,
                 audio=audio_arrays,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
@@ -103,20 +112,6 @@ class Qwen2AudioWrapper(AbsEncoder):
 
         return torch.cat(all_embeddings, dim=0).numpy()
 
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        if "audio" not in inputs.dataset.features:
-            raise ValueError("Qwen2AudioWrapper only supports audio inputs.")
-        return self.get_audio_embeddings(inputs, **kwargs)
-
 
 qwen2_audio_meta = ModelMeta(
     loader=Qwen2AudioWrapper,
@@ -137,5 +132,5 @@ qwen2_audio_meta = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    modalities=["audio"],
+    modalities=["audio", "text"],
 )
