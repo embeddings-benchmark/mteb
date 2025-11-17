@@ -16,7 +16,7 @@ class VoxPopuliAccentPairClassification(AbsTaskPairClassification):
         description="Classifying same or different regional accent of English",
         reference="https://aclanthology.org/2021.acl-long.80/",
         dataset={
-            "path": "facebook/voxpopuli",
+            "path": "mteb/VoxPopuliAccentPairClassification",
             "name": "en_accented",
             "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
         },

@@ -457,6 +457,13 @@ def _create_audio_dataloader(
     ):
         dataset = dataset.rename_column(input_column, "audio")
 
+    select_columns = ["audio"]
+    if "text" in dataset.column_names:
+        select_columns.append("text")
+    # in pair classification and sts tasks can be multiple audio columns
+    # and audio can have `path` element with `None` that can break collator
+    dataset = dataset.select_columns(select_columns)
+
     return DataLoader(
         dataset,
         batch_size=batch_size,
