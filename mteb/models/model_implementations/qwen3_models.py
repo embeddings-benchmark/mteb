@@ -1,6 +1,7 @@
+from mteb import TaskMetadata
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import EncoderProtocol, PromptType
+from mteb.models.models_protocols import PromptType
 
 
 def instruction_template(
@@ -114,29 +115,35 @@ training_data = {
 }
 
 
-def q3e_instruct_loader(
-    model_name_or_path: str, revision: str, **kwargs
-) -> EncoderProtocol:
-    model = InstructSentenceTransformerModel(
-        model_name_or_path,
-        revision=revision,
-        instruction_template=instruction_template,
-        apply_instruction_to_passages=False,
-        **kwargs,
-    )
-    encoder = model.model._first_module()
-    if encoder.auto_model.config._attn_implementation == "flash_attention_2":
-        # The Qwen3 code only use left padding in flash_attention_2 mode.
-        encoder.tokenizer.padding_side = "left"
-    return model
+class Qwen3EmbeddingWrapper(InstructSentenceTransformerModel):
+    def get_instruction(
+        self,
+        task_metadata: TaskMetadata,
+        prompt_type: PromptType | None,
+    ) -> str:
+        # https://github.com/QwenLM/Qwen3-Embedding/blob/0ad27418c1ed2a1fb67282ac147c6958ea539be8/evaluation/qwen3_embedding_model.py#L222-L240
+        if task_metadata.task_name in ["STS", "PairClassification"]:
+            return "Retrieve semantically similar text"
+        if prompt_type == PromptType.query:
+            return "Retrieval relevant passage for the given query."
+        return super().get_instruction(task_metadata, prompt_type)
 
+
+_qwen3_loader_kwargs = dict(
+    instruction_template=instruction_template,
+    apply_instruction_to_passages=False,
+    # https://github.com/QwenLM/Qwen3-Embedding/blob/44548aa5f0a0aed1c76d64e19afe47727a325b8f/evaluation/run_mteb.sh#L14
+    max_seq_length=8192,
+    padding_side="left",
+)
 
 Qwen3_Embedding_0B6 = ModelMeta(
-    loader=q3e_instruct_loader,
+    loader=Qwen3EmbeddingWrapper,
+    loader_kwargs=_qwen3_loader_kwargs,
     name="Qwen/Qwen3-Embedding-0.6B",
     languages=multilingual_langs,
     open_weights=True,
-    revision="b22da495047858cce924d27d76261e96be6febc0",  # Commit of @tomaarsen
+    revision="b22da495047858cce924d27d76261e96be6febc0",
     release_date="2025-06-05",
     n_parameters=595776512,
     memory_usage_mb=2272,
@@ -154,11 +161,12 @@ Qwen3_Embedding_0B6 = ModelMeta(
 )
 
 Qwen3_Embedding_4B = ModelMeta(
-    loader=q3e_instruct_loader,
+    loader=Qwen3EmbeddingWrapper,
+    loader_kwargs=_qwen3_loader_kwargs,
     name="Qwen/Qwen3-Embedding-4B",
     languages=multilingual_langs,
     open_weights=True,
-    revision="636cd9bf47d976946cdbb2b0c3ca0cb2f8eea5ff",  # Commit of @tomaarsen
+    revision="636cd9bf47d976946cdbb2b0c3ca0cb2f8eea5ff",
     release_date="2025-06-05",
     n_parameters=4021774336,
     memory_usage_mb=15341,
@@ -176,11 +184,12 @@ Qwen3_Embedding_4B = ModelMeta(
 )
 
 Qwen3_Embedding_8B = ModelMeta(
-    loader=q3e_instruct_loader,
+    loader=Qwen3EmbeddingWrapper,
+    loader_kwargs=_qwen3_loader_kwargs,
     name="Qwen/Qwen3-Embedding-8B",
     languages=multilingual_langs,
     open_weights=True,
-    revision="4e423935c619ae4df87b646a3ce949610c66241c",  # Commit of @tomaarsen
+    revision="4e423935c619ae4df87b646a3ce949610c66241c",
     release_date="2025-06-05",
     n_parameters=7567295488,
     memory_usage_mb=28866,
