@@ -122,7 +122,7 @@ class Qwen3EmbeddingWrapper(InstructSentenceTransformerModel):
         prompt_type: PromptType | None,
     ) -> str:
         # https://github.com/QwenLM/Qwen3-Embedding/blob/0ad27418c1ed2a1fb67282ac147c6958ea539be8/evaluation/qwen3_embedding_model.py#L222-L240
-        if task_metadata.task_name in ["STS", "PairClassification"]:
+        if task_metadata.type in ["STS", "PairClassification"]:
             return "Retrieve semantically similar text"
         if prompt_type == PromptType.query:
             return "Retrieval relevant passage for the given query."
