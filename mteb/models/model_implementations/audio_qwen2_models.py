@@ -116,7 +116,7 @@ class Qwen2AudioWrapper(AbsEncoder):
                 batch_indices = torch.arange(hidden.size(0), device=self.device)
                 embeddings = hidden[batch_indices, last_idx]
 
-                all_embeddings.append(embeddings.cpu())
+                all_embeddings.append(embeddings.cpu().detach())
 
         return torch.cat(all_embeddings, dim=0).numpy()
 
