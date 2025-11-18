@@ -36,10 +36,6 @@ class Qwen2AudioWrapper(AbsEncoder):
         ).to(self.device)
         self.model.eval()
 
-        self.audio_encoder = self.model.audio_tower
-
-        cfg = self.model.config.audio_config
-        self.embed_dim = getattr(cfg, "d_model", getattr(cfg, "hidden_size", None))
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
     def encode(
@@ -100,18 +96,27 @@ class Qwen2AudioWrapper(AbsEncoder):
                 max_length=int(self.max_audio_length_seconds * self.sampling_rate),
             )
 
-            input_features = processor_inputs.input_features.to(self.device)
-
+            processor_inputs = {
+                k: v.to(self.device) for k, v in processor_inputs.items()
+            }
             with torch.no_grad():
-                outputs = self.audio_encoder(
-                    input_features=input_features,
+                outputs = self.model(
+                    **processor_inputs,
                     output_hidden_states=True,
                 )
 
-                # Use last hidden state and mean pool
-                last_hidden = outputs.hidden_states[-1]
-                embeddings = last_hidden.mean(dim=1).cpu().detach()
-                all_embeddings.append(embeddings)
+                hidden = outputs.hidden_states[-1]
+                mask = processor_inputs["attention_mask"]
+
+                # last non-pad index per item
+                last_idx = mask.sum(dim=1) - 1
+                last_idx = last_idx.clamp(min=0)
+
+                # gather last-token embeddings
+                batch_indices = torch.arange(hidden.size(0), device=self.device)
+                embeddings = hidden[batch_indices, last_idx]
+
+                all_embeddings.append(embeddings.cpu())
 
         return torch.cat(all_embeddings, dim=0).numpy()
 
