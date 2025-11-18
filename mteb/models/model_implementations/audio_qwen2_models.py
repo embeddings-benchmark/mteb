@@ -84,8 +84,6 @@ class Qwen2AudioWrapper(AbsEncoder):
                         array = resampler(array)
                     cur_text += "<|audio_bos|><|AUDIO|><|audio_eos|>"
                     audio_arrays.append(array.numpy())
-                else:
-                    audio_arrays.append(None)
 
                 text_row = text_list[i] if i < len(text_list) else None
                 if text_row is not None:
