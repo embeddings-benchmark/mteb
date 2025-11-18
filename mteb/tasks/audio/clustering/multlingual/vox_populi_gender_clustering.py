@@ -1,8 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_clustering import AbsTaskAudioClustering
+from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class VoxPopuliGenderClustering(AbsTaskAudioClustering):
+class VoxPopuliGenderClustering(AbsTaskClustering):
     label_column_name: str = "gender_id"
 
     metadata = TaskMetadata(
@@ -58,6 +58,7 @@ Dupoux, Emmanuel},
     )
 
     max_fraction_of_documents_to_embed = None
+    input_column_name: str = "audio"
 
     def dataset_transform(self):
         # Define label mapping
@@ -70,5 +71,4 @@ Dupoux, Emmanuel},
                 example["gender_id"] = label2id[example["gender"]]
                 return example
 
-            print(f"Converting gender labels to numeric IDs for split '{split}'...")
             self.dataset[split] = self.dataset[split].map(add_gender_id)

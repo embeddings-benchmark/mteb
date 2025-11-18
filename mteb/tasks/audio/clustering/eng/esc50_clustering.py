@@ -1,8 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_clustering import AbsTaskAudioClustering
+from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ESC50Clustering(AbsTaskAudioClustering):
+class ESC50Clustering(AbsTaskClustering):
     label_column_name: str = "target"
     metadata = TaskMetadata(
         name="ESC50Clustering",
@@ -46,4 +46,5 @@ class ESC50Clustering(AbsTaskAudioClustering):
 }
 """,
     )
+    input_column_name: str = "audio"
     max_fraction_of_documents_to_embed = None
