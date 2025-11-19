@@ -40,19 +40,19 @@ class ZeroShotClassificationEvaluator(Evaluator):
     def __call__(
         self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
     ) -> Array:
-        dataloader = create_dataloader(
-            self.dataset,
-            input_column=self.input_column_name,
-            task_metadata=self.task_metadata,
-            **encode_kwargs,
-        )
-
         logger.info("Running zero-shot classification - Encoding labels...")
         text_label_embeddings = model.encode(
             _create_dataloader_from_texts(self.candidate_labels, **encode_kwargs),
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,
             hf_split=self.hf_split,
+            **encode_kwargs,
+        )
+
+        dataloader = create_dataloader(
+            self.dataset,
+            input_column=self.input_column_name,
+            task_metadata=self.task_metadata,
             **encode_kwargs,
         )
 
@@ -67,8 +67,8 @@ class ZeroShotClassificationEvaluator(Evaluator):
 
         logger.info("Running zero-shot classification - Evaluating accuracy...")
 
-        if self.task_metadata.modalities == ["text"]:
-            probs = model.similarity(text_label_embeddings, input_embeddings)
-        else:
+        if self.task_metadata.modalities == ["image", "text"]:
             probs = similarity(text_label_embeddings, input_embeddings)
+        else:
+            probs = model.similarity(input_embeddings, text_label_embeddings)
         return probs

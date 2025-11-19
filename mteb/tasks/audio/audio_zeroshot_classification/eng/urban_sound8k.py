@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_zero_shot_classification import (
-    AbsTaskAudioZeroshotClassification,
-)
+from mteb.abstasks import AbsTaskZeroShotClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class UrbanSound8kZeroshotClassification(AbsTaskAudioZeroshotClassification):
+class UrbanSound8kZeroshotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="UrbanSound8kZeroshot",
         description="Environmental Sound Classification Dataset.",
@@ -37,7 +35,7 @@ class UrbanSound8kZeroshotClassification(AbsTaskAudioZeroshotClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "classID"
 
     def get_candidate_labels(self) -> list[str]:

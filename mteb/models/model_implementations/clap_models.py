@@ -68,7 +68,7 @@ class ClapZeroShotWrapper(AbsEncoder):
                 audio_arrays.append(array.numpy())
 
             features = self.processor(
-                audios=audio_arrays,
+                audio=audio_arrays,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding=True,
