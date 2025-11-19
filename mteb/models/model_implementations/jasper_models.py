@@ -156,7 +156,7 @@ Jasper_Token_Compression_600M = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_code=None,
+    public_training_code="https://github.com/DunZhang/Jasper-Token-Compression-Training",
     # public_training_data: unsupervised data for distillation
     public_training_data="https://huggingface.co/datasets/infgrad/jasper_text_distill_dataset",
     training_datasets=bge_m3_training_data
@@ -164,4 +164,15 @@ Jasper_Token_Compression_600M = ModelMeta(
     | bge_full_data
     | E5_MISTRAL_TRAINING_DATA
     | qzhou_training_data,
+    citation="""
+@misc{zhang2025jaspertokencompression600mtechnicalreport,
+      title={Jasper-Token-Compression-600M Technical Report}, 
+      author={Dun Zhang and Ziyang Zeng and Yudong Zhou and Shuyang Lu},
+      year={2025},
+      eprint={2511.14405},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2511.14405}, 
+}
+""",
 )
