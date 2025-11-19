@@ -121,4 +121,5 @@ def test_check_training_datasets_can_be_derived(model_meta: ModelMeta):
     # E.g. if a model if adapted_from is set to the model itself, this would cause infinite recursion. This ensures that this attribute can be called 
     # without issues.
     # https://github.com/embeddings-benchmark/mteb/pull/3565
-    model_meta.get_training_datasets()
+    assert model_meta.name != model_meta.adapted_from, f"Model name and adapter model should be different. Got {model_meta.name} and {model_meta.adapted_from}"
+model_meta.get_training_datasets()
