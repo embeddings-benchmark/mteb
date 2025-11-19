@@ -8,7 +8,6 @@ from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks import (
     AbsTaskAudioClassification,
-    AbsTaskAudioPairClassification,
 )
 from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
@@ -4645,7 +4644,7 @@ class MockAudioClassification(AbsTaskAudioClassification):
         self.data_loaded = True
 
 
-class MockAudioPairClassification(AbsTaskAudioPairClassification):
+class MockAudioPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         type="AudioPairClassification",
         name="AbsTaskAudioPairClassification",
@@ -4653,6 +4652,10 @@ class MockAudioPairClassification(AbsTaskAudioPairClassification):
         **general_args,  # type: ignore
     )
     metadata.modalities = ["audio"]
+
+    input1_column_name = "audio1"
+    input2_column_name = "audio1"
+    label_column_name = "label"
 
     def load_data(self, **kwargs):
         mock_audio = [
