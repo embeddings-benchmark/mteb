@@ -1,8 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_clustering import AbsTaskAudioClustering
+from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class VehicleSoundClustering(AbsTaskAudioClustering):
+class VehicleSoundClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="VehicleSoundClustering",
         description="Clustering vehicle sounds recorded from smartphones (0 (car class), 1 (truck, bus and van class), 2 (motorcycle class))",
@@ -36,4 +36,5 @@ class VehicleSoundClustering(AbsTaskAudioClustering):
     )
 
     label_column_name: str = "label"
+    input_column_name: str = "audio"
     max_fraction_of_documents_to_embed = None

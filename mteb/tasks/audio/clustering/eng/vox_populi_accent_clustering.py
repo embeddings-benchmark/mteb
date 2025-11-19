@@ -1,8 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_clustering import AbsTaskAudioClustering
+from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class VoxPopuliAccentClustering(AbsTaskAudioClustering):
+class VoxPopuliAccentClustering(AbsTaskClustering):
     label_column_name: str = "accent_id"
 
     metadata = TaskMetadata(
@@ -50,3 +50,4 @@ Dupoux, Emmanuel},
 """,
     )
     max_fraction_of_documents_to_embed = None
+    input_column_name: str = "audio"

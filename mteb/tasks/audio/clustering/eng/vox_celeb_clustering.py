@@ -1,8 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_clustering import AbsTaskAudioClustering
+from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class VoxCelebClustering(AbsTaskAudioClustering):
+class VoxCelebClustering(AbsTaskClustering):
     label_column_name: str = "label_id"
     metadata = TaskMetadata(
         name="VoxCelebClustering",
@@ -38,6 +38,7 @@ class VoxCelebClustering(AbsTaskAudioClustering):
 """,
     )
     max_fraction_of_documents_to_embed = None
+    input_column_name: str = "audio"
 
     def dataset_transform(self):
         ds = self.dataset

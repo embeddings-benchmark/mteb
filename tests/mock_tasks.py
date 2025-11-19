@@ -8,7 +8,6 @@ from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks import (
     AbsTaskAudioClassification,
-    AbsTaskAudioClustering,
     AbsTaskAudioPairClassification,
 )
 from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
@@ -4245,9 +4244,10 @@ class MockImageRegressionTask(AbsTaskRegression):
         self.data_loaded = True
 
 
-class MockAudioClusteringTask(AbsTaskAudioClustering):
+class MockAudioClusteringTask(AbsTaskClustering):
     max_document_to_embed = 2
     max_fraction_of_documents_to_embed = None
+    input_column_name = "audio"
 
     expected_stats = {
         "test": {
