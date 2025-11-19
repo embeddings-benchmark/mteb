@@ -8,16 +8,12 @@ from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks import (
     AbsTaskAudioClassification,
-    AbsTaskAudioClustering,
 )
 from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.audio.abs_task_adio_reranking import AbsTaskAudioReranking
 from mteb.abstasks.audio.abs_task_multilabel_classification import (
     AbsTaskAudioMultilabelClassification,
-)
-from mteb.abstasks.audio.abs_task_zero_shot_classification import (
-    AbsTaskAudioZeroshotClassification,
 )
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.clustering import AbsTaskClustering
@@ -4247,9 +4243,10 @@ class MockImageRegressionTask(AbsTaskRegression):
         self.data_loaded = True
 
 
-class MockAudioClusteringTask(AbsTaskAudioClustering):
+class MockAudioClusteringTask(AbsTaskClustering):
     max_document_to_embed = 2
     max_fraction_of_documents_to_embed = None
+    input_column_name = "audio"
 
     expected_stats = {
         "test": {
@@ -4354,8 +4351,8 @@ class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification
         self.data_loaded = True
 
 
-class MockAudioZeroshotClassificationTask(AbsTaskAudioZeroshotClassification):
-    audio_column_name: str = "audio"
+class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
+    input_column_name: str = "audio"
     label_column_name: str = "label"
 
     expected_stats = {
