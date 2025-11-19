@@ -153,6 +153,9 @@ class InstructSentenceTransformerModel(AbsEncoder):
 
         self.model_name = model_name
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
+        if max_seq_length:
+            # https://github.com/huggingface/sentence-transformers/issues/3575
+            self.model.max_seq_length = max_seq_length
         self.apply_instruction_to_passages = apply_instruction_to_passages
         self.prompts_dict = prompts_dict
 
