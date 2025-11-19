@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_zero_shot_classification import (
-    AbsTaskAudioZeroshotClassification,
-)
+from mteb.abstasks import AbsTaskZeroShotClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ESC50ZeroshotClassification(AbsTaskAudioZeroshotClassification):
+class ESC50ZeroshotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="ESC50_Zeroshot",
         description="Environmental Sound Classification Dataset.",
@@ -44,9 +42,8 @@ class ESC50ZeroshotClassification(AbsTaskAudioZeroshotClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "target"
-    samples_per_label: int = 50
 
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""

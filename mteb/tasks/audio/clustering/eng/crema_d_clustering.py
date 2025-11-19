@@ -1,8 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_clustering import AbsTaskAudioClustering
+from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CREMADClustering(AbsTaskAudioClustering):
+class CREMADClustering(AbsTaskClustering):
     label_column_name: str = "label"
     metadata = TaskMetadata(
         name="CREMA_DClustering",
@@ -39,6 +39,7 @@ class CREMADClustering(AbsTaskAudioClustering):
 """,
     )
     max_fraction_of_documents_to_embed = None
+    input_column_name: str = "audio"
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(

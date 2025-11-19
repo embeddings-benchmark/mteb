@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_zero_shot_classification import (
-    AbsTaskAudioZeroshotClassification,
-)
+from mteb.abstasks import AbsTaskZeroShotClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RavdessZeroshotClassification(AbsTaskAudioZeroshotClassification):
+class RavdessZeroshotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="RavdessZeroshot",
         description="Emotion classification Dataset. RAVDESS contains 24 professional actors (12 female, 12 male), vocalizing two lexically-matched statements in a neutral North American accent. Speech emotions includes neutral,calm, happy, sad, angry, fearful, surprise, and disgust expressions. These 8 emtoions also serve as labels for the dataset.",
@@ -43,9 +41,8 @@ class RavdessZeroshotClassification(AbsTaskAudioZeroshotClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "labels"
-    samples_per_label: int = 180
 
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""
