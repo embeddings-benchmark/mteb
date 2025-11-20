@@ -1,8 +1,8 @@
-from mteb.abstasks.audio.abs_task_adio_reranking import AbsTaskAudioReranking
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class VocalSoundAudioReranking(AbsTaskAudioReranking):
+class VocalSoundAudioReranking(AbsTaskRetrieval):
     """VocalSound dataset adapted for audio reranking task.
 
     The VocalSound dataset consists of recordings of human vocal sounds across 6 categories:
@@ -23,15 +23,15 @@ class VocalSoundAudioReranking(AbsTaskAudioReranking):
         description="VocalSound dataset adapted for audio reranking. Given a query vocal sound from one of 6 categories, rank 4 relevant vocal samples higher than 16 irrelevant ones from different vocal sound types. Contains 198 queries across 6 vocal sound categories for robust evaluation.",
         reference="https://www.researchgate.net/publication/360793875_Vocalsound_A_Dataset_for_Improving_Human_Vocal_Sounds_Recognition/citations",
         dataset={
-            "path": "AdnanElAssadi/vocalsound-audio-reranking",
-            "revision": "64fa19c62cfd8f0aca9a1e10e82da8abb6ba7009",
+            "path": "mteb/VocalSoundAudioReranking",
+            "revision": "d44884963d55578a13d6da80dfaca0f7f0971fe7",
         },
         type="AudioReranking",
         category="a2a",
         modalities=["audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2022-01-01", "2022-12-31"),
         domains=["Spoken"],
         task_subtypes=["Emotion Reranking"],
@@ -50,8 +50,3 @@ class VocalSoundAudioReranking(AbsTaskAudioReranking):
 }
 """,
     )
-
-    # Column names from our preprocessed dataset
-    audio_query_column_name: str = "query"
-    audio_positive_column_name: str = "positive"
-    audio_negative_column_name: str = "negative"

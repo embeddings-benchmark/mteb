@@ -1,8 +1,8 @@
-from mteb.abstasks.audio.abs_task_adio_reranking import AbsTaskAudioReranking
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AudioCapsMiniReranking(AbsTaskAudioReranking):
+class AudioCapsMiniReranking(AbsTaskRetrieval):
     """A smaller version of AudioCapsReranking that uses a preprocessed dataset.
     This dataset is much smaller and already formatted for reranking,
     avoiding the need to download and process the full AudioCaps dataset.
@@ -13,15 +13,15 @@ class AudioCapsMiniReranking(AbsTaskAudioReranking):
         description="A smaller subset of AudioCaps dataset preprocessed for audio reranking",
         reference="https://audiocaps.github.io/",
         dataset={
-            "path": "AdnanElAssadi/audiocaps-mini",
-            "revision": "d4dc581109fd9ea6b8ed2c4a85075a5ec910cfda",
+            "path": "mteb/AudioCapsMiniReranking",
+            "revision": "837a1885599d9769084e6d77e4efd3a78fdd0f3c",
         },
         type="AudioReranking",
         category="a2a",
         modalities=["audio"],
         eval_splits=["test"],  # The mini dataset has only one split
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2019-04-01", "2019-04-01"),
         domains=["Speech"],
         task_subtypes=["Environment Sound Reranking"],
@@ -39,8 +39,3 @@ class AudioCapsMiniReranking(AbsTaskAudioReranking):
 }
 """,
     )
-
-    # The column names from our preprocessed dataset
-    audio_query_column_name: str = "query"
-    audio_positive_column_name: str = "positive"
-    audio_negative_column_name: str = "negative"
