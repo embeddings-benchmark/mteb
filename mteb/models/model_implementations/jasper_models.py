@@ -328,15 +328,8 @@ jasper_en_v1 = ModelMeta(
 )
 
 
-class JasperTokenCompressionLoader(InstructSentenceTransformerModel):
-    def __init__(self, model_name: str, revision: str, **kwargs: Any):
-        super().__init__(model_name, revision, **kwargs)
-        if isinstance(kwargs.get("max_seq_length"), int):
-            self.model.max_seq_length = kwargs["max_seq_length"]
-
-
 Jasper_Token_Compression_600M = ModelMeta(
-    loader=JasperTokenCompressionLoader,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=jasper_token_compression_600m_loader_kwargs,
     name="infgrad/Jasper-Token-Compression-600M",
     languages=["eng-Latn", "zho-Hans"],
