@@ -201,7 +201,7 @@ jasper_token_compression_600m_prompts_dict = {
 }
 jasper_token_compression_600m_loader_kwargs = dict(
     model_kwargs={
-        "attn_implementation": "spda",
+        "attn_implementation": "sdpa",
         "torch_dtype": "bfloat16",
         "trust_remote_code": True,
     },
