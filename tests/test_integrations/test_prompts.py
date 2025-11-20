@@ -1,7 +1,5 @@
 """test that prompts, and query/corpus indicators are correctly called and passed to the encoders"""
 
-from __future__ import annotations
-
 import logging
 from pathlib import Path
 

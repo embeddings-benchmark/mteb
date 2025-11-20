@@ -1,0 +1,53 @@
+from mteb.abstasks.audio.abs_task_audio_classification import (
+    AbsTaskAudioClassification,
+)
+from mteb.abstasks.task_metadata import TaskMetadata
+
+
+class CommonLanguageLanguageClassification(AbsTaskAudioClassification):
+    metadata = TaskMetadata(
+        name="CommonLanguageLanguageDetection",
+        description="Language Classification. This is a stratified subsampled version of the original CommonLanguage dataset.",
+        reference="https://huggingface.co/datasets/speechbrain/common_language",
+        dataset={
+            "path": "mteb/commonlanguage-lang-mini",
+            "revision": "445bd662ffd3883ac662e2f1df18724c10688304",
+        },
+        type="AudioClassification",
+        category="a2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2021-01-01", "2021-12-31"),
+        domains=["Spoken", "Scene", "Speech"],
+        task_subtypes=["Language identification", "Spoken Language Identification"],
+        license="cc-by-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        modalities=["audio"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@dataset{ganesh_sinisetty_2021_5036977,
+  author = {Ganesh Sinisetty and
+Pavlo Ruban and
+Oleksandr Dymov and
+Mirco Ravanelli},
+  doi = {10.5281/zenodo.5036977},
+  month = jun,
+  publisher = {Zenodo},
+  title = {CommonLanguage},
+  url = {https://doi.org/10.5281/zenodo.5036977},
+  version = {0.1},
+  year = {2021},
+}
+""",
+    )
+
+    audio_column_name: str = "audio"
+    label_column_name: str = "language"
+    samples_per_label: int = 10
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"], label=self.label_column_name
+        )
