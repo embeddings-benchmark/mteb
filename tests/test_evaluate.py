@@ -77,6 +77,18 @@ def test_evaluate_with_cache(
         "main score should match the expected value"
     )
 
+    # test cache re-use
+    cached_results = mteb.evaluate(
+        model, task, cache=cache, overwrite_strategy="only-cache"
+    )
+    cached_result = cached_results[0]
+    assert cached_result.task_name == task.metadata.name, (
+        "results should match the task"
+    )
+    assert cached_result.get_score() == expected_score, (
+        "main score should match the expected value"
+    )
+
 
 @pytest.mark.parametrize(
     "model, task, expected_score,splits",
@@ -112,6 +124,19 @@ def test_evaluate_w_missing_splits(
     assert updated.get_score() == expected_score, (
         "main score should match the expected value"
     )
+
+
+@pytest.mark.parametrize(
+    "task", [MockClassificationTask()], ids=["mock_classification"]
+)
+def test_cache_hit(task: AbsTask):
+    """Test that evaluating with 'only-cache' raises an error when there are no cache hit."""
+    model = mteb.get_model("baseline/random-encoder-baseline")
+    with pytest.raises(
+        ValueError,
+        match="overwrite_strategy is set to 'only-cache' and the results file exists",
+    ):
+        mteb.evaluate(model, task, overwrite_strategy="only-cache")
 
 
 @pytest.mark.parametrize(
