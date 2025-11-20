@@ -440,7 +440,7 @@ def evaluate(
 
     if existing_results:
         logger.info(
-            f"Found existing results for {task.metadata.name}, only running missing splits: {list(missing_eval.keys())}"
+            f"Found existing results for {task.metadata.name}, only running missing splits (subsets): {missing_eval}"
         )
 
     if isinstance(model, ModelMeta):
