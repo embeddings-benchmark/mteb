@@ -83,21 +83,21 @@ def load_results(
 
     if models is not None:
         models_to_keep = {}
-        for model_path in models:
-            if isinstance(model_path, ModelMeta):
-                models_to_keep[model_path.name] = model_path.revision
+        for model in models:
+            if isinstance(model, ModelMeta):
+                models_to_keep[model.name] = model.revision
             else:
-                models_to_keep[model_path] = None
+                models_to_keep[model] = None
     else:
         models_to_keep = None
 
-    task_names = {}
+    task_names: dict[str, AbsTask | None] = {}
     if tasks is not None:
-        for task in tasks:
-            if isinstance(task, AbsTask):
-                task_names[task.metadata.name] = task
+        for task_ in tasks:
+            if isinstance(task_, AbsTask):
+                task_names[task_.metadata.name] = task_
             else:
-                task_names[task] = None
+                task_names[task_] = None
 
     model_results = []
     for model_path in model_paths:

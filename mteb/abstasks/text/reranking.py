@@ -16,7 +16,7 @@ else:
 
 logger = logging.getLogger(__name__)
 
-OLD_FORMAT_RERANKING_TASKS = []
+OLD_FORMAT_RERANKING_TASKS: list[str] = []
 
 
 @deprecated(
@@ -105,7 +105,9 @@ class AbsTaskReranking(AbsTaskRetrieval):
         )
 
         given_dataset = copy(given_dataset)
-        self.dataset = defaultdict(lambda: defaultdict(dict))
+        self.dataset: dict[str, dict[str, RetrievalSplitData]] = defaultdict(
+            lambda: defaultdict(dict)  # type: ignore[arg-type]
+        )
 
         hf_subsets = self.hf_subsets
 
@@ -127,7 +129,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
             for split in cur_dataset:
                 corpus = []
                 queries = []
-                relevant_docs = defaultdict(dict)
+                relevant_docs: dict[str, dict[str, int]] = defaultdict(dict)
                 top_ranked = defaultdict(list)
 
                 # Create an enumerated dataset to pass indices
