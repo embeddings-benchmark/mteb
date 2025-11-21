@@ -23,7 +23,7 @@ model2vecdk = ModelMeta(
     superseded_by=None,
     training_datasets=set(),  # distilled
     public_training_code="https://github.com/andersborges/dkmodel2vec",
-    public_training_data=None,
+    public_training_data="https://huggingface.co/datasets/DDSC/nordic-embedding-training-data",
 )
 
 
@@ -47,5 +47,5 @@ model2vecdk_stem = ModelMeta(
     superseded_by=None,
     training_datasets=set(),  # distilled
     public_training_code="https://github.com/andersborges/dkmodel2vec",
-    public_training_data=None,
+    public_training_data="https://huggingface.co/datasets/DDSC/nordic-embedding-training-data",
 )
