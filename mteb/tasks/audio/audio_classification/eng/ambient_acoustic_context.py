@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AmbientAcousticContextClassification(AbsTaskAudioClassification):
+class AmbientAcousticContextClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AmbientAcousticContext",
         description="The Ambient Acoustic Context dataset contains 1-second segments for activities that occur in a workplace setting. This is a downsampled version with ~100 train and ~50 test samples per class.",
@@ -46,7 +44,7 @@ class AmbientAcousticContextClassification(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = None  # Not needed as dataset is already balanced
+
     is_cross_validation: bool = False

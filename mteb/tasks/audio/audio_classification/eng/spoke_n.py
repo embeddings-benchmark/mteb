@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SpokeNEnglishClassification(AbsTaskAudioClassification):
+class SpokeNEnglishClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SpokeNEnglish",
         description="Human Sound Classification Dataset.",
@@ -39,7 +37,7 @@ class SpokeNEnglishClassification(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = 8
+
     is_cross_validation: bool = True

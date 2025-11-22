@@ -1,4 +1,4 @@
-from mteb.abstasks.audio.abs_task_audio_classification import AbsTaskAudioClassification
+from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 EVAL_LANGS_MAP = {
@@ -17,7 +17,7 @@ EVAL_LANGS_MAP = {
 }
 
 
-class MInDS14Classification(AbsTaskAudioClassification):
+class MInDS14Classification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MInDS14",
         description="MInDS-14 is an evaluation resource for intent detection with spoken data in 14 diverse languages.",
@@ -53,8 +53,7 @@ class MInDS14Classification(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "intent_class"  # Contains numeric labels 0-13
-    samples_per_label: int = 40
     is_cross_validation: bool = True
     n_splits: int = 5

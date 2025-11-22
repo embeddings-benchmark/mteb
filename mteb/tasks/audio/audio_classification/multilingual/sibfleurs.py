@@ -1,4 +1,4 @@
-from mteb.abstasks.audio.abs_task_audio_classification import AbsTaskAudioClassification
+from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 EVAL_LANGS_MAP = {
@@ -107,7 +107,7 @@ EVAL_LANGS_MAP = {
 }
 
 
-class SIBFLEURSMultilingualClassification(AbsTaskAudioClassification):
+class SIBFLEURSMultilingualClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SIBFLEURS",
         description="Topic Classification for multilingual audio dataset. This dataset is a stratified and downsampled subset of the SIBFLEURS dataset, which is a collection of 1000+ hours of audio data in 100+ languages.",
@@ -147,7 +147,6 @@ class SIBFLEURSMultilingualClassification(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "category"
-    samples_per_label: int = 10
     is_cross_validation: bool = True

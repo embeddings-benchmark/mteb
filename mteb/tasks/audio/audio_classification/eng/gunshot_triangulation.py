@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class GunshotTriangulation(AbsTaskAudioClassification):
+class GunshotTriangulation(AbsTaskClassification):
     metadata = TaskMetadata(
         name="GunshotTriangulation",
         description="Classifying a weapon based on its muzzle blast",
@@ -39,7 +37,7 @@ class GunshotTriangulation(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = 10
+
     is_cross_validation: bool = True

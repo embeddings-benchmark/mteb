@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class VocalSoundClassification(AbsTaskAudioClassification):
+class VocalSoundClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="VocalSound",
         description="Human Vocal Sound Classification Dataset.",
@@ -40,7 +38,7 @@ class VocalSoundClassification(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "answer"
 
     def dataset_transform(self):
