@@ -64,7 +64,7 @@ class TERRaV2(AbsTaskPairClassification):
         description="Textual Entailment Recognition for Russian. This task requires to recognize, given two text fragments, "
         + "whether the meaning of one text is entailed (can be inferred) from the other text."
         + " Version 2 uses different prompt types for the two inputs.",
-        adapted_from="TERRa",
+        adapted_from=["TERRa"],
         prompt={
             PromptType.query.value: "Given a premise, retrieve a hypothesis that is entailed by the premise"
         },
