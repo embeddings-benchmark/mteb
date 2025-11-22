@@ -6,7 +6,6 @@ These tests are not perfect, but should encourage contributors to re-examine the
 from typing import cast
 
 from mteb.abstasks import AbsTask
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.get_tasks import get_tasks
 from mteb.types.statistics import DescriptiveStatistics, TextStatistics
 
@@ -277,8 +276,10 @@ KNOWN_ISSUES = {
 }
 
 
-def _split_is_high_quality(metadata: TaskMetadata, split_stats: DescriptiveStatistics):
-    name = metadata.name
+def _split_quality(
+    name: str, split: str, split_stats: DescriptiveStatistics
+) -> list[str]:
+    errors = []
 
     num_samples = split_stats["num_samples"]  # type: ignore
     text_stats = split_stats.get("text_statistics", None)
@@ -287,52 +288,57 @@ def _split_is_high_quality(metadata: TaskMetadata, split_stats: DescriptiveStati
         unique_texts = text_stats["unique_texts"]
 
         # Note: there could be cases where a dataset
-        assert num_samples == unique_texts, (
-            f"{name} contains text duplicates ({num_samples=}, {unique_texts=}), this can be intentional in multimodal datasets, but it likely unintentional."
-        )
+        if num_samples != unique_texts:
+            errors.append(
+                f"{name} ({split}) contains text duplicates ({num_samples=}, {unique_texts=}), this can be intentional in multimodal datasets, but it likely unintentional."
+            )
 
         min_text_length = text_stats["min_text_length"]
-        assert min_text_length > 3, (
-            f"{name} contains documents which are extremely short ({min_text_length=}), this likely indicate poor quality samples."
-        )
+        if not (min_text_length > 3):
+            errors.append(
+                f"{name} ({split}) contains documents which are extremely short ({min_text_length=}), this likely indicate poor quality samples."
+            )
 
         # Note: there could be cases where a dataset
-        assert num_samples == unique_texts, (
-            f"{name} contains duplicates ({num_samples=}, {unique_texts=})"
-        )
+        if num_samples != unique_texts:
+            errors.append(
+                f"{name} ({split}) contains duplicates ({num_samples=}, {unique_texts=})"
+            )
 
     # train-test leakage
     number_texts_intersect_with_train = split_stats.get(
         "number_texts_intersect_with_train", None
     )
-    assert (
+    if not (
         number_texts_intersect_with_train is None
         or number_texts_intersect_with_train == 0
-    ), (
-        f"{name} has an overlap between train and test ({number_texts_intersect_with_train=})"
-    )
+    ):
+        errors.append(
+            f"{name} ({split}) has an overlap between train and test ({number_texts_intersect_with_train=})"
+        )
+    return errors
 
 
-def _task_is_high_quality(task: AbsTask):
+def _task_quality(task: AbsTask) -> list[str]:
     desc_stats = task.metadata.descriptive_stats
 
+    errors = []
     if desc_stats is None:
-        return
-    for split_stats in desc_stats.values():
-        _split_is_high_quality(task.metadata, split_stats)
+        return []
+    for split_name, split_stats in desc_stats.items():
+        errors += _split_quality(task.metadata.name, split_name, split_stats)
+
+    return errors
 
 
-def test_dataset_is_high_quality():
+def test_dataset_quality():
     tasks = get_tasks(exclude_superseded=False, exclude_aggregate=False)
 
-    errors = []
+    errors: list[str] = []
     for task in tasks:
         if task.metadata.name in KNOWN_ISSUES:
             continue
-        try:
-            _task_is_high_quality(task)
-        except AssertionError as ae:
-            errors.append(ae)
+        errors += _task_quality(task)
 
     if errors:
         raise AssertionError("\n".join([str(e) for e in errors]))
