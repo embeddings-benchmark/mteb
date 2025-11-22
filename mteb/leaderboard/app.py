@@ -155,9 +155,8 @@ def _update_task_info(task_names: str) -> gr.DataFrame:
     df = df.drop(columns="reference")
     return gr.DataFrame(
         df,
-        datatype=["markdown"] + ["str"] * (len(df.columns) - 1),
-        show_copy_button=True,
-        show_fullscreen_button=True,
+        datatype=["markdown"] + ["str"] * (len(df.columns) - 1),  # type: ignore
+        buttons=["copy", "fullscreen"],
         show_search="filter",
     )
 
