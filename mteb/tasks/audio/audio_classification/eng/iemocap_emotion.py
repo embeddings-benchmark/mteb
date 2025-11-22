@@ -40,7 +40,7 @@ class IEMOCAPEmotionClassification(AbsTaskClassification):
 
     input_column_name: str = "audio"
     label_column_name: str = "emotion"
-    samples_per_label: int = 10
+
     is_cross_validation: bool = True
 
     def dataset_transform(self):

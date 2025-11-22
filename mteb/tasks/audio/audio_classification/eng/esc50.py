@@ -44,5 +44,5 @@ class ESC50Classification(AbsTaskClassification):
 
     input_column_name: str = "audio"
     label_column_name: str = "target"
-    samples_per_label: int = 50
+
     is_cross_validation: bool = True

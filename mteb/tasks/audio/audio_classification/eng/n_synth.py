@@ -39,4 +39,3 @@ class NSynth(AbsTaskClassification):
 
     input_column_name: str = "audio"
     label_column_name: str = "instrument_source"
-    samples_per_label: int = 50

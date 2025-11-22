@@ -43,7 +43,6 @@ Mirco Ravanelli},
 
     input_column_name: str = "audio"
     label_column_name: str = "age"
-    samples_per_label: int = 10
 
     def dataset_transform(self):
         # remove rows where age is "not_defined" or "eighties" <- only 1 label so messes up stratified subsampling

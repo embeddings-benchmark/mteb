@@ -39,5 +39,5 @@ class BirdCLEFClassification(AbsTaskClassification):
 
     input_column_name: str = "recording"
     label_column_name: str = "primary_label"
-    samples_per_label: int = 20
+
     is_cross_validation: bool = True

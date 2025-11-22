@@ -39,7 +39,7 @@ class SpokenQAForIC(AbsTaskClassification):
 
     input_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = 10
+
     is_cross_validation: bool = True
 
     def dataset_transform(self):

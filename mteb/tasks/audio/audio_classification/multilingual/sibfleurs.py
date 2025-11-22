@@ -149,5 +149,4 @@ class SIBFLEURSMultilingualClassification(AbsTaskClassification):
 
     input_column_name: str = "audio"
     label_column_name: str = "category"
-    samples_per_label: int = 10
     is_cross_validation: bool = True

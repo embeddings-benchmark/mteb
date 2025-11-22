@@ -43,7 +43,6 @@ Mirco Ravanelli},
 
     input_column_name: str = "audio"
     label_column_name: str = "language"
-    samples_per_label: int = 10
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(

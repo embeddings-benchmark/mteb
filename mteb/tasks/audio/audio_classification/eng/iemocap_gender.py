@@ -40,7 +40,7 @@ class IEMOCAPGenderClassification(AbsTaskClassification):
 
     input_column_name: str = "audio"
     label_column_name: str = "gender_id"
-    samples_per_label: int = 100
+
     is_cross_validation: bool = True
 
     def dataset_transform(self):

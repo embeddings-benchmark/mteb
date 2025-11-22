@@ -55,6 +55,5 @@ class MInDS14Classification(AbsTaskClassification):
 
     input_column_name: str = "audio"
     label_column_name: str = "intent_class"  # Contains numeric labels 0-13
-    samples_per_label: int = 40
     is_cross_validation: bool = True
     n_splits: int = 5
