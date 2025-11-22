@@ -30,10 +30,10 @@ class EagerEmbedV1Wrapper(AbsEncoder):
     ):
         requires_image_dependencies()
         requires_package(
-            self, "peft", model_name, "pip install mteb[peft]"
+            self, "peft", model_name, "pip install mteb[eager_embed]"
         )
         requires_package(
-            self, "qwen_vl_utils", model_name, "pip install mteb[qwen_vl_utils]"
+            self, "qwen_vl_utils", model_name, "pip install mteb[eager_embed]"
         )
         from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
 
@@ -95,7 +95,8 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         if text_embeddings is not None and image_embeddings is not None:
             if len(text_embeddings) != len(image_embeddings):
                 raise ValueError(
-                    "The number of texts and images must have the same length"
+                    "This implementation of the model does not support "
+                    "unequal numbers of texts and images"
                 )
             # For multimodal inputs, concatenate or fuse embeddings
             fused_embeddings = text_embeddings + image_embeddings
@@ -306,6 +307,13 @@ EAGER_EMBED_V1_CITATION = """@article{EagerEmbed,
   url={https://github.com/eagerworks/eager-embed},
 }"""
 
+EAGER_EMBED_V1_TRAINING_DATASETS = {
+    "colpali",
+    "bge-ir",
+    "pixmo-docs",
+    "wiki-ss"
+}
+
 Eager_Embed_V1 = ModelMeta(
     loader=EagerEmbedV1Wrapper,
     loader_kwargs=dict(
@@ -327,8 +335,9 @@ Eager_Embed_V1 = ModelMeta(
     reference="https://huggingface.co/eagerworks/eager-embed-v1",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=EAGER_EMBED_V1_TRAINING_DATASETS,
     citation=EAGER_EMBED_V1_CITATION,
+    adapted_from="https://huggingface.co/Qwen/Qwen3-VL-4B-Instruct",
     public_training_code="https://github.com/eagerworks/eager-embed",
     public_training_data="https://github.com/eagerworks/eager-embed/blob/main/dataset_config.yaml"
 )
