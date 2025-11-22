@@ -166,7 +166,7 @@ def _evaluate_task(
         try:
             task.load_data()
         except DatasetNotFoundError as e:
-            if task.metadata.is_private and public_only is None:
+            if not task.metadata.is_public and public_only is None:
                 logger.warning(
                     f"Dataset for private task {task.metadata.name} not found. "
                     "Make sure you have access to the dataset and that you have set up the authentication correctly."
