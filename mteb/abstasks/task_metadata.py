@@ -202,13 +202,6 @@ Attributes:
     document: The prompt used for the passages in the task.
 """
 
-AsymmetricTypes = Literal[
-    "q2q",
-    "q2d",
-    "d2d",
-]
-"""Asymmetric types of the tasks, where `q` is query, `d` is document"""
-
 
 class MetadataDatasetDict(TypedDict, total=False):
     """A dictionary containing the dataset path and revision.
@@ -262,7 +255,6 @@ class TaskMetadata(BaseModel):
         is_public: Whether the dataset is publicly available. If False (closed/private), a HuggingFace token is required to run the datasets.
         superseded_by: Denotes the task that this task is superseded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
-        asymmetric_type: Type of asymmetric. If `None`, then it symmetric. For PairClassification and STS tasks.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -294,7 +286,6 @@ class TaskMetadata(BaseModel):
     adapted_from: Sequence[str] | None = None
     is_public: bool = True
     superseded_by: str | None = None
-    asymmetric_type: AsymmetricTypes | None = None
 
     def _validate_metadata(self) -> None:
         self._eval_langs_are_valid(self.eval_langs)
