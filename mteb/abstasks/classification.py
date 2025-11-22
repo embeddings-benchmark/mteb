@@ -1,8 +1,8 @@
 import logging
 from collections import defaultdict
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Protocol, TypedDict
+from typing import Any, TypedDict
 
 import numpy as np
 from datasets import Dataset, DatasetDict
@@ -16,7 +16,6 @@ from sklearn.metrics import (
     recall_score,
 )
 from sklearn.model_selection import KFold
-from typing_extensions import Self
 
 from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
@@ -96,13 +95,6 @@ class FullClassificationMetrics(ClassificationMetrics):
     scores_per_experiment: list[ClassificationMetrics]
 
 
-class KFoldSplitterProtocol(Protocol):  # noqa: D101
-    def __init__(self, n_splits: int, shuffle: bool, random_state: int): ...
-    def get_params(self) -> dict[str, Any]: ...  # noqa: D102
-    def set_params(self, **kwargs: dict[str, Any]) -> Self: ...  # noqa: D102
-    def split(self, data: Iterable[int]) -> tuple[Sequence[int], Sequence[int]]: ...  # noqa: D102
-
-
 class AbsTaskClassification(AbsTask):
     """Abstract class for classification tasks
 
@@ -120,7 +112,6 @@ class AbsTaskClassification(AbsTask):
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
         is_cross_validation: Is task cross validation
         n_splits: Number of splits for cross-validation
-        cross_validation_splitter: Splitter for cross validation
     """
 
     evaluator: type[SklearnEvaluator] = SklearnEvaluator
@@ -137,7 +128,6 @@ class AbsTaskClassification(AbsTask):
     abstask_prompt = "Classify user passages."
     is_cross_validation: bool = False
     n_splits = 5
-    cross_validation_splitter: type[KFoldSplitterProtocol] = KFold
 
     def evaluate(
         self,
@@ -272,7 +262,7 @@ class AbsTaskClassification(AbsTask):
 
         scores = []
         idxs = None
-        cross_validation_splitter = self.cross_validation_splitter(
+        cross_validation_splitter = KFold(
             n_splits=self.n_splits, shuffle=True, random_state=self.seed
         )
         all_predictions = []
