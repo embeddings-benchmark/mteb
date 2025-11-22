@@ -198,7 +198,7 @@ def test_run_private_task_warning(caplog):
     with caplog.at_level(logging.WARNING):
         result = mteb.evaluate(model, task, cache=None)
         assert len(result.task_results) == 0
-        assert "Code1Retrieval is private. Skipping it." in caplog.text
+        assert "Dataset for private task Code1Retrieval not found" in caplog.text
 
 
 def test_run_private_task():

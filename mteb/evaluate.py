@@ -397,14 +397,6 @@ def evaluate(
             task_results=results,
         )
 
-    if public_only and not task.metadata.is_public:
-        logger.warning(f"{task.metadata.name} is private. Skipping it.")
-        return ModelResult(
-            model_name=model_name,
-            model_revision=model_revision,
-            task_results=[],
-        )
-
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
 
     existing_results = None
