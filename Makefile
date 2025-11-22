@@ -10,15 +10,16 @@ install-for-tests:
 
 lint:
 	@echo "--- 🧹 Running linters ---"
-	ruff format . 			# running ruff formatting
-	ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
+	ruff format .
+	@echo "running ruff linting '--exit-non-zero-on-fix' is used for the pre-commit hook to work"
+	ruff check . --fix --exit-non-zero-on-fix
 	typos
 
 lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
-	# Required for CI to work, otherwise it will just pass
-	ruff format . --check						    # running ruff formatting
-	ruff check .    						        # running ruff linting
+	@echo "This is different from 'make lint' as it only checks if the code is formatted correctly (required for CI)"
+	ruff format . --check
+	ruff check .
 	typos --diff
 
 test:
@@ -83,7 +84,7 @@ format-citations:
 
 
 .PHONY: check
-check: ## Run code quality tools.
+check:
 	@echo "--- 🧹 Running code quality tools ---"
 	@pre-commit run -a
 
