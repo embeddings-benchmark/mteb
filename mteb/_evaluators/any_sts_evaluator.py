@@ -12,6 +12,7 @@ from mteb._create_dataloaders import create_dataloader
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import EncoderProtocol
 from mteb.similarity_functions import compute_pairwise_similarity
+from mteb.types import PromptType
 
 from .evaluator import Evaluator
 
@@ -42,6 +43,8 @@ class AnySTSEvaluator(Evaluator):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
+        input1_prompt_type: PromptType | None,
+        input2_prompt_type: PromptType | None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -50,6 +53,8 @@ class AnySTSEvaluator(Evaluator):
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
+        self.input1_prompt_type = input1_prompt_type
+        self.input2_prompt_type = input2_prompt_type
 
     def __call__(
         self,
@@ -68,6 +73,7 @@ class AnySTSEvaluator(Evaluator):
             task_metadata=self.task_metadata,
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
+            prompt_type=self.input1_prompt_type,
             **encode_kwargs,
         )
 
@@ -82,6 +88,7 @@ class AnySTSEvaluator(Evaluator):
             task_metadata=self.task_metadata,
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
+            prompt_type=self.input2_prompt_type,
             **encode_kwargs,
         )
 

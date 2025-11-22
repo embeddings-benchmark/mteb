@@ -8,6 +8,7 @@ from scipy.stats import pearsonr, spearmanr
 from mteb._evaluators import AnySTSEvaluator
 from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
 from mteb.models import EncoderProtocol
+from mteb.types import PromptType
 from mteb.types.statistics import (
     ImageStatistics,
     ScoreStatistics,
@@ -89,12 +90,16 @@ class AbsTaskSTS(AbsTask):
         min_score: Minimum possible score in the dataset.
         max_score: Maximum possible score in the dataset.
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
+        input1_prompt_type: Type of prompt of first input. Used for asymmetric tasks.
+        input2_prompt_type: Type of prompt of second input. Used for asymmetric tasks.
     """
 
     abstask_prompt = "Retrieve semantically similar text."
     column_names: tuple[str, str] = ("sentence1", "sentence2")
     min_score: int = 0
     max_score: int = 5
+    input1_prompt_type: PromptType | None = None
+    input2_prompt_type: PromptType | None = None
 
     def _evaluate_subset(
         self,
@@ -115,6 +120,8 @@ class AbsTaskSTS(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            input1_prompt_type=self.input1_prompt_type,
+            input2_prompt_type=self.input2_prompt_type,
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)
