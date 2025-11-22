@@ -82,6 +82,7 @@ class ModelResult(BaseModel):
             protected_namespaces=(),
         )
     )
+    errors: list[str] | None = None
 
     def __repr__(self) -> str:
         n_entries = len(self.task_results)
