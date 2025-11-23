@@ -45,5 +45,5 @@ and Tran, Duc -Tan},
   title = {GN-TRVN: A Benchmark for Vietnamese Table Markdown Retrieval Task},
   year = {2026},
 }
-""",  # TODO: Add bibtex citation when the paper is published
+""",
     )
