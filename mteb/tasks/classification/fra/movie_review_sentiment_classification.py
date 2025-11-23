@@ -49,8 +49,7 @@ class MovieReviewSentimentClassificationV2(AbsTaskClassification):
             "path": "mteb/movie_review_sentiment",
             "revision": "4e182033cbfe75ae0556cd640d028986be82afd8",
         },
-        description="""The Allociné dataset is a French-language dataset for sentiment analysis that contains movie reviews produced by the online community of the Allociné.fr website.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="The Allociné dataset is a French-language dataset for sentiment analysis that contains movie reviews produced by the online community of the Allociné.fr website. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://github.com/TheophileBlard/french-sentiment-analysis-with-bert",
         type="Classification",
         category="t2c",

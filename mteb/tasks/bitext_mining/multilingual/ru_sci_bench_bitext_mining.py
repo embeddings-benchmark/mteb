@@ -10,11 +10,7 @@ class RuSciBenchBitextMining(AbsTaskBitextMining):
             "path": "mlsa-iai-msu-lab/ru_sci_bench_bitext_mining",
             "revision": "e5840033c5cf2573932db027ac8001fe0a7eb6fa",
         },
-        description="""This task focuses on finding translations of scientific articles.
-        The dataset is sourced from eLibrary, Russia's largest electronic library of scientific publications.
-        Russian authors often provide English translations for their abstracts and titles,
-        and the data consists of these paired titles and abstracts. The task evaluates a model's ability
-        to match an article's Russian title and abstract to its English counterpart, or vice versa.""",
+        description="This task focuses on finding translations of scientific articles. The dataset is sourced from eLibrary, Russia's largest electronic library of scientific publications. Russian authors often provide English translations for their abstracts and titles, and the data consists of these paired titles and abstracts. The task evaluates a model's ability to match an article's Russian title and abstract to its English counterpart, or vice versa.",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="BitextMining",
         category="t2c",

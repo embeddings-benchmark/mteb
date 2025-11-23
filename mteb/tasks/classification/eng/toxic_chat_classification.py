@@ -7,15 +7,7 @@ _EVAL_SPLITS = ["test"]
 class ToxicChatClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ToxicChatClassification",
-        description="""This dataset contains toxicity annotations on 10K user
-            prompts collected from the Vicuna online demo. We utilize a human-AI
-            collaborative annotation framework to guarantee the quality of annotation
-            while maintaining a feasible annotation workload. The details of data
-            collection, pre-processing, and annotation can be found in our paper.
-            We believe that ToxicChat can be a valuable resource to drive further
-            advancements toward building a safe and healthy environment for user-AI
-            interactions.
-            Only human annotated samples are selected here.""",
+        description="This dataset contains toxicity annotations on 10K user prompts collected from the Vicuna online demo. We utilize a human-AI collaborative annotation framework to guarantee the quality of annotation while maintaining a feasible annotation workload. The details of data collection, pre-processing, and annotation can be found in our paper. We believe that ToxicChat can be a valuable resource to drive further advancements toward building a safe and healthy environment for user-AI interactions. Only human annotated samples are selected here.",
         reference="https://aclanthology.org/2023.findings-emnlp.311/",
         dataset={
             "path": "lmsys/toxic-chat",
@@ -68,16 +60,7 @@ class ToxicChatClassification(AbsTaskClassification):
 class ToxicChatClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ToxicChatClassification.v2",
-        description="""This dataset contains toxicity annotations on 10K user
-            prompts collected from the Vicuna online demo. We utilize a human-AI
-            collaborative annotation framework to guarantee the quality of annotation
-            while maintaining a feasible annotation workload. The details of data
-            collection, pre-processing, and annotation can be found in our paper.
-            We believe that ToxicChat can be a valuable resource to drive further
-            advancements toward building a safe and healthy environment for user-AI
-            interactions.
-            Only human annotated samples are selected here.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="This dataset contains toxicity annotations on 10K user prompts collected from the Vicuna online demo. We utilize a human-AI collaborative annotation framework to guarantee the quality of annotation while maintaining a feasible annotation workload. The details of data collection, pre-processing, and annotation can be found in our paper. We believe that ToxicChat can be a valuable resource to drive further advancements toward building a safe and healthy environment for user-AI interactions. Only human annotated samples are selected here. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://aclanthology.org/2023.findings-emnlp.311/",
         dataset={
             "path": "mteb/toxic_chat",

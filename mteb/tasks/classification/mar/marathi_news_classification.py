@@ -43,8 +43,7 @@ class MarathiNewsClassification(AbsTaskClassification):
 class MarathiNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MarathiNewsClassification.v2",
-        description="""A Marathi dataset for 3-class classification of Marathi news articles
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="A Marathi dataset for 3-class classification of Marathi news articles This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://github.com/goru001/nlp-for-marathi",
         dataset={
             "path": "mteb/marathi_news",

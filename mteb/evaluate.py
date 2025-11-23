@@ -256,6 +256,20 @@ def _check_model_modalities(
         logger.warning(msg)
 
 
+def _requires_merge(task: AbsTask, existing_results: TaskResult) -> bool:
+    """Check if the existing results require merging with new results."""
+    # If the task has multiple eval splits and existing results cover only a subset, we need to merge
+    required_evals = dict.fromkeys(task.eval_splits, task.hf_subsets)
+    for split, subsets in required_evals.items():
+        res = existing_results.scores.get(split, None)
+        if res is None:
+            return True
+        hf_subsets = [r["hf_subset"] for r in res]
+        if not set(subsets).issubset(set(hf_subsets)):
+            return True
+    return False
+
+
 def evaluate(
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
     tasks: AbsTask | Iterable[AbsTask],
@@ -388,13 +402,18 @@ def evaluate(
 
     if (
         existing_results
-        and overwrite_strategy == "only-missing"
-        and overwrite_strategy == OverwriteStrategy.ONLY_MISSING
-        and existing_results.is_mergeable(task)
+        and overwrite_strategy
+        not in (OverwriteStrategy.ALWAYS, OverwriteStrategy.NEVER)
+        and (
+            not _requires_merge(task, existing_results)
+            or existing_results.is_mergeable(task)
+        )
     ):
         missing_eval = existing_results.get_missing_evaluations(task)
     else:
         missing_eval = dict.fromkeys(task.eval_splits, task.hf_subsets)
+        # Will be fully recomputed so we set it to None to avoid merging:
+        existing_results = None
 
     if (
         existing_results
@@ -415,12 +434,13 @@ def evaluate(
         OverwriteStrategy.ONLY_CACHE,
     ]:
         raise ValueError(
-            f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists. However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
+            f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists for task {task.metadata.name}. "
+            + f"However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
         )
 
     if existing_results:
         logger.info(
-            f"Found existing results for {task.metadata.name}, only running missing splits: {list(missing_eval.keys())}"
+            f"Found existing results for {task.metadata.name}, only running missing splits (subsets): {missing_eval}"
         )
 
     if isinstance(model, ModelMeta):

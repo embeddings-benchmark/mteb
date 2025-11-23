@@ -43,8 +43,7 @@ class TswanaNewsClassification(AbsTaskClassification):
 class TswanaNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TswanaNewsClassification.v2",
-        description="""Tswana News Classification Dataset
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Tswana News Classification Dataset This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://link.springer.com/chapter/10.1007/978-3-031-49002-6_17",
         dataset={
             "path": "mteb/tswana_news",

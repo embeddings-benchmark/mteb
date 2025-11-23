@@ -107,7 +107,9 @@ def _update_description(
     description += f" - **Number of task types**: {n_task_types}\n"
     description += f" - **Number of domains**: {n_domains}\n"
     if benchmark.reference is not None:
-        description += f"\n[Click for More Info]({benchmark.reference})"
+        description += (
+            f'\n<a href="{benchmark.reference}" target="_blank">Click for More Info</a>'
+        )
 
     return description
 
@@ -137,7 +139,7 @@ def _update_task_info(task_names: str) -> gr.DataFrame:
     df["languages"] = df["languages"].map(_format_list)
     df = df.sort_values("name")
     df["domains"] = df["domains"].map(_format_list)
-    df["name"] = "[" + df["name"] + "](" + df["reference"] + ")"
+    df["name"] = f'<a href="{df["reference"]}" target="_blank">{df["name"]}</a>'
     df["modalities"] = df["modalities"].map(_format_list)
     df = df.rename(
         columns={

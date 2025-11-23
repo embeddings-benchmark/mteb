@@ -42,8 +42,7 @@ class FrenkSlClassification(AbsTaskClassification):
 class FrenkSlClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FrenkSlClassification.v2",
-        description="""Slovenian subset of the FRENK dataset. Also available on HuggingFace dataset hub: English subset, Croatian subset.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Slovenian subset of the FRENK dataset. Also available on HuggingFace dataset hub: English subset, Croatian subset. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         dataset={
             "path": "mteb/frenk_sl",
             "revision": "3b69facc14651fbd152fda173683a7ecf9125b82",

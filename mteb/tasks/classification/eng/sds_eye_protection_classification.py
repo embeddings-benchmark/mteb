@@ -47,8 +47,7 @@ class SDSEyeProtectionClassification(AbsTaskClassification):
 class SDSEyeProtectionClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SDSEyeProtectionClassification.v2",
-        description="""ChemTEB evaluates the performance of text embedding models on chemical domain data.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="ChemTEB evaluates the performance of text embedding models on chemical domain data. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://arxiv.org/abs/2412.00532",
         dataset={
             "path": "mteb/sds_eye_protection",

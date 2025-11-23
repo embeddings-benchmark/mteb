@@ -9,7 +9,7 @@ from mteb.abstasks.zeroshot_classification import (
 class PatchCamelyonZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="PatchCamelyonZeroShot",
-        description="""Histopathology diagnosis classification dataset.""",
+        description="Histopathology diagnosis classification dataset.",
         reference="https://link.springer.com/chapter/10.1007/978-3-030-00934-2_24",
         dataset={
             "path": "clip-benchmark/wds_vtab-pcam",

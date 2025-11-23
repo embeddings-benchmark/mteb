@@ -17,11 +17,17 @@ potion_base_8m = ModelMeta(
     license="mit",
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["NumPy", "Sentence Transformers"],
-    reference="https://huggingface.co/minishlab/rasgaard/m2v-dfm-large",
+    reference="https://huggingface.co/rasgaard/m2v-dfm-large",
     use_instructions=False,
     adapted_from="KennethEnevoldsen/dfm-sentence-encoder-large",
     superseded_by=None,
     training_datasets=set(),  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data="https://huggingface.co/datasets/HuggingFaceFW/fineweb-2",  # distilled on this
+    citation="""@article{minishlab2024model2vec,
+    author = {Tulkens, Stephan and {van Dongen}, Thomas},
+    title = {Model2Vec: Fast State-of-the-Art Static Embeddings},
+    year = {2024},
+    url = {https://github.com/MinishLab/model2vec}
+}""",
 )

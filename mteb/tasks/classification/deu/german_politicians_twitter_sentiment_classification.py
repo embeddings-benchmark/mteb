@@ -56,8 +56,7 @@ Zesch, Torsten},
 class GermanPoliticiansTwitterSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="GermanPoliticiansTwitterSentimentClassification.v2",
-        description="""GermanPoliticiansTwitterSentiment is a dataset of German tweets categorized with their sentiment (3 classes).
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="GermanPoliticiansTwitterSentiment is a dataset of German tweets categorized with their sentiment (3 classes). This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://aclanthology.org/2022.konvens-1.9",
         dataset={
             "path": "mteb/german_politicians_twitter_sentiment",

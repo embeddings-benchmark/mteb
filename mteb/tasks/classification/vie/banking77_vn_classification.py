@@ -5,11 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class Banking77VNClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Banking77VNClassification",
-        description="""A translated dataset composed of online banking queries annotated with their corresponding intents.
-            The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-            - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-            - Applies advanced embedding models to filter the translations.
-            - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
+        description="A translated dataset composed of online banking queries annotated with their corresponding intents. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://arxiv.org/abs/2003.04807",
         dataset={
             "path": "GreenNode/banking77-vn",

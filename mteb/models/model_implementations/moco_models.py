@@ -10,6 +10,13 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
+MOCOV3_CITATION = """@Article{chen2021mocov3,
+    author  = {Xinlei Chen* and Saining Xie* and Kaiming He},
+    title   = {An Empirical Study of Training Self-Supervised Vision Transformers},
+    journal = {arXiv preprint arXiv:2104.02057},
+    year    = {2021},
+}"""
+
 
 def mocov3_loader(model_name, **kwargs):
     requires_package(mocov3_loader, "timm", model_name, "pip install 'mteb[timm]'")
@@ -129,6 +136,7 @@ mocov3_vit_base = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=mocov3_training_datasets,
+    citation=MOCOV3_CITATION,
 )
 
 mocov3_vit_large = ModelMeta(
@@ -151,4 +159,5 @@ mocov3_vit_large = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=mocov3_training_datasets,
+    citation=MOCOV3_CITATION,
 )

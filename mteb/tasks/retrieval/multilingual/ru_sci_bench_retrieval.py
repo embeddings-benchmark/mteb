@@ -68,11 +68,7 @@ class RuSciBenchCiteRetrieval(AbsTaskRetrieval):
             "path": "mlsa-iai-msu-lab/ru_sci_bench_cite_retrieval",
             "revision": "6cb447d02f41b8b775d5d9df7faf472f44d2f1db",
         },
-        description="""This task is focused on Direct Citation Prediction for scientific papers from eLibrary,
-        Russia's largest electronic library of scientific publications. Given a query paper (title and abstract),
-        the goal is to retrieve papers that are directly cited by it from a larger corpus of papers.
-        The dataset for this task consists of 3,000 query papers, 15,000 relevant (cited) papers,
-        and 75,000 irrelevant papers. The task is available for both Russian and English scientific texts.""",
+        description="This task is focused on Direct Citation Prediction for scientific papers from eLibrary, Russia's largest electronic library of scientific publications. Given a query paper (title and abstract), the goal is to retrieve papers that are directly cited by it from a larger corpus of papers. The dataset for this task consists of 3,000 query papers, 15,000 relevant (cited) papers, and 75,000 irrelevant papers. The task is available for both Russian and English scientific texts.",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="Retrieval",
         category="t2t",
@@ -130,13 +126,7 @@ class RuSciBenchCociteRetrieval(AbsTaskRetrieval):
             "path": "mlsa-iai-msu-lab/ru_sci_bench_cocite_retrieval",
             "revision": "a5da47a245275669d2b6ddf8f96c5338dd2428b4",
         },
-        description="""This task focuses on Co-citation Prediction for scientific papers from eLibrary,
-        Russia's largest electronic library of scientific publications. Given a query paper (title and abstract),
-        the goal is to retrieve other papers that are co-cited with it. Two papers are considered co-cited
-        if they are both cited by at least 5 of the same other papers. Similar to the Direct Citation task,
-        this task employs a retrieval setup: for a given query paper, all other papers in the corpus that
-        are not co-cited with it are considered negative examples. The task is available for both Russian
-        and English scientific texts.""",
+        description="This task focuses on Co-citation Prediction for scientific papers from eLibrary, Russia's largest electronic library of scientific publications. Given a query paper (title and abstract), the goal is to retrieve other papers that are co-cited with it. Two papers are considered co-cited if they are both cited by at least 5 of the same other papers. Similar to the Direct Citation task, this task employs a retrieval setup: for a given query paper, all other papers in the corpus that are not co-cited with it are considered negative examples. The task is available for both Russian and English scientific texts.",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="Retrieval",
         category="t2t",

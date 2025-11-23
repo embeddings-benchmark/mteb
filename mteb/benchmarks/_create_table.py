@@ -358,9 +358,7 @@ def _create_summary_table_mean_public_private(
         "mean(public)": "Mean (Public)",
         "mean(private)": "Mean (Private)",
     }
-    # For RTEB: all tasks are Retrieval type, so Retrieval column = Mean (Task)
-    if "Retrieval" in joint_table.columns:
-        rename_dict["Retrieval"] = "Mean (Task)"
+
     joint_table = joint_table.rename(columns=rename_dict)
 
     # Move borda rank to front

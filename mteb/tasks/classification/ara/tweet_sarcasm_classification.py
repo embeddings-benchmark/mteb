@@ -62,8 +62,7 @@ class TweetSarcasmClassificationV2(AbsTaskClassification):
             "path": "mteb/tweet_sarcasm",
             "revision": "3a20898e2ea3303844e907d55f7a815a7644150d",
         },
-        description="""Arabic sarcasm detection dataset, which was created through the reannotation of available Arabic sentiment analysis datasets.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",
+        description="Arabic sarcasm detection dataset, which was created through the reannotation of available Arabic sentiment analysis datasets. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)",
         reference="https://aclanthology.org/2020.osact-1.5/",
         type="Classification",
         category="t2c",

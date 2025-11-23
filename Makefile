@@ -19,6 +19,7 @@ lint-check:
 	# Required for CI to work, otherwise it will just pass
 	ruff format . --check						    # running ruff formatting
 	ruff check .    						        # running ruff linting
+	typos --diff
 
 test:
 	@echo "--- 🧪 Running tests ---"

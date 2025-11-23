@@ -36,8 +36,7 @@ class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
 class TeluguAndhraJyotiNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TeluguAndhraJyotiNewsClassification.v2",
-        description="""A Telugu dataset for 5-class classification of Telugu news articles
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="A Telugu dataset for 5-class classification of Telugu news articles This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://github.com/AnushaMotamarri/Telugu-Newspaper-Article-Dataset",
         dataset={
             "path": "mteb/telugu_andhra_jyoti_news",

@@ -5,12 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class TalemaaderPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="TalemaaderPC",
-        description="""\
-The Danish Language and Literature Society has developed a dataset for evaluating language models in Danish.
-The dataset contains a total of 1000 Danish idioms and fixed expressions with transferred meanings based on the Danish Dictionary's collection of fixed expressions with associated definitions.
-For each of the 1000 idioms and fixed expressions, three false definitions have also been prepared.
-The dataset can be used to test the performance of language models in identifying correct definitions for Danish idioms and fixed expressions.
-""",
+        description="\\ The Danish Language and Literature Society has developed a dataset for evaluating language models in Danish. The dataset contains a total of 1000 Danish idioms and fixed expressions with transferred meanings based on the Danish Dictionary's collection of fixed expressions with associated definitions. For each of the 1000 idioms and fixed expressions, three false definitions have also been prepared. The dataset can be used to test the performance of language models in identifying correct definitions for Danish idioms and fixed expressions.",
         reference="https://sprogteknologi.dk/dataset/1000-talemader-evalueringsdatasaet",
         dataset={
             "path": "mteb/talemaader_pc",

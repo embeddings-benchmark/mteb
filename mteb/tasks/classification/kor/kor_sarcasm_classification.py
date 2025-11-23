@@ -5,15 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class KorSarcasmClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="KorSarcasmClassification",
-        description="""
-        The Korean Sarcasm Dataset was created to detect sarcasm in text, which can significantly alter the original
-        meaning of a sentence. 9319 tweets were collected from Twitter and labeled for sarcasm or not_sarcasm. These
-        tweets were gathered by querying for: irony sarcastic, and
-        sarcasm.
-        The dataset was created by gathering HTML data from Twitter. Queries for hashtags that include sarcasm
-        and variants of it were used to return tweets. It was preprocessed by removing the keyword
-        hashtag, urls and mentions of the user to preserve anonymity.
-        """,
+        description="The Korean Sarcasm Dataset was created to detect sarcasm in text, which can significantly alter the original meaning of a sentence. 9319 tweets were collected from Twitter and labeled for sarcasm or not_sarcasm. These tweets were gathered by querying for: irony sarcastic, and sarcasm. The dataset was created by gathering HTML data from Twitter. Queries for hashtags that include sarcasm and variants of it were used to return tweets. It was preprocessed by removing the keyword hashtag, urls and mentions of the user to preserve anonymity.",
         dataset={
             "path": "mteb/KorSarcasmClassification",
             "revision": "6701f384372c04aa8c64b10582e72eb84135a1d4",
@@ -49,16 +41,7 @@ class KorSarcasmClassification(AbsTaskClassification):
 class KorSarcasmClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="KorSarcasmClassification.v2",
-        description="""
-        The Korean Sarcasm Dataset was created to detect sarcasm in text, which can significantly alter the original
-        meaning of a sentence. 9319 tweets were collected from Twitter and labeled for sarcasm or not_sarcasm. These
-        tweets were gathered by querying for: irony sarcastic, and
-        sarcasm.
-        The dataset was created by gathering HTML data from Twitter. Queries for hashtags that include sarcasm
-        and variants of it were used to return tweets. It was preprocessed by removing the keyword
-        hashtag, urls and mentions of the user to preserve anonymity.
-
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="The Korean Sarcasm Dataset was created to detect sarcasm in text, which can significantly alter the original meaning of a sentence. 9319 tweets were collected from Twitter and labeled for sarcasm or not_sarcasm. These tweets were gathered by querying for: irony sarcastic, and sarcasm. The dataset was created by gathering HTML data from Twitter. Queries for hashtags that include sarcasm and variants of it were used to return tweets. It was preprocessed by removing the keyword hashtag, urls and mentions of the user to preserve anonymity. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         dataset={
             "path": "mteb/kor_sarcasm",
             "revision": "0e5e17b4dba569776e445f5639ba13dc406b2b0e",

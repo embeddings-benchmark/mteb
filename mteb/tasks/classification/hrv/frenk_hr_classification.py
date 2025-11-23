@@ -42,8 +42,7 @@ class FrenkHrClassification(AbsTaskClassification):
 class FrenkHrClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FrenkHrClassification.v2",
-        description="""Croatian subset of the FRENK dataset
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Croatian subset of the FRENK dataset This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         dataset={
             "path": "mteb/frenk_hr",
             "revision": "09f90d0bee34d5e703caed26737166591a8f12b9",

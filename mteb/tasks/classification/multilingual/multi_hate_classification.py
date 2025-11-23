@@ -24,10 +24,7 @@ class MultiHateClassification(AbsTaskClassification):
             "path": "mteb/multi-hatecheck",
             "revision": "8f95949846bb9e33c6aaf730ccfdb8fe6bcfb7a9",
         },
-        description="""Hate speech detection dataset with binary
-                       (hateful vs non-hateful) labels. Includes 25+ distinct types of hate
-                       and challenging non-hate, and 11 languages.
-                     """,
+        description="Hate speech detection dataset with binary (hateful vs non-hateful) labels. Includes 25+ distinct types of hate and challenging non-hate, and 11 languages.",
         reference="https://aclanthology.org/2022.woah-1.15/",
         type="Classification",
         category="t2c",

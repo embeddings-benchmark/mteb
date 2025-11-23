@@ -15,6 +15,8 @@ ACCEPTED_PRIVATE_TASKS = [
     "GermanHealthcare1Retrieval",
     "GermanLegal1Retrieval",
     "JapaneseLegal1Retrieval",
+    "Vidore3TelecomRetrieval",
+    "Vidore3NuclearRetrieval",
     # Add task names here that are allowed to be private
 ]
 

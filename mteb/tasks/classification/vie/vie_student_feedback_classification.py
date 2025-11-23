@@ -45,8 +45,7 @@ class VieStudentFeedbackClassification(AbsTaskClassification):
 class VieStudentFeedbackClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="VieStudentFeedbackClassification.v2",
-        description="""A Vietnamese dataset for classification of student feedback
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="A Vietnamese dataset for classification of student feedback This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://ieeexplore.ieee.org/document/8573337",
         dataset={
             "path": "mteb/vie_student_feedback",

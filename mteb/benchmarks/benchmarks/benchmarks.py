@@ -1,4 +1,9 @@
-from mteb.benchmarks.benchmark import Benchmark, HUMEBenchmark, MIEBBenchmark
+from mteb.benchmarks.benchmark import (
+    Benchmark,
+    HUMEBenchmark,
+    MIEBBenchmark,
+    VidoreBenchmark,
+)
 from mteb.get_tasks import MTEBTasks, get_task, get_tasks
 
 MMTEB_CITATION = r"""@article{enevoldsen2025mmtebmassivemultilingualtext,
@@ -1642,7 +1647,7 @@ MTEB_NL = Benchmark(
             exclusive_language_filter=True,
             tasks=[
                 # Classification
-                "DutchBookReviewSentimentClassification",
+                "DutchBookReviewSentimentClassification.v2",
                 "MassiveIntentClassification",
                 "MassiveScenarioClassification",
                 "SIB200Classification",
@@ -1673,10 +1678,10 @@ MTEB_NL = Benchmark(
                 # # Reranking
                 "WikipediaRerankingMultilingual",
                 # # Retrieval
-                "ArguAna-NL",
-                "SCIDOCS-NL",
-                "SciFact-NL",
-                "NFCorpus-NL",
+                "ArguAna-NL.v2",
+                "SCIDOCS-NL.v2",
+                "SciFact-NL.v2",
+                "NFCorpus-NL.v2",
                 "BelebeleRetrieval",
                 "WebFAQRetrieval",
                 "DutchNewsArticlesRetrieval",
@@ -2214,10 +2219,43 @@ VIDORE_V2 = Benchmark(
 """,
 )
 
-VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
-    name="VisualDocumentRetrieval",
-    display_name="Visual Document Retrieval",
-    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-picture.svg",
+VIDORE_V3 = VidoreBenchmark(
+    name="ViDoRe(v3)",
+    display_name="ViDoRe V3",
+    icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
+    tasks=get_tasks(
+        tasks=[
+            "Vidore3FinanceEnRetrieval",
+            "Vidore3IndustrialRetrieval",
+            "Vidore3ComputerScienceRetrieval",
+            "Vidore3PharmaceuticalsRetrieval",
+            "Vidore3HrRetrieval",
+            "Vidore3FinanceFrRetrieval",
+            "Vidore3PhysicsRetrieval",
+            "Vidore3EnergyRetrieval",
+            "Vidore3TelecomRetrieval",
+            "Vidore3NuclearRetrieval",
+        ]
+    ),
+    description="ViDoRe V3 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents. The benchmark includes both open and closed datasets: to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
+    reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
+    citation=r"""
+@misc{mace2025vidorev3,
+  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
+  day = {5},
+  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
+  journal = {Hugging Face Blog},
+  month = {November},
+  publisher = {Hugging Face},
+  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
+  year = {2025},
+}
+""",
+)
+
+VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
+    name="ViDoRe(v1&v2)",
+    display_name="ViDoRe (V1&V2)",
     tasks=get_tasks(
         tasks=[
             # v1

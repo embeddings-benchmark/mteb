@@ -112,7 +112,7 @@ class CachedEmbeddingWrapper:
                     dataset,
                     task_metadata=task_metadata,
                     prompt_type=prompt_type,
-                    batch_size=batch_size,
+                    **kwargs,
                 )
                 new_vectors = self._model.encode(
                     dl,

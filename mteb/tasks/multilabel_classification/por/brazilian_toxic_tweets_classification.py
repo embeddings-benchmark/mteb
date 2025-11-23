@@ -7,12 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
         name="BrazilianToxicTweetsClassification",
-        description="""
-        ToLD-Br is the biggest dataset for toxic tweets in Brazilian Portuguese, crowdsourced by 42 annotators selected from
-        a pool of 129 volunteers. Annotators were selected aiming to create a plural group in terms of demographics (ethnicity,
-        sexual orientation, age, gender). Each tweet was labeled by three annotators in 6 possible categories: LGBTQ+phobia,
-        Xenophobia, Obscene, Insult, Misogyny and Racism.
-        """,
+        description="ToLD-Br is the biggest dataset for toxic tweets in Brazilian Portuguese, crowdsourced by 42 annotators selected from a pool of 129 volunteers. Annotators were selected aiming to create a plural group in terms of demographics (ethnicity, sexual orientation, age, gender). Each tweet was labeled by three annotators in 6 possible categories: LGBTQ+phobia, Xenophobia, Obscene, Insult, Misogyny and Racism.",
         reference="https://paperswithcode.com/dataset/told-br",
         dataset={
             "path": "mteb/BrazilianToxicTweetsClassification",

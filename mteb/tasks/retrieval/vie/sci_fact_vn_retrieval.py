@@ -9,11 +9,7 @@ class SciFactVN(AbsTaskRetrieval):
             "path": "GreenNode/scifact-vn",
             "revision": "483a7cf890c523c954e7751d328c5bb65061dcff",
         },
-        description="""A translated dataset from SciFact verifies scientific claims using evidence from the research literature containing scientific paper abstracts.
-            The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-            - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-            - Applies advanced embedding models to filter the translations.
-            - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
+        description="A translated dataset from SciFact verifies scientific claims using evidence from the research literature containing scientific paper abstracts. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://github.com/allenai/scifact",
         type="Retrieval",
         category="t2t",

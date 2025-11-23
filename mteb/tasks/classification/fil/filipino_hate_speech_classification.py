@@ -44,8 +44,7 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
 class FilipinoHateSpeechClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FilipinoHateSpeechClassification.v2",
-        description="""Filipino Twitter dataset for sentiment classification.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Filipino Twitter dataset for sentiment classification. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://pcj.csp.org.ph/index.php/pcj/issue/download/29/PCJ%20V14%20N1%20pp1-14%202019",
         dataset={
             "path": "mteb/filipino_hate_speech",

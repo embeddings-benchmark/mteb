@@ -39,6 +39,7 @@ def _get_previous_benchmark_names() -> dict[str, str]:
         MTEB_RETRIEVAL_MEDICAL,
         MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
         SEB,
+        VISUAL_DOCUMENT_RETRIEVAL,
         MTEB_code,
         MTEB_multilingual_v2,
     )
@@ -63,6 +64,7 @@ def _get_previous_benchmark_names() -> dict[str, str]:
         "MTEB(Chinese)": C_MTEB.name,
         "FaMTEB(fas, beta)": FA_MTEB.name,
         "BRIGHT(long)": BRIGHT_LONG.name,
+        "VisualDocumentRetrieval": VISUAL_DOCUMENT_RETRIEVAL.name,
     }
     return previous_benchmark_names
 

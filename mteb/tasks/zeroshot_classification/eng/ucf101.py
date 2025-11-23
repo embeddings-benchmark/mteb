@@ -7,11 +7,7 @@ from mteb.abstasks.zeroshot_classification import (
 class UCF101ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="UCF101ZeroShot",
-        description="""UCF101 is an action recognition data set of realistic
-action videos collected from YouTube, having 101 action categories. This
-version of the dataset does not contain images but images saved frame by
-frame. Train and test splits are generated based on the authors' first
-version train/test list.""",
+        description="UCF101 is an action recognition data set of realistic action videos collected from YouTube, having 101 action categories. This version of the dataset does not contain images but images saved frame by frame. Train and test splits are generated based on the authors' first version train/test list.",
         reference="https://huggingface.co/datasets/flwrlabs/ucf101",
         dataset={
             "path": "flwrlabs/ucf101",

@@ -1,6 +1,15 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
+CODESAGE_CITATION = """@inproceedings{
+    zhang2024code,
+    title={{CODE} {REPRESENTATION} {LEARNING} {AT} {SCALE}},
+    author={Dejiao Zhang and Wasi Uddin Ahmad and Ming Tan and Hantian Ding and Ramesh Nallapati and Dan Roth and Xiaofei Ma and Bing Xiang},
+    booktitle={The Twelfth International Conference on Learning Representations},
+    year={2024},
+    url={https://openreview.net/forum?id=vfzRRjumpX}
+}"""
+
 codesage_languages = [
     "python-Code",
     "javascript-Code",
@@ -33,6 +42,7 @@ codesage_large = ModelMeta(
         "CodeSearchNetRetrieval",
         "CodeSearchNetCCRetrieval",
     },
+    citation=CODESAGE_CITATION,
 )
 
 codesage_base = ModelMeta(
@@ -58,6 +68,7 @@ codesage_base = ModelMeta(
         "CodeSearchNetRetrieval",
         "CodeSearchNetCCRetrieval",
     },
+    citation=CODESAGE_CITATION,
 )
 
 codesage_small = ModelMeta(
@@ -83,4 +94,5 @@ codesage_small = ModelMeta(
         "CodeSearchNetRetrieval",
         "CodeSearchNetCCRetrieval",
     },
+    citation=CODESAGE_CITATION,
 )

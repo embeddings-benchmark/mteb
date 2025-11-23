@@ -46,10 +46,17 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
             split=_EVAL_SPLIT,
             revision=self.metadata.dataset["revision"],
         )
-        question_ids = {
-            question: _id for _id, question in enumerate(set(data["question"]))
-        }
-        answer_ids = {answer: _id for _id, answer in enumerate(set(data["answer"]))}
+
+        question_ids = {}
+        answer_ids = {}
+
+        for row in data:
+            question = row["question"]
+            answer = row["answer"]
+            if question not in question_ids:
+                question_ids[question] = len(question_ids)
+            if answer not in answer_ids:
+                answer_ids[answer] = len(answer_ids)
 
         for row in data:
             question = row["question"]

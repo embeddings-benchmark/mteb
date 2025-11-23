@@ -9,11 +9,7 @@ class MTOPIntentVNClassification(AbsTaskClassification):
             "path": "GreenNode/mtop-intent-vn",
             "revision": "c4e81a5c9a813a0142d905e261e5a446cc6fbc4a",
         },
-        description="""A translated dataset from MTOP: Multilingual Task-Oriented Semantic Parsing
-            The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-            - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-            - Applies advanced embedding models to filter the translations.
-            - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
+        description="A translated dataset from MTOP: Multilingual Task-Oriented Semantic Parsing The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://arxiv.org/pdf/2008.09335.pdf",
         category="t2c",
         type="Classification",

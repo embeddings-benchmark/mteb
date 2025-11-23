@@ -52,8 +52,7 @@ class ItalianLinguisticAcceptabilityClassificationV2(AbsTaskClassification):
             "path": "mteb/italian_linguistic_acceptability",
             "revision": "4550151a0f0433e65df172c088427063e376ce81",
         },
-        description="""An Italian Corpus of Linguistic Acceptability taken from linguistic literature with a binary annotation made by the original authors themselves.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="An Italian Corpus of Linguistic Acceptability taken from linguistic literature with a binary annotation made by the original authors themselves. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://aclanthology.org/2021.findings-emnlp.250/",
         type="Classification",
         category="t2c",

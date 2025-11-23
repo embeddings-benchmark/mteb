@@ -9,11 +9,7 @@ class BiossesSTSVN(AbsTaskSTS):
             "path": "GreenNode/biosses-sts-vn",
             "revision": "1dae4a6df91c0852680cd4ab48c8c1d8a9ed49b2",
         },
-        description="""A translated dataset from Biomedical Semantic Similarity Estimation.
-            The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-            - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-            - Applies advanced embedding models to filter the translations.
-            - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
+        description="A translated dataset from Biomedical Semantic Similarity Estimation. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html",
         type="STS",
         category="t2c",

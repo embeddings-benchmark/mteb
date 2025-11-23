@@ -42,8 +42,7 @@ class KurdishSentimentClassification(AbsTaskClassification):
 class KurdishSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="KurdishSentimentClassification.v2",
-        description="""Kurdish Sentiment Dataset
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Kurdish Sentiment Dataset This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://link.springer.com/article/10.1007/s10579-023-09716-6",
         dataset={
             "path": "mteb/kurdish_sentiment",

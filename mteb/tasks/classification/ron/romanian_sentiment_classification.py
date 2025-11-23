@@ -41,8 +41,7 @@ class RomanianSentimentClassification(AbsTaskClassification):
 class RomanianSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="RomanianSentimentClassification.v2",
-        description="""An Romanian dataset for sentiment classification.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="An Romanian dataset for sentiment classification. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://arxiv.org/abs/2009.08712",
         dataset={
             "path": "mteb/romanian_sentiment",

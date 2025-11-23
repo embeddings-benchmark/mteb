@@ -48,4 +48,10 @@ piccolo_large_zh_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,  # They don't say
+    citation="""@misc{2405.06932,
+    Author = {Junqin Huang and Zhongjie Hu and Zihao Jing and Mengya Gao and Yichao Wu},
+    Title = {Piccolo2: General Text Embedding with Multi-task Hybrid Loss Training},
+    Year = {2024},
+    Eprint = {arXiv:2405.06932},
+}""",
 )

@@ -50,8 +50,7 @@ M{\`a}rquez, Llu{\'\i}s},
 class PatentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PatentClassification.v2",
-        description="""Classification Dataset of Patents and Abstract
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Classification Dataset of Patents and Abstract This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         dataset={
             "path": "mteb/patent",
             "revision": "f5e5c81286448c68264300fe1e6f3de599922890",

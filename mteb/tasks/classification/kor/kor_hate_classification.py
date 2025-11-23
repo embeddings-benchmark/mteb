@@ -5,14 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class KorHateClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="KorHateClassification",
-        description="""The dataset was created to provide the first human-labeled Korean corpus for
-        toxic speech detection from a Korean online entertainment news aggregator. Recently,
-        two young Korean celebrities suffered from a series of tragic incidents that led to two
-        major Korean web portals to close the comments section on their platform. However, this only
-        serves as a temporary solution, and the fundamental issue has not been solved yet. This dataset
-        hopes to improve Korean hate speech detection. Annotation was performed by 32 annotators,
-        consisting of 29 annotators from the crowdsourcing platform DeepNatural AI and three NLP researchers.
-        """,
+        description="The dataset was created to provide the first human-labeled Korean corpus for toxic speech detection from a Korean online entertainment news aggregator. Recently, two young Korean celebrities suffered from a series of tragic incidents that led to two major Korean web portals to close the comments section on their platform. However, this only serves as a temporary solution, and the fundamental issue has not been solved yet. This dataset hopes to improve Korean hate speech detection. Annotation was performed by 32 annotators, consisting of 29 annotators from the crowdsourcing platform DeepNatural AI and three NLP researchers.",
         dataset={
             "path": "mteb/KorHateClassification",
             "revision": "a4e70398c3689a5f55cd1f4a447d8d2da0a7dd1e",
@@ -48,15 +41,7 @@ class KorHateClassification(AbsTaskClassification):
 class KorHateClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="KorHateClassification.v2",
-        description="""The dataset was created to provide the first human-labeled Korean corpus for
-        toxic speech detection from a Korean online entertainment news aggregator. Recently,
-        two young Korean celebrities suffered from a series of tragic incidents that led to two
-        major Korean web portals to close the comments section on their platform. However, this only
-        serves as a temporary solution, and the fundamental issue has not been solved yet. This dataset
-        hopes to improve Korean hate speech detection. Annotation was performed by 32 annotators,
-        consisting of 29 annotators from the crowdsourcing platform DeepNatural AI and three NLP researchers.
-
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="The dataset was created to provide the first human-labeled Korean corpus for toxic speech detection from a Korean online entertainment news aggregator. Recently, two young Korean celebrities suffered from a series of tragic incidents that led to two major Korean web portals to close the comments section on their platform. However, this only serves as a temporary solution, and the fundamental issue has not been solved yet. This dataset hopes to improve Korean hate speech detection. Annotation was performed by 32 annotators, consisting of 29 annotators from the crowdsourcing platform DeepNatural AI and three NLP researchers. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         dataset={
             "path": "mteb/kor_hate",
             "revision": "5d64e6dcbe9204c934e9a3852b1130a6f2d51ad4",
