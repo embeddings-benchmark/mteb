@@ -9,7 +9,7 @@ class WinoGrande(AbsTaskRetrieval):
         reference="https://winogrande.allenai.org/",
         dataset={
             "path": "mteb/WinoGrande",
-            "revision": "770abbd7f77affc005f9734996e795925cbc0f65",
+            "revision": "4dec9c5666e9f84702ac614363db6d96a68bc6de",
         },
         type="Retrieval",
         category="t2t",

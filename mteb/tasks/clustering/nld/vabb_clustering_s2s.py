@@ -39,6 +39,9 @@ class VABBClusteringS2S(AbsTaskClustering):
   year = {2024},
 }
 """,
+        prompt={
+            "query": "Identificeer de hoofdcategorie van wetenschappelijke artikelen op basis van de titels"
+        },
     )
 
     def dataset_transform(self):

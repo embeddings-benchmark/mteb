@@ -107,6 +107,7 @@ The domains follow the categories used in the [Universal Dependencies project](h
 SampleCreationMethod = Literal[
     "found",
     "created",
+    "created and machine-translated",
     "human-translated and localized",
     "human-translated",
     "machine-translated",
@@ -532,7 +533,7 @@ class TaskMetadata(BaseModel):
                 citation=self.bibtex_citation,
                 dataset_description=self.description,
                 dataset_reference=self.reference,
-                descritptive_stats=descriptive_stats,
+                descriptive_stats=descriptive_stats,
                 dataset_task_name=self.name,
                 category=self.category,
                 domains=", ".join(self.domains) if self.domains else None,

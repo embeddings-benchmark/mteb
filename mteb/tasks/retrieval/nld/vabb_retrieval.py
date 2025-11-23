@@ -38,4 +38,7 @@ class VABBRetrieval(AbsTaskRetrieval):
   year = {2024},
 }
 """,
+        prompt={
+            "query": "Gegeven een titel, haal de wetenschappelijke abstract op die het beste bij de titel past"
+        },
     )

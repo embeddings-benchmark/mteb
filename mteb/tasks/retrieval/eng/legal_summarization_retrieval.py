@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class LegalSummarization(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="LegalSummarization",
-        description="The dataset consistes of 439 pairs of contracts and their summarizations from https://tldrlegal.com and https://tosdr.org/.",
+        description="The dataset consists of 439 pairs of contracts and their summarizations from https://tldrlegal.com and https://tosdr.org/.",
         reference="https://github.com/lauramanor/legal_summarization",
         dataset={
             "path": "mteb/legal_summarization",

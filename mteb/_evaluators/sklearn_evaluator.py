@@ -6,7 +6,7 @@ from datasets import Dataset
 from torch.utils.data import DataLoader
 from typing_extensions import Self
 
-from mteb._create_dataloaders import _create_image_dataloader
+from mteb._create_dataloaders import create_dataloader
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import EncoderProtocol
 from mteb.types import BatchedInput
@@ -50,33 +50,20 @@ class SklearnEvaluator(Evaluator):
         self.evaluator_model = evaluator_model
 
     def create_dataloaders(
-        self, batch_size: int
+        self, encode_kwargs: dict[str, Any]
     ) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
-        if self.task_metadata.modalities == ["image"]:
-            dataloader_train = _create_image_dataloader(
-                self.train_dataset,
-                image_column_name=self.values_column_name,
-                batch_size=batch_size,
-            )
-            dataloader_test = _create_image_dataloader(
-                self.eval_dataset,
-                image_column_name=self.values_column_name,
-                batch_size=batch_size,
-            )
-        elif self.task_metadata.modalities == ["text"]:
-            if self.values_column_name != "text":
-                self.train_dataset = self.train_dataset.rename_column(
-                    self.values_column_name, "text"
-                )
-                self.eval_dataset = self.eval_dataset.rename_column(
-                    self.values_column_name, "text"
-                )
-            dataloader_train = DataLoader(self.train_dataset)
-            dataloader_test = DataLoader(self.eval_dataset)
-        else:
-            raise ValueError(
-                "ClassificationEvaluator only supports image and text modalities."
-            )
+        dataloader_train = create_dataloader(
+            self.train_dataset,
+            self.task_metadata,
+            input_column=self.values_column_name,
+            **encode_kwargs,
+        )
+        dataloader_test = create_dataloader(
+            self.eval_dataset,
+            self.task_metadata,
+            input_column=self.values_column_name,
+            **encode_kwargs,
+        )
         return dataloader_train, dataloader_test
 
     def __call__(  # type: ignore[override]
@@ -98,7 +85,7 @@ class SklearnEvaluator(Evaluator):
 
         """
         dataloader_train, dataloader_test = self.create_dataloaders(
-            batch_size=encode_kwargs["batch_size"]
+            encode_kwargs=encode_kwargs,
         )
 
         logger.info("Running - Encoding samples...")

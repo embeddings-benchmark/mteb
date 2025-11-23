@@ -57,8 +57,7 @@ Tan, Liling},
 class NepaliNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="NepaliNewsClassification.v2",
-        description="""A Nepali dataset for 7500 news articles
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="A Nepali dataset for 7500 news articles This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://github.com/goru001/nlp-for-nepali",
         dataset={
             "path": "mteb/nepali_news",

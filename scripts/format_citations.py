@@ -351,7 +351,7 @@ def main():
     benchmarks_parser.add_argument(
         "--benchmarks_file",
         type=str,
-        default=str(Path("mteb/benchmarks/benchmarks.py")),
+        default=str(Path("mteb/benchmarks/benchmarks/benchmarks.py")),
         help="Path to the benchmarks.py file.",
     )
     benchmarks_parser.add_argument(

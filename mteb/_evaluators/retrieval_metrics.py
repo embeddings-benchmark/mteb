@@ -5,21 +5,12 @@ from typing import Any
 import numpy as np
 import pandas as pd
 import pytrec_eval
-import torch
 from packaging.version import Version
 from sklearn.metrics import auc
 
 from mteb.types import RelevantDocumentsType, RetrievalEvaluationResult
 
 logger = logging.getLogger(__name__)
-
-
-try:
-    # speeds up computation if available
-    torch.set_float32_matmul_precision("high")
-    logger.info("Setting torch float32 matmul precision to high for a speedup")
-except Exception:
-    pass
 
 
 def mrr(

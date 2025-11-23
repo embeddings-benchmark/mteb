@@ -56,7 +56,7 @@ Derczynski, Leon},
         self.data_loaded = True
 
     def dataset_transform(self) -> None:
-        """And transform to a retrieval datset, which have the following attributes
+        """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text
         self.queries = dict[query_id, str] #id => query

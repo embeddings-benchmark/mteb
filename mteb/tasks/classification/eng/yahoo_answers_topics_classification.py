@@ -46,8 +46,7 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
 class YahooAnswersTopicsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="YahooAnswersTopicsClassification.v2",
-        description="""Dataset composed of questions and answers from Yahoo Answers, categorized into topics.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Dataset composed of questions and answers from Yahoo Answers, categorized into topics. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://huggingface.co/datasets/yahoo_answers_topics",
         dataset={
             "path": "mteb/yahoo_answers_topics",

@@ -42,14 +42,14 @@ class ZeroShotClassificationEvaluator(Evaluator):
     ) -> Array:
         dataloader = create_dataloader(
             self.dataset,
-            batch_size=encode_kwargs["batch_size"],
             input_column=self.input_column_name,
             task_metadata=self.task_metadata,
+            **encode_kwargs,
         )
 
         logger.info("Running zero-shot classification - Encoding labels...")
         text_label_embeddings = model.encode(
-            _create_dataloader_from_texts(self.candidate_labels),
+            _create_dataloader_from_texts(self.candidate_labels, **encode_kwargs),
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,
             hf_split=self.hf_split,

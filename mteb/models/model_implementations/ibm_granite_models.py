@@ -79,7 +79,7 @@ granite_training_data = {
     "MIRACLReranking",
     # Multilingual MrTydi Triples
     "MrTidyRetrieval",
-    # Sadeeem Question Asnwering
+    # Sadeeem Question Answering
     # DBPedia Title-Body Pairs
     "DBPedia",
     "DBPedia-NL",  # translated from hotpotQA (not trained on)

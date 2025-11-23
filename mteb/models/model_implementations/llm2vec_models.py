@@ -23,7 +23,7 @@ def llm2vec_instruction(instruction):
 
 llm2vec_supervised_training_data = {
     # source, section g1: https://arxiv.org/pdf/2404.05961
-    # splits assumed but unkown
+    # splits assumed but unknown
     "HotpotQA",
     "HotpotQA-PL",  # translation not trained on
     "HotpotQA-NL",  # translation not trained on

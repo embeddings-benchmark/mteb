@@ -43,8 +43,7 @@ class TenKGnadClassification(AbsTaskClassification):
 class TenKGnadClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TenKGnadClassification.v2",
-        description="""10k German News Articles Dataset (10kGNAD) contains news articles from the online Austrian newspaper website DER Standard with their topic classification (9 classes).
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="10k German News Articles Dataset (10kGNAD) contains news articles from the online Austrian newspaper website DER Standard with their topic classification (9 classes). This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://tblock.github.io/10kGNAD/",
         dataset={
             "path": "mteb/ten_k_gnad",

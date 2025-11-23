@@ -524,13 +524,13 @@ class SearchCrossEncoderWrapper:
             Dataset.from_list(total_queries),
             task_metadata,
             prompt_type=PromptType.document,
-            batch_size=encode_kwargs.get("batch_size", 32),
+            **encode_kwargs,
         )
         corpus_loader = create_dataloader(
             Dataset.from_list(total_docs),
             task_metadata,
             prompt_type=PromptType.document,
-            batch_size=encode_kwargs.get("batch_size", 32),
+            **encode_kwargs,
         )
         predictions = self.model.predict(
             inputs1=queries_loader,

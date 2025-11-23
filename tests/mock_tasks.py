@@ -1,9 +1,12 @@
 """This implements minimal viable mock tasks for testing the benchmarking framework."""
 
+import datasets
 from datasets import Dataset, DatasetDict
 from PIL import Image
 from sklearn.linear_model import LogisticRegression
 
+from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
@@ -1704,7 +1707,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
 
 
 class MockRetrievalTask(AbsTaskRetrieval):
-    _top_k = 1
+    _top_k = 2
     expected_stats = {
         "val": {
             "num_samples": 4,
@@ -2625,6 +2628,19 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
             "fra": {"test": base_datasplit, "val": base_datasplit},
         }
         self.data_loaded = True
+
+
+class MockAggregatedTask(AbsTaskAggregate):
+    metadata = AggregateTaskMetadata(
+        type="InstructionReranking",
+        name="MockMultilingualInstructionReranking",
+        main_score="ndcg_at_10",
+        tasks=[
+            MockRetrievalTask(),
+            MockRerankingTask(),
+        ],
+        **general_args,  # type: ignore
+    )
 
 
 class MockMultiChoiceTask(AbsTaskRetrieval):
@@ -3948,6 +3964,8 @@ class MockVisualSTSTask(AbsTaskSTS):
                 ),
             }
         )
+        self.dataset = self.dataset.cast_column("sentence1", datasets.Image())
+        self.dataset = self.dataset.cast_column("sentence2", datasets.Image())
         self.data_loaded = True
 
 

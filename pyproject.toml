@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.1.0"
+version = "2.1.17"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -29,7 +29,7 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
 ]
-requires-python = ">=3.10,<3.14"
+requires-python = ">=3.10,<3.15"
 dependencies = [
     "datasets>=2.19.0",
     "numpy>=1.0.0,<3.0.0",
@@ -60,7 +60,7 @@ mteb = "mteb.cli:main"
 image = ["torchvision>0.2.1"]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
-    "gradio==5.35.0",
+    "gradio==5.49.1",
     "plotly>=5.24.0,<6.0.0",
     "cachetools>=5.2.0",
     "matplotlib>=3.9.4",
@@ -98,7 +98,8 @@ faiss-cpu = ["faiss-cpu>=1.12.0"]
 lint = [
     "ruff==0.14.0", # locked so we don't get PRs which fail only due to a lint update
     "pre-commit>=4.1.0",
-    "bibtexparser>=1.4.3" # used for tests/test_citation_formatting.py
+    "bibtexparser>=1.4.3", # used for tests/test_citation_formatting.py
+    "typos>1",
 ]
 test = [
     "pytest>=8.3.4,<8.4.0",
@@ -251,6 +252,22 @@ convention = "google"
 mypy-init-return = true
 suppress-none-returning = true
 
+[tool.semantic_release]
+branch = "main"
+version_toml = ["pyproject.toml:project.version"]
+build_command = "python -m pip install build; python -m build"
+tag_format = "{version}"
+
+[tool.semantic_release.commit_parser_options]
+minor_tags = ["minor", "feat"]
+patch_tags = [
+    "patch",
+    "fix",
+    "perf",
+    "model",
+    "dataset",
+]
+
 [tool.pytest.ini_options]
 addopts = """
             --reruns 3
@@ -318,3 +335,80 @@ ignore_errors = true
 # mypy can't resolve dataset dict
 module = ["mteb.abstasks.*"]
 disable_error_code = ["index"]
+
+[tool.typos.default]
+binary = false
+locale = "en"
+extend-ignore-words-re = [
+    # authors
+    "Stap",
+    "Asai",
+    "Tung",
+    "Gool",
+    "Winn",
+    "STIL",
+    "Sherif",
+    "Mor",
+    "Ond",
+    "Mehta",
+    "Parth",
+    # languages/bibtext artifacts
+    "ba",
+    "creen",
+    "Accademia",
+]
+extend-ignore-re = [
+    "author.*",  # ignore authors in citations
+]
+
+[tool.typos.files]
+extend-exclude = [
+    "*.json",
+    "*.jsonl",
+    "*.cff",
+    "*.txt",  # zero shot labels
+    "docs/mmteb",
+    "scripts/",
+    "docs/references.bib",
+    "mteb/models/model_implementations/gme_v_models.py",  # video_grid_thw `thw`
+    "mteb/models/model_implementations/vista_models.py",  # self.normlized: in visual bge
+    "tests/mock_tasks.py",  #  "denne her matche ikke den ovenstående",
+    "mteb/models/model_implementations/kalm_models.py",  # prompt:  classify ist topic",
+    "mteb/tasks/reranking/eng/built_bench_reranking.py",  # prompt:   descriptions from buit asset
+    "mteb/tasks/retrieval/eng/built_bench_retrieval.py",
+    "mteb/tasks/retrieval/eng/llava_it2t_retrieval.py",
+    # dutch prompts
+    "mteb/tasks/classification/nld/",
+    "mteb/tasks/clustering/nld/",
+    "mteb/tasks/multilabel_classification/nld/",
+    "mteb/tasks/pair_classification/nld/",
+    "mteb/tasks/sts/nld/",
+    "mteb/tasks/retrieval/nld/",
+]
+
+[tool.typos.type.py]
+extend-ignore-re = [
+    # ignore lang identifiers
+    "...-....",
+    "..._....",
+]
+
+[tool.typos.type.py.extend-identifiers]
+BulgarianStoreReviewSentimentClassfication = "BulgarianStoreReviewSentimentClassfication"
+
+[tool.typos.type.py.extend-words]
+wdth = "wdth"
+Allo = "Allo"   # AlloProfClusteringS2S.v2
+# langs/splits
+som = "som"
+yor = "yor"
+Beng = "Beng"
+als = "als"
+tha = "tha"
+mak = "mak"
+Maka = "Maka"
+Mape = "Mape"
+Mian = "Mian"
+Ono = "Ono"
+Yau = "Yau"
+Altas = "Altas"

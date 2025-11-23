@@ -69,8 +69,7 @@ class DdiscoCohesionClassificationV2(AbsTaskClassification):
             "path": "mteb/ddisco_cohesion",
             "revision": "b5a05bdecdfc6efc14eebc8f7a86e0986edaf5ff",
         },
-        description="""A Danish Discourse dataset with values for coherence and source (Wikipedia or Reddit)
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="A Danish Discourse dataset with values for coherence and source (Wikipedia or Reddit) This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://aclanthology.org/2022.lrec-1.260/",
         type="Classification",
         category="t2c",

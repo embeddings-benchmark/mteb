@@ -22,6 +22,7 @@ from .cirr_it2i_retrieval import CIRRIT2IRetrieval
 from .climate_fever_retrieval import (
     ClimateFEVER,
     ClimateFEVERHardNegatives,
+    ClimateFEVERHardNegativesV2,
     ClimateFEVERRetrievalv2,
 )
 from .cqa_dupstack_android_retrieval import CQADupstackAndroidRetrieval
@@ -57,7 +58,7 @@ from .dapfam_patent_retrieval import (
     DAPFAMOutTitlAbsToTitlAbsClmRetrieval,
     DAPFAMOutTitlAbsToTitlAbsRetrieval,
 )
-from .dbpedia_retrieval import DBPedia, DBPediaHardNegatives
+from .dbpedia_retrieval import DBPedia, DBPediaHardNegatives, DBPediaHardNegativesV2
 from .edis_t2it_retrieval import EDIST2ITRetrieval
 from .encyclopedia_vqa_it2it_retrieval import EncyclopediaVQAIT2ITRetrieval
 from .english_finance1_retrieval import EnglishFinance1Retrieval
@@ -70,7 +71,7 @@ from .fashion200k_i2t_retrieval import Fashion200kI2TRetrieval
 from .fashion200k_t2i_retrieval import Fashion200kT2IRetrieval
 from .fashion_iq_it2i_retrieval import FashionIQIT2IRetrieval
 from .feedback_qa_retrieval import FeedbackQARetrieval
-from .fever_retrieval import FEVER, FEVERHardNegatives
+from .fever_retrieval import FEVER, FEVERHardNegatives, FEVERHardNegativesV2
 from .fi_qa2018_retrieval import FiQA2018
 from .fin_qa_retrieval import FinQARetrieval
 from .finance_bench_retrieval import FinanceBenchRetrieval
@@ -85,7 +86,11 @@ from .hateful_memes_i2t_retrieval import HatefulMemesI2TRetrieval
 from .hateful_memes_t2i_retrieval import HatefulMemesT2IRetrieval
 from .hc3_finance_retrieval import HC3FinanceRetrieval
 from .hella_swag_retrieval import HellaSwag
-from .hotpot_qa_retrieval import HotpotQA, HotpotQAHardNegatives
+from .hotpot_qa_retrieval import (
+    HotpotQA,
+    HotpotQAHardNegatives,
+    HotpotQAHardNegativesV2,
+)
 from .image_co_de_t2i_retrieval import ImageCoDeT2IRetrieval
 from .info_seek_it2it_retrieval import InfoSeekIT2ITRetrieval
 from .info_seek_it2t_retrieval import InfoSeekIT2TRetrieval
@@ -133,7 +138,11 @@ from .oven_it2it_retrieval import OVENIT2ITRetrieval
 from .oven_it2t_retrieval import OVENIT2TRetrieval
 from .piqa_retrieval import PIQA
 from .quail_retrieval import Quail
-from .quora_retrieval import QuoraRetrieval, QuoraRetrievalHardNegatives
+from .quora_retrieval import (
+    QuoraRetrieval,
+    QuoraRetrievalHardNegatives,
+    QuoraRetrievalHardNegativesV2,
+)
 from .r2_med_retrieval import (
     R2MEDBioinformaticsRetrieval,
     R2MEDBiologyRetrieval,
@@ -247,6 +256,7 @@ __all__ = [
     "ChemNQRetrieval",
     "ClimateFEVER",
     "ClimateFEVERHardNegatives",
+    "ClimateFEVERHardNegativesV2",
     "ClimateFEVERRetrievalv2",
     "DAPFAMAllTitlAbsClmToFullTextRetrieval",
     "DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval",
@@ -268,6 +278,7 @@ __all__ = [
     "DAPFAMOutTitlAbsToTitlAbsRetrieval",
     "DBPedia",
     "DBPediaHardNegatives",
+    "DBPediaHardNegativesV2",
     "EDIST2ITRetrieval",
     "EncyclopediaVQAIT2ITRetrieval",
     "EnglishFinance1Retrieval",
@@ -276,6 +287,7 @@ __all__ = [
     "EnglishFinance4Retrieval",
     "EnglishHealthcare1Retrieval",
     "FEVERHardNegatives",
+    "FEVERHardNegativesV2",
     "FaithDialRetrieval",
     "Fashion200kI2TRetrieval",
     "Fashion200kT2IRetrieval",
@@ -296,6 +308,7 @@ __all__ = [
     "HellaSwag",
     "HotpotQA",
     "HotpotQAHardNegatives",
+    "HotpotQAHardNegativesV2",
     "ImageCoDeT2IRetrieval",
     "InfoSeekIT2ITRetrieval",
     "InfoSeekIT2TRetrieval",
@@ -345,6 +358,7 @@ __all__ = [
     "Quail",
     "QuoraRetrieval",
     "QuoraRetrievalHardNegatives",
+    "QuoraRetrievalHardNegativesV2",
     "R2MEDBioinformaticsRetrieval",
     "R2MEDBiologyRetrieval",
     "R2MEDIIYiClinicalRetrieval",

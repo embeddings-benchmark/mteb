@@ -112,7 +112,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             unique_train_dataset,
             self.metadata,
             input_column=self.input_column_name,
-            batch_size=encode_kwargs["batch_size"],
+            **encode_kwargs,
         )
 
         logger.info("Running multilabel classification - Encoding training set...")
@@ -141,7 +141,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             test_dataset.select_columns(self.input_column_name),
             self.metadata,
             input_column=self.input_column_name,
-            batch_size=encode_kwargs["batch_size"],
+            **encode_kwargs,
         )
 
         logger.info("Running multilabel classification - Encoding test set...")
