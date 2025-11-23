@@ -35,10 +35,6 @@ and Hoang, Quoc Viet
 and Luu, Quy Tung
 and Vo, Trong Thu},
   booktitle = {Proceedings of the Fifth International Conference on Intelligent Systems and Networks},
-  editor = {Thi Dieu Linh, Nguyen
-and Yu, Shiqi
-and Selamat, Ali
-and Tran, Duc -Tan},
   isbn = {978-981-95-1746-6},
   pages = {153--163},
   publisher = {Springer Nature Singapore},
