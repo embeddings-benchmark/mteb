@@ -211,8 +211,8 @@ class IterativeStratification(_BaseKFold):
         rows = sp.lil_matrix(y).rows
         rows_used = dict.fromkeys(range(self.n_samples), False)
         all_combinations = []
-        per_row_combinations = [[] for i in range(self.n_samples)]
-        samples_with_combination = {}
+        per_row_combinations: list[list[int]] = [[] for i in range(self.n_samples)]
+        samples_with_combination: dict[str, int] = {}
         folds = [[] for _ in range(self.n_splits)]  # type: ignore
 
         # for every row
@@ -229,7 +229,7 @@ class IterativeStratification(_BaseKFold):
                 all_combinations.append(combination)
                 per_row_combinations[sample_index].append(combination)
 
-        all_combinations = [list(x) for x in set(all_combinations)]
+        all_combinations: list[list[int]] = [list(x) for x in set(all_combinations)]
 
         self.desired_samples_per_combination_per_fold = {
             combination: np.array(

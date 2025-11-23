@@ -1,15 +1,16 @@
 import logging
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, ClassVar, TypedDict
+from typing import Any, ClassVar, cast
 
 from datasets import Dataset, DatasetDict
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from mteb._evaluators import BitextMiningEvaluator
 from mteb.abstasks._statistics_calculation import calculate_text_statistics
-from mteb.abstasks.abstask import AbsTask
+from mteb.abstasks.abstask import AbsMetrics, AbsTask
 from mteb.models import EncoderProtocol, MTEBModels
+from mteb.models.models_protocols import CrossEncoderProtocol, SearchProtocol
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import SplitDescriptiveStatistics, TextStatistics
 
@@ -36,7 +37,7 @@ class BitextDescriptiveStatistics(SplitDescriptiveStatistics):
     sentence2_statistics: TextStatistics
 
 
-class BitextMiningMetrics(TypedDict):
+class BitextMiningMetrics(AbsMetrics):
     """Metrics for BitextMining tasks
 
     Attributes:
@@ -78,6 +79,23 @@ class AbsTaskBitextMining(AbsTask):
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Added load for "parallel" datasets"""
+        if isinstance(model, CrossEncoderProtocol) and not self._support_cross_encoder:
+            raise TypeError(
+                f"Model {model} is a CrossEncoder, but this task {self.metadata.name} does not support CrossEncoders. "
+                "Please use a Encoder model instead."
+            )
+
+        # encoders might implement search protocols
+        if (
+            isinstance(model, SearchProtocol)
+            and not isinstance(model, EncoderProtocol)
+            and not self._support_search
+        ):
+            raise TypeError(
+                f"Model {model} is a SearchProtocol, but this task {self.metadata.name} does not support Search. "
+                "Please use a Encoder model instead."
+            )
+
         if not self.data_loaded:
             self.load_data()
 
@@ -87,11 +105,16 @@ class AbsTaskBitextMining(AbsTask):
         if subsets_to_run is not None:
             hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
-        scores = {}
+        encoder_model = cast(EncoderProtocol, model)
+
+        if self.dataset is None:
+            raise ValueError("Dataset is not loaded.")
+
+        scores: dict[str, BitextMiningMetrics] = {}
         if self.parallel_subsets:
-            scores = self._evaluate_subset(
-                model,
-                self.dataset[split],  # type: ignore
+            scores = self._evaluate_subset(  # type: ignore[assignment]
+                encoder_model,
+                self.dataset[split],
                 parallel=True,
                 hf_split=split,
                 hf_subset="parallel",
@@ -109,8 +132,8 @@ class AbsTaskBitextMining(AbsTask):
                     data_split = self.dataset[split]
                 else:
                     data_split = self.dataset[hf_subset][split]
-                scores[hf_subset] = self._evaluate_subset(
-                    model,
+                scores[hf_subset] = self._evaluate_subset(  # type: ignore[assignment]
+                    encoder_model,
                     data_split,
                     hf_split=split,
                     hf_subset=hf_subset,
@@ -124,21 +147,21 @@ class AbsTaskBitextMining(AbsTask):
     def _get_pairs(self, parallel: bool) -> list[tuple[str, str]]:
         pairs = self._DEFAULT_PAIR
         if parallel:
-            pairs = [langpair.split("-") for langpair in self.hf_subsets]
+            pairs = [langpair.split("-") for langpair in self.hf_subsets]  # type: ignore[misc]
         return pairs
 
-    def _evaluate_subset(
+    def _evaluate_subset(  # type: ignore[override]
         self,
         model: EncoderProtocol,
         data_split: Dataset,
         *,
         hf_split: str,
         hf_subset: str,
-        parallel: bool = False,
         encode_kwargs: dict[str, Any],
         prediction_folder: Path | None = None,
+        parallel: bool = False,
         **kwargs,
-    ) -> ScoresDict:
+    ) -> BitextMiningMetrics | dict[str, BitextMiningMetrics]:
         pairs = self._get_pairs(parallel)
 
         evaluator = BitextMiningEvaluator(
@@ -250,8 +273,11 @@ class AbsTaskBitextMining(AbsTask):
         )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
+        if self.dataset is None:
+            raise ValueError("Dataset is not loaded.")
+
         if self.metadata.is_multilingual:
-            dataset = defaultdict(dict)
+            dataset: dict[str, dict[str, list[str]]] = defaultdict(dict)
             for config in self.metadata.eval_langs:
                 logger.info(f"Converting {config} of {self.metadata.name}")
 
@@ -266,10 +292,10 @@ class AbsTaskBitextMining(AbsTask):
                     for split in self.dataset[config]:
                         dataset[split][lang_1] = self.dataset[config][split][sent_1]
                         dataset[split][lang_2] = self.dataset[config][split][sent_2]
-            for split in dataset:
-                dataset[split] = Dataset.from_dict(dataset[split])
-            dataset = DatasetDict(dataset)
-            dataset.push_to_hub(repo_name)
+            dataset_dict = DatasetDict(
+                {split: Dataset.from_dict(dataset[split]) for split in dataset}
+            )
+            dataset_dict.push_to_hub(repo_name)
         else:
             sentences = {}
             for split in self.dataset:

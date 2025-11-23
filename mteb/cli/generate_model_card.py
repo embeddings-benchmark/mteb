@@ -1,4 +1,5 @@
 import logging
+from collections.abc import Sequence
 from pathlib import Path
 
 from huggingface_hub import ModelCard, ModelCardData, repo_exists
@@ -12,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 def generate_model_card(
     model_name: str,
-    tasks: list[AbsTask] | None = None,
+    tasks: Sequence[AbsTask] | None = None,
     existing_model_card_id_or_path: str | Path | None = None,
     results_cache: ResultCache = ResultCache(),
     output_path: Path = Path("model_card.md"),
@@ -47,8 +48,8 @@ def generate_model_card(
         for task_result in models_results.task_results:
             eval_results.extend(task_result.get_hf_eval_results())
 
-    existing_model_card_data = (
-        existing_model_card.data if existing_model_card else ModelCardData()
+    existing_model_card_data: ModelCardData = (
+        existing_model_card.data if existing_model_card else ModelCardData()  # type: ignore[assignment]
     )
 
     if existing_model_card_data.eval_results is None:
@@ -88,7 +89,8 @@ def generate_model_card(
             benchmark_results, existing_model_card
         )
 
-    if push_to_hub:
+    if push_to_hub and existing_model_card_id_or_path:
+        existing_model_card_id_or_path = str(existing_model_card_id_or_path)
         if repo_exists(existing_model_card_id_or_path):
             existing_model_card.push_to_hub(existing_model_card_id_or_path, token=token)
         else:
