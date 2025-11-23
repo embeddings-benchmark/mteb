@@ -18,7 +18,7 @@ class StreamingSearchIndex:
     sub_corpus_embeddings: Array | None = None
     idxs: list[str]
 
-    def add_document(
+    def add_documents(
         self,
         embeddings: Array,
         idxs: list[str],

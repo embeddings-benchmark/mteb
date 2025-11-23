@@ -181,7 +181,7 @@ class SearchEncoderWrapper:
                 prompt_type=PromptType.document,
                 **encode_kwargs,
             )
-            self.index_backend.add_document(sub_corpus_embeddings, sub_corpus_ids)
+            self.index_backend.add_documents(sub_corpus_embeddings, sub_corpus_ids)
             # Compute similarities using either cosine-similarity or dot product
             logger.info("Computing Similarities...")
 
@@ -232,7 +232,7 @@ class SearchEncoderWrapper:
             **encode_kwargs,
         )
         all_doc_ids = [doc["id"] for doc in self.task_corpus]
-        self.index_backend.add_document(all_doc_embeddings, all_doc_ids)
+        self.index_backend.add_documents(all_doc_embeddings, all_doc_ids)
 
         cos_scores_top_k_values, cos_scores_top_k_idx = self.index_backend.search(
             query_embeddings,

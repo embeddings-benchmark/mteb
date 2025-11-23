@@ -7,7 +7,7 @@ from mteb.types import Array, TopRankedDocumentsType
 class IndexEncoderSearchProtocol(Protocol):
     """Protocol for search backends used in encoder-based retrieval."""
 
-    def add_document(
+    def add_documents(
         self,
         embeddings: Array,
         idxs: list[str],

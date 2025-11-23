@@ -52,7 +52,7 @@ class FaissSearchIndex:
         self.idxs: list[str] = []
         self.index: faiss.Index | None = None
 
-    def add_document(self, embeddings: Array, idxs: list[str]) -> None:
+    def add_documents(self, embeddings: Array, idxs: list[str]) -> None:
         """Add all document embeddings and their IDs to FAISS index."""
         import faiss
 
