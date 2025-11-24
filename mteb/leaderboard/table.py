@@ -120,6 +120,31 @@ def apply_per_task_styling_from_benchmark(
     return _apply_per_task_table_styling(per_task_df)
 
 
+def apply_per_language_styling_from_benchmark(
+    benchmark_instance: Benchmark, benchmark_results: BenchmarkResults
+) -> gr.DataFrame:
+    """Apply styling to per-language table created by the benchmark instance's _create_per_language_table method.
+
+    This supports polymorphism - different benchmark classes can have different table generation logic.
+
+    Args:
+        benchmark_instance: The benchmark instance
+        benchmark_results: BenchmarkResults object containing model results (may be pre-filtered)
+
+    Returns:
+        Styled gr.DataFrame ready for display in the leaderboard
+    """
+    # Use the instance method to support polymorphism
+    per_language_df = benchmark_instance._create_per_language_table(benchmark_results)
+
+    # If it's a no-results DataFrame, return it as-is
+    if "No results" in per_language_df.columns:
+        return gr.DataFrame(per_language_df)
+
+    # Apply the styling
+    return _apply_per_task_table_styling(per_language_df)
+
+
 def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
     """Apply styling to a raw summary DataFrame
 

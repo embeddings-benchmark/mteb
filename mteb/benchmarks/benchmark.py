@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 import pandas as pd
 
 from mteb.benchmarks._create_table import (
+    _create_per_language_table_from_benchmark_results,
     _create_per_task_table_from_benchmark_results,
     _create_summary_table_from_benchmark_results,
     _create_summary_table_mean_public_private,
@@ -79,6 +80,16 @@ class Benchmark:
             A pandas DataFrame representing the per-task results.
         """
         return _create_per_task_table_from_benchmark_results(benchmark_results)
+
+    def _create_per_language_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        """Create per-language table. Called by the leaderboard app.
+
+        Returns:
+            A pandas DataFrame representing the per-language results.
+        """
+        return _create_per_language_table_from_benchmark_results(benchmark_results)
 
 
 class RtebBenchmark(Benchmark):

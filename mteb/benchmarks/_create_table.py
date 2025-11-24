@@ -250,6 +250,65 @@ def _create_per_task_table_from_benchmark_results(
     return per_task
 
 
+def _create_per_language_table_from_benchmark_results(
+    benchmark_results: BenchmarkResults,
+) -> pd.DataFrame:
+    """Create per-language table from BenchmarkResults.
+
+    Returns a DataFrame with one row per model and one column per language.
+
+    Args:
+        benchmark_results: BenchmarkResults object containing model results
+    Returns:
+        DataFrame with per-language scores, ready for styling in the leaderboard
+    """
+    # Get scores in long format
+    data = benchmark_results.to_dataframe(aggregation_level="subset", format="long")
+
+    if data.empty:
+        no_results_frame = pd.DataFrame(
+            {"No results": ["You can try relaxing your criteria"]}
+        )
+        return no_results_frame
+
+    print(">> data", data)
+
+    # I want to pivot on subset (language), so that each column is a language
+    # I want to mean the scores for each language across tasks
+
+    per_language = data.groupby(["model_name", "subset"])["score"].mean().reset_index()
+    per_language = per_language.pivot(
+        index="model_name", columns="subset", values="score"
+    )
+
+    # per_language = data.pivot(index="model_name", columns="subset", values="score")
+
+    to_remove = per_language.isna().all(axis="columns")
+    if to_remove.all():
+        no_results_frame = pd.DataFrame(
+            {"No results": ["You can try relaxing your criteria"]}
+        )
+        return no_results_frame
+    models_to_remove = list(per_language[to_remove].index)
+    per_language = per_language.drop(models_to_remove, axis=0)
+
+    per_language["borda_rank"] = _get_borda_rank(per_language)
+    per_language = per_language.sort_values("borda_rank", ascending=True)
+    per_language = per_language.drop(columns=["borda_rank"])
+    per_language = per_language.reset_index()
+
+    per_language["model_name"] = per_language["model_name"].map(
+        lambda name: name.split("/")[-1]
+    )
+    per_language = per_language.rename(
+        columns={
+            "model_name": "Model",
+        }
+    )
+
+    return per_language
+
+
 def _create_summary_table_mean_public_private(
     benchmark_results: BenchmarkResults,
 ) -> pd.DataFrame:
