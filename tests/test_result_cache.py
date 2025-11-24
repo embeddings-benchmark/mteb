@@ -6,6 +6,7 @@ from typing import cast
 import mteb
 from mteb.cache import ResultCache
 from mteb.results import TaskResult
+from tests.mock_tasks import MockMultilingualClusteringTask
 
 test_cache_path = Path(__file__).parent / "mock_mteb_cache"
 
@@ -190,3 +191,17 @@ def test_filter_with_string_models():
     }
     actual = {(p.parent.parent.name, p.parent.name) for p in filtered}
     assert actual == expected
+
+
+def test_cache_filter_languages():
+    cache = ResultCache(cache_path=test_cache_path)
+
+    task = MockMultilingualClusteringTask()
+    results = cache.load_results(
+        tasks=[task],
+        validate_and_filter=True,
+    )
+    assert len(results.model_results[0].task_results[0].scores["test"]) == 2
+    task = task.filter_languages(["eng"])
+    eng_results = cache.load_results(tasks=[task], validate_and_filter=True)
+    assert len(eng_results.model_results[0].task_results[0].scores["test"]) == 1
