@@ -12,8 +12,7 @@ from mteb._requires_package import (
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.models_protocols import PromptType
-from mteb.types import Array, BatchedInput
+from mteb.types import Array, BatchedInput, PromptType
 
 
 class EagerEmbedV1Wrapper(AbsEncoder):
@@ -25,13 +24,9 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         image_size: int = 784,
-        use_peft: bool = False,
         **kwargs,
     ):
         requires_image_dependencies()
-        requires_package(
-            self, "peft", model_name, "pip install mteb[eager_embed]"
-        )
         requires_package(
             self, "qwen_vl_utils", model_name, "pip install mteb[eager_embed]"
         )
@@ -39,27 +34,16 @@ class EagerEmbedV1Wrapper(AbsEncoder):
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.image_size = image_size
-        self.use_peft = use_peft
 
         # Handle deprecated torch_dtype parameter
         if 'torch_dtype' in kwargs:
             kwargs['dtype'] = kwargs.pop('torch_dtype')
 
         # Load model
-        if self.use_peft:
-            from peft import PeftModel, PeftConfig
-            config = PeftConfig.from_pretrained(model_name)
-            base_model = Qwen3VLForConditionalGeneration.from_pretrained(
-                config.base_model_name_or_path,
-                **kwargs
-            )
-            self.mdl = PeftModel.from_pretrained(base_model, model_name)
-            self.mdl = self.mdl.merge_and_unload()
-        else:
-            self.mdl = Qwen3VLForConditionalGeneration.from_pretrained(
-                model_name,
-                **kwargs
-            )
+        self.mdl = Qwen3VLForConditionalGeneration.from_pretrained(
+            model_name,
+            **kwargs
+        )
 
         self.mdl = self.mdl.to(self.device)
         self.mdl.eval()
@@ -87,10 +71,10 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         image_embeddings = None
 
         if "text" in inputs.dataset.features:
-            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+            text_embeddings = self.get_text_embeddings(inputs, prompt_type=prompt_type, **kwargs)
 
         if "image" in inputs.dataset.features:
-            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
+            image_embeddings = self.get_image_embeddings(inputs, prompt_type=prompt_type, **kwargs)
 
         if text_embeddings is not None and image_embeddings is not None:
             if len(text_embeddings) != len(image_embeddings):
@@ -110,51 +94,27 @@ class EagerEmbedV1Wrapper(AbsEncoder):
 
     def get_image_embeddings(
         self,
-        images,
-        batch_size: int = 32,
+        inputs: DataLoader[BatchedInput],
+        prompt_type: PromptType | None = None,
         **kwargs,
     ):
         """Encode images (documents) into embeddings."""
         from qwen_vl_utils import process_vision_info
-        import torchvision.transforms.functional as F
 
-        all_embeds = []
-
-        # Create a new DataLoader with custom collate function to handle images
-        def image_collate_fn(batch):
-            """Custom collate function that keeps images as a list."""
-            collated = {}
-            for key in batch[0]:
-                collated[key] = [item[key] for item in batch]
-            return collated
-
-        # Extract the dataset from the DataLoader and create a new one with proper collation
-        dataset = images.dataset
-        image_loader = DataLoader(
-            dataset,
-            batch_size=batch_size,
-            collate_fn=image_collate_fn,
-            shuffle=False,
-        )
-
+        all_embeddings: list[torch.Tensor] = []
         with torch.no_grad():
-            for batch in tqdm(image_loader, desc="Encoding images"):
-                # Convert batch to PIL images if needed
-                imgs = [
-                    F.to_pil_image(b.to(self.device))
-                    if not isinstance(b, Image.Image)
-                    else b
-                    for b in batch["image"]
-                ]
-
+            for batch in tqdm(inputs, desc="Encoding images"):
                 # Create messages for each image
                 doc_messages = []
-                for img in imgs:
+                for img in batch["image"]:
                     message = [
                         {
                             'role': 'user',
                             'content': [
-                                {'type': 'text', 'text': ''},
+                                {
+                                    'type': 'text',
+                                    'text': ('Query: ' if prompt_type == PromptType.query else '')
+                                },
                                 {
                                     'type': 'image',
                                     'image': img,
@@ -189,50 +149,34 @@ class EagerEmbedV1Wrapper(AbsEncoder):
                 # Convert to float32 and ensure normalization is maintained
                 embeddings = embeddings.cpu().to(torch.float32)
                 embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
-                all_embeds.append(embeddings)
+                all_embeddings.append(embeddings)
 
         # Concatenate all embeddings
-        all_embeds = torch.cat(all_embeds, dim=0)
-        return all_embeds
+        return torch.cat(all_embeddings, dim=0)
+
 
     def get_text_embeddings(
         self,
-        texts,
-        batch_size: int = 32,
-        **kwargs,
+        inputs: DataLoader[BatchedInput],
+        prompt_type: PromptType | None = None,
+         **kwargs,
     ):
         """Encode texts (queries) into embeddings."""
         from qwen_vl_utils import process_vision_info
 
-        all_embeds = []
-
-        # Create a new DataLoader with custom collate function to handle variable-length texts
-        def text_collate_fn(batch):
-            """Custom collate function that doesn't try to stack text strings."""
-            collated = {}
-            for key in batch[0]:
-                collated[key] = [item[key] for item in batch]
-            return collated
-
-        # Extract the dataset from the DataLoader and create a new one with proper collation
-        dataset = texts.dataset
-        text_loader = DataLoader(
-            dataset,
-            batch_size=batch_size,
-            collate_fn=text_collate_fn,
-            shuffle=False,
-        )
+        all_embeddings: list[torch.Tensor] = []
 
         with torch.no_grad():
-            for batch in tqdm(text_loader, desc="Encoding texts"):
+            for batch in tqdm(inputs, desc="Encoding texts"):
                 # Create query messages
                 query_messages = []
                 for query in batch["text"]:
+                    query_prefix = ('Query: ' if prompt_type == PromptType.query else '')
                     message = [
                         {
                             'role': 'user',
                             'content': [
-                                {'type': 'text', 'text': f'Query: {query}'},
+                                {'type': 'text', 'text': f'{query_prefix}{query}'},
                             ]
                         }
                     ]
@@ -261,11 +205,10 @@ class EagerEmbedV1Wrapper(AbsEncoder):
                 # Convert to float32 and ensure normalization is maintained
                 embeddings = embeddings.cpu().to(torch.float32)
                 embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
-                all_embeds.append(embeddings)
+                all_embeddings.append(embeddings)
 
         # Concatenate all embeddings
-        all_embeds = torch.cat(all_embeds, dim=0)
-        return all_embeds
+        return torch.cat(all_embeddings, dim=0)
 
     def get_fused_embeddings(
         self,
