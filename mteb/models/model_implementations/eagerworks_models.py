@@ -50,7 +50,6 @@ class EagerEmbedV1Wrapper(AbsEncoder):
 
         # Load processor
         self.processor = AutoProcessor.from_pretrained(model_name)
-        self.processor.tokenizer.padding_side = "left"
 
     def get_embedding(self, last_hidden_state: torch.Tensor) -> torch.Tensor:
         """Extract embeddings from last token of last hidden state."""
@@ -162,7 +161,6 @@ class EagerEmbedV1Wrapper(AbsEncoder):
          **kwargs,
     ):
         """Encode texts (queries) into embeddings."""
-        from qwen_vl_utils import process_vision_info
 
         all_embeddings: list[torch.Tensor] = []
 
@@ -190,11 +188,10 @@ class EagerEmbedV1Wrapper(AbsEncoder):
                     for msg in query_messages
                 ]
 
-                query_image_inputs, query_video_inputs = process_vision_info(query_messages)
                 query_inputs = self.processor(
                     text=query_texts,
-                    images=query_image_inputs,
-                    videos=query_video_inputs,
+                    images=None,
+                    videos=None,
                     padding='longest',
                     return_tensors='pt'
                 ).to(self.device)
@@ -265,7 +262,7 @@ Eager_Embed_V1 = ModelMeta(
     ),
     name='eagerworks/eager-embed-v1',
     languages=["fra-Latn", "spa-Latn", "eng-Latn", "deu-Latn"],
-    revision='34ab386e65fea9187829bbd595b79622350c0a00',
+    revision='a6bec272729c5056e2c26618ce085205c82a3b3c',
     release_date='2025-11-20',
     modalities=["image", "text"],
     n_parameters=4_000_000_000,
