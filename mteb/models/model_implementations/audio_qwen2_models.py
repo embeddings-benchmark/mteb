@@ -12,7 +12,6 @@ from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput
 
 logger = logging.getLogger(__name__)
 
@@ -37,71 +36,7 @@ class Qwen2AudioWrapper(AbsEncoder):
         ).to(self.device)
         self.model.eval()
 
-        self.audio_encoder = self.model.audio_tower
-
-        cfg = self.model.config.audio_config
-        self.embed_dim = getattr(cfg, "d_model", getattr(cfg, "hidden_size", None))
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
-
-    def get_audio_embeddings(
-        self,
-        inputs: DataLoader[AudioInput],
-        show_progress_bar: bool = True,
-        **kwargs: Any,
-    ) -> Array:
-        import torchaudio
-
-        all_embeddings = []
-
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-        ):
-            audio_arrays = []
-            for a in batch["audio"]:
-                array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate", None)
-                if sr is None:
-                    warnings.warn(
-                        f"No sampling_rate provided for an audio sample. "
-                        f"Assuming {self.sampling_rate} Hz (model default)."
-                    )
-                    sr = self.sampling_rate
-
-                if sr != self.sampling_rate:
-                    resampler = torchaudio.transforms.Resample(
-                        orig_freq=sr, new_freq=self.sampling_rate
-                    )
-                    array = resampler(array)
-                audio_arrays.append(array.numpy())
-
-            # Qwen2Audio specific: create prompt with <|AUDIO|> tokens
-            prompt = " ".join(["<|AUDIO|>"] * len(audio_arrays))
-
-            processor_inputs = self.processor(
-                text=prompt,
-                audio=audio_arrays,
-                sampling_rate=self.sampling_rate,
-                return_tensors="pt",
-                padding=True,
-                truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
-            )
-
-            input_features = processor_inputs.input_features.to(self.device)
-
-            with torch.no_grad():
-                outputs = self.audio_encoder(
-                    input_features=input_features,
-                    output_hidden_states=True,
-                )
-
-                # Use last hidden state and mean pool
-                last_hidden = outputs.hidden_states[-1]
-                embeddings = last_hidden.mean(dim=1).cpu().detach()
-                all_embeddings.append(embeddings)
-
-        return torch.cat(all_embeddings, dim=0).numpy()
 
     def encode(
         self,
@@ -111,11 +46,79 @@ class Qwen2AudioWrapper(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        if "audio" not in inputs.dataset.features:
-            raise ValueError("Qwen2AudioWrapper only supports audio inputs.")
-        return self.get_audio_embeddings(inputs, **kwargs)
+        import torchaudio
+
+        all_embeddings = []
+
+        for batch in tqdm(inputs, disable=not show_progress_bar):
+            audio_arrays = []
+            texts = []
+            audio_list = batch.get("audio", [])
+            text_list = batch.get("text", [])
+            batch_size = max(len(audio_list), len(text_list))
+
+            for i in range(batch_size):
+                cur_text = ""
+                audio_row = audio_list[i] if i < len(audio_list) else None
+                if audio_row is not None:
+                    array = torch.tensor(audio_row["array"], dtype=torch.float32)
+                    sr = audio_row.get("sampling_rate", None)
+                    if sr is None:
+                        warnings.warn(
+                            f"No sampling_rate provided for an audio sample. "
+                            f"Assuming {self.sampling_rate} Hz (model default)."
+                        )
+                        sr = self.sampling_rate
+
+                    if sr != self.sampling_rate:
+                        resampler = torchaudio.transforms.Resample(
+                            orig_freq=sr, new_freq=self.sampling_rate
+                        )
+                        array = resampler(array)
+                    cur_text += "<|audio_bos|><|AUDIO|><|audio_eos|>"
+                    audio_arrays.append(array.numpy())
+
+                text_row = text_list[i] if i < len(text_list) else None
+                if text_row is not None:
+                    cur_text += text_row
+                texts.append(cur_text)
+
+            processor_inputs = self.processor(
+                text=texts,
+                audio=audio_arrays if len(audio_arrays) > 0 else None,
+                sampling_rate=self.sampling_rate,
+                return_tensors="pt",
+                padding=True,
+                truncation=True,
+                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
+            )
+
+            processor_inputs = {
+                k: v.to(self.device) for k, v in processor_inputs.items()
+            }
+            with torch.no_grad():
+                outputs = self.model(
+                    **processor_inputs,
+                    output_hidden_states=True,
+                )
+
+                hidden = outputs.hidden_states[-1]
+                mask = processor_inputs["attention_mask"]
+
+                # last non-pad index per item
+                last_idx = mask.sum(dim=1) - 1
+                last_idx = last_idx.clamp(min=0)
+
+                # gather last-token embeddings
+                batch_indices = torch.arange(hidden.size(0), device=self.device)
+                embeddings = hidden[batch_indices, last_idx]
+
+                all_embeddings.append(embeddings.cpu().detach())
+
+        return torch.cat(all_embeddings, dim=0).numpy()
 
 
 qwen2_audio_meta = ModelMeta(
@@ -137,5 +140,5 @@ qwen2_audio_meta = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    modalities=["audio"],
+    modalities=["audio", "text"],
 )
