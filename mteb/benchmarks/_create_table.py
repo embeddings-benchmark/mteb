@@ -271,17 +271,10 @@ def _create_per_language_table_from_benchmark_results(
         )
         return no_results_frame
 
-    print(">> data", data)
-
-    # I want to pivot on subset (language), so that each column is a language
-    # I want to mean the scores for each language across tasks
-
     per_language = data.groupby(["model_name", "subset"])["score"].mean().reset_index()
     per_language = per_language.pivot(
         index="model_name", columns="subset", values="score"
     )
-
-    # per_language = data.pivot(index="model_name", columns="subset", values="score")
 
     to_remove = per_language.isna().all(axis="columns")
     if to_remove.all():
