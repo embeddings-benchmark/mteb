@@ -31,4 +31,3 @@ yuan_embedding_2_zh = ModelMeta(
     public_training_data=None,
     training_datasets=yuan_emb_zh_datasets,
 )
-
