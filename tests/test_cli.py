@@ -75,7 +75,6 @@ def test_run_task(
         benchmarks=None,
         overwrite=False,
         save_predictions=None,
-        allow_private=True,
     )
 
     run(args)
