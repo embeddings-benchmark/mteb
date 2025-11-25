@@ -8,7 +8,7 @@ import mteb
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.models import SearchEncoderWrapper
 from mteb.models.model_meta import ScoringFunction
-from mteb.models.search_encoder_index import FaissSearchIndex, StreamingSearchIndex
+from mteb.models.search_encoder_index import FaissSearchIndex
 from tests.mock_tasks import (
     MockRerankingTask,
     MockRetrievalTask,
@@ -35,14 +35,13 @@ def test_retrieval_backends(
     model_meta.similarity_fn_name = similarity
     model.mteb_model_meta = model_meta
 
-    python_backend = SearchEncoderWrapper(model, index_backend=StreamingSearchIndex())
     faiss_backend = SearchEncoderWrapper(model, index_backend=FaissSearchIndex(model))
 
     python_backend_predictions = tmp_path / "python_backend_predictions"
     faiss_backend_predictions = tmp_path / "faiss_backend_predictions"
 
     python_results = mteb.evaluate(
-        python_backend,
+        model,
         task,
         prediction_folder=python_backend_predictions,
         cache=None,
