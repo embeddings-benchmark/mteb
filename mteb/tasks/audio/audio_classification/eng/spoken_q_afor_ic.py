@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SpokenQAForIC(AbsTaskAudioClassification):
+class SpokenQAForIC(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SpokenQAForIC",
         description="SpokenQA dataset reformulated as Intent Classification (IC) task",
@@ -39,16 +37,10 @@ class SpokenQAForIC(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = 10
+
     is_cross_validation: bool = True
 
     def dataset_transform(self):
-        ## required to run the dataloader for cross-validation
-        import torch
-
-        torch.multiprocessing.set_sharing_strategy("file_system")
-        #########################################################
-
         self.dataset["train"] = self.dataset.pop("test")

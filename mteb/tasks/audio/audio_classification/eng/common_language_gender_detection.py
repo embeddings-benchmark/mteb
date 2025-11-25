@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CommonLanguageGenderDetection(AbsTaskAudioClassification):
+class CommonLanguageGenderDetection(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CommonLanguageGenderDetection",
         description="Gender Classification. This is a stratified subsampled version of the original CommonLanguage datasets.",
@@ -43,9 +41,8 @@ Mirco Ravanelli},
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "gender"
-    samples_per_label: int = 10
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(

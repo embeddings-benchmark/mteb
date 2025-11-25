@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class VoxCelebSA(AbsTaskAudioClassification):
+class VoxCelebSA(AbsTaskClassification):
     metadata = TaskMetadata(
         name="VoxCelebSA",
         description="VoxCeleb dataset augmented for Sentiment Analysis task",
@@ -39,9 +37,9 @@ class VoxCelebSA(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = 10
+
     is_cross_validation: bool = True
 
     def dataset_transform(self):

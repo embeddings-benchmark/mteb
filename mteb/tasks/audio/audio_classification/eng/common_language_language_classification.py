@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CommonLanguageLanguageClassification(AbsTaskAudioClassification):
+class CommonLanguageLanguageClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CommonLanguageLanguageDetection",
         description="Language Classification. This is a stratified subsampled version of the original CommonLanguage dataset.",
@@ -43,9 +41,8 @@ Mirco Ravanelli},
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "language"
-    samples_per_label: int = 10
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(

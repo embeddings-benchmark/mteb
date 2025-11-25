@@ -1,5 +1,4 @@
 from .abstask import AbsTask
-from .audio.abs_task_audio_classification import AbsTaskAudioClassification
 from .classification import AbsTaskClassification
 from .clustering import AbsTaskClustering
 from .clustering_legacy import AbsTaskClusteringLegacy
@@ -16,7 +15,6 @@ from .zeroshot_classification import AbsTaskZeroShotClassification
 
 __all__ = [
     "AbsTask",
-    "AbsTaskAudioClassification",
     "AbsTaskBitextMining",
     "AbsTaskClassification",
     "AbsTaskClustering",

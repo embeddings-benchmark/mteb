@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class LibriCount(AbsTaskAudioClassification):
+class LibriCount(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LibriCount",
         description="Multiclass speaker count identification. Dataset contains audio recordings with between 0 to 10 speakers.",
@@ -41,7 +39,7 @@ class LibriCount(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = 10
+
     is_cross_validation: bool = True

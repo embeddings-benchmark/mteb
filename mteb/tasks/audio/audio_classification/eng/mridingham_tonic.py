@@ -1,10 +1,8 @@
-from mteb.abstasks.audio.abs_task_audio_classification import (
-    AbsTaskAudioClassification,
-)
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MridinghamTonic(AbsTaskAudioClassification):
+class MridinghamTonic(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MridinghamTonic",
         description="Tonic classification of Mridingham (a pitched percussion instrument) into one of 6 classes: B,C,C#,D,D#,E",
@@ -41,7 +39,7 @@ class MridinghamTonic(AbsTaskAudioClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    input_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = 10
+
     is_cross_validation: bool = True

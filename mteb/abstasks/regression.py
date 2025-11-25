@@ -100,7 +100,7 @@ class AbsTaskRegression(AbsTaskClassification):
 
     def _undersample_data(
         self, dataset: Dataset, experiment_num: int, idxs: list[int] | None = None
-    ) -> tuple[Dataset, list[int]]:
+    ) -> tuple[Dataset, list[int], list[int]]:
         if self.n_samples >= len(dataset):
             train_split_sampled = dataset
         else:
@@ -111,7 +111,7 @@ class AbsTaskRegression(AbsTaskClassification):
                 label=self.label_column_name,
                 n_samples=self.n_samples,
             )["train"]
-        return train_split_sampled, []
+        return train_split_sampled, [], []
 
     def _calculate_scores(
         self,
