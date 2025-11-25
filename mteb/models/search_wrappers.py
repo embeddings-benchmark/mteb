@@ -147,7 +147,7 @@ class SearchEncoderWrapper:
         top_k: int,
         encode_kwargs: dict[str, Any],
     ) -> dict[str, list[tuple[float, str]]]:
-        logger.info("Encoding Corpus in batches... Warning: This might take a while!")
+        logger.info("Encoding Corpus in batches (this might take a while)...")
         itr = range(0, len(self.task_corpus), self.corpus_chunk_size)
 
         result_heaps = {qid: [] for qid in query_idx_to_id.values()}
