@@ -225,8 +225,10 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
     if task.metadata.name in (
         "SpeechCommandsZeroshotv0.01",
         "VoxPopuliGenderClustering",
+        "BirdSet",
     ):
         # https://github.com/embeddings-benchmark/mteb/issues/3499
+        assert task.metadata.dataset.get("trust_remote_code", False) is True
         pytest.skip("Skipping known failing dataset for now, see issue #3499")
 
     # --- Check that no dataset trusts remote code ---
