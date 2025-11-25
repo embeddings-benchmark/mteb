@@ -252,6 +252,7 @@ def _create_per_task_table_from_benchmark_results(
 
 def _create_per_language_table_from_benchmark_results(
     benchmark_results: BenchmarkResults,
+    language_view: list[str],
 ) -> pd.DataFrame:
     """Create per-language table from BenchmarkResults.
 
@@ -259,11 +260,13 @@ def _create_per_language_table_from_benchmark_results(
 
     Args:
         benchmark_results: BenchmarkResults object containing model results
+        language_view: List of languages to include in the per-language table
     Returns:
         DataFrame with per-language scores, ready for styling in the leaderboard
     """
-    # Get scores in long format
-    data = benchmark_results.to_dataframe(aggregation_level="subset", format="long")
+    data = benchmark_results.to_dataframe(aggregation_level="language", format="long")
+    # keep only languages in language_view
+    data = data[data["language"].isin(language_view)]
 
     if data.empty:
         no_results_frame = pd.DataFrame(
@@ -272,7 +275,7 @@ def _create_per_language_table_from_benchmark_results(
         return no_results_frame
 
     per_language = data.pivot_table(
-        index="model_name", columns="subset", values="score", aggfunc="mean"
+        index="model_name", columns="language", values="score", aggfunc="mean"
     )
 
     to_remove = per_language.isna().all(axis="columns")

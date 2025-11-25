@@ -263,7 +263,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
     )
 
     # Check if this benchmark displays per-language results
-    display_language_table = default_benchmark.supports_language_view
+    display_language_table = len(default_benchmark.language_view) > 0
 
     lang_select = gr.Dropdown(
         LANGUAGE,
@@ -884,7 +884,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 summary,
                 per_task,
                 per_language,
-                gr.update(visible=benchmark.supports_language_view),
+                gr.update(visible=len(benchmark.language_view) > 0),
             )
 
         # Only update tables when models change, not when scores/tasks change directly

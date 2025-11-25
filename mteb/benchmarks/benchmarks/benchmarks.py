@@ -2222,7 +2222,14 @@ VIDORE_V2 = Benchmark(
 VIDORE_V3 = VidoreBenchmark(
     name="ViDoRe(v3)",
     display_name="ViDoRe V3",
-    supports_language_view=True,
+    language_view=[
+        "deu-Latn",
+        "eng-Latn",
+        "fra-Latn",
+        "ita-Latn",
+        "por-Latn",
+        "spa-Latn",
+    ],
     icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
     tasks=get_tasks(
         tasks=[

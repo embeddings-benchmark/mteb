@@ -1,5 +1,5 @@
 from collections.abc import Iterable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 import pandas as pd
@@ -51,7 +51,7 @@ class Benchmark:
     display_on_leaderboard: bool = True
     icon: str | None = None
     display_name: str | None = None
-    supports_language_view: bool = False
+    language_view: list[str] = field(default_factory=list)
 
     def __iter__(self) -> Iterable["AbsTask"]:
         return iter(self.tasks)
@@ -90,8 +90,10 @@ class Benchmark:
         Returns:
             A pandas DataFrame representing the per-language results.
         """
-        if self.supports_language_view:
-            return _create_per_language_table_from_benchmark_results(benchmark_results)
+        if len(self.language_view) > 0:
+            return _create_per_language_table_from_benchmark_results(
+                benchmark_results, self.language_view
+            )
         else:
             no_results_frame = pd.DataFrame(
                 {
