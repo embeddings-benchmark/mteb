@@ -3,7 +3,7 @@
 !!! note "Available since 2.3.0"
     This feature was introduced in version **2.3.0**.
 
-For some large dataset search can take a lot of time. To reduce this you can use `FaissSearchIndex`. To work with it install `pip install mteb[faiss]`.
+For some large dataset search can take a lot of time and memory. To reduce this you can use `FaissSearchIndex`. To work with it install `pip install mteb[faiss]`.
 
 Usage example:
 ```python
