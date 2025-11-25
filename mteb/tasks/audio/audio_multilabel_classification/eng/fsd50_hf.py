@@ -1,10 +1,11 @@
-from mteb.abstasks.audio.abs_task_multilabel_classification import (
-    AbsTaskAudioMultilabelClassification,
-)
+from sklearn.linear_model import LogisticRegression
+from sklearn.multioutput import MultiOutputClassifier
+
+from mteb.abstasks import AbsTaskMultilabelClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class FSD50HFMultilingualClassification(AbsTaskAudioMultilabelClassification):
+class FSD50HFMultilingualClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
         name="FSD50K",
         description="Multilabel Audio Classification.",
@@ -44,7 +45,8 @@ class FSD50HFMultilingualClassification(AbsTaskAudioMultilabelClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    evaluator = MultiOutputClassifier(estimator=LogisticRegression())
+    input_column_name: str = "audio"
     label_column_name: str = "labels"
     samples_per_label: int = 8
 

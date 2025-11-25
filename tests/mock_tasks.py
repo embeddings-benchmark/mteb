@@ -8,9 +8,6 @@ from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
-from mteb.abstasks.audio.abs_task_multilabel_classification import (
-    AbsTaskAudioMultilabelClassification,
-)
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
@@ -4293,7 +4290,7 @@ class MockAudioClusteringTask(AbsTaskClustering):
         self.data_loaded = True
 
 
-class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification):
+class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -4324,6 +4321,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification
         **general_args,
     )
     metadata.modalities = ["audio"]
+    input_column_name = "audio"
 
     def load_data(self, **kwargs):
         mock_audio = [
@@ -4337,9 +4335,9 @@ class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification
 
         self.dataset = DatasetDict(
             {
-                "test": Dataset.from_dict({"audio": mock_audio, "labels": labels}),
+                "test": Dataset.from_dict({"audio": mock_audio, "label": labels}),
                 "train": Dataset.from_dict(
-                    {"audio": mock_audio * 5, "labels": labels * 5}
+                    {"audio": mock_audio * 5, "label": labels * 5}
                 ),
             }
         )

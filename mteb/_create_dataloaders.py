@@ -17,7 +17,6 @@ from mteb.types import (
 )
 from mteb.types._encoder_io import (
     AudioInput,
-    AudioInputItem,
     CorpusInput,
     ImageInput,
     QueryInput,
@@ -532,33 +531,4 @@ def create_dataloader(
     return DataLoader(
         dataset,
         batch_size=batch_size,
-    )
-
-
-def _create_audio_dataloader_from_audio_list(
-    audio_array: list[AudioInputItem],
-    batch_size: int = 32,
-):
-    # todo temporary until full refactoring of tasks
-    from torch.utils.data import DataLoader, Dataset
-
-    class CustomAudioDataset(Dataset):
-        def __init__(self, audio_array):
-            self.audio_array = audio_array
-
-        def __len__(self):
-            return len(self.audio_array)
-
-        def __getitem__(self, idx):
-            return {"audio": self.audio_array[idx]}
-
-        @property
-        def features(self) -> dict[str, Any]:
-            # for correct wrapper handling
-            return {"audio": []}
-
-    return DataLoader(
-        CustomAudioDataset(audio_array),
-        batch_size=batch_size,
-        collate_fn=_custom_collate_fn,
     )
