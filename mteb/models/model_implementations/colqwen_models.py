@@ -1,11 +1,19 @@
 import logging
+from typing import Any
 
 import torch
+from PIL import Image
+from torch.utils.data import DataLoader
+from tqdm.auto import tqdm
 
 from mteb._requires_package import (
+    requires_image_dependencies,
     requires_package,
 )
-from mteb.models.model_meta import ModelMeta
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import Array, BatchedInput, PromptType
 
 from .colpali_models import (
     COLPALI_CITATION,
@@ -14,6 +22,172 @@ from .colpali_models import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+class ColQwen3Wrapper(AbsEncoder):
+    """Wrapper for the ColQwen3 vision-language retrieval model."""
+
+    def __init__(
+        self,
+        model_name: str,
+        *,
+        revision: str | None = None,
+        device: str | None = None,
+        torch_dtype: torch.dtype | str | None = torch.float16,
+        **kwargs: Any,
+    ):
+        requires_image_dependencies()
+        from transformers import AutoModel, AutoProcessor
+
+        self.device = device or (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
+        )
+        self.model = AutoModel.from_pretrained(
+            model_name,
+            revision=revision,
+            torch_dtype=torch_dtype,
+            trust_remote_code=True,
+            **kwargs,
+        ).to(self.device)
+        self.model.eval()
+
+        self.processor = AutoProcessor.from_pretrained(
+            model_name, revision=revision, trust_remote_code=True
+        )
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        text_embeddings = None
+        image_embeddings = None
+
+        if "text" in inputs.dataset.features:
+            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+        if "image" in inputs.dataset.features:
+            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
+
+        if text_embeddings is not None and image_embeddings is not None:
+            if len(text_embeddings) != len(image_embeddings):
+                raise ValueError(
+                    "The number of texts and images must have the same length"
+                )
+            return text_embeddings + image_embeddings
+        if text_embeddings is not None:
+            return text_embeddings
+        if image_embeddings is not None:
+            return image_embeddings
+        raise ValueError("No text or image features found in inputs.")
+
+    def _encode_inputs(self, encoded_inputs: dict[str, torch.Tensor]) -> torch.Tensor:
+        outputs = self.model(**encoded_inputs)
+        embeddings = getattr(outputs, "embeddings", None) or outputs[0]
+        return embeddings
+
+    def get_image_embeddings(
+        self,
+        images: DataLoader[BatchedInput],
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ) -> torch.Tensor:
+        import torchvision.transforms.functional as F
+
+        all_embeds: list[torch.Tensor] = []
+        with torch.no_grad():
+            for batch in tqdm(
+                images, disable=not show_progress_bar, desc="Encoding images"
+            ):
+                imgs = [
+                    F.to_pil_image(b.to(self.device))
+                    if not isinstance(b, Image.Image)
+                    else b
+                    for b in batch["image"]
+                ]
+                inputs = self.processor.process_images(imgs)
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                outs = self._encode_inputs(inputs)
+                all_embeds.extend(outs.cpu().to(torch.float32))
+
+        padded = torch.nn.utils.rnn.pad_sequence(
+            all_embeds, batch_first=True, padding_value=0
+        )
+        return padded
+
+    def get_text_embeddings(
+        self,
+        texts: DataLoader[BatchedInput],
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ) -> torch.Tensor:
+        all_embeds: list[torch.Tensor] = []
+        with torch.no_grad():
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Encoding texts"
+            ):
+                inputs = self.processor.process_texts(batch["text"])
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                outs = self._encode_inputs(inputs)
+                all_embeds.extend(outs.cpu().to(torch.float32))
+
+        # Pad to support variable sequence lengths while keeping token-level outputs for MaxSim.
+        padded = torch.nn.utils.rnn.pad_sequence(
+            all_embeds, batch_first=True, padding_value=0
+        )
+        return padded
+
+    def get_fused_embeddings(
+        self,
+        texts: list[str] | None = None,
+        images: list[Image.Image] | DataLoader | None = None,
+        *,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
+        fusion_mode="sum",
+        **kwargs: Any,
+    ):
+        import torchvision.transforms.functional as F
+
+        all_embeds: list[torch.Tensor] = []
+        with torch.no_grad():
+            for batch in tqdm(
+                images, disable=not show_progress_bar, desc="Encoding images+texts"
+            ):
+                imgs = [
+                    F.to_pil_image(b.to(self.device))
+                    if not isinstance(b, Image.Image)
+                    else b
+                    for b in batch["image"]
+                ]
+                inputs = self.processor(images=imgs, text=texts)
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                outs = self._encode_inputs(inputs)
+                all_embeds.extend(outs.cpu().to(torch.float32))
+
+        padded = torch.nn.utils.rnn.pad_sequence(
+            all_embeds, batch_first=True, padding_value=0
+        )
+        return padded
+
+    def calculate_probs(self, text_embeddings, image_embeddings):
+        scores = self.similarity(text_embeddings, image_embeddings).T
+        return scores.softmax(dim=-1)
+
+    def similarity(self, a, b):
+        return self.processor.score(a, b, device=self.device)
 
 
 class ColQwen2Wrapper(ColPaliEngineWrapper):
@@ -71,6 +245,33 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
             device=device,
             **kwargs,
         )
+
+
+colqwen3 = ModelMeta(
+    loader=ColQwen3Wrapper,
+    loader_kwargs=dict(
+        torch_dtype=torch.float16,
+    ),
+    name="TomoroAI/tomoro-colqwen3-embed-8b",
+    languages=["eng-Latn"],
+    revision="local",
+    release_date=None,
+    modalities=["image", "text"],
+    n_parameters=8_000_000_000,
+    memory_usage_mb=None,
+    max_tokens=262144,
+    embed_dim=320,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=True,
+    training_datasets=COLPALI_TRAINING_DATA,
+    citation=COLPALI_CITATION,
+)
 
 
 colqwen2 = ModelMeta(
