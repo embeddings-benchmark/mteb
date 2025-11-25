@@ -1996,7 +1996,6 @@ MIEB_LITE = MIEBBenchmark(
 
 MIEB_IMG = MIEBBenchmark(
     name="MIEB(Img)",
-    supports_language_view=True,
     display_name="Image only",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-pictures.svg",
     tasks=get_tasks(
