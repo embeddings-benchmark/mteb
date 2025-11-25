@@ -184,7 +184,7 @@ def retry_with_rate_limit(
                     result = func(self, *args, **kwargs)
                     previous_call_ts = time.time()
                     return result
-                except cohere.errors.TooManyRequestsError as e:
+                except cohere.exceptions.TooManyRequestsError as e:
                     if attempt == max_retries - 1:
                         raise
                     # For rate limits, wait longer (30s minimum to respect API limits)

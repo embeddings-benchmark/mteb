@@ -173,7 +173,7 @@ def _evaluate_task(
                 )
                 return TaskError(
                     task_name=task.metadata.name,
-                    error_message=str(e),
+                    exception=e,
                 )
 
     evaluation_time = 0
@@ -371,6 +371,7 @@ def evaluate(
         task = tasks
     else:
         results = []
+        exceptions = []
         tasks_tqdm = tqdm(
             tasks,
             desc="Evaluating tasks",
@@ -391,10 +392,13 @@ def evaluate(
                 public_only=public_only,
             )
             results.extend(_res.task_results)
+            if _res.exceptions:
+                exceptions.extend(_res.exceptions)
         return ModelResult(
             model_name=_res.model_name,
             model_revision=_res.model_revision,
             task_results=results,
+            exceptions=exceptions,
         )
 
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
@@ -464,11 +468,7 @@ def evaluate(
             logger.error(
                 f"Error while running task {task.metadata.name} on splits {list(missing_eval.keys())}: {e}"
             )
-            return ModelResult(
-                model_name=model_name,
-                model_revision=model_revision,
-                task_results=[],
-            )
+            result = TaskError(task_name=task.metadata.name, exception=str(e))
     else:
         result = _evaluate_task(
             model=model,
@@ -486,7 +486,7 @@ def evaluate(
             model_name=model_name,
             model_revision=model_revision,
             task_results=[],
-            errors=[result.error_message],
+            exceptions=[result],
         )
 
     if existing_results:

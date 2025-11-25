@@ -843,8 +843,8 @@ class TaskError(BaseModel):
 
     Attributes:
         task_name: The name of the MTEB task.
-        error_message: The error message that occurred during the evaluation.
+        exception: The error message that occurred during the evaluation.
     """
 
     task_name: str
-    error_message: str
+    exception: str
