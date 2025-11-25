@@ -19,6 +19,7 @@ from mteb.abstasks._statistics_calculation import (
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ScoringFunction
 from mteb.models.models_protocols import EncoderProtocol
+from mteb.types import PromptType
 from mteb.types.statistics import (
     ImageStatistics,
     LabelStatistics,
@@ -35,7 +36,7 @@ class PairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     Attributes:
         num_samples: number of samples in the dataset.
         number_of_characters: Total number of symbols in the dataset.
-        unique_text_pairs: Number of unique pairs
+        unique_pairs: Number of unique pairs
 
         text1_statistics: Statistics for sentence1
         text2_statistics: Statistics for sentence2
@@ -65,12 +66,16 @@ class AbsTaskPairClassification(AbsTask):
         input2_column_name: The name of the column containing the second sentence in the pair.
         label_column_name: The name of the column containing the labels for the pairs. Labels should be 0 or 1.
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
+        input1_prompt_type: Type of prompt of first input. Used for asymmetric tasks.
+        input2_prompt_type: Type of prompt of second input. Used for asymmetric tasks.
     """
 
     abstask_prompt = "Retrieve text that are semantically similar to the given text."
     input1_column_name: str = "sentence1"
     input2_column_name: str = "sentence2"
     label_column_name: str = "labels"
+    input1_prompt_type: PromptType | None = None
+    input2_prompt_type: PromptType | None = None
 
     def _evaluate_subset(
         self,
@@ -93,6 +98,8 @@ class AbsTaskPairClassification(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            input1_prompt_type=self.input1_prompt_type,
+            input2_prompt_type=self.input2_prompt_type,
             **kwargs,
         )
         similarity_scores = evaluator(model, encode_kwargs=encode_kwargs)
