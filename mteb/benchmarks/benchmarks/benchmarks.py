@@ -1996,6 +1996,7 @@ MIEB_LITE = MIEBBenchmark(
 
 MIEB_IMG = MIEBBenchmark(
     name="MIEB(Img)",
+    supports_language_view=True,
     display_name="Image only",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-pictures.svg",
     tasks=get_tasks(
@@ -2222,6 +2223,7 @@ VIDORE_V2 = Benchmark(
 VIDORE_V3 = VidoreBenchmark(
     name="ViDoRe(v3)",
     display_name="ViDoRe V3",
+    supports_language_view=True,
     icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
     tasks=get_tasks(
         tasks=[

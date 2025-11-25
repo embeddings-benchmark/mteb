@@ -51,6 +51,7 @@ class Benchmark:
     display_on_leaderboard: bool = True
     icon: str | None = None
     display_name: str | None = None
+    supports_language_view: bool = False
 
     def __iter__(self) -> Iterable["AbsTask"]:
         return iter(self.tasks)
@@ -89,7 +90,17 @@ class Benchmark:
         Returns:
             A pandas DataFrame representing the per-language results.
         """
-        return _create_per_language_table_from_benchmark_results(benchmark_results)
+        if self.supports_language_view:
+            return _create_per_language_table_from_benchmark_results(benchmark_results)
+        else:
+            no_results_frame = pd.DataFrame(
+                {
+                    "No results": [
+                        "The per-language table is not available for this benchmark."
+                    ]
+                }
+            )
+            return no_results_frame
 
 
 class RtebBenchmark(Benchmark):

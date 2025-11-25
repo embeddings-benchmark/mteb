@@ -262,6 +262,9 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         filtered_benchmark_results,
     )
 
+    # Check if this benchmark displays per-language results
+    display_language_table = default_benchmark.supports_language_view
+
     lang_select = gr.Dropdown(
         LANGUAGE,
         value=sorted(default_results.languages),
@@ -464,7 +467,9 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             download_per_task.click(
                 _download_table, inputs=[per_task_table], outputs=[download_per_task]
             )
-        with gr.Tab("Performance per language"):
+        with gr.Tab(
+            "Performance per language", visible=display_language_table
+        ) as language_tab:
             per_language_table.render()
             download_per_language = gr.DownloadButton("Download Table")
             download_per_language.click(
@@ -875,7 +880,12 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             )
             elapsed = time.time() - start_time
             logger.debug(f"update_tables callback: {elapsed}s")
-            return summary, per_task, per_language
+            return (
+                summary,
+                per_task,
+                per_language,
+                gr.update(visible=benchmark.supports_language_view),
+            )
 
         # Only update tables when models change, not when scores/tasks change directly
         # This avoids redundant updates since scores/tasks changes trigger update_models
@@ -884,7 +894,12 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             item.change(
                 update_tables,
                 inputs=[scores, task_select, models, benchmark_select],
-                outputs=[summary_table, per_task_table, per_language_table],
+                outputs=[
+                    summary_table,
+                    per_task_table,
+                    per_language_table,
+                    language_tab,
+                ],
             )
 
         gr.Markdown(ACKNOWLEDGEMENT, elem_id="ack_markdown")

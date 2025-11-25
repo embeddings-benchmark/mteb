@@ -271,9 +271,8 @@ def _create_per_language_table_from_benchmark_results(
         )
         return no_results_frame
 
-    per_language = data.groupby(["model_name", "subset"])["score"].mean().reset_index()
-    per_language = per_language.pivot(
-        index="model_name", columns="subset", values="score"
+    per_language = data.pivot_table(
+        index="model_name", columns="subset", values="score", aggfunc="mean"
     )
 
     to_remove = per_language.isna().all(axis="columns")

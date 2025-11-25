@@ -142,7 +142,7 @@ def apply_per_language_styling_from_benchmark(
         return gr.DataFrame(per_language_df)
 
     # Apply the styling
-    return _apply_per_task_table_styling(per_language_df)
+    return _apply_per_language_table_styling(per_language_df)
 
 
 def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
@@ -250,6 +250,29 @@ def _apply_per_task_table_styling(per_task: pd.DataFrame) -> gr.DataFrame:
 
     return gr.DataFrame(
         per_task_style,
+        interactive=False,
+        pinned_columns=1,
+        show_fullscreen_button=True,
+        show_copy_button=True,
+        show_search="filter",
+    )
+
+
+def _apply_per_language_table_styling(per_language: pd.DataFrame) -> gr.DataFrame:
+    """Apply styling to a raw per-task DataFrame
+
+    Returns:
+        Styled gr.DataFrame ready for display in the leaderboard
+    """
+    language_score_columns = per_language.select_dtypes("number").columns
+    per_language[language_score_columns] *= 100
+
+    per_language_style = per_language.style.format(
+        "{:.2f}", subset=language_score_columns, na_rep=""
+    ).highlight_max(subset=language_score_columns, props="font-weight: bold")
+
+    return gr.DataFrame(
+        per_language_style,
         interactive=False,
         pinned_columns=1,
         show_fullscreen_button=True,
