@@ -41,6 +41,7 @@ def _load_data(
             },
             remove_columns=["query-id", "query"],
         )
+        query_ds = query_ds.select_columns(["id", "text"])
 
         corpus_ds = load_dataset(
             path,
@@ -55,6 +56,7 @@ def _load_data(
             },
             remove_columns=["corpus-id"],
         )
+        corpus_ds = corpus_ds.select_columns(["id", "image"])
 
         qrels_ds = load_dataset(
             path,

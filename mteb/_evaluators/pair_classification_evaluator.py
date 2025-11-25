@@ -14,6 +14,7 @@ from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import EncoderProtocol
 from mteb.similarity_functions import compute_pairwise_similarity
+from mteb.types import PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +61,8 @@ class PairClassificationEvaluator(Evaluator):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
+        input1_prompt_type: PromptType | None,
+        input2_prompt_type: PromptType | None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -69,6 +72,8 @@ class PairClassificationEvaluator(Evaluator):
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
+        self.input1_prompt_type = input1_prompt_type
+        self.input2_prompt_type = input2_prompt_type
 
         if len(self.dataset[self.input1_column_name]) != len(
             self.dataset[self.input2_column_name]
@@ -82,49 +87,34 @@ class PairClassificationEvaluator(Evaluator):
         model: EncoderProtocol,
         encode_kwargs: dict[str, Any],
     ) -> PairClassificationDistances:
-        logger.info("Running pair classification - Encoding inputs...")
-        if self.task_metadata.modalities == ["text"]:
-            # datasets v4 will pass column objects, so we need to extract the text
-            all_sentences = (
-                self.dataset[self.input1_column_name][:]
-                + self.dataset[self.input2_column_name][:]
-            )
-            len_sentences1 = len(self.dataset[self.input1_column_name])
-            embeddings = self._encode_unique_texts(
-                all_sentences,
-                model,
+        logger.info("Running pair classification - Encoding samples (1/2)")
+        embeddings1 = model.encode(
+            create_dataloader(
+                self.dataset,
                 task_metadata=self.task_metadata,
-                hf_split=self.hf_split,
-                hf_subset=self.hf_subset,
+                input_column=self.input1_column_name,
                 **encode_kwargs,
-            )
-            embeddings1 = embeddings[:len_sentences1]
-            embeddings2 = embeddings[len_sentences1:]
-        else:
-            embeddings1 = model.encode(
-                create_dataloader(
-                    self.dataset,
-                    task_metadata=self.task_metadata,
-                    input_column=self.input1_column_name,
-                    **encode_kwargs,
-                ),
+            ),
+            task_metadata=self.task_metadata,
+            hf_split=self.hf_split,
+            hf_subset=self.hf_subset,
+            prompt_type=self.input1_prompt_type,
+            **encode_kwargs,
+        )
+        logger.info("Running pair classification - Encoding samples (2/2)")
+        embeddings2 = model.encode(
+            create_dataloader(
+                self.dataset,
                 task_metadata=self.task_metadata,
-                hf_split=self.hf_split,
-                hf_subset=self.hf_subset,
+                input_column=self.input2_column_name,
                 **encode_kwargs,
-            )
-            embeddings2 = model.encode(
-                create_dataloader(
-                    self.dataset,
-                    task_metadata=self.task_metadata,
-                    input_column=self.input2_column_name,
-                    **encode_kwargs,
-                ),
-                task_metadata=self.task_metadata,
-                hf_split=self.hf_split,
-                hf_subset=self.hf_subset,
-                **encode_kwargs,
-            )
+            ),
+            task_metadata=self.task_metadata,
+            hf_split=self.hf_split,
+            hf_subset=self.hf_subset,
+            prompt_type=self.input2_prompt_type,
+            **encode_kwargs,
+        )
 
         logger.info("Running pair classification - Evaluating pair similarity...")
         cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)

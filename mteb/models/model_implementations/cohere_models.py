@@ -221,7 +221,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
     ) -> None:
         import cohere  # type: ignore
 
-        self.model_name = model_name.lstrip("Cohere/Cohere-")
+        self.model_name = model_name.removeprefix("Cohere/Cohere-")
         self.sep = sep
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
         if embedding_type not in get_args(EmbeddingType):
