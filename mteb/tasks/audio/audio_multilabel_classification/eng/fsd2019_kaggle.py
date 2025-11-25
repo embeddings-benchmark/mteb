@@ -1,12 +1,12 @@
 import datasets
+from sklearn.linear_model import LogisticRegression
+from sklearn.multioutput import MultiOutputClassifier
 
-from mteb.abstasks.audio.abs_task_multilabel_classification import (
-    AbsTaskAudioMultilabelClassification,
-)
+from mteb.abstasks import AbsTaskMultilabelClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class FSD2019KaggleMultilingualClassification(AbsTaskAudioMultilabelClassification):
+class FSD2019KaggleMultilingualClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
         name="FSD2019Kaggle",
         description="Multilabel Audio Classification.",
@@ -49,7 +49,8 @@ Xavier Serra},
 """,
     )
 
-    audio_column_name: str = "audio"
+    evaluator = MultiOutputClassifier(estimator=LogisticRegression())
+    input_column_name: str = "audio"
     label_column_name: str = "sound"
     samples_per_label: int = 8
 

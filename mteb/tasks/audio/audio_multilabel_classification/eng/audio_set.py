@@ -1,10 +1,11 @@
-from mteb.abstasks.audio.abs_task_multilabel_classification import (
-    AbsTaskAudioMultilabelClassification,
-)
+from sklearn.linear_model import LogisticRegression
+from sklearn.multioutput import MultiOutputClassifier
+
+from mteb.abstasks import AbsTaskMultilabelClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AudioSetMultilingualClassification(AbsTaskAudioMultilabelClassification):
+class AudioSetMultilingualClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
         name="AudioSet",
         description="AudioSet consists of an expanding ontology of 632 audio event classes and a collection of 2,084,320 human-labeled 10-second sound clips drawn from YouTube videos.",
@@ -46,12 +47,13 @@ class AudioSetMultilingualClassification(AbsTaskAudioMultilabelClassification):
         superseded_by="AudioSetMini",
     )
 
-    audio_column_name: str = "audio"
+    evaluator = MultiOutputClassifier(estimator=LogisticRegression())
+    input_column_name: str = "audio"
     label_column_name: str = "human_labels"
 
 
 # Sampled using scripts/data/audioset/create_data.ipynb
-class AudioSetMiniMultilingualClassification(AbsTaskAudioMultilabelClassification):
+class AudioSetMiniMultilingualClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
         name="AudioSetMini",
         description="AudioSet consists of an expanding ontology of 632 audio event classes and a collection of 2,084,320 human-labeled 10-second sound clips drawn from YouTube videos. This is a mini version that is sampled from the original dataset.",
@@ -92,5 +94,6 @@ class AudioSetMiniMultilingualClassification(AbsTaskAudioMultilabelClassificatio
 """,
     )
 
-    audio_column_name: str = "audio"
+    evaluator = MultiOutputClassifier(estimator=LogisticRegression())
+    input_column_name: str = "audio"
     label_column_name: str = "human_labels"

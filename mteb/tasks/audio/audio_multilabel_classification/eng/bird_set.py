@@ -1,10 +1,11 @@
-from mteb.abstasks.audio.abs_task_multilabel_classification import (
-    AbsTaskAudioMultilabelClassification,
-)
+from sklearn.linear_model import LogisticRegression
+from sklearn.multioutput import MultiOutputClassifier
+
+from mteb.abstasks import AbsTaskMultilabelClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BirdSetMultilabelClassification(AbsTaskAudioMultilabelClassification):
+class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
         name="BirdSet",
         description="BirdSet: A Large-Scale Dataset for Audio Classification in Avian Bioacoustics",
@@ -13,6 +14,7 @@ class BirdSetMultilabelClassification(AbsTaskAudioMultilabelClassification):
             "path": "DBD-research-group/BirdSet",
             "name": "HSN",
             "revision": "b0c14a03571a7d73d56b12c4b1db81952c4f7e64",
+            "trust_remote_code": True,
         },
         type="AudioClassification",
         category="a2t",
@@ -40,7 +42,8 @@ class BirdSetMultilabelClassification(AbsTaskAudioMultilabelClassification):
 """,
     )
 
-    audio_column_name: str = "audio"
+    evaluator = MultiOutputClassifier(estimator=LogisticRegression())
+    input_column_name: str = "audio"
     label_column_name: str = "labels"
     samples_per_label: int = 21
 
