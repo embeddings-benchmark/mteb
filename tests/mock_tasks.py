@@ -4337,7 +4337,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
             {
                 "test": Dataset.from_dict({"audio": mock_audio, "label": labels}),
                 "train": Dataset.from_dict(
-                    {"audio": mock_audio * 5, "labels": labels * 5}
+                    {"audio": mock_audio * 5, "label": labels * 5}
                 ),
             }
         )
