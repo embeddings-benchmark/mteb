@@ -476,7 +476,7 @@ def evaluate(
             model=model,
             splits=missing_eval,
             task=task,
-            co2_tracker=co2_tracker,
+            co2_tracker=False,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             public_only=public_only,
