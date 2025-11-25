@@ -175,6 +175,8 @@ def _evaluate_task(
                     task_name=task.metadata.name,
                     exception=str(e),
                 )
+            if public_only is False:
+                raise e
 
     evaluation_time = 0
 
@@ -474,7 +476,7 @@ def evaluate(
             model=model,
             splits=missing_eval,
             task=task,
-            co2_tracker=False,
+            co2_tracker=co2_tracker,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             public_only=public_only,
