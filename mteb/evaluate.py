@@ -173,7 +173,7 @@ def _evaluate_task(
                 )
                 return TaskError(
                     task_name=task.metadata.name,
-                    exception=e,
+                    exception=str(e),
                 )
 
     evaluation_time = 0
