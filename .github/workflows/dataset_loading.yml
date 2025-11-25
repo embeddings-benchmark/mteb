@@ -23,5 +23,7 @@ jobs:
           make install-for-tests
 
     - name: Run dataset loading tests
+      env:
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
       run: |
         make dataset-load-test
