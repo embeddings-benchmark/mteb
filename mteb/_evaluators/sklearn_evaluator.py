@@ -72,6 +72,7 @@ class SklearnEvaluator(Evaluator):
         *,
         encode_kwargs: dict[str, Any],
         test_cache: np.ndarray | None = None,
+        train_cache: np.ndarray | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
         """Classification evaluation by training a sklearn classifier on the embeddings of the training set and evaluating on the embeddings of the test set.
 
@@ -79,6 +80,7 @@ class SklearnEvaluator(Evaluator):
             model: Encoder
             encode_kwargs: encode kwargs
             test_cache: embeddings of the test set, if already computed
+            train_cache: embeddings of the train set, if already computed. Used for cross-validation.
 
         Returns:
             Tuple of test predictions and embeddings
@@ -89,13 +91,14 @@ class SklearnEvaluator(Evaluator):
         )
 
         logger.info("Running - Encoding samples...")
-        X_train = model.encode(
-            dataloader_train,
-            task_metadata=self.task_metadata,
-            hf_split="train",
-            hf_subset=self.hf_subset,
-            **encode_kwargs,
-        )
+        if train_cache is None:
+            train_cache = model.encode(
+                dataloader_train,
+                task_metadata=self.task_metadata,
+                hf_split="train",
+                hf_subset=self.hf_subset,
+                **encode_kwargs,
+            )
         if test_cache is None:
             test_cache = model.encode(
                 dataloader_test,
@@ -107,7 +110,7 @@ class SklearnEvaluator(Evaluator):
 
         logger.info("Running - Fitting classifier...")
         y_train = self.train_dataset[self.label_column_name]
-        self.evaluator_model.fit(X_train, y_train)
+        self.evaluator_model.fit(train_cache, y_train)
 
         logger.info("Running - Evaluating classifier...")
         y_pred = self.evaluator_model.predict(test_cache)

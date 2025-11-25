@@ -67,7 +67,7 @@ def test_filter_tasks_superseded(
     all_tasks: list[AbsTask],
     languages: list[str],
     domains: list[TaskDomain],
-    task_types: list[TaskType] | None,  # type: ignore
+    task_types: list[TaskType] | None,
     exclude_superseded_datasets: bool,
 ):
     tasks = filter_tasks(
