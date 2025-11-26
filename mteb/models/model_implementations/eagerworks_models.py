@@ -36,15 +36,11 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         self.image_size = image_size
 
         # Handle deprecated torch_dtype parameter
-        if 'torch_dtype' in kwargs:
-            kwargs['dtype'] = kwargs.pop('torch_dtype')
+        if "torch_dtype" in kwargs:
+            kwargs["dtype"] = kwargs.pop("torch_dtype")
 
         # Load model
-        self.mdl = Qwen3VLForConditionalGeneration.from_pretrained(
-            model_name,
-            **kwargs
-        )
-
+        self.mdl = Qwen3VLForConditionalGeneration.from_pretrained(model_name, **kwargs)
         self.mdl = self.mdl.to(self.device)
         self.mdl.eval()
 
@@ -66,145 +62,70 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        text_embeddings = None
-        image_embeddings = None
-
-        if "text" in inputs.dataset.features:
-            text_embeddings = self.get_text_embeddings(inputs, prompt_type=prompt_type, **kwargs)
-
-        if "image" in inputs.dataset.features:
-            image_embeddings = self.get_image_embeddings(inputs, prompt_type=prompt_type, **kwargs)
-
-        if text_embeddings is not None and image_embeddings is not None:
-            if len(text_embeddings) != len(image_embeddings):
-                raise ValueError(
-                    "This implementation of the model does not support "
-                    "unequal numbers of texts and images"
-                )
-            # For multimodal inputs, concatenate or fuse embeddings
-            fused_embeddings = text_embeddings + image_embeddings
-            return fused_embeddings
-        elif text_embeddings is not None:
-            return text_embeddings
-        elif image_embeddings is not None:
-            return image_embeddings
-
-        raise ValueError("No text or image inputs found")
-
-    def get_image_embeddings(
-        self,
-        inputs: DataLoader[BatchedInput],
-        prompt_type: PromptType | None = None,
-        **kwargs,
-    ):
-        """Encode images (documents) into embeddings."""
+        """Encode inputs (text and/or images) into embeddings."""
         from qwen_vl_utils import process_vision_info
 
         all_embeddings: list[torch.Tensor] = []
+
         with torch.no_grad():
-            for batch in tqdm(inputs, desc="Encoding images"):
-                # Create messages for each image
-                doc_messages = []
-                for img in batch["image"]:
-                    message = [
-                        {
-                            'role': 'user',
-                            'content': [
-                                {
-                                    'type': 'text',
-                                    'text': ('Query: ' if prompt_type == PromptType.query else '')
-                                },
-                                {
-                                    'type': 'image',
-                                    'image': img,
-                                    'resized_height': self.image_size,
-                                    'resized_width': self.image_size
-                                }
-                            ]
-                        }
+            for batch in tqdm(inputs, desc="Encoding"):
+                batch_texts = batch.get("text", [])
+                batch_images = batch.get("image", [])
+
+                messages = []
+                for i in range(max(len(batch_texts), len(batch_images))):
+                    text_content = batch_texts[i] if batch_texts else ""
+                    image_content = batch_images[i] if batch_images else None
+
+                    query_prefix = "Query: " if prompt_type == PromptType.query else ""
+                    content = [
+                        {"type": "text", "text": f"{query_prefix}{text_content}"}
                     ]
-                    doc_messages.append(message)
+
+                    if image_content is not None:
+                        content.append(
+                            {
+                                "type": "image",
+                                "image": image_content,
+                                "resized_height": self.image_size,
+                                "resized_width": self.image_size,
+                            }
+                        )
+
+                    messages.append([{"role": "user", "content": content}])
 
                 # Prepare inputs
-                doc_texts = [
+                texts = [
                     self.processor.apply_chat_template(
                         msg, tokenize=False, add_generation_prompt=False
-                    ) + "<|endoftext|>"
-                    for msg in doc_messages
+                    )
+                    + "<|endoftext|>"
+                    for msg in messages
                 ]
 
-                doc_image_inputs, doc_video_inputs = process_vision_info(doc_messages)
-                doc_inputs = self.processor(
-                    text=doc_texts,
-                    images=doc_image_inputs,
-                    videos=doc_video_inputs,
-                    padding='longest',
-                    return_tensors='pt'
+                image_inputs = None
+                video_inputs = None
+                if batch_images:
+                    image_inputs, video_inputs = process_vision_info(messages)
+
+                model_inputs = self.processor(
+                    text=texts,
+                    images=image_inputs,
+                    videos=video_inputs,
+                    padding="longest",
+                    return_tensors="pt",
                 ).to(self.device)
 
                 # Get embeddings
-                output = self.mdl(**doc_inputs, return_dict=True, output_hidden_states=True)
+                output = self.mdl(
+                    **model_inputs, return_dict=True, output_hidden_states=True
+                )
                 embeddings = self.get_embedding(output.hidden_states[-1])
-                # Convert to float32 and ensure normalization is maintained
                 embeddings = embeddings.cpu().to(torch.float32)
                 embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
+
                 all_embeddings.append(embeddings)
 
-        # Concatenate all embeddings
-        return torch.cat(all_embeddings, dim=0)
-
-
-    def get_text_embeddings(
-        self,
-        inputs: DataLoader[BatchedInput],
-        prompt_type: PromptType | None = None,
-         **kwargs,
-    ):
-        """Encode texts (queries) into embeddings."""
-
-        all_embeddings: list[torch.Tensor] = []
-
-        with torch.no_grad():
-            for batch in tqdm(inputs, desc="Encoding texts"):
-                # Create query messages
-                query_messages = []
-                for query in batch["text"]:
-                    query_prefix = ('Query: ' if prompt_type == PromptType.query else '')
-                    message = [
-                        {
-                            'role': 'user',
-                            'content': [
-                                {'type': 'text', 'text': f'{query_prefix}{query}'},
-                            ]
-                        }
-                    ]
-                    query_messages.append(message)
-
-                # Prepare inputs
-                query_texts = [
-                    self.processor.apply_chat_template(
-                        msg, tokenize=False, add_generation_prompt=False
-                    ) + "<|endoftext|>"
-                    for msg in query_messages
-                ]
-
-                query_inputs = self.processor(
-                    text=query_texts,
-                    images=None,
-                    videos=None,
-                    padding='longest',
-                    return_tensors='pt'
-                ).to(self.device)
-
-                # Get embeddings
-                output = self.mdl(**query_inputs, return_dict=True, output_hidden_states=True)
-                embeddings = self.get_embedding(output.hidden_states[-1])
-                # Convert to float32 and ensure normalization is maintained
-                embeddings = embeddings.cpu().to(torch.float32)
-                embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
-                all_embeddings.append(embeddings)
-
-        # Concatenate all embeddings
         return torch.cat(all_embeddings, dim=0)
 
     def get_fused_embeddings(
@@ -225,19 +146,16 @@ class EagerEmbedV1Wrapper(AbsEncoder):
     def calculate_probs(self, text_embeddings, image_embeddings):
         """Calculate probabilities using softmax over cosine similarities."""
         scores = torch.nn.functional.cosine_similarity(
-            text_embeddings.unsqueeze(1),
-            image_embeddings.unsqueeze(0),
-            dim=-1
+            text_embeddings.unsqueeze(1), image_embeddings.unsqueeze(0), dim=-1
         )
         return scores.softmax(dim=-1)
 
     def similarity(self, a, b):
         """Calculate cosine similarity between embeddings."""
         return torch.nn.functional.cosine_similarity(
-            a.unsqueeze(1),
-            b.unsqueeze(0),
-            dim=-1
+            a.unsqueeze(1), b.unsqueeze(0), dim=-1
         )
+
 
 EAGER_EMBED_V1_CITATION = """@article{EagerEmbed,
   title={Eager Embed V1: Multimodal Dense Embeddings for Retrieval},
@@ -247,12 +165,7 @@ EAGER_EMBED_V1_CITATION = """@article{EagerEmbed,
   url={https://github.com/eagerworks/eager-embed},
 }"""
 
-EAGER_EMBED_V1_TRAINING_DATASETS = {
-    "colpali",
-    "bge-ir",
-    "pixmo-docs",
-    "wiki-ss"
-}
+EAGER_EMBED_V1_TRAINING_DATASETS = {"colpali", "bge-ir", "pixmo-docs", "wiki-ss"}
 
 Eager_Embed_V1 = ModelMeta(
     loader=EagerEmbedV1Wrapper,
@@ -260,10 +173,10 @@ Eager_Embed_V1 = ModelMeta(
         torch_dtype=torch.float16,
         image_size=784,
     ),
-    name='eagerworks/eager-embed-v1',
+    name="eagerworks/eager-embed-v1",
     languages=["fra-Latn", "spa-Latn", "eng-Latn", "deu-Latn"],
-    revision='a6bec272729c5056e2c26618ce085205c82a3b3c',
-    release_date='2025-11-20',
+    revision="a6bec272729c5056e2c26618ce085205c82a3b3c",
+    release_date="2025-11-20",
     modalities=["image", "text"],
     n_parameters=4_000_000_000,
     memory_usage_mb=16929,
@@ -279,5 +192,5 @@ Eager_Embed_V1 = ModelMeta(
     citation=EAGER_EMBED_V1_CITATION,
     adapted_from="https://huggingface.co/Qwen/Qwen3-VL-4B-Instruct",
     public_training_code="https://github.com/eagerworks/eager-embed",
-    public_training_data="https://github.com/eagerworks/eager-embed/blob/main/dataset_config.yaml"
+    public_training_data="https://github.com/eagerworks/eager-embed/blob/main/dataset_config.yaml",
 )
