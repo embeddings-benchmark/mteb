@@ -130,24 +130,12 @@ class ColQwen3Wrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        text_embeddings = None
-        image_embeddings = None
-
-        if "text" in inputs.dataset.features:
-            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
-        if "image" in inputs.dataset.features:
-            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
-
-        if text_embeddings is not None and image_embeddings is not None:
-            if len(text_embeddings) != len(image_embeddings):
-                raise ValueError(
-                    "The number of texts and images must have the same length"
-                )
-            return text_embeddings + image_embeddings
-        if text_embeddings is not None:
-            return text_embeddings
-        if image_embeddings is not None:
-            return image_embeddings
+        if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
+            return self.get_fused_embeddings(inputs, **kwargs)
+        elif "text" in inputs.dataset.features:
+            return self.get_text_embeddings(inputs, **kwargs)
+        elif "image" in inputs.dataset.features:
+            return self.get_image_embeddings(inputs, **kwargs)
         raise ValueError("No text or image features found in inputs.")
 
     def _encode_inputs(self, encoded_inputs: dict[str, torch.Tensor]) -> torch.Tensor:
@@ -211,9 +199,46 @@ class ColQwen3Wrapper(AbsEncoder):
         )
         return padded
 
+    def get_fused_embeddings(
+        self,
+        image_texts_pairs: DataLoader[BatchedInput] | None = None,
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
+        fusion_mode="concat",
+        **kwargs: Any,
+    ):
+        import torchvision.transforms.functional as F
+
+        all_embeds: list[torch.Tensor] = []
+        with torch.no_grad():
+            for batch in tqdm(
+                image_texts_pairs,
+                disable=not show_progress_bar,
+                desc="Encoding images+texts",
+            ):
+                imgs = [
+                    F.to_pil_image(b.to(self.device))
+                    if not isinstance(b, Image.Image)
+                    else b
+                    for b in batch["image"]
+                ]
+                texts = batch["text"]
+                assert len(imgs) == len(texts), (
+                    f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
+                )
+
+                inputs = self.processor(images=imgs, text=texts)
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                outs = self._encode_inputs(inputs)
+                all_embeds.extend(outs.cpu().to(torch.float32))
+
+        padded = torch.nn.utils.rnn.pad_sequence(
+            all_embeds, batch_first=True, padding_value=0
+        )
+        return padded
+
     def similarity(self, a, b):
         return self.processor.score_multi_vector(a, b, device=self.device)
-
 
 
 colqwen2 = ModelMeta(
