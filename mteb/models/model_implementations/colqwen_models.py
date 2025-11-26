@@ -94,9 +94,7 @@ class ColQwen3Wrapper(AbsEncoder):
         **kwargs: Any,
     ):
         requires_image_dependencies()
-        requires_package(
-            self, "transformers", model_name, "pip install mteb[colqwen3]"
-        )
+        requires_package(self, "transformers", model_name, "pip install mteb[colqwen3]")
         from transformers import AutoModel, AutoProcessor
 
         self.device = device or (
@@ -116,7 +114,10 @@ class ColQwen3Wrapper(AbsEncoder):
         self.model.eval()
 
         self.processor = AutoProcessor.from_pretrained(
-            model_name, revision=revision, trust_remote_code=True, max_num_visual_tokens=1280
+            model_name,
+            revision=revision,
+            trust_remote_code=True,
+            max_num_visual_tokens=1280,
         )
 
     def encode(
@@ -210,17 +211,9 @@ class ColQwen3Wrapper(AbsEncoder):
         )
         return padded
 
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        scores = self.similarity(text_embeddings, image_embeddings).T
-        return scores.softmax(dim=-1)
-
     def similarity(self, a, b):
-        if hasattr(self.processor, "score_multi_vector"):
-            return self.processor.score_multi_vector(a, b, device=self.device)
+        return self.processor.score_multi_vector(a, b, device=self.device)
 
-        raise AttributeError(
-            "Processor does not implement score_multi_vector or score for similarity computation."
-        )
 
 
 colqwen2 = ModelMeta(
@@ -294,9 +287,6 @@ TOMORO_CITATION = """
 
 colqwen3_8b = ModelMeta(
     loader=ColQwen3Wrapper,
-    loader_kwargs=dict(
-        dtype=torch.bfloat16,
-    ),
     name="TomoroAI/tomoro-colqwen3-embed-8b",
     languages=["eng-Latn"],
     revision="5ba6feafdc0b61bfa2348989e80ac06ccf1a0a3f",
@@ -320,9 +310,6 @@ colqwen3_8b = ModelMeta(
 
 colqwen3_4b = ModelMeta(
     loader=ColQwen3Wrapper,
-    loader_kwargs=dict(
-        dtype=torch.bfloat16,
-    ),
     name="TomoroAI/tomoro-colqwen3-embed-4b",
     languages=["eng-Latn"],
     revision="4123a7add987edfa09105b9e420d91dffa10e9fd",
