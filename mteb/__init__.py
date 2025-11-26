@@ -9,8 +9,10 @@ from mteb.filter_tasks import filter_tasks
 from mteb.get_tasks import get_task, get_tasks
 from mteb.load_results import load_results
 from mteb.models import (
+    CacheBackendProtocol,
     CrossEncoderProtocol,
     EncoderProtocol,
+    IndexEncoderSearchProtocol,
     SearchProtocol,
     SentenceTransformerEncoderWrapper,
 )
@@ -27,8 +29,10 @@ __all__ = [
     "AbsTask",
     "Benchmark",
     "BenchmarkResults",
+    "CacheBackendProtocol",
     "CrossEncoderProtocol",
     "EncoderProtocol",
+    "IndexEncoderSearchProtocol",
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
     "TaskMetadata",
