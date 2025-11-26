@@ -24,6 +24,63 @@ from .colpali_models import (
 logger = logging.getLogger(__name__)
 
 
+class ColQwen2Wrapper(ColPaliEngineWrapper):
+    """Wrapper for ColQwen2 model."""
+
+    def __init__(
+        self,
+        model_name: str = "vidore/colqwen2-v1.0",
+        revision: str | None = None,
+        device: str | None = None,
+        **kwargs,
+    ):
+        requires_package(
+            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
+        )
+        from colpali_engine.models import ColQwen2, ColQwen2Processor
+
+        super().__init__(
+            model_name=model_name,
+            model_class=ColQwen2,
+            processor_class=ColQwen2Processor,
+            revision=revision,
+            device=device,
+            **kwargs,
+        )
+
+
+class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
+    """Wrapper for ColQwen2.5 model."""
+
+    def __init__(
+        self,
+        model_name: str = "vidore/colqwen2.5-v0.2",
+        revision: str | None = None,
+        device: str | None = None,
+        attn_implementation: str | None = None,
+        **kwargs,
+    ):
+        requires_package(
+            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
+        )
+        from colpali_engine.models import ColQwen2_5, ColQwen2_5_Processor
+        from transformers.utils.import_utils import is_flash_attn_2_available
+
+        if attn_implementation is None:
+            attn_implementation = (
+                "flash_attention_2" if is_flash_attn_2_available() else None
+            )
+
+        super().__init__(
+            model_name=model_name,
+            model_class=ColQwen2_5,
+            processor_class=ColQwen2_5_Processor,
+            revision=revision,
+            device=device,
+            **kwargs,
+        )
+
+
 class ColQwen3Wrapper(AbsEncoder):
     """Wrapper for the ColQwen3 vision-language retrieval model."""
 
@@ -166,136 +223,6 @@ class ColQwen3Wrapper(AbsEncoder):
         )
 
 
-class ColQwen2Wrapper(ColPaliEngineWrapper):
-    """Wrapper for ColQwen2 model."""
-
-    def __init__(
-        self,
-        model_name: str = "vidore/colqwen2-v1.0",
-        revision: str | None = None,
-        device: str | None = None,
-        **kwargs,
-    ):
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
-        )
-        from colpali_engine.models import ColQwen2, ColQwen2Processor
-
-        super().__init__(
-            model_name=model_name,
-            model_class=ColQwen2,
-            processor_class=ColQwen2Processor,
-            revision=revision,
-            device=device,
-            **kwargs,
-        )
-
-
-class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
-    """Wrapper for ColQwen2.5 model."""
-
-    def __init__(
-        self,
-        model_name: str = "vidore/colqwen2.5-v0.2",
-        revision: str | None = None,
-        device: str | None = None,
-        attn_implementation: str | None = None,
-        **kwargs,
-    ):
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
-        )
-        from colpali_engine.models import ColQwen2_5, ColQwen2_5_Processor
-        from transformers.utils.import_utils import is_flash_attn_2_available
-
-        if attn_implementation is None:
-            attn_implementation = (
-                "flash_attention_2" if is_flash_attn_2_available() else None
-            )
-
-        super().__init__(
-            model_name=model_name,
-            model_class=ColQwen2_5,
-            processor_class=ColQwen2_5_Processor,
-            revision=revision,
-            device=device,
-            **kwargs,
-        )
-
-
-TOMORO_TRAINING_DATA = {
-    # from https://huggingface.co/datasets/vidore/colpali_train_set
-    "vdr-multilingual-train",
-    "colpali_train_set",  # as it contains PDFs
-    "VisRAG-Ret-Train-Synthetic-data",
-    "VisRAG-Ret-Train-In-domain-data",
-}
-
-
-TOMORO_CITATION = """
-@misc{huang2025tomoro_colqwen3_embed,
-  title={TomoroAI/tomoro-colqwen3-embed},
-  author={Xin Huang and Kye Min Tan and Albert Phelps},
-  year={2025},
-  url={https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-8b}
-}
-"""
-
-
-colqwen3_8b = ModelMeta(
-    loader=ColQwen3Wrapper,
-    loader_kwargs=dict(
-        dtype=torch.bfloat16,
-    ),
-    name="TomoroAI/tomoro-colqwen3-embed-8b",
-    languages=["eng-Latn"],
-    revision="5ba6feafdc0b61bfa2348989e80ac06ccf1a0a3f",
-    release_date=None,
-    modalities=["image", "text"],
-    n_parameters=8_000_000_000,
-    memory_usage_mb=16724,
-    max_tokens=262144,
-    embed_dim=320,
-    license="apache-2.0",
-    open_weights=True,
-    public_training_code="https://github.com/illuin-tech/colpali",
-    public_training_data=None,
-    framework=["PyTorch"],
-    reference="https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-8b",
-    similarity_fn_name=ScoringFunction.MAX_SIM,
-    use_instructions=True,
-    training_datasets=TOMORO_TRAINING_DATA,
-    citation=TOMORO_CITATION,
-)
-
-
-colqwen3_4b = ModelMeta(
-    loader=ColQwen3Wrapper,
-    loader_kwargs=dict(
-        dtype=torch.bfloat16,
-    ),
-    name="TomoroAI/tomoro-colqwen3-embed-4b",
-    languages=["eng-Latn"],
-    revision="4123a7add987edfa09105b9e420d91dffa10e9fd",
-    release_date="2025-11-26",
-    modalities=["image", "text"],
-    n_parameters=4_000_000_000,
-    memory_usage_mb=8466,
-    max_tokens=262144,
-    embed_dim=320,
-    license="apache-2.0",
-    open_weights=True,
-    public_training_code="https://github.com/illuin-tech/colpali",
-    public_training_data=None,
-    framework=["PyTorch"],
-    reference="https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-4b",
-    similarity_fn_name=ScoringFunction.MAX_SIM,
-    use_instructions=True,
-    training_datasets=TOMORO_TRAINING_DATA,
-    citation=TOMORO_CITATION,
-)
-
-
 colqwen2 = ModelMeta(
     loader=ColQwen2Wrapper,
     loader_kwargs=dict(
@@ -346,6 +273,75 @@ colqwen2_5 = ModelMeta(
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
+)
+
+TOMORO_TRAINING_DATA = {
+    # from https://huggingface.co/datasets/vidore/colpali_train_set
+    "vdr-multilingual-train",
+    "colpali_train_set",  # as it contains PDFs
+    "VisRAG-Ret-Train-Synthetic-data",
+    "VisRAG-Ret-Train-In-domain-data",
+}
+
+TOMORO_CITATION = """
+@misc{huang2025tomoro_colqwen3_embed,
+  title={TomoroAI/tomoro-colqwen3-embed},
+  author={Xin Huang and Kye Min Tan and Albert Phelps},
+  year={2025},
+  url={https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-8b}
+}
+"""
+
+colqwen3_8b = ModelMeta(
+    loader=ColQwen3Wrapper,
+    loader_kwargs=dict(
+        dtype=torch.bfloat16,
+    ),
+    name="TomoroAI/tomoro-colqwen3-embed-8b",
+    languages=["eng-Latn"],
+    revision="5ba6feafdc0b61bfa2348989e80ac06ccf1a0a3f",
+    release_date=None,
+    modalities=["image", "text"],
+    n_parameters=8_000_000_000,
+    memory_usage_mb=16724,
+    max_tokens=262144,
+    embed_dim=320,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/illuin-tech/colpali",
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference="https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-8b",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=True,
+    training_datasets=TOMORO_TRAINING_DATA,
+    citation=TOMORO_CITATION,
+)
+
+colqwen3_4b = ModelMeta(
+    loader=ColQwen3Wrapper,
+    loader_kwargs=dict(
+        dtype=torch.bfloat16,
+    ),
+    name="TomoroAI/tomoro-colqwen3-embed-4b",
+    languages=["eng-Latn"],
+    revision="4123a7add987edfa09105b9e420d91dffa10e9fd",
+    release_date="2025-11-26",
+    modalities=["image", "text"],
+    n_parameters=4_000_000_000,
+    memory_usage_mb=8466,
+    max_tokens=262144,
+    embed_dim=320,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/illuin-tech/colpali",
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference="https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-4b",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=True,
+    training_datasets=TOMORO_TRAINING_DATA,
+    citation=TOMORO_CITATION,
 )
 
 colnomic_7b = ModelMeta(
