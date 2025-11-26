@@ -282,7 +282,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
     task_select = gr.Dropdown(
         sorted(all_results.task_names),
         value=sorted(default_results.task_names),
-        allow_custom_value=True,
+        allow_custom_value=False,
         multiselect=True,
         label="Task",
         info="Select specific tasks to include",
