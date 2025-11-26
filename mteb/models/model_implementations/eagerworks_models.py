@@ -34,10 +34,6 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.image_size = image_size
 
-        # Handle deprecated torch_dtype parameter
-        if "torch_dtype" in kwargs:
-            kwargs["dtype"] = kwargs.pop("torch_dtype")
-
         # Load model
         self.mdl = Qwen3VLForConditionalGeneration.from_pretrained(model_name, **kwargs)
         self.mdl = self.mdl.to(self.device)
@@ -141,7 +137,7 @@ EAGER_EMBED_V1_TRAINING_DATASETS = {"colpali", "bge-ir", "pixmo-docs", "wiki-ss"
 Eager_Embed_V1 = ModelMeta(
     loader=EagerEmbedV1Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
+        dtype=torch.float16,
         image_size=784,
     ),
     name="eagerworks/eager-embed-v1",
