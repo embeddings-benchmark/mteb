@@ -33,7 +33,7 @@ class ColQwen3Wrapper(AbsEncoder):
         *,
         revision: str | None = None,
         device: str | None = None,
-        torch_dtype: torch.dtype | str | None = torch.float16,
+        dtype: torch.dtype | str | None = torch.bfloat16,
         **kwargs: Any,
     ):
         requires_image_dependencies()
@@ -49,14 +49,14 @@ class ColQwen3Wrapper(AbsEncoder):
         self.model = AutoModel.from_pretrained(
             model_name,
             revision=revision,
-            torch_dtype=torch_dtype,
+            dtype=dtype,
             trust_remote_code=True,
             **kwargs,
         ).to(self.device)
         self.model.eval()
 
         self.processor = AutoProcessor.from_pretrained(
-            model_name, revision=revision, trust_remote_code=True
+            model_name, revision=revision, trust_remote_code=True, max_num_visual_tokens=1280
         )
 
     def encode(
@@ -91,7 +91,10 @@ class ColQwen3Wrapper(AbsEncoder):
 
     def _encode_inputs(self, encoded_inputs: dict[str, torch.Tensor]) -> torch.Tensor:
         outputs = self.model(**encoded_inputs)
-        embeddings = getattr(outputs, "embeddings", None) or outputs[0]
+        # Avoid boolean casting of tensors when checking for custom attributes.
+        embeddings = getattr(outputs, "embeddings", None)
+        if embeddings is None:
+            embeddings = outputs[0]
         return embeddings
 
     def get_image_embeddings(
@@ -147,47 +150,17 @@ class ColQwen3Wrapper(AbsEncoder):
         )
         return padded
 
-    def get_fused_embeddings(
-        self,
-        texts: list[str] | None = None,
-        images: list[Image.Image] | DataLoader | None = None,
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
-        show_progress_bar: bool = True,
-        fusion_mode="sum",
-        **kwargs: Any,
-    ):
-        import torchvision.transforms.functional as F
-
-        all_embeds: list[torch.Tensor] = []
-        with torch.no_grad():
-            for batch in tqdm(
-                images, disable=not show_progress_bar, desc="Encoding images+texts"
-            ):
-                imgs = [
-                    F.to_pil_image(b.to(self.device))
-                    if not isinstance(b, Image.Image)
-                    else b
-                    for b in batch["image"]
-                ]
-                inputs = self.processor(images=imgs, text=texts)
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                outs = self._encode_inputs(inputs)
-                all_embeds.extend(outs.cpu().to(torch.float32))
-
-        padded = torch.nn.utils.rnn.pad_sequence(
-            all_embeds, batch_first=True, padding_value=0
-        )
-        return padded
-
     def calculate_probs(self, text_embeddings, image_embeddings):
         scores = self.similarity(text_embeddings, image_embeddings).T
         return scores.softmax(dim=-1)
 
     def similarity(self, a, b):
-        return self.processor.score(a, b, device=self.device)
+        if hasattr(self.processor, "score_multi_vector"):
+            return self.processor.score_multi_vector(a, b, device=self.device)
+
+        raise AttributeError(
+            "Processor does not implement score_multi_vector or score for similarity computation."
+        )
 
 
 class ColQwen2Wrapper(ColPaliEngineWrapper):
@@ -247,10 +220,10 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
         )
 
 
-colqwen3 = ModelMeta(
+colqwen3_8b = ModelMeta(
     loader=ColQwen3Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
+        dtype=torch.bfloat16,
     ),
     name="TomoroAI/tomoro-colqwen3-embed-8b",
     languages=["eng-Latn"],
@@ -263,10 +236,37 @@ colqwen3 = ModelMeta(
     embed_dim=320,
     license="apache-2.0",
     open_weights=True,
-    public_training_code=None,
+    public_training_code="https://github.com/illuin-tech/colpali",
     public_training_data=None,
     framework=["PyTorch"],
     reference=None,
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=True,
+    training_datasets=COLPALI_TRAINING_DATA,
+    citation=COLPALI_CITATION,
+)
+
+
+colqwen3_4b = ModelMeta(
+    loader=ColQwen3Wrapper,
+    loader_kwargs=dict(
+        dtype=torch.bfloat16,
+    ),
+    name="TomoroAI/tomoro-colqwen3-embed-4b",
+    languages=["eng-Latn"],
+    revision=None,
+    release_date="2025-11-26",
+    modalities=["image", "text"],
+    n_parameters=4_000_000_000,
+    memory_usage_mb=None,
+    max_tokens=262144,
+    embed_dim=320,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/illuin-tech/colpali",
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference="https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-4b",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
