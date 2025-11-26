@@ -499,7 +499,7 @@ class ResultCache:
             if validate_and_filter:
                 task = task_names[task_result.task_name]
                 try:
-                    task_result.validate_and_filter_scores(task=task)
+                    task_result = task_result.validate_and_filter_scores(task=task)
                 except Exception as e:
                     logger.info(
                         f"Validation failed for {task_result.task_name} in {model_name} {revision}: {e}"
