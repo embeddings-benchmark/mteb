@@ -280,7 +280,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         info="Select domains to include.",
     )
     task_select = gr.Dropdown(
-        sorted(all_results.task_names),
+        sorted(default_results.task_names),
         value=sorted(default_results.task_names),
         allow_custom_value=False,
         multiselect=True,
