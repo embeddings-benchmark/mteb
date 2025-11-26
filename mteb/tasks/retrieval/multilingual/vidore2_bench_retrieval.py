@@ -41,11 +41,6 @@ def _load_data(
             },
             remove_columns=["query-id", "query"],
         )
-        # Keep "language" column for filtering when langs is provided
-        if langs is None:
-            query_ds = query_ds.select_columns(["id", "text"])
-        else:
-            query_ds = query_ds.select_columns(["id", "text", "language"])
 
         corpus_ds = load_dataset(
             path,
@@ -70,7 +65,7 @@ def _load_data(
         )
 
         if langs is None:
-            queries[split] = query_ds
+            queries[split] = query_ds.select_columns(["id", "text"])
             corpus[split] = corpus_ds
             relevant_docs[split] = {}
             for row in qrels_ds:
