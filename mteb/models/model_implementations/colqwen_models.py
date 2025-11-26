@@ -37,6 +37,9 @@ class ColQwen3Wrapper(AbsEncoder):
         **kwargs: Any,
     ):
         requires_image_dependencies()
+        requires_package(
+            self, "transformers", model_name, "pip install mteb[colqwen3]"
+        )
         from transformers import AutoModel, AutoProcessor
 
         self.device = device or (
@@ -220,6 +223,25 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
         )
 
 
+TOMORO_TRAINING_DATA = {
+    # from https://huggingface.co/datasets/vidore/colpali_train_set
+    "vdr-multilingual-train",
+    "colpali_train_set",  # as it contains PDFs
+    "VisRAG-Ret-Train-Synthetic-data",
+    "VisRAG-Ret-Train-In-domain-data",
+}
+
+
+TOMORO_CITATION = """
+@misc{huang2025tomoro_colqwen3_embed,
+  title={TomoroAI/tomoro-colqwen3-embed},
+  author={Xin Huang and Kye Min Tan and Albert Phelps},
+  year={2025},
+  url={https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-8b}
+}
+"""
+
+
 colqwen3_8b = ModelMeta(
     loader=ColQwen3Wrapper,
     loader_kwargs=dict(
@@ -227,11 +249,11 @@ colqwen3_8b = ModelMeta(
     ),
     name="TomoroAI/tomoro-colqwen3-embed-8b",
     languages=["eng-Latn"],
-    revision="local",
+    revision="5ba6feafdc0b61bfa2348989e80ac06ccf1a0a3f",
     release_date=None,
     modalities=["image", "text"],
     n_parameters=8_000_000_000,
-    memory_usage_mb=None,
+    memory_usage_mb=16724,
     max_tokens=262144,
     embed_dim=320,
     license="apache-2.0",
@@ -239,11 +261,11 @@ colqwen3_8b = ModelMeta(
     public_training_code="https://github.com/illuin-tech/colpali",
     public_training_data=None,
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-8b",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
-    training_datasets=COLPALI_TRAINING_DATA,
-    citation=COLPALI_CITATION,
+    training_datasets=TOMORO_TRAINING_DATA,
+    citation=TOMORO_CITATION,
 )
 
 
@@ -254,11 +276,11 @@ colqwen3_4b = ModelMeta(
     ),
     name="TomoroAI/tomoro-colqwen3-embed-4b",
     languages=["eng-Latn"],
-    revision=None,
+    revision="4123a7add987edfa09105b9e420d91dffa10e9fd",
     release_date="2025-11-26",
     modalities=["image", "text"],
     n_parameters=4_000_000_000,
-    memory_usage_mb=None,
+    memory_usage_mb=8466,
     max_tokens=262144,
     embed_dim=320,
     license="apache-2.0",
@@ -269,8 +291,8 @@ colqwen3_4b = ModelMeta(
     reference="https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-4b",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
-    training_datasets=COLPALI_TRAINING_DATA,
-    citation=COLPALI_CITATION,
+    training_datasets=TOMORO_TRAINING_DATA,
+    citation=TOMORO_CITATION,
 )
 
 
