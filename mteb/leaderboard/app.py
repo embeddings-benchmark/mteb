@@ -519,7 +519,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 domains,
                 types,
                 modalities,
-                benchmark_tasks,
+                gr.update(choices=benchmark_tasks, value=benchmark_tasks),
                 scores,
                 gr.update(visible=show_zero_shot),
                 initial_models,
