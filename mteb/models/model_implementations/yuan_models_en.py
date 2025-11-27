@@ -61,4 +61,5 @@ yuan_embedding_2_en  = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
+    adapted_from="Qwen/Qwen3-Embedding-0.6B"
 )
