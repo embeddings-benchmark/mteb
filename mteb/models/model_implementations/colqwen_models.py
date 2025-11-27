@@ -130,13 +130,12 @@ class ColQwen3Wrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
-            return self.get_fused_embeddings(inputs, **kwargs)
-        elif "text" in inputs.dataset.features:
-            return self.get_text_embeddings(inputs, **kwargs)
-        elif "image" in inputs.dataset.features:
-            return self.get_image_embeddings(inputs, **kwargs)
-        raise ValueError("No text or image features found in inputs.")
+        if (
+            "text" not in inputs.dataset.features
+            and "image" not in inputs.dataset.features
+        ):
+            raise ValueError("No text or image features found in inputs.")
+        return self.get_fused_embeddings(inputs, **kwargs)
 
     def _encode_inputs(self, encoded_inputs: dict[str, torch.Tensor]) -> torch.Tensor:
         outputs = self.model(**encoded_inputs)
@@ -145,59 +144,6 @@ class ColQwen3Wrapper(AbsEncoder):
         if embeddings is None:
             embeddings = outputs[0]
         return embeddings
-
-    def get_image_embeddings(
-        self,
-        images: DataLoader[BatchedInput],
-        batch_size: int = 32,
-        show_progress_bar: bool = True,
-        **kwargs: Any,
-    ) -> torch.Tensor:
-        import torchvision.transforms.functional as F
-
-        all_embeds: list[torch.Tensor] = []
-        with torch.no_grad():
-            for batch in tqdm(
-                images, disable=not show_progress_bar, desc="Encoding images"
-            ):
-                imgs = [
-                    F.to_pil_image(b.to(self.device))
-                    if not isinstance(b, Image.Image)
-                    else b
-                    for b in batch["image"]
-                ]
-                inputs = self.processor.process_images(imgs)
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                outs = self._encode_inputs(inputs)
-                all_embeds.extend(outs.cpu().to(torch.float32))
-
-        padded = torch.nn.utils.rnn.pad_sequence(
-            all_embeds, batch_first=True, padding_value=0
-        )
-        return padded
-
-    def get_text_embeddings(
-        self,
-        texts: DataLoader[BatchedInput],
-        batch_size: int = 32,
-        show_progress_bar: bool = True,
-        **kwargs: Any,
-    ) -> torch.Tensor:
-        all_embeds: list[torch.Tensor] = []
-        with torch.no_grad():
-            for batch in tqdm(
-                texts, disable=not show_progress_bar, desc="Encoding texts"
-            ):
-                inputs = self.processor.process_texts(batch["text"])
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                outs = self._encode_inputs(inputs)
-                all_embeds.extend(outs.cpu().to(torch.float32))
-
-        # Pad to support variable sequence lengths while keeping token-level outputs for MaxSim.
-        padded = torch.nn.utils.rnn.pad_sequence(
-            all_embeds, batch_first=True, padding_value=0
-        )
-        return padded
 
     def get_fused_embeddings(
         self,
@@ -209,6 +155,10 @@ class ColQwen3Wrapper(AbsEncoder):
     ):
         import torchvision.transforms.functional as F
 
+        contains_image = "image" in image_texts_pairs.dataset.features
+        contains_text = "text" in image_texts_pairs.dataset.features
+        contains_both = contains_image and contains_text
+
         all_embeds: list[torch.Tensor] = []
         with torch.no_grad():
             for batch in tqdm(
@@ -216,16 +166,23 @@ class ColQwen3Wrapper(AbsEncoder):
                 disable=not show_progress_bar,
                 desc="Encoding images+texts",
             ):
-                imgs = [
-                    F.to_pil_image(b.to(self.device))
-                    if not isinstance(b, Image.Image)
-                    else b
-                    for b in batch["image"]
-                ]
-                texts = batch["text"]
-                assert len(imgs) == len(texts), (
-                    f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
-                )
+                if contains_image:
+                    imgs = [
+                        F.to_pil_image(b.to(self.device))
+                        if not isinstance(b, Image.Image)
+                        else b
+                        for b in batch["image"]
+                    ]
+                else:
+                    imgs = None
+                if contains_text:
+                    texts = batch["text"]
+                else:
+                    texts = None
+                if contains_both:
+                    assert len(imgs) == len(texts), (
+                        f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
+                    )
 
                 inputs = self.processor(images=imgs, text=texts)
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
