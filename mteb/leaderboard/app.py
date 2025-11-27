@@ -5,7 +5,7 @@ import tempfile
 import time
 import warnings
 from pathlib import Path
-from typing import Literal, get_args
+from typing import Literal
 from urllib.parse import urlencode
 
 import cachetools
@@ -14,7 +14,6 @@ import pandas as pd
 
 import mteb
 from mteb import BenchmarkResults
-from mteb.abstasks.task_metadata import TaskDomain, TaskType
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.cache import ResultCache
 from mteb.leaderboard.benchmark_selector import (
@@ -29,7 +28,6 @@ from mteb.leaderboard.table import (
     apply_summary_styling_from_benchmark,
 )
 from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
-from mteb.types import Modalities
 
 logger = logging.getLogger(__name__)
 
