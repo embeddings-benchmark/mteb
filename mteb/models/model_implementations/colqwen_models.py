@@ -159,12 +159,21 @@ class ColQwen3Wrapper(AbsEncoder):
         contains_text = "text" in image_texts_pairs.dataset.features
         contains_both = contains_image and contains_text
 
+        if contains_both:
+            progress_desc = "Encoding images+texts"
+        elif contains_image:
+            progress_desc = "Encoding images"
+        elif contains_text:
+            progress_desc = "Encoding texts"
+        else:
+            raise ValueError("No text or image features found in inputs.")
+
         all_embeds: list[torch.Tensor] = []
         with torch.no_grad():
             for batch in tqdm(
                 image_texts_pairs,
                 disable=not show_progress_bar,
-                desc="Encoding images+texts",
+                desc=progress_desc,
             ):
                 if contains_image:
                     imgs = [
