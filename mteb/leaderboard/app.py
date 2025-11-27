@@ -260,40 +260,43 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         default_benchmark, filtered_benchmark_results
     )
 
-    lang_select = gr.Dropdown(
-        LANGUAGE,
+    lang_select = gr.CheckboxGroup(
+        sorted(default_results.languages),
         value=sorted(default_results.languages),
-        allow_custom_value=True,
-        multiselect=True,
+        show_label=True,
+        show_select_all=True,
         label="Language",
         info="Select languages to include.",
     )
-    type_select = gr.Dropdown(
-        sorted(get_args(TaskType)),
+    type_select = gr.CheckboxGroup(
+        sorted(default_results.task_types),
         value=sorted(default_results.task_types),
-        multiselect=True,
+        show_label=True,
+        show_select_all=True,
         label="Task Type",
         info="Select task types to include.",
     )
-    domain_select = gr.Dropdown(
-        sorted(get_args(TaskDomain)),
+    domain_select = gr.CheckboxGroup(
+        sorted(default_results.domains),
         value=sorted(default_results.domains),
-        multiselect=True,
+        show_label=True,
+        show_select_all=True,
         label="Domain",
         info="Select domains to include.",
     )
-    task_select = gr.Dropdown(
+    task_select = gr.CheckboxGroup(
         sorted(default_results.task_names),
         value=sorted(default_results.task_names),
-        allow_custom_value=False,
-        multiselect=True,
+        show_label=True,
+        show_select_all=True,
         label="Task",
         info="Select specific tasks to include",
     )
-    modality_select = gr.Dropdown(
-        sorted(get_args(Modalities)),
+    modality_select = gr.CheckboxGroup(
+        sorted(default_results.modalities),
         value=sorted(default_results.modalities),
-        multiselect=True,
+        show_label=True,
+        show_select_all=True,
         label="Modality",
         info="Select modalities to include.",
     )
@@ -518,10 +521,10 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             initial_models = sorted(initial_models)
 
             return (
-                languages,
-                domains,
-                types,
-                modalities,
+                gr.update(choices=languages, value=languages),
+                gr.update(choices=domains, value=domains),
+                gr.update(choices=types, value=types),
+                gr.update(choices=modalities, value=modalities),
                 gr.update(choices=benchmark_tasks, value=benchmark_tasks),
                 scores,
                 gr.update(visible=show_zero_shot),
