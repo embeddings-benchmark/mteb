@@ -82,7 +82,10 @@ GP_BENCHMARK_ENTRIES = [
                 )
                 + [
                     MenuEntry(
-                        "Other", mteb.get_benchmarks(["MTEB(eng, v1)", "MTEB(fas, v1)", "MTEB(rus, v1)"])
+                        "Other",
+                        mteb.get_benchmarks(
+                            ["MTEB(eng, v1)", "MTEB(fas, v1)", "MTEB(rus, v1)"]
+                        ),
                     )
                 ],
             ),
