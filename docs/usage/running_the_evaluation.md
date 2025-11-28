@@ -120,7 +120,7 @@ Evaluation in MTEB consists of three main components: 1) downloading the dataset
 If you find that any of our design decisions prevents you from running the evaluation efficiently, do feel free to create an [issue](https://github.com/embeddings-benchmark/mteb/issues).
 
 !!! info
-    In version `2.1.4` an [issue](https://github.com/embeddings-benchmark/mteb/pull/3518) was found that caused the GPU and CPU to idle during evaluation. We suggest upgrading to `mteb>=2.2.0`. 
+    In version `2.1.4` an [issue](https://github.com/embeddings-benchmark/mteb/pull/3518) was found that caused the GPU and CPU to idle during evaluation of retrieval/reranking tasks. We suggest upgrading to `mteb>=2.2.0`.
 
 ### Speeding up the Model
 
