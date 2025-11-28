@@ -192,6 +192,7 @@ def test_evaluate_aggregated_task():
 
 
 def test_run_private_task_warning(caplog):
+    """Test that a warning is correctly logged in an attempt run a private dataset is made"""
     task = mteb.get_task("Code1Retrieval")
     model = mteb.get_model("baseline/random-encoder-baseline")
 
@@ -202,6 +203,7 @@ def test_run_private_task_warning(caplog):
 
 
 def test_run_private_task():
+    """Tests that private task is run if it is possible to load the data"""
     task = MockRetrievalTask()
     task_metadata = copy(task.metadata)
     task_metadata.is_public = False
@@ -212,6 +214,7 @@ def test_run_private_task():
 
 
 def test_run_task_raise_error():
+    """Test that the error is not caught unintentionally"""
     task = MockRetrievalTask()
 
     def load_error():
@@ -224,6 +227,7 @@ def test_run_task_raise_error():
 
 
 def test_run_task_supress_error():
+    """Test that errors are correctly suppressed, when specified"""
     task = MockRetrievalTask()
 
     def load_error():
