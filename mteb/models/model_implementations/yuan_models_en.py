@@ -36,7 +36,11 @@ def yuan_instruct_loader(
 
 
 yuan_embedding_2_en  = ModelMeta(
-    loader=yuan_instruct_loader,
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template=instruction_template,
+        apply_instruction_to_passages=False,
+    ),
     name="IEITYuan/Yuan-embedding-2.0-en",
     languages=["eng-Latn"],
     open_weights=True,
