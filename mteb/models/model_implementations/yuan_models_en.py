@@ -16,9 +16,6 @@ def instruction_template(
     return f"Instruct: {instruction}\nQuery:"
 
 
-multilingual_langs = [
-      "eng-Latn"
-]
 
 
 training_data = {"T2Retrieval","DuRetrieval","MMarcoReranking","CMedQAv2-reranking","NQ","MSMARCO","HotpotQA","MrTidyRetrieval","MIRACLRetrieval","CodeSearchNet",
