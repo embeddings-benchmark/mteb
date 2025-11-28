@@ -1,6 +1,6 @@
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 import pandas as pd
 
@@ -51,7 +51,7 @@ class Benchmark:
     display_on_leaderboard: bool = True
     icon: str | None = None
     display_name: str | None = None
-    language_view: list[str] = field(default_factory=list)
+    language_view: list[str] | Literal["all"] = field(default_factory=list)
 
     def __iter__(self) -> Iterable["AbsTask"]:
         return iter(self.tasks)

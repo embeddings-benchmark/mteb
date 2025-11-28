@@ -265,8 +265,8 @@ def _create_per_language_table_from_benchmark_results(
         DataFrame with per-language scores, ready for styling in the leaderboard
     """
     data = benchmark_results.to_dataframe(aggregation_level="language", format="long")
-    # keep only languages in language_view
-    data = data[data["language"].isin(language_view)]
+    if language_view != "all":
+        data = data[data["language"].isin(language_view)]
 
     if data.empty:
         no_results_frame = pd.DataFrame(

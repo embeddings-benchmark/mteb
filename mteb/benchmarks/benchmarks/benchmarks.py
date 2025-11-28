@@ -410,6 +410,7 @@ SEB = Benchmark(
     name="MTEB(Scandinavian, v1)",
     display_name="Scandinavian",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/dk.svg",
+    language_view=["dan-Latn", "swe-Latn", "nno-Latn", "nob-Latn"],
     tasks=get_tasks(
         tasks=[
             # Bitext
@@ -892,6 +893,7 @@ MTEB_multilingual_v1 = Benchmark(
 MTEB_multilingual_v2 = Benchmark(
     name="MTEB(Multilingual, v2)",
     display_name="Multilingual",
+    language_view="all",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
     tasks=mteb_multilingual_tasks,
     description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages. ",

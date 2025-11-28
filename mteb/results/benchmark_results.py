@@ -347,9 +347,6 @@ class BenchmarkResults(BaseModel):
         # Create DataFrame
         df = pd.DataFrame(scores_data)
 
-        if aggregation_level == "language":
-            df["language"] = df["language"].apply(lambda langs: ", ".join(langs))
-
         _columns = ["model_name"]
         if include_model_revision is False:
             df = df.drop(columns=["model_revision"])

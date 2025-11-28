@@ -45,6 +45,9 @@ def _aggregate_and_pivot(
 
     elif aggregation_level == "language":
         index_columns = ["language"]
+        df = df.explode("language").reset_index(
+            drop=True
+        )  # each language in its own row before aggregation
 
     # perform aggregation
     if aggregation_fn is None:
