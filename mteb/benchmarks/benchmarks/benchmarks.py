@@ -240,6 +240,7 @@ MTEB_MAIN_RU = Benchmark(
   year = {2024},
 }
 """,
+    contacts=["Samoed", "artemsnegirev", "Drozhzhinastya"],
 )
 
 MTEB_MAIN_RU_v1_1 = Benchmark(
@@ -286,7 +287,7 @@ MTEB_MAIN_RU_v1_1 = Benchmark(
             eval_splits=["test"],
         )
     ),
-    description="A Russian version of the Massive Text Embedding Benchmark with all original task categories and HardNegatives Retrieval tasks for measuring time optimization.",
+    description="A Russian version of the Massive Text Embedding Benchmark covering the task categories of classification, clustering, reranking, pair classification, retrieval, and semantic similarity. In v1.1, MIRACLRetrieval and RiaNewsRetrieval were replaced with their HardNegatives variants for improved time-optimization measurement. MIRACLRetrievalHardNegatives and RiaNewsRetrievalHardNegatives are used in their updated versions (v2), both of which include improved default prompts.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation=r"""
 @misc{snegirev2024russianfocusedembeddersexplorationrumteb,
@@ -299,6 +300,7 @@ MTEB_MAIN_RU_v1_1 = Benchmark(
   year = {2024},
 }
 """,
+    contacts=["Samoed", "artemsnegirev", "Drozhzhinastya"],
 )
 
 
