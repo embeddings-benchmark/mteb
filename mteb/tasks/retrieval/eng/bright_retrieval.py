@@ -104,7 +104,7 @@ class BrightRetrieval(AbsTaskRetrieval):
             "revision": "a75a0eb483f6a5233a6efc2d63d71540a4443dfb",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
-        description="Bright retrieval dataset.",
+        description="BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval",
         type="Retrieval",
         category="t2t",
         eval_splits=["standard"],
