@@ -223,7 +223,7 @@ def test_run_task_raise_error():
     task.load_data = load_error
     model = mteb.get_model("baseline/random-encoder-baseline")
     with pytest.raises(RuntimeError, match="Test error"):
-        mteb.evaluate(model, task, cache=None, public_only=False, raise_error=True)
+        mteb.evaluate(model, task, cache=None)
 
 
 def test_run_task_supress_error():
@@ -236,7 +236,7 @@ def test_run_task_supress_error():
     task.load_data = load_error
     model = mteb.get_model("baseline/random-encoder-baseline")
     results = mteb.evaluate(
-        model, task, cache=None, public_only=False, raise_error=False
+        model, task, cache=None, raise_error=False
     )
     assert len(results.task_results) == 0
     assert len(results.exceptions) == 1
@@ -253,7 +253,7 @@ def test_run_list_with_error():
 
     model = mteb.get_model("baseline/random-encoder-baseline")
     results = mteb.evaluate(
-        model, [error_task, task], cache=None, public_only=False, raise_error=False
+        model, [error_task, task], cache=None, raise_error=False
     )
     assert len(results.task_results) == 1
     assert len(results.exceptions) == 1
