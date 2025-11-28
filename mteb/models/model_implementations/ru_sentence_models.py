@@ -43,11 +43,19 @@ GIGA_task_prompts = {
         "query": "Given a news title, retrieve relevant news article",
         "document": "",
     },
+    "RiaNewsRetrievalHardNegatives.v2": {
+        "query": "Given a news title, retrieve relevant news article",
+        "document": "",
+    },
     "MIRACLReranking": {
         "query": "Given a question, retrieve Wikipedia passages that answer the question",
         "document": "",
     },
     "MIRACLRetrieval": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question",
+        "document": "",
+    },
+    "MIRACLRetrievalHardNegatives.v2": {
         "query": "Given a question, retrieve Wikipedia passages that answer the question",
         "document": "",
     },
@@ -755,6 +763,7 @@ frida_prompts = {
     "SensitiveTopicsClassification": "categorize_topic: ",
     "TERRa": "categorize_entailment: ",
     "RiaNewsRetrieval": "categorize: ",
+    "RiaNewsRetrievalHardNegatives.v2": "",
 }
 
 frida_training_datasets = {
