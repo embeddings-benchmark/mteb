@@ -41,7 +41,7 @@ def yuan_instruct_loader(
 yuan_embedding_2_en  = ModelMeta(
     loader=yuan_instruct_loader,
     name="IEITYuan/Yuan-embedding-2.0-en",
-    languages=multilingual_langs,
+    languages=["eng-Latn"],
     open_weights=True,
     revision="b2fd15da3bcae3473c8529593825c15068f09fce",  
     release_date="2025-11-27",
