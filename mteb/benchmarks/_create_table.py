@@ -1,6 +1,7 @@
 import math
 import re
 from collections import defaultdict
+from typing import Literal
 
 import numpy as np
 import pandas as pd
@@ -252,7 +253,7 @@ def _create_per_task_table_from_benchmark_results(
 
 def _create_per_language_table_from_benchmark_results(
     benchmark_results: BenchmarkResults,
-    language_view: list[str],
+    language_view: list[str] | Literal["all"],
 ) -> pd.DataFrame:
     """Create per-language table from BenchmarkResults.
 
@@ -284,6 +285,7 @@ def _create_per_language_table_from_benchmark_results(
             {"No results": ["You can try relaxing your criteria"]}
         )
         return no_results_frame
+
     models_to_remove = list(per_language[to_remove].index)
     per_language = per_language.drop(models_to_remove, axis=0)
 
