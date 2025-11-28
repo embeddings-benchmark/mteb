@@ -268,9 +268,7 @@ def _apply_per_language_table_styling(per_language: pd.DataFrame) -> gr.DataFram
     per_language[language_score_columns] *= 100
 
     if len(per_language.columns) > 100:  # Avoid gradio error on very wide tables
-        per_language_style = per_language.style.format(
-            "{:.2f}", subset=language_score_columns, na_rep=""
-        )
+        per_language_style = per_language.round(2)
     else:
         per_language_style = per_language.style.format(
             "{:.2f}", subset=language_score_columns, na_rep=""
