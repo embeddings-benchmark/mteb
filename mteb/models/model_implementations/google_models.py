@@ -275,5 +275,5 @@ embedding_gemma_300m = ModelMeta(
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
     similarity_fn_name="cosine",
-    memory_usage_mb=578,
+    memory_usage_mb=1155,
 )
