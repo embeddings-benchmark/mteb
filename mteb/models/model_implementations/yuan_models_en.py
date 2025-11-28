@@ -35,10 +35,6 @@ def yuan_instruct_loader(
         apply_instruction_to_passages=False,
         **kwargs,
     )
-    encoder = model.model._first_module()
-    if encoder.auto_model.config._attn_implementation == "flash_attention_2":
-        # The Qwen3 code only use left padding in flash_attention_2 mode.
-        encoder.tokenizer.padding_side = "left"
     return model
 
 
