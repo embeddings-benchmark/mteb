@@ -3,6 +3,7 @@ from copy import copy
 from pathlib import Path
 
 import pytest
+from datasets.exceptions import DatasetNotFoundError
 
 import mteb
 from mteb.abstasks.abstask import AbsTask
@@ -194,12 +195,17 @@ def test_evaluate_aggregated_task():
 def test_run_private_task_warning(caplog):
     """Test that a warning is correctly logged in an attempt run a private dataset is made"""
     task = mteb.get_task("Code1Retrieval")
+
+    def load_data_dataset_not_found():
+        raise DatasetNotFoundError
+
+    task.load_data = load_data_dataset_not_found
     model = mteb.get_model("baseline/random-encoder-baseline")
 
     with caplog.at_level(logging.WARNING):
         result = mteb.evaluate(model, task, cache=None)
         assert len(result.task_results) == 0
-        assert "Dataset for private task Code1Retrieval not found" in caplog.text
+        assert "Dataset for private task 'Code1Retrieval' not found" in caplog.text
 
 
 def test_run_private_task():
