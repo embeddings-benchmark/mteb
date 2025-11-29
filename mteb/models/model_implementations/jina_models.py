@@ -139,10 +139,10 @@ JinaV4_TRAINING_DATA = {
     "CornStack",
     "VDRMultilingualRetrieval",
     # from https://huggingface.co/datasets/vidore/colpali_train_set
-    "DocVQA",
-    "InfoVQA",
-    "TATDQA",
-    "arXivQA",
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreArxivQARetrieval",
     # "other", # inhouse dataset including synthetic datasets
 }
 
