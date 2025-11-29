@@ -5,7 +5,7 @@ import tempfile
 import time
 import warnings
 from pathlib import Path
-from typing import Literal, get_args
+from typing import Literal
 from urllib.parse import urlencode
 
 import cachetools
@@ -14,7 +14,6 @@ import pandas as pd
 
 import mteb
 from mteb import BenchmarkResults
-from mteb.abstasks.task_metadata import TaskDomain, TaskType
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.cache import ResultCache
 from mteb.leaderboard.benchmark_selector import (
@@ -29,7 +28,6 @@ from mteb.leaderboard.table import (
     apply_summary_styling_from_benchmark,
 )
 from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
-from mteb.types import Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -139,7 +137,10 @@ def _update_task_info(task_names: str) -> gr.DataFrame:
     df["languages"] = df["languages"].map(_format_list)
     df = df.sort_values("name")
     df["domains"] = df["domains"].map(_format_list)
-    df["name"] = f'<a href="{df["reference"]}" target="_blank">{df["name"]}</a>'
+    df["name"] = df.apply(
+        lambda row: f'<a href="{row["reference"]}" target="_blank">{row["name"]}</a>',
+        axis=1,
+    )
     df["modalities"] = df["modalities"].map(_format_list)
     df = df.rename(
         columns={
@@ -257,40 +258,43 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         default_benchmark, filtered_benchmark_results
     )
 
-    lang_select = gr.Dropdown(
-        LANGUAGE,
+    lang_select = gr.CheckboxGroup(
+        sorted(default_results.languages),
         value=sorted(default_results.languages),
-        allow_custom_value=True,
-        multiselect=True,
+        show_label=True,
+        show_select_all=True,
         label="Language",
         info="Select languages to include.",
     )
-    type_select = gr.Dropdown(
-        sorted(get_args(TaskType)),
+    type_select = gr.CheckboxGroup(
+        sorted(default_results.task_types),
         value=sorted(default_results.task_types),
-        multiselect=True,
+        show_label=True,
+        show_select_all=True,
         label="Task Type",
         info="Select task types to include.",
     )
-    domain_select = gr.Dropdown(
-        sorted(get_args(TaskDomain)),
+    domain_select = gr.CheckboxGroup(
+        sorted(default_results.domains),
         value=sorted(default_results.domains),
-        multiselect=True,
+        show_label=True,
+        show_select_all=True,
         label="Domain",
         info="Select domains to include.",
     )
-    task_select = gr.Dropdown(
-        sorted(all_results.task_names),
+    task_select = gr.CheckboxGroup(
+        sorted(default_results.task_names),
         value=sorted(default_results.task_names),
-        allow_custom_value=True,
-        multiselect=True,
+        show_label=True,
+        show_select_all=True,
         label="Task",
         info="Select specific tasks to include",
     )
-    modality_select = gr.Dropdown(
-        sorted(get_args(Modalities)),
+    modality_select = gr.CheckboxGroup(
+        sorted(default_results.modalities),
         value=sorted(default_results.modalities),
-        multiselect=True,
+        show_label=True,
+        show_select_all=True,
         label="Modality",
         info="Select modalities to include.",
     )
@@ -515,11 +519,11 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             initial_models = sorted(initial_models)
 
             return (
-                languages,
-                domains,
-                types,
-                modalities,
-                benchmark_tasks,
+                gr.update(choices=languages, value=languages),
+                gr.update(choices=domains, value=domains),
+                gr.update(choices=types, value=types),
+                gr.update(choices=modalities, value=modalities),
+                gr.update(choices=benchmark_tasks, value=benchmark_tasks),
                 scores,
                 gr.update(visible=show_zero_shot),
                 initial_models,
