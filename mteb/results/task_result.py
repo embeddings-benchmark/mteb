@@ -840,3 +840,15 @@ class TaskResult(BaseModel):
                     )
                 )
         return results
+
+
+class TaskError(BaseModel):
+    """A class to represent an error that occurred during the evaluation of a task.
+
+    Attributes:
+        task_name: The name of the MTEB task.
+        exception: The error message that occurred during the evaluation.
+    """
+
+    task_name: str
+    exception: str
