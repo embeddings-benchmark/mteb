@@ -260,9 +260,12 @@ colqwen2_5 = ModelMeta(
 )
 
 TOMORO_TRAINING_DATA = {
+    "VDRMultilingualRetrieval",
     # from https://huggingface.co/datasets/vidore/colpali_train_set
-    "vdr-multilingual-train",
-    "colpali_train_set",  # as it contains PDFs
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreArxivQARetrieval",
     "VisRAG-Ret-Train-Synthetic-data",
     "VisRAG-Ret-Train-In-domain-data",
 }
