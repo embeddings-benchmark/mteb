@@ -21,6 +21,7 @@ from mteb.types import (
 )
 
 from .models_protocols import CrossEncoderProtocol, EncoderProtocol
+from .search_encoder_index.search_backend_protocol import IndexEncoderSearchProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -28,13 +29,19 @@ logger = logging.getLogger(__name__)
 class SearchEncoderWrapper:
     """Wrapper for Encoder models to be used in search tasks."""
 
-    corpus_chunk_size = 50_000
     task_corpus: CorpusDatasetType | None
 
-    def __init__(self, model: EncoderProtocol):
+    def __init__(
+        self,
+        model: EncoderProtocol,
+        corpus_chunk_size: int = 50_000,
+        index_backend: IndexEncoderSearchProtocol | None = None,
+    ) -> None:
         self.model = model
         self.task_corpus = None
         self.mteb_model_meta = model.mteb_model_meta
+        self.corpus_chunk_size = corpus_chunk_size
+        self.index_backend = index_backend
 
     def index(
         self,
@@ -56,6 +63,22 @@ class SearchEncoderWrapper:
         """
         # Always retain corpus for potential reranking or fallback flows
         self.task_corpus = corpus
+        if self.index_backend is not None:
+            all_doc_embeddings = self.model.encode(
+                create_dataloader(
+                    corpus,
+                    task_metadata,
+                    prompt_type=PromptType.document,
+                    **encode_kwargs,
+                ),
+                task_metadata=task_metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                prompt_type=PromptType.document,
+                **encode_kwargs,
+            )
+
+            self.index_backend.add_documents(all_doc_embeddings, corpus["id"])
 
     def search(
         self,
@@ -105,27 +128,74 @@ class SearchEncoderWrapper:
 
         if top_ranked is not None:
             logger.info("Reranking pre-ranked documents...")
-            result_heaps = self._rerank_documents(
-                query_idx_to_id=query_idx_to_id,
-                query_embeddings=query_embeddings,
-                top_ranked=top_ranked,
-                top_k=top_k,
-                task_metadata=task_metadata,
-                hf_subset=hf_subset,
-                hf_split=hf_split,
-                encode_kwargs=encode_kwargs,
-            )
+            if self.index_backend is None:
+                result_heaps = self._rerank_documents(
+                    query_idx_to_id=query_idx_to_id,
+                    query_embeddings=query_embeddings,
+                    top_ranked=top_ranked,
+                    top_k=top_k,
+                    task_metadata=task_metadata,
+                    hf_subset=hf_subset,
+                    hf_split=hf_split,
+                    encode_kwargs=encode_kwargs,
+                )
+            else:
+                cos_scores_top_k_values, cos_scores_top_k_idx = (
+                    self.index_backend.search(
+                        query_embeddings,
+                        top_k,
+                        similarity_fn=self.model.similarity,
+                        top_ranked=top_ranked,
+                        query_idx_to_id=query_idx_to_id,
+                    )
+                )
+                result_heaps = {qid: [] for qid in query_idx_to_id.values()}
+                for query_itr in range(len(query_embeddings)):
+                    result_heaps = self._rerank_sort_results(
+                        result_heaps=result_heaps,
+                        query_id=query_idx_to_id[query_itr],
+                        ranked_ids=top_ranked[query_idx_to_id[query_itr]],
+                        scores_top_k_idx=torch.tensor(
+                            [cos_scores_top_k_idx[query_itr]]
+                        ),
+                        scores_top_k_values=torch.tensor(
+                            [cos_scores_top_k_values[query_itr]]
+                        ),
+                    )
+                self.index_backend.clear()
         else:
             logger.info("Performing full corpus search...")
-            result_heaps = self._full_corpus_search(
-                query_idx_to_id=query_idx_to_id,
-                query_embeddings=query_embeddings,
-                task_metadata=task_metadata,
-                hf_subset=hf_subset,
-                hf_split=hf_split,
-                top_k=top_k,
-                encode_kwargs=encode_kwargs,
-            )
+            if self.index_backend is None:
+                result_heaps = self._full_corpus_search(
+                    query_idx_to_id=query_idx_to_id,
+                    query_embeddings=query_embeddings,
+                    task_metadata=task_metadata,
+                    hf_subset=hf_subset,
+                    hf_split=hf_split,
+                    top_k=top_k,
+                    encode_kwargs=encode_kwargs,
+                )
+            else:
+                cos_scores_top_k_values, cos_scores_top_k_idx = (
+                    self.index_backend.search(
+                        query_embeddings,
+                        top_k,
+                        similarity_fn=self.model.similarity,
+                        top_ranked=None,
+                        query_idx_to_id=None,
+                    )
+                )
+                result_heaps = {qid: [] for qid in query_idx_to_id.values()}
+                result_heaps = self._sort_full_corpus_results(
+                    result_heaps=result_heaps,
+                    query_idx_to_id=query_idx_to_id,
+                    query_embeddings=query_embeddings,
+                    cos_scores_top_k_idx=cos_scores_top_k_idx,
+                    cos_scores_top_k_values=cos_scores_top_k_values,
+                    sub_corpus_ids=self.task_corpus["id"],
+                    top_k=top_k,
+                )
+                self.index_backend.clear()
 
         # Reset the task corpus dataloader to None to free up memory
         self.task_corpus = None
@@ -147,7 +217,7 @@ class SearchEncoderWrapper:
         top_k: int,
         encode_kwargs: dict[str, Any],
     ) -> dict[str, list[tuple[float, str]]]:
-        logger.info("Encoding Corpus in batches... Warning: This might take a while!")
+        logger.info("Encoding Corpus in batches (this might take a while)...")
         itr = range(0, len(self.task_corpus), self.corpus_chunk_size)
 
         result_heaps = {qid: [] for qid in query_idx_to_id.values()}
@@ -192,19 +262,45 @@ class SearchEncoderWrapper:
             cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
 
             sub_corpus_ids = list(sub_corpus_ids)
-            for query_itr in range(len(query_embeddings)):
-                query_id = query_idx_to_id[query_itr]
-                for sub_corpus_id, score in zip(
-                    cos_scores_top_k_idx[query_itr],
-                    cos_scores_top_k_values[query_itr],
-                ):
-                    corpus_id = sub_corpus_ids[sub_corpus_id]
-                    if len(result_heaps[query_id]) < top_k:
-                        # push item on the heap
-                        heapq.heappush(result_heaps[query_id], (score, corpus_id))
-                    else:
-                        # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
-                        heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
+            result_heaps = self._sort_full_corpus_results(
+                result_heaps=result_heaps,
+                query_idx_to_id=query_idx_to_id,
+                query_embeddings=query_embeddings,
+                cos_scores_top_k_idx=cos_scores_top_k_idx,
+                cos_scores_top_k_values=cos_scores_top_k_values,
+                sub_corpus_ids=sub_corpus_ids,
+                top_k=top_k,
+            )
+        return result_heaps
+
+    def _sort_full_corpus_results(
+        self,
+        result_heaps: dict[str, list[tuple[float, str]]],
+        query_idx_to_id: dict[int, str],
+        query_embeddings: Array,
+        cos_scores_top_k_idx: list[list[int]],
+        cos_scores_top_k_values: list[list[float]],
+        sub_corpus_ids: list[str],
+        top_k: int,
+    ) -> dict[str, list[tuple[float, str]]]:
+        """Sort the heaps into descending order lists.
+
+        Returns:
+            A dictionary mapping query IDs to a sorted list of tuples, each containing a relevance score and a document ID.
+        """
+        for query_itr in range(len(query_embeddings)):
+            query_id = query_idx_to_id[query_itr]
+            for sub_corpus_id, score in zip(
+                cos_scores_top_k_idx[query_itr],
+                cos_scores_top_k_values[query_itr],
+            ):
+                corpus_id = sub_corpus_ids[sub_corpus_id]
+                if len(result_heaps[query_id]) < top_k:
+                    # push item on the heap
+                    heapq.heappush(result_heaps[query_id], (score, corpus_id))
+                else:
+                    # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
+                    heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
         return result_heaps
 
     def _rerank_documents(
@@ -279,14 +375,34 @@ class SearchEncoderWrapper:
             scores_top_k_values = scores_top_k_values.cpu()
             scores_top_k_idx = scores_top_k_idx.cpu()
 
-            # Build result heap
-            for doc_idx, score in zip(
-                scores_top_k_idx[0].tolist(),
-                scores_top_k_values[0].tolist(),
-            ):
-                corpus_id = ranked_ids[doc_idx]
-                heapq.heappush(result_heaps[query_id], (score, corpus_id))
+            result_heaps = self._rerank_sort_results(
+                result_heaps=result_heaps,
+                query_id=query_id,
+                ranked_ids=ranked_ids,
+                scores_top_k_idx=scores_top_k_idx,
+                scores_top_k_values=scores_top_k_values,
+            )
+        return result_heaps
 
+    def _rerank_sort_results(
+        self,
+        result_heaps: list[tuple[float, str]],
+        query_id: str,
+        ranked_ids: list[str],
+        scores_top_k_idx: torch.Tensor,
+        scores_top_k_values: torch.Tensor,
+    ) -> list[tuple[float, str]]:
+        """Sort the heap into descending order list.
+
+        Returns:
+            A sorted list of tuples, each containing a relevance score and a document ID.
+        """
+        for doc_idx, score in zip(
+            scores_top_k_idx[0].tolist(),
+            scores_top_k_values[0].tolist(),
+        ):
+            corpus_id = ranked_ids[doc_idx]
+            heapq.heappush(result_heaps[query_id], (score, corpus_id))
         return result_heaps
 
     def encode(

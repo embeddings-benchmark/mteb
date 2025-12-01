@@ -1,27 +1,34 @@
 name: Datasets available on HuggingFace
-
 on:
   push:
     branches: [main]
+  pull_request:
+    paths:
+      - "mteb/tasks/**.py"
 
 jobs:
-  extract-and-run:
+  dataset-loading-check:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
-
+      uses: actions/checkout@v6
+    
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v6
       with:
-        python-version: '3.10'
+        python-version: '3.11'
         cache: 'pip'
-
+    
     - name: Install dependencies
       run: |
-          make install-for-tests
-
+        make install-for-tests
+    
     - name: Run dataset loading tests
+      env:
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
       run: |
-        make dataset-load-test
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          make dataset-load-test-pr BASE_BRANCH=${{ github.event.pull_request.base.ref }}
+        else
+          make dataset-load-test
+        fi
