@@ -216,6 +216,110 @@ def _should_show_zero_shot_filter(benchmark_name: str) -> bool:
     return True
 
 
+@cachetools.cached(
+    cache={},
+    key=lambda benchmark_name, all_benchmark_results: hash(benchmark_name),
+)
+def _cache_on_benchmark_select(benchmark_name, all_benchmark_results):
+    start_time = time.time()
+    benchmark = mteb.get_benchmark(benchmark_name)
+    languages = [task.languages for task in benchmark.tasks if task.languages]
+    languages = set(itertools.chain.from_iterable(languages))
+    languages = sorted(languages)
+    domains = [
+        task.metadata.domains for task in benchmark.tasks if task.metadata.domains
+    ]
+    domains = set(itertools.chain.from_iterable(domains))
+    types = {task.metadata.type for task in benchmark.tasks if task.metadata.type}
+    modalities = set()
+    for task in benchmark.tasks:
+        modalities.update(task.metadata.modalities)
+    languages, domains, types, modalities = (
+        sorted(languages),
+        sorted(domains),
+        sorted(types),
+        sorted(modalities),
+    )
+    elapsed = time.time() - start_time
+    benchmark_results = all_benchmark_results[benchmark_name]
+    scores = benchmark_results._get_scores(format="long")
+    logger.debug(f"on_benchmark_select callback: {elapsed}s")
+    show_zero_shot = _should_show_zero_shot_filter(benchmark_name)
+
+    # Calculate initial models for this benchmark to avoid race conditions
+    benchmark_tasks = sorted([task.metadata.name for task in benchmark.tasks])
+    all_models_in_scores = list({entry["model_name"] for entry in scores})
+    initial_models = _filter_models(
+        all_models_in_scores,
+        benchmark_tasks,
+        availability=None,
+        compatibility=[],
+        instructions=None,
+        max_model_size=MAX_MODEL_SIZE,
+        zero_shot_setting="allow_all",
+    )
+    # Sort to ensure consistency with update_models
+    initial_models = sorted(initial_models)
+
+    return (
+        languages,
+        domains,
+        types,
+        modalities,
+        benchmark_tasks,
+        scores,
+        show_zero_shot,
+        initial_models,
+    )
+
+
+@cachetools.cached(
+    cache={},
+    key=lambda benchmark_name,
+    type_select,
+    domain_select,
+    lang_select,
+    modality_select: hash(
+        (
+            hash(benchmark_name),
+            hash(tuple(type_select)),
+            hash(tuple(domain_select)),
+            hash(tuple(lang_select)),
+            hash(tuple(modality_select)),
+        )
+    ),
+)
+def _cache_update_task_list(
+    benchmark_name, type_select, domain_select, lang_select, modality_select
+):
+    if not len(lang_select):
+        return []
+    start_time = time.time()
+    benchmark_tasks = []
+    tasks_to_keep = []
+    for task in mteb.get_benchmark(benchmark_name).tasks:
+        benchmark_tasks.append(task.metadata.name)
+        if task.metadata.type not in type_select:
+            continue
+        if task.metadata.domains is not None and not (
+            set(task.metadata.domains) & set(domain_select)
+        ):
+            continue
+        if task.languages is not None and not (set(task.languages) & set(lang_select)):
+            continue
+        if task.metadata.modalities and not (
+            set(task.metadata.modalities) & set(modality_select)
+        ):
+            continue
+        tasks_to_keep.append(task.metadata.name)
+    benchmark_tasks.sort()
+    tasks_to_keep.sort()
+    elapsed = time.time() - start_time
+    logger.debug(f"update_task_list callback: {elapsed}s")
+
+    return benchmark_tasks, tasks_to_keep
+
+
 def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
     """Returns a Gradio Blocks app for the MTEB leaderboard."""
     logger.info("Loading all benchmark results")
@@ -228,6 +332,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         benchmark.name: all_results.select_tasks(benchmark.tasks).join_revisions()
         for benchmark in benchmarks
     }
+
     default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
     default_results = all_benchmark_results[default_benchmark.name]
     logger.info("Benchmark results loaded")
@@ -469,54 +574,17 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         # This sets the benchmark from the URL query parameters
         demo.load(_set_benchmark_on_load, inputs=[], outputs=[benchmark_select])
 
-        @cachetools.cached(
-            cache={},
-            key=lambda benchmark_name: hash(benchmark_name),
-        )
         def on_benchmark_select(benchmark_name):
-            start_time = time.time()
-            benchmark = mteb.get_benchmark(benchmark_name)
-            languages = [task.languages for task in benchmark.tasks if task.languages]
-            languages = set(itertools.chain.from_iterable(languages))
-            languages = sorted(languages)
-            domains = [
-                task.metadata.domains
-                for task in benchmark.tasks
-                if task.metadata.domains
-            ]
-            domains = set(itertools.chain.from_iterable(domains))
-            types = {
-                task.metadata.type for task in benchmark.tasks if task.metadata.type
-            }
-            modalities = set()
-            for task in benchmark.tasks:
-                modalities.update(task.metadata.modalities)
-            languages, domains, types, modalities = (
-                sorted(languages),
-                sorted(domains),
-                sorted(types),
-                sorted(modalities),
-            )
-            elapsed = time.time() - start_time
-            benchmark_results = all_benchmark_results[benchmark_name]
-            scores = benchmark_results._get_scores(format="long")
-            logger.debug(f"on_benchmark_select callback: {elapsed}s")
-            show_zero_shot = _should_show_zero_shot_filter(benchmark_name)
-
-            # Calculate initial models for this benchmark to avoid race conditions
-            benchmark_tasks = sorted([task.metadata.name for task in benchmark.tasks])
-            all_models_in_scores = list({entry["model_name"] for entry in scores})
-            initial_models = _filter_models(
-                all_models_in_scores,
+            (
+                languages,
+                domains,
+                types,
+                modalities,
                 benchmark_tasks,
-                availability=None,
-                compatibility=[],
-                instructions=None,
-                max_model_size=MAX_MODEL_SIZE,
-                zero_shot_setting="allow_all",
-            )
-            # Sort to ensure consistency with update_models
-            initial_models = sorted(initial_models)
+                scores,
+                show_zero_shot,
+                initial_models,
+            ) = _cache_on_benchmark_select(benchmark_name, all_benchmark_results)
 
             return (
                 gr.update(choices=languages, value=languages),
@@ -566,48 +634,13 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             outputs=[scores],
         )
 
-        @cachetools.cached(
-            cache={},
-            key=lambda benchmark_name,
-            type_select,
-            domain_select,
-            lang_select,
-            modality_select: hash(
-                (
-                    hash(benchmark_name),
-                    hash(tuple(type_select)),
-                    hash(tuple(domain_select)),
-                    hash(tuple(lang_select)),
-                    hash(tuple(modality_select)),
-                )
-            ),
-        )
         def update_task_list(
             benchmark_name, type_select, domain_select, lang_select, modality_select
         ):
-            if not len(lang_select):
-                return []
-            start_time = time.time()
-            tasks_to_keep = []
-            for task in mteb.get_benchmark(benchmark_name).tasks:
-                if task.metadata.type not in type_select:
-                    continue
-                if task.metadata.domains is not None and not (
-                    set(task.metadata.domains) & set(domain_select)
-                ):
-                    continue
-                if task.languages is not None and not (
-                    set(task.languages) & set(lang_select)
-                ):
-                    continue
-                if task.metadata.modalities and not (
-                    set(task.metadata.modalities) & set(modality_select)
-                ):
-                    continue
-                tasks_to_keep.append(task.metadata.name)
-            elapsed = time.time() - start_time
-            logger.debug(f"update_task_list callback: {elapsed}s")
-            return sorted(tasks_to_keep)
+            benchmark_tasks, tasks_to_keep = _cache_update_task_list(
+                benchmark_name, type_select, domain_select, lang_select, modality_select
+            )
+            return gr.update(choices=benchmark_tasks, value=tasks_to_keep)
 
         type_select.input(
             update_task_list,
