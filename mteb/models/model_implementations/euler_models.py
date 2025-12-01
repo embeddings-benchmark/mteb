@@ -3,7 +3,7 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 
 Euler_Legal_Embedding_V1 = ModelMeta(
     loader=sentence_transformers_loader,
-    name="LawRank/Euler-Legal-Embedding-V1",
+    name="Mira190/Euler-Legal-Embedding-V1",
     revision="main",
     release_date="2025-11-06",
     languages=["eng-Latn", "multilingual"],
@@ -16,7 +16,7 @@ Euler_Legal_Embedding_V1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     framework=["PyTorch", "Sentence Transformers"],
-    reference="https://huggingface.co/LawRank/Euler-Legal-Embedding-V1",
+    reference="https://huggingface.co/Mira190/Euler-Legal-Embedding-V1",
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=["final-data-new-anonymized-grok4-filtered.jsonl"],
