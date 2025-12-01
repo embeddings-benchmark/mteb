@@ -23,16 +23,6 @@ _LANGUAGES = {
     "zh": ["zho-Hans"],
 }
 
-_CITATION = r"""@misc{bge-m3,
-    title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings
-    Through Self-Knowledge Distillation},
-    author={Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
-    year={2024},
-    eprint={2402.03216},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL}
-}"""
-
 
 class MultiLongDocReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -48,7 +38,6 @@ class MultiLongDocReranking(AbsTaskRetrieval):
         dataset={
             "path": "Shitao/MLDR",
             "revision": "b38336456b0e2a0dc1f6b8b3ce3a0e1f3c436d16",
-            "trust_remote_code": True,
         },
         type="Reranking",
         category="t2t",
@@ -72,7 +61,16 @@ class MultiLongDocReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",  # gpt-3.5
         dialect=[],
         sample_creation="found",
-        bibtex_citation=_CITATION,
+        bibtex_citation=r"""
+@misc{bge-m3,
+  archiveprefix = {arXiv},
+  author = {Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
+  eprint = {2402.03216},
+  primaryclass = {cs.CL},
+  title = {BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation},
+  year = {2024},
+}
+""",
         prompt={
             "query": "Given a question, rerank long documents based on their relevance to answer the question"
         },
@@ -91,7 +89,6 @@ class MultiLongDocReranking(AbsTaskRetrieval):
                 self.metadata.dataset["path"],
                 name=lang,
                 revision=self.metadata.dataset["revision"],
-                trust_remote_code=self.metadata.dataset.get("trust_remote_code", False),
             )
 
             # Transform each split immediately
