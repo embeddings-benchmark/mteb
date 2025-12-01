@@ -56,17 +56,27 @@ class MultiLongDocReranking(AbsTaskRetrieval):
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGUAGES,
         main_score="ndcg_at_10",
-        date=("2024-01-01", "2024-02-01"),
-        domains=["Encyclopaedic", "Academic", "Written"],
+        date=(
+            "2000-01-01",
+            "2024-12-31",
+        ),  # Not found in the paper, guessed using the paper's publication date and constituent datasets
+        domains=[
+            "Encyclopaedic",
+            "Written",
+            "Web",
+            "Non-fiction",
+            "Fiction",
+        ],  # narrativeqa, wikipedia, wudao, mC4
         task_subtypes=[],
         license="mit",
-        annotations_creators="derived",
+        annotations_creators="LM-generated",  # gpt-3.5
         dialect=[],
-        sample_creation="created",
+        sample_creation="found",
         bibtex_citation=_CITATION,
         prompt={
             "query": "Given a question, rerank long documents based on their relevance to answer the question"
         },
+        adapted_from=["MultiLongDocRetrieval"],
     )
 
     def load_data(self, **kwargs):
