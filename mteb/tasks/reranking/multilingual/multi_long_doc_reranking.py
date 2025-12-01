@@ -37,7 +37,7 @@ class MultiLongDocReranking(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/Shitao/MLDR",
         dataset={
             "path": "Shitao/MLDR",
-            "revision": "b38336456b0e2a0dc1f6b8b3ce3a0e1f3c436d16",
+            "revision": "d67138e705d963e346253a80e59676ddb418810a",
         },
         type="Reranking",
         category="t2t",
