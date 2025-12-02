@@ -301,11 +301,11 @@ def _cache_update_task_list(
         benchmark_tasks.append(task.metadata.name)
         if task.metadata.type not in type_select:
             continue
-        if task.metadata.domains is not None and not (
+        if task.metadata.domains and not (
             set(task.metadata.domains) & set(domain_select)
         ):
             continue
-        if task.languages is not None and not (set(task.languages) & set(lang_select)):
+        if task.languages and not (set(task.languages) & set(lang_select)):
             continue
         if task.metadata.modalities and not (
             set(task.metadata.modalities) & set(modality_select)
