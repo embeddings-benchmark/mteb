@@ -4,6 +4,7 @@ from typing import Any, ClassVar
 
 import numpy as np
 import torch
+from sentence_transformers import CrossEncoder
 from torch.utils.data import DataLoader
 
 from mteb._requires_package import requires_package
@@ -227,46 +228,58 @@ JinaV4_TRAINING_DATA = {
 }
 
 
-class JinaRerankerV3:
-    """
-    Wrapper for jinaai/jina-reranker-v3 compatible with MTEB evaluation.
-    """
+class JinaRerankerV3Wrapper(CrossEncoderWrapper):
+    """Wrapper integration for MTEB."""
 
     def __init__(
         self,
-        model_name_or_path: str,
+        model: CrossEncoder | str,
+        revision: str | None = None,
         trust_remote_code: bool = True,
-        device: str | None = None,
         **kwargs: Any,
     ) -> None:
-        from transformers import AutoConfig, AutoModel
+        from mteb.models.get_model_meta import _model_meta_from_cross_encoder
 
-        self.config = AutoConfig.from_pretrained(
-            model_name_or_path, trust_remote_code=trust_remote_code
-        )
-        self.name_or_path = model_name_or_path
-        if device is None:
-            self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        else:
-            self.device = torch.device(device)
+        if isinstance(model, str):
+            from sentence_transformers.util import get_device_name
+            from transformers import AutoModel
 
-        self.model = AutoModel.from_pretrained(
-            model_name_or_path, trust_remote_code=trust_remote_code, dtype="auto"
-        ).to(self.device)
-        self.model.eval()
+            self.model = AutoModel.from_pretrained(
+                model, trust_remote_code=trust_remote_code, dtype="auto"
+            )
 
-    def predict(self, sentences: list[tuple[str, str]], **kwargs: Any) -> list[float]:
-        """
-        Args:
-            sentences: List of (query, document) pairs.
-            batch_size: MTEB passes this, though we group by query mostly.
-        """
-        sentences_count = len(sentences)
+            device = kwargs.get("device", None)
+            if device is None:
+                device = get_device_name()
+                logger.info(f"Use pytorch device: {device}")
+
+            self.model.to(device)
+            self.model.eval()
+        if isinstance(model, CrossEncoder):
+            self.model = model
+
+        self.mteb_model_meta = _model_meta_from_cross_encoder(self.model)
+
+    def predict(
+        self,
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        all_corpus = [text for batch in inputs2 for text in batch["text"]]
+        all_queries = [text for batch in inputs1 for text in batch["text"]]
+
+        sentences_count = len(all_corpus)
         query_groups: dict[str, list[tuple[int, str]]] = defaultdict(list)
-        for idx, (query, doc) in enumerate(sentences):
+        for idx, (query, doc) in enumerate(zip(all_queries, all_corpus)):
             query_groups[query].append((idx, doc))
 
-        results = [0.0] * sentences_count
+        results = np.zeros(sentences_count, dtype=np.float32)
         for query, doc_infos in query_groups.items():
             original_indices, docs = zip(*doc_infos)
 
@@ -276,25 +289,6 @@ class JinaRerankerV3:
                 results[original_idx] = float(scr["relevance_score"])
 
         return results
-
-
-class JinaRerankerV3Wrapper(CrossEncoderWrapper):
-    """Wrapper integration for MTEB."""
-
-    def __init__(
-        self,
-        model: str | JinaRerankerV3,
-        revision: str | None = None,
-        trust_remote_code: bool = True,
-        **kwargs: Any,
-    ) -> None:
-        if isinstance(model, str):
-            model = JinaRerankerV3(model, trust_remote_code=trust_remote_code, **kwargs)
-        self.model = model
-
-        super().__init__(
-            model, revision=revision, trust_remote_code=trust_remote_code, **kwargs
-        )
 
 
 class JinaWrapper(SentenceTransformerEncoderWrapper):
