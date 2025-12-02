@@ -240,25 +240,20 @@ class JinaRerankerV3Wrapper(CrossEncoderWrapper):
     ) -> None:
         from mteb.models.get_model_meta import _model_meta_from_cross_encoder
 
-        if isinstance(model, str):
-            from sentence_transformers.util import get_device_name
-            from transformers import AutoModel
+        from sentence_transformers.util import get_device_name
+        from transformers import AutoModel
 
-            self.model = AutoModel.from_pretrained(
-                model, trust_remote_code=trust_remote_code, dtype="auto"
-            )
+        self.model = AutoModel.from_pretrained(
+            model, trust_remote_code=trust_remote_code, dtype="auto"
+        )
 
-            device = kwargs.get("device", None)
-            if device is None:
-                device = get_device_name()
-                logger.info(f"Use pytorch device: {device}")
+        device = kwargs.get("device", None)
+        if device is None:
+            device = get_device_name()
+            logger.info(f"Use pytorch device: {device}")
 
-            self.model.to(device)
-            self.model.eval()
-        if isinstance(model, CrossEncoder):
-            self.model = model
-
-        self.mteb_model_meta = _model_meta_from_cross_encoder(self.model)
+        self.model.to(device)
+        self.model.eval()
 
     def predict(
         self,
