@@ -262,9 +262,6 @@ class JinaRerankerV3:
             batch_size: MTEB passes this, though we group by query mostly.
         """
         sentences_count = len(sentences)
-        if sentences_count == 0:
-            return []
-
         query_groups: dict[str, list[tuple[int, str]]] = defaultdict(list)
         for idx, (query, doc) in enumerate(sentences):
             query_groups[query].append((idx, doc))
