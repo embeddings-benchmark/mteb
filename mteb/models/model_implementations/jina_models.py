@@ -1,4 +1,5 @@
 import logging
+from collections import defaultdict
 from typing import Any, ClassVar
 
 import numpy as np
@@ -10,12 +11,91 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import PROGRAMMING_LANGS
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.models.sentence_transformer_wrapper import (
+    CrossEncoderWrapper,
+    SentenceTransformerEncoderWrapper,
+)
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 MIN_SENTENCE_TRANSFORMERS_VERSION = (3, 1, 0)
+
+multilingual_langs = [
+    "afr-Latn",
+    "ara-Arab",
+    "aze-Latn",
+    "bel-Cyrl",
+    "bul-Cyrl",
+    "ben-Beng",
+    "cat-Latn",
+    "ceb-Latn",
+    "ces-Latn",
+    "cym-Latn",
+    "dan-Latn",
+    "deu-Latn",
+    "ell-Grek",
+    "eng-Latn",
+    "spa-Latn",
+    "est-Latn",
+    "eus-Latn",
+    "fas-Arab",
+    "fin-Latn",
+    "fra-Latn",
+    "glg-Latn",
+    "guj-Gujr",
+    "heb-Hebr",
+    "hin-Deva",
+    "hrv-Latn",
+    "hat-Latn",
+    "hun-Latn",
+    "hye-Armn",
+    "ind-Latn",
+    "isl-Latn",
+    "ita-Latn",
+    "jpn-Jpan",
+    "jav-Latn",
+    "kat-Geor",
+    "kaz-Cyrl",
+    "khm-Khmr",
+    "kan-Knda",
+    "kor-Hang",
+    "kir-Cyrl",
+    "lao-Laoo",
+    "lit-Latn",
+    "lav-Latn",
+    "mkd-Cyrl",
+    "mal-Mlym",
+    "mon-Cyrl",
+    "mar-Deva",
+    "msa-Latn",
+    "mya-Mymr",
+    "nep-Deva",
+    "nld-Latn",
+    "nor-Latn",
+    "nob-Latn",
+    "nno-Latn",
+    "pan-Guru",
+    "pol-Latn",
+    "por-Latn",
+    "que-Latn",
+    "ron-Latn",
+    "rus-Cyrl",
+    "sin-Sinh",
+    "slk-Latn",
+    "slv-Latn",
+    "swa-Latn",
+    "tam-Taml",
+    "tel-Telu",
+    "tha-Thai",
+    "tgl-Latn",
+    "tur-Latn",
+    "ukr-Cyrl",
+    "urd-Arab",
+    "vie-Latn",
+    "yor-Latn",
+    "zho-Hans",
+]
 
 XLMR_LANGUAGES = [
     "afr-Latn",
@@ -145,6 +225,79 @@ JinaV4_TRAINING_DATA = {
     "arXivQA",
     # "other", # inhouse dataset including synthetic datasets
 }
+
+
+class JinaRerankerV3:
+    """
+    Wrapper for jinaai/jina-reranker-v3 compatible with MTEB evaluation.
+    """
+
+    def __init__(
+        self,
+        model_name_or_path: str,
+        trust_remote_code: bool = True,
+        device: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        from transformers import AutoConfig, AutoModel
+
+        self.config = AutoConfig.from_pretrained(
+            model_name_or_path, trust_remote_code=trust_remote_code
+        )
+        self.name_or_path = model_name_or_path
+        if device is None:
+            self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        else:
+            self.device = torch.device(device)
+
+        self.model = AutoModel.from_pretrained(
+            model_name_or_path, trust_remote_code=trust_remote_code, dtype="auto"
+        ).to(self.device)
+        self.model.eval()
+
+    def predict(self, sentences: list[tuple[str, str]], **kwargs: Any) -> list[float]:
+        """
+        Args:
+            sentences: List of (query, document) pairs.
+            batch_size: MTEB passes this, though we group by query mostly.
+        """
+        sentences_count = len(sentences)
+        if sentences_count == 0:
+            return []
+
+        query_groups: dict[str, list[tuple[int, str]]] = defaultdict(list)
+        for idx, (query, doc) in enumerate(sentences):
+            query_groups[query].append((idx, doc))
+
+        results = [0.0] * sentences_count
+        for query, doc_infos in query_groups.items():
+            original_indices, docs = zip(*doc_infos)
+
+            scores = self.model.rerank(query, list(docs), max_query_length=3072)
+            for scr in scores:
+                original_idx = original_indices[scr["index"]]
+                results[original_idx] = float(scr["relevance_score"])
+
+        return results
+
+
+class JinaRerankerV3Wrapper(CrossEncoderWrapper):
+    """Wrapper integration for MTEB."""
+
+    def __init__(
+        self,
+        model: str | JinaRerankerV3,
+        revision: str | None = None,
+        trust_remote_code: bool = True,
+        **kwargs: Any,
+    ) -> None:
+        if isinstance(model, str):
+            model = JinaRerankerV3(model, trust_remote_code=trust_remote_code, **kwargs)
+        self.model = model
+
+        super().__init__(
+            model, revision=revision, trust_remote_code=trust_remote_code, **kwargs
+        )
 
 
 class JinaWrapper(SentenceTransformerEncoderWrapper):
@@ -551,6 +704,42 @@ def get_programming_task_override(
         return "code"
 
     return current_task_name
+
+
+jina_reranker_v3 = ModelMeta(
+    loader=JinaRerankerV3Wrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+    ),
+    name="jinaai/jina-reranker-v3",
+    languages=multilingual_langs,
+    open_weights=True,
+    revision="050e171c4f75dfec5b648ed8470a2475e5a30f30",
+    release_date="2025-09-18",  # official release date
+    modalities=["text"],
+    n_parameters=int(0.6 * 1e9),
+    memory_usage_mb=1138,
+    max_tokens=32768,
+    embed_dim=None,
+    license="cc-by-nc-4.0",
+    similarity_fn_name=None,
+    framework=["PyTorch"],
+    use_instructions=None,
+    reference="https://huggingface.co/jinaai/jina-reranker-v3",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    adapted_from="Qwen/Qwen3-0.6B",
+    citation="""@misc{wang2025jinarerankerv3lateinteractionlistwise,
+      title={jina-reranker-v3: Last but Not Late Interaction for Listwise Document Reranking}, 
+      author={Feng Wang and Yuqing Li and Han Xiao},
+      year={2025},
+      eprint={2509.25085},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2509.25085},}
+""",
+)
 
 
 jina_embeddings_v4 = ModelMeta(
