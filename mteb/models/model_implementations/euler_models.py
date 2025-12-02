@@ -19,7 +19,7 @@ Euler_Legal_Embedding_V1 = ModelMeta(
     reference="https://huggingface.co/Mira190/Euler-Legal-Embedding-V1",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=["final-data-new-anonymized-grok4-filtered.jsonl"],
+    training_datasets=set(), # final-data-new-anonymized-grok4-filtered
     adapted_from="Qwen/Qwen3-Embedding-8B",
     superseded_by=None,
 )
