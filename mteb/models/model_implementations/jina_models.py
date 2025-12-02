@@ -238,8 +238,6 @@ class JinaRerankerV3Wrapper(CrossEncoderWrapper):
         trust_remote_code: bool = True,
         **kwargs: Any,
     ) -> None:
-        from mteb.models.get_model_meta import _model_meta_from_cross_encoder
-
         from sentence_transformers.util import get_device_name
         from transformers import AutoModel
 
