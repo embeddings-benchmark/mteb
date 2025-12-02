@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -70,4 +68,3 @@ class MultiLongDocReranking(AbsTaskRetrieval):
         },
         adapted_from=["MultiLongDocRetrieval"],
     )
-
