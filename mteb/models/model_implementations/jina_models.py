@@ -218,7 +218,7 @@ JINARerankerV3_TRAINING_DATA = {
     "DuRetrieval",
     "MMarcoReranking",
     "CornStack",
-    "MLDR",
+    "MultiLongDocRetrieval",
     "StackOverflowQA",
 }
 
