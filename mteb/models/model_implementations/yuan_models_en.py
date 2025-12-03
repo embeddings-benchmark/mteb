@@ -22,19 +22,6 @@ training_data = {"T2Retrieval","DuRetrieval","MMarcoReranking","CMedQAv2-reranki
 }
 
 
-def yuan_instruct_loader(
-    model_name_or_path: str, revision: str, **kwargs
-) -> EncoderProtocol:
-    model = InstructSentenceTransformerModel(
-        model_name_or_path,
-        revision=revision,
-        instruction_template=instruction_template,
-        apply_instruction_to_passages=False,
-        **kwargs,
-    )
-    return model
-
-
 yuan_embedding_2_en  = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
