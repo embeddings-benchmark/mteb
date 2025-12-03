@@ -1,6 +1,6 @@
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import EncoderProtocol, PromptType
+from mteb.models.models_protocols import PromptType
 
 
 def instruction_template(
@@ -16,13 +16,21 @@ def instruction_template(
     return f"Instruct: {instruction}\nQuery:"
 
 
-
-
-training_data = {"T2Retrieval","DuRetrieval","MMarcoReranking","CMedQAv2-reranking","NQ","MSMARCO","HotpotQA","MrTidyRetrieval","MIRACLRetrieval","CodeSearchNet",
+training_data = {
+    "T2Retrieval",
+    "DuRetrieval",
+    "MMarcoReranking",
+    "CMedQAv2-reranking",
+    "NQ",
+    "MSMARCO",
+    "HotpotQA",
+    "MrTidyRetrieval",
+    "MIRACLRetrieval",
+    "CodeSearchNet",
 }
 
 
-yuan_embedding_2_en  = ModelMeta(
+yuan_embedding_2_en = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
@@ -31,7 +39,7 @@ yuan_embedding_2_en  = ModelMeta(
     name="IEITYuan/Yuan-embedding-2.0-en",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="b2fd15da3bcae3473c8529593825c15068f09fce",  
+    revision="b2fd15da3bcae3473c8529593825c15068f09fce",
     release_date="2025-11-27",
     n_parameters=595776512,
     memory_usage_mb=2272,
@@ -45,5 +53,5 @@ yuan_embedding_2_en  = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
-    adapted_from="Qwen/Qwen3-Embedding-0.6B"
+    adapted_from="Qwen/Qwen3-Embedding-0.6B",
 )
