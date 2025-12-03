@@ -156,9 +156,8 @@ def _update_task_info(task_names: str) -> gr.DataFrame:
     df = df.drop(columns="reference")
     return gr.DataFrame(
         df,
-        datatype=["markdown"] + ["str"] * (len(df.columns) - 1),
-        show_copy_button=True,
-        show_fullscreen_button=True,
+        datatype=["markdown"] + ["str"] * (len(df.columns) - 1),  # type: ignore
+        buttons=["copy", "fullscreen"],
         show_search="filter",
     )
 
@@ -404,17 +403,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         info="Select modalities to include.",
     )
 
-    head = """
-      <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    """
-
-    with gr.Blocks(
-        fill_width=True,
-        theme=gr.themes.Soft(
-            font=[gr.themes.GoogleFont("Roboto Mono"), "Arial", "sans-serif"],
-        ),
-        head=head,
-    ) as demo:
+    with gr.Blocks(fill_width=True) as demo:
         with gr.Sidebar(
             position="left",
             label="Benchmark Selection and Customization",
@@ -950,4 +939,15 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
 
     app = get_leaderboard_app()
-    app.launch(server_name="0.0.0.0", server_port=7860)
+
+    head = """
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    """
+    app.launch(
+        server_name="0.0.0.0",
+        server_port=7860,
+        theme=gr.themes.Soft(
+            font=[gr.themes.GoogleFont("Roboto Mono"), "Arial", "sans-serif"],
+        ),
+        head=head,
+    )
