@@ -423,7 +423,11 @@ colnomic_7b = ModelMeta(
 
 
 EVOQWEN_TRAINING_DATA = {
-    "colpali_train_set",
+    # "colpali_train_set",
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreArxivQARetrieval",
     "VisRAG-Ret-Train-Synthetic-data",
     "VisRAG-Ret-Train-In-domain-data",
 }

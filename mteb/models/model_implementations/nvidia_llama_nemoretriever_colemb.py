@@ -117,19 +117,18 @@ class LlamaNemoretrieverColembed(AbsEncoder):
 
 TRAINING_DATA = {
     # from https://huggingface.co/datasets/vidore/colpali_train_set
-    "DocVQA",
-    "InfoVQA",
-    "TATDQA",
-    "arXivQA",
-    "hotpotqa",
-    "miracl",
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreArxivQARetrieval",
+    "HotpotQA",
+    "MIRACLRetrieval",
     "NQ",
-    "stackexchange",
+    "StackExchangeClustering",
     "SQuAD",
     "WebInstructSub",
     "docmatix-ir",
-    "vdr-multilingual-train",
-    "colpali_train_set",  # as it contains PDFs
+    "VDRMultilingualRetrieval",
     "VisRAG-Ret-Train-Synthetic-data",
     "VisRAG-Ret-Train-In-domain-data",
     "wiki-ss-nq",
