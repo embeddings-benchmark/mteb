@@ -276,7 +276,9 @@ class JinaRerankerV3Wrapper(CrossEncoderWrapper):
         for query, doc_infos in query_groups.items():
             original_indices, docs = zip(*doc_infos)
 
-            scores = self.model.rerank(query, list(docs), max_query_length=3072, max_doc_length=2048,)
+            scores = self.model.rerank(
+                query, list(docs), max_query_length=3072, max_doc_length=2048
+            )
             for scr in scores:
                 original_idx = original_indices[scr["index"]]
                 results[original_idx] = float(scr["relevance_score"])
