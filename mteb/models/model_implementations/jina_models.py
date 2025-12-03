@@ -200,6 +200,28 @@ XLMR_LANGUAGES = [
     "zho-Hans",
 ]
 
+JINARerankerV3_TRAINING_DATA = {
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MIRACLReranking",
+    "CMedQAv1-reranking",
+    "CMedQAv2-reranking",
+    "MrTidyRetrieval",
+    "T2Reranking",
+    "MSMARCO",
+    "MSMARCOHardNegatives",
+    "NQ",
+    "NQHardNegatives",
+    "HotpotQA",
+    "HotpotQAHardNegatives",
+    "T2Retrieval",
+    "DuRetrieval",
+    "MMarcoReranking",
+    "CornStack",
+    "MLDR",
+    "StackOverflowQA",
+}
+
 JinaV4_TRAINING_DATA = {
     "MSMARCO",
     "MSMARCOHardNegatives",
@@ -715,7 +737,7 @@ jina_reranker_v3 = ModelMeta(
     is_cross_encoder=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=JINARerankerV3_TRAINING_DATA,
     adapted_from="Qwen/Qwen3-0.6B",
     citation="""@misc{wang2025jinarerankerv3lateinteractionlistwise,
       title={jina-reranker-v3: Last but Not Late Interaction for Listwise Document Reranking}, 
