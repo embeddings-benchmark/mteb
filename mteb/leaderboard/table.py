@@ -204,8 +204,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         pinned_columns=2,
         column_widths=column_widths,
         wrap=True,
-        show_fullscreen_button=True,
-        show_copy_button=True,
+        buttons=["copy", "fullscreen"],
         show_search="filter",
     )
 
@@ -227,7 +226,6 @@ def _apply_per_task_table_styling(per_task: pd.DataFrame) -> gr.DataFrame:
         per_task_style,
         interactive=False,
         pinned_columns=1,
-        show_fullscreen_button=True,
-        show_copy_button=True,
+        buttons=["copy", "fullscreen"],
         show_search="filter",
     )
