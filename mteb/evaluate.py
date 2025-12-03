@@ -7,6 +7,7 @@ from pathlib import Path
 from time import time
 from typing import TYPE_CHECKING, Any, cast
 
+from datasets.exceptions import DatasetNotFoundError
 from tqdm.auto import tqdm
 
 from mteb._helpful_enum import HelpfulStrEnum
@@ -25,6 +26,7 @@ from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
 from mteb.results import ModelResult, TaskResult
+from mteb.results.task_result import TaskError
 from mteb.types import HFSubset, PromptType, SplitName
 from mteb.types._metadata import ModelName, Revision
 
@@ -117,7 +119,8 @@ def _evaluate_task(
     co2_tracker: bool | None,
     encode_kwargs: dict[str, Any],
     prediction_folder: Path | None,
-) -> TaskResult:
+    public_only: bool | None,
+) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
 
     Returns:
@@ -149,6 +152,7 @@ def _evaluate_task(
                 encode_kwargs=encode_kwargs,
                 co2_tracker=False,
                 prediction_folder=prediction_folder,
+                public_only=public_only,
             )
         result.kg_co2_emissions = tracker.final_emissions
         return result
@@ -159,7 +163,20 @@ def _evaluate_task(
 
     data_loaded = task.data_loaded
     if not data_loaded:
-        task.load_data()
+        try:
+            task.load_data()
+        except DatasetNotFoundError as e:
+            if not task.metadata.is_public and public_only is None:
+                logger.warning(
+                    f"Dataset for private task '{task.metadata.name}' not found. "
+                    "Make sure you have access to the dataset and that you have set up the authentication correctly. To disable this warning set `public_only=False`"
+                )
+                return TaskError(
+                    task_name=task.metadata.name,
+                    exception=str(e),
+                )
+            if public_only is False:
+                raise e
 
     evaluation_time = 0
 
@@ -281,6 +298,7 @@ def evaluate(
     overwrite_strategy: str | OverwriteStrategy = "only-missing",
     prediction_folder: Path | str | None = None,
     show_progress_bar: bool = True,
+    public_only: bool | None = None,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -304,6 +322,7 @@ def evaluate(
         prediction_folder: Optional folder in which to save model predictions for the task. Predictions of the tasks will be sabed in `prediction_folder/{task_name}_predictions.json`
         show_progress_bar: Whether to show a progress bar when running the evaluation. Default is True. Setting this to False will also set the
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
+        public_only: Run only public tasks. If None, it will attempt to run the private task.
 
     Returns:
         The results of the evaluation.
@@ -355,6 +374,7 @@ def evaluate(
             overwrite_strategy=overwrite_strategy,
             prediction_folder=prediction_folder,
             show_progress_bar=show_progress_bar,
+            public_only=public_only,
         )
         result = task.combine_task_results(results.task_results)
         return ModelResult(
@@ -367,6 +387,7 @@ def evaluate(
         task = tasks
     else:
         results = []
+        exceptions = []
         tasks_tqdm = tqdm(
             tasks,
             desc="Evaluating tasks",
@@ -384,12 +405,16 @@ def evaluate(
                 overwrite_strategy=overwrite_strategy,
                 prediction_folder=prediction_folder,
                 show_progress_bar=False,
+                public_only=public_only,
             )
             results.extend(_res.task_results)
+            if _res.exceptions:
+                exceptions.extend(_res.exceptions)
         return ModelResult(
             model_name=_res.model_name,
             model_revision=_res.model_revision,
             task_results=results,
+            exceptions=exceptions,
         )
 
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
@@ -459,16 +484,13 @@ def evaluate(
                 co2_tracker=co2_tracker,
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
+                public_only=public_only,
             )
         except Exception as e:
             logger.error(
                 f"Error while running task {task.metadata.name} on splits {list(missing_eval.keys())}: {e}"
             )
-            return ModelResult(
-                model_name=model_name,
-                model_revision=model_revision,
-                task_results=[],
-            )
+            result = TaskError(task_name=task.metadata.name, exception=str(e))
     else:
         result = _evaluate_task(
             model=model,
@@ -477,8 +499,17 @@ def evaluate(
             co2_tracker=False,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
+            public_only=public_only,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
+
+    if isinstance(result, TaskError):
+        return ModelResult(
+            model_name=model_name,
+            model_revision=model_revision,
+            task_results=[],
+            exceptions=[result],
+        )
 
     if existing_results:
         result = result.merge(existing_results)
