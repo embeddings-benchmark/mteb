@@ -144,7 +144,7 @@ def _create_summary_table_from_benchmark_results(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: str(int(m.embed_dim)) if m.embed_dim else "Unknown"),
+        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
     )
     joint_table.insert(
         1,
@@ -155,7 +155,7 @@ def _create_summary_table_from_benchmark_results(
         1,
         "Memory Usage (MB)",
         model_metas.map(
-            lambda m: str(int(m.memory_usage_mb)) if m.memory_usage_mb else "Unknown"
+            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
         ),
     )
 
@@ -323,7 +323,7 @@ def _create_summary_table_mean_public_private(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: str(int(m.embed_dim)) if m.embed_dim else "Unknown"),
+        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
     )
     joint_table.insert(
         1,
@@ -334,7 +334,7 @@ def _create_summary_table_mean_public_private(
         1,
         "Memory Usage (MB)",
         model_metas.map(
-            lambda m: str(int(m.memory_usage_mb)) if m.memory_usage_mb else "Unknown"
+            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
         ),
     )
 
@@ -445,7 +445,7 @@ def _create_summary_table_mean_subset(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: str(int(m.embed_dim)) if m.embed_dim else "Unknown"),
+        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
     )
     joint_table.insert(
         1,
@@ -456,7 +456,7 @@ def _create_summary_table_mean_subset(
         1,
         "Memory Usage (MB)",
         model_metas.map(
-            lambda m: str(int(m.memory_usage_mb)) if m.memory_usage_mb else "Unknown"
+            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
         ),
     )
 
@@ -558,14 +558,12 @@ def _create_summary_table_mean_task_type(
 
     # Insert model metadata columns
     joint_table.insert(
-        1,
-        "Max Tokens",
-        model_metas.map(lambda m: _format_max_tokens(m.max_tokens)),
+        1, "Max Tokens", model_metas.map(lambda m: _format_max_tokens(m.max_tokens))
     )
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: str(int(m.embed_dim)) if m.embed_dim else "Unknown"),
+        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
     )
     joint_table.insert(
         1,
@@ -576,7 +574,7 @@ def _create_summary_table_mean_task_type(
         1,
         "Memory Usage (MB)",
         model_metas.map(
-            lambda m: str(int(m.memory_usage_mb)) if m.memory_usage_mb else "Unknown"
+            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
         ),
     )
 
