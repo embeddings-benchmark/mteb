@@ -135,7 +135,6 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         "Max Tokens",
         "Memory Usage (MB)",
     ]
-    numeric_meta_cols = ["Memory Usage (MB)", "Embedding Dimensions"]
 
     gradient_columns = [
         col for col in joint_table.columns if col not in excluded_columns
@@ -154,13 +153,15 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
     # Format data for display
     if "Zero-shot" in joint_table.columns:
         joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(_format_zero_shot)
-    joint_table[numeric_meta_cols] = joint_table[numeric_meta_cols].map(
-        lambda x: round(x, 0)
-    )
     joint_table[score_columns] = joint_table[score_columns].map(_format_scores)
 
     joint_table_style = joint_table.style.format(
-        {**dict.fromkeys(score_columns, "{:.2f}"), "Rank (Borda)": "{:.0f}"},
+        {
+            **dict.fromkeys(score_columns, "{:.2f}"),
+            "Rank (Borda)": "{:.0f}",
+            "Memory Usage (MB)": "{:.0f}",
+            "Embedding Dimensions": "{:.0f}",
+        },
         na_rep="",
     )
     joint_table_style = joint_table_style.highlight_min(
