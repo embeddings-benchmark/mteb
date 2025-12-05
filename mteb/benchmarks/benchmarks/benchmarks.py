@@ -2605,7 +2605,7 @@ JMTEB_V2 = Benchmark(
             "MultiLongDocReranking",
         ],
     ),
-    description="JMTEB is a benchmark for evaluating Japanese text embedding models.",
+    description="JMTEB is a benchmark for evaluating Japanese text embedding models. In v2, we have extended the benchmark to 28 datasets, enabling more comprehensive evaluation compared with v1 (MTEB(jpn,v1)).",
     reference="https://github.com/sbintuitions/JMTEB",
     citation=r"""
 @article{li2025jmteb,
@@ -2616,6 +2616,6 @@ JMTEB_V2 = Benchmark(
   note = {in Japanese},
   title = {{JMTEB and JMTEB-lite: Japanese Massive Text Embedding Benchmark and Its Lightweight Version}},
   year = {2025},
-}
-""",
+}""",
+    contacts=["lsz05"],
 )
