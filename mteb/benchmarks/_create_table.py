@@ -1,4 +1,3 @@
-import math
 import re
 from collections import defaultdict
 
@@ -32,26 +31,18 @@ def _split_on_capital(s: str) -> str:
     return " ".join(re.findall(r"[A-Z]?[a-z]+|[A-Z]+(?=[A-Z]|$)", s))
 
 
-def _format_n_parameters(n_parameters) -> str:
-    if (n_parameters is None) or (not int(n_parameters)):
-        return "Unknown"
-    n_thousand = int(n_parameters // 1e3)
-    if n_thousand < 1:
-        return str(int(n_parameters))
-    n_zeros = math.log10(n_thousand)
-    if n_zeros >= 6:
-        return str(n_thousand // (10**6)) + "B"
-    if n_zeros >= 3:
-        return str(n_thousand // (10**3)) + "M"
-    return str(n_thousand) + "K"
+def _format_n_parameters(n_parameters) -> float | None:
+    """Format n_parameters to be in billions with decimals down to 1 million. I.e. 7M -> 0.007B, 1.5B -> 1.5B, None -> None"""
+    if n_parameters:
+        n_parameters = float(n_parameters)
+        return round(n_parameters / 1e9, 3)
+    return None
 
 
-def _format_max_tokens(max_tokens: float | None) -> str:
-    if max_tokens is None:
-        return "Unknown"
-    if max_tokens == np.inf:
-        return "Infinite"
-    return str(int(max_tokens))
+def _format_max_tokens(max_tokens: float | None) -> float | None:
+    if max_tokens is None or max_tokens == np.inf:
+        return None
+    return float(max_tokens)
 
 
 def _get_means_per_types(per_task: pd.DataFrame):
@@ -148,7 +139,7 @@ def _create_summary_table_from_benchmark_results(
     )
     joint_table.insert(
         1,
-        "Number of Parameters",
+        "Number of Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(
@@ -327,7 +318,7 @@ def _create_summary_table_mean_public_private(
     )
     joint_table.insert(
         1,
-        "Number of Parameters",
+        "Number of Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(
@@ -449,7 +440,7 @@ def _create_summary_table_mean_subset(
     )
     joint_table.insert(
         1,
-        "Number of Parameters",
+        "Number of Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(
@@ -567,7 +558,7 @@ def _create_summary_table_mean_task_type(
     )
     joint_table.insert(
         1,
-        "Number of Parameters",
+        "Number of Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(

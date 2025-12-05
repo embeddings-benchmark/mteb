@@ -130,7 +130,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         "Rank (Borda)",
         "Rank",
         "Model",
-        "Number of Parameters",
+        "Number of Parameters (B)",
         "Embedding Dimensions",
         "Max Tokens",
         "Memory Usage (MB)",
@@ -161,6 +161,8 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
             "Rank (Borda)": "{:.0f}",
             "Memory Usage (MB)": "{:.0f}",
             "Embedding Dimensions": "{:.0f}",
+            "Max Tokens": "{:.0f}",
+            "Number of Parameters (B)": "{:.3f}",
         },
         na_rep="",
     )
