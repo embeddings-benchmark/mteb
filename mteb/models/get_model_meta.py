@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import difflib
 import logging
+import warnings
 from collections.abc import Iterable
 from typing import TYPE_CHECKING, Any
 
@@ -180,6 +181,14 @@ def _model_meta_from_hf_hub(model_name: str) -> ModelMeta:
     if card_data.get("library_name", None) == "sentence-transformers":
         frameworks.append("Sentence Transformers")
         loader = sentence_transformers_loader
+    else:
+        msg = (
+            "Model library not recognized, defaulting to Sentence Transformers loader."
+        )
+        logger.warning(msg)
+        warnings.warn(msg)
+        loader = sentence_transformers_loader
+
     revision = card_data.get("base_model_revision", None)
     license = card_data.get("license", None)
     return ModelMeta(
