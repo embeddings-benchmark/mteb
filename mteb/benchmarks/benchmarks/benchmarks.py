@@ -2607,13 +2607,15 @@ JMTEB_V2 = Benchmark(
     ),
     description="JMTEB is a benchmark for evaluating Japanese text embedding models.",
     reference="https://github.com/sbintuitions/JMTEB",
-    citation=r"""@article{li2025jmteb,
-    author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
-    issue = {3},
-    month = {sep},
-    year = {2025},
-    title = {{JMTEB and JMTEB-lite: Japanese Massive Text Embedding Benchmark and Its Lightweight Version}},
-    journal = {Vol.2025-NL-265,No.3,1-15}
-    note = "in Japanese"
-}""",
+    citation=r"""
+@article{li2025jmteb,
+  author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
+  issue = {3},
+  journal = {Vol.2025-NL-265,No.3,1-15},
+  month = {sep},
+  note = {in Japanese},
+  title = {{JMTEB and JMTEB-lite: Japanese Massive Text Embedding Benchmark and Its Lightweight Version}},
+  year = {2025},
+}
+""",
 )
