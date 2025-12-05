@@ -1,3 +1,4 @@
+import logging
 from typing import get_args
 
 import numpy as np
@@ -6,6 +7,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 from mteb.abstasks.task_metadata import TaskType
+
+logger = logging.getLogger(__name__)
 
 
 def _text_plot(text: str):
@@ -29,16 +32,17 @@ def _failsafe_plot(fun):
         try:
             return fun(*args, **kwargs)
         except Exception as e:
+            logger.error(f"Plot generation failed: {e}")
             return _text_plot(f"Couldn't produce plot. Reason: {e}")
 
     return wrapper
 
 
-def _parse_n_params(text: str) -> int:
-    if text.endswith("M"):
-        return float(text[:-1]) * 1e6
-    if text.endswith("B"):
-        return float(text[:-1]) * 1e9
+def _parse_n_params(params: float | None) -> int | float:
+    """Specified in billions."""
+    if params is None or np.isnan(params):
+        return None
+    return int(params * 1e9)
 
 
 def _parse_model_name(name: str) -> str:
@@ -51,20 +55,14 @@ def _parse_model_name(name: str) -> str:
 
 
 def _parse_float(value) -> float:
-    try:
-        if value == "Infinite":
-            return np.inf
-        else:
-            return float(value)
-    except ValueError:
+    if value is None or np.isnan(value):
         return np.nan
+    return float(value)
 
 
 def _process_max_tokens(x):
-    if pd.isna(x):
+    if pd.isna(x) or x is None or np.isinf(x):
         return "Unknown"
-    if np.isinf(x):
-        return "Infinite"
     return str(int(x))
 
 
@@ -112,7 +110,7 @@ def _add_size_guide(fig: go.Figure):
 @_failsafe_plot
 def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df = df.copy()
-    df["Number of Parameters"] = df["Number of Parameters"].map(_parse_n_params)
+    df["Number of Parameters"] = df["Number of Parameters (B)"].map(_parse_n_params)
     df["Model"] = df["Model"].map(_parse_model_name)
     df["model_text"] = df["Model"].where(df["Model"].isin(models_to_annotate), "")
     df["Embedding Dimensions"] = df["Embedding Dimensions"].map(_parse_float)

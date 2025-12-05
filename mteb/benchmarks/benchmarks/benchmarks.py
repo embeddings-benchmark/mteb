@@ -185,7 +185,7 @@ We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benc
 
 MTEB_MAIN_RU = Benchmark(
     name="MTEB(rus, v1)",
-    display_name="Russian",
+    display_name="Russian legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ru.svg",
     tasks=MTEBTasks(
         get_tasks(
@@ -240,6 +240,67 @@ MTEB_MAIN_RU = Benchmark(
   year = {2024},
 }
 """,
+    contacts=["Samoed", "artemsnegirev", "Drozhzhinastya"],
+)
+
+MTEB_MAIN_RU_v1_1 = Benchmark(
+    name="MTEB(rus, v1.1)",
+    display_name="Russian",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ru.svg",
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["rus"],
+            tasks=[
+                # Classification
+                "GeoreviewClassification",
+                "HeadlineClassification",
+                "InappropriatenessClassification",
+                "KinopoiskClassification",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "RuReviewsClassification",
+                "RuSciBenchGRNTIClassification",
+                "RuSciBenchOECDClassification",
+                # Clustering
+                "GeoreviewClusteringP2P",
+                "RuSciBenchGRNTIClusteringP2P",
+                "RuSciBenchOECDClusteringP2P",
+                # MultiLabelClassification
+                "CEDRClassification",
+                "SensitiveTopicsClassification",
+                # PairClassification
+                "TERRa",
+                # Reranking
+                "MIRACLReranking",
+                "RuBQReranking",
+                # Retrieval
+                "MIRACLRetrievalHardNegatives.v2",
+                "RiaNewsRetrievalHardNegatives.v2",
+                "RuBQRetrieval",
+                # STS
+                "RUParaPhraserSTS",
+                "STS22",
+            ],
+        )
+        + get_tasks(
+            tasks=["RuSTSBenchmarkSTS"],
+            eval_splits=["test"],
+        )
+    ),
+    description="A Russian version of the Massive Text Embedding Benchmark covering the task categories of classification, clustering, reranking, pair classification, retrieval, and semantic similarity. In v1.1, MIRACLRetrieval and RiaNewsRetrieval were replaced with their HardNegatives variants for improved time-optimization measurement. MIRACLRetrievalHardNegatives and RiaNewsRetrievalHardNegatives are used in their updated versions (v2), both of which include improved default prompts.",
+    reference="https://aclanthology.org/2023.eacl-main.148/",
+    citation=r"""
+@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
+  archiveprefix = {arXiv},
+  author = {Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
+  eprint = {2408.12503},
+  primaryclass = {cs.CL},
+  title = {The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design},
+  url = {https://arxiv.org/abs/2408.12503},
+  year = {2024},
+}
+""",
+    contacts=["Samoed", "artemsnegirev", "Drozhzhinastya"],
 )
 
 
