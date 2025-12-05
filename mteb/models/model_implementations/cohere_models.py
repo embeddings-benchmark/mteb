@@ -8,6 +8,7 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
+from mteb._requires_package import requires_package
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -219,6 +220,8 @@ class CohereTextEmbeddingModel(AbsEncoder):
         output_dimension: int | None = None,
         **kwargs,
     ) -> None:
+        requires_package(self, "cohere", model_name, "pip install 'mteb[cohere]'")
+
         import cohere  # type: ignore
 
         self.model_name = model_name.removeprefix("Cohere/Cohere-")
