@@ -535,9 +535,6 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
 
         with gr.Tab("Performance per Model Size") as plot_tab:
             plot = gr.Plot(_performance_size_plot, inputs=[summary_table])
-            gr.Markdown(
-                "*We only display TOP 5 models that have been run on all tasks in the benchmark*"
-            )
             plot_tab.select(
                 _performance_size_plot, inputs=[summary_table], outputs=[plot]
             )
