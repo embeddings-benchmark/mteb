@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 def _aggregate_and_pivot(
     df: pd.DataFrame,
     columns: list[str],
-    aggregation_level: Literal["subset", "split", "task"],
+    aggregation_level: Literal["subset", "split", "task", "language"],
     format: Literal["wide", "long"],
     aggregation_fn: Callable[[list[Score]], Any] | None,
 ) -> pd.DataFrame:
@@ -42,6 +42,12 @@ def _aggregate_and_pivot(
 
     elif aggregation_level == "task":
         index_columns = ["task_name"]
+
+    elif aggregation_level == "language":
+        index_columns = ["language"]
+        df = df.explode("language").reset_index(
+            drop=True
+        )  # each language in its own row before aggregation
 
     # perform aggregation
     if aggregation_fn is None:
@@ -227,7 +233,7 @@ class ModelResult(BaseModel):
                     )
             return entries
 
-    def _get_score_for_table(self) -> list[dict[str, str | float]]:
+    def _get_score_for_table(self) -> list[dict[str, str | float | list[str]]]:
         scores_data = []
         model_name = self.model_name
         for task_result in self.task_results:
@@ -239,10 +245,10 @@ class ModelResult(BaseModel):
                         "model_revision": self.model_revision,
                         "task_name": task_name,
                         "split": split,
+                        "language": score_item.get("languages", ["Unknown"]),
                         "subset": score_item.get("hf_subset", "default"),
                         "score": score_item.get("main_score", None),
                     }
-
                     scores_data.append(row)
 
         return scores_data
