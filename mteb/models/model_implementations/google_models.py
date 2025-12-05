@@ -61,6 +61,8 @@ class GoogleTextEmbeddingModel(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
+        if "/" in model_name:
+            model_name = model_name.split("/")[-1]
         self.model_name = model_name
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
@@ -147,7 +149,6 @@ class GoogleTextEmbeddingModel(AbsEncoder):
 google_text_emb_004 = ModelMeta(
     loader=GoogleTextEmbeddingModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
-        model_name="text-embedding-004",
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-embedding-004",
