@@ -27,6 +27,7 @@ jobs:
 
     steps:
       - name: Free disk space
+        if: runner.os != 'Windows'
         run: |
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /opt/ghc
