@@ -42,7 +42,6 @@ jobs:
             /usr/local/share/powershell \
             /usr/share/dotnet \
             /usr/share/swift
-          docker system prune -af
 
       - uses: actions/checkout@v6
         with:
