@@ -10,19 +10,26 @@ jobs:
   dataset-loading-check:
     runs-on: ubuntu-latest
     steps:
+    - name: Free disk space
+      run: |
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf /usr/local/share/boost
+        docker system prune -af
+
     - name: Checkout repository
       uses: actions/checkout@v6
-    
+
     - name: Set up Python
       uses: actions/setup-python@v6
       with:
         python-version: '3.11'
         cache: 'pip'
-    
+
     - name: Install dependencies
       run: |
         make install-for-tests
-    
+
     - name: Run dataset loading tests
       env:
         HF_TOKEN: ${{ secrets.HF_TOKEN }}
