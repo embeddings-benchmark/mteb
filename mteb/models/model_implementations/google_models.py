@@ -61,8 +61,6 @@ class GoogleTextEmbeddingModel(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
-        if "/" in model_name:
-            model_name = model_name.split("/")[-1]
         self.model_name = model_name
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
@@ -173,7 +171,6 @@ google_text_emb_004 = ModelMeta(
 google_text_emb_005 = ModelMeta(
     loader=GoogleTextEmbeddingModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
-        model_name="text-embedding-005",
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-embedding-005",
@@ -198,7 +195,6 @@ google_text_emb_005 = ModelMeta(
 google_text_multilingual_emb_002 = ModelMeta(
     loader=GoogleTextEmbeddingModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
-        model_name="text-embedding-002",
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-multilingual-embedding-002",
@@ -223,7 +219,6 @@ google_text_multilingual_emb_002 = ModelMeta(
 google_gemini_embedding_001 = ModelMeta(
     loader=GoogleTextEmbeddingModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
-        model_name="gemini-embedding-001",
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/gemini-embedding-001",
