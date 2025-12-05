@@ -1,0 +1,60 @@
+{
+    "test": {
+        "num_samples": 2560,
+        "number_texts_intersect_with_train": 1236,
+        "text_statistics": {
+            "total_text_length": 291970,
+            "min_text_length": 1,
+            "average_text_length": 114.05078125,
+            "max_text_length": 2909,
+            "unique_texts": 2367
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 3,
+            "labels": {
+                "0": {
+                    "count": 1698
+                },
+                "1": {
+                    "count": 790
+                },
+                "2": {
+                    "count": 72
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 10244,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 1163409,
+            "min_text_length": 1,
+            "average_text_length": 113.56979695431473,
+            "max_text_length": 4759,
+            "unique_texts": 7488
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 3,
+            "labels": {
+                "0": {
+                    "count": 6814
+                },
+                "1": {
+                    "count": 3132
+                },
+                "2": {
+                    "count": 298
+                }
+            }
+        }
+    }
+}
