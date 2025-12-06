@@ -250,7 +250,7 @@ class SearchEncoderWrapper:
 
             # get top-k values
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
-                torch.tensor(scores),
+                torch.as_tensor(scores),
                 min(
                     top_k + 1,
                     len(scores[1]) if len(scores) > 1 else len(scores[-1]),
