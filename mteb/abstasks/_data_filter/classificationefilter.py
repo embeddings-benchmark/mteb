@@ -177,7 +177,9 @@ def clean_dataset(
     return ds
 
 
-def process_classification(task: AbsTaskClassification) -> dict[str, DatasetDict]:
+def process_classification(
+    task: AbsTaskClassification,
+) -> DatasetDict | dict[str, DatasetDict]:
     if not task.data_loaded:
         task.load_data()
     if isinstance(task.dataset, DatasetDict):
