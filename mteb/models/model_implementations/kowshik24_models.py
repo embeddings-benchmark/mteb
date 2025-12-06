@@ -16,7 +16,7 @@ kowshik24_bangla_embedding_model = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-	public_training_code="https://github.com/kowshik24/Bangla-Embedding"
+    public_training_code="https://github.com/kowshik24/Bangla-Embedding",
     public_training_data="https://huggingface.co/datasets/sartajekram/BanglaRQA",
-	training_datasets=None,
+    training_datasets=set(),
 )
