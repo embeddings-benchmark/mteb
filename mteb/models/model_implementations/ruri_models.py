@@ -144,6 +144,7 @@ cl_nagoya_ruri_small_v2 = ModelMeta(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=RURI_V1_V2_PROMPTS,
+        trust_remote_code=True,
     ),
     name="cl-nagoya/ruri-small-v2",
     languages=["jpn-Jpan"],
@@ -228,8 +229,9 @@ cl_nagoya_ruri_small_v1 = ModelMeta(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=RURI_V1_V2_PROMPTS,
+        trust_remote_code=True,
     ),
-    name="cl-nagoya/ruri-small-v2",
+    name="cl-nagoya/ruri-small",
     languages=["jpn-Jpan"],
     open_weights=True,
     revision="bc56ce90cd7a979f6eb199fc52dfe700bfd94bc3",
@@ -257,7 +259,7 @@ cl_nagoya_ruri_base_v1 = ModelMeta(
     loader_kwargs=dict(
         model_prompts=RURI_V1_V2_PROMPTS,
     ),
-    name="cl-nagoya/ruri-base-v2",
+    name="cl-nagoya/ruri-base",
     languages=["jpn-Jpan"],
     open_weights=True,
     revision="1ae40b8b6c78518a499425086bab8fc16c2e4b0e",
@@ -286,7 +288,7 @@ cl_nagoya_ruri_large_v1 = ModelMeta(
     loader_kwargs=dict(
         model_prompts=RURI_V1_V2_PROMPTS,
     ),
-    name="cl-nagoya/ruri-large-v2",
+    name="cl-nagoya/ruri-large",
     languages=["jpn-Jpan"],
     open_weights=True,
     revision="a011c39b13e8bc137ee13c6bc82191ece46c414c",
