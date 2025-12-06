@@ -58,6 +58,9 @@ SARASHINA_V2_PROMPTS = {
 
 sbintuitions_sarashina_embedding_v2_1b = ModelMeta(
     loader=sentence_transformers_loader,
+    loader_kwargs=dict(
+        model_prompts=SARASHINA_V2_PROMPTS,
+    ),
     name="sbintuitions/sarashina-embedding-v2-1b",
     languages=["jpn-Jpan"],
     open_weights=True,
