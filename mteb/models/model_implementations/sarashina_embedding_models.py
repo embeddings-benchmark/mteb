@@ -1,20 +1,6 @@
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
-SARASHINA_TRAINING_DATA = {"NQ", "MrTidyRetrieval"}
-
-SARASHINA_TRAINING_DATA_LINKS = {
-    "https://huggingface.co/datasets/hpprc/emb",
-    "https://huggingface.co/datasets/hpprc/mqa-ja",
-    "https://huggingface.co/datasets/izumi-lab/llm-japanese-dataset",
-    "https://huggingface.co/datasets/wikimedia/wikipedia",
-    "https://huggingface.co/datasets/sentence-transformers/NQ-retrieval",
-    "https://huggingface.co/datasets/sbintuitions/JSQuAD",
-    "https://aclanthology.org/L18-1185",
-    "https://huggingface.co/datasets/SkelterLabsInc/JaQuAD",
-    "https://github.com/apple/ml-mkqa",
-}
-
 SARASHINA_V2_PROMPTS = {
     "Retrieval-query": "task: クエリを与えるので、もっともクエリに意味が似ている一節を探してください。\nquery: ",
     "Retrieval-document": "text: ",
@@ -90,7 +76,7 @@ sbintuitions_sarashina_embedding_v2_1b = ModelMeta(
     superseded_by=None,
     training_datasets={"NQ", "MrTidyRetrieval"},
     public_training_code=None,
-    public_training_data=SARASHINA_TRAINING_DATA_LINKS,
+    public_training_data="https://huggingface.co/sbintuitions/sarashina-embedding-v1-1b",
     citation=None,
     contacts=["Sraym1217", "akiFQC", "lsz05"],
 )
@@ -115,7 +101,7 @@ sbintuitions_sarashina_embedding_v1_1b = ModelMeta(
     superseded_by="sbintuitions/sarashina-embedding-v2-1b",
     training_datasets={"NQ", "MrTidyRetrieval"},
     public_training_code=None,
-    public_training_data=SARASHINA_TRAINING_DATA_LINKS,
+    public_training_data="https://huggingface.co/sbintuitions/sarashina-embedding-v1-1b",
     citation=None,
     contacts=["akiFQC", "lsz05"],
 )
