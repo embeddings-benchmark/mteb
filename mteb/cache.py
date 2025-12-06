@@ -243,7 +243,11 @@ class ResultCache:
             f"No results repository found in {results_directory}, cloning it from {remote}"
         )
 
-        subprocess.run(["git", "clone", remote, "remote"], cwd=self.cache_path)
+        subprocess.run(
+            ["git", "clone", "--depth", "1", remote, "remote"],
+            cwd=self.cache_path,
+            check=True,
+        )
 
         return results_directory
 
