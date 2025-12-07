@@ -23,3 +23,24 @@ nb_sbert = ModelMeta(
     public_training_data="https://huggingface.co/datasets/NbAiLab/mnli-norwegian",
     training_datasets=set(),
 )
+
+nb_bert_large = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="NbAiLab/nb-bert-large",
+    languages=["nno-Latn", "nob-Latn", "swe-Latn", "dan-Latn"],
+    open_weights=True,
+    revision="1e372b3497e7e0781ccd343e30f633de5bebbdd8",
+    release_date="2021-06-21",
+    n_parameters=354_000_000,
+    memory_usage_mb=1350,
+    embed_dim=1024,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/NbAiLab/nb-bert-large",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=set(),
+)
