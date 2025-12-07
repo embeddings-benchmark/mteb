@@ -105,7 +105,7 @@ def sarashina_instruction_template(
     if not instruction:
         return ""
     if prompt_type == PromptType.document:
-        return instruction
+        return "text: "
     return f"task: {instruction}\nquery: "
 
 
