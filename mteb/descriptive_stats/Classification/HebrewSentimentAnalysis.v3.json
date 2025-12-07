@@ -1,13 +1,13 @@
 {
     "test": {
-        "num_samples": 2560,
-        "number_texts_intersect_with_train": 1236,
+        "num_samples": 1085,
+        "number_texts_intersect_with_train": 0,
         "text_statistics": {
-            "total_text_length": 291970,
-            "min_text_length": 1,
-            "average_text_length": 114.05078125,
-            "max_text_length": 2909,
-            "unique_texts": 2367
+            "total_text_length": 115359,
+            "min_text_length": 8,
+            "average_text_length": 106.32165898617511,
+            "max_text_length": 2722,
+            "unique_texts": 1085
         },
         "image_statistics": null,
         "label_statistics": {
@@ -17,26 +17,26 @@
             "unique_labels": 3,
             "labels": {
                 "0": {
-                    "count": 1698
+                    "count": 868
                 },
                 "1": {
-                    "count": 790
+                    "count": 190
                 },
                 "2": {
-                    "count": 72
+                    "count": 27
                 }
             }
         }
     },
     "train": {
-        "num_samples": 10244,
+        "num_samples": 7176,
         "number_texts_intersect_with_train": null,
         "text_statistics": {
-            "total_text_length": 1163409,
-            "min_text_length": 1,
-            "average_text_length": 113.56979695431473,
+            "total_text_length": 830248,
+            "min_text_length": 5,
+            "average_text_length": 115.69788182831661,
             "max_text_length": 4759,
-            "unique_texts": 7488
+            "unique_texts": 7176
         },
         "image_statistics": null,
         "label_statistics": {
@@ -46,13 +46,13 @@
             "unique_labels": 3,
             "labels": {
                 "0": {
-                    "count": 6814
+                    "count": 4933
                 },
                 "1": {
-                    "count": 3132
+                    "count": 2047
                 },
                 "2": {
-                    "count": 298
+                    "count": 196
                 }
             }
         }
