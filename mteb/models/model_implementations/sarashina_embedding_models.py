@@ -1,65 +1,121 @@
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.types import PromptType
 
-SARASHINA_V2_PROMPTS = {
-    "Retrieval-query": "task: クエリを与えるので、もっともクエリに意味が似ている一節を探してください。\nquery: ",
-    "Retrieval-document": "text: ",
-    "Reranking-query": "task: クエリを与えるので、もっともクエリに意味が似ている一節を探してください。\nquery: ",
-    "Reranking-document": "text: ",
-    "Classification": "task: 与えられたドキュメントを適切なカテゴリに分類してください。\nquery: ",
-    "Clustering": "task: 与えられたドキュメントのトピックまたはテーマを特定してください。\nquery: ",
+SARASHINA_V2_INSTRUCTIONS = {
+    "Retrieval": {
+        "query": "クエリを与えるので、もっともクエリに意味が似ている一節を探してください。",
+        "document": "text: ",
+    },
+    "Reranking": {
+        "query": "クエリを与えるので、もっともクエリに意味が似ている一節を探してください。",
+        "document": "text: ",
+    },
+    "Classification": "与えられたドキュメントを適切なカテゴリに分類してください。",
+    "Clustering": "与えられたドキュメントのトピックまたはテーマを特定してください。",
     # optimization regarding JMTEB
-    "LivedoorNewsClustering.v2": "task: 与えられたニュース記事のトピックを特定してください。\nquery: ",
-    "MewsC16JaClustering": "task: 与えられたニュース記事のトピックを特定してください。\nquery: ",
-    "SIB200ClusteringS2S": "task: 与えられたテキストのトピックを特定してください。\nquery: ",
-    "AmazonReviewsClassification": "task: 与えられたAmazonレビューを適切な評価カテゴリに分類してください。\nquery: ",
-    "AmazonCounterfactualClassification": "task: 与えられたAmazonのカスタマーレビューのテキストを反事実か反事実でないかに分類してください。\nquery: ",
-    "MassiveIntentClassification": "task: ユーザーの発話をクエリとして与えるので、ユーザーの意図を見つけてください。\nquery: ",
-    "MassiveScenarioClassification": "task: ユーザーの発話をクエリとして与えるので、ユーザーシナリオを見つけてください。\nquery: ",
-    "JapaneseSentimentClassification": "task: 与えられたテキストの感情極性をポジティブ(1)かネガティブか(0)に分類してください。\nquery: ",
-    "SIB200Classification": "task: 与えられたテキストのトピックを特定してください。\nquery: ",
-    "WRIMEClassification": "task: 与えられたテキストの感情極性（-2:強いネガティブ、-1:ネガティブ、0:ニュートラル、1:ポジティブ、2:強いポジティブ）を分類してください。\nquery: ",
-    "JSTS": "task: クエリを与えるので，もっともクエリに意味が似ている一節を探してください。\nquery: ",
-    "JSICK": "task: クエリを与えるので，もっともクエリに意味が似ている一節を探してください。\nquery: ",
-    "JaqketRetrieval-query": "task: 質問を与えるので、その質問に答えるのに役立つWikipediaの文章を検索してください。\nquery: ",
-    "JaqketRetrieval-document": "text: ",
-    "MrTidyRetrieval-query": "task: 質問を与えるので、その質問に答えるWikipediaの文章を検索するしてください。\nquery: ",
-    "MrTidyRetrieval-document": "text: ",
-    "JaGovFaqsRetrieval-query": "task: 質問を与えるので、その質問に答えるのに役立つ関連文書を検索してください。\nquery: ",
-    "JaGovFaqsRetrieval-document": "text: ",
-    "NLPJournalTitleAbsRetrieval.V2-query": "task: 論文のタイトルを与えるので、タイトルに対応する要約を検索してください。\nquery: ",
-    "NLPJournalTitleAbsRetrieval.V2-document": "text: ",
-    "NLPJournalTitleIntroRetrieval.V2-query": "task: 論文のタイトルを与えるので、タイトルに対応する要約を検索してください。\nquery: ",
-    "NLPJournalTitleIntroRetrieval.V2-document": "text: ",
-    "NLPJournalAbsIntroRetrieval.V2-query": "task: 論文の序論を与えるので、序論に対応する全文を検索してください。\nquery: ",
-    "NLPJournalAbsIntroRetrieval.V2-document": "text: ",
-    "NLPJournalAbsArticleRetrieval.V2-query": "task: 論文の序論を与えるので、序論に対応する全文を検索してください。\nquery: ",
-    "NLPJournalAbsArticleRetrieval.V2-document": "text: ",
-    "JaCWIRRetrieval-query": "task: 記事のタイトルを与えるので、そのタイトルと合っている記事の中身を検索してください。\nquery: ",
-    "JaCWIRRetrieval-document": "text: ",
-    "MIRACLRetrieval-query": "task: 質問を与えるので、その質問に答えるのに役立つ関連文書を検索してください。\nquery: ",
-    "MIRACLRetrieval-document": "text: ",
-    "MintakaRetrieval-query": "task: 質問を与えるので、その質問に答えられるテキストを検索してください。\nquery: ",
-    "MintakaRetrieval-document": "text: ",
-    "MultiLongDocRetrieval-query": "task: 質問を与えるので、その質問に答えるのに役立つWikipediaの文章を検索してください。\nquery: ",
-    "MultiLongDocRetrieval-document": "text: ",
-    "ESCIReranking-query": "task: クエリを与えるので、与えられたWeb検索クエリに答える関連文章を検索してください。\nquery: ",
-    "ESCIReranking-document": "text: ",
-    "JQaRAReranking-query": "task: 質問を与えるので、その質問に答えるのに役立つWikipediaの文章を検索してください。\nquery: ",
-    "JQaRAReranking-document": "text: ",
-    "JaCWIRReranking-query": "task: 記事のタイトルを与えるので、そのタイトルと合っている記事の中身を検索してください。\nquery: ",
-    "JaCWIRReranking-document": "text: ",
-    "MIRACLReranking-query": "task: 質問を与えるので、その質問に答えるのに役立つ関連文書を検索してください。\nquery: ",
-    "MIRACLReranking-document": "text: ",
-    "MultiLongDocReranking-query": "task: 質問を与えるので、その質問に答えるのに役立つWikipediaの文章を検索してください。\nquery: ",
-    "MultiLongDocReranking-document": "text: ",
+    "LivedoorNewsClustering.v2": "与えられたニュース記事のトピックを特定してください。",
+    "MewsC16JaClustering": "与えられたニュース記事のトピックを特定してください。",
+    "SIB200ClusteringS2S": "与えられたテキストのトピックを特定してください。",
+    "AmazonReviewsClassification": "与えられたAmazonレビューを適切な評価カテゴリに分類してください。",
+    "AmazonCounterfactualClassification": "与えられたAmazonのカスタマーレビューのテキストを反事実か反事実でないかに分類してください。",
+    "MassiveIntentClassification": "ユーザーの発話をクエリとして与えるので、ユーザーの意図を見つけてください。",
+    "MassiveScenarioClassification": "ユーザーの発話をクエリとして与えるので、ユーザーシナリオを見つけてください。",
+    "JapaneseSentimentClassification": "与えられたテキストの感情極性をポジティブ(1)かネガティブか(0)に分類してください。",
+    "SIB200Classification": "与えられたテキストのトピックを特定してください。",
+    "WRIMEClassification": "与えられたテキストの感情極性（-2:強いネガティブ、-1:ネガティブ、0:ニュートラル、1:ポジティブ、2:強いポジティブ）を分類してください。",
+    "JSTS": "クエリを与えるので，もっともクエリに意味が似ている一節を探してください。",
+    "JSICK": "クエリを与えるので，もっともクエリに意味が似ている一節を探してください。",
+    "JaqketRetrieval": {
+        "query": "質問を与えるので、その質問に答えるのに役立つWikipediaの文章を検索してください。",
+        "document": "text: ",
+    },
+    "MrTidyRetrieval": {
+        "query": "質問を与えるので、その質問に答えるWikipediaの文章を検索するしてください。",
+        "document": "text: ",
+    },
+    "JaGovFaqsRetrieval": {
+        "query": "質問を与えるので、その質問に答えるのに役立つ関連文書を検索してください。",
+        "document": "text: ",
+    },
+    "NLPJournalTitleAbsRetrieval.V2": {
+        "query": "論文のタイトルを与えるので、タイトルに対応する要約を検索してください。",
+        "document": "text: ",
+    },
+    "NLPJournalTitleIntroRetrieval.V2": {
+        "query": "論文のタイトルを与えるので、タイトルに対応する要約を検索してください。",
+        "document": "text: ",
+    },
+    "NLPJournalAbsIntroRetrieval.V2": {
+        "query": "論文の序論を与えるので、序論に対応する全文を検索してください。",
+        "document": "text: ",
+    },
+    "NLPJournalAbsArticleRetrieval.V2": {
+        "query": "論文の序論を与えるので、序論に対応する全文を検索してください。",
+        "document": "text: ",
+    },
+    "JaCWIRRetrieval": {
+        "query": "記事のタイトルを与えるので、そのタイトルと合っている記事の中身を検索してください。",
+        "document": "text: ",
+    },
+    "MIRACLRetrieval": {
+        "query": "質問を与えるので、その質問に答えるのに役立つ関連文書を検索してください。",
+        "document": "text: ",
+    },
+    "MintakaRetrieval": {
+        "query": "質問を与えるので、その質問に答えられるテキストを検索してください。",
+        "document": "text: ",
+    },
+    "MultiLongDocRetrieval": {
+        "query": "質問を与えるので、その質問に答えるのに役立つWikipediaの文章を検索してください。",
+        "document": "text: ",
+    },
+    "ESCIReranking": {
+        "query": "クエリを与えるので、与えられたWeb検索クエリに答える関連文章を検索してください。",
+        "document": "text: ",
+    },
+    "JQaRAReranking": {
+        "query": "質問を与えるので、その質問に答えるのに役立つWikipediaの文章を検索してください。",
+        "document": "text: ",
+    },
+    "JaCWIRReranking": {
+        "query": "記事のタイトルを与えるので、そのタイトルと合っている記事の中身を検索してください。",
+        "document": "text: ",
+    },
+    "MIRACLReranking": {
+        "query": "質問を与えるので、その質問に答えるのに役立つ関連文書を検索してください。",
+        "document": "text: ",
+    },
+    "MultiLongDocReranking": {
+        "query": "質問を与えるので、その質問に答えるのに役立つWikipediaの文章を検索してください。",
+        "document": "text: ",
+    },
 }
 
 
+def sarashina_instruction_template(
+    instruction: str, prompt_type: PromptType | None = None
+) -> str:
+    """Instruction template for Sarashina v2 model.
+
+    Returns the instruction as-is since the prompts already contain the full format.
+    For document prompts, returns the instruction directly (e.g., "text: ").
+    """
+    if not instruction:
+        return ""
+    if prompt_type == PromptType.document:
+        return instruction
+    return f"task: {instruction}\nquery: "
+
+
 sbintuitions_sarashina_embedding_v2_1b = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
-        model_prompts=SARASHINA_V2_PROMPTS,
+        instruction_template=sarashina_instruction_template,
+        apply_instruction_to_passages=True,
+        prompts_dict=SARASHINA_V2_INSTRUCTIONS,
+        max_seq_length=8192,
     ),
     name="sbintuitions/sarashina-embedding-v2-1b",
     languages=["jpn-Jpan"],
