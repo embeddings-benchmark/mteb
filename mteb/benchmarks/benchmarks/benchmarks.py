@@ -961,6 +961,42 @@ MTEB_multilingual_v2 = Benchmark(
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
 
+MTEB_JPN = Benchmark(
+    name="MTEB(jpn, v1)",
+    display_name="Japanese",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
+    tasks=get_tasks(
+        languages=["jpn"],
+        tasks=[
+            # clustering
+            "LivedoorNewsClustering.v2",
+            "MewsC16JaClustering",
+            # classification
+            "AmazonReviewsClassification",
+            "AmazonCounterfactualClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            # STS
+            "JSTS",
+            "JSICK",
+            # pair classification
+            "PawsXPairClassification",
+            # retrieval
+            "JaqketRetrieval",
+            "MrTidyRetrieval",
+            "JaGovFaqsRetrieval",
+            "NLPJournalTitleAbsRetrieval",
+            "NLPJournalAbsIntroRetrieval",
+            "NLPJournalTitleIntroRetrieval",
+            # reranking
+            "ESCIReranking",
+        ],
+    ),
+    description="JMTEB is a benchmark for evaluating Japanese text embedding models.",
+    reference="https://github.com/sbintuitions/JMTEB",
+    citation=None,
+)
+
 
 indic_languages = [
     "asm",
