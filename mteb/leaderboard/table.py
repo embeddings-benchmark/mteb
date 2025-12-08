@@ -143,8 +143,8 @@ def apply_per_language_styling_from_benchmark(
 
     # Apply the styling
     return _apply_per_language_table_styling(per_language_df)
-  
-  
+
+
 def _style_number_of_parameters(num_params: float) -> str:
     """Anything bigger than 1B is shown in billions with 1 decimal (e.g. 1.712 > 1.7) while anything smaller as 0.xxx B (e.g. 0.345 remains 0.345)"""
     if num_params >= 1:

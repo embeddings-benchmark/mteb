@@ -955,27 +955,27 @@ MTEB_multilingual_v2 = Benchmark(
     name="MTEB(Multilingual, v2)",
     display_name="Multilingual",
     language_view=[
-    "eng-Latn",  # English
-    "zho-Hans",  # Chinese (Simplified)
-    "hin-Deva",  # Hindi
-    "spa-Latn",  # Spanish
-    "fra-Latn",  # French
-    "ara-Arab",  # Arabic
-    "ben-Beng",  # Bengali
-    "rus-Cyrl",  # Russian
-    "por-Latn",  # Portuguese
-    "urd-Arab",  # Urdu
-    "ind-Latn",  # Indonesian
-    "deu-Latn",  # German
-    "jpn-Jpan",  # Japanese
-    "swa-Latn",  # Swahili
-    "mar-Deva",  # Marathi
-    "tel-Telu",  # Telugu
-    "tur-Latn",  # Turkish
-    "tam-Taml",  # Tamil
-    "vie-Latn",  # Vietnamese
-    "kor-Hang",  # Korean
-]
+        "eng-Latn",  # English
+        "zho-Hans",  # Chinese (Simplified)
+        "hin-Deva",  # Hindi
+        "spa-Latn",  # Spanish
+        "fra-Latn",  # French
+        "ara-Arab",  # Arabic
+        "ben-Beng",  # Bengali
+        "rus-Cyrl",  # Russian
+        "por-Latn",  # Portuguese
+        "urd-Arab",  # Urdu
+        "ind-Latn",  # Indonesian
+        "deu-Latn",  # German
+        "jpn-Jpan",  # Japanese
+        "swa-Latn",  # Swahili
+        "mar-Deva",  # Marathi
+        "tel-Telu",  # Telugu
+        "tur-Latn",  # Turkish
+        "tam-Taml",  # Tamil
+        "vie-Latn",  # Vietnamese
+        "kor-Hang",  # Korean
+    ],
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
     tasks=mteb_multilingual_tasks,
     description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages. ",
