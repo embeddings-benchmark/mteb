@@ -7,7 +7,6 @@ import pandas as pd
 from datasets import Dataset, DatasetDict
 
 from mteb import TaskMetadata
-from mteb.abstasks import AbsTaskClassification
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +22,7 @@ def deduplicate(dataset: Dataset, input_column: str) -> Dataset:
             indices_to_keep.append(i)
 
     logger.info(
-        f"[deduplicate] kept={len(indices_to_keep)}, removed={len(dataset) - len(indices_to_keep)}"
+        f"[deduplicate] removed={len(dataset) - len(indices_to_keep)}/{len(dataset)}"
     )
     return dataset.select(indices_to_keep)
 
@@ -32,7 +31,7 @@ def filter_empty(dataset: Dataset, input_column: str) -> Dataset:
     """Filter out empty or whitespace-only examples."""
     before = len(dataset)
     ds = dataset.filter(lambda x: len(x[input_column].strip()) > 0)
-    logger.info(f"[filter_empty] removed={before - len(ds)}")
+    logger.info(f"[filter_empty] removed={before - len(ds)}/{before}")
     return ds
 
 
@@ -47,11 +46,11 @@ def filter_train_leakage(
         for i, text in enumerate(test_dataset[input_column])
         if text not in train_texts
     ]
-    logger.info(f"[filter_train_leakage] removed={before - len(indices)}")
+    logger.info(f"[filter_train_leakage] removed={before - len(indices)}/{before}")
     return test_dataset.select(indices)
 
 
-def filter_controversial(
+def filter_unclear_label(
     dataset_dict: DatasetDict, input_column: str, label_column: str
 ) -> DatasetDict:
     """Remove examples where the same text appears with multiple different labels."""
@@ -72,7 +71,9 @@ def filter_controversial(
     for split, ds in dataset_dict.items():
         before = len(ds)
         filtered = ds.filter(lambda x: x[input_column].strip().lower() not in bad_texts)
-        logger.debug(f"[filter_controversial:{split}] removed={before - len(filtered)}")
+        logger.debug(
+            f"[filter_controversial:{split}] removed={before - len(filtered)}/{before}"
+        )
         new_dict[split] = filtered
 
     return DatasetDict(new_dict)
@@ -82,7 +83,7 @@ def filter_short(dataset: Dataset, input_column: str, min_words: int = 3) -> Dat
     """Filter out texts with fewer than `min_words`."""
     before = len(dataset)
     ds = dataset.filter(lambda x: len(x[input_column].strip().split()) >= min_words)
-    logger.debug(f"[filter_short] removed={before - len(ds)}")
+    logger.debug(f"[filter_short] removed={before - len(ds)}/{before}")
     return ds
 
 
@@ -122,82 +123,3 @@ def split_train_test(
         )
 
     return ds
-
-
-def clean_dataset(
-    ds: DatasetDict,
-    metadata: TaskMetadata,
-    train_split: str,
-    input_column: str,
-    label_column: str,
-) -> DatasetDict:
-    """Apply the full cleaning pipeline with logging."""
-    logger.info("[clean_dataset] Starting dataset cleaning pipeline...")
-
-    transforms = [
-        ("filter_empty", filter_empty),
-        ("deduplicate", deduplicate),
-    ]
-
-    skip_cjk_codes = {"zho", "jpn", "tha", "mya", "cmn"}
-    apply_short = not any(
-        lang.split("-")[0] in skip_cjk_codes for lang in metadata.eval_langs
-    )
-
-    if apply_short:
-        logger.info("[clean_dataset] Applying short-text filter")
-        transforms.append(("filter_short", filter_short))
-
-    for split in [train_split, *metadata.eval_splits]:
-        if split not in ds:
-            logger.warning(f"[clean_dataset] Split '{split}' missing; skipping.")
-            continue
-
-        for name, fn in transforms:
-            before = len(ds[split])
-            ds[split] = fn(ds[split], input_column=input_column)
-            logger.info(
-                f"[clean_dataset:{split}] {name} removed={before - len(ds[split])}"
-            )
-
-    ds = split_train_test(ds, metadata, train_split, label_column)
-
-    for split in metadata.eval_splits:
-        if split == train_split:
-            continue
-        before = len(ds[split])
-        ds[split] = filter_train_leakage(ds[train_split], ds[split], input_column)
-        logger.info(
-            f"[clean_dataset:{split}] leakage_removed={before - len(ds[split])}"
-        )
-
-    ds = filter_controversial(ds, input_column=input_column, label_column=label_column)
-
-    logger.info("[clean_dataset] Cleaning pipeline complete.")
-    return ds
-
-
-def process_classification(
-    task: AbsTaskClassification,
-) -> DatasetDict | dict[str, DatasetDict]:
-    if not task.data_loaded:
-        task.load_data()
-    if isinstance(task.dataset, DatasetDict):
-        return clean_dataset(
-            task.dataset,
-            task.metadata,
-            task.train_split,
-            task.input_column_name,
-            task.label_column_name,
-        )
-
-    new_ds = {}
-    for subset in task.dataset:
-        new_ds[subset] = clean_dataset(
-            task.dataset[subset],
-            task.metadata,
-            task.train_split,
-            task.input_column_name,
-            task.label_column_name,
-        )
-    return new_ds
