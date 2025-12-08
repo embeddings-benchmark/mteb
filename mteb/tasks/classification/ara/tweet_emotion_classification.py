@@ -45,8 +45,7 @@ class TweetEmotionClassificationV2(AbsTaskClassification):
             "path": "mteb/TweetEmotionClassification",
             "revision": "930d65840c089406ceed5241b1a9ba7294e5eeae",
         },
-        description="""A dataset of 10,012 tweets that was created with the aim of covering the most frequently used emotion categories in Arabic tweets.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",
+        description="A dataset of 10,012 tweets that was created with the aim of covering the most frequently used emotion categories in Arabic tweets. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-77116-8_8",
         type="Classification",
         category="t2c",

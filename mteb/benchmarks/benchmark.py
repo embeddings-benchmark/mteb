@@ -87,7 +87,10 @@ class RtebBenchmark(Benchmark):
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        return _create_summary_table_mean_public_private(benchmark_results)
+        joint_table = _create_summary_table_mean_public_private(benchmark_results)
+        # For RTEB: all tasks are Retrieval type, so Retrieval column = Mean (Task)
+        joint_table = joint_table.rename(columns={"Retrieval": "Mean (Task)"})
+        return joint_table
 
 
 class HUMEBenchmark(Benchmark):
@@ -108,10 +111,15 @@ class MIEBBenchmark(Benchmark):
         return _create_summary_table_mean_task_type(benchmark_results)
 
 
-class Vidore3Benchmark(Benchmark):
+class VidoreBenchmark(Benchmark):
     """Wrapper for Vidore3 benchmark."""
 
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        return _create_summary_table_mean_public_private(benchmark_results)
+        joint_table = _create_summary_table_mean_public_private(benchmark_results)
+        # For ViDoRe (V1, V2, V3): all tasks are Document Understanding type, so Document Understanding column = Mean (Task)
+        joint_table = joint_table.rename(
+            columns={"Document Understanding": "Mean (Task)"}
+        )
+        return joint_table

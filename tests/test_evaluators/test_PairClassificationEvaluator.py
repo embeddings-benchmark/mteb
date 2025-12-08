@@ -21,6 +21,8 @@ class TestPairClassificationEvaluator:
             MockClassificationTask.metadata,
             "test",
             "test",
+            input1_prompt_type=None,
+            input2_prompt_type=None,
         )
         distances = evaluator(
             mteb.get_model("baseline/random-encoder-baseline"),

@@ -698,27 +698,31 @@ class TaskResult(BaseModel):
             name = result.metadata.name
             revision = result.metadata.revision
         else:
+            msg = "result must be a TaskResult or AbsTask object"
+            if raise_error:
+                raise ValueError(msg)
+            logger.debug(msg)
             return False
 
         if self.task_name != name:
+            msg = f"Cannot merge TaskResult objects as they are derived from different tasks ({self.task_name} and {name})"
             if raise_error:
-                raise ValueError(
-                    f"Cannot merge TaskResult objects as they are derived from different tasks ({self.task_name} and {name})"
-                )
+                raise ValueError(msg)
+            logger.debug(msg)
             return False
 
         if Criteria.MTEB_VERSION in criteria and self.mteb_version != mteb_version:
+            msg = f"Cannot merge TaskResult objects as they are derived from different MTEB versions ({self.mteb_version} (loaded) and {mteb_version} (current))"
             if raise_error:
-                raise ValueError(
-                    f"Cannot merge TaskResult objects as they are derived from different MTEB versions ({self.mteb_version} and {mteb_version})"
-                )
+                raise ValueError(msg)
+            logger.debug(msg)
             return False
 
         if Criteria.DATASET_REVISION in criteria and self.dataset_revision != revision:
+            msg = f"Cannot merge TaskResult objects as they are derived from different dataset revisions ({self.dataset_revision} and {revision})"
             if raise_error:
-                raise ValueError(
-                    f"Cannot merge TaskResult objects as they are derived from different dataset revisions ({self.dataset_revision} and {revision})"
-                )
+                raise ValueError(msg)
+            logger.debug(msg)
             return False
 
         return True
@@ -836,3 +840,15 @@ class TaskResult(BaseModel):
                     )
                 )
         return results
+
+
+class TaskError(BaseModel):
+    """A class to represent an error that occurred during the evaluation of a task.
+
+    Attributes:
+        task_name: The name of the MTEB task.
+        exception: The error message that occurred during the evaluation.
+    """
+
+    task_name: str
+    exception: str

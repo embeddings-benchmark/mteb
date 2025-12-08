@@ -115,17 +115,18 @@ The file will now be saved to `"{prediction_folder}/{task_name}_predictions.json
 
 ## Speeding up Evaluations
 
-Evaluation in MTEB consists of three main components: 1) downloading the dataset, 2) encoding of the samples, and 3) the evaluation. Typically, the most notable bottleneck are either in the encoding step or on the download step.
-Where this bottleneck is depends on the tasks that you evaluate on and the models that you evaluate.
+Evaluation in MTEB consists of three main components: 1) downloading the dataset, 2) encoding of the samples, and 3) the evaluation. Typically, the most notable bottlenecks are either in the encoding step or in the download step. Where this bottleneck is depends on the tasks that you evaluate on and the models that you evaluate.
 
-If you find that any of our design decisions prevents you from running the evaluation efficiently do feel free to create an [issue](https://github.com/embeddings-benchmark/mteb/issues).
+If you find that any of our design decisions prevents you from running the evaluation efficiently, do feel free to create an [issue](https://github.com/embeddings-benchmark/mteb/issues).
 
+!!! info
+    In version `2.1.4` an [issue](https://github.com/embeddings-benchmark/mteb/pull/3518) was found that caused the GPU and CPU to idle during evaluation of retrieval/reranking tasks. We suggest upgrading to `mteb>=2.2.0`.
 
 ### Speeding up the Model
 
-MTEB is an evaluation framework and therefore we try to avoid doing inference optimizations. However, here is a few tricks to speed up inference.
+MTEB is an evaluation framework, and therefore, we try to avoid doing inference optimizations. However, here are a few tricks to speed up inference.
 
-First of all it is possible to pass directly to the model loader:
+First of all, it is possible to pass directly to the model loader:
 ```python
 import mteb
 
@@ -139,9 +140,9 @@ kwargs = dict(
 model = meta.load_model(**kwargs) # passed to model loader, e.g. SentenceTransformer
 ```
 
-This e.g. allows you to use all the [inference optimization tricks](https://sbert.net/docs/sentence_transformer/usage/efficiency.html) from sentence-transformers. However in general you can always pass `device`.
+This e.g., allows you to use all the [inference optimization tricks](https://sbert.net/docs/sentence_transformer/usage/efficiency.html) from sentence-transformers. However, in general, you can always pass `device`.
 
-If you can't the required keyword argument a solution might be to extract the model:
+If you can't find the required keyword argument, a solution might be to extract the model:
 ```python
 model = meta.load_model(**kwargs)
 # extract model

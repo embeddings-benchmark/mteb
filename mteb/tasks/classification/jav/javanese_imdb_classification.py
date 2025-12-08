@@ -41,8 +41,7 @@ class JavaneseIMDBClassification(AbsTaskClassification):
 class JavaneseIMDBClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="JavaneseIMDBClassification.v2",
-        description="""Large Movie Review Dataset translated to Javanese. This is a dataset for binary sentiment classification containing substantially more data than previous benchmark datasets.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Large Movie Review Dataset translated to Javanese. This is a dataset for binary sentiment classification containing substantially more data than previous benchmark datasets. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://github.com/w11wo/nlp-datasets#javanese-imdb",
         dataset={
             "path": "mteb/javanese_imdb",

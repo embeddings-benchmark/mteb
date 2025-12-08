@@ -2,7 +2,7 @@ from mteb.benchmarks.benchmark import (
     Benchmark,
     HUMEBenchmark,
     MIEBBenchmark,
-    Vidore3Benchmark,
+    VidoreBenchmark,
 )
 from mteb.get_tasks import MTEBTasks, get_task, get_tasks
 
@@ -185,7 +185,7 @@ We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benc
 
 MTEB_MAIN_RU = Benchmark(
     name="MTEB(rus, v1)",
-    display_name="Russian",
+    display_name="Russian legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ru.svg",
     tasks=MTEBTasks(
         get_tasks(
@@ -240,6 +240,67 @@ MTEB_MAIN_RU = Benchmark(
   year = {2024},
 }
 """,
+    contacts=["Samoed", "artemsnegirev", "Drozhzhinastya"],
+)
+
+MTEB_MAIN_RU_v1_1 = Benchmark(
+    name="MTEB(rus, v1.1)",
+    display_name="Russian",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ru.svg",
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["rus"],
+            tasks=[
+                # Classification
+                "GeoreviewClassification",
+                "HeadlineClassification",
+                "InappropriatenessClassification",
+                "KinopoiskClassification",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "RuReviewsClassification",
+                "RuSciBenchGRNTIClassification",
+                "RuSciBenchOECDClassification",
+                # Clustering
+                "GeoreviewClusteringP2P",
+                "RuSciBenchGRNTIClusteringP2P",
+                "RuSciBenchOECDClusteringP2P",
+                # MultiLabelClassification
+                "CEDRClassification",
+                "SensitiveTopicsClassification",
+                # PairClassification
+                "TERRa",
+                # Reranking
+                "MIRACLReranking",
+                "RuBQReranking",
+                # Retrieval
+                "MIRACLRetrievalHardNegatives.v2",
+                "RiaNewsRetrievalHardNegatives.v2",
+                "RuBQRetrieval",
+                # STS
+                "RUParaPhraserSTS",
+                "STS22",
+            ],
+        )
+        + get_tasks(
+            tasks=["RuSTSBenchmarkSTS"],
+            eval_splits=["test"],
+        )
+    ),
+    description="A Russian version of the Massive Text Embedding Benchmark covering the task categories of classification, clustering, reranking, pair classification, retrieval, and semantic similarity. In v1.1, MIRACLRetrieval and RiaNewsRetrieval were replaced with their HardNegatives variants for improved time-optimization measurement. MIRACLRetrievalHardNegatives and RiaNewsRetrievalHardNegatives are used in their updated versions (v2), both of which include improved default prompts.",
+    reference="https://aclanthology.org/2023.eacl-main.148/",
+    citation=r"""
+@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
+  archiveprefix = {arXiv},
+  author = {Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
+  eprint = {2408.12503},
+  primaryclass = {cs.CL},
+  title = {The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design},
+  url = {https://arxiv.org/abs/2408.12503},
+  year = {2024},
+}
+""",
+    contacts=["Samoed", "artemsnegirev", "Drozhzhinastya"],
 )
 
 
@@ -248,7 +309,7 @@ RU_SCI_BENCH = Benchmark(
     tasks=get_tasks(
         tasks=[
             # BitextMining
-            "RuSciBenchBitextMining",
+            "RuSciBenchBitextMining.v2",
             # Classification
             "RuSciBenchCoreRiscClassification",
             "RuSciBenchGRNTIClassification.v2",
@@ -902,7 +963,7 @@ MTEB_multilingual_v2 = Benchmark(
 
 MTEB_JPN = Benchmark(
     name="MTEB(jpn, v1)",
-    display_name="Japanese",
+    display_name="Japanese Legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
     tasks=get_tasks(
         languages=["jpn"],
@@ -1647,7 +1708,7 @@ MTEB_NL = Benchmark(
             exclusive_language_filter=True,
             tasks=[
                 # Classification
-                "DutchBookReviewSentimentClassification",
+                "DutchBookReviewSentimentClassification.v2",
                 "MassiveIntentClassification",
                 "MassiveScenarioClassification",
                 "SIB200Classification",
@@ -1678,10 +1739,10 @@ MTEB_NL = Benchmark(
                 # # Reranking
                 "WikipediaRerankingMultilingual",
                 # # Retrieval
-                "ArguAna-NL",
-                "SCIDOCS-NL",
-                "SciFact-NL",
-                "NFCorpus-NL",
+                "ArguAna-NL.v2",
+                "SCIDOCS-NL.v2",
+                "SciFact-NL.v2",
+                "NFCorpus-NL.v2",
                 "BelebeleRetrieval",
                 "WebFAQRetrieval",
                 "DutchNewsArticlesRetrieval",
@@ -2219,7 +2280,7 @@ VIDORE_V2 = Benchmark(
 """,
 )
 
-VIDORE_V3 = Vidore3Benchmark(
+VIDORE_V3 = VidoreBenchmark(
     name="ViDoRe(v3)",
     display_name="ViDoRe V3",
     icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
@@ -2253,10 +2314,9 @@ VIDORE_V3 = Vidore3Benchmark(
 """,
 )
 
-VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
-    name="VisualDocumentRetrieval",
-    display_name="Visual Document Retrieval",
-    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-picture.svg",
+VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
+    name="ViDoRe(v1&v2)",
+    display_name="ViDoRe (V1&V2)",
     tasks=get_tasks(
         tasks=[
             # v1
@@ -2501,4 +2561,61 @@ HUME = HUMEBenchmark(
     reference="Coming soon (in review)",
     citation=None,
     contacts=["AdnanElAssadi56", "KennethEnevoldsen", "isaac-chung", "Samoed"],
+)
+
+JMTEB_V2 = Benchmark(
+    name="JMTEB(v2)",
+    display_name="Japanese",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
+    tasks=get_tasks(
+        languages=["jpn"],
+        tasks=[
+            # Clustering (3)
+            "LivedoorNewsClustering.v2",
+            "MewsC16JaClustering",
+            "SIB200ClusteringS2S",
+            # Classification (7)
+            "AmazonReviewsClassification",
+            "AmazonCounterfactualClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "JapaneseSentimentClassification",
+            "SIB200Classification",
+            "WRIMEClassification",
+            # STS (2)
+            "JSTS",
+            "JSICK",
+            # Retrieval (11)
+            "JaqketRetrieval",
+            "MrTidyRetrieval",
+            "JaGovFaqsRetrieval",
+            "NLPJournalTitleAbsRetrieval.V2",
+            "NLPJournalTitleIntroRetrieval.V2",
+            "NLPJournalAbsIntroRetrieval.V2",
+            "NLPJournalAbsArticleRetrieval.V2",
+            "JaCWIRRetrieval",
+            "MIRACLRetrieval",
+            "MintakaRetrieval",
+            "MultiLongDocRetrieval",
+            # Reranking (5)
+            "ESCIReranking",
+            "JQaRAReranking",
+            "JaCWIRReranking",
+            "MIRACLReranking",
+            "MultiLongDocReranking",
+        ],
+    ),
+    description="JMTEB is a benchmark for evaluating Japanese text embedding models. In v2, we have extended the benchmark to 28 datasets, enabling more comprehensive evaluation compared with v1 (MTEB(jpn, v1)).",
+    reference="https://github.com/sbintuitions/JMTEB",
+    citation=r"""
+@article{li2025jmteb,
+  author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
+  issue = {3},
+  journal = {Vol.2025-NL-265,No.3,1-15},
+  month = {sep},
+  title = {{JMTEB and JMTEB-lite: Japanese Massive Text Embedding Benchmark and Its Lightweight Version}},
+  year = {2025},
+}
+""",
+    contacts=["lsz05"],
 )

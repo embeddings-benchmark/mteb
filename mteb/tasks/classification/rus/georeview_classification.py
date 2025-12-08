@@ -37,8 +37,7 @@ class GeoreviewClassificationV2(AbsTaskClassification):
             "path": "mteb/georeview",
             "revision": "5194395f82217bc31212fd6a275002fb405f9dfb",
         },
-        description="""Review classification (5-point scale) based on Yandex Georeview dataset
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Review classification (5-point scale) based on Yandex Georeview dataset This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://github.com/yandex/geo-reviews-dataset-2023",
         type="Classification",
         category="t2c",

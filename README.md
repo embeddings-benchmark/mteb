@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="docs/images/logos/mteb_logo/dots-icon.png" alt="MTEB" width="28" style="vertical-align: middle; margin-right: 10px;"/> MTEB
+  <img src="https://github.com/embeddings-benchmark/mteb/blob/main/docs/images/logos/mteb_logo/dots-icon.png?raw=true" alt="MTEB" width="28" style="vertical-align: middle; margin-right: 10px;"/> MTEB
 </h1>
 
 <h3 align="center" style="border-bottom: none;">Multimodal toolbox for evaluating embeddings and retrieval systems</h3>
@@ -28,7 +28,7 @@
 
 
 <h3 align="center">
-    <a href="https://huggingface.co/spaces/mteb/leaderboard"><img style="float: middle; padding: 10px 10px 10px 10px;" width="60" height="55" src="./docs/images/logos/hf_logo.png" /></a>
+    <a href="https://huggingface.co/spaces/mteb/leaderboard"><img style="float: middle; padding: 10px 10px 10px 10px;" width="60" height="55" src="https://github.com/embeddings-benchmark/mteb/blob/main/docs/images/logos/hf_logo.png?raw=true" /></a>
 </h3>
 
 

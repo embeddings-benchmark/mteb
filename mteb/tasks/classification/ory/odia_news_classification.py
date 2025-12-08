@@ -43,8 +43,7 @@ class OdiaNewsClassification(AbsTaskClassification):
 class OdiaNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OdiaNewsClassification.v2",
-        description="""A Odia dataset for 3-class classification of Odia news articles
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="A Odia dataset for 3-class classification of Odia news articles This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://github.com/goru001/nlp-for-odia",
         dataset={
             "path": "mteb/odia_news",

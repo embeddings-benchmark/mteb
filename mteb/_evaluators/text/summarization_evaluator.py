@@ -109,7 +109,8 @@ class SummarizationEvaluator(Evaluator):
                     summary
                     for human_summaries in self.human_summaries
                     for summary in human_summaries
-                ]
+                ],
+                **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,
@@ -124,7 +125,8 @@ class SummarizationEvaluator(Evaluator):
                     summary
                     for machine_summaries in self.machine_summaries
                     for summary in machine_summaries
-                ]
+                ],
+                **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,

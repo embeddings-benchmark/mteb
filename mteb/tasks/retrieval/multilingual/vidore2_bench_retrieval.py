@@ -55,6 +55,7 @@ def _load_data(
             },
             remove_columns=["corpus-id"],
         )
+        corpus_ds = corpus_ds.select_columns(["id", "image"])
 
         qrels_ds = load_dataset(
             path,
@@ -64,7 +65,7 @@ def _load_data(
         )
 
         if langs is None:
-            queries[split] = query_ds
+            queries[split] = query_ds.select_columns(["id", "text"])
             corpus[split] = corpus_ds
             relevant_docs[split] = {}
             for row in qrels_ds:
@@ -75,7 +76,8 @@ def _load_data(
                 relevant_docs[split][qid][did] = int(row["score"])
         else:
             for lang in langs:
-                queries[lang][split] = query_ds.filter(lambda x: x["language"] == lang)
+                filtered_query_ds = query_ds.filter(lambda x: x["language"] == lang)
+                queries[lang][split] = filtered_query_ds.select_columns(["id", "text"])
 
                 corpus[lang][split] = corpus_ds
 

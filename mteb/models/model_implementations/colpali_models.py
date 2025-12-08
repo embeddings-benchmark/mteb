@@ -196,10 +196,10 @@ COLPALI_CITATION = """
 
 COLPALI_TRAINING_DATA = {
     # from https://huggingface.co/datasets/vidore/colpali_train_set
-    "DocVQA",
-    "InfoVQA",
-    "TATDQA",
-    "arXivQA",
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreArxivQARetrieval",
 }
 
 colpali_v1_1 = ModelMeta(

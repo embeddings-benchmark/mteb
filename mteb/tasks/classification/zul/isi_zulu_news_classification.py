@@ -45,8 +45,7 @@ class IsiZuluNewsClassification(AbsTaskClassification):
 class IsiZuluNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="IsiZuluNewsClassification.v2",
-        description="""isiZulu News Classification Dataset
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="isiZulu News Classification Dataset This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://huggingface.co/datasets/dsfsi/za-isizulu-siswati-news",
         dataset={
             "path": "mteb/isi_zulu_news",
