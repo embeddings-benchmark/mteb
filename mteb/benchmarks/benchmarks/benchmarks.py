@@ -961,7 +961,7 @@ MTEB_multilingual_v2 = Benchmark(
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
 
-MTEB_JPN_CLASSIC = Benchmark(
+MTEB_JPN = Benchmark(
     name="MTEB(jpn, v1)",
     display_name="Japanese Legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
