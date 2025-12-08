@@ -45,9 +45,9 @@ nb_bert_large = ModelMeta(
     training_datasets=set(),
 )
 
-nb_bert_large = ModelMeta(
+nb_bert_base = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,  # type: ignore[arg-type]
-    name="NbAiLab/nb-bert-large",
+    name="NbAiLab/nb-bert-base",
     languages=["nno-Latn", "nob-Latn"],
     open_weights=True,
     revision="9417c3f62a3adc99f17ff92bff446f35d011f994",
