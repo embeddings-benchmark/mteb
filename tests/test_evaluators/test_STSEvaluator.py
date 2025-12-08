@@ -29,6 +29,8 @@ def test_output_structure(model, mock_task):
         task_metadata=mock_task.metadata,
         hf_subset="default",
         hf_split="test",
+        input1_prompt_type=None,
+        input2_prompt_type=None,
     )
     scores = evaluator(model, encode_kwargs={"batch_size": 32})
 

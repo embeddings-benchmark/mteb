@@ -1,31 +1,27 @@
 from mteb.abstasks.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.types import PromptType
 
-
-class TERRa(AbsTaskPairClassification):
-    metadata = TaskMetadata(
-        name="TERRa",
-        dataset={
-            "path": "ai-forever/terra-pairclassification",
-            "revision": "7b58f24536063837d644aab9a023c62199b2a612",
-        },
-        description="Textual Entailment Recognition for Russian. This task requires to recognize, given two text fragments, "
-        + "whether the meaning of one text is entailed (can be inferred) from the other text.",
-        reference="https://arxiv.org/pdf/2010.15925",
-        type="PairClassification",
-        category="t2t",
-        modalities=["text"],
-        eval_splits=["dev"],
-        eval_langs=["rus-Cyrl"],
-        main_score="max_ap",
-        date=("2000-01-01", "2018-01-01"),
-        domains=["News", "Web", "Written"],
-        task_subtypes=[],
-        license="mit",
-        annotations_creators="human-annotated",
-        dialect=[],
-        sample_creation="found",
-        bibtex_citation=r"""
+_terra_metadata = dict(
+    dataset={
+        "path": "ai-forever/terra-pairclassification",
+        "revision": "7b58f24536063837d644aab9a023c62199b2a612",
+    },
+    reference="https://arxiv.org/pdf/2010.15925",
+    type="PairClassification",
+    category="t2t",
+    modalities=["text"],
+    eval_splits=["dev"],
+    eval_langs=["rus-Cyrl"],
+    main_score="max_ap",
+    date=("2000-01-01", "2018-01-01"),
+    domains=["News", "Web", "Written"],
+    task_subtypes=[],
+    license="mit",
+    annotations_creators="human-annotated",
+    dialect=[],
+    sample_creation="found",
+    bibtex_citation=r"""
 @article{shavrina2020russiansuperglue,
   author = {Shavrina, Tatiana
 and Fenogenova, Alena
@@ -42,7 +38,37 @@ and Evlampiev, Andrey},
   year = {2020},
 }
 """,
+)
+
+
+class TERRa(AbsTaskPairClassification):
+    metadata = TaskMetadata(
+        name="TERRa",
+        description="Textual Entailment Recognition for Russian. This task requires to recognize, given two text fragments, "
+        + "whether the meaning of one text is entailed (can be inferred) from the other text.",
         prompt="Given a premise, retrieve a hypothesis that is entailed by the premise",
+        **_terra_metadata,
+    )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("sent1", "sentence1")
+        self.dataset = self.dataset.rename_column("sent2", "sentence2")
+
+
+class TERRaV2(AbsTaskPairClassification):
+    input1_prompt_type = PromptType.document
+    input2_prompt_type = PromptType.query
+
+    metadata = TaskMetadata(
+        name="TERRa.V2",
+        description="Textual Entailment Recognition for Russian. This task requires to recognize, given two text fragments, "
+        + "whether the meaning of one text is entailed (can be inferred) from the other text."
+        + " Version 2 uses different prompt types for the two inputs.",
+        adapted_from=["TERRa"],
+        prompt={
+            PromptType.query.value: "Given a premise, retrieve a hypothesis that is entailed by the premise"
+        },
+        **_terra_metadata,
     )
 
     def dataset_transform(self):

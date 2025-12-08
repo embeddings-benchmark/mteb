@@ -22,7 +22,7 @@ from mteb.types import (
     SplitName,
 )
 
-from .task_result import TaskResult
+from .task_result import TaskError, TaskResult
 
 logger = logging.getLogger(__name__)
 
@@ -88,6 +88,7 @@ class ModelResult(BaseModel):
             protected_namespaces=(),
         )
     )
+    exceptions: list[TaskError] | None = None
 
     def __repr__(self) -> str:
         n_entries = len(self.task_results)

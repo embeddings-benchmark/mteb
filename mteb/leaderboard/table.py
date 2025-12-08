@@ -143,6 +143,14 @@ def apply_per_language_styling_from_benchmark(
 
     # Apply the styling
     return _apply_per_language_table_styling(per_language_df)
+  
+  
+def _style_number_of_parameters(num_params: float) -> str:
+    """Anything bigger than 1B is shown in billions with 1 decimal (e.g. 1.712 > 1.7) while anything smaller as 0.xxx B (e.g. 0.345 remains 0.345)"""
+    if num_params >= 1:
+        return f"{num_params:.1f}"
+    else:
+        return f"{num_params:.3f}"
 
 
 def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
@@ -155,7 +163,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         "Rank (Borda)",
         "Rank",
         "Model",
-        "Number of Parameters",
+        "Number of Parameters (B)",
         "Embedding Dimensions",
         "Max Tokens",
         "Memory Usage (MB)",
@@ -181,7 +189,14 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
     joint_table[score_columns] = joint_table[score_columns].map(_format_scores)
 
     joint_table_style = joint_table.style.format(
-        {**dict.fromkeys(score_columns, "{:.2f}"), "Rank (Borda)": "{:.0f}"},
+        {
+            **dict.fromkeys(score_columns, "{:.2f}"),
+            "Rank (Borda)": "{:.0f}",
+            "Memory Usage (MB)": "{:.0f}",
+            "Embedding Dimensions": "{:.0f}",
+            "Max Tokens": "{:.0f}",
+            "Number of Parameters (B)": lambda x: _style_number_of_parameters(x),
+        },
         na_rep="",
     )
     joint_table_style = joint_table_style.highlight_min(
@@ -229,8 +244,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         pinned_columns=2,
         column_widths=column_widths,
         wrap=True,
-        show_fullscreen_button=True,
-        show_copy_button=True,
+        buttons=["copy", "fullscreen"],
         show_search="filter",
     )
 
@@ -252,8 +266,7 @@ def _apply_per_task_table_styling(per_task: pd.DataFrame) -> gr.DataFrame:
         per_task_style,
         interactive=False,
         pinned_columns=1,
-        show_fullscreen_button=True,
-        show_copy_button=True,
+        buttons=["copy", "fullscreen"],
         show_search="filter",
     )
 
