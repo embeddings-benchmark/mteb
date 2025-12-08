@@ -322,8 +322,10 @@ plugins = ['pydantic.mypy']
 # these modules not typed and don't have stubs
 module = [
     "datasets",
+    "datasets.exceptions",
     "sklearn",
     "sklearn.*",
+    "faiss",
 ]
 ignore_missing_imports = true
 

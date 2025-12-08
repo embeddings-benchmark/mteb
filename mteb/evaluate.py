@@ -10,11 +10,11 @@ from typing import TYPE_CHECKING, Any, cast
 from datasets.exceptions import DatasetNotFoundError
 from tqdm.auto import tqdm
 
-from mteb import Benchmark
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import (
@@ -156,7 +156,8 @@ def _evaluate_task(
                 prediction_folder=prediction_folder,
                 public_only=public_only,
             )
-        result.kg_co2_emissions = tracker.final_emissions
+        if isinstance(result, TaskResult):
+            result.kg_co2_emissions = tracker.final_emissions
         return result
 
     task_results = {}
@@ -213,7 +214,7 @@ def _evaluate_task(
 
 def _check_model_modalities(
     model: ModelMeta,
-    tasks: AbsTask | Benchmark | Iterable[AbsTask | Benchmark],
+    tasks: AbsTask | Benchmark | Iterable[AbsTask],
 ) -> None:
     """Check that model modalities are compatible with task modalities.
 
@@ -230,9 +231,6 @@ def _check_model_modalities(
     check_tasks: Iterable[AbsTask] = []
     if isinstance(tasks, AbsTask):
         check_tasks = [tasks]
-    elif isinstance(tasks, list) and all(isinstance(task, Benchmark) for task in tasks):
-        benchmarks = cast(Iterable[Benchmark], tasks)
-        check_tasks = [task for benchmark in benchmarks for task in benchmark.tasks]
     elif isinstance(tasks, Benchmark):
         benchmark = cast(Benchmark, tasks)
         check_tasks = benchmark.tasks
@@ -300,7 +298,7 @@ def _requires_merge(task: AbsTask, existing_results: TaskResult) -> bool:
 
 def evaluate(
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
-    tasks: AbsTask | Benchmark | Iterable[AbsTask | Benchmark],
+    tasks: AbsTask | Benchmark | Iterable[AbsTask],
     *,
     co2_tracker: bool | None = None,
     raise_error: bool = True,
@@ -387,11 +385,11 @@ def evaluate(
             show_progress_bar=show_progress_bar,
             public_only=public_only,
         )
-        result = aggregated_task.combine_task_results(results.task_results)
+        combined_results = aggregated_task.combine_task_results(results.task_results)
         return ModelResult(
             model_name=results.model_name,
             model_revision=results.model_revision,
-            task_results=[result],
+            task_results=[combined_results],
         )
 
     if isinstance(tasks, AbsTask):

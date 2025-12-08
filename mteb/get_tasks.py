@@ -194,7 +194,7 @@ class MTEBTasks(tuple[AbsTask]):
         """
         if include_citation_in_name and "name" in properties:
             df = self.to_dataframe(tuple(properties) + ("intext_citation",))
-            df["name"] = df["name"] + " " + df["intext_citation"]
+            df["name"] = df["name"] + " " + df["intext_citation"]  # type: ignore[operator]
             df = df.drop(columns=["intext_citation"])
         else:
             df = self.to_dataframe(properties)
@@ -219,17 +219,17 @@ class MTEBTasks(tuple[AbsTask]):
 
 
 def get_tasks(
-    tasks: list[str] | None = None,
+    tasks: Sequence[str] | None = None,
     *,
-    languages: list[str] | None = None,
-    script: list[str] | None = None,
-    domains: list[TaskDomain] | None = None,
-    task_types: list[TaskType] | None = None,  # type: ignore
-    categories: list[TaskCategory] | None = None,
+    languages: Sequence[str] | None = None,
+    script: Sequence[str] | None = None,
+    domains: Sequence[TaskDomain] | None = None,
+    task_types: Sequence[TaskType] | None = None,
+    categories: Sequence[TaskCategory] | None = None,
     exclude_superseded: bool = True,
-    eval_splits: list[str] | None = None,
+    eval_splits: Sequence[str] | None = None,
     exclusive_language_filter: bool = False,
-    modalities: list[Modalities] | None = None,
+    modalities: Sequence[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
     exclude_aggregate: bool = False,
     exclude_private: bool = True,
@@ -285,7 +285,7 @@ def get_tasks(
         ]
         return MTEBTasks(_tasks)
 
-    tasks_: list[type[AbsTask]] = filter_tasks(
+    tasks_: Sequence[type[AbsTask]] = filter_tasks(
         TASK_LIST,
         languages=languages,
         script=script,
@@ -311,10 +311,10 @@ _TASK_RENAMES = {"PersianTextTone": "SynPerTextToneClassification"}
 
 def get_task(
     task_name: str,
-    languages: list[str] | None = None,
-    script: list[str] | None = None,
-    eval_splits: list[str] | None = None,
-    hf_subsets: list[str] | None = None,
+    languages: Sequence[str] | None = None,
+    script: Sequence[str] | None = None,
+    eval_splits: Sequence[str] | None = None,
+    hf_subsets: Sequence[str] | None = None,
     exclusive_language_filter: bool = False,
 ) -> AbsTask:
     """Get a task by name.

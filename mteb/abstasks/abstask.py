@@ -443,7 +443,7 @@ class AbsTask(ABC):
 
         return self.metadata.languages
 
-    def filter_eval_splits(self, eval_splits: list[str] | None) -> Self:
+    def filter_eval_splits(self, eval_splits: Sequence[str] | None) -> Self:
         """Filter the evaluation splits of the task.
 
         Args:
@@ -457,9 +457,9 @@ class AbsTask(ABC):
 
     def filter_languages(
         self,
-        languages: list[str] | None,
-        script: list[str] | None = None,
-        hf_subsets: list[HFSubset] | None = None,
+        languages: Sequence[str] | None,
+        script: Sequence[str] | None = None,
+        hf_subsets: Sequence[HFSubset] | None = None,
         exclusive_language_filter: bool = False,
     ) -> Self:
         """Filter the languages of the task.

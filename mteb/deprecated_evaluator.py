@@ -12,13 +12,13 @@ from pathlib import Path
 from time import time
 from typing import TYPE_CHECKING, Any, cast
 
-from mteb import CrossEncoderProtocol
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.task_metadata import TaskCategory, TaskType
 from mteb.models.get_model_meta import (
     _model_meta_from_cross_encoder,
     _model_meta_from_sentence_transformers,
 )
+from mteb.models.models_protocols import CrossEncoderProtocol
 
 if sys.version_info >= (3, 13):
     from warnings import deprecated

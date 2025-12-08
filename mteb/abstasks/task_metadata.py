@@ -192,10 +192,10 @@ AnnotatorType = Literal[
 """The type of the annotators. Is often important for understanding the quality of a dataset."""
 
 
-PromptDict = TypedDict(
+PromptDict = TypedDict(  # type: ignore[misc]
     "PromptDict",
     {prompt_type.value: str for prompt_type in PromptType},
-    total=False,  # type: ignore[misc]
+    total=False,
 )
 """A dictionary containing the prompt used for the task.
 

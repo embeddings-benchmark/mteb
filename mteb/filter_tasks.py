@@ -38,17 +38,17 @@ T = TypeVar("T", AbsTask, type[AbsTask])
 def filter_tasks(
     tasks: Sequence[T],
     *,
-    languages: list[str] | None = None,
-    script: list[str] | None = None,
-    domains: list[TaskDomain] | None = None,
-    task_types: list[TaskType] | None = None,
-    categories: list[TaskCategory] | None = None,
-    modalities: list[Modalities] | None = None,
+    languages: Sequence[str] | None = None,
+    script: Sequence[str] | None = None,
+    domains: Sequence[TaskDomain] | None = None,
+    task_types: Sequence[TaskType] | None = None,
+    categories: Sequence[TaskCategory] | None = None,
+    modalities: Sequence[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
     exclude_private: bool = False,
-) -> list[T]:
+) -> Sequence[T]:
     """Filter tasks based on the specified criteria.
 
     Args:

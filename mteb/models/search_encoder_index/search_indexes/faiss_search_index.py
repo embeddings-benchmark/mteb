@@ -116,8 +116,8 @@ class FaissSearchIndex:
         self,
         embeddings: Array,
         top_k: int,
-        top_ranked: TopRankedDocumentsType | None = None,
-        query_idx_to_id: dict[int, str] | None = None,
+        top_ranked: TopRankedDocumentsType,
+        query_idx_to_id: dict[int, str],
     ) -> tuple[list[list[float]], list[list[int]]]:
         doc_id_to_idx = {doc_id: i for i, doc_id in enumerate(self.idxs)}
         scores_all: list[list[float]] = []
@@ -133,9 +133,9 @@ class FaissSearchIndex:
                 continue
 
             candidate_indices = [doc_id_to_idx[doc_id] for doc_id in ranked_ids]
-            d = self.index.d
+            d = self.index.d  # type: ignore[union-attr]
             candidate_embs = np.vstack(
-                [self.index.reconstruct(idx) for idx in candidate_indices]
+                [self.index.reconstruct(idx) for idx in candidate_indices]  # type: ignore[union-attr]
             )
             sub_reranking_index = self.index_type(d)
             sub_reranking_index.add(candidate_embs)

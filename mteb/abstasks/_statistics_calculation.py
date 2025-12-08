@@ -1,5 +1,6 @@
 import hashlib
 from collections import Counter
+from typing import cast
 
 from PIL import Image
 
@@ -84,10 +85,11 @@ def calculate_label_statistics(labels: list[int | list[int]]) -> LabelStatistics
         total_labels = labels
     elif isinstance(labels[0], list):
         # multilabel classification
-        label_len = [len(l) for l in labels]
+        multilabel_labels = cast(list[list[int]], labels)
+        label_len = [len(l) for l in multilabel_labels]
         total_label_len = sum(label_len)
-        total_labels = []
-        for l in labels:
+        total_labels: list[int | None] = []
+        for l in multilabel_labels:
             total_labels.extend(l if len(l) > 0 else [None])
     else:
         raise ValueError(

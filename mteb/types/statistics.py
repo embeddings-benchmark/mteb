@@ -88,9 +88,9 @@ class ScoreStatistics(TypedDict):
         max_score: Maximum score
     """
 
-    min_score: int
+    min_score: int | float
     avg_score: float
-    max_score: int
+    max_score: int | float
 
 
 class TopRankedStatistics(TypedDict):

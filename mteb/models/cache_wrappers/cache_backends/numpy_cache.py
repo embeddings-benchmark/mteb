@@ -1,10 +1,9 @@
 import json
 import logging
 from pathlib import Path
+from typing import Any
 
 import numpy as np
-
-from mteb.types import BatchedInput
 
 from ._hash_utils import _hash_item
 
@@ -14,7 +13,7 @@ logger = logging.getLogger(__name__)
 class NumpyCache:
     """Generic vector cache for both text and images."""
 
-    def __init__(self, directory: str | Path, initial_vectors: int = 100000):
+    def __init__(self, directory: str | Path, initial_vectors: int = 100_000):
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)
         self.vectors_file = self.directory / "vectors.npy"
@@ -27,7 +26,7 @@ class NumpyCache:
         logger.info(f"Initialized VectorCacheMap in directory: {self.directory}")
         self._initialize_vectors_file()
 
-    def add(self, item: list[BatchedInput], vectors: np.ndarray) -> None:
+    def add(self, items: list[dict[str, Any]], vectors: np.ndarray) -> None:
         """Add a vector to the cache."""
         try:
             if self.vector_dim is None:
@@ -38,7 +37,7 @@ class NumpyCache:
                 self._save_dimension()
                 logger.info(f"Initialized vector dimension to {self.vector_dim}")
 
-            for item, vec in zip(item, vectors):
+            for item, vec in zip(items, vectors):
                 item_hash = _hash_item(item)
                 if item_hash in self.hash_to_index:
                     logger.warning(
@@ -163,7 +162,7 @@ class NumpyCache:
             logger.error(f"Error loading VectorCacheMap: {str(e)}")
             raise
 
-    def get_vector(self, item: BatchedInput) -> np.ndarray | None:
+    def get_vector(self, item: dict[str, Any]) -> np.ndarray | None:
         """Retrieve vector from index by hash."""
         try:
             item_hash = _hash_item(item)
@@ -176,7 +175,7 @@ class NumpyCache:
             logger.error(f"Error retrieving vector for item: {str(e)}")
             raise
 
-    def __contains__(self, item: BatchedInput) -> bool:
+    def __contains__(self, item: dict[str, Any]) -> bool:
         return _hash_item(item) in self.hash_to_index
 
     def __del__(self):
