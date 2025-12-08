@@ -19,12 +19,8 @@ def hamming_score(y_true: np.ndarray, y_pred: np.ndarray) -> float:
         ValueError: If inputs are invalid or have incompatible shapes
         TypeError: If inputs cannot be converted to numpy arrays
     """
-    # Input validation
-    try:
-        y_true = np.asarray(y_true)
-        y_pred = np.asarray(y_pred)
-    except (ValueError, TypeError) as e:
-        raise TypeError(f"Inputs must be convertible to numpy arrays: {e}")
+    y_true = np.asarray(y_true)
+    y_pred = np.asarray(y_pred)
 
     # Check shapes
     if y_true.shape != y_pred.shape:
