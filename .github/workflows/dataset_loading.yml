@@ -6,9 +6,6 @@ on:
     paths:
       - "mteb/tasks/**.py"
 
-env:
-  UV_SYSTEM_PYTHON: 1
-
 jobs:
   dataset-loading-check:
     runs-on: ubuntu-latest
