@@ -150,7 +150,7 @@ _TASK_TYPE = (
     "InstructionReranking",
 ) + MIEB_TASK_TYPE
 
-TaskType = Literal[_TASK_TYPE]
+TaskType = Literal[_TASK_TYPE]  # type: ignore[valid-type]
 """The type of the task. E.g. includes "Classification", "Retrieval" and "Clustering"."""
 
 
@@ -192,8 +192,10 @@ AnnotatorType = Literal[
 """The type of the annotators. Is often important for understanding the quality of a dataset."""
 
 
-PromptDict = TypedDict(
-    "PromptDict", {prompt_type.value: str for prompt_type in PromptType}, total=False
+PromptDict = TypedDict(  # type: ignore[misc]
+    "PromptDict",
+    {prompt_type.value: str for prompt_type in PromptType},
+    total=False,
 )
 """A dictionary containing the prompt used for the task.
 
@@ -447,7 +449,7 @@ class TaskMetadata(BaseModel):
         Raises:
             ValueError: If the prompt type is not recognized.
         """
-        if prompt_type is None:
+        if prompt_type is None or self.category is None:
             return self.modalities
         query_modalities, doc_modalities = self.category.split("2")
         category_to_modality: dict[str, Modalities] = {
@@ -711,7 +713,7 @@ class TaskMetadata(BaseModel):
                 readme_langs.append(lang_name)
         return sorted(set(readme_langs))
 
-    def _hf_license(self) -> str:
+    def _hf_license(self) -> str | None:
         dataset_license = self.license
         if dataset_license:
             license_mapping = {

@@ -1,6 +1,7 @@
 import json
 import logging
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 
@@ -36,7 +37,7 @@ class FaissCache:
         logger.info(f"Initialized FAISS VectorCacheMap in {self.directory}")
         self.load()
 
-    def add(self, items: list[BatchedInput], vectors: np.ndarray) -> None:
+    def add(self, items: list[dict[str, Any]], vectors: np.ndarray) -> None:
         """Add vector to FAISS index."""
         import faiss
 

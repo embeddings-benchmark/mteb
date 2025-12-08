@@ -61,7 +61,7 @@ def filter_unclear_label(
         for text, label in zip(ds[input_column], ds[label_column]):
             key = text.strip().lower()
             normalized.setdefault(key, set()).add(
-                label if isinstance(label, (str, int, float)) else tuple(label)
+                label if isinstance(label, (str, int, float)) else tuple(label)  # type: ignore[arg-type]
             )
 
     bad_texts = {t for t, labels in normalized.items() if len(labels) > 1}
