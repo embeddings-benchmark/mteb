@@ -90,7 +90,7 @@ class Benchmark:
         Returns:
             A pandas DataFrame representing the per-language results.
         """
-        if len(self.language_view) > 0:
+        if self.language_view == "all" or len(self.language_view) > 0:
             return _create_per_language_table_from_benchmark_results(
                 benchmark_results, self.language_view
             )
