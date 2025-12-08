@@ -97,11 +97,13 @@ class MultilabelClassificationMetrics(TypedDict):
         accuracy: Accuracy of the classifier.
         lrap: Label Ranking Average Precision (LRAP) score.
         f1: Macro F1 score.
+        hamming: Hamming score (label-based accuracy).
     """
 
     accuracy: float
     lrap: float
     f1: float
+    hamming: float
 
 
 class FullMultilabelClassificationMetrics(MultilabelClassificationMetrics):
@@ -264,10 +266,12 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         else:
             lrap = label_ranking_average_precision_score(y_test, y_pred)
         f1 = f1_score(y_test, y_pred, average="macro")
+        hamming = hamming_score(y_test, y_pred)
         return MultilabelClassificationMetrics(
             accuracy=accuracy,
             lrap=lrap,
             f1=f1,
+            hamming=hamming,
         )
 
     def _undersample_data_indices(
