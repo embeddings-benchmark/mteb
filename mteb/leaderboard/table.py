@@ -291,7 +291,6 @@ def _apply_per_language_table_styling(per_language: pd.DataFrame) -> gr.DataFram
         per_language_style,
         interactive=False,
         pinned_columns=1,
-        show_fullscreen_button=True,
-        show_copy_button=True,
+        buttons=["copy", "fullscreen"],
         show_search="filter",
     )
