@@ -89,28 +89,28 @@ def _sanitize_model(
 ) -> tuple[MTEBModels | ModelMeta, ModelMeta, ModelName, Revision]:
     from sentence_transformers import CrossEncoder, SentenceTransformer
 
-    wrapped: MTEBModels | ModelMeta
+    wrapped_model: MTEBModels | ModelMeta
     if isinstance(model, SentenceTransformer):
         wrapper = SentenceTransformerEncoderWrapper(model)
         meta = wrapper.mteb_model_meta
-        wrapped = cast(EncoderProtocol, wrapper)
+        wrapped_model = cast(EncoderProtocol, wrapper)
     elif isinstance(model, CrossEncoder):
         cross_encoder_wrapper = CrossEncoderWrapper(model)
         meta = cross_encoder_wrapper.mteb_model_meta
-        wrapped = cast(CrossEncoderProtocol, cross_encoder_wrapper)
+        wrapped_model = cast(CrossEncoderProtocol, cross_encoder_wrapper)
     elif hasattr(model, "mteb_model_meta"):
         meta = getattr(model, "mteb_model_meta")
         if not isinstance(meta, ModelMeta):
             meta = _create_empty_model_meta()
-        wrapped = cast(MTEBModels | ModelMeta, model)
+        wrapped_model = cast(MTEBModels | ModelMeta, model)
     else:
         meta = _create_empty_model_meta() if not isinstance(model, ModelMeta) else model
-        wrapped = meta
+        wrapped_model = meta
 
     model_name = cast(str, meta.name)
     model_revision = cast(str, meta.revision)
 
-    return wrapped, meta, model_name, model_revision
+    return wrapped_model, meta, model_name, model_revision
 
 
 def _evaluate_task(

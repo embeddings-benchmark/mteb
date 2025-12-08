@@ -195,7 +195,8 @@ class InstructSentenceTransformerModel(AbsEncoder):
             The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
         """
         sentences = [text for batch in inputs for text in batch["text"]]
-        instruction: str | None = self.get_task_instruction(task_metadata, prompt_type)
+        instruction: str | None
+        instruction = self.get_task_instruction(task_metadata, prompt_type)
 
         # to passage prompts won't be applied to passages
         if (

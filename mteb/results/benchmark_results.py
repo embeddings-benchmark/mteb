@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 import json
 import logging
 import warnings
 from collections.abc import Callable, Iterable, Iterator, Sequence
 from pathlib import Path
-from typing import Any, Literal, cast, override
+from typing import Any, Literal, cast
 
 import pandas as pd
 from packaging.version import InvalidVersion, Version
@@ -60,7 +62,7 @@ class BenchmarkResults(BaseModel):
         task_types: list[TaskType] | None = None,  # type: ignore
         modalities: list[Modalities] | None = None,
         is_public: bool | None = None,
-    ) -> "BenchmarkResults":
+    ) -> BenchmarkResults:
         # TODO: Same as filter_models
         model_results = [
             res._filter_tasks(
@@ -77,7 +79,7 @@ class BenchmarkResults(BaseModel):
             model_results=[res for res in model_results if res.task_results]
         )
 
-    def select_tasks(self, tasks: Sequence[AbsTask]) -> "BenchmarkResults":
+    def select_tasks(self, tasks: Sequence[AbsTask]) -> BenchmarkResults:
         """Select tasks from the benchmark results.
 
         Args:
@@ -95,7 +97,7 @@ class BenchmarkResults(BaseModel):
         self,
         names: list[str] | list[ModelMeta],
         revisions: list[str | None] | None = None,
-    ) -> "BenchmarkResults":
+    ) -> BenchmarkResults:
         """Get models by name and revision.
 
         Args:
@@ -142,7 +144,7 @@ class BenchmarkResults(BaseModel):
         n_parameters_range: tuple[int | None, int | None] = (None, None),
         use_instructions: bool | None = None,
         zero_shot_on: list[AbsTask] | None = None,
-    ) -> "BenchmarkResults":
+    ) -> BenchmarkResults:
         # mostly a utility function for the leaderboard app.
         # I would probably move the filtering of the models outside of this call. No need to call get_model_metas inside the filter.
         # interface would then be the same as the get_models function
@@ -165,7 +167,7 @@ class BenchmarkResults(BaseModel):
 
         return type(self).model_construct(model_results=new_model_results)
 
-    def join_revisions(self) -> "BenchmarkResults":
+    def join_revisions(self) -> BenchmarkResults:
         """Join revisions of the same model.
 
         In case of conflicts, the following rules are applied:
@@ -364,7 +366,6 @@ class BenchmarkResults(BaseModel):
             format=format,
         )
 
-    @override
     def __iter__(self) -> Iterator[ModelResult]:  # type: ignore[override]
         return iter(self.model_results)
 
@@ -387,7 +388,7 @@ class BenchmarkResults(BaseModel):
             out_file.write(self.model_dump_json(indent=2))
 
     @classmethod
-    def from_validated(cls, **data) -> "BenchmarkResults":
+    def from_validated(cls, **data) -> BenchmarkResults:
         """Create BenchmarkResults from validated data.
 
         Args:
