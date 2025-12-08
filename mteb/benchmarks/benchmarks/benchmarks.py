@@ -309,7 +309,7 @@ RU_SCI_BENCH = Benchmark(
     tasks=get_tasks(
         tasks=[
             # BitextMining
-            "RuSciBenchBitextMining",
+            "RuSciBenchBitextMining.v2",
             # Classification
             "RuSciBenchCoreRiscClassification",
             "RuSciBenchGRNTIClassification.v2",
