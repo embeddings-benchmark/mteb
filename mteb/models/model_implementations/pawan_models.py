@@ -4,48 +4,35 @@ from mteb.models.model_meta import (
 )
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
-# Optional: Add citation if you have a paper/technical report
 PAWAN_EMBD_CITATION = """@misc{medhi2025pawanembd,
-  title={PawanEmbd-68M: Distilled Embedding Model},
-  author={Medhi, D.},
-  year={2025},
-  url={https://huggingface.co/dmedhi/PawanEmbd-68M}
+    title={PawanEmbd-68M: Distilled Embedding Model},
+    author={Medhi, D.},
+    year={2025},
+    url={https://huggingface.co/dmedhi/PawanEmbd-68M}
 }"""
 
-pawanEmbd_68m = ModelMeta(
+pawan_embd_68m = ModelMeta(
     loader=sentence_transformers_loader,
-    
     name="dmedhi/PawanEmbd-68M",
-    languages=["eng-Latn"], 
+    languages=["eng-Latn"],
     open_weights=True,
-    
-    revision="32f295145802bdbd65699ad65fd27d2a5b69a909",  
-    
+    revision="32f295145802bdbd65699ad65fd27d2a5b69a909",
     release_date="2025-12-08",
-    
-    # Model specifications
     n_parameters=68_000_000,
-    memory_usage_mb=260,  
+    memory_usage_mb=260,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
-    
     reference="https://huggingface.co/dmedhi/PawanEmbd-68M",
-    
     similarity_fn_name=ScoringFunction.COSINE,
-    
     framework=["Sentence Transformers", "PyTorch"],
-    
-    adapted_from=None,  
+    adapted_from="ibm-granite/granite-embedding-278m-multilingual",
     superseded_by=None,
-    public_training_code=None, 
-    public_training_data=None,  
+    public_training_code=None,
+    public_training_data=None,
     use_instructions=False,
-    
-
     training_datasets={
-        "AllNLI", 
+        "AllNLI",
     },
-    
-    citation=PAWAN_EMBD_CITATION, 
+    citation=PAWAN_EMBD_CITATION,
 )
