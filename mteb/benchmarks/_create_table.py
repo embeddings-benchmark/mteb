@@ -252,19 +252,23 @@ def _create_per_language_table_from_benchmark_results(
 
     Args:
         benchmark_results: BenchmarkResults object containing model results
-        language_view: List of languages to include in the per-language table
+        language_view: List of languages to include in the per-language table, or "all" for all languages present in the results
     Returns:
         DataFrame with per-language scores, ready for styling in the leaderboard
     """
+    if language_view != "all" and not isinstance(language_view, list):
+        raise ValueError("language_view must be a list of languages or 'all'")
+
     data = benchmark_results.to_dataframe(aggregation_level="language", format="long")
-    if language_view != "all":
-        data = data[data["language"].isin(language_view)]
 
     if data.empty:
         no_results_frame = pd.DataFrame(
             {"No results": ["You can try relaxing your criteria"]}
         )
         return no_results_frame
+
+    if language_view != "all":
+        data = data[data["language"].isin(language_view)]
 
     per_language = data.pivot_table(
         index="model_name", columns="language", values="score", aggfunc="mean"
