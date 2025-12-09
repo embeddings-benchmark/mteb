@@ -25,6 +25,11 @@
             "max_relevant_docs_per_query": 5,
             "unique_relevant_docs": 129
         },
-        "top_ranked_statistics": null
+        "top_ranked_statistics": {
+            "num_top_ranked": 59832,
+            "min_top_ranked_per_query": 554,
+            "average_top_ranked_per_query": 554.0,
+            "max_top_ranked_per_query": 554
+        }
     }
 }

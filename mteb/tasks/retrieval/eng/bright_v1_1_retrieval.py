@@ -15,6 +15,10 @@ def load_bright_data(
     cache_dir: str | None = None,
     revision: str | None = None,
 ):
+    eval_split = eval_splits[0]
+    corpus_name = "documents" if eval_split == "standard" else "long_documents"
+    gold_ids_field = "gold_ids" if eval_split == "standard" else "gold_ids_long"
+
     corpus = dict.fromkeys(eval_splits)
     queries = dict.fromkeys(eval_splits)
     relevant_docs = dict.fromkeys(eval_splits)
@@ -22,7 +26,7 @@ def load_bright_data(
 
     domain_corpus = datasets.load_dataset(
         path,
-        "documents",
+        corpus_name,
         split=domain,
         cache_dir=cache_dir,
         revision=revision,
@@ -34,30 +38,30 @@ def load_bright_data(
         cache_dir=cache_dir,
         revision=revision,
     )
-    corpus["standard"] = {e["id"]: {"text": e["content"]} for e in domain_corpus}
-    queries["standard"] = {e["id"]: e["query"] for e in examples}
-    relevant_docs["standard"] = defaultdict(dict)
-    top_ranked["standard"] = defaultdict(list)
+    corpus[eval_split] = {e["id"]: {"text": e["content"]} for e in domain_corpus}
+    queries[eval_split] = {e["id"]: e["query"] for e in examples}
+    relevant_docs[eval_split] = defaultdict(dict)
+    top_ranked[eval_split] = defaultdict(list)
 
     # Get all document IDs
     all_doc_ids = [e["id"] for e in domain_corpus]
 
     for e in examples:
         qid = e["id"]
-        gold_ids = e["gold_ids"]
+        gold_ids = e[gold_ids_field]
         for gid in gold_ids:
-            relevant_docs["standard"][qid].update({gid: 1})
+            relevant_docs[eval_split][qid].update({gid: 1})
 
         # Create top_ranked: all documents except excluded_ids
         excluded_ids = e.get("excluded_ids", [])
         if excluded_ids and excluded_ids != ["N/A"]:
             excluded_set = set(excluded_ids)
-            top_ranked["standard"][qid] = [
+            top_ranked[eval_split][qid] = [
                 doc_id for doc_id in all_doc_ids if doc_id not in excluded_set
             ]
         else:
             # No exclusions, use all documents
-            top_ranked["standard"][qid] = all_doc_ids
+            top_ranked[eval_split][qid] = all_doc_ids
 
     corpus = datasets.DatasetDict(corpus)
     queries = datasets.DatasetDict(queries)
@@ -600,6 +604,358 @@ class BrightTheoremQAQuestionsRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="theoremqa_questions",
+                cache_dir=kwargs.get("cache_dir", None),
+                revision=self.metadata.dataset["revision"],
+            )
+        )
+        self.data_loaded = True
+
+
+class BrightBiologyLongRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="BrightBiologyLongRetrieval",
+        dataset={
+            "path": "xlangai/BRIGHT",
+            "revision": "a75a0eb483f6a5233a6efc2d63d71540a4443dfb",
+        },
+        reference="https://huggingface.co/datasets/xlangai/BRIGHT",
+        description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Biology StackExchange answers with long documents.",
+        type="Retrieval",
+        prompt={
+            "query": "Represent this Biology post for searching relevant passages: "
+        },
+        category="t2t",
+        eval_splits=["long"],
+        eval_langs=["eng-Latn"],
+        main_score="recall_at_1",
+        date=("2024-03-01", "2024-06-01"),
+        domains=["Non-fiction", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        modalities=["text"],
+        bibtex_citation=_BIBTEX_CITATION,
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
+            load_bright_data(
+                path=self.metadata.dataset["path"],
+                eval_splits=self.metadata.eval_splits,
+                domain="biology",
+                cache_dir=kwargs.get("cache_dir", None),
+                revision=self.metadata.dataset["revision"],
+            )
+        )
+        self.data_loaded = True
+
+
+class BrightEarthScienceLongRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="BrightEarthScienceLongRetrieval",
+        dataset={
+            "path": "xlangai/BRIGHT",
+            "revision": "a75a0eb483f6a5233a6efc2d63d71540a4443dfb",
+        },
+        reference="https://huggingface.co/datasets/xlangai/BRIGHT",
+        description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Earth Science StackExchange answers with long documents.",
+        type="Retrieval",
+        prompt={
+            "query": "Represent this Earth Science post for searching relevant passages: "
+        },
+        category="t2t",
+        eval_splits=["long"],
+        eval_langs=["eng-Latn"],
+        main_score="recall_at_1",
+        date=("2024-03-01", "2024-06-01"),
+        domains=["Non-fiction", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        modalities=["text"],
+        bibtex_citation=_BIBTEX_CITATION,
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
+            load_bright_data(
+                path=self.metadata.dataset["path"],
+                eval_splits=self.metadata.eval_splits,
+                domain="earth_science",
+                cache_dir=kwargs.get("cache_dir", None),
+                revision=self.metadata.dataset["revision"],
+            )
+        )
+        self.data_loaded = True
+
+
+class BrightEconomicsLongRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="BrightEconomicsLongRetrieval",
+        dataset={
+            "path": "xlangai/BRIGHT",
+            "revision": "a75a0eb483f6a5233a6efc2d63d71540a4443dfb",
+        },
+        reference="https://huggingface.co/datasets/xlangai/BRIGHT",
+        description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Economics StackExchange answers with long documents.",
+        type="Retrieval",
+        prompt={
+            "query": "Represent this Economics post for searching relevant passages: "
+        },
+        category="t2t",
+        eval_splits=["long"],
+        eval_langs=["eng-Latn"],
+        main_score="recall_at_1",
+        date=("2024-03-01", "2024-06-01"),
+        domains=["Non-fiction", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        modalities=["text"],
+        bibtex_citation=_BIBTEX_CITATION,
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
+            load_bright_data(
+                path=self.metadata.dataset["path"],
+                eval_splits=self.metadata.eval_splits,
+                domain="economics",
+                cache_dir=kwargs.get("cache_dir", None),
+                revision=self.metadata.dataset["revision"],
+            )
+        )
+        self.data_loaded = True
+
+
+class BrightPsychologyLongRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="BrightPsychologyLongRetrieval",
+        dataset={
+            "path": "xlangai/BRIGHT",
+            "revision": "a75a0eb483f6a5233a6efc2d63d71540a4443dfb",
+        },
+        reference="https://huggingface.co/datasets/xlangai/BRIGHT",
+        description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Psychology StackExchange answers with long documents.",
+        type="Retrieval",
+        prompt={
+            "query": "Represent this Psychology post for searching relevant passages: "
+        },
+        category="t2t",
+        eval_splits=["long"],
+        eval_langs=["eng-Latn"],
+        main_score="recall_at_1",
+        date=("2024-03-01", "2024-06-01"),
+        domains=["Non-fiction", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        modalities=["text"],
+        bibtex_citation=_BIBTEX_CITATION,
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
+            load_bright_data(
+                path=self.metadata.dataset["path"],
+                eval_splits=self.metadata.eval_splits,
+                domain="psychology",
+                cache_dir=kwargs.get("cache_dir", None),
+                revision=self.metadata.dataset["revision"],
+            )
+        )
+        self.data_loaded = True
+
+
+class BrightRoboticsLongRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="BrightRoboticsLongRetrieval",
+        dataset={
+            "path": "xlangai/BRIGHT",
+            "revision": "a75a0eb483f6a5233a6efc2d63d71540a4443dfb",
+        },
+        reference="https://huggingface.co/datasets/xlangai/BRIGHT",
+        description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Robotics StackExchange answers with long documents.",
+        type="Retrieval",
+        prompt={
+            "query": "Represent this Robotics post for searching relevant passages: "
+        },
+        category="t2t",
+        eval_splits=["long"],
+        eval_langs=["eng-Latn"],
+        main_score="recall_at_1",
+        date=("2024-03-01", "2024-06-01"),
+        domains=["Non-fiction", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        modalities=["text"],
+        bibtex_citation=_BIBTEX_CITATION,
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
+            load_bright_data(
+                path=self.metadata.dataset["path"],
+                eval_splits=self.metadata.eval_splits,
+                domain="robotics",
+                cache_dir=kwargs.get("cache_dir", None),
+                revision=self.metadata.dataset["revision"],
+            )
+        )
+        self.data_loaded = True
+
+
+class BrightStackoverflowLongRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="BrightStackoverflowLongRetrieval",
+        dataset={
+            "path": "xlangai/BRIGHT",
+            "revision": "a75a0eb483f6a5233a6efc2d63d71540a4443dfb",
+        },
+        reference="https://huggingface.co/datasets/xlangai/BRIGHT",
+        description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Stack Overflow answers with long documents.",
+        type="Retrieval",
+        prompt={
+            "query": "Represent this Stack Overflow post for searching relevant passages: "
+        },
+        category="t2t",
+        eval_splits=["long"],
+        eval_langs=["eng-Latn"],
+        main_score="recall_at_1",
+        date=("2024-03-01", "2024-06-01"),
+        domains=["Non-fiction", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        modalities=["text"],
+        bibtex_citation=_BIBTEX_CITATION,
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
+            load_bright_data(
+                path=self.metadata.dataset["path"],
+                eval_splits=self.metadata.eval_splits,
+                domain="stackoverflow",
+                cache_dir=kwargs.get("cache_dir", None),
+                revision=self.metadata.dataset["revision"],
+            )
+        )
+        self.data_loaded = True
+
+
+class BrightSustainableLivingLongRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="BrightSustainableLivingLongRetrieval",
+        dataset={
+            "path": "xlangai/BRIGHT",
+            "revision": "a75a0eb483f6a5233a6efc2d63d71540a4443dfb",
+        },
+        reference="https://huggingface.co/datasets/xlangai/BRIGHT",
+        description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Sustainable Living StackExchange answers with long documents.",
+        type="Retrieval",
+        prompt={
+            "query": "Represent this Sustainable Living post for searching relevant passages: "
+        },
+        category="t2t",
+        eval_splits=["long"],
+        eval_langs=["eng-Latn"],
+        main_score="recall_at_1",
+        date=("2024-03-01", "2024-06-01"),
+        domains=["Non-fiction", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        modalities=["text"],
+        bibtex_citation=_BIBTEX_CITATION,
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
+            load_bright_data(
+                path=self.metadata.dataset["path"],
+                eval_splits=self.metadata.eval_splits,
+                domain="sustainable_living",
+                cache_dir=kwargs.get("cache_dir", None),
+                revision=self.metadata.dataset["revision"],
+            )
+        )
+        self.data_loaded = True
+
+
+class BrightPonyLongRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="BrightPonyLongRetrieval",
+        dataset={
+            "path": "xlangai/BRIGHT",
+            "revision": "a75a0eb483f6a5233a6efc2d63d71540a4443dfb",
+        },
+        reference="https://huggingface.co/datasets/xlangai/BRIGHT",
+        description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of Pony programming language syntax documentation with long documents.",
+        type="Retrieval",
+        prompt={
+            "query": "Represent this Pony question for searching relevant passages: "
+        },
+        category="t2t",
+        eval_splits=["long"],
+        eval_langs=["eng-Latn"],
+        main_score="recall_at_1",
+        date=("2024-03-01", "2024-06-01"),
+        domains=["Non-fiction", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        modalities=["text"],
+        bibtex_citation=_BIBTEX_CITATION,
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
+            load_bright_data(
+                path=self.metadata.dataset["path"],
+                eval_splits=self.metadata.eval_splits,
+                domain="pony",
                 cache_dir=kwargs.get("cache_dir", None),
                 revision=self.metadata.dataset["revision"],
             )

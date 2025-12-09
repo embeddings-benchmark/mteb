@@ -1198,42 +1198,6 @@ BRIGHT = Benchmark(
 """,
 )
 
-BRIGHT_SUBSETS = Benchmark(
-    name="BRIGHT (subsets)",
-    display_name="Reasoning Retrieval (subsets)",
-    tasks=get_tasks(
-        tasks=[
-            "BrightBiologyRetrieval",
-            "BrightEarthScienceRetrieval",
-            "BrightEconomicsRetrieval",
-            "BrightPsychologyRetrieval",
-            "BrightRoboticsRetrieval",
-            "BrightStackoverflowRetrieval",
-            "BrightSustainableLivingRetrieval",
-            "BrightPonyRetrieval",
-            "BrightLeetcodeRetrieval",
-            "BrightAopsRetrieval",
-            "BrightTheoremQATheoremsRetrieval",
-            "BrightTheoremQAQuestionsRetrieval",
-        ],
-    ),
-    description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval (Individual Subsets).
-    This benchmark contains individual subset tasks for each domain in the BRIGHT benchmark,
-    allowing for domain-specific evaluation. The subsets include: biology, earth science, economics,
-    psychology, robotics, stackoverflow, sustainable living, pony, leetcode, aops, theoremqa_theorems,
-    and theoremqa_questions.
-    """,
-    reference="https://brightbenchmark.github.io/",
-    citation=r"""
-@article{su2024bright,
-  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
-  journal = {arXiv preprint arXiv:2407.12883},
-  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
-  year = {2024},
-}
-""",
-)
-
 BRIGHT_LONG = Benchmark(
     name="BRIGHT (long)",
     tasks=MTEBTasks(
@@ -1263,11 +1227,23 @@ This is the long version of the benchmark, which only filter longer documents.
 """,
 )
 
-BRIGHT_SUBSETS_LONG = Benchmark(
-    name="BRIGHT (long subsets)",
-    display_name="Reasoning Retrieval (long subsets)",
+BRIGHT_V1_1 = Benchmark(
+    name="BRIGHT(v1.1)",
+    display_name="Reasoning Retrieval",
     tasks=get_tasks(
         tasks=[
+            "BrightBiologyRetrieval",
+            "BrightEarthScienceRetrieval",
+            "BrightEconomicsRetrieval",
+            "BrightPsychologyRetrieval",
+            "BrightRoboticsRetrieval",
+            "BrightStackoverflowRetrieval",
+            "BrightSustainableLivingRetrieval",
+            "BrightPonyRetrieval",
+            "BrightLeetcodeRetrieval",
+            "BrightAopsRetrieval",
+            "BrightTheoremQATheoremsRetrieval",
+            "BrightTheoremQAQuestionsRetrieval",
             "BrightBiologyLongRetrieval",
             "BrightEarthScienceLongRetrieval",
             "BrightEconomicsLongRetrieval",
@@ -1278,11 +1254,7 @@ BRIGHT_SUBSETS_LONG = Benchmark(
             "BrightPonyLongRetrieval",
         ],
     ),
-    description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval (Long Individual Subsets).
-    This benchmark contains individual subset tasks for each domain in the BRIGHT benchmark with long documents,
-    allowing for domain-specific evaluation with longer context. The subsets include: biology, earth science,
-    economics, psychology, robotics, stackoverflow, sustainable living, and pony.
-    """,
+    description="v1.1 refactors the BRIGHT and BRIGHT(long) into a single benchmark (with separate columns) and added prompt to individual tasks.",
     reference="https://brightbenchmark.github.io/",
     citation=r"""
 @article{su2024bright,
