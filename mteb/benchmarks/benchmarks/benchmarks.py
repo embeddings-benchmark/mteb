@@ -471,6 +471,7 @@ SEB = Benchmark(
     name="MTEB(Scandinavian, v1)",
     display_name="Scandinavian",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/dk.svg",
+    language_view=["dan-Latn", "swe-Latn", "nno-Latn", "nob-Latn"],
     tasks=get_tasks(
         tasks=[
             # Bitext
@@ -953,6 +954,28 @@ MTEB_multilingual_v1 = Benchmark(
 MTEB_multilingual_v2 = Benchmark(
     name="MTEB(Multilingual, v2)",
     display_name="Multilingual",
+    language_view=[
+        "eng-Latn",  # English
+        "zho-Hans",  # Chinese (Simplified)
+        "hin-Deva",  # Hindi
+        "spa-Latn",  # Spanish
+        "fra-Latn",  # French
+        "ara-Arab",  # Arabic
+        "ben-Beng",  # Bengali
+        "rus-Cyrl",  # Russian
+        "por-Latn",  # Portuguese
+        "urd-Arab",  # Urdu
+        "ind-Latn",  # Indonesian
+        "deu-Latn",  # German
+        "jpn-Jpan",  # Japanese
+        "swa-Latn",  # Swahili
+        "mar-Deva",  # Marathi
+        "tel-Telu",  # Telugu
+        "tur-Latn",  # Turkish
+        "tam-Taml",  # Tamil
+        "vie-Latn",  # Vietnamese
+        "kor-Hang",  # Korean
+    ],
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
     tasks=mteb_multilingual_tasks,
     description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages. ",
@@ -2283,6 +2306,14 @@ VIDORE_V2 = Benchmark(
 VIDORE_V3 = VidoreBenchmark(
     name="ViDoRe(v3)",
     display_name="ViDoRe V3",
+    language_view=[
+        "deu-Latn",
+        "eng-Latn",
+        "fra-Latn",
+        "ita-Latn",
+        "por-Latn",
+        "spa-Latn",
+    ],
     icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
     tasks=get_tasks(
         tasks=[

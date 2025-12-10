@@ -296,7 +296,7 @@ class BenchmarkResults(BaseModel):
 
     def to_dataframe(
         self,
-        aggregation_level: Literal["subset", "split", "task"] = "task",
+        aggregation_level: Literal["subset", "split", "task", "language"] = "task",
         aggregation_fn: Callable[[list[Score]], Any] | None = None,
         include_model_revision: bool = False,
         format: Literal["wide", "long"] = "wide",
@@ -321,6 +321,7 @@ class BenchmarkResults(BaseModel):
                 - "subset"/None: No aggregation will be done. The DataFrame will have one row per model, task, split and subset.
                 - "split": Aggregates the scores by split. The DataFrame will have one row per model, task and split.
                 - "task": Aggregates the scores by task. The DataFrame will have one row per model and task.
+                - "language": Aggregates the scores by language. The DataFrame will have one row per model and language.
             aggregation_fn: The function to use for aggregation. If None, the mean will be used.
             include_model_revision: If True, the model revision will be included in the DataFrame. If False, it will be excluded.
                 If there are multiple revisions for the same model, they will be joined using the `join_revisions` method.

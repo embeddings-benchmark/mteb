@@ -120,6 +120,31 @@ def apply_per_task_styling_from_benchmark(
     return _apply_per_task_table_styling(per_task_df)
 
 
+def apply_per_language_styling_from_benchmark(
+    benchmark_instance: Benchmark, benchmark_results: BenchmarkResults
+) -> gr.DataFrame:
+    """Apply styling to per-language table created by the benchmark instance's _create_per_language_table method.
+
+    This supports polymorphism - different benchmark classes can have different table generation logic.
+
+    Args:
+        benchmark_instance: The benchmark instance
+        benchmark_results: BenchmarkResults object containing model results (may be pre-filtered)
+
+    Returns:
+        Styled gr.DataFrame ready for display in the leaderboard
+    """
+    # Use the instance method to support polymorphism
+    per_language_df = benchmark_instance._create_per_language_table(benchmark_results)
+
+    # If it's a no-results DataFrame, return it as-is
+    if "No results" in per_language_df.columns:
+        return gr.DataFrame(per_language_df)
+
+    # Apply the styling
+    return _apply_per_language_table_styling(per_language_df)
+
+
 def _style_number_of_parameters(num_params: float) -> str:
     """Anything bigger than 1B is shown in billions with 1 decimal (e.g. 1.712 > 1.7) while anything smaller as 0.xxx B (e.g. 0.345 remains 0.345)"""
     if num_params >= 1:
@@ -237,10 +262,47 @@ def _apply_per_task_table_styling(per_task: pd.DataFrame) -> gr.DataFrame:
         "{:.2f}", subset=task_score_columns, na_rep=""
     ).highlight_max(subset=task_score_columns, props="font-weight: bold")
 
+    # setting task name column width to 250px
+    column_widths = _get_column_widths(per_task_style.data)
+    if len(column_widths) > 0:
+        column_widths[0] = "250px"
+
     return gr.DataFrame(
         per_task_style,
         interactive=False,
         pinned_columns=1,
+        column_widths=column_widths,
+        buttons=["copy", "fullscreen"],
+        show_search="filter",
+    )
+
+
+def _apply_per_language_table_styling(per_language: pd.DataFrame) -> gr.DataFrame:
+    """Apply styling to a raw per-task DataFrame
+
+    Returns:
+        Styled gr.DataFrame ready for display in the leaderboard
+    """
+    language_score_columns = per_language.select_dtypes("number").columns
+    per_language[language_score_columns] *= 100
+
+    if len(per_language.columns) > 100:  # Avoid gradio error on very wide tables
+        per_language_style = per_language.round(2)
+    else:
+        per_language_style = per_language.style.format(
+            "{:.2f}", subset=language_score_columns, na_rep=""
+        ).highlight_max(subset=language_score_columns, props="font-weight: bold")
+
+    # setting task name column width to 250px
+    column_widths = _get_column_widths(per_language_style.data)
+    if len(column_widths) > 0:
+        column_widths[0] = "250px"
+
+    return gr.DataFrame(
+        per_language_style,
+        interactive=False,
+        pinned_columns=1,
+        column_widths=column_widths,
         buttons=["copy", "fullscreen"],
         show_search="filter",
     )
