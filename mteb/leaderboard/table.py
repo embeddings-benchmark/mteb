@@ -262,10 +262,16 @@ def _apply_per_task_table_styling(per_task: pd.DataFrame) -> gr.DataFrame:
         "{:.2f}", subset=task_score_columns, na_rep=""
     ).highlight_max(subset=task_score_columns, props="font-weight: bold")
 
+    # setting task name column width to 250px
+    column_widths = _get_column_widths(per_task_style.data)
+    if len(column_widths) > 0:
+        column_widths[0] = "250px"
+
     return gr.DataFrame(
         per_task_style,
         interactive=False,
         pinned_columns=1,
+        column_widths=column_widths,
         buttons=["copy", "fullscreen"],
         show_search="filter",
     )
@@ -287,10 +293,16 @@ def _apply_per_language_table_styling(per_language: pd.DataFrame) -> gr.DataFram
             "{:.2f}", subset=language_score_columns, na_rep=""
         ).highlight_max(subset=language_score_columns, props="font-weight: bold")
 
+    # setting task name column width to 250px
+    column_widths = _get_column_widths(per_language_style.data)
+    if len(column_widths) > 0:
+        column_widths[0] = "250px"
+
     return gr.DataFrame(
         per_language_style,
         interactive=False,
         pinned_columns=1,
+        column_widths=column_widths,
         buttons=["copy", "fullscreen"],
         show_search="filter",
     )
