@@ -95,7 +95,13 @@ class ClapZeroShotWrapper(AbsEncoder):
             inputs, disable=not show_progress_bar, desc="Processing text batches"
         ):
             texts = batch["text"]
-            inputs = self.processor(text=texts, return_tensors="pt", padding=True)
+            inputs = self.processor(
+                text=texts,
+                return_tensors="pt",
+                padding=True,
+                truncation=True,
+                max_length=512,
+            )
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
             text_features = self.model.get_text_features(**inputs)
