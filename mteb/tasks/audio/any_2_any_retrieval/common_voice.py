@@ -7,8 +7,7 @@ from tqdm import tqdm
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-# Language codes for Common Voice 17
-_EVAL_LANGS_CV17 = {
+_EVAL_LANGS = {
     "ab": ["abk-Latn"],  # Abkhaz
     "af": ["afr-Latn"],  # Afrikaans
     "am": ["amh-Ethi"],  # Amharic
@@ -56,55 +55,6 @@ _EVAL_LANGS_CV17 = {
     "ig": ["ibo-Latn"],  # Igbo
 }
 
-# Language codes for Common Voice 21
-_EVAL_LANGS_CV21 = {
-    "abk": ["abk-Latn"],  # Abkhaz
-    "afr": ["afr-Latn"],  # Afrikaans
-    "amh": ["amh-Ethi"],  # Amharic
-    "ara": ["ara-Arab"],  # Arabic
-    "asm": ["asm-Beng"],  # Assamese
-    "ast": ["ast-Latn"],  # Asturian
-    "aze": ["aze-Latn"],  # Azerbaijani
-    "bak": ["bak-Cyrl"],  # Bashkir
-    "bas": ["bas-Latn"],  # Basaa
-    "bel": ["bel-Cyrl"],  # Belarusian
-    "bul": ["bul-Cyrl"],  # Bulgarian
-    "ben": ["ben-Beng"],  # Bengali
-    "bre": ["bre-Latn"],  # Breton
-    "cat": ["cat-Latn"],  # Catalan
-    "ckb": ["ckb-Arab"],  # Central Kurdish (Sorani)
-    "cnh": ["cnh-Latn"],  # Hakha Chin
-    "ces": ["ces-Latn"],  # Czech
-    "chv": ["chv-Cyrl"],  # Chuvash
-    "cym": ["cym-Latn"],  # Welsh
-    "dan": ["dan-Latn"],  # Danish
-    "deu": ["deu-Latn"],  # German
-    "div": ["div-Thaa"],  # Divehi
-    "dyu": ["dyu-Latn"],  # Dyula
-    "ell": ["ell-Grek"],  # Greek
-    "eng": ["eng-Latn"],  # English
-    "epo": ["epo-Latn"],  # Esperanto
-    "spa": ["spa-Latn"],  # Spanish
-    "est": ["est-Latn"],  # Estonian
-    "eus": ["eus-Latn"],  # Basque
-    "fas": ["fas-Arab"],  # Persian
-    "fin": ["fin-Latn"],  # Finnish
-    "fra": ["fra-Latn"],  # French
-    "fry": ["fry-Latn"],  # Frisian (Netherlands)
-    "gle": ["gle-Latn"],  # Irish (Ireland)
-    "glg": ["glg-Latn"],  # Galician
-    "grn": ["grn-Latn"],  # Guarani
-    "hau": ["hau-Latn"],  # Hausa
-    "heb": ["heb-Hebr"],  # Hebrew
-    "hin": ["hin-Deva"],  # Hindi
-    "hsb": ["hsb-Latn"],  # Upper Sorbian
-    "hun": ["hun-Latn"],  # Hungarian
-    "hye": ["hye-Armn"],  # Armenian (Armenia)
-    "ina": ["ina-Latn"],  # Interlingua
-    "ind": ["ind-Latn"],  # Indonesian
-    "ibo": ["ibo-Latn"],  # Igbo
-}
-
 
 class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -119,7 +69,7 @@ class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
         category="a2t",
         modalities=["text", "audio"],
         eval_splits=["test"],
-        eval_langs=_EVAL_LANGS_CV17,
+        eval_langs=_EVAL_LANGS,
         main_score="cv_recall_at_5",
         date=("2020-01-01", "2024-12-31"),
         domains=["Spoken"],
@@ -210,7 +160,7 @@ class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
         category="t2a",
         modalities=["text", "audio"],
         eval_splits=["test"],
-        eval_langs=_EVAL_LANGS_CV17,
+        eval_langs=_EVAL_LANGS,
         main_score="cv_recall_at_5",
         date=("2020-01-01", "2024-12-31"),
         domains=["Spoken"],
@@ -294,7 +244,7 @@ class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
         category="a2t",
         modalities=["text", "audio"],
         eval_splits=["test"],
-        eval_langs=_EVAL_LANGS_CV21,
+        eval_langs=_EVAL_LANGS,
         main_score="cv_recall_at_5",
         date=("2020-01-01", "2024-12-31"),
         domains=["Spoken"],
@@ -385,7 +335,7 @@ class CommonVoice21T2ARetrieval(AbsTaskRetrieval):
         category="t2a",
         modalities=["text", "audio"],
         eval_splits=["test"],
-        eval_langs=_EVAL_LANGS_CV21,
+        eval_langs=_EVAL_LANGS,
         main_score="cv_recall_at_5",
         date=("2020-01-01", "2024-12-31"),
         domains=["Spoken"],
