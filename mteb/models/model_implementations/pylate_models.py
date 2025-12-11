@@ -328,13 +328,10 @@ class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
             inputs,
             prompt_name=prompt_name,
             is_query=prompt_type == PromptType.query,
-            convert_to_tensor=True,
             **kwargs,
         )
 
-        # encode returns a list of tensors shaped (x, token_dim), pad to uniform length
-        pred = torch.nn.utils.rnn.pad_sequence(pred, batch_first=True, padding_value=0)
-        return pred.cpu().numpy()
+        return pred
 
 
 colbert_v2 = ModelMeta(
