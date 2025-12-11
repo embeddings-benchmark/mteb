@@ -57,7 +57,10 @@ Repository = "https://github.com/embeddings-benchmark/mteb"
 mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
-image = ["torchvision>0.2.1"]
+image = [
+    "torchvision>0.2.1",
+    "transformers[torch-vision,vision]>=4.57.3",
+]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
     "gradio==6.0.1",
@@ -67,34 +70,34 @@ leaderboard = [
 ]
 
 # model specific optional dependencies:
-peft = ["peft>=0.11.0"]
-flagembedding = ["FlagEmbedding==1.3.4"]
-jina = ["einops>=0.8.0"]
-jina-v4 = ["peft>=0.15.2", "transformers>=4.52.0", "torchvision>=0.22.1"]
-flash_attention = ["flash-attn>=2.6.3"]
-openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
-model2vec = ["model2vec>=0.3.0"]
-pylate = ["pylate>=1.3.1; python_version < '3.13'"]  # Required for sentence-transformers 5.0.0 compatibility (otherwise 1.1.6), pylate requires voyager, which in turn requires <=3.12
-bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
-gritlm = ["gritlm>=1.0.2"]
-xformers = ["xformers>=0.0.29"]
-blip2 = ["salesforce-lavis>=1.0.2"]
-voyageai = ["voyageai>0.3.0,<2.0.0"]
-voyage_v = ["voyageai>0.3.0,<2.0.0", "tenacity>9.0.0"]
-cohere = ["cohere==5.14.0"]
-vertexai = ["vertexai==1.71.1"]
-llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
-timm = ["timm>=1.0.15,<1.1.0"]
-open_clip_torch = ["open_clip_torch==2.31.0"]
-nomic = ["einops>=0.8.1"]
-ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
-colpali_engine = ["colpali_engine>=0.3.12"]
-colqwen3 = ["transformers>=4.57", "torchvision>=0.22.1"]
-xet = ["huggingface_hub>=0.32.0"]
-youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lkeap>=3.0.1451"]
-llama-embed-nemotron = ["transformers==4.51.0"]
-faiss-cpu = ["faiss-cpu>=1.12.0"]
-eager_embed = ["qwen_vl_utils>=0.0.14"]
+#peft = ["peft>=0.11.0"]
+#flagembedding = ["FlagEmbedding==1.3.4"]
+#jina = ["einops>=0.8.0"]
+#jina-v4 = ["peft>=0.15.2", "transformers>=4.52.0", "torchvision>=0.22.1"]
+#flash_attention = ["flash-attn>=2.6.3"]
+#openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
+#model2vec = ["model2vec>=0.3.0"]
+#pylate = ["pylate>=1.3.1; python_version < '3.13'"]  # Required for sentence-transformers 5.0.0 compatibility (otherwise 1.1.6), pylate requires voyager, which in turn requires <=3.12
+#bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
+#gritlm = ["gritlm>=1.0.2"]
+#xformers = ["xformers>=0.0.29"]
+#blip2 = ["salesforce-lavis>=1.0.2"]
+#voyageai = ["voyageai>0.3.0,<2.0.0"]
+#voyage_v = ["voyageai>0.3.0,<2.0.0", "tenacity>9.0.0"]
+#cohere = ["cohere==5.14.0"]
+#vertexai = ["vertexai==1.71.1"]
+#llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
+#timm = ["timm>=1.0.15,<1.1.0"]
+#open_clip_torch = ["open_clip_torch==2.31.0"]
+#nomic = ["einops>=0.8.1"]
+#ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
+#colpali_engine = ["colpali_engine>=0.3.12"]
+#colqwen3 = ["transformers>=4.57", "torchvision>=0.22.1"]
+#xet = ["huggingface_hub>=0.32.0"]
+#youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lkeap>=3.0.1451"]
+#llama-embed-nemotron = ["transformers==4.51.0"]
+#faiss-cpu = ["faiss-cpu>=1.12.0"]
+#eager_embed = ["qwen_vl_utils>=0.0.14"]
 
 [dependency-groups]
 lint = [
