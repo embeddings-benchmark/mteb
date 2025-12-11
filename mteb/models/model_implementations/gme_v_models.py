@@ -100,7 +100,7 @@ class Encoder(torch.nn.Module):
     def embed(
         self,
         texts: list[str],
-        images: list[Image.Image],
+        images: list["Image.Image"],
         device,
         instruction=None,
         **kwargs,

@@ -355,13 +355,13 @@ Jasper_Token_Compression_600M = ModelMeta(
     | qzhou_training_data,
     citation="""
 @misc{zhang2025jaspertokencompression600mtechnicalreport,
-      title={Jasper-Token-Compression-600M Technical Report}, 
+      title={Jasper-Token-Compression-600M Technical Report},
       author={Dun Zhang and Ziyang Zeng and Yudong Zhou and Shuyang Lu},
       year={2025},
       eprint={2511.14405},
       archivePrefix={arXiv},
       primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2511.14405}, 
+      url={https://arxiv.org/abs/2511.14405},
 }
 """,
 )
