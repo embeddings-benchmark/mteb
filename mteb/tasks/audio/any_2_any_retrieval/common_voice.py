@@ -62,8 +62,8 @@ class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
         reference="https://commonvoice.mozilla.org/",
         dataset={
-            "path": "mozilla-foundation/common_voice_17_0",
-            "revision": "b10d53980ef166bc24ce3358471c1970d7e6b5ec",
+            "path": "fsicoli/common_voice_17_0",
+            "revision": "8262c16bf297c87a9cd88c51997c4758ed7a8ba2",
         },
         type="Any2AnyRetrieval",
         category="a2t",
@@ -153,8 +153,8 @@ class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
         reference="https://commonvoice.mozilla.org/",
         dataset={
-            "path": "mozilla-foundation/common_voice_17_0",
-            "revision": "b10d53980ef166bc24ce3358471c1970d7e6b5ec",
+            "path": "fsicoli/common_voice_17_0",
+            "revision": "8262c16bf297c87a9cd88c51997c4758ed7a8ba2",
         },
         type="Any2AnyRetrieval",
         category="t2a",
