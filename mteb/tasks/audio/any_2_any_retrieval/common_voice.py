@@ -7,7 +7,57 @@ from tqdm import tqdm
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_EVAL_LANGS = {
+# Language codes for Common Voice 17
+_EVAL_LANGS_CV17 = {
+    "ab": ["abk-Latn"],  # Abkhaz
+    "af": ["afr-Latn"],  # Afrikaans
+    "am": ["amh-Ethi"],  # Amharic
+    "ar": ["ara-Arab"],  # Arabic
+    "as": ["asm-Beng"],  # Assamese
+    "ast": ["ast-Latn"],  # Asturian
+    "az": ["aze-Latn"],  # Azerbaijani
+    "ba": ["bak-Cyrl"],  # Bashkir
+    "bas": ["bas-Latn"],  # Basaa
+    "be": ["bel-Cyrl"],  # Belarusian
+    "bg": ["bul-Cyrl"],  # Bulgarian
+    "bn": ["ben-Beng"],  # Bengali
+    "br": ["bre-Latn"],  # Breton
+    "ca": ["cat-Latn"],  # Catalan
+    "ckb": ["ckb-Arab"],  # Central Kurdish (Sorani)
+    "cnh": ["cnh-Latn"],  # Hakha Chin
+    "cs": ["ces-Latn"],  # Czech
+    "cv": ["chv-Cyrl"],  # Chuvash
+    "cy": ["cym-Latn"],  # Welsh
+    "da": ["dan-Latn"],  # Danish
+    "de": ["deu-Latn"],  # German
+    "dv": ["div-Thaa"],  # Divehi
+    "dyu": ["dyu-Latn"],  # Dyula
+    "el": ["ell-Grek"],  # Greek
+    "en": ["eng-Latn"],  # English
+    "eo": ["epo-Latn"],  # Esperanto
+    "es": ["spa-Latn"],  # Spanish
+    "et": ["est-Latn"],  # Estonian
+    "eu": ["eus-Latn"],  # Basque
+    "fa": ["fas-Arab"],  # Persian
+    "fi": ["fin-Latn"],  # Finnish
+    "fr": ["fra-Latn"],  # French
+    "fy-NL": ["fry-Latn"],  # Frisian (Netherlands)
+    "ga-IE": ["gle-Latn"],  # Irish (Ireland)
+    "gl": ["glg-Latn"],  # Galician
+    "gn": ["grn-Latn"],  # Guarani
+    "ha": ["hau-Latn"],  # Hausa
+    "he": ["heb-Hebr"],  # Hebrew
+    "hi": ["hin-Deva"],  # Hindi
+    "hsb": ["hsb-Latn"],  # Upper Sorbian
+    "hu": ["hun-Latn"],  # Hungarian
+    "hy-AM": ["hye-Armn"],  # Armenian (Armenia)
+    "ia": ["ina-Latn"],  # Interlingua
+    "id": ["ind-Latn"],  # Indonesian
+    "ig": ["ibo-Latn"],  # Igbo
+}
+
+# Language codes for Common Voice 21
+_EVAL_LANGS_CV21 = {
     "abk": ["abk-Latn"],  # Abkhaz
     "afr": ["afr-Latn"],  # Afrikaans
     "amh": ["amh-Ethi"],  # Amharic
@@ -69,7 +119,7 @@ class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
         category="a2t",
         modalities=["text", "audio"],
         eval_splits=["test"],
-        eval_langs=_EVAL_LANGS,
+        eval_langs=_EVAL_LANGS_CV17,
         main_score="cv_recall_at_5",
         date=("2020-01-01", "2024-12-31"),
         domains=["Spoken"],
@@ -160,7 +210,7 @@ class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
         category="t2a",
         modalities=["text", "audio"],
         eval_splits=["test"],
-        eval_langs=_EVAL_LANGS,
+        eval_langs=_EVAL_LANGS_CV17,
         main_score="cv_recall_at_5",
         date=("2020-01-01", "2024-12-31"),
         domains=["Spoken"],
@@ -244,7 +294,7 @@ class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
         category="a2t",
         modalities=["text", "audio"],
         eval_splits=["test"],
-        eval_langs=_EVAL_LANGS,
+        eval_langs=_EVAL_LANGS_CV21,
         main_score="cv_recall_at_5",
         date=("2020-01-01", "2024-12-31"),
         domains=["Spoken"],
@@ -335,7 +385,7 @@ class CommonVoice21T2ARetrieval(AbsTaskRetrieval):
         category="t2a",
         modalities=["text", "audio"],
         eval_splits=["test"],
-        eval_langs=_EVAL_LANGS,
+        eval_langs=_EVAL_LANGS_CV21,
         main_score="cv_recall_at_5",
         date=("2020-01-01", "2024-12-31"),
         domains=["Spoken"],
