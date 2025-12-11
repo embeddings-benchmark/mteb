@@ -1,12 +1,15 @@
 from collections.abc import Mapping
 from enum import Enum
-from typing import TypedDict
+from typing import TYPE_CHECKING, TypedDict
 
 import numpy as np
 import torch
 from datasets import Dataset
-from PIL import Image
 from typing_extensions import NotRequired
+
+if TYPE_CHECKING:
+    from PIL import Image
+
 
 # --- Output types ---
 Array = np.ndarray | torch.Tensor
@@ -87,7 +90,7 @@ class ImageInput(TypedDict):
         image: The image to encode. Can be a list of images or a list of lists of images.
     """
 
-    image: list[Image.Image]
+    image: list["Image.Image"]
 
 
 class AudioInput(TypedDict):

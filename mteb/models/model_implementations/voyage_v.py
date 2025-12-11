@@ -1,8 +1,7 @@
 import logging
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
@@ -12,10 +11,13 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
+if TYPE_CHECKING:
+    from PIL import Image
+
 
 def _downsample_image(
-    image: Image.Image, max_pixels: int = 16000000, target_longest_side: int = 4000
-) -> Image.Image:
+    image: "Image.Image", max_pixels: int = 16000000, target_longest_side: int = 4000
+) -> "Image.Image":
     """If image pixel > max_pixels, downsample it to target_longest_side while keeping the width height ratio.
 
     Returns:

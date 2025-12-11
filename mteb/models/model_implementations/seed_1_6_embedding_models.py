@@ -4,11 +4,10 @@ import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from io import BytesIO
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import requests
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 
 from mteb._requires_package import requires_package
@@ -18,6 +17,10 @@ from mteb.models.model_implementations.bge_models import bge_chinese_training_da
 from mteb.models.model_implementations.nvidia_models import nvidia_training_datasets
 from mteb.models.model_meta import ModelMeta
 from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from PIL import Image
+
 
 logger = logging.getLogger(__name__)
 
@@ -219,7 +222,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
 
     def get_image_embeddings(
         self,
-        images: list[Image.Image],
+        images: list["Image.Image"],
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
@@ -268,7 +271,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
     def get_fused_embeddings(
         self,
         texts: list[str] | None = None,
-        images: list[Image.Image] | DataLoader | None = None,
+        images: list["Image.Image"] | DataLoader | None = None,
         fusion_mode="sum",
         **kwargs: Any,
     ) -> Array:

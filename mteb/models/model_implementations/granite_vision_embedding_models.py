@@ -1,8 +1,7 @@
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
@@ -14,6 +13,9 @@ from mteb.models.model_meta import ModelMeta
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
+
+if TYPE_CHECKING:
+    from PIL import Image
 
 
 class GraniteVisionEmbeddingWrapper:
@@ -102,7 +104,7 @@ class GraniteVisionEmbeddingWrapper:
     def get_fused_embeddings(
         self,
         texts: list[str] | None = None,
-        images: list[Image.Image] | DataLoader | None = None,
+        images: list["Image.Image"] | DataLoader | None = None,
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,

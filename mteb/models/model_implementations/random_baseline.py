@@ -1,9 +1,8 @@
 import hashlib
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -13,6 +12,9 @@ from mteb.similarity_functions import (
     select_similarity,
 )
 from mteb.types._encoder_io import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from PIL import Image
 
 
 def _string_to_vector(text: str | None, size: int) -> np.ndarray:
@@ -34,7 +36,7 @@ def _string_to_vector(text: str | None, size: int) -> np.ndarray:
     return rng.random(size, dtype=np.float32)
 
 
-def _image_to_vector(image: Image.Image, size: int) -> np.ndarray:
+def _image_to_vector(image: "Image.Image", size: int) -> np.ndarray:
     """Generate a deterministic random vector based on image content.
 
     Args:
