@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import hashlib
 from typing import TYPE_CHECKING, Any, Literal
 
@@ -36,7 +38,7 @@ def _string_to_vector(text: str | None, size: int) -> np.ndarray:
     return rng.random(size, dtype=np.float32)
 
 
-def _image_to_vector(image: "Image.Image", size: int) -> np.ndarray:
+def _image_to_vector(image: Image.Image, size: int) -> np.ndarray:
     """Generate a deterministic random vector based on image content.
 
     Args:

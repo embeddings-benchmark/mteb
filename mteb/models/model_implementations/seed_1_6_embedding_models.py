@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import base64
 import logging
 import os
@@ -222,7 +224,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
 
     def get_image_embeddings(
         self,
-        images: list["Image.Image"],
+        images: list[Image.Image],
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
@@ -271,7 +273,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
     def get_fused_embeddings(
         self,
         texts: list[str] | None = None,
-        images: list["Image.Image"] | DataLoader | None = None,
+        images: list[Image.Image] | DataLoader | None = None,
         fusion_mode="sum",
         **kwargs: Any,
     ) -> Array:

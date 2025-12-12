@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections.abc import Mapping
 from enum import Enum
 from typing import TYPE_CHECKING, TypedDict
@@ -90,7 +92,7 @@ class ImageInput(TypedDict):
         image: The image to encode. Can be a list of images or a list of lists of images.
     """
 
-    image: list["Image.Image"]
+    image: list[Image.Image]
 
 
 class AudioInput(TypedDict):

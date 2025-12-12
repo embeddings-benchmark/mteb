@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 import math
 from typing import TYPE_CHECKING, Any
@@ -100,7 +102,7 @@ class Encoder(torch.nn.Module):
     def embed(
         self,
         texts: list[str],
-        images: list["Image.Image"],
+        images: list[Image.Image],
         device,
         instruction=None,
         **kwargs,
@@ -269,7 +271,7 @@ def smart_resize(
     return h_bar, w_bar
 
 
-def fetch_image(image: "Image.Image", size_factor: int = IMAGE_FACTOR) -> "Image.Image":
+def fetch_image(image: Image.Image, size_factor: int = IMAGE_FACTOR) -> Image.Image:
     from PIL import Image
 
     image_obj = None

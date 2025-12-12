@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 from typing import TYPE_CHECKING, Any, Literal
 
@@ -16,8 +18,8 @@ if TYPE_CHECKING:
 
 
 def _downsample_image(
-    image: "Image.Image", max_pixels: int = 16000000, target_longest_side: int = 4000
-) -> "Image.Image":
+    image: Image.Image, max_pixels: int = 16000000, target_longest_side: int = 4000
+) -> Image.Image:
     """If image pixel > max_pixels, downsample it to target_longest_side while keeping the width height ratio.
 
     Returns:

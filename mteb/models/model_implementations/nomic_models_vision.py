@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -64,7 +66,7 @@ class NomicVisionModel(AbsEncoder):
     def preprocess(
         self,
         texts: list[str],
-        images: list["Image.Image"],
+        images: list[Image.Image],
     ):
         return self.processor(
             text=texts, images=images, return_tensors="pt", padding=True

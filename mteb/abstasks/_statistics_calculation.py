@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import hashlib
 from collections import Counter
 from typing import TYPE_CHECKING
@@ -37,7 +39,7 @@ def calculate_text_statistics(texts: list[str]) -> TextStatistics:
     )
 
 
-def calculate_image_statistics(images: list["Image.Image"]) -> ImageStatistics:
+def calculate_image_statistics(images: list[Image.Image]) -> ImageStatistics:
     """Calculate descriptive statistics for a list of images.
 
     Args:

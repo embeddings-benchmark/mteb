@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 from typing import TYPE_CHECKING, Any
 
@@ -24,14 +26,14 @@ logger = logging.getLogger(__name__)
 class CustomImageDataset(torch.utils.data.Dataset):
     def __init__(
         self,
-        images: list["Image"],
+        images: list[Image],
     ):
         self.images = images
 
     def __len__(self) -> int:
         return len(self.images)
 
-    def __getitem__(self, idx: int) -> dict[str, "Image"]:
+    def __getitem__(self, idx: int) -> dict[str, Image]:
         return {
             "image": self.images[idx],
         }

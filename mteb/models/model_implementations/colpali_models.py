@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 from typing import TYPE_CHECKING, Any
 
@@ -142,7 +144,7 @@ class ColPaliEngineWrapper(AbsEncoder):
     def get_fused_embeddings(
         self,
         texts: list[str] | None = None,
-        images: list["Image.Image"] | DataLoader | None = None,
+        images: list[Image.Image] | DataLoader | None = None,
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
