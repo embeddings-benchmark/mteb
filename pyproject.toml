@@ -59,7 +59,7 @@ mteb = "mteb.cli:main"
 [project.optional-dependencies]
 image = [
     "torchvision>0.2.1",
-    "transformers[torch-vision,vision]>=4.57.3",
+    "transformers[torch-vision,vision]",
 ]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
