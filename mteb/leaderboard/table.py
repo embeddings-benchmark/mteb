@@ -226,7 +226,6 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
                     gmap=gmap_values.loc[mask],
                 )
 
-    # column_types = _get_column_types(joint_table_style.data)
     column_types = ["auto" for _ in joint_table_style.data.columns]
     # setting model name column to markdown
     if len(column_types) > 1:
