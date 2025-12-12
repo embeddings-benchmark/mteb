@@ -10,7 +10,7 @@ from huggingface_hub.errors import (
     NotASafetensorsRepoError,
     SafetensorsParsingError,
 )
-from pydantic import BaseModel, ConfigDict, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 from mteb.languages import check_language_code
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
@@ -183,7 +183,7 @@ class ModelMeta(BaseModel):
                 "Model name must be in the format 'organization/model_name'"
             )
         return v
-    
+
     def _model_meta_from_hf_hub(self) -> "ModelMeta":
         """Automatically fetch release_date from HuggingFace if not provided."""
         if self.release_date is None and self.name is not None:
@@ -337,14 +337,13 @@ class ModelMeta(BaseModel):
         # Convert to MB
         model_memory_mb = model_memory_bytes / MB
         return round(model_memory_mb)
-    
+
     def fetch_release_date(self) -> StrDate | None:
         """Fetches the release date from HuggingFace Hub based on the first commit.
 
         Returns:
             The release date in YYYY-MM-DD format, or None if it cannot be determined.
         """
-
         try:
             commits = list_repo_commits(repo_id=self.name, repo_type="model")
             if commits:
@@ -375,7 +374,7 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
     visited.add(dataset)
     similar = set()
 
-    # Check if dataset is a key in SIMILAR_TASKS 
+    # Check if dataset is a key in SIMILAR_TASKS
     if dataset in _SIMILAR_TASKS:
         for similar_task in _SIMILAR_TASKS[dataset]:
             similar.add(similar_task)
