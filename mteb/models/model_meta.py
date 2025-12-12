@@ -184,8 +184,7 @@ class ModelMeta(BaseModel):
             )
         return v
     
-    @model_validator(mode='after')
-    def _auto_populate_release_date(self) -> 'ModelMeta':
+    def _model_meta_from_hf_hub(self) -> "ModelMeta":
         """Automatically fetch release_date from HuggingFace if not provided."""
         if self.release_date is None and self.name is not None:
             self.release_date = self.fetch_release_date()
