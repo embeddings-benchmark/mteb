@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class MIRACLJaRetrievalLite(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MIRACLJRetrievalLite",
+        name="MIRACLJaRetrievalLite",
         dataset={
             "path": "sbintuitions/JMTEB-lite",
             "revision": "main",
