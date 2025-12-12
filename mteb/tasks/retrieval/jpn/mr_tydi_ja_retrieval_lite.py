@@ -1,7 +1,4 @@
-from datasets import Dataset, load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
-from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
@@ -9,9 +6,8 @@ class MrTyDiJaRetrievalLite(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MrTyDiJaRetrievalLite",
         dataset={
-            "path": "sbintuitions/JMTEB-lite",
-            "revision": "main",
-            "trust_remote_code": True,
+            "path": "lsz05/MrTyDiJaRetrievalLite",
+            "revision": "f32f71baeec4d497a85162d622ba65e9a7face0d",
         },
         description=(
             "Mr.TyDi is a multilingual benchmark dataset built on TyDi for document retrieval tasks. "
@@ -49,53 +45,3 @@ and Kawahara, Daisuke},
 }
 """,
     )
-
-    def load_data(self, **kwargs):
-        """Load JMTEB-lite dataset."""
-        if self.data_loaded:
-            return
-
-        for split in self.metadata.eval_splits:
-            queries = load_dataset(
-                self.metadata.dataset["path"],
-                "mrtydi-query",
-                split=split,
-                trust_remote_code=True,
-            )
-            corpus = load_dataset(
-                self.metadata.dataset["path"],
-                "mrtydi-corpus",
-                split="corpus",
-                trust_remote_code=True,
-            )
-
-            relevant_docs = {}
-
-            queries_list = []
-            for query in queries:
-                qid = str(query["qid"])
-                queries_list.append({"id": qid, "text": query["query"]})
-
-                if "relevant_docs" in query:
-                    relevant_docs[qid] = {
-                        str(doc_id): 1 for doc_id in query["relevant_docs"]
-                    }
-
-            corpus_list = []
-            for doc in corpus:
-                corpus_list.append(
-                    {
-                        "id": str(doc["docid"]),
-                        "text": doc["text"],
-                        "title": doc.get("title", ""),
-                    }
-                )
-
-            self.dataset["default"][split] = RetrievalSplitData(
-                corpus=Dataset.from_list(corpus_list),
-                queries=Dataset.from_list(queries_list),
-                relevant_docs=relevant_docs,
-                top_ranked=None,  # Retrieval task searches entire corpus
-            )
-
-        self.data_loaded = True
