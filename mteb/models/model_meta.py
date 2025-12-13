@@ -333,6 +333,7 @@ class ModelMeta(BaseModel):
         model_memory_mb = model_memory_bytes / MB
         return round(model_memory_mb)
 
+    @staticmethod
     def fetch_release_date(self) -> StrDate | None:
         """Fetches the release date from HuggingFace Hub based on the first commit.
 
@@ -347,8 +348,6 @@ class ModelMeta(BaseModel):
                 return release_date
         except RepositoryNotFoundError:
             logger.warning(f"Model repository not found for {self.name}.")
-        except Exception as e:
-            logger.warning(f"Could not fetch release date for {self.name}: {e}")
 
         return None
 

@@ -195,7 +195,7 @@ def _model_meta_from_hf_hub(model_name: str) -> ModelMeta:
         loader=loader,
         name=model_name,
         revision=revision,
-        release_date=None,
+        release_date=ModelMeta.fetch_release_date(model_name),
         languages=None,
         license=license,
         framework=frameworks,  # type: ignore
@@ -210,17 +210,16 @@ def _model_meta_from_hf_hub(model_name: str) -> ModelMeta:
         public_training_data=None,
         use_instructions=None,
     )
-    if meta.release_date is None:
-        meta.release_date = meta.fetch_release_date()
     return meta
 
 
 def _model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
+    model_name = (model.model.name_or_path,)
     meta = ModelMeta(
         loader=CrossEncoderWrapper,
-        name=model.model.name_or_path,
+        name=model_name,
         revision=model.config._commit_hash,
-        release_date=None,
+        release_date=ModelMeta.fetch_release_date(model_name),
         languages=None,
         framework=["Sentence Transformers"],
         similarity_fn_name=None,
@@ -235,8 +234,6 @@ def _model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
         use_instructions=None,
         training_datasets=None,
     )
-    if meta.release_date is None:
-        meta.release_date = meta.fetch_release_date()
     return meta
 
 
@@ -251,7 +248,7 @@ def _model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelM
         loader=sentence_transformers_loader,
         name=name,
         revision=model.model_card_data.base_model_revision,
-        release_date=None,
+        release_date=ModelMeta.fetch_release_date(name) if name else None,
         languages=None,
         framework=["Sentence Transformers"],
         similarity_fn_name=None,
@@ -266,6 +263,4 @@ def _model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelM
         use_instructions=None,
         training_datasets=None,
     )
-    if meta.release_date is None:
-        meta.release_date = meta.fetch_release_date()
     return meta
