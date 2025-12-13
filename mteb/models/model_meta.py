@@ -225,34 +225,40 @@ class ModelMeta(BaseModel):
         return self.name.replace("/", "__").replace(" ", "_")
 
     @classmethod
-    def from_hf_hub(cls, model_name: str) -> Self:
+    def from_hf_hub(cls, model_name: str, compute_metadata: bool = True) -> Self:
         """Generates a ModelMeta from a HuggingFace model name.
 
         Args:
             model_name: The HuggingFace model name.
+            compute_metadata: Add metadata based on model card
 
         Returns:
             The generated ModelMeta.
         """
         from mteb.models import sentence_transformers_loader
 
-        card = ModelCard.load(model_name)
-        card_data: ModelCardData = card.data
-        frameworks: list[FRAMEWORKS] = ["PyTorch"]
         loader = sentence_transformers_loader
-        sentence_transformer_name = "sentence-transformers"
-        if (
-            card_data.library_name == sentence_transformer_name
-            or sentence_transformer_name in card_data.tags
-        ):
-            frameworks.append("Sentence Transformers")
-        else:
-            msg = "Model library not recognized, defaulting to Sentence Transformers loader."
-            logger.warning(msg)
-            warnings.warn(msg)
+        revision = None
+        frameworks: list[FRAMEWORKS] = ["PyTorch"]
+        model_license = None
 
-        revisions = _get_repo_commits(model_name, "model")
-        revision = revisions[0].commit_id if revisions else None
+        if compute_metadata:
+            card = ModelCard.load(model_name)
+            card_data: ModelCardData = card.data
+            sentence_transformer_name = "sentence-transformers"
+            if (
+                card_data.library_name == sentence_transformer_name
+                or sentence_transformer_name in card_data.tags
+            ):
+                frameworks.append("Sentence Transformers")
+            else:
+                msg = "Model library not recognized, defaulting to Sentence Transformers loader."
+                logger.warning(msg)
+                warnings.warn(msg)
+
+            revisions = _get_repo_commits(model_name, "model")
+            revision = revisions[0].commit_id if revisions else None
+            model_license = card_data.license
 
         model = ModelMeta(
             loader=loader,
@@ -260,7 +266,7 @@ class ModelMeta(BaseModel):
             revision=revision,
             release_date=None,
             languages=None,
-            license=card_data.license,
+            license=model_license,
             framework=frameworks,
             training_datasets=None,
             similarity_fn_name=None,
@@ -273,16 +279,20 @@ class ModelMeta(BaseModel):
             public_training_data=None,
             use_instructions=None,
         )
-        model.n_parameters = model.calculate_num_parameters_from_hub()
-        model.memory_usage_mb = model.calculate_memory_usage_mb()
+        if compute_metadata:
+            model.n_parameters = model.calculate_num_parameters_from_hub()
+            model.memory_usage_mb = model.calculate_memory_usage_mb()
         return model
 
     @classmethod
-    def from_sentence_transformer_model(cls, model: SentenceTransformer) -> Self:
+    def from_sentence_transformer_model(
+        cls, model: SentenceTransformer, compute_metadata: bool = True
+    ) -> Self:
         """Generates a ModelMeta from a SentenceTransformer model.
 
         Args:
             model: SentenceTransformer model.
+            compute_metadata: Add metadata based on model card
 
         Returns:
             The generated ModelMeta.
@@ -292,7 +302,7 @@ class ModelMeta(BaseModel):
             if model.model_card_data.model_name
             else model.model_card_data.base_model
         )
-        meta = cls.from_hf_hub(name)
+        meta = cls.from_hf_hub(name, compute_metadata)
         meta.framework = ["Sentence Transformers"]
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
@@ -300,18 +310,21 @@ class ModelMeta(BaseModel):
         return meta
 
     @classmethod
-    def from_cross_encoder(cls, model: CrossEncoder) -> Self:
+    def from_cross_encoder(
+        cls, model: CrossEncoder, compute_metadata: bool = True
+    ) -> Self:
         """Generates a ModelMeta from a CrossEncoder.
 
         Args:
             model: The CrossEncoder model
+            compute_metadata: Add metadata based on model card
 
         Returns:
             The generated ModelMeta
         """
         from mteb.models import CrossEncoderWrapper
 
-        meta = cls.from_hf_hub(model.model.name_or_path)
+        meta = cls.from_hf_hub(model.model.name_or_path, compute_metadata)
         meta.framework = ["Sentence Transformers"]
         meta.loader = CrossEncoderWrapper
         return meta
