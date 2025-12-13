@@ -6,8 +6,8 @@ class JQaRARerankingLite(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JQaRARerankingLite",
         dataset={
-            "path": "lsz05/JQaRARerankingLite",
-            "revision": "6400855c0eb4c55bf15c2302fd9b248264e82227",
+            "path": "mteb/JQaRARerankingLite",
+            "revision": "d23d3ad479f74824ed126052e810eac47e685558",
         },
         description=(
             "JQaRA (Japanese Question Answering with Retrieval Augmentation) is a reranking dataset "
