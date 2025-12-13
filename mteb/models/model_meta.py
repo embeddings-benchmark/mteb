@@ -241,6 +241,7 @@ class ModelMeta(BaseModel):
         revision = None
         frameworks: list[FRAMEWORKS] = ["PyTorch"]
         model_license = None
+        reference = "https://huggingface.co/" + model_name
 
         if compute_metadata:
             card = ModelCard.load(model_name)
@@ -264,6 +265,7 @@ class ModelMeta(BaseModel):
             loader=loader,
             name=model_name,
             revision=revision,
+            reference=reference,
             release_date=None,
             languages=None,
             license=model_license,
@@ -302,7 +304,8 @@ class ModelMeta(BaseModel):
             if model.model_card_data.model_name
             else model.model_card_data.base_model
         )
-        meta = cls.from_hf_hub(name, compute_metadata)
+        if name:
+            meta = cls.from_hf_hub(name, compute_metadata)
         meta.framework = ["Sentence Transformers"]
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
