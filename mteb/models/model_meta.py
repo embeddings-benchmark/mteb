@@ -9,6 +9,7 @@ from huggingface_hub.errors import (
     GatedRepoError,
     NotASafetensorsRepoError,
     SafetensorsParsingError,
+    RepositoryNotFoundError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator
 
@@ -344,6 +345,8 @@ class ModelMeta(BaseModel):
                 initial_commit = commits[-1]
                 release_date = initial_commit.created_at.strftime("%Y-%m-%d")
                 return release_date
+        except RepositoryNotFoundError:
+            logger.warning(f"Model repository not found for {self.name}.")
         except Exception as e:
             logger.warning(f"Could not fetch release date for {self.name}: {e}")
 
