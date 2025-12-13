@@ -6,8 +6,8 @@ class JaCWIRRerankingLite(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JaCWIRRerankingLite",
         dataset={
-            "path": "lsz05/JaCWIRRerankingLite",
-            "revision": "4b05009fd598a6b2f4c81c0f24250b559c013d13",
+            "path": "mteb/JaCWIRRerankingLite",
+            "revision": "b7c738193fb9b20c97c2b5d9a8fa3f3d28503dc0",
         },
         description=(
             "JaCWIR (Japanese Casual Web IR) is a dataset consisting of questions and webpage meta descriptions "

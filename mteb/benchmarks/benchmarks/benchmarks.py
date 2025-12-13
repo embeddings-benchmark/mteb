@@ -2650,3 +2650,60 @@ JMTEB_V2 = Benchmark(
 """,
     contacts=["lsz05"],
 )
+
+JMTEB_LITE_V1 = Benchmark(
+    name="JMTEB-lite(v1)",
+    display_name="Japanese",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
+    tasks=get_tasks(
+        languages=["jpn"],
+        tasks=[
+            # Clustering (3)
+            "LivedoorNewsClustering.v2",
+            "MewsC16JaClustering",
+            "SIB200ClusteringS2S",
+            # Classification (7)
+            "AmazonReviewsClassification",
+            "AmazonCounterfactualClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "JapaneseSentimentClassification",
+            "SIB200Classification",
+            "WRIMEClassification",
+            # STS (2)
+            "JSTS",
+            "JSICK",
+            # Retrieval (11)
+            "JaqketRetrievalLite",
+            "MrTyDiJaRetrievalLite",
+            "JaGovFaqsRetrieval",
+            "NLPJournalTitleAbsRetrieval.V2",
+            "NLPJournalTitleIntroRetrieval.V2",
+            "NLPJournalAbsIntroRetrieval.V2",
+            "NLPJournalAbsArticleRetrieval.V2",
+            "JaCWIRRetrievalLite",
+            "MIRACLJaRetrievalLite",
+            "MintakaRetrieval",
+            "MultiLongDocRetrieval",
+            # Reranking (5)
+            "ESCIReranking",
+            "JQaRARerankingLite",
+            "JaCWIRRerankingLite",
+            "MIRACLReranking",
+            "MultiLongDocReranking",
+        ],
+    ),
+    description="JMTEB-lite is a lightweight version of JMTEB. It makes agile evaluation possible by reaching an average of 5x faster evaluation comparing with JMTEB, as 6 heavy datasets in JMTEB are optimized with hard negative pooling strategy, making them much smaller. The result of JMTEB-lite is proved to be highly relevant with that of JMTEB, making it a faithful preview of JMTEB.",
+    reference="https://huggingface.co/datasets/sbintuitions/JMTEB-lite",
+    citation=r"""
+@article{li2025jmteb,
+  author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
+  issue = {3},
+  journal = {Vol.2025-NL-265,No.3,1-15},
+  month = {sep},
+  title = {{JMTEB and JMTEB-lite: Japanese Massive Text Embedding Benchmark and Its Lightweight Version}},
+  year = {2025},
+}
+""",
+    contacts=["lsz05"],
+)

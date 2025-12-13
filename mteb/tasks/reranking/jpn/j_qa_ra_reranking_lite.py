@@ -6,8 +6,8 @@ class JQaRARerankingLite(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JQaRARerankingLite",
         dataset={
-            "path": "lsz05/JQaRARerankingLite",
-            "revision": "6400855c0eb4c55bf15c2302fd9b248264e82227",
+            "path": "mteb/JQaRARerankingLite",
+            "revision": "d23d3ad479f74824ed126052e810eac47e685558",
         },
         description=(
             "JQaRA (Japanese Question Answering with Retrieval Augmentation) is a reranking dataset "
@@ -29,6 +29,7 @@ class JQaRARerankingLite(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=["jpn-Jpan"],
         sample_creation="found",
+        adapted_from=["JQaRAReranking"],
         bibtex_citation=r"""
 @misc{jmteb_lite,
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide
