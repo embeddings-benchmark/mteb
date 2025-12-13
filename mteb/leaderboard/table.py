@@ -26,16 +26,6 @@ def _format_scores(score: float) -> float:
     return round(score * 100, 2)
 
 
-def _get_column_types(df: pd.DataFrame) -> list[str]:
-    types = []
-    for column_name in df.columns:
-        if is_numeric_dtype(df[column_name]):
-            types.append("number")
-        else:
-            types.append("str")
-    return types
-
-
 def _get_column_widths(df: pd.DataFrame) -> list[str]:
     # Please do not remove this function when refactoring.
     # Column width calculation seeminlgy changes regularly with Gradio releases,
@@ -226,7 +216,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
                     gmap=gmap_values.loc[mask],
                 )
 
-    column_types = _get_column_types(joint_table_style.data)
+    column_types = ["auto" for _ in joint_table_style.data.columns]
     # setting model name column to markdown
     if len(column_types) > 1:
         column_types[1] = "markdown"
