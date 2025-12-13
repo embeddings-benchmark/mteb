@@ -335,22 +335,23 @@ class ModelMeta(BaseModel):
         return round(model_memory_mb)
 
     @staticmethod
-    def fetch_release_date(self) -> StrDate | None:
+    def fetch_release_date(model_name: str) -> StrDate | None:
         """Fetches the release date from HuggingFace Hub based on the first commit.
 
         Returns:
             The release date in YYYY-MM-DD format, or None if it cannot be determined.
         """
         try:
-            commits = list_repo_commits(repo_id=self.name, repo_type="model")
+            commits = list_repo_commits(repo_id=model_name, repo_type="model")
             if commits:
                 initial_commit = commits[-1]
                 release_date = initial_commit.created_at.strftime("%Y-%m-%d")
                 return release_date
         except RepositoryNotFoundError:
-            logger.warning(f"Model repository not found for {self.name}.")
+            logger.warning(f"Model repository not found for {model_name}.")
 
         return None
+
     def to_python(self) -> str:
         """Returns a string representation of the model."""
         return _pydantic_instance_to_code(self)
