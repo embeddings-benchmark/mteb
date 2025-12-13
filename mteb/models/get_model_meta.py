@@ -214,7 +214,7 @@ def _model_meta_from_hf_hub(model_name: str) -> ModelMeta:
 
 
 def _model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
-    model_name = (model.model.name_or_path,)
+    model_name = model.model.name_or_path
     meta = ModelMeta(
         loader=CrossEncoderWrapper,
         name=model_name,
