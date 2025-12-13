@@ -1,7 +1,5 @@
 import hashlib
 
-from PIL import Image
-
 from mteb.types import BatchedInput
 
 
@@ -11,6 +9,8 @@ def _hash_item(item: BatchedInput) -> str:
         item_hash = hashlib.sha256(item["text"].encode()).hexdigest()
 
     if "image" in item:
+        from PIL import Image
+
         image: Image.Image = item["image"]
         item_hash += hashlib.sha256(image.tobytes()).hexdigest()
 

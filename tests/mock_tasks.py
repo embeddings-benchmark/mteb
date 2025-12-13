@@ -2,7 +2,6 @@
 
 import datasets
 from datasets import Dataset, DatasetDict
-from PIL import Image
 from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
@@ -1134,6 +1133,8 @@ class MockPairImageClassificationTask(AbsTaskPairClassification):
     input2_column_name = "image2"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images1 = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images1 = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images1
@@ -2700,6 +2701,8 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
     metadata.category = "it2i"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -2882,6 +2885,8 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
     metadata.category = "it2i"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -2971,6 +2976,8 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
     metadata.category = "i2t"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3048,6 +3055,8 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
     metadata.category = "t2i"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3140,6 +3149,8 @@ class MockImageClassificationTask(AbsTaskClassification):
     input_column_name = "image"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3313,6 +3324,8 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
     input_column_name = "image"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3377,6 +3390,8 @@ class MockImageClusteringTask(AbsTaskClusteringLegacy):
     label_column_name = "label"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3433,6 +3448,8 @@ class MockImageClusteringFastTask(AbsTaskClustering):
     max_document_to_embed = 2
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3521,6 +3538,8 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
     input_column_name = "image"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3724,6 +3743,8 @@ class MockMultilingualImageMultilabelClassificationTask(
     input_column_name = "image"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3787,6 +3808,8 @@ class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
     metadata.category = "i2t"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3883,6 +3906,8 @@ class MockMultilingualImageTextPairClassificationTask(
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3946,8 +3971,9 @@ class MockVisualSTSTask(AbsTaskSTS):
     metadata.category = "i2i"
 
     def load_data(self) -> None:
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
+        from PIL import Image
 
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
@@ -4011,8 +4037,9 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
     metadata.category = "i2t"
 
     def load_data(self) -> None:
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
+        from PIL import Image
 
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
@@ -4201,6 +4228,8 @@ class MockImageRegressionTask(AbsTaskRegression):
     input_column_name = "image"
 
     def load_data(self, **kwargs):
+        from PIL import Image
+
         train_images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         train_images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA")

@@ -125,3 +125,36 @@ def test_check_training_datasets_can_be_derived(model_meta: ModelMeta):
         f"Model name and adapter model should be different. Got {model_meta.name} and {model_meta.adapted_from}"
     )
     model_meta.get_training_datasets()
+
+
+def test_model_to_python():
+    meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+    assert meta.to_python() == (
+        """ModelMeta(
+    loader=sentence_transformers_loader,
+    loader_kwargs={},
+    name='sentence-transformers/all-MiniLM-L6-v2',
+    revision='8b3219a92973c328a8e22fadcfa821b5dc75636a',
+    release_date='2021-08-30',
+    languages=['eng-Latn'],
+    n_parameters=22700000,
+    memory_usage_mb=87.0,
+    max_tokens=256.0,
+    embed_dim=384,
+    license='apache-2.0',
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=['Sentence Transformers', 'PyTorch'],
+    reference='https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2',
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets={'MSMARCO', 'MSMARCO-PL', 'MSMARCOHardNegatives', 'NQ', 'NQ-NL', 'NQ-PL', 'NQHardNegatives', 'NanoMSMARCORetrieval', 'NanoNQRetrieval', 'mMARCO-NL'},
+    adapted_from=None,
+    superseded_by=None,
+    modalities=['text'],
+    is_cross_encoder=None,
+    citation=\'@inproceedings{reimers-2019-sentence-bert,\\n    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",\\n    author = "Reimers, Nils and Gurevych, Iryna",\\n    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",\\n    month = "11",\\n    year = "2019",\\n    publisher = "Association for Computational Linguistics",\\n    url = "http://arxiv.org/abs/1908.10084",\\n}\\n\',
+    contacts=None,
+)"""
+    )

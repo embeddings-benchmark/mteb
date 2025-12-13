@@ -1,10 +1,11 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
 import torch.nn.functional as F
 from datasets import Dataset
-from PIL.Image import Image
 from torch.utils.data import DataLoader
 
 from mteb._create_dataloaders import (
@@ -14,6 +15,10 @@ from mteb._evaluators.evaluator import Evaluator
 from mteb._requires_package import requires_image_dependencies
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.models_protocols import EncoderProtocol
+
+if TYPE_CHECKING:
+    from PIL.Image import Image
+
 
 logger = logging.getLogger(__name__)
 

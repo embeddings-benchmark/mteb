@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import hashlib
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -13,6 +14,9 @@ from mteb.similarity_functions import (
     select_similarity,
 )
 from mteb.types._encoder_io import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from PIL import Image
 
 
 def _string_to_vector(text: str | None, size: int) -> np.ndarray:

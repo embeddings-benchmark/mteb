@@ -4,6 +4,8 @@ import logging
 import warnings
 from collections.abc import Callable, Sequence
 from dataclasses import field
+from enum import Enum
+from functools import partial
 from typing import TYPE_CHECKING, Any, Literal, Self, cast
 
 from huggingface_hub import (
@@ -471,6 +473,86 @@ class ModelMeta(BaseModel):
         # Convert to MB
         model_memory_mb = model_memory_bytes / MB
         return round(model_memory_mb)
+
+    def to_python(self) -> str:
+        """Returns a string representation of the model."""
+        return _pydantic_instance_to_code(self)
+
+
+def _pydantic_instance_to_code(
+    model: BaseModel,
+    indent: int = 4,
+    *,
+    only_set_fields: bool = False,
+) -> str:
+    """Convert a Pydantic model instance into valid Python constructor code.
+
+    If only_set_fields=True, only fields explicitly provided at model construction
+    time are printed (i.e., excludes fields that came only from defaults).
+
+    Arguments:
+        model: The Pydantic model to convert.
+        indent: The indentation to use.
+        only_set_fields: If True, only fields explicitly provided at model construction time
+    """
+    cls_name = model.__class__.__name__
+    pad = " " * indent
+    lines: list[str] = [f"{cls_name}("]
+
+    model_fields = list(type(model).model_fields.keys())
+
+    if only_set_fields:
+        field_names = [n for n in model_fields if n in model.model_fields_set]
+    else:
+        field_names = model_fields
+
+    for field_name in field_names:
+        value = getattr(model, field_name)
+        value_code = _value_to_code(value, indent)
+        lines.append(f"{pad}{field_name}={value_code},")
+
+    lines.append(")")
+    return "\n".join(lines)
+
+
+def _value_to_code(value: Any, indent: int) -> str:
+    """Convert a Python value into valid Python source code."""
+    if isinstance(value, BaseModel):
+        return _pydantic_instance_to_code(value, indent, only_set_fields=True)
+
+    if callable(value):
+        if isinstance(value, partial):
+            return value.func.__name__
+        return value.__name__
+
+    if isinstance(value, Enum):
+        return f"{value.__class__.__name__}.{value.name}"
+
+    if isinstance(value, str):
+        return repr(value)
+
+    if isinstance(value, list):
+        if not value:
+            return "[]"
+        inner = ", ".join(_value_to_code(v, indent) for v in value)
+        return f"[{inner}]"
+
+    if isinstance(value, set):
+        if not value:
+            return "set()"
+        inner = ", ".join(_value_to_code(v, indent) for v in sorted(value))
+        return f"{{{inner}}}"
+
+    if isinstance(value, dict):
+        if not value:
+            return "{}"
+        inner = ", ".join(
+            f"{_value_to_code(k, indent)}: {_value_to_code(v, indent)}"
+            for k, v in value.items()
+        )
+        return f"{{{inner}}}"
+
+    return repr(value)
 
 
 def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:

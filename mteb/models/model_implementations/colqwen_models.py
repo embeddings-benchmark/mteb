@@ -2,7 +2,6 @@ import logging
 from typing import Any
 
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
@@ -154,6 +153,7 @@ class ColQwen3Wrapper(AbsEncoder):
         **kwargs: Any,
     ):
         import torchvision.transforms.functional as F
+        from PIL import Image
 
         contains_image = "image" in image_texts_pairs.dataset.features
         contains_text = "text" in image_texts_pairs.dataset.features
