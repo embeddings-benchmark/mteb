@@ -191,7 +191,7 @@ def _model_meta_from_hf_hub(model_name: str) -> ModelMeta:
 
     revision = card_data.get("base_model_revision", None)
     license = card_data.get("license", None)
-    return ModelMeta(
+    meta = ModelMeta(
         loader=loader,
         name=model_name,
         revision=revision,
@@ -210,10 +210,13 @@ def _model_meta_from_hf_hub(model_name: str) -> ModelMeta:
         public_training_data=None,
         use_instructions=None,
     )
+    if meta.release_date is None:
+        meta.release_date = meta.fetch_release_date()
+    return meta
 
 
 def _model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
-    return ModelMeta(
+    meta = ModelMeta(
         loader=CrossEncoderWrapper,
         name=model.model.name_or_path,
         revision=model.config._commit_hash,
@@ -232,6 +235,9 @@ def _model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
         use_instructions=None,
         training_datasets=None,
     )
+    if meta.release_date is None:
+        meta.release_date = meta.fetch_release_date()
+    return meta
 
 
 def _model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMeta:
@@ -260,4 +266,6 @@ def _model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelM
         use_instructions=None,
         training_datasets=None,
     )
+    if meta.release_date is None:
+        meta.release_date = meta.fetch_release_date()
     return meta

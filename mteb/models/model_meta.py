@@ -184,12 +184,6 @@ class ModelMeta(BaseModel):
             )
         return v
 
-    def _model_meta_from_hf_hub(self) -> "ModelMeta":
-        """Automatically fetch release_date from HuggingFace if not provided."""
-        if self.release_date is None and self.name is not None:
-            self.release_date = self.fetch_release_date()
-        return self
-
     def load_model(self, **kwargs: Any) -> MTEBModels:
         """Loads the model using the specified loader function."""
         if self.loader is None:
