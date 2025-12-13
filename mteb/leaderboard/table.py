@@ -26,16 +26,6 @@ def _format_scores(score: float) -> float:
     return round(score * 100, 2)
 
 
-def _get_column_types(df: pd.DataFrame) -> list[str]:
-    types = []
-    for column_name in df.columns:
-        if is_numeric_dtype(df[column_name]):
-            types.append("number")
-        else:
-            types.append("str")
-    return types
-
-
 def _get_column_widths(df: pd.DataFrame) -> list[str]:
     # Please do not remove this function when refactoring.
     # Column width calculation seeminlgy changes regularly with Gradio releases,
