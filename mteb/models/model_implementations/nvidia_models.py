@@ -100,8 +100,24 @@ nvidia_training_datasets = {
     "MrTidyRetrieval",
 }
 
+
+def _nvembed_v2_wrapper(
+    *args,
+    **kwargs: Any,
+) -> InstructSentenceTransformerModel:
+    required_transformers_version = "4.42.4"
+
+    if Version(transformers_version) != Version(required_transformers_version):
+        raise RuntimeError(
+            f"transformers version {transformers_version} is not match with required "
+            f"install version {required_transformers_version} to run `nvidia/NV-Embed-v2`"
+        )
+
+    return InstructSentenceTransformerModel(*args, **kwargs)
+
+
 NV_embed_v2 = ModelMeta(
-    loader=InstructSentenceTransformerModel,
+    loader=_nvembed_v2_wrapper,
     loader_kwargs=dict(
         instruction_template=instruction_template,
         trust_remote_code=True,
