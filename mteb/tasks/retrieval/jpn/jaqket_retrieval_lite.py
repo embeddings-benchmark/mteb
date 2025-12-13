@@ -6,7 +6,7 @@ class JaqketRetrievalLite(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JaqketRetrievalLite",
         dataset={
-            "path": "lsz05/JaqketRetrievalLite",
+            "path": "mteb/JaqketRetrievalLite",
             "revision": "860965fbb6526dd8edff12627dacf07c8f5a54f3",
         },
         description=(

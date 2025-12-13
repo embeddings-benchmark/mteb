@@ -6,7 +6,7 @@ class JaCWIRRetrievalLite(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JaCWIRRetrievalLite",
         dataset={
-            "path": "lsz05/JaCWIRRetrievalLite",
+            "path": "mteb/JaCWIRRetrievalLite",
             "revision": "79472b360242cf2692e24a6d9999ef50d350d672",
         },
         description=(
