@@ -8,8 +8,8 @@ from huggingface_hub import get_safetensors_metadata, list_repo_commits
 from huggingface_hub.errors import (
     GatedRepoError,
     NotASafetensorsRepoError,
-    SafetensorsParsingError,
     RepositoryNotFoundError,
+    SafetensorsParsingError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator
 
