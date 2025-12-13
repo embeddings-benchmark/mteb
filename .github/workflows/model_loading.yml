@@ -33,11 +33,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.10"
-          cache: "pip"
 
       - name: Install dependencies and run tests
         run: |
