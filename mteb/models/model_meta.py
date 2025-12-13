@@ -5,10 +5,11 @@ from enum import Enum
 from functools import partial
 from typing import TYPE_CHECKING, Any, Literal, cast
 
-from huggingface_hub import get_safetensors_metadata
+from huggingface_hub import get_safetensors_metadata, list_repo_commits
 from huggingface_hub.errors import (
     GatedRepoError,
     NotASafetensorsRepoError,
+    RepositoryNotFoundError,
     SafetensorsParsingError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator
@@ -73,7 +74,7 @@ class ModelMeta(BaseModel):
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
         revision: The revision number of the model. If None, it is assumed that the metadata (including the loader) is valid for all revisions of the model.
-        release_date: The date the model's revision was released.
+        release_date: The date the model's revision was released. If None, then release date will be added based on 1st commit in hf repository of model.
         license: The license under which the model is released. Required if open_weights is True.
         open_weights: Whether the model is open source or proprietary.
         public_training_code: A link to the publicly available training code. If None, it is assumed that the training code is not publicly available.
@@ -332,6 +333,24 @@ class ModelMeta(BaseModel):
         # Convert to MB
         model_memory_mb = model_memory_bytes / MB
         return round(model_memory_mb)
+
+    @staticmethod
+    def fetch_release_date(model_name: str) -> StrDate | None:
+        """Fetches the release date from HuggingFace Hub based on the first commit.
+
+        Returns:
+            The release date in YYYY-MM-DD format, or None if it cannot be determined.
+        """
+        try:
+            commits = list_repo_commits(repo_id=model_name, repo_type="model")
+            if commits:
+                initial_commit = commits[-1]
+                release_date = initial_commit.created_at.strftime("%Y-%m-%d")
+                return release_date
+        except RepositoryNotFoundError:
+            logger.warning(f"Model repository not found for {model_name}.")
+
+        return None
 
     def to_python(self) -> str:
         """Returns a string representation of the model."""
