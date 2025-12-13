@@ -28,6 +28,7 @@ class JaCWIRRetrievalLite(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
+        adapted_from=["JaCWIRRetrieval"],
         bibtex_citation=r"""
 @misc{jmteb_lite,
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide

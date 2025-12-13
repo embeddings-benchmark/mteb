@@ -28,6 +28,7 @@ class JaqketRetrievalLite(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        adapted_from=["JaqketRetrieval"],
         bibtex_citation=r"""
 @misc{jmteb_lite,
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide
