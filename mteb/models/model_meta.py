@@ -273,8 +273,8 @@ class ModelMeta(BaseModel):
                 revisions = _get_repo_commits(model_name, "model")
                 revision = revisions[0].commit_id if revisions else None
             model_license = card_data.license
-            n_parameters = cls.calculate_num_parameters_from_hub(model_name)
-            memory_usage_mb = cls.calculate_memory_usage_mb(model_name)
+            n_parameters = cls._calculate_num_parameters_from_hub(model_name)
+            memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
 
         return cls(
             loader=loader,
@@ -428,44 +428,33 @@ class ModelMeta(BaseModel):
         perc_overlap = 100 * (len(overlap) / len(benchmark_datasets))
         return int(100 - perc_overlap)
 
-    @classmethod
-    def calculate_num_parameters_from_hub(
-        cls, model_name: str | None = None
-    ) -> int | None:
+    @staticmethod
+    def _calculate_num_parameters_from_hub(model_name: str | None = None) -> int | None:
+        try:
+            safetensors_metadata = get_safetensors_metadata(model_name)
+            if len(safetensors_metadata.parameter_count) >= 0:
+                return sum(safetensors_metadata.parameter_count.values())
+        except (NotASafetensorsRepoError, SafetensorsParsingError, GatedRepoError) as e:
+            logger.warning(
+                f"Can't calculate number of parameters for {model_name}. Got error {e}"
+            )
+            return None
+
+    def calculate_num_parameters_from_hub(self) -> int | None:
         """Calculates the number of parameters in the model.
 
         Returns:
             Number of parameters in the model.
         """
-        name = model_name or cls.name
-        if name is None:
-            return None
+        return self._calculate_num_parameters_from_hub(self.name)
 
-        try:
-            safetensors_metadata = get_safetensors_metadata(name)
-            if len(safetensors_metadata.parameter_count) >= 0:
-                return sum(safetensors_metadata.parameter_count.values())
-        except (NotASafetensorsRepoError, SafetensorsParsingError, GatedRepoError) as e:
-            logger.warning(
-                f"Can't calculate number of parameters for {name}. Got error {e}"
-            )
-            return None
-
-    @classmethod
-    def calculate_memory_usage_mb(cls, model_name: str | None = None) -> int | None:
-        """Calculates the memory usage of the model in MB.
-
-        Returns:
-            The memory usage of the model in MB, or None if it cannot be determined.
-        """
-        name = model_name or cls.name
-
-        if "API" in cls.framework or name is None:
-            return None
-
+    @staticmethod
+    def _calculate_memory_usage_mb(
+        model_name: str, n_parameters: int | None
+    ) -> int | None:
         MB = 1024**2  # noqa: N806
         try:
-            safetensors_metadata = get_safetensors_metadata(name)
+            safetensors_metadata = get_safetensors_metadata(model_name)
             if len(safetensors_metadata.parameter_count) >= 0:
                 dtype_size_map = {
                     "F64": 8,  # 64-bit float
@@ -490,15 +479,29 @@ class ModelMeta(BaseModel):
             GatedRepoError,
             RepositoryNotFoundError,
         ) as e:
-            logger.warning(f"Can't calculate memory usage for {name}. Got error {e}")
-        if cls.n_parameters is None:
+            logger.warning(
+                f"Can't calculate memory usage for {model_name}. Got error {e}"
+            )
+
+        if n_parameters is None:
             return None
         # Model memory in bytes. For FP32 each parameter is 4 bytes.
-        model_memory_bytes = cls.n_parameters * 4
+        model_memory_bytes = n_parameters * 4
 
         # Convert to MB
         model_memory_mb = model_memory_bytes / MB
         return round(model_memory_mb)
+
+    def calculate_memory_usage_mb(self) -> int | None:
+        """Calculates the memory usage of the model in MB.
+
+        Returns:
+            The memory usage of the model in MB, or None if it cannot be determined.
+        """
+        if "API" in self.framework or self.name is None:
+            return None
+
+        return self._calculate_memory_usage_mb(self.model_name, self.n_parameters)
 
     def to_python(self) -> str:
         """Returns a string representation of the model."""
