@@ -18,4 +18,17 @@ bica_base = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/NiravBhattLab/BiCA",
     public_training_data="https://huggingface.co/datasets/bisectgroup/hard-negatives-traversal",
+    adapted_from="thenlper/gte-base",
+    citation="""
+@misc{sinha2025bicaeffectivebiomedicaldense,
+      title={BiCA: Effective Biomedical Dense Retrieval with Citation-Aware Hard Negatives}, 
+      author={Aarush Sinha and Pavan Kumar S and Roshan Balaji and Nirav Pravinbhai Bhatt},
+      year={2025},
+      eprint={2511.08029},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2511.08029}, 
+}
+""",
+    training_datasets=set(),
 )
