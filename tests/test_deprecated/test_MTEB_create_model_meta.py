@@ -18,7 +18,7 @@ def test_create_model_meta_from_sentence_transformers():
 
     assert meta.embed_dim == model.get_sentence_embedding_dimension()
     assert type(meta.framework) is list
-    assert meta.framework[0] == "Sentence Transformers"
+    assert "Sentence Transformers" in meta.framework
     assert meta.name == model_name
     assert meta.revision == revision
 

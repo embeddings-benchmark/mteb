@@ -346,7 +346,7 @@ class ModelMeta(BaseModel):
         meta = cls.from_hub(name, revision, compute_metadata)
         if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
             meta.framework.append("Sentence Transformers")
-        meta.revision = meta.revision or model.model_card_data.base_model_revision
+        meta.revision = model.model_card_data.base_model_revision or meta.revision
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
         meta.similarity_fn_name = ScoringFunction.from_str(model.similarity_fn_name)
@@ -422,7 +422,7 @@ class ModelMeta(BaseModel):
         meta = cls.from_hub(model.model.name_or_path, revision, compute_metadata)
         if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
             meta.framework.append("Sentence Transformers")
-        meta.revision = meta.revision or model.model_card_data.base_model_revision
+        meta.revision = model.config._commit_hash or meta.revision
         meta.loader = CrossEncoderWrapper
         meta.embed_dim = None
         meta.modalities = ["text"]
