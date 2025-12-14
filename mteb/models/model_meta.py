@@ -6,7 +6,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import field
 from enum import Enum
 from functools import partial
-from typing import TYPE_CHECKING, Any, Literal, Self, cast
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 from huggingface_hub import (
     GitCommitInfo,
@@ -14,6 +14,7 @@ from huggingface_hub import (
     ModelCardData,
     get_safetensors_metadata,
     list_repo_commits,
+    repo_exists,
 )
 from huggingface_hub.errors import (
     GatedRepoError,
@@ -22,6 +23,7 @@ from huggingface_hub.errors import (
     SafetensorsParsingError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator
+from typing_extensions import Self
 
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.languages import check_language_code
@@ -243,9 +245,10 @@ class ModelMeta(BaseModel):
         revision = None
         frameworks: list[FRAMEWORKS] = ["PyTorch"]
         model_license = None
-        reference = "https://huggingface.co/" + model_name
+        reference = None
 
-        if compute_metadata:
+        if compute_metadata and repo_exists(model_name):
+            reference = "https://huggingface.co/" + model_name
             card = ModelCard.load(model_name)
             card_data: ModelCardData = card.data
             sentence_transformer_name = "sentence-transformers"
