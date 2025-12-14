@@ -278,8 +278,8 @@ class ModelMeta(BaseModel):
 
         return cls(
             loader=loader,
-            name=model_name,
-            revision=revision,
+            name=model_name or "no_model_name/available",
+            revision=revision or "no_revision_available",
             reference=reference,
             release_date=None,
             languages=None,
@@ -295,6 +295,7 @@ class ModelMeta(BaseModel):
             public_training_code=None,
             public_training_data=None,
             use_instructions=None,
+            modalities=[],
         )
 
     @classmethod
@@ -325,6 +326,7 @@ class ModelMeta(BaseModel):
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
         meta.similarity_fn_name = ScoringFunction.from_str(model.similarity_fn_name)
+        meta.modalities = ["text"]
         return meta
 
     @classmethod
@@ -350,6 +352,7 @@ class ModelMeta(BaseModel):
         meta.framework = ["Sentence Transformers"]
         meta.revision = meta.revision or model.model_card_data.base_model_revision
         meta.loader = CrossEncoderWrapper
+        meta.modalities = ["text"]
         return meta
 
     def is_zero_shot_on(self, tasks: Sequence[AbsTask] | Sequence[str]) -> bool | None:
