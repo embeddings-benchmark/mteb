@@ -229,11 +229,17 @@ class ModelMeta(BaseModel):
         return self.name.replace("/", "__").replace(" ", "_")
 
     @classmethod
-    def from_hf_hub(cls, model_name: str, compute_metadata: bool = True) -> Self:
+    def from_hf_hub(
+        cls,
+        model_name: str | None,
+        revision: str | None = None,
+        compute_metadata: bool = True,
+    ) -> Self:
         """Generates a ModelMeta from a HuggingFace model name.
 
         Args:
             model_name: The HuggingFace model name.
+            revision: Revision of the model
             compute_metadata: Add metadata based on model card
 
         Returns:
@@ -242,12 +248,13 @@ class ModelMeta(BaseModel):
         from mteb.models import sentence_transformers_loader
 
         loader = sentence_transformers_loader
-        revision = None
         frameworks: list[FRAMEWORKS] = ["PyTorch"]
         model_license = None
         reference = None
+        n_parameters = None
+        memory_usage_mb = None
 
-        if compute_metadata and repo_exists(model_name):
+        if model_name and compute_metadata and repo_exists(model_name):
             reference = "https://huggingface.co/" + model_name
             card = ModelCard.load(model_name)
             card_data: ModelCardData = card.data
@@ -262,11 +269,14 @@ class ModelMeta(BaseModel):
                 logger.warning(msg)
                 warnings.warn(msg)
 
-            revisions = _get_repo_commits(model_name, "model")
-            revision = revisions[0].commit_id if revisions else None
+            if revision is None:
+                revisions = _get_repo_commits(model_name, "model")
+                revision = revisions[0].commit_id if revisions else None
             model_license = card_data.license
+            n_parameters = cls.calculate_num_parameters_from_hub(model_name)
+            memory_usage_mb = cls.calculate_memory_usage_mb(model_name)
 
-        model = ModelMeta(
+        return cls(
             loader=loader,
             name=model_name,
             revision=revision,
@@ -277,8 +287,8 @@ class ModelMeta(BaseModel):
             framework=frameworks,
             training_datasets=None,
             similarity_fn_name=None,
-            n_parameters=None,
-            memory_usage_mb=None,
+            n_parameters=n_parameters,
+            memory_usage_mb=memory_usage_mb,
             max_tokens=None,
             embed_dim=None,
             open_weights=True,
@@ -286,19 +296,19 @@ class ModelMeta(BaseModel):
             public_training_data=None,
             use_instructions=None,
         )
-        if compute_metadata:
-            model.n_parameters = model.calculate_num_parameters_from_hub()
-            model.memory_usage_mb = model.calculate_memory_usage_mb()
-        return model
 
     @classmethod
     def from_sentence_transformer_model(
-        cls, model: SentenceTransformer, compute_metadata: bool = True
+        cls,
+        model: SentenceTransformer,
+        revision: str | None = None,
+        compute_metadata: bool = True,
     ) -> Self:
         """Generates a ModelMeta from a SentenceTransformer model.
 
         Args:
             model: SentenceTransformer model.
+            revision: Revision of the model
             compute_metadata: Add metadata based on model card
 
         Returns:
@@ -309,10 +319,9 @@ class ModelMeta(BaseModel):
             if model.model_card_data.model_name
             else model.model_card_data.base_model
         )
-        if name:
-            meta = cls.from_hf_hub(name, compute_metadata)
+        meta = cls.from_hf_hub(name, revision, compute_metadata)
         meta.framework = ["Sentence Transformers"]
-        meta.revision = model.model_card_data.base_model_revision
+        meta.revision = meta.revision or model.model_card_data.base_model_revision
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
         meta.similarity_fn_name = ScoringFunction.from_str(model.similarity_fn_name)
@@ -320,12 +329,16 @@ class ModelMeta(BaseModel):
 
     @classmethod
     def from_cross_encoder(
-        cls, model: CrossEncoder, compute_metadata: bool = True
+        cls,
+        model: CrossEncoder,
+        revision: str | None = None,
+        compute_metadata: bool = True,
     ) -> Self:
         """Generates a ModelMeta from a CrossEncoder.
 
         Args:
             model: The CrossEncoder model
+            revision: Revision of the model
             compute_metadata: Add metadata based on model card
 
         Returns:
@@ -333,9 +346,9 @@ class ModelMeta(BaseModel):
         """
         from mteb.models import CrossEncoderWrapper
 
-        meta = cls.from_hf_hub(model.model.name_or_path, compute_metadata)
+        meta = cls.from_hf_hub(model.model.name_or_path, revision, compute_metadata)
         meta.framework = ["Sentence Transformers"]
-        meta.revision = model.model_card_data.base_model_revision
+        meta.revision = meta.revision or model.model_card_data.base_model_revision
         meta.loader = CrossEncoderWrapper
         return meta
 
@@ -415,34 +428,44 @@ class ModelMeta(BaseModel):
         perc_overlap = 100 * (len(overlap) / len(benchmark_datasets))
         return int(100 - perc_overlap)
 
-    def calculate_num_parameters_from_hub(self) -> int | None:
+    @classmethod
+    def calculate_num_parameters_from_hub(
+        cls, model_name: str | None = None
+    ) -> int | None:
         """Calculates the number of parameters in the model.
 
         Returns:
             Number of parameters in the model.
         """
+        name = model_name or cls.name
+        if name is None:
+            return None
+
         try:
-            safetensors_metadata = get_safetensors_metadata(self.name)
+            safetensors_metadata = get_safetensors_metadata(name)
             if len(safetensors_metadata.parameter_count) >= 0:
                 return sum(safetensors_metadata.parameter_count.values())
         except (NotASafetensorsRepoError, SafetensorsParsingError, GatedRepoError) as e:
             logger.warning(
-                f"Can't calculate number of parameters for {self.name}. Got error {e}"
+                f"Can't calculate number of parameters for {name}. Got error {e}"
             )
             return None
 
-    def calculate_memory_usage_mb(self) -> int | None:
-        """Calculates the memory usage (in FP32) of the model in MB.
+    @classmethod
+    def calculate_memory_usage_mb(cls, model_name: str | None = None) -> int | None:
+        """Calculates the memory usage of the model in MB.
 
         Returns:
             The memory usage of the model in MB, or None if it cannot be determined.
         """
-        if "API" in self.framework:
+        name = model_name or cls.name
+
+        if "API" in cls.framework or name is None:
             return None
 
         MB = 1024**2  # noqa: N806
         try:
-            safetensors_metadata = get_safetensors_metadata(self.name)  # type: ignore
+            safetensors_metadata = get_safetensors_metadata(name)
             if len(safetensors_metadata.parameter_count) >= 0:
                 dtype_size_map = {
                     "F64": 8,  # 64-bit float
@@ -467,13 +490,11 @@ class ModelMeta(BaseModel):
             GatedRepoError,
             RepositoryNotFoundError,
         ) as e:
-            logger.warning(
-                f"Can't calculate memory usage for {self.name}. Got error {e}"
-            )
-        if self.n_parameters is None:
+            logger.warning(f"Can't calculate memory usage for {name}. Got error {e}")
+        if cls.n_parameters is None:
             return None
         # Model memory in bytes. For FP32 each parameter is 4 bytes.
-        model_memory_bytes = self.n_parameters * 4
+        model_memory_bytes = cls.n_parameters * 4
 
         # Convert to MB
         model_memory_mb = model_memory_bytes / MB

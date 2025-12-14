@@ -3,8 +3,6 @@ import logging
 from collections.abc import Iterable
 from typing import Any
 
-from huggingface_hub.errors import RepositoryNotFoundError
-
 from mteb.abstasks import AbsTask
 from mteb.models import (
     ModelMeta,
@@ -124,12 +122,8 @@ def get_model_meta(
         logger.info(
             "Model not found in model registry. Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
         )
-        try:
-            meta = ModelMeta.from_hf_hub(model_name)
-            meta.revision = revision
-            return meta
-        except RepositoryNotFoundError:
-            pass
+        meta = ModelMeta.from_hf_hub(model_name, revision)
+        return meta
 
     not_found_msg = f"Model '{model_name}' not found in MTEB registry"
     not_found_msg += " nor on the Huggingface Hub." if fetch_from_hf else "."
