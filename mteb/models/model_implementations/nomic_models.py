@@ -193,7 +193,7 @@ NOMIC_CITATION = """
 """
 
 nomic_embed_v1_5 = ModelMeta(
-    loader=NomicWrapper, # type: ignore
+    loader=NomicWrapper,  # type: ignore
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
@@ -221,7 +221,7 @@ nomic_embed_v1_5 = ModelMeta(
 )
 
 nomic_embed_v1 = ModelMeta(
-    loader=NomicWrapper, # type: ignore
+    loader=NomicWrapper,  # type: ignore
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
@@ -249,7 +249,7 @@ nomic_embed_v1 = ModelMeta(
 )
 
 nomic_embed_v1_ablated = ModelMeta(
-    loader=NomicWrapper, # type: ignore
+    loader=NomicWrapper,  # type: ignore
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
@@ -276,7 +276,7 @@ nomic_embed_v1_ablated = ModelMeta(
 )
 
 nomic_embed_v1_unsupervised = ModelMeta(
-    loader=NomicWrapper, # type: ignore
+    loader=NomicWrapper,  # type: ignore
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
@@ -433,7 +433,7 @@ m_languages = [
 ]
 
 nomic_embed_text_v2_moe = ModelMeta(
-    loader=NomicWrapper, # type: ignore
+    loader=NomicWrapper,  # type: ignore
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
@@ -455,7 +455,7 @@ nomic_embed_text_v2_moe = ModelMeta(
     adapted_from="nomic-ai/nomic-xlm-2048",
     public_training_data="https://github.com/nomic-ai/contrastors?tab=readme-ov-file#data-access",
     public_training_code="https://github.com/nomic-ai/contrastors",  # not quite reproducible, but the best I could find
-    training_datasets=None, # did not look into this further
+    training_datasets=None,  # did not look into this further
     superseded_by=None,
     citation="""@misc{nussbaum2025trainingsparsemixtureexperts,
       title={Training Sparse Mixture Of Experts Text Embedding Models}, 
