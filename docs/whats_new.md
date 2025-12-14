@@ -1,9 +1,148 @@
-# New in v2.0 🎉
+# What's New
+
+
+## New since v2.3
+
+
+### Overview of patch updates
+
+- Make `PIL` optional as it is only used for type-checks ([#3713](https://github.com/embeddings-benchmark/mteb/pull/3713)) 
+- Only use a shallow clone when download results to reduce download time and memory usage ([#3682](https://github.com/embeddings-benchmark/mteb/pull/3682))
+- `get_model` now correctly assumed `SentenceTransformer` ([#3673](https://github.com/embeddings-benchmark/mteb/pull/3673))
+- Fixed incorrect metadata on memory usage ([#3624](https://github.com/embeddings-benchmark/mteb/pull/3624))
+- Resolved issue with laoding Vidore ([#3618](https://github.com/embeddings-benchmark/mteb/pull/3618))
+- Updated to logging, such that "warning" is noted stated in the message if it is not a warning ([#3619](https://github.com/embeddings-benchmark/mteb/pull/3619))
+- Added new metric (hamming score) to multilabel classification
+  ([#3700](https://github.com/embeddings-benchmark/mteb/pull/3700))
+
+- **Leaderboard**
+    - Bumped gradio to v6 ([#3629](https://github.com/embeddings-benchmark/mteb/pull/3629))
+    - Fixed display for task information and improve UI for benchmark filtering ([#3629](https://github.com/embeddings-benchmark/mteb/pull/3629))
+    - Remove "Unknown" for int on leaderboard causing them to be unsortable ([#3653](https://github.com/embeddings-benchmark/mteb/pull/3653))
+    - Add optional "per language table" ([#3617](https://github.com/embeddings-benchmark/mteb/pull/3617))
+    - Minor improvements to the leaderboard
+
+- **Docs**
+    - Update "speeding up"-section to include benefit gained from bumping the version of MTEB ([#3634](https://github.com/embeddings-benchmark/mteb/pull/3634))
+
+
+- **Model fixes**
+    - Fixed loading of GoogleTextEmbeddingModel which were given multiple `model_name`([#3653](https://github.com/embeddings-benchmark/mteb/pull/3653))
+    - Fixed loading of Linq-Embed-Mistral which does not take `instruction_template` as a kwargs ([#3653](https://github.com/embeddings-benchmark/mteb/pull/3653))
+    - Fix bug in `openai/text-embedding-ada-002` caused by passing `embed_dim`
+    ([#3689](https://github.com/embeddings-benchmark/mteb/pull/3689))
+
+- **New models**
+    - Added `FacebookAI/xlm-roberta-large` ([#3701](https://github.com/embeddings-benchmark/mteb/pull/3701))
+    - Added `FacebookAI/xlm-roberta-base` ([#3701](https://github.com/embeddings-benchmark/mteb/pull/3701))
+    - Added `KBLab/sentence-bert-swedish-cased` ([#3701](https://github.com/embeddings-benchmark/mteb/pull/3701))
+    - Added `KFST/XLMRoberta-en-da-sv-nb` ([#3701](https://github.com/embeddings-benchmark/mteb/pull/3701))
+
+
+## New in v2.3
+
+### Support for custom search backends
+
+MTEB v2.3 adds support for custom search encoder [IndexEncoderSearchProtocol](https://embeddings-benchmark.github.io/mteb/api/model/?h=indexencodersearchprotocol#mteb.models.IndexEncoderSearchProtocol) and adds the [FaissSearchIndex](https://embeddings-benchmark.github.io/mteb/advanced_usage/retrieval_backend/?h=faisssearchindex).
+
+```python
+import mteb
+from mteb.models import SearchEncoderWrapper
+from mteb.models.search_encoder_index import FaissSearchIndex
+
+model = mteb.get_model(...)
+index_backend = FaissSearchIndex(model)
+model = SearchEncoderWrapper(
+    model,
+    index_backend=index_backend
+)
+...
+```
+
+This leads to a slight increase in performance, for example running `minishlab/potion-base-2M` on `SWEbenchVerifiedRR` took 694 seconds instead of 769. It, however, does not change the default behaviour.
+
+### Overview of patch updates
+
+- Fixed incorrect metadata on model memory ([#3624](https://github.com/embeddings-benchmark/mteb/pull/3624))
+- Resolved issue with laoding Vidore ([#3618](https://github.com/embeddings-benchmark/mteb/pull/3618))
+- Updated to logging, such that "warning" is noted stated in the message if it is not a warning ([#3619](https://github.com/embeddings-benchmark/mteb/pull/3619))
+
+- **Docs**
+    - Update "speeding up"-section to include benefit gained from bumping the version of MTEB ([#3634](https://github.com/embeddings-benchmark/mteb/pull/3634))
+
+
+## New in v2.2
+
+### Support for Assymetric embeddings in STS and `PairClassification`
+MTEB v2.2 adds support for `prompt_type` for `STS` and `PairClassification` thus allowing for asymmetric embeddings.
+
+E.g. for `TERRa`, this allow us to add `TERRa.v2`, 
+```python
+class TERRaV2(AbsTaskPairClassification):
+    input1_prompt_type = PromptType.document
+    input2_prompt_type = PromptType.query
+
+    metadata = TaskMetadata(
+        name="TERRa.V2", ...
+    )
+```
+
+This is not backward compatible in scores for models with `query`/`document` separation, which is why we introduce the v2, but it better reflect the actual performance of these models.
+
+Example for `intfloat/multilingual-e5-small`:
+
+| Task | main | PR |
+| - | - | - |
+| TERRa.v2 | 0.575105 | 0.589083 |
+
+### New Benchmark Vidore v3
+Added Vidore V3 to the leaderboard ([#3542](https://github.com/embeddings-benchmark/mteb/pull/3542)), thanks [QuentinJGMace](https://github.com/QuentinJGMace) et al for working on this!
+
+### Overview of patch updates
+
+- Add support for python 3.14 ([#3450](https://github.com/embeddings-benchmark/mteb/pull/3450))
+- Multiple fixes to leaderboard links, e.g.
+  [#3591](https://github.com/embeddings-benchmark/mteb/pull/3591) and [#3560](https://github.com/embeddings-benchmark/mteb/pull/3560). Thanks [antoineedy](https://github.com/antoineedy)
+- Resolve bugs where cache was ignored ([#3558](https://github.com/embeddings-benchmark/mteb/pull/3558)), thanks [dongwook92](https://github.com/dongwook92) for the PR
+- Resolve hash randomization in retrieval task ID generation
+  ([#3553](https://github.com/embeddings-benchmark/mteb/pull/3553))
+- Improve messages for running missing splits
+  ([#3596](https://github.com/embeddings-benchmark/mteb/pull/3596))
+- Remove `set_float32_matmul_precision` as this lead to errors in some enviroments
+  ([#3509](https://github.com/embeddings-benchmark/mteb/pull/3509))
+- Add prompts to hardnegative tasks and bumping their version to maintain backward compatibility
+  ([#3469](https://github.com/embeddings-benchmark/mteb/pull/3469))
+
+- **Docs**
+    - Minor fixes, e.g. updates of brokens links in the readme
+
+- **Model fixes**
+    - Correcting bug in the Cohere model implementation ([#3610](https://github.com/embeddings-benchmark/mteb/pull/3610))
+    - Set default `input_type` for 'VoyageMultiModalModelWrapper' ([#3567](https://github.com/embeddings-benchmark/mteb/pull/3567))
+
+- **New models**
+    - Add jasper token compression model ([#3557](https://github.com/embeddings-benchmark/mteb/pull/3557))
+
+
+## New in v2.1
+
+### New benchmark for Dutch
+
+MTEB v2.1 introduces a new benchmark for dutch `MTEB(nld, v1)` ([#3464](https://github.com/embeddings-benchmark/mteb/pull/3464)). Thanks to [nikolay-banar](https://github.com/nikolay-banar) for the PR.
+
+### Overview of patch updates
+
+- Speed up retrieval computation by more 6x ([#3454](https://github.com/embeddings-benchmark/mteb/pull/3454))
+- Docs
+    - Added model citations
+    - spelling fixes 
+
+## New in v2.0
 This section goes through new features added in v2. Below we give an overview of changes following by detailed examples.
 
-**Overview of changes:**
+### Overview of changes
 
-- [New in v2.0 🎉](#new-in-v20-)
+- New in v2.0
     - [Easier evaluation](#easier-evaluation)
     - [Better local and online caching](#better-local-and-online-caching)
     - [Multimodal Input format](#multimodal-input-format)
@@ -26,7 +165,7 @@ What are the reasons for the changes? Generally the many inconsistencies in the 
 We have already been able to add many new feature in v2.0, but hope that this new version allow us to keep doing so without breaking backward compatibility. See [upgrading from v1](#upgrading-from-v1) for specific deprecations and how to fix them.
 
 
-### Easier evaluation
+#### Easier evaluation
 
 Evaluations are now a lot easier using [`mteb.evaluate`][mteb.evaluate.evaluate],
 
@@ -34,7 +173,7 @@ Evaluations are now a lot easier using [`mteb.evaluate`][mteb.evaluate.evaluate]
 results = mteb.evaluate(model, tasks)
 ```
 
-### Better local and online caching
+#### Better local and online caching
 The new [`mteb.ResultCache`][mteb.cache.ResultCache] makes managing the cache notably easier:
 ```py
 from mteb.cache import ResultCache
@@ -56,7 +195,7 @@ cache.download_from_remote() # download the latest results from the remote repos
 results = mteb.evaluate(model, tasks, cache=cache)
 ```
 
-### Multimodal Input format
+#### Multimodal Input format
 
 Models in mteb who implements the [`Encoder`][mteb.models.EncoderProtocol] protocol now supports multimodal input With the model protocol roughly looking like so:
 
@@ -87,7 +226,7 @@ Where `text` is a batch of texts and `list[images]` is a batch for that texts. T
 However, this also allows no text, multi-image inputs (e.g. for PDFs). Overall this greatly expands the possible tasks that can now be evaluated in MTEB.
 To see how to convert a legacy model see the [converting model](#converting-model-to-new-format) section.
 
-### Better support for CrossEncoders
+#### Better support for CrossEncoders
 
 Also, we've introduced a new [`CrossEncoderProtocol`][mteb.models.CrossEncoderProtocol] for cross-encoders and now all cross-encoders have better support for evaluation:
 
@@ -102,7 +241,7 @@ class CrossEncoderProtocol(Protocol):
     ) -> Array:
 ```
 
-### Unified Retrieval, Reranking and instruction variants
+#### Unified Retrieval, Reranking and instruction variants
 
 The retrieval tasks in MTEB now supports both retrieval and reranking using the same base task. The main difference now that Reranking tasks should have `top_ranked` subset to be evaluated on.
 New structure of retrieval tasks: `dataset[subset][split]` = [RetrievalSplitData][mteb.abstasks.retrieval_dataset_loaders.RetrievalSplitData]. On HF this dataset should these subsets:
@@ -119,7 +258,7 @@ New structure of retrieval tasks: `dataset[subset][split]` = [RetrievalSplitData
 4. `Top Ranked` - the top ranked documents to rerank. Only for reranking tasks. Monolingual name: `top_ranked`, multilingual name: `{subset}-top_ranked`.
       `query-id`, `corpus-ids` (`list[str]`) - the top ranked documents for each query.
 
-### Search Interface
+#### Search Interface
 
 To make it easier to use MTEB for search, we have added a simple search interface using the new [`SearchProtocol`][mteb.models.SearchProtocol]:
 
@@ -152,17 +291,17 @@ class SearchProtocol(Protocol):
         ...
 ```
 
-We're automatically wrapping `Encoder` and `CrossEncoder` models support `SearchProtocol`. However, if your model needs a custom index you can implement this protocol directly, like was done for colbert-like models. <!-- [colbert-like models][mteb.models.model_implementations.pylate_models.PylateSearchEncoder]. -->
+We're automatically wrapping `Encoder` and `CrossEncoder` models support `SearchProtocol`. However, if your model needs a custom index you can implement this protocol directly, like was done for colbert-like models.
 
-### New Documentation
+#### New Documentation
 
 We've added a lot of new documentation to make it easier to get started with MTEB.
 
 - You can see api of our models in tasks in [API documentation](./api/index.md).
 - We've added a [getting started guide](./usage/get_started.md) to help you get started with MTEB.
-- You can see implemented [tasks](./overview/available_tasks/retrieval.md) and [models](./overview/available_models/text.md) in MTEB.
+- You can see implemented [tasks](./overview/available_tasks/retrieval.md) and [models](../overview/available_models/text.md) in MTEB.
 
-### Better support for loading and comparing results
+#### Better support for loading and comparing results
 
 The new `ResultCache` also makes it easier to load, inspect and compare both local and online results:
 
@@ -177,7 +316,7 @@ results = cache.load_results(models=["sentence-transformers/all-MiniLM-L6-v2", .
 df = results.to_dataframe()
 ```
 
-### Descriptive Statistics
+#### Descriptive Statistics
 
 Descriptive statistics isn't a new thing in MTEB, however, now it is there for every task, to extract it simply run:
 
@@ -231,7 +370,7 @@ Example for reranking task:
 
 Documentation for [the descriptive statistics types][mteb.types.statistics].
 
-### Saving Predictions
+#### Saving Predictions
 
 To support error analysis it is now possible to save the model prediction on a given task. You can do this simply as follows:
 ```python
@@ -262,15 +401,15 @@ Result of prediction will be saved in `path/to/model_predictions/{task_name}_pre
 }
 ```
 
-### Support datasets v4
+#### Support datasets v4
 
 With the new functionality for [reuploading datasets][mteb.abstasks.abstask.AbsTask.push_dataset_to_hub] to the standard datasets Parquet format, we’ve reuploaded all tasks with `trust_remote_code`, and MTEB now fully supports Datasets v4.
 
-## Upgrading from v1
+### Upgrading from v1
 
 This section gives an introduction of how to upgrade from v1 to v2.
 
-### Replacing `mteb.MTEB`
+#### Replacing `mteb.MTEB`
 
 The previous approach to evaluate would require you to first create `MTEB` object and then call `.run` on that object.
 The `MTEB` object was initially a sort of catch all object intended for both filtering tasks, selecting tasks, evaluating and few other cases.
@@ -298,7 +437,7 @@ mteb.evaluate(
 )
 ```
 
-### Replacing `mteb.load_results()`
+#### Replacing `mteb.load_results()`
 
 Given the new `ResultCache` makes dealing with a results from _both_ local and online caches a lot easier, it can now replace `mteb.load_results` it
 
@@ -317,7 +456,7 @@ results = cache.load_results(models=model_names, tasks=tasks)
 ```
 
 
-### Converting model to new format
+#### Converting model to new format
 
 As mentioned in [the above section](#multimodal-input-format) MTEB v2, now supports multimodal input as the default.
 Luckily for you all models implemented in MTEB already supports this new format! However, if you have a local model that you would like to evaluate
@@ -352,7 +491,7 @@ class MyDummyEncoder:
 
 Of course, it will be more efficient if you work directly with the dataloader.
 
-### Reuploading datasets
+#### Reuploading datasets
 
 If your dataset is in old format, or you want to reupload it to the new Parquet format, you can do so using the new
 [`push_dataset_to_hub`][mteb.abstasks.abstask.AbsTask.push_dataset_to_hub] method:
@@ -364,7 +503,7 @@ task = mteb.get_task("MyOldTask")
 task.push_dataset_to_hub("my-username/my-new-task")
 ```
 
-### Converting Reranking datasets to new format
+#### Converting Reranking datasets to new format
 
 If you have a reranking dataset, you can convert it to the retrieval format. To do this you need to add your task name to the `mteb.abstasks.text.reranking.OLD_FORMAT_RERANKING_TASKS`
 and after this it would be converted to the new format automatically. To reupload them in new reranking format you refer to the [reuploading datasets](#reuploading-datasets) section.

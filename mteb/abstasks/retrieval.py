@@ -285,7 +285,7 @@ class AbsTaskRetrieval(AbsTask):
         *,
         encode_kwargs: dict[str, Any],
         prediction_folder: Path | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluate the model on the retrieval task.
 
@@ -297,7 +297,6 @@ class AbsTaskRetrieval(AbsTask):
             encode_kwargs: Keyword arguments passed to the encoder
             prediction_folder: Folder to save model predictions
             **kwargs: Additional keyword arguments passed to the evaluator
-
 
         Returns:
             Dictionary mapping subsets to their evaluation scores

@@ -92,7 +92,6 @@ def filter_tasks(
         task_types: A string specifying the type of task e.g. "Classification" or "Retrieval". If None, all tasks are included.
         categories: A list of task categories these include "t2t" (text to text), "t2i" (text to image). See TaskMetadata for the full list.
         exclude_superseded: A boolean flag to exclude datasets which are superseded by another.
-        eval_splits: A list of evaluation splits to include. If None, all splits are included.
         modalities: A list of modalities to include. If None, all modalities are included.
         exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
             task's modalities and ALL task modalities are in filter modalities (exact match).
