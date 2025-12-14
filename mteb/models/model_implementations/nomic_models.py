@@ -454,7 +454,7 @@ nomic_embed_text_v2_moe = ModelMeta(
     use_instructions=True,
     adapted_from="nomic-ai/nomic-xlm-2048",
     public_training_data="https://github.com/nomic-ai/contrastors?tab=readme-ov-file#data-access",
-    public_training_code="https://github.com/nomic-ai/contrastors",  # not quite reproducible, but the best I could find
+    public_training_code="https://github.com/nomic-ai/contrastors/blob/613ddfd37309e538cceadb05b1e6423e7b09f603/src/contrastors/configs/train/contrastive_finetune_moe.yaml",
     training_datasets=None,  # did not look into this further
     superseded_by=None,
     citation="""@misc{nussbaum2025trainingsparsemixtureexperts,
