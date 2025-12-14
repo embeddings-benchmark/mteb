@@ -360,7 +360,7 @@ class ModelMeta(BaseModel):
         revision: str | None = None,
         compute_metadata: bool = True,
     ) -> Self:
-        """Generates a ModelMeta for SentenceTransformer model.
+        """Generates a ModelMeta for SentenceTransformer model from hub.
 
         Args:
             model: SentenceTransformer model.
