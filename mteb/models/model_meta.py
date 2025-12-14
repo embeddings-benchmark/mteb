@@ -419,8 +419,8 @@ class ModelMeta(BaseModel):
         Returns:
             Number of parameters in the model.
         """
-        safetensors_metadata = get_safetensors_metadata(self.name)
         try:
+            safetensors_metadata = get_safetensors_metadata(self.name)
             if len(safetensors_metadata.parameter_count) >= 0:
                 return sum(safetensors_metadata.parameter_count.values())
         except (NotASafetensorsRepoError, SafetensorsParsingError, GatedRepoError) as e:
