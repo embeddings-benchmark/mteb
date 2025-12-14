@@ -269,7 +269,13 @@ class ModelMeta(BaseModel):
             reference = "https://huggingface.co/" + model_name
             card = ModelCard.load(model_name)
             card_data: ModelCardData = card.data
-            model_config = AutoConfig.from_pretrained(model_name)
+            try:
+                model_config = AutoConfig.from_pretrained(model_name)
+            except Exception as e:
+                # some models can't load AutoConfig (e.g. `average_word_embeddings_levy_dependency`)
+                model_config = None
+                logger.warning(f"Can't get configuration for {model_name}. Error: {e}")
+
             if (
                 card_data.library_name == _SENTENCE_TRANSFORMER_LIB_NAME
                 or _SENTENCE_TRANSFORMER_LIB_NAME in card_data.tags
@@ -288,9 +294,9 @@ class ModelMeta(BaseModel):
             model_license = card_data.license
             n_parameters = cls._calculate_num_parameters_from_hub(model_name)
             memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
-            if hasattr(model_config, "hidden_size"):
+            if model_config and hasattr(model_config, "hidden_size"):
                 embedding_dim = model_config.hidden_size
-            if hasattr(model_config, "max_position_embeddings"):
+            if model_config and hasattr(model_config, "max_position_embeddings"):
                 max_tokens = model_config.max_position_embeddings
 
         return cls(
