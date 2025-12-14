@@ -434,7 +434,12 @@ class ModelMeta(BaseModel):
             safetensors_metadata = get_safetensors_metadata(model_name)
             if len(safetensors_metadata.parameter_count) >= 0:
                 return sum(safetensors_metadata.parameter_count.values())
-        except (NotASafetensorsRepoError, SafetensorsParsingError, GatedRepoError) as e:
+        except (
+            NotASafetensorsRepoError,
+            SafetensorsParsingError,
+            GatedRepoError,
+            RepositoryNotFoundError,
+        ) as e:
             logger.warning(
                 f"Can't calculate number of parameters for {model_name}. Got error {e}"
             )
