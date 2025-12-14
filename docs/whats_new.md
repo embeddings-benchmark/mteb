@@ -23,8 +23,8 @@
     - Minor improvements to the leaderboard
 
 - **Docs**
+    - Added a continually updated "what's new" section to the documentation
     - Update "speeding up"-section to include benefit gained from bumping the version of MTEB ([#3634](https://github.com/embeddings-benchmark/mteb/pull/3634))
-
 
 - **Model fixes**
     - Fixed loading of GoogleTextEmbeddingModel which were given multiple `model_name`([#3653](https://github.com/embeddings-benchmark/mteb/pull/3653))
