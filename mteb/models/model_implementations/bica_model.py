@@ -3,7 +3,7 @@ from mteb.models import ModelMeta, sentence_transformers_loader
 bica_base = ModelMeta(
     name="bisectgroup/BiCA-base",
     loader=sentence_transformers_loader,
-    languages=["eng-Latn"], 
+    languages=["eng-Latn"],
     open_weights=True,
     revision="31237a836e5ae908c308a256573e5f0986498574",
     release_date="2025-11-14",
