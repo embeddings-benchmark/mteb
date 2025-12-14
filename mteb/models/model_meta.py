@@ -312,6 +312,7 @@ class ModelMeta(BaseModel):
         if name:
             meta = cls.from_hf_hub(name, compute_metadata)
         meta.framework = ["Sentence Transformers"]
+        meta.revision = model.model_card_data.base_model_revision
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
         meta.similarity_fn_name = ScoringFunction.from_str(model.similarity_fn_name)
@@ -334,6 +335,7 @@ class ModelMeta(BaseModel):
 
         meta = cls.from_hf_hub(model.model.name_or_path, compute_metadata)
         meta.framework = ["Sentence Transformers"]
+        meta.revision = model.model_card_data.base_model_revision
         meta.loader = CrossEncoderWrapper
         return meta
 
