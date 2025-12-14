@@ -23,6 +23,7 @@ from huggingface_hub.errors import (
     SafetensorsParsingError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator
+from transformers import AutoConfig
 from typing_extensions import Self
 
 from mteb._helpful_enum import HelpfulStrEnum
@@ -253,11 +254,15 @@ class ModelMeta(BaseModel):
         reference = None
         n_parameters = None
         memory_usage_mb = None
+        release_date = None
+        embedding_dim = None
+        max_tokens = None
 
         if model_name and compute_metadata and repo_exists(model_name):
             reference = "https://huggingface.co/" + model_name
             card = ModelCard.load(model_name)
             card_data: ModelCardData = card.data
+            model_config = AutoConfig.from_pretrained(model_name)
             sentence_transformer_name = "sentence-transformers"
             if (
                 card_data.library_name == sentence_transformer_name
@@ -272,16 +277,22 @@ class ModelMeta(BaseModel):
             if revision is None:
                 revisions = _get_repo_commits(model_name, "model")
                 revision = revisions[0].commit_id if revisions else None
+
+            release_date = cls.fetch_release_date(model_name)
             model_license = card_data.license
             n_parameters = cls._calculate_num_parameters_from_hub(model_name)
             memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
+            if hasattr(model_config, "hidden_size"):
+                embedding_dim = model_config.hidden_size
+            if hasattr(model_config, "max_position_embeddings"):
+                max_tokens = model_config.max_position_embeddings
 
         return cls(
             loader=loader,
             name=model_name or "no_model_name/available",
             revision=revision or "no_revision_available",
             reference=reference,
-            release_date=None,
+            release_date=release_date,
             languages=None,
             license=model_license,
             framework=frameworks,
@@ -289,8 +300,8 @@ class ModelMeta(BaseModel):
             similarity_fn_name=None,
             n_parameters=n_parameters,
             memory_usage_mb=memory_usage_mb,
-            max_tokens=None,
-            embed_dim=None,
+            max_tokens=max_tokens,
+            embed_dim=embedding_dim,
             open_weights=True,
             public_training_code=None,
             public_training_data=None,
@@ -518,15 +529,11 @@ class ModelMeta(BaseModel):
         Returns:
             The release date in YYYY-MM-DD format, or None if it cannot be determined.
         """
-        try:
-            commits = list_repo_commits(repo_id=model_name, repo_type="model")
-            if commits:
-                initial_commit = commits[-1]
-                release_date = initial_commit.created_at.strftime("%Y-%m-%d")
-                return release_date
-        except RepositoryNotFoundError:
-            logger.warning(f"Model repository not found for {model_name}.")
-
+        commits = _get_repo_commits(repo_id=model_name, repo_type="model")
+        if commits:
+            initial_commit = commits[-1]
+            release_date = initial_commit.created_at.strftime("%Y-%m-%d")
+            return release_date
         return None
 
     def to_python(self) -> str:
@@ -646,5 +653,6 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
 def _get_repo_commits(repo_id: str, repo_type: str) -> list[GitCommitInfo] | None:
     try:
         return list_repo_commits(repo_id=repo_id, repo_type=repo_type)
-    except (GatedRepoError, RepositoryNotFoundError):
+    except (GatedRepoError, RepositoryNotFoundError) as e:
+        logger.warning(f"Can't get commits of {repo_id}: {e}")
         return None
