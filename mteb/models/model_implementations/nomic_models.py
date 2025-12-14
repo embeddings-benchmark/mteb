@@ -193,7 +193,7 @@ NOMIC_CITATION = """
 """
 
 nomic_embed_v1_5 = ModelMeta(
-    loader=NomicWrapper,
+    loader=NomicWrapper, # type: ignore
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
@@ -221,7 +221,7 @@ nomic_embed_v1_5 = ModelMeta(
 )
 
 nomic_embed_v1 = ModelMeta(
-    loader=NomicWrapper,
+    loader=NomicWrapper, # type: ignore
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
@@ -249,7 +249,7 @@ nomic_embed_v1 = ModelMeta(
 )
 
 nomic_embed_v1_ablated = ModelMeta(
-    loader=NomicWrapper,
+    loader=NomicWrapper, # type: ignore
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
@@ -276,7 +276,7 @@ nomic_embed_v1_ablated = ModelMeta(
 )
 
 nomic_embed_v1_unsupervised = ModelMeta(
-    loader=NomicWrapper,
+    loader=NomicWrapper, # type: ignore
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
@@ -328,4 +328,142 @@ nomic_modern_bert_embed = ModelMeta(
     superseded_by=None,
     training_datasets=nomic_training_data,
     public_training_data=None,
+)
+
+
+m_languages = [
+    "eng-Latn",
+    "spa-Latn",
+    "fra-Latn",
+    "deu-Latn",
+    "ita-Latn",
+    "por-Latn",
+    "pol-Latn",
+    "nld-Latn",
+    "tur-Latn",
+    "jpn-Jpan",
+    "vie-Latn",
+    "rus-Cyrl",
+    "ind-Latn",
+    "arb-Arab",
+    "ces-Latn",
+    "ron-Latn",
+    "swe-Latn",
+    "ell-Grek",
+    "ukr-Cyrl",
+    "zho-Hans",
+    "hun-Latn",
+    "dan-Latn",
+    "nor-Latn",
+    "hin-Deva",
+    "fin-Latn",
+    "bul-Cyrl",
+    "kor-Hang",
+    "slk-Latn",
+    "tha-Thai",
+    "heb-Hebr",
+    "cat-Latn",
+    "lit-Latn",
+    "fas-Arab",
+    "msa-Latn",
+    "slv-Latn",
+    "lav-Latn",
+    "mar-Deva",
+    "ben-Beng",
+    "sqi-Latn",
+    "cym-Latn",
+    "bel-Cyrl",
+    "mal-Mlym",
+    "kan-Knda",
+    "mkd-Cyrl",
+    "urd-Arab",
+    "fry-Latn",
+    "fil-Latn",
+    "tel-Telu",
+    "eus-Latn",
+    "swh-Latn",
+    "som-Latn",
+    "snd-Arab",
+    "uzb-Latn",
+    "cos-Latn",
+    "hrv-Latn",
+    "guj-Gujr",
+    "hin-Latn",
+    "ceb-Latn",
+    "epo-Latn",
+    "jav-Latn",
+    "lat-Latn",
+    "zul-Latn",
+    "mon-Cyrl",
+    "sin-Sinh",
+    "ell-Latn",
+    "gle-Latn",
+    "kir-Cyrl",
+    "tgk-Cyrl",
+    "mya-Mymr",
+    "khm-Khmr",
+    "mlg-Latn",
+    "pan-Guru",
+    "rus-Latn",
+    "sna-Latn",
+    "zho-Latn",
+    "hau-Latn",
+    "heb-Latn",
+    "hmn-Latn",
+    "hat-Latn",
+    "jpn-Latn",
+    "sun-Latn",
+    "bul-Latn",
+    "gla-Latn",
+    "nya-Latn",
+    "pus-Arab",
+    "kur-Latn",
+    "hbs-Latn",
+    "amh-Ethi",
+    "ibo-Latn",
+    "lao-Laoo",
+    "mri-Latn",
+    "nno-Latn",
+    "smo-Latn",
+    "yid-Hebr",
+    "sot-Latn",
+    "tgl-Latn",
+    "xho-Latn",
+    "yor-Latn",
+]
+
+nomic_embed_text_v2_moe = ModelMeta(
+    loader=NomicWrapper, # type: ignore
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        model_prompts=model_prompts,
+    ),
+    name="nomic-ai/nomic-embed-text-v2-moe",
+    languages=m_languages,
+    open_weights=True,
+    revision="1066b6599d099fbb93dfcb64f9c37a7c9e503e85",
+    release_date="2025-02-07",
+    n_parameters=475292928,
+    memory_usage_mb=1813,
+    max_tokens=512,
+    embed_dim=768,
+    license="apache-2.0",
+    reference="https://huggingface.co/nomic-ai/nomic-embed-text-v2-moe",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    adapted_from="nomic-ai/nomic-xlm-2048",
+    public_training_data="https://github.com/nomic-ai/contrastors?tab=readme-ov-file#data-access",
+    public_training_code="https://github.com/nomic-ai/contrastors",  # not quite reproducible, but the best I could find
+    training_datasets=None, # did not look into this further
+    superseded_by=None,
+    citation="""@misc{nussbaum2025trainingsparsemixtureexperts,
+      title={Training Sparse Mixture Of Experts Text Embedding Models}, 
+      author={Zach Nussbaum and Brandon Duderstadt},
+      year={2025},
+      eprint={2502.07972},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2502.07972}, 
+}""",
 )
