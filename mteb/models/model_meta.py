@@ -79,6 +79,9 @@ def _get_loader_name(
     return loader.__name__
 
 
+_SENTENCE_TRANSFORMER_LIB_NAME = "Sentence Transformers"
+
+
 class ModelMeta(BaseModel):
     """The model metadata object.
 
@@ -267,12 +270,11 @@ class ModelMeta(BaseModel):
             card = ModelCard.load(model_name)
             card_data: ModelCardData = card.data
             model_config = AutoConfig.from_pretrained(model_name)
-            sentence_transformer_name = "sentence-transformers"
             if (
-                card_data.library_name == sentence_transformer_name
-                or sentence_transformer_name in card_data.tags
+                card_data.library_name == _SENTENCE_TRANSFORMER_LIB_NAME
+                or _SENTENCE_TRANSFORMER_LIB_NAME in card_data.tags
             ):
-                frameworks.append("Sentence Transformers")
+                frameworks.append(_SENTENCE_TRANSFORMER_LIB_NAME)
             else:
                 msg = "Model library not recognized, defaulting to Sentence Transformers loader."
                 logger.warning(msg)
@@ -336,7 +338,8 @@ class ModelMeta(BaseModel):
             else model.model_card_data.base_model
         )
         meta = cls.from_hub(name, revision, compute_metadata)
-        meta.framework.append("Sentence Transformers")
+        if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
+            meta.framework.append("Sentence Transformers")
         meta.revision = meta.revision or model.model_card_data.base_model_revision
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
@@ -363,7 +366,8 @@ class ModelMeta(BaseModel):
 
         """
         meta = cls.from_hub(model, revision, compute_metadata)
-        meta.framework.append("Sentence Transformers")
+        if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
+            meta.framework.append("Sentence Transformers")
         meta.modalities = ["text"]
 
         if model and compute_metadata and repo_exists(model):
@@ -379,10 +383,15 @@ class ModelMeta(BaseModel):
             config_sbert = _get_json_from_hub(
                 model, "config_sentence_transformers.json", "model", revision=revision
             )
-            if config_sbert:
+            if (
+                config_sbert is not None
+                and config_sbert.get("similarity_fn_name") is not None
+            ):
                 meta.similarity_fn_name = ScoringFunction.from_str(
-                    config_sbert["similarity_fn_name"]
+                    config_sbert.get("similarity_fn_name")
                 )
+            else:
+                meta.similarity_fn_name = ScoringFunction.COSINE
         return meta
 
     @classmethod
@@ -405,9 +414,11 @@ class ModelMeta(BaseModel):
         from mteb.models import CrossEncoderWrapper
 
         meta = cls.from_hub(model.model.name_or_path, revision, compute_metadata)
-        meta.framework.append("Sentence Transformers")
+        if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
+            meta.framework.append("Sentence Transformers")
         meta.revision = meta.revision or model.model_card_data.base_model_revision
         meta.loader = CrossEncoderWrapper
+        meta.embed_dim = None
         meta.modalities = ["text"]
         return meta
 
