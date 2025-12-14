@@ -122,7 +122,7 @@ def get_model_meta(
         logger.info(
             "Model not found in model registry. Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
         )
-        meta = ModelMeta.from_hf_hub(model_name, revision)
+        meta = ModelMeta.from_hub(model_name, revision)
         return meta
 
     not_found_msg = f"Model '{model_name}' not found in MTEB registry"

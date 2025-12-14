@@ -70,11 +70,9 @@ def _sanitize_model(
     elif hasattr(model, "mteb_model_meta"):
         meta = model.mteb_model_meta  # type: ignore[attr-defined]
         if not isinstance(meta, ModelMeta):
-            meta = ModelMeta.from_hf_hub(None)
+            meta = ModelMeta.from_hub(None)
     else:
-        meta = (
-            ModelMeta.from_hf_hub(None) if not isinstance(model, ModelMeta) else model
-        )
+        meta = ModelMeta.from_hub(None) if not isinstance(model, ModelMeta) else model
 
     model_name = cast(str, meta.name)
     model_revision = cast(str, meta.revision)

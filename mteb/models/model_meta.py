@@ -234,7 +234,7 @@ class ModelMeta(BaseModel):
         return self.name.replace("/", "__").replace(" ", "_")
 
     @classmethod
-    def from_hf_hub(
+    def from_hub(
         cls,
         model_name: str | None,
         revision: str | None = None,
@@ -335,7 +335,7 @@ class ModelMeta(BaseModel):
             if model.model_card_data.model_name
             else model.model_card_data.base_model
         )
-        meta = cls.from_hf_hub(name, revision, compute_metadata)
+        meta = cls.from_hub(name, revision, compute_metadata)
         meta.framework.append("Sentence Transformers")
         meta.revision = meta.revision or model.model_card_data.base_model_revision
         meta.max_tokens = model.max_seq_length
@@ -362,7 +362,7 @@ class ModelMeta(BaseModel):
             The generated ModelMeta.
 
         """
-        meta = cls.from_hf_hub(model, revision, compute_metadata)
+        meta = cls.from_hub(model, revision, compute_metadata)
         meta.framework.append("Sentence Transformers")
         meta.modalities = ["text"]
 
@@ -404,7 +404,7 @@ class ModelMeta(BaseModel):
         """
         from mteb.models import CrossEncoderWrapper
 
-        meta = cls.from_hf_hub(model.model.name_or_path, revision, compute_metadata)
+        meta = cls.from_hub(model.model.name_or_path, revision, compute_metadata)
         meta.framework.append("Sentence Transformers")
         meta.revision = meta.revision or model.model_card_data.base_model_revision
         meta.loader = CrossEncoderWrapper
