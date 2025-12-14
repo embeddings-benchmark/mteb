@@ -6,8 +6,8 @@ class MIRACLJaRetrievalLite(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MIRACLJaRetrievalLite",
         dataset={
-            "path": "lsz05/MIRACLJaRetrievalLite",
-            "revision": "cb85f282ebfbb896530d07964fae6cbad3e2340d",
+            "path": "mteb/MIRACLJaRetrievalLite",
+            "revision": "575c225da29d1f5fec01082afa56f35df0f44295",
         },
         description=(
             "MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual "

@@ -6,8 +6,8 @@ class MrTyDiJaRetrievalLite(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MrTyDiJaRetrievalLite",
         dataset={
-            "path": "lsz05/MrTyDiJaRetrievalLite",
-            "revision": "f32f71baeec4d497a85162d622ba65e9a7face0d",
+            "path": "mteb/MrTyDiJaRetrievalLite",
+            "revision": "b87e6ff25f4e32d1c97498a539ea8aad5fde3cb1",
         },
         description=(
             "Mr.TyDi is a multilingual benchmark dataset built on TyDi for document retrieval tasks. "

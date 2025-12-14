@@ -6,8 +6,8 @@ class JaqketRetrievalLite(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JaqketRetrievalLite",
         dataset={
-            "path": "lsz05/JaqketRetrievalLite",
-            "revision": "a99c3afbd8212424de8cc5b08bf9723d9448075d",
+            "path": "mteb/JaqketRetrievalLite",
+            "revision": "860965fbb6526dd8edff12627dacf07c8f5a54f3",
         },
         description=(
             "JAQKET (JApanese Questions on Knowledge of EnTities) is a QA dataset created based on quiz questions. "
