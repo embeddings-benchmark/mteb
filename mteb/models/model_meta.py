@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import json
 import logging
 import warnings
 from collections.abc import Callable, Sequence
 from dataclasses import field
 from enum import Enum
 from functools import partial
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
 from huggingface_hub import (
@@ -13,10 +15,12 @@ from huggingface_hub import (
     ModelCard,
     ModelCardData,
     get_safetensors_metadata,
+    hf_hub_download,
     list_repo_commits,
     repo_exists,
 )
 from huggingface_hub.errors import (
+    EntryNotFoundError,
     GatedRepoError,
     NotASafetensorsRepoError,
     RepositoryNotFoundError,
@@ -332,12 +336,53 @@ class ModelMeta(BaseModel):
             else model.model_card_data.base_model
         )
         meta = cls.from_hf_hub(name, revision, compute_metadata)
-        meta.framework = ["Sentence Transformers"]
+        meta.framework.append("Sentence Transformers")
         meta.revision = meta.revision or model.model_card_data.base_model_revision
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
         meta.similarity_fn_name = ScoringFunction.from_str(model.similarity_fn_name)
         meta.modalities = ["text"]
+        return meta
+
+    @classmethod
+    def from_hub_for_sentence_transformer(
+        cls,
+        model: str,
+        revision: str | None = None,
+        compute_metadata: bool = True,
+    ) -> Self:
+        """Generates a ModelMeta for SentenceTransformer model.
+
+        Args:
+            model: SentenceTransformer model.
+            revision: Revision of the model
+            compute_metadata: Add metadata based on model card
+
+        Returns:
+            The generated ModelMeta.
+
+        """
+        meta = cls.from_hf_hub(model, revision, compute_metadata)
+        meta.framework.append("Sentence Transformers")
+        meta.modalities = ["text"]
+
+        if model and compute_metadata and repo_exists(model):
+            # have max_seq_length field
+            sbert_config = _get_json_from_hub(
+                model, "sentence_bert_config.json", "model", revision=revision
+            )
+            if sbert_config:
+                meta.max_tokens = (
+                    sbert_config.get("max_seq_length", None) or meta.max_tokens
+                )
+            # have model type, similarity function fields
+            config_sbert = _get_json_from_hub(
+                model, "config_sentence_transformers.json", "model", revision=revision
+            )
+            if config_sbert:
+                meta.similarity_fn_name = ScoringFunction.from_str(
+                    config_sbert["similarity_fn_name"]
+                )
         return meta
 
     @classmethod
@@ -360,7 +405,7 @@ class ModelMeta(BaseModel):
         from mteb.models import CrossEncoderWrapper
 
         meta = cls.from_hf_hub(model.model.name_or_path, revision, compute_metadata)
-        meta.framework = ["Sentence Transformers"]
+        meta.framework.append("Sentence Transformers")
         meta.revision = meta.revision or model.model_card_data.base_model_revision
         meta.loader = CrossEncoderWrapper
         meta.modalities = ["text"]
@@ -655,4 +700,28 @@ def _get_repo_commits(repo_id: str, repo_type: str) -> list[GitCommitInfo] | Non
         return list_repo_commits(repo_id=repo_id, repo_type=repo_type)
     except (GatedRepoError, RepositoryNotFoundError) as e:
         logger.warning(f"Can't get commits of {repo_id}: {e}")
+        return None
+
+
+def _get_json_from_hub(
+    repo_id: str, file_name: str, repo_type: str, revision: str | None = None
+) -> dict[str, Any] | None:
+    path = _get_file_on_hub(repo_id, file_name, repo_type, revision)
+    if path is None:
+        return None
+
+    with Path(path).open() as f:
+        js = json.load(f)
+    return js
+
+
+def _get_file_on_hub(
+    repo_id: str, file_name: str, repo_type: str, revision: str | None = None
+) -> str | None:
+    try:
+        return hf_hub_download(
+            repo_id=repo_id, filename=file_name, repo_type=repo_type, revision=revision
+        )
+    except (GatedRepoError, RepositoryNotFoundError, EntryNotFoundError) as e:
+        logger.warning(f"Can't get file {file_name} of {repo_id}: {e}")
         return None
