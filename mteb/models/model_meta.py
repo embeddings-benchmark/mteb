@@ -356,7 +356,7 @@ class ModelMeta(BaseModel):
     @classmethod
     def from_hub(
         cls,
-        model: str,
+        model: str | None,
         revision: str | None = None,
         compute_metadata: bool = True,
     ) -> Self:
