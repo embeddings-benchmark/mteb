@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def instruct_wrapper(
     model_name_or_path: str,
     mode: str,
-    instruction_template: str | Callable[[str, PromptType], str] | None = None,
+    instruction_template: str | Callable[[str, PromptType | None], str] | None = None,
     **kwargs,
 ):
     """Instruct wrapper for models. Uses GritLM to pass instructions to the model.
@@ -40,7 +40,9 @@ def instruct_wrapper(
             self,
             model_name_or_path: str,
             mode: str,
-            instruction_template: str | Callable[[str, PromptType], str] | None = None,
+            instruction_template: str
+            | Callable[[str, PromptType | None], str]
+            | None = None,
             **kwargs,
         ):
             if (

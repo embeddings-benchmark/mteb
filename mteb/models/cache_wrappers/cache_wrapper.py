@@ -92,7 +92,7 @@ class CachedEmbeddingWrapper:
 
             uncached_items: list[dict[str, Any]] = []
             uncached_indices: list[int] = []
-            all_items = inputs.dataset
+            all_items: Dataset = inputs.dataset
             cached_vectors: dict[int, np.ndarray] = {}
 
             for i, item in enumerate(all_items):

@@ -87,7 +87,9 @@ class AbsTaskSummarization(AbsTask):
         **kwargs,
     ) -> SummarizationMetrics:
         normalized_scores = [
-            (np.array(x) - self.min_score) / (self.max_score - self.min_score)
+            (
+                (np.array(x) - self.min_score) / (self.max_score - self.min_score)
+            ).tolist()
             for x in data_split[self.relevancy_column_name]
         ]
         evaluator = self.evaluator(

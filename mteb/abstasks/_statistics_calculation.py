@@ -82,18 +82,24 @@ def calculate_label_statistics(labels: list[int | list[int]]) -> LabelStatistics
         LabelStatistics: A dictionary containing the descriptive statistics.
 
     """
+    total_labels: list[int | None] = []
+
     if not isinstance(labels[0], list):
-        label_len = [1] * len(labels)
-        total_label_len = len(labels)
-        total_labels = labels
+        # single label classification
+        single_label = cast(list[int], labels)
+        label_len = [1] * len(single_label)
+        total_label_len = len(single_label)
+        total_labels.extend(single_label)
     elif isinstance(labels[0], list):
         # multilabel classification
         multilabel_labels = cast(list[list[int]], labels)
         label_len = [len(l) for l in multilabel_labels]
         total_label_len = sum(label_len)
-        total_labels: list[int | None] = []
         for l in multilabel_labels:
-            total_labels.extend(l if len(l) > 0 else [None])
+            if l and len(l) > 0:
+                total_labels.extend(l)
+            else:
+                total_labels.append(None)
     else:
         raise ValueError(
             "Labels must be a list of integers or a list of lists of integers."

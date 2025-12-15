@@ -142,7 +142,7 @@ class AbsTaskSTS(AbsTask):
     ) -> STSMetrics:
         def compute_corr(x: list[float], y: list[float]) -> tuple[float, float]:
             """Return (pearson, spearman) correlations between x and y."""
-            return pearsonr(x, y)[0], spearmanr(x, y)[0]
+            return float(pearsonr(x, y)[0]), float(spearmanr(x, y)[0])
 
         cosine_pearson, cosine_spearman = compute_corr(
             normalized_scores, scores["cosine_scores"]

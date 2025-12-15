@@ -43,7 +43,7 @@ class AbsEncoder(ABC):
     model: Any
     mteb_model_meta: ModelMeta | None = None
     model_prompts: dict[str, str] | None = None
-    instruction_template: str | Callable[[str, PromptType], str] | None = None
+    instruction_template: str | Callable[[str, PromptType | None], str] | None = None
     prompts_dict: dict[str, str] | None = None
 
     def get_prompt_name(
@@ -110,7 +110,7 @@ class AbsEncoder(ABC):
         if not self.model_prompts:
             return None
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-        return self.model_prompts.get(prompt_name)
+        return self.model_prompts.get(prompt_name) if prompt_name else None
 
     @staticmethod
     @overload

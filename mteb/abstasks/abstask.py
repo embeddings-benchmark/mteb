@@ -84,7 +84,7 @@ class AbsTask(ABC):
     """
 
     metadata: TaskMetadata
-    abstask_prompt: str | None = None
+    abstask_prompt: str
     _eval_splits: list[str] | None = None
     dataset: dict[HFSubset, DatasetDict] | None = None
     data_loaded: bool = False
@@ -216,7 +216,7 @@ class AbsTask(ABC):
 
     def _save_task_predictions(
         self,
-        predictions: dict[str, Any] | list[Any],
+        predictions: Mapping[str, Any] | list[Any],
         model: MTEBModels,
         prediction_folder: Path,
         hf_split: str,

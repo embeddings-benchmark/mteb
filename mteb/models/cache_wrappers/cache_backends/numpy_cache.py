@@ -28,6 +28,10 @@ class NumpyCache:
 
     def add(self, items: list[dict[str, Any]], vectors: np.ndarray) -> None:
         """Add a vector to the cache."""
+        if self.vectors is None:
+            raise RuntimeError(
+                "Vectors file not initialized. Call _initialize_vectors_file() first."
+            )
         try:
             if self.vector_dim is None:
                 self.vector_dim = (
@@ -73,18 +77,26 @@ class NumpyCache:
                 shape=(self.initial_vectors, self.vector_dim),
             )
         else:
-            self.vectors = np.memmap(self.vectors_file, dtype="float32", mode="r+")
-            self.vectors = self.vectors.reshape(-1, self.vector_dim)
+            self.vectors = np.memmap(
+                self.vectors_file,
+                dtype="float32",
+                mode="r+",
+                shape=(-1, self.vector_dim),
+            )
         logger.info(f"Vectors file initialized with shape: {self.vectors.shape}")
 
     def _double_vectors_file(self) -> None:
+        if self.vectors is None or self.vector_dim is None:
+            raise RuntimeError(
+                "Vectors file not initialized. Call _initialize_vectors_file() first."
+            )
         current_size = len(self.vectors)
         new_size = current_size * 2
         logger.info(f"Doubling vectors file from {current_size} to {new_size} vectors")
         self.vectors.flush()
         new_vectors = np.memmap(
-            self.vectors_file,
-            dtype="float32",
+            str(self.vectors_file),
+            dtype=np.float32,
             mode="r+",
             shape=(new_size, self.vector_dim),
         )
@@ -145,9 +157,11 @@ class NumpyCache:
 
                 if self.vector_dim is not None:
                     self.vectors = np.memmap(
-                        self.vectors_file, dtype="float32", mode="r+"
+                        self.vectors_file,
+                        dtype="float32",
+                        mode="r+",
+                        shape=(-1, self.vector_dim),
                     )
-                    self.vectors = self.vectors.reshape(-1, self.vector_dim)
                     logger.info(f"Loaded vectors file with shape: {self.vectors.shape}")
                 else:
                     logger.warning(
@@ -164,6 +178,10 @@ class NumpyCache:
 
     def get_vector(self, item: dict[str, Any]) -> np.ndarray | None:
         """Retrieve vector from index by hash."""
+        if self.vectors is None:
+            raise RuntimeError(
+                "Vectors file not initialized. Call _initialize_vectors_file() first."
+            )
         try:
             item_hash = _hash_item(item)
             if item_hash not in self.hash_to_index:

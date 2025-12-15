@@ -199,9 +199,7 @@ class ModelMeta(BaseModel):
         _kwargs = self.loader_kwargs.copy()
         _kwargs.update(kwargs)
 
-        model: EncoderProtocol = self.loader(
-            self.name, revision=self.revision, **_kwargs
-        )
+        model: MTEBModels = self.loader(self.name, revision=self.revision, **_kwargs)
         model.mteb_model_meta = self  # type: ignore
         return model
 
@@ -260,7 +258,7 @@ class ModelMeta(BaseModel):
                 logger.warning(f"Could not get source model: {e} in MTEB")
 
         return_dataset = training_datasets.copy()
-        visited = set()
+        visited: set[str] = set()
 
         for dataset in training_datasets:
             similar_tasks = _collect_similar_tasks(dataset, visited)

@@ -1,8 +1,9 @@
 import hashlib
+from collections.abc import Mapping
 from typing import Any
 
 
-def _hash_item(item: dict[str, Any]) -> str:
+def _hash_item(item: Mapping[str, Any]) -> str:
     item_hash = ""
     if "text" in item:
         item_text: str = item["text"]
