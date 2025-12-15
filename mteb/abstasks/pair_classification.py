@@ -44,8 +44,8 @@ class PairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     """
 
     num_samples: int
-    number_of_characters: int
-    unique_pairs: int
+    number_of_characters: int | None
+    unique_pairs: int | None
 
     text1_statistics: TextStatistics | None
     image1_statistics: ImageStatistics | None
@@ -120,7 +120,7 @@ class AbsTaskPairClassification(AbsTask):
         self, similarity_scores: PairClassificationDistances, labels: list[int]
     ) -> dict[str, float]:
         logger.info("Computing metrics...")
-        labels = np.asarray(labels)
+        np_labels = np.asarray(labels)
         output_scores = {}
         max_scores = defaultdict(list)
         for short_name, scores, reverse in [
@@ -142,7 +142,7 @@ class AbsTaskPairClassification(AbsTask):
             ],
             [ScoringFunction.DOT_PRODUCT.value, similarity_scores["dot_scores"], True],
         ]:
-            metrics = self._compute_metrics_values(scores, labels, reverse)
+            metrics = self._compute_metrics_values(scores, np_labels, reverse)  # type: ignore[arg-type]
             for metric_name, metric_value in metrics.items():
                 output_scores[f"{short_name}_{metric_name}"] = metric_value
                 max_scores[metric_name].append(metric_value)
@@ -237,6 +237,8 @@ class AbsTaskPairClassification(AbsTask):
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
         # previously pair classification datasets were stored in a single row
+        if self.dataset is None:
+            raise RuntimeError("Dataset not loaded")
         if self.metadata.is_multilingual:
             for subset in self.dataset:
                 for split in self.dataset[subset]:
@@ -290,13 +292,13 @@ class AbsTaskPairClassification(AbsTask):
         )
 
     def _find_best_acc_and_threshold(
-        self, scores: np.ndarray, labels: np.ndarray, high_score_more_similar: bool
+        self, scores: list[float], labels: np.ndarray, high_score_more_similar: bool
     ) -> tuple[float, float]:
         rows = list(zip(scores, labels))
         rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
 
         max_acc = 0
-        best_threshold = -1
+        best_threshold = -1.0
         positive_so_far = 0
         remaining_negatives = sum(np.array(labels) == 0)
 
@@ -323,7 +325,7 @@ class AbsTaskPairClassification(AbsTask):
 
         rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
 
-        best_f1 = best_precision = best_recall = 0
+        best_f1 = best_precision = best_recall = 0.0
         threshold = 0
         nextract = 0
         ncorrect = 0

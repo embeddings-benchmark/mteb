@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Mapping, Sequence
 from copy import copy
 from pathlib import Path
-from typing import Any, TypedDict, cast
+from typing import Any, cast
 
 import numpy as np
 from datasets import ClassLabel, Dataset, DatasetDict, load_dataset
@@ -58,12 +58,6 @@ def _multilabel_subsampling(
         )
         dataset_dict.update({split: Dataset.from_dict(dataset_dict[split][test_idx])})
     return dataset_dict
-
-
-class AbsMetrics(TypedDict):
-    """The abstract class for the metrics returned by the tasks"""
-
-    ...
 
 
 class AbsTask(ABC):
@@ -209,7 +203,7 @@ class AbsTask(ABC):
         encode_kwargs: dict[str, Any],
         prediction_folder: Path | None = None,
         **kwargs: Any,
-    ) -> AbsMetrics:
+    ) -> ScoresDict:
         raise NotImplementedError(
             "If you are using the default evaluate method, you must implement _evaluate_subset method."
         )
@@ -505,7 +499,7 @@ class AbsTask(ABC):
         self.hf_subsets = subsets_to_keep
         return self
 
-    def _add_main_score(self, scores: dict[HFSubset, ScoresDict | AbsMetrics]) -> None:
+    def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _upload_dataset_to_hub(

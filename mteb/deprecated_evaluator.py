@@ -5,7 +5,7 @@ import logging
 import os
 import sys
 import traceback
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable
 from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
@@ -455,7 +455,7 @@ class MTEB:
                 task.check_if_dataset_is_superseded()
                 task.load_data()
 
-                task_results: dict[str, Mapping[str, dict[str, Any]]] = {}
+                task_results: dict[str, dict[str, dict[str, Any]]] = {}
                 evaluation_time = 0
                 kg_co2_emissions: int | None = 0 if co2_tracker else None
 
@@ -532,7 +532,7 @@ class MTEB:
                 # Create new TaskResult
                 new_results = TaskResult.from_task_results(
                     task,
-                    task_results,
+                    task_results,  # type: ignore[arg-type]
                     evaluation_time=evaluation_time,
                     kg_co2_emissions=kg_co2_emissions,
                 )

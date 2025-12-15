@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 from collections import Counter
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, cast
 
 from mteb.types import TopRankedDocumentsType
@@ -166,7 +167,7 @@ def calculate_top_ranked_statistics(
 
 
 def calculate_relevant_docs_statistics(
-    relevant_docs: dict[str, dict[str, float]],
+    relevant_docs: Mapping[str, Mapping[str, int]],
 ) -> RelevantDocsStatistics:
     qrels_lengths = [len(relevant_docs[qid]) for qid in relevant_docs]
     unique_qrels = len({doc for qid in relevant_docs for doc in relevant_docs[qid]})

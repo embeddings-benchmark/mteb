@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 from typing import Any
 
 from mteb.abstasks.abstask import _set_seed
 from mteb.models import EncoderProtocol
-from mteb.types import Array
 
 
 class Evaluator(ABC):
@@ -20,7 +19,7 @@ class Evaluator(ABC):
     @abstractmethod
     def __call__(
         self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
-    ) -> Mapping[str, float] | Array:
+    ) -> Mapping[str, float] | Iterable[Any]:
         """This is called during training to evaluate the model.
 
         It returns scores.

@@ -16,6 +16,7 @@ from mteb._evaluators.evaluator import Evaluator
 from mteb._requires_package import requires_image_dependencies
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.models_protocols import EncoderProtocol
+from mteb.types import Array
 
 if TYPE_CHECKING:
     from PIL.Image import Image
@@ -83,11 +84,9 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
 
-    def __call__(
-        self,
-        model: EncoderProtocol,
-        encode_kwargs: dict[str, Any],
-    ) -> list[torch.Tensor]:
+    def __call__(  # type: ignore[override]
+        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
+    ) -> Array:
         images = []
         if isinstance(self.images_column_names, str):
             images = self.dataset[self.images_column_names]
@@ -151,4 +150,4 @@ class ImageTextPairClassificationEvaluator(Evaluator):
                 img_emb @ txt_emb.t()
             )  # shape = (num_images_per_sample x num_texts_per_sample)
             all_scores.append(scores)
-        return all_scores
+        return torch.tensor(all_scores)

@@ -79,7 +79,7 @@ def _get_loader_name(
     return loader.__name__
 
 
-_SENTENCE_TRANSFORMER_LIB_NAME = "Sentence Transformers"
+_SENTENCE_TRANSFORMER_LIB_NAME: FRAMEWORKS = "Sentence Transformers"
 
 
 class ModelMeta(BaseModel):
@@ -274,9 +274,8 @@ class ModelMeta(BaseModel):
                 model_config = None
                 logger.warning(f"Can't get configuration for {model_name}. Error: {e}")
 
-            if (
-                card_data.library_name == _SENTENCE_TRANSFORMER_LIB_NAME
-                or _SENTENCE_TRANSFORMER_LIB_NAME in card_data.tags
+            if card_data.library_name == _SENTENCE_TRANSFORMER_LIB_NAME or (
+                card_data.tags and _SENTENCE_TRANSFORMER_LIB_NAME in card_data.tags
             ):
                 frameworks.append(_SENTENCE_TRANSFORMER_LIB_NAME)
             else:
@@ -391,7 +390,7 @@ class ModelMeta(BaseModel):
                 and config_sbert.get("similarity_fn_name") is not None
             ):
                 meta.similarity_fn_name = ScoringFunction.from_str(
-                    config_sbert.get("similarity_fn_name")
+                    config_sbert["similarity_fn_name"]
                 )
             else:
                 meta.similarity_fn_name = ScoringFunction.COSINE
@@ -503,6 +502,8 @@ class ModelMeta(BaseModel):
 
     @staticmethod
     def _calculate_num_parameters_from_hub(model_name: str | None = None) -> int | None:
+        if not model_name:
+            return None
         try:
             safetensors_metadata = get_safetensors_metadata(model_name)
             if len(safetensors_metadata.parameter_count) >= 0:
@@ -516,7 +517,7 @@ class ModelMeta(BaseModel):
             logger.warning(
                 f"Can't calculate number of parameters for {model_name}. Got error {e}"
             )
-            return None
+        return None
 
     def calculate_num_parameters_from_hub(self) -> int | None:
         """Calculates the number of parameters in the model.
@@ -579,7 +580,7 @@ class ModelMeta(BaseModel):
         if "API" in self.framework or self.name is None:
             return None
 
-        return self._calculate_memory_usage_mb(self.model_name, self.n_parameters)
+        return self._calculate_memory_usage_mb(self.name, self.n_parameters)
 
     @staticmethod
     def fetch_release_date(model_name: str) -> StrDate | None:

@@ -4,12 +4,12 @@ from typing import Any, Protocol
 import numpy as np
 from datasets import Dataset
 from torch.utils.data import DataLoader
-from typing_extensions import Self
+from typing_extensions import Self, Unpack
 
 from mteb._create_dataloaders import create_dataloader
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import EncoderProtocol
-from mteb.types import BatchedInput
+from mteb.types import Array, BatchedInput
 
 from .evaluator import Evaluator
 
@@ -17,11 +17,11 @@ logger = logging.getLogger(__name__)
 
 
 class SklearnModelProtocol(Protocol):
-    def fit(self, X: np.ndarray, y: np.ndarray | list[int]) -> None: ...  # noqa: N803
-    def predict(self, X: np.ndarray) -> np.ndarray: ...  # noqa: N803
+    def fit(self, X: Array, y: np.ndarray | list[int]) -> None: ...  # noqa: N803
+    def predict(self, X: Array) -> np.ndarray: ...  # noqa: N803
     def get_params(self) -> dict[str, Any]: ...
-    def set_params(self, **kwargs: dict[str, Any]) -> Self: ...
-    def score(self, X: np.ndarray, y: np.ndarray | list[int]) -> float: ...  # noqa: N803
+    def set_params(self, **kwargs: Unpack[dict[str, Any]]) -> Self: ...
+    def score(self, X: Array, y: np.ndarray | list[int]) -> float: ...  # noqa: N803
 
 
 class SklearnEvaluator(Evaluator):

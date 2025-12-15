@@ -1,7 +1,7 @@
 import logging
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
 import torch
 from datasets import Dataset, concatenate_datasets
@@ -11,7 +11,7 @@ from mteb.abstasks._statistics_calculation import (
     calculate_image_statistics,
     calculate_text_statistics,
 )
-from mteb.abstasks.abstask import AbsMetrics, AbsTask
+from mteb.abstasks.abstask import AbsTask
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.types.statistics import (
     ImageStatistics,
@@ -36,7 +36,7 @@ class ImageTextPairClassificationDescriptiveStatistics(SplitDescriptiveStatistic
     image_statistics: ImageStatistics
 
 
-class ImageTextPairClassificationMetrics(AbsMetrics):
+class ImageTextPairClassificationMetrics(TypedDict):
     """ImageTextPairClassification metrics.
 
     Attributes:
@@ -154,10 +154,10 @@ class AbsTaskImageTextPairClassification(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        scores = evaluator(model, encode_kwargs=encode_kwargs)
+        scores: torch.Tensor = evaluator(model, encode_kwargs=encode_kwargs)  # type: ignore[assignment]
         if prediction_folder:
             self._save_task_predictions(
-                [score.tolist() for score in scores],
+                scores.tolist(),
                 model,
                 prediction_folder,
                 hf_subset=hf_subset,
@@ -172,7 +172,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
 
     def _compute_metrics(
         self,
-        scores: list[torch.Tensor],
+        scores: torch.Tensor,
         num_images_per_sample: int,
         num_texts_per_sample: int,
     ) -> ImageTextPairClassificationMetrics:

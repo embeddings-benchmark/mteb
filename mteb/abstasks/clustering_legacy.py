@@ -148,10 +148,10 @@ class AbsTaskClusteringLegacy(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        clusters = evaluator(model, encode_kwargs=encode_kwargs)
+        evaluate_clusters = evaluator(model, encode_kwargs=encode_kwargs)
         if prediction_folder:
             self._save_task_predictions(
-                clusters,
+                evaluate_clusters,
                 model,
                 prediction_folder,
                 hf_subset=hf_subset,
@@ -160,7 +160,7 @@ class AbsTaskClusteringLegacy(AbsTask):
 
         return self._compute_metrics(
             data_split[self.label_column_name],
-            clusters,
+            evaluate_clusters,
         )
 
     def _compute_metrics(

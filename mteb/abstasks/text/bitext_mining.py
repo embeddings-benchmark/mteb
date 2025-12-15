@@ -1,14 +1,14 @@
 import logging
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, ClassVar, cast
+from typing import Any, ClassVar, TypedDict, cast
 
 from datasets import Dataset, DatasetDict
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from mteb._evaluators import BitextMiningEvaluator
 from mteb.abstasks._statistics_calculation import calculate_text_statistics
-from mteb.abstasks.abstask import AbsMetrics, AbsTask
+from mteb.abstasks.abstask import AbsTask
 from mteb.models import EncoderProtocol, MTEBModels
 from mteb.models.models_protocols import CrossEncoderProtocol, SearchProtocol
 from mteb.types import HFSubset, ScoresDict
@@ -37,7 +37,7 @@ class BitextDescriptiveStatistics(SplitDescriptiveStatistics):
     sentence2_statistics: TextStatistics
 
 
-class BitextMiningMetrics(AbsMetrics):
+class BitextMiningMetrics(TypedDict):
     """Metrics for BitextMining tasks
 
     Attributes:
@@ -142,7 +142,7 @@ class AbsTaskBitextMining(AbsTask):
                     **kwargs,
                 )
 
-        return scores
+        return cast(dict[HFSubset, ScoresDict], scores)
 
     def _get_pairs(self, parallel: bool) -> list[tuple[str, str]]:
         pairs = self._DEFAULT_PAIR
@@ -191,16 +191,16 @@ class AbsTaskBitextMining(AbsTask):
             )
 
         if parallel:
-            metrics = {}
+            parallel_metrics = {}
             for keys, nearest_neighbors in neighbours.items():
-                metrics[keys] = self._compute_metrics(nearest_neighbors, gold)
+                parallel_metrics[keys] = self._compute_metrics(nearest_neighbors, gold)
 
-            for v in metrics.values():
+            for v in parallel_metrics.values():
                 self._add_main_score(v)
-        else:
-            def_pair_str = "-".join(self._DEFAULT_PAIR[0])
-            metrics = self._compute_metrics(neighbours[def_pair_str], gold)
-            self._add_main_score(metrics)
+            return parallel_metrics
+        def_pair_str = "-".join(self._DEFAULT_PAIR[0])
+        metrics = self._compute_metrics(neighbours[def_pair_str], gold)
+        self._add_main_score(metrics)
         return metrics
 
     def _compute_metrics(
