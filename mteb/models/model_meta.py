@@ -2,12 +2,14 @@ import logging
 from collections.abc import Callable, Sequence
 from dataclasses import field
 from enum import Enum
+from functools import partial
 from typing import TYPE_CHECKING, Any, Literal, cast
 
-from huggingface_hub import get_safetensors_metadata
+from huggingface_hub import get_safetensors_metadata, list_repo_commits
 from huggingface_hub.errors import (
     GatedRepoError,
     NotASafetensorsRepoError,
+    RepositoryNotFoundError,
     SafetensorsParsingError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator
@@ -72,7 +74,7 @@ class ModelMeta(BaseModel):
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
         revision: The revision number of the model. If None, it is assumed that the metadata (including the loader) is valid for all revisions of the model.
-        release_date: The date the model's revision was released.
+        release_date: The date the model's revision was released. If None, then release date will be added based on 1st commit in hf repository of model.
         license: The license under which the model is released. Required if open_weights is True.
         open_weights: Whether the model is open source or proprietary.
         public_training_code: A link to the publicly available training code. If None, it is assumed that the training code is not publicly available.
@@ -331,6 +333,104 @@ class ModelMeta(BaseModel):
         # Convert to MB
         model_memory_mb = model_memory_bytes / MB
         return round(model_memory_mb)
+
+    @staticmethod
+    def fetch_release_date(model_name: str) -> StrDate | None:
+        """Fetches the release date from HuggingFace Hub based on the first commit.
+
+        Returns:
+            The release date in YYYY-MM-DD format, or None if it cannot be determined.
+        """
+        try:
+            commits = list_repo_commits(repo_id=model_name, repo_type="model")
+            if commits:
+                initial_commit = commits[-1]
+                release_date = initial_commit.created_at.strftime("%Y-%m-%d")
+                return release_date
+        except RepositoryNotFoundError:
+            logger.warning(f"Model repository not found for {model_name}.")
+
+        return None
+
+    def to_python(self) -> str:
+        """Returns a string representation of the model."""
+        return _pydantic_instance_to_code(self)
+
+
+def _pydantic_instance_to_code(
+    model: BaseModel,
+    indent: int = 4,
+    *,
+    only_set_fields: bool = False,
+) -> str:
+    """Convert a Pydantic model instance into valid Python constructor code.
+
+    If only_set_fields=True, only fields explicitly provided at model construction
+    time are printed (i.e., excludes fields that came only from defaults).
+
+    Arguments:
+        model: The Pydantic model to convert.
+        indent: The indentation to use.
+        only_set_fields: If True, only fields explicitly provided at model construction time
+    """
+    cls_name = model.__class__.__name__
+    pad = " " * indent
+    lines: list[str] = [f"{cls_name}("]
+
+    model_fields = list(type(model).model_fields.keys())
+
+    if only_set_fields:
+        field_names = [n for n in model_fields if n in model.model_fields_set]
+    else:
+        field_names = model_fields
+
+    for field_name in field_names:
+        value = getattr(model, field_name)
+        value_code = _value_to_code(value, indent)
+        lines.append(f"{pad}{field_name}={value_code},")
+
+    lines.append(")")
+    return "\n".join(lines)
+
+
+def _value_to_code(value: Any, indent: int) -> str:
+    """Convert a Python value into valid Python source code."""
+    if isinstance(value, BaseModel):
+        return _pydantic_instance_to_code(value, indent, only_set_fields=True)
+
+    if callable(value):
+        if isinstance(value, partial):
+            return value.func.__name__
+        return value.__name__
+
+    if isinstance(value, Enum):
+        return f"{value.__class__.__name__}.{value.name}"
+
+    if isinstance(value, str):
+        return repr(value)
+
+    if isinstance(value, list):
+        if not value:
+            return "[]"
+        inner = ", ".join(_value_to_code(v, indent) for v in value)
+        return f"[{inner}]"
+
+    if isinstance(value, set):
+        if not value:
+            return "set()"
+        inner = ", ".join(_value_to_code(v, indent) for v in sorted(value))
+        return f"{{{inner}}}"
+
+    if isinstance(value, dict):
+        if not value:
+            return "{}"
+        inner = ", ".join(
+            f"{_value_to_code(k, indent)}: {_value_to_code(v, indent)}"
+            for k, v in value.items()
+        )
+        return f"{{{inner}}}"
+
+    return repr(value)
 
 
 def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:

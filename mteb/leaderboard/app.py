@@ -24,6 +24,7 @@ from mteb.leaderboard.benchmark_selector import (
 )
 from mteb.leaderboard.figures import _performance_size_plot, _radar_chart
 from mteb.leaderboard.table import (
+    apply_per_language_styling_from_benchmark,
     apply_per_task_styling_from_benchmark,
     apply_summary_styling_from_benchmark,
 )
@@ -361,6 +362,13 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
     per_task_table = apply_per_task_styling_from_benchmark(
         default_benchmark, filtered_benchmark_results
     )
+    per_language_table = apply_per_language_styling_from_benchmark(
+        default_benchmark,
+        filtered_benchmark_results,
+    )
+
+    # Check if this benchmark displays per-language results
+    display_language_table = len(default_benchmark.language_view) > 0
 
     lang_select = gr.CheckboxGroup(
         sorted(default_results.languages),
@@ -553,6 +561,16 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             download_per_task = gr.DownloadButton("Download Table")
             download_per_task.click(
                 _download_table, inputs=[per_task_table], outputs=[download_per_task]
+            )
+        with gr.Tab(
+            "Performance per language", visible=display_language_table
+        ) as language_tab:
+            per_language_table.render()
+            download_per_language = gr.DownloadButton("Download Table")
+            download_per_language.click(
+                _download_table,
+                inputs=[per_language_table],
+                outputs=[download_per_language],
             )
         with gr.Tab("Task information"):
             task_info_table = gr.DataFrame(_update_task_info, inputs=[task_select])  # noqa: F841
@@ -879,9 +897,18 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             per_task = apply_per_task_styling_from_benchmark(
                 benchmark, filtered_benchmark_results
             )
+            per_language = apply_per_language_styling_from_benchmark(
+                benchmark,
+                filtered_benchmark_results,
+            )
             elapsed = time.time() - start_time
             logger.debug(f"update_tables callback: {elapsed}s")
-            return summary, per_task
+            return (
+                summary,
+                per_task,
+                per_language,
+                gr.update(visible=len(benchmark.language_view) > 0),
+            )
 
         # Only update tables when models change, not when scores/tasks change directly
         # This avoids redundant updates since scores/tasks changes trigger update_models
@@ -890,7 +917,12 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             item.change(
                 update_tables,
                 inputs=[scores, task_select, models, benchmark_select],
-                outputs=[summary_table, per_task_table],
+                outputs=[
+                    summary_table,
+                    per_task_table,
+                    per_language_table,
+                    language_tab,
+                ],
             )
 
         gr.Markdown(ACKNOWLEDGEMENT, elem_id="ack_markdown")

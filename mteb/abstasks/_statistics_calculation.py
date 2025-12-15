@@ -1,8 +1,8 @@
+from __future__ import annotations
+
 import hashlib
 from collections import Counter
-from typing import cast
-
-from PIL import Image
+from typing import TYPE_CHECKING, cast
 
 from mteb.types import TopRankedDocumentsType
 from mteb.types.statistics import (
@@ -13,6 +13,9 @@ from mteb.types.statistics import (
     TextStatistics,
     TopRankedStatistics,
 )
+
+if TYPE_CHECKING:
+    from PIL import Image
 
 
 def calculate_text_statistics(texts: list[str]) -> TextStatistics:

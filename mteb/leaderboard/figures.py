@@ -117,7 +117,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df["Max Tokens"] = df["Max Tokens"].map(_parse_float)
     df["Log(Tokens)"] = np.log10(df["Max Tokens"])
     df["Mean (Task)"] = df["Mean (Task)"].map(_parse_float)
-    df = df[df["Mean (Task)"] > 0].dropna(
+    df = df.dropna(
         subset=["Mean (Task)", "Number of Parameters", "Embedding Dimensions"]
     )
     if not len(df.index):

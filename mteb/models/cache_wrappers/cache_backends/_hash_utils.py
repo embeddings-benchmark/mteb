@@ -1,8 +1,6 @@
 import hashlib
 from typing import Any
 
-from PIL import Image
-
 
 def _hash_item(item: dict[str, Any]) -> str:
     item_hash = ""
@@ -11,6 +9,8 @@ def _hash_item(item: dict[str, Any]) -> str:
         item_hash = hashlib.sha256(item_text.encode()).hexdigest()
 
     if "image" in item:
+        from PIL import Image
+
         image: Image.Image = item["image"]
         item_hash += hashlib.sha256(image.tobytes()).hexdigest()
 
