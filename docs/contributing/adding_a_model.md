@@ -40,6 +40,36 @@ Typically, it only requires that you fill in metadata about the model and add it
 
 This works for all [Sentence Transformers](https://sbert.net) compatible models. Once filled out, you can submit your model to `mteb` by submitting a PR.
 
+You can generate it automatically by using:
+
+=== "General model from hub"
+    ```python
+    from mteb.models import ModelMeta
+
+    meta = ModelMeta.from_hub("Qwen/Qwen3-Embedding-0.6B")
+    print(meta.to_python())
+    ```
+
+=== "For Sentence transformers model"
+    ```python
+    from mteb.models import ModelMeta
+    from sentence_transformers import SentenceTransformer
+
+    model = SentenceTransformer("Qwen/Qwen3-Embedding-0.6B", device="cpu")
+    meta = ModelMeta.from_sentence_transformer_model(model)
+    print(meta.to_python())
+    ```
+
+=== "For CrossEncoder"
+    ```python
+    from mteb.models import ModelMeta
+    from sentence_transformers import CrossEncoder
+
+    model = SentenceTransformer("Qwen/Qwen3-Reranker-0.6B", device="cpu")
+    meta = ModelMeta.from_cross_encoder(model)
+    print(meta.to_python())
+    ```
+
 
 ### Calculating the Memory Usage
 

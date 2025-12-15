@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Iterable
-from copy import deepcopy
 from pathlib import Path
 from time import time
 from typing import TYPE_CHECKING, Any, cast
@@ -53,36 +52,6 @@ class OverwriteStrategy(HelpfulStrEnum):
     ONLY_CACHE = "only-cache"
 
 
-_empty_model_meta = ModelMeta(
-    loader=None,
-    name=None,
-    revision=None,
-    release_date=None,
-    languages=None,
-    framework=[],
-    similarity_fn_name=None,
-    n_parameters=None,
-    memory_usage_mb=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
-    public_training_data=None,
-    use_instructions=None,
-    training_datasets=None,
-    modalities=[],
-)
-
-
-def _create_empty_model_meta() -> ModelMeta:
-    logger.warning("Model metadata is missing. Using empty metadata.")
-    meta = deepcopy(_empty_model_meta)
-    meta.revision = "no_revision_available"
-    meta.name = "no_model_name_available"
-    return meta
-
-
 def _sanitize_model(
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
 ) -> tuple[MTEBModels | ModelMeta, ModelMeta, ModelName, Revision]:
@@ -101,9 +70,9 @@ def _sanitize_model(
     elif hasattr(model, "mteb_model_meta"):
         meta = model.mteb_model_meta  # type: ignore[attr-defined]
         if not isinstance(meta, ModelMeta):
-            meta = _create_empty_model_meta()
+            meta = ModelMeta.from_hub(None)
     else:
-        meta = _create_empty_model_meta() if not isinstance(model, ModelMeta) else model
+        meta = ModelMeta.from_hub(None) if not isinstance(model, ModelMeta) else model
 
     model_name = cast(str, meta.name)
     model_revision = cast(str, meta.revision)
