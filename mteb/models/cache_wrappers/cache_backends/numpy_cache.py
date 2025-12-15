@@ -46,10 +46,14 @@ class NumpyCache:
                     index = self.hash_to_index[item_hash]
                 else:
                     index = len(self.hash_to_index)
-                    if index >= len(self.vectors):
+                    if self.vectors and index >= len(self.vectors):
                         self._double_vectors_file()
                     self.hash_to_index[item_hash] = index
 
+                if self.vectors is None:
+                    raise RuntimeError(
+                        "Vectors file not initialized. Call _initialize_vectors_file() first."
+                    )
                 self.vectors[index] = vec
                 logger.debug(
                     f"Added new item-vector pair. Total pairs: {len(self.hash_to_index)}"

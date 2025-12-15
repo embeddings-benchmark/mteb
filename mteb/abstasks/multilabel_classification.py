@@ -186,8 +186,8 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             )
 
         avg_scores: dict[str, Any] = {
-            k: np.mean([s[k] for s in scores])
-            for k in scores[0].keys()  # type: ignore[literal-required]
+            k: np.mean([s[k] for s in scores])  # type: ignore[literal-required]
+            for k in scores[0].keys()
         }
         logger.info("Running multilabel classification - Finished.")
         return FullMultilabelClassificationMetrics(
