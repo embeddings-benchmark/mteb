@@ -28,10 +28,6 @@ class NumpyCache:
 
     def add(self, items: list[dict[str, Any]], vectors: np.ndarray) -> None:
         """Add a vector to the cache."""
-        if self.vectors is None:
-            raise RuntimeError(
-                "Vectors file not initialized. Call _initialize_vectors_file() first."
-            )
         try:
             if self.vector_dim is None:
                 self.vector_dim = (
@@ -179,9 +175,8 @@ class NumpyCache:
     def get_vector(self, item: dict[str, Any]) -> np.ndarray | None:
         """Retrieve vector from index by hash."""
         if self.vectors is None:
-            raise RuntimeError(
-                "Vectors file not initialized. Call _initialize_vectors_file() first."
-            )
+            return None
+
         try:
             item_hash = _hash_item(item)
             if item_hash not in self.hash_to_index:

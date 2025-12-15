@@ -154,10 +154,10 @@ class AbsTaskImageTextPairClassification(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        scores: torch.Tensor = evaluator(model, encode_kwargs=encode_kwargs)  # type: ignore[assignment]
+        scores: list[torch.Tensor] = evaluator(model, encode_kwargs=encode_kwargs)  # type: ignore[assignment]
         if prediction_folder:
             self._save_task_predictions(
-                scores.tolist(),
+                [score.tolist() for score in scores],
                 model,
                 prediction_folder,
                 hf_subset=hf_subset,
@@ -172,7 +172,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
 
     def _compute_metrics(
         self,
-        scores: torch.Tensor,
+        scores: list[torch.Tensor],
         num_images_per_sample: int,
         num_texts_per_sample: int,
     ) -> ImageTextPairClassificationMetrics:
