@@ -356,20 +356,19 @@ class ModelMeta(BaseModel):
     @classmethod
     def from_hub(
         cls,
-        model: str | None,
+        model: str,
         revision: str | None = None,
         compute_metadata: bool = True,
     ) -> Self:
-        """Generates a ModelMeta for SentenceTransformer model from hub.
+        """Generates a ModelMeta for model from HuggingFace hub.
 
         Args:
-            model: SentenceTransformer model.
+            model: Name of the model from HuggingFace hub. For example, `intfloat/multilingual-e5-large`
             revision: Revision of the model
             compute_metadata: Add metadata based on model card
 
         Returns:
             The generated ModelMeta.
-
         """
         meta = cls._from_hub(model, revision, compute_metadata)
         if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
