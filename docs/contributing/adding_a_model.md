@@ -42,6 +42,14 @@ This works for all [Sentence Transformers](https://sbert.net) compatible models.
 
 You can generate it automatically by using:
 
+=== "General model from hub"
+    ```python
+    from mteb.models import ModelMeta
+
+    meta = ModelMeta.from_hub("Qwen/Qwen3-Embedding-0.6B")
+    print(meta.to_python())
+    ```
+
 === "For Sentence transformers model"
     ```python
     from mteb.models import ModelMeta
@@ -52,14 +60,6 @@ You can generate it automatically by using:
     print(meta.to_python())
     ```
 
-=== "For Sentence transformers without loading"
-    ```python
-    from mteb.models import ModelMeta
-
-    meta = ModelMeta.from_hub_for_sentence_transformer("Qwen/Qwen3-Embedding-0.6B")
-    print(meta.to_python())
-    ```
-
 === "For CrossEncoder"
     ```python
     from mteb.models import ModelMeta
@@ -67,14 +67,6 @@ You can generate it automatically by using:
 
     model = SentenceTransformer("Qwen/Qwen3-Reranker-0.6B", device="cpu")
     meta = ModelMeta.from_cross_encoder(model)
-    print(meta.to_python())
-    ```
-
-=== "General model from hub"
-    ```python
-    from mteb.models import ModelMeta
-
-    meta = ModelMeta.from_hub("Qwen/Qwen3-Embedding-0.6B")
     print(meta.to_python())
     ```
 
