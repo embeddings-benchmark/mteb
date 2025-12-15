@@ -67,9 +67,9 @@ def test_model_meta_load_sentence_transformer_metadata_from_model():
 @pytest.mark.parametrize("model_name", ["sentence-transformers/all-MiniLM-L6-v2"])
 def test_model_meta_sentence_transformer_from_hub(as_sentence_transformer, model_name):
     if as_sentence_transformer:
-        meta = ModelMeta.from_hub_for_sentence_transformer(model_name)
-    else:
         meta = ModelMeta.from_hub(model_name)
+    else:
+        meta = ModelMeta._from_hub(model_name)
 
     assert meta.name == "sentence-transformers/all-MiniLM-L6-v2"
     assert meta.revision is not None

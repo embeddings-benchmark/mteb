@@ -237,7 +237,7 @@ class ModelMeta(BaseModel):
         return self.name.replace("/", "__").replace(" ", "_")
 
     @classmethod
-    def from_hub(
+    def _from_hub(
         cls,
         model_name: str | None,
         revision: str | None = None,
@@ -343,7 +343,7 @@ class ModelMeta(BaseModel):
             if model.model_card_data.model_name
             else model.model_card_data.base_model
         )
-        meta = cls.from_hub(name, revision, compute_metadata)
+        meta = cls._from_hub(name, revision, compute_metadata)
         if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
             meta.framework.append("Sentence Transformers")
         meta.revision = model.model_card_data.base_model_revision or meta.revision
@@ -354,7 +354,7 @@ class ModelMeta(BaseModel):
         return meta
 
     @classmethod
-    def from_hub_for_sentence_transformer(
+    def from_hub(
         cls,
         model: str,
         revision: str | None = None,
@@ -371,7 +371,7 @@ class ModelMeta(BaseModel):
             The generated ModelMeta.
 
         """
-        meta = cls.from_hub(model, revision, compute_metadata)
+        meta = cls._from_hub(model, revision, compute_metadata)
         if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
             meta.framework.append("Sentence Transformers")
         meta.modalities = ["text"]
@@ -419,7 +419,7 @@ class ModelMeta(BaseModel):
         """
         from mteb.models import CrossEncoderWrapper
 
-        meta = cls.from_hub(model.model.name_or_path, revision, compute_metadata)
+        meta = cls._from_hub(model.model.name_or_path, revision, compute_metadata)
         if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
             meta.framework.append("Sentence Transformers")
         meta.revision = model.config._commit_hash or meta.revision
