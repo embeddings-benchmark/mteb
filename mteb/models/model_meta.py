@@ -38,6 +38,8 @@ FRAMEWORKS = Literal[
     "ColPali",
 ]
 
+MODEL_TYPES = Literal["dense", "cross_encoder", "late_interaction"]
+
 
 class ScoringFunction(str, Enum):
     """The scoring function used by the models."""
@@ -124,7 +126,7 @@ class ModelMeta(BaseModel):
     superseded_by: str | None = None
     modalities: list[Modalities] = ["text"]
     is_cross_encoder: bool | None = None
-    model_type: list[str] | None = None
+    model_type: list[MODEL_TYPES] = ["dense"]
     citation: str | None = None
     contacts: list[str] | None = None
 
