@@ -118,7 +118,7 @@ PREDEFINED_PROMPTS = {
     # ========== Open Datasets ==========
 
     # Legal domain
-    "AILACasedocs": "Instruct: Given a legal case scenario, retrieve the most relevant case documents\nQuery: ",
+    "AILACasedocs": "Given a legal case scenario, retrieve the most relevant case documents",
     "AILAStatutes": "Instruct: Given a legal scenario, retrieve the most relevant statute documents\nQuery: ",
     "LegalQuAD": "Instruct: Given a legal question, retrieve relevant legal documents that answer the question\nQuery: ",
     "LegalSummarization": "Instruct: Given a query, retrieve relevant legal documents for summarization\nQuery: ",
