@@ -119,56 +119,56 @@ PREDEFINED_PROMPTS = {
 
     # Legal domain
     "AILACasedocs": "Given a legal case scenario, retrieve the most relevant case documents",
-    "AILAStatutes": "Instruct: Given a legal scenario, retrieve the most relevant statute documents\nQuery: ",
-    "LegalQuAD": "Instruct: Given a legal question, retrieve relevant legal documents that answer the question\nQuery: ",
-    "LegalSummarization": "Instruct: Given a query, retrieve relevant legal documents for summarization\nQuery: ",
+    "AILAStatutes": "Given a legal scenario, retrieve the most relevant statute documents",
+    "LegalQuAD": "Given a legal question, retrieve relevant legal documents that answer the question",
+    "LegalSummarization": "Given a query, retrieve relevant legal documents for summarization",
 
     # Code domain
-    "AppsRetrieval": "Instruct: Given a query about mobile applications, retrieve relevant app information\nQuery: ",
-    "HumanEvalRetrieval": "Instruct: Given a code problem description, retrieve relevant code examples\nQuery: ",
-    "MBPPRetrieval": "Instruct: Given a programming problem description, retrieve relevant code solutions\nQuery: ",
-    "DS1000Retrieval": "Instruct: Given a data science problem, retrieve relevant code snippets\nQuery: ",
-    "FreshStackRetrieval": "Instruct: Given a programming question, retrieve relevant Stack Overflow posts\nQuery: ",
+    "AppsRetrieval": "Given a query about mobile applications, retrieve relevant app information",
+    "HumanEvalRetrieval": "Given a code problem description, retrieve relevant code examples",
+    "MBPPRetrieval": "Given a programming problem description, retrieve relevant code solutions",
+    "DS1000Retrieval": "Given a data science problem, retrieve relevant code snippets",
+    "FreshStackRetrieval": "Given a programming question, retrieve relevant Stack Overflow posts",
 
     # Finance domain
-    "FinQARetrieval": "Instruct: Given a financial question, retrieve relevant financial documents\nQuery: ",
-    "FinanceBenchRetrieval": "Instruct: Given a financial query, retrieve relevant financial information\nQuery: ",
-    "HC3FinanceRetrieval": "Instruct: Given a finance-related query, retrieve relevant documents\nQuery: ",
+    "FinQARetrieval": "Given a financial question, retrieve relevant financial documents",
+    "FinanceBenchRetrieval": "Given a financial query, retrieve relevant financial information",
+    "HC3FinanceRetrieval": "Given a finance-related query, retrieve relevant documents",
 
     # Medical domain
-    "CUREv1": "Instruct: Given a medical query, retrieve relevant clinical documents\nQuery: ",
-    "ChatDoctorRetrieval": "Instruct: Given a medical question, retrieve relevant medical information\nQuery: ",
+    "CUREv1": "Given a medical query, retrieve relevant clinical documents",
+    "ChatDoctorRetrieval": "Given a medical question, retrieve relevant medical information",
 
     # SQL domain
-    "WikiSQLRetrieval": "Instruct: Given a natural language query, retrieve relevant SQL examples\nQuery: ",
+    "WikiSQLRetrieval": "Given a natural language query, retrieve relevant SQL examples",
 
     # Multilingual
-    "MIRACLRetrievalHardNegatives": "Instruct: Given a query, retrieve relevant passages\nQuery: ",
+    "MIRACLRetrievalHardNegatives": "Given a query, retrieve relevant passages",
 
     # ========== Private/Closed Datasets ==========
 
     # Code domain (Private)
-    "Code1Retrieval": "Instruct: Given a code problem description, retrieve relevant code examples\nQuery: ",
-    "JapaneseCode1Retrieval": "Instruct: Given a code problem description, retrieve relevant code examples\nQuery: ",
+    "Code1Retrieval": "Given a code problem description, retrieve relevant code examples",
+    "JapaneseCode1Retrieval": "Given a code problem description, retrieve relevant code examples",
 
     # Finance domain (Private)
-    "EnglishFinance1Retrieval": "Instruct: Given a financial query, retrieve relevant financial documents\nQuery: ",
-    "EnglishFinance2Retrieval": "Instruct: Given a financial query, retrieve relevant financial documents\nQuery: ",
-    "EnglishFinance3Retrieval": "Instruct: Given a financial query, retrieve relevant financial documents\nQuery: ",
-    "EnglishFinance4Retrieval": "Instruct: Given a financial query, retrieve relevant financial documents\nQuery: ",
+    "EnglishFinance1Retrieval": "Given a financial query, retrieve relevant financial documents",
+    "EnglishFinance2Retrieval": "Given a financial query, retrieve relevant financial documents",
+    "EnglishFinance3Retrieval": "Given a financial query, retrieve relevant financial documents",
+    "EnglishFinance4Retrieval": "Given a financial query, retrieve relevant financial documents",
 
     # Healthcare domain (Private)
-    "EnglishHealthcare1Retrieval": "Instruct: Given a medical question, retrieve relevant medical information\nQuery: ",
-    "GermanHealthcare1Retrieval": "Instruct: Given a medical question, retrieve relevant medical information\nQuery: ",
+    "EnglishHealthcare1Retrieval": "Given a medical question, retrieve relevant medical information",
+    "GermanHealthcare1Retrieval": "Given a medical question, retrieve relevant medical information",
 
     # Legal domain (Private)
-    "FrenchLegal1Retrieval": "Instruct: Given a legal query, retrieve relevant legal documents\nQuery: ",
-    "GermanLegal1Retrieval": "Instruct: Given a legal query, retrieve relevant legal documents\nQuery: ",
-    "JapaneseLegal1Retrieval": "Instruct: Given a legal query, retrieve relevant legal documents\nQuery: ",
+    "FrenchLegal1Retrieval": "Given a legal query, retrieve relevant legal documents",
+    "GermanLegal1Retrieval": "Given a legal query, retrieve relevant legal documents",
+    "JapaneseLegal1Retrieval": "Given a legal query, retrieve relevant legal documents",
 
     # General/Multilingual (Private)
-    "French1Retrieval": "Instruct: Given a query, retrieve relevant passages\nQuery: ",
-    "German1Retrieval": "Instruct: Given a query, retrieve relevant passages\nQuery: ",
+    "French1Retrieval": "Given a query, retrieve relevant passages",
+    "German1Retrieval": "Given a query, retrieve relevant passages",
 }
 
 
