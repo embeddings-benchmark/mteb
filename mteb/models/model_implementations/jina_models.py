@@ -764,7 +764,7 @@ jina_embeddings_v4 = ModelMeta(
         },
     ),
     name="jinaai/jina-embeddings-v4",
-    model_type=["dense", "late_interaction"],
+    model_type=["dense"],
     languages=XLMR_LANGUAGES,
     open_weights=True,
     revision="4a58ca57710c49f51896e4bc820e202fbf64904b",
