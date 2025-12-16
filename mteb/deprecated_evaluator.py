@@ -14,21 +14,11 @@ from pathlib import Path
 from time import time
 from typing import TYPE_CHECKING, Any
 
-from mteb.abstasks.task_metadata import TaskCategory, TaskType
-from mteb.models.get_model_meta import (
-    _model_meta_from_cross_encoder,
-    _model_meta_from_sentence_transformers,
-)
-
-if sys.version_info >= (3, 13):
-    from warnings import deprecated
-else:
-    from typing_extensions import deprecated
-
 import datasets
 
 import mteb
 from mteb.abstasks import AbsTask
+from mteb.abstasks.task_metadata import TaskCategory, TaskType
 from mteb.benchmarks import Benchmark
 from mteb.models import (
     CrossEncoderWrapper,
@@ -39,6 +29,11 @@ from mteb.models import (
 )
 from mteb.results import TaskResult
 from mteb.types import ScoresDict
+
+if sys.version_info >= (3, 13):
+    from warnings import deprecated
+else:
+    from typing_extensions import deprecated
 
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder, SentenceTransformer
@@ -673,9 +668,9 @@ class MTEB:
         from sentence_transformers import CrossEncoder, SentenceTransformer
 
         if isinstance(model, CrossEncoder):
-            meta = _model_meta_from_cross_encoder(model)
+            meta = ModelMeta.from_cross_encoder(model)
         elif isinstance(model, SentenceTransformer):
-            meta = _model_meta_from_sentence_transformers(model)
+            meta = ModelMeta.from_sentence_transformer_model(model)
         else:
             meta = ModelMeta(
                 loader=None,

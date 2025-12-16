@@ -69,11 +69,8 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             self.model = SentenceTransformer(model, revision=revision, **kwargs)
         else:
             self.model = model
-        from mteb.models.get_model_meta import (
-            _model_meta_from_sentence_transformers,
-        )
 
-        self.mteb_model_meta = _model_meta_from_sentence_transformers(self.model)
+        self.mteb_model_meta = ModelMeta.from_sentence_transformer_model(self.model)
 
         built_in_prompts = getattr(self.model, "prompts", None)
         if built_in_prompts and not model_prompts:
@@ -279,14 +276,12 @@ class CrossEncoderWrapper:
     ) -> None:
         from sentence_transformers import CrossEncoder
 
-        from mteb.models.get_model_meta import _model_meta_from_cross_encoder
-
         if isinstance(model, CrossEncoder):
             self.model = model
         elif isinstance(model, str):
             self.model = CrossEncoder(model, revision=revision, **kwargs)
 
-        self.mteb_model_meta = _model_meta_from_cross_encoder(self.model)
+        self.mteb_model_meta = ModelMeta.from_cross_encoder(self.model)
 
     def predict(
         self,

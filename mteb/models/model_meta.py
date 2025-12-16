@@ -1,27 +1,45 @@
+from __future__ import annotations
+
+import json
 import logging
 import warnings
 from collections.abc import Callable, Sequence
 from dataclasses import field
 from enum import Enum
 from functools import partial
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
-from huggingface_hub import get_safetensors_metadata, list_repo_commits
+from huggingface_hub import (
+    GitCommitInfo,
+    ModelCard,
+    ModelCardData,
+    get_safetensors_metadata,
+    hf_hub_download,
+    list_repo_commits,
+    repo_exists,
+)
 from huggingface_hub.errors import (
+    EntryNotFoundError,
     GatedRepoError,
     NotASafetensorsRepoError,
     RepositoryNotFoundError,
     SafetensorsParsingError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator
+from transformers import AutoConfig
+from typing_extensions import Self
 
+from mteb._helpful_enum import HelpfulStrEnum
 from mteb.languages import check_language_code
+from mteb.models.models_protocols import EncoderProtocol, MTEBModels
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
-from .models_protocols import EncoderProtocol, MTEBModels
-
 if TYPE_CHECKING:
+    from sentence_transformers import CrossEncoder, SentenceTransformer
+
     from mteb.abstasks import AbsTask
+
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +58,7 @@ FRAMEWORKS = Literal[
 ]
 
 
-class ScoringFunction(str, Enum):
+class ScoringFunction(HelpfulStrEnum):
     """The scoring function used by the models."""
 
     COSINE = "cosine"
@@ -59,6 +77,9 @@ def _get_loader_name(
     if hasattr(loader, "func"):  # partial class wrapper
         return loader.func.__name__
     return loader.__name__
+
+
+_SENTENCE_TRANSFORMER_LIB_NAME = "Sentence Transformers"
 
 
 class ModelMeta(BaseModel):
@@ -215,9 +236,198 @@ class ModelMeta(BaseModel):
             raise ValueError("Model name is not set")
         return self.name.replace("/", "__").replace(" ", "_")
 
-    def is_zero_shot_on(
-        self, tasks: Sequence["AbsTask"] | Sequence[str]
-    ) -> bool | None:
+    @classmethod
+    def _from_hub(
+        cls,
+        model_name: str | None,
+        revision: str | None = None,
+        compute_metadata: bool = True,
+    ) -> Self:
+        """Generates a ModelMeta from a HuggingFace model name.
+
+        Args:
+            model_name: The HuggingFace model name.
+            revision: Revision of the model
+            compute_metadata: Add metadata based on model card
+
+        Returns:
+            The generated ModelMeta.
+        """
+        from mteb.models import sentence_transformers_loader
+
+        loader = sentence_transformers_loader
+        frameworks: list[FRAMEWORKS] = ["PyTorch"]
+        model_license = None
+        reference = None
+        n_parameters = None
+        memory_usage_mb = None
+        release_date = None
+        embedding_dim = None
+        max_tokens = None
+
+        if model_name and compute_metadata and repo_exists(model_name):
+            reference = "https://huggingface.co/" + model_name
+            card = ModelCard.load(model_name)
+            card_data: ModelCardData = card.data
+            try:
+                model_config = AutoConfig.from_pretrained(model_name)
+            except Exception as e:
+                # some models can't load AutoConfig (e.g. `average_word_embeddings_levy_dependency`)
+                model_config = None
+                logger.warning(f"Can't get configuration for {model_name}. Error: {e}")
+
+            if (
+                card_data.library_name == _SENTENCE_TRANSFORMER_LIB_NAME
+                or _SENTENCE_TRANSFORMER_LIB_NAME in card_data.tags
+            ):
+                frameworks.append(_SENTENCE_TRANSFORMER_LIB_NAME)
+            else:
+                msg = "Model library not recognized, defaulting to Sentence Transformers loader."
+                logger.warning(msg)
+                warnings.warn(msg)
+
+            if revision is None:
+                revisions = _get_repo_commits(model_name, "model")
+                revision = revisions[0].commit_id if revisions else None
+
+            release_date = cls.fetch_release_date(model_name)
+            model_license = card_data.license
+            n_parameters = cls._calculate_num_parameters_from_hub(model_name)
+            memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
+            if model_config and hasattr(model_config, "hidden_size"):
+                embedding_dim = model_config.hidden_size
+            if model_config and hasattr(model_config, "max_position_embeddings"):
+                max_tokens = model_config.max_position_embeddings
+
+        return cls(
+            loader=loader,
+            name=model_name or "no_model_name/available",
+            revision=revision or "no_revision_available",
+            reference=reference,
+            release_date=release_date,
+            languages=None,
+            license=model_license,
+            framework=frameworks,
+            training_datasets=None,
+            similarity_fn_name=None,
+            n_parameters=n_parameters,
+            memory_usage_mb=memory_usage_mb,
+            max_tokens=max_tokens,
+            embed_dim=embedding_dim,
+            open_weights=True,
+            public_training_code=None,
+            public_training_data=None,
+            use_instructions=None,
+            modalities=[],
+        )
+
+    @classmethod
+    def from_sentence_transformer_model(
+        cls,
+        model: SentenceTransformer,
+        revision: str | None = None,
+        compute_metadata: bool = True,
+    ) -> Self:
+        """Generates a ModelMeta from a SentenceTransformer model.
+
+        Args:
+            model: SentenceTransformer model.
+            revision: Revision of the model
+            compute_metadata: Add metadata based on model card
+
+        Returns:
+            The generated ModelMeta.
+        """
+        name: str | None = (
+            model.model_card_data.model_name
+            if model.model_card_data.model_name
+            else model.model_card_data.base_model
+        )
+        meta = cls._from_hub(name, revision, compute_metadata)
+        if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
+            meta.framework.append("Sentence Transformers")
+        meta.revision = model.model_card_data.base_model_revision or meta.revision
+        meta.max_tokens = model.max_seq_length
+        meta.embed_dim = model.get_sentence_embedding_dimension()
+        meta.similarity_fn_name = ScoringFunction.from_str(model.similarity_fn_name)
+        meta.modalities = ["text"]
+        return meta
+
+    @classmethod
+    def from_hub(
+        cls,
+        model: str,
+        revision: str | None = None,
+        compute_metadata: bool = True,
+    ) -> Self:
+        """Generates a ModelMeta for model from HuggingFace hub.
+
+        Args:
+            model: Name of the model from HuggingFace hub. For example, `intfloat/multilingual-e5-large`
+            revision: Revision of the model
+            compute_metadata: Add metadata based on model card
+
+        Returns:
+            The generated ModelMeta.
+        """
+        meta = cls._from_hub(model, revision, compute_metadata)
+        if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
+            meta.framework.append("Sentence Transformers")
+        meta.modalities = ["text"]
+
+        if model and compute_metadata and repo_exists(model):
+            # have max_seq_length field
+            sbert_config = _get_json_from_hub(
+                model, "sentence_bert_config.json", "model", revision=revision
+            )
+            if sbert_config:
+                meta.max_tokens = (
+                    sbert_config.get("max_seq_length", None) or meta.max_tokens
+                )
+            # have model type, similarity function fields
+            config_sbert = _get_json_from_hub(
+                model, "config_sentence_transformers.json", "model", revision=revision
+            )
+            if (
+                config_sbert is not None
+                and config_sbert.get("similarity_fn_name") is not None
+            ):
+                meta.similarity_fn_name = ScoringFunction.from_str(
+                    config_sbert.get("similarity_fn_name")
+                )
+            else:
+                meta.similarity_fn_name = ScoringFunction.COSINE
+        return meta
+
+    @classmethod
+    def from_cross_encoder(
+        cls,
+        model: CrossEncoder,
+        revision: str | None = None,
+        compute_metadata: bool = True,
+    ) -> Self:
+        """Generates a ModelMeta from a CrossEncoder.
+
+        Args:
+            model: The CrossEncoder model
+            revision: Revision of the model
+            compute_metadata: Add metadata based on model card
+
+        Returns:
+            The generated ModelMeta
+        """
+        from mteb.models import CrossEncoderWrapper
+
+        meta = cls._from_hub(model.model.name_or_path, revision, compute_metadata)
+        if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
+            meta.framework.append("Sentence Transformers")
+        meta.revision = model.config._commit_hash or meta.revision
+        meta.loader = CrossEncoderWrapper
+        meta.embed_dim = None
+        meta.modalities = ["text"]
+        return meta
+
+    def is_zero_shot_on(self, tasks: Sequence[AbsTask] | Sequence[str]) -> bool | None:
         """Indicates whether the given model can be considered zero-shot or not on the given tasks.
 
         Returns:
@@ -271,7 +481,7 @@ class ModelMeta(BaseModel):
         return return_dataset
 
     def zero_shot_percentage(
-        self, tasks: Sequence["AbsTask"] | Sequence[str]
+        self, tasks: Sequence[AbsTask] | Sequence[str]
     ) -> int | None:
         """Indicates how out-of-domain the selected tasks are for the given model.
 
@@ -294,18 +504,38 @@ class ModelMeta(BaseModel):
         perc_overlap = 100 * (len(overlap) / len(benchmark_datasets))
         return int(100 - perc_overlap)
 
-    def calculate_memory_usage_mb(self) -> int | None:
-        """Calculates the memory usage (in FP32) of the model in MB.
-
-        Returns:
-            The memory usage of the model in MB, or None if it cannot be determined.
-        """
-        if "API" in self.framework:
+    @staticmethod
+    def _calculate_num_parameters_from_hub(model_name: str | None = None) -> int | None:
+        try:
+            safetensors_metadata = get_safetensors_metadata(model_name)
+            if len(safetensors_metadata.parameter_count) >= 0:
+                return sum(safetensors_metadata.parameter_count.values())
+        except (
+            NotASafetensorsRepoError,
+            SafetensorsParsingError,
+            GatedRepoError,
+            RepositoryNotFoundError,
+        ) as e:
+            logger.warning(
+                f"Can't calculate number of parameters for {model_name}. Got error {e}"
+            )
             return None
 
+    def calculate_num_parameters_from_hub(self) -> int | None:
+        """Calculates the number of parameters in the model.
+
+        Returns:
+            Number of parameters in the model.
+        """
+        return self._calculate_num_parameters_from_hub(self.name)
+
+    @staticmethod
+    def _calculate_memory_usage_mb(
+        model_name: str, n_parameters: int | None
+    ) -> int | None:
         MB = 1024**2  # noqa: N806
         try:
-            safetensors_metadata = get_safetensors_metadata(self.name)  # type: ignore
+            safetensors_metadata = get_safetensors_metadata(model_name)
             if len(safetensors_metadata.parameter_count) >= 0:
                 dtype_size_map = {
                     "F64": 8,  # 64-bit float
@@ -324,17 +554,35 @@ class ModelMeta(BaseModel):
                     for dtype, parameters in safetensors_metadata.parameter_count.items()
                 )
                 return round(total_memory_bytes / MB)  # Convert to MB
+        except (
+            NotASafetensorsRepoError,
+            SafetensorsParsingError,
+            GatedRepoError,
+            RepositoryNotFoundError,
+        ) as e:
+            logger.warning(
+                f"Can't calculate memory usage for {model_name}. Got error {e}"
+            )
 
-        except (NotASafetensorsRepoError, SafetensorsParsingError, GatedRepoError):
-            pass
-        if self.n_parameters is None:
+        if n_parameters is None:
             return None
         # Model memory in bytes. For FP32 each parameter is 4 bytes.
-        model_memory_bytes = self.n_parameters * 4
+        model_memory_bytes = n_parameters * 4
 
         # Convert to MB
         model_memory_mb = model_memory_bytes / MB
         return round(model_memory_mb)
+
+    def calculate_memory_usage_mb(self) -> int | None:
+        """Calculates the memory usage of the model in MB.
+
+        Returns:
+            The memory usage of the model in MB, or None if it cannot be determined.
+        """
+        if "API" in self.framework or self.name is None:
+            return None
+
+        return self._calculate_memory_usage_mb(self.model_name, self.n_parameters)
 
     @staticmethod
     def fetch_release_date(model_name: str) -> StrDate | None:
@@ -343,16 +591,11 @@ class ModelMeta(BaseModel):
         Returns:
             The release date in YYYY-MM-DD format, or None if it cannot be determined.
         """
-        try:
-            commits = list_repo_commits(repo_id=model_name, repo_type="model")
-            if commits:
-                initial_commit = commits[-1]
-                release_date = initial_commit.created_at.strftime("%Y-%m-%d")
-                return release_date
-        except RepositoryNotFoundError:
-            logger.warning(f"Model repository not found for {model_name}.")
-            warnings.warn(f"Model repository not found for {model_name}.")
-
+        commits = _get_repo_commits(repo_id=model_name, repo_type="model")
+        if commits:
+            initial_commit = commits[-1]
+            release_date = initial_commit.created_at.strftime("%Y-%m-%d")
+            return release_date
         return None
 
     def to_python(self) -> str:
@@ -467,3 +710,35 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
             similar.update(_collect_similar_tasks(parent, visited))
 
     return similar
+
+
+def _get_repo_commits(repo_id: str, repo_type: str) -> list[GitCommitInfo] | None:
+    try:
+        return list_repo_commits(repo_id=repo_id, repo_type=repo_type)
+    except (GatedRepoError, RepositoryNotFoundError) as e:
+        logger.warning(f"Can't get commits of {repo_id}: {e}")
+        return None
+
+
+def _get_json_from_hub(
+    repo_id: str, file_name: str, repo_type: str, revision: str | None = None
+) -> dict[str, Any] | None:
+    path = _get_file_on_hub(repo_id, file_name, repo_type, revision)
+    if path is None:
+        return None
+
+    with Path(path).open() as f:
+        js = json.load(f)
+    return js
+
+
+def _get_file_on_hub(
+    repo_id: str, file_name: str, repo_type: str, revision: str | None = None
+) -> str | None:
+    try:
+        return hf_hub_download(
+            repo_id=repo_id, filename=file_name, repo_type=repo_type, revision=revision
+        )
+    except (GatedRepoError, RepositoryNotFoundError, EntryNotFoundError) as e:
+        logger.warning(f"Can't get file {file_name} of {repo_id}: {e}")
+        return None
