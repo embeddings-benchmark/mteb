@@ -176,8 +176,6 @@ def mod_instruct_loader(
     model_name_or_path: str, revision: str, **kwargs
 ) -> EncoderProtocol:
     # Set default prompts_dict if not provided
-    if "prompts_dict" not in kwargs:
-        kwargs["prompts_dict"] = PREDEFINED_PROMPTS
 
     model = InstructSentenceTransformerModel(
         model_name_or_path,
