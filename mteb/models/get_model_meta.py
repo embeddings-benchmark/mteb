@@ -1,25 +1,14 @@
-from __future__ import annotations
-
 import difflib
 import logging
-import warnings
 from collections.abc import Iterable
-from typing import TYPE_CHECKING, Any
-
-from huggingface_hub import ModelCard
-from huggingface_hub.errors import RepositoryNotFoundError
+from typing import Any
 
 from mteb.abstasks import AbsTask
 from mteb.models import (
-    CrossEncoderWrapper,
     ModelMeta,
     MTEBModels,
-    sentence_transformers_loader,
 )
 from mteb.models.model_implementations import MODEL_REGISTRY
-
-if TYPE_CHECKING:
-    from sentence_transformers import CrossEncoder, SentenceTransformer
 
 logger = logging.getLogger(__name__)
 
@@ -101,23 +90,8 @@ def get_model(
     Returns:
         A model object
     """
-    from sentence_transformers import CrossEncoder, SentenceTransformer
-
     meta = get_model_meta(model_name, revision)
     model = meta.load_model(**kwargs)
-
-    # If revision not available in the modelmeta, try to extract it from sentence-transformers
-    if hasattr(model, "model") and isinstance(model.model, SentenceTransformer):  # type: ignore
-        _meta = _model_meta_from_sentence_transformers(model.model)  # type: ignore
-        if meta.revision is None:
-            meta.revision = _meta.revision if _meta.revision else meta.revision
-        if not meta.similarity_fn_name:
-            meta.similarity_fn_name = _meta.similarity_fn_name
-
-    elif isinstance(model, CrossEncoder):
-        _meta = _model_meta_from_cross_encoder(model.model)
-        if meta.revision is None:
-            meta.revision = _meta.revision if _meta.revision else meta.revision
 
     model.mteb_model_meta = meta  # type: ignore
     return model
@@ -148,12 +122,8 @@ def get_model_meta(
         logger.info(
             "Model not found in model registry. Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
         )
-        try:
-            meta = _model_meta_from_hf_hub(model_name)
-            meta.revision = revision
-            return meta
-        except RepositoryNotFoundError:
-            pass
+        meta = ModelMeta.from_hub(model_name, revision)
+        return meta
 
     not_found_msg = f"Model '{model_name}' not found in MTEB registry"
     not_found_msg += " nor on the Huggingface Hub." if fetch_from_hf else "."
@@ -171,96 +141,3 @@ def get_model_meta(
             suggestion = f" Did you mean: '{close_matches[0]}'?"
 
     raise KeyError(not_found_msg + suggestion)
-
-
-def _model_meta_from_hf_hub(model_name: str) -> ModelMeta:
-    card = ModelCard.load(model_name)
-    card_data = card.data.to_dict()
-    frameworks = ["PyTorch"]
-    loader = None
-    if card_data.get("library_name", None) == "sentence-transformers":
-        frameworks.append("Sentence Transformers")
-        loader = sentence_transformers_loader
-    else:
-        msg = (
-            "Model library not recognized, defaulting to Sentence Transformers loader."
-        )
-        logger.warning(msg)
-        warnings.warn(msg)
-        loader = sentence_transformers_loader
-
-    revision = card_data.get("base_model_revision", None)
-    license = card_data.get("license", None)
-    meta = ModelMeta(
-        loader=loader,
-        name=model_name,
-        revision=revision,
-        release_date=ModelMeta.fetch_release_date(model_name),
-        languages=None,
-        license=license,
-        framework=frameworks,  # type: ignore
-        training_datasets=None,
-        similarity_fn_name=None,
-        n_parameters=None,
-        memory_usage_mb=None,
-        max_tokens=None,
-        embed_dim=None,
-        open_weights=True,
-        public_training_code=None,
-        public_training_data=None,
-        use_instructions=None,
-    )
-    return meta
-
-
-def _model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
-    model_name = model.model.name_or_path
-    meta = ModelMeta(
-        loader=CrossEncoderWrapper,
-        name=model_name,
-        revision=model.config._commit_hash,
-        release_date=ModelMeta.fetch_release_date(model_name),
-        languages=None,
-        framework=["Sentence Transformers"],
-        similarity_fn_name=None,
-        n_parameters=None,
-        memory_usage_mb=None,
-        max_tokens=None,
-        embed_dim=None,
-        license=None,
-        open_weights=True,
-        public_training_code=None,
-        public_training_data=None,
-        use_instructions=None,
-        training_datasets=None,
-    )
-    return meta
-
-
-def _model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMeta:
-    name: str | None = (
-        model.model_card_data.model_name
-        if model.model_card_data.model_name
-        else model.model_card_data.base_model
-    )
-    embeddings_dim = model.get_sentence_embedding_dimension()
-    meta = ModelMeta(
-        loader=sentence_transformers_loader,
-        name=name,
-        revision=model.model_card_data.base_model_revision,
-        release_date=ModelMeta.fetch_release_date(name) if name else None,
-        languages=None,
-        framework=["Sentence Transformers"],
-        similarity_fn_name=None,
-        n_parameters=None,
-        memory_usage_mb=None,
-        max_tokens=None,
-        embed_dim=embeddings_dim,
-        license=None,
-        open_weights=True,
-        public_training_code=None,
-        public_training_data=None,
-        use_instructions=None,
-        training_datasets=None,
-    )
-    return meta
