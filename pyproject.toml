@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.3.10"
+version = "2.4.0"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -57,7 +57,10 @@ Repository = "https://github.com/embeddings-benchmark/mteb"
 mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
-image = ["torchvision>0.2.1"]
+image = [
+    "torchvision>0.2.1",
+    "transformers[torch-vision,vision]",
+]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
     "gradio==6.0.1",
@@ -417,3 +420,4 @@ Mian = "Mian"
 Ono = "Ono"
 Yau = "Yau"
 Altas = "Altas"
+matche = "matche"

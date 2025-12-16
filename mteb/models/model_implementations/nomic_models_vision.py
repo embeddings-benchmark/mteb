@@ -1,8 +1,9 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
 import torch.nn.functional as F
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
@@ -11,6 +12,9 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from PIL import Image
 
 NOMIC_EMBED_VISION_CITATION = """@article{nussbaum2024nomicembedvision,
       title={Nomic Embed Vision: Expanding the Latent Space},

@@ -13,6 +13,7 @@ from torch.utils.data import DataLoader
 import mteb
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 from tests.task_grid import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
@@ -50,6 +51,28 @@ def test_task_metadata_passed_encoder(task: mteb.AbsTask, tmp_path: Path):
     _task_name = task.metadata.name
 
     class MockEncoder(AbsEncoder):
+        mteb_model_meta = ModelMeta(
+            loader=None,
+            name="no_model_name/available",
+            revision="no_revision_available",
+            reference=None,
+            release_date=None,
+            languages=None,
+            license=None,
+            framework=[],
+            training_datasets=None,
+            similarity_fn_name=None,
+            n_parameters=None,
+            memory_usage_mb=None,
+            max_tokens=None,
+            embed_dim=None,
+            open_weights=True,
+            public_training_code=None,
+            public_training_data=None,
+            use_instructions=None,
+            modalities=[],
+        )
+
         def encode(
             self,
             inputs: DataLoader[BatchedInput],
