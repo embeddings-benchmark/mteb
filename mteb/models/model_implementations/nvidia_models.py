@@ -122,7 +122,7 @@ class _NVEmbedWrapper(InstructSentenceTransformerModel):
         from sentence_transformers import __version__ as sbert_version
 
         required_transformers_version = "4.42.4"
-        required_sbert_version = "2.7.2"
+        required_sbert_version = "2.7.0"
 
         if Version(transformers_version) != Version(required_transformers_version):
             raise RuntimeError(
