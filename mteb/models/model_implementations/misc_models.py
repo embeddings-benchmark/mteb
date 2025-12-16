@@ -13,6 +13,7 @@ from .sentence_transformers_models import sent_trf_training_dataset
 Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
     loader=sentence_transformers_loader,
     name="Haon-Chen/speed-embedding-7b-instruct",
+    model_type=["dense"],
     revision="c167e9a8144b397622ce47b85d9edcdeecef3d3f",
     release_date="2024-10-31",
     languages=["eng-Latn"],
@@ -40,6 +41,7 @@ Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
 )
 Gameselo__STS_multilingual_mpnet_base_v2 = ModelMeta(
     name="Gameselo/STS-multilingual-mpnet-base-v2",
+    model_type=["dense"],
     revision="449f917af30f590fc31f9ffb226c94f21a2f47b8",
     release_date="2024-06-07",
     languages=[],
@@ -131,6 +133,7 @@ Gameselo__STS_multilingual_mpnet_base_v2 = ModelMeta(
 
 Hum_Works__lodestone_base_4096_v1 = ModelMeta(
     name="Hum-Works/lodestone-base-4096-v1",
+    model_type=["dense"],
     revision="9bbc2d0b57dd2198aea029404b0f976712a7d966",
     release_date="2023-08-25",
     languages=["eng-Latn"],
@@ -197,6 +200,7 @@ Hum_Works__lodestone_base_4096_v1 = ModelMeta(
 )
 Jaume__gemma_2b_embeddings = ModelMeta(
     name="Jaume/gemma-2b-embeddings",
+    model_type=["dense"],
     revision="86431f65d7c3f66b2af096c61e614a2958f191f1",
     release_date="2024-06-29",
     languages=[],
@@ -228,6 +232,7 @@ bilingual_embedding_training_data = {
 
 Lajavaness__bilingual_embedding_base = ModelMeta(
     name="Lajavaness/bilingual-embedding-base",
+    model_type=["dense"],
     revision="0bfc54bb2aa2666dd84715289c7ef58a95eb4d8d",
     release_date="2024-06-26",
     languages=None,
@@ -253,6 +258,7 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
 )
 Lajavaness__bilingual_embedding_large = ModelMeta(
     name="Lajavaness/bilingual-embedding-large",
+    model_type=["dense"],
     revision="e83179d7a66e8aed1b3015e98bb5ae234ed89598",
     release_date="2024-06-24",
     languages=["fra-Latn", "eng-Latn"],
@@ -278,6 +284,7 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
 )
 Lajavaness__bilingual_embedding_small = ModelMeta(
     name="Lajavaness/bilingual-embedding-small",
+    model_type=["dense"],
     revision="ed4a1dd814de0db81d4a4e287c296a03194463e3",
     release_date="2024-07-17",
     languages=["fra-Latn", "eng-Latn"],
@@ -303,6 +310,7 @@ Lajavaness__bilingual_embedding_small = ModelMeta(
 )
 Mihaiii__Bulbasaur = ModelMeta(
     name="Mihaiii/Bulbasaur",
+    model_type=["dense"],
     revision="6876f839e18ae36224049a41194a431953f08747",
     release_date="2024-04-27",
     languages=None,
@@ -326,6 +334,7 @@ Mihaiii__Bulbasaur = ModelMeta(
 )
 Mihaiii__Ivysaur = ModelMeta(
     name="Mihaiii/Ivysaur",
+    model_type=["dense"],
     revision="65914d976f45beb4bda7485c39d88865b4ce6554",
     release_date="2024-04-27",
     languages=None,
@@ -349,6 +358,7 @@ Mihaiii__Ivysaur = ModelMeta(
 )
 Mihaiii__Squirtle = ModelMeta(
     name="Mihaiii/Squirtle",
+    model_type=["dense"],
     revision="5b991da48a9286637a256d4a35aab87a1a57b78a",
     release_date="2024-04-30",
     languages=None,
@@ -372,6 +382,7 @@ Mihaiii__Squirtle = ModelMeta(
 )
 Mihaiii__Venusaur = ModelMeta(
     name="Mihaiii/Venusaur",
+    model_type=["dense"],
     revision="0dc817f0addbb7bab8feeeeaded538f9ffeb3419",
     release_date="2024-04-29",
     languages=None,
@@ -395,6 +406,7 @@ Mihaiii__Venusaur = ModelMeta(
 )
 Mihaiii__Wartortle = ModelMeta(
     name="Mihaiii/Wartortle",
+    model_type=["dense"],
     revision="14caca5253414d38a7d28b62d1b7c30ef3293a87",
     release_date="2024-04-30",
     languages=None,
@@ -418,6 +430,7 @@ Mihaiii__Wartortle = ModelMeta(
 )
 Mihaiii__gte_micro = ModelMeta(
     name="Mihaiii/gte-micro",
+    model_type=["dense"],
     revision="6fd2397cb9dfa7c901aedf9a2a44d3c888ccafdd",
     release_date="2024-04-21",
     languages=None,
@@ -440,6 +453,7 @@ Mihaiii__gte_micro = ModelMeta(
 )
 Mihaiii__gte_micro_v4 = ModelMeta(
     name="Mihaiii/gte-micro-v4",
+    model_type=["dense"],
     revision="78e1a4b348f8524c3ab2e3e3475788f5adb8c98f",
     release_date="2024-04-22",
     languages=None,
@@ -462,6 +476,7 @@ Mihaiii__gte_micro_v4 = ModelMeta(
 )
 OrdalieTech__Solon_embeddings_large_0_1 = ModelMeta(
     name="OrdalieTech/Solon-embeddings-large-0.1",
+    model_type=["dense"],
     revision="9f6465f6ea2f6d10c6294bc15d84edf87d47cdef",
     release_date="2023-12-09",
     languages=["fra-Latn"],
@@ -484,6 +499,7 @@ OrdalieTech__Solon_embeddings_large_0_1 = ModelMeta(
 )
 Omartificial_Intelligence_Space__Arabert_all_nli_triplet_Matryoshka = ModelMeta(
     name="Omartificial-Intelligence-Space/Arabert-all-nli-triplet-Matryoshka",
+    model_type=["dense"],
     revision="d0361a36f6fe69febfc8550d0918abab174f6f30",
     release_date="2024-06-16",
     languages=["ara-Arab"],
@@ -506,6 +522,7 @@ Omartificial_Intelligence_Space__Arabert_all_nli_triplet_Matryoshka = ModelMeta(
 )
 Omartificial_Intelligence_Space__Arabic_MiniLM_L12_v2_all_nli_triplet = ModelMeta(
     name="Omartificial-Intelligence-Space/Arabic-MiniLM-L12-v2-all-nli-triplet",
+    model_type=["dense"],
     revision="6916465c43b984e955aa6dc72851474f0128f428",
     release_date="2024-06-25",
     languages=["ara-Arab"],
@@ -530,6 +547,7 @@ Omartificial_Intelligence_Space__Arabic_MiniLM_L12_v2_all_nli_triplet = ModelMet
 )
 Omartificial_Intelligence_Space__Arabic_all_nli_triplet_Matryoshka = ModelMeta(
     name="Omartificial-Intelligence-Space/Arabic-all-nli-triplet-Matryoshka",
+    model_type=["dense"],
     revision="1ca467cc576bd76666a4d21b24ee43afa914dd10",
     release_date="2024-06-14",
     languages=["ara-Arab"],
@@ -554,6 +572,7 @@ Omartificial_Intelligence_Space__Arabic_all_nli_triplet_Matryoshka = ModelMeta(
 )
 Omartificial_Intelligence_Space__Arabic_labse_Matryoshka = ModelMeta(
     name="Omartificial-Intelligence-Space/Arabic-labse-Matryoshka",
+    model_type=["dense"],
     revision="ee6d5e33c78ed582ade47fd452a74ea52aa5bfe2",
     release_date="2024-06-16",
     languages=["ara-Arab"],
@@ -578,6 +597,7 @@ Omartificial_Intelligence_Space__Arabic_labse_Matryoshka = ModelMeta(
 )
 Omartificial_Intelligence_Space__Arabic_mpnet_base_all_nli_triplet = ModelMeta(
     name="Omartificial-Intelligence-Space/Arabic-mpnet-base-all-nli-triplet",
+    model_type=["dense"],
     revision="2628cb641e040f44328195fadcdfb58e6d5cffa7",
     release_date="2024-06-15",
     languages=["ara-Arab"],
@@ -602,6 +622,7 @@ Omartificial_Intelligence_Space__Arabic_mpnet_base_all_nli_triplet = ModelMeta(
 )
 Omartificial_Intelligence_Space__Marbert_all_nli_triplet_Matryoshka = ModelMeta(
     name="Omartificial-Intelligence-Space/Marbert-all-nli-triplet-Matryoshka",
+    model_type=["dense"],
     revision="ecf3274e164f057c4a3dd70691cae0265d87a9d0",
     release_date="2024-06-17",
     languages=["ara-Arab"],
@@ -624,6 +645,7 @@ Omartificial_Intelligence_Space__Marbert_all_nli_triplet_Matryoshka = ModelMeta(
 )
 consciousai__cai_lunaris_text_embeddings = ModelMeta(
     name="consciousAI/cai-lunaris-text-embeddings",
+    model_type=["dense"],
     revision="8332c464d13505968ff7a6e2213f36fd8730b4c7",
     release_date="2023-06-22",
     languages=None,
@@ -646,6 +668,7 @@ consciousai__cai_lunaris_text_embeddings = ModelMeta(
 )
 consciousai__cai_stellaris_text_embeddings = ModelMeta(
     name="consciousAI/cai-stellaris-text-embeddings",
+    model_type=["dense"],
     revision="c000ec4b29588daf0f4a0b2ad4e72ee807d8efc0",
     release_date="2023-06-23",
     languages=None,
@@ -677,6 +700,7 @@ SENTENCE_CROISSANT_TRAINING_DATA = {
 }
 manu__sentence_croissant_alpha_v0_2 = ModelMeta(
     name="manu/sentence_croissant_alpha_v0.2",
+    model_type=["dense"],
     revision="4610b8cea65d7dd59e0b04af50753933fe5b29b2",
     release_date="2024-03-15",
     languages=None,
@@ -699,6 +723,7 @@ manu__sentence_croissant_alpha_v0_2 = ModelMeta(
 )
 manu__sentence_croissant_alpha_v0_3 = ModelMeta(
     name="manu/sentence_croissant_alpha_v0.3",
+    model_type=["dense"],
     revision="4ac16754f3d81aba76cc32955dc9ee4122df96eb",
     release_date="2024-04-26",
     languages=None,
@@ -721,6 +746,7 @@ manu__sentence_croissant_alpha_v0_3 = ModelMeta(
 )
 manu__sentence_croissant_alpha_v0_4 = ModelMeta(
     name="manu/sentence_croissant_alpha_v0.4",
+    model_type=["dense"],
     revision="0ce6372e6a3c21134dcf26dcde13cca869c767fc",
     release_date="2024-04-27",
     languages=["fra-Latn", "eng-Latn"],
@@ -744,6 +770,7 @@ manu__sentence_croissant_alpha_v0_4 = ModelMeta(
 )
 thenlper__gte_base = ModelMeta(
     name="thenlper/gte-base",
+    model_type=["dense"],
     revision="c078288308d8dee004ab72c6191778064285ec0c",
     release_date="2023-07-27",
     languages=["eng-Latn"],
@@ -766,6 +793,7 @@ thenlper__gte_base = ModelMeta(
 )
 thenlper__gte_large = ModelMeta(
     name="thenlper/gte-large",
+    model_type=["dense"],
     revision="4bef63f39fcc5e2d6b0aae83089f307af4970164",
     release_date="2023-07-27",
     languages=["eng-Latn"],
@@ -788,6 +816,7 @@ thenlper__gte_large = ModelMeta(
 )
 thenlper__gte_small = ModelMeta(
     name="thenlper/gte-small",
+    model_type=["dense"],
     revision="17e1f347d17fe144873b1201da91788898c639cd",
     release_date="2023-07-27",
     languages=["eng-Latn"],
@@ -810,6 +839,7 @@ thenlper__gte_small = ModelMeta(
 )
 OrlikB__KartonBERT_USE_base_v1 = ModelMeta(
     name="OrlikB/KartonBERT-USE-base-v1",
+    model_type=["dense"],
     revision="1f59dd58fe57995c0e867d5e29f03763eae99645",
     release_date="2024-09-30",
     languages=["pol-Latn"],
@@ -832,6 +862,7 @@ OrlikB__KartonBERT_USE_base_v1 = ModelMeta(
 )
 OrlikB__st_polish_kartonberta_base_alpha_v1 = ModelMeta(
     name="OrlikB/st-polish-kartonberta-base-alpha-v1",
+    model_type=["dense"],
     revision="5590a0e2d7bb43674e44d7076b3ff157f7d4a1cb",
     release_date="2023-11-12",
     languages=["pol-Latn"],
@@ -854,6 +885,7 @@ OrlikB__st_polish_kartonberta_base_alpha_v1 = ModelMeta(
 )
 sdadas__mmlw_e5_base = ModelMeta(
     name="sdadas/mmlw-e5-base",
+    model_type=["dense"],
     revision="f10628ed55b5ec400502aff439bd714a6da0af30",
     release_date="2023-11-17",
     languages=["pol-Latn"],
@@ -876,6 +908,7 @@ sdadas__mmlw_e5_base = ModelMeta(
 )
 dwzhu__e5_base_4k = ModelMeta(
     name="dwzhu/e5-base-4k",
+    model_type=["dense"],
     revision="1b5664b8cb2bccd8c309429b7bfe5864402e8fbc",
     release_date="2024-03-28",
     languages=["eng-Latn"],
@@ -898,6 +931,7 @@ dwzhu__e5_base_4k = ModelMeta(
 )
 sdadas__mmlw_e5_large = ModelMeta(
     name="sdadas/mmlw-e5-large",
+    model_type=["dense"],
     revision="5c143fb045ebed664fd85b43fc45155999eb110f",
     release_date="2023-11-17",
     languages=["pol-Latn"],
@@ -920,6 +954,7 @@ sdadas__mmlw_e5_large = ModelMeta(
 )
 sdadas__mmlw_e5_small = ModelMeta(
     name="sdadas/mmlw-e5-small",
+    model_type=["dense"],
     revision="ff1298cb6d997f18b794d2f3d73cad2ba2ad739a",
     release_date="2023-11-17",
     languages=["pol-Latn"],
@@ -942,6 +977,7 @@ sdadas__mmlw_e5_small = ModelMeta(
 )
 sdadas__mmlw_roberta_base = ModelMeta(
     name="sdadas/mmlw-roberta-base",
+    model_type=["dense"],
     revision="0ac7f23f6c96af601fa6a17852bd08d5136d6365",
     release_date="2023-11-17",
     languages=["pol-Latn"],
@@ -964,6 +1000,7 @@ sdadas__mmlw_roberta_base = ModelMeta(
 )
 sdadas__mmlw_roberta_large = ModelMeta(
     name="sdadas/mmlw-roberta-large",
+    model_type=["dense"],
     revision="b8058066a8de32d0737b3cd82d8b4f4108745af9",
     release_date="2023-11-17",
     languages=["pol-Latn"],
@@ -1041,6 +1078,7 @@ udever_languages = [
 
 izhx__udever_bloom_1b1 = ModelMeta(
     name="izhx/udever-bloom-1b1",
+    model_type=["dense"],
     revision="7bf1ee29878cb040b2708a691aa4b61f27eaa252",
     release_date="2023-10-24",
     languages=udever_languages,
@@ -1063,6 +1101,7 @@ izhx__udever_bloom_1b1 = ModelMeta(
 )
 izhx__udever_bloom_3b = ModelMeta(
     name="izhx/udever-bloom-3b",
+    model_type=["dense"],
     revision="4edd8affe80ca89ba0f6b6ba4103fc7f25fc57b2",
     release_date="2023-10-24",
     languages=udever_languages,
@@ -1085,6 +1124,7 @@ izhx__udever_bloom_3b = ModelMeta(
 )
 izhx__udever_bloom_560m = ModelMeta(
     name="izhx/udever-bloom-560m",
+    model_type=["dense"],
     revision="b2a723e355946ec5a5c5fbed3459766627ded2bb",
     release_date="2023-10-24",
     languages=udever_languages,
@@ -1107,6 +1147,7 @@ izhx__udever_bloom_560m = ModelMeta(
 )
 izhx__udever_bloom_7b1 = ModelMeta(
     name="izhx/udever-bloom-7b1",
+    model_type=["dense"],
     revision="18e8d3e6dbd94868584877f2e72a105a17df22ef",
     release_date="2023-10-24",
     languages=udever_languages,
@@ -1129,6 +1170,7 @@ izhx__udever_bloom_7b1 = ModelMeta(
 )
 avsolatorio__gist_embedding_v0 = ModelMeta(
     name="avsolatorio/GIST-Embedding-v0",
+    model_type=["dense"],
     revision="bf6b2e55e92f510a570ad4d7d2da2ec8cd22590c",
     release_date="2024-01-31",
     languages=["eng-Latn"],
@@ -1168,6 +1210,7 @@ avsolatorio__gist_embedding_v0 = ModelMeta(
 )
 avsolatorio__gist_all_minilm_l6_v2 = ModelMeta(
     name="avsolatorio/GIST-all-MiniLM-L6-v2",
+    model_type=["dense"],
     revision="ea89dfad053bba14677bb784a4269898abbdce44",
     release_date="2024-02-03",
     languages=["eng-Latn"],
@@ -1207,6 +1250,7 @@ avsolatorio__gist_all_minilm_l6_v2 = ModelMeta(
 )
 avsolatorio__gist_large_embedding_v0 = ModelMeta(
     name="avsolatorio/GIST-large-Embedding-v0",
+    model_type=["dense"],
     revision="7831200e2f7819b994490c091cf3258a2b821f0c",
     release_date="2024-02-14",
     languages=["eng-Latn"],
@@ -1246,6 +1290,7 @@ avsolatorio__gist_large_embedding_v0 = ModelMeta(
 )
 avsolatorio__gist_small_embedding_v0 = ModelMeta(
     name="avsolatorio/GIST-small-Embedding-v0",
+    model_type=["dense"],
     revision="d6c4190f9e01b9994dc7cac99cf2f2b85cfb57bc",
     release_date="2024-02-03",
     languages=["eng-Latn"],
@@ -1285,6 +1330,7 @@ avsolatorio__gist_small_embedding_v0 = ModelMeta(
 )
 bigscience__sgpt_bloom_7b1_msmarco = ModelMeta(
     name="bigscience/sgpt-bloom-7b1-msmarco",
+    model_type=["dense"],
     revision="dc579f3d2d5a0795eba2049e16c3e36c74007ad3",
     release_date="2022-08-26",
     languages=None,
@@ -1307,6 +1353,7 @@ bigscience__sgpt_bloom_7b1_msmarco = ModelMeta(
 )
 aari1995__german_semantic_sts_v2 = ModelMeta(
     name="aari1995/German_Semantic_STS_V2",
+    model_type=["dense"],
     revision="22912542b0ec7a7ef369837e28ffe6352a27afc9",
     release_date="2022-11-17",
     languages=["deu-Latn"],
@@ -1330,6 +1377,7 @@ aari1995__german_semantic_sts_v2 = ModelMeta(
 )
 abhinand__medembed_small_v0_1 = ModelMeta(
     name="abhinand/MedEmbed-small-v0.1",
+    model_type=["dense"],
     revision="40a5850d046cfdb56154e332b4d7099b63e8d50e",
     release_date="2024-10-20",
     languages=["eng-Latn"],
@@ -1361,6 +1409,7 @@ abhinand__medembed_small_v0_1 = ModelMeta(
 )
 avsolatorio__noinstruct_small_embedding_v0 = ModelMeta(
     name="avsolatorio/NoInstruct-small-Embedding-v0",
+    model_type=["dense"],
     revision="b38747000553d8268915c95a55fc87e707c9aadd",
     release_date="2024-05-01",
     languages=["eng-Latn"],
@@ -1383,6 +1432,7 @@ avsolatorio__noinstruct_small_embedding_v0 = ModelMeta(
 )
 brahmairesearch__slx_v0_1 = ModelMeta(
     name="brahmairesearch/slx-v0.1",
+    model_type=["dense"],
     revision="688c83fd1a7f34b25575a2bc26cfd87c11b4ce71",
     release_date="2024-08-13",
     languages=["eng-Latn"],
@@ -1405,6 +1455,7 @@ brahmairesearch__slx_v0_1 = ModelMeta(
 )
 deepfile__embedder_100p = ModelMeta(
     name="deepfile/embedder-100p",
+    model_type=["dense"],
     revision="aa02f08f11517977fbcdc94dc9dbf9a1ca152d9b",
     release_date="2023-07-24",
     languages=None,
@@ -1427,6 +1478,7 @@ deepfile__embedder_100p = ModelMeta(
 )
 infgrad__stella_base_en_v2 = ModelMeta(
     name="infgrad/stella-base-en-v2",
+    model_type=["dense"],
     revision="c9e80ff9892d80b39dc54e30a7873f91ea161034",
     release_date="2023-10-19",
     languages=["eng-Latn"],
@@ -1449,6 +1501,7 @@ infgrad__stella_base_en_v2 = ModelMeta(
 )
 malenia1__ternary_weight_embedding = ModelMeta(
     name="malenia1/ternary-weight-embedding",
+    model_type=["dense"],
     revision="a1208fb7f646647bb62639fd2e1eb6cc2ef3738e",
     release_date="2024-10-23",
     languages=None,
@@ -1471,6 +1524,7 @@ malenia1__ternary_weight_embedding = ModelMeta(
 )
 omarelshehy__arabic_english_sts_matryoshka = ModelMeta(
     name="omarelshehy/arabic-english-sts-matryoshka",
+    model_type=["dense"],
     revision="763d116fbe8bf7883c64635c862feeaa3768bb64",
     release_date="2024-10-13",
     languages=["ara-Arab", "eng-Latn"],
@@ -1502,6 +1556,7 @@ openbmb__minicpm_embedding = ModelMeta(
         # https://huggingface.co/openbmb/MiniCPM-Embedding/blob/c0cb2de33fb366e17c30f9d53142ff11bc18e049/README.md?code=true#L405
     ),
     name="openbmb/MiniCPM-Embedding",
+    model_type=["dense"],
     revision="c0cb2de33fb366e17c30f9d53142ff11bc18e049",
     release_date="2024-09-04",
     languages=["zho-Hans", "eng-Latn"],
@@ -1524,6 +1579,7 @@ openbmb__minicpm_embedding = ModelMeta(
 
 silma_ai__silma_embedding_matryoshka_v0_1 = ModelMeta(
     name="silma-ai/silma-embeddding-matryoshka-v0.1",
+    model_type=["dense"],
     revision="a520977a9542ebdb8a7206df6b7ff6977f1886ea",
     release_date="2024-10-12",
     languages=["ara-Arab", "eng-Latn"],
@@ -1547,6 +1603,7 @@ silma_ai__silma_embedding_matryoshka_v0_1 = ModelMeta(
 
 sbert_chinese_general_v1 = ModelMeta(
     name="DMetaSoul/sbert-chinese-general-v1",
+    model_type=["dense"],
     revision="bd27765956bcc2fcf682de0097819947ac10037e",
     release_date="2022-03-25",
     languages=["zho-Hans"],
@@ -1574,6 +1631,7 @@ sbert_chinese_general_v1 = ModelMeta(
 
 dmeta_embedding_zh_small = ModelMeta(
     name="DMetaSoul/Dmeta-embedding-zh-small",
+    model_type=["dense"],
     revision="2050d3439a2f68999dd648c1697471acaac37a29",
     release_date="2024-03-25",
     languages=["zho-Hans"],
@@ -1596,6 +1654,7 @@ dmeta_embedding_zh_small = ModelMeta(
 
 xiaobu_embedding = ModelMeta(
     name="lier007/xiaobu-embedding",
+    model_type=["dense"],
     revision="59c79d82eb5223cd9895f6eb8e825c7fa10e4e92",
     release_date="2024-01-09",
     languages=["zho-Hans"],
@@ -1619,6 +1678,7 @@ xiaobu_embedding = ModelMeta(
 
 xiaobu_embedding_v2 = ModelMeta(
     name="lier007/xiaobu-embedding-v2",
+    model_type=["dense"],
     revision="1912f2e59a5c2ef802a471d735a38702a5c9485e",
     release_date="2024-06-30",
     languages=["zho-Hans"],
@@ -1642,6 +1702,7 @@ xiaobu_embedding_v2 = ModelMeta(
 
 yinka_embedding = ModelMeta(
     name="Classical/Yinka",
+    model_type=["dense"],
     revision="59c79d82eb5223cd9895f6eb8e825c7fa10e4e92",
     release_date="2024-01-09",
     languages=["zho-Hans"],
@@ -1664,6 +1725,7 @@ yinka_embedding = ModelMeta(
 )
 conan_embedding = ModelMeta(
     name="TencentBAC/Conan-embedding-v1",
+    model_type=["dense"],
     revision="bb9749a57d4f02fd71722386f8d0f5a9398d7eeb",
     release_date="2024-08-22",
     languages=["zho-Hans"],
@@ -1688,6 +1750,7 @@ conan_embedding = ModelMeta(
 ember_v1 = ModelMeta(
     loader=sentence_transformers_loader,
     name="llmrails/ember-v1",
+    model_type=["dense"],
     revision="5e5ce5904901f6ce1c353a95020f17f09e5d021d",
     release_date="2023-10-10",
     languages=["eng-Latn"],

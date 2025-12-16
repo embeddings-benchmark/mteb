@@ -37,6 +37,7 @@ Hinvec_bidir = ModelMeta(
         add_eos_token=True,
     ),
     name="Sailesh97/Hinvec",
+    model_type=["dense"],
     languages=["eng-Latn", "hin-Deva"],
     open_weights=True,
     revision="d4fc678720cc1b8c5d18599ce2d9a4d6090c8b6b",

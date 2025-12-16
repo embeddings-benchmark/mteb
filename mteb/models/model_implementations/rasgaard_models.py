@@ -6,6 +6,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 potion_base_8m = ModelMeta(
     loader=Model2VecModel,  # type: ignore
     name="rasgaard/m2v-dfm-large",
+    model_type=["dense"],
     languages=["dan-Latn"],
     open_weights=True,
     revision="387897cfb09992e6d45ea9cd7b28b9fcf119e23a",

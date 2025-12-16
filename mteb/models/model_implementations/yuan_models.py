@@ -13,6 +13,7 @@ yuan_emb_zh_datasets = {
 
 yuan_embedding_2_zh = ModelMeta(
     name="IEITYuan/Yuan-embedding-2.0-zh",
+    model_type=["dense"],
     loader=sentence_transformers_loader,
     languages=["zho-Hans"],
     open_weights=True,

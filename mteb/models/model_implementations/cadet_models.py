@@ -35,6 +35,7 @@ cadet_embed = ModelMeta(
         },
     ),
     name="manveertamber/cadet-embed-base-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="8056d118be37a566f20972a5f35cda815f6bc47e",
     open_weights=True,

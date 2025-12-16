@@ -54,6 +54,7 @@ colsmol_256m = ModelMeta(
         torch_dtype=torch.float16,
     ),
     name="vidore/colSmol-256M",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
     release_date="2025-01-22",
@@ -80,6 +81,7 @@ colsmol_500m = ModelMeta(
         torch_dtype=torch.float16, attn_implementation="flash_attention_2"
     ),
     name="vidore/colSmol-500M",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="1aa9325cba7ed2b3b9b97ede4d55026322504902",
     release_date="2025-01-22",

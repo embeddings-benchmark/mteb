@@ -43,6 +43,7 @@ samilpwc_expr = ModelMeta(
         apply_instruction_to_passages=False,
     ),
     name="SamilPwC-AXNode-GenAI/PwC-Embedding_expr",
+    model_type=["dense"],
     languages=[
         "kor-Hang",
     ],

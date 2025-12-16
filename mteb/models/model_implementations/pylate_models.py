@@ -337,6 +337,7 @@ class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
 colbert_v2 = ModelMeta(
     loader=MultiVectorModel,
     name="colbert-ir/colbertv2.0",
+    model_type=["late_interaction"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="c1e84128e85ef755c096a95bdb06b47793b13acf",
@@ -369,6 +370,7 @@ jina_colbert_v2 = ModelMeta(
         trust_remote_code=True,
     ),
     name="jinaai/jina-colbert-v2",
+    model_type=["late_interaction"],
     languages=[
         "ara-Arab",
         "ben-Beng",
@@ -421,6 +423,7 @@ jina_colbert_v2 = ModelMeta(
 lightonai__gte_moderncolbert_v1 = ModelMeta(
     loader=MultiVectorModel,
     name="lightonai/GTE-ModernColBERT-v1",
+    model_type=["late_interaction"],
     languages=[
         "eng-Latn",
     ],

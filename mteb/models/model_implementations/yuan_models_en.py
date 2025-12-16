@@ -37,6 +37,7 @@ yuan_embedding_2_en = ModelMeta(
         apply_instruction_to_passages=False,
     ),
     name="IEITYuan/Yuan-embedding-2.0-en",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="b2fd15da3bcae3473c8529593825c15068f09fce",

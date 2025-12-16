@@ -7,6 +7,7 @@ greennode_embedding_large_vn_v1_training_data = {
 
 greennode_embedding_large_vn_v1 = ModelMeta(
     name="GreenNode/GreenNode-Embedding-Large-VN-V1",
+    model_type=["dense"],
     revision="660def1f6e1c8ecdf39f6f9c95829e3cf0cef837",
     release_date="2024-04-11",
     languages=[
@@ -31,6 +32,7 @@ greennode_embedding_large_vn_v1 = ModelMeta(
 
 greennode_embedding_large_vn_mixed_v1 = ModelMeta(
     name="GreenNode/GreenNode-Embedding-Large-VN-Mixed-V1",
+    model_type=["dense"],
     revision="1d3dddb3862292dab4bd3eddf0664c0335ad5843",
     release_date="2024-04-11",
     languages=[
@@ -55,6 +57,7 @@ greennode_embedding_large_vn_mixed_v1 = ModelMeta(
 
 aiteamvn_vietnamese_embeddings = ModelMeta(
     name="AITeamVN/Vietnamese_Embedding",
+    model_type=["dense"],
     revision="fcbbb905e6c3757d421aaa5db6fd7c53d038f6fb",
     release_date="2024-03-17",
     languages=[
@@ -79,6 +82,7 @@ aiteamvn_vietnamese_embeddings = ModelMeta(
 
 hiieu_halong_embedding = ModelMeta(
     name="hiieu/halong_embedding",
+    model_type=["dense"],
     revision="b57776031035f70ed2030d2e35ecc533eb0f8f71",
     release_date="2024-07-06",
     languages=[
@@ -103,6 +107,7 @@ hiieu_halong_embedding = ModelMeta(
 
 sup_simcse_vietnamese_phobert_base_ = ModelMeta(
     name="VoVanPhuc/sup-SimCSE-VietNamese-phobert-base",
+    model_type=["dense"],
     revision="608779b86741a8acd8c8d38132974ff04086b138",
     release_date="2021-05-26",
     languages=[
@@ -126,6 +131,7 @@ sup_simcse_vietnamese_phobert_base_ = ModelMeta(
 
 bkai_foundation_models_vietnamese_bi_encoder = ModelMeta(
     name="bkai-foundation-models/vietnamese-bi-encoder",
+    model_type=["dense"],
     revision="84f9d9ada0d1a3c37557398b9ae9fcedcdf40be0",
     release_date="2023-09-09",
     languages=[
