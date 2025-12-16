@@ -116,56 +116,44 @@ training_data = {
 # Predefined prompts for various RTEB tasks
 PREDEFINED_PROMPTS = {
     # ========== Open Datasets ==========
-
     # Legal domain
     "AILACasedocs": "Given a legal case scenario, retrieve the most relevant case documents",
     "AILAStatutes": "Given a legal scenario, retrieve the most relevant statute documents",
     "LegalQuAD": "Given a legal question, retrieve relevant legal documents that answer the question",
     "LegalSummarization": "Given a query, retrieve relevant legal documents for summarization",
-
     # Code domain
     "AppsRetrieval": "Given a query about mobile applications, retrieve relevant app information",
     "HumanEvalRetrieval": "Given a code problem description, retrieve relevant code examples",
     "MBPPRetrieval": "Given a programming problem description, retrieve relevant code solutions",
     "DS1000Retrieval": "Given a data science problem, retrieve relevant code snippets",
     "FreshStackRetrieval": "Given a programming question, retrieve relevant Stack Overflow posts",
-
     # Finance domain
     "FinQARetrieval": "Given a financial question, retrieve relevant financial documents",
     "FinanceBenchRetrieval": "Given a financial query, retrieve relevant financial information",
     "HC3FinanceRetrieval": "Given a finance-related query, retrieve relevant documents",
-
     # Medical domain
     "CUREv1": "Given a medical query, retrieve relevant clinical documents",
     "ChatDoctorRetrieval": "Given a medical question, retrieve relevant medical information",
-
     # SQL domain
     "WikiSQLRetrieval": "Given a natural language query, retrieve relevant SQL examples",
-
     # Multilingual
     "MIRACLRetrievalHardNegatives": "Given a query, retrieve relevant passages",
-
     # ========== Private/Closed Datasets ==========
-
     # Code domain (Private)
     "Code1Retrieval": "Given a code problem description, retrieve relevant code examples",
     "JapaneseCode1Retrieval": "Given a code problem description, retrieve relevant code examples",
-
     # Finance domain (Private)
     "EnglishFinance1Retrieval": "Given a financial query, retrieve relevant financial documents",
     "EnglishFinance2Retrieval": "Given a financial query, retrieve relevant financial documents",
     "EnglishFinance3Retrieval": "Given a financial query, retrieve relevant financial documents",
     "EnglishFinance4Retrieval": "Given a financial query, retrieve relevant financial documents",
-
     # Healthcare domain (Private)
     "EnglishHealthcare1Retrieval": "Given a medical question, retrieve relevant medical information",
     "GermanHealthcare1Retrieval": "Given a medical question, retrieve relevant medical information",
-
     # Legal domain (Private)
     "FrenchLegal1Retrieval": "Given a legal query, retrieve relevant legal documents",
     "GermanLegal1Retrieval": "Given a legal query, retrieve relevant legal documents",
     "JapaneseLegal1Retrieval": "Given a legal query, retrieve relevant legal documents",
-
     # General/Multilingual (Private)
     "French1Retrieval": "Given a query, retrieve relevant passages",
     "German1Retrieval": "Given a query, retrieve relevant passages",
@@ -190,6 +178,7 @@ def mod_instruct_loader(
         # The Qwen3 code only use left padding in flash_attention_2 mode.
         encoder.tokenizer.padding_side = "left"
     return model
+
 
 MoD_Embedding = ModelMeta(
     loader=mod_instruct_loader,
