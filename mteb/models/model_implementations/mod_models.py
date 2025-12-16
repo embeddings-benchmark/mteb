@@ -212,4 +212,5 @@ MoD_Embedding = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=MOD_CITATION,
+    adapted_from="Qwen/Qwen3-Embedding-4B",
 )
