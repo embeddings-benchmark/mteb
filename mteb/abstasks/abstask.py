@@ -1,5 +1,6 @@
 import json
 import logging
+import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from copy import copy
@@ -103,6 +104,9 @@ class AbsTask(ABC):
         """Check if the dataset is superseded by a newer version."""
         if self.superseded_by:
             logger.warning(
+                f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}', you might consider using the newer version of the dataset."
+            )
+            warnings.warn(
                 f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}', you might consider using the newer version of the dataset."
             )
 
@@ -608,6 +612,9 @@ class AbsTask(ABC):
             logger.info(f"Unloaded dataset {self.metadata.name} from memory.")
         else:
             logger.warning(
+                f"Dataset {self.metadata.name} is not loaded, cannot unload it."
+            )
+            warnings.warn(
                 f"Dataset {self.metadata.name} is not loaded, cannot unload it."
             )
 

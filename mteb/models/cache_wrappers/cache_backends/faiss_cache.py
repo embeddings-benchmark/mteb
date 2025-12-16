@@ -1,5 +1,6 @@
 import json
 import logging
+import warnings
 from pathlib import Path
 
 import numpy as np
@@ -72,6 +73,7 @@ class FaissCache:
             return self.index.reconstruct(idx)
         except Exception:
             logger.warning(f"Vector id {idx} missing for hash {item_hash}")
+            warnings.warn(f"Vector id {idx} missing for hash {item_hash}")
             return None
 
     def save(self) -> None:

@@ -1,5 +1,6 @@
 import heapq
 import logging
+import warnings
 from typing import Any
 
 import torch
@@ -341,6 +342,7 @@ class SearchEncoderWrapper:
             query_id = query_idx_to_id[query_idx]
             if query_id not in top_ranked:
                 logger.warning(f"No pre-ranked documents found for query {query_id}")
+                warnings.warn(f"No pre-ranked documents found for query {query_id}")
                 continue
 
             ranked_ids = top_ranked[query_id]
@@ -512,6 +514,7 @@ class SearchCrossEncoderWrapper:
         for query_id, corpus_ids in top_ranked.items():
             if query_id not in top_ranked:
                 logger.warning(f"No pre-ranked documents found for query {query_id}")
+                warnings.warn(f"No pre-ranked documents found for query {query_id}")
                 continue
 
             query_idx = query_id_to_idx[query_id]

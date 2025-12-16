@@ -1,4 +1,5 @@
 import logging
+import warnings
 from collections.abc import Callable, Sequence
 from dataclasses import field
 from enum import Enum
@@ -258,6 +259,7 @@ class ModelMeta(BaseModel):
                     training_datasets |= adapted_training_datasets
             except (ValueError, KeyError) as e:
                 logger.warning(f"Could not get source model: {e} in MTEB")
+                warnings.warn(f"Could not get source model: {e} in MTEB")
 
         return_dataset = training_datasets.copy()
         visited = set()
@@ -349,6 +351,7 @@ class ModelMeta(BaseModel):
                 return release_date
         except RepositoryNotFoundError:
             logger.warning(f"Model repository not found for {model_name}.")
+            warnings.warn(f"Model repository not found for {model_name}.")
 
         return None
 

@@ -1,6 +1,7 @@
 import argparse
 import logging
 import os
+import warnings
 from pathlib import Path
 
 import torch
@@ -72,11 +73,17 @@ def run(args: argparse.Namespace) -> None:
         logger.warning(
             "`--overwrite` is deprecated, please use `--overwrite-strategy 'always'` instead."
         )
+        warnings.warn(
+            "`--overwrite` is deprecated, please use `--overwrite-strategy 'always'` instead."
+        )
         overwrite_strategy = OverwriteStrategy.ALWAYS.value
 
     prediction_folder = args.prediction_folder
     if args.save_predictions:
         logger.warning(
+            "`--save_predictions` is deprecated, please use `--prediction-folder` instead."
+        )
+        warnings.warn(
             "`--save_predictions` is deprecated, please use `--prediction-folder` instead."
         )
         prediction_folder = args.output_folder
@@ -280,6 +287,7 @@ def _create_meta(args: argparse.Namespace) -> None:
 
     if output_path.exists() and overwrite:
         logger.warning("Output path already exists, overwriting.")
+        warnings.warn("Output path already exists, overwriting.")
     elif output_path.exists():
         raise FileExistsError(
             "Output path already exists, use --overwrite to overwrite."

@@ -1,6 +1,7 @@
 import logging
 import os
 import time
+import warnings
 from typing import Any
 
 import numpy as np
@@ -247,6 +248,7 @@ class HakimModelWrapper(AbsEncoder):
 
         if not task_prompt:
             logger.warning(f"Unknown dataset: {task_name}, no preprocessing applied.")
+            warnings.warn(f"Unknown dataset: {task_name}, no preprocessing applied.")
             return sample
 
         task_prompt = f"مسئله : {task_prompt}"

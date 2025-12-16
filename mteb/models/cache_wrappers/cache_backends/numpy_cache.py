@@ -1,5 +1,6 @@
 import json
 import logging
+import warnings
 from pathlib import Path
 
 import numpy as np
@@ -42,6 +43,9 @@ class NumpyCache:
                 item_hash = _hash_item(item)
                 if item_hash in self.hash_to_index:
                     logger.warning(
+                        "Hash collision or duplicate item. Overwriting existing vector."
+                    )
+                    warnings.warn(
                         "Hash collision or duplicate item. Overwriting existing vector."
                     )
                     index = self.hash_to_index[item_hash]
@@ -110,6 +114,9 @@ class NumpyCache:
             logger.warning(
                 "Dimension file not found. Vector dimension remains uninitialized."
             )
+            warnings.warn(
+                "Dimension file not found. Vector dimension remains uninitialized."
+            )
 
     def save(self) -> None:
         """Persist VectorCacheMap to disk."""
@@ -154,9 +161,15 @@ class NumpyCache:
                     logger.warning(
                         "Vector dimension not set. Unable to load vectors file."
                     )
+                    warnings.warn(
+                        "Vector dimension not set. Unable to load vectors file."
+                    )
                 logger.info(f"Loaded VectorCacheMap from {self.directory}")
             else:
                 logger.warning(
+                    "No existing files found. Initialized empty VectorCacheMap."
+                )
+                warnings.warn(
                     "No existing files found. Initialized empty VectorCacheMap."
                 )
         except Exception as e:

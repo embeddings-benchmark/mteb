@@ -1,4 +1,5 @@
 import logging
+import warnings
 from collections.abc import Callable
 from typing import Any, cast
 
@@ -139,6 +140,9 @@ def _convert_conv_history_to_query(
         ]
         if not _warned_about_user_role:
             logger.warning(
+                "Conversations are a list of strings. Used 'user' role for all turns."
+            )
+            warnings.warn(
                 "Conversations are a list of strings. Used 'user' role for all turns."
             )
             _warned_about_user_role = True

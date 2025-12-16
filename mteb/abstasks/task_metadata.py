@@ -1,5 +1,6 @@
 import json
 import logging
+import warnings
 from collections.abc import Sequence
 from pathlib import Path
 from typing import Any, Literal
@@ -377,6 +378,9 @@ class TaskMetadata(BaseModel):
             # check for whitespace in the citation
             if " " in cite:
                 logger.warning(
+                    "Citation contains whitespace. Please ensure that the citation is correctly formatted."
+                )
+                warnings.warn(
                     "Citation contains whitespace. Please ensure that the citation is correctly formatted."
                 )
             return f"\\cite{{{cite}}}"

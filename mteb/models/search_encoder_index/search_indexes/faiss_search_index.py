@@ -1,4 +1,5 @@
 import logging
+import warnings
 from collections.abc import Callable
 
 import numpy as np
@@ -128,6 +129,7 @@ class FaissSearchIndex:
             ranked_ids = top_ranked.get(query_id)
             if not ranked_ids:
                 logger.warning(f"No top-ranked documents for query {query_id}")
+                warnings.warn(f"No top-ranked documents for query {query_id}")
                 scores_all.append([])
                 idxs_all.append([])
                 continue

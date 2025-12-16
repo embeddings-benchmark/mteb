@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import warnings
 from collections.abc import Iterable
 from copy import deepcopy
 from pathlib import Path
@@ -77,6 +78,7 @@ _empty_model_meta = ModelMeta(
 
 def _create_empty_model_meta() -> ModelMeta:
     logger.warning("Model metadata is missing. Using empty metadata.")
+    warnings.warn("Model metadata is missing. Using empty metadata.")
     meta = deepcopy(_empty_model_meta)
     meta.revision = "no_revision_available"
     meta.name = "no_model_name_available"
@@ -168,6 +170,10 @@ def _evaluate_task(
         except DatasetNotFoundError as e:
             if not task.metadata.is_public and public_only is None:
                 logger.warning(
+                    f"Dataset for private task '{task.metadata.name}' not found. "
+                    "Make sure you have access to the dataset and that you have set up the authentication correctly. To disable this warning set `public_only=False`"
+                )
+                warnings.warn(
                     f"Dataset for private task '{task.metadata.name}' not found. "
                     "Make sure you have access to the dataset and that you have set up the authentication correctly. To disable this warning set `public_only=False`"
                 )

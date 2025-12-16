@@ -1,4 +1,5 @@
 import logging
+import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Sequence
 from typing import Any, Literal, cast, get_args, overload
@@ -187,6 +188,7 @@ class AbsEncoder(ABC):
                 except KeyError:
                     msg = f"Task name {task_name} is not valid. {valid_keys_msg}"
                     logger.warning(msg)
+                    warnings.warn(msg)
                     invalid_task_messages.add(msg)
                     invalid_keys.add(task_key)
 
@@ -229,6 +231,9 @@ class AbsEncoder(ABC):
             if prompt.get(prompt_type.value):
                 return prompt[prompt_type.value]
             logger.warning(
+                f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
+            )
+            warnings.warn(
                 f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
             )
             return ""

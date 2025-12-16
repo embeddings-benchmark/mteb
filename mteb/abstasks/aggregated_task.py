@@ -1,4 +1,5 @@
 import logging
+import warnings
 from pathlib import Path
 from typing import Any
 
@@ -116,6 +117,9 @@ class AbsTaskAggregate(AbsTask):
             logger.warning(
                 f"All tasks of {self.metadata.name} is not run using the same version."
             )
+            warnings.warn(
+                f"All tasks of {self.metadata.name} is not run using the same version."
+            )
             task_res.mteb_version = None
         task_res.mteb_version = task_results[0].mteb_version
         return task_res
@@ -124,6 +128,9 @@ class AbsTaskAggregate(AbsTask):
         """Check if the dataset is superseded by a newer version"""
         if self.superseded_by:
             logger.warning(
+                f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}', you might consider using the newer version of the dataset."
+            )
+            warnings.warn(
                 f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}', you might consider using the newer version of the dataset."
             )
 

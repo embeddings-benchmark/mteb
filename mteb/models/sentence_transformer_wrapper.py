@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import warnings
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -81,6 +82,9 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             logger.warning(
                 f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
             )
+            warnings.warn(
+                f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
+            )
             self.model.prompts = model_prompts
 
         self.model_prompts, invalid_prompts = self.validate_task_to_prompt_name(
@@ -90,6 +94,9 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         if invalid_prompts:
             invalid_prompts = "\n".join(invalid_prompts)
             logger.warning(
+                f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
+            )
+            warnings.warn(
                 f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
             )
 
@@ -102,6 +109,10 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             )
         ):
             logger.warning(
+                "SentenceTransformers that use prompts most often need to be configured with at least 'query' and"
+                f" 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
+            )
+            warnings.warn(
                 "SentenceTransformers that use prompts most often need to be configured with at least 'query' and"
                 f" 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
             )

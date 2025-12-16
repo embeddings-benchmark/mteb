@@ -2,6 +2,7 @@
 
 import difflib
 import logging
+import warnings
 from collections import Counter, defaultdict
 from collections.abc import Sequence
 from typing import Any
@@ -341,6 +342,9 @@ def get_task(
     if task_name in _TASK_RENAMES:
         _task_name = _TASK_RENAMES[task_name]
         logger.warning(
+            f"The task with the given name '{task_name}' has been renamed to '{_task_name}'. To prevent this warning use the new name."
+        )
+        warnings.warn(
             f"The task with the given name '{task_name}' has been renamed to '{_task_name}'. To prevent this warning use the new name."
         )
 

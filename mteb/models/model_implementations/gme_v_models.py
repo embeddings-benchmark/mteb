@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import math
+import warnings
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -262,6 +263,9 @@ def smart_resize(
 
     if max(h_bar, w_bar) / min(h_bar, w_bar) > MAX_RATIO:
         logger.warning(
+            f"Absolute aspect ratio must be smaller than {MAX_RATIO}, got {max(h_bar, w_bar) / min(h_bar, w_bar)}"
+        )
+        warnings.warn(
             f"Absolute aspect ratio must be smaller than {MAX_RATIO}, got {max(h_bar, w_bar) / min(h_bar, w_bar)}"
         )
         if h_bar > w_bar:

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import warnings
 from argparse import Namespace
 from collections import defaultdict
 from collections.abc import Callable, Iterable
@@ -463,6 +464,7 @@ class TaskResult(BaseModel):
                         hf_subset_scores["main_score"] = hf_subset_scores[main_score]
                     else:
                         logger.warning(f"Main score {main_score} not found in scores")
+                        warnings.warn(f"Main score {main_score} not found in scores")
                         hf_subset_scores["main_score"] = None
 
         # specific fixes:
@@ -659,9 +661,15 @@ class TaskResult(BaseModel):
                 logger.warning(
                     f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
                 )
+                warnings.warn(
+                    f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
+                )
             seen_splits.add(split)
         if seen_splits != set(splits):
             logger.warning(
+                f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
+            )
+            warnings.warn(
                 f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
             )
         new_res = {**self.to_dict(), "scores": new_scores}

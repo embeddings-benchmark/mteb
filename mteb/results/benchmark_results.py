@@ -342,6 +342,7 @@ class BenchmarkResults(BaseModel):
 
         if not scores_data:
             logger.warning("No scores data available. Returning empty DataFrame.")
+            warnings.warn("No scores data available. Returning empty DataFrame.")
             return pd.DataFrame()
 
         # Create DataFrame

@@ -3,6 +3,7 @@ import logging
 import os
 import shutil
 import subprocess
+import warnings
 from collections import defaultdict
 from collections.abc import Sequence
 from pathlib import Path
@@ -82,6 +83,9 @@ class ResultCache:
 
         if model_revision is None:
             logger.warning(
+                "model_revision is not specified, attempting to load the latest revision. To disable this behavior, specify model_revision explicitly."
+            )
+            warnings.warn(
                 "model_revision is not specified, attempting to load the latest revision. To disable this behavior, specify model_revision explicitly."
             )
             # get revs from paths
@@ -258,6 +262,7 @@ class ResultCache:
             logger.info(f"Cache directory {self.cache_path} cleared.")
         else:
             logger.warning(f"Cache directory {self.cache_path} does not exist.")
+            warnings.warn(f"Cache directory {self.cache_path} does not exist.")
 
     def __repr__(self) -> str:
         return f"ResultCache(cache_path={self.cache_path})"

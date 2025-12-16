@@ -1,4 +1,5 @@
 import logging
+import warnings
 from pathlib import Path
 
 from huggingface_hub import ModelCard, ModelCardData, repo_exists
@@ -93,6 +94,9 @@ def generate_model_card(
             existing_model_card.push_to_hub(existing_model_card_id_or_path, token=token)
         else:
             logger.warning(
+                f"Repository {existing_model_card_id_or_path} does not exist on the Hub. Skipping push to hub."
+            )
+            warnings.warn(
                 f"Repository {existing_model_card_id_or_path} does not exist on the Hub. Skipping push to hub."
             )
     existing_model_card.save(output_path)
