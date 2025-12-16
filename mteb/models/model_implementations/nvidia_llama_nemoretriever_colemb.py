@@ -65,14 +65,14 @@ class LlamaNemoretrieverColembed(AbsEncoder):
             iterator = DataLoader(images, batch_size=batch_size)
 
         for batch in iterator:
-            for b in batch:
+            for image in batch["image"]:
                 pil_img = (
-                    F.to_pil_image(b.to("cpu")) if not isinstance(b, Image.Image) else b
+                    image if isinstance(image, Image.Image) else F.to_pil_image(image.to("cpu"))
                 )
                 all_images.append(pil_img)
 
         batch_size = 1
-        return self.model.forward_passages(all_images, batch_size=batch_size)
+        return self.model.forward_images(all_images, batch_size=batch_size)
 
     def calculate_probs(self, text_embeddings, image_embeddings):
         scores = self.similarity(text_embeddings, image_embeddings)
