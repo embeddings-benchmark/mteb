@@ -429,6 +429,8 @@ class ModelMeta(BaseModel):
         meta.loader = CrossEncoderWrapper
         meta.embed_dim = None
         meta.modalities = ["text"]
+        meta.is_cross_encoder = True
+        meta.model_type = ["cross_encoder"]
         return meta
 
     def is_zero_shot_on(self, tasks: Sequence[AbsTask] | Sequence[str]) -> bool | None:
