@@ -1,16 +1,15 @@
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import torch
+from packaging.version import Version
 from torch.utils.data import DataLoader
+from transformers import __version__ as transformers_version
 
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models import CrossEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.model_meta import ModelMeta
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
-
-if TYPE_CHECKING:
-    pass
-
 
 LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperforming,
       title={Llama Nemoretriever Colembed: Top-Performing Text-Image Retrieval Model},
@@ -34,6 +33,14 @@ class LlamaNemoretrieverColembed(AbsEncoder):
         attn_implementation="flash_attention_2",
         **kwargs,
     ):
+        required_transformers_version = "4.49.0"
+
+        if Version(transformers_version) != Version(required_transformers_version):
+            raise RuntimeError(
+                f"transformers version {transformers_version} is not match with required "
+                f"install version {required_transformers_version} to run `nvidia/NV-Embed-v2`"
+            )
+
         from transformers import AutoModel
 
         self.model = AutoModel.from_pretrained(
@@ -188,4 +195,55 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     use_instructions=True,
     training_datasets=TRAINING_DATA,
     citation=LLAMA_NEMORETRIEVER_CITATION,
+)
+
+
+def _nemotron_rerank_model(model: str, revision: str, **kwargs) -> CrossEncoderWrapper:
+    required_transformers_version = "4.42.4"
+
+    if Version(transformers_version) != Version(required_transformers_version):
+        raise RuntimeError(
+            f"transformers version {transformers_version} is not match with required "
+            f"install version {required_transformers_version} to run `nvidia/NV-Embed-v2`"
+        )
+
+    return CrossEncoderWrapper(
+        model=model,
+        revision=revision,
+        **kwargs,
+    )
+
+
+nemotron_rerank_1b_v2 = ModelMeta(
+    loader=_nemotron_rerank_model,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        query_prefix="question:",
+        passage_prefix=" \n \n passage:",
+    ),
+    name="nvidia/llama-nemotron-rerank-1b-v2",
+    revision="78efcfdc23b53a753f6c73f2d78b18132a34ac4d",
+    release_date="2025-10-16",
+    languages=["eng-Latn"],
+    n_parameters=1235816448,
+    memory_usage_mb=2357.0,
+    max_tokens=4096,
+    embed_dim=2048,
+    license="https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/nvidia/llama-nemotron-rerank-1b-v2",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=None,
+    training_datasets=set(
+        # private
+    ),
+    adapted_from="meta-llama/Llama-3.2-1B",
+    superseded_by=None,
+    modalities=["text"],
+    is_cross_encoder=True,
+    citation=None,
+    contacts=None,
 )

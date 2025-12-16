@@ -261,6 +261,8 @@ class CrossEncoderWrapper:
         self,
         model: CrossEncoder | str,
         revision: str | None = None,
+        query_prefix: str | None = None,
+        passage_prefix: str | None = None,
         **kwargs,
     ) -> None:
         from sentence_transformers import CrossEncoder
@@ -271,6 +273,8 @@ class CrossEncoderWrapper:
             self.model = CrossEncoder(model, revision=revision, **kwargs)
 
         self.mteb_model_meta = ModelMeta.from_cross_encoder(self.model)
+        self.query_prefix = query_prefix or ""
+        self.passage_prefix = passage_prefix or ""
 
     def predict(
         self,
@@ -299,10 +303,10 @@ class CrossEncoderWrapper:
             The predicted relevance scores for each inputs pair.
         """
         all_queries_with_instructions = [
-            text for batch in inputs1 for text in batch["text"]
+            self.query_prefix + text for batch in inputs1 for text in batch["text"]
         ]
         all_corpus_with_instructions = [
-            text for batch in inputs2 for text in batch["text"]
+            self.passage_prefix + text for batch in inputs2 for text in batch["text"]
         ]
 
         return self.model.predict(
