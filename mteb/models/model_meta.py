@@ -128,6 +128,7 @@ class ModelMeta(BaseModel):
     loader: Callable[..., MTEBModels] | None
     loader_kwargs: dict[str, Any] = field(default_factory=dict)
     name: str | None
+    model_type: list[MODEL_TYPES] = ["dense"]
     revision: str | None
     release_date: StrDate | None
     languages: list[ISOLanguageScript] | None
@@ -148,7 +149,6 @@ class ModelMeta(BaseModel):
     superseded_by: str | None = None
     modalities: list[Modalities] = ["text"]
     is_cross_encoder: bool | None = None
-    model_type: list[MODEL_TYPES] = ["dense"]
     citation: str | None = None
     contacts: list[str] | None = None
 
