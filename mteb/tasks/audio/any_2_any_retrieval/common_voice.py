@@ -272,8 +272,8 @@ class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
         reference="https://commonvoice.mozilla.org/",
         dataset={
-            "path": "fsicoli/common_voice_17_0",
-            "revision": "8262c16bf297c87a9cd88c51997c4758ed7a8ba2",
+            "path": "mteb/common_voice_17_0",
+            "revision": "f6564f1e20e5952404a6fed6d65da9b1d393c2d3",
         },
         type="Any2AnyRetrieval",
         category="t2a",
