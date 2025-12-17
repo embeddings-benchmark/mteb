@@ -1,5 +1,4 @@
 import logging
-import warnings
 from collections.abc import Callable
 from typing import Any
 
@@ -55,15 +54,9 @@ def instruct_wrapper(
                 logger.warning(
                     "No instruction template provided. Instructions will be used as-is."
                 )
-                warnings.warn(
-                    "No instruction template provided. Instructions will be used as-is."
-                )
 
             if "gte-Qwen" in model_name_or_path:
                 logger.warning(
-                    "Instructions are used in both query and docs, which may cause performance discrepancies from the original implementation."
-                )
-                warnings.warn(
                     "Instructions are used in both query and docs, which may cause performance discrepancies from the original implementation."
                 )
 
@@ -143,9 +136,6 @@ class InstructSentenceTransformerModel(AbsEncoder):
             )
         if instruction_template is None:
             logger.warning(
-                "No instruction template provided. Instructions will be used as-is."
-            )
-            warnings.warn(
                 "No instruction template provided. Instructions will be used as-is."
             )
 
