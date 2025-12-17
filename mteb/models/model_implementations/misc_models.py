@@ -280,6 +280,7 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
   journal={arXiv e-prints},
   pages={arXiv--2010},
   year={2020}
+}
 """
 )
 Lajavaness__bilingual_embedding_large = ModelMeta(
@@ -327,7 +328,7 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
   journal={arXiv e-prints},
   pages={arXiv--2010},
   year={2020}
-
+}
 """
 )
 Lajavaness__bilingual_embedding_small = ModelMeta(
@@ -375,7 +376,7 @@ Lajavaness__bilingual_embedding_small = ModelMeta(
   journal={arXiv e-prints},
   pages={arXiv--2010},
   year={2020}
-
+}
 """
 )
 Mihaiii__Bulbasaur = ModelMeta(

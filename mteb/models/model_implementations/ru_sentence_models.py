@@ -443,7 +443,7 @@ user_bge_m3 = ModelMeta(
     title={USER: Universal Sentence Encoder for Russian},
     author={Malashenko, Boris and  Zemerov, Anton and Spirin, Egor},
     url={https://huggingface.co/datasets/deepvk/USER-base},
-    publisher={Hugging Face}
+    publisher={Hugging Face},
     year={2024},
 }""",
 )
@@ -880,8 +880,7 @@ frida = ModelMeta(
     public_training_data=None,
     public_training_code=None,
     framework=["Sentence Transformers", "PyTorch"],
-    citation="""@misc{TODO
-}""",
+    citation=None,
 )
 
 giga_embeddings = ModelMeta(
@@ -1021,7 +1020,7 @@ user2_small = ModelMeta(
     title={USER2},
     author={Malashenko, Boris and Spirin, Egor and Sokolov Andrey},
     url={https://huggingface.co/deepvk/USER2-small},
-    publisher={Hugging Face}
+    publisher={Hugging Face},
     year={2025},
 }""",
 )
@@ -1053,7 +1052,7 @@ user2_base = ModelMeta(
     title={USER2},
     author={Malashenko, Boris and Spirin, Egor and Sokolov Andrey},
     url={https://huggingface.co/deepvk/USER2-base},
-    publisher={Hugging Face}
+    publisher={Hugging Face},
     year={2025},
 }""",
 )
