@@ -170,7 +170,7 @@ def mod_instruct_loader(
         revision=revision,
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
-        prompt_dicts=PREDEFINED_PROMPTS,
+        prompts_dict=PREDEFINED_PROMPTS,
         **kwargs,
     )
     encoder = model.model._first_module()
