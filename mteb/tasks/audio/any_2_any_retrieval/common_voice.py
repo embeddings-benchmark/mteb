@@ -9,7 +9,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 # Language codes for Common Voice 17
 _EVAL_LANGS_CV17 = {
-"ar": ["ara-Arab"],
+    "ar": ["ara-Arab"],
     "ast": ["ast-Latn"],
     "be": ["bel-Cyrl"],
     "bg": ["bul-Cyrl"],
