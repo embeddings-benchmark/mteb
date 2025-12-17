@@ -213,12 +213,19 @@ class Seed16EmbeddingWrapper(AbsEncoder):
             prompt_type == PromptType("query") or prompt_type is None
         ) and task_name in TASK_NAME_TO_INSTRUCTION:
             instruction = TASK_NAME_TO_INSTRUCTION[task_name]
-            instruction = instruction.rstrip('{}').rstrip('\n')
-            trimmed_sentences = [('Target_modality:Text.\n Instruction:'+instruction+"\n Query:{}").format(text) for text in trimmed_sentences]
+            instruction = instruction.rstrip("{}").rstrip("\n")
+            trimmed_sentences = [
+                (
+                    "Target_modality:Text.\n Instruction:" + instruction + "\n Query:{}"
+                ).format(text)
+                for text in trimmed_sentences
+            ]
         else:
-            instruction = "Instruction: Compress the the text into one word.\n Query: {}" 
+            instruction = (
+                "Instruction: Compress the the text into one word.\n Query: {}"
+            )
             trimmed_sentences = [instruction.format(i) for i in trimmed_sentences]
-            
+
         outputs = multi_thread_encode(trimmed_sentences)
 
         if self._embed_dim is not None:
@@ -248,10 +255,12 @@ class Seed16EmbeddingWrapper(AbsEncoder):
             prompt_type == PromptType("query") or prompt_type is None
         ) and task_name in TASK_NAME_TO_INSTRUCTION:
             instruction = TASK_NAME_TO_INSTRUCTION[task_name]
-            instruction = instruction.rstrip('{}').rstrip('\n')
-            instruction = 'Target_modality:Text.\n Instruction:'+instruction+"\n Query:"
+            instruction = instruction.rstrip("{}").rstrip("\n")
+            instruction = (
+                "Target_modality:Text.\n Instruction:" + instruction + "\n Query:"
+            )
         else:
-            instruction = "Instruction: Compress the the image into one word.\n Query: " 
+            instruction = "Instruction: Compress the the image into one word.\n Query: "
 
         if isinstance(images, DataLoader):
             images_base64 = []
@@ -261,9 +270,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
             images_base64 = [pil_to_base64(image) for image in images]
         outputs = []
         for image in images_base64:
-            resp = multimodal_embedding(
-                image_base64=[image], text_content=instruction
-            )
+            resp = multimodal_embedding(image_base64=[image], text_content=instruction)
             embedding = torch.tensor(resp["data"]["embedding"])
             embedding = torch.reshape(embedding, (1, -1))
 
@@ -296,12 +303,17 @@ class Seed16EmbeddingWrapper(AbsEncoder):
             prompt_type == PromptType("query") or prompt_type is None
         ) and task_name in TASK_NAME_TO_INSTRUCTION:
             instruction = TASK_NAME_TO_INSTRUCTION[task_name]
-            instruction = instruction.rstrip('{}').rstrip('\n')
-            texts = [('Target_modality:Text.\n Instruction:'+instruction+"\n Query:{}").format(text) for text in texts]
+            instruction = instruction.rstrip("{}").rstrip("\n")
+            texts = [
+                (
+                    "Target_modality:Text.\n Instruction:" + instruction + "\n Query:{}"
+                ).format(text)
+                for text in texts
+            ]
         else:
-            instruction = "Instruction: Compress the the text and image into one word.\n Query: {}" 
+            instruction = "Instruction: Compress the the text and image into one word.\n Query: {}"
             texts = [instruction.format(text) for text in texts]
-        
+
         images_base64 = [pil_to_base64(image) for image in images]
 
         outputs = []
@@ -450,7 +462,7 @@ TASK_NAME_TO_INSTRUCTION = {
     "PolEmo2.0-IN": "Classify the sentiment of in-domain (medicine and hotels) online reviews\n{}",
     "PolEmo2.0-OUT": "Classify the sentiment of out-of-domain (products and school) online reviews\n{}",
     "AllegroReviews": "Classify the sentiment of reviews from e-commerce marketplace Allegro\n{}",
-    "PAC": "Classify the sentence into one of the two types: \"BEZPIECZNE_POSTANOWIENIE_UMOWNE\" and \"KLAUZULA_ABUZYWNA\"\n{}",
+    "PAC": 'Classify the sentence into one of the two types: "BEZPIECZNE_POSTANOWIENIE_UMOWNE" and "KLAUZULA_ABUZYWNA"\n{}',
     "SICK-E-PL": "Retrieve semantically similar text\n{}",
     "SICK-R-PL": "Retrieve semantically similar text\n{}",
     "STS22": "Retrieve semantically similar text\n{}",
@@ -637,7 +649,79 @@ seed_embedding = ModelMeta(
     revision="1",
     release_date="2025-12-15",
     languages=[
-        "afr-Latn", "ara-Arab", "aze-Latn", "bel-Cyrl", "bul-Cyrl", "ben-Beng", "cat-Latn", "ceb-Latn", "ces-Latn", "cym-Latn", "dan-Latn", "deu-Latn", "ell-Grek", "eng-Latn", "spa-Latn", "est-Latn", "eus-Latn", "fas-Arab", "fin-Latn", "fra-Latn", "glg-Latn", "guj-Gujr", "heb-Hebr", "hin-Deva", "hrv-Latn", "hat-Latn", "hun-Latn", "hye-Armn", "ind-Latn", "isl-Latn", "ita-Latn", "jpn-Jpan", "jav-Latn", "kat-Geor", "kaz-Cyrl", "khm-Khmr", "kan-Knda", "kor-Hang", "kir-Cyrl", "lao-Laoo", "lit-Latn", "lav-Latn", "mkd-Cyrl", "mal-Mlym", "mon-Cyrl", "mar-Deva", "msa-Latn", "mya-Mymr", "nep-Deva", "nld-Latn", "nor-Latn", "nob-Latn", "nno-Latn", "pan-Guru", "pol-Latn", "por-Latn", "que-Latn", "ron-Latn", "rus-Cyrl", "sin-Sinh", "slk-Latn", "slv-Latn", "swa-Latn", "tam-Taml", "tel-Telu", "tha-Thai", "tgl-Latn", "tur-Latn", "ukr-Cyrl", "urd-Arab", "vie-Latn", "yor-Latn", "zho-Hans"
+        "afr-Latn",
+        "ara-Arab",
+        "aze-Latn",
+        "bel-Cyrl",
+        "bul-Cyrl",
+        "ben-Beng",
+        "cat-Latn",
+        "ceb-Latn",
+        "ces-Latn",
+        "cym-Latn",
+        "dan-Latn",
+        "deu-Latn",
+        "ell-Grek",
+        "eng-Latn",
+        "spa-Latn",
+        "est-Latn",
+        "eus-Latn",
+        "fas-Arab",
+        "fin-Latn",
+        "fra-Latn",
+        "glg-Latn",
+        "guj-Gujr",
+        "heb-Hebr",
+        "hin-Deva",
+        "hrv-Latn",
+        "hat-Latn",
+        "hun-Latn",
+        "hye-Armn",
+        "ind-Latn",
+        "isl-Latn",
+        "ita-Latn",
+        "jpn-Jpan",
+        "jav-Latn",
+        "kat-Geor",
+        "kaz-Cyrl",
+        "khm-Khmr",
+        "kan-Knda",
+        "kor-Hang",
+        "kir-Cyrl",
+        "lao-Laoo",
+        "lit-Latn",
+        "lav-Latn",
+        "mkd-Cyrl",
+        "mal-Mlym",
+        "mon-Cyrl",
+        "mar-Deva",
+        "msa-Latn",
+        "mya-Mymr",
+        "nep-Deva",
+        "nld-Latn",
+        "nor-Latn",
+        "nob-Latn",
+        "nno-Latn",
+        "pan-Guru",
+        "pol-Latn",
+        "por-Latn",
+        "que-Latn",
+        "ron-Latn",
+        "rus-Cyrl",
+        "sin-Sinh",
+        "slk-Latn",
+        "slv-Latn",
+        "swa-Latn",
+        "tam-Taml",
+        "tel-Telu",
+        "tha-Thai",
+        "tgl-Latn",
+        "tur-Latn",
+        "ukr-Cyrl",
+        "urd-Arab",
+        "vie-Latn",
+        "yor-Latn",
+        "zho-Hans",
     ],
     loader=Seed16EmbeddingWrapper,
     loader_kwargs=dict(
