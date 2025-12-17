@@ -618,7 +618,7 @@ TASK_NAME_TO_INSTRUCTION = {
     "SummEval": "Retrieve semantically similar text\n{}",
     "ATEC": "Retrieve semantically similar text\n{}",
     "ArguAna": "Given a claim, find documents that refute the claim\n{}",
-    "CQADupstackGamingRetrieval": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given questionn\n{}",
+    "CQADupstackGamingRetrieval": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question\n{}",
     "CQADupstackUnixRetrieval": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question\n{}",
     "MMarcoReranking": "为这个句子生成表示以用于检索相关内容：{}",
     "CMedQAv1-reranking": "为这个句子生成表示以用于检索相关内容：{}",
