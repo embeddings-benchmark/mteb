@@ -402,6 +402,15 @@ static_similarity_mrl_multilingual_v1 = ModelMeta(
     training_datasets=static_multi_datasets,
     public_training_code="https://huggingface.co/blog/static-embeddings",
     public_training_data="https://huggingface.co/collections/sentence-transformers/embedding-model-datasets-6644d7a3673a511914aa7552",
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )
 
 contriever = ModelMeta(
@@ -465,8 +474,28 @@ microllama_text_embedding = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )
 
+SENTENCE_T5_CITATION = """
+@misc{ni2021sentencet5scalablesentenceencoders,
+      title={Sentence-T5: Scalable Sentence Encoders from Pre-trained Text-to-Text Models}, 
+      author={Jianmo Ni and Gustavo Hernández Ábrego and Noah Constant and Ji Ma and Keith B. Hall and Daniel Cer and Yinfei Yang},
+      year={2021},
+      eprint={2108.08877},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2108.08877}, 
+}
+"""
 sentence_t5_base = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-base",
@@ -486,6 +515,7 @@ sentence_t5_base = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
+    citation=SENTENCE_T5_CITATION,
 )
 
 sentence_t5_large = ModelMeta(
@@ -507,6 +537,7 @@ sentence_t5_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
+    citation=SENTENCE_T5_CITATION,
 )
 
 sentence_t5_xl = ModelMeta(
@@ -528,6 +559,7 @@ sentence_t5_xl = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
+    citation=SENTENCE_T5_CITATION,
 )
 
 sentence_t5_xxl = ModelMeta(
@@ -549,7 +581,19 @@ sentence_t5_xxl = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
+    citation=SENTENCE_T5_CITATION,
 )
+GTR_CITATION = """
+@misc{ni2021largedualencodersgeneralizable,
+      title={Large Dual Encoders Are Generalizable Retrievers}, 
+      author={Jianmo Ni and Chen Qu and Jing Lu and Zhuyun Dai and Gustavo Hernández Ábrego and Ji Ma and Vincent Y. Zhao and Yi Luan and Keith B. Hall and Ming-Wei Chang and Yinfei Yang},
+      year={2021},
+      eprint={2112.07899},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2112.07899}, 
+}
+"""
 gtr_t5_large = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-large",
@@ -581,6 +625,7 @@ gtr_t5_large = ModelMeta(
         "NQ-PL",  # translation not trained on
         "Community QA",
     },
+    citation=GTR_CITATION,
 )
 
 gtr_t5_xl = ModelMeta(
@@ -614,6 +659,7 @@ gtr_t5_xl = ModelMeta(
         "NQ-PL",  # translation not trained on
         "Community QA",
     },
+    citation=GTR_CITATION,
 )
 gtr_t5_xxl = ModelMeta(
     loader=sentence_transformers_loader,
@@ -646,6 +692,7 @@ gtr_t5_xxl = ModelMeta(
         "NQ-PL",  # translation not trained on
         "Community QA",
     },
+    citation=GTR_CITATION,
 )
 
 gtr_t5_base = ModelMeta(
@@ -679,4 +726,5 @@ gtr_t5_base = ModelMeta(
         "NQ-PL",  # translation not trained on
         "Community QA",
     },
+    citation=GTR_CITATION,
 )

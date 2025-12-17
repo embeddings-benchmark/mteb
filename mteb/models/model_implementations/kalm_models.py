@@ -901,6 +901,25 @@ KaLM_Embedding_KaLM_embedding_multilingual_mini_instruct_v2_5 = ModelMeta(
     training_datasets=kalm_v2_training_data,
     adapted_from="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2",
     superseded_by=None,
+    citation="""@misc{zhao2025kalmembeddingv2,
+      title={KaLM-Embedding-V2: Superior Training Techniques and Data Inspire A Versatile Embedding Model}, 
+      author={Xinping Zhao and Xinshuo Hu and Zifei Shan and Shouzheng Huang and Yao Zhou and Xin Zhang and Zetian Sun and Zhenyu Liu and Dongfang Li and Xinyuan Wei and Youcheng Pan and Yang Xiang and Meishan Zhang and Haofen Wang and Jun Yu and Baotian Hu and Min Zhang},
+      year={2025},
+      eprint={2506.20923},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2506.20923}, 
+}
+
+@misc{hu2025kalmembedding,
+      title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Model}, 
+      author={Xinshuo Hu and Zifei Shan and Xinping Zhao and Zetian Sun and Zhenyu Liu and Dongfang Li and Shaolin Ye and Xinyuan Wei and Qian Chen and Baotian Hu and Haofen Wang and Jun Yu and Min Zhang},
+      year={2025},
+      eprint={2501.01028},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2501.01028}, 
+}""",
 )
 
 KaLM_Embedding_gemma_3_12b_2511 = ModelMeta(
@@ -928,4 +947,23 @@ KaLM_Embedding_gemma_3_12b_2511 = ModelMeta(
     public_training_code="https://github.com/HITsz-TMG/KaLM-Embedding",
     public_training_data=None,
     training_datasets=KaLM_Embedding_gemma_3_12b_training_data,
+    citation="""@misc{zhao2025kalmembeddingv2,
+      title={KaLM-Embedding-V2: Superior Training Techniques and Data Inspire A Versatile Embedding Model}, 
+      author={Xinping Zhao and Xinshuo Hu and Zifei Shan and Shouzheng Huang and Yao Zhou and Xin Zhang and Zetian Sun and Zhenyu Liu and Dongfang Li and Xinyuan Wei and Youcheng Pan and Yang Xiang and Meishan Zhang and Haofen Wang and Jun Yu and Baotian Hu and Min Zhang},
+      year={2025},
+      eprint={2506.20923},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2506.20923}, 
+}
+
+@misc{hu2025kalmembedding,
+      title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Model}, 
+      author={Xinshuo Hu and Zifei Shan and Xinping Zhao and Zetian Sun and Zhenyu Liu and Dongfang Li and Shaolin Ye and Xinyuan Wei and Qian Chen and Baotian Hu and Haofen Wang and Jun Yu and Min Zhang},
+      year={2025},
+      eprint={2501.01028},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2501.01028}, 
+}""",
 )

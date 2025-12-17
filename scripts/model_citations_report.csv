@@ -1,0 +1,1045 @@
+model_name,status,citation
+Snowflake/snowflake-arctic-embed-l,already_present,"@article{merrick2024embedding,
+      title={Embedding And Clustering Your Data Can Improve Contrasti..."
+Snowflake/snowflake-arctic-embed-l-v2.0,already_present,"@article{yu2024arctic,
+      title={Arctic-Embed 2.0: Multilingual Retrieval Without Compromise},
+  ..."
+Snowflake/snowflake-arctic-embed-m,already_present,"@article{merrick2024embedding,
+      title={Embedding And Clustering Your Data Can Improve Contrasti..."
+Snowflake/snowflake-arctic-embed-m-long,already_present,"@article{merrick2024embedding,
+      title={Embedding And Clustering Your Data Can Improve Contrasti..."
+Snowflake/snowflake-arctic-embed-m-v1.5,already_present,"@article{merrick2024embedding,
+      title={Embedding And Clustering Your Data Can Improve Contrasti..."
+Snowflake/snowflake-arctic-embed-m-v2.0,already_present,"@article{yu2024arctic,
+      title={Arctic-Embed 2.0: Multilingual Retrieval Without Compromise},
+  ..."
+Snowflake/snowflake-arctic-embed-s,already_present,"@article{merrick2024embedding,
+      title={Embedding And Clustering Your Data Can Improve Contrasti..."
+Snowflake/snowflake-arctic-embed-xs,already_present,"@article{merrick2024embedding,
+      title={Embedding And Clustering Your Data Can Improve Contrasti..."
+bm25s,already_present,"@misc{bm25s,
+      title={BM25S: Orders of magnitude faster lexical search via eager sparse scoring}..."
+Omartificial-Intelligence-Space/Arabic-Triplet-Matryoshka-V2,already_present,"
+    @article{nacar2025gate,
+    title={GATE: General Arabic Text Embedding for Enhanced Semantic Te..."
+Kingsoft-LLM/QZhou-Embedding,already_present,"@misc{yu2025qzhouembeddingtechnicalreport,
+      title={QZhou-Embedding Technical Report},
+      aut..."
+Kingsoft-LLM/QZhou-Embedding-Zh,already_present,"@misc{yu2025qzhouembeddingtechnicalreport,
+      title={QZhou-Embedding Technical Report},
+      aut..."
+samaya-ai/promptriever-llama2-7b-v1,already_present,"
+@article{weller2024promptriever,
+      title={Promptriever: Instruction-Trained Retrievers Can Be P..."
+samaya-ai/promptriever-llama3.1-8b-v1,already_present,"
+@article{weller2024promptriever,
+      title={Promptriever: Instruction-Trained Retrievers Can Be P..."
+samaya-ai/promptriever-llama3.1-8b-instruct-v1,already_present,"
+@article{weller2024promptriever,
+      title={Promptriever: Instruction-Trained Retrievers Can Be P..."
+samaya-ai/promptriever-mistral-v0.1-7b-v1,already_present,"
+@article{weller2024promptriever,
+      title={Promptriever: Instruction-Trained Retrievers Can Be P..."
+sbintuitions/sarashina-embedding-v1-1b,already_present,
+sbintuitions/sarashina-embedding-v2-1b,already_present,
+vidore/colpali-v1.1,already_present,"
+@misc{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models..."
+vidore/colpali-v1.2,already_present,"
+@misc{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models..."
+vidore/colpali-v1.3,already_present,"
+@misc{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models..."
+voyageai/voyage-multimodal-3,citation_not_found,
+eagerworks/eager-embed-v1,already_present,"@article{EagerEmbed,
+  title={Eager Embed V1: Multimodal Dense Embeddings for Retrieval},
+  author={..."
+Bytedance/Seed1.6-embedding,repo_not_found,
+microsoft/LLM2CLIP-Openai-B-16,already_present,"@misc{huang2024llm2clippowerfullanguagemodel,
+  title={LLM2CLIP: Powerful Language Model Unlock Rich..."
+microsoft/LLM2CLIP-Openai-L-14-224,already_present,"@misc{huang2024llm2clippowerfullanguagemodel,
+  title={LLM2CLIP: Powerful Language Model Unlock Rich..."
+microsoft/LLM2CLIP-Openai-L-14-336,already_present,"@misc{huang2024llm2clippowerfullanguagemodel,
+  title={LLM2CLIP: Powerful Language Model Unlock Rich..."
+FacebookAI/xlm-roberta-base,added,"@article{DBLP:journals/corr/abs-1911-02116,
+  author    = {Alexis Conneau and
+               Kartika..."
+FacebookAI/xlm-roberta-large,added,"@article{DBLP:journals/corr/abs-1911-02116,
+  author    = {Alexis Conneau and
+               Kartika..."
+codefuse-ai/F2LLM-0.6B,already_present,"@article{2025F2LLM,
+    title={F2LLM Technical Report: Matching SOTA Embedding Performance with 6 Mi..."
+codefuse-ai/F2LLM-1.7B,already_present,"@article{2025F2LLM,
+    title={F2LLM Technical Report: Matching SOTA Embedding Performance with 6 Mi..."
+codefuse-ai/F2LLM-4B,already_present,"@article{2025F2LLM,
+    title={F2LLM Technical Report: Matching SOTA Embedding Performance with 6 Mi..."
+ibm-granite/granite-vision-3.3-2b-embedding,already_present,"@article{karlinsky2025granitevision,
+  title={Granite Vision: a lightweight, open-source multimodal ..."
+openai/clip-vit-base-patch16,already_present,"
+@article{radford2021learning,
+  title={Learning Transferable Visual Models From Natural Language Su..."
+openai/clip-vit-base-patch32,already_present,"
+@article{radford2021learning,
+  title={Learning Transferable Visual Models From Natural Language Su..."
+openai/clip-vit-large-patch14,already_present,"
+@article{radford2021learning,
+  title={Learning Transferable Visual Models From Natural Language Su..."
+shibing624/text2vec-base-chinese,already_present,"@software{text2vec,
+  author = {Xu Ming},
+  title = {text2vec: A Tool for Text to Vector},
+  year = ..."
+shibing624/text2vec-base-chinese-paraphrase,already_present,"@software{text2vec,
+  author = {Xu Ming},
+  title = {text2vec: A Tool for Text to Vector},
+  year = ..."
+shibing624/text2vec-base-multilingual,already_present,"@software{text2vec,
+  author = {Xu Ming},
+  title = {text2vec: A Tool for Text to Vector},
+  year = ..."
+kakaobrain/align-base,already_present,"@misc{kakaobrain2022coyo-align,
+    title         = {COYO-ALIGN},
+    author        = {Yoon, Boogeo ..."
+IEITYuan/Yuan-embedding-2.0-en,citation_not_found,
+dmedhi/PawanEmbd-68M,already_present,"@misc{medhi2025pawanembd,
+    title={PawanEmbd-68M: Distilled Embedding Model},
+    author={Medhi, D..."
+BAAI/bge-reranker-v2-m3,already_present,"
+    @misc{li2023making,
+      title={Making Large Language Models A Better Foundation For Dense Ret..."
+jinaai/jina-reranker-v2-base-multilingual,citation_not_found,
+castorini/monobert-large-msmarco,citation_not_found,
+emillykkejensen/EmbeddingGemma-Scandi-300m,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+emillykkejensen/mmBERTscandi-base-embedding,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+emillykkejensen/Qwen3-Embedding-Scandi-0.6B,citation_not_found,
+BAAI/bge-base-en,impl_file_not_found,"@misc{bge_embedding,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, ..."
+BAAI/bge-base-en-v1.5,already_present,"@misc{bge_embedding,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
+..."
+BAAI/bge-base-zh,added,"@misc{bge_embedding,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, ..."
+BAAI/bge-base-zh-v1.5,added,"@misc{bge_embedding,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, ..."
+BAAI/bge-en-icl,already_present,"
+    @misc{li2024makingtextembeddersfewshot,
+      title={Making Text Embedders Few-Shot Learners},
+..."
+BAAI/bge-large-en,impl_file_not_found,"@misc{bge_embedding,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, ..."
+BAAI/bge-large-en-v1.5,already_present,"@misc{bge_embedding,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
+..."
+BAAI/bge-large-zh,added,"@misc{bge_embedding,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, ..."
+BAAI/bge-large-zh-v1.5,added,"@misc{bge_embedding,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, ..."
+BAAI/bge-m3,added,"@misc{bge-m3,
+      title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity T..."
+BAAI/bge-m3-unsupervised,added,"@misc{bge-m3,
+      title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity T..."
+BAAI/bge-multilingual-gemma2,added,"@misc{bge-m3,
+      title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity T..."
+BAAI/bge-small-en,added,"@misc{bge_embedding,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, ..."
+BAAI/bge-small-en-v1.5,already_present,"@misc{bge_embedding,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
+..."
+BAAI/bge-small-zh,added,"@misc{bge_embedding,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, ..."
+BAAI/bge-small-zh-v1.5,added,"@misc{bge_embedding,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, ..."
+manu/bge-m3-custom-fr,citation_not_found,
+spartan8806/atles-champion-embedding,added,"@article{conner2025epistemic,
+  title={The Epistemic Barrier: How RLHF Makes AI Consciousness Empiri..."
+prdev/mini-gte,citation_not_found,
+SamilPwC-AXNode-GenAI/PwC-Embedding_expr,citation_not_found,
+m3hrdadfi/bert-zwnj-wnli-mean-tokens,citation_not_found,
+sbunlp/fabert,added,"@inproceedings{masumi-etal-2025-fabert,
+    title = ""{F}a{BERT}: Pre-training {BERT} on {P}ersian Bl..."
+HooshvareLab/bert-base-parsbert-uncased,already_present,"
+    @article{ParsBERT,
+    title={ParsBERT: Transformer-based Model for Persian Language Understand..."
+m3hrdadfi/roberta-zwnj-wnli-mean-tokens,citation_not_found,
+myrkur/sentence-transformer-parsbert-fa,citation_not_found,
+PartAI/TookaBERT-Base,citation_not_found,
+PartAI/Tooka-SBERT,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+PartAI/Tooka-SBERT-V2-Large,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+PartAI/Tooka-SBERT-V2-Small,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+castorini/repllama-v1-7b-lora-passage,already_present,"
+@article{rankllama,
+      title={Fine-Tuning LLaMA for Multi-Stage Text Retrieval},
+      author={X..."
+samaya-ai/RepLLaMA-reproduced,already_present,"
+@article{rankllama,
+      title={Fine-Tuning LLaMA for Multi-Stage Text Retrieval},
+      author={X..."
+nomic-ai/nomic-embed-text-v1,already_present,"
+@misc{nussbaum2024nomic,
+      title={Nomic Embed: Training a Reproducible Long Context Text Embedd..."
+nomic-ai/nomic-embed-text-v1.5,already_present,"
+@misc{nussbaum2024nomic,
+      title={Nomic Embed: Training a Reproducible Long Context Text Embedd..."
+nomic-ai/nomic-embed-text-v1-ablated,citation_not_found,
+nomic-ai/nomic-embed-text-v1-unsupervised,citation_not_found,
+nomic-ai/modernbert-embed-base,added,"@misc{nussbaum2024nomic,
+      title={Nomic Embed: Training a Reproducible Long Context Text Embedde..."
+nomic-ai/nomic-embed-vision-v1.5,already_present,"@article{nussbaum2024nomicembedvision,
+      title={Nomic Embed Vision: Expanding the Latent Space},..."
+ReasonIR/ReasonIR-8B,already_present,"@article{shao2025reasonir,
+      title={ReasonIR: Training Retrievers for Reasoning Tasks},
+      au..."
+yibinlei/LENS-d4000,already_present,"@article{lei2025lens,
+  title={Enhancing Lexicon-Based Text Embeddings with Large Language Models},
+..."
+yibinlei/LENS-d8000,already_present,"@article{lei2025lens,
+  title={Enhancing Lexicon-Based Text Embeddings with Large Language Models},
+..."
+facebook/dinov2-base,added,"misc{oquab2023dinov2,
+      title={DINOv2: Learning Robust Visual Features without Supervision}, 
+  ..."
+facebook/dinov2-giant,added,"misc{oquab2023dinov2,
+      title={DINOv2: Learning Robust Visual Features without Supervision}, 
+  ..."
+facebook/dinov2-large,added,"misc{oquab2023dinov2,
+      title={DINOv2: Learning Robust Visual Features without Supervision}, 
+  ..."
+facebook/dinov2-small,added,"misc{oquab2023dinov2,
+      title={DINOv2: Learning Robust Visual Features without Supervision}, 
+  ..."
+facebook/webssl-dino1b-full2b-224,added,"@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={..."
+facebook/webssl-dino2b-full2b-224,added,"@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={..."
+facebook/webssl-dino2b-heavy2b-224,added,"@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={..."
+facebook/webssl-dino2b-light2b-224,added,"@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={..."
+facebook/webssl-dino300m-full2b-224,added,"@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={..."
+facebook/webssl-dino3b-full2b-224,added,"@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={..."
+facebook/webssl-dino3b-heavy2b-224,added,"@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={..."
+facebook/webssl-dino3b-light2b-224,added,"@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={..."
+facebook/webssl-dino5b-full2b-224,added,"@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={..."
+facebook/webssl-dino7b-full8b-224,added,"@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={..."
+facebook/webssl-dino7b-full8b-378,added,"@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={..."
+facebook/webssl-dino7b-full8b-518,added,"@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={..."
+facebook/webssl-mae1b-full2b-224,added,"@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={..."
+facebook/webssl-mae300m-full2b-224,added,"@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={..."
+facebook/webssl-mae700m-full2b-224,added,"@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={..."
+TencentBAC/Conan-embedding-v2,citation_not_found,
+Gameselo/STS-multilingual-mpnet-base-v2,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+Haon-Chen/speed-embedding-7b-instruct,already_present,"@article{chen2024little,
+    title={Little Giants: Synthesizing High-Quality Embedding Data at Scale..."
+Hum-Works/lodestone-base-4096-v1,citation_not_found,
+Jaume/gemma-2b-embeddings,citation_not_found,
+Lajavaness/bilingual-embedding-base,citation_not_found,
+Lajavaness/bilingual-embedding-large,citation_not_found,
+Lajavaness/bilingual-embedding-small,citation_not_found,
+Mihaiii/Bulbasaur,citation_not_found,
+Mihaiii/Ivysaur,citation_not_found,
+Mihaiii/Squirtle,citation_not_found,
+Mihaiii/Venusaur,citation_not_found,
+Mihaiii/Wartortle,citation_not_found,
+Mihaiii/gte-micro,citation_not_found,
+Mihaiii/gte-micro-v4,citation_not_found,
+Omartificial-Intelligence-Space/Arabert-all-nli-triplet-Matryoshka,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+Omartificial-Intelligence-Space/Arabic-MiniLM-L12-v2-all-nli-triplet,citation_not_found,
+Omartificial-Intelligence-Space/Arabic-all-nli-triplet-Matryoshka,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+Omartificial-Intelligence-Space/Arabic-labse-Matryoshka,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+Omartificial-Intelligence-Space/Arabic-mpnet-base-all-nli-triplet,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+Omartificial-Intelligence-Space/Marbert-all-nli-triplet-Matryoshka,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+OrdalieTech/Solon-embeddings-large-0.1,citation_not_found,
+OrlikB/KartonBERT-USE-base-v1,repo_not_found,
+OrlikB/st-polish-kartonberta-base-alpha-v1,repo_not_found,
+aari1995/German_Semantic_STS_V2,citation_not_found,
+abhinand/MedEmbed-small-v0.1,added,"@software{balachandran2024medembed,
+  author = {Balachandran, Abhinand},
+  title = {MedEmbed: Medica..."
+avsolatorio/GIST-all-MiniLM-L6-v2,added,"@article{solatorio2024gistembed,
+    title={GISTEmbed: Guided In-sample Selection of Training Negati..."
+avsolatorio/GIST-Embedding-v0,added,"@article{solatorio2024gistembed,
+    title={GISTEmbed: Guided In-sample Selection of Training Negati..."
+avsolatorio/GIST-large-Embedding-v0,added,"@article{solatorio2024gistembed,
+    title={GISTEmbed: Guided In-sample Selection of Training Negati..."
+avsolatorio/GIST-small-Embedding-v0,added,"@article{solatorio2024gistembed,
+    title={GISTEmbed: Guided In-sample Selection of Training Negati..."
+avsolatorio/NoInstruct-small-Embedding-v0,citation_not_found,
+bigscience/sgpt-bloom-7b1-msmarco,added,"@article{muennighoff2022sgpt,
+  title={SGPT: GPT Sentence Embeddings for Semantic Search},
+  author=..."
+brahmairesearch/slx-v0.1,citation_not_found,
+TencentBAC/Conan-embedding-v1,added,"@misc{li2024conanembeddinggeneraltextembedding,
+  title={Conan-embedding: General Text Embedding wit..."
+consciousAI/cai-lunaris-text-embeddings,citation_not_found,
+consciousAI/cai-stellaris-text-embeddings,citation_not_found,
+deepfile/embedder-100p,citation_not_found,
+DMetaSoul/Dmeta-embedding-zh-small,citation_not_found,
+dwzhu/e5-base-4k,added,"@article{zhu2024longembed,
+  title={LongEmbed: Extending Embedding Models for Long Context Retrieval..."
+llmrails/ember-v1,added,"@misc{nur2024emberv1,
+      title={ember-v1: SOTA embedding model}, 
+      author={Enrike Nur and An..."
+infgrad/stella-base-en-v2,citation_not_found,
+izhx/udever-bloom-1b1,added,"@article{zhang2023language,
+  title={Language Models are Universal Embedders},
+  author={Zhang, Xin ..."
+izhx/udever-bloom-3b,added,"@article{zhang2023language,
+  title={Language Models are Universal Embedders},
+  author={Zhang, Xin ..."
+izhx/udever-bloom-560m,added,"@article{zhang2023language,
+  title={Language Models are Universal Embedders},
+  author={Zhang, Xin ..."
+izhx/udever-bloom-7b1,added,"@article{zhang2023language,
+  title={Language Models are Universal Embedders},
+  author={Zhang, Xin ..."
+malenia1/ternary-weight-embedding,citation_not_found,
+manu/sentence_croissant_alpha_v0.2,citation_not_found,
+manu/sentence_croissant_alpha_v0.3,citation_not_found,
+manu/sentence_croissant_alpha_v0.4,citation_not_found,
+omarelshehy/arabic-english-sts-matryoshka,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+openbmb/MiniCPM-Embedding,citation_not_found,
+DMetaSoul/sbert-chinese-general-v1,citation_not_found,
+sdadas/mmlw-e5-base,added,"@article{dadas2024pirb,
+  title={{PIRB}: A Comprehensive Benchmark of Polish Dense and Hybrid Text R..."
+sdadas/mmlw-e5-large,added,"@article{dadas2024pirb,
+  title={{PIRB}: A Comprehensive Benchmark of Polish Dense and Hybrid Text R..."
+sdadas/mmlw-e5-small,added,"@article{dadas2024pirb,
+  title={{PIRB}: A Comprehensive Benchmark of Polish Dense and Hybrid Text R..."
+sdadas/mmlw-roberta-base,added,"@article{dadas2024pirb,
+  title={{PIRB}: A Comprehensive Benchmark of Polish Dense and Hybrid Text R..."
+sdadas/mmlw-roberta-large,added,"@article{dadas2024pirb,
+  title={{PIRB}: A Comprehensive Benchmark of Polish Dense and Hybrid Text R..."
+silma-ai/silma-embeddding-matryoshka-v0.1,added,"@misc{silma2024embedding,
+  author = {Abu Bakr Soliman, Karim Ouda, SILMA AI},
+  title = {SILMA Embe..."
+thenlper/gte-base,added,"@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learni..."
+thenlper/gte-large,added,"@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learni..."
+thenlper/gte-small,added,"@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learni..."
+lier007/xiaobu-embedding,citation_not_found,
+lier007/xiaobu-embedding-v2,citation_not_found,
+Classical/Yinka,citation_not_found,
+Kowshik24/bangla-sentence-transformer-ft-matryoshka-paraphrase-multilingual-mpnet-base-v2,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+colbert-ir/colbertv2.0,citation_not_found,
+jinaai/jina-colbert-v2,added,"@inproceedings{xiao-etal-2024-jina,
+    title = ""{J}ina-{C}ol{BERT}-v2: A General-Purpose Multilingu..."
+lightonai/GTE-ModernColBERT-v1,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+Alibaba-NLP/gte-base-en-v1.5,added,"@misc{zhang2024mgte,
+  title={mGTE: Generalized Long-Context Text Representation and Reranking Model..."
+thenlper/gte-base-zh,added,"@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learni..."
+thenlper/gte-large-zh,added,"@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learni..."
+Alibaba-NLP/gte-modernbert-base,added,"@inproceedings{zhang2024mgte,
+  title={mGTE: Generalized Long-Context Text Representation and Rerank..."
+Alibaba-NLP/gte-multilingual-base,added,"@inproceedings{zhang2024mgte,
+  title={mGTE: Generalized Long-Context Text Representation and Rerank..."
+Alibaba-NLP/gte-Qwen1.5-7B-instruct,added,"@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learni..."
+Alibaba-NLP/gte-Qwen2-1.5B-instruct,added,"@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learni..."
+Alibaba-NLP/gte-Qwen2-7B-instruct,already_present,"
+@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learn..."
+thenlper/gte-small-zh,added,"@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learni..."
+jinaai/jina-clip-v1,already_present,"@article{koukounas2024jinaclip,
+  title={Jina CLIP: Your CLIP Model Is Also Your Text Retriever},
+  ..."
+intfloat/e5-base,already_present,"
+@article{wang2022text,
+  title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+  a..."
+intfloat/e5-base-v2,already_present,"
+@article{wang2022text,
+  title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+  a..."
+intfloat/e5-large-v2,already_present,"
+@article{wang2022text,
+  title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+  a..."
+intfloat/e5-small,already_present,"
+@article{wang2022text,
+  title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+  a..."
+intfloat/e5-small-v2,already_present,"
+@article{wang2022text,
+  title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+  a..."
+intfloat/e5-large,already_present,"
+@article{wang2022text,
+  title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+  a..."
+intfloat/multilingual-e5-base,already_present,"
+@article{wang2024multilingual,
+  title={Multilingual E5 Text Embeddings: A Technical Report},
+  aut..."
+intfloat/multilingual-e5-large,already_present,"
+@article{wang2024multilingual,
+  title={Multilingual E5 Text Embeddings: A Technical Report},
+  aut..."
+intfloat/multilingual-e5-small,already_present,"
+@article{wang2024multilingual,
+  title={Multilingual E5 Text Embeddings: A Technical Report},
+  aut..."
+tencent/Youtu-Embedding,already_present,"@misc{zhang2025codiemb,
+  title={CoDiEmb: A Collaborative yet Distinct Framework for Unified Represe..."
+moka-ai/m3e-base,already_present,"@software{MokaMassiveMixedEmbedding,
+  author = {Wang Yuxin and Sun Qingxuan and He Sicheng},
+  titl..."
+moka-ai/m3e-large,already_present,"@software{MokaMassiveMixedEmbedding,
+  author = {Wang Yuxin and Sun Qingxuan and He Sicheng},
+  titl..."
+moka-ai/m3e-small,already_present,"@software{MokaMassiveMixedEmbedding,
+  author = {Wang Yuxin and Sun Qingxuan and He Sicheng},
+  titl..."
+QuanSun/EVA02-CLIP-B-16,already_present,"@article{EVA-CLIP,
+      title={EVA-CLIP: Improved Training Techniques for CLIP at Scale},
+      aut..."
+QuanSun/EVA02-CLIP-L-14,already_present,"@article{EVA-CLIP,
+      title={EVA-CLIP: Improved Training Techniques for CLIP at Scale},
+      aut..."
+QuanSun/EVA02-CLIP-bigE-14,already_present,"@article{EVA-CLIP,
+      title={EVA-CLIP: Improved Training Techniques for CLIP at Scale},
+      aut..."
+QuanSun/EVA02-CLIP-bigE-14-plus,already_present,"@article{EVA-CLIP,
+      title={EVA-CLIP: Improved Training Techniques for CLIP at Scale},
+      aut..."
+Salesforce/blip-image-captioning-base,already_present,"@misc{https://doi.org/10.48550/arxiv.2201.12086,
+    doi = {10.48550/ARXIV.2201.12086},
+    url = {h..."
+Salesforce/blip-image-captioning-large,already_present,"@misc{https://doi.org/10.48550/arxiv.2201.12086,
+    doi = {10.48550/ARXIV.2201.12086},
+    url = {h..."
+Salesforce/blip-itm-base-coco,already_present,"@misc{https://doi.org/10.48550/arxiv.2201.12086,
+    doi = {10.48550/ARXIV.2201.12086},
+    url = {h..."
+Salesforce/blip-itm-base-flickr,already_present,"@misc{https://doi.org/10.48550/arxiv.2201.12086,
+    doi = {10.48550/ARXIV.2201.12086},
+    url = {h..."
+Salesforce/blip-itm-large-coco,already_present,"@misc{https://doi.org/10.48550/arxiv.2201.12086,
+    doi = {10.48550/ARXIV.2201.12086},
+    url = {h..."
+Salesforce/blip-itm-large-flickr,already_present,"@misc{https://doi.org/10.48550/arxiv.2201.12086,
+    doi = {10.48550/ARXIV.2201.12086},
+    url = {h..."
+Salesforce/blip-vqa-base,already_present,"@misc{https://doi.org/10.48550/arxiv.2201.12086,
+    doi = {10.48550/ARXIV.2201.12086},
+    url = {h..."
+Salesforce/blip-vqa-capfilt-large,already_present,"@misc{https://doi.org/10.48550/arxiv.2201.12086,
+    doi = {10.48550/ARXIV.2201.12086},
+    url = {h..."
+Salesforce/SFR-Embedding-2_R,already_present,"@misc{SFR-embedding-2,
+      title={SFR-Embedding-2: Advanced Text Embedding with Multi-stage Traini..."
+Salesforce/SFR-Embedding-Code-2B_R,already_present,"@article{liu2024codexembed,
+  title={CodeXEmbed: A Generalist Embedding Model Family for Multiligual..."
+Salesforce/SFR-Embedding-Mistral,already_present,"
+    @misc{SFRAIResearch2024,
+  title={SFR-Embedding-Mistral:Enhance Text Retrieval with Transfer Le..."
+Cohere/Cohere-embed-v4.0,repo_not_found,
+Cohere/Cohere-embed-v4.0 (output_dtype=binary),"repo_check_error: Repo id must use alphanumeric chars or '-', '_', '.', '--' and '..' are forbidden, '-' and '.' cannot start or end the name, max length is 96: 'Cohere/Cohere-embed-v4.0 (output_dtype=binary)'.",
+Cohere/Cohere-embed-v4.0 (output_dtype=int8),"repo_check_error: Repo id must use alphanumeric chars or '-', '_', '.', '--' and '..' are forbidden, '-' and '.' cannot start or end the name, max length is 96: 'Cohere/Cohere-embed-v4.0 (output_dtype=int8)'.",
+cohere/embed-english-v3.0,repo_not_found,
+cohere/embed-multilingual-v3.0,repo_not_found,
+jinaai/jina-embedding-b-en-v1,already_present,"@misc{günther2023jina,
+      title={Jina Embeddings: A Novel Set of High-Performance Sentence Embedd..."
+jinaai/jina-embedding-s-en-v1,already_present,"@misc{günther2023jina,
+      title={Jina Embeddings: A Novel Set of High-Performance Sentence Embedd..."
+jinaai/jina-embeddings-v2-base-en,already_present,"@misc{günther2023jina,
+      title={Jina Embeddings 2: 8192-Token General-Purpose Text Embeddings fo..."
+jinaai/jina-embeddings-v2-small-en,already_present,"@misc{günther2023jina,
+      title={Jina Embeddings 2: 8192-Token General-Purpose Text Embeddings fo..."
+jinaai/jina-embeddings-v3,already_present,"
+    @misc{sturua2024jinaembeddingsv3multilingualembeddingstask,
+      title={jina-embeddings-v3: Mu..."
+jinaai/jina-embeddings-v4,already_present,"@misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      title={jina-embeddings-v4: Uni..."
+jinaai/jina-reranker-v3,already_present,"@misc{wang2025jinarerankerv3lateinteractionlistwise,
+      title={jina-reranker-v3: Last but Not Lat..."
+voyageai/voyage-2,citation_not_found,
+voyageai/voyage-3,citation_not_found,
+voyageai/voyage-3.5,citation_not_found,
+voyageai/voyage-3.5 (output_dtype=binary),"repo_check_error: Repo id must use alphanumeric chars or '-', '_', '.', '--' and '..' are forbidden, '-' and '.' cannot start or end the name, max length is 96: 'voyageai/voyage-3.5 (output_dtype=binary)'.",
+voyageai/voyage-3.5 (output_dtype=int8),"repo_check_error: Repo id must use alphanumeric chars or '-', '_', '.', '--' and '..' are forbidden, '-' and '.' cannot start or end the name, max length is 96: 'voyageai/voyage-3.5 (output_dtype=int8)'.",
+voyageai/voyage-3-m-exp,citation_not_found,
+voyageai/voyage-3-large,citation_not_found,
+voyageai/voyage-3-lite,citation_not_found,
+voyageai/voyage-code-2,citation_not_found,
+voyageai/voyage-code-3,citation_not_found,
+voyageai/voyage-finance-2,citation_not_found,
+voyageai/voyage-large-2,citation_not_found,
+voyageai/voyage-large-2-instruct,citation_not_found,
+voyageai/voyage-law-2,citation_not_found,
+voyageai/voyage-multilingual-2,citation_not_found,
+MongoDB/mdbr-leaf-ir,already_present,"@misc{mdbr_leaf,
+  title={LEAF: Knowledge Distillation of Text Embedding Models with Teacher-Aligned..."
+MongoDB/mdbr-leaf-mt,already_present,"@misc{mdbr_leaf,
+  title={LEAF: Knowledge Distillation of Text Embedding Models with Teacher-Aligned..."
+KennethEnevoldsen/dfm-sentence-encoder-large,already_present,"@article{enevoldsenScandinavianEmbeddingBenchmarks2024,
+    title = {The {Scandinavian} {Embedding} ..."
+KennethEnevoldsen/dfm-sentence-encoder-medium,already_present,"@article{enevoldsenScandinavianEmbeddingBenchmarks2024,
+    title = {The {Scandinavian} {Embedding} ..."
+jxm/cde-small-v1,already_present,"@misc{morris2024contextualdocumentembeddings,
+    title={Contextual Document Embeddings},
+    author..."
+jxm/cde-small-v2,already_present,"@misc{morris2024contextualdocumentembeddings,
+    title={Contextual Document Embeddings},
+    author..."
+Sailesh97/Hinvec,citation_not_found,
+w601sxs/b1ade-embed,already_present,"
+    @misc{bigscience_workshop_2022,
+    author       = { {Shreyas Subramanian} },
+    title        ..."
+google/flan-t5-base,already_present,"@misc{10.48550/arxiv.2210.11416,
+      doi = {10.48550/ARXIV.2210.11416},
+      url = {https://arxiv..."
+google/flan-t5-large,already_present,"@misc{10.48550/arxiv.2210.11416,
+      doi = {10.48550/ARXIV.2210.11416},
+      url = {https://arxiv..."
+google/flan-t5-xl,already_present,"@misc{10.48550/arxiv.2210.11416,
+      doi = {10.48550/ARXIV.2210.11416},
+      url = {https://arxiv..."
+google/flan-t5-xxl,already_present,"@misc{10.48550/arxiv.2210.11416,
+      doi = {10.48550/ARXIV.2210.11416},
+      url = {https://arxiv..."
+jhu-clsp/FollowIR-7B,already_present,"
+    @misc{weller2024followir,
+      title={FollowIR: Evaluating and Teaching Information Retrieval ..."
+meta-llama/Llama-2-7b-hf,already_present,"@misc{touvron2023llama2openfoundation,
+      title={Llama 2: Open Foundation and Fine-Tuned Chat Mod..."
+meta-llama/Llama-2-7b-chat-hf,already_present,"@misc{touvron2023llama2openfoundation,
+      title={Llama 2: Open Foundation and Fine-Tuned Chat Mod..."
+mistralai/Mistral-7B-Instruct-v0.2,already_present,"@misc{jiang2023mistral7b,
+      title={Mistral 7B},
+      author={Albert Q. Jiang and Alexandre Sabl..."
+castorini/monot5-3b-msmarco-10k,already_present,"@misc{rosa2022parameterleftbehinddistillation,
+      title={No Parameter Left Behind: How Distillati..."
+castorini/monot5-base-msmarco-10k,already_present,"@misc{rosa2022parameterleftbehinddistillation,
+      title={No Parameter Left Behind: How Distillati..."
+castorini/monot5-large-msmarco-10k,already_present,"@misc{rosa2022parameterleftbehinddistillation,
+      title={No Parameter Left Behind: How Distillati..."
+castorini/monot5-small-msmarco-10k,already_present,"@misc{rosa2022parameterleftbehinddistillation,
+      title={No Parameter Left Behind: How Distillati..."
+unicamp-dl/mt5-13b-mmarco-100k,citation_not_found,
+unicamp-dl/mt5-base-mmarco-v2,already_present,"@misc{bonifacio2021mmarco,
+      title={mMARCO: A Multilingual Version of MS MARCO Passage Ranking D..."
+Alibaba-NLP/gme-Qwen2-VL-2B-Instruct,already_present,"@misc{zhang2024gme,
+      title={GME: Improving Universal Multimodal Retrieval by Multimodal LLMs},
+..."
+Alibaba-NLP/gme-Qwen2-VL-7B-Instruct,already_present,"@misc{zhang2024gme,
+      title={GME: Improving Universal Multimodal Retrieval by Multimodal LLMs},
+..."
+fangxq/XYZ-embedding,citation_not_found,
+rasgaard/m2v-dfm-large,already_present,"@article{minishlab2024model2vec,
+    author = {Tulkens, Stephan and {van Dongen}, Thomas},
+    title..."
+bedrock/amazon-titan-embed-text-v1,repo_not_found,
+bedrock/amazon-titan-embed-text-v2,repo_not_found,
+bedrock/cohere-embed-english-v3,repo_not_found,
+bedrock/cohere-embed-multilingual-v3,repo_not_found,
+Cohere/Cohere-embed-english-v3.0,citation_not_found,
+Cohere/Cohere-embed-english-light-v3.0,citation_not_found,
+Cohere/Cohere-embed-multilingual-v3.0,citation_not_found,
+Cohere/Cohere-embed-multilingual-light-v3.0,citation_not_found,
+Qodo/Qodo-Embed-1-1.5B,citation_not_found,
+Qodo/Qodo-Embed-1-7B,citation_not_found,
+WhereIsAI/UAE-Large-V1,already_present,"
+    @article{li2023angle,
+      title={AnglE-optimized Text Embeddings},
+      author={Li, Xianming..."
+GeoGPT-Research-Project/GeoEmbedding,citation_not_found,
+infgrad/stella-base-zh-v3-1792d,citation_not_found,
+NovaSearch/stella_en_1.5B_v5,already_present,"@misc{zhang2025jasperstelladistillationsota,
+      title={Jasper and Stella: distillation of SOTA em..."
+NovaSearch/stella_en_400M_v5,already_present,"@misc{zhang2025jasperstelladistillationsota,
+      title={Jasper and Stella: distillation of SOTA em..."
+dunzhang/stella-large-zh-v3-1792d,citation_not_found,
+dunzhang/stella-mrl-large-zh-v3.5-1792d,citation_not_found,
+iampanda/zpoint_large_embedding_zh,citation_not_found,
+sensenova/piccolo-base-zh,citation_not_found,
+sensenova/piccolo-large-zh-v2,already_present,"@misc{2405.06932,
+    Author = {Junqin Huang and Zhongjie Hu and Zihao Jing and Mengya Gao and Yicha..."
+facebook/SONAR,already_present,"@misc{Duquenne:2023:sonar_arxiv,
+  author = {Paul-Ambroise Duquenne and Holger Schwenk and Benoit Sa..."
+OpenSearch-AI/Ops-MoA-Conan-embedding-v1,citation_not_found,
+OpenSearch-AI/Ops-MoA-Yuan-embedding-1.0,citation_not_found,
+ByteDance-Seed/Seed1.5-Embedding,repo_not_found,
+Human,repo_not_found,
+VPLabs/SearchMap_Preview,already_present,"@misc{vectorpath2025searchmap,
+  title={SearchMap: Conversational E-commerce Search Embedding Model}..."
+ByteDance/ListConRanker,already_present,"@article{liu2025listconranker,
+  title={ListConRanker: A Contrastive Text Reranker with Listwise Enc..."
+Linq-AI-Research/Linq-Embed-Mistral,already_present,"@misc{LinqAIResearch2024,
+  title={Linq-Embed-Mistral:Elevating Text Retrieval with Improved GPT Dat..."
+infly/inf-retriever-v1,already_present,"@misc{infly-ai_2025,
+  author       = {Junhan Yang and Jiahe Wan and Yichen Yao and Wei Chu and Ying..."
+infly/inf-retriever-v1-1.5b,already_present,"@misc{infly-ai_2025,
+  author       = {Junhan Yang and Jiahe Wan and Yichen Yao and Wei Chu and Ying..."
+OrdalieTech/Solon-embeddings-mini-beta-1.1,citation_not_found,
+BAAI/bge-visualized-base,already_present,"@article{zhou2024vista,
+  title={VISTA: Visualized Text Embedding For Universal Multi-Modal Retrieva..."
+BAAI/bge-visualized-m3,already_present,"@article{zhou2024vista,
+  title={VISTA: Visualized Text Embedding For Universal Multi-Modal Retrieva..."
+laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K,already_present,"@inproceedings{cherti2023reproducible,
+    title={Reproducible scaling laws for contrastive language..."
+laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K,already_present,"@inproceedings{cherti2023reproducible,
+    title={Reproducible scaling laws for contrastive language..."
+laion/CLIP-ViT-B-32-laion2B-s34B-b79K,already_present,"@inproceedings{cherti2023reproducible,
+    title={Reproducible scaling laws for contrastive language..."
+laion/CLIP-ViT-H-14-laion2B-s32B-b79K,already_present,"@inproceedings{cherti2023reproducible,
+    title={Reproducible scaling laws for contrastive language..."
+laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K,already_present,"@inproceedings{cherti2023reproducible,
+    title={Reproducible scaling laws for contrastive language..."
+laion/CLIP-ViT-L-14-laion2B-s32B-b82K,already_present,"@inproceedings{cherti2023reproducible,
+    title={Reproducible scaling laws for contrastive language..."
+laion/CLIP-ViT-bigG-14-laion2B-39B-b160k,already_present,"@inproceedings{cherti2023reproducible,
+    title={Reproducible scaling laws for contrastive language..."
+laion/CLIP-ViT-g-14-laion2B-s34B-b88K,already_present,"@inproceedings{cherti2023reproducible,
+    title={Reproducible scaling laws for contrastive language..."
+baseline/random-cross-encoder-baseline,repo_not_found,
+baseline/random-encoder-baseline,repo_not_found,
+infgrad/Jasper-Token-Compression-600M,already_present,"
+@misc{zhang2025jaspertokencompression600mtechnicalreport,
+      title={Jasper-Token-Compression-600..."
+NovaSearch/jasper_en_vision_language_v1,already_present,"
+@misc{zhang2025jasperstelladistillationsota,
+      title={Jasper and Stella: distillation of SOTA e..."
+KBLab/sentence-bert-swedish-cased,added,"@misc{rekathati2021introducing,  
+  author = {Rekathati, Faton},  
+  title = {The KBLab Blog: Introd..."
+cl-nagoya/ruri-base,already_present,"@misc{Ruri,
+  title={{Ruri: Japanese General Text Embeddings}},
+  author={Hayato Tsukagoshi and Ryoh..."
+cl-nagoya/ruri-base-v2,already_present,"@misc{Ruri,
+  title={{Ruri: Japanese General Text Embeddings}},
+  author={Hayato Tsukagoshi and Ryoh..."
+cl-nagoya/ruri-large,already_present,"@misc{Ruri,
+  title={{Ruri: Japanese General Text Embeddings}},
+  author={Hayato Tsukagoshi and Ryoh..."
+cl-nagoya/ruri-large-v2,already_present,"@misc{Ruri,
+  title={{Ruri: Japanese General Text Embeddings}},
+  author={Hayato Tsukagoshi and Ryoh..."
+cl-nagoya/ruri-small,already_present,"@misc{Ruri,
+  title={{Ruri: Japanese General Text Embeddings}},
+  author={Hayato Tsukagoshi and Ryoh..."
+cl-nagoya/ruri-small-v2,already_present,"@misc{Ruri,
+  title={{Ruri: Japanese General Text Embeddings}},
+  author={Hayato Tsukagoshi and Ryoh..."
+cl-nagoya/ruri-v3-130m,already_present,"@misc{Ruri,
+  title={{Ruri: Japanese General Text Embeddings}},
+  author={Hayato Tsukagoshi and Ryoh..."
+cl-nagoya/ruri-v3-30m,already_present,"@misc{Ruri,
+  title={{Ruri: Japanese General Text Embeddings}},
+  author={Hayato Tsukagoshi and Ryoh..."
+cl-nagoya/ruri-v3-310m,already_present,"@misc{Ruri,
+  title={{Ruri: Japanese General Text Embeddings}},
+  author={Hayato Tsukagoshi and Ryoh..."
+cl-nagoya/ruri-v3-70m,already_present,"@misc{Ruri,
+  title={{Ruri: Japanese General Text Embeddings}},
+  author={Hayato Tsukagoshi and Ryoh..."
+mixedbread-ai/mxbai-embed-2d-large-v1,citation_not_found,
+mixedbread-ai/mxbai-embed-large-v1,already_present,"
+    @online{emb2024mxbai,
+      title={Open Source Strikes Bread - New Fluffy Embeddings Model},
+  ..."
+mixedbread-ai/mxbai-embed-xsmall-v1,added,"@online{xsmall2024mxbai,
+  title={Every Byte Matters: Introducing mxbai-embed-xsmall-v1},
+  author={..."
+Salesforce/blip2-opt-2.7b,already_present,"@inproceedings{li2023blip2,
+    title={{BLIP-2:} Bootstrapping Language-Image Pre-training with Froz..."
+Salesforce/blip2-opt-6.7b-coco,already_present,"@inproceedings{li2023blip2,
+    title={{BLIP-2:} Bootstrapping Language-Image Pre-training with Froz..."
+fyaronskiy/english_code_retriever,citation_not_found,
+BMRetriever/BMRetriever-1B,already_present,"
+@inproceedings{xu-etal-2024-bmretriever,
+    title = ""{BMR}etriever: Tuning Large Language Models a..."
+BMRetriever/BMRetriever-2B,already_present,"
+@inproceedings{xu-etal-2024-bmretriever,
+    title = ""{BMR}etriever: Tuning Large Language Models a..."
+BMRetriever/BMRetriever-410M,already_present,"
+@inproceedings{xu-etal-2024-bmretriever,
+    title = ""{BMR}etriever: Tuning Large Language Models a..."
+BMRetriever/BMRetriever-7B,already_present,"
+@inproceedings{xu-etal-2024-bmretriever,
+    title = ""{BMR}etriever: Tuning Large Language Models a..."
+google/siglip-base-patch16-224,already_present,"@misc{zhai2023sigmoid,
+      title={Sigmoid Loss for Language Image Pre-Training},
+      author={Xia..."
+google/siglip-base-patch16-256,already_present,"@misc{zhai2023sigmoid,
+      title={Sigmoid Loss for Language Image Pre-Training},
+      author={Xia..."
+google/siglip-base-patch16-256-multilingual,already_present,"@misc{zhai2023sigmoid,
+      title={Sigmoid Loss for Language Image Pre-Training},
+      author={Xia..."
+google/siglip-base-patch16-384,already_present,"@misc{zhai2023sigmoid,
+      title={Sigmoid Loss for Language Image Pre-Training},
+      author={Xia..."
+google/siglip-base-patch16-512,already_present,"@misc{zhai2023sigmoid,
+      title={Sigmoid Loss for Language Image Pre-Training},
+      author={Xia..."
+google/siglip-large-patch16-256,already_present,"@misc{zhai2023sigmoid,
+      title={Sigmoid Loss for Language Image Pre-Training},
+      author={Xia..."
+google/siglip-large-patch16-384,already_present,"@misc{zhai2023sigmoid,
+      title={Sigmoid Loss for Language Image Pre-Training},
+      author={Xia..."
+google/siglip-so400m-patch14-224,already_present,"@misc{zhai2023sigmoid,
+      title={Sigmoid Loss for Language Image Pre-Training},
+      author={Xia..."
+google/siglip-so400m-patch14-384,already_present,"@misc{zhai2023sigmoid,
+      title={Sigmoid Loss for Language Image Pre-Training},
+      author={Xia..."
+google/siglip-so400m-patch16-256-i18n,already_present,"@misc{zhai2023sigmoid,
+      title={Sigmoid Loss for Language Image Pre-Training},
+      author={Xia..."
+sentence-transformers/all-MiniLM-L12-v2,already_present,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+sentence-transformers/all-MiniLM-L6-v2,already_present,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+sentence-transformers/all-mpnet-base-v2,already_present,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+facebook/contriever-msmarco,already_present,"
+    @misc{izacard2021contriever,
+      title={Unsupervised Dense Information Retrieval with Contras..."
+sentence-transformers/gtr-t5-base,citation_not_found,
+sentence-transformers/gtr-t5-large,citation_not_found,
+sentence-transformers/gtr-t5-xl,citation_not_found,
+sentence-transformers/gtr-t5-xxl,citation_not_found,
+sentence-transformers/LaBSE,already_present,"@misc{feng2022languageagnosticbertsentenceembedding,
+      title={Language-agnostic BERT Sentence Em..."
+keeeeenw/MicroLlama-text-embedding,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+sentence-transformers/multi-qa-MiniLM-L6-cos-v1,already_present,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,already_present,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+sentence-transformers/paraphrase-multilingual-mpnet-base-v2,already_present,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+sentence-transformers/sentence-t5-base,citation_not_found,
+sentence-transformers/sentence-t5-large,citation_not_found,
+sentence-transformers/sentence-t5-xl,citation_not_found,
+sentence-transformers/sentence-t5-xxl,citation_not_found,
+sentence-transformers/static-similarity-mrl-multilingual-v1,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+llamaindex/vdr-2b-multi-v1,citation_not_found,
+royokong/e5-v,already_present,"@article{jiang2024e5v,
+      title={E5-V: Universal Embeddings with Multimodal Large Language Models..."
+amazon/Titan-text-embeddings-v2,citation_not_found,
+openai/text-embedding-3-large,repo_not_found,
+openai/text-embedding-3-large (embed_dim=512),"repo_check_error: Repo id must use alphanumeric chars or '-', '_', '.', '--' and '..' are forbidden, '-' and '.' cannot start or end the name, max length is 96: 'openai/text-embedding-3-large (embed_dim=512)'.",
+openai/text-embedding-3-small,repo_not_found,
+openai/text-embedding-3-small (embed_dim=512),"repo_check_error: Repo id must use alphanumeric chars or '-', '_', '.', '--' and '..' are forbidden, '-' and '.' cannot start or end the name, max length is 96: 'openai/text-embedding-3-small (embed_dim=512)'.",
+openai/text-embedding-ada-002,repo_not_found,
+IEITYuan/Yuan-embedding-2.0-zh,citation_not_found,
+sergeyzh/BERTA,citation_not_found,
+deepvk/deberta-v1-base,citation_not_found,
+DeepPavlov/distilrubert-small-cased-conversational,already_present,"@misc{https://doi.org/10.48550/arxiv.2205.02340,
+      doi = {10.48550/ARXIV.2205.02340},
+      url ..."
+ai-forever/FRIDA,added,"@misc{TODO
+}"
+ai-sage/Giga-Embeddings-instruct,citation_not_found,
+cointegrated/LaBSE-en-ru,citation_not_found,
+sergeyzh/LaBSE-ru-turbo,citation_not_found,
+ai-forever/ru-en-RoSBERTa,already_present,"@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
+      title={The Russian-focused embedde..."
+DeepPavlov/rubert-base-cased,already_present,"@misc{kuratov2019adaptationdeepbidirectionalmultilingual,
+      title={Adaptation of Deep Bidirectio..."
+DeepPavlov/rubert-base-cased-sentence,citation_not_found,
+sergeyzh/rubert-mini-frida,citation_not_found,
+cointegrated/rubert-tiny,citation_not_found,
+cointegrated/rubert-tiny2,citation_not_found,
+sergeyzh/rubert-tiny-turbo,citation_not_found,
+ai-forever/sbert_large_mt_nlu_ru,citation_not_found,
+ai-forever/sbert_large_nlu_ru,citation_not_found,
+deepvk/USER2-base,added,"@misc{deepvk2025user,
+    title={USER2},
+    author={Malashenko, Boris and Spirin, Egor and Sokolov ..."
+deepvk/USER2-small,added,"@misc{deepvk2025user,
+    title={USER2},
+    author={Malashenko, Boris and Spirin, Egor and Sokolov ..."
+deepvk/USER-base,already_present,"@misc{deepvk2024user,
+        title={USER: Universal Sentence Encoder for Russian},
+        author={..."
+deepvk/USER-bge-m3,added,"@misc{deepvk2024user,
+    title={USER: Universal Sentence Encoder for Russian},
+    author={Malashen..."
+nvidia/NV-Embed-v1,already_present,"@misc{moreira2025nvretrieverimprovingtextembedding,
+      title={NV-Retriever: Improving text embedd..."
+nvidia/NV-Embed-v2,already_present,"@misc{moreira2025nvretrieverimprovingtextembedding,
+      title={NV-Retriever: Improving text embedd..."
+nvidia/llama-embed-nemotron-8b,already_present,"@misc{moreira2025nvretrieverimprovingtextembedding,
+      title={NV-Retriever: Improving text embedd..."
+NbAiLab/nb-bert-base,citation_not_found,
+NbAiLab/nb-bert-large,citation_not_found,
+NbAiLab/nb-sbert-base,citation_not_found,
+GritLM/GritLM-7B,already_present,"
+@misc{muennighoff2024generative,
+      title={Generative Representational Instruction Tuning},
+    ..."
+GritLM/GritLM-8x7B,already_present,"
+@misc{muennighoff2024generative,
+      title={Generative Representational Instruction Tuning},
+    ..."
+clips/e5-base-trm-nl,already_present,"
+@misc{banar2025mtebnle5nlembeddingbenchmark,
+  archiveprefix = {arXiv},
+  author = {Nikolay Banar a..."
+clips/e5-large-trm-nl,already_present,"
+@misc{banar2025mtebnle5nlembeddingbenchmark,
+  archiveprefix = {arXiv},
+  author = {Nikolay Banar a..."
+clips/e5-small-trm-nl,already_present,"
+@misc{banar2025mtebnle5nlembeddingbenchmark,
+  archiveprefix = {arXiv},
+  author = {Nikolay Banar a..."
+andersborges/model2vecdk,added,"@article{minishlab2024model2vec,
+  author = {Tulkens, Stephan and {van Dongen}, Thomas},
+  title = {..."
+andersborges/model2vecdk-stem,added,"@article{minishlab2024model2vec,
+  author = {Tulkens, Stephan and {van Dongen}, Thomas},
+  title = {..."
+KFST/XLMRoberta-en-da-sv-nb,citation_not_found,
+panalexeu/xlm-roberta-ua-distilled,added,"@inproceedings{reimers-2019-sentence-bert,
+    title = ""Sentence-BERT: Sentence Embeddings using Sia..."
+nyu-visionx/moco-v3-vit-b,already_present,"@Article{chen2021mocov3,
+    author  = {Xinlei Chen* and Saining Xie* and Kaiming He},
+    title   =..."
+nyu-visionx/moco-v3-vit-l,already_present,"@Article{chen2021mocov3,
+    author  = {Xinlei Chen* and Saining Xie* and Kaiming He},
+    title   =..."
+nvidia/llama-nemoretriever-colembed-1b-v1,already_present,"@misc{xu2025llamanemoretrievercolembedtopperforming,
+      title={Llama Nemoretriever Colembed: Top-..."
+nvidia/llama-nemoretriever-colembed-3b-v1,already_present,"@misc{xu2025llamanemoretrievercolembedtopperforming,
+      title={Llama Nemoretriever Colembed: Top-..."
+Shuu12121/CodeSearch-ModernBERT-Crow-Plus,citation_not_found,
+minishlab/M2V_base_glove,already_present,"@software{minishlab2024model2vec,
+      authors = {Stephan Tulkens, Thomas van Dongen},
+      title ..."
+minishlab/M2V_base_glove_subword,already_present,"@software{minishlab2024model2vec,
+      authors = {Stephan Tulkens, Thomas van Dongen},
+      title ..."
+minishlab/M2V_base_output,already_present,"@software{minishlab2024model2vec,
+      authors = {Stephan Tulkens, Thomas van Dongen},
+      title ..."
+minishlab/M2V_multilingual_output,already_present,"@software{minishlab2024model2vec,
+      authors = {Stephan Tulkens, Thomas van Dongen},
+      title ..."
+minishlab/potion-base-2M,already_present,"@software{minishlab2024model2vec,
+      authors = {Stephan Tulkens, Thomas van Dongen},
+      title ..."
+minishlab/potion-base-4M,already_present,"@software{minishlab2024model2vec,
+      authors = {Stephan Tulkens, Thomas van Dongen},
+      title ..."
+minishlab/potion-base-8M,already_present,"@software{minishlab2024model2vec,
+      authors = {Stephan Tulkens, Thomas van Dongen},
+      title ..."
+minishlab/potion-multilingual-128M,already_present,"@software{minishlab2024model2vec,
+      authors = {Stephan Tulkens, Thomas van Dongen},
+      title ..."
+NeuML/pubmedbert-base-embeddings-100K,citation_not_found,
+NeuML/pubmedbert-base-embeddings-1M,citation_not_found,
+NeuML/pubmedbert-base-embeddings-2M,citation_not_found,
+NeuML/pubmedbert-base-embeddings-500K,citation_not_found,
+NeuML/pubmedbert-base-embeddings-8M,citation_not_found,
+ibm-granite/granite-embedding-107m-multilingual,already_present,"@article{awasthy2025graniteembedding,
+  title={Granite Embedding Models},
+  author={Awasthy, Parul a..."
+ibm-granite/granite-embedding-125m-english,already_present,"@article{awasthy2025graniteembedding,
+  title={Granite Embedding Models},
+  author={Awasthy, Parul a..."
+ibm-granite/granite-embedding-278m-multilingual,already_present,"@article{awasthy2025graniteembedding,
+  title={Granite Embedding Models},
+  author={Awasthy, Parul a..."
+ibm-granite/granite-embedding-30m-english,already_present,"@article{awasthy2025graniteembedding,
+  title={Granite Embedding Models},
+  author={Awasthy, Parul a..."
+ibm-granite/granite-embedding-english-r2,already_present,"@article{awasthy2025graniteembedding,
+  title={Granite Embedding Models},
+  author={Awasthy, Parul a..."
+ibm-granite/granite-embedding-small-english-r2,already_present,"@article{awasthy2025graniteembedding,
+  title={Granite Embedding Models},
+  author={Awasthy, Parul a..."
+nomic-ai/colnomic-embed-multimodal-3b,already_present,"
+@misc{nomicembedmultimodal2025,
+  title={Nomic Embed Multimodal: Interleaved Text, Image, and Scree..."
+nomic-ai/colnomic-embed-multimodal-7b,already_present,"
+@misc{nomicembedmultimodal2025,
+  title={Nomic Embed Multimodal: Interleaved Text, Image, and Scree..."
+vidore/colqwen2-v1.0,already_present,"
+@misc{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models..."
+vidore/colqwen2.5-v0.2,already_present,"
+@misc{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models..."
+TomoroAI/tomoro-colqwen3-embed-4b,already_present,"
+@misc{huang2025tomoro_colqwen3_embed,
+  title={TomoroAI/tomoro-colqwen3-embed},
+  author={Xin Huang..."
+TomoroAI/tomoro-colqwen3-embed-8b,already_present,"
+@misc{huang2025tomoro_colqwen3_embed,
+  title={TomoroAI/tomoro-colqwen3-embed},
+  author={Xin Huang..."
+ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-3B-v1,citation_not_found,
+ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-7B-v1,citation_not_found,
+BeastyZ/e5-R-mistral-7b,citation_not_found,
+intfloat/multilingual-e5-large-instruct,already_present,"@article{wang2024multilingual,
+      title={Multilingual E5 Text Embeddings: A Technical Report},
+  ..."
+intfloat/e5-mistral-7b-instruct,already_present,"
+    @article{wang2023improving,
+      title={Improving Text Embeddings with Large Language Models},..."
+zeta-alpha-ai/Zeta-Alpha-E5-Mistral,citation_not_found,
+codesage/codesage-base-v2,already_present,"@inproceedings{
+    zhang2024code,
+    title={{CODE} {REPRESENTATION} {LEARNING} {AT} {SCALE}},
+    ..."
+codesage/codesage-large-v2,already_present,"@inproceedings{
+    zhang2024code,
+    title={{CODE} {REPRESENTATION} {LEARNING} {AT} {SCALE}},
+    ..."
+codesage/codesage-small-v2,already_present,"@inproceedings{
+    zhang2024code,
+    title={{CODE} {REPRESENTATION} {LEARNING} {AT} {SCALE}},
+    ..."
+Tarka-AIR/Tarka-Embedding-150M-V1,already_present,"@misc{tarka_ai_research_2025,
+	author       = { Tarka AI Research },
+	title        = { Tarka-Embeddi..."
+Tarka-AIR/Tarka-Embedding-350M-V1,already_present,"@misc{tarka_ai_research_2025,
+	author       = { Tarka AI Research },
+	title        = { Tarka-Embeddi..."
+HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1,already_present,"@article{hu2025kalm,
+  title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Mod..."
+HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1.5,already_present,"@article{hu2025kalm,
+  title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Mod..."
+HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2,already_present,"@article{hu2025kalm,
+  title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Mod..."
+HIT-TMG/KaLM-embedding-multilingual-mini-v1,already_present,"@article{hu2025kalm,
+  title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Mod..."
+KaLM-Embedding/KaLM-embedding-multilingual-mini-instruct-v2.5,added,"@misc{zhao2025kalmembeddingv2,
+      title={KaLM-Embedding-V2: Superior Training Techniques and Data..."
+tencent/KaLM-Embedding-Gemma3-12B-2511,added,"@misc{zhao2025kalmembeddingv2,
+      title={KaLM-Embedding-V2: Superior Training Techniques and Data..."
+Qwen/Qwen3-Embedding-0.6B,already_present,"@article{qwen3embedding,
+  title={Qwen3 Embedding: Advancing Text Embedding and Reranking Through Fo..."
+Qwen/Qwen3-Embedding-4B,already_present,"@article{qwen3embedding,
+  title={Qwen3 Embedding: Advancing Text Embedding and Reranking Through Fo..."
+Qwen/Qwen3-Embedding-8B,already_present,"@article{qwen3embedding,
+  title={Qwen3 Embedding: Advancing Text Embedding and Reranking Through Fo..."
+annamodels/LGAI-Embedding-Preview,already_present,"@misc{choi2025lgaiembeddingpreviewtechnicalreport,
+      title={LGAI-EMBEDDING-Preview Technical Rep..."
+opensearch-project/opensearch-neural-sparse-encoding-doc-v1,citation_not_found,
+opensearch-project/opensearch-neural-sparse-encoding-doc-v2-distill,citation_not_found,
+opensearch-project/opensearch-neural-sparse-encoding-doc-v2-mini,citation_not_found,
+opensearch-project/opensearch-neural-sparse-encoding-doc-v3-distill,citation_not_found,
+opensearch-project/opensearch-neural-sparse-encoding-doc-v3-gte,citation_not_found,
+AITeamVN/Vietnamese_Embedding,added,"@misc{Vietnamese_Embedding,
+  title={Vietnamese_Embedding: Embedding model in Vietnamese language.},..."
+bkai-foundation-models/vietnamese-bi-encoder,citation_not_found,
+GreenNode/GreenNode-Embedding-Large-VN-Mixed-V1,citation_not_found,
+GreenNode/GreenNode-Embedding-Large-VN-V1,citation_not_found,
+hiieu/halong_embedding,added,"@misc{HalongEmbedding,
+  title={HalongEmbedding: A Vietnamese Text Embedding},
+  author={Ngo Hieu},
+..."
+VoVanPhuc/sup-SimCSE-VietNamese-phobert-base,citation_not_found,
+Mira190/Euler-Legal-Embedding-V1,added,"@misc{euler2025legal,
+      title={Euler-Legal-Embedding: Advanced Legal Representation Learning}, 
+..."
+MCINext/Hakim,already_present,"@article{sarmadi2025hakim,
+      title={Hakim: Farsi Text Embedding Model},
+      author={Sarmadi, M..."
+MCINext/Hakim-small,already_present,"@article{sarmadi2025hakim,
+      title={Hakim: Farsi Text Embedding Model},
+      author={Sarmadi, M..."
+MCINext/Hakim-unsup,already_present,"@article{sarmadi2025hakim,
+      title={Hakim: Farsi Text Embedding Model},
+      author={Sarmadi, M..."
+TIGER-Lab/VLM2Vec-Full,already_present,"@article{jiang2024vlm2vec,
+  title={VLM2Vec: Training Vision-Language Models for Massive Multimodal ..."
+TIGER-Lab/VLM2Vec-LoRA,already_present,"@article{jiang2024vlm2vec,
+  title={VLM2Vec: Training Vision-Language Models for Massive Multimodal ..."
+richinfoai/ritrieve_zh_v1,citation_not_found,
+vidore/colSmol-256M,already_present,"
+@misc{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models..."
+vidore/colSmol-500M,already_present,"
+@misc{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models..."
+manveertamber/cadet-embed-base-v1,already_present,"@article{tamber2025conventionalcontrastivelearningfalls,
+    title={Conventional Contrastive Learnin..."
+google/embeddinggemma-300m,already_present,"@article{embedding_gemma_2025,
+    title={EmbeddingGemma: Powerful and Lightweight Text Representati..."
+google/gemini-embedding-001,repo_not_found,
+google/text-embedding-004,repo_not_found,
+google/text-embedding-005,repo_not_found,
+google/text-multilingual-embedding-002,repo_not_found,
+McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-supervised,already_present,"
+@misc{behnamghader2024llm2veclargelanguagemodels,
+      title={LLM2Vec: Large Language Models Are S..."
+McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-unsup-simcse,already_present,"
+@misc{behnamghader2024llm2veclargelanguagemodels,
+      title={LLM2Vec: Large Language Models Are S..."
+McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-supervised,already_present,"
+@misc{behnamghader2024llm2veclargelanguagemodels,
+      title={LLM2Vec: Large Language Models Are S..."
+McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-unsup-simcse,already_present,"
+@misc{behnamghader2024llm2veclargelanguagemodels,
+      title={LLM2Vec: Large Language Models Are S..."
+McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-supervised,already_present,"
+@misc{behnamghader2024llm2veclargelanguagemodels,
+      title={LLM2Vec: Large Language Models Are S..."
+McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-unsup-simcse,already_present,"
+@misc{behnamghader2024llm2veclargelanguagemodels,
+      title={LLM2Vec: Large Language Models Are S..."
+McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-supervised,already_present,"
+@misc{behnamghader2024llm2veclargelanguagemodels,
+      title={LLM2Vec: Large Language Models Are S..."
+McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-unsup-simcse,already_present,"
+@misc{behnamghader2024llm2veclargelanguagemodels,
+      title={LLM2Vec: Large Language Models Are S..."
+intfloat/mmE5-mllama-11b-instruct,already_present,"
+@article{chen2025mmE5,
+  title={mmE5: Improving Multimodal Multilingual Embeddings via High-quality..."

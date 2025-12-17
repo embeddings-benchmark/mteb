@@ -21,6 +21,15 @@ embedding_gemma_300m_scandi = ModelMeta(
     similarity_fn_name="cosine",  # type: ignore[arg-type]
     adapted_from="google/embeddinggemma-300m",
     memory_usage_mb=578,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )
 
 
@@ -67,4 +76,13 @@ mmbert_scandi = ModelMeta(
     training_datasets=set(),
     similarity_fn_name="cosine",  # type: ignore[arg-type]
     adapted_from="jonasaise/scandmmBERT-base-scandinavian",
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )

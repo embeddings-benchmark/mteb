@@ -127,6 +127,15 @@ Gameselo__STS_multilingual_mpnet_base_v2 = ModelMeta(
     },
     adapted_from="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     superseded_by=None,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )
 
 Hum_Works__lodestone_base_4096_v1 = ModelMeta(
@@ -250,6 +259,28 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
     training_datasets=bilingual_embedding_training_data,
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
+    citation="""
+    @article{conneau2019unsupervised,
+  title={Unsupervised cross-lingual representation learning at scale},
+  author={Conneau, Alexis and Khandelwal, Kartikay and Goyal, Naman and Chaudhary, Vishrav and Wenzek, Guillaume and Guzm{\'a}n, Francisco and Grave, Edouard and Ott, Myle and Zettlemoyer, Luke and Stoyanov, Veselin},
+  journal={arXiv preprint arXiv:1911.02116},
+  year={2019}
+}
+
+@article{reimers2019sentence,
+   title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+   author={Nils Reimers, Iryna Gurevych},
+   journal={https://arxiv.org/abs/1908.10084},
+   year={2019}
+}
+
+@article{thakur2020augmented,
+  title={Augmented SBERT: Data Augmentation Method for Improving Bi-Encoders for Pairwise Sentence Scoring Tasks},
+  author={Thakur, Nandan and Reimers, Nils and Daxenberger, Johannes and Gurevych, Iryna},
+  journal={arXiv e-prints},
+  pages={arXiv--2010},
+  year={2020}
+"""
 )
 Lajavaness__bilingual_embedding_large = ModelMeta(
     name="Lajavaness/bilingual-embedding-large",
@@ -275,6 +306,29 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
     training_datasets=bilingual_embedding_training_data,
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
+    citation="""
+    @article{conneau2019unsupervised,
+  title={Unsupervised cross-lingual representation learning at scale},
+  author={Conneau, Alexis and Khandelwal, Kartikay and Goyal, Naman and Chaudhary, Vishrav and Wenzek, Guillaume and Guzm{\'a}n, Francisco and Grave, Edouard and Ott, Myle and Zettlemoyer, Luke and Stoyanov, Veselin},
+  journal={arXiv preprint arXiv:1911.02116},
+  year={2019}
+}
+
+@article{reimers2019sentence,
+   title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+   author={Nils Reimers, Iryna Gurevych},
+   journal={https://arxiv.org/abs/1908.10084},
+   year={2019}
+}
+
+@article{thakur2020augmented,
+  title={Augmented SBERT: Data Augmentation Method for Improving Bi-Encoders for Pairwise Sentence Scoring Tasks},
+  author={Thakur, Nandan and Reimers, Nils and Daxenberger, Johannes and Gurevych, Iryna},
+  journal={arXiv e-prints},
+  pages={arXiv--2010},
+  year={2020}
+
+"""
 )
 Lajavaness__bilingual_embedding_small = ModelMeta(
     name="Lajavaness/bilingual-embedding-small",
@@ -300,6 +354,29 @@ Lajavaness__bilingual_embedding_small = ModelMeta(
     training_datasets=bilingual_embedding_training_data,
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
+    citation="""
+    @article{conneau2019unsupervised,
+  title={Unsupervised cross-lingual representation learning at scale},
+  author={Conneau, Alexis and Khandelwal, Kartikay and Goyal, Naman and Chaudhary, Vishrav and Wenzek, Guillaume and Guzm{\'a}n, Francisco and Grave, Edouard and Ott, Myle and Zettlemoyer, Luke and Stoyanov, Veselin},
+  journal={arXiv preprint arXiv:1911.02116},
+  year={2019}
+}
+
+@article{reimers2019sentence,
+   title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+   author={Nils Reimers, Iryna Gurevych},
+   journal={https://arxiv.org/abs/1908.10084},
+   year={2019}
+}
+
+@article{thakur2020augmented,
+  title={Augmented SBERT: Data Augmentation Method for Improving Bi-Encoders for Pairwise Sentence Scoring Tasks},
+  author={Thakur, Nandan and Reimers, Nils and Daxenberger, Johannes and Gurevych, Iryna},
+  journal={arXiv e-prints},
+  pages={arXiv--2010},
+  year={2020}
+
+"""
 )
 Mihaiii__Bulbasaur = ModelMeta(
     name="Mihaiii/Bulbasaur",
@@ -503,6 +580,15 @@ Omartificial_Intelligence_Space__Arabert_all_nli_triplet_Matryoshka = ModelMeta(
     training_datasets=set(),  # not in MTEB: {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet"},
     adapted_from="aubmindlab/bert-base-arabertv02",
     superseded_by=None,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )
 Omartificial_Intelligence_Space__Arabic_MiniLM_L12_v2_all_nli_triplet = ModelMeta(
     name="Omartificial-Intelligence-Space/Arabic-MiniLM-L12-v2-all-nli-triplet",
@@ -551,6 +637,15 @@ Omartificial_Intelligence_Space__Arabic_all_nli_triplet_Matryoshka = ModelMeta(
     # {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet"},
     adapted_from="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     superseded_by=None,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )
 Omartificial_Intelligence_Space__Arabic_labse_Matryoshka = ModelMeta(
     name="Omartificial-Intelligence-Space/Arabic-labse-Matryoshka",
@@ -575,6 +670,15 @@ Omartificial_Intelligence_Space__Arabic_labse_Matryoshka = ModelMeta(
     # {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet"},
     adapted_from="sentence-transformers/LaBSE",
     superseded_by=None,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )
 Omartificial_Intelligence_Space__Arabic_mpnet_base_all_nli_triplet = ModelMeta(
     name="Omartificial-Intelligence-Space/Arabic-mpnet-base-all-nli-triplet",
@@ -599,6 +703,15 @@ Omartificial_Intelligence_Space__Arabic_mpnet_base_all_nli_triplet = ModelMeta(
     # {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet"},
     adapted_from="tomaarsen/mpnet-base-all-nli-triplet",
     superseded_by=None,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )
 Omartificial_Intelligence_Space__Marbert_all_nli_triplet_Matryoshka = ModelMeta(
     name="Omartificial-Intelligence-Space/Marbert-all-nli-triplet-Matryoshka",
@@ -621,6 +734,15 @@ Omartificial_Intelligence_Space__Marbert_all_nli_triplet_Matryoshka = ModelMeta(
     training_datasets=set(),  # not in MTEB: "Omartificial-Intelligence-Space/Arabic-NLi-Triplet"},
     adapted_from="UBC-NLP/MARBERTv2",
     superseded_by=None,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )
 consciousai__cai_lunaris_text_embeddings = ModelMeta(
     name="consciousAI/cai-lunaris-text-embeddings",
@@ -763,6 +885,12 @@ thenlper__gte_base = ModelMeta(
     training_datasets=None,
     adapted_from=None,
     superseded_by=None,
+    citation="""@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learning},
+  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
+  journal={arXiv preprint arXiv:2308.03281},
+  year={2023}
+}""",
 )
 thenlper__gte_large = ModelMeta(
     name="thenlper/gte-large",
@@ -785,6 +913,12 @@ thenlper__gte_large = ModelMeta(
     training_datasets=None,
     adapted_from=None,
     superseded_by=None,
+    citation="""@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learning},
+  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
+  journal={arXiv preprint arXiv:2308.03281},
+  year={2023}
+}""",
 )
 thenlper__gte_small = ModelMeta(
     name="thenlper/gte-small",
@@ -807,6 +941,12 @@ thenlper__gte_small = ModelMeta(
     training_datasets=None,
     adapted_from=None,
     superseded_by=None,
+    citation="""@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learning},
+  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
+  journal={arXiv preprint arXiv:2308.03281},
+  year={2023}
+}""",
 )
 OrlikB__KartonBERT_USE_base_v1 = ModelMeta(
     name="OrlikB/KartonBERT-USE-base-v1",
@@ -873,6 +1013,14 @@ sdadas__mmlw_e5_base = ModelMeta(
     training_datasets=E5_TRAINING_DATA,
     adapted_from="intfloat/multilingual-e5-base",
     superseded_by=None,
+    citation="""@article{dadas2024pirb,
+  title={{PIRB}: A Comprehensive Benchmark of Polish Dense and Hybrid Text Retrieval Methods}, 
+  author={Sławomir Dadas and Michał Perełkiewicz and Rafał Poświata},
+  year={2024},
+  eprint={2402.13350},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL}
+}""",
 )
 dwzhu__e5_base_4k = ModelMeta(
     name="dwzhu/e5-base-4k",
@@ -895,6 +1043,12 @@ dwzhu__e5_base_4k = ModelMeta(
     training_datasets=E5_TRAINING_DATA,
     adapted_from="intfloat/e5-base-v2",
     superseded_by=None,
+    citation="""@article{zhu2024longembed,
+  title={LongEmbed: Extending Embedding Models for Long Context Retrieval},
+  author={Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
+  journal={arXiv preprint arXiv:2404.12096},
+  year={2024}
+}""",
 )
 sdadas__mmlw_e5_large = ModelMeta(
     name="sdadas/mmlw-e5-large",
@@ -917,6 +1071,14 @@ sdadas__mmlw_e5_large = ModelMeta(
     training_datasets=E5_TRAINING_DATA,
     adapted_from="intfloat/multilingual-e5-large",
     superseded_by=None,
+    citation="""@article{dadas2024pirb,
+  title={{PIRB}: A Comprehensive Benchmark of Polish Dense and Hybrid Text Retrieval Methods}, 
+  author={Sławomir Dadas and Michał Perełkiewicz and Rafał Poświata},
+  year={2024},
+  eprint={2402.13350},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL}
+}""",
 )
 sdadas__mmlw_e5_small = ModelMeta(
     name="sdadas/mmlw-e5-small",
@@ -939,6 +1101,14 @@ sdadas__mmlw_e5_small = ModelMeta(
     training_datasets=E5_TRAINING_DATA,
     adapted_from="intfloat/multilingual-e5-small",
     superseded_by=None,
+    citation="""@article{dadas2024pirb,
+  title={{PIRB}: A Comprehensive Benchmark of Polish Dense and Hybrid Text Retrieval Methods}, 
+  author={Sławomir Dadas and Michał Perełkiewicz and Rafał Poświata},
+  year={2024},
+  eprint={2402.13350},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL}
+}""",
 )
 sdadas__mmlw_roberta_base = ModelMeta(
     name="sdadas/mmlw-roberta-base",
@@ -961,6 +1131,14 @@ sdadas__mmlw_roberta_base = ModelMeta(
     training_datasets={"MSMARCO"},
     adapted_from="sdadas/polish-roberta-base-v2",
     superseded_by=None,
+    citation="""@article{dadas2024pirb,
+  title={{PIRB}: A Comprehensive Benchmark of Polish Dense and Hybrid Text Retrieval Methods}, 
+  author={Sławomir Dadas and Michał Perełkiewicz and Rafał Poświata},
+  year={2024},
+  eprint={2402.13350},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL}
+}""",
 )
 sdadas__mmlw_roberta_large = ModelMeta(
     name="sdadas/mmlw-roberta-large",
@@ -983,6 +1161,14 @@ sdadas__mmlw_roberta_large = ModelMeta(
     training_datasets={"MSMARCO"},
     adapted_from="sdadas/polish-roberta-large-v2",
     superseded_by=None,
+    citation="""@article{dadas2024pirb,
+  title={{PIRB}: A Comprehensive Benchmark of Polish Dense and Hybrid Text Retrieval Methods}, 
+  author={Sławomir Dadas and Michał Perełkiewicz and Rafał Poświata},
+  year={2024},
+  eprint={2402.13350},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL}
+}""",
 )
 
 udever_dataset = {  # discussed here: https://github.com/embeddings-benchmark/mteb/issues/2193
@@ -1060,6 +1246,12 @@ izhx__udever_bloom_1b1 = ModelMeta(
     training_datasets=udever_dataset,
     adapted_from="bigscience/bloom-1b1",
     superseded_by=None,
+    citation="""@article{zhang2023language,
+  title={Language Models are Universal Embedders},
+  author={Zhang, Xin and Li, Zehan and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Zhang, Min},
+  journal={arXiv preprint arXiv:2310.08232},
+  year={2023}
+}""",
 )
 izhx__udever_bloom_3b = ModelMeta(
     name="izhx/udever-bloom-3b",
@@ -1082,6 +1274,12 @@ izhx__udever_bloom_3b = ModelMeta(
     training_datasets=udever_dataset,
     adapted_from="bigscience/bloom-3b",
     superseded_by=None,
+    citation="""@article{zhang2023language,
+  title={Language Models are Universal Embedders},
+  author={Zhang, Xin and Li, Zehan and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Zhang, Min},
+  journal={arXiv preprint arXiv:2310.08232},
+  year={2023}
+}""",
 )
 izhx__udever_bloom_560m = ModelMeta(
     name="izhx/udever-bloom-560m",
@@ -1104,6 +1302,12 @@ izhx__udever_bloom_560m = ModelMeta(
     training_datasets=udever_dataset,
     adapted_from="bigscience/bloom-560m",
     superseded_by=None,
+    citation="""@article{zhang2023language,
+  title={Language Models are Universal Embedders},
+  author={Zhang, Xin and Li, Zehan and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Zhang, Min},
+  journal={arXiv preprint arXiv:2310.08232},
+  year={2023}
+}""",
 )
 izhx__udever_bloom_7b1 = ModelMeta(
     name="izhx/udever-bloom-7b1",
@@ -1126,6 +1330,12 @@ izhx__udever_bloom_7b1 = ModelMeta(
     training_datasets=udever_dataset,
     adapted_from="bigscience/bloom-7b1",
     superseded_by=None,
+    citation="""@article{zhang2023language,
+  title={Language Models are Universal Embedders},
+  author={Zhang, Xin and Li, Zehan and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Zhang, Min},
+  journal={arXiv preprint arXiv:2310.08232},
+  year={2023}
+}""",
 )
 avsolatorio__gist_embedding_v0 = ModelMeta(
     name="avsolatorio/GIST-Embedding-v0",
@@ -1165,6 +1375,16 @@ avsolatorio__gist_embedding_v0 = ModelMeta(
     | bge_training_data,
     adapted_from="BAAI/bge-large-en-v1.5",
     superseded_by=None,
+    citation="""@article{solatorio2024gistembed,
+    title={GISTEmbed: Guided In-sample Selection of Training Negatives for Text Embedding Fine-tuning},
+    author={Aivin V. Solatorio},
+    journal={arXiv preprint arXiv:2402.16829},
+    year={2024},
+    URL={https://arxiv.org/abs/2402.16829}
+    eprint={2402.16829},
+    archivePrefix={arXiv},
+    primaryClass={cs.LG}
+}""",
 )
 avsolatorio__gist_all_minilm_l6_v2 = ModelMeta(
     name="avsolatorio/GIST-all-MiniLM-L6-v2",
@@ -1204,6 +1424,16 @@ avsolatorio__gist_all_minilm_l6_v2 = ModelMeta(
     | bge_training_data,
     adapted_from=None,
     superseded_by=None,
+    citation="""@article{solatorio2024gistembed,
+    title={GISTEmbed: Guided In-sample Selection of Training Negatives for Text Embedding Fine-tuning},
+    author={Aivin V. Solatorio},
+    journal={arXiv preprint arXiv:2402.16829},
+    year={2024},
+    URL={https://arxiv.org/abs/2402.16829}
+    eprint={2402.16829},
+    archivePrefix={arXiv},
+    primaryClass={cs.LG}
+}""",
 )
 avsolatorio__gist_large_embedding_v0 = ModelMeta(
     name="avsolatorio/GIST-large-Embedding-v0",
@@ -1243,6 +1473,16 @@ avsolatorio__gist_large_embedding_v0 = ModelMeta(
     | bge_training_data,
     adapted_from=None,
     superseded_by=None,
+    citation="""@article{solatorio2024gistembed,
+    title={GISTEmbed: Guided In-sample Selection of Training Negatives for Text Embedding Fine-tuning},
+    author={Aivin V. Solatorio},
+    journal={arXiv preprint arXiv:2402.16829},
+    year={2024},
+    URL={https://arxiv.org/abs/2402.16829}
+    eprint={2402.16829},
+    archivePrefix={arXiv},
+    primaryClass={cs.LG}
+}""",
 )
 avsolatorio__gist_small_embedding_v0 = ModelMeta(
     name="avsolatorio/GIST-small-Embedding-v0",
@@ -1282,6 +1522,16 @@ avsolatorio__gist_small_embedding_v0 = ModelMeta(
     | bge_training_data,
     adapted_from=None,
     superseded_by=None,
+    citation="""@article{solatorio2024gistembed,
+    title={GISTEmbed: Guided In-sample Selection of Training Negatives for Text Embedding Fine-tuning},
+    author={Aivin V. Solatorio},
+    journal={arXiv preprint arXiv:2402.16829},
+    year={2024},
+    URL={https://arxiv.org/abs/2402.16829}
+    eprint={2402.16829},
+    archivePrefix={arXiv},
+    primaryClass={cs.LG}
+}""",
 )
 bigscience__sgpt_bloom_7b1_msmarco = ModelMeta(
     name="bigscience/sgpt-bloom-7b1-msmarco",
@@ -1304,6 +1554,12 @@ bigscience__sgpt_bloom_7b1_msmarco = ModelMeta(
     training_datasets=None,
     adapted_from="/gpfsscratch/rech/six/commun/commun/experiments/muennighoff/bloomckpt/6b3/bloom-7b1",
     superseded_by=None,
+    citation="""@article{muennighoff2022sgpt,
+  title={SGPT: GPT Sentence Embeddings for Semantic Search},
+  author={Muennighoff, Niklas},
+  journal={arXiv preprint arXiv:2202.08904},
+  year={2022}
+}""",
 )
 aari1995__german_semantic_sts_v2 = ModelMeta(
     name="aari1995/German_Semantic_STS_V2",
@@ -1358,6 +1614,12 @@ abhinand__medembed_small_v0_1 = ModelMeta(
     },
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
+    citation="""@software{balachandran2024medembed,
+  author = {Balachandran, Abhinand},
+  title = {MedEmbed: Medical-Focused Embedding Models},
+  year = {2024},
+  url = {https://github.com/abhinand5/MedEmbed}
+}""",
 )
 avsolatorio__noinstruct_small_embedding_v0 = ModelMeta(
     name="avsolatorio/NoInstruct-small-Embedding-v0",
@@ -1490,6 +1752,15 @@ omarelshehy__arabic_english_sts_matryoshka = ModelMeta(
     training_datasets=None,
     adapted_from="FacebookAI/xlm-roberta-large",
     superseded_by=None,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )
 openbmb__minicpm_embedding = ModelMeta(
     loader=sentence_transformers_loader,
@@ -1543,6 +1814,13 @@ silma_ai__silma_embedding_matryoshka_v0_1 = ModelMeta(
     training_datasets=None,
     adapted_from="/workspace/v3-matryoshka_aubmindlab-bert-base-arabertv02-2024-10-12_13-55-06/checkpoint-26250",
     superseded_by=None,
+    citation="""@misc{silma2024embedding,
+  author = {Abu Bakr Soliman, Karim Ouda, SILMA AI},
+  title = {SILMA Embedding Matryoshka 0.1},
+  year = {2024},
+  publisher = {Hugging Face},
+  howpublished = {\url{https://huggingface.co/silma-ai/silma-embeddding-matryoshka-0.1}},
+}""",
 )
 
 sbert_chinese_general_v1 = ModelMeta(
@@ -1683,6 +1961,15 @@ conan_embedding = ModelMeta(
     # source: https://arxiv.org/pdf/2408.15710
     training_datasets=None,  # They "scraped" things from the internet, we don't know, could be leakage
     superseded_by=None,
+    citation="""@misc{li2024conanembeddinggeneraltextembedding,
+  title={Conan-embedding: General Text Embedding with More and Better Negative Samples}, 
+  author={Shiyu Li and Yang Tang and Shizhe Chen and Xi Chen},
+  year={2024},
+  eprint={2408.15710},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2408.15710}, 
+}""",
 )
 
 ember_v1 = ModelMeta(
@@ -1705,4 +1992,9 @@ ember_v1 = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     superseded_by=None,
+    citation="""@misc{nur2024emberv1,
+      title={ember-v1: SOTA embedding model}, 
+      author={Enrike Nur and Anar Aliyev},
+      year={2023},
+}""",
 )

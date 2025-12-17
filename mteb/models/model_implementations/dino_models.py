@@ -123,6 +123,14 @@ dinov2_small = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=dinov2_training_datasets,
+    citation="""misc{oquab2023dinov2,
+      title={DINOv2: Learning Robust Visual Features without Supervision}, 
+      author={Maxime Oquab and Timothée Darcet and Théo Moutakanni and Huy Vo and Marc Szafraniec and Vasil Khalidov and Pierre Fernandez and Daniel Haziza and Francisco Massa and Alaaeldin El-Nouby and Mahmoud Assran and Nicolas Ballas and Wojciech Galuba and Russell Howes and Po-Yao Huang and Shang-Wen Li and Ishan Misra and Michael Rabbat and Vasu Sharma and Gabriel Synnaeve and Hu Xu and Hervé Jegou and Julien Mairal and Patrick Labatut and Armand Joulin and Piotr Bojanowski},
+      year={2023},
+      eprint={2304.07193},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}""",
 )
 
 dinov2_base = ModelMeta(
@@ -145,6 +153,14 @@ dinov2_base = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=dinov2_training_datasets,
+    citation="""misc{oquab2023dinov2,
+      title={DINOv2: Learning Robust Visual Features without Supervision}, 
+      author={Maxime Oquab and Timothée Darcet and Théo Moutakanni and Huy Vo and Marc Szafraniec and Vasil Khalidov and Pierre Fernandez and Daniel Haziza and Francisco Massa and Alaaeldin El-Nouby and Mahmoud Assran and Nicolas Ballas and Wojciech Galuba and Russell Howes and Po-Yao Huang and Shang-Wen Li and Ishan Misra and Michael Rabbat and Vasu Sharma and Gabriel Synnaeve and Hu Xu and Hervé Jegou and Julien Mairal and Patrick Labatut and Armand Joulin and Piotr Bojanowski},
+      year={2023},
+      eprint={2304.07193},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}""",
 )
 
 dinov2_large = ModelMeta(
@@ -167,6 +183,14 @@ dinov2_large = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=dinov2_training_datasets,
+    citation="""misc{oquab2023dinov2,
+      title={DINOv2: Learning Robust Visual Features without Supervision}, 
+      author={Maxime Oquab and Timothée Darcet and Théo Moutakanni and Huy Vo and Marc Szafraniec and Vasil Khalidov and Pierre Fernandez and Daniel Haziza and Francisco Massa and Alaaeldin El-Nouby and Mahmoud Assran and Nicolas Ballas and Wojciech Galuba and Russell Howes and Po-Yao Huang and Shang-Wen Li and Ishan Misra and Michael Rabbat and Vasu Sharma and Gabriel Synnaeve and Hu Xu and Hervé Jegou and Julien Mairal and Patrick Labatut and Armand Joulin and Piotr Bojanowski},
+      year={2023},
+      eprint={2304.07193},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}""",
 )
 
 dinov2_giant = ModelMeta(
@@ -189,6 +213,14 @@ dinov2_giant = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=dinov2_training_datasets,
+    citation="""misc{oquab2023dinov2,
+      title={DINOv2: Learning Robust Visual Features without Supervision}, 
+      author={Maxime Oquab and Timothée Darcet and Théo Moutakanni and Huy Vo and Marc Szafraniec and Vasil Khalidov and Pierre Fernandez and Daniel Haziza and Francisco Massa and Alaaeldin El-Nouby and Mahmoud Assran and Nicolas Ballas and Wojciech Galuba and Russell Howes and Po-Yao Huang and Shang-Wen Li and Ishan Misra and Michael Rabbat and Vasu Sharma and Gabriel Synnaeve and Hu Xu and Hervé Jegou and Julien Mairal and Patrick Labatut and Armand Joulin and Piotr Bojanowski},
+      year={2023},
+      eprint={2304.07193},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}""",
 )
 
 webssl_dino_training_datasets = set(
@@ -215,6 +247,14 @@ webssl_dino300m_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
+    citation="""@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
+  year={2025},
+  eprint={2504.01017},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}""",
 )
 
 webssl_dino1b_full2b = ModelMeta(
@@ -237,6 +277,14 @@ webssl_dino1b_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
+    citation="""@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
+  year={2025},
+  eprint={2504.01017},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}""",
 )
 
 webssl_dino2b_full2b = ModelMeta(
@@ -259,6 +307,14 @@ webssl_dino2b_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
+    citation="""@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
+  year={2025},
+  eprint={2504.01017},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}""",
 )
 
 webssl_dino3b_full2b = ModelMeta(
@@ -281,6 +337,14 @@ webssl_dino3b_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
+    citation="""@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
+  year={2025},
+  eprint={2504.01017},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}""",
 )
 
 webssl_dino5b_full2b = ModelMeta(
@@ -303,6 +367,14 @@ webssl_dino5b_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
+    citation="""@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
+  year={2025},
+  eprint={2504.01017},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}""",
 )
 
 webssl_dino7b_full8b_224 = ModelMeta(
@@ -325,6 +397,14 @@ webssl_dino7b_full8b_224 = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
+    citation="""@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
+  year={2025},
+  eprint={2504.01017},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}""",
 )
 
 webssl_dino7b_full8b_378 = ModelMeta(
@@ -347,6 +427,14 @@ webssl_dino7b_full8b_378 = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
+    citation="""@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
+  year={2025},
+  eprint={2504.01017},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}""",
 )
 
 webssl_dino7b_full8b_518 = ModelMeta(
@@ -369,6 +457,14 @@ webssl_dino7b_full8b_518 = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
+    citation="""@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
+  year={2025},
+  eprint={2504.01017},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}""",
 )
 
 
@@ -392,6 +488,14 @@ webssl_dino2b_light2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
+    citation="""@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
+  year={2025},
+  eprint={2504.01017},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}""",
 )
 
 webssl_dino2b_heavy2b = ModelMeta(
@@ -414,6 +518,14 @@ webssl_dino2b_heavy2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
+    citation="""@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
+  year={2025},
+  eprint={2504.01017},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}""",
 )
 
 webssl_dino3b_light2b = ModelMeta(
@@ -436,6 +548,14 @@ webssl_dino3b_light2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
+    citation="""@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
+  year={2025},
+  eprint={2504.01017},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}""",
 )
 
 webssl_dino3b_heavy2b = ModelMeta(
@@ -458,6 +578,14 @@ webssl_dino3b_heavy2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
+    citation="""@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
+  year={2025},
+  eprint={2504.01017},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}""",
 )
 
 webssl_mae300m_full2b = ModelMeta(
@@ -480,6 +608,14 @@ webssl_mae300m_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
+    citation="""@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
+  year={2025},
+  eprint={2504.01017},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}""",
 )
 
 webssl_mae700m_full2b = ModelMeta(
@@ -502,6 +638,14 @@ webssl_mae700m_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
+    citation="""@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
+  year={2025},
+  eprint={2504.01017},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}""",
 )
 
 webssl_mae1b_full2b = ModelMeta(
@@ -524,4 +668,12 @@ webssl_mae1b_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
+    citation="""@article{fan2025scaling,
+  title={Scaling Language-Free Visual Representation Learning}, 
+  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
+  year={2025},
+  eprint={2504.01017},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}""",
 )
