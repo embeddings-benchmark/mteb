@@ -99,4 +99,10 @@ mxbai_embed_xsmall_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=mixedbread_training_data,
+    citation="""@online{xsmall2024mxbai,
+  title={Every Byte Matters: Introducing mxbai-embed-xsmall-v1},
+  author={Sean Lee and Julius Lipp and Rui Huang and Darius Koenig},
+  year={2024},
+  url={https://www.mixedbread.ai/blog/mxbai-embed-xsmall-v1},
+}""",
 )

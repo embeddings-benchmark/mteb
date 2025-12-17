@@ -328,6 +328,14 @@ nomic_modern_bert_embed = ModelMeta(
     superseded_by=None,
     training_datasets=nomic_training_data,
     public_training_data=None,
+    citation="""@misc{nussbaum2024nomic,
+      title={Nomic Embed: Training a Reproducible Long Context Text Embedder}, 
+      author={Zach Nussbaum and John X. Morris and Brandon Duderstadt and Andriy Mulyar},
+      year={2024},
+      eprint={2402.01613},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
 )
 
 

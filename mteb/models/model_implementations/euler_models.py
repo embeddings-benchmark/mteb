@@ -22,4 +22,10 @@ Euler_Legal_Embedding_V1 = ModelMeta(
     training_datasets=set(),  # final-data-new-anonymized-grok4-filtered
     adapted_from="Qwen/Qwen3-Embedding-8B",
     superseded_by=None,
+    citation="""@misc{euler2025legal,
+      title={Euler-Legal-Embedding: Advanced Legal Representation Learning}, 
+      author={LawRank Team},
+      year={2025},
+      publisher={Hugging Face}
+}""",
 )

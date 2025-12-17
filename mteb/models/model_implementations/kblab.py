@@ -21,4 +21,10 @@ sbert_swedish = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="sentence-transformers/all-mpnet-base-v2",
+    citation="""@misc{rekathati2021introducing,  
+  author = {Rekathati, Faton},  
+  title = {The KBLab Blog: Introducing a Swedish Sentence Transformer},  
+  url = {https://kb-labb.github.io/posts/2021-08-23-a-swedish-sentence-transformer/},  
+  year = {2021}  
+}""",
 )
