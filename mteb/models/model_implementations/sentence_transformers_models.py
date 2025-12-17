@@ -474,15 +474,6 @@ microllama_text_embedding = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
-    citation="""@inproceedings{reimers-2019-sentence-bert,
-    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
-    author = "Reimers, Nils and Gurevych, Iryna",
-    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
-    month = "11",
-    year = "2019",
-    publisher = "Association for Computational Linguistics",
-    url = "https://arxiv.org/abs/1908.10084",
-}""",
 )
 
 SENTENCE_T5_CITATION = """

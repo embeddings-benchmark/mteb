@@ -281,7 +281,7 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
   pages={arXiv--2010},
   year={2020}
 }
-"""
+""",
 )
 Lajavaness__bilingual_embedding_large = ModelMeta(
     name="Lajavaness/bilingual-embedding-large",
@@ -329,7 +329,7 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
   pages={arXiv--2010},
   year={2020}
 }
-"""
+""",
 )
 Lajavaness__bilingual_embedding_small = ModelMeta(
     name="Lajavaness/bilingual-embedding-small",
@@ -377,7 +377,7 @@ Lajavaness__bilingual_embedding_small = ModelMeta(
   pages={arXiv--2010},
   year={2020}
 }
-"""
+""",
 )
 Mihaiii__Bulbasaur = ModelMeta(
     name="Mihaiii/Bulbasaur",
@@ -1820,7 +1820,7 @@ silma_ai__silma_embedding_matryoshka_v0_1 = ModelMeta(
   title = {SILMA Embedding Matryoshka 0.1},
   year = {2024},
   publisher = {Hugging Face},
-  howpublished = {\url{https://huggingface.co/silma-ai/silma-embeddding-matryoshka-0.1}},
+  howpublished = {https://huggingface.co/silma-ai/silma-embeddding-matryoshka-0.1},
 }""",
 )
 
