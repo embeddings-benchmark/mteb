@@ -1,6 +1,7 @@
 import itertools
 import json
 import logging
+import secrets
 import tempfile
 import time
 import warnings
@@ -29,8 +30,10 @@ from mteb.leaderboard.table import (
     apply_summary_styling_from_benchmark,
 )
 from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
+from mteb.leaderboard.event_logger import EventLogger
 
 logger = logging.getLogger(__name__)
+event_logger = EventLogger()
 
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 
@@ -320,6 +323,17 @@ def _cache_update_task_list(
     return benchmark_tasks, tasks_to_keep
 
 
+def on_page_load(session_id):
+    # Log page view
+    if not session_id:
+        session_id = secrets.token_hex(16)
+    event_logger.log_page_view(
+        session_id=session_id,
+        benchmark=None,  # Can be None if not available yet
+    )
+    return session_id
+
+
 def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
     """Returns a Gradio Blocks app for the MTEB leaderboard."""
     logger.info("Loading all benchmark results")
@@ -412,6 +426,9 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
     )
 
     with gr.Blocks(fill_width=True) as demo:
+        session_id = gr.BrowserState("")
+        demo.load(fn=on_page_load, inputs=[session_id], outputs=[session_id])
+
         with gr.Sidebar(
             position="left",
             label="Benchmark Selection and Customization",
@@ -578,7 +595,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         # This sets the benchmark from the URL query parameters
         demo.load(_set_benchmark_on_load, inputs=[], outputs=[benchmark_select])
 
-        def on_benchmark_select(benchmark_name):
+        def on_benchmark_select(benchmark_name, session_id=None):
             (
                 languages,
                 domains,
@@ -589,6 +606,11 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 show_zero_shot,
                 initial_models,
             ) = _cache_on_benchmark_select(benchmark_name, all_benchmark_results)
+
+            if session_id:
+                event_logger.log_benchmark_change(
+                    session_id=session_id, new_value=benchmark_name, old_value=None
+                )
 
             return (
                 gr.update(choices=languages, value=languages),
@@ -603,7 +625,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
 
         benchmark_select.change(
             on_benchmark_select,
-            inputs=[benchmark_select],
+            inputs=[benchmark_select, session_id],
             outputs=[
                 lang_select,
                 domain_select,
@@ -639,11 +661,30 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         )
 
         def update_task_list(
-            benchmark_name, type_select, domain_select, lang_select, modality_select
+            benchmark_name,
+            type_select,
+            domain_select,
+            lang_select,
+            modality_select,
+            session_id=None,
         ):
             benchmark_tasks, tasks_to_keep = _cache_update_task_list(
                 benchmark_name, type_select, domain_select, lang_select, modality_select
             )
+            if session_id is not None:
+                event_logger.log_filter_change(
+                    session_id=session_id,
+                    filter_name="task_type",
+                    new_value=benchmark_name,
+                    old_value=None,  # Optional: previous value
+                    benchmark=benchmark_name,
+                    filters={  # Optional: snapshot of all filters
+                        "task_type": type_select,
+                        "domain": domain_select,
+                        "language": lang_select,
+                        "modality": modality_select,
+                    },
+                )
             return gr.update(choices=benchmark_tasks, value=tasks_to_keep)
 
         type_select.input(
@@ -654,6 +695,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 domain_select,
                 lang_select,
                 modality_select,
+                session_id,
             ],
             outputs=[task_select],
         )
@@ -665,6 +707,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 domain_select,
                 lang_select,
                 modality_select,
+                session_id,
             ],
             outputs=[task_select],
         )
@@ -676,6 +719,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 domain_select,
                 lang_select,
                 modality_select,
+                session_id,
             ],
             outputs=[task_select],
         )
@@ -687,6 +731,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 domain_select,
                 lang_select,
                 modality_select,
+                session_id,
             ],
             outputs=[task_select],
         )
@@ -699,7 +744,8 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             compatibility,
             instructions,
             max_model_size,
-            zero_shot: hash(
+            zero_shot,
+            session_id: hash(
                 (
                     id(scores),
                     hash(tuple(tasks)),
@@ -719,6 +765,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             instructions: bool | None,
             max_model_size: int,
             zero_shot: Literal["allow_all", "remove_unknown", "only_zero_shot"],
+            session_id,
         ):
             start_time = time.time()
             model_names = list({entry["model_name"] for entry in scores})
@@ -734,6 +781,23 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             elapsed = time.time() - start_time
             logger.debug(f"update_models callback: {elapsed}s")
             # Always return sorted models to ensure models.change triggers update_tables
+            if session_id is not None:
+                event_logger.log_filter_change(
+                    session_id=session_id,
+                    filter_name="model_type",
+                    new_value=None,
+                    old_value=None,  # Optional: previous value
+                    benchmark=None,
+                    filters={  # Optional: snapshot of all filters
+                        "scores": scores,
+                        "tasks": tasks,
+                        "availability": availability,
+                        "compatibility": compatibility,
+                        "instructions": instructions,
+                        "max_model_size": max_model_size,
+                        "zero_shot": zero_shot,
+                    },
+                )
 
             return sorted(filtered_models)
 
@@ -747,6 +811,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                session_id,
             ],
             outputs=[models],
         )
@@ -761,6 +826,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                session_id,
             ],
             outputs=[models],
         )
@@ -774,6 +840,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                session_id,
             ],
             outputs=[models],
         )
@@ -787,6 +854,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                session_id,
             ],
             outputs=[models],
         )
@@ -800,6 +868,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                session_id,
             ],
             outputs=[models],
         )
@@ -813,6 +882,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                session_id,
             ],
             outputs=[models],
         )
@@ -826,6 +896,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                session_id,
             ],
             outputs=[models],
         )
