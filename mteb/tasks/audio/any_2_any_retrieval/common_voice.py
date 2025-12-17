@@ -26,7 +26,7 @@ _EVAL_LANGS_CV17 = {
     "fa": ["fas-Arab"],
     "fi": ["fin-Latn"],
     "fr": ["fra-Latn"],
-    "fro": ["fro-Latn"],
+    "frold": ["fro-Latn"],
     "gl": ["glg-Latn"],
     "ha": ["hau-Latn"],
     "hi": ["hin-Deva"],
