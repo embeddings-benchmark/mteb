@@ -1,6 +1,6 @@
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import EncoderProtocol, PromptType
+from mteb.models.models_protocols import PromptType
 
 
 def instruction_template(
@@ -114,7 +114,7 @@ training_data = {
 }
 
 # Predefined prompts for various RTEB tasks
-PREDEFINED_PROMPTS = {
+_PREDEFINED_PROMPTS = {
     # ========== Open Datasets ==========
     # Legal domain
     "AILACasedocs": "Given a legal case scenario, retrieve the most relevant case documents",
@@ -160,28 +160,13 @@ PREDEFINED_PROMPTS = {
 }
 
 
-def mod_instruct_loader(
-    model_name_or_path: str, revision: str, **kwargs
-) -> EncoderProtocol:
-    # Set default prompts_dict if not provided
-
-    model = InstructSentenceTransformerModel(
-        model_name_or_path,
-        revision=revision,
+MoD_Embedding = ModelMeta(
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
-        prompts_dict=PREDEFINED_PROMPTS,
-        **kwargs,
-    )
-    encoder = model.model._first_module()
-    if encoder.auto_model.config._attn_implementation == "flash_attention_2":
-        # The Qwen3 code only use left padding in flash_attention_2 mode.
-        encoder.tokenizer.padding_side = "left"
-    return model
-
-
-MoD_Embedding = ModelMeta(
-    loader=mod_instruct_loader,
+        prompts_dict=_PREDEFINED_PROMPTS,
+    ),
     name="bflhc/MoD-Embedding",
     languages=multilingual_langs,
     open_weights=True,
