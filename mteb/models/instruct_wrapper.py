@@ -122,7 +122,8 @@ class InstructSentenceTransformerModel(AbsEncoder):
             apply_instruction_to_passages: Whether to apply the instruction template to the passages.
             padding_side: Padding side. If None, the padding side will be read from the model config.
             add_eos_token: Whether to add the eos token to each input example.
-            prompts_dict: Dictionary of task names to prompt names. If None, the prompts will be read from the model config.
+            prompts_dict: Dictionary of task names to prompt names. If task name is missing in the dict or prompts dict is None, prompt from task metadata or
+                AbsTask.abstask_prompt will be used.
             **kwargs: Kwargs for Sentence Transformer model.
         """
         from sentence_transformers import SentenceTransformer
