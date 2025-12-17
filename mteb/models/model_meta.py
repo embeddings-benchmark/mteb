@@ -117,7 +117,7 @@ class ModelMeta(BaseModel):
         adapted_from: Name of the model from which this model is adapted. For quantizations, fine-tunes, long doc extensions, etc.
         superseded_by: Name of the model that supersedes this model, e.g., nvidia/NV-Embed-v2 supersedes v1.
         is_cross_encoder: Whether the model can act as a cross-encoder or not.
-        model_type: A list of strings representing the type of model, e.g., ["dense"], ["cross-encoder"], ["late interaction"].
+        model_type: A list of strings representing the type of model.
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
     """
