@@ -446,7 +446,7 @@ TASK_NAME_TO_INSTRUCTION = {
     "TweetTopicSingleClassification": "Gvien a twitter, classify its topic\n{}",
     "EstonianValenceClassification": "Given a news article, categorized by sentiment into negatiivne, positiivne, neutraalne or vastuolulin\n{}",
     "FilipinoShopeeReviewsClassification": "Given a shop review, classify its rating on a scale from 1 to 5\n{}",
-    "GujaratiNewsClassification": "Given a Gujarati news articles, classify ist topic\n{}",
+    "GujaratiNewsClassification": "Given a Gujarati news articles, classify its topic\n{}",
     "SentimentAnalysisHindi": "Given a hindi text, categorized by sentiment into positive, negative or neutral\n{}",
     "IndonesianIdClickbaitClassification": "Given an Indonesian news headlines, classify its into clickbait or non-clickbait\n{}",
     "ItaCaseholdClassification": "Given a judgments, classify its topic\n{}",
