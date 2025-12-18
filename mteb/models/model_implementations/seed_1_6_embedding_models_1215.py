@@ -28,6 +28,8 @@ logger = logging.getLogger(__name__)
 
 
 def pil_to_base64(image, format="jpeg"):
+    if image is None:
+        return None
     buffer = BytesIO()
     image.save(buffer, format=format)
     img_bytes = buffer.getvalue()
@@ -186,101 +188,6 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         truncated_sentence = self._encoding.encode(text)[: self._max_tokens]
         return self._encoding.decode(truncated_sentence)
 
-    def get_text_embeddings(
-        self,
-        sentences: list[str],
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
-    ) -> Array:
-        trimmed_sentences = []
-        for sentence in sentences:
-            encoded_sentence = self._encoding.encode(sentence)
-            if len(encoded_sentence) > self._max_tokens:
-                truncated_sentence = self.truncate_text_tokens(sentence)
-                trimmed_sentences.append(truncated_sentence)
-            else:
-                trimmed_sentences.append(sentence)
-
-        assert (
-            self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
-
-        if (
-            prompt_type == PromptType("query") or prompt_type is None
-        ) and task_name in TASK_NAME_TO_INSTRUCTION:
-            instruction = TASK_NAME_TO_INSTRUCTION[task_name]
-            instruction = instruction.rstrip("{}").rstrip("\n")
-            trimmed_sentences = [
-                (
-                    "Target_modality:Text.\n Instruction:" + instruction + "\n Query:{}"
-                ).format(text)
-                for text in trimmed_sentences
-            ]
-        else:
-            instruction = (
-                "Instruction: Compress the the text into one word.\n Query: {}"
-            )
-            trimmed_sentences = [instruction.format(i) for i in trimmed_sentences]
-
-        outputs = multi_thread_encode(trimmed_sentences)
-
-        if self._embed_dim is not None:
-            outputs = outputs[:, : self._embed_dim]
-        outputs = torch.nn.functional.normalize(outputs, p=2, dim=1)
-
-        return outputs.float()
-
-    def get_image_embeddings(
-        self,
-        images: list[Image.Image],
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
-        **kwargs: Any,
-    ) -> Array:
-        import torchvision.transforms.functional as F
-
-        assert (
-            self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
-
-        if (
-            prompt_type == PromptType("query") or prompt_type is None
-        ) and task_name in TASK_NAME_TO_INSTRUCTION:
-            instruction = TASK_NAME_TO_INSTRUCTION[task_name]
-            instruction = instruction.rstrip("{}").rstrip("\n")
-            instruction = (
-                "Target_modality:Text.\n Instruction:" + instruction + "\n Query:"
-            )
-        else:
-            instruction = "Instruction: Compress the the image into one word.\n Query: "
-
-        if isinstance(images, DataLoader):
-            images_base64 = []
-            for batch in images:
-                images_base64.extend([pil_to_base64(F.to_pil_image(b)) for b in batch])
-        else:
-            images_base64 = [pil_to_base64(image) for image in images]
-        outputs = []
-        for image in images_base64:
-            resp = multimodal_embedding(image_base64=[image], text_content=instruction)
-            embedding = torch.tensor(resp["data"]["embedding"])
-            embedding = torch.reshape(embedding, (1, -1))
-
-        outputs = torch.stack(outputs, dim=0)
-
-        if self._embed_dim is not None:
-            outputs = outputs[:, : self._embed_dim]
-        outputs = torch.nn.functional.normalize(outputs, p=2, dim=1)
-        return outputs.float()
-
     def get_fused_embeddings(
         self,
         texts: list[str] | None = None,
@@ -298,28 +205,46 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         )
 
         assert len(texts) == len(images)
-
-        if (
-            prompt_type == PromptType("query") or prompt_type is None
-        ) and task_name in TASK_NAME_TO_INSTRUCTION:
-            instruction = TASK_NAME_TO_INSTRUCTION[task_name]
-            instruction = instruction.rstrip("{}").rstrip("\n")
-            texts = [
-                (
-                    "Target_modality:Text.\n Instruction:" + instruction + "\n Query:{}"
-                ).format(text)
-                for text in texts
-            ]
-        else:
-            instruction = "Instruction: Compress the the text and image into one word.\n Query: {}"
-            texts = [instruction.format(text) for text in texts]
-
         images_base64 = [pil_to_base64(image) for image in images]
 
         outputs = []
         for i in range(len(images_base64)):
+            if (
+                prompt_type == PromptType("query") or prompt_type is None
+            ) and task_name in TASK_NAME_TO_INSTRUCTION:
+                instruction = TASK_NAME_TO_INSTRUCTION[task_name]
+                instruction = instruction.rstrip("{}").rstrip("\n")
+                if texts[i] != "":
+                    input_text = (
+                        "Target_modality:Text.\n Instruction:"
+                        + instruction
+                        + "\n Query:{}"
+                    ).format(texts[i])
+                else:
+                    input_text = (
+                        "Target_modality:Text.\n Instruction:"
+                        + instruction
+                        + "\n Query:"
+                    )
+            else:
+                if texts[i] != "" and images_base64[i] is not None:
+                    instruction = "Instruction: Compress the the text and image into one word.\n Query: {}"
+                    input_text = instruction.format(texts[i])
+                elif texts[i] != "":
+                    instruction = (
+                        "Instruction: Compress the the text into one word.\n Query: {}"
+                    )
+                    input_text = instruction.format(texts[i])
+                elif images_base64[i] is not None:
+                    instruction = (
+                        "Instruction: Compress the the image into one word.\n Query:"
+                    )
+                    input_text = instruction
+                else:
+                    raise ValueError("image and text are both None")
+
             resp = multimodal_embedding(
-                image_base64=[images_base64[i]], text_content=texts[i]
+                image_base64=[images_base64[i]], text_content=input_text
             )
             embedding = torch.tensor(resp["data"]["embedding"])
             embedding = torch.reshape(embedding, (1, -1))
@@ -341,29 +266,15 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
-            sentences = [text for batch in inputs for text in batch["text"]]
-            images = [image for batch in inputs for image in batch["image"]]
-            return self.get_fused_embeddings(
-                texts=sentences,
-                images=images,
-                task_name=task_metadata.name,
-                **kwargs,
-            )
-        if "text" in inputs.dataset.features:
-            sentences = [text for batch in inputs for text in batch["text"]]
-            return self.get_text_embeddings(
-                sentences,
-                task_name=task_metadata.name,
-                prompt_type=prompt_type,
-                **kwargs,
-            )
-        if "image" in inputs.dataset.features:
-            images = [image for batch in inputs for image in batch["image"]]
-            return self.get_image_embeddings(
-                images, task_name=task_metadata.name, prompt_type=prompt_type, **kwargs
-            )
-        raise ValueError
+        sentences = [text for batch in inputs for text in batch["text"]]
+        images = [image for batch in inputs for image in batch["image"]]
+
+        return self.get_fused_embeddings(
+            texts=sentences,
+            images=images,
+            task_name=task_metadata.name,
+            **kwargs,
+        )
 
 
 TASK_NAME_TO_INSTRUCTION = {
