@@ -195,12 +195,14 @@ class ResultCache:
         self,
         remote: str = "https://github.com/embeddings-benchmark/results",
         download_latest: bool = True,
+        revision: str | None = None,
     ) -> Path:
         """Downloads the latest version of the results repository from GitHub to a local cache directory. Required git to be installed.
 
         Args:
             remote: The URL of the results repository on GitHub.
             download_latest: If True it will download the latest version of the repository, otherwise it will only update the existing repository.
+            revision: If specified, it will checkout the given revision after cloning or pulling the repository.
 
         Returns:
             The path to the local cache directory.
@@ -228,14 +230,27 @@ class ResultCache:
                 )
                 raise ValueError(msg)
 
-            if download_latest:
+            if revision or download_latest:
                 logger.info(
-                    f"remote repository already exists in {results_directory}, updating it using git pull"
+                    f"remote repository already exists in {results_directory}, fetching updates"
                 )
-                subprocess.run(["git", "pull"], cwd=results_directory)
+                subprocess.run(
+                    ["git", "fetch", "--all", "--tags"],
+                    cwd=results_directory,
+                    check=True,
+                )
             else:
                 logger.debug(
-                    f"Results repository already exists in {results_directory}, skipping update, set download_latest=True to update it"
+                    f"Results repository already exists in {results_directory}, skipping update, "
+                    f"set download_latest=True to update it"
+                )
+
+            if revision:
+                logger.info(f"Checking out revision '{revision}'")
+                subprocess.run(
+                    ["git", "checkout", revision],
+                    cwd=results_directory,
+                    check=True,
                 )
             return results_directory
 
@@ -243,8 +258,15 @@ class ResultCache:
             f"No results repository found in {results_directory}, cloning it from {remote}"
         )
 
+        clone_cmd = ["git", "clone", "--depth", "1"]
+
+        if revision:
+            logger.info(f"Cloning repository at revision '{revision}'")
+            clone_cmd.append(f"--revision={revision}")
+        clone_cmd.extend([remote, "remote"])
+
         subprocess.run(
-            ["git", "clone", "--depth", "1", remote, "remote"],
+            clone_cmd,
             cwd=self.cache_path,
             check=True,
         )
