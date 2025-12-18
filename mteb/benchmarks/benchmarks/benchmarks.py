@@ -85,6 +85,7 @@ The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb
     """,
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "Muennighoff"],
+    alias=["MTEB(eng)"],
 )
 
 MTEB_ENG_CLASSIC = Benchmark(
@@ -181,6 +182,7 @@ We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benc
 }
 """,
     contacts=["Muennighoff"],
+    alias=["MTEB(eng, classic)"],
 )
 
 MTEB_MAIN_RU = Benchmark(
@@ -241,6 +243,7 @@ MTEB_MAIN_RU = Benchmark(
 }
 """,
     contacts=["Samoed", "artemsnegirev", "Drozhzhinastya"],
+    alias=["MTEB(rus)"],
 )
 
 MTEB_MAIN_RU_v1_1 = Benchmark(
@@ -364,6 +367,7 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
   year = {2024},
 }
 """,
+    alias=["MTEB(Retrieval w/Instructions)"],
 )
 
 MTEB_RETRIEVAL_WITH_DOMAIN_INSTRUCTIONS = Benchmark(
@@ -412,6 +416,7 @@ MTEB_RETRIEVAL_LAW = Benchmark(
     description="A benchmark of retrieval tasks in the legal domain.",
     reference=None,
     citation=None,
+    alias=["MTEB(law)"],
 )
 
 MTEB_RETRIEVAL_MEDICAL = Benchmark(
@@ -437,6 +442,7 @@ MTEB_RETRIEVAL_MEDICAL = Benchmark(
     description="A curated set of MTEB tasks designed to evaluate systems in the context of medical information retrieval.",
     reference="",
     citation=None,
+    alias=["MTEB(Medical)"],
 )
 
 MTEB_MINERS_BITEXT_MINING = Benchmark(
@@ -521,6 +527,7 @@ SEB = Benchmark(
 }
 """,
     contacts=["KennethEnevoldsen", "x-tabdeveloping", "Samoed"],
+    alias=["MTEB(Scandinavian)"],
 )
 
 CoIR = Benchmark(
@@ -649,6 +656,7 @@ MTEB_FRA = Benchmark(
 }
 """,
     contacts=["imenelydiaker"],
+    alias=["MTEB(fra)"],
 )
 
 MTEB_DEU = Benchmark(
@@ -700,6 +708,7 @@ MTEB_DEU = Benchmark(
 }
 """,
     contacts=["slvnwhrl"],
+    alias=["MTEB(deu)"],
 )
 
 MTEB_KOR = Benchmark(
@@ -724,6 +733,7 @@ MTEB_KOR = Benchmark(
     description="A benchmark and leaderboard for evaluation of text embedding in Korean.",
     reference=None,
     citation=None,
+    alias=["MTEB(kor)"],
 )
 
 MTEB_POL = Benchmark(
@@ -773,6 +783,7 @@ two novel clustering tasks.""",  # Rephrased from the abstract
 }
 """,
     contacts=["rafalposwiata"],
+    alias=["MTEB(pol)"],
 )
 
 MTEB_code = Benchmark(
@@ -799,6 +810,7 @@ MTEB_code = Benchmark(
     description="A massive code embedding benchmark covering retrieval tasks in a miriad of popular programming languages.",
     reference=None,
     citation=MMTEB_CITATION,
+    alias=["MTEB(code)"],
 )
 
 mteb_multilingual_tasks = get_tasks(
@@ -982,6 +994,7 @@ MTEB_multilingual_v2 = Benchmark(
     reference="https://arxiv.org/abs/2502.13595",
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
+    alias=["MTEB(Multilingual)"],
 )
 
 MTEB_JPN = Benchmark(
@@ -1018,6 +1031,7 @@ MTEB_JPN = Benchmark(
     description="JMTEB is a benchmark for evaluating Japanese text embedding models.",
     reference="https://github.com/sbintuitions/JMTEB",
     citation=None,
+    alias=["MTEB(jpn)"],
 )
 
 
@@ -1098,6 +1112,7 @@ MTEB_INDIC = Benchmark(
     reference=None,
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
+    alias=["MTEB(Indic)"],
 )
 
 
@@ -1231,6 +1246,7 @@ MTEB_EU = Benchmark(
     reference=None,
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
+    alias=["MTEB(Europe)"],
 )
 
 LONG_EMBED = Benchmark(
@@ -1310,6 +1326,7 @@ This is the long version of the benchmark, which only filter longer documents.
   year = {2024},
 }
 """,
+    alias=["BRIGHT(long)"],
 )
 
 CODE_RAG = Benchmark(
@@ -1462,6 +1479,7 @@ C_MTEB = Benchmark(
   year = {2023},
 }
 """,
+    alias=["MTEB(Chinese)"],
 )
 
 FA_MTEB = Benchmark(
@@ -1551,6 +1569,7 @@ FA_MTEB = Benchmark(
 }
 """,
     contacts=["mehran-sarmadi", "ERfun", "morteza20"],
+    alias=["FaMTEB(fas, beta)"],
 )
 
 FA_MTEB_2 = Benchmark(
@@ -2378,6 +2397,7 @@ VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
   year = {2025},
 }
 """,
+    alias=["VisualDocumentRetrieval"],
 )
 
 R2MED = Benchmark(

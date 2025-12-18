@@ -30,6 +30,8 @@ class Benchmark:
         reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
         citation: A bibtex citation
         contacts: The people to contact in case of a problem in the benchmark, preferably a GitHub handle.
+        alias: Alternative names for the benchmark.
+
 
     Examples:
         >>> Benchmark(
@@ -52,6 +54,7 @@ class Benchmark:
     icon: str | None = None
     display_name: str | None = None
     language_view: list[str] | Literal["all"] = field(default_factory=list)
+    alias: list[str] = field(default_factory=list)
 
     def __iter__(self) -> Iterable["AbsTask"]:
         return iter(self.tasks)
