@@ -201,11 +201,21 @@ class Seed16EmbeddingWrapper(AbsEncoder):
             f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
         )
 
-        assert len(texts) == len(images)
-        images_base64 = [pil_to_base64(image) for image in images]
+        if images is not None and texts is not None:
+            assert len(texts) == len(images)
+            batch_len = len(texts)
+            images_base64 = [pil_to_base64(image) for image in images]
+        elif images is None:
+            batch_len = len(texts)
+            images_base64 = [None for _ in range(batch_len)]
+        elif texts is None:
+            batch_len = len(images)
+            images_base64 = [pil_to_base64(image) for image in images]
+        else:
+            raise ValueError("images and texts cannot be None at the same time")
 
         outputs = []
-        for i in range(len(images_base64)):
+        for i in range(batch_len):
             if (
                 prompt_type == PromptType("query") or prompt_type is None
             ) and task_name in TASK_NAME_TO_INSTRUCTION:
