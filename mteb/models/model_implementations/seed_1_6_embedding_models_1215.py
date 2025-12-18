@@ -136,14 +136,14 @@ def multi_thread_encode(sentences, batch_size=1, max_workers=8):
 
 doubao_embedding_training_data = (
     {
-        "PAWSX",
+        "PawsXPairClassification",
         "QBQTC",
         "STSB",
         "TNews",
         "Waimai",
         "IFlyTek",
         "MassiveScenarioClassification",
-        "CodeSearchNet",
+        "CodeSearchNetRetrieval",
     }
     | bge_chinese_training_data
     | nvidia_training_datasets
@@ -193,7 +193,6 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
-        fusion_mode="sum",
         **kwargs: Any,
     ) -> Array:
         assert (
