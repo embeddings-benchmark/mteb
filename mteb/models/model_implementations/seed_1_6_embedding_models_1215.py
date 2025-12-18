@@ -155,10 +155,8 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        max_tokens: int,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
-        available_embed_dims: list[int | None] = [None],
         **kwargs,
     ) -> None:
         """Wrapper for Seed embedding API."""
@@ -171,9 +169,9 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         import tiktoken
 
         self._model_name = model_name
-        self._max_tokens = max_tokens
+        self._max_tokens = 32768
         self._embed_dim = embed_dim
-        self._available_embed_dims = available_embed_dims
+        self._available_embed_dims = [2048, 1024]
         self._encoding = tiktoken.get_encoding(tokenizer_name)
 
     def truncate_text_tokens(self, text: str) -> str:
@@ -635,10 +633,6 @@ seed_embedding = ModelMeta(
         "zho-Hans",
     ],
     loader=Seed16EmbeddingWrapper,
-    loader_kwargs=dict(
-        max_tokens=32000,
-        available_embed_dims=[2048, 1024],
-    ),
     max_tokens=32768,
     embed_dim=2048,
     open_weights=False,
