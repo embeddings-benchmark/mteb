@@ -610,7 +610,6 @@ class AbsTask(ABC):
         else:
             msg = f"Dataset `{self.metadata.name}` is not loaded, cannot unload it."
             logger.warning(msg)
-            warnings.warn(msg)
 
     @property
     def superseded_by(self) -> str | None:

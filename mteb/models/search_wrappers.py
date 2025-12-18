@@ -1,6 +1,5 @@
 import heapq
 import logging
-import warnings
 from typing import Any
 
 import torch
@@ -343,7 +342,6 @@ class SearchEncoderWrapper:
             if query_id not in top_ranked:
                 msg = f"No pre-ranked documents found for query {query_id}"
                 logger.warning(msg)
-                warnings.warn(msg)
                 continue
 
             ranked_ids = top_ranked[query_id]
@@ -516,7 +514,6 @@ class SearchCrossEncoderWrapper:
             if query_id not in top_ranked:
                 msg = f"No pre-ranked documents found for query {query_id}"
                 logger.warning(msg)
-                warnings.warn(msg)
                 continue
 
             query_idx = query_id_to_idx[query_id]
