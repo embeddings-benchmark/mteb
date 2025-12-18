@@ -262,12 +262,9 @@ def smart_resize(
         w_bar = ceil_by_factor(width * beta, factor)
 
     if max(h_bar, w_bar) / min(h_bar, w_bar) > MAX_RATIO:
-        logger.warning(
-            f"Absolute aspect ratio must be smaller than {MAX_RATIO}, got {max(h_bar, w_bar) / min(h_bar, w_bar)}"
-        )
-        warnings.warn(
-            f"Absolute aspect ratio must be smaller than {MAX_RATIO}, got {max(h_bar, w_bar) / min(h_bar, w_bar)}"
-        )
+        msg = f"Absolute aspect ratio must be smaller than {MAX_RATIO}, got {max(h_bar, w_bar) / min(h_bar, w_bar)}"
+        logger.warning(msg)
+        warnings.warn(msg)
         if h_bar > w_bar:
             h_bar = w_bar * MAX_RATIO
         else:

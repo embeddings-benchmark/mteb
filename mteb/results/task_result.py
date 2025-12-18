@@ -463,8 +463,9 @@ class TaskResult(BaseModel):
                     if main_score in hf_subset_scores:
                         hf_subset_scores["main_score"] = hf_subset_scores[main_score]
                     else:
-                        logger.warning(f"Main score {main_score} not found in scores")
-                        warnings.warn(f"Main score {main_score} not found in scores")
+                        msg = f"Main score {main_score} not found in scores"
+                        logger.warning(msg)
+                        warnings.warn(msg)
                         hf_subset_scores["main_score"] = None
 
         # specific fixes:
@@ -658,20 +659,14 @@ class TaskResult(BaseModel):
                 else:
                     missing_subsets_str = str(missing_subsets)
 
-                logger.warning(
-                    f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
-                )
-                warnings.warn(
-                    f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
-                )
+                msg = f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
+                logger.warning(msg)
+                warnings.warn(msg)
             seen_splits.add(split)
         if seen_splits != set(splits):
-            logger.warning(
-                f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
-            )
-            warnings.warn(
-                f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
-            )
+            msg = f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
+            logger.warning(msg)
+            warnings.warn(msg)
         new_res = {**self.to_dict(), "scores": new_scores}
         new_res = TaskResult.from_validated(**new_res)
         return new_res

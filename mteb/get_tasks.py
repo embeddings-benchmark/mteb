@@ -341,12 +341,9 @@ def get_task(
     """
     if task_name in _TASK_RENAMES:
         _task_name = _TASK_RENAMES[task_name]
-        logger.warning(
-            f"The task with the given name '{task_name}' has been renamed to '{_task_name}'. To prevent this warning use the new name."
-        )
-        warnings.warn(
-            f"The task with the given name '{task_name}' has been renamed to '{_task_name}'. To prevent this warning use the new name."
-        )
+        msg = f"The task with the given name '{task_name}' has been renamed to '{_task_name}'. To prevent this warning use the new name."
+        logger.warning(msg)
+        warnings.warn(msg)
 
     if task_name not in _TASKS_REGISTRY:
         close_matches = difflib.get_close_matches(task_name, _TASKS_REGISTRY.keys())

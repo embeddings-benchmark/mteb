@@ -230,12 +230,9 @@ class AbsEncoder(ABC):
         if isinstance(prompt, dict) and prompt_type:
             if prompt.get(prompt_type.value):
                 return prompt[prompt_type.value]
-            logger.warning(
-                f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
-            )
-            warnings.warn(
-                f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
-            )
+            msg = f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
+            logger.warning(msg)
+            warnings.warn(msg)
             return ""
 
         if prompt:

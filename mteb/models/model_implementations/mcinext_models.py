@@ -247,8 +247,9 @@ class HakimModelWrapper(AbsEncoder):
         task_prompt, task_id = DATASET_TASKS.get(task_name, (None, None))
 
         if not task_prompt:
-            logger.warning(f"Unknown dataset: {task_name}, no preprocessing applied.")
-            warnings.warn(f"Unknown dataset: {task_name}, no preprocessing applied.")
+            msg = f"Unknown dataset: {task_name}, no preprocessing applied."
+            logger.warning(msg)
+            warnings.warn(msg)
             return sample
 
         task_prompt = f"مسئله : {task_prompt}"

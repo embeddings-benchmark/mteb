@@ -42,12 +42,9 @@ class NumpyCache:
             for item, vec in zip(item, vectors):
                 item_hash = _hash_item(item)
                 if item_hash in self.hash_to_index:
-                    logger.warning(
-                        "Hash collision or duplicate item. Overwriting existing vector."
-                    )
-                    warnings.warn(
-                        "Hash collision or duplicate item. Overwriting existing vector."
-                    )
+                    msg = f"Hash collision or duplicate item for hash {item_hash}. Overwriting existing vector."
+                    logger.warning(msg)
+                    warnings.warn(msg)
                     index = self.hash_to_index[item_hash]
                 else:
                     index = len(self.hash_to_index)
@@ -111,12 +108,9 @@ class NumpyCache:
                 f"Loaded vector dimension {self.vector_dim} from {self.dimension_file}"
             )
         else:
-            logger.warning(
-                "Dimension file not found. Vector dimension remains uninitialized."
-            )
-            warnings.warn(
-                "Dimension file not found. Vector dimension remains uninitialized."
-            )
+            msg = "Dimension file not found. Vector dimension remains uninitialized."
+            logger.warning(msg)
+            warnings.warn(msg)
 
     def save(self) -> None:
         """Persist VectorCacheMap to disk."""
@@ -158,20 +152,14 @@ class NumpyCache:
                     self.vectors = self.vectors.reshape(-1, self.vector_dim)
                     logger.info(f"Loaded vectors file with shape: {self.vectors.shape}")
                 else:
-                    logger.warning(
-                        "Vector dimension not set. Unable to load vectors file."
-                    )
-                    warnings.warn(
-                        "Vector dimension not set. Unable to load vectors file."
-                    )
+                    msg = "Vector dimension not set. Unable to load vectors file."
+                    logger.warning(msg)
+                    warnings.warn(msg)
                 logger.info(f"Loaded VectorCacheMap from {self.directory}")
             else:
-                logger.warning(
-                    "No existing files found. Initialized empty VectorCacheMap."
-                )
-                warnings.warn(
-                    "No existing files found. Initialized empty VectorCacheMap."
-                )
+                msg = "No existing files found. Initialized empty VectorCacheMap."
+                logger.warning(msg)
+                warnings.warn(msg)
         except Exception as e:
             logger.error(f"Error loading VectorCacheMap: {str(e)}")
             raise

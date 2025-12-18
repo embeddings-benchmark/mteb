@@ -114,12 +114,9 @@ class AbsTaskAggregate(AbsTask):
         )
         mteb_versions = {tr.mteb_version for tr in task_results}
         if len(mteb_versions) != 1:
-            logger.warning(
-                f"All tasks of {self.metadata.name} is not run using the same version."
-            )
-            warnings.warn(
-                f"All tasks of {self.metadata.name} is not run using the same version."
-            )
+            msg = f"All tasks of {self.metadata.name} is not run using the same version. different versions found are: {mteb_versions}"
+            logger.warning(msg)
+            warnings.warn(msg)
             task_res.mteb_version = None
         task_res.mteb_version = task_results[0].mteb_version
         return task_res
@@ -127,12 +124,9 @@ class AbsTaskAggregate(AbsTask):
     def check_if_dataset_is_superseded(self) -> None:
         """Check if the dataset is superseded by a newer version"""
         if self.superseded_by:
-            logger.warning(
-                f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}', you might consider using the newer version of the dataset."
-            )
-            warnings.warn(
-                f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}', you might consider using the newer version of the dataset."
-            )
+            msg = f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}'. We recommend using the newer version of the dataset unless you are running a specific benchmark. See `get_task('{self.superseded_by}').metadata.description` to get a description of the task and changes."
+            logger.warning(msg)
+            warnings.warn(msg)
 
     def filter_eval_splits(self, eval_splits: list[str] | None) -> Self:
         """Filter the evaluation splits of the task.

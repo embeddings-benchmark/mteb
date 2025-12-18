@@ -76,12 +76,9 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         if built_in_prompts and not model_prompts:
             model_prompts = built_in_prompts
         elif model_prompts and built_in_prompts:
-            logger.warning(
-                f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
-            )
-            warnings.warn(
-                f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
-            )
+            msg = f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
+            logger.warning(msg)
+            warnings.warn(msg)
             self.model.prompts = model_prompts
 
         self.model_prompts, invalid_prompts = self.validate_task_to_prompt_name(
@@ -90,12 +87,9 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
 
         if invalid_prompts:
             invalid_prompts = "\n".join(invalid_prompts)
-            logger.warning(
-                f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
-            )
-            warnings.warn(
-                f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
-            )
+            msg = f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
+            logger.warning(msg)
+            warnings.warn(msg)
 
         if (
             self.model_prompts
@@ -105,14 +99,9 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 or PromptType.document.value not in self.model_prompts
             )
         ):
-            logger.warning(
-                "SentenceTransformers that use prompts most often need to be configured with at least 'query' and"
-                f" 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
-            )
-            warnings.warn(
-                "SentenceTransformers that use prompts most often need to be configured with at least 'query' and"
-                f" 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
-            )
+            msg = f"SentenceTransformers that use prompts most often need to be configured with at least 'query' and 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
+            logger.warning(msg)
+            warnings.warn(msg)
 
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
             self.similarity = self.model.similarity
