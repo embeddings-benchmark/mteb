@@ -8,18 +8,18 @@ logger = logging.getLogger(__name__)
 
 
 @lru_cache
-def _build_registry() -> dict[str, Benchmark]:
+def _build_registry() -> tuple[dict[str, Benchmark], dict[str, Benchmark]]:
     import mteb.benchmarks.benchmarks as benchmark_module
 
     benchmark_registry: dict[str, Benchmark] = {}
+    aliases: dict[str, Benchmark] = {}
     for _, inst in benchmark_module.__dict__.items():
         if isinstance(inst, Benchmark):
-            if isinstance(inst.name, list):
-                for name in inst.name:
-                    benchmark_registry[name] = inst
-            else:
-                benchmark_registry[inst.name] = inst
-    return benchmark_registry
+            benchmark_registry[inst.name] = inst
+            if inst.aliases is not None:
+                for alias in inst.aliases:
+                    aliases[alias] = inst
+    return benchmark_registry, aliases
 
 
 def get_benchmark(
@@ -33,7 +33,9 @@ def get_benchmark(
     Returns:
         The Benchmark instance corresponding to the given name.
     """
-    benchmark_registry = _build_registry()
+    benchmark_registry, aliases_registry = _build_registry()
+    if benchmark_name in aliases_registry:
+        return aliases_registry[benchmark_name]
     if benchmark_name not in benchmark_registry:
         close_matches = difflib.get_close_matches(
             benchmark_name, benchmark_registry.keys()

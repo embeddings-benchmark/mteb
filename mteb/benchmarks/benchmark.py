@@ -25,6 +25,7 @@ class Benchmark:
 
     Args:
         name: The name of the benchmark
+        aliases: Alternative names for the benchmark
         tasks: The tasks within the benchmark.
         description: A description of the benchmark, should include its intended goal and potentially a description of its construction
         reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
@@ -42,7 +43,8 @@ class Benchmark:
         ... )
     """
 
-    name: str | list[str]
+    name: str
+    aliases: list[str] | None = None
     tasks: Sequence["AbsTask"]
     description: str | None = None
     reference: StrURL | None = None
