@@ -25,10 +25,9 @@ def _build_aliases_registry() -> dict[str, Benchmark]:
 
     aliases: dict[str, Benchmark] = {}
     for _, inst in benchmark_module.__dict__.items():
-        if isinstance(inst, Benchmark):
-            if inst.aliases is not None:
-                for alias in inst.aliases:
-                    aliases[alias] = inst
+        if isinstance(inst, Benchmark) and inst.aliases is not None:
+            for alias in inst.aliases:
+                aliases[alias] = inst
     return aliases
 
 
