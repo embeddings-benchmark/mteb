@@ -45,7 +45,7 @@ class Benchmark:
 
     name: str
     tasks: Sequence["AbsTask"]
-    aliases: list[str] | None = None
+    aliases: Sequence[str] | None = None
     description: str | None = None
     reference: StrURL | None = None
     citation: str | None = None

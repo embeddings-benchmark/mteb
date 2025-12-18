@@ -398,10 +398,9 @@ MTEB_RETRIEVAL_WITH_DOMAIN_INSTRUCTIONS = Benchmark(
 )
 
 MTEB_RETRIEVAL_LAW = Benchmark(
+    # This benchmark is likely in the need of an update
     name="MTEB(Law, v1)",
-    aliases=[
-        "MTEB(law)",
-    ],  # This benchmark is likely in the need of an update
+    aliases=["MTEB(law)"],
     display_name="Legal",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-library.svg",
     tasks=get_tasks(
