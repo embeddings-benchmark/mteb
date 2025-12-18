@@ -70,21 +70,19 @@ def run(args: argparse.Namespace) -> None:
 
     overwrite_strategy = args.overwrite_strategy
     if args.overwrite:
-        logger.warning(
-            "`--overwrite` is deprecated, please use `--overwrite-strategy 'always'` instead."
-        )
         warnings.warn(
-            "`--overwrite` is deprecated, please use `--overwrite-strategy 'always'` instead."
+            "`--overwrite` is deprecated, please use `--overwrite-strategy 'always'` instead.",
+            DeprecationWarning,
+            stacklevel=2,
         )
         overwrite_strategy = OverwriteStrategy.ALWAYS.value
 
     prediction_folder = args.prediction_folder
     if args.save_predictions:
-        logger.warning(
-            "`--save_predictions` is deprecated, please use `--prediction-folder` instead."
-        )
         warnings.warn(
-            "`--save_predictions` is deprecated, please use `--prediction-folder` instead."
+            "`--save_predictions` is deprecated, please use `--prediction-folder` instead.",
+            DeprecationWarning,
+            stacklevel=2,
         )
         prediction_folder = args.output_folder
 
