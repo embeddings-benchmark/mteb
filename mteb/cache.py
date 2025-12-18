@@ -258,7 +258,7 @@ class ResultCache:
             f"No results repository found in {results_directory}, cloning it from {remote}"
         )
 
-        clone_cmd = ["git", "clone"]
+        clone_cmd = ["git", "clone", "--depth", "1"]
 
         if revision:
             logger.info(f"Cloning repository at revision '{revision}'")
