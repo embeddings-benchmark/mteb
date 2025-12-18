@@ -17,7 +17,7 @@ MMTEB_CITATION = r"""@article{enevoldsen2025mmtebmassivemultilingualtext,
 }"""
 
 MTEB_EN = Benchmark(
-    name="MTEB(eng, v2)",
+    name=["MTEB(eng, v2)", "MTEB(eng)"],
     display_name="English",
     icon="https://github.com/lipis/flag-icons/raw/refs/heads/main/flags/4x3/us.svg",
     tasks=MTEBTasks(
@@ -88,7 +88,7 @@ The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb
 )
 
 MTEB_ENG_CLASSIC = Benchmark(
-    name="MTEB(eng, v1)",
+    name=["MTEB(eng, v1)", "MTEB(eng, classic)"],
     display_name="English Legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/gb.svg",
     tasks=MTEBTasks(
@@ -184,7 +184,7 @@ We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benc
 )
 
 MTEB_MAIN_RU = Benchmark(
-    name="MTEB(rus, v1)",
+    name=["MTEB(rus, v1)", "MTEB(rus)"],
     display_name="Russian legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ru.svg",
     tasks=MTEBTasks(
@@ -343,7 +343,7 @@ RU_SCI_BENCH = Benchmark(
 )
 
 MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
-    name="FollowIR",
+    name=["FollowIR", "MTEB(Retrieval w/Instructions)"],
     display_name="Instruction Following",
     tasks=get_tasks(
         tasks=[
@@ -394,7 +394,10 @@ MTEB_RETRIEVAL_WITH_DOMAIN_INSTRUCTIONS = Benchmark(
 )
 
 MTEB_RETRIEVAL_LAW = Benchmark(
-    name="MTEB(Law, v1)",  # This benchmark is likely in the need of an update
+    name=[
+        "MTEB(Law, v1)",
+        "MTEB(law)",
+    ],  # This benchmark is likely in the need of an update
     display_name="Legal",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-library.svg",
     tasks=get_tasks(
@@ -415,7 +418,7 @@ MTEB_RETRIEVAL_LAW = Benchmark(
 )
 
 MTEB_RETRIEVAL_MEDICAL = Benchmark(
-    name="MTEB(Medical, v1)",
+    name=["MTEB(Medical, v1)", "MTEB(Medical)"],
     display_name="Medical",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-hospital.svg",
     tasks=get_tasks(
@@ -468,7 +471,7 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
 )
 
 SEB = Benchmark(
-    name="MTEB(Scandinavian, v1)",
+    name=["MTEB(Scandinavian, v1)", "MTEB(Scandinavian)"],
     display_name="Scandinavian",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/dk.svg",
     language_view=["dan-Latn", "swe-Latn", "nno-Latn", "nob-Latn"],
@@ -594,7 +597,7 @@ RAR_b = Benchmark(
 )
 
 MTEB_FRA = Benchmark(
-    name="MTEB(fra, v1)",
+    name=["MTEB(fra, v1)", "MTEB(fra)"],
     display_name="French",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/fr.svg",
     tasks=MTEBTasks(
@@ -652,7 +655,7 @@ MTEB_FRA = Benchmark(
 )
 
 MTEB_DEU = Benchmark(
-    name="MTEB(deu, v1)",
+    name=["MTEB(deu, v1)", "MTEB(deu)"],
     display_name="German",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/de.svg",
     tasks=get_tasks(
@@ -703,7 +706,7 @@ MTEB_DEU = Benchmark(
 )
 
 MTEB_KOR = Benchmark(
-    name="MTEB(kor, v1)",
+    name=["MTEB(kor, v1)", "MTEB(kor)"],
     display_name="Korean",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
     tasks=get_tasks(
@@ -727,7 +730,7 @@ MTEB_KOR = Benchmark(
 )
 
 MTEB_POL = Benchmark(
-    name="MTEB(pol, v1)",
+    name=["MTEB(pol, v1)", "MTEB(pol)"],
     display_name="Polish",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/pl.svg",
     tasks=MTEBTasks(
@@ -776,7 +779,7 @@ two novel clustering tasks.""",  # Rephrased from the abstract
 )
 
 MTEB_code = Benchmark(
-    name="MTEB(Code, v1)",
+    name=["MTEB(Code, v1)", "MTEB(code)"],
     display_name="Code",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
     tasks=get_tasks(
@@ -952,7 +955,7 @@ MTEB_multilingual_v1 = Benchmark(
 
 
 MTEB_multilingual_v2 = Benchmark(
-    name="MTEB(Multilingual, v2)",
+    name=["MTEB(Multilingual, v2)", "MTEB(Multilingual)"],
     display_name="Multilingual",
     language_view=[
         "eng-Latn",  # English
@@ -985,7 +988,7 @@ MTEB_multilingual_v2 = Benchmark(
 )
 
 MTEB_JPN = Benchmark(
-    name="MTEB(jpn, v1)",
+    name=["MTEB(jpn, v1)", "MTEB(jpn)"],
     display_name="Japanese Legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
     tasks=get_tasks(
@@ -1055,7 +1058,7 @@ indic_languages = [
 ]
 
 MTEB_INDIC = Benchmark(
-    name="MTEB(Indic, v1)",
+    name=["MTEB(Indic, v1)", "MTEB(Indic)"],
     display_name="Indic",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/in.svg",
     tasks=MTEBTasks(
@@ -1145,7 +1148,7 @@ eu_languages = [
 ]
 
 MTEB_EU = Benchmark(
-    name="MTEB(Europe, v1)",
+    name=["MTEB(Europe, v1)", "MTEB(Europe)"],
     display_name="European",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/eu.svg",
     tasks=get_tasks(
@@ -1284,7 +1287,7 @@ BRIGHT = Benchmark(
 )
 
 BRIGHT_LONG = Benchmark(
-    name="BRIGHT (long)",
+    name=["BRIGHT (long)", "BRIGHT(long)"],
     tasks=MTEBTasks(
         (
             get_task(
@@ -1399,7 +1402,7 @@ NANOBEIR = Benchmark(
 )
 
 C_MTEB = Benchmark(
-    name="MTEB(cmn, v1)",
+    name=["MTEB(cmn, v1)", "MTEB(Chinese)"],
     display_name="Chinese",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/cn.svg",
     tasks=MTEBTasks(
@@ -1465,7 +1468,7 @@ C_MTEB = Benchmark(
 )
 
 FA_MTEB = Benchmark(
-    name="MTEB(fas, v1)",
+    name=["MTEB(fas, v1)", "FaMTEB(fas, beta)"],
     display_name="Farsi Legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
     tasks=get_tasks(
@@ -2346,7 +2349,7 @@ VIDORE_V3 = VidoreBenchmark(
 )
 
 VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
-    name="ViDoRe(v1&v2)",
+    name=["ViDoRe(v1&v2)", "VisualDocumentRetrieval"],
     display_name="ViDoRe (V1&V2)",
     tasks=get_tasks(
         tasks=[

@@ -42,7 +42,7 @@ class Benchmark:
         ... )
     """
 
-    name: str
+    name: str | list[str]
     tasks: Sequence["AbsTask"]
     description: str | None = None
     reference: StrURL | None = None
