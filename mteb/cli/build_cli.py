@@ -73,7 +73,6 @@ def run(args: argparse.Namespace) -> None:
         warnings.warn(
             "`--overwrite` is deprecated, please use `--overwrite-strategy 'always'` instead.",
             DeprecationWarning,
-            stacklevel=2,
         )
         overwrite_strategy = OverwriteStrategy.ALWAYS.value
 
@@ -82,7 +81,6 @@ def run(args: argparse.Namespace) -> None:
         warnings.warn(
             "`--save_predictions` is deprecated, please use `--prediction-folder` instead.",
             DeprecationWarning,
-            stacklevel=2,
         )
         prediction_folder = args.output_folder
 
