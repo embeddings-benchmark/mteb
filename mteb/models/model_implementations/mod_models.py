@@ -137,7 +137,7 @@ _PREDEFINED_PROMPTS = {
     # SQL domain
     "WikiSQLRetrieval": "Given a natural language query, retrieve relevant SQL examples",
     # Multilingual
-    "MIRACLRetrievalHardNegatives": "Given a query, retrieve relevant passages",
+    "MIRACLRetrievalHardNegatives": "Given a question, retrieve Wikipedia passages that answer the question",
     # ========== Private/Closed Datasets ==========
     # Code domain (Private)
     "Code1Retrieval": "Given a code problem description, retrieve relevant code examples",
@@ -166,6 +166,8 @@ MoD_Embedding = ModelMeta(
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
         prompts_dict=_PREDEFINED_PROMPTS,
+        max_seq_length=18480,
+        model_kwargs={"torch_dtype": "bfloat16"},
     ),
     name="bflhc/MoD-Embedding",
     languages=multilingual_langs,
