@@ -1,8 +1,9 @@
 from collections.abc import Iterable, Sequence
-from dataclasses import dataclass, field
+from dataclasses import field
 from typing import TYPE_CHECKING, Literal
 
 import pandas as pd
+from pydantic.dataclasses import dataclass
 
 from mteb.benchmarks._create_table import (
     _create_per_language_table_from_benchmark_results,

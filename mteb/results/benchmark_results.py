@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING, Any, Literal
 import pandas as pd
 from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
-from pydantic.dataclasses import dataclass
 from typing_extensions import Self
 
 if TYPE_CHECKING:
@@ -36,7 +35,7 @@ from .model_result import ModelResult, _aggregate_and_pivot
 
 logger = logging.getLogger(__name__)
 
-@dataclass
+
 class BenchmarkResults(BaseModel):
     """Data class to hold the benchmark results of a model.
 
