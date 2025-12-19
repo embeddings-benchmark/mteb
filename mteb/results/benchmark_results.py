@@ -1,6 +1,5 @@
 import json
 import logging
-import re
 import warnings
 from collections.abc import Callable, Iterable, Iterator, Sequence
 from pathlib import Path
@@ -367,16 +366,13 @@ class BenchmarkResults(BaseModel):
             format=format,
         )
 
-    def get_benchmark_result(self) -> dict[str, float]:
+    def get_benchmark_result(self) -> pd.DataFrame:
         """Get aggregated scores for each model in the benchmark.
 
         Uses the benchmark's summary table creation method to compute scores.
 
         Returns:
-            A dictionary mapping model names to their benchmark scores.
-
-        Raises:
-            ValueError: If no benchmark is associated with these results.
+            A DataFrame with the aggregated benchmark scores for each model.
 
         Examples:
             >>> results = cache.load_results(
@@ -393,37 +389,7 @@ class BenchmarkResults(BaseModel):
             )
 
         summary_table = self.benchmark._create_summary_table(self)
-        if (
-            "No results" in summary_table.columns
-            or summary_table.empty
-            or "Model" not in summary_table.columns
-        ):
-            return {}
-
-        model_scores = {}
-
-        score_column = None
-
-        if "Mean (Task)" in summary_table.columns:
-            score_column = "Mean (Task)"
-        elif "Mean (TaskType)" in summary_table.columns:
-            score_column = "Mean (TaskType)"
-        elif "Mean (Public)" in summary_table.columns:
-            score_column = "Mean (Public)"
-        elif "Mean (Subset)" in summary_table.columns:
-            score_column = "Mean (Subset)"
-
-        if score_column is None:
-            return {}
-
-        for _, row in summary_table.iterrows():
-            model_name = row["Model"]
-            if isinstance(model_name, str) and "[" in model_name:
-                match = re.match(r"\[([^\]]+)\]", model_name)
-                if match:
-                    model_name = match.group(1)
-            model_scores[model_name] = row[score_column]
-        return model_scores
+        return summary_table
 
     def __iter__(self) -> Iterator[ModelResult]:
         return iter(self.model_results)

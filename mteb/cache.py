@@ -498,8 +498,6 @@ class ResultCache:
             ...     require_model_meta=True,
             ... )
         """
-        from mteb.benchmarks.benchmark import Benchmark
-
         benchmark = None
         if tasks is not None and isinstance(tasks, Benchmark):
             benchmark = tasks
