@@ -44,7 +44,7 @@ class BenchmarkResults(BaseModel):
     """
 
     model_results: list[ModelResult]
-    benchmark: Benchmark | None = None
+    benchmark: Any = None
     model_config = (
         ConfigDict(  # to free up the name model_results which is otherwise protected
             protected_namespaces=(),
