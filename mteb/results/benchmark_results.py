@@ -11,7 +11,7 @@ from pydantic import BaseModel, ConfigDict
 from typing_extensions import Self
 
 if TYPE_CHECKING:
-    pass
+    from mteb.benchmarks.benchmark import Benchmark
 
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import (
@@ -42,7 +42,7 @@ class BenchmarkResults(BaseModel):
     """
 
     model_results: list[ModelResult]
-    benchmark: Any | None = None
+    benchmark: Benchmark | None = None
     model_config = (
         ConfigDict(  # to free up the name model_results which is otherwise protected
             protected_namespaces=(),
