@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 import warnings
 from collections.abc import Callable, Iterable, Iterator, Sequence
 from pathlib import Path
@@ -418,11 +419,10 @@ class BenchmarkResults(BaseModel):
         for _, row in summary_table.iterrows():
             model_name = row["Model"]
             if isinstance(model_name, str) and "[" in model_name:
-                import re
-
                 match = re.match(r"\[([^\]]+)\]", model_name)
                 if match:
                     model_name = match.group(1)
+            model_scores[model_name] = row[score_column]
         return model_scores
 
     def __iter__(self) -> Iterator[ModelResult]:
