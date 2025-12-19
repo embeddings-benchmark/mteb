@@ -556,14 +556,3 @@ class BenchmarkResults(BaseModel):
             {"model_name": model_res.model_name, "revision": model_res.model_revision}
             for model_res in self.model_results
         ]
-
-    @property
-    def benchmark_name(self) -> str | None:
-        """Get the name of the benchmark if one is associated.
-
-        Returns:
-            The benchmark name or None if no benchmark is associated.
-        """
-        if self.benchmark is None:
-            return None
-        return self.benchmark.name
