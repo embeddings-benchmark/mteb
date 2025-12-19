@@ -3,6 +3,7 @@ from dataclasses import field
 from typing import TYPE_CHECKING, Literal
 
 import pandas as pd
+from pydantic import ConfigDict
 from pydantic.dataclasses import dataclass
 
 from mteb.benchmarks._create_table import (
@@ -20,7 +21,7 @@ if TYPE_CHECKING:
     from mteb.abstasks import AbsTask
 
 
-@dataclass
+@dataclass(config=ConfigDict(arbitrary_types_allowed=True))
 class Benchmark:
     """A benchmark object intended to run a certain benchmark within MTEB.
 
