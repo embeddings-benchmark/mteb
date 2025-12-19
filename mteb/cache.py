@@ -6,7 +6,7 @@ import subprocess
 from collections import defaultdict
 from collections.abc import Sequence
 from pathlib import Path
-from typing import cast
+from typing import Any, cast
 
 from mteb.abstasks import AbsTask
 from mteb.models import ModelMeta
@@ -465,7 +465,7 @@ class ResultCache:
     def load_results(
         self,
         models: Sequence[str] | Sequence[ModelMeta] | None = None,
-        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        tasks: Sequence[str] | Sequence[AbsTask] | Any | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
         validate_and_filter: bool = False,
@@ -497,6 +497,13 @@ class ResultCache:
             ...     require_model_meta=True,
             ... )
         """
+        from mteb.benchmarks.benchmark import Benchmark
+
+        benchmark = None
+        if tasks is not None and isinstance(tasks, Benchmark):
+            benchmark = tasks
+            tasks = benchmark.tasks
+
         paths = self.get_cache_paths(
             models=models,
             tasks=tasks,
@@ -546,6 +553,7 @@ class ResultCache:
 
         benchmark_results = BenchmarkResults(
             model_results=models_results,
+            benchmark=benchmark,
         )
 
         return benchmark_results

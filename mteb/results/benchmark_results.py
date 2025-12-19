@@ -3,12 +3,15 @@ import logging
 import warnings
 from collections.abc import Callable, Iterable, Iterator, Sequence
 from pathlib import Path
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import pandas as pd
 from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
 from typing_extensions import Self
+
+if TYPE_CHECKING:
+    pass
 
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import (
@@ -39,6 +42,7 @@ class BenchmarkResults(BaseModel):
     """
 
     model_results: list[ModelResult]
+    benchmark: Any | None = None
     model_config = (
         ConfigDict(  # to free up the name model_results which is otherwise protected
             protected_namespaces=(),
@@ -362,6 +366,65 @@ class BenchmarkResults(BaseModel):
             format=format,
         )
 
+    def get_benchmark_result(self) -> dict[str, float]:
+        """Get aggregated scores for each model in the benchmark.
+
+        Uses the benchmark's summary table creation method to compute scores.
+
+        Returns:
+            A dictionary mapping model names to their benchmark scores.
+
+        Raises:
+            ValueError: If no benchmark is associated with these results.
+
+        Examples:
+            >>> results = cache.load_results(
+            ...     models=["intfloat/e5-small"],
+            ...     tasks=mteb.get_benchmark("MTEB(eng)")
+            ... )
+            >>> scores = results.get_benchmark_result()
+            >>> # {"intfloat/e5-small": 0.5}
+        """
+        if self.benchmark is None:
+            raise ValueError(
+                "No benchmark associated with these results. "
+                "To get benchmark results, load results with a Benchmark object."
+            )
+
+        summary_table = self.benchmark._create_summary_table(self)
+        if (
+            "No results" in summary_table.columns
+            or summary_table.empty
+            or "Model" not in summary_table.columns
+        ):
+            return {}
+
+        model_scores = {}
+
+        score_column = None
+
+        if "Mean (Task)" in summary_table.columns:
+            score_column = "Mean (Task)"
+        elif "Mean (TaskType)" in summary_table.columns:
+            score_column = "Mean (TaskType)"
+        elif "Mean (Public)" in summary_table.columns:
+            score_column = "Mean (Public)"
+        elif "Mean (Subset)" in summary_table.columns:
+            score_column = "Mean (Subset)"
+
+        if score_column is None:
+            return {}
+
+        for _, row in summary_table.iterrows():
+            model_name = row["Model"]
+            if isinstance(model_name, str) and "[" in model_name:
+                import re
+
+                match = re.match(r"\[([^\]]+)\]", model_name)
+                if match:
+                    model_name = match.group(1)
+        return model_scores
+
     def __iter__(self) -> Iterator[ModelResult]:
         return iter(self.model_results)
 
@@ -493,3 +556,14 @@ class BenchmarkResults(BaseModel):
             {"model_name": model_res.model_name, "revision": model_res.model_revision}
             for model_res in self.model_results
         ]
+
+    @property
+    def benchmark_name(self) -> str | None:
+        """Get the name of the benchmark if one is associated.
+
+        Returns:
+            The benchmark name or None if no benchmark is associated.
+        """
+        if self.benchmark is None:
+            return None
+        return self.benchmark.name
