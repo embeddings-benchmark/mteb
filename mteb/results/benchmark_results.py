@@ -12,8 +12,7 @@ from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
 from typing_extensions import Self
 
-if TYPE_CHECKING:
-    from mteb.benchmarks.benchmark import Benchmark
+from mteb.benchmarks.benchmark import Benchmark
 
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import (
