@@ -1,0 +1,139 @@
+{
+  "dataset_revision": "main",
+  "task_name": "TurkishConstitutionalCourtViolation",
+  "mteb_version": "2.4.2",
+  "scores": {
+    "test": [
+      {
+        "scores_per_experiment": [
+          {
+            "accuracy": 0.510309,
+            "f1": 0.434576,
+            "f1_weighted": 0.607376,
+            "precision": 0.553926,
+            "precision_weighted": 0.907224,
+            "recall": 0.676264,
+            "recall_weighted": 0.510309,
+            "ap": 0.945932,
+            "ap_weighted": 0.945932
+          },
+          {
+            "accuracy": 0.587629,
+            "f1": 0.446347,
+            "f1_weighted": 0.679895,
+            "precision": 0.514912,
+            "precision_weighted": 0.861385,
+            "recall": 0.547753,
+            "recall_weighted": 0.587629,
+            "ap": 0.92485,
+            "ap_weighted": 0.92485
+          },
+          {
+            "accuracy": 0.381443,
+            "f1": 0.344595,
+            "f1_weighted": 0.474366,
+            "precision": 0.536901,
+            "precision_weighted": 0.896675,
+            "recall": 0.606039,
+            "recall_weighted": 0.381443,
+            "ap": 0.934453,
+            "ap_weighted": 0.934453
+          },
+          {
+            "accuracy": 0.453608,
+            "f1": 0.382091,
+            "f1_weighted": 0.557633,
+            "precision": 0.518619,
+            "precision_weighted": 0.869679,
+            "recall": 0.560042,
+            "recall_weighted": 0.453608,
+            "ap": 0.926826,
+            "ap_weighted": 0.926826
+          },
+          {
+            "accuracy": 0.505155,
+            "f1": 0.403765,
+            "f1_weighted": 0.609079,
+            "precision": 0.50946,
+            "precision_weighted": 0.858197,
+            "recall": 0.53125,
+            "recall_weighted": 0.505155,
+            "ap": 0.922305,
+            "ap_weighted": 0.922305
+          },
+          {
+            "accuracy": 0.623711,
+            "f1": 0.459197,
+            "f1_weighted": 0.708275,
+            "precision": 0.51271,
+            "precision_weighted": 0.858521,
+            "recall": 0.538975,
+            "recall_weighted": 0.623711,
+            "ap": 0.923484,
+            "ap_weighted": 0.923484
+          },
+          {
+            "accuracy": 0.664948,
+            "f1": 0.501876,
+            "f1_weighted": 0.739873,
+            "precision": 0.539605,
+            "precision_weighted": 0.878032,
+            "recall": 0.618329,
+            "recall_weighted": 0.664948,
+            "ap": 0.935968,
+            "ap_weighted": 0.935968
+          },
+          {
+            "accuracy": 0.546392,
+            "f1": 0.421993,
+            "f1_weighted": 0.64591,
+            "precision": 0.507719,
+            "precision_weighted": 0.855776,
+            "recall": 0.525281,
+            "recall_weighted": 0.546392,
+            "ap": 0.921381,
+            "ap_weighted": 0.921381
+          },
+          {
+            "accuracy": 0.762887,
+            "f1": 0.520009,
+            "f1_weighted": 0.805126,
+            "precision": 0.526786,
+            "precision_weighted": 0.862297,
+            "recall": 0.557935,
+            "recall_weighted": 0.762887,
+            "ap": 0.9264,
+            "ap_weighted": 0.9264
+          },
+          {
+            "accuracy": 0.35567,
+            "f1": 0.325546,
+            "f1_weighted": 0.444573,
+            "precision": 0.533551,
+            "precision_weighted": 0.89376,
+            "recall": 0.591994,
+            "recall_weighted": 0.35567,
+            "ap": 0.932168,
+            "ap_weighted": 0.932168
+          }
+        ],
+        "accuracy": 0.539175,
+        "f1": 0.424,
+        "f1_weighted": 0.627211,
+        "precision": 0.525419,
+        "precision_weighted": 0.874155,
+        "recall": 0.575386,
+        "recall_weighted": 0.539175,
+        "ap": 0.929377,
+        "ap_weighted": 0.929377,
+        "main_score": 0.424,
+        "hf_subset": "default",
+        "languages": [
+          "tur-Latn"
+        ]
+      }
+    ]
+  },
+  "evaluation_time": 35.03193497657776,
+  "kg_co2_emissions": null
+}
