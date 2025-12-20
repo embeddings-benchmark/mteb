@@ -5,20 +5,19 @@ import logging
 import warnings
 from collections.abc import Callable, Iterable, Iterator, Sequence
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal
+from typing import Any, Literal
 
 import pandas as pd
 from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
 from typing_extensions import Self
 
-from mteb.benchmarks.benchmark import Benchmark
-
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import (
     TaskDomain,
     TaskType,
 )
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.types import (
