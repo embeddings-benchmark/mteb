@@ -1,11 +1,12 @@
 from collections.abc import Iterable, Sequence
 from dataclasses import field
-from typing import TYPE_CHECKING, Literal
+from typing import Literal
 
 import pandas as pd
 from pydantic import ConfigDict
 from pydantic.dataclasses import dataclass
 
+from mteb.abstasks.abstask import AbsTask
 from mteb.benchmarks._create_table import (
     _create_per_language_table_from_benchmark_results,
     _create_per_task_table_from_benchmark_results,
@@ -16,9 +17,6 @@ from mteb.benchmarks._create_table import (
 )
 from mteb.results import BenchmarkResults
 from mteb.types import StrURL
-
-if TYPE_CHECKING:
-    from mteb.abstasks import AbsTask
 
 
 @dataclass(config=ConfigDict(arbitrary_types_allowed=True))
@@ -45,7 +43,7 @@ class Benchmark:
     """
 
     name: str
-    tasks: Sequence["AbsTask"]
+    tasks: Sequence[AbsTask]
     description: str | None = None
     reference: StrURL | None = None
     citation: str | None = None
@@ -55,13 +53,13 @@ class Benchmark:
     display_name: str | None = None
     language_view: list[str] | Literal["all"] = field(default_factory=list)
 
-    def __iter__(self) -> Iterable["AbsTask"]:
+    def __iter__(self) -> Iterable[AbsTask]:
         return iter(self.tasks)
 
     def __len__(self) -> int:
         return len(self.tasks)
 
-    def __getitem__(self, index: int) -> "AbsTask":
+    def __getitem__(self, index: int) -> AbsTask:
         return self.tasks[index]
 
     def _create_summary_table(
