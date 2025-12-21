@@ -1,6 +1,7 @@
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
+
 class TurkishConstitutionalCourtViolation(AbsTaskClassification):
     # Normalize column names after load_data renames them.
     label_column_name = "label"

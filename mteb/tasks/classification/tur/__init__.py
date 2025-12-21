@@ -18,5 +18,4 @@ __all__ = [
     "TurkishProductSentimentClassification",
     "TurkishProductSentimentClassificationV2",
     "TurkishConstitutionalCourtViolation",
-
 ]
