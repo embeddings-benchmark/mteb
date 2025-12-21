@@ -439,6 +439,13 @@ user_bge_m3 = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
+    citation="""@misc{deepvk2024user,
+    title={USER: Universal Sentence Encoder for Russian},
+    author={Malashenko, Boris and  Zemerov, Anton and Spirin, Egor},
+    url={https://huggingface.co/datasets/deepvk/USER-base},
+    publisher={Hugging Face},
+    year={2024},
+}""",
 )
 
 deberta_v1_ru = ModelMeta(
@@ -873,6 +880,7 @@ frida = ModelMeta(
     public_training_data=None,
     public_training_code=None,
     framework=["Sentence Transformers", "PyTorch"],
+    citation=None,
 )
 
 giga_embeddings = ModelMeta(
@@ -1008,6 +1016,13 @@ user2_small = ModelMeta(
     public_training_data=None,
     public_training_code="https://github.com/BlessedTatonka/some_code/tree/2899f27d51efdf4217fc6453799ff197e9792f1e",
     framework=["Sentence Transformers", "PyTorch"],
+    citation="""@misc{deepvk2025user,
+    title={USER2},
+    author={Malashenko, Boris and Spirin, Egor and Sokolov Andrey},
+    url={https://huggingface.co/deepvk/USER2-small},
+    publisher={Hugging Face},
+    year={2025},
+}""",
 )
 
 user2_base = ModelMeta(
@@ -1033,4 +1048,11 @@ user2_base = ModelMeta(
     public_training_data=None,
     public_training_code="https://github.com/BlessedTatonka/some_code/tree/2899f27d51efdf4217fc6453799ff197e9792f1e",
     framework=["Sentence Transformers", "PyTorch"],
+    citation="""@misc{deepvk2025user,
+    title={USER2},
+    author={Malashenko, Boris and Spirin, Egor and Sokolov Andrey},
+    url={https://huggingface.co/deepvk/USER2-base},
+    publisher={Hugging Face},
+    year={2025},
+}""",
 )

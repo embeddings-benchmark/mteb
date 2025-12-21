@@ -75,6 +75,12 @@ aiteamvn_vietnamese_embeddings = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="BAAI/bge-m3",
+    citation="""@misc{Vietnamese_Embedding,
+  title={Vietnamese_Embedding: Embedding model in Vietnamese language.},
+  author={Nguyen Nho Trung, Nguyen Nhat Quang, Nguyen Van Huy},
+  year={2025},
+  publisher={Huggingface},
+}""",
 )
 
 hiieu_halong_embedding = ModelMeta(
@@ -99,6 +105,12 @@ hiieu_halong_embedding = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="intfloat/multilingual-e5-base",
+    citation="""@misc{HalongEmbedding,
+  title={HalongEmbedding: A Vietnamese Text Embedding},
+  author={Ngo Hieu},
+  year={2024},
+  publisher={Huggingface},
+}""",
 )
 
 sup_simcse_vietnamese_phobert_base_ = ModelMeta(
@@ -122,6 +134,20 @@ sup_simcse_vietnamese_phobert_base_ = ModelMeta(
     reference="https://huggingface.co/VoVanPhuc/sup-SimCSE-VietNamese-phobert-base",
     similarity_fn_name="cosine",
     training_datasets=None,
+    citation="""@article{gao2021simcse,
+   title={{SimCSE}: Simple Contrastive Learning of Sentence Embeddings},
+   author={Gao, Tianyu and Yao, Xingcheng and Chen, Danqi},
+   journal={arXiv preprint arXiv:2104.08821},
+   year={2021}
+}
+
+@inproceedings{phobert,
+title     = {{PhoBERT: Pre-trained language models for Vietnamese}},
+author    = {Dat Quoc Nguyen and Anh Tuan Nguyen},
+booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2020},
+year      = {2020},
+pages     = {1037--1042}
+}""",
 )
 
 bkai_foundation_models_vietnamese_bi_encoder = ModelMeta(
@@ -145,4 +171,11 @@ bkai_foundation_models_vietnamese_bi_encoder = ModelMeta(
     reference="https://huggingface.co/bkai-foundation-models/vietnamese-bi-encoder",
     similarity_fn_name="cosine",
     training_datasets=None,
+    citation="""
+      @article{duc2024towards,
+    title={Towards Comprehensive Vietnamese Retrieval-Augmented Generation and Large Language Models},
+    author={Nguyen Quang Duc, Le Hai Son, Nguyen Duc Nhan, Nguyen Dich Nhat Minh, Le Thanh Huong, Dinh Viet Sang},
+    journal={arXiv preprint arXiv:2403.01616},
+    year={2024}
+  }""",
 )

@@ -156,6 +156,15 @@ tooka_sbert = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )
 
 fa_bert = ModelMeta(
@@ -180,6 +189,29 @@ fa_bert = ModelMeta(
         # It's just a base model
         # https://huggingface.co/datasets/sbunlp/hmblogs-v3
     ),
+    citation="""@inproceedings{masumi-etal-2025-fabert,
+    title = "{F}a{BERT}: Pre-training {BERT} on {P}ersian Blogs",
+    author = "Masumi, Mostafa  and
+      Majd, Seyed Soroush  and
+      Shamsfard, Mehrnoush  and
+      Beigy, Hamid",
+    editor = "Bak, JinYeong  and
+      Goot, Rob van der  and
+      Jang, Hyeju  and
+      Buaphet, Weerayut  and
+      Ramponi, Alan  and
+      Xu, Wei  and
+      Ritter, Alan",
+    booktitle = "Proceedings of the Tenth Workshop on Noisy and User-generated Text",
+    month = may,
+    year = "2025",
+    address = "Albuquerque, New Mexico, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.wnut-1.10/",
+    doi = "10.18653/v1/2025.wnut-1.10",
+    pages = "85--96",
+    ISBN = "979-8-89176-232-9",
+}""",
 )
 
 tooka_sbert_v2_small = ModelMeta(
@@ -201,6 +233,15 @@ tooka_sbert_v2_small = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )
 
 tooka_sbert_v2_large = ModelMeta(
@@ -222,4 +263,13 @@ tooka_sbert_v2_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )

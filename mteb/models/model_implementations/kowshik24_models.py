@@ -19,4 +19,13 @@ kowshik24_bangla_embedding_model = ModelMeta(
     public_training_code="https://github.com/kowshik24/Bangla-Embedding",
     public_training_data="https://huggingface.co/datasets/sartajekram/BanglaRQA",
     training_datasets=set(),
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )

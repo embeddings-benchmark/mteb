@@ -123,6 +123,28 @@ xlmr_base = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=set(),
+    citation="""@article{DBLP:journals/corr/abs-1911-02116,
+  author    = {Alexis Conneau and
+               Kartikay Khandelwal and
+               Naman Goyal and
+               Vishrav Chaudhary and
+               Guillaume Wenzek and
+               Francisco Guzm{\'{a}}n and
+               Edouard Grave and
+               Myle Ott and
+               Luke Zettlemoyer and
+               Veselin Stoyanov},
+  title     = {Unsupervised Cross-lingual Representation Learning at Scale},
+  journal   = {CoRR},
+  volume    = {abs/1911.02116},
+  year      = {2019},
+  url       = {http://arxiv.org/abs/1911.02116},
+  eprinttype = {arXiv},
+  eprint    = {1911.02116},
+  timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
+  biburl    = {https://dblp.org/rec/journals/corr/abs-1911-02116.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}""",
 )
 
 xlmr_large = ModelMeta(
@@ -144,4 +166,26 @@ xlmr_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=set(),
+    citation="""@article{DBLP:journals/corr/abs-1911-02116,
+  author    = {Alexis Conneau and
+               Kartikay Khandelwal and
+               Naman Goyal and
+               Vishrav Chaudhary and
+               Guillaume Wenzek and
+               Francisco Guzm{\'{a}}n and
+               Edouard Grave and
+               Myle Ott and
+               Luke Zettlemoyer and
+               Veselin Stoyanov},
+  title     = {Unsupervised Cross-lingual Representation Learning at Scale},
+  journal   = {CoRR},
+  volume    = {abs/1911.02116},
+  year      = {2019},
+  url       = {http://arxiv.org/abs/1911.02116},
+  eprinttype = {arXiv},
+  eprint    = {1911.02116},
+  timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
+  biburl    = {https://dblp.org/rec/journals/corr/abs-1911-02116.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}""",
 )
