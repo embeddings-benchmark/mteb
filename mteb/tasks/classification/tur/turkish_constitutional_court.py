@@ -19,7 +19,7 @@ class TurkishConstitutionalCourtViolation(AbsTaskClassification):
         main_score="f1",
         dataset={
             "path": "KocLab-Bilkent/turkish-constitutional-court",
-            "revision": "4c579103a7728e7d5ab9386d8aa5d2f4fcac70e7",
+            "revision": "abb26be1e1259d883acebb605efe6c79b1045152",
         },
         date=("2000-01-01", "2023-02-20"),  # dataset card last updated Feb 20, 2023
         domains=["Legal", "Non-fiction"],
