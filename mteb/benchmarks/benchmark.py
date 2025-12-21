@@ -1,12 +1,10 @@
 from __future__ import annotations
 
 from collections.abc import Iterable, Sequence
-from dataclasses import field
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Literal
 
 import pandas as pd
-from pydantic import ConfigDict
-from pydantic.dataclasses import dataclass
 
 from mteb.abstasks.abstask import AbsTask
 from mteb.types import StrURL
@@ -15,7 +13,7 @@ if TYPE_CHECKING:
     from mteb.results import BenchmarkResults
 
 
-@dataclass(config=ConfigDict(arbitrary_types_allowed=True))
+@dataclass
 class Benchmark:
     """A benchmark object intended to run a certain benchmark within MTEB.
 

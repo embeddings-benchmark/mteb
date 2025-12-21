@@ -41,10 +41,9 @@ class BenchmarkResults(BaseModel):
 
     model_results: list[ModelResult]
     benchmark: Benchmark | None = None
-    model_config = (
-        ConfigDict(  # to free up the name model_results which is otherwise protected
-            protected_namespaces=(),
-        )
+    model_config = ConfigDict(
+        protected_namespaces=(),  # to free up the name model_results which is otherwise protected
+        arbitrary_types_allowed=True,  # Benchmark is dataclasses.dataclass
     )
 
     def __repr__(self) -> str:
@@ -383,11 +382,11 @@ class BenchmarkResults(BaseModel):
         if self.benchmark is None:
             raise ValueError(
                 "No benchmark associated with these results. "
-                "To get benchmark results, load results with a Benchmark object."
+                "To get benchmark results, load results with a Benchmark object. "
+                "`results = cache.load_results(tasks='MTEB(eng, v2)')`"
             )
 
-        summary_table = self.benchmark._create_summary_table(self)
-        return summary_table
+        return self.benchmark._create_summary_table(self)
 
     def __iter__(self) -> Iterator[ModelResult]:
         return iter(self.model_results)

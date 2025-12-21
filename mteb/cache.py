@@ -8,6 +8,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import cast
 
+import mteb
 from mteb.abstasks import AbsTask
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
@@ -466,7 +467,7 @@ class ResultCache:
     def load_results(
         self,
         models: Sequence[str] | Sequence[ModelMeta] | None = None,
-        tasks: Sequence[str] | Sequence[AbsTask] | Benchmark | None = None,
+        tasks: Sequence[str] | Sequence[AbsTask] | Benchmark | str | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
         validate_and_filter: bool = False,
@@ -476,7 +477,8 @@ class ResultCache:
 
         Args:
             models: A list of model names to load the results for. If None it will load the results for all models.
-            tasks: A list of task names to load the results for. If None it will load the results for all tasks.
+            tasks: A list of task names to load the results for. If str is passed, then benchmark will be loaded.
+                If None it will load the results for all tasks.
             require_model_meta: If True it will ignore results that do not have a model_meta.json file. If false it attempt to
                 extract the model name and revision from the path.
             include_remote: If True, it will include results from the remote repository.
@@ -498,10 +500,8 @@ class ResultCache:
             ...     require_model_meta=True,
             ... )
         """
-        benchmark = None
-        if tasks is not None and isinstance(tasks, Benchmark):
-            benchmark = tasks
-            tasks = benchmark.tasks
+        if isinstance(tasks, str):
+            tasks = mteb.get_benchmark(tasks)
 
         paths = self.get_cache_paths(
             models=models,
@@ -552,7 +552,7 @@ class ResultCache:
 
         benchmark_results = BenchmarkResults(
             model_results=models_results,
-            benchmark=benchmark,
+            benchmark=tasks if isinstance(tasks, Benchmark) else None,
         )
 
         return benchmark_results
