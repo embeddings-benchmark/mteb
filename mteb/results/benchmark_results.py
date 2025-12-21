@@ -370,18 +370,10 @@ class BenchmarkResults(BaseModel):
 
         Returns:
             A DataFrame with the aggregated benchmark scores for each model.
-
-        Examples:
-            >>> results = cache.load_results(
-            ...     models=["intfloat/e5-small"],
-            ...     tasks=mteb.get_benchmark("MTEB(eng)")
-            ... )
-            >>> scores = results.get_benchmark_result()
-            >>> # {"intfloat/e5-small": 0.5}
         """
         if self.benchmark is None:
             raise ValueError(
-                "No benchmark associated with these results. "
+                "No benchmark associated with these results (self.benchmark is None). "
                 "To get benchmark results, load results with a Benchmark object. "
                 "`results = cache.load_results(tasks='MTEB(eng, v2)')`"
             )
