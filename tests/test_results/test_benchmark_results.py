@@ -7,18 +7,22 @@ import pandas as pd
 import pytest
 
 import mteb
+from mteb.cache import ResultCache
 from mteb.results import BenchmarkResults, ModelResult
+from tests.task_grid import MOCK_BENCHMARK
 
 
 @pytest.fixture
-def benchmark_results() -> BenchmarkResults:
+def cache_path() -> Path:
     tests_path = Path(__file__).parent.parent / "mock_mteb_cache"
 
     os.environ["MTEB_CACHE"] = str(tests_path)
+    return tests_path
 
-    results = mteb.load_results(download_latest=False, require_model_meta=False)
 
-    return results
+@pytest.fixture
+def benchmark_results(cache_path: Path) -> BenchmarkResults:
+    return mteb.load_results(download_latest=False, require_model_meta=False)
 
 
 def test_indexing(benchmark_results: BenchmarkResults) -> None:
@@ -157,3 +161,20 @@ def test_utility_properties(
     )
     assert isinstance(br.task_types, list) and isinstance(br.task_types[0], str)
     assert isinstance(br.domains, list) and isinstance(br.domains[0], str)
+
+
+def test_benchmark_results(cache_path: Path) -> None:
+    cache = ResultCache(cache_path)
+    results = cache.load_results(
+        tasks=MOCK_BENCHMARK,
+        models=[
+            "sentence-transformers/all-MiniLM-L6-v2",
+            "baseline/random-encoder-baseline",
+        ],
+    )
+    df = results.get_benchmark_result()
+
+    assert "Classification" in df.columns
+    assert "Retrieval" in df.columns
+    assert df.shape[0] == 2
+    assert df.at[0, "Mean (Task)"] == pytest.approx(0.616616)
