@@ -222,7 +222,7 @@ class ModelMeta(BaseModel):
         _kwargs.update(kwargs)
 
         model: MTEBModels = self.loader(self.name, revision=self.revision, **_kwargs)
-        model.mteb_model_meta = self  # type: ignore
+        model.mteb_model_meta = self
         return model
 
     def model_name_as_path(self) -> str:

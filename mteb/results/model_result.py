@@ -183,15 +183,15 @@ class ModelResult(BaseModel):
                 try:
                     if use_fast:
                         scores[res.task_name] = res._get_score_fast(
-                            splits=splits,  # type: ignore
-                            languages=languages,  # type: ignore
+                            splits=splits,
+                            languages=languages,
                         )
                     else:
                         scores[res.task_name] = res.get_score(
                             splits=splits,
                             languages=languages,
-                            aggregation=aggregation,  # type: ignore
-                            getter=getter,  # type: ignore
+                            aggregation=aggregation,
+                            getter=getter,
                             scripts=scripts,
                         )
                 except Exception as e:
@@ -206,14 +206,14 @@ class ModelResult(BaseModel):
                     if use_fast:
                         score = task_res._get_score_fast(
                             splits=splits,
-                            languages=languages,  # type: ignore
+                            languages=languages,
                         )
                     else:
                         score = task_res.get_score(
                             splits=splits,
                             languages=languages,
-                            aggregation=aggregation,  # type: ignore
-                            getter=getter,  # type: ignore
+                            aggregation=aggregation,
+                            getter=getter,
                             scripts=scripts,
                         )
                     entry = dict(

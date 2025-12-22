@@ -41,7 +41,7 @@ class VLM2VecWrapper(AbsEncoder):
             model_name,
             "pip install flash-attn --no-build-isolation",
         ):
-            import flash_attn  # noqa
+            pass
 
         requires_package(self, "peft", model_name, "pip install 'mteb[peft]'")
         from peft import LoraConfig, PeftModel

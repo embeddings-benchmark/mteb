@@ -164,7 +164,7 @@ class SummarizationEvaluator(Evaluator):
                 dot_scores = dot_score(emb_machine_summary, embs_human_summaries)
 
                 _sim_score = [
-                    float(model.similarity(emb_machine_summary, emb_human_summary))  # type: ignore
+                    float(model.similarity(emb_machine_summary, emb_human_summary))
                     for emb_human_summary in embs_human_summaries
                 ]
                 sim_score = torch.tensor(_sim_score)

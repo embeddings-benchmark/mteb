@@ -326,7 +326,7 @@ class AbsTask(ABC):
                     )
         else:
             # some of monolingual datasets explicitly adding the split name to the dataset name
-            self.dataset = load_dataset(**self.metadata.dataset)  # type: ignore
+            self.dataset = load_dataset(**self.metadata.dataset)
         self.dataset_transform()
         self.data_loaded = True
 

@@ -42,7 +42,7 @@ class Criteria(HelpfulStrEnum):
 class ScalaNbClassificationDummy:
     """A dummy task for loading historic results from before v1.11.0"""
 
-    metadata = Namespace(  # type: ignore
+    metadata = Namespace(
         name="ScalaNbClassification",
         main_score="accuracy",
         type="Classification",
@@ -57,7 +57,7 @@ class ScalaNbClassificationDummy:
 class ScalaNnClassificationDummy:
     """A dummy task for loading historic results from before v1.11.0"""
 
-    metadata = Namespace(  # type: ignore
+    metadata = Namespace(
         name="ScalaNnClassification",
         main_score="accuracy",
         type="Classification",
@@ -72,7 +72,7 @@ class ScalaNnClassificationDummy:
 class ScalaDaClassificationDummy:
     """A dummy task for loading historic results from before v1.11.0"""
 
-    metadata = Namespace(  # type: ignore
+    metadata = Namespace(
         name="ScalaDaClassification",
         main_score="accuracy",
         type="Classification",
@@ -87,7 +87,7 @@ class ScalaDaClassificationDummy:
 class ScalaSvClassificationDummy:
     """A dummy task for loading historic results from before v1.11.0"""
 
-    metadata = Namespace(  # type: ignore
+    metadata = Namespace(
         name="ScalaSvClassification",
         main_score="accuracy",
         type="Classification",
@@ -251,7 +251,7 @@ class TaskResult(BaseModel):
         doms = self.task.metadata.domains
         if doms is None:
             doms = []
-        return doms  # type: ignore
+        return doms
 
     @property
     def task_type(self) -> str:
@@ -325,7 +325,7 @@ class TaskResult(BaseModel):
             json.dump(json_obj, f, indent=2)
 
     @classmethod
-    def from_disk(cls, path: Path, load_historic_data: bool = True) -> Self:  # type: ignore
+    def from_disk(cls, path: Path, load_historic_data: bool = True) -> Self:
         """Load TaskResult from disk.
 
         Args:
@@ -481,7 +481,7 @@ class TaskResult(BaseModel):
                 scores["test"]["fra-fra"] = scores["test"].pop("fr")
 
         result: TaskResult = TaskResult.from_task_results(
-            task,  # type: ignore
+            task,
             scores,
             evaluation_time,
             kg_co2_emissions=None,

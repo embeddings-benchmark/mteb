@@ -53,7 +53,7 @@ def calculate_image_statistics(images: list[Image.Image]) -> ImageStatistics:
     seen_hashes: set[str] = set()
 
     for img in images:
-        width, height = img.size  # type: ignore
+        width, height = img.size
         img_heights.append(height)
         img_widths.append(width)
 

@@ -4,7 +4,7 @@ from mteb.models.sentence_transformer_wrapper import (
 )
 
 dfm_enc_large = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore
+    loader=sentence_transformers_loader,
     name="KennethEnevoldsen/dfm-sentence-encoder-large",
     languages=["dan-Latn"],
     open_weights=True,
@@ -38,7 +38,7 @@ dfm_enc_large = ModelMeta(
 )
 
 dfm_enc_med = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore
+    loader=sentence_transformers_loader,
     name="KennethEnevoldsen/dfm-sentence-encoder-medium",
     languages=["dan-Latn"],
     open_weights=True,

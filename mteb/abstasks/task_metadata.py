@@ -368,7 +368,7 @@ class TaskMetadata(BaseModel):
         """Return a dictionary mapping huggingface subsets to languages."""
         if isinstance(self.eval_langs, dict):
             return self.eval_langs
-        return {"default": self.eval_langs}  # type: ignore
+        return {"default": self.eval_langs}
 
     @property
     def intext_citation(self, include_cite: bool = True) -> str:
@@ -417,7 +417,7 @@ class TaskMetadata(BaseModel):
         for subset, subset_value in stats.items():
             if subset == "hf_subset_descriptive_stats":
                 continue
-            n_samples[subset] = subset_value["num_samples"]  # type: ignore
+            n_samples[subset] = subset_value["num_samples"]
         return n_samples
 
     @property

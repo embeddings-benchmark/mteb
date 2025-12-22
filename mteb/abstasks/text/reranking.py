@@ -117,14 +117,14 @@ class AbsTaskReranking(AbsTaskRetrieval):
                 if hf_subset in cur_dataset:
                     cur_dataset = cur_dataset[hf_subset]
             elif "name" in self.metadata.dataset:
-                cur_dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+                cur_dataset = datasets.load_dataset(**self.metadata.dataset)
                 assert hf_subset == "default", (
                     f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
                 )
             else:
                 cur_dataset = datasets.load_dataset(
                     **self.metadata.dataset, name=hf_subset
-                )  # type: ignore
+                )
 
             for split in cur_dataset:
                 corpus = []

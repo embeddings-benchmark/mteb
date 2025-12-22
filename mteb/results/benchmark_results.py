@@ -59,7 +59,7 @@ class BenchmarkResults(BaseModel):
         task_names: list[str] | None = None,
         languages: list[str] | None = None,
         domains: list[TaskDomain] | None = None,
-        task_types: list[TaskType] | None = None,  # type: ignore
+        task_types: list[TaskType] | None = None,
         modalities: list[Modalities] | None = None,
         is_public: bool | None = None,
     ) -> BenchmarkResults:
@@ -231,8 +231,8 @@ class BenchmarkResults(BaseModel):
         model_to_main_revision = {
             meta.name: meta.revision for meta in get_model_metas()
         }
-        task_df["main_revision"] = task_df["model"].map(model_to_main_revision)  # type: ignore
-        task_df["mteb_version"] = task_df["mteb_version"].map(parse_version)  # type: ignore
+        task_df["main_revision"] = task_df["model"].map(model_to_main_revision)
+        task_df["mteb_version"] = task_df["mteb_version"].map(parse_version)
         task_df = (
             task_df.groupby(["model", "task_name"])
             .apply(keep_best)
@@ -273,7 +273,7 @@ class BenchmarkResults(BaseModel):
                         {
                             "model": model_res.model_name,
                             "revision": model_res.model_revision,
-                            **model_scores,  # type: ignore
+                            **model_scores,
                         }
                     )
                 except Exception as e:

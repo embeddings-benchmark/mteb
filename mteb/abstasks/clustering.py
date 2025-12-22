@@ -184,11 +184,11 @@ class AbsTaskClustering(AbsTask):
             else:
                 max_documents_to_embed = self.max_document_to_embed
 
-            max_documents_to_embed = min(len(data_split), max_documents_to_embed)  # type: ignore
+            max_documents_to_embed = min(len(data_split), max_documents_to_embed)
             example_indices = self.rng_state.sample(
                 range(len(data_split)), k=max_documents_to_embed
             )
-            downsampled_dataset = data_split.select(example_indices)  # type: ignore
+            downsampled_dataset = data_split.select(example_indices)
 
         downsampled_dataset = downsampled_dataset.select_columns(
             [self.input_column_name, self.label_column_name]

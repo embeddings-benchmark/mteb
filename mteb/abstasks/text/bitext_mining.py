@@ -167,7 +167,7 @@ class AbsTaskBitextMining(AbsTask):
         evaluator = BitextMiningEvaluator(
             data_split,
             task_metadata=self.metadata,
-            pair_columns=pairs,  # type: ignore
+            pair_columns=pairs,
             hf_split=hf_split,
             hf_subset=hf_subset,
             **kwargs,

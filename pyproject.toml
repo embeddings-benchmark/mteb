@@ -220,6 +220,7 @@ select = [
     "PTH",     # use pathlib
     "TID",     # tidy-imports
     "D",       # pydocstyle
+    "PGH",  # pygrep-hooks Use specific rule codes when ignoring type issues
 ]
 
 ignore = [

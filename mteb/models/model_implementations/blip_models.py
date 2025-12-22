@@ -128,7 +128,7 @@ class BLIPModel(AbsEncoder):
 
 # in descending order of usage (downloads from huggingface)
 blip_image_captioning_large = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-image-captioning-large",
     languages=["eng-Latn"],
     revision="2227ac38c9f16105cb0412e7cab4759978a8fd90",
@@ -155,7 +155,7 @@ blip_image_captioning_large = ModelMeta(
 )
 
 blip_image_captioning_base = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-image-captioning-base",
     languages=["eng-Latn"],
     revision="89b09ea1789f7addf2f6d6f0dfc4ce10ab58ef84",
@@ -183,7 +183,7 @@ blip_image_captioning_base = ModelMeta(
 
 
 blip_vqa_base = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-vqa-base",
     languages=["eng-Latn"],
     revision="c7df8e7cd7aa2ee9af18f56e2b29e59a92651b64",
@@ -209,7 +209,7 @@ blip_vqa_base = ModelMeta(
 )
 
 blip_vqa_capfilt_large = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-vqa-capfilt-large",
     languages=["eng-Latn"],
     revision="e53f95265aeab69013fabb5380500ab984adbbb4",
@@ -235,7 +235,7 @@ blip_vqa_capfilt_large = ModelMeta(
 )
 
 blip_itm_base_coco = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-base-coco",
     languages=["eng-Latn"],
     revision="7eaa90c11850c0b17fc38c6a11e7d88bd6ac231f",
@@ -261,7 +261,7 @@ blip_itm_base_coco = ModelMeta(
 )
 
 blip_itm_large_coco = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-large-coco",
     languages=["eng-Latn"],
     revision="fef05cafc05298067cbbca00b125749394a77a6f",
@@ -288,7 +288,7 @@ blip_itm_large_coco = ModelMeta(
 )
 
 blip_itm_base_flickr = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-base-flickr",
     languages=["eng-Latn"],
     revision="1de29e660d91ae1786c1876212ea805a22eab251",
@@ -315,7 +315,7 @@ blip_itm_base_flickr = ModelMeta(
 )
 
 blip_itm_large_flickr = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-large-flickr",
     languages=["eng-Latn"],
     revision="bda12e6506758f54261b5ab174b2c55a3ba143fb",

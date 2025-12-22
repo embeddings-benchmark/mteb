@@ -123,7 +123,7 @@ siglip_training_datasets = set(
 )
 
 siglip_so400m_patch14_224 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-so400m-patch14-224",
     languages=["eng-Latn"],
     revision="d04cf29fca7b6374f74d8bea1969314492266b5e",
@@ -146,7 +146,7 @@ siglip_so400m_patch14_224 = ModelMeta(
 )
 
 siglip_so400m_patch14_384 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-so400m-patch14-384",
     languages=["eng-Latn"],
     revision="9fdffc58afc957d1a03a25b10dba0329ab15c2a3",
@@ -169,7 +169,7 @@ siglip_so400m_patch14_384 = ModelMeta(
 )
 
 siglip_so400m_patch16_256_i18n = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-so400m-patch16-256-i18n",
     languages=["eng-Latn"],
     revision="365d321c0cfdea96bc28e3a29787a11a062681a1",
@@ -192,7 +192,7 @@ siglip_so400m_patch16_256_i18n = ModelMeta(
 )
 
 siglip_base_patch16_256_multilingual = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-base-patch16-256-multilingual",
     languages=["eng-Latn"],
     revision="8952a4eafcde3cb7ab46b1dd629b33f8784ca9c6",
@@ -215,7 +215,7 @@ siglip_base_patch16_256_multilingual = ModelMeta(
 )
 
 siglip_base_patch16_256 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-base-patch16-256",
     languages=["eng-Latn"],
     revision="b078df89e446d623010d890864d4207fe6399f61",
@@ -238,7 +238,7 @@ siglip_base_patch16_256 = ModelMeta(
 )
 
 siglip_base_patch16_512 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-base-patch16-512",
     languages=["eng-Latn"],
     revision="753a949581523b60257d93e18391e8c27f72eb22",
@@ -261,7 +261,7 @@ siglip_base_patch16_512 = ModelMeta(
 )
 
 siglip_base_patch16_384 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-base-patch16-384",
     languages=["eng-Latn"],
     revision="41aec1c83b32e0a6fca20ad88ba058aa5b5ea394",
@@ -284,7 +284,7 @@ siglip_base_patch16_384 = ModelMeta(
 )
 
 siglip_base_patch16_224 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-base-patch16-224",
     languages=["eng-Latn"],
     revision="7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed",
@@ -307,7 +307,7 @@ siglip_base_patch16_224 = ModelMeta(
 )
 
 siglip_large_patch16_256 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-large-patch16-256",
     languages=["eng-Latn"],
     revision="d0da9f876e7d66b4e250cd2450c3ba2ce735e447",
@@ -330,7 +330,7 @@ siglip_large_patch16_256 = ModelMeta(
 )
 
 siglip_large_patch16_384 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-large-patch16-384",
     languages=["eng-Latn"],
     revision="ce005573a40965dfd21fd937fbdeeebf2439fc35",

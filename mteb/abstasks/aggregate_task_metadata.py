@@ -65,9 +65,9 @@ class AggregateTaskMetadata(TaskMetadata):
         """Return a dictionary mapping huggingface subsets to languages."""
         if isinstance(self.eval_langs, dict):
             return self.eval_langs
-        return {"default": self.eval_langs}  # type: ignore
+        return {"default": self.eval_langs}
 
-    @model_validator(mode="after")  # type: ignore
+    @model_validator(mode="after")
     def _compute_unfilled_cases(self) -> Self:
         if not self.eval_langs:
             self.eval_langs = self._compute_eval_langs()

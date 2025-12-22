@@ -139,7 +139,7 @@ class Model2VecModel(AbsEncoder):
             **kwargs: Additional arguments to pass to the wrapper.
         """
         requires_package(self, "model2vec", model_name, "pip install 'mteb[model2vec]'")
-        from model2vec import StaticModel  # type: ignore
+        from model2vec import StaticModel
 
         self.model_name = model_name
         self.model = StaticModel.from_pretrained(self.model_name)

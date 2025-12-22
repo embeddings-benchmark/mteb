@@ -794,7 +794,7 @@ jina_embeddings_v4 = ModelMeta(
 
 
 jina_embeddings_v3 = ModelMeta(
-    loader=JinaWrapper,  # type: ignore
+    loader=JinaWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts={

@@ -110,7 +110,7 @@ class BitextMiningEvaluator(Evaluator):
             # Iterate over chunks of the corpus
             for corpus_start_idx in range(0, len(corpus_embeddings), corpus_chunk_size):
                 # Compute cosine similarities
-                similarity_scores = model.similarity(  # type: ignore
+                similarity_scores = model.similarity(
                     query_embeddings[
                         query_start_idx : query_start_idx + query_chunk_size
                     ],

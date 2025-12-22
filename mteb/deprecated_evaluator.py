@@ -572,7 +572,7 @@ class MTEB:
     def create_model_meta(model: MTEBModels) -> ModelMeta:
         """Create a ModelMeta object for the given model."""
         if hasattr(model, "mteb_model_meta") and model.mteb_model_meta is not None:
-            meta = model.mteb_model_meta  # type: ignore
+            meta = model.mteb_model_meta
         else:
             meta = MTEB._get_model_meta(model)
 
@@ -598,7 +598,7 @@ class MTEB:
         if output_folder is None:
             return None
 
-        model_revision: str = model_meta.revision  # type: ignore
+        model_revision: str = model_meta.revision
         model_path_name = model_meta.model_name_as_path()
 
         output_path = Path(output_folder) / model_path_name / model_revision

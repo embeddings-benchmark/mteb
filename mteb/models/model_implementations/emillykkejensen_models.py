@@ -2,7 +2,7 @@ from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 embedding_gemma_300m_scandi = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore
+    loader=sentence_transformers_loader,
     name="emillykkejensen/EmbeddingGemma-Scandi-300m",
     languages=["dan-Latn", "swe-Latn", "nor-Latn", "nob-Latn", "nno-Latn"],
     open_weights=True,
@@ -34,7 +34,7 @@ embedding_gemma_300m_scandi = ModelMeta(
 
 
 qwen_scandi = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore
+    loader=sentence_transformers_loader,
     name="emillykkejensen/Qwen3-Embedding-Scandi-0.6B",
     languages=["dan-Latn", "swe-Latn", "nor-Latn", "nob-Latn", "nno-Latn"],
     open_weights=True,
@@ -57,7 +57,7 @@ qwen_scandi = ModelMeta(
 
 
 mmbert_scandi = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore
+    loader=sentence_transformers_loader,
     name="emillykkejensen/mmBERTscandi-base-embedding",
     languages=["dan-Latn", "swe-Latn", "nor-Latn", "nob-Latn", "nno-Latn"],
     open_weights=True,
