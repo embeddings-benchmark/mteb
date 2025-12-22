@@ -1,26 +1,10 @@
+import sys
 from importlib.metadata import version
 
 from mteb import types
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.deprecated_evaluator import MTEB
-from mteb.evaluate import evaluate
-from mteb.filter_tasks import filter_tasks
-from mteb.get_tasks import get_task, get_tasks
-from mteb.load_results import load_results
-from mteb.models import (
-    CacheBackendProtocol,
-    CrossEncoderProtocol,
-    EncoderProtocol,
-    IndexEncoderSearchProtocol,
-    SearchProtocol,
-    SentenceTransformerEncoderWrapper,
-)
-from mteb.models.get_model_meta import get_model, get_model_meta, get_model_metas
 from mteb.results import BenchmarkResults, TaskResult
-
-from .benchmarks.benchmark import Benchmark
-from .benchmarks.get_benchmark import get_benchmark, get_benchmarks
 
 __version__ = version("mteb")  # fetch version from install metadata
 
@@ -33,6 +17,7 @@ __all__ = [
     "CrossEncoderProtocol",
     "EncoderProtocol",
     "IndexEncoderSearchProtocol",
+    "MTEBTasks",
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
     "TaskMetadata",
@@ -49,3 +34,101 @@ __all__ = [
     "load_results",
     "types",
 ]
+
+
+def __getattr__(attr_name):
+    """Lazy import heavy dependencies only when needed."""
+    import importlib
+
+    _module_map = {
+        "MTEB": ("mteb.deprecated_evaluator", "MTEB"),
+        "evaluate": ("mteb.evaluate", "evaluate"),
+        "filter_tasks": ("mteb.filter_tasks", "filter_tasks"),
+        "get_task": ("mteb.get_tasks", "get_task"),
+        "get_tasks": ("mteb.get_tasks", "get_tasks"),
+        "MTEBTasks": ("mteb.get_tasks", "MTEBTasks"),
+        "load_results": ("mteb.load_results", "load_results"),
+        "CacheBackendProtocol": ("mteb.models", "CacheBackendProtocol"),
+        "CrossEncoderProtocol": ("mteb.models", "CrossEncoderProtocol"),
+        "EncoderProtocol": ("mteb.models", "EncoderProtocol"),
+        "IndexEncoderSearchProtocol": ("mteb.models", "IndexEncoderSearchProtocol"),
+        "SearchProtocol": ("mteb.models", "SearchProtocol"),
+        "SentenceTransformerEncoderWrapper": (
+            "mteb.models",
+            "SentenceTransformerEncoderWrapper",
+        ),
+        "get_model": ("mteb.models.get_model_meta", "get_model"),
+        "get_model_meta": ("mteb.models.get_model_meta", "get_model_meta"),
+        "get_model_metas": ("mteb.models.get_model_meta", "get_model_metas"),
+        "Benchmark": ("mteb.benchmarks.benchmark", "Benchmark"),
+        "get_benchmark": ("mteb.benchmarks.get_benchmark", "get_benchmark"),
+        "get_benchmarks": ("mteb.benchmarks.get_benchmark", "get_benchmarks"),
+    }
+
+    if attr_name not in _module_map:
+        raise AttributeError(f"module 'mteb' has no attribute '{attr_name}'")
+
+    module_path, attr = _module_map[attr_name]
+
+    # Import the module and get the attribute
+    module = importlib.import_module(module_path)
+    value = getattr(module, attr)
+
+    # Cache for future access
+    globals()[attr_name] = value
+    return value
+
+
+# Wrap the module to intercept attribute access
+class _ModuleWrapper:
+    """Wrapper to fix submodule shadowing issue."""
+
+    def __init__(self, module):
+        object.__setattr__(self, "_module", module)
+
+    def __getattribute__(self, name):
+        if name == "_module":
+            return object.__getattribute__(self, name)
+
+        module = object.__getattribute__(self, "_module")
+
+        # Get the attribute from the actual module
+        try:
+            value = getattr(module, name)
+        except AttributeError:
+            raise AttributeError(f"module 'mteb' has no attribute '{name}'")
+
+        # If this is a submodule that shadows a function/class, fix it
+        if hasattr(value, "__name__") and isinstance(
+            getattr(value, "__name__", None), str
+        ):
+            if value.__name__.startswith("mteb.") and value.__name__.count(".") == 1:
+                submodule_name = value.__name__.split(".")[-1]
+                if submodule_name == name and hasattr(value, name):
+                    # Return the function/class from inside the module
+                    actual_value = getattr(value, name)
+                    # Cache it
+                    setattr(module, name, actual_value)
+                    return actual_value
+
+        return value
+
+    def __setattr__(self, name, value):
+        if name == "_module":
+            object.__setattr__(self, name, value)
+        else:
+            module = object.__getattribute__(self, "_module")
+            setattr(module, name, value)
+
+    def __delattr__(self, name):
+        module = object.__getattribute__(self, "_module")
+        delattr(module, name)
+
+    def __dir__(self):
+        module = object.__getattribute__(self, "_module")
+        return dir(module)
+
+
+# Wrap the current module
+_current_module = sys.modules[__name__]
+sys.modules[__name__] = _ModuleWrapper(_current_module)

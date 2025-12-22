@@ -688,7 +688,10 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
     Returns:
         A set of similar tasks.
     """
-    from mteb.get_tasks import _SIMILAR_TASKS
+    import importlib
+
+    get_tasks_mod = importlib.import_module("mteb.get_tasks")
+    _SIMILAR_TASKS = get_tasks_mod._SIMILAR_TASKS  # noqa: N806
 
     if dataset in visited:
         return set()

@@ -1,8 +1,8 @@
 from collections.abc import Sequence
 
+from mteb import MTEBTasks
 from mteb.abstasks import AbsTask
 from mteb.benchmarks import Benchmark
-from mteb.get_tasks import MTEBTasks
 
 
 def _display_benchmarks(benchmarks: Sequence[Benchmark]) -> None:

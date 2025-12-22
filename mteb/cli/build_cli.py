@@ -3,12 +3,10 @@ import logging
 import os
 from pathlib import Path
 
-import torch
 from rich.logging import RichHandler
 
-import mteb
+from mteb import get_benchmarks, get_tasks
 from mteb.cache import ResultCache
-from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
 
 from ._display_tasks import _display_benchmarks, _display_tasks
@@ -19,6 +17,10 @@ logger = logging.getLogger(__name__)
 def run(args: argparse.Namespace) -> None:
     """Run a model on a set of tasks."""
     # set logging based on verbosity level
+    import torch
+
+    from mteb import get_model
+
     if args.verbosity == 0:
         logging.getLogger("mteb").setLevel(logging.CRITICAL)
     elif args.verbosity == 1:
@@ -49,13 +51,13 @@ def run(args: argparse.Namespace) -> None:
     else:
         device = args.device
 
-    model = mteb.get_model(args.model, args.model_revision, device=device)
+    model = get_model(args.model, args.model_revision, device=device)
 
     if args.benchmarks:
-        benchmarks = mteb.get_benchmarks(names=args.benchmarks)
+        benchmarks = get_benchmarks(names=args.benchmarks)
         tasks = [t for b in benchmarks for t in b.tasks]
     else:
-        tasks = mteb.get_tasks(
+        tasks = get_tasks(
             categories=args.categories,
             task_types=args.task_types,
             languages=args.languages,
@@ -81,7 +83,9 @@ def run(args: argparse.Namespace) -> None:
         )
         prediction_folder = args.output_folder
 
-    mteb.evaluate(
+    from mteb import evaluate
+
+    evaluate(
         model,
         tasks,
         cache=ResultCache(args.output_folder),
@@ -93,12 +97,12 @@ def run(args: argparse.Namespace) -> None:
 
 
 def _available_benchmarks(args: argparse.Namespace) -> None:
-    benchmarks = mteb.get_benchmarks(names=args.benchmarks)
+    benchmarks = get_benchmarks(names=args.benchmarks)
     _display_benchmarks(benchmarks)
 
 
 def _available_tasks(args: argparse.Namespace) -> None:
-    tasks = mteb.get_tasks(
+    tasks = get_tasks(
         categories=args.categories,
         task_types=args.task_types,
         languages=args.languages,
@@ -268,6 +272,8 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
 
 
 def _create_meta(args: argparse.Namespace) -> None:
+    from mteb.cli.generate_model_card import generate_model_card
+
     model_name = args.model_name
     tasks_names = args.tasks
     benchmarks = args.benchmarks
@@ -287,9 +293,9 @@ def _create_meta(args: argparse.Namespace) -> None:
 
     tasks = []
     if tasks_names is not None:
-        tasks = mteb.get_tasks(tasks_names)
+        tasks = get_tasks(tasks_names)
     if benchmarks is not None:
-        benchmarks = mteb.get_benchmarks(benchmarks)
+        benchmarks = get_benchmarks(benchmarks)
         for benchmark in benchmarks:
             tasks.extend(benchmark.tasks)
 
