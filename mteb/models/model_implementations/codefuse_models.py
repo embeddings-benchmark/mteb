@@ -1,15 +1,7 @@
-from collections.abc import Callable
-from typing import Any
-
-import torch
-from torch.utils.data import DataLoader
-
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import ModelMeta
-from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
+from mteb.types import PromptType
 
 F2LLM_CITATION = """@article{2025F2LLM,
     title={F2LLM Technical Report: Matching SOTA Embedding Performance with 6 Million Open-Source Data},
@@ -197,9 +189,10 @@ c2llm_prompts_dict = {
 
 c2llm_loader_kwargs = dict(
     trust_remote_code=True,
-    prompts=c2llm_prompts_dict,
+    prompts_dict=c2llm_prompts_dict,
+    apply_instruction_to_passages=True,
     max_seq_length=2048,
-    tokenizer_kwargs={"max_seq_length": 2048, "padding_side": "left"},
+    padding_side="left",
 )
 
 
@@ -214,49 +207,6 @@ def instruction_template(
         else:
             instruction = instruction[prompt_type]
     return f"Instruct: {instruction}\nQuery: "
-
-
-class C2LLMWrapper(AbsEncoder):
-    def __init__(
-        self,
-        model_name: str,
-        revision: str,
-        instruction_template: str | Callable[[str], str] | None = None,
-        max_seq_length: int = 2048,
-        **kwargs: Any,
-    ):
-        from sentence_transformers import SentenceTransformer
-
-        self.model_name = model_name
-        self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
-        self.model.max_seq_length = max_seq_length
-
-    def get_task_instruction(self, task_metadata, prompt_type):
-        return c2llm_prompts_dict[task_metadata.name][prompt_type.value]
-
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        instruction = self.get_task_instruction(task_metadata, prompt_type)
-        inputs = [text for batch in inputs for text in batch["text"]]
-
-        embeddings = self.model.encode(
-            inputs,
-            prompt=instruction,
-            **kwargs,
-        )
-
-        if isinstance(embeddings, torch.Tensor):
-            # sometimes in kwargs can be return_tensors=True
-            embeddings = embeddings.cpu().detach().float().numpy()
-        return embeddings
 
 
 F2LLM_0B6 = ModelMeta(
@@ -304,7 +254,7 @@ F2LLM_1B7 = ModelMeta(
     release_date="2025-09-18",
     n_parameters=1_720_574_976,
     memory_usage_mb=3282,
-    embed_dim=2048,
+    embed_dim=2560,
     license="apache-2.0",
     max_tokens=8192,
     reference="https://huggingface.co/codefuse-ai/F2LLM-1.7B",
@@ -347,7 +297,7 @@ F2LLM_4B = ModelMeta(
 )
 
 C2LLM_0B5 = ModelMeta(
-    loader=C2LLMWrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=c2llm_loader_kwargs,
     name="codefuse-ai/C2LLM-0.5B",
     revision="f08c18be03de42c6e388948a1804d4b271a953a2",
@@ -375,7 +325,7 @@ C2LLM_0B5 = ModelMeta(
 )
 
 C2LLM_7B = ModelMeta(
-    loader=C2LLMWrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=c2llm_loader_kwargs,
     name="codefuse-ai/C2LLM-7B",
     revision="c1dc16d6d64eb962c783bfb36a6d9c2f24a86dca",
