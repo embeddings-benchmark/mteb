@@ -26,22 +26,22 @@ class SQuADKorV1Retrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{rajpurkar-etal-2016-squad,
-    title = "{SQ}u{AD}: 100,000+ Questions for Machine Comprehension of Text",
-    author = "Rajpurkar, Pranav  and
-      Zhang, Jian  and
-      Lopyrev, Konstantin  and
-      Liang, Percy",
-    editor = "Su, Jian  and
-      Duh, Kevin  and
-      Carreras, Xavier",
-    booktitle = "Proceedings of the 2016 Conference on Empirical Methods in Natural Language Processing",
-    month = nov,
-    year = "2016",
-    address = "Austin, Texas",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/D16-1264",
-    doi = "10.18653/v1/D16-1264",
-    pages = "2383--2392",
+  address = {Austin, Texas},
+  author = {Rajpurkar, Pranav  and
+Zhang, Jian  and
+Lopyrev, Konstantin  and
+Liang, Percy},
+  booktitle = {Proceedings of the 2016 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/v1/D16-1264},
+  editor = {Su, Jian  and
+Duh, Kevin  and
+Carreras, Xavier},
+  month = nov,
+  pages = {2383--2392},
+  publisher = {Association for Computational Linguistics},
+  title = {{SQ}u{AD}: 100,000+ Questions for Machine Comprehension of Text},
+  url = {https://aclanthology.org/D16-1264},
+  year = {2016},
 }
 """,
     )
