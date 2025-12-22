@@ -100,7 +100,22 @@ results = cache.load_results(
 
 benchmark_scores = results.get_benchmark_result()
 print(benchmark_scores)
-# {'intfloat/e5-small': 0.5}
+# # {'Rank (Borda)': {0: 1},
+#  'Model': {0: '[e5-small](https://huggingface.co/intfloat/e5-small)'},
+#  'Zero-shot': {0: 100},
+#  'Memory Usage (MB)': {0: 127},
+#  'Number of Parameters (B)': {0: 0.033},
+#  'Embedding Dimensions': {0: 384},
+#  'Max Tokens': {0: 512.0},
+#  'Mean (Task)': {0: 0.5742671001588695},
+#  'Mean (TaskType)': {0: 0.5526734767747465},
+#  'Classification': {0: 0.5995449273003266},
+#  'Clustering': {0: 0.4220845698992639},
+#  'Pair Classification': {0: 0.8508950069895098},
+#  'Reranking': {0: 0.44461291302267736},
+#  'Retrieval': {0: 0.450684},
+#  'STS': {0: 0.7902839202114486},
+#  'Summarization': {0: 0.310609}}
 ```
 
 ### Filtering Results
