@@ -1,6 +1,7 @@
 import difflib
 import logging
 from collections.abc import Iterable
+from copy import deepcopy
 from typing import Any
 
 from mteb.abstasks import AbsTask
@@ -91,6 +92,9 @@ def get_model(
         A model object
     """
     meta = get_model_meta(model_name, revision)
+    if kwargs:
+        meta = deepcopy(meta)
+        meta.loader_kwargs = {**meta.loader_kwargs, **kwargs}
     model = meta.load_model(**kwargs)
 
     model.mteb_model_meta = meta  # type: ignore
