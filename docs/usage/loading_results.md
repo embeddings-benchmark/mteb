@@ -100,7 +100,7 @@ results = cache.load_results(
 
 benchmark_scores = results.get_benchmark_result()
 print(benchmark_scores)
-# # {'Rank (Borda)': {0: 1},
+# {'Rank (Borda)': {0: 1},
 #  'Model': {0: '[e5-small](https://huggingface.co/intfloat/e5-small)'},
 #  'Zero-shot': {0: 100},
 #  'Memory Usage (MB)': {0: 127},
