@@ -19,7 +19,7 @@ class TurkishConstitutionalCourtViolation(AbsTaskClassification):
         main_score="f1",
         dataset={
             "path": "denizgulal/turkish-constitutional-court-violation",
-            "revision": "abb26be1e1259d883acebb605efe6c79b1045152",
+            "revision": "886b7b5fee2f4757c85574b3f9ef60289bc4f632",
         },
         date=("2000-01-01", "2023-02-20"),  # dataset card last updated Feb 20, 2023
         domains=["Legal", "Non-fiction"],
@@ -29,13 +29,14 @@ class TurkishConstitutionalCourtViolation(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-        @article{mumcuoglu21natural,
-        title = {{Natural language processing in law: Prediction of outcomes in the higher courts of Turkey}},
-        journal = {Information Processing \\& Management},
-        volume = {58},
-        number = {5},
-        year = {2021},
-        author = {Mumcuoğlu, Emre and Öztürk, Ceyhun E. and Ozaktas, Haldun M. and Koç, Aykut}
+        @article{mumcuoglu2021natural,
+        title   = {Natural language processing in law: Prediction of outcomes in the higher courts of Turkey},
+        author  = {Mumcuo\u{g}lu, Emre and \"Ozt\"urk, Ceyhun E. and Ozaktas, Haldun M. and Ko\c{c}, Aykut},
+        journal = {Information Processing and Management},
+        volume  = {58},
+        number  = {5},
+        year    = {2021}
         }
+
         """,
     )
