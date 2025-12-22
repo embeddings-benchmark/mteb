@@ -218,14 +218,19 @@ class SearchEncoderWrapper:
         encode_kwargs: dict[str, Any],
     ) -> dict[str, list[tuple[float, str]]]:
         logger.info("Encoding Corpus in batches (this might take a while)...")
-        itr = range(0, len(self.task_corpus), self.corpus_chunk_size)  # type: ignore[arg-type]
+        if self.task_corpus is None:
+            raise ValueError("Corpus must be indexed before searching.")
 
-        result_heaps = {qid: [] for qid in query_idx_to_id.values()}
+        itr = range(0, len(self.task_corpus), self.corpus_chunk_size)
+
+        result_heaps: dict[str, list[tuple[float, str]]] = {
+            qid: [] for qid in query_idx_to_id.values()
+        }
         for batch_num, corpus_start_idx in enumerate(itr):
             logger.info(f"Encoding Batch {batch_num + 1}/{len(itr)}...")
             corpus_end_idx = min(
                 corpus_start_idx + self.corpus_chunk_size,
-                len(self.task_corpus),  # type: ignore[arg-type]
+                len(self.task_corpus),
             )
             sub_corpus = self.task_corpus.select(
                 range(corpus_start_idx, corpus_end_idx)
@@ -320,7 +325,11 @@ class SearchEncoderWrapper:
         Returns:
             A dictionary mapping query IDs to a list of tuples, each containing a relevance score and a document ID.
         """
-        result_heaps = {qid: [] for qid in query_idx_to_id.values()}
+        if self.task_corpus is None:
+            raise ValueError("Corpus must be indexed before searching.")
+        result_heaps: dict[str, list[tuple[float, str]]] = {
+            qid: [] for qid in query_idx_to_id.values()
+        }
         doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
 
         all_doc_embeddings = self.model.encode(
@@ -387,12 +396,12 @@ class SearchEncoderWrapper:
 
     def _rerank_sort_results(
         self,
-        result_heaps: list[tuple[float, str]],
+        result_heaps: dict[str, list[tuple[float, str]]],
         query_id: str,
         ranked_ids: list[str],
         scores_top_k_idx: torch.Tensor,
         scores_top_k_values: torch.Tensor,
-    ) -> list[tuple[float, str]]:
+    ) -> dict[str, list[tuple[float, str]]]:
         """Sort the heap into descending order list.
 
         Returns:
@@ -503,6 +512,8 @@ class SearchCrossEncoderWrapper:
             raise ValueError(
                 "CrossEncoder search requires top_ranked documents for reranking."
             )
+        if self.task_corpus is None:
+            raise ValueError("Corpus must be indexed before searching.")
 
         query_id_to_idx = {row["id"]: i for i, row in enumerate(queries)}
         doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
@@ -541,7 +552,7 @@ class SearchCrossEncoderWrapper:
             hf_subset=hf_subset,
         )
 
-        results = {qid: {} for qid in queries["id"]}
+        results: RetrievalOutputType = {qid: {} for qid in queries["id"]}
         for (query_id, corpus_id), score in zip(doc_pairs_ids, predictions):
             results[query_id][corpus_id] = float(score)
 
