@@ -187,6 +187,17 @@ c2llm_prompts_dict = {
     },
 }
 
+c2llm_languages = [
+    "eng-Latn",
+    "zho-Hans",
+    "python-Code",
+    "javascript-Code",
+    "go-Code",
+    "ruby-Code",
+    "java-Code",
+    "php-Code",
+]
+
 c2llm_loader_kwargs = dict(
     trust_remote_code=True,
     prompts_dict=c2llm_prompts_dict,
@@ -302,7 +313,7 @@ C2LLM_0B5 = ModelMeta(
     name="codefuse-ai/C2LLM-0.5B",
     revision="f08c18be03de42c6e388948a1804d4b271a953a2",
     release_date="2025-12-22",
-    languages=None,
+    languages=c2llm_languages,
     n_parameters=497252096,
     memory_usage_mb=948.0,
     max_tokens=32768,
@@ -330,7 +341,7 @@ C2LLM_7B = ModelMeta(
     name="codefuse-ai/C2LLM-7B",
     revision="c1dc16d6d64eb962c783bfb36a6d9c2f24a86dca",
     release_date="2025-12-22",
-    languages=None,
+    languages=c2llm_languages,
     n_parameters=7667028992,
     memory_usage_mb=14624.0,
     max_tokens=32768,
