@@ -67,7 +67,9 @@ class LlamaNemoretrieverColembed(AbsEncoder):
         for batch in iterator:
             for image in batch["image"]:
                 pil_img = (
-                    image if isinstance(image, Image.Image) else F.to_pil_image(image.to("cpu"))
+                    image
+                    if isinstance(image, Image.Image)
+                    else F.to_pil_image(image.to("cpu"))
                 )
                 all_images.append(pil_img)
 
