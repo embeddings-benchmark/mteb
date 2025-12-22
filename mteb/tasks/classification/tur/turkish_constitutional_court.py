@@ -29,12 +29,13 @@ class TurkishConstitutionalCourtViolation(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-        @article{mumcuoglu2021natural,
-        author  = {Mumcuoglu, Emre and Ozturk, Ceyhun E. and Ozaktas, Haldun M. and Koc, Aykut},
-        title   = {Natural language processing in law: Prediction of outcomes in the higher courts of Turkey},
-        journal = {Information Processing and Management},
-        volume  = {58},
-        number  = {5},
-        year    = {2021},
-        }""",
+@article{mumcuoglu2021natural,
+  author = {Mumcuoglu, Emre and Ozturk, Ceyhun E. and Ozaktas, Haldun M. and Koc, Aykut},
+  journal = {Information Processing and Management},
+  number = {5},
+  title = {Natural language processing in law: Prediction of outcomes in the higher courts of Turkey},
+  volume = {58},
+  year = {2021},
+}
+""",
     )
