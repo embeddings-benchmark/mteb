@@ -1,6 +1,15 @@
+from collections.abc import Callable
+from typing import Any
+
+import torch
+from torch.utils.data import DataLoader
+
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import ModelMeta
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
-from mteb.types import PromptType
+from mteb.models.model_meta import ScoringFunction
+from mteb.types import Array, BatchedInput, PromptType
 
 F2LLM_CITATION = """@article{2025F2LLM,
     title={F2LLM Technical Report: Matching SOTA Embedding Performance with 6 Million Open-Source Data},
@@ -74,6 +83,22 @@ training_datasets = {
     "TwentyNewsgroupsClustering",
 }
 
+c2llm_training_datasets = {
+    "CodeSearchNet",
+    "CodeSearchNetRetrieval",
+    "CodeSearchNetCCRetrieval",
+    "CodeEditSearchRetrieval",
+    "CodeFeedbackMT",
+    "CodeFeedbackST",
+    "CodeTransOceanContest",
+    "CodeTransOceanDL",
+    "COIRCodeSearchNetRetrieval",
+    "CosQA",
+    "StackOverflowQA",
+    "SyntheticText2SQL",
+    "AdvTrain",
+}
+
 prompts_dict = {
     "AmazonCounterfactualClassification": "Classify a given Amazon customer review text as either counterfactual or not counterfactual.",
     "Banking77Classification": "Given an online banking query, find the corresponding intents.",
@@ -119,6 +144,65 @@ prompts_dict = {
 }
 
 
+c2llm_prompts_dict = {
+    "CodeEditSearchRetrieval": {
+        "query": "Retrieve the diff code that relevant the following query:\n",
+        "document": "Retrieved Answer:",
+    },
+    "CodeSearchNetRetrieval": {
+        "query": "Retrieve the code that solves the following query:\n",
+        "document": "Retrieved Answer:",
+    },
+    "AppsRetrieval": {
+        "query": "Given a problem description from a programming contest, retrieve code examples that can assist in solving it.\n",
+        "document": "Retrieved Answer:",
+    },
+    "CodeFeedbackMT": {
+        "query": "Given a multi-turn conversation history that includes both text and code, retrieve relevant multi-modal answers composed of text and code that address the ongoing discussion.\n",
+        "document": "Retrieved Answer:",
+    },
+    "CodeFeedbackST": {
+        "query": "Given a single-turn question composed of text and code, retrieve suitable answers that also mix text and code to provide helpful feedback.\n",
+        "document": "Retrieved Answer:",
+    },
+    "CodeSearchNetCCRetrieval": {
+        "query": "Given an initial code segment, retrieve the subsequent segment that continues the code.\n",
+        "document": "Retrieved Answer:",
+    },
+    "CodeTransOceanContest": {
+        "query": "Given a Python code snippet, retrieve its semantically equivalent version written in C++.\n",
+        "document": "Retrieved Answer:",
+    },
+    "CodeTransOceanDL": {
+        "query": "Given a Python code snippet, retrieve its semantically equivalent version written in C++.\n",
+        "document": "Retrieved Answer:",
+    },
+    "COIRCodeSearchNetRetrieval": {
+        "query": "Given a code snippet, retrieve its corresponding document string that summarizes its functionality.\n",
+        "document": "Retrieved Answer:",
+    },
+    "CosQA": {
+        "query": "Given a query from a web search, retrieve code that is helpful in addressing the query.\n",
+        "document": "Retrieved Answer:",
+    },
+    "StackOverflowQA": {
+        "query": "Given a question combining text and code, retrieve relevant answers that also contain both text and code snippets and can address the question.\n",
+        "document": "Retrieved Answer:",
+    },
+    "SyntheticText2SQL": {
+        "query": "Given a natural language question, retrieve SQL queries that serve as appropriate responses.\n",
+        "document": "Retrieved Answer:",
+    },
+}
+
+c2llm_loader_kwargs = dict(
+    trust_remote_code=True,
+    prompts=c2llm_prompts_dict,
+    max_seq_length=2048,
+    tokenizer_kwargs={"max_seq_length": 2048, "padding_side": "left"},
+)
+
+
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
 ) -> str:
@@ -130,6 +214,49 @@ def instruction_template(
         else:
             instruction = instruction[prompt_type]
     return f"Instruct: {instruction}\nQuery: "
+
+
+class C2LLMWrapper(AbsEncoder):
+    def __init__(
+        self,
+        model_name: str,
+        revision: str,
+        instruction_template: str | Callable[[str], str] | None = None,
+        max_seq_length: int = 2048,
+        **kwargs: Any,
+    ):
+        from sentence_transformers import SentenceTransformer
+
+        self.model_name = model_name
+        self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
+        self.model.max_seq_length = max_seq_length
+
+    def get_task_instruction(self, task_metadata, prompt_type):
+        return c2llm_prompts_dict[task_metadata.name][prompt_type.value]
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        instruction = self.get_task_instruction(task_metadata, prompt_type)
+        inputs = [text for batch in inputs for text in batch["text"]]
+
+        embeddings = self.model.encode(
+            inputs,
+            prompt=instruction,
+            **kwargs,
+        )
+
+        if isinstance(embeddings, torch.Tensor):
+            # sometimes in kwargs can be return_tensors=True
+            embeddings = embeddings.cpu().detach().float().numpy()
+        return embeddings
 
 
 F2LLM_0B6 = ModelMeta(
@@ -177,7 +304,7 @@ F2LLM_1B7 = ModelMeta(
     release_date="2025-09-18",
     n_parameters=1_720_574_976,
     memory_usage_mb=3282,
-    embed_dim=2560,
+    embed_dim=2048,
     license="apache-2.0",
     max_tokens=8192,
     reference="https://huggingface.co/codefuse-ai/F2LLM-1.7B",
@@ -217,4 +344,60 @@ F2LLM_4B = ModelMeta(
     public_training_data="https://huggingface.co/datasets/codefuse-ai/F2LLM",
     training_datasets=training_datasets,
     citation=F2LLM_CITATION,
+)
+
+C2LLM_0B5 = ModelMeta(
+    loader=C2LLMWrapper,
+    loader_kwargs=c2llm_loader_kwargs,
+    name="codefuse-ai/C2LLM-0.5B",
+    revision="f08c18be03de42c6e388948a1804d4b271a953a2",
+    release_date="2025-12-22",
+    languages=None,
+    n_parameters=497252096,
+    memory_usage_mb=948.0,
+    max_tokens=32768,
+    embed_dim=896,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/codefuse-ai/C2LLM-0.5B",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    training_datasets=c2llm_training_datasets,
+    adapted_from=None,
+    superseded_by=None,
+    modalities=["text"],
+    is_cross_encoder=None,
+    citation=None,
+    contacts=None,
+)
+
+C2LLM_7B = ModelMeta(
+    loader=C2LLMWrapper,
+    loader_kwargs=c2llm_loader_kwargs,
+    name="codefuse-ai/C2LLM-7B",
+    revision="c1dc16d6d64eb962c783bfb36a6d9c2f24a86dca",
+    release_date="2025-12-22",
+    languages=None,
+    n_parameters=7667028992,
+    memory_usage_mb=14624.0,
+    max_tokens=32768,
+    embed_dim=3584,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/codefuse-ai/C2LLM-7B",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    training_datasets=c2llm_training_datasets,
+    adapted_from=None,
+    superseded_by=None,
+    modalities=["text"],
+    is_cross_encoder=None,
+    citation=None,
+    contacts=None,
 )
