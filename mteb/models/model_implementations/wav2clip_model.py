@@ -34,12 +34,11 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         self.sampling_rate = 16_000
         self.max_audio_length_s = max_audio_length_s
 
-        # text side (CLIP)
-        self.clip = CLIPModel.from_pretrained(model_name, revision=revision).to(device)
+        # text side (CLIP) - we use the standard OpenAI CLIP model as mentioned in paper
+        clip_model_name = "openai/clip-vit-base-patch32"
+        self.clip = CLIPModel.from_pretrained(clip_model_name).to(device)
         self.clip.eval()
-        self.clip_processor = CLIPProcessor.from_pretrained(
-            model_name, revision=revision
-        )
+        self.clip_processor = CLIPProcessor.from_pretrained(clip_model_name)
 
     def get_audio_embeddings(
         self,
