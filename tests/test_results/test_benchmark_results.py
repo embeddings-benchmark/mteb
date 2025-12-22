@@ -7,9 +7,9 @@ import pandas as pd
 import pytest
 
 import mteb
+from mteb import Benchmark
 from mteb.cache import ResultCache
 from mteb.results import BenchmarkResults, ModelResult
-from tests.task_grid import MOCK_BENCHMARK
 
 
 @pytest.fixture
@@ -165,8 +165,17 @@ def test_utility_properties(
 
 def test_benchmark_results(cache_path: Path) -> None:
     cache = ResultCache(cache_path)
+    bench = Benchmark(
+        name="MockBenchmark",
+        tasks=mteb.get_tasks(
+            [
+                "NanoSCIDOCSRetrieval",
+                "Banking77Classification",
+            ],
+        ),
+    )
     results = cache.load_results(
-        tasks=MOCK_BENCHMARK,
+        tasks=bench,
         models=[
             "sentence-transformers/all-MiniLM-L6-v2",
             "baseline/random-encoder-baseline",

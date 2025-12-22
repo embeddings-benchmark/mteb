@@ -1,7 +1,6 @@
 """Task grid for testing purposes. This is a list of tasks that can be used to test the benchmarking pipeline."""
 
 import mteb
-from mteb import Benchmark
 from mteb.abstasks import AbsTask
 
 from .mock_tasks import (
@@ -153,13 +152,3 @@ ALL_TASK_TEST_GRID_AS_STRING = [
 ]
 
 ALL_MOCK_TASK_REGISTRY = {task.metadata.name: type(task) for task in ALL_TASK_TEST_GRID}
-
-MOCK_BENCHMARK = Benchmark(
-    name="MockBenchmark",
-    tasks=mteb.get_tasks(
-        [
-            "NanoSCIDOCSRetrieval",
-            "Banking77Classification",
-        ],
-    ),
-)
