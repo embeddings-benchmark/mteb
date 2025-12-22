@@ -28,7 +28,7 @@ class TurkishConstitutionalCourtViolation(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
         @article{mumcuoglu21natural,
         title = {{Natural language processing in law: Prediction of outcomes in the higher courts of Turkey}},
         journal = {Information Processing \\& Management},
