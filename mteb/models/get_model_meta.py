@@ -94,7 +94,6 @@ def get_model(
     meta = get_model_meta(model_name, revision)
     if kwargs:
         meta = deepcopy(meta)
-        meta.loader_kwargs = {**meta.loader_kwargs, **kwargs}
     model = meta.load_model(**kwargs)
 
     model.mteb_model_meta = meta  # type: ignore

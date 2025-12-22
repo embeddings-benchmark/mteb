@@ -221,6 +221,9 @@ class ModelMeta(BaseModel):
         _kwargs = self.loader_kwargs.copy()
         _kwargs.update(kwargs)
 
+        if kwargs:
+            self.loader_kwargs = _kwargs
+
         model: EncoderProtocol = self.loader(
             self.name, revision=self.revision, **_kwargs
         )
