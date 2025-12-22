@@ -2,9 +2,10 @@ import json
 import logging
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
 from huggingface_hub import (
+    CardData,
     DatasetCard,
     DatasetCardData,
     constants,
@@ -469,7 +470,7 @@ class TaskMetadata(BaseModel):
 
     def _create_dataset_card_data(
         self,
-        existing_dataset_card_data: DatasetCardData | None = None,
+        existing_dataset_card_data: CardData | None = None,
     ) -> tuple[DatasetCardData, dict[str, Any]]:
         """Create a DatasetCardData object from the task metadata.
 
@@ -504,12 +505,13 @@ class TaskMetadata(BaseModel):
 
         tags = ["mteb"] + self.modalities
 
-        descriptive_stats = self.descriptive_stats
-        if descriptive_stats is not None:
-            for split, split_stat in descriptive_stats.items():
+        descriptive_stats = ""
+        if self.descriptive_stats is not None:
+            descriptive_stats_ = self.descriptive_stats
+            for split, split_stat in descriptive_stats_.items():
                 if len(split_stat.get("hf_subset_descriptive_stats", {})) > 10:
                     split_stat.pop("hf_subset_descriptive_stats", {})
-            descriptive_stats = json.dumps(descriptive_stats, indent=4)
+            descriptive_stats = json.dumps(descriptive_stats_, indent=4)
 
         dataset_card_data_params = existing_dataset_card_data.to_dict()
         # override the existing values
@@ -697,11 +699,11 @@ class TaskMetadata(BaseModel):
 
     def _hf_languages(self) -> list[str]:
         languages: list[str] = []
-        if self.is_multilingual:
-            for val in list(self.eval_langs.values()):
+        if self.is_multilingual and isinstance(self.eval_langs, dict):
+            for val in self.eval_langs.values():
                 languages.extend(val)
         else:
-            languages = self.eval_langs
+            languages = cast(list[str], self.eval_langs)
         # value "python" is not valid. It must be an ISO 639-1, 639-2 or 639-3 code (two/three letters),
         # or a special value like "code", "multilingual".
         readme_langs = []

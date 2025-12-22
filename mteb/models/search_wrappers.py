@@ -200,7 +200,7 @@ class SearchEncoderWrapper:
         # Reset the task corpus dataloader to None to free up memory
         self.task_corpus = None
 
-        results = {qid: {} for qid in query_idx_to_id.values()}
+        results: RetrievalOutputType = {qid: {} for qid in query_idx_to_id.values()}
         for qid in result_heaps:
             for score, corpus_id in result_heaps[qid]:
                 results[qid][corpus_id] = score
@@ -218,13 +218,14 @@ class SearchEncoderWrapper:
         encode_kwargs: dict[str, Any],
     ) -> dict[str, list[tuple[float, str]]]:
         logger.info("Encoding Corpus in batches (this might take a while)...")
-        itr = range(0, len(self.task_corpus), self.corpus_chunk_size)
+        itr = range(0, len(self.task_corpus), self.corpus_chunk_size)  # type: ignore[arg-type]
 
         result_heaps = {qid: [] for qid in query_idx_to_id.values()}
         for batch_num, corpus_start_idx in enumerate(itr):
             logger.info(f"Encoding Batch {batch_num + 1}/{len(itr)}...")
             corpus_end_idx = min(
-                corpus_start_idx + self.corpus_chunk_size, len(self.task_corpus)
+                corpus_start_idx + self.corpus_chunk_size,
+                len(self.task_corpus),  # type: ignore[arg-type]
             )
             sub_corpus = self.task_corpus.select(
                 range(corpus_start_idx, corpus_end_idx)
@@ -249,7 +250,7 @@ class SearchEncoderWrapper:
             scores = self.model.similarity(query_embeddings, sub_corpus_embeddings)
 
             # get top-k values
-            cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
+            cos_scores_top_k_values_tensor, cos_scores_top_k_idx_tensor = torch.topk(
                 torch.as_tensor(scores),
                 min(
                     top_k + 1,
@@ -258,8 +259,8 @@ class SearchEncoderWrapper:
                 dim=1,
                 largest=True,
             )
-            cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
-            cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
+            cos_scores_top_k_idx = cos_scores_top_k_idx_tensor.cpu().tolist()
+            cos_scores_top_k_values = cos_scores_top_k_values_tensor.cpu().tolist()
 
             sub_corpus_ids = list(sub_corpus_ids)
             result_heaps = self._sort_full_corpus_results(

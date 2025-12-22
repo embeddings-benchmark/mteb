@@ -39,6 +39,7 @@ Bibtex:
 """
 
 import itertools
+from typing import Any
 
 import numpy as np
 import scipy.sparse as sp
@@ -182,9 +183,9 @@ class IterativeStratification(_BaseKFold):
         list[list[int]],
         dict[int, bool],
         list[list[int]],
-        list[list[list[int]]],
-        dict[tuple[int, ...], list[int]],
-        list[list[int]],
+        list[list[Any]],
+        dict[str, list[Any]],
+        list[list[Any]],
     ]:
         """Prepares variables for performing stratification
 
@@ -211,8 +212,8 @@ class IterativeStratification(_BaseKFold):
         rows = sp.lil_matrix(y).rows
         rows_used = dict.fromkeys(range(self.n_samples), False)
         all_combinations = []
-        per_row_combinations: list[list[int]] = [[] for i in range(self.n_samples)]
-        samples_with_combination: dict[str, int] = {}
+        per_row_combinations: list[list[Any]] = [[] for i in range(self.n_samples)]
+        samples_with_combination: dict[str, list[Any]] = {}
         folds = [[] for _ in range(self.n_splits)]  # type: ignore
 
         # for every row
@@ -229,21 +230,19 @@ class IterativeStratification(_BaseKFold):
                 all_combinations.append(combination)
                 per_row_combinations[sample_index].append(combination)
 
-        all_combinations: list[list[int]] = [list(x) for x in set(all_combinations)]
-
         self.desired_samples_per_combination_per_fold = {
             combination: np.array(
                 [
                     len(evidence_for_combination) * self.percentage_per_fold[j]
-                    for j in range(self.n_splits)  # type: ignore
+                    for j in range(self.n_splits)
                 ]
             )
             for combination, evidence_for_combination in samples_with_combination.items()
         }
         return (
-            rows,
+            rows.tolist(),
             rows_used,
-            all_combinations,
+            [list(x) for x in set(all_combinations)],
             per_row_combinations,
             samples_with_combination,
             folds,
@@ -328,7 +327,7 @@ class IterativeStratification(_BaseKFold):
             per_row_combinations,
             samples_with_combination,
             folds,
-        ) = self._prepare_stratification(y)  # type: ignore
+        ) = self._prepare_stratification(y)
 
         self._distribute_positive_evidence(
             rows_used, folds, samples_with_combination, per_row_combinations
