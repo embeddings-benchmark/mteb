@@ -37,14 +37,14 @@ pr:
 
 build-docs: build-docs-overview
 	@echo "--- 📚 Building documentation ---"
-	python -m mkdocs build
+	MTEB_BUILD_DOCS=1 python -m mkdocs build
 
 
 build-docs-overview:
 	@echo "--- 📚 Building documentation overview ---"
-	python docs/overview/create_available_tasks.py
-	python docs/overview/create_available_models.py
-	python docs/overview/create_available_benchmarks.py
+	MTEB_BUILD_DOCS=1 python docs/overview/create_available_tasks.py
+	MTEB_BUILD_DOCS=1 python docs/overview/create_available_models.py
+	MTEB_BUILD_DOCS=1 python docs/overview/create_available_benchmarks.py
 
 
 serve-docs:

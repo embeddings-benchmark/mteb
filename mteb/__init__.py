@@ -1,3 +1,4 @@
+import os
 import sys
 from importlib.metadata import version
 
@@ -79,6 +80,14 @@ def __getattr__(attr_name):
     return value
 
 
+def __dir__():
+    """Include lazy-loaded attributes in dir() for introspection."""
+    # Get the base attributes from globals
+    base = list(globals().keys())
+    # Add all items from __all__ (includes lazy-loaded attrs)
+    return sorted(set(base + __all__))
+
+
 # Wrap the module to intercept attribute access
 class _ModuleWrapper:
     """Wrapper to fix submodule shadowing issue."""
@@ -126,9 +135,24 @@ class _ModuleWrapper:
 
     def __dir__(self):
         module = object.__getattribute__(self, "_module")
+        # Call the module's __dir__ function if it exists
+        if hasattr(module, "__dir__") and callable(getattr(module, "__dir__", None)):
+            return module.__dir__()
         return dir(module)
 
 
 # Wrap the current module
 _current_module = sys.modules[__name__]
 sys.modules[__name__] = _ModuleWrapper(_current_module)
+
+# Check if we're in a documentation build context
+# If so, eagerly load all lazy attributes for introspection
+
+if os.environ.get("MTEB_BUILD_DOCS") or "READTHEDOCS" in os.environ:
+    # Pre-load all lazy attributes for documentation introspection
+    for attr in __all__:
+        if attr not in _current_module.__dict__:
+            try:
+                getattr(sys.modules[__name__], attr)
+            except Exception:
+                pass

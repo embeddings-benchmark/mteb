@@ -13,11 +13,11 @@ length, valid frameworks, license, and degree of openness.
 
 ## Utilities
 
-:::mteb.get_model_metas
+:::mteb.models.get_model_meta.get_model_metas
 
-:::mteb.get_model_meta
+:::mteb.models.get_model_meta.get_model_meta
 
-:::mteb.get_model
+:::mteb.models.get_model_meta.get_model
 
 
 ## Metadata

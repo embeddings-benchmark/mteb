@@ -13,11 +13,11 @@ This metadata includes a short description of the benchmark's intention, the ref
 
 ## Utilities
 
-:::mteb.get_benchmarks
+:::mteb.benchmarks.get_benchmark.get_benchmarks
 
-:::mteb.get_benchmark
+:::mteb.benchmarks.get_benchmark.get_benchmark
 
 
 ## The Benchmark Object
 
-:::mteb.Benchmark
+:::mteb.benchmarks.benchmark.Benchmark

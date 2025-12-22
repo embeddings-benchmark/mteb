@@ -10,11 +10,11 @@ A task is an implementation of a dataset for evaluation. It could, for instance,
 
 ## Utilities
 
-:::mteb.get_tasks
+:::mteb.get_tasks.get_tasks
 
-:::mteb.get_task
+:::mteb.get_tasks.get_task
 
-:::mteb.filter_tasks
+:::mteb.get_tasks.filter_tasks
 
 ## Metadata
 
