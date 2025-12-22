@@ -235,7 +235,8 @@ class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
 
         qid = set()
         did = set()
-        for lang in self.metadata.eval_langs:
+        # Use self.hf_subsets to respect language filtering
+        for lang in self.hf_subsets:
             lang_dataset = datasets.load_dataset(
                 self.metadata.dataset["path"],
                 lang,
@@ -323,7 +324,8 @@ class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
 
         qid = set()
         did = set()
-        for lang in self.metadata.eval_langs:
+        # Use self.hf_subsets to respect language filtering
+        for lang in self.hf_subsets:
             lang_dataset = datasets.load_dataset(
                 self.metadata.dataset["path"],
                 lang,
@@ -410,7 +412,8 @@ class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
 
         qid = set()
         did = set()
-        for lang in self.metadata.eval_langs:
+        # Use self.hf_subsets to respect language filtering
+        for lang in self.hf_subsets:
             lang_dataset = datasets.load_dataset(
                 self.metadata.dataset["path"],
                 lang,
@@ -498,7 +501,8 @@ class CommonVoice21T2ARetrieval(AbsTaskRetrieval):
 
         qid = set()
         did = set()
-        for lang in self.metadata.eval_langs:
+        # Use self.hf_subsets to respect language filtering
+        for lang in self.hf_subsets:
             lang_dataset = datasets.load_dataset(
                 self.metadata.dataset["path"],
                 lang,
