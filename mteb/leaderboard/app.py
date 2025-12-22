@@ -23,6 +23,7 @@ from mteb.leaderboard.benchmark_selector import (
     R_BENCHMARK_ENTRIES,
     _make_selector,
 )
+from mteb.leaderboard.event_logger import EventLogger
 from mteb.leaderboard.figures import _performance_size_plot, _radar_chart
 from mteb.leaderboard.table import (
     apply_per_language_styling_from_benchmark,
@@ -30,7 +31,6 @@ from mteb.leaderboard.table import (
     apply_summary_styling_from_benchmark,
 )
 from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
-from mteb.leaderboard.event_logger import EventLogger
 
 logger = logging.getLogger(__name__)
 event_logger = EventLogger()
@@ -324,7 +324,7 @@ def _cache_update_task_list(
 
 
 def on_page_load(session_id):
-    # Log page view
+    """Log page view"""
     if not session_id:
         session_id = secrets.token_hex(16)
     event_logger.log_page_view(

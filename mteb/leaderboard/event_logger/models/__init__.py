@@ -1,18 +1,18 @@
 # Event model module
 from .base import BaseEvent
 from .events import (
-    PageViewEvent,
     BenchmarkChangeEvent,
     FilterChangeEvent,
-    TableSwitchEvent,
+    PageViewEvent,
     TableDownloadEvent,
+    TableSwitchEvent,
 )
 
 __all__ = [
     "BaseEvent",
-    "PageViewEvent",
     "BenchmarkChangeEvent",
     "FilterChangeEvent",
-    "TableSwitchEvent",
+    "PageViewEvent",
     "TableDownloadEvent",
+    "TableSwitchEvent",
 ]

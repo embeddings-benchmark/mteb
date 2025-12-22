@@ -1,15 +1,13 @@
-"""
-Specific Event Type Models
+"""Specific Event Type Models
 
 Defines data structures for various business events
 """
 
-from typing import Any, Literal, Optional
+from typing import Any, Literal
 
 from pydantic import Field
 
 from .base import BaseEvent
-
 
 # Supported filter types
 FilterName = Literal[
@@ -27,8 +25,7 @@ FilterName = Literal[
 
 
 class PageViewEvent(BaseEvent):
-    """
-    Page view event
+    """Page view event
 
     Triggered when user visits the page
     """
@@ -37,8 +34,7 @@ class PageViewEvent(BaseEvent):
 
 
 class BenchmarkChangeEvent(BaseEvent):
-    """
-    Benchmark change event
+    """Benchmark change event
 
     Triggered when user switches benchmark in sidebar
     """
@@ -50,7 +46,7 @@ class BenchmarkChangeEvent(BaseEvent):
 
     @classmethod
     def create(
-        cls, session_id: str, old_value: Optional[str], new_value: str, **kwargs
+        cls, session_id: str, old_value: str | None, new_value: str, **kwargs
     ) -> "BenchmarkChangeEvent":
         """Convenience creation method"""
         return cls(
@@ -65,8 +61,7 @@ class BenchmarkChangeEvent(BaseEvent):
 
 
 class FilterChangeEvent(BaseEvent):
-    """
-    Filter change event
+    """Filter change event
 
     Triggered when user modifies any filter condition
     event_name format: filter_change_{filter_name}
@@ -84,21 +79,11 @@ class FilterChangeEvent(BaseEvent):
         filter_name: str,
         new_value: Any,
         old_value: Any = None,
-        benchmark: Optional[str] = None,
-        filters: Optional[dict[str, Any]] = None,
+        benchmark: str | None = None,
+        filters: dict[str, Any] | None = None,
         **kwargs,
     ) -> "FilterChangeEvent":
-        """
-        Convenience creation method
-
-        Args:
-            session_id: Session ID
-            filter_name: Filter name (e.g., task_type, domain, etc.)
-            new_value: New value
-            old_value: Old value (optional)
-            benchmark: Current benchmark
-            filters: Snapshot of all current filter conditions (optional)
-        """
+        """Convenience creation method"""
         return cls(
             event_name=f"filter_change_{filter_name}",
             session_id=session_id,
@@ -114,8 +99,7 @@ class FilterChangeEvent(BaseEvent):
 
 
 class TableSwitchEvent(BaseEvent):
-    """
-    Table switch event
+    """Table switch event
 
     Triggered when user switches between different table views
     """
@@ -129,9 +113,9 @@ class TableSwitchEvent(BaseEvent):
     def create(
         cls,
         session_id: str,
-        old_table: Optional[str],
+        old_table: str | None,
         new_table: str,
-        benchmark: Optional[str] = None,
+        benchmark: str | None = None,
         **kwargs,
     ) -> "TableSwitchEvent":
         """Convenience creation method"""
@@ -147,8 +131,7 @@ class TableSwitchEvent(BaseEvent):
 
 
 class TableDownloadEvent(BaseEvent):
-    """
-    Table download event
+    """Table download event
 
     Triggered when user downloads table data
     """
@@ -163,9 +146,9 @@ class TableDownloadEvent(BaseEvent):
     def create(
         cls,
         session_id: str,
-        benchmark: Optional[str] = None,
+        benchmark: str | None = None,
         format: str = "csv",
-        row_count: Optional[int] = None,
+        row_count: int | None = None,
         **kwargs,
     ) -> "TableDownloadEvent":
         """Convenience creation method"""

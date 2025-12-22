@@ -1,5 +1,4 @@
-"""
-Event Logger - Event Logger
+"""Event Logger - Event Logger
 
 A lightweight event logging SDK for Gradio projects
 
@@ -55,23 +54,21 @@ Usage example:
 from .logger import EventLogger
 from .models import (
     BaseEvent,
-    PageViewEvent,
     BenchmarkChangeEvent,
     FilterChangeEvent,
-    TableSwitchEvent,
+    PageViewEvent,
     TableDownloadEvent,
+    TableSwitchEvent,
 )
 
 __version__ = "0.1.0"
 
 __all__ = [
-    # Main class
-    "EventLogger",
-    # Event models
     "BaseEvent",
-    "PageViewEvent",
     "BenchmarkChangeEvent",
+    "EventLogger",
     "FilterChangeEvent",
-    "TableSwitchEvent",
+    "PageViewEvent",
     "TableDownloadEvent",
+    "TableSwitchEvent",
 ]

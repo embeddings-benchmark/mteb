@@ -1,18 +1,16 @@
-"""
-Base Event Model
+"""Base Event Model
 
 Defines common fields and behaviors for all events
 """
 
 from datetime import datetime, timezone
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 
 
 class BaseEvent(BaseModel):
-    """
-    Base event class
+    """Base event class
 
     All specific event types inherit from this class, containing common fields:
     - event_name: Event name
@@ -29,13 +27,13 @@ class BaseEvent(BaseModel):
     )
     session_id: str = Field(..., description="Session ID")
     page_id: str = Field(default="leaderboard", description="Page identifier")
-    benchmark: Optional[str] = Field(default=None, description="Current benchmark")
+    benchmark: str | None = Field(default=None, description="Current benchmark")
 
     # Fields that allow free extension
-    filters: Optional[dict[str, Any]] = Field(
+    filters: dict[str, Any] | None = Field(
         default=None, description="Current filter conditions snapshot"
     )
-    properties: Optional[dict[str, Any]] = Field(
+    properties: dict[str, Any] | None = Field(
         default=None, description="Event additional properties"
     )
 
@@ -44,8 +42,7 @@ class BaseEvent(BaseModel):
     }
 
     def to_mongo_dict(self) -> dict[str, Any]:
-        """
-        Convert to MongoDB document format
+        """Convert to MongoDB document format
 
         Converts datetime to ISO format string for easier storage and querying
         """

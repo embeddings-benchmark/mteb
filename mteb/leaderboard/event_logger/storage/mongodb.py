@@ -1,12 +1,12 @@
-"""
-MongoDB Storage Implementation
+"""MongoDB Storage Implementation
 
 Responsible for persisting event data to MongoDB
 """
 
 import logging
 import os
-from typing import Any, Optional
+from typing import Any
+
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.database import Database
@@ -16,8 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class MongoDBStorage:
-    """
-    MongoDB storage class
+    """MongoDB storage class
 
     Supports reading connection string from environment variable MONGO_URI
     """
@@ -28,12 +27,11 @@ class MongoDBStorage:
 
     def __init__(
         self,
-        uri: Optional[str] = None,
-        database: Optional[str] = None,
-        collection: Optional[str] = None,
+        uri: str | None = None,
+        database: str | None = None,
+        collection: str | None = None,
     ):
-        """
-        Initialize MongoDB connection
+        """Initialize MongoDB connection
 
         Args:
             uri: MongoDB connection string, defaults to reading from environment variable MONGO_URI
@@ -50,13 +48,12 @@ class MongoDBStorage:
         self._collection_name = collection or self.DEFAULT_COLLECTION
 
         # Lazy connection initialization
-        self._client: Optional[MongoClient] = None
-        self._db: Optional[Database] = None
-        self._collection: Optional[Collection] = None
+        self._client: MongoClient | None = None
+        self._db: Database | None = None
+        self._collection: Collection | None = None
 
     def _ensure_connection(self) -> Collection:
-        """
-        Ensure database connection is established
+        """Ensure database connection is established
 
         Returns:
             MongoDB Collection object
@@ -71,8 +68,7 @@ class MongoDBStorage:
         return self._collection
 
     def insert(self, event_data: dict[str, Any]) -> bool:
-        """
-        Insert a single event record
+        """Insert a single event record
 
         Args:
             event_data: Event data dictionary
@@ -90,8 +86,7 @@ class MongoDBStorage:
             return False
 
     def insert_many(self, events: list[dict[str, Any]]) -> bool:
-        """
-        Batch insert event records
+        """Batch insert event records
 
         Args:
             events: List of event data
