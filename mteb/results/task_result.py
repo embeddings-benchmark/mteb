@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import logging
-from argparse import Namespace
 from collections import defaultdict
 from collections.abc import Callable, Iterable, Mapping
 from functools import cached_property
@@ -16,8 +15,11 @@ from packaging.version import Version
 from pydantic import BaseModel, field_validator
 from typing_extensions import Self
 
+from mteb import TaskMetadata
 from mteb._helpful_enum import HelpfulStrEnum
+from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.abstask import AbsTask
+from mteb.abstasks.task_metadata import TaskDomain
 from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
 from mteb.types import (
@@ -39,67 +41,59 @@ class Criteria(HelpfulStrEnum):
     DATASET_REVISION = "dataset_revision"
 
 
-class ScalaNbClassificationDummy:
+class ScalaNbClassificationDummy(AbsTaskClassification):
     """A dummy task for loading historic results from before v1.11.0"""
 
-    metadata = Namespace(
+    metadata = TaskMetadata(
         name="ScalaNbClassification",
+        description="A dummy",
         main_score="accuracy",
         type="Classification",
-        hf_subsets_to_langscripts={
-            "default": ["nob-Latn"],
-        },
-        dataset={"revision": "revision_not_applicable"},
-        revision="revision_not_applicable",
+        eval_langs=["nob-Latn"],
+        dataset={"path": "not/exists", "revision": "revision_not_applicable"},
     )
 
 
-class ScalaNnClassificationDummy:
+class ScalaNnClassificationDummy(AbsTaskClassification):
     """A dummy task for loading historic results from before v1.11.0"""
 
-    metadata = Namespace(
+    metadata = TaskMetadata(
         name="ScalaNnClassification",
+        description="A dummy",
         main_score="accuracy",
         type="Classification",
-        hf_subsets_to_langscripts={
-            "default": ["nno-Latn"],
-        },
-        dataset={"revision": "revision_not_applicable"},
-        revision="revision_not_applicable",
+        eval_langs=["nob-Latn"],
+        dataset={"path": "not/exists", "revision": "revision_not_applicable"},
     )
 
 
-class ScalaDaClassificationDummy:
+class ScalaDaClassificationDummy(AbsTaskClassification):
     """A dummy task for loading historic results from before v1.11.0"""
 
-    metadata = Namespace(
+    metadata = TaskMetadata(
         name="ScalaDaClassification",
+        description="A dummy",
         main_score="accuracy",
         type="Classification",
-        hf_subsets_to_langscripts={
-            "default": ["dan-Latn"],
-        },
-        dataset={"revision": "revision_not_applicable"},
-        revision="revision_not_applicable",
+        eval_langs=["dan-Latn"],
+        dataset={"path": "not/exists", "revision": "revision_not_applicable"},
     )
 
 
-class ScalaSvClassificationDummy:
+class ScalaSvClassificationDummy(AbsTaskClassification):
     """A dummy task for loading historic results from before v1.11.0"""
 
-    metadata = Namespace(
+    metadata = TaskMetadata(
         name="ScalaSvClassification",
+        description="A dummy",
         main_score="accuracy",
         type="Classification",
-        hf_subsets_to_langscripts={
-            "default": ["swe-Latn"],
-        },
-        dataset={"revision": "revision_not_applicable"},
-        revision="revision_not_applicable",
+        eval_langs=["swe-Latn"],
+        dataset={"path": "not/exists", "revision": "revision_not_applicable"},
     )
 
 
-outdated_tasks = {
+outdated_tasks: dict[str, type[AbsTask]] = {
     "ScalaNbClassification": ScalaNbClassificationDummy,
     "ScalaNnClassification": ScalaNnClassificationDummy,
     "ScalaDaClassification": ScalaDaClassificationDummy,
@@ -169,7 +163,7 @@ class TaskResult(BaseModel):
         scores: dict[SplitName, Mapping[HFSubset, ScoresDict]],
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
-    ) -> Self:
+    ) -> TaskResult:
         """Create a TaskResult from the task and scores.
 
         Args:
@@ -246,7 +240,7 @@ class TaskResult(BaseModel):
         return get_task(self.task_name)
 
     @property
-    def domains(self) -> list[str]:
+    def domains(self) -> list[TaskDomain]:
         """Get the domains of the task."""
         doms = self.task.metadata.domains
         if doms is None:
@@ -307,7 +301,7 @@ class TaskResult(BaseModel):
                     if isinstance(v, dict):
                         self._round_scores(v, n)
                     elif isinstance(v, float):
-                        value[i] = round(v, n)
+                        value[i] = round(v, n)  # type: ignore[call-overload]
 
             elif isinstance(value, float):
                 scores[key] = round(value, n)
@@ -325,7 +319,7 @@ class TaskResult(BaseModel):
             json.dump(json_obj, f, indent=2)
 
     @classmethod
-    def from_disk(cls, path: Path, load_historic_data: bool = True) -> Self:
+    def from_disk(cls, path: Path, load_historic_data: bool = True) -> TaskResult:
         """Load TaskResult from disk.
 
         Args:
@@ -356,7 +350,7 @@ class TaskResult(BaseModel):
         )  # assume it is before 1.11.0 if the version is not present
 
         try:
-            obj = cls.model_validate(data)
+            obj: TaskResult = cls.model_validate(data)
         except Exception as e:
             if not pre_1_11_load:
                 raise e
@@ -381,6 +375,7 @@ class TaskResult(BaseModel):
         from mteb import get_task
 
         task_name = obj.task_name
+        task: AbsTask | type[AbsTask]
         if task_name in outdated_tasks:
             task = outdated_tasks[task_name]
         else:
@@ -393,11 +388,11 @@ class TaskResult(BaseModel):
                     for key in list(hf_subset_scores.keys()):
                         if isinstance(hf_subset_scores[key], dict):
                             for k, v in hf_subset_scores[key].items():
-                                hf_subset_scores[f"{key}_{k}"] = v
-                            hf_subset_scores.pop(key)
+                                hf_subset_scores[f"{key}_{k}"] = v  # type: ignore[index]
+                            hf_subset_scores.pop(key)  # type: ignore[attr-defined]
 
     @classmethod
-    def _convert_from_before_v1_11_0(cls, data: dict) -> Self:
+    def _convert_from_before_v1_11_0(cls, data: dict) -> TaskResult:
         from mteb.get_tasks import _TASKS_REGISTRY
 
         # in case the task name is not found in the registry, try to find a lower case version
@@ -532,7 +527,7 @@ class TaskResult(BaseModel):
     def _get_score_fast(
         self,
         splits: Iterable[str] | None = None,
-        languages: str | None = None,
+        languages: list[ISOLanguage | ISOLanguageScript] | None = None,
         subsets: Iterable[str] | None = None,
     ) -> float:
         """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified.
@@ -581,7 +576,7 @@ class TaskResult(BaseModel):
         return val_sum / n_val
 
     @classmethod
-    def from_validated(cls, **data) -> Self:
+    def from_validated(cls, **data) -> TaskResult:
         """Create a TaskResult from validated data.
 
         Returns:
@@ -592,13 +587,13 @@ class TaskResult(BaseModel):
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, scores=...)"
 
-    def only_main_score(self) -> Self:
+    def only_main_score(self) -> TaskResult:
         """Return a new TaskResult object with only the main score.
 
         Returns:
             A new TaskResult object with only the main score.
         """
-        new_scores = {}
+        new_scores: dict[str, list[Score]] = {}
         for split in self.scores:
             new_scores[split] = []
             for subset_scores in self.scores[split]:
@@ -610,10 +605,9 @@ class TaskResult(BaseModel):
                     }
                 )
         new_res = {**self.to_dict(), "scores": new_scores}
-        new_res = TaskResult.from_validated(**new_res)
-        return new_res
+        return TaskResult.from_validated(**new_res)
 
-    def validate_and_filter_scores(self, task: AbsTask | None = None) -> Self:
+    def validate_and_filter_scores(self, task: AbsTask | None = None) -> TaskResult:
         """Validate and filter the scores against the task metadata.
 
         This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
@@ -634,9 +628,9 @@ class TaskResult(BaseModel):
 
         splits = task.eval_splits
         hf_subsets = task.hf_subsets
-        hf_subsets = set(hf_subsets)
+        set_hf_subsets = set(hf_subsets)
 
-        new_scores = {}
+        new_scores: dict[str, list[Score]] = {}
         seen_splits = set()
         for split in self.scores:
             if split not in splits:
@@ -644,12 +638,12 @@ class TaskResult(BaseModel):
             new_scores[split] = []
             seen_subsets = set()
             for _scores in self.scores[split]:
-                if _scores["hf_subset"] not in hf_subsets:
+                if _scores["hf_subset"] not in set_hf_subsets:
                     continue
                 new_scores[split].append(_scores)
                 seen_subsets.add(_scores["hf_subset"])
-            if seen_subsets != hf_subsets:
-                missing_subsets = hf_subsets - seen_subsets
+            if seen_subsets != set_hf_subsets:
+                missing_subsets = set_hf_subsets - seen_subsets
                 if len(missing_subsets) > 2:
                     subset1, subset2 = list(missing_subsets)[:2]
                     missing_subsets_str = f"{{'{subset1}', '{subset2}', ...}}"
@@ -665,8 +659,7 @@ class TaskResult(BaseModel):
                 f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
             )
         new_res = {**self.to_dict(), "scores": new_scores}
-        new_res = TaskResult.from_validated(**new_res)
-        return new_res
+        return TaskResult.from_validated(**new_res)
 
     def is_mergeable(
         self,
@@ -734,7 +727,7 @@ class TaskResult(BaseModel):
             "mteb_version",
             "dataset_revision",
         ],
-    ) -> Self:
+    ) -> TaskResult:
         """Merges two TaskResult objects.
 
         Args:

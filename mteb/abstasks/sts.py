@@ -7,7 +7,7 @@ from scipy.stats import pearsonr, spearmanr
 
 from mteb._evaluators import AnySTSEvaluator
 from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
-from mteb.models import EncoderProtocol
+from mteb.models import EncoderProtocol, MTEBModels
 from mteb.types import PromptType
 from mteb.types.statistics import (
     ImageStatistics,
@@ -103,7 +103,7 @@ class AbsTaskSTS(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: Dataset,
         encode_kwargs: dict[str, Any],
         hf_split: str,
@@ -111,6 +111,9 @@ class AbsTaskSTS(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> STSMetrics:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
+
         normalized_scores = list(map(self._normalize, data_split["score"]))
         data_split = data_split.select_columns(list(self.column_names))
 

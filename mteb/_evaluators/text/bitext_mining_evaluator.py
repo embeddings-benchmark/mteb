@@ -1,7 +1,6 @@
 import logging
 from typing import Any
 
-import numpy as np
 import torch
 from datasets import Dataset
 from tqdm.auto import tqdm
@@ -10,6 +9,7 @@ from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import EncoderProtocol
+from mteb.types import Array
 
 logger = logging.getLogger(__name__)
 
@@ -69,11 +69,11 @@ class BitextMiningEvaluator(Evaluator):
 
     def _similarity_search(
         self,
-        query_embeddings: np.ndarray,
-        corpus_embeddings: np.ndarray,
+        query_embeddings: Array,
+        corpus_embeddings: Array,
         model: EncoderProtocol,
         query_chunk_size: int = 100,
-        corpus_chunk_size: int = 500000,
+        corpus_chunk_size: int = 500_000,
     ) -> list[dict[str, float]]:
         """This function performs a cosine similarity search between a list of query embeddings and a list of corpus embeddings.
 
@@ -104,7 +104,9 @@ class BitextMiningEvaluator(Evaluator):
         ):
             query_embeddings = query_embeddings.to(corpus_embeddings.device)
 
-        queries_result_list = [[] for _ in range(len(query_embeddings))]
+        queries_result_list: list[list[dict[str, float]]] = [
+            [] for _ in range(len(query_embeddings))
+        ]
 
         for query_start_idx in range(0, len(query_embeddings), query_chunk_size):
             # Iterate over chunks of the corpus
@@ -120,15 +122,17 @@ class BitextMiningEvaluator(Evaluator):
                 )
 
                 # Get top-k scores
-                cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
-                    torch.tensor(similarity_scores),
-                    1,
-                    dim=1,
-                    largest=True,
-                    sorted=False,
+                cos_scores_top_k_values_tensor, cos_scores_top_k_idx_tensor = (
+                    torch.topk(
+                        torch.tensor(similarity_scores),
+                        1,
+                        dim=1,
+                        largest=True,
+                        sorted=False,
+                    )
                 )
-                cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
-                cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
+                cos_scores_top_k_values = cos_scores_top_k_values_tensor.cpu().tolist()
+                cos_scores_top_k_idx = cos_scores_top_k_idx_tensor.cpu().tolist()
 
                 for query_itr in range(len(similarity_scores)):
                     for sub_corpus_id, score in zip(
@@ -141,11 +145,14 @@ class BitextMiningEvaluator(Evaluator):
                             {"corpus_id": corpus_id, "score": score}
                         )
 
+        result_queries_list: list[dict[str, float]] = [
+            {} for _ in range(len(query_embeddings))
+        ]
         # Sort and strip to top_k results
         for idx in range(len(queries_result_list)):
             queries_result_list[idx] = sorted(
                 queries_result_list[idx], key=lambda x: x["score"], reverse=True
             )
-            queries_result_list[idx] = queries_result_list[idx][0]
+            result_queries_list[idx] = queries_result_list[idx][0]
 
-        return queries_result_list
+        return result_queries_list

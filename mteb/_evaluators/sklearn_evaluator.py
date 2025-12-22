@@ -1,10 +1,10 @@
 import logging
-from typing import Any, Protocol
+from typing import Any, Protocol, cast
 
 import numpy as np
 from datasets import Dataset
 from torch.utils.data import DataLoader
-from typing_extensions import Self, Unpack
+from typing_extensions import Self
 
 from mteb._create_dataloaders import create_dataloader
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -20,7 +20,7 @@ class SklearnModelProtocol(Protocol):
     def fit(self, X: Array, y: np.ndarray | list[int]) -> None: ...  # noqa: N803
     def predict(self, X: Array) -> np.ndarray: ...  # noqa: N803
     def get_params(self) -> dict[str, Any]: ...
-    def set_params(self, **kwargs: Unpack[dict[str, Any]]) -> Self: ...
+    def set_params(self, random_state: int, **kwargs: dict[str, Any]) -> Self: ...
     def score(self, X: Array, y: np.ndarray | list[int]) -> float: ...  # noqa: N803
 
 
@@ -71,8 +71,8 @@ class SklearnEvaluator(Evaluator):
         model: EncoderProtocol,
         *,
         encode_kwargs: dict[str, Any],
-        test_cache: np.ndarray | None = None,
-    ) -> tuple[np.ndarray, np.ndarray]:
+        test_cache: Array | None = None,
+    ) -> tuple[np.ndarray, Array]:
         """Classification evaluation by training a sklearn classifier on the embeddings of the training set and evaluating on the embeddings of the test set.
 
         Args:
@@ -104,6 +104,7 @@ class SklearnEvaluator(Evaluator):
                 hf_subset=self.hf_subset,
                 **encode_kwargs,
             )
+            test_cache = cast(Array, test_cache)
 
         logger.info("Running - Fitting classifier...")
         y_train = self.train_dataset[self.label_column_name]

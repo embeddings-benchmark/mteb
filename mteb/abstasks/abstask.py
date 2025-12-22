@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Mapping, Sequence
 from copy import copy
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, Literal, cast
 
 import numpy as np
 from datasets import ClassLabel, Dataset, DatasetDict, load_dataset
@@ -79,7 +79,7 @@ class AbsTask(ABC):
 
     metadata: TaskMetadata
     abstask_prompt: str
-    _eval_splits: list[str] | None = None
+    _eval_splits: Sequence[str] | None = None
     dataset: dict[HFSubset, DatasetDict] | None = None
     data_loaded: bool = False
     hf_subsets: list[HFSubset]
@@ -195,7 +195,7 @@ class AbsTask(ABC):
     @abstractmethod
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: Dataset,
         *,
         hf_split: str,
@@ -226,7 +226,7 @@ class AbsTask(ABC):
             hf_subset: The subset of the dataset (e.g. "en").
         """
         predictions_path = self._predictions_path(prediction_folder)
-        existing_results = {
+        existing_results: dict[str, Any] = {
             "mteb_model_meta": {
                 "model_name": model.mteb_model_meta.name,
                 "revision": model.mteb_model_meta.revision,
@@ -362,15 +362,19 @@ class AbsTask(ABC):
         """
         from mteb.abstasks import AbsTaskClassification
 
-        if self.metadata.descriptive_stat_path.exists() and not overwrite_results:
+        existing_stats = self.metadata.descriptive_stats
+
+        if existing_stats is not None and not overwrite_results:
             logger.info("Loading metadata descriptive statistics from cache.")
-            return self.metadata.descriptive_stats
+            return existing_stats
 
         if not self.data_loaded:
             self.load_data()
 
         descriptive_stats: dict[str, DescriptiveStatistics] = {}
-        hf_subset_stat = "hf_subset_descriptive_stats"
+        hf_subset_stat: Literal["hf_subset_descriptive_stats"] = (
+            "hf_subset_descriptive_stats"
+        )
         eval_splits = self.metadata.eval_splits
         if isinstance(self, AbsTaskClassification):
             eval_splits.append(self.train_split)
@@ -381,7 +385,7 @@ class AbsTask(ABC):
             logger.info(f"Processing metadata for split {split}")
             if self.metadata.is_multilingual:
                 descriptive_stats[split] = (
-                    self._calculate_descriptive_statistics_from_split(
+                    self._calculate_descriptive_statistics_from_split(  # type: ignore[assignment]
                         split, compute_overall=True
                     )
                 )
@@ -400,7 +404,7 @@ class AbsTask(ABC):
                     descriptive_stats[split][hf_subset_stat][hf_subset] = split_details
             else:
                 split_details = self._calculate_descriptive_statistics_from_split(split)
-                descriptive_stats[split] = split_details
+                descriptive_stats[split] = split_details  # type: ignore[assignment]
 
         with self.metadata.descriptive_stat_path.open("w") as f:
             json.dump(descriptive_stats, f, indent=4)
@@ -505,6 +509,8 @@ class AbsTask(ABC):
     def _upload_dataset_to_hub(
         self, repo_name: str, fields: list[str] | dict[str, str]
     ) -> None:
+        if self.dataset is None:
+            raise ValueError("Dataset not loaded")
         if self.metadata.is_multilingual:
             for config in self.metadata.eval_langs:
                 logger.info(f"Converting {config} of {self.metadata.name}")
@@ -574,7 +580,7 @@ class AbsTask(ABC):
         return False
 
     @property
-    def eval_splits(self) -> list[str]:
+    def eval_splits(self) -> Sequence[str]:
         """Returns the evaluation splits of the task."""
         if self._eval_splits:
             return self._eval_splits

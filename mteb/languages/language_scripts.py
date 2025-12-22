@@ -1,4 +1,4 @@
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 
 from typing_extensions import Self
@@ -25,7 +25,9 @@ class LanguageScripts:
 
     @classmethod
     def from_languages_and_scripts(
-        cls, languages: list[str] | None = None, scripts: list[str] | None = None
+        cls,
+        languages: Sequence[str] | None = None,
+        scripts: Sequence[str] | None = None,
     ) -> Self:
         """Create a LanguageScripts object from lists of languages and scripts.
 

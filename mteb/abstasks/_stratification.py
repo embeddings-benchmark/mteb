@@ -120,7 +120,9 @@ def _get_most_desired_combination(samples_with_combination: dict):
         if support_size == 0:
             continue
         if currently_chosen is None or (
-            best_number_of_combinations < number_of_combinations
+            best_number_of_combinations is not None
+            and best_support_size is not None
+            and best_number_of_combinations < number_of_combinations
             and best_support_size > support_size
         ):
             currently_chosen = combination
@@ -213,7 +215,7 @@ class IterativeStratification(_BaseKFold):
         all_combinations = []
         per_row_combinations: list[list[Any]] = [[] for i in range(self.n_samples)]
         samples_with_combination: dict[str, list[Any]] = {}
-        folds = [[] for _ in range(self.n_splits)]
+        folds: list[list[int]] = [[] for _ in range(self.n_splits)]
 
         # for every row
         for sample_index, label_assignment in enumerate(rows):

@@ -93,7 +93,7 @@ def get_model(
     meta = get_model_meta(model_name, revision)
     model = meta.load_model(**kwargs)
 
-    model.mteb_model_meta = meta
+    model.mteb_model_meta = meta  # type: ignore[misc]
     return model
 
 

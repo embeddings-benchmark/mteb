@@ -182,7 +182,7 @@ class AbsTaskClassification(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: DatasetDict,
         *,
         encode_kwargs: dict[str, Any],
@@ -191,6 +191,9 @@ class AbsTaskClassification(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
+
         train_split = data_split[self.train_split]
         eval_split = data_split[hf_split]
 

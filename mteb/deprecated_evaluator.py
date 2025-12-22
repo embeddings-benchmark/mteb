@@ -5,7 +5,7 @@ import logging
 import os
 import sys
 import traceback
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
@@ -598,7 +598,11 @@ class MTEB:
         if output_folder is None:
             return None
 
-        model_revision: str = model_meta.revision
+        model_revision: str = (
+            model_meta.revision
+            if model_meta.revision is not None
+            else "no_revision_available"
+        )
         model_path_name = model_meta.model_name_as_path()
 
         output_path = Path(output_folder) / model_path_name / model_revision
@@ -626,9 +630,9 @@ class MTEB:
     @staticmethod
     def _get_missing_evaluations(
         existing_results: TaskResult | None,
-        task_eval_splits: list[str],
-        task_eval_langs: list[str],
-        eval_subsets: list[str] | None,
+        task_eval_splits: Sequence[str],
+        task_eval_langs: Sequence[str],
+        eval_subsets: Sequence[str] | None,
     ) -> dict[str, dict[str, Any]]:
         """Return a dictionary for each split, indicating if the whole split is missing and which subsets are missing."""
         missing_evaluations = {

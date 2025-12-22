@@ -12,7 +12,7 @@ from mteb.abstasks._statistics_calculation import (
     calculate_text_statistics,
 )
 from mteb.abstasks.abstask import AbsTask
-from mteb.models.models_protocols import EncoderProtocol
+from mteb.models.models_protocols import EncoderProtocol, MTEBModels
 from mteb.types.statistics import (
     ImageStatistics,
     SplitDescriptiveStatistics,
@@ -116,7 +116,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: Dataset,
         *,
         encode_kwargs: dict[str, Any],
@@ -125,6 +125,8 @@ class AbsTaskImageTextPairClassification(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> ImageTextPairClassificationMetrics:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
         select_columns = []
         for columns in (self.images_column_names, self.texts_column_names):
             if isinstance(columns, str):

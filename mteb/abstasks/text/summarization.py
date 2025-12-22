@@ -12,7 +12,7 @@ from mteb.abstasks._statistics_calculation import (
     calculate_text_statistics,
 )
 from mteb.abstasks.abstask import AbsTask
-from mteb.models import EncoderProtocol
+from mteb.models import EncoderProtocol, MTEBModels
 from mteb.types.statistics import (
     ScoreStatistics,
     SplitDescriptiveStatistics,
@@ -77,7 +77,7 @@ class AbsTaskSummarization(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: Dataset,
         *,
         hf_split: str,
@@ -86,6 +86,9 @@ class AbsTaskSummarization(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs,
     ) -> SummarizationMetrics:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
+
         normalized_scores = [
             (
                 (np.array(x) - self.min_score) / (self.max_score - self.min_score)

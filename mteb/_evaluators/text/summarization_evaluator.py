@@ -1,6 +1,6 @@
 import logging
 import sys
-from typing import Any, TypedDict
+from typing import Any, TypedDict, cast
 
 import numpy as np
 import torch
@@ -135,10 +135,10 @@ class SummarizationEvaluator(Evaluator):
         )
 
         # Split the embeddings into the original human & machine summaries
-        embs_human_summaries_all = np.split(
+        embs_human_summaries_all_split = np.split(
             embs_human_summaries_all, np.cumsum(human_lens)[:-1]
         )
-        embs_machine_summaries_all = np.split(
+        embs_machine_summaries_all_split = np.split(
             embs_machine_summaries_all, np.cumsum(machine_lens)[:-1]
         )
 
@@ -148,7 +148,9 @@ class SummarizationEvaluator(Evaluator):
         all_human_scores = []
 
         for i, (embs_human_summaries, embs_machine_summaries) in tqdm(
-            enumerate(zip(embs_human_summaries_all, embs_machine_summaries_all)),
+            enumerate(
+                zip(embs_human_summaries_all_split, embs_machine_summaries_all_split)
+            ),
             desc="Scoring",
             total=len(self.human_summaries),
         ):
@@ -201,12 +203,12 @@ class SummarizationEvaluator(Evaluator):
         self,
         distances: SummarizationDistances,
     ) -> SummarizationMetrics:
-        cosine_spearman_scores = []
-        cosine_pearson_scores = []
-        dot_spearman_scores = []
-        dot_pearson_scores = []
-        pearson_scores = []
-        spearman_scores = []
+        cosine_spearman_scores: list[float] = []
+        cosine_pearson_scores: list[float] = []
+        dot_spearman_scores: list[float] = []
+        dot_pearson_scores: list[float] = []
+        pearson_scores: list[float] = []
+        spearman_scores: list[float] = []
 
         for human_scores, cosine_pred_scores, dot_pred_scores, sim_scores in zip(
             distances["human_scores"],
@@ -216,17 +218,23 @@ class SummarizationEvaluator(Evaluator):
             strict=True,
         ):
             cosine_spearman_scores.append(
-                spearmanr(human_scores, cosine_pred_scores).statistic
+                cast(float, spearmanr(human_scores, cosine_pred_scores).statistic)
             )
             cosine_pearson_scores.append(
-                pearsonr(human_scores, cosine_pred_scores).statistic
+                cast(float, pearsonr(human_scores, cosine_pred_scores).statistic)
             )
             dot_spearman_scores.append(
-                spearmanr(human_scores, dot_pred_scores).statistic
+                cast(float, spearmanr(human_scores, dot_pred_scores).statistic)
             )
-            dot_pearson_scores.append(pearsonr(human_scores, dot_pred_scores).statistic)
-            spearman_scores.append(spearmanr(human_scores, sim_scores).statistic)
-            pearson_scores.append(pearsonr(human_scores, sim_scores).statistic)
+            dot_pearson_scores.append(
+                cast(float, pearsonr(human_scores, dot_pred_scores).statistic)
+            )
+            spearman_scores.append(
+                cast(float, spearmanr(human_scores, sim_scores).statistic)
+            )
+            pearson_scores.append(
+                cast(float, pearsonr(human_scores, sim_scores).statistic)
+            )
 
         return SummarizationMetrics(
             pearson=float(np.mean(pearson_scores)),
@@ -273,10 +281,10 @@ class DeprecatedSummarizationEvaluator(SummarizationEvaluator):
             pearson_scores.append(pearsonr(human_scores, sim_scores))
 
         return SummarizationMetrics(
-            pearson=float(np.mean(pearson_scores)),
-            spearman=float(np.mean(spearman_scores)),
-            cosine_spearman=float(np.mean(cosine_spearman_scores)),
-            cosine_pearson=float(np.mean(cosine_pearson_scores)),
-            dot_pearson=float(np.mean(dot_pearson_scores)),
-            dot_spearman=float(np.mean(dot_spearman_scores)),
+            pearson=float(np.mean(pearson_scores)),  # type: ignore[arg-type]
+            spearman=float(np.mean(spearman_scores)),  # type: ignore[arg-type]
+            cosine_spearman=float(np.mean(cosine_spearman_scores)),  # type: ignore[arg-type]
+            cosine_pearson=float(np.mean(cosine_pearson_scores)),  # type: ignore[arg-type]
+            dot_pearson=float(np.mean(dot_pearson_scores)),  # type: ignore[arg-type]
+            dot_spearman=float(np.mean(dot_spearman_scores)),  # type: ignore[arg-type]
         )

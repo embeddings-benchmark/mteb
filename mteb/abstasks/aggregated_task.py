@@ -1,10 +1,10 @@
 import logging
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 from datasets import Dataset, DatasetDict
-from typing_extensions import Self
 
 from mteb.models.models_protocols import MTEBModels
 from mteb.results.task_result import TaskResult
@@ -32,7 +32,7 @@ class AbsTaskAggregate(AbsTask):
 
     def task_results_to_scores(
         self, task_results: list[TaskResult]
-    ) -> dict[str, dict[HFSubset, ScoresDict]]:
+    ) -> dict[str, Mapping[HFSubset, ScoresDict]]:
         """The function that aggregated scores. Can be redefined to allow for custom aggregations.
 
         Args:
@@ -41,7 +41,7 @@ class AbsTaskAggregate(AbsTask):
         Returns:
             A dictionary with the aggregated scores.
         """
-        scores = {}
+        scores: dict[str, Mapping[HFSubset, ScoresDict]] = {}
         subsets = (
             self.metadata.eval_langs.keys()
             if isinstance(self.metadata.eval_langs, dict)
@@ -126,19 +126,6 @@ class AbsTaskAggregate(AbsTask):
             logger.warning(
                 f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}', you might consider using the newer version of the dataset."
             )
-
-    def filter_eval_splits(self, eval_splits: list[str] | None) -> Self:
-        """Filter the evaluation splits of the task.
-
-        Args:
-            eval_splits: List of splits to evaluate on. If None, all splits in metadata
-                are used.
-
-        Returns:
-            The task with filtered evaluation splits.
-        """
-        self._eval_splits = eval_splits
-        return self
 
     def evaluate(
         self,

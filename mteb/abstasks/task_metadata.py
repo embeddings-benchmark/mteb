@@ -368,7 +368,7 @@ class TaskMetadata(BaseModel):
         """Return a dictionary mapping huggingface subsets to languages."""
         if isinstance(self.eval_langs, dict):
             return self.eval_langs
-        return {"default": self.eval_langs}
+        return {"default": cast(list[str], self.eval_langs)}
 
     @property
     def intext_citation(self, include_cite: bool = True) -> str:

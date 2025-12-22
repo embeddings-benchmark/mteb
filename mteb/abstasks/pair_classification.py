@@ -18,7 +18,7 @@ from mteb.abstasks._statistics_calculation import (
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ScoringFunction
-from mteb.models.models_protocols import EncoderProtocol
+from mteb.models.models_protocols import EncoderProtocol, MTEBModels
 from mteb.types import PromptType
 from mteb.types.statistics import (
     ImageStatistics,
@@ -79,7 +79,7 @@ class AbsTaskPairClassification(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: Dataset,
         *,
         hf_split: str,
@@ -88,6 +88,9 @@ class AbsTaskPairClassification(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs,
     ) -> dict[str, float]:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
+
         if self.metadata.modalities == ["text"]:
             # for compatibility with v1 version where datasets were stored in a single row
             data_split = data_split[0] if len(data_split) == 1 else data_split
