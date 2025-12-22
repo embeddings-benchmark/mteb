@@ -39,5 +39,3 @@ class TurkishConstitutionalCourtViolation(AbsTaskClassification):
         }
         """,
     )
-
-
