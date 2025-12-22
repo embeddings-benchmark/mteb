@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 import datasets
-from datasets import Dataset, DatasetDict
+from datasets import Audio, Dataset, DatasetDict
 from tqdm import tqdm
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -242,6 +242,11 @@ class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
                 lang,
                 revision=self.metadata.dataset.get("revision"),
             )
+            # Decode audio bytes to arrays
+            for split_name in lang_dataset:
+                lang_dataset[split_name] = lang_dataset[split_name].cast_column(
+                    audio_col, Audio(sampling_rate=16000)
+                )
             for split in self.metadata.eval_splits:
                 for row in tqdm(lang_dataset[split], total=len(lang_dataset[split])):
                     # Use the "path" field as a unique id for both query and doc
@@ -331,6 +336,11 @@ class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
                 lang,
                 revision=self.metadata.dataset.get("revision"),
             )
+            # Decode audio bytes to arrays
+            for split_name in lang_dataset:
+                lang_dataset[split_name] = lang_dataset[split_name].cast_column(
+                    audio_col, Audio(sampling_rate=16000)
+                )
             for split in self.metadata.eval_splits:
                 for row in tqdm(lang_dataset[split], total=len(lang_dataset[split])):
                     query_id = str(row[id_col])
@@ -419,6 +429,11 @@ class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
                 lang,
                 revision=self.metadata.dataset.get("revision"),
             )
+            # Decode audio bytes to arrays
+            for split_name in lang_dataset:
+                lang_dataset[split_name] = lang_dataset[split_name].cast_column(
+                    audio_col, Audio(sampling_rate=16000)
+                )
             for split in self.metadata.eval_splits:
                 for row in tqdm(lang_dataset[split], total=len(lang_dataset[split])):
                     # Use the "path" field as a unique id for both query and doc
@@ -508,6 +523,11 @@ class CommonVoice21T2ARetrieval(AbsTaskRetrieval):
                 lang,
                 revision=self.metadata.dataset.get("revision"),
             )
+            # Decode audio bytes to arrays
+            for split_name in lang_dataset:
+                lang_dataset[split_name] = lang_dataset[split_name].cast_column(
+                    audio_col, Audio(sampling_rate=16000)
+                )
             for split in self.metadata.eval_splits:
                 for row in tqdm(lang_dataset[split], total=len(lang_dataset[split])):
                     query_id = str(row[id_col])
