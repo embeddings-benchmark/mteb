@@ -18,7 +18,7 @@ class TurkishConstitutionalCourtViolation(AbsTaskClassification):
         eval_langs=["tur-Latn"],
         main_score="f1",
         dataset={
-            "path": "KocLab-Bilkent/turkish-constitutional-court",
+            "path": "denizgulal/turkish-constitutional-court-violation",
             "revision": "abb26be1e1259d883acebb605efe6c79b1045152",
         },
         date=("2000-01-01", "2023-02-20"),  # dataset card last updated Feb 20, 2023
