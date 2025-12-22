@@ -108,7 +108,7 @@ class FaissSearchIndex:
             ids = ids.tolist()
 
         if issubclass(self.index_type, faiss.IndexFlatL2):
-            similarities = -np.sqrt(np.maximum(similarities, 0)).tolist()
+            similarities = (-np.sqrt(np.maximum(similarities, 0))).tolist()
 
         return similarities, ids
 
