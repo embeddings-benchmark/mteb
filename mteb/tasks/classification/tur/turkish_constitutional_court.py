@@ -36,6 +36,5 @@ class TurkishConstitutionalCourtViolation(AbsTaskClassification):
         volume  = {58},
         number  = {5},
         year    = {2021},
-        }"""
-        
+        }""",
     )
