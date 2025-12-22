@@ -2,7 +2,7 @@
 
 import logging
 from collections.abc import Sequence
-from typing import TypeVar
+from typing import overload
 
 from mteb.abstasks import (
     AbsTask,
@@ -32,11 +32,9 @@ def _check_is_valid_language(lang: str) -> None:
         )
 
 
-T = TypeVar("T", AbsTask, type[AbsTask])
-
-
+@overload
 def filter_tasks(
-    tasks: Sequence[T],
+    tasks: Sequence[AbsTask],
     *,
     languages: Sequence[str] | None = None,
     script: Sequence[str] | None = None,
@@ -48,7 +46,40 @@ def filter_tasks(
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
     exclude_private: bool = False,
-) -> Sequence[T]:
+) -> list[AbsTask]: ...
+
+
+@overload
+def filter_tasks(
+    tasks: Sequence[type[AbsTask]],
+    *,
+    languages: Sequence[str] | None = None,
+    script: Sequence[str] | None = None,
+    domains: Sequence[TaskDomain] | None = None,
+    task_types: Sequence[TaskType] | None = None,
+    categories: Sequence[TaskCategory] | None = None,
+    modalities: Sequence[Modalities] | None = None,
+    exclusive_modality_filter: bool = False,
+    exclude_superseded: bool = False,
+    exclude_aggregate: bool = False,
+    exclude_private: bool = False,
+) -> list[type[AbsTask]]: ...
+
+
+def filter_tasks(
+    tasks: Sequence[AbsTask] | Sequence[type[AbsTask]],
+    *,
+    languages: Sequence[str] | None = None,
+    script: Sequence[str] | None = None,
+    domains: Sequence[TaskDomain] | None = None,
+    task_types: Sequence[TaskType] | None = None,
+    categories: Sequence[TaskCategory] | None = None,
+    modalities: Sequence[Modalities] | None = None,
+    exclusive_modality_filter: bool = False,
+    exclude_superseded: bool = False,
+    exclude_aggregate: bool = False,
+    exclude_private: bool = False,
+) -> list[AbsTask] | list[type[AbsTask]]:
     """Filter tasks based on the specified criteria.
 
     Args:
@@ -146,4 +177,4 @@ def filter_tasks(
 
         _tasks.append(t)
 
-    return _tasks
+    return _tasks  # type: ignore[return-value]  # type checker cannot infer the overload return type
