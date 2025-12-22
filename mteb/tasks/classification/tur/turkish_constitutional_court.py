@@ -40,23 +40,4 @@ class TurkishConstitutionalCourtViolation(AbsTaskClassification):
         """,
     )
 
-    def load_data(self, **kwargs):
-        # Let the parent load the HF dataset first
-        super().load_data(**kwargs)
 
-        # Normalize column names and cast labels to integers for sklearn metrics.
-        label_map = {"No violation": 0, "Violation": 1}
-
-        def rename_and_cast(split):
-            if "Text" in split.column_names:
-                split = split.rename_column("Text", "text")
-            if "Label" in split.column_names:
-                split = split.rename_column("Label", "label")
-            return split.map(lambda ex: {"label": label_map[ex["label"]]})
-
-        if isinstance(self.dataset, dict):
-            self.dataset = {
-                name: rename_and_cast(split) for name, split in self.dataset.items()
-            }
-        else:
-            self.dataset = rename_and_cast(self.dataset)
