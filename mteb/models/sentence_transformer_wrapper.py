@@ -103,8 +103,11 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 f" 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
             )
 
+    def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Compute the similarity between two collections of embeddings."""
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
-            self.similarity = self.model.similarity
+            return self.model.similarity(embeddings1, embeddings2)
+        return super().similarity(embeddings1, embeddings2)
 
     def encode(
         self,
