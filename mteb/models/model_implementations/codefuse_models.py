@@ -1,6 +1,6 @@
 from mteb.models import ModelMeta
-from mteb.models.model_meta import ScoringFunction
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
+from mteb.models.model_meta import ScoringFunction
 from mteb.types import PromptType
 
 F2LLM_CITATION = """@article{2025F2LLM,
