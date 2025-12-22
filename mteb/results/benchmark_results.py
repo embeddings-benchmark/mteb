@@ -241,8 +241,8 @@ class BenchmarkResults(BaseModel):
         model_results = []
         for (model, model_revision), group in task_df.groupby(["model", "revision"]):
             model_result = ModelResult.model_construct(
-                model_name=model,
-                model_revision=model_revision,
+                model_name=model,  # type: ignore[arg-type]
+                model_revision=model_revision,  # type: ignore[arg-type]
                 task_results=list(group["task_result"]),
             )
             model_results.append(model_result)

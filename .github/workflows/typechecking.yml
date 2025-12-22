@@ -7,7 +7,7 @@ on:
 
 
 jobs:
-  deploy:
+  typecheck:
     runs-on: ubuntu-latest
     steps:
       - name: Free disk space
