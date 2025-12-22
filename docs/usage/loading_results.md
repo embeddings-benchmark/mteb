@@ -82,6 +82,27 @@ print(task_names)
 # ['SpartQA', 'PlscClusteringP2P.v2', 'StackOverflowQA', 'JSICK', ...
 ```
 
+### Getting Benchmark Results
+
+If you loaded results for a specific benchmark, you can get the aggregated benchmark scores for each model using the `get_benchmark_result()` method:
+
+```python
+import mteb
+from mteb.cache import ResultCache
+
+# Load results for a specific benchmark
+benchmark = mteb.get_benchmark("MTEB(eng, v2)")
+cache = ResultCache()
+results = cache.load_results(
+    models=["intfloat/e5-small"],
+    tasks=benchmark,
+)
+
+benchmark_scores = results.get_benchmark_result()
+print(benchmark_scores)
+# {'intfloat/e5-small': 0.5}
+```
+
 ### Filtering Results
 
 There is also utility function that allows you to select certain models or tasks:
