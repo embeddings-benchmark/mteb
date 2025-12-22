@@ -35,9 +35,8 @@ pr:
 	make lint
 	make test
 
-build-docs:
+build-docs: build-docs-overview
 	@echo "--- 📚 Building documentation ---"
-	make build-docs-overview
 	python -m mkdocs build
 
 

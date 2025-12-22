@@ -147,7 +147,6 @@ class GoogleTextEmbeddingModel(AbsEncoder):
 google_text_emb_004 = ModelMeta(
     loader=GoogleTextEmbeddingModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
-        model_name="text-embedding-004",
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-embedding-004",
@@ -172,7 +171,6 @@ google_text_emb_004 = ModelMeta(
 google_text_emb_005 = ModelMeta(
     loader=GoogleTextEmbeddingModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
-        model_name="text-embedding-005",
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-embedding-005",
@@ -197,7 +195,6 @@ google_text_emb_005 = ModelMeta(
 google_text_multilingual_emb_002 = ModelMeta(
     loader=GoogleTextEmbeddingModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
-        model_name="text-embedding-002",
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-multilingual-embedding-002",
@@ -222,7 +219,6 @@ google_text_multilingual_emb_002 = ModelMeta(
 google_gemini_embedding_001 = ModelMeta(
     loader=GoogleTextEmbeddingModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
-        model_name="gemini-embedding-001",
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/gemini-embedding-001",
@@ -275,5 +271,15 @@ embedding_gemma_300m = ModelMeta(
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
     similarity_fn_name="cosine",
-    memory_usage_mb=578,
+    memory_usage_mb=1155,
+    citation="""
+@misc{vera2025embeddinggemmapowerfullightweighttext,
+      title={EmbeddingGemma: Powerful and Lightweight Text Representations},
+      author={Henrique Schechter Vera and Sahil Dua and Biao Zhang and Daniel Salz and Ryan Mullins and Sindhu Raghuram Panyam and Sara Smoot and Iftekhar Naim and Joe Zou and Feiyang Chen and Daniel Cer and Alice Lisak and Min Choi and Lucas Gonzalez and Omar Sanseviero and Glenn Cameron and Ian Ballantyne and Kat Black and Kaifeng Chen and Weiyi Wang and Zhe Li and Gus Martins and Jinhyuk Lee and Mark Sherwood and Juyeong Ji and Renjie Wu and Jingxiao Zheng and Jyotinder Singh and Abheesht Sharma and Divyashree Sreepathihalli and Aashi Jain and Adham Elarabawy and AJ Co and Andreas Doumanoglou and Babak Samari and Ben Hora and Brian Potetz and Dahun Kim and Enrique Alfonseca and Fedor Moiseev and Feng Han and Frank Palma Gomez and Gustavo Hernández Ábrego and Hesen Zhang and Hui Hui and Jay Han and Karan Gill and Ke Chen and Koert Chen and Madhuri Shanbhogue and Michael Boratko and Paul Suganthan and Sai Meher Karthik Duddu and Sandeep Mariserla and Setareh Ariafar and Shanfeng Zhang and Shijie Zhang and Simon Baumgartner and Sonam Goenka and Steve Qiu and Tanmaya Dabral and Trevor Walker and Vikram Rao and Waleed Khawaja and Wenlei Zhou and Xiaoqi Ren and Ye Xia and Yichang Chen and Yi-Ting Chen and Zhe Dong and Zhongli Ding and Francesco Visin and Gaël Liu and Jiageng Zhang and Kathleen Kenealy and Michelle Casbon and Ravin Kumar and Thomas Mesnard and Zach Gleicher and Cormac Brick and Olivier Lacombe and Adam Roberts and Qin Yin and Yunhsuan Sung and Raphael Hoffmann and Tris Warkentin and Armand Joulin and Tom Duerig and Mojtaba Seyedhosseini},
+      year={2025},
+      eprint={2509.20354},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2509.20354},
+}""",
 )

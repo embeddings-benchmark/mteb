@@ -1,10 +1,11 @@
 from collections.abc import Iterable, Sequence
-from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Literal
 
 import pandas as pd
 
 from mteb.benchmarks._create_table import (
+    _create_per_language_table_from_benchmark_results,
     _create_per_task_table_from_benchmark_results,
     _create_summary_table_from_benchmark_results,
     _create_summary_table_mean_public_private,
@@ -50,6 +51,7 @@ class Benchmark:
     display_on_leaderboard: bool = True
     icon: str | None = None
     display_name: str | None = None
+    language_view: list[str] | Literal["all"] = field(default_factory=list)
 
     def __iter__(self) -> Iterable["AbsTask"]:
         return iter(self.tasks)
@@ -79,6 +81,28 @@ class Benchmark:
             A pandas DataFrame representing the per-task results.
         """
         return _create_per_task_table_from_benchmark_results(benchmark_results)
+
+    def _create_per_language_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        """Create per-language table. Called by the leaderboard app.
+
+        Returns:
+            A pandas DataFrame representing the per-language results.
+        """
+        if self.language_view == "all" or len(self.language_view) > 0:
+            return _create_per_language_table_from_benchmark_results(
+                benchmark_results, self.language_view
+            )
+        else:
+            no_results_frame = pd.DataFrame(
+                {
+                    "No results": [
+                        "The per-language table is not available for this benchmark."
+                    ]
+                }
+            )
+            return no_results_frame
 
 
 class RtebBenchmark(Benchmark):

@@ -1,7 +1,7 @@
 import torch
 
+from mteb.models.instruct_wrapper import instruct_wrapper
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
@@ -22,7 +22,7 @@ def instruction_template(
 
 
 Linq_Embed_Mistral = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
+    loader=instruct_wrapper,
     loader_kwargs=dict(
         instruction_template=instruction_template,
         attn="cccc",

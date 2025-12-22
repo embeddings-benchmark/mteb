@@ -1,14 +1,22 @@
+from __future__ import annotations
+
 import hashlib
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
+from mteb.similarity_functions import (
+    select_pairwise_similarity,
+    select_similarity,
+)
 from mteb.types._encoder_io import Array, AudioInputItem, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from PIL import Image
 
 
 def _string_to_vector(text: str | None, size: int) -> np.ndarray:
@@ -181,15 +189,9 @@ class RandomEncoderBaseline:
         Returns:
             Cosine similarity matrix between the two sets of embeddings
         """
-        norm1 = np.linalg.norm(
-            embeddings1.reshape(-1, self.embedding_dim), axis=1, keepdims=True
+        return select_similarity(
+            embeddings1, embeddings2, self.mteb_model_meta.similarity_fn_name
         )
-        norm2 = np.linalg.norm(
-            embeddings2.reshape(-1, self.embedding_dim), axis=1, keepdims=True
-        )
-        normalized1 = embeddings1 / (norm1 + 1e-10)
-        normalized2 = embeddings2 / (norm2 + 1e-10)
-        return np.dot(normalized1, normalized2.T)
 
     def similarity_pairwise(
         self,
@@ -205,17 +207,9 @@ class RandomEncoderBaseline:
         Returns:
             Cosine similarity for each pair of embeddings
         """
-        norm1 = np.linalg.norm(
-            embeddings1.reshape(-1, self.embedding_dim), axis=1, keepdims=True
+        return select_pairwise_similarity(
+            embeddings1, embeddings2, self.mteb_model_meta.similarity_fn_name
         )
-        norm2 = np.linalg.norm(
-            embeddings2.reshape(-1, self.embedding_dim), axis=1, keepdims=True
-        )
-        normalized1 = embeddings1 / (norm1 + 1e-10)
-        normalized2 = embeddings2 / (norm2 + 1e-10)
-        normalized1 = np.asarray(normalized1)
-        normalized2 = np.asarray(normalized2)
-        return np.sum(normalized1 * normalized2, axis=1)
 
 
 random_encoder_baseline = ModelMeta(

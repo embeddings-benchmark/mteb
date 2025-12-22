@@ -62,7 +62,11 @@ class ResultCache:
         Returns:
             The path to the results of the task.
         """
-        results_folder = "results" if not remote else "remote"
+        results_folder = (
+            self.cache_path / "results"
+            if not remote
+            else self.cache_path / "remote" / "results"
+        )
 
         if isinstance(model_name, ModelMeta):
             if model_revision is not None:
@@ -74,7 +78,7 @@ class ResultCache:
         elif isinstance(model_name, str):
             model_name = model_name.replace("/", "__").replace(" ", "_")
 
-        model_path = self.cache_path / results_folder / model_name
+        model_path = results_folder / model_name
 
         if model_revision is None:
             logger.warning(
@@ -191,12 +195,14 @@ class ResultCache:
         self,
         remote: str = "https://github.com/embeddings-benchmark/results",
         download_latest: bool = True,
+        revision: str | None = None,
     ) -> Path:
         """Downloads the latest version of the results repository from GitHub to a local cache directory. Required git to be installed.
 
         Args:
             remote: The URL of the results repository on GitHub.
             download_latest: If True it will download the latest version of the repository, otherwise it will only update the existing repository.
+            revision: If specified, it will checkout the given revision after cloning or pulling the repository.
 
         Returns:
             The path to the local cache directory.
@@ -224,14 +230,27 @@ class ResultCache:
                 )
                 raise ValueError(msg)
 
-            if download_latest:
+            if revision or download_latest:
                 logger.info(
-                    f"remote repository already exists in {results_directory}, updating it using git pull"
+                    f"remote repository already exists in {results_directory}, fetching updates"
                 )
-                subprocess.run(["git", "pull"], cwd=results_directory)
+                subprocess.run(
+                    ["git", "fetch", "--all", "--tags"],
+                    cwd=results_directory,
+                    check=True,
+                )
             else:
                 logger.debug(
-                    f"Results repository already exists in {results_directory}, skipping update, set download_latest=True to update it"
+                    f"Results repository already exists in {results_directory}, skipping update, "
+                    f"set download_latest=True to update it"
+                )
+
+            if revision:
+                logger.info(f"Checking out revision '{revision}'")
+                subprocess.run(
+                    ["git", "checkout", revision],
+                    cwd=results_directory,
+                    check=True,
                 )
             return results_directory
 
@@ -239,7 +258,18 @@ class ResultCache:
             f"No results repository found in {results_directory}, cloning it from {remote}"
         )
 
-        subprocess.run(["git", "clone", remote, "remote"], cwd=self.cache_path)
+        clone_cmd = ["git", "clone", "--depth", "1"]
+
+        if revision:
+            logger.info(f"Cloning repository at revision '{revision}'")
+            clone_cmd.append(f"--revision={revision}")
+        clone_cmd.extend([remote, "remote"])
+
+        subprocess.run(
+            clone_cmd,
+            cwd=self.cache_path,
+            check=True,
+        )
 
         return results_directory
 
@@ -495,7 +525,7 @@ class ResultCache:
             if validate_and_filter:
                 task = task_names[task_result.task_name]
                 try:
-                    task_result.validate_and_filter_scores(task=task)
+                    task_result = task_result.validate_and_filter_scores(task=task)
                 except Exception as e:
                     logger.info(
                         f"Validation failed for {task_result.task_name} in {model_name} {revision}: {e}"

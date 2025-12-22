@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import logging
 import math
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.autonotebook import tqdm
 
@@ -11,6 +12,9 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from PIL import Image
 
 logger = logging.getLogger(__name__)
 
@@ -267,9 +271,9 @@ def smart_resize(
     return h_bar, w_bar
 
 
-def fetch_image(
-    image: str | Image.Image, size_factor: int = IMAGE_FACTOR
-) -> Image.Image:
+def fetch_image(image: Image.Image, size_factor: int = IMAGE_FACTOR) -> Image.Image:
+    from PIL import Image
+
     image_obj = None
     if isinstance(image, Image.Image):
         image_obj = image

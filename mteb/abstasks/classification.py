@@ -6,7 +6,6 @@ from typing import Any, TypedDict
 
 import numpy as np
 from datasets import Dataset, DatasetDict
-from PIL import ImageFile
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     accuracy_score,
@@ -35,7 +34,6 @@ from ._statistics_calculation import (
 )
 from .abstask import AbsTask
 
-ImageFile.LOAD_TRUNCATED_IMAGES = True
 logger = logging.getLogger(__name__)
 
 

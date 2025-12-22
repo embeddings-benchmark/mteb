@@ -14,6 +14,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from typing_extensions import override
 
 from mteb._create_dataloaders import create_dataloader
+from mteb._evaluators.classification_metrics import hamming_score
 from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
 from mteb.models import EncoderProtocol
 
@@ -40,11 +41,13 @@ class MultilabelClassificationMetrics(TypedDict):
         accuracy: Accuracy of the classifier.
         lrap: Label Ranking Average Precision (LRAP) score.
         f1: Macro F1 score.
+        hamming: Hamming score (label-based accuracy).
     """
 
     accuracy: float
     lrap: float
     f1: float
+    hamming: float
 
 
 class FullMultilabelClassificationMetrics(MultilabelClassificationMetrics):
@@ -157,7 +160,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
 
         logger.info("Running multilabel classification - Evaluating classifiers...")
         all_predictions = []
-        for i_experiment, sample_indices in enumerate(train_samples):
+        for _, sample_indices in enumerate(train_samples):
             X_train = np.stack([unique_train_embeddings[idx] for idx in sample_indices])
             y_train = train_split.select(sample_indices)[self.label_column_name]
             y_train = binarizer.transform(y_train)
@@ -207,16 +210,20 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         else:
             lrap = label_ranking_average_precision_score(y_test, y_pred)
         f1 = f1_score(y_test, y_pred, average="macro")
+        hamming = hamming_score(y_test, y_pred)
         return MultilabelClassificationMetrics(
             accuracy=accuracy,
             lrap=lrap,
             f1=f1,
+            hamming=hamming,
         )
 
     def _undersample_data_indices(
         self, y: list[list[int]], samples_per_label: int, idxs: list[int] | None = None
     ) -> tuple[list[int], list[int]]:
         """Undersample data to have samples_per_label samples of each label.
+
+        Currently ensures that each label has at least samples_per_label samples.
 
         Returns:
             A tuple containing:

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.1.13"
+version = "2.4.2"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -57,7 +57,10 @@ Repository = "https://github.com/embeddings-benchmark/mteb"
 mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
-image = ["torchvision>0.2.1"]
+image = [
+    "torchvision>0.2.1",
+    "transformers[torch-vision,vision]",
+]
 audio = [
     "torchaudio>=2.6.0",
     "datasets<4",  # https://github.com/huggingface/datasets/issues/7707
@@ -66,7 +69,7 @@ audio = [
 ]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
-    "gradio==5.35.0",
+    "gradio==6.0.1",
     "plotly>=5.24.0,<6.0.0",
     "cachetools>=5.2.0",
     "matplotlib>=3.9.4",
@@ -96,10 +99,12 @@ open_clip_torch = ["open_clip_torch==2.31.0"]
 nomic = ["einops>=0.8.1"]
 ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
 colpali_engine = ["colpali_engine>=0.3.12"]
+colqwen3 = ["transformers>=4.57", "torchvision>=0.22.1"]
 xet = ["huggingface_hub>=0.32.0"]
 youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lkeap>=3.0.1451"]
 llama-embed-nemotron = ["transformers==4.51.0"]
 faiss-cpu = ["faiss-cpu>=1.12.0"]
+eager_embed = ["qwen_vl_utils>=0.0.14"]
 speechbrain = ["speechbrain>=0.5.12"]
 muq = ["muq==0.1.0"]
 wav2clip = ["wav2clip==0.1.0"]
@@ -242,10 +247,6 @@ ignore = [
 "scripts/*" = ["ALL"]
 "docs/*" = ["D", "DOC"]
 "tests/*" = ["RUF012", "D", "DOC", "NPY"]
-"mteb/abstasks/audio/*" = ["D"]
-"mteb/evaluation/*" = ["D"]
-"mteb/abstasks/image/abs_task_any2any_retrieval.py" = ["ALL"]
-"mteb/evaluation/evaluators/image/any2any_retrieval_evaluator.py" = ["ALL"]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = ["D", "DOC"]
 "mteb/models/model_implementations/*" = ["D", "DOC"]
@@ -318,6 +319,9 @@ conflicts = [
     [{ extra = "colpali-engine" }, { extra = "pylate" }],
     [{ extra = "colpali-engine" }, { extra = "llm2vec" }],
     [{ extra = "colpali-engine" }, { extra = "llama-embed-nemotron" }], # conflicting version of transformers
+    [{ extra = "colqwen3" }, { extra = "pylate" }], # conflicting versions of transformers
+    [{ extra = "colqwen3" }, { extra = "llm2vec" }], # conflicting versions of transformers
+    [{ extra = "colqwen3" }, { extra = "llama-embed-nemotron" }], # conflicting versions of transformers
     [{ extra = "jina-v4" }, { extra = "llm2vec" }],
     [{ extra = "jina-v4" }, { extra = "llama-embed-nemotron" }], # conflicting versions of transformers
     [{ extra = "msclap" }, { extra = "audio" }],
@@ -431,3 +435,4 @@ Mian = "Mian"
 Ono = "Ono"
 Yau = "Yau"
 Altas = "Altas"
+matche = "matche"

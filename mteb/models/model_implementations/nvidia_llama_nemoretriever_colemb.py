@@ -1,13 +1,16 @@
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    pass
+
 
 LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperforming,
       title={Llama Nemoretriever Colembed: Top-Performing Text-Image Retrieval Model},
@@ -53,6 +56,7 @@ class LlamaNemoretrieverColembed(AbsEncoder):
         **kwargs,
     ):
         import torchvision.transforms.functional as F
+        from PIL import Image
 
         all_images = []
         if isinstance(images, DataLoader):
@@ -61,14 +65,16 @@ class LlamaNemoretrieverColembed(AbsEncoder):
             iterator = DataLoader(images, batch_size=batch_size)
 
         for batch in iterator:
-            for b in batch:
+            for image in batch["image"]:
                 pil_img = (
-                    F.to_pil_image(b.to("cpu")) if not isinstance(b, Image.Image) else b
+                    image
+                    if isinstance(image, Image.Image)
+                    else F.to_pil_image(image.to("cpu"))
                 )
                 all_images.append(pil_img)
 
         batch_size = 1
-        return self.model.forward_passages(all_images, batch_size=batch_size)
+        return self.model.forward_images(all_images, batch_size=batch_size)
 
     def calculate_probs(self, text_embeddings, image_embeddings):
         scores = self.similarity(text_embeddings, image_embeddings)
@@ -117,19 +123,18 @@ class LlamaNemoretrieverColembed(AbsEncoder):
 
 TRAINING_DATA = {
     # from https://huggingface.co/datasets/vidore/colpali_train_set
-    "DocVQA",
-    "InfoVQA",
-    "TATDQA",
-    "arXivQA",
-    "hotpotqa",
-    "miracl",
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreArxivQARetrieval",
+    "HotpotQA",
+    "MIRACLRetrieval",
     "NQ",
-    "stackexchange",
+    "StackExchangeClustering",
     "SQuAD",
     "WebInstructSub",
     "docmatix-ir",
-    "vdr-multilingual-train",
-    "colpali_train_set",  # as it contains PDFs
+    "VDRMultilingualRetrieval",
     "VisRAG-Ret-Train-Synthetic-data",
     "VisRAG-Ret-Train-In-domain-data",
     "wiki-ss-nq",
@@ -146,7 +151,7 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     release_date="2025-06-27",
     modalities=["image", "text"],
     n_parameters=2_418_000_000,
-    memory_usage_mb=9224,
+    memory_usage_mb=4610,
     max_tokens=8192,
     embed_dim=2048,
     license="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1/blob/main/LICENSE",
@@ -172,7 +177,7 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     release_date="2025-06-27",
     modalities=["image", "text"],
     n_parameters=4_407_000_000,
-    memory_usage_mb=16811,
+    memory_usage_mb=8403,
     max_tokens=8192,
     embed_dim=3072,
     license="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1/blob/main/LICENSE",

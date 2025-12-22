@@ -1,12 +1,17 @@
+from __future__ import annotations
+
 from collections.abc import Mapping
 from enum import Enum
-from typing import TypedDict
+from typing import TYPE_CHECKING, TypedDict
 
 import numpy as np
 import torch
 from datasets import Dataset
-from PIL import Image
 from typing_extensions import NotRequired
+
+if TYPE_CHECKING:
+    from PIL import Image
+
 
 # --- Output types ---
 Array = np.ndarray | torch.Tensor

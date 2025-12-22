@@ -83,6 +83,7 @@ nav:
       - Advanced Usage:
         - Two stage reranking: advanced_usage/two_stage_reranking.md
         - Cache embeddings: advanced_usage/cache_embeddings.md
+        - Retrieval backend: advanced_usage/retrieval_backend.md
   - Contributing:
       - Adding a Model: contributing/adding_a_model.md
       - Adding a Task: contributing/adding_a_dataset.md

@@ -342,7 +342,6 @@ tarka_embedding_150m_v1 = ModelMeta(
 
 tark_embedding_350_v1_kwargs = dict(
     model_kwargs={
-        "attn_implementation": "flash_attention_2",
         "torch_dtype": "bfloat16",
     },  # use low-precision
     trust_remote_code=True,
@@ -357,7 +356,7 @@ tarka_embedding_350m_v1 = ModelMeta(
     name="Tarka-AIR/Tarka-Embedding-350M-V1",
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
     open_weights=True,
-    revision="f4b5de82060cf3a833e52580e7ce59adeacb6fb5",
+    revision="a850d6a329145474727424fed6b12b62096b8ba3",
     release_date="2025-11-11",
     n_parameters=354_483_968,
     memory_usage_mb=676,
