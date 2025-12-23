@@ -82,7 +82,7 @@ Here is an example implementing a zero-shot image classification from scratch. L
 To solve this task, we need to encode the `images`, encode the `class label candidates with prompts` (e.g. "this is a dog pic", "this is a cat pic"), and compare them by calculating similarity, and then argmax out the class prediction for each image. We begin by implementing a model wrapper.
 
 #### Model Wrapper
-See the [`EncoderProtocol`](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/encoder_protocol.py) for more details. The model class implements `encode()` and `similarity()` methods for text and image embeddings.
+See the [`EncoderProtocol`](https://embeddings-benchmark.github.io/mteb/api/model/?h=encoder+protocol#mteb.models.EncoderProtocol) for more details. The model class implements `encode()` and `similarity()` methods for text and image embeddings.
 As an example, [`OpenCLIPWrapper`](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/model_implementations/openclip_models.py) is implemented with the required interface.
 ```python
 class OpenCLIPWrapper:
