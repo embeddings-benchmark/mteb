@@ -1,0 +1,30 @@
+{
+    "loader_kwargs": {},
+    "name": "baseline/random-encoder-baseline",
+    "revision": "1",
+    "release_date": null,
+    "languages": null,
+    "n_parameters": 0,
+    "memory_usage_mb": 0.0,
+    "max_tokens": Infinity,
+    "embed_dim": 32,
+    "license": "mit",
+    "open_weights": true,
+    "public_training_code": null,
+    "public_training_data": null,
+    "framework": [],
+    "reference": null,
+    "similarity_fn_name": "cosine",
+    "use_instructions": false,
+    "training_datasets": [],
+    "adapted_from": null,
+    "superseded_by": null,
+    "modalities": [
+        "text",
+        "image"
+    ],
+    "is_cross_encoder": null,
+    "citation": null,
+    "contacts": null,
+    "loader": "RandomEncoderBaseline"
+}

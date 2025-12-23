@@ -435,7 +435,7 @@ MTEB_RETRIEVAL_MEDICAL = Benchmark(
         ],
     ),
     description="A curated set of MTEB tasks designed to evaluate systems in the context of medical information retrieval.",
-    reference="",
+    reference=None,
     citation=None,
 )
 
@@ -2589,7 +2589,7 @@ HUME = HUMEBenchmark(
         ],
     ),
     description="The HUME benchmark is designed to evaluate the performance of text embedding models and humans on a comparable set of tasks. This captures areas where models perform better than human annotators and the reverse. In the paper, we go further into the analysis and what conclusions can be drawn.",
-    reference="Coming soon (in review)",
+    reference=None,
     citation=None,
     contacts=["AdnanElAssadi56", "KennethEnevoldsen", "isaac-chung", "Samoed"],
 )
