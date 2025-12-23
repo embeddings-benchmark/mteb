@@ -1,4 +1,5 @@
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -59,11 +60,11 @@ class FarsTail(AbsTaskPairClassification):
             lambda example: {"label": 1 if example["label"] == "e" else 0}
         )
         for split in self.metadata.eval_splits:
-            _dataset[split] = [
+            _dataset[split] = Dataset.from_dict(
                 {
                     "sentence1": self.dataset[split]["premise"],
                     "sentence2": self.dataset[split]["hypothesis"],
                     "labels": self.dataset[split]["label"],
                 }
-            ]
+            )
         self.dataset = _dataset
