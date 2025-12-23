@@ -34,12 +34,11 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         self.sampling_rate = 16_000
         self.max_audio_length_s = max_audio_length_s
 
-        # text side (CLIP)
-        self.clip = CLIPModel.from_pretrained(model_name, revision=revision).to(device)
+        # text side (CLIP) - we use the standard OpenAI CLIP model as mentioned in paper
+        clip_model_name = "openai/clip-vit-base-patch32"
+        self.clip = CLIPModel.from_pretrained(clip_model_name).to(device)
         self.clip.eval()
-        self.clip_processor = CLIPProcessor.from_pretrained(
-            model_name, revision=revision
-        )
+        self.clip_processor = CLIPProcessor.from_pretrained(clip_model_name)
 
     def get_audio_embeddings(
         self,
@@ -79,13 +78,13 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
                 if wav.shape[-1] < max_length:
                     # Pad with zeros
                     pad_length = max_length - wav.shape[-1]
-                    padded_wav = torch.nn.functional.pad(wav, (0, pad_length))
+                    padded_wav = np.pad(wav, (0, pad_length), mode="constant")
                 else:
                     padded_wav = wav
                 padded_wavs.append(padded_wav)
 
-            # Stack into batch tensor
-            batch_tensor = torch.stack(padded_wavs).cpu().detach().numpy()
+            # Stack into batch array
+            batch_tensor = np.stack(padded_wavs)
 
             # Process entire batch at once
             batch_embeds = self.embed_audio(batch_tensor, self.audio_model)
