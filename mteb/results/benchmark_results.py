@@ -249,7 +249,6 @@ class BenchmarkResults(BaseModel):
             na_position="last",
         )
 
-        # Use groupby().first() instead of apply() for massive speedup
         task_df = task_df.groupby(["model", "task_name"], as_index=False).first()
 
         # Reconstruct model results
