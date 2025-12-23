@@ -6,7 +6,9 @@ from mteb.models.models_protocols import PromptType
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
 ) -> str:
-    if prompt_type == PromptType.document:
+    if (
+        prompt_type == PromptType.document
+    ):  # to avoid this issue: https://huggingface.co/Qwen/Qwen3-Embedding-8B/discussions/21
         return " "
     if not instruction:
         return ""
