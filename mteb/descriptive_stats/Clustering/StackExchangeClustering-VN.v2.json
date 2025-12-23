@@ -1,0 +1,171 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "text_statistics": {
+            "total_text_length": 133154,
+            "min_text_length": 12,
+            "average_text_length": 65.0166015625,
+            "max_text_length": 197,
+            "unique_texts": 2046
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 50,
+            "labels": {
+                "47": {
+                    "count": 45
+                },
+                "38": {
+                    "count": 50
+                },
+                "27": {
+                    "count": 46
+                },
+                "10": {
+                    "count": 21
+                },
+                "48": {
+                    "count": 74
+                },
+                "42": {
+                    "count": 47
+                },
+                "22": {
+                    "count": 37
+                },
+                "30": {
+                    "count": 25
+                },
+                "44": {
+                    "count": 38
+                },
+                "37": {
+                    "count": 58
+                },
+                "21": {
+                    "count": 41
+                },
+                "46": {
+                    "count": 92
+                },
+                "7": {
+                    "count": 61
+                },
+                "35": {
+                    "count": 52
+                },
+                "17": {
+                    "count": 37
+                },
+                "1": {
+                    "count": 38
+                },
+                "19": {
+                    "count": 12
+                },
+                "39": {
+                    "count": 54
+                },
+                "40": {
+                    "count": 114
+                },
+                "26": {
+                    "count": 12
+                },
+                "14": {
+                    "count": 70
+                },
+                "34": {
+                    "count": 16
+                },
+                "32": {
+                    "count": 8
+                },
+                "15": {
+                    "count": 25
+                },
+                "23": {
+                    "count": 59
+                },
+                "28": {
+                    "count": 13
+                },
+                "0": {
+                    "count": 55
+                },
+                "25": {
+                    "count": 145
+                },
+                "5": {
+                    "count": 68
+                },
+                "13": {
+                    "count": 27
+                },
+                "45": {
+                    "count": 20
+                },
+                "31": {
+                    "count": 47
+                },
+                "4": {
+                    "count": 32
+                },
+                "2": {
+                    "count": 52
+                },
+                "3": {
+                    "count": 60
+                },
+                "16": {
+                    "count": 11
+                },
+                "24": {
+                    "count": 20
+                },
+                "33": {
+                    "count": 51
+                },
+                "12": {
+                    "count": 24
+                },
+                "11": {
+                    "count": 34
+                },
+                "29": {
+                    "count": 16
+                },
+                "9": {
+                    "count": 57
+                },
+                "49": {
+                    "count": 24
+                },
+                "8": {
+                    "count": 7
+                },
+                "20": {
+                    "count": 36
+                },
+                "36": {
+                    "count": 48
+                },
+                "43": {
+                    "count": 31
+                },
+                "6": {
+                    "count": 22
+                },
+                "41": {
+                    "count": 10
+                },
+                "18": {
+                    "count": 6
+                }
+            }
+        }
+    }
+}
