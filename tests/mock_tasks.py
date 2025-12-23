@@ -1067,22 +1067,22 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
         ]
         # "this is a test sentence", "this does not match the above"
         labels = [1, 0]
-        data = {
-            "test": [
-                {
-                    "sentence1": sentence1,
-                    "sentence2": sentence2,
-                    "labels": labels,
-                }
-            ]
-        }
-
-        self.dataset = DatasetDict(
+        data = DatasetDict(
             {
-                "eng": data,
-                "fra": data,
+                "test": Dataset.from_dict(
+                    {
+                        "sentence1": sentence1,
+                        "sentence2": sentence2,
+                        "labels": labels,
+                    }
+                )
             }
         )
+
+        self.dataset = {
+            "eng": data,
+            "fra": data,
+        }
         self.data_loaded = True
 
 
