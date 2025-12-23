@@ -384,7 +384,7 @@ class BenchmarkResults(BaseModel):
             out_file.write(self.model_dump_json(indent=2))
 
     @classmethod
-    def from_validated(cls, **data) -> Self:
+    def from_validated(cls, **data: dict) -> Self:
         """Create BenchmarkResults from validated data.
 
         Args:
