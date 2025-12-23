@@ -89,6 +89,9 @@ class AbsTaskClusteringLegacy(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
+        data_split = data_split.select_columns(
+            [self.input_column_name, self.label_column_name]
+        )
         # MTEB text clustering requires renaming and eval per subset.
         if self.metadata.modalities == ["text"]:
             all_metrics = []
@@ -97,8 +100,6 @@ class AbsTaskClusteringLegacy(AbsTask):
                 logger.info(
                     f"Running clustering on cluster ({i + 1}/{len(data_split)})"
                 )
-                if "__index_level_0__" in cluster_set:
-                    cluster_set.pop("__index_level_0__")
                 clustering_dataset = Dataset.from_dict(cluster_set).select_columns(
                     [self.input_column_name, self.label_column_name]
                 )
