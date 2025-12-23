@@ -32,7 +32,7 @@ from .model_result import ModelResult, _aggregate_and_pivot
 logger = logging.getLogger(__name__)
 
 
-# Global cache for model metas and version parsing (HIGH IMPACT OPTIMIZATIONS)
+# Global cache for model metas and version parsing
 @functools.lru_cache
 def _get_cached_model_metas() -> dict[str, str | None]:
     """Cache model metas to avoid repeated calls."""
@@ -209,17 +209,17 @@ class BenchmarkResults(BaseModel):
             return BenchmarkResults.model_construct(model_results=[])
         task_df = pd.DataFrame.from_records(records)
 
-        # Use cached model metas (HIGH IMPACT OPTIMIZATION #1)
+        # Use cached model metas
         model_to_main_revision = _get_cached_model_metas()
         task_df["main_revision"] = task_df["model"].map(model_to_main_revision)  # type: ignore
 
-        # Use cached version parsing (HIGH IMPACT OPTIMIZATION #3)
+        # Use cached version parsing
         task_df["mteb_version"] = task_df["mteb_version"].map(_parse_version_cached)  # type: ignore
 
         # Filter out rows without scores first
         task_df = task_df[task_df["has_scores"]]
 
-        # Optimize groupby with vectorized operations (HIGH IMPACT OPTIMIZATION #2)
+        # Optimize groupby with vectorized operations
         # Sort by priority: main_revision match, then mteb_version (descending), then revision
         task_df["is_main_revision"] = task_df["revision"] == task_df["main_revision"]
 
