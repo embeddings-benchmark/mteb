@@ -735,7 +735,6 @@ jina_reranker_v3 = ModelMeta(
     framework=["PyTorch"],
     use_instructions=None,
     reference="https://huggingface.co/jinaai/jina-reranker-v3",
-    is_cross_encoder=True,
     public_training_code=None,
     public_training_data=None,
     training_datasets=JINARerankerV3_TRAINING_DATA,

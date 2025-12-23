@@ -331,7 +331,6 @@ monot5_small = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -374,7 +373,6 @@ monot5_base = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )
 
 monot5_large = ModelMeta(
@@ -399,7 +397,6 @@ monot5_large = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -433,7 +430,6 @@ monot5_3b = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -489,7 +485,6 @@ flant5_base = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )
 
 flant5_large = ModelMeta(
@@ -536,7 +531,6 @@ flant5_large = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )
 
 flant5_xl = ModelMeta(
@@ -583,7 +577,6 @@ flant5_xl = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )
 
 flant5_xxl = ModelMeta(
@@ -630,7 +623,6 @@ flant5_xxl = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )
 
 
@@ -665,7 +657,6 @@ llama2_7b = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2307.09288},
     }""",
-    is_cross_encoder=True,
 )
 
 llama2_7b_chat = ModelMeta(
@@ -699,7 +690,6 @@ llama2_7b_chat = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )
 
 mistral_7b = ModelMeta(
@@ -733,7 +723,6 @@ mistral_7b = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2310.06825},
     }""",
-    is_cross_encoder=True,
 )
 
 followir_7b = ModelMeta(
@@ -770,7 +759,6 @@ followir_7b = ModelMeta(
       primaryClass={cs.IR}
     }
     """,
-    is_cross_encoder=True,
 )
 
 
@@ -911,7 +899,6 @@ mt5_base_mmarco_v2 = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )
 
 mt5_13b_mmarco_100k = ModelMeta(
@@ -936,5 +923,4 @@ mt5_13b_mmarco_100k = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )

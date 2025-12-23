@@ -129,6 +129,5 @@ listconranker = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    is_cross_encoder=True,
     citation=LISTCONRANKER_CITATION,
 )

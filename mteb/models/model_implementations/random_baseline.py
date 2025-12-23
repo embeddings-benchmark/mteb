@@ -236,6 +236,5 @@ random_cross_encoder_baseline = ModelMeta(
     name="baseline/random-cross-encoder-baseline",
     model_type=["cross-encoder"],
     modalities=["text", "image"],
-    is_cross_encoder=True,
     **_common_mock_metadata,
 )
