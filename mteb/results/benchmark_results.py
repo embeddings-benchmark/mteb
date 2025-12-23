@@ -1,3 +1,4 @@
+import functools
 import json
 import logging
 import warnings
@@ -29,6 +30,24 @@ from mteb.types import (
 from .model_result import ModelResult, _aggregate_and_pivot
 
 logger = logging.getLogger(__name__)
+
+
+# Global cache for model metas and version parsing (HIGH IMPACT OPTIMIZATIONS)
+@functools.lru_cache(maxsize=1)
+def _get_cached_model_metas() -> dict[str, str | None]:
+    """Cache model metas to avoid repeated calls."""
+    return {meta.name: meta.revision for meta in get_model_metas()}
+
+
+@functools.lru_cache(maxsize=10000)
+def _parse_version_cached(version_str: str | None) -> Version | None:
+    """Cache version parsing to avoid repeated parsing."""
+    if version_str is None:
+        return None
+    try:
+        return Version(version_str)
+    except (InvalidVersion, TypeError):
+        return None
 
 
 class BenchmarkResults(BaseModel):
@@ -173,40 +192,6 @@ class BenchmarkResults(BaseModel):
         Returns:
             A new BenchmarkResults object with the revisions joined.
         """
-
-        def parse_version(version_str: str) -> Version | None:
-            try:
-                return Version(version_str)
-            except (InvalidVersion, TypeError):
-                return None
-
-        def keep_best(group: pd.DataFrame) -> pd.DataFrame:
-            # Filtering out task_results where no scores are present
-            group = group[group["has_scores"]]
-            is_main_revision = group["revision"] == group["main_revision"]
-            # If the main revision is present we select that
-            if is_main_revision.sum() > 0:
-                return group[is_main_revision].head(n=1)
-            unique_revisions = group["revision"].unique()
-
-            # ensure None/NA/"external" revisions is filtered out
-            group.loc[group["revision"].isna(), "revision"] = "no_revision_available"
-            group.loc[group["revision"] == "external", "revision"] = (
-                "no_revision_available"
-            )
-
-            # Filtering out no_revision_available if other revisions are present
-            if (len(unique_revisions) > 1) and (
-                "no_revision_available" in unique_revisions
-            ):
-                group = group[group["revision"] != "no_revision_available"]
-            # If there are any not-NA mteb versions, we select the latest one
-            if group["mteb_version"].notna().any():
-                group = group.dropna(subset=["mteb_version"])
-                group = group.sort_values("mteb_version", ascending=False)
-                return group.head(n=1)
-            return group.head(n=1)
-
         records = []
         for model_result in self:
             for task_result in model_result.task_results:
@@ -223,21 +208,62 @@ class BenchmarkResults(BaseModel):
         if not records:
             return BenchmarkResults.model_construct(model_results=[])
         task_df = pd.DataFrame.from_records(records)
-        model_to_main_revision = {
-            meta.name: meta.revision for meta in get_model_metas()
-        }
+
+        # Use cached model metas (HIGH IMPACT OPTIMIZATION #1)
+        model_to_main_revision = _get_cached_model_metas()
         task_df["main_revision"] = task_df["model"].map(model_to_main_revision)  # type: ignore
-        task_df["mteb_version"] = task_df["mteb_version"].map(parse_version)  # type: ignore
-        task_df = (
-            task_df.groupby(["model", "task_name"])
-            .apply(keep_best)
-            .reset_index(drop=True)
+
+        # Use cached version parsing (HIGH IMPACT OPTIMIZATION #3)
+        task_df["mteb_version"] = task_df["mteb_version"].map(_parse_version_cached)  # type: ignore
+
+        # Filter out rows without scores first
+        task_df = task_df[task_df["has_scores"]]
+
+        # Optimize groupby with vectorized operations (HIGH IMPACT OPTIMIZATION #2)
+        # Sort by priority: main_revision match, then mteb_version (descending), then revision
+        task_df["is_main_revision"] = task_df["revision"] == task_df["main_revision"]
+
+        # Handle None/NA/external revisions
+        task_df["revision_clean"] = task_df["revision"].copy()
+        task_df.loc[task_df["revision"].isna(), "revision_clean"] = (
+            "no_revision_available"
         )
+        task_df.loc[task_df["revision"] == "external", "revision_clean"] = (
+            "no_revision_available"
+        )
+
+        # Create a priority column for sorting
+        # Higher priority = better to keep
+        # Priority: main_revision (1000), has valid mteb_version (100), has valid revision (10)
+        task_df["priority"] = 0
+        task_df.loc[task_df["is_main_revision"], "priority"] += 1000
+        task_df.loc[task_df["mteb_version"].notna(), "priority"] += 100
+        task_df.loc[
+            task_df["revision_clean"] != "no_revision_available", "priority"
+        ] += 10
+
+        # Sort by priority (desc), mteb_version (desc), and take first per group
+        task_df = task_df.sort_values(
+            ["model", "task_name", "priority", "mteb_version"],
+            ascending=[True, True, False, False],
+            na_position="last",
+        )
+
+        # Use groupby().first() instead of apply() for massive speedup
+        task_df = task_df.groupby(["model", "task_name"], as_index=False).first()
+
+        # Reconstruct model results
         model_results = []
-        for (model, model_revision), group in task_df.groupby(["model", "revision"]):
+        for (model, model_revision), group in task_df.groupby(
+            ["model", "revision_clean"]
+        ):
+            # Use original revision, not the cleaned one
+            actual_revision = (
+                group["revision"].iloc[0] if len(group) > 0 else model_revision
+            )
             model_result = ModelResult.model_construct(
                 model_name=model,
-                model_revision=model_revision,
+                model_revision=actual_revision,
                 task_results=list(group["task_result"]),
             )
             model_results.append(model_result)
