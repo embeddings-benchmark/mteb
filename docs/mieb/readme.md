@@ -112,7 +112,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
 ```
 
 #### AbsTask X
-With the evaluator, [AbsTaskZeroShotClassification](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/abstasks/zeroshot_classification.py) is defined. In MTEB v2, the dataset is loaded via `self.load_data()` and stored in `self.dataset` with the structure `self.dataset[hf_subset][split]` where `hf_subset` is the language/subset (e.g., "eng") and `split` is "train"/"test"/"validation".
+With the evaluator, [AbsTaskZeroShotClassification](https://embeddings-benchmark.github.io/mteb/api/task/#mteb.abstasks.zeroshot_classification.AbsTaskZeroShotClassification) is defined. In MTEB v2, the dataset is loaded via `self.load_data()` and stored in `self.dataset` with the structure `self.dataset[hf_subset][split]` where `hf_subset` is the language/subset (e.g., "eng") and `split` is "train"/"test"/"validation".
 ```python
 class AbsTaskZeroShotClassification(AbsTask):
     # Default column names - override if your dataset uses different names
