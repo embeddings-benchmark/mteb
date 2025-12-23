@@ -1,7 +1,5 @@
 """test that arguments, encode_kwargs are correctly called and passed to the encoders"""
 
-from __future__ import annotations
-
 import logging
 from pathlib import Path
 from typing import Any

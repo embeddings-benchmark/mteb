@@ -1,7 +1,8 @@
 """This implements minimal viable mock tasks for testing the benchmarking framework."""
 
 import datasets
-from datasets import Dataset, DatasetDict
+import numpy as np
+from datasets import Audio, Dataset, DatasetDict
 from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
@@ -1066,22 +1067,22 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
         ]
         # "this is a test sentence", "this does not match the above"
         labels = [1, 0]
-        data = {
-            "test": [
-                {
-                    "sentence1": sentence1,
-                    "sentence2": sentence2,
-                    "labels": labels,
-                }
-            ]
-        }
-
-        self.dataset = DatasetDict(
+        data = DatasetDict(
             {
-                "eng": data,
-                "fra": data,
+                "test": Dataset.from_dict(
+                    {
+                        "sentence1": sentence1,
+                        "sentence2": sentence2,
+                        "labels": labels,
+                    }
+                )
             }
         )
+
+        self.dataset = {
+            "eng": data,
+            "fra": data,
+        }
         self.data_loaded = True
 
 
@@ -4261,4 +4262,499 @@ class MockImageRegressionTask(AbsTaskRegression):
                 ),
             }
         )
+        self.data_loaded = True
+
+
+class MockAudioClusteringTask(AbsTaskClustering):
+    max_document_to_embed = 2
+    max_fraction_of_documents_to_embed = None
+    input_column_name = "audio"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 3,
+            "number_of_samples": 3,
+            "min_audio_length": 16000,  # sr = 16000
+            "average_audio_length": 16000,  # 1s
+            "max_audio_length": 16000,  # 1s
+            "unique_audios": 3,
+            "min_labels_per_audio": 1,
+            "average_labels_per_audio": 1.0,
+            "max_labels_per_audio": 1,
+            "unique_labels": 3,
+            "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
+        }
+    }
+
+    metadata = TaskMetadata(
+        type="Clustering",
+        name="MockAudioClusteringTask",
+        main_score="v_measure",
+        **general_args,
+    )
+    metadata.modalities = ["audio"]
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s
+                "sampling_rate": 16000,
+            }
+            for _ in range(3)
+        ]
+
+        labels = [0, 1, 2]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "audio": mock_audio,
+                        "labels": labels,
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("audio", Audio())
+        self.data_loaded = True
+
+
+class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "total_duration": 2.0,  # 2 samples * 1s each
+            "min_duration": 1.0,
+            "avg_duration": 1.0,
+            "max_duration": 1.0,
+            "sample_rate": 16000,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 1}, "1": {"count": 1}},
+        },
+        "train": {
+            "num_samples": 10,
+            "total_duration": 10.0,
+            "min_duration": 1.0,
+            "avg_duration": 1.0,
+            "max_duration": 1.0,
+            "sample_rate": 16000,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 5}, "1": {"count": 5}},
+        },
+    }
+
+    metadata = TaskMetadata(
+        type="AudioMultilabelClassification",
+        name="MockAudioMultilabelClassification",
+        main_score="accuracy",
+        **general_args,
+    )
+    metadata.modalities = ["audio"]
+    input_column_name = "audio"
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s audio
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+        labels = [[0], [1]]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict({"audio": mock_audio, "label": labels}),
+                "train": Dataset.from_dict(
+                    {"audio": mock_audio * 5, "label": labels * 5}
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("audio", Audio())
+        self.data_loaded = True
+
+
+class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
+    input_column_name: str = "audio"
+    label_column_name: str = "label"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "total_duration": 2.0,  # 2 samples * 1s each
+            "min_duration": 1.0,
+            "avg_duration": 1.0,
+            "max_duration": 1.0,
+            "sample_rate": 16000,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 1}, "1": {"count": 1}},
+        }
+    }
+
+    metadata = TaskMetadata(
+        type="AudioZeroshotClassification",
+        name="MockAudioZeroshotClassification",
+        main_score="accuracy",
+        **general_args,
+    )
+    metadata.modalities = ["audio"]
+
+    def load_data(self, **kwargs):
+        # Create mock audio data as numpy arrays
+        mock_audio = [
+            {
+                "array": np.random.rand(16000).astype(np.float32),  # 1s audio
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+        labels = np.array([0, 1])  # Convert labels to numpy array
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "audio": mock_audio,
+                        "label": labels,
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("audio", Audio())
+        self.data_loaded = True
+
+    def get_candidate_labels(self) -> list[str]:
+        """Return the text candidates for zeroshot classification"""
+        return ["This is sound type 0", "This is sound type 1"]
+
+
+class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        type="Any2AnyRetrieval",
+        name="MockAny2AnyRetrievalT2A",
+        main_score="ndcg_at_10",
+        **general_args,  # type: ignore
+    )
+    metadata.modalities = ["audio", "text"]
+    metadata.category = "t2a"
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+
+        self.queries = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "id": [f"q{i}" for i in range(2)],
+                        "text": [
+                            "This is a positive sentence",
+                            "This is another positive sentence",
+                        ],
+                        "modality": ["text" for _ in range(2)],
+                    }
+                )
+            }
+        )
+        self.corpus = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "id": ["d1", "d2"],
+                        "audio": mock_audio,
+                        "modality": ["audio" for _ in range(2)],
+                    }
+                )
+            }
+        )
+        self.corpus = self.corpus.cast_column("audio", Audio())
+
+        self.relevant_docs = {
+            "test": {
+                "q0": {"d1": 1, "d2": 0},
+                "q1": {"d1": 0, "d2": 1},
+            },
+        }
+        self.data_loaded = True
+
+
+class MockAny2AnyRetrievalA2TTask(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        type="Any2AnyRetrieval",
+        name="MockAny2AnyRetrievalA2T",
+        main_score="ndcg_at_10",
+        **general_args,  # type: ignore
+    )
+    metadata.modalities = ["audio", "text"]
+    metadata.category = "a2t"
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+
+        self.queries = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "id": [f"q{i}" for i in range(2)],
+                        "audio": mock_audio,
+                        "modality": ["audio" for _ in range(2)],
+                    }
+                )
+            }
+        )
+        self.queries = self.queries.cast_column("audio", Audio())
+
+        self.corpus = {
+            "test": Dataset.from_dict(
+                {
+                    "id": ["d1", "d2"],
+                    "text": [
+                        "This is a positive sentence",
+                        "This is another positive sentence",
+                    ],
+                    "modality": ["text" for _ in range(2)],
+                }
+            )
+        }
+
+        self.relevant_docs = {
+            "test": {
+                "q0": {"d1": 1, "d2": 0},
+                "q1": {"d1": 0, "d2": 1},
+            },
+        }
+        self.data_loaded = True
+
+
+class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        type="Any2AnyRetrieval",
+        name="MockAny2AnyRetrievalA2A",
+        main_score="ndcg_at_10",
+        **general_args,  # type: ignore
+    )
+    metadata.modalities = ["audio"]
+    metadata.category = "a2a"
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+
+        self.queries = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "id": [f"q{i}" for i in range(2)],
+                        "audio": mock_audio,
+                        "modality": ["audio" for _ in range(2)],
+                    }
+                )
+            }
+        )
+        self.corpus = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "id": ["d1", "d2"],
+                        "audio": mock_audio,
+                        "modality": ["audio" for _ in range(2)],
+                    }
+                )
+            }
+        )
+
+        self.queries = self.queries.cast_column("audio", Audio())
+        self.corpus = self.corpus.cast_column("audio", Audio())
+
+        self.relevant_docs = {
+            "test": {
+                "q0": {"d1": 1, "d2": 0},
+                "q1": {"d1": 0, "d2": 1},
+            },
+        }
+        self.data_loaded = True
+
+
+class MockAudioReranking(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        type="AudioReranking",
+        name="MockAudioReranking",
+        main_score="map_at_1",
+        **general_args,  # type: ignore
+    )
+    metadata.category = "a2a"
+    metadata.modalities = ["audio"]
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+
+        queries = Dataset.from_dict(
+            {
+                "id": ["q1", "q2"],
+                "audio": mock_audio,
+            }
+        )
+        corpus = Dataset.from_dict(
+            {
+                "id": ["d1", "d2"],
+                "audio": mock_audio,
+            }
+        )
+
+        queries = queries.cast_column("audio", Audio())
+        corpus = corpus.cast_column("audio", Audio())
+
+        self.dataset = {
+            "default": {
+                "test": RetrievalSplitData(
+                    queries=queries,
+                    corpus=corpus,
+                    relevant_docs={
+                        "q1": {"d1": 1, "d2": 0},
+                        "q2": {"d1": 0, "d2": 1},
+                    },
+                    top_ranked={
+                        "q1": ["d1", "d2"],
+                        "q2": ["d2", "d1"],
+                    },
+                )
+            }
+        }
+
+        self.data_loaded = True
+
+
+class MockAudioClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        type="AudioClassification",
+        name="MockAudioClassification",
+        main_score="accuracy",
+        **general_args,  # type: ignore
+    )
+    metadata.modalities = ["audio"]
+    input_column_name = "audio"
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "audio": mock_audio,
+                        "label": [1, 2],
+                    }
+                ),
+                "train": Dataset.from_dict(
+                    {
+                        "audio": mock_audio * 5,
+                        "label": [1, 2] * 5,
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("audio", Audio())
+
+        self.data_loaded = True
+
+
+class MockAudioPairClassification(AbsTaskPairClassification):
+    metadata = TaskMetadata(
+        type="AudioPairClassification",
+        name="AbsTaskAudioPairClassification",
+        main_score="max_ap",
+        **general_args,  # type: ignore
+    )
+    metadata.modalities = ["audio"]
+
+    input1_column_name = "audio1"
+    input2_column_name = "audio1"
+    label_column_name = "label"
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "audio1": mock_audio,
+                        "audio2": mock_audio,
+                        "label": [0, 1],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("audio1", Audio())
+        self.dataset = self.dataset.cast_column("audio2", Audio())
+        self.data_loaded = True
+
+
+class MockAudioClassificationCrossVal(AbsTaskClassification):
+    metadata = TaskMetadata(
+        type="AudioClassification",
+        name="MockAudioClassificationCrossVal",
+        main_score="accuracy",
+        **general_args,  # type: ignore
+    )
+    metadata.modalities = ["audio"]
+    metadata.eval_splits = ["train"]
+    input_column_name = "audio"
+    is_cross_validation = True
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+
+        self.dataset = DatasetDict(
+            {
+                "train": Dataset.from_dict(
+                    {
+                        "audio": mock_audio * 5,
+                        "label": [1, 2] * 5,
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("audio", Audio())
+
         self.data_loaded = True
