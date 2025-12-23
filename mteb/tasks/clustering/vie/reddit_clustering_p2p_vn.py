@@ -1,6 +1,8 @@
 import itertools
+
 import numpy as np
 from datasets import Dataset, DatasetDict
+
 from mteb.abstasks.clustering import (
     AbsTaskClustering,
     _check_label_distribution,
@@ -80,6 +82,7 @@ class RedditFastClusteringP2PVN(AbsTaskClustering):
 """,
         adapted_from=["RedditClusteringP2P-VN"],
     )
+
     def dataset_transform(self):
         ds = {}
         for split in self.metadata.eval_splits:

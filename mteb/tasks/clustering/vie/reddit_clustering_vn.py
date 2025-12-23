@@ -1,6 +1,7 @@
 import itertools
-import numpy as np
+
 from datasets import Dataset, DatasetDict
+
 from mteb.abstasks.clustering import (
     AbsTaskClustering,
     _check_label_distribution,
@@ -45,6 +46,7 @@ class RedditClusteringVN(AbsTaskClusteringLegacy):
         superseded_by="RedditClustering-VN.v2",
     )
 
+
 class RedditFastClusteringVN(AbsTaskClustering):
     metadata = TaskMetadata(
         name="RedditClustering-VN.v2",
@@ -79,6 +81,7 @@ class RedditFastClusteringVN(AbsTaskClustering):
 """,
         adapted_from=["RedditClustering"],
     )
+
     def dataset_transform(self):
         ds = {}
         for split in self.metadata.eval_splits:
@@ -96,4 +99,3 @@ class RedditFastClusteringVN(AbsTaskClustering):
             label="labels",
         )
         self.max_fraction_of_documents_to_embed = None
-

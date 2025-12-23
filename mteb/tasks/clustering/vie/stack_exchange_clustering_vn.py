@@ -1,6 +1,7 @@
 import itertools
-import numpy as np
+
 from datasets import Dataset, DatasetDict
+
 from mteb.abstasks.clustering import (
     AbsTaskClustering,
     _check_label_distribution,
@@ -45,6 +46,7 @@ class StackExchangeClusteringVN(AbsTaskClusteringLegacy):
         superseded_by="StackExchangeClustering-VN.v2",
     )
 
+
 class StackExchangeFastClusteringVN(AbsTaskClustering):
     metadata = TaskMetadata(
         name="StackExchangeClustering-VN.v2",
@@ -79,6 +81,7 @@ class StackExchangeFastClusteringVN(AbsTaskClustering):
 """,
         adapted_from=["StackExchangeClustering"],
     )
+
     def dataset_transform(self):
         ds = {}
         for split in self.metadata.eval_splits:
