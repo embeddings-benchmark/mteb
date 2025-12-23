@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 
 
 # Global cache for model metas and version parsing (HIGH IMPACT OPTIMIZATIONS)
-@functools.lru_cache(maxsize=1)
+@functools.lru_cache
 def _get_cached_model_metas() -> dict[str, str | None]:
     """Cache model metas to avoid repeated calls."""
     return {meta.name: meta.revision for meta in get_model_metas()}
