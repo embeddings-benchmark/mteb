@@ -15,6 +15,7 @@ from mteb.abstasks.task_metadata import (
     TaskDomain,
     TaskType,
 )
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.types import (
@@ -39,10 +40,10 @@ class BenchmarkResults(BaseModel):
     """
 
     model_results: list[ModelResult]
-    model_config = (
-        ConfigDict(  # to free up the name model_results which is otherwise protected
-            protected_namespaces=(),
-        )
+    benchmark: Benchmark | None = None
+    model_config = ConfigDict(
+        protected_namespaces=(),  # to free up the name model_results which is otherwise protected
+        arbitrary_types_allowed=True,  # Benchmark is dataclasses.dataclass
     )
 
     def __repr__(self) -> str:
@@ -361,6 +362,23 @@ class BenchmarkResults(BaseModel):
             aggregation_fn=aggregation_fn,
             format=format,
         )
+
+    def get_benchmark_result(self) -> pd.DataFrame:
+        """Get aggregated scores for each model in the benchmark.
+
+        Uses the benchmark's summary table creation method to compute scores.
+
+        Returns:
+            A DataFrame with the aggregated benchmark scores for each model.
+        """
+        if self.benchmark is None:
+            raise ValueError(
+                "No benchmark associated with these results (self.benchmark is None). "
+                "To get benchmark results, load results with a Benchmark object. "
+                "`results = cache.load_results(tasks='MTEB(eng, v2)')`"
+            )
+
+        return self.benchmark._create_summary_table(self)
 
     def __iter__(self) -> Iterator[ModelResult]:
         return iter(self.model_results)
