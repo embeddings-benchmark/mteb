@@ -112,7 +112,7 @@ listconranker = ModelMeta(
         fp_options="float16",
     ),
     name="ByteDance/ListConRanker",
-    model_type=["cross_encoder"],
+    model_type=["cross-encoder"],
     languages=["zho-Hans"],
     open_weights=True,
     revision="95ae6a5f422a916bc36520f0f3e198e7d91520a0",

@@ -720,7 +720,7 @@ jina_reranker_v3 = ModelMeta(
         trust_remote_code=True,
     ),
     name="jinaai/jina-reranker-v3",
-    model_type=["cross_encoder"],
+    model_type=["cross-encoder"],
     languages=multilingual_langs,
     open_weights=True,
     revision="050e171c4f75dfec5b648ed8470a2475e5a30f30",

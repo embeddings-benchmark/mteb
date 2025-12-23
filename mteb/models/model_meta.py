@@ -57,7 +57,7 @@ FRAMEWORKS = Literal[
     "ColPali",
 ]
 
-MODEL_TYPES = Literal["dense", "cross_encoder", "late_interaction"]
+MODEL_TYPES = Literal["dense", "cross-encoder", "late-interaction"]
 
 
 class ScoringFunction(HelpfulStrEnum):
@@ -430,7 +430,7 @@ class ModelMeta(BaseModel):
         meta.embed_dim = None
         meta.modalities = ["text"]
         meta.is_cross_encoder = True
-        meta.model_type = ["cross_encoder"]
+        meta.model_type = ["cross-encoder"]
         return meta
 
     def is_zero_shot_on(self, tasks: Sequence[AbsTask] | Sequence[str]) -> bool | None:
