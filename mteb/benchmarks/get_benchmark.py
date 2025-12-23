@@ -12,6 +12,19 @@ logger = logging.getLogger(__name__)
 def _build_registry() -> dict[str, Benchmark]:
     import mteb.benchmarks.benchmarks as benchmark_module
 
+    # Explicitly import rteb_benchmarks module to ensure RTEB benchmarks are registered
+    from mteb.benchmarks.benchmarks import rteb_benchmarks
+
+    # Add RTEB benchmarks to the module's __dict__ if they're not already there
+    for attr_name in dir(rteb_benchmarks):
+        if not attr_name.startswith("_"):
+            attr = getattr(rteb_benchmarks, attr_name)
+            if (
+                isinstance(attr, Benchmark)
+                and attr_name not in benchmark_module.__dict__
+            ):
+                setattr(benchmark_module, attr_name, attr)
+
     benchmark_registry = {
         inst.name: inst
         for _, inst in benchmark_module.__dict__.items()
