@@ -254,16 +254,13 @@ class BenchmarkResults(BaseModel):
 
         # Reconstruct model results
         model_results = []
-        for (model, model_revision), group in task_df.groupby(
-            ["model", "revision_clean"]
-        ):
-            # Use original revision, not the cleaned one
-            actual_revision = (
-                group["revision"].iloc[0] if len(group) > 0 else model_revision
-            )
+        # Group by original revision to maintain deterministic behavior
+        # After the first() selection above, each (model, task_name) is unique,
+        # so grouping by original revision ensures consistent ModelResult creation
+        for (model, model_revision), group in task_df.groupby(["model", "revision"]):
             model_result = ModelResult.model_construct(
                 model_name=model,
-                model_revision=actual_revision,
+                model_revision=model_revision,
                 task_results=list(group["task_result"]),
             )
             model_results.append(model_result)
