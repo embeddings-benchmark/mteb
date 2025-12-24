@@ -35,6 +35,13 @@ from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 
 logger = logging.getLogger(__name__)
 
+
+def _flush_logs():
+    """Flush all log handlers to ensure messages are written immediately."""
+    for handler in logging.root.handlers:
+        handler.flush()
+
+
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 
 
@@ -51,24 +58,92 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
         try:
             # Download the gzipped cached results from the cached-data branch
             url = "https://raw.githubusercontent.com/embeddings-benchmark/results/cached-data/__cached_results.json.gz"
-            response = requests.get(url, timeout=60)
-            response.raise_for_status()
+            logger.info(f"Attempting to download from: {url}")
+
+            try:
+                response = requests.get(url, timeout=60)
+                response.raise_for_status()
+                logger.info(
+                    f"HTTP request successful, content length: {len(response.content)} bytes"
+                )
+                _flush_logs()
+            except requests.exceptions.Timeout as e:
+                logger.error(f"HTTP timeout after 60s: {e}")
+                _flush_logs()
+                raise
+            except requests.exceptions.ConnectionError as e:
+                logger.error(f"HTTP connection error: {e}")
+                _flush_logs()
+                raise
+            except requests.exceptions.HTTPError as e:
+                logger.error(f"HTTP error {response.status_code}: {e}")
+                _flush_logs()
+                raise
+            except Exception as e:
+                logger.error(f"Unexpected HTTP error: {type(e).__name__}: {e}")
+                _flush_logs()
+                raise
 
             # Decompress and save the results
-            with gzip.open(
-                io.BytesIO(response.content), "rt", encoding="utf-8"
-            ) as gz_file:
-                data = gz_file.read()
+            try:
+                logger.info("Attempting gzip decompression...")
+                with gzip.open(
+                    io.BytesIO(response.content), "rt", encoding="utf-8"
+                ) as gz_file:
+                    data = gz_file.read()
+                logger.info(f"Decompression successful, data length: {len(data)} chars")
+                _flush_logs()
+            except gzip.BadGzipFile as e:
+                logger.error(f"Invalid gzip file: {e}")
+                _flush_logs()
+                raise
+            except UnicodeDecodeError as e:
+                logger.error(f"UTF-8 decode error during decompression: {e}")
+                _flush_logs()
+                raise
+            except Exception as e:
+                logger.error(f"Unexpected decompression error: {type(e).__name__}: {e}")
+                _flush_logs()
+                raise
 
-            results_cache_path.write_text(data, encoding="utf-8")
+            # Write to file
+            try:
+                logger.info(f"Attempting to write to: {results_cache_path}")
+                # Check parent directory exists and is writable
+                parent_dir = results_cache_path.parent
+                if not parent_dir.exists():
+                    logger.info(f"Creating parent directory: {parent_dir}")
+                    parent_dir.mkdir(parents=True)
+
+                results_cache_path.write_text(data, encoding="utf-8")
+                logger.info(
+                    f"File write successful, size: {results_cache_path.stat().st_size} bytes"
+                )
+                _flush_logs()
+            except PermissionError as e:
+                logger.error(f"Permission denied writing to {results_cache_path}: {e}")
+                _flush_logs()
+                raise
+            except OSError as e:
+                logger.error(f"OS error writing to {results_cache_path}: {e}")
+                _flush_logs()
+                raise
+            except Exception as e:
+                logger.error(f"Unexpected file write error: {type(e).__name__}: {e}")
+                _flush_logs()
+                raise
+
             download_time = time.time() - start_time
             logger.info(
                 f"Downloaded cached results from cached-data branch in {download_time:.2f}s"
             )
 
         except Exception as e:
-            logger.info(f"Failed to download from cached-data branch: {e}")
+            logger.error(
+                f"Failed to download from cached-data branch: {type(e).__name__}: {e}"
+            )
             logger.info("Falling back to downloading full remote repository...")
+            _flush_logs()
 
             # Fall back to the original approach: clone the full repo
             cache.download_from_remote()
@@ -90,8 +165,52 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
 
     # Load the cached results file (either pre-existing or just downloaded)
     logger.info("Loading cached results from disk...")
-    with results_cache_path.open() as cache_file:
-        results = mteb.BenchmarkResults.from_validated(**json.load(cache_file))
+    try:
+        logger.info(f"Opening file: {results_cache_path}")
+        if not results_cache_path.exists():
+            logger.error(f"Cached results file does not exist: {results_cache_path}")
+            raise FileNotFoundError(
+                f"Cached results file not found: {results_cache_path}"
+            )
+
+        file_size = results_cache_path.stat().st_size
+        logger.info(f"File exists, size: {file_size} bytes")
+
+        try:
+            with results_cache_path.open() as cache_file:
+                logger.info("File opened successfully, attempting JSON parse...")
+                json_data = json.load(cache_file)
+                logger.info(
+                    f"JSON parsed successfully, keys: {list(json_data.keys()) if isinstance(json_data, dict) else 'not a dict'}"
+                )
+        except json.JSONDecodeError as e:
+            logger.error(f"JSON decode error: {e}")
+            logger.error(f"Error at line {e.lineno}, column {e.colno}: {e.msg}")
+            raise
+        except Exception as e:
+            logger.error(f"Unexpected file read error: {type(e).__name__}: {e}")
+            raise
+
+        try:
+            logger.info("Attempting BenchmarkResults.from_validated...")
+            results = mteb.BenchmarkResults.from_validated(**json_data)
+            logger.info("BenchmarkResults.from_validated successful")
+        except TypeError as e:
+            logger.error(f"Type error in from_validated (invalid kwargs): {e}")
+            raise
+        except ValueError as e:
+            logger.error(f"Value error in from_validated (invalid data): {e}")
+            raise
+        except Exception as e:
+            logger.error(f"Unexpected error in from_validated: {type(e).__name__}: {e}")
+            raise
+
+    except Exception as e:
+        logger.error(
+            f"Failed to load cached results from disk: {type(e).__name__}: {e}"
+        )
+        raise
+
     total_time = time.time() - start_time
     logger.info(f"Loaded cached results in {total_time:.2f}s")
     return results
@@ -1055,15 +1174,26 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
 
 
 if __name__ == "__main__":
-    logging.getLogger("mteb.load_results.task_results").setLevel(
-        logging.ERROR
-    )  # Warnings related to task split
-    logging.getLogger("mteb.model_meta").setLevel(
-        logging.ERROR
-    )  # Warning related to model metadata (fetch_from_hf=False)
-    logging.getLogger("mteb.load_results.benchmark_results").setLevel(
-        logging.ERROR
-    )  # Warning related to model metadata (fetch_from_hf=False)
+    import os
+
+    # Add process ID to logging for multiprocessing debugging
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - PID:%(process)d - %(name)s - %(levelname)s - %(message)s",
+        force=True,  # Override any existing handlers
+    )
+
+    # Flush log handlers immediately (helpful for multiprocessing)
+    for handler in logging.root.handlers:
+        handler.flush()
+
+    logger.info(f"Starting leaderboard app in process {os.getpid()}")
+
+    # Suppress specific WARNING messages while keeping INFO level for the app
+    logging.getLogger("mteb.results.task_result").setLevel(logging.ERROR)
+    logging.getLogger("mteb.models.model_meta").setLevel(logging.ERROR)
+    logging.getLogger("mteb.results.benchmark_results").setLevel(logging.ERROR)
+
     warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
 
     app = get_leaderboard_app()

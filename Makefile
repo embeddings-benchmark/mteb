@@ -69,7 +69,7 @@ dataset-load-test-pr:
 
 leaderboard-build-test:
 	@echo "--- 🚀 Running leaderboard build test ---"
-	pytest -n auto -m leaderboard_stability
+	pytest -n auto -m leaderboard_stability --log-cli-level=INFO -s -v
 
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
