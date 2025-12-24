@@ -44,7 +44,9 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
     if not results_cache_path.exists():
         # First try to download the cached results file from the cached-data branch
         # This is faster than cloning the entire results repository
-        logger.info("Cached results not found, trying to download from cached-data branch...")
+        logger.info(
+            "Cached results not found, trying to download from cached-data branch..."
+        )
 
         try:
             # Download the gzipped cached results from the cached-data branch
@@ -53,12 +55,16 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
             response.raise_for_status()
 
             # Decompress and save the results
-            with gzip.open(io.BytesIO(response.content), 'rt', encoding='utf-8') as gz_file:
+            with gzip.open(
+                io.BytesIO(response.content), "rt", encoding="utf-8"
+            ) as gz_file:
                 data = gz_file.read()
 
-            results_cache_path.write_text(data, encoding='utf-8')
+            results_cache_path.write_text(data, encoding="utf-8")
             download_time = time.time() - start_time
-            logger.info(f"Downloaded cached results from cached-data branch in {download_time:.2f}s")
+            logger.info(
+                f"Downloaded cached results from cached-data branch in {download_time:.2f}s"
+            )
 
         except Exception as e:
             logger.info(f"Failed to download from cached-data branch: {e}")
