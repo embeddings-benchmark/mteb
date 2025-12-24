@@ -1,3 +1,5 @@
+import gzip
+import io
 import itertools
 import json
 import logging
@@ -11,6 +13,7 @@ from urllib.parse import urlencode
 import cachetools
 import gradio as gr
 import pandas as pd
+import requests
 
 import mteb
 from mteb import BenchmarkResults
@@ -39,30 +42,53 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
     start_time = time.time()
     results_cache_path = Path(__file__).parent.joinpath("__cached_results.json")
     if not results_cache_path.exists():
-        logger.info("Cached results not found, downloading from remote...")
-        cache.download_from_remote()
-        download_time = time.time() - start_time
-        logger.info(f"Downloaded remote results in {download_time:.2f}s")
+        # First try to download the cached results file from the cached-data branch
+        # This is faster than cloning the entire results repository
+        logger.info("Cached results not found, trying to download from cached-data branch...")
 
-        load_start = time.time()
-        all_model_names = [model_meta.name for model_meta in mteb.get_model_metas()]
+        try:
+            # Download the gzipped cached results from the cached-data branch
+            url = "https://raw.githubusercontent.com/embeddings-benchmark/results/cached-data/__cached_results.json.gz"
+            response = requests.get(url, timeout=60)
+            response.raise_for_status()
 
-        all_results = cache.load_results(
-            models=all_model_names,
-            only_main_score=True,
-            require_model_meta=False,
-            include_remote=True,
-        )
-        load_time = time.time() - load_start
-        logger.info(f"Loaded results from cache in {load_time:.2f}s")
-        return all_results
-    else:
-        logger.info("Loading cached results from disk...")
-        with results_cache_path.open() as cache_file:
-            results = mteb.BenchmarkResults.from_validated(**json.load(cache_file))
-        total_time = time.time() - start_time
-        logger.info(f"Loaded cached results in {total_time:.2f}s")
-        return results
+            # Decompress and save the results
+            with gzip.open(io.BytesIO(response.content), 'rt', encoding='utf-8') as gz_file:
+                data = gz_file.read()
+
+            results_cache_path.write_text(data, encoding='utf-8')
+            download_time = time.time() - start_time
+            logger.info(f"Downloaded cached results from cached-data branch in {download_time:.2f}s")
+
+        except Exception as e:
+            logger.info(f"Failed to download from cached-data branch: {e}")
+            logger.info("Falling back to downloading full remote repository...")
+
+            # Fall back to the original approach: clone the full repo
+            cache.download_from_remote()
+            download_time = time.time() - start_time
+            logger.info(f"Downloaded remote results in {download_time:.2f}s")
+
+            load_start = time.time()
+            all_model_names = [model_meta.name for model_meta in mteb.get_model_metas()]
+
+            all_results = cache.load_results(
+                models=all_model_names,
+                only_main_score=True,
+                require_model_meta=False,
+                include_remote=True,
+            )
+            load_time = time.time() - load_start
+            logger.info(f"Loaded results from cache in {load_time:.2f}s")
+            return all_results
+
+    # Load the cached results file (either pre-existing or just downloaded)
+    logger.info("Loading cached results from disk...")
+    with results_cache_path.open() as cache_file:
+        results = mteb.BenchmarkResults.from_validated(**json.load(cache_file))
+    total_time = time.time() - start_time
+    logger.info(f"Loaded cached results in {total_time:.2f}s")
+    return results
 
 
 def _produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
