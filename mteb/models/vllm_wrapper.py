@@ -28,6 +28,8 @@ def vllm_loader(
 
 
 class VllmEncoderWrapper(AbsEncoder):
+    """Wrapper for vllm serving engine."""
+
     def __init__(
         self,
         model: str,
@@ -135,6 +137,44 @@ class VllmEncoderWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        """Encodes the given sentences using the encoder.
+
+        Args:
+            inputs: The sentences to encode.
+            task_metadata: The metadata of the task. Sentence-transformers uses this to
+                determine which prompt to use from a specified dictionary.
+            prompt_type: The name type of prompt. (query or passage)
+            hf_split: Split of current task
+            hf_subset: Subset of current task
+            **kwargs: Additional arguments to pass to the encoder.
+
+            The order of priorities for prompt selection are:
+                1. Composed prompt of task name + prompt type (query or passage)
+                2. Specific task prompt
+                3. Composed prompt of task type + prompt type (query or passage)
+                4. Specific task type prompt
+                5. Specific prompt type (query or passage)
+
+
+        Returns:
+            The encoded sentences.
+        """
+
+        prompt = None
+        prompt_name = None
+        if self.model_prompts is not None:
+            prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+            prompt = self.model_prompts.get(prompt_name, None)
+        if prompt_name:
+            logger.info(
+                f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
+            )
+        else:
+            logger.info(
+                f"No model prompts found for task={task_metadata.name} {prompt_type=}"
+            )
+
+        # TODO: support task prompt
         prompts = [text for batch in inputs for text in batch["text"]]
         outputs = self.llm.encode(
             prompts, pooling_task="embed", truncate_prompt_tokens=-1
@@ -143,6 +183,7 @@ class VllmEncoderWrapper(AbsEncoder):
         return embeddings
 
     def cleanup(self):
+        """Clean up the VLLM distributed runtime environment and release GPU resources."""
         if self.llm is None:
             return
 

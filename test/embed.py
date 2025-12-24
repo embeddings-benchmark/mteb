@@ -23,6 +23,8 @@ if __name__ == "__main__":
     )
 
     vllm_main_score = results[0].scores["test"][0]["main_score"]
+    print("ST:", MAIN_SCORE)
+    print("vllm:", vllm_main_score)
 
     assert MAIN_SCORE - vllm_main_score < MTEB_EMBED_TOL
 
