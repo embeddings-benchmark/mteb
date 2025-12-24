@@ -666,8 +666,9 @@ class TaskResult(BaseModel):
             logger.warning(
                 f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
             )
-        # Avoid to_dict() roundtrip - use model_copy for better performance
-        return self.model_copy(update={"scores": new_scores})
+        data = self.model_dump()
+        data["scores"] = new_scores
+        return type(self).model_construct(**data)
 
     def is_mergeable(
         self,
