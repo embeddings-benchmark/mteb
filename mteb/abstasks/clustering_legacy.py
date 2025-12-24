@@ -89,6 +89,9 @@ class AbsTaskClusteringLegacy(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
+        data_split = data_split.select_columns(
+            [self.input_column_name, self.label_column_name]
+        )
         # MTEB text clustering requires renaming and eval per subset.
         if self.metadata.modalities == ["text"]:
             all_metrics = []

@@ -16,6 +16,7 @@ from mteb.abstasks.task_metadata import (
     TaskDomain,
     TaskType,
 )
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.types import (
@@ -32,8 +33,8 @@ from .model_result import ModelResult, _aggregate_and_pivot
 logger = logging.getLogger(__name__)
 
 
-# Global cache for model metas and version parsing (HIGH IMPACT OPTIMIZATIONS)
-@functools.lru_cache(maxsize=1)
+# Global cache for model metas and version parsing
+@functools.lru_cache
 def _get_cached_model_metas() -> dict[str, str | None]:
     """Cache model metas to avoid repeated calls."""
     return {meta.name: meta.revision for meta in get_model_metas()}
@@ -58,10 +59,10 @@ class BenchmarkResults(BaseModel):
     """
 
     model_results: list[ModelResult]
-    model_config = (
-        ConfigDict(  # to free up the name model_results which is otherwise protected
-            protected_namespaces=(),
-        )
+    benchmark: Benchmark | None = None
+    model_config = ConfigDict(
+        protected_namespaces=(),  # to free up the name model_results which is otherwise protected
+        arbitrary_types_allowed=True,  # Benchmark is dataclasses.dataclass
     )
 
     def __repr__(self) -> str:
@@ -209,17 +210,17 @@ class BenchmarkResults(BaseModel):
             return BenchmarkResults.model_construct(model_results=[])
         task_df = pd.DataFrame.from_records(records)
 
-        # Use cached model metas (HIGH IMPACT OPTIMIZATION #1)
+        # Use cached model metas
         model_to_main_revision = _get_cached_model_metas()
         task_df["main_revision"] = task_df["model"].map(model_to_main_revision)  # type: ignore
 
-        # Use cached version parsing (HIGH IMPACT OPTIMIZATION #3)
+        # Use cached version parsing
         task_df["mteb_version"] = task_df["mteb_version"].map(_parse_version_cached)  # type: ignore
 
         # Filter out rows without scores first
         task_df = task_df[task_df["has_scores"]]
 
-        # Optimize groupby with vectorized operations (HIGH IMPACT OPTIMIZATION #2)
+        # Optimize groupby with vectorized operations
         # Sort by priority: main_revision match, then mteb_version (descending), then revision
         task_df["is_main_revision"] = task_df["revision"] == task_df["main_revision"]
 
@@ -249,21 +250,17 @@ class BenchmarkResults(BaseModel):
             na_position="last",
         )
 
-        # Use groupby().first() instead of apply() for massive speedup
         task_df = task_df.groupby(["model", "task_name"], as_index=False).first()
 
         # Reconstruct model results
         model_results = []
-        for (model, model_revision), group in task_df.groupby(
-            ["model", "revision_clean"]
-        ):
-            # Use original revision, not the cleaned one
-            actual_revision = (
-                group["revision"].iloc[0] if len(group) > 0 else model_revision
-            )
+        # Group by original revision to maintain deterministic behavior
+        # After the first() selection above, each (model, task_name) is unique,
+        # so grouping by original revision ensures consistent ModelResult creation
+        for (model, model_revision), group in task_df.groupby(["model", "revision"]):
             model_result = ModelResult.model_construct(
                 model_name=model,
-                model_revision=actual_revision,
+                model_revision=model_revision,
                 task_results=list(group["task_result"]),
             )
             model_results.append(model_result)
@@ -387,6 +384,23 @@ class BenchmarkResults(BaseModel):
             aggregation_fn=aggregation_fn,
             format=format,
         )
+
+    def get_benchmark_result(self) -> pd.DataFrame:
+        """Get aggregated scores for each model in the benchmark.
+
+        Uses the benchmark's summary table creation method to compute scores.
+
+        Returns:
+            A DataFrame with the aggregated benchmark scores for each model.
+        """
+        if self.benchmark is None:
+            raise ValueError(
+                "No benchmark associated with these results (self.benchmark is None). "
+                "To get benchmark results, load results with a Benchmark object. "
+                "`results = cache.load_results(tasks='MTEB(eng, v2)')`"
+            )
+
+        return self.benchmark._create_summary_table(self)
 
     def __iter__(self) -> Iterator[ModelResult]:
         return iter(self.model_results)

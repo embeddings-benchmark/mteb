@@ -362,9 +362,14 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         for benchmark in benchmarks
     }
     process_time = time.time() - process_start
-    logger.info(
-        f"Step 3/7 complete: Processed {len(benchmarks)} benchmarks in {process_time:.2f}s (avg {process_time / len(benchmarks):.2f}s/benchmark)"
-    )
+    if len(benchmarks) > 0:
+        logger.info(
+            f"Step 3/7 complete: Processed {len(benchmarks)} benchmarks in {process_time:.2f}s (avg {process_time / len(benchmarks):.2f}s/benchmark)"
+        )
+    else:
+        logger.info(
+            f"Step 3/7 complete: Processed 0 benchmarks in {process_time:.2f}s (avg N/A)"
+        )
 
     default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
     default_results = all_benchmark_results[default_benchmark.name]
