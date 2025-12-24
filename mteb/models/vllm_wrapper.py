@@ -1,3 +1,4 @@
+import atexit
 import logging
 from typing import TYPE_CHECKING, Any, Literal
 
@@ -29,7 +30,7 @@ class VllmEncoderWrapper(AbsEncoder):
         dtype: Dtype = "auto",
         head_dtype: Literal["model"] | Dtype | None = None,
         max_model_len: int | None = None,
-        max_num_batched_tokens: int = None,
+        max_num_batched_tokens: int | None = None,
         max_num_seqs: int = 128,
         tensor_parallel_size: int = 1,
         data_parallel_size: int = 1,
@@ -76,6 +77,10 @@ class VllmEncoderWrapper(AbsEncoder):
                 and finally to the specific prompt type.
             **kwargs: Additional arguments to pass to the vllm serving engine model.
         """
+        import os
+
+        os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
+
         from vllm import LLM, EngineArgs
 
         hf_overrides = {} if hf_overrides is None else hf_overrides
@@ -117,6 +122,8 @@ class VllmEncoderWrapper(AbsEncoder):
                 "Encode models use prompts most often need to be configured with at least 'query' and"
                 f" 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
             )
+
+        atexit.register(self.cleanup)
 
     def encode(
         self,
@@ -186,4 +193,7 @@ class VllmEncoderWrapper(AbsEncoder):
         cleanup_dist_env_and_memory()
 
     def __del__(self):
-        self.cleanup()
+        try:
+            self.cleanup()
+        except Exception:
+            pass
