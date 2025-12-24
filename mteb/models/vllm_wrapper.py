@@ -1,17 +1,22 @@
 import logging
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import torch
 from torch.utils.data import DataLoader
-from vllm.config import PoolerConfig
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 
+if TYPE_CHECKING:
+    from vllm.config import PoolerConfig
+else:
+    PoolerConfig = Any
+
 logger = logging.getLogger(__name__)
 
 Dtype = Literal["half", "float16", "float", "float32", "bfloat16"]
+
 
 class VllmEncoderWrapper(AbsEncoder):
     """Wrapper for vllm serving engine."""
@@ -145,7 +150,6 @@ class VllmEncoderWrapper(AbsEncoder):
         Returns:
             The encoded sentences.
         """
-
         prompt = None
         prompt_name = None
         if self.model_prompts is not None:
