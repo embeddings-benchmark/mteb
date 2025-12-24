@@ -5,14 +5,14 @@ os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
 
 if __name__ == "__main__":
     import mteb
-    from mteb.models.vllm_wrapper import vllm_loader
+    from mteb.models.vllm_wrapper import VllmEncoderWrapper
 
     MODEL_NAME = "intfloat/e5-small"
     MAIN_SCORE = 0.7422994752439667
     MTEB_EMBED_TASKS = ["STS12"]
     MTEB_EMBED_TOL = 1e-4
 
-    encoder = vllm_loader(model_name=MODEL_NAME)
+    encoder = VllmEncoderWrapper(model=MODEL_NAME)
     tasks = mteb.get_tasks(tasks=MTEB_EMBED_TASKS)
 
     results = mteb.evaluate(

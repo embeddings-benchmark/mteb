@@ -13,20 +13,6 @@ logger = logging.getLogger(__name__)
 
 Dtype = Literal["half", "float16", "float", "float32", "bfloat16"]
 
-
-def vllm_loader(
-    model_name: str, revision: str | None = None, **kwargs
-) -> "VllmEncoderWrapper":
-    """Loads a model and wraps it in a VllmEncoderWrapper.
-
-    Args:
-        model_name: The name of the  to load.
-        revision: The revision of the model to load.
-        kwargs: Additional arguments to pass to the SentenceTransformer model.
-    """
-    return VllmEncoderWrapper(model=model_name, revision=revision, **kwargs)
-
-
 class VllmEncoderWrapper(AbsEncoder):
     """Wrapper for vllm serving engine."""
 
