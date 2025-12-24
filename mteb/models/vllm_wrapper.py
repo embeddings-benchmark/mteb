@@ -1,14 +1,13 @@
-from typing import TYPE_CHECKING, Any, Literal
 import logging
+from typing import Any, Literal
+
 import torch
-from mteb.models.abs_encoder import AbsEncoder
 from torch.utils.data import DataLoader
+from vllm.config import PoolerConfig
 
-from mteb.types import BatchedInput, PromptType, Array
-
-if TYPE_CHECKING:
-    from mteb.abstasks.task_metadata import TaskMetadata
-    from vllm.config import PoolerConfig
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -25,32 +24,30 @@ def vllm_loader(
         revision: The revision of the model to load.
         kwargs: Additional arguments to pass to the SentenceTransformer model.
     """
-    return VllmEncoderWrapper(
-        model=model_name, revision=revision, **kwargs
-    )
+    return VllmEncoderWrapper(model=model_name, revision=revision, **kwargs)
 
 
 class VllmEncoderWrapper(AbsEncoder):
-
     def __init__(
-            self,
+        self,
         model: str,
         revision: str | None = None,
-        trust_remote_code: bool=True,
-        dtype:Dtype="auto",
-        head_dtype: Literal["model"]|Dtype|None = None,
-        max_model_len: int|None = None,
+        trust_remote_code: bool = True,
+        dtype: Dtype = "auto",
+        head_dtype: Literal["model"] | Dtype | None = None,
+        max_model_len: int | None = None,
         max_num_batched_tokens: int = None,
         max_num_seqs: int = 128,
         tensor_parallel_size: int = 1,
         data_parallel_size: int = 1,
         enable_prefix_caching: bool | None = None,
         gpu_memory_utilization: float = 0.9,
-        hf_overrides: dict[str, str] | None = None,
+        hf_overrides: dict[str, Any] | None = None,
         pooler_config: PoolerConfig | None = None,
         enforce_eager: bool = False,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,):
+        **kwargs,
+    ):
         """Wrapper for vllm serving engine.
 
         Args:
@@ -86,17 +83,17 @@ class VllmEncoderWrapper(AbsEncoder):
                 and finally to the specific prompt type.
             **kwargs: Additional arguments to pass to the vllm serving engine model.
         """
-
         from vllm import LLM, EngineArgs
 
+        hf_overrides = {} if hf_overrides is None else hf_overrides
+
         if head_dtype is not None:
-            hf_overrides = {} if hf_overrides is None else hf_overrides
             hf_overrides["head_dtype"] = head_dtype
 
         args = EngineArgs(
             model=model,
             revision=revision,
-            runner='pooling',
+            runner="pooling",
             convert="embed",
             max_model_len=max_model_len,
             max_num_batched_tokens=max_num_batched_tokens,
@@ -105,12 +102,12 @@ class VllmEncoderWrapper(AbsEncoder):
             data_parallel_size=data_parallel_size,
             enable_prefix_caching=enable_prefix_caching,
             gpu_memory_utilization=gpu_memory_utilization,
-            hf_overrides = {} if hf_overrides is None else hf_overrides,
+            hf_overrides=hf_overrides,
             pooler_config=pooler_config,
             enforce_eager=enforce_eager,
             trust_remote_code=trust_remote_code,
             dtype=dtype,
-            **kwargs
+            **kwargs,
         )
         self.llm = LLM(**vars(args))
         self.model_prompts = model_prompts
@@ -139,8 +136,23 @@ class VllmEncoderWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         prompts = [text for batch in inputs for text in batch["text"]]
-        outputs = self.llm.encode(prompts)
+        outputs = self.llm.encode(
+            prompts, pooling_task="embed", truncate_prompt_tokens=-1
+        )
         embeddings = torch.stack([output.outputs.data for output in outputs])
         return embeddings
 
+    def cleanup(self):
+        if self.llm is None:
+            return
 
+        import gc
+
+        from vllm.distributed import cleanup_dist_env_and_memory
+
+        self.llm = None
+        gc.collect()
+        cleanup_dist_env_and_memory()
+
+    def __del__(self):
+        self.cleanup()
