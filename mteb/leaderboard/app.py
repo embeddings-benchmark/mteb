@@ -39,57 +39,6 @@ logger = logging.getLogger(__name__)
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 
 
-def _validate_benchmark_json(json_string: str) -> None:
-    """Validate that the JSON string contains valid MTEB benchmark data.
-
-    Args:
-        json_string: JSON string to validate
-
-    Raises:
-        ValueError: If JSON is invalid or doesn't have expected structure
-        json.JSONDecodeError: If JSON parsing fails
-    """
-    logger.info("Validating JSON structure...")
-
-    try:
-        # Parse JSON to ensure it's valid
-        data = json.loads(json_string)
-
-        # Check if it's a dictionary (expected for BenchmarkResults)
-        if not isinstance(data, dict):
-            raise ValueError(f"Expected JSON object, got {type(data).__name__}")
-
-        # Check for expected top-level keys that BenchmarkResults should have
-        required_keys = ["results"]  # Minimal validation for BenchmarkResults structure
-        missing_keys = [key for key in required_keys if key not in data]
-        if missing_keys:
-            logger.warning(f"Missing expected keys in JSON: {missing_keys}")
-            # Don't raise an error, just warn, as the structure might vary
-
-        # Check that results is a list
-        if "results" in data and not isinstance(data["results"], list):
-            raise ValueError(
-                f"Expected 'results' to be a list, got {type(data['results']).__name__}"
-            )
-
-        # Basic size sanity check
-        if (
-            len(json_string) < 1000
-        ):  # Less than 1KB seems too small for benchmark results
-            logger.warning(
-                f"JSON data seems unusually small: {len(json_string)} characters"
-            )
-
-        logger.info("JSON validation successful")
-
-    except json.JSONDecodeError as e:
-        logger.error(f"Invalid JSON structure: {e}")
-        raise
-    except Exception as e:
-        logger.error(f"JSON validation error: {type(e).__name__}: {e}")
-        raise ValueError(f"Invalid benchmark data structure: {e}") from e
-
-
 def _download_cached_results(
     url: str, timeout: int = 60, max_size_mb: int = 500
 ) -> bytes:
@@ -151,12 +100,11 @@ def _download_cached_results(
         raise
 
 
-def _decompress_gzip_data(content: bytes, validate_json: bool = True) -> str:
+def _decompress_gzip_data(content: bytes) -> str:
     """Decompress gzipped content to string with optional JSON validation.
 
     Args:
         content: Gzipped content as bytes
-        validate_json: Whether to validate the decompressed data as JSON
 
     Returns:
         Decompressed string data
@@ -172,10 +120,6 @@ def _decompress_gzip_data(content: bytes, validate_json: bool = True) -> str:
         with gzip.open(io.BytesIO(content), "rt", encoding="utf-8") as gz_file:
             data = gz_file.read()
         logger.info(f"Decompression successful, data length: {len(data)} chars")
-
-        # Validate JSON structure if requested
-        if validate_json:
-            _validate_benchmark_json(data)
 
         return data
     except gzip.BadGzipFile as e:

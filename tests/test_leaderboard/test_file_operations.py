@@ -2,7 +2,6 @@
 
 import gzip
 import io
-import json
 from pathlib import Path
 from unittest.mock import patch
 
@@ -19,18 +18,6 @@ class TestDecompressGzipData:
         gzipped_content = mock_gzipped_content(mock_benchmark_json)
         result = _decompress_gzip_data(gzipped_content)
         assert result == mock_benchmark_json
-
-    def test_successful_decompression_no_validation(self):
-        """Test decompression without JSON validation."""
-        # Create gzipped non-JSON data
-        text_data = "This is not JSON"
-        buffer = io.BytesIO()
-        with gzip.open(buffer, "wt", encoding="utf-8") as gz_file:
-            gz_file.write(text_data)
-        gzipped_content = buffer.getvalue()
-
-        result = _decompress_gzip_data(gzipped_content, validate_json=False)
-        assert result == text_data
 
     def test_invalid_gzip(self):
         """Test that invalid gzip data raises BadGzipFile."""
@@ -49,18 +36,6 @@ class TestDecompressGzipData:
 
         with pytest.raises(UnicodeDecodeError):
             _decompress_gzip_data(gzipped_content)
-
-    def test_json_validation_failure(self):
-        """Test that JSON validation failures are properly handled."""
-        # Create gzipped invalid JSON
-        invalid_json = "not valid json {"
-        buffer = io.BytesIO()
-        with gzip.open(buffer, "wt", encoding="utf-8") as gz_file:
-            gz_file.write(invalid_json)
-        gzipped_content = buffer.getvalue()
-
-        with pytest.raises(json.JSONDecodeError):
-            _decompress_gzip_data(gzipped_content, validate_json=True)
 
     @patch("gzip.open")
     def test_unexpected_exception(self, mock_gzip_open):
