@@ -151,7 +151,7 @@ def _validate_benchmark_json(json_string: str) -> None:
 
 
 def _download_cached_results(
-    url: str, timeout: int = 60, max_size_mb: int = 50
+    url: str, timeout: int = 60, max_size_mb: int = 500
 ) -> bytes:
     """Download cached results from the specified URL with validation.
 
