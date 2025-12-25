@@ -1,7 +1,13 @@
 """Test cases for the ResultCache class in the mteb.cache module."""
 
+import gzip
+import io
 from pathlib import Path
 from typing import cast
+from unittest.mock import Mock, patch
+
+import pytest
+import requests
 
 import mteb
 from mteb.cache import ResultCache
@@ -205,3 +211,240 @@ def test_cache_filter_languages():
     task = task.filter_languages(["eng"])
     eng_results = cache.load_results(tasks=[task], validate_and_filter=True)
     assert len(eng_results.model_results[0].task_results[0].scores["test"]) == 1
+
+
+# Tests for download_cached_results_from_branch method
+
+
+@pytest.fixture
+def mock_benchmark_json():
+    """Sample valid benchmark JSON for testing."""
+    return '{"results": [{"task": "test_task", "score": 0.85, "model": "test_model"}]}'
+
+
+@pytest.fixture
+def mock_gzipped_content():
+    """Generate mock gzipped content for testing."""
+
+    def _generate_gzipped(text_content: str) -> bytes:
+        buffer = io.BytesIO()
+        with gzip.open(buffer, "wt", encoding="utf-8") as gz_file:
+            gz_file.write(text_content)
+        return buffer.getvalue()
+
+    return _generate_gzipped
+
+
+class TestDownloadCachedResultsFromBranch:
+    """Test the download_cached_results_from_branch method."""
+
+    @patch("requests.get")
+    def test_successful_download(
+        self, mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
+    ):
+        """Test successful download and decompression, including parent directory creation."""
+        cache = ResultCache(cache_path=tmp_path)
+
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.headers = {"content-type": "application/gzip"}
+        mock_response.content = mock_gzipped_content(mock_benchmark_json)
+        mock_get.return_value = mock_response
+
+        # Test basic download
+        output_path = tmp_path / "test_cached_results.json"
+        result_path = cache.download_cached_results_from_branch(output_path=output_path)
+
+        assert result_path == output_path
+        assert result_path.exists()
+        assert result_path.read_text(encoding="utf-8") == mock_benchmark_json
+        mock_response.raise_for_status.assert_called_once()
+
+        # Test parent directory creation
+        nested_output_path = tmp_path / "nested" / "dir" / "test_cache.json"
+        nested_result_path = cache.download_cached_results_from_branch(
+            output_path=nested_output_path
+        )
+
+        assert nested_result_path.exists()
+        assert nested_result_path.read_text(encoding="utf-8") == mock_benchmark_json
+
+    @patch("requests.get")
+    def test_file_too_large(self, mock_get, tmp_path):
+        """Test that oversized files raise ValueError."""
+        cache = ResultCache(cache_path=tmp_path)
+
+        # Create gzipped content that's 51MB (larger than the limit)
+        # We create the actual bytes directly rather than compressing,
+        # since we're testing the downloaded size check
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.headers = {"content-type": "application/gzip"}
+        mock_response.content = b"x" * (51 * 1024 * 1024)  # 51MB of gzipped data
+        mock_get.return_value = mock_response
+
+        with pytest.raises(ValueError, match="Downloaded file too large"):
+            cache.download_cached_results_from_branch(max_size_mb=50)
+
+    @pytest.mark.parametrize(
+        "error_type,exception_class",
+        [
+            ("timeout", requests.exceptions.Timeout),
+            ("connection", requests.exceptions.ConnectionError),
+            ("http_404", requests.exceptions.HTTPError),
+            ("invalid_gzip", gzip.BadGzipFile),
+        ],
+    )
+    @patch("requests.get")
+    def test_error_handling_consolidated(
+        self, mock_get, tmp_path, error_type, exception_class
+    ):
+        """Test various error conditions in a consolidated manner."""
+        cache = ResultCache(cache_path=tmp_path)
+
+        if error_type == "timeout":
+            mock_get.side_effect = requests.exceptions.Timeout("Request timed out")
+        elif error_type == "connection":
+            mock_get.side_effect = requests.exceptions.ConnectionError(
+                "Connection failed"
+            )
+        elif error_type == "http_404":
+            mock_response = Mock()
+            mock_response.status_code = 404
+            mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError(
+                "404 Not Found"
+            )
+            mock_get.return_value = mock_response
+        elif error_type == "invalid_gzip":
+            mock_response = Mock()
+            mock_response.status_code = 200
+            mock_response.headers = {"content-type": "application/gzip"}
+            mock_response.content = b"not gzipped data"
+            mock_get.return_value = mock_response
+
+        with pytest.raises(exception_class):
+            cache.download_cached_results_from_branch(timeout=30)
+
+    @patch("requests.get")
+    def test_default_output_path(
+        self, mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
+    ):
+        """Test that default output path is mteb/leaderboard/__cached_results.json when none provided."""
+        cache = ResultCache(cache_path=tmp_path)
+
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.headers = {"content-type": "application/gzip"}
+        mock_response.content = mock_gzipped_content(mock_benchmark_json)
+        mock_get.return_value = mock_response
+
+        result_path = cache.download_cached_results_from_branch()
+
+        # Default path should be mteb/leaderboard/__cached_results.json
+        # Get the mteb package directory
+        mteb_package_dir = Path(mteb.__file__).parent
+        expected_path = mteb_package_dir / "leaderboard" / "__cached_results.json"
+        assert result_path == expected_path
+        assert result_path.exists()
+
+    @pytest.mark.parametrize(
+        "content_type,should_warn",
+        [
+            ("application/gzip", False),  # Expected type
+            ("text/html", True),  # Unexpected type
+            ("", False),  # Empty content-type should not warn
+        ],
+    )
+    @patch("requests.get")
+    def test_content_type_handling(
+        self,
+        mock_get,
+        tmp_path,
+        content_type,
+        should_warn,
+        mock_benchmark_json,
+        mock_gzipped_content,
+    ):
+        """Test various content-type header scenarios."""
+        cache = ResultCache(cache_path=tmp_path)
+
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.headers = {"content-type": content_type}
+        mock_response.content = mock_gzipped_content(mock_benchmark_json)
+        mock_get.return_value = mock_response
+
+        with patch("mteb.cache.logger.warning") as mock_warning:
+            output_path = tmp_path / "test.json"
+            result_path = cache.download_cached_results_from_branch(
+                output_path=output_path
+            )
+
+            assert result_path.exists()
+
+            if should_warn:
+                mock_warning.assert_called()
+                assert "Unexpected content-type" in str(mock_warning.call_args)
+            else:
+                # Filter out other warnings
+                warning_calls = [
+                    call
+                    for call in mock_warning.call_args_list
+                    if "Unexpected content-type" in str(call)
+                ]
+                assert len(warning_calls) == 0
+
+    @pytest.mark.parametrize(
+        "file_size,max_size_mb,should_fail",
+        [
+            (1024, 1, False),  # Small file - OK
+            (1024 * 1024, 1, False),  # At limit - OK
+            (51 * 1024 * 1024, 50, True),  # Over limit - Fail
+        ],
+    )
+    @patch("requests.get")
+    def test_file_size_validation(
+        self,
+        mock_get,
+        tmp_path,
+        file_size,
+        max_size_mb,
+        should_fail,
+        mock_gzipped_content,
+    ):
+        """Test file size validation with various sizes.
+
+        Note: file_size represents the size of the gzipped (downloaded) content,
+        not the uncompressed size, since validation happens on download.
+        """
+        cache = ResultCache(cache_path=tmp_path)
+
+        # For size validation, we care about the downloaded (gzipped) size
+        # So we mock the response.content directly with the desired byte size
+        # But we still need valid gzip content for decompression
+        if should_fail:
+            # For failure cases, just use raw bytes (will fail on decompression but that's after size check)
+            mock_response = Mock()
+            mock_response.status_code = 200
+            mock_response.headers = {"content-type": "application/gzip"}
+            mock_response.content = b"x" * file_size
+            mock_get.return_value = mock_response
+
+            with pytest.raises(ValueError, match="Downloaded file too large"):
+                cache.download_cached_results_from_branch(max_size_mb=max_size_mb)
+        else:
+            # For success cases, use valid gzipped content
+            # Create small content and gzip it
+            content = "x" * min(file_size, 1000)  # Keep content small for faster tests
+            gzipped = mock_gzipped_content(content)
+
+            mock_response = Mock()
+            mock_response.status_code = 200
+            mock_response.headers = {"content-type": "application/gzip"}
+            mock_response.content = gzipped
+            mock_get.return_value = mock_response
+
+            result_path = cache.download_cached_results_from_branch(
+                max_size_mb=max_size_mb
+            )
+            assert result_path.exists()

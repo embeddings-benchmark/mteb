@@ -1,5 +1,3 @@
-import gzip
-import io
 import itertools
 import json
 import logging
@@ -13,7 +11,6 @@ from urllib.parse import urlencode
 import cachetools
 import gradio as gr
 import pandas as pd
-import requests
 
 import mteb
 from mteb import BenchmarkResults
@@ -39,133 +36,6 @@ logger = logging.getLogger(__name__)
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 
 
-def _download_cached_results(
-    url: str, timeout: int = 60, max_size_mb: int = 500
-) -> bytes:
-    """Download cached results from the specified URL with validation.
-
-    Args:
-        url: URL to download from
-        timeout: Request timeout in seconds
-        max_size_mb: Maximum allowed file size in megabytes
-
-    Returns:
-        Downloaded content as bytes
-
-    Raises:
-        requests.exceptions.RequestException: On HTTP errors
-        ValueError: On validation failures (size, content-type)
-    """
-    logger.info(f"Attempting to download from: {url}")
-    max_size_bytes = max_size_mb * 1024 * 1024
-
-    try:
-        response = requests.get(url, timeout=timeout)
-        response.raise_for_status()
-
-        # Validate content-type header
-        content_type = response.headers.get("content-type", "").lower()
-        if content_type and not any(
-            ct in content_type
-            for ct in [
-                "application/gzip",
-                "application/octet-stream",
-                "application/x-gzip",
-            ]
-        ):
-            logger.warning(
-                f"Unexpected content-type: {content_type}, continuing anyway..."
-            )
-
-        # Validate file size
-        content_length = len(response.content)
-        if content_length > max_size_bytes:
-            raise ValueError(
-                f"Downloaded file too large: {content_length} bytes (max: {max_size_bytes})"
-            )
-
-        logger.info(f"HTTP request successful, content length: {content_length} bytes")
-        return response.content
-    except requests.exceptions.Timeout as e:
-        logger.error(f"HTTP timeout after {timeout}s: {e}")
-        raise
-    except requests.exceptions.ConnectionError as e:
-        logger.error(f"HTTP connection error: {e}")
-        raise
-    except requests.exceptions.HTTPError as e:
-        logger.error(f"HTTP error {response.status_code}: {e}")
-        raise
-    except Exception as e:
-        logger.error(f"Unexpected HTTP error: {type(e).__name__}: {e}")
-        raise
-
-
-def _decompress_gzip_data(content: bytes) -> str:
-    """Decompress gzipped content to string with optional JSON validation.
-
-    Args:
-        content: Gzipped content as bytes
-
-    Returns:
-        Decompressed string data
-
-    Raises:
-        gzip.BadGzipFile: If content is not valid gzip
-        UnicodeDecodeError: If content cannot be decoded as UTF-8
-        ValueError: If JSON validation fails
-    """
-    logger.info("Attempting gzip decompression...")
-
-    try:
-        with gzip.open(io.BytesIO(content), "rt", encoding="utf-8") as gz_file:
-            data = gz_file.read()
-        logger.info(f"Decompression successful, data length: {len(data)} chars")
-
-        return data
-    except gzip.BadGzipFile as e:
-        logger.error(f"Invalid gzip file: {e}")
-        raise
-    except UnicodeDecodeError as e:
-        logger.error(f"UTF-8 decode error during decompression: {e}")
-        raise
-    except Exception as e:
-        logger.error(f"Unexpected decompression error: {type(e).__name__}: {e}")
-        raise
-
-
-def _write_cache_file(data: str, file_path: Path) -> None:
-    """Write decompressed data to cache file.
-
-    Args:
-        data: String data to write
-        file_path: Path where to write the file
-
-    Raises:
-        PermissionError: If file cannot be written due to permissions
-        OSError: On other file system errors
-    """
-    logger.info(f"Attempting to write to: {file_path}")
-
-    # Check parent directory exists and is writable
-    parent_dir = file_path.parent
-    if not parent_dir.exists():
-        logger.info(f"Creating parent directory: {parent_dir}")
-        parent_dir.mkdir(parents=True)
-
-    try:
-        file_path.write_text(data, encoding="utf-8")
-        logger.info(f"File write successful, size: {file_path.stat().st_size} bytes")
-    except PermissionError as e:
-        logger.error(f"Permission denied writing to {file_path}: {e}")
-        raise
-    except OSError as e:
-        logger.error(f"OS error writing to {file_path}: {e}")
-        raise
-    except Exception as e:
-        logger.error(f"Unexpected file write error: {type(e).__name__}: {e}")
-        raise
-
-
 def _load_results(cache: ResultCache) -> BenchmarkResults:
     """Load benchmark results using an optimized caching strategy.
 
@@ -185,7 +55,7 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
     during app startup.
 
     Args:
-        cache: ResultCache instance used for fallback repository operations
+        cache: ResultCache instance used for both optimized and fallback operations
 
     Returns:
         BenchmarkResults: Complete benchmark results ready for leaderboard display
@@ -196,6 +66,7 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
     """
     start_time = time.time()
     results_cache_path = Path(__file__).parent.joinpath("__cached_results.json")
+
     if not results_cache_path.exists():
         # First try to download the cached results file from the cached-data branch
         # This is faster than cloning the entire results repository
@@ -204,19 +75,9 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
         )
 
         try:
-            # === OPTIMIZED DOWNLOAD WORKFLOW ===
-            # Use separate functions for cleaner error handling and better maintainability
-            url = "https://raw.githubusercontent.com/embeddings-benchmark/results/cached-data/__cached_results.json.gz"
-
-            # Step 1: Download compressed data
-            content = _download_cached_results(url, timeout=60)
-
-            # Step 2: Decompress to JSON string
-            data = _decompress_gzip_data(content)
-
-            # Step 3: Write to cache file
-            _write_cache_file(data, results_cache_path)
-
+            # Use ResultCache's optimized download method
+            # Default saves to mteb/leaderboard/__cached_results.json
+            results_cache_path = cache.download_cached_results_from_branch()
             download_time = time.time() - start_time
             logger.info(
                 f"Downloaded cached results from cached-data branch in {download_time:.2f}s"

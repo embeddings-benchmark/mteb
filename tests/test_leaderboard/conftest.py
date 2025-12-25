@@ -1,5 +1,8 @@
 """Shared test fixtures and configuration for leaderboard tests."""
 
+import gzip
+import io
+
 import pytest
 
 
@@ -29,8 +32,6 @@ def mock_invalid_json():
 @pytest.fixture
 def mock_gzipped_content():
     """Generate mock gzipped content for testing."""
-    import gzip
-    import io
 
     def _generate_gzipped(text_content: str) -> bytes:
         buffer = io.BytesIO()

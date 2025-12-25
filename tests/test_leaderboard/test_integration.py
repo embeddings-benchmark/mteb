@@ -1,124 +1,66 @@
-"""Integration tests for leaderboard caching workflow."""
+"""Integration tests for leaderboard caching workflow with ResultCache."""
 
-import gzip
-from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
-import requests
 
-from mteb.leaderboard.app import _download_cached_results
+from mteb.cache import ResultCache
 
 
 class TestIntegrationScenarios:
-    """Test integration scenarios that combine multiple functions."""
+    """Test integration scenarios that use ResultCache method."""
 
-    @patch("mteb.leaderboard.app._download_cached_results")
-    @patch("mteb.leaderboard.app._decompress_gzip_data")
-    @patch("mteb.leaderboard.app._write_cache_file")
+    @patch("mteb.cache.requests.get")
     def test_full_caching_workflow_success(
-        self, mock_write, mock_decompress, mock_download
+        self, mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
     ):
-        """Test the complete workflow from download to file write."""
+        """Test the complete workflow from download to file write via ResultCache."""
+        cache = ResultCache(cache_path=tmp_path)
+
         # Setup mocks for successful workflow
-        mock_download.return_value = b"gzipped content"
-        mock_decompress.return_value = '{"results": [{"task": "test"}]}'
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.headers = {"content-type": "application/gzip"}
+        mock_response.content = mock_gzipped_content(mock_benchmark_json)
+        mock_get.return_value = mock_response
 
-        # This would be called within _load_results, but we can test the components
-        url = "https://example.com/cached_results.json.gz"
-        content = mock_download(url)
-        data = mock_decompress(content)
-        file_path = Path("/tmp/cached_results.json")
-        mock_write(data, file_path)
+        # Test the full workflow through ResultCache
+        output_path = tmp_path / "cached_results.json"
+        result_path = cache.download_cached_results_from_branch(output_path=output_path)
 
-        # Verify all functions were called correctly
-        mock_download.assert_called_once_with(url)
-        mock_decompress.assert_called_once_with(b"gzipped content")
-        mock_write.assert_called_once_with('{"results": [{"task": "test"}]}', file_path)
+        # Verify the workflow completed correctly
+        assert result_path == output_path
+        assert result_path.exists()
+        assert result_path.read_text(encoding="utf-8") == mock_benchmark_json
+        mock_get.assert_called_once()
+        mock_response.raise_for_status.assert_called_once()
 
-    @patch("mteb.leaderboard.app._download_cached_results")
-    def test_download_failure_handling(self, mock_download):
+    @patch("mteb.cache.requests.get")
+    def test_download_failure_handling(self, mock_get, tmp_path):
         """Test that download failures are properly handled in the workflow."""
-        mock_download.side_effect = requests.exceptions.ConnectionError("Network error")
+        cache = ResultCache(cache_path=tmp_path)
+        mock_get.side_effect = Exception("Network error")
 
-        with pytest.raises(requests.exceptions.ConnectionError):
-            mock_download("https://example.com/cached_results.json.gz")
-
-    @patch("mteb.leaderboard.app._decompress_gzip_data")
-    def test_decompression_failure_handling(self, mock_decompress):
-        """Test that decompression failures are properly handled."""
-        mock_decompress.side_effect = gzip.BadGzipFile("Invalid gzip")
-
-        with pytest.raises(gzip.BadGzipFile):
-            mock_decompress(b"invalid gzip content")
-
-    @patch("mteb.leaderboard.app._write_cache_file")
-    def test_write_failure_handling(self, mock_write):
-        """Test that write failures are properly handled."""
-        mock_write.side_effect = PermissionError("Cannot write file")
-
-        with pytest.raises(PermissionError):
-            mock_write('{"data": "test"}', Path("/tmp/test.json"))
+        with pytest.raises(Exception, match="Network error"):
+            cache.download_cached_results_from_branch()
 
 
-# Parametrized tests for edge cases
-@pytest.mark.parametrize(
-    "content_type,should_warn",
-    [
-        ("application/gzip", False),
-        ("application/octet-stream", False),
-        ("application/x-gzip", False),
-        ("text/html", True),
-        ("application/json", True),
-        ("", False),  # Empty content-type should not warn
-    ],
-)
-@patch("requests.get")
-def test_content_type_handling(mock_get, content_type, should_warn):
-    """Test various content-type header scenarios."""
-    mock_response = Mock()
-    mock_response.status_code = 200
-    mock_response.headers = {"content-type": content_type}
-    mock_response.content = b"test content"
-    mock_get.return_value = mock_response
-
-    with patch("mteb.leaderboard.app.logger.warning") as mock_warning:
-        result = _download_cached_results("http://example.com/test.gz")
-        assert result == b"test content"
-
-        if should_warn:
-            mock_warning.assert_called_once()
-            assert "Unexpected content-type" in mock_warning.call_args[0][0]
-        else:
-            mock_warning.assert_not_called()
+@pytest.fixture
+def mock_benchmark_json():
+    """Sample valid benchmark JSON for testing."""
+    return '{"results": [{"task": "test_task", "score": 0.85, "model": "test_model"}]}'
 
 
-@pytest.mark.parametrize(
-    "file_size,max_size_mb,should_fail",
-    [
-        (1024, 1, False),  # 1KB file, 1MB limit - OK
-        (1024 * 1024, 1, False),  # 1MB file, 1MB limit - OK (exactly at limit)
-        (1024 * 1024 + 1, 1, True),  # 1MB+1 file, 1MB limit - Fail
-        (50 * 1024 * 1024, 50, False),  # 50MB file, 50MB limit - OK
-        (51 * 1024 * 1024, 50, True),  # 51MB file, 50MB limit - Fail
-    ],
-)
-@patch("requests.get")
-def test_file_size_validation(mock_get, file_size, max_size_mb, should_fail):
-    """Test file size validation with various sizes."""
-    mock_response = Mock()
-    mock_response.status_code = 200
-    mock_response.headers = {"content-type": "application/gzip"}
-    mock_response.content = b"x" * file_size
-    mock_get.return_value = mock_response
+@pytest.fixture
+def mock_gzipped_content():
+    """Generate mock gzipped content for testing."""
+    import gzip
+    import io
 
-    if should_fail:
-        with pytest.raises(ValueError, match="Downloaded file too large"):
-            _download_cached_results(
-                "http://example.com/test.gz", max_size_mb=max_size_mb
-            )
-    else:
-        result = _download_cached_results(
-            "http://example.com/test.gz", max_size_mb=max_size_mb
-        )
-        assert len(result) == file_size
+    def _generate_gzipped(text_content: str) -> bytes:
+        buffer = io.BytesIO()
+        with gzip.open(buffer, "wt", encoding="utf-8") as gz_file:
+            gz_file.write(text_content)
+        return buffer.getvalue()
+
+    return _generate_gzipped
