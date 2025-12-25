@@ -2,9 +2,11 @@ import atexit
 import logging
 from typing import TYPE_CHECKING, Any, Literal
 
+import numpy as np
 import torch
 from torch.utils.data import DataLoader
 
+from mteb import CrossEncoderProtocol
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
@@ -19,12 +21,12 @@ logger = logging.getLogger(__name__)
 Dtype = Literal["half", "float16", "float", "float32", "bfloat16"]
 
 
-class VllmEncoderWrapper(AbsEncoder):
+class VllmWrapperBase:
     """Wrapper for vllm serving engine."""
 
     def __init__(
         self,
-        model: str,
+        model_name: str,
         revision: str | None = None,
         trust_remote_code: bool = True,
         dtype: Dtype = "auto",
@@ -89,7 +91,7 @@ class VllmEncoderWrapper(AbsEncoder):
             hf_overrides["head_dtype"] = head_dtype
 
         args = EngineArgs(
-            model=model,
+            model=model_name,
             revision=revision,
             runner="pooling",
             convert="embed",
@@ -124,6 +126,29 @@ class VllmEncoderWrapper(AbsEncoder):
             )
 
         atexit.register(self.cleanup)
+
+    def cleanup(self):
+        """Clean up the VLLM distributed runtime environment and release GPU resources."""
+        if self.llm is None:
+            return
+
+        import gc
+
+        from vllm.distributed import cleanup_dist_env_and_memory
+
+        self.llm = None
+        gc.collect()
+        cleanup_dist_env_and_memory()
+
+    def __del__(self):
+        try:
+            self.cleanup()
+        except Exception:
+            pass
+
+
+class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
+    """vLLM wrapper for Encoder models."""
 
     def encode(
         self,
@@ -179,21 +204,55 @@ class VllmEncoderWrapper(AbsEncoder):
         embeddings = torch.stack([output.outputs.data for output in outputs])
         return embeddings
 
-    def cleanup(self):
-        """Clean up the VLLM distributed runtime environment and release GPU resources."""
-        if self.llm is None:
-            return
 
-        import gc
+class VllmCrossEncoderWrapper(CrossEncoderProtocol, VllmWrapperBase):
+    """vLLM wrapper for CrossEncoder models."""
 
-        from vllm.distributed import cleanup_dist_env_and_memory
+    def __init__(
+        self, model_name: str, revision: str | None = None, **kwargs: Any
+    ) -> None:
+        CrossEncoderProtocol.__init__(self, model_name=model_name, revision=revision)
+        VllmWrapperBase.__init__(
+            self, model_name=model_name, revision=revision, **kwargs
+        )
 
-        self.llm = None
-        gc.collect()
-        cleanup_dist_env_and_memory()
+    def predict(
+        self,
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        """Predicts relevance scores for pairs of inputs. Note that, unlike the encoder, the cross-encoder can compare across inputs.
 
-    def __del__(self):
-        try:
-            self.cleanup()
-        except Exception:
-            pass
+        Args:
+            inputs1: First Dataloader of inputs to encode. For reranking tasks, these are queries (for text only tasks `QueryDatasetType`).
+            inputs2: Second Dataloader of inputs to encode. For reranking, these are documents (for text only tasks `RetrievalOutputType`).
+            task_metadata: Metadata of the current task.
+            hf_split: Split of current task, allows to know some additional information about current split.
+                E.g. Current language
+            hf_subset: Subset of current task. Similar to `hf_split` to get more information
+            prompt_type: The name type of prompt. (query or passage)
+            **kwargs: Additional arguments to pass to the cross-encoder.
+
+        Returns:
+            The predicted relevance scores for each inputs pair.
+        """
+        queries = [text for batch in inputs1 for text in batch["text"]]
+        corpus = [text for batch in inputs2 for text in batch["text"]]
+
+        # TODO: support task prompt
+        # TODO: support score prompt
+
+        outputs = self.llm.score(
+            queries,
+            corpus,
+            truncate_prompt_tokens=-1,
+            use_tqdm=False,
+        )
+        scores = np.array([output.outputs.score for output in outputs])
+        return scores
