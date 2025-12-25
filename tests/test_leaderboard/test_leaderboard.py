@@ -1,3 +1,5 @@
+"""Leaderboard stability and integration tests."""
+
 import logging
 import multiprocessing
 import os

@@ -36,16 +36,280 @@ from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 logger = logging.getLogger(__name__)
 
 
-def _flush_logs():
-    """Flush all log handlers to ensure messages are written immediately."""
-    for handler in logging.root.handlers:
-        handler.flush()
+class LogFlusher:
+    """Optimized log flushing utility with batching and conditional flushing."""
+
+    def __init__(self, flush_interval: int = 5):
+        """Initialize the log flusher.
+
+        Args:
+            flush_interval: Number of flush requests before actually flushing
+        """
+        self._flush_count = 0
+        self._flush_interval = flush_interval
+        self._last_flush_time = time.time()
+
+    def flush_if_needed(self, force: bool = False):
+        """Conditionally flush logs to reduce I/O overhead.
+
+        Args:
+            force: If True, flush immediately regardless of batching logic
+        """
+        self._flush_count += 1
+        current_time = time.time()
+
+        # Force flush if:
+        # 1. Explicitly requested
+        # 2. Reached the flush interval
+        # 3. More than 2 seconds have passed since last flush
+        should_flush = (
+            force
+            or self._flush_count >= self._flush_interval
+            or (current_time - self._last_flush_time) > 2.0
+        )
+
+        if should_flush:
+            for handler in logging.root.handlers:
+                handler.flush()
+            self._flush_count = 0
+            self._last_flush_time = current_time
+
+
+# Global log flusher instance
+_log_flusher = LogFlusher()
+
+
+def _flush_logs(force: bool = False):
+    """Flush all log handlers with optimized batching.
+
+    This function implements intelligent log flushing to reduce I/O overhead:
+    - Normal calls are batched (flush every 5 calls or every 2 seconds)
+    - Use force=True only at critical points where immediate visibility is essential
+
+    Args:
+        force: If True, flush immediately. Use sparingly - only for:
+               - Successful completion of major operations
+               - Before fallback to alternative methods
+               - Final function completion
+               - Critical errors where immediate user feedback is needed
+    """
+    _log_flusher.flush_if_needed(force=force)
 
 
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 
 
+def _validate_benchmark_json(json_string: str) -> None:
+    """Validate that the JSON string contains valid MTEB benchmark data.
+
+    Args:
+        json_string: JSON string to validate
+
+    Raises:
+        ValueError: If JSON is invalid or doesn't have expected structure
+        json.JSONDecodeError: If JSON parsing fails
+    """
+    logger.info("Validating JSON structure...")
+
+    try:
+        # Parse JSON to ensure it's valid
+        data = json.loads(json_string)
+
+        # Check if it's a dictionary (expected for BenchmarkResults)
+        if not isinstance(data, dict):
+            raise ValueError(f"Expected JSON object, got {type(data).__name__}")
+
+        # Check for expected top-level keys that BenchmarkResults should have
+        required_keys = ["results"]  # Minimal validation for BenchmarkResults structure
+        missing_keys = [key for key in required_keys if key not in data]
+        if missing_keys:
+            logger.warning(f"Missing expected keys in JSON: {missing_keys}")
+            # Don't raise an error, just warn, as the structure might vary
+
+        # Check that results is a list
+        if "results" in data and not isinstance(data["results"], list):
+            raise ValueError(
+                f"Expected 'results' to be a list, got {type(data['results']).__name__}"
+            )
+
+        # Basic size sanity check
+        if (
+            len(json_string) < 1000
+        ):  # Less than 1KB seems too small for benchmark results
+            logger.warning(
+                f"JSON data seems unusually small: {len(json_string)} characters"
+            )
+
+        logger.info("JSON validation successful")
+
+    except json.JSONDecodeError as e:
+        logger.error(f"Invalid JSON structure: {e}")
+        raise
+    except Exception as e:
+        logger.error(f"JSON validation error: {type(e).__name__}: {e}")
+        raise ValueError(f"Invalid benchmark data structure: {e}") from e
+
+
+def _download_cached_results(
+    url: str, timeout: int = 60, max_size_mb: int = 50
+) -> bytes:
+    """Download cached results from the specified URL with validation.
+
+    Args:
+        url: URL to download from
+        timeout: Request timeout in seconds
+        max_size_mb: Maximum allowed file size in megabytes
+
+    Returns:
+        Downloaded content as bytes
+
+    Raises:
+        requests.exceptions.RequestException: On HTTP errors
+        ValueError: On validation failures (size, content-type)
+    """
+    logger.info(f"Attempting to download from: {url}")
+    max_size_bytes = max_size_mb * 1024 * 1024
+
+    try:
+        response = requests.get(url, timeout=timeout)
+        response.raise_for_status()
+
+        # Validate content-type header
+        content_type = response.headers.get("content-type", "").lower()
+        if content_type and not any(
+            ct in content_type
+            for ct in [
+                "application/gzip",
+                "application/octet-stream",
+                "application/x-gzip",
+            ]
+        ):
+            logger.warning(
+                f"Unexpected content-type: {content_type}, continuing anyway..."
+            )
+
+        # Validate file size
+        content_length = len(response.content)
+        if content_length > max_size_bytes:
+            raise ValueError(
+                f"Downloaded file too large: {content_length} bytes (max: {max_size_bytes})"
+            )
+
+        logger.info(f"HTTP request successful, content length: {content_length} bytes")
+        return response.content
+    except requests.exceptions.Timeout as e:
+        logger.error(f"HTTP timeout after {timeout}s: {e}")
+        raise
+    except requests.exceptions.ConnectionError as e:
+        logger.error(f"HTTP connection error: {e}")
+        raise
+    except requests.exceptions.HTTPError as e:
+        logger.error(f"HTTP error {response.status_code}: {e}")
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected HTTP error: {type(e).__name__}: {e}")
+        raise
+
+
+def _decompress_gzip_data(content: bytes, validate_json: bool = True) -> str:
+    """Decompress gzipped content to string with optional JSON validation.
+
+    Args:
+        content: Gzipped content as bytes
+        validate_json: Whether to validate the decompressed data as JSON
+
+    Returns:
+        Decompressed string data
+
+    Raises:
+        gzip.BadGzipFile: If content is not valid gzip
+        UnicodeDecodeError: If content cannot be decoded as UTF-8
+        ValueError: If JSON validation fails
+    """
+    logger.info("Attempting gzip decompression...")
+
+    try:
+        with gzip.open(io.BytesIO(content), "rt", encoding="utf-8") as gz_file:
+            data = gz_file.read()
+        logger.info(f"Decompression successful, data length: {len(data)} chars")
+
+        # Validate JSON structure if requested
+        if validate_json:
+            _validate_benchmark_json(data)
+
+        return data
+    except gzip.BadGzipFile as e:
+        logger.error(f"Invalid gzip file: {e}")
+        raise
+    except UnicodeDecodeError as e:
+        logger.error(f"UTF-8 decode error during decompression: {e}")
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected decompression error: {type(e).__name__}: {e}")
+        raise
+
+
+def _write_cache_file(data: str, file_path: Path) -> None:
+    """Write decompressed data to cache file.
+
+    Args:
+        data: String data to write
+        file_path: Path where to write the file
+
+    Raises:
+        PermissionError: If file cannot be written due to permissions
+        OSError: On other file system errors
+    """
+    logger.info(f"Attempting to write to: {file_path}")
+
+    # Check parent directory exists and is writable
+    parent_dir = file_path.parent
+    if not parent_dir.exists():
+        logger.info(f"Creating parent directory: {parent_dir}")
+        parent_dir.mkdir(parents=True)
+
+    try:
+        file_path.write_text(data, encoding="utf-8")
+        logger.info(f"File write successful, size: {file_path.stat().st_size} bytes")
+    except PermissionError as e:
+        logger.error(f"Permission denied writing to {file_path}: {e}")
+        raise
+    except OSError as e:
+        logger.error(f"OS error writing to {file_path}: {e}")
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected file write error: {type(e).__name__}: {e}")
+        raise
+
+
 def _load_results(cache: ResultCache) -> BenchmarkResults:
+    """Load benchmark results using an optimized caching strategy.
+
+    This function implements a two-tier caching strategy for faster leaderboard startup:
+
+    1. **Primary Strategy (Fast)**: Download pre-computed cached results from the
+       'cached-data' branch as a compressed JSON file (~2MB vs ~200MB full repo).
+       This avoids the need to clone the entire results repository and provides
+       near-instantaneous loading for most users.
+
+    2. **Fallback Strategy (Slower)**: If the cached download fails, fall back to
+       the original approach of downloading the full results repository and
+       building the cache from scratch.
+
+    The cached results file contains pre-aggregated benchmark data that eliminates
+    the need for expensive operations like task selection and revision joining
+    during app startup.
+
+    Args:
+        cache: ResultCache instance used for fallback repository operations
+
+    Returns:
+        BenchmarkResults: Complete benchmark results ready for leaderboard display
+
+    Raises:
+        Various exceptions related to network issues, file I/O, or data validation
+        are logged and may cause fallback to the slower repository-based approach.
+    """
     start_time = time.time()
     results_cache_path = Path(__file__).parent.joinpath("__cached_results.json")
     if not results_cache_path.exists():
@@ -56,94 +320,33 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
         )
 
         try:
-            # Download the gzipped cached results from the cached-data branch
+            # === OPTIMIZED DOWNLOAD WORKFLOW ===
+            # Use separate functions for cleaner error handling and better maintainability
             url = "https://raw.githubusercontent.com/embeddings-benchmark/results/cached-data/__cached_results.json.gz"
-            logger.info(f"Attempting to download from: {url}")
 
-            try:
-                response = requests.get(url, timeout=60)
-                response.raise_for_status()
-                logger.info(
-                    f"HTTP request successful, content length: {len(response.content)} bytes"
-                )
-                _flush_logs()
-            except requests.exceptions.Timeout as e:
-                logger.error(f"HTTP timeout after 60s: {e}")
-                _flush_logs()
-                raise
-            except requests.exceptions.ConnectionError as e:
-                logger.error(f"HTTP connection error: {e}")
-                _flush_logs()
-                raise
-            except requests.exceptions.HTTPError as e:
-                logger.error(f"HTTP error {response.status_code}: {e}")
-                _flush_logs()
-                raise
-            except Exception as e:
-                logger.error(f"Unexpected HTTP error: {type(e).__name__}: {e}")
-                _flush_logs()
-                raise
+            # Step 1: Download compressed data
+            content = _download_cached_results(url, timeout=60)
 
-            # Decompress and save the results
-            try:
-                logger.info("Attempting gzip decompression...")
-                with gzip.open(
-                    io.BytesIO(response.content), "rt", encoding="utf-8"
-                ) as gz_file:
-                    data = gz_file.read()
-                logger.info(f"Decompression successful, data length: {len(data)} chars")
-                _flush_logs()
-            except gzip.BadGzipFile as e:
-                logger.error(f"Invalid gzip file: {e}")
-                _flush_logs()
-                raise
-            except UnicodeDecodeError as e:
-                logger.error(f"UTF-8 decode error during decompression: {e}")
-                _flush_logs()
-                raise
-            except Exception as e:
-                logger.error(f"Unexpected decompression error: {type(e).__name__}: {e}")
-                _flush_logs()
-                raise
+            # Step 2: Decompress to JSON string
+            data = _decompress_gzip_data(content)
 
-            # Write to file
-            try:
-                logger.info(f"Attempting to write to: {results_cache_path}")
-                # Check parent directory exists and is writable
-                parent_dir = results_cache_path.parent
-                if not parent_dir.exists():
-                    logger.info(f"Creating parent directory: {parent_dir}")
-                    parent_dir.mkdir(parents=True)
-
-                results_cache_path.write_text(data, encoding="utf-8")
-                logger.info(
-                    f"File write successful, size: {results_cache_path.stat().st_size} bytes"
-                )
-                _flush_logs()
-            except PermissionError as e:
-                logger.error(f"Permission denied writing to {results_cache_path}: {e}")
-                _flush_logs()
-                raise
-            except OSError as e:
-                logger.error(f"OS error writing to {results_cache_path}: {e}")
-                _flush_logs()
-                raise
-            except Exception as e:
-                logger.error(f"Unexpected file write error: {type(e).__name__}: {e}")
-                _flush_logs()
-                raise
+            # Step 3: Write to cache file
+            _write_cache_file(data, results_cache_path)
 
             download_time = time.time() - start_time
             logger.info(
                 f"Downloaded cached results from cached-data branch in {download_time:.2f}s"
             )
+            _flush_logs(force=True)  # Force flush after successful download
 
         except Exception as e:
             logger.error(
                 f"Failed to download from cached-data branch: {type(e).__name__}: {e}"
             )
             logger.info("Falling back to downloading full remote repository...")
-            _flush_logs()
+            _flush_logs(
+                force=True
+            )  # Force flush on fallback to ensure error is visible
 
             # Fall back to the original approach: clone the full repo
             cache.download_from_remote()
@@ -213,6 +416,7 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
 
     total_time = time.time() - start_time
     logger.info(f"Loaded cached results in {total_time:.2f}s")
+    _flush_logs(force=True)  # Force flush at completion to ensure all logs are written
     return results
 
 
