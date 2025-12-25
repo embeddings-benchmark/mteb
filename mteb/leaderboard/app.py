@@ -36,66 +36,6 @@ from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 logger = logging.getLogger(__name__)
 
 
-class LogFlusher:
-    """Optimized log flushing utility with batching and conditional flushing."""
-
-    def __init__(self, flush_interval: int = 5):
-        """Initialize the log flusher.
-
-        Args:
-            flush_interval: Number of flush requests before actually flushing
-        """
-        self._flush_count = 0
-        self._flush_interval = flush_interval
-        self._last_flush_time = time.time()
-
-    def flush_if_needed(self, force: bool = False):
-        """Conditionally flush logs to reduce I/O overhead.
-
-        Args:
-            force: If True, flush immediately regardless of batching logic
-        """
-        self._flush_count += 1
-        current_time = time.time()
-
-        # Force flush if:
-        # 1. Explicitly requested
-        # 2. Reached the flush interval
-        # 3. More than 2 seconds have passed since last flush
-        should_flush = (
-            force
-            or self._flush_count >= self._flush_interval
-            or (current_time - self._last_flush_time) > 2.0
-        )
-
-        if should_flush:
-            for handler in logging.root.handlers:
-                handler.flush()
-            self._flush_count = 0
-            self._last_flush_time = current_time
-
-
-# Global log flusher instance
-_log_flusher = LogFlusher()
-
-
-def _flush_logs(force: bool = False):
-    """Flush all log handlers with optimized batching.
-
-    This function implements intelligent log flushing to reduce I/O overhead:
-    - Normal calls are batched (flush every 5 calls or every 2 seconds)
-    - Use force=True only at critical points where immediate visibility is essential
-
-    Args:
-        force: If True, flush immediately. Use sparingly - only for:
-               - Successful completion of major operations
-               - Before fallback to alternative methods
-               - Final function completion
-               - Critical errors where immediate user feedback is needed
-    """
-    _log_flusher.flush_if_needed(force=force)
-
-
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 
 
@@ -337,16 +277,12 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
             logger.info(
                 f"Downloaded cached results from cached-data branch in {download_time:.2f}s"
             )
-            _flush_logs(force=True)  # Force flush after successful download
 
         except Exception as e:
             logger.error(
                 f"Failed to download from cached-data branch: {type(e).__name__}: {e}"
             )
             logger.info("Falling back to downloading full remote repository...")
-            _flush_logs(
-                force=True
-            )  # Force flush on fallback to ensure error is visible
 
             # Fall back to the original approach: clone the full repo
             cache.download_from_remote()
@@ -416,7 +352,6 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
 
     total_time = time.time() - start_time
     logger.info(f"Loaded cached results in {total_time:.2f}s")
-    _flush_logs(force=True)  # Force flush at completion to ensure all logs are written
     return results
 
 
