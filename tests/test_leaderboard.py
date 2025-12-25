@@ -123,10 +123,7 @@ def test_leaderboard_app_does_not_crash():
                             logger.info(
                                 f"🎉 HTTP 200 OK received at second {i}! App is fully ready."
                             )
-                    except (
-                        requests.exceptions.RequestException,
-                        requests.exceptions.Timeout,
-                    ):
+                    except requests.exceptions.RequestException:
                         # Server not ready yet, keep waiting
                         pass
 
