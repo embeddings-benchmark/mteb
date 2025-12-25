@@ -77,9 +77,10 @@ class VllmWrapperBase:
             pooler_config: Controls the behavior of output pooling in pooling models..
             enforce_eager: Whether to disable CUDA graph optimization and use eager execution.
             model_prompts: A dictionary mapping task names to prompt names.
-                First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
-                then to the composed prompt of task type + prompt type, then to the specific task type prompt,
-                and finally to the specific prompt type.
+                First priority is given to the composed prompt of task name + prompt type (query
+                or passage), then to the specific task prompt, then to the composed prompt of
+                task type + prompt type, then to the specific task type prompt, and finally to
+                the specific prompt type.
             **kwargs: Additional arguments to pass to the vllm serving engine model.
         """
         requires_package(
