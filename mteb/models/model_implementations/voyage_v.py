@@ -204,6 +204,7 @@ def voyage_v_loader(model_name, **kwargs):
 voyage_v = ModelMeta(
     loader=voyage_v_loader,  # type: ignore
     name="voyageai/voyage-multimodal-3",
+    model_type=["dense"],
     languages=[],  # Unknown
     revision="1",
     release_date="2024-11-10",

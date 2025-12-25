@@ -25,6 +25,7 @@ vdr_2b_multi_v1 = ModelMeta(
         apply_instruction_to_passages=True,
     ),
     name="llamaindex/vdr-2b-multi-v1",
+    model_type=["dense"],
     languages=vdr_languages,
     open_weights=True,
     revision="2c4e54c8db4071cc61fc3c62f4490124e40c37db",

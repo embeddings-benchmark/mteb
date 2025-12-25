@@ -14,6 +14,7 @@ PAWAN_EMBD_CITATION = """@misc{medhi2025pawanembd,
 pawan_embd_68m = ModelMeta(
     loader=sentence_transformers_loader,
     name="dmedhi/PawanEmbd-68M",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="32f295145802bdbd65699ad65fd27d2a5b69a909",

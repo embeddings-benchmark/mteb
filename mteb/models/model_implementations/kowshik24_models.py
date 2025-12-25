@@ -3,6 +3,7 @@ from mteb.models import ModelMeta, sentence_transformers_loader
 kowshik24_bangla_embedding_model = ModelMeta(
     loader=sentence_transformers_loader,
     name="Kowshik24/bangla-sentence-transformer-ft-matryoshka-paraphrase-multilingual-mpnet-base-v2",
+    model_type=["dense"],
     languages=["ben-Beng"],  # Bengali using Bengali script
     open_weights=True,
     revision="6689c21e69be5950596bad084457cbaa138728d8",

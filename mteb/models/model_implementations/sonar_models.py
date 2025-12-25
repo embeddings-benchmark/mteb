@@ -218,6 +218,7 @@ sonar_langs = [
 sonar = ModelMeta(
     loader=None,
     name="facebook/SONAR",
+    model_type=["dense"],
     languages=sonar_langs,
     open_weights=True,
     use_instructions=False,  # it does take a language code as input

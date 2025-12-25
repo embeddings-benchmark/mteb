@@ -6,6 +6,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 model2vecdk = ModelMeta(
     loader=Model2VecModel,  # type: ignore
     name="andersborges/model2vecdk",
+    model_type=["dense"],
     languages=["dan-Latn"],
     open_weights=True,
     revision="cb576c78dcc1b729e4612645f61db59929d69e61",
@@ -36,6 +37,7 @@ model2vecdk = ModelMeta(
 model2vecdk_stem = ModelMeta(
     loader=Model2VecModel,  # type: ignore
     name="andersborges/model2vecdk-stem",
+    model_type=["dense"],
     languages=["dan-Latn"],
     open_weights=True,
     revision="cb576c78dcc1b729e4612645f61db59929d69e61",

@@ -12,6 +12,7 @@ english_code_retriever = ModelMeta(
         },
     ),
     name="fyaronskiy/english_code_retriever",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="be653fab7d27a7348a0c2c3d16b9f92a7f10cb0c",

@@ -44,6 +44,7 @@ LGAI_EMBEDDING_TRAINING_DATA = {
 lgai_embedding_en = ModelMeta(
     loader=sentence_transformers_loader,
     name="annamodels/LGAI-Embedding-Preview",
+    model_type=["dense"],
     languages=[
         "eng-Latn",
     ],
