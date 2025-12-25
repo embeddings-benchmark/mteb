@@ -4,9 +4,9 @@ import mteb
 from mteb.models.vllm_wrapper import VllmCrossEncoderWrapper
 
 
-def get_results(model_name: str, tasks: list[str], languages: list[str]):
+def get_results(model: str, tasks: list[str], languages: list[str]):
     """Evaluate a model on specified MTEB tasks using vLLM for inference."""
-    cross_encoder = VllmCrossEncoderWrapper(model_name=model_name)
+    cross_encoder = VllmCrossEncoderWrapper(model=model)
 
     with tempfile.TemporaryDirectory() as prediction_folder:
         bm25s = mteb.get_model("bm25s")
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     MAIN_SCORE = 0.33457
 
     results = get_results(
-        model_name=MODEL_NAME, tasks=MTEB_RERANK_TASKS, languages=MTEB_RERANK_LANGS
+        model=MODEL_NAME, tasks=MTEB_RERANK_TASKS, languages=MTEB_RERANK_LANGS
     )
 
     vllm_main_score = results[0].scores["test"][0]["main_score"]

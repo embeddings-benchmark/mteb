@@ -2,9 +2,9 @@ import mteb
 from mteb.models.vllm_wrapper import VllmEncoderWrapper
 
 
-def get_results(model_name: str, tasks: list[str]):
+def get_results(model: str, tasks: list[str]):
     """Evaluate a model on specified MTEB tasks using vLLM for inference."""
-    encoder = VllmEncoderWrapper(model_name=model_name)
+    encoder = VllmEncoderWrapper(model=model)
     tasks = mteb.get_tasks(tasks=tasks)
 
     results = mteb.evaluate(
@@ -22,7 +22,7 @@ if __name__ == "__main__":
     MAIN_SCORE = 0.7422994752439667
     MTEB_EMBED_TOL = 1e-4
 
-    results = get_results(model_name=MODEL_NAME, tasks=MTEB_EMBED_TASKS)
+    results = get_results(model=MODEL_NAME, tasks=MTEB_EMBED_TASKS)
 
     vllm_main_score = results[0].scores["test"][0]["main_score"]
     print("ST:", MAIN_SCORE)

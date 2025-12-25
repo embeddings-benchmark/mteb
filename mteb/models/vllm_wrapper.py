@@ -6,8 +6,9 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader
 
-from mteb import CrossEncoderProtocol
+from mteb._requires_package import requires_package
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 
@@ -24,9 +25,11 @@ Dtype = Literal["half", "float16", "float", "float32", "bfloat16"]
 class VllmWrapperBase:
     """Wrapper for vllm serving engine."""
 
+    convert = "auto"
+
     def __init__(
         self,
-        model_name: str,
+        model: str,
         revision: str | None = None,
         trust_remote_code: bool = True,
         dtype: Dtype = "auto",
@@ -79,6 +82,13 @@ class VllmWrapperBase:
                 and finally to the specific prompt type.
             **kwargs: Additional arguments to pass to the vllm serving engine model.
         """
+        requires_package(
+            self,
+            "vllm",
+            "Wrapper for vllm serving engine",
+            install_instruction="pip install mteb[vllm]",
+        )
+
         import os
 
         os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
@@ -91,10 +101,10 @@ class VllmWrapperBase:
             hf_overrides["head_dtype"] = head_dtype
 
         args = EngineArgs(
-            model=model_name,
+            model=model,
             revision=revision,
             runner="pooling",
-            convert="embed",
+            convert=self.convert,
             max_model_len=max_model_len,
             max_num_batched_tokens=max_num_batched_tokens,
             max_num_seqs=max_num_seqs,
@@ -111,6 +121,8 @@ class VllmWrapperBase:
         )
         self.llm = LLM(**vars(args))
         self.model_prompts = model_prompts
+
+        self.mteb_model_meta = ModelMeta.from_hub(model=model, revision=revision)
 
         if (
             self.model_prompts
@@ -149,6 +161,8 @@ class VllmWrapperBase:
 
 class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
     """vLLM wrapper for Encoder models."""
+
+    convert = "embed"
 
     def encode(
         self,
@@ -205,16 +219,10 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
         return embeddings
 
 
-class VllmCrossEncoderWrapper(CrossEncoderProtocol, VllmWrapperBase):
+class VllmCrossEncoderWrapper(VllmWrapperBase):
     """vLLM wrapper for CrossEncoder models."""
 
-    def __init__(
-        self, model_name: str, revision: str | None = None, **kwargs: Any
-    ) -> None:
-        CrossEncoderProtocol.__init__(self, model_name=model_name, revision=revision)
-        VllmWrapperBase.__init__(
-            self, model_name=model_name, revision=revision, **kwargs
-        )
+    convert = "classify"
 
     def predict(
         self,
