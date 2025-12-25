@@ -5,6 +5,7 @@ from huggingface_hub import ModelCard, ModelCardData, repo_exists
 
 from mteb import BenchmarkResults
 from mteb.abstasks.abstask import AbsTask
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.cache import ResultCache
 
 logger = logging.getLogger(__name__)
@@ -12,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 def generate_model_card(
     model_name: str,
-    tasks: list[AbsTask] | None = None,
+    tasks: list[AbsTask] | Benchmark | list[Benchmark] | None = None,
     existing_model_card_id_or_path: str | Path | None = None,
     results_cache: ResultCache = ResultCache(),
     output_path: Path = Path("model_card.md"),
@@ -102,8 +103,7 @@ def _add_table_to_model_card(
     results: BenchmarkResults, model_card: ModelCard
 ) -> ModelCard:
     original_content = model_card.content
-    results_df = results.to_dataframe()
-    results_df = results_df.set_index("task_name")
+    results_df = results.get_benchmark_result()
     mteb_content = f"""
 # MTEB results
 {results_df.to_markdown()}
