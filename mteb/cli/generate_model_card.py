@@ -40,8 +40,16 @@ def generate_model_card(
     if existing_model_card_id_or_path:
         existing_model_card = ModelCard.load(existing_model_card_id_or_path)
 
+    tasks_for_loading = tasks
+    if isinstance(tasks, list) and len(tasks) > 0 and isinstance(tasks[0], Benchmark):
+        # Extract all tasks from benchmarks
+        all_tasks = []
+        for benchmark in tasks:
+            all_tasks.extend(benchmark.tasks)
+        tasks_for_loading = all_tasks
+
     benchmark_results = results_cache.load_results(
-        [model_name], tasks, only_main_score=True
+        [model_name], tasks_for_loading, only_main_score=True
     )
     eval_results = []
     for models_results in benchmark_results.model_results:
@@ -81,12 +89,12 @@ def generate_model_card(
 
     if models_to_compare:
         benchmark_results = results_cache.load_results(
-            [model_name, *models_to_compare], tasks, only_main_score=True
+            [model_name, *models_to_compare], tasks_for_loading, only_main_score=True
         )
 
     if add_table_to_model_card:
         existing_model_card = _add_table_to_model_card(
-            benchmark_results, existing_model_card
+            benchmark_results, existing_model_card, tasks
         )
 
     if push_to_hub:
@@ -100,10 +108,29 @@ def generate_model_card(
 
 
 def _add_table_to_model_card(
-    results: BenchmarkResults, model_card: ModelCard
+    results: BenchmarkResults,
+    model_card: ModelCard,
+    tasks: list[AbsTask] | Benchmark | list[Benchmark] | None = None,
 ) -> ModelCard:
     original_content = model_card.content
-    results_df = results.get_benchmark_result()
+    if results.benchmark is not None:
+        results_df = results.get_benchmark_result()
+    else:
+        results_df = results.to_dataframe()
+
+    # Add benchmark name column if list[Benchmark] was passed
+    if isinstance(tasks, list) and len(tasks) > 0 and isinstance(tasks[0], Benchmark):
+        task_to_benchmark = {}
+        for benchmark in tasks:
+            for task in benchmark.tasks:
+                task_to_benchmark[task.metadata.name] = benchmark.name
+
+        if "task_name" in results_df.columns:
+            results_df.insert(
+                0, "benchmark", results_df["task_name"].map(task_to_benchmark)
+            )
+        results_df = results_df.set_index("task_name")
+
     mteb_content = f"""
 # MTEB results
 {results_df.to_markdown()}
