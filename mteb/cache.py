@@ -3,6 +3,7 @@ import logging
 import os
 import shutil
 import subprocess
+import warnings
 from collections import defaultdict
 from collections.abc import Sequence
 from pathlib import Path
@@ -83,9 +84,9 @@ class ResultCache:
         model_path = results_folder / model_name
 
         if model_revision is None:
-            logger.warning(
-                "model_revision is not specified, attempting to load the latest revision. To disable this behavior, specify model_revision explicitly."
-            )
+            msg = "`model_revision` is not specified, attempting to load the latest revision. To disable this behavior, specify the 'model_revision` explicitly."
+            logger.warning(msg)
+            warnings.warn(msg)
             # get revs from paths
             revisions = [p for p in model_path.glob("*") if p.is_dir()]
             if not revisions:
@@ -281,7 +282,9 @@ class ResultCache:
             shutil.rmtree(self.cache_path)
             logger.info(f"Cache directory {self.cache_path} cleared.")
         else:
-            logger.warning(f"Cache directory {self.cache_path} does not exist.")
+            msg = f"Cache directory `{self.cache_path}` does not exist."
+            logger.warning(msg)
+            warnings.warn(msg)
 
     def __repr__(self) -> str:
         return f"ResultCache(cache_path={self.cache_path})"

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import warnings
 from collections.abc import Iterable
 from pathlib import Path
 from time import time
@@ -136,10 +137,12 @@ def _evaluate_task(
             task.load_data()
         except DatasetNotFoundError as e:
             if not task.metadata.is_public and public_only is None:
-                logger.warning(
+                msg = (
                     f"Dataset for private task '{task.metadata.name}' not found. "
                     "Make sure you have access to the dataset and that you have set up the authentication correctly. To disable this warning set `public_only=False`"
                 )
+                logger.warning(msg)
+                warnings.warn(msg)
                 return TaskError(
                     task_name=task.metadata.name,
                     exception=str(e),

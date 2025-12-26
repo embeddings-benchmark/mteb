@@ -340,7 +340,8 @@ class SearchEncoderWrapper:
         for query_idx, query_embedding in enumerate(query_embeddings):
             query_id = query_idx_to_id[query_idx]
             if query_id not in top_ranked:
-                logger.warning(f"No pre-ranked documents found for query {query_id}")
+                msg = f"No pre-ranked documents found for query {query_id}"
+                logger.warning(msg)
                 continue
 
             ranked_ids = top_ranked[query_id]
@@ -511,7 +512,8 @@ class SearchCrossEncoderWrapper:
         doc_pairs_ids: list[tuple[str, str]] = []
         for query_id, corpus_ids in top_ranked.items():
             if query_id not in top_ranked:
-                logger.warning(f"No pre-ranked documents found for query {query_id}")
+                msg = f"No pre-ranked documents found for query {query_id}"
+                logger.warning(msg)
                 continue
 
             query_idx = query_id_to_idx[query_id]

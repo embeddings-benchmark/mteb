@@ -1,4 +1,5 @@
 import logging
+import warnings
 from pathlib import Path
 from typing import Any
 
@@ -113,19 +114,12 @@ class AbsTaskAggregate(AbsTask):
         )
         mteb_versions = {tr.mteb_version for tr in task_results}
         if len(mteb_versions) != 1:
-            logger.warning(
-                f"All tasks of {self.metadata.name} is not run using the same version."
-            )
+            msg = f"All tasks of {self.metadata.name} is not run using the same version. different versions found are: {mteb_versions}"
+            logger.warning(msg)
+            warnings.warn(msg)
             task_res.mteb_version = None
         task_res.mteb_version = task_results[0].mteb_version
         return task_res
-
-    def check_if_dataset_is_superseded(self) -> None:
-        """Check if the dataset is superseded by a newer version"""
-        if self.superseded_by:
-            logger.warning(
-                f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}', you might consider using the newer version of the dataset."
-            )
 
     def filter_eval_splits(self, eval_splits: list[str] | None) -> Self:
         """Filter the evaluation splits of the task.
