@@ -26,6 +26,7 @@ class VllmWrapperBase:
     """Wrapper for vllm serving engine."""
 
     convert = "auto"
+    mteb_model_meta: ModelMeta | None = None
 
     def __init__(
         self,
