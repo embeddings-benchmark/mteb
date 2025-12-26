@@ -33,14 +33,14 @@ pr:
 
 build-docs: build-docs-overview
 	@echo "--- 📚 Building documentation ---"
-	uv run --no-sync --group docs python -m mkdocs build
+	uv run --group docs python -m mkdocs build
 
 
 build-docs-overview:
 	@echo "--- 📚 Building documentation overview ---"
-	uv run --no-sync --group docs python docs/overview/create_available_tasks.py
-	uv run --no-sync --group docs python docs/overview/create_available_models.py
-	uv run --no-sync --group docs python docs/overview/create_available_benchmarks.py
+	uv run --group docs python docs/overview/create_available_tasks.py
+	uv run --group docs python docs/overview/create_available_models.py
+	uv run --group docs python docs/overview/create_available_benchmarks.py
 
 
 serve-docs:
