@@ -1,12 +1,8 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
-	uv sync --extra image --group dev
-	pre-commit install
-
-install-for-tests:
-	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
 	uv sync --extra bm25s --extra pylate --extra image --extra codecarbon --extra faiss-cpu --group dev
+	pre-commit install
 
 lint:
 	@echo "--- 🧹 Running linters ---"

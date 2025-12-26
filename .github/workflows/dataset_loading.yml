@@ -45,7 +45,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        make install-for-tests
+        make install
 
     - name: Run dataset loading tests
       env:

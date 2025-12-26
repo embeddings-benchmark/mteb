@@ -64,7 +64,7 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          make install-for-tests
+          make install
 
       - name: Run tests
         if: runner.os != 'Windows'
