@@ -10,7 +10,6 @@ from mteb._evaluators import BitextMiningEvaluator
 from mteb.abstasks._statistics_calculation import calculate_text_statistics
 from mteb.abstasks.abstask import AbsTask
 from mteb.models import EncoderProtocol, MTEBModels
-from mteb.models.models_protocols import CrossEncoderProtocol, SearchProtocol
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import SplitDescriptiveStatistics, TextStatistics
 
@@ -79,22 +78,8 @@ class AbsTaskBitextMining(AbsTask):
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Added load for "parallel" datasets"""
-        if isinstance(model, CrossEncoderProtocol) and not self._support_cross_encoder:
-            raise TypeError(
-                f"Model {model} is a CrossEncoder, but this task {self.metadata.name} does not support CrossEncoders. "
-                "Please use a Encoder model instead."
-            )
-
-        # encoders might implement search protocols
-        if (
-            isinstance(model, SearchProtocol)
-            and not isinstance(model, EncoderProtocol)
-            and not self._support_search
-        ):
-            raise TypeError(
-                f"Model {model} is a SearchProtocol, but this task {self.metadata.name} does not support Search. "
-                "Please use a Encoder model instead."
-            )
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
 
         if not self.data_loaded:
             self.load_data()

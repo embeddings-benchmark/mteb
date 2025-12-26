@@ -16,7 +16,7 @@ from typing_extensions import override
 from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.classification_metrics import hamming_score
 from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
-from mteb.models import EncoderProtocol
+from mteb.models import EncoderProtocol, MTEBModels
 from mteb.types import Array
 
 from .classification import AbsTaskClassification
@@ -80,7 +80,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
     @override
     def _evaluate_subset(  # type: ignore[override]
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: DatasetDict,
         *,
         encode_kwargs: dict[str, Any],
@@ -89,6 +89,9 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> FullMultilabelClassificationMetrics:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
+
         if isinstance(data_split, DatasetDict):
             data_split = data_split.select_columns(
                 [self.input_column_name, self.label_column_name]
