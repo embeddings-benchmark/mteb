@@ -41,15 +41,11 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Dependencies
-        run: |
-          uv sync --group docs
-
       - name: Build and Deploy
         if: github.event_name == 'push'
         run: |
           make build-docs-overview
-          uv run --no-sync --group docs mkdocs gh-deploy --force
+          uv run --group docs mkdocs gh-deploy --force
 
       - name: Build
         if: github.event_name == 'pull_request'
