@@ -285,15 +285,17 @@ def _create_meta(args: argparse.Namespace) -> None:
             "Output path already exists, use --overwrite to overwrite."
         )
 
-    tasks_or_benchmarks = None
+    tasks = None
+    benchmarks = None
     if tasks_names is not None:
-        tasks_or_benchmarks = mteb.get_tasks(tasks_names)
+        tasks = mteb.get_tasks(tasks_names)
     if benchmarks is not None:
-        tasks_or_benchmarks = mteb.get_benchmarks(benchmarks)
+        benchmarks = mteb.get_benchmarks(benchmarks)
 
     generate_model_card(
         model_name,
-        tasks_or_benchmarks,
+        tasks,
+        benchmarks,
         existing_model_card_id_or_path=from_existing,
         results_cache=ResultCache(results_folder),
         output_path=output_path,

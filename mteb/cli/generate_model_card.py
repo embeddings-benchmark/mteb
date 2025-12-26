@@ -13,7 +13,8 @@ logger = logging.getLogger(__name__)
 
 def generate_model_card(
     model_name: str,
-    tasks: list[AbsTask] | Benchmark | list[Benchmark] | None = None,
+    tasks: list[AbsTask] | None = None,
+    benchmark: Benchmark | list[Benchmark] | None = None,
     existing_model_card_id_or_path: str | Path | None = None,
     results_cache: ResultCache = ResultCache(),
     output_path: Path = Path("model_card.md"),
@@ -27,6 +28,7 @@ def generate_model_card(
     Args:
         model_name: Name of the model.
         tasks: List of tasks to generate results for.
+        benchmark: A Benchmark or list of benchmarks to generate results for.
         existing_model_card_id_or_path: Path or ID of an existing model card to update.
         results_cache: Instance of ResultCache to load results from.
         output_path: Path to save the generated model card.
@@ -40,16 +42,22 @@ def generate_model_card(
     if existing_model_card_id_or_path:
         existing_model_card = ModelCard.load(existing_model_card_id_or_path)
 
-    tasks_for_loading = tasks
-    if isinstance(tasks, list) and len(tasks) > 0 and isinstance(tasks[0], Benchmark):
-        # Extract all tasks from benchmarks
-        all_tasks = []
-        for benchmark in tasks:
-            all_tasks.extend(benchmark.tasks)
-        tasks_for_loading = all_tasks
+    all_tasks = []
+    benchmark_list: list[Benchmark] = []
+    if tasks is not None:
+        all_tasks.extend(tasks)
+
+    if benchmark is not None:
+        if isinstance(benchmark, Benchmark):
+            benchmark_list = [benchmark]
+        else:
+            benchmark_list = benchmark
+
+        for b in benchmark_list:
+            all_tasks.extend(b.tasks)
 
     benchmark_results = results_cache.load_results(
-        [model_name], tasks_for_loading, only_main_score=True
+        [model_name], all_tasks if all_tasks else None, only_main_score=True
     )
     eval_results = []
     for models_results in benchmark_results.model_results:
@@ -89,12 +97,14 @@ def generate_model_card(
 
     if models_to_compare:
         benchmark_results = results_cache.load_results(
-            [model_name, *models_to_compare], tasks_for_loading, only_main_score=True
+            [model_name, *models_to_compare],
+            all_tasks if all_tasks else None,
+            only_main_score=True,
         )
 
     if add_table_to_model_card:
         existing_model_card = _add_table_to_model_card(
-            benchmark_results, existing_model_card, tasks
+            benchmark_results, existing_model_card, benchmark_list
         )
 
     if push_to_hub:
@@ -110,30 +120,30 @@ def generate_model_card(
 def _add_table_to_model_card(
     results: BenchmarkResults,
     model_card: ModelCard,
-    tasks: list[AbsTask] | Benchmark | list[Benchmark] | None = None,
+    benchmark_list: list[Benchmark],
 ) -> ModelCard:
     original_content = model_card.content
-    if results.benchmark is not None:
-        results_df = results.get_benchmark_result()
-    else:
-        results_df = results.to_dataframe()
+    mteb_content = "# MTEB Results\n\n"
 
-    # Add benchmark name column if list[Benchmark] was passed
-    if isinstance(tasks, list) and len(tasks) > 0 and isinstance(tasks[0], Benchmark):
-        task_to_benchmark = {}
-        for benchmark in tasks:
-            for task in benchmark.tasks:
-                task_to_benchmark[task.metadata.name] = benchmark.name
+    task_to_benchmark = {}
+    for b in benchmark_list:
+        for task in b.tasks:
+            task_to_benchmark[task.metadata.name] = b.name
 
-        if "task_name" in results_df.columns:
-            results_df.insert(
-                0, "benchmark", results_df["task_name"].map(task_to_benchmark)
-            )
-        results_df = results_df.set_index("task_name")
+    for b in benchmark_list:
+        try:
+            # Filter results to only include tasks from this benchmark
+            benchmark_tasks = list(b.tasks)
+            filtered_results = results.select_tasks(benchmark_tasks)
 
-    mteb_content = f"""
-# MTEB results
-{results_df.to_markdown()}
-"""
+            if filtered_results.model_results:
+                results_df = filtered_results.get_benchmark_result()
+
+                mteb_content += f"## {b.name}\n\n"
+                mteb_content += results_df.to_markdown()
+                mteb_content += "\n\n"
+        except Exception as e:
+            logger.warning(f"Could not create table for benchmark {b.name}: {e}")
+            continue
     model_card.content = original_content + "\n\n" + mteb_content
     return model_card
