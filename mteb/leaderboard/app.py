@@ -5,7 +5,7 @@ import tempfile
 import time
 import warnings
 from pathlib import Path
-from typing import Literal
+from typing import Literal, get_args
 from urllib.parse import urlencode
 
 import cachetools
@@ -34,6 +34,7 @@ from mteb.models.model_meta import MODEL_TYPES
 logger = logging.getLogger(__name__)
 
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
+MODEL_TYPE_CHOICES = list(get_args(MODEL_TYPES))
 
 
 def _load_results(cache: ResultCache) -> BenchmarkResults:
@@ -589,7 +590,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                                 )
                             with gr.Column():
                                 model_type_select = gr.CheckboxGroup(
-                                    list(MODEL_TYPES),
+                                    MODEL_TYPE_CHOICES,
                                     value=[],
                                     label="Model Type",
                                     info="Select model types to include.",
