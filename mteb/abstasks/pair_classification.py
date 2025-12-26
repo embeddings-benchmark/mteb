@@ -241,6 +241,8 @@ class AbsTaskPairClassification(AbsTask):
     def _push_dataset_to_hub(self, repo_name: str) -> None:
         # previously pair classification datasets were stored in a single row
         if self.dataset is None:
+            # overall this shouldn't happen as we check for dataset before pushing to hub
+            # added here for type checking purposes
             raise RuntimeError(
                 "Dataset not loaded. To load dataset run `task.load_data()`."
             )
