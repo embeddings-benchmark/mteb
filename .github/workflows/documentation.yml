@@ -41,6 +41,10 @@ jobs:
         with:
           python-version: "3.10"
 
+      - name: Dependencies
+        run: |
+          uv sync --group docs
+
       - name: Build and Deploy
         if: github.event_name == 'push'
         run: |
