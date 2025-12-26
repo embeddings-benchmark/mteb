@@ -4,7 +4,7 @@ import os
 import shutil
 import subprocess
 from collections import defaultdict
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import cast
 
@@ -288,8 +288,8 @@ class ResultCache:
 
     def get_cache_paths(
         self,
-        models: Sequence[str] | Sequence[ModelMeta] | None = None,
-        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        models: Sequence[str] | Iterable[ModelMeta] | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
     ) -> list[Path]:
@@ -422,7 +422,7 @@ class ResultCache:
     @staticmethod
     def _filter_paths_by_model_and_revision(
         paths: list[Path],
-        models: Sequence[str] | Sequence[ModelMeta] | None = None,
+        models: Sequence[str] | Iterable[ModelMeta] | None = None,
     ) -> list[Path]:
         """Filter a list of paths by model name and optional revision.
 
@@ -432,8 +432,9 @@ class ResultCache:
         if not models:
             return paths
 
-        if isinstance(models[0], ModelMeta):
-            models = cast(list[ModelMeta], models)
+        first_model = next(iter(models))
+        if isinstance(first_model, ModelMeta):
+            models = cast(Iterable[ModelMeta], models)
             name_and_revision = {
                 (m.model_name_as_path(), m.revision or "no_revision_available")
                 for m in models
@@ -451,7 +452,7 @@ class ResultCache:
     @staticmethod
     def _filter_paths_by_task(
         paths: list[Path],
-        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | Benchmark | None = None,
     ) -> list[Path]:
         if tasks is not None:
             task_names = set()
@@ -467,8 +468,8 @@ class ResultCache:
 
     def load_results(
         self,
-        models: Sequence[str] | Sequence[ModelMeta] | None = None,
-        tasks: Sequence[str] | Sequence[AbsTask] | Benchmark | str | None = None,
+        models: Sequence[str] | Iterable[ModelMeta] | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | Benchmark | str | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
         validate_and_filter: bool = False,
