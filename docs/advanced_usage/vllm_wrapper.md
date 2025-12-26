@@ -9,7 +9,7 @@ Reference: https://docs.vllm.ai/en/latest/getting_started/installation/
 
 === "uv"
     ```bash
-    uv pip install vllm mteb
+    uv pip install mteb[vllm]
     ```
 
 ## vllm EngineArgs
