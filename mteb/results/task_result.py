@@ -636,21 +636,23 @@ class TaskResult(BaseModel):
             task = get_task(self.task_name)
 
         splits = task.eval_splits
-        hf_subsets = task.hf_subsets
-        hf_subsets = set(hf_subsets)
+        hf_subsets = set(task.hf_subsets)  # Convert to set once
 
         new_scores = {}
         seen_splits = set()
         for split in self.scores:
             if split not in splits:
                 continue
-            new_scores[split] = []
             seen_subsets = set()
-            for _scores in self.scores[split]:
-                if _scores["hf_subset"] not in hf_subsets:
-                    continue
-                new_scores[split].append(_scores)
+            # Use list comprehension for better performance
+            new_scores[split] = [
+                _scores
+                for _scores in self.scores[split]
+                if _scores["hf_subset"] in hf_subsets
+            ]
+            for _scores in new_scores[split]:
                 seen_subsets.add(_scores["hf_subset"])
+
             if seen_subsets != hf_subsets:
                 missing_subsets = hf_subsets - seen_subsets
                 if len(missing_subsets) > 2:
@@ -667,9 +669,9 @@ class TaskResult(BaseModel):
             msg = f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
             logger.warning(msg)
             warnings.warn(msg)
-        new_res = {**self.to_dict(), "scores": new_scores}
-        new_res = TaskResult.from_validated(**new_res)
-        return new_res
+        data = self.model_dump()
+        data["scores"] = new_scores
+        return type(self).model_construct(**data)
 
     def is_mergeable(
         self,

@@ -6,6 +6,7 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 parsbert = ModelMeta(
     loader=sentence_transformers_loader,
     name="HooshvareLab/bert-base-parsbert-uncased",
+    model_type=["dense"],
     languages=["fas-Arab"],
     open_weights=True,
     revision="d73a0e2c7492c33bd5819bcdb23eba207404dd19",
@@ -41,6 +42,7 @@ parsbert = ModelMeta(
 bert_zwnj = ModelMeta(
     loader=sentence_transformers_loader,
     name="m3hrdadfi/bert-zwnj-wnli-mean-tokens",
+    model_type=["dense"],
     languages=["fas-Arab"],
     open_weights=True,
     revision="b9506ddc579ac8c398ae6dae680401ae0a1a5b23",
@@ -66,6 +68,7 @@ bert_zwnj = ModelMeta(
 roberta_zwnj = ModelMeta(
     loader=sentence_transformers_loader,
     name="m3hrdadfi/roberta-zwnj-wnli-mean-tokens",
+    model_type=["dense"],
     languages=["fas-Arab"],
     open_weights=True,
     revision="36f912ac44e22250aee16ea533a4ff8cd848c1a1",
@@ -90,6 +93,7 @@ roberta_zwnj = ModelMeta(
 sentence_transformer_parsbert = ModelMeta(
     loader=sentence_transformers_loader,
     name="myrkur/sentence-transformer-parsbert-fa",
+    model_type=["dense"],
     languages=["fas-Arab"],
     open_weights=True,
     revision="72bd0a3557622f0ae08a092f4643609e0b950cdd",
@@ -140,6 +144,7 @@ tooka_bert_base = ModelMeta(
 tooka_sbert = ModelMeta(
     loader=sentence_transformers_loader,
     name="PartAI/Tooka-SBERT",
+    model_type=["dense"],
     languages=["fas-Arab"],
     open_weights=True,
     revision="5d07f0c543aca654373b931ae07cd197769110fd",
@@ -156,11 +161,21 @@ tooka_sbert = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )
 
 fa_bert = ModelMeta(
     loader=sentence_transformers_loader,
     name="sbunlp/fabert",
+    model_type=["dense"],
     languages=["fas-Arab"],
     open_weights=True,
     revision="a0e3973064c97768e121b9b95f21adc94e0ca3fb",
@@ -180,11 +195,35 @@ fa_bert = ModelMeta(
         # It's just a base model
         # https://huggingface.co/datasets/sbunlp/hmblogs-v3
     ),
+    citation="""@inproceedings{masumi-etal-2025-fabert,
+    title = "{F}a{BERT}: Pre-training {BERT} on {P}ersian Blogs",
+    author = "Masumi, Mostafa  and
+      Majd, Seyed Soroush  and
+      Shamsfard, Mehrnoush  and
+      Beigy, Hamid",
+    editor = "Bak, JinYeong  and
+      Goot, Rob van der  and
+      Jang, Hyeju  and
+      Buaphet, Weerayut  and
+      Ramponi, Alan  and
+      Xu, Wei  and
+      Ritter, Alan",
+    booktitle = "Proceedings of the Tenth Workshop on Noisy and User-generated Text",
+    month = may,
+    year = "2025",
+    address = "Albuquerque, New Mexico, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.wnut-1.10/",
+    doi = "10.18653/v1/2025.wnut-1.10",
+    pages = "85--96",
+    ISBN = "979-8-89176-232-9",
+}""",
 )
 
 tooka_sbert_v2_small = ModelMeta(
     loader=sentence_transformers_loader,
     name="PartAI/Tooka-SBERT-V2-Small",
+    model_type=["dense"],
     languages=["fas-Arab"],
     open_weights=True,
     revision="8bbed87e36669387f71437c061430ba56d1b496f",
@@ -201,11 +240,21 @@ tooka_sbert_v2_small = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )
 
 tooka_sbert_v2_large = ModelMeta(
     loader=sentence_transformers_loader,
     name="PartAI/Tooka-SBERT-V2-Large",
+    model_type=["dense"],
     languages=["fas-Arab"],
     open_weights=True,
     revision="b59682efa961122cc0e4408296d5852870c82eae",
@@ -222,4 +271,13 @@ tooka_sbert_v2_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )

@@ -12,6 +12,7 @@ mme5_mllama = ModelMeta(
         "trust_remote_code": True,
     },
     name="intfloat/mmE5-mllama-11b-instruct",
+    model_type=["dense"],
     revision="cbb328b9bf9ff5362c852c3166931903226d46f1",
     release_date="2025-02-12",
     languages=["eng-Latn"],

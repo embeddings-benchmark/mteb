@@ -36,9 +36,15 @@ LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.lang
 
 
 def _load_results(cache: ResultCache) -> BenchmarkResults:
+    start_time = time.time()
     results_cache_path = Path(__file__).parent.joinpath("__cached_results.json")
     if not results_cache_path.exists():
+        logger.info("Cached results not found, downloading from remote...")
         cache.download_from_remote()
+        download_time = time.time() - start_time
+        logger.info(f"Downloaded remote results in {download_time:.2f}s")
+
+        load_start = time.time()
         all_model_names = [model_meta.name for model_meta in mteb.get_model_metas()]
 
         all_results = cache.load_results(
@@ -47,10 +53,16 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
             require_model_meta=False,
             include_remote=True,
         )
+        load_time = time.time() - load_start
+        logger.info(f"Loaded results from cache in {load_time:.2f}s")
         return all_results
     else:
+        logger.info("Loading cached results from disk...")
         with results_cache_path.open() as cache_file:
-            return mteb.BenchmarkResults.from_validated(**json.load(cache_file))
+            results = mteb.BenchmarkResults.from_validated(**json.load(cache_file))
+        total_time = time.time() - start_time
+        logger.info(f"Loaded cached results in {total_time:.2f}s")
+        return results
 
 
 def _produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
@@ -322,20 +334,48 @@ def _cache_update_task_list(
 
 def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
     """Returns a Gradio Blocks app for the MTEB leaderboard."""
-    logger.info("Loading all benchmark results")
-    all_results = _load_results(cache)
+    app_start = time.time()
+    logger.info("=== Starting leaderboard app initialization ===")
 
+    logger.info("Step 1/7: Loading all benchmark results...")
+    load_start = time.time()
+    all_results = _load_results(cache)
+    load_time = time.time() - load_start
+    logger.info(f"Step 1/7 complete: Loaded results in {load_time:.2f}s")
+
+    logger.info("Step 2/7: Fetching benchmarks...")
+    bench_start = time.time()
     benchmarks = sorted(
         mteb.get_benchmarks(display_on_leaderboard=True), key=lambda x: x.name
     )
+    bench_time = time.time() - bench_start
+    logger.info(
+        f"Step 2/7 complete: Fetched {len(benchmarks)} benchmarks in {bench_time:.2f}s"
+    )
+
+    logger.info(
+        "Step 3/7: Processing all benchmarks (select_tasks + join_revisions)..."
+    )
+    process_start = time.time()
     all_benchmark_results = {
         benchmark.name: all_results.select_tasks(benchmark.tasks).join_revisions()
         for benchmark in benchmarks
     }
+    process_time = time.time() - process_start
+    if len(benchmarks) > 0:
+        logger.info(
+            f"Step 3/7 complete: Processed {len(benchmarks)} benchmarks in {process_time:.2f}s (avg {process_time / len(benchmarks):.2f}s/benchmark)"
+        )
+    else:
+        logger.info(
+            f"Step 3/7 complete: Processed 0 benchmarks in {process_time:.2f}s (avg N/A)"
+        )
 
     default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
     default_results = all_benchmark_results[default_benchmark.name]
-    logger.info("Benchmark results loaded")
+
+    logger.info("Step 4/7: Filtering models...")
+    filter_start = time.time()
 
     default_scores = default_results._get_scores(format="long")
     all_models = list({entry["model_name"] for entry in default_scores})
@@ -355,7 +395,13 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
     # Filter BenchmarkResults based on default filtered models (as required by Kenneth)
     filtered_model_names = [entry["model_name"] for entry in default_filtered_scores]
     filtered_benchmark_results = default_results.select_models(filtered_model_names)
+    filter_time = time.time() - filter_start
+    logger.info(
+        f"Step 4/7 complete: Filtered {len(filtered_model_names)} models in {filter_time:.2f}s"
+    )
 
+    logger.info("Step 5/7: Generating tables...")
+    table_start = time.time()
     summary_table = apply_summary_styling_from_benchmark(
         default_benchmark, filtered_benchmark_results
     )
@@ -366,10 +412,14 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         default_benchmark,
         filtered_benchmark_results,
     )
+    table_time = time.time() - table_start
+    logger.info(f"Step 5/7 complete: Generated tables in {table_time:.2f}s")
 
     # Check if this benchmark displays per-language results
     display_language_table = len(default_benchmark.language_view) > 0
 
+    logger.info("Step 6/7: Creating Gradio components...")
+    component_start = time.time()
     lang_select = gr.CheckboxGroup(
         sorted(default_results.languages),
         value=sorted(default_results.languages),
@@ -410,7 +460,13 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         label="Modality",
         info="Select modalities to include.",
     )
+    component_time = time.time() - component_start
+    logger.info(
+        f"Step 6/7 complete: Created Gradio components in {component_time:.2f}s"
+    )
 
+    logger.info("Step 7/7: Building Gradio interface and callbacks...")
+    interface_start = time.time()
     with gr.Blocks(fill_width=True) as demo:
         with gr.Sidebar(
             position="left",
@@ -926,7 +982,11 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             )
 
         gr.Markdown(ACKNOWLEDGEMENT, elem_id="ack_markdown")
+    interface_time = time.time() - interface_start
+    logger.info(f"Step 7/7 complete: Built Gradio interface in {interface_time:.2f}s")
 
+    logger.info("Starting prerun on all benchmarks to populate caches...")
+    prerun_start = time.time()
     # Prerun on all benchmarks, so that results of callbacks get cached
     for benchmark in benchmarks:
         (
@@ -952,6 +1012,13 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         update_tables(
             bench_scores, filtered_tasks, bench_initial_models, benchmark.name
         )
+    prerun_time = time.time() - prerun_start
+    logger.info(
+        f"Prerun complete: Processed {len(benchmarks)} benchmarks in {prerun_time:.2f}s"
+    )
+
+    total_time = time.time() - app_start
+    logger.info(f"=== Leaderboard app initialization complete in {total_time:.2f}s ===")
     return demo
 
 

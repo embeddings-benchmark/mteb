@@ -9,7 +9,9 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import cast
 
+import mteb
 from mteb.abstasks import AbsTask
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
 from mteb.types import ModelName, Revision
@@ -196,12 +198,14 @@ class ResultCache:
         self,
         remote: str = "https://github.com/embeddings-benchmark/results",
         download_latest: bool = True,
+        revision: str | None = None,
     ) -> Path:
         """Downloads the latest version of the results repository from GitHub to a local cache directory. Required git to be installed.
 
         Args:
             remote: The URL of the results repository on GitHub.
             download_latest: If True it will download the latest version of the repository, otherwise it will only update the existing repository.
+            revision: If specified, it will checkout the given revision after cloning or pulling the repository.
 
         Returns:
             The path to the local cache directory.
@@ -229,14 +233,27 @@ class ResultCache:
                 )
                 raise ValueError(msg)
 
-            if download_latest:
+            if revision or download_latest:
                 logger.info(
-                    f"remote repository already exists in {results_directory}, updating it using git pull"
+                    f"remote repository already exists in {results_directory}, fetching updates"
                 )
-                subprocess.run(["git", "pull"], cwd=results_directory)
+                subprocess.run(
+                    ["git", "fetch", "--all", "--tags"],
+                    cwd=results_directory,
+                    check=True,
+                )
             else:
                 logger.debug(
-                    f"Results repository already exists in {results_directory}, skipping update, set download_latest=True to update it"
+                    f"Results repository already exists in {results_directory}, skipping update, "
+                    f"set download_latest=True to update it"
+                )
+
+            if revision:
+                logger.info(f"Checking out revision '{revision}'")
+                subprocess.run(
+                    ["git", "checkout", revision],
+                    cwd=results_directory,
+                    check=True,
                 )
             return results_directory
 
@@ -244,8 +261,15 @@ class ResultCache:
             f"No results repository found in {results_directory}, cloning it from {remote}"
         )
 
+        clone_cmd = ["git", "clone", "--depth", "1"]
+
+        if revision:
+            logger.info(f"Cloning repository at revision '{revision}'")
+            clone_cmd.append(f"--revision={revision}")
+        clone_cmd.extend([remote, "remote"])
+
         subprocess.run(
-            ["git", "clone", "--depth", "1", remote, "remote"],
+            clone_cmd,
             cwd=self.cache_path,
             check=True,
         )
@@ -446,7 +470,7 @@ class ResultCache:
     def load_results(
         self,
         models: Sequence[str] | Sequence[ModelMeta] | None = None,
-        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        tasks: Sequence[str] | Sequence[AbsTask] | Benchmark | str | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
         validate_and_filter: bool = False,
@@ -456,7 +480,8 @@ class ResultCache:
 
         Args:
             models: A list of model names to load the results for. If None it will load the results for all models.
-            tasks: A list of task names to load the results for. If None it will load the results for all tasks.
+            tasks: A list of task names to load the results for. If str is passed, then benchmark will be loaded.
+                If None it will load the results for all tasks.
             require_model_meta: If True it will ignore results that do not have a model_meta.json file. If false it attempt to
                 extract the model name and revision from the path.
             include_remote: If True, it will include results from the remote repository.
@@ -478,6 +503,9 @@ class ResultCache:
             ...     require_model_meta=True,
             ... )
         """
+        if isinstance(tasks, str):
+            tasks = mteb.get_benchmark(tasks)
+
         paths = self.get_cache_paths(
             models=models,
             tasks=tasks,
@@ -527,6 +555,7 @@ class ResultCache:
 
         benchmark_results = BenchmarkResults(
             model_results=models_results,
+            benchmark=tasks if isinstance(tasks, Benchmark) else None,
         )
 
         return benchmark_results

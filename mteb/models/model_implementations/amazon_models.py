@@ -3,6 +3,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 amazon_titan_text_embeddings_v2 = ModelMeta(
     loader=None,
     name="amazon/Titan-text-embeddings-v2",
+    model_type=["dense"],
     revision="1",
     release_date="2024-04-30",
     languages=["eng-Latn"],

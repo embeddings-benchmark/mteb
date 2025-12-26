@@ -337,6 +337,7 @@ class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
 colbert_v2 = ModelMeta(
     loader=MultiVectorModel,
     name="colbert-ir/colbertv2.0",
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="c1e84128e85ef755c096a95bdb06b47793b13acf",
@@ -369,6 +370,7 @@ jina_colbert_v2 = ModelMeta(
         trust_remote_code=True,
     ),
     name="jinaai/jina-colbert-v2",
+    model_type=["late-interaction"],
     languages=[
         "ara-Arab",
         "ben-Beng",
@@ -415,12 +417,37 @@ jina_colbert_v2 = ModelMeta(
         "DuRetrieval",
         "MIRACL",
     },
+    citation="""@inproceedings{xiao-etal-2024-jina,
+    title = "{J}ina-{C}ol{BERT}-v2: A General-Purpose Multilingual Late Interaction Retriever",
+    author = {Jha, Rohan  and
+      Wang, Bo  and
+      G{\"u}nther, Michael  and
+      Mastrapas, Georgios  and
+      Sturua, Saba  and
+      Mohr, Isabelle  and
+      Koukounas, Andreas  and
+      Wang, Mohammad Kalim  and
+      Wang, Nan  and
+      Xiao, Han},
+    editor = {S{\"a}lev{\"a}, Jonne  and
+      Owodunni, Abraham},
+    booktitle = "Proceedings of the Fourth Workshop on Multilingual Representation Learning (MRL 2024)",
+    month = nov,
+    year = "2024",
+    address = "Miami, Florida, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.mrl-1.11/",
+    doi = "10.18653/v1/2024.mrl-1.11",
+    pages = "159--166",
+    abstract = "Multi-vector dense models, such as ColBERT, have proven highly effective in information retrieval. ColBERT`s late interaction scoring approximates the joint query-document attention seen in cross-encoders while maintaining inference efficiency closer to traditional dense retrieval models, thanks to its bi-encoder architecture and recent optimizations in indexing and search. In this paper, we introduce a novel architecture and a training framework to support long context window and multilingual retrieval. Leveraging Matryoshka Representation Loss, we further demonstrate that the reducing the embedding dimensionality from 128 to 64 has insignificant impact on the model`s retrieval performance and cut storage requirements by up to 50{\%}. Our new model, Jina-ColBERT-v2, demonstrates strong performance across a range of English and multilingual retrieval tasks,"
+}""",
 )
 
 
 lightonai__gte_moderncolbert_v1 = ModelMeta(
     loader=MultiVectorModel,
     name="lightonai/GTE-ModernColBERT-v1",
+    model_type=["late-interaction"],
     languages=[
         "eng-Latn",
     ],
@@ -444,4 +471,13 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
         "MSMARCO",
         "mMARCO-NL",
     },
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084"
+}""",
 )
