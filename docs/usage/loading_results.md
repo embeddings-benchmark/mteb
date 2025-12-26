@@ -82,6 +82,30 @@ print(task_names)
 # ['SpartQA', 'PlscClusteringP2P.v2', 'StackOverflowQA', 'JSICK', ...
 ```
 
+### Getting Benchmark Results
+
+If you loaded results for a specific benchmark, you can get the aggregated benchmark scores for each model using the `get_benchmark_result()` method:
+
+```python
+import mteb
+from mteb.cache import ResultCache
+
+# Load results for a specific benchmark
+benchmark = mteb.get_benchmark("MTEB(eng, v2)")
+cache = ResultCache()
+cache.download_from_remote()  # download results from the remote repository
+results = cache.load_results(
+    models=["intfloat/e5-small", "intfloat/multilingual-e5-small"],
+    tasks=benchmark,
+)
+
+benchmark_scores_df = results.get_benchmark_result()
+print(benchmark_scores_df)
+#    Rank (Borda)                                              Model  Zero-shot  Memory Usage (MB)  Number of Parameters (B)  Embedding Dimensions  Max Tokens  ...  Classification  Clustering  Pair Classification  Reranking  Retrieval       STS  Summarization
+# 0             1  [e5-small](https://huggingface.co/intfloat/e5-...        100                127                     0.033                   384       512.0  ...        0.599545    0.422085             0.850895   0.444613   0.450684  0.790284       0.310609
+# 1             2  [multilingual-e5-small](https://huggingface.co...         95                449                     0.118                   384       512.0  ...        0.673919    0.413591             0.840878   0.431942   0.464342  0.800185       0.292190
+```
+
 ### Filtering Results
 
 There is also utility function that allows you to select certain models or tasks:

@@ -141,6 +141,7 @@ Eager_Embed_V1 = ModelMeta(
         image_size=784,
     ),
     name="eagerworks/eager-embed-v1",
+    model_type=["dense"],
     languages=["fra-Latn", "spa-Latn", "eng-Latn", "deu-Latn"],
     revision="a6bec272729c5056e2c26618ce085205c82a3b3c",
     release_date="2025-11-20",

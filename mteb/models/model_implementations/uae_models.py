@@ -61,6 +61,7 @@ uae_large_v1 = ModelMeta(
         },
     ),
     name="WhereIsAI/UAE-Large-V1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="369c368f70f16a613f19f5598d4f12d9f44235d4",

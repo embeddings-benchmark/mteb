@@ -344,6 +344,7 @@ hakim = ModelMeta(
     loader=HakimModelWrapper,
     loader_kwargs=dict(
         api_model_name="hakim",
+        model_type=["dense"],
     ),
     name="MCINext/Hakim",
     languages=["fas-Arab"],
@@ -411,6 +412,7 @@ hakim_small = ModelMeta(
     loader=HakimModelWrapper,
     loader_kwargs=dict(
         api_model_name="hakim-small",
+        model_type=["dense"],
     ),
     name="MCINext/Hakim-small",
     languages=["fas-Arab"],
@@ -477,6 +479,7 @@ hakim_unsup = ModelMeta(
     loader=HakimModelWrapper,
     loader_kwargs=dict(
         api_model_name="hakim-unsup",
+        model_type=["dense"],
     ),
     name="MCINext/Hakim-unsup",
     languages=["fas-Arab"],

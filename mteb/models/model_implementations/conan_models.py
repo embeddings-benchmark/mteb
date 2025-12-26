@@ -190,6 +190,7 @@ class ConanWrapper(AbsEncoder):
 
 Conan_embedding_v2 = ModelMeta(
     name="TencentBAC/Conan-embedding-v2",
+    model_type=["dense"],
     revision="e5c87c63889630bca87486f6a2645ed97c5ddb17",
     release_date="2025-04-10",
     languages=[

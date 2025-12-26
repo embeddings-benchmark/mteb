@@ -92,6 +92,9 @@ class AbsTaskClusteringLegacy(AbsTask):
         if not isinstance(model, EncoderProtocol):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
 
+        data_split = data_split.select_columns(
+            [self.input_column_name, self.label_column_name]
+        )
         # MTEB text clustering requires renaming and eval per subset.
         if self.metadata.modalities == ["text"]:
             all_metrics = []
@@ -139,9 +142,6 @@ class AbsTaskClusteringLegacy(AbsTask):
             }
             return scores
 
-        data_split = data_split.select_columns(
-            [self.input_column_name, self.label_column_name]
-        )
         evaluator = self.evaluator(
             data_split,
             input_column_name=self.input_column_name,

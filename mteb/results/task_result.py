@@ -627,23 +627,25 @@ class TaskResult(BaseModel):
             task = get_task(self.task_name)
 
         splits = task.eval_splits
-        hf_subsets = task.hf_subsets
-        set_hf_subsets = set(hf_subsets)
+        hf_subsets = set(task.hf_subsets)  # Convert to set once
 
         new_scores: dict[str, list[Score]] = {}
         seen_splits = set()
         for split in self.scores:
             if split not in splits:
                 continue
-            new_scores[split] = []
             seen_subsets = set()
-            for _scores in self.scores[split]:
-                if _scores["hf_subset"] not in set_hf_subsets:
-                    continue
-                new_scores[split].append(_scores)
+            # Use list comprehension for better performance
+            new_scores[split] = [
+                _scores
+                for _scores in self.scores[split]
+                if _scores["hf_subset"] in hf_subsets
+            ]
+            for _scores in new_scores[split]:
                 seen_subsets.add(_scores["hf_subset"])
-            if seen_subsets != set_hf_subsets:
-                missing_subsets = set_hf_subsets - seen_subsets
+
+            if seen_subsets != hf_subsets:
+                missing_subsets = hf_subsets - seen_subsets
                 if len(missing_subsets) > 2:
                     subset1, subset2 = list(missing_subsets)[:2]
                     missing_subsets_str = f"{{'{subset1}', '{subset2}', ...}}"
@@ -658,8 +660,9 @@ class TaskResult(BaseModel):
             logger.warning(
                 f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
             )
-        new_res = {**self.to_dict(), "scores": new_scores}
-        return TaskResult.from_validated(**new_res)
+        data = self.model_dump()
+        data["scores"] = new_scores
+        return type(self).model_construct(**data)
 
     def is_mergeable(
         self,

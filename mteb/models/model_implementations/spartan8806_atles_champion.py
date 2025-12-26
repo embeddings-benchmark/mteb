@@ -6,6 +6,7 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 spartan8806_atles_champion_embedding = ModelMeta(
     loader=sentence_transformers_loader,
     name="spartan8806/atles-champion-embedding",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="d4c74d7000bbd25f3597fc0f2dcde59ef1386e8f",

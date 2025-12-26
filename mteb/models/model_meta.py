@@ -26,7 +26,7 @@ from huggingface_hub.errors import (
     RepositoryNotFoundError,
     SafetensorsParsingError,
 )
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 from transformers import AutoConfig
 from typing_extensions import Self
 
@@ -56,6 +56,8 @@ FRAMEWORKS = Literal[
     "ColBERT",
     "ColPali",
 ]
+
+MODEL_TYPES = Literal["dense", "cross-encoder", "late-interaction"]
 
 
 class ScoringFunction(HelpfulStrEnum):
@@ -114,7 +116,7 @@ class ModelMeta(BaseModel):
             a benchmark as well as mark dataset contaminations.
         adapted_from: Name of the model from which this model is adapted. For quantizations, fine-tunes, long doc extensions, etc.
         superseded_by: Name of the model that supersedes this model, e.g., nvidia/NV-Embed-v2 supersedes v1.
-        is_cross_encoder: Whether the model can act as a cross-encoder or not.
+        model_type: A list of strings representing the type of model.
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
     """
@@ -144,9 +146,48 @@ class ModelMeta(BaseModel):
     adapted_from: str | None = None
     superseded_by: str | None = None
     modalities: list[Modalities] = ["text"]
-    is_cross_encoder: bool | None = None
+    model_type: list[MODEL_TYPES] = ["dense"]
     citation: str | None = None
     contacts: list[str] | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def handle_legacy_is_cross_encoder(cls, data: Any) -> Any:
+        """Handle legacy is_cross_encoder field by converting it to model_type.
+
+        This validator handles backward compatibility for the deprecated is_cross_encoder field.
+        If is_cross_encoder=True is provided, it adds "cross_encoder" to model_type.
+        """
+        if isinstance(data, dict) and "is_cross_encoder" in data:
+            is_cross_encoder_value = data.pop("is_cross_encoder")
+
+            if is_cross_encoder_value is not None:
+                warnings.warn(
+                    "is_cross_encoder is deprecated and will be removed in a future version. "
+                    "Use model_type=['cross-encoder'] instead.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+
+                model_type = data.get("model_type", ["dense"])
+
+                if is_cross_encoder_value:
+                    if "cross-encoder" not in model_type:
+                        data["model_type"] = ["cross-encoder"]
+                else:
+                    if "cross-encoder" in model_type:
+                        model_type = [t for t in model_type if t != "cross-encoder"]
+                        data["model_type"] = model_type if model_type else ["dense"]
+
+        return data
+
+    @property
+    def is_cross_encoder(self) -> bool:
+        """Returns True if the model is a cross-encoder.
+
+        Derived from model_type field. A model is considered a cross-encoder if "cross-encoder" is in its model_type list.
+        """
+        return "cross-encoder" in self.model_type
 
     @field_validator("similarity_fn_name", mode="before")
     @classmethod
@@ -183,6 +224,7 @@ class ModelMeta(BaseModel):
             else dict_repr["training_datasets"]
         )
         dict_repr["loader"] = _get_loader_name(loader)
+        dict_repr["is_cross_encoder"] = self.is_cross_encoder
         return dict_repr
 
     @field_validator("languages")
@@ -422,6 +464,7 @@ class ModelMeta(BaseModel):
         meta.loader = CrossEncoderWrapper
         meta.embed_dim = None
         meta.modalities = ["text"]
+        meta.model_type = ["cross-encoder"]
         return meta
 
     def is_zero_shot_on(self, tasks: Sequence[AbsTask] | Sequence[str]) -> bool | None:
