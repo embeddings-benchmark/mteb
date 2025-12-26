@@ -2,7 +2,7 @@ install:
 	@echo "--- 🚀 Installing project dependencies ---"
 	@echo "This ensures that the project is not installed in editable mode"
 	uv sync --extra bm25s --extra pylate --extra image --extra codecarbon --extra faiss-cpu --group dev
-	pre-commit install
+	uv run --no-sync pre-commit install
 
 lint:
 	@echo "--- 🧹 Running linters ---"
@@ -80,7 +80,7 @@ format-citations:
 .PHONY: check
 check: ## Run code quality tools.
 	@echo "--- 🧹 Running code quality tools ---"
-	@pre-commit run -a
+	@uv run --no-sync pre-commit run -a
 
 .PHONY: typecheck
 typecheck:
