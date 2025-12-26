@@ -46,11 +46,11 @@ jobs:
         run: uv sync --group lint
 
       - name: Install pre-commit hooks
-        run: uv run pre-commit install
+        run: uv run --no-sync --group lint pre-commit install
 
       - name: Lint
         id: lint
         run: |
-          uv run ruff format . --check
-          uv run ruff check .
-          uv run typos --diff
+          uv run --no-sync --group lint ruff format . --check
+          uv run --no-sync --group lint ruff check .
+          uv run --no-sync --group lint typos --diff

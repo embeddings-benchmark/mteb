@@ -23,12 +23,12 @@ lint-check:
 
 test:
 	@echo "--- 🧪 Running tests ---"
-	uv run pytest -n auto -m "not (test_datasets or leaderboard_stability)"
+	uv run --no-sync --group test pytest -n auto -m "not (test_datasets or leaderboard_stability)"
 
 
 test-with-coverage:
 	@echo "--- 🧪 Running tests with coverage ---"
-	uv run pytest -n auto --cov-report=term-missing --cov-config=pyproject.toml --cov=mteb
+	uv run --no-sync --group test pytest -n auto --cov-report=term-missing --cov-config=pyproject.toml --cov=mteb
 
 pr:
 	@echo "--- 🚀 Running requirements for a PR ---"
@@ -37,48 +37,48 @@ pr:
 
 build-docs: build-docs-overview
 	@echo "--- 📚 Building documentation ---"
-	uv run python -m mkdocs build
+	uv run --no-sync --group docs python -m mkdocs build
 
 
 build-docs-overview:
 	@echo "--- 📚 Building documentation overview ---"
-	uv run python docs/overview/create_available_tasks.py
-	uv run python docs/overview/create_available_models.py
-	uv run python docs/overview/create_available_benchmarks.py
+	uv run --no-sync --group docs python docs/overview/create_available_tasks.py
+	uv run --no-sync --group docs python docs/overview/create_available_models.py
+	uv run --no-sync --group docs python docs/overview/create_available_benchmarks.py
 
 
 serve-docs:
 	@echo "--- 📚 Serving documentation ---"
-	uv run python -m mkdocs serve
+	uv run --no-sync --group docs python -m mkdocs serve
 
 
 model-load-test:
 	@echo "--- 🚀 Running model load test ---"
 	uv sync --extra pylate --extra gritlm --extra xformers --extra model2vec --group dev
-	uv run python scripts/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
-	uv run python tests/test_models/model_loading.py --model_name_file scripts/model_names.txt
+	uv run --no-sync python scripts/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
+	uv run --no-sync python tests/test_models/model_loading.py --model_name_file scripts/model_names.txt
 
 
 dataset-load-test:
 	@echo "--- 🚀 Running dataset load test ---"
-	uv run pytest -m test_datasets
+	uv run --no-sync --group test pytest -m test_datasets
 
 dataset-load-test-pr:
 	@echo "--- 🚀 Running dataset load test for PR ---"
-	eval "$$(uv run python -m scripts.extract_datasets $(BASE_BRANCH))" && uv run pytest -m test_datasets
+	eval "$$(uv run --no-sync python -m scripts.extract_datasets $(BASE_BRANCH))" && uv run --no-sync --group test pytest -m test_datasets
 
 leaderboard-build-test:
 	@echo "--- 🚀 Running leaderboard build test ---"
-	uv run pytest -n auto -m leaderboard_stability
+	uv run --no-sync --group test pytest -n auto -m leaderboard_stability
 
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
-	uv run python -m mteb.leaderboard.app
+	uv run --no-sync --extra leaderboard python -m mteb.leaderboard.app
 
 format-citations:
 	@echo "--- 🧹 Formatting citations ---"
-	uv run python scripts/format_citations.py benchmarks
-	uv run python scripts/format_citations.py tasks
+	uv run --no-sync python scripts/format_citations.py benchmarks
+	uv run --no-sync python scripts/format_citations.py tasks
 
 
 .PHONY: check
@@ -89,4 +89,4 @@ check: ## Run code quality tools.
 .PHONY: typecheck
 typecheck:
 	@echo "--- 🔍 Running type checks ---"
-	uv run mypy mteb
+	uv run --no-sync --group typing mypy mteb
