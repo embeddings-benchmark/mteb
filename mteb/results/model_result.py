@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import warnings
-from collections.abc import Callable, Iterable, Sequence
+from collections.abc import Callable, Iterable
 from typing import Any, Literal, cast
 
 import numpy as np
@@ -145,7 +145,7 @@ class ModelResult(BaseModel):
             task_results=new_task_results,
         )
 
-    def select_tasks(self, tasks: Sequence[AbsTask]) -> ModelResult:
+    def select_tasks(self, tasks: Iterable[AbsTask]) -> ModelResult:
         """Select tasks from the ModelResult based on a list of AbsTask objects.
 
         Args:

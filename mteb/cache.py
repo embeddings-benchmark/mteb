@@ -452,7 +452,7 @@ class ResultCache:
     @staticmethod
     def _filter_paths_by_task(
         paths: list[Path],
-        tasks: Sequence[str] | Iterable[AbsTask] | Benchmark | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
     ) -> list[Path]:
         if tasks is not None:
             task_names = set()
@@ -469,7 +469,7 @@ class ResultCache:
     def load_results(
         self,
         models: Sequence[str] | Iterable[ModelMeta] | None = None,
-        tasks: Sequence[str] | Iterable[AbsTask] | Benchmark | str | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | str | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
         validate_and_filter: bool = False,

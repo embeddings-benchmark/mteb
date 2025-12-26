@@ -53,7 +53,7 @@ class MTEB:
     )
     def __init__(
         self,
-        tasks: Iterable[AbsTask | Benchmark],
+        tasks: Iterable[AbsTask] | Iterable[Benchmark],
         *,
         err_logs_path: str = "error_logs.txt",
     ) -> None:

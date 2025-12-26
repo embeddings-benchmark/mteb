@@ -4,7 +4,7 @@ import functools
 import json
 import logging
 import warnings
-from collections.abc import Callable, Iterable, Iterator, Sequence
+from collections.abc import Callable, Iterable, Iterator
 from pathlib import Path
 from typing import Any, Literal, cast
 
@@ -100,7 +100,7 @@ class BenchmarkResults(BaseModel):
             model_results=[res for res in model_results if res.task_results]
         )
 
-    def select_tasks(self, tasks: Sequence[AbsTask]) -> BenchmarkResults:
+    def select_tasks(self, tasks: Iterable[AbsTask]) -> BenchmarkResults:
         """Select tasks from the benchmark results.
 
         Args:

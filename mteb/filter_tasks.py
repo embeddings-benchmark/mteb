@@ -1,7 +1,7 @@
 """This script contains functions that are used to get an overview of the MTEB benchmark."""
 
 import logging
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from typing import overload
 
 from mteb.abstasks import (
@@ -34,14 +34,14 @@ def _check_is_valid_language(lang: str) -> None:
 
 @overload
 def filter_tasks(
-    tasks: Sequence[AbsTask],
+    tasks: Iterable[AbsTask],
     *,
     languages: Sequence[str] | None = None,
     script: Sequence[str] | None = None,
-    domains: Sequence[TaskDomain] | None = None,
-    task_types: Sequence[TaskType] | None = None,
-    categories: Sequence[TaskCategory] | None = None,
-    modalities: Sequence[Modalities] | None = None,
+    domains: Iterable[TaskDomain] | None = None,
+    task_types: Iterable[TaskType] | None = None,
+    categories: Iterable[TaskCategory] | None = None,
+    modalities: Iterable[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
@@ -51,14 +51,14 @@ def filter_tasks(
 
 @overload
 def filter_tasks(
-    tasks: Sequence[type[AbsTask]],
+    tasks: Iterable[type[AbsTask]],
     *,
     languages: Sequence[str] | None = None,
     script: Sequence[str] | None = None,
-    domains: Sequence[TaskDomain] | None = None,
-    task_types: Sequence[TaskType] | None = None,
-    categories: Sequence[TaskCategory] | None = None,
-    modalities: Sequence[Modalities] | None = None,
+    domains: Iterable[TaskDomain] | None = None,
+    task_types: Iterable[TaskType] | None = None,
+    categories: Iterable[TaskCategory] | None = None,
+    modalities: Iterable[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
@@ -67,14 +67,14 @@ def filter_tasks(
 
 
 def filter_tasks(
-    tasks: Sequence[AbsTask] | Sequence[type[AbsTask]],
+    tasks: Iterable[AbsTask] | Iterable[type[AbsTask]],
     *,
     languages: Sequence[str] | None = None,
     script: Sequence[str] | None = None,
-    domains: Sequence[TaskDomain] | None = None,
-    task_types: Sequence[TaskType] | None = None,
-    categories: Sequence[TaskCategory] | None = None,
-    modalities: Sequence[Modalities] | None = None,
+    domains: Iterable[TaskDomain] | None = None,
+    task_types: Iterable[TaskType] | None = None,
+    categories: Iterable[TaskCategory] | None = None,
+    modalities: Iterable[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,

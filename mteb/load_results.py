@@ -1,7 +1,7 @@
 import json
 import logging
 import sys
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from pathlib import Path
 
 from mteb.abstasks.abstask import AbsTask
@@ -45,8 +45,8 @@ def _model_name_and_revision(
 def load_results(
     results_repo: str = "https://github.com/embeddings-benchmark/results",
     download_latest: bool = True,
-    models: Sequence[ModelMeta] | Sequence[str] | None = None,
-    tasks: Sequence[AbsTask] | Sequence[str] | None = None,
+    models: Iterable[ModelMeta] | Sequence[str] | None = None,
+    tasks: Iterable[AbsTask] | Sequence[str] | None = None,
     validate_and_filter: bool = True,
     require_model_meta: bool = True,
     only_main_score: bool = False,

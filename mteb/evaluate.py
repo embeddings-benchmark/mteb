@@ -183,7 +183,7 @@ def _evaluate_task(
 
 def _check_model_modalities(
     model: ModelMeta,
-    tasks: AbsTask | Benchmark | Iterable[AbsTask],
+    tasks: AbsTask | Iterable[AbsTask],
 ) -> None:
     """Check that model modalities are compatible with task modalities.
 
@@ -267,7 +267,7 @@ def _requires_merge(task: AbsTask, existing_results: TaskResult) -> bool:
 
 def evaluate(
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
-    tasks: AbsTask | Benchmark | Iterable[AbsTask],
+    tasks: AbsTask | Iterable[AbsTask],
     *,
     co2_tracker: bool | None = None,
     raise_error: bool = True,

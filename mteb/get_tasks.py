@@ -3,7 +3,7 @@
 import difflib
 import logging
 from collections import Counter, defaultdict
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from typing import Any
 
 import pandas as pd
@@ -42,7 +42,7 @@ def _create_name_to_task_mapping(
     return metadata_names
 
 
-def _create_similar_tasks(tasks: Sequence[type[AbsTask]]) -> dict[str, list[str]]:
+def _create_similar_tasks(tasks: Iterable[type[AbsTask]]) -> dict[str, list[str]]:
     """Create a dictionary of similar tasks.
 
     Returns:
