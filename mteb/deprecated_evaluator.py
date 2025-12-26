@@ -8,6 +8,7 @@ import traceback
 from collections.abc import Iterable, Sequence
 from copy import deepcopy
 from datetime import datetime
+from itertools import chain
 from pathlib import Path
 from time import time
 from typing import TYPE_CHECKING, Any, cast
@@ -62,19 +63,11 @@ class MTEB:
                 `mteb.get_tasks(["task1","task2"]) or `mteb.get_benchmark("MTEB(eng, classic)").
             err_logs_path: Path to save error logs.
         """
-        from mteb.benchmarks import Benchmark
-
-        if isinstance(tasks, list) and all(
-            isinstance(task, Benchmark) for task in tasks
-        ):
+        if isinstance(next(iter(tasks)), Benchmark):
             self.benchmarks = tasks
-            self.tasks = [task for bench in tasks for task in bench.tasks]
-        elif isinstance(tasks, list) and all(
-            isinstance(task, AbsTask) for task in tasks
-        ):
-            self.tasks = list(tasks)
-        else:
-            raise ValueError("tasks must be a list of AbsTask or Benchmark instances.")
+            self.tasks = list(chain.from_iterable(cast(Iterable[Benchmark], tasks)))
+        elif isinstance(next(iter(tasks)), AbsTask):
+            self.tasks = list(cast(Iterable[AbsTask], tasks))
 
         self.err_logs_path = Path(err_logs_path)
         self._last_evaluated_splits: dict[str, list[str]] = {}
