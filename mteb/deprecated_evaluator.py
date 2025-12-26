@@ -21,12 +21,10 @@ from mteb.abstasks.task_metadata import TaskCategory, TaskType
 from mteb.benchmarks import Benchmark
 from mteb.models import (
     CrossEncoderWrapper,
-    EncoderProtocol,
     ModelMeta,
     MTEBModels,
     SentenceTransformerEncoderWrapper,
 )
-from mteb.models.models_protocols import CrossEncoderProtocol
 from mteb.results import TaskResult
 from mteb.types import ScoresDict
 
@@ -317,9 +315,9 @@ class MTEB:
 
         mteb_model: MTEBModels
         if isinstance(model, SentenceTransformer):
-            mteb_model = cast(EncoderProtocol, SentenceTransformerEncoderWrapper(model))
+            mteb_model = SentenceTransformerEncoderWrapper(model)
         elif isinstance(model, CrossEncoder):
-            mteb_model = cast(CrossEncoderProtocol, CrossEncoderWrapper(model))
+            mteb_model = CrossEncoderWrapper(model)
         else:
             mteb_model = cast(MTEBModels, model)
 
@@ -352,7 +350,6 @@ class MTEB:
             logger.info(
                 f"\n\n********************** Evaluating {task.metadata.name} **********************"
             )
-            save_path: Path | None = None
 
             if task.is_aggregate:
                 aggregated_task = cast(AbsTaskAggregate, task)
@@ -375,8 +372,9 @@ class MTEB:
                 evaluation_results.append(new_results)
 
                 if output_path:
-                    save_path = output_path / f"{aggregated_task.metadata.name}.json"
-                    new_results.to_disk(save_path)
+                    new_results.to_disk(
+                        output_path / f"{aggregated_task.metadata.name}.json"
+                    )
                 del self.tasks[0]
                 continue
 
@@ -398,6 +396,7 @@ class MTEB:
             task_subsets = task.hf_subsets
 
             existing_results = None
+            save_path: Path | None = None
             final_splits_to_run = task_eval_splits
             missing_evaluations = self._get_missing_evaluations(
                 existing_results,

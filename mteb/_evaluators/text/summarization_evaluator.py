@@ -1,6 +1,6 @@
 import logging
 import sys
-from typing import Any, TypedDict, cast
+from typing import Any, TypedDict
 
 import numpy as np
 import torch
@@ -218,23 +218,19 @@ class SummarizationEvaluator(Evaluator):
             strict=True,
         ):
             cosine_spearman_scores.append(
-                cast(float, spearmanr(human_scores, cosine_pred_scores).statistic)
+                float(spearmanr(human_scores, cosine_pred_scores).statistic)
             )
             cosine_pearson_scores.append(
-                cast(float, pearsonr(human_scores, cosine_pred_scores).statistic)
+                float(pearsonr(human_scores, cosine_pred_scores).statistic)
             )
             dot_spearman_scores.append(
-                cast(float, spearmanr(human_scores, dot_pred_scores).statistic)
+                float(spearmanr(human_scores, dot_pred_scores).statistic)
             )
             dot_pearson_scores.append(
-                cast(float, pearsonr(human_scores, dot_pred_scores).statistic)
+                float(pearsonr(human_scores, dot_pred_scores).statistic)
             )
-            spearman_scores.append(
-                cast(float, spearmanr(human_scores, sim_scores).statistic)
-            )
-            pearson_scores.append(
-                cast(float, pearsonr(human_scores, sim_scores).statistic)
-            )
+            spearman_scores.append(float(spearmanr(human_scores, sim_scores).statistic))
+            pearson_scores.append(float(pearsonr(human_scores, sim_scores).statistic))
 
         return SummarizationMetrics(
             pearson=float(np.mean(pearson_scores)),

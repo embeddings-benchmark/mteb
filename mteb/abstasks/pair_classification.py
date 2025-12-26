@@ -241,7 +241,9 @@ class AbsTaskPairClassification(AbsTask):
     def _push_dataset_to_hub(self, repo_name: str) -> None:
         # previously pair classification datasets were stored in a single row
         if self.dataset is None:
-            raise RuntimeError("Dataset not loaded")
+            raise RuntimeError(
+                "Dataset not loaded. To load dataset run `task.load_data()`."
+            )
         if self.metadata.is_multilingual:
             for subset in self.dataset:
                 for split in self.dataset[subset]:
