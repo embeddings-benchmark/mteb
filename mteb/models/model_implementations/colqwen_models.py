@@ -2,7 +2,6 @@ import logging
 from typing import Any
 
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
@@ -154,6 +153,7 @@ class ColQwen3Wrapper(AbsEncoder):
         **kwargs: Any,
     ):
         import torchvision.transforms.functional as F
+        from PIL import Image
 
         contains_image = "image" in image_texts_pairs.dataset.features
         contains_text = "text" in image_texts_pairs.dataset.features
@@ -213,6 +213,7 @@ colqwen2 = ModelMeta(
         torch_dtype=torch.float16,
     ),
     name="vidore/colqwen2-v1.0",
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
     revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
     release_date="2025-11-03",
@@ -239,6 +240,7 @@ colqwen2_5 = ModelMeta(
         torch_dtype=torch.float16,
     ),
     name="vidore/colqwen2.5-v0.2",
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
     revision="6f6fcdfd1a114dfe365f529701b33d66b9349014",
     release_date="2025-01-31",
@@ -282,6 +284,7 @@ TOMORO_CITATION = """
 colqwen3_8b = ModelMeta(
     loader=ColQwen3Wrapper,
     name="TomoroAI/tomoro-colqwen3-embed-8b",
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
     revision="0b9fe28142910e209bbac15b1efe85507c27644f",
     release_date="2025-11-26",
@@ -305,6 +308,7 @@ colqwen3_8b = ModelMeta(
 colqwen3_4b = ModelMeta(
     loader=ColQwen3Wrapper,
     name="TomoroAI/tomoro-colqwen3-embed-4b",
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
     revision="6a32fb68598730bf5620fbf18d832c784235c59c",
     release_date="2025-11-26",
@@ -331,6 +335,7 @@ colnomic_7b = ModelMeta(
         torch_dtype=torch.float16,
     ),
     name="nomic-ai/colnomic-embed-multimodal-7b",
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
     revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
     release_date="2025-03-31",
@@ -375,6 +380,7 @@ colnomic_3b = ModelMeta(
         torch_dtype=torch.float16, attn_implementation="flash_attention_2"
     ),
     name="nomic-ai/colnomic-embed-multimodal-3b",
+    model_type=["late-interaction"],
     languages=COLNOMIC_LANGUAGES,
     revision="86627b4a9b0cade577851a70afa469084f9863a4",
     release_date="2025-03-31",
@@ -401,6 +407,7 @@ colnomic_7b = ModelMeta(
         torch_dtype=torch.float16,
     ),
     name="nomic-ai/colnomic-embed-multimodal-7b",
+    model_type=["late-interaction"],
     languages=COLNOMIC_LANGUAGES,
     revision="09dbc9502b66605d5be56d2226019b49c9fd3293",
     release_date="2025-03-31",
@@ -438,6 +445,7 @@ evoqwen25_vl_retriever_3b_v1 = ModelMeta(
         torch_dtype=torch.float16, attn_implementation="flash_attention_2"
     ),
     name="ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-3B-v1",
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
     revision="aeacaa2775f2758d82721eb1cf2f5daf1a392da9",
     release_date="2025-11-04",
@@ -463,6 +471,7 @@ evoqwen25_vl_retriever_7b_v1 = ModelMeta(
         torch_dtype=torch.float16, attn_implementation="flash_attention_2"
     ),
     name="ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-7B-v1",
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
     revision="8952ac6ee0e7de2e9211b165921518caf9202110",
     release_date="2025-11-04",

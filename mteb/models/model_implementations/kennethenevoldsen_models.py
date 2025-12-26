@@ -6,6 +6,7 @@ from mteb.models.sentence_transformer_wrapper import (
 dfm_enc_large = ModelMeta(
     loader=sentence_transformers_loader,  # type: ignore
     name="KennethEnevoldsen/dfm-sentence-encoder-large",
+    model_type=["dense"],
     languages=["dan-Latn"],
     open_weights=True,
     revision="132c53391e7a780dc6a2f9a03724d0158fe7122c",
@@ -40,6 +41,7 @@ dfm_enc_large = ModelMeta(
 dfm_enc_med = ModelMeta(
     loader=sentence_transformers_loader,  # type: ignore
     name="KennethEnevoldsen/dfm-sentence-encoder-medium",
+    model_type=["dense"],
     languages=["dan-Latn"],
     open_weights=True,
     revision="701bce95d499fa97610d57e8823c54fd1fb79930",

@@ -381,6 +381,7 @@ cohere_mult_3 = ModelMeta(
     loader=cohere_v_loader,  # type: ignore
     loader_kwargs={"model_name": "embed-multilingual-v3.0"},
     name="cohere/embed-multilingual-v3.0",
+    model_type=["dense"],
     languages=[],  # Unknown, but support >100 languages
     revision="1",
     release_date="2024-10-24",
@@ -404,6 +405,7 @@ cohere_eng_3 = ModelMeta(
     loader=cohere_v_loader,  # type: ignore
     loader_kwargs={"model_name": "embed-english-v3.0"},
     name="cohere/embed-english-v3.0",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="1",
     release_date="2024-10-24",
@@ -426,6 +428,7 @@ cohere_eng_3 = ModelMeta(
 cohere_embed_v4_multimodal = ModelMeta(
     loader=cohere_v_loader,
     loader_kwargs=dict(model_name="embed-v4.0"),
+    model_type=["dense"],
     name="Cohere/Cohere-embed-v4.0",
     languages=all_languages,
     revision="1",
@@ -450,6 +453,7 @@ cohere_embed_v4_multimodal_binary = ModelMeta(
     loader=cohere_v_loader,
     loader_kwargs=dict(embedding_type="binary"),
     name="Cohere/Cohere-embed-v4.0 (output_dtype=binary)",
+    model_type=["dense"],
     languages=all_languages,
     revision="1",
     release_date="2024-12-01",
@@ -474,6 +478,7 @@ cohere_embed_v4_multimodal_int8 = ModelMeta(
     loader=cohere_v_loader,
     loader_kwargs=dict(embedding_type="int8"),
     name="Cohere/Cohere-embed-v4.0 (output_dtype=int8)",
+    model_type=["dense"],
     languages=all_languages,
     revision="1",
     release_date="2024-12-01",

@@ -236,6 +236,7 @@ DEFAULT_INSTRUCTION = "Instruct: Given a web search query, retrieve relevant pas
 
 seed_embedding = ModelMeta(
     name="ByteDance-Seed/Seed1.5-Embedding",
+    model_type=["dense"],
     revision="4",
     release_date="2025-04-25",
     languages=[

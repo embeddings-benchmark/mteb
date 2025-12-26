@@ -73,6 +73,13 @@ class MockSentenceTransformer(SentenceTransformer):
     def get_sentence_embedding_dimension() -> int:
         return 10
 
+    def max_seq_length(self) -> int:
+        return 10
+
+    @property
+    def similarity_fn_name(self) -> Literal["cosine", "dot", "euclidean", "manhattan"]:
+        return "cosine"
+
 
 class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
     mteb_model_meta = ModelMeta(

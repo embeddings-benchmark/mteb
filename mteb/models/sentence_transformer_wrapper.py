@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import warnings
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -68,19 +69,16 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             self.model = SentenceTransformer(model, revision=revision, **kwargs)
         else:
             self.model = model
-        from mteb.models.get_model_meta import (
-            _model_meta_from_sentence_transformers,
-        )
 
-        self.mteb_model_meta = _model_meta_from_sentence_transformers(self.model)
+        self.mteb_model_meta = ModelMeta.from_sentence_transformer_model(self.model)
 
         built_in_prompts = getattr(self.model, "prompts", None)
         if built_in_prompts and not model_prompts:
             model_prompts = built_in_prompts
         elif model_prompts and built_in_prompts:
-            logger.warning(
-                f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
-            )
+            msg = f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
+            logger.warning(msg)
+            warnings.warn(msg)
             self.model.prompts = model_prompts
 
         self.model_prompts, invalid_prompts = self.validate_task_to_prompt_name(
@@ -89,9 +87,9 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
 
         if invalid_prompts:
             invalid_prompts = "\n".join(invalid_prompts)
-            logger.warning(
-                f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
-            )
+            msg = f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
+            logger.warning(msg)
+            warnings.warn(msg)
 
         if (
             self.model_prompts
@@ -101,10 +99,9 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 or PromptType.document.value not in self.model_prompts
             )
         ):
-            logger.warning(
-                "SentenceTransformers that use prompts most often need to be configured with at least 'query' and"
-                f" 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
-            )
+            msg = f"SentenceTransformers that use prompts most often need to be configured with at least 'query' and 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
+            logger.warning(msg)
+            warnings.warn(msg)
 
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
             self.similarity = self.model.similarity
@@ -268,14 +265,12 @@ class CrossEncoderWrapper:
     ) -> None:
         from sentence_transformers import CrossEncoder
 
-        from mteb.models.get_model_meta import _model_meta_from_cross_encoder
-
         if isinstance(model, CrossEncoder):
             self.model = model
         elif isinstance(model, str):
             self.model = CrossEncoder(model, revision=revision, **kwargs)
 
-        self.mteb_model_meta = _model_meta_from_cross_encoder(self.model)
+        self.mteb_model_meta = ModelMeta.from_cross_encoder(self.model)
 
     def predict(
         self,

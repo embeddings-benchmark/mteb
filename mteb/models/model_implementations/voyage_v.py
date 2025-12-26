@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 import logging
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
@@ -11,6 +12,9 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from PIL import Image
 
 
 def _downsample_image(
@@ -200,6 +204,7 @@ def voyage_v_loader(model_name, **kwargs):
 voyage_v = ModelMeta(
     loader=voyage_v_loader,  # type: ignore
     name="voyageai/voyage-multimodal-3",
+    model_type=["dense"],
     languages=[],  # Unknown
     revision="1",
     release_date="2024-11-10",

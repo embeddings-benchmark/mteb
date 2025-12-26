@@ -97,6 +97,7 @@ class NoInstructModel(AbsEncoder):
 no_instruct_small_v0 = ModelMeta(
     loader=NoInstructModel,
     name="avsolatorio/NoInstruct-small-Embedding-v0",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="b38747000553d8268915c95a55fc87e707c9aadd",

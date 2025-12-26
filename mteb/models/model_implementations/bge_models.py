@@ -319,6 +319,7 @@ bge_small_en_v1_5 = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="BAAI/bge-small-en-v1.5",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
@@ -344,6 +345,7 @@ bge_base_en_v1_5 = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="BAAI/bge-base-en-v1.5",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",
@@ -369,6 +371,7 @@ bge_large_en_v1_5 = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="BAAI/bge-large-en-v1.5",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="d4aa6901d3a41ba39fb536a557fa166f842b0e09",
@@ -394,6 +397,7 @@ bge_small_zh = ModelMeta(
         model_prompts=model_prompts_zh,
     ),
     name="BAAI/bge-small-zh",
+    model_type=["dense"],
     languages=["zho-Hans"],
     open_weights=True,
     revision="1d2363c5de6ce9ba9c890c8e23a4c72dce540ca8",
@@ -411,6 +415,7 @@ bge_small_zh = ModelMeta(
     public_training_data=None,
     training_datasets=bge_chinese_training_data,
     superseded_by="BAAI/bge-small-zh-v1.5",
+    citation=BGE_15_CITATION,
 )
 
 bge_base_zh = ModelMeta(
@@ -419,6 +424,7 @@ bge_base_zh = ModelMeta(
         model_prompts=model_prompts_zh,
     ),
     name="BAAI/bge-base-zh",
+    model_type=["dense"],
     languages=["zho-Hans"],
     open_weights=True,
     revision="0e5f83d4895db7955e4cb9ed37ab73f7ded339b6",
@@ -436,6 +442,7 @@ bge_base_zh = ModelMeta(
     public_training_data=None,
     training_datasets=bge_chinese_training_data,
     superseded_by="BAAI/bge-base-zh-v1.5",
+    citation=BGE_15_CITATION,
 )
 
 bge_large_zh = ModelMeta(
@@ -444,6 +451,7 @@ bge_large_zh = ModelMeta(
         model_prompts=model_prompts_zh,
     ),
     name="BAAI/bge-large-zh",
+    model_type=["dense"],
     languages=["zho-Hans"],
     open_weights=True,
     revision="b5d9f5c027e87b6f0b6fa4b614f8f9cdc45ce0e8",
@@ -461,6 +469,7 @@ bge_large_zh = ModelMeta(
     public_training_data=None,
     training_datasets=bge_chinese_training_data,
     superseded_by="BAAI/bge-large-zh-v1.5",
+    citation=BGE_15_CITATION,
 )
 
 bge_small_en = ModelMeta(
@@ -469,6 +478,7 @@ bge_small_en = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="BAAI/bge-small-en",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="4778d71a06863076696b03fd2777eb118712cad8",
@@ -486,6 +496,7 @@ bge_small_en = ModelMeta(
     public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
     training_datasets=bge_training_data,
     superseded_by="BAAI/bge-small-en-v1.5",
+    citation=BGE_15_CITATION,
 )
 
 bge_base_en = ModelMeta(
@@ -494,6 +505,7 @@ bge_base_en = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="BAAI/bge-base-en",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="b737bf5dcc6ee8bdc530531266b4804a5d77b5d8",
@@ -511,6 +523,7 @@ bge_base_en = ModelMeta(
     public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
     training_datasets=bge_training_data,
     superseded_by="BAAI/bge-base-en-v1.5",
+    citation=BGE_15_CITATION,
 )
 
 bge_large_en = ModelMeta(
@@ -519,6 +532,7 @@ bge_large_en = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="BAAI/bge-large-en",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="abe7d9d814b775ca171121fb03f394dc42974275",
@@ -536,6 +550,7 @@ bge_large_en = ModelMeta(
     public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
     training_datasets=bge_training_data,
     superseded_by="BAAI/bge-large-en-v1.5",
+    citation=BGE_15_CITATION,
 )
 
 
@@ -545,6 +560,7 @@ bge_small_zh_v1_5 = ModelMeta(
         model_prompts=model_prompts_zh,
     ),
     name="BAAI/bge-small-zh-v1.5",
+    model_type=["dense"],
     languages=["zho-Hans"],
     open_weights=True,
     revision="7999e1d3359715c523056ef9478215996d62a620",
@@ -561,6 +577,7 @@ bge_small_zh_v1_5 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=bge_chinese_training_data,
+    citation=BGE_15_CITATION,
 )
 
 bge_base_zh_v1_5 = ModelMeta(
@@ -569,6 +586,7 @@ bge_base_zh_v1_5 = ModelMeta(
         model_prompts=model_prompts_zh,
     ),
     name="BAAI/bge-base-zh-v1.5",
+    model_type=["dense"],
     languages=["zho-Hans"],
     open_weights=True,
     revision="f03589ceff5aac7111bd60cfc7d497ca17ecac65",
@@ -585,6 +603,7 @@ bge_base_zh_v1_5 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=bge_chinese_training_data,
+    citation=BGE_15_CITATION,
 )
 
 bge_large_zh_v1_5 = ModelMeta(
@@ -593,6 +612,7 @@ bge_large_zh_v1_5 = ModelMeta(
         model_prompts=model_prompts_zh,
     ),
     name="BAAI/bge-large-zh-v1.5",
+    model_type=["dense"],
     languages=["zho-Hans"],
     open_weights=True,
     revision="79e7739b6ab944e86d6171e44d24c997fc1e0116",
@@ -609,11 +629,13 @@ bge_large_zh_v1_5 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=bge_chinese_training_data,
+    citation=BGE_15_CITATION,
 )
 
 bge_m3 = ModelMeta(
     loader=sentence_transformers_loader,
     name="BAAI/bge-m3",
+    model_type=["dense"],
     languages=bgem3_languages,
     open_weights=True,
     revision="5617a9f61b028005a4858fdac845db406aefb181",
@@ -630,6 +652,14 @@ bge_m3 = ModelMeta(
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
     training_datasets=bge_m3_training_data,
+    citation="""@misc{bge-m3,
+      title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation}, 
+      author={Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
+      year={2024},
+      eprint={2402.03216},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
 )
 
 # Contents of cfli/bge-full-data
@@ -692,6 +722,7 @@ bge_full_data = {
 bge_multilingual_gemma2 = ModelMeta(
     loader=sentence_transformers_loader,
     name="BAAI/bge-multilingual-gemma2",
+    model_type=["dense"],
     languages=[
         "eng-Latn",
         "zho-Hans",
@@ -722,11 +753,30 @@ bge_multilingual_gemma2 = ModelMeta(
     }
     | bge_full_data
     | bge_m3_training_data,
+    citation="""@misc{bge-m3,
+      title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation}, 
+      author={Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
+      year={2024},
+      eprint={2402.03216},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
+
+@misc{bge_embedding,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
+      year={2023},
+      eprint={2309.07597},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
 )
 
 bge_en_icl = ModelMeta(
     loader=sentence_transformers_loader,
     name="BAAI/bge-en-icl",
+    model_type=["dense"],
     languages=[
         "eng-Latn",
     ],
@@ -762,6 +812,7 @@ bge_en_icl = ModelMeta(
 bge_m3_unsupervised = ModelMeta(
     loader=sentence_transformers_loader,
     name="BAAI/bge-m3-unsupervised",
+    model_type=["dense"],
     languages=bgem3_languages,
     open_weights=True,
     revision="46f03bc86361cf88102b0b517b36c8259f2946b1",
@@ -778,10 +829,19 @@ bge_m3_unsupervised = ModelMeta(
     public_training_code="https://github.com/FlagOpen/FlagEmbedding",
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
     training_datasets=bge_m3_training_data,
+    citation="""@misc{bge-m3,
+      title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation}, 
+      author={Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
+      year={2024},
+      eprint={2402.03216},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
 )
 
 manu__bge_m3_custom_fr = ModelMeta(
     name="manu/bge-m3-custom-fr",
+    model_type=["dense"],
     revision="ed3ef88678ba83ddf4c0fab71a93cb90d89a9078",
     release_date="2024-04-11",
     languages=None,

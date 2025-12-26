@@ -22,6 +22,7 @@ class OPSWrapper(AbsEncoder):
 
 ops_moa_conan_embedding = ModelMeta(
     name="OpenSearch-AI/Ops-MoA-Conan-embedding-v1",
+    model_type=["dense"],
     revision="46dcd58753f3daa920c66f89e47086a534089350",
     release_date="2025-03-26",
     languages=["zho-Hans"],
@@ -53,6 +54,7 @@ ops_moa_conan_embedding = ModelMeta(
 
 ops_moa_yuan_embedding = ModelMeta(
     name="OpenSearch-AI/Ops-MoA-Yuan-embedding-1.0",
+    model_type=["dense"],
     revision="23712d0766417b0eb88a2513c6e212a58b543268",
     release_date="2025-03-26",
     languages=["zho-Hans"],

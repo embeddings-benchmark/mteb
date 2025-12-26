@@ -435,7 +435,7 @@ MTEB_RETRIEVAL_MEDICAL = Benchmark(
         ],
     ),
     description="A curated set of MTEB tasks designed to evaluate systems in the context of medical information retrieval.",
-    reference="",
+    reference=None,
     citation=None,
 )
 
@@ -471,6 +471,7 @@ SEB = Benchmark(
     name="MTEB(Scandinavian, v1)",
     display_name="Scandinavian",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/dk.svg",
+    language_view=["dan-Latn", "swe-Latn", "nno-Latn", "nob-Latn"],
     tasks=get_tasks(
         tasks=[
             # Bitext
@@ -953,6 +954,28 @@ MTEB_multilingual_v1 = Benchmark(
 MTEB_multilingual_v2 = Benchmark(
     name="MTEB(Multilingual, v2)",
     display_name="Multilingual",
+    language_view=[
+        "eng-Latn",  # English
+        "zho-Hans",  # Chinese (Simplified)
+        "hin-Deva",  # Hindi
+        "spa-Latn",  # Spanish
+        "fra-Latn",  # French
+        "ara-Arab",  # Arabic
+        "ben-Beng",  # Bengali
+        "rus-Cyrl",  # Russian
+        "por-Latn",  # Portuguese
+        "urd-Arab",  # Urdu
+        "ind-Latn",  # Indonesian
+        "deu-Latn",  # German
+        "jpn-Jpan",  # Japanese
+        "swa-Latn",  # Swahili
+        "mar-Deva",  # Marathi
+        "tel-Telu",  # Telugu
+        "tur-Latn",  # Turkish
+        "tam-Taml",  # Tamil
+        "vie-Latn",  # Vietnamese
+        "kor-Hang",  # Korean
+    ],
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
     tasks=mteb_multilingual_tasks,
     description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages. ",
@@ -963,7 +986,7 @@ MTEB_multilingual_v2 = Benchmark(
 
 MTEB_JPN = Benchmark(
     name="MTEB(jpn, v1)",
-    display_name="Japanese",
+    display_name="Japanese Legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
     tasks=get_tasks(
         languages=["jpn"],
@@ -2283,6 +2306,14 @@ VIDORE_V2 = Benchmark(
 VIDORE_V3 = VidoreBenchmark(
     name="ViDoRe(v3)",
     display_name="ViDoRe V3",
+    language_view=[
+        "deu-Latn",
+        "eng-Latn",
+        "fra-Latn",
+        "ita-Latn",
+        "por-Latn",
+        "spa-Latn",
+    ],
     icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
     tasks=get_tasks(
         tasks=[
@@ -2558,7 +2589,7 @@ HUME = HUMEBenchmark(
         ],
     ),
     description="The HUME benchmark is designed to evaluate the performance of text embedding models and humans on a comparable set of tasks. This captures areas where models perform better than human annotators and the reverse. In the paper, we go further into the analysis and what conclusions can be drawn.",
-    reference="Coming soon (in review)",
+    reference=None,
     citation=None,
     contacts=["AdnanElAssadi56", "KennethEnevoldsen", "isaac-chung", "Samoed"],
 )
@@ -2607,6 +2638,63 @@ JMTEB_V2 = Benchmark(
     ),
     description="JMTEB is a benchmark for evaluating Japanese text embedding models. In v2, we have extended the benchmark to 28 datasets, enabling more comprehensive evaluation compared with v1 (MTEB(jpn, v1)).",
     reference="https://github.com/sbintuitions/JMTEB",
+    citation=r"""
+@article{li2025jmteb,
+  author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
+  issue = {3},
+  journal = {Vol.2025-NL-265,No.3,1-15},
+  month = {sep},
+  title = {{JMTEB and JMTEB-lite: Japanese Massive Text Embedding Benchmark and Its Lightweight Version}},
+  year = {2025},
+}
+""",
+    contacts=["lsz05"],
+)
+
+JMTEB_LITE_V1 = Benchmark(
+    name="JMTEB-lite(v1)",
+    display_name="Japanese",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
+    tasks=get_tasks(
+        languages=["jpn"],
+        tasks=[
+            # Clustering (3)
+            "LivedoorNewsClustering.v2",
+            "MewsC16JaClustering",
+            "SIB200ClusteringS2S",
+            # Classification (7)
+            "AmazonReviewsClassification",
+            "AmazonCounterfactualClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "JapaneseSentimentClassification",
+            "SIB200Classification",
+            "WRIMEClassification",
+            # STS (2)
+            "JSTS",
+            "JSICK",
+            # Retrieval (11)
+            "JaqketRetrievalLite",
+            "MrTyDiJaRetrievalLite",
+            "JaGovFaqsRetrieval",
+            "NLPJournalTitleAbsRetrieval.V2",
+            "NLPJournalTitleIntroRetrieval.V2",
+            "NLPJournalAbsIntroRetrieval.V2",
+            "NLPJournalAbsArticleRetrieval.V2",
+            "JaCWIRRetrievalLite",
+            "MIRACLJaRetrievalLite",
+            "MintakaRetrieval",
+            "MultiLongDocRetrieval",
+            # Reranking (5)
+            "ESCIReranking",
+            "JQaRARerankingLite",
+            "JaCWIRRerankingLite",
+            "MIRACLReranking",
+            "MultiLongDocReranking",
+        ],
+    ),
+    description="JMTEB-lite is a lightweight version of JMTEB. It makes agile evaluation possible by reaching an average of 5x faster evaluation comparing with JMTEB, as 6 heavy datasets in JMTEB are optimized with hard negative pooling strategy, making them much smaller. The result of JMTEB-lite is proved to be highly relevant with that of JMTEB, making it a faithful preview of JMTEB.",
+    reference="https://huggingface.co/datasets/sbintuitions/JMTEB-lite",
     citation=r"""
 @article{li2025jmteb,
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},

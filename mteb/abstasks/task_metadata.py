@@ -376,9 +376,8 @@ class TaskMetadata(BaseModel):
         if include_cite and cite:
             # check for whitespace in the citation
             if " " in cite:
-                logger.warning(
-                    "Citation contains whitespace. Please ensure that the citation is correctly formatted."
-                )
+                msg = "Citation contains whitespace. Please ensure that the citation is correctly formatted."
+                logger.warning(msg)
             return f"\\cite{{{cite}}}"
         return cite
 

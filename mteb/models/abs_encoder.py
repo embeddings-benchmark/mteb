@@ -1,4 +1,5 @@
 import logging
+import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Sequence
 from typing import Any, Literal, cast, get_args, overload
@@ -54,11 +55,11 @@ class AbsEncoder(ABC):
         """A wrapper function around the model.encode method that handles the prompt_name argument and standardizes the output to a numpy array.
 
         The order of priorities for prompt selection are:
-            1. Composed prompt of task name + prompt type (query or passage)
+            1. Composed prompt of task name + prompt type
             2. Specific task prompt
-            3. Composed prompt of task type + prompt type (query or passage)
+            3. Composed prompt of task type + prompt type
             4. Specific task type prompt
-            5. Specific prompt type (query or passage)
+            5. Specific prompt type
 
         Args:
             task_metadata: The task name to use for building the encoding prompt
@@ -105,7 +106,7 @@ class AbsEncoder(ABC):
 
         Args:
             task_metadata: The metadata of the task.
-            prompt_type: The name type of prompt. (query or passage)
+            prompt_type: The name type of prompt.
         """
         if not self.model_prompts:
             return None
@@ -187,6 +188,7 @@ class AbsEncoder(ABC):
                 except KeyError:
                     msg = f"Task name {task_name} is not valid. {valid_keys_msg}"
                     logger.warning(msg)
+                    warnings.warn(msg)
                     invalid_task_messages.add(msg)
                     invalid_keys.add(task_key)
 
@@ -210,13 +212,11 @@ class AbsEncoder(ABC):
             task_metadata: The metadata of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
                 The order of priorities for prompt selection are:
-                    1. Composed prompt of task name + prompt type (query or passage)
-                    2. Specific task prompt
-                    3. Composed prompt of task type + prompt type (query or passage)
-                    4. Specific task type prompt
-                    5. Specific prompt type (query or passage)
-                    6. Default prompt from the task definition
-            prompt_type: The name type of prompt. (query or passage)
+                    1. Specific task prompt
+                    2. Specific task type prompt
+                    3. Specific prompt type
+                    4. Default prompt from the task definition
+            prompt_type: The name type of prompt.
 
         Returns:
             The instruction/prompt to be used for encoding sentences.
@@ -224,13 +224,19 @@ class AbsEncoder(ABC):
         prompt = task_metadata.prompt
         if self.prompts_dict and task_metadata.name in self.prompts_dict:
             prompt = self.prompts_dict[task_metadata.name]
+        elif self.prompts_dict and task_metadata.type in self.prompts_dict:
+            prompt = self.prompts_dict[task_metadata.type]
+        elif (
+            self.prompts_dict and prompt_type and prompt_type.value in self.prompts_dict
+        ):
+            prompt = self.prompts_dict[prompt_type.value]
 
         if isinstance(prompt, dict) and prompt_type:
             if prompt.get(prompt_type.value):
                 return prompt[prompt_type.value]
-            logger.warning(
-                f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
-            )
+            msg = f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
+            logger.warning(msg)
+            warnings.warn(msg)
             return ""
 
         if prompt:
@@ -246,7 +252,7 @@ class AbsEncoder(ABC):
 
         Args:
             instruction: The instruction to be formatted.
-            prompt_type: The name type of prompt. (query or passage)
+            prompt_type: The name type of prompt.
         """
         if self.instruction_template is None:
             raise ValueError(
@@ -269,7 +275,7 @@ class AbsEncoder(ABC):
 
         Args:
             task_metadata: The metadata of the task
-            prompt_type: The name type of prompt. (query or passage)
+            prompt_type: The name type of prompt.
 
         Returns:
             The instruction to be used for encoding sentences.
@@ -373,14 +379,14 @@ class AbsEncoder(ABC):
             task_metadata: The metadata of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
                 The order of priorities for prompt selection are:
-                    1. Composed prompt of task name + prompt type (query or passage)
+                    1. Composed prompt of task name + prompt type
                     2. Specific task prompt
-                    3. Composed prompt of task type + prompt type (query or passage)
+                    3. Composed prompt of task type + prompt type
                     4. Specific task type prompt
-                    5. Specific prompt type (query or passage)
+                    5. Specific prompt type
             hf_split: Split of current task
             hf_subset: Subset of current task
-            prompt_type: The name type of prompt. (query or passage)
+            prompt_type: The name type of prompt.
             **kwargs: Additional arguments to pass to the encoder.
 
         Returns:

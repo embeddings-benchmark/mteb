@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import warnings
 from argparse import Namespace
 from collections import defaultdict
 from collections.abc import Callable, Iterable
@@ -462,7 +463,9 @@ class TaskResult(BaseModel):
                     if main_score in hf_subset_scores:
                         hf_subset_scores["main_score"] = hf_subset_scores[main_score]
                     else:
-                        logger.warning(f"Main score {main_score} not found in scores")
+                        msg = f"Main score {main_score} not found in scores"
+                        logger.warning(msg)
+                        warnings.warn(msg)
                         hf_subset_scores["main_score"] = None
 
         # specific fixes:
@@ -633,21 +636,23 @@ class TaskResult(BaseModel):
             task = get_task(self.task_name)
 
         splits = task.eval_splits
-        hf_subsets = task.hf_subsets
-        hf_subsets = set(hf_subsets)
+        hf_subsets = set(task.hf_subsets)  # Convert to set once
 
         new_scores = {}
         seen_splits = set()
         for split in self.scores:
             if split not in splits:
                 continue
-            new_scores[split] = []
             seen_subsets = set()
-            for _scores in self.scores[split]:
-                if _scores["hf_subset"] not in hf_subsets:
-                    continue
-                new_scores[split].append(_scores)
+            # Use list comprehension for better performance
+            new_scores[split] = [
+                _scores
+                for _scores in self.scores[split]
+                if _scores["hf_subset"] in hf_subsets
+            ]
+            for _scores in new_scores[split]:
                 seen_subsets.add(_scores["hf_subset"])
+
             if seen_subsets != hf_subsets:
                 missing_subsets = hf_subsets - seen_subsets
                 if len(missing_subsets) > 2:
@@ -656,17 +661,17 @@ class TaskResult(BaseModel):
                 else:
                     missing_subsets_str = str(missing_subsets)
 
-                logger.warning(
-                    f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
-                )
+                msg = f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
+                logger.warning(msg)
+                warnings.warn(msg)
             seen_splits.add(split)
         if seen_splits != set(splits):
-            logger.warning(
-                f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
-            )
-        new_res = {**self.to_dict(), "scores": new_scores}
-        new_res = TaskResult.from_validated(**new_res)
-        return new_res
+            msg = f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
+            logger.warning(msg)
+            warnings.warn(msg)
+        data = self.model_dump()
+        data["scores"] = new_scores
+        return type(self).model_construct(**data)
 
     def is_mergeable(
         self,
