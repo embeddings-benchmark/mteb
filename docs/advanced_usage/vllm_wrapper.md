@@ -3,6 +3,26 @@
 !!! note 
     vLLM currently only supports a limited number of models, with many model implementations having subtle differences compared to the default implementations in mteb. We are working on it. For full list of supported models you can refer to [vllm documentation](https://docs.vllm.ai/en/stable/models/supported_models/#pooling-models).
 
+## vLLM is fast with
+
+For models that use bidirectional attention, such as BERT.
+- Optimized CUDA kernels, including integration with FlashAttention and FlashInfer
+- CUDA Graphs & torch.compile for reduced overhead and accelerated execution
+- Tensor, pipeline, data and expert parallelism support for distributed inference
+- Quantizations: GPTQ, AWQ, AutoRound, INT4, INT8, and FP8 for efficient deployment
+- Continuous batching of incoming requests to maximize throughput
+- When requests of varying lengths are batched together, there is no need to pad all inputs to the length of the longest request.
+
+For models that use causal attention, such as the Qwen3 reranker. The following optimization can also be used.
+- Efficient management of attention key and value memory with PagedAttention
+- Chunked prefill
+- Prefix caching
+
+For full list of features you can refer to [vllm documentation](https://docs.vllm.ai/en/latest/features/)
+
+!!! note 
+    vllm uses flash attention by default, which does not support fp32. Therefore, it defaults to using fp16 for inference on fp32 models. Testing has shown a relatively small drop in accuracy. You can manually opt for fp32, but inference speed will be very slow.
+
 ## Installation
 
 Reference: https://docs.vllm.ai/en/latest/getting_started/installation/
@@ -50,7 +70,7 @@ if __name__ == "__main__":
     print(results)
 ```
 
-## Two stage reranking
+## Rerank models
 
 To use a cross encoder for reranking. The following code shows a two-stage run with the second stage reading results saved from the first stage.
 

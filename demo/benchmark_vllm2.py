@@ -3,11 +3,12 @@ import os
 import torch
 
 os.environ["VLLM_LOGGING_LEVEL"] = "ERROR"
+import gc
 import time
+
 from vllm import LLM
 from vllm.distributed import cleanup_dist_env_and_memory
 from vllm.utils.counter import Counter
-import gc
 
 
 def benchmark_vllm(args):
