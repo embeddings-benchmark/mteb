@@ -1,7 +1,7 @@
 ## vLLM Wrapper
 
 !!! note 
-    vLLM currently only supports a limited number of models, with many model implementations having subtle differences compared to the default implementations in mteb. We are working on it.
+    vLLM currently only supports a limited number of models, with many model implementations having subtle differences compared to the default implementations in mteb. We are working on it. For full list of supported models you can refer to [vllm documentation](https://docs.vllm.ai/en/stable/models/supported_models/#pooling-models).
 
 ## Installation
 
