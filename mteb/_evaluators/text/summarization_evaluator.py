@@ -203,12 +203,12 @@ class SummarizationEvaluator(Evaluator):
         self,
         distances: SummarizationDistances,
     ) -> SummarizationMetrics:
-        cosine_spearman_scores: list[float] = []
-        cosine_pearson_scores: list[float] = []
-        dot_spearman_scores: list[float] = []
-        dot_pearson_scores: list[float] = []
-        pearson_scores: list[float] = []
-        spearman_scores: list[float] = []
+        cosine_spearman_scores = []
+        cosine_pearson_scores = []
+        dot_spearman_scores = []
+        dot_pearson_scores = []
+        pearson_scores = []
+        spearman_scores = []
 
         for human_scores, cosine_pred_scores, dot_pred_scores, sim_scores in zip(
             distances["human_scores"],
