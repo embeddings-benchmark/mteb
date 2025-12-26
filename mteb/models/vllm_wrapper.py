@@ -1,5 +1,7 @@
 import atexit
+import gc
 import logging
+import os
 from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
@@ -91,8 +93,6 @@ class VllmWrapperBase:
             install_instruction="pip install mteb[vllm]",
         )
 
-        import os
-
         os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
 
         from vllm import LLM, EngineArgs
@@ -146,8 +146,6 @@ class VllmWrapperBase:
         if self.llm is None:
             return
 
-        import gc
-
         from vllm.distributed import cleanup_dist_env_and_memory
 
         self.llm = None
@@ -187,31 +185,9 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
             hf_subset: Subset of current task
             **kwargs: Additional arguments to pass to the encoder.
 
-            The order of priorities for prompt selection are:
-                1. Composed prompt of task name + prompt type (query or passage)
-                2. Specific task prompt
-                3. Composed prompt of task type + prompt type (query or passage)
-                4. Specific task type prompt
-                5. Specific prompt type (query or passage)
-
-
         Returns:
             The encoded sentences.
         """
-        prompt = None
-        prompt_name = None
-        if self.model_prompts is not None:
-            prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-            prompt = self.model_prompts.get(prompt_name, None)
-        if prompt_name:
-            logger.info(
-                f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
-            )
-        else:
-            logger.info(
-                f"No model prompts found for task={task_metadata.name} {prompt_type=}"
-            )
-
         # TODO: support task prompt
         prompts = [text for batch in inputs for text in batch["text"]]
         outputs = self.llm.encode(
