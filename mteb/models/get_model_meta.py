@@ -93,6 +93,13 @@ def get_model(
     meta = get_model_meta(model_name, revision)
     model = meta.load_model(**kwargs)
 
+    if kwargs:
+        logger.info(
+            f"Model '{model_name}' loaded with additional arguments: {list(kwargs.keys())}"
+        )
+        meta = meta.model_copy(deep=True)
+        meta.loader_kwargs |= kwargs
+
     model.mteb_model_meta = meta  # type: ignore
     return model
 

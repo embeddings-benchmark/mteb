@@ -127,6 +127,19 @@ def test_check_training_datasets_can_be_derived(model_meta: ModelMeta):
     model_meta.get_training_datasets()
 
 
+def test_loader_kwargs_persisted_in_metadata():
+    model = mteb.get_model(
+        "baseline/random-encoder-baseline",
+        not_existing_param=123,
+    )
+
+    assert hasattr(model, "mteb_model_meta")
+    meta = model.mteb_model_meta
+
+    assert "not_existing_param" in meta.loader_kwargs
+    assert meta.loader_kwargs["not_existing_param"] == 123
+
+
 def test_model_to_python():
     meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
     assert meta.to_python() == (
