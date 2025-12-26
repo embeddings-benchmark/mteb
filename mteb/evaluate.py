@@ -17,8 +17,6 @@ from mteb.benchmarks.benchmark import Benchmark
 from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import (
-    CrossEncoderProtocol,
-    EncoderProtocol,
     MTEBModels,
 )
 from mteb.models.sentence_transformer_wrapper import (
@@ -60,13 +58,11 @@ def _sanitize_model(
 
     wrapped_model: MTEBModels | ModelMeta
     if isinstance(model, SentenceTransformer):
-        wrapper = SentenceTransformerEncoderWrapper(model)
-        meta = wrapper.mteb_model_meta
-        wrapped_model = cast(EncoderProtocol, wrapper)
+        wrapped_model = SentenceTransformerEncoderWrapper(model)
+        meta = wrapped_model.mteb_model_meta
     elif isinstance(model, CrossEncoder):
-        cross_encoder_wrapper = CrossEncoderWrapper(model)
-        meta = cross_encoder_wrapper.mteb_model_meta
-        wrapped_model = cast(CrossEncoderProtocol, cross_encoder_wrapper)
+        wrapped_model = CrossEncoderWrapper(model)
+        meta = wrapped_model.mteb_model_meta
     elif hasattr(model, "mteb_model_meta"):
         meta = getattr(model, "mteb_model_meta")
         if not isinstance(meta, ModelMeta):
