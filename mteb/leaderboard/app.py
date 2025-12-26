@@ -111,11 +111,6 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
     logger.info("Loading cached results from disk...")
     try:
         logger.info(f"Opening file: {results_cache_path}")
-        if not results_cache_path.exists():
-            logger.error(f"Cached results file does not exist: {results_cache_path}")
-            raise FileNotFoundError(
-                f"Cached results file not found: {results_cache_path}"
-            )
 
         file_size = results_cache_path.stat().st_size
         logger.info(f"File exists, size: {file_size} bytes")

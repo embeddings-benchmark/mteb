@@ -1,7 +1,6 @@
 """Test cases for the ResultCache class in the mteb.cache module."""
 
 import gzip
-import io
 from pathlib import Path
 from typing import cast
 from unittest.mock import Mock, patch
@@ -214,7 +213,6 @@ def test_cache_filter_languages():
 
 
 # Tests for download_cached_results_from_branch method
-
 
 
 class TestDownloadCachedResultsFromBranch:

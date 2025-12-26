@@ -43,4 +43,3 @@ class TestIntegrationScenarios:
 
         with pytest.raises(Exception, match="Network error"):
             cache.download_cached_results_from_branch()
-
