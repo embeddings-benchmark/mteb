@@ -7,7 +7,7 @@ model_name = "BAAI/bge-m3"
 model = mteb.get_model(model_name)
 tasks = mteb.get_tasks(tasks=["T2Reranking"])
 start = time.perf_counter()
-# When suing batch size is 12, the gpu memory usage is 18.669 GB, and it is estimated to take 13 hours to complete.
+# When using batch size is 12, the gpu memory usage is 18.669 GB, and it is estimated to take 13 hours to complete.
 results = mteb.evaluate(model, tasks=tasks, encode_kwargs={"batch_size": 12, "show_progress_bar": True})
 end = time.perf_counter()
 elapsed_time = end - start
