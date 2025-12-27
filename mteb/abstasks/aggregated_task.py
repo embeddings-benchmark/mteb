@@ -6,7 +6,6 @@ from typing import Any
 
 import numpy as np
 from datasets import Dataset, DatasetDict
-from typing_extensions import Self
 
 from mteb.models.models_protocols import MTEBModels
 from mteb.results.task_result import TaskResult
@@ -121,19 +120,6 @@ class AbsTaskAggregate(AbsTask):
             task_res.mteb_version = None
         task_res.mteb_version = task_results[0].mteb_version
         return task_res
-
-    def filter_eval_splits(self, eval_splits: list[str] | None) -> Self:
-        """Filter the evaluation splits of the task.
-
-        Args:
-            eval_splits: List of splits to evaluate on. If None, all splits in metadata
-                are used.
-
-        Returns:
-            The task with filtered evaluation splits.
-        """
-        self._eval_splits = eval_splits
-        return self
 
     def evaluate(
         self,
