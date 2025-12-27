@@ -1,14 +1,23 @@
+from __future__ import annotations
+
 import logging
 import warnings
-from collections.abc import Callable
+from typing import TYPE_CHECKING
 
 import numpy as np
 import torch
 
 from mteb._requires_package import requires_package
 from mteb.models.model_meta import ScoringFunction
-from mteb.models.models_protocols import EncoderProtocol
-from mteb.types import Array, TopRankedDocumentsType
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    import faiss
+
+    from mteb.models.models_protocols import EncoderProtocol
+    from mteb.types import Array, TopRankedDocumentsType
+
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +42,6 @@ class FaissSearchIndex:
             install_instruction="pip install mteb[faiss-cpu]",
         )
 
-        import faiss
         from faiss import IndexFlatIP, IndexFlatL2
 
         # https://github.com/facebookresearch/faiss/wiki/Faiss-indexes

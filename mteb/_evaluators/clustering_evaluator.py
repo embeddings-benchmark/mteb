@@ -1,14 +1,19 @@
-import logging
-from typing import Any
+from __future__ import annotations
 
-from datasets import Dataset
+import logging
+from typing import TYPE_CHECKING, Any
+
 from sklearn import cluster
 
 from mteb._create_dataloaders import create_dataloader
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import EncoderProtocol
 
 from .evaluator import Evaluator
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import EncoderProtocol
 
 logger = logging.getLogger(__name__)
 

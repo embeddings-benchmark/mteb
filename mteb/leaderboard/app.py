@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import itertools
 import json
 import logging
@@ -5,15 +7,13 @@ import tempfile
 import time
 import warnings
 from pathlib import Path
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 from urllib.parse import urlencode
 
 import cachetools
 import gradio as gr
-import pandas as pd
 
 import mteb
-from mteb import BenchmarkResults
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.cache import ResultCache
 from mteb.leaderboard.benchmark_selector import (
@@ -29,6 +29,11 @@ from mteb.leaderboard.table import (
     apply_summary_styling_from_benchmark,
 )
 from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
+
+if TYPE_CHECKING:
+    import pandas as pd
+
+    from mteb import BenchmarkResults
 
 logger = logging.getLogger(__name__)
 

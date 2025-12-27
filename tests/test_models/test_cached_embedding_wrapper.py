@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import shutil
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pytest
@@ -16,8 +18,11 @@ from mteb.models.cache_wrappers.cache_backends.numpy_cache import NumpyCache
 from mteb.models.cache_wrappers.cache_wrapper import CachedEmbeddingWrapper
 from mteb.models.model_implementations.random_baseline import RandomEncoderBaseline
 from mteb.models.models_protocols import EncoderProtocol
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
 from tests.mock_tasks import MockMultiChoiceTask, MockRetrievalTask
+
+if TYPE_CHECKING:
+    from mteb.types import Array, BatchedInput
 
 
 class DummyModel(RandomEncoderBaseline):

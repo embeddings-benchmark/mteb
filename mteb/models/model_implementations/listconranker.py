@@ -1,13 +1,18 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
-from mteb.types import BatchedInput, PromptType
 
 from .rerankers_custom import RerankerWrapper
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import BatchedInput, PromptType
 
 LISTCONRANKER_CITATION = """@article{liu2025listconranker,
   title={ListConRanker: A Contrastive Text Reranker with Listwise Encoding},
