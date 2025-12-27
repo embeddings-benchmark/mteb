@@ -43,7 +43,6 @@ def filter_tasks(
     categories: list[TaskCategory] | None = None,
     modalities: list[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
-    model_types: list[str] | None = None,
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
     exclude_private: bool = False,
@@ -61,7 +60,6 @@ def filter_tasks(
     categories: list[TaskCategory] | None = None,
     modalities: list[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
-    model_types: list[str] | None = None,
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
     exclude_private: bool = False,
@@ -78,7 +76,6 @@ def filter_tasks(
     categories: list[TaskCategory] | None = None,
     modalities: list[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
-    model_types: list[str] | None = None,
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
     exclude_private: bool = False,
@@ -100,7 +97,6 @@ def filter_tasks(
         exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
             task's modalities and ALL task modalities are in filter modalities (exact match).
             If False, keep tasks if _any_ of the task's modalities match the filter modalities.
-        model_types: A list of model types to filter by. If None, all model types are included.
         exclude_aggregate: If True, exclude aggregate tasks. If False, both aggregate and non-aggregate tasks are returned.
         exclude_private: If True (default), exclude private/closed datasets (is_public=False). If False, include both public and private datasets.
 
@@ -144,10 +140,6 @@ def filter_tasks(
     if modalities:
         modalities_to_keep = set(modalities)
 
-    model_types_to_keep = None
-    if model_types:
-        model_types_to_keep = set(model_types)
-
     _tasks = []
     for t in tasks:
         # For metadata and superseded_by, we can access them directly
@@ -172,10 +164,6 @@ def filter_tasks(
             else:
                 if not modalities_to_keep.intersection(metadata.modalities):
                     continue
-        if model_types_to_keep and not model_types_to_keep.intersection(
-            _convert_to_set(metadata.model_types)
-        ):
-            continue
         if exclude_superseded and metadata.superseded_by is not None:
             continue
         is_aggregate = (
