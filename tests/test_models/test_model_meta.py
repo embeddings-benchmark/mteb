@@ -127,6 +127,12 @@ def test_check_training_datasets_can_be_derived(model_meta: ModelMeta):
     model_meta.get_training_datasets()
 
 
+@pytest.mark.parametrize("model_meta", mteb.get_model_metas())
+def test_model_meta_has_model_type(model_meta: ModelMeta):
+    """Test that all models have model_type field."""
+    assert model_meta.model_type is not None
+
+
 def test_loader_kwargs_persisted_in_metadata():
     model = mteb.get_model(
         "baseline/random-encoder-baseline",
