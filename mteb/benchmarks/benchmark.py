@@ -7,10 +7,10 @@ from typing import TYPE_CHECKING, Literal
 import pandas as pd
 
 from mteb.abstasks.abstask import AbsTask
+from mteb.types import StrURL
 
 if TYPE_CHECKING:
     from mteb.results import BenchmarkResults
-    from mteb.types import StrURL
 
 
 @dataclass
