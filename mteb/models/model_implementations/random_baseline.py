@@ -68,7 +68,7 @@ _common_mock_metadata = dict(
     license="mit",
     max_tokens=np.inf,
     reference=None,
-    similarity_fn_name="cosine",  # type: ignore
+    similarity_fn_name="cosine",
     framework=[],
     use_instructions=False,
     public_training_code=None,  # No training code, as this is a random baseline
@@ -187,7 +187,7 @@ class RandomEncoderBaseline:
 
 
 random_encoder_baseline = ModelMeta(
-    loader=RandomEncoderBaseline,  # type: ignore
+    loader=RandomEncoderBaseline,
     name="baseline/random-encoder-baseline",
     model_type=["dense"],
     modalities=["text", "image"],
@@ -232,7 +232,7 @@ class RandomCrossEncoderBaseline:
 
 
 random_cross_encoder_baseline = ModelMeta(
-    loader=RandomCrossEncoderBaseline,  # type: ignore
+    loader=RandomCrossEncoderBaseline,
     name="baseline/random-cross-encoder-baseline",
     model_type=["cross-encoder"],
     modalities=["text", "image"],

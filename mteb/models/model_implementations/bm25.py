@@ -113,7 +113,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
 
         def encode(self, texts: list[str]):
             """Encode input text as term vectors"""
-            return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)  # type: ignore
+            return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
 
     return BM25Search(**kwargs)
 

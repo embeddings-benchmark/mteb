@@ -121,7 +121,7 @@ class JinaCLIPModel(AbsEncoder):
 
 
 jina_clip_v1 = ModelMeta(
-    loader=JinaCLIPModel,  # type: ignore
+    loader=JinaCLIPModel,
     name="jinaai/jina-clip-v1",
     model_type=["dense"],
     languages=["eng-Latn"],

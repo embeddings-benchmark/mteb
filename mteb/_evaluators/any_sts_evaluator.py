@@ -57,10 +57,7 @@ class AnySTSEvaluator(Evaluator):
         self.input2_prompt_type = input2_prompt_type
 
     def __call__(
-        self,
-        model: EncoderProtocol,
-        *,
-        encode_kwargs: dict[str, Any],
+        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
     ) -> STSEvaluatorScores:
         logger.info("Running semantic similarity - Encoding samples (1/2)")
         embeddings1 = model.encode(

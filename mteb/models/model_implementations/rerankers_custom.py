@@ -214,7 +214,7 @@ class JinaReranker(RerankerWrapper):
 
 
 monobert_large = ModelMeta(
-    loader=MonoBERTReranker,  # type: ignore
+    loader=MonoBERTReranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
@@ -239,7 +239,7 @@ monobert_large = ModelMeta(
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
 jina_reranker_multilingual = ModelMeta(
-    loader=JinaReranker,  # type: ignore
+    loader=JinaReranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
@@ -263,7 +263,7 @@ jina_reranker_multilingual = ModelMeta(
 )
 
 bge_reranker_v2_m3 = ModelMeta(
-    loader=BGEReranker,  # type: ignore
+    loader=BGEReranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),

@@ -128,7 +128,7 @@ class BLIPModel(AbsEncoder):
 
 # in descending order of usage (downloads from huggingface)
 blip_image_captioning_large = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-image-captioning-large",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -156,7 +156,7 @@ blip_image_captioning_large = ModelMeta(
 )
 
 blip_image_captioning_base = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-image-captioning-base",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -185,7 +185,7 @@ blip_image_captioning_base = ModelMeta(
 
 
 blip_vqa_base = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-vqa-base",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -212,7 +212,7 @@ blip_vqa_base = ModelMeta(
 )
 
 blip_vqa_capfilt_large = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-vqa-capfilt-large",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -239,7 +239,7 @@ blip_vqa_capfilt_large = ModelMeta(
 )
 
 blip_itm_base_coco = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-base-coco",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -266,7 +266,7 @@ blip_itm_base_coco = ModelMeta(
 )
 
 blip_itm_large_coco = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-large-coco",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -294,7 +294,7 @@ blip_itm_large_coco = ModelMeta(
 )
 
 blip_itm_base_flickr = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-base-flickr",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -322,7 +322,7 @@ blip_itm_base_flickr = ModelMeta(
 )
 
 blip_itm_large_flickr = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-large-flickr",
     model_type=["dense"],
     languages=["eng-Latn"],

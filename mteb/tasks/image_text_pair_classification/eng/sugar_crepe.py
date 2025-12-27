@@ -49,7 +49,7 @@ class SugarCrepe(AbsTaskImageTextPairClassification):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.dataset = datasets.DatasetDict({"test": self.dataset["train"]})
         self.dataset_transform()
         self.data_loaded = True

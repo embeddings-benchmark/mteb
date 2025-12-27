@@ -102,7 +102,7 @@ class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
         normalize_embeddings: bool = False,
         **kwargs,
     ) -> list[Tensor] | np.ndarray | Tensor:
-        return torch.randn(len(sentences), 10, dtype=torch.bfloat16)  # type: ignore
+        return torch.randn(len(sentences), 10, dtype=torch.bfloat16)
 
 
 class MockSentenceTransformerWrapper(SentenceTransformerEncoderWrapper):

@@ -378,7 +378,7 @@ def cohere_v_loader(model_name, **kwargs):
 
 
 cohere_mult_3 = ModelMeta(
-    loader=cohere_v_loader,  # type: ignore
+    loader=cohere_v_loader,
     loader_kwargs={"model_name": "embed-multilingual-v3.0"},
     name="cohere/embed-multilingual-v3.0",
     model_type=["dense"],
@@ -402,7 +402,7 @@ cohere_mult_3 = ModelMeta(
 )
 
 cohere_eng_3 = ModelMeta(
-    loader=cohere_v_loader,  # type: ignore
+    loader=cohere_v_loader,
     loader_kwargs={"model_name": "embed-english-v3.0"},
     name="cohere/embed-english-v3.0",
     model_type=["dense"],

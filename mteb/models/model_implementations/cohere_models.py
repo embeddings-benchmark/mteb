@@ -222,7 +222,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
     ) -> None:
         requires_package(self, "cohere", model_name, "pip install 'mteb[cohere]'")
 
-        import cohere  # type: ignore
+        import cohere
 
         self.model_name = model_name.removeprefix("Cohere/Cohere-")
         self.sep = sep

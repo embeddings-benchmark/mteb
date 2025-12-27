@@ -115,7 +115,7 @@ CLIP_CITATION = """
 
 
 clip_vit_large_patch14 = ModelMeta(
-    loader=CLIPModel,  # type: ignore
+    loader=CLIPModel,
     name="openai/clip-vit-large-patch14",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -139,7 +139,7 @@ clip_vit_large_patch14 = ModelMeta(
 )
 
 clip_vit_base_patch32 = ModelMeta(
-    loader=CLIPModel,  # type: ignore
+    loader=CLIPModel,
     name="openai/clip-vit-base-patch32",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -163,7 +163,7 @@ clip_vit_base_patch32 = ModelMeta(
 )
 
 clip_vit_base_patch16 = ModelMeta(
-    loader=CLIPModel,  # type: ignore
+    loader=CLIPModel,
     name="openai/clip-vit-base-patch16",
     model_type=["dense"],
     languages=["eng-Latn"],

@@ -4,7 +4,7 @@ from mteb.models.model_implementations.model2vec_models import Model2VecModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 potion_base_8m = ModelMeta(
-    loader=Model2VecModel,  # type: ignore
+    loader=Model2VecModel,
     name="rasgaard/m2v-dfm-large",
     model_type=["dense"],
     languages=["dan-Latn"],

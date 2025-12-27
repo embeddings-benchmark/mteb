@@ -100,7 +100,7 @@ def get_model(
         meta = meta.model_copy(deep=True)
         meta.loader_kwargs |= kwargs
 
-    model.mteb_model_meta = meta  # type: ignore
+    model.mteb_model_meta = meta  # type: ignore[misc]
     return model
 
 
