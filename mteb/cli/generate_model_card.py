@@ -44,7 +44,7 @@ def generate_model_card(
     if existing_model_card_id_or_path:
         existing_model_card = ModelCard.load(existing_model_card_id_or_path)
 
-    all_tasks = []
+    all_tasks: list[AbsTask] = []
     benchmark_list: list[Benchmark] = []
     if tasks is not None:
         all_tasks.extend(tasks)
