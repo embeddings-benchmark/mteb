@@ -181,7 +181,7 @@ llm2clip_training_sets = set(
 )
 
 llm2clip_openai_l_14_336 = ModelMeta(
-    loader=llm2clip_loader,  # type: ignore
+    loader=llm2clip_loader,
     name="microsoft/LLM2CLIP-Openai-L-14-336",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -206,7 +206,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
 
 # NOTE: https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224/discussions/1
 llm2clip_openai_l_14_224 = ModelMeta(
-    loader=llm2clip_loader,  # type: ignore
+    loader=llm2clip_loader,
     name="microsoft/LLM2CLIP-Openai-L-14-224",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -230,7 +230,7 @@ llm2clip_openai_l_14_224 = ModelMeta(
 )
 
 llm2clip_openai_b_16 = ModelMeta(
-    loader=llm2clip_loader,  # type: ignore
+    loader=llm2clip_loader,
     name="microsoft/LLM2CLIP-Openai-B-16",
     model_type=["dense"],
     languages=["eng-Latn"],

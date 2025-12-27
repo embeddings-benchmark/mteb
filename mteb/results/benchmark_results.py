@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import functools
 import json
 import logging
 import warnings
-from collections.abc import Callable, Iterable, Iterator, Sequence
+from collections.abc import Callable, Iterable, Iterator
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
 import pandas as pd
 from packaging.version import InvalidVersion, Version
@@ -33,11 +35,12 @@ from .model_result import ModelResult, _aggregate_and_pivot
 logger = logging.getLogger(__name__)
 
 
-# Global cache for model metas and version parsing
 @functools.lru_cache
 def _get_cached_model_metas() -> dict[str, str | None]:
     """Cache model metas to avoid repeated calls."""
-    return {meta.name: meta.revision for meta in get_model_metas()}
+    return {
+        meta.name: meta.revision for meta in get_model_metas() if meta.name is not None
+    }
 
 
 @functools.lru_cache(maxsize=10000)
@@ -77,10 +80,10 @@ class BenchmarkResults(BaseModel):
         task_names: list[str] | None = None,
         languages: list[str] | None = None,
         domains: list[TaskDomain] | None = None,
-        task_types: list[TaskType] | None = None,  # type: ignore
+        task_types: list[TaskType] | None = None,
         modalities: list[Modalities] | None = None,
         is_public: bool | None = None,
-    ) -> Self:
+    ) -> BenchmarkResults:
         # TODO: Same as filter_models
         model_results = [
             res._filter_tasks(
@@ -97,7 +100,7 @@ class BenchmarkResults(BaseModel):
             model_results=[res for res in model_results if res.task_results]
         )
 
-    def select_tasks(self, tasks: Sequence[AbsTask]) -> Self:
+    def select_tasks(self, tasks: Iterable[AbsTask]) -> BenchmarkResults:
         """Select tasks from the benchmark results.
 
         Args:
@@ -115,7 +118,7 @@ class BenchmarkResults(BaseModel):
         self,
         names: list[str] | list[ModelMeta],
         revisions: list[str | None] | None = None,
-    ) -> Self:
+    ) -> BenchmarkResults:
         """Get models by name and revision.
 
         Args:
@@ -128,7 +131,7 @@ class BenchmarkResults(BaseModel):
         models_res = []
         _revisions = revisions if revisions is not None else [None] * len(names)
 
-        name_rev = {}
+        name_rev: dict[str, str | None] = {}
 
         if len(names) != len(_revisions):
             raise ValueError(
@@ -137,9 +140,12 @@ class BenchmarkResults(BaseModel):
 
         for name, revision in zip(names, _revisions):
             if isinstance(name, ModelMeta):
+                if name.name is None:
+                    raise ValueError("name in ModelMeta is None. It must be a string.")
                 name_rev[name.name] = name.revision
             else:
-                name_rev[name] = revision
+                name_ = cast(str, name)
+                name_rev[name_] = revision
 
         for model_res in self.model_results:
             model_name = model_res.model_name
@@ -159,7 +165,7 @@ class BenchmarkResults(BaseModel):
         n_parameters_range: tuple[int | None, int | None] = (None, None),
         use_instructions: bool | None = None,
         zero_shot_on: list[AbsTask] | None = None,
-    ) -> Self:
+    ) -> BenchmarkResults:
         # mostly a utility function for the leaderboard app.
         # I would probably move the filtering of the models outside of this call. No need to call get_model_metas inside the filter.
         # interface would then be the same as the get_models function
@@ -182,7 +188,7 @@ class BenchmarkResults(BaseModel):
 
         return type(self).model_construct(model_results=new_model_results)
 
-    def join_revisions(self) -> Self:
+    def join_revisions(self) -> BenchmarkResults:
         """Join revisions of the same model.
 
         In case of conflicts, the following rules are applied:
@@ -212,10 +218,10 @@ class BenchmarkResults(BaseModel):
 
         # Use cached model metas
         model_to_main_revision = _get_cached_model_metas()
-        task_df["main_revision"] = task_df["model"].map(model_to_main_revision)  # type: ignore
+        task_df["main_revision"] = task_df["model"].map(model_to_main_revision)
 
         # Use cached version parsing
-        task_df["mteb_version"] = task_df["mteb_version"].map(_parse_version_cached)  # type: ignore
+        task_df["mteb_version"] = task_df["mteb_version"].map(_parse_version_cached)
 
         # Filter out rows without scores first
         task_df = task_df[task_df["has_scores"]]
@@ -259,8 +265,8 @@ class BenchmarkResults(BaseModel):
         # so grouping by original revision ensures consistent ModelResult creation
         for (model, model_revision), group in task_df.groupby(["model", "revision"]):
             model_result = ModelResult.model_construct(
-                model_name=model,
-                model_revision=model_revision,
+                model_name=model,  # type: ignore[arg-type]
+                model_revision=model_revision,  # type: ignore[arg-type]
                 task_results=list(group["task_result"]),
             )
             model_results.append(model_result)
@@ -291,7 +297,7 @@ class BenchmarkResults(BaseModel):
                         {
                             "model": model_res.model_name,
                             "revision": model_res.model_revision,
-                            **model_scores,  # type: ignore
+                            **model_scores,
                         }
                     )
                 except Exception as e:
@@ -404,7 +410,7 @@ class BenchmarkResults(BaseModel):
 
         return self.benchmark._create_summary_table(self)
 
-    def __iter__(self) -> Iterator[ModelResult]:
+    def __iter__(self) -> Iterator[ModelResult]:  # type: ignore[override]
         return iter(self.model_results)
 
     def __getitem__(self, index: int) -> ModelResult:
@@ -426,7 +432,7 @@ class BenchmarkResults(BaseModel):
             out_file.write(self.model_dump_json(indent=2))
 
     @classmethod
-    def from_validated(cls, **data) -> Self:
+    def from_validated(cls, **data) -> BenchmarkResults:
         """Create BenchmarkResults from validated data.
 
         Args:

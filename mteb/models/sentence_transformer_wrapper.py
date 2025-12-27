@@ -103,8 +103,11 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             logger.warning(msg)
             warnings.warn(msg)
 
+    def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Compute the similarity between two collections of embeddings."""
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
-            self.similarity = self.model.similarity
+            return self.model.similarity(embeddings1, embeddings2)
+        return super().similarity(embeddings1, embeddings2)
 
     def encode(
         self,
@@ -150,7 +153,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         prompt_name = None
         if self.model_prompts is not None:
             prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-            prompt = self.model_prompts.get(prompt_name, None)
+            prompt = self.model_prompts.get(prompt_name, None)  # type: ignore[arg-type]
         if prompt_name:
             prompt_log = f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
         else:
@@ -221,7 +224,7 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
         prompt_name = None
         if self.model_prompts is not None:
             prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-            prompt = self.model_prompts.get(prompt_name, None)
+            prompt = self.model_prompts.get(prompt_name, None)  # type: ignore[arg-type]
         if prompt_name:
             logger.info(
                 f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
@@ -234,7 +237,9 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
         all_embeddings = []
         for batch in inputs:
             batch_column = next(iter(batch.keys()))
-            batched_input = [dict() for _ in range(len(batch[batch_column]))]
+            batched_input: list[dict[str, Any]] = [
+                dict() for _ in range(len(batch[batch_column]))
+            ]
 
             # transform from {"text": [text1, text2], "image": [image1, image2]} to
             # [{"text": text1, "image": image1}, {"text": text2, "image": image2}]

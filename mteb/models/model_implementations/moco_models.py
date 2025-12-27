@@ -117,7 +117,7 @@ mocov3_training_datasets = set(
 )
 
 mocov3_vit_base = ModelMeta(
-    loader=mocov3_loader,  # type: ignore
+    loader=mocov3_loader,
     name="nyu-visionx/moco-v3-vit-b",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -141,7 +141,7 @@ mocov3_vit_base = ModelMeta(
 )
 
 mocov3_vit_large = ModelMeta(
-    loader=mocov3_loader,  # type: ignore
+    loader=mocov3_loader,
     name="nyu-visionx/moco-v3-vit-l",
     model_type=["dense"],
     languages=["eng-Latn"],

@@ -123,7 +123,7 @@ siglip_training_datasets = set(
 )
 
 siglip_so400m_patch14_224 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-so400m-patch14-224",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -147,7 +147,7 @@ siglip_so400m_patch14_224 = ModelMeta(
 )
 
 siglip_so400m_patch14_384 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-so400m-patch14-384",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -171,7 +171,7 @@ siglip_so400m_patch14_384 = ModelMeta(
 )
 
 siglip_so400m_patch16_256_i18n = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-so400m-patch16-256-i18n",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -195,7 +195,7 @@ siglip_so400m_patch16_256_i18n = ModelMeta(
 )
 
 siglip_base_patch16_256_multilingual = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-base-patch16-256-multilingual",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -219,7 +219,7 @@ siglip_base_patch16_256_multilingual = ModelMeta(
 )
 
 siglip_base_patch16_256 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-base-patch16-256",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -243,7 +243,7 @@ siglip_base_patch16_256 = ModelMeta(
 )
 
 siglip_base_patch16_512 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-base-patch16-512",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -267,7 +267,7 @@ siglip_base_patch16_512 = ModelMeta(
 )
 
 siglip_base_patch16_384 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-base-patch16-384",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -291,7 +291,7 @@ siglip_base_patch16_384 = ModelMeta(
 )
 
 siglip_base_patch16_224 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-base-patch16-224",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -315,7 +315,7 @@ siglip_base_patch16_224 = ModelMeta(
 )
 
 siglip_large_patch16_256 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-large-patch16-256",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -339,7 +339,7 @@ siglip_large_patch16_256 = ModelMeta(
 )
 
 siglip_large_patch16_384 = ModelMeta(
-    loader=SiglipModelWrapper,  # type: ignore
+    loader=SiglipModelWrapper,
     name="google/siglip-large-patch16-384",
     model_type=["dense"],
     languages=["eng-Latn"],

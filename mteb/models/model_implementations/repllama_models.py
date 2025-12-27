@@ -154,7 +154,7 @@ REPLLAMA_CITATION = """
 """
 
 repllama_llama2_original = ModelMeta(
-    loader=RepLLaMAModel,  # type: ignore
+    loader=RepLLaMAModel,
     loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         device_map="auto",
@@ -187,7 +187,7 @@ repllama_llama2_original = ModelMeta(
 
 
 repllama_llama2_reproduced = ModelMeta(
-    loader=RepLLaMAModel,  # type: ignore
+    loader=RepLLaMAModel,
     loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         device_map="auto",

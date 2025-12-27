@@ -343,7 +343,7 @@ monot5_small = ModelMeta(
 )
 
 monot5_base = ModelMeta(
-    loader=MonoT5Reranker,  # type: ignore
+    loader=MonoT5Reranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
@@ -442,7 +442,7 @@ monot5_3b = ModelMeta(
 )
 
 flant5_base = ModelMeta(
-    loader=FLANT5Reranker,  # type: ignore
+    loader=FLANT5Reranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
@@ -902,7 +902,7 @@ mt5_base_mmarco_v2 = ModelMeta(
 )
 
 mt5_13b_mmarco_100k = ModelMeta(
-    loader=MonoT5Reranker,  # type: ignore
+    loader=MonoT5Reranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
