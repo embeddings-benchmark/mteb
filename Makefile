@@ -65,7 +65,7 @@ dataset-load-test-pr:
 
 leaderboard-build-test:
 	@echo "--- 🚀 Running leaderboard build test ---"
-	uv run --group test pytest -n auto -m leaderboard_stability
+	uv run --group test --extra leaderboard pytest -n auto -m leaderboard_stability
 
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
