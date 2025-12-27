@@ -15,6 +15,8 @@ from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 
+from .model_result import ModelResult, _aggregate_and_pivot
+
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator
 
@@ -34,7 +36,6 @@ if TYPE_CHECKING:
         SplitName,
     )
 
-from .model_result import ModelResult, _aggregate_and_pivot
 
 logger = logging.getLogger(__name__)
 
