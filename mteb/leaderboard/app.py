@@ -594,7 +594,6 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                                     MODEL_TYPE_CHOICES,
                                     value=[],
                                     label="Model Type",
-                                    info="Select model types to include.",
                                 )
 
         with gr.Tab("Summary"):
