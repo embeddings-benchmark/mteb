@@ -9,8 +9,8 @@ import torch
 import mteb
 from mteb._create_dataloaders import _corpus_to_dict
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.models_protocols import PromptType
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import PromptType
 
 from .bge_models import bge_full_data
 
