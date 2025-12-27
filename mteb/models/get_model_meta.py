@@ -128,7 +128,6 @@ def get_model_meta(
             raise ValueError(
                 f"Model revision {revision} not found for model {model_name}. Expected {model_meta.revision}."
             )
-        return model_meta
 
         if compute_missing:
             if model_meta.n_parameters is None:
@@ -141,6 +140,7 @@ def get_model_meta(
                     f"Memory usage is missing for model '{model_name}'. Computing them now using Huggingface Hub."
                 )
                 model_meta.memory_usage_mb = model_meta.calculate_memory_usage_mb()
+        return model_meta
 
     if fetch_from_hf:
         logger.info(
