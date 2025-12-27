@@ -167,6 +167,7 @@ class OpenAIModel(AbsEncoder):
 
 text_embedding_3_small = ModelMeta(
     name="openai/text-embedding-3-small",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -191,6 +192,7 @@ text_embedding_3_small = ModelMeta(
 )
 text_embedding_3_large = ModelMeta(
     name="openai/text-embedding-3-large",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -215,6 +217,7 @@ text_embedding_3_large = ModelMeta(
 )
 text_embedding_ada_002 = ModelMeta(
     name="openai/text-embedding-ada-002",
+    model_type=["dense"],
     revision="3",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
@@ -240,6 +243,7 @@ text_embedding_ada_002 = ModelMeta(
 
 text_embedding_3_small_512 = ModelMeta(
     name="openai/text-embedding-3-small (embed_dim=512)",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -266,6 +270,7 @@ text_embedding_3_small_512 = ModelMeta(
 
 text_embedding_3_large_512 = ModelMeta(
     name="openai/text-embedding-3-large (embed_dim=512)",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified

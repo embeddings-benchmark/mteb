@@ -4,6 +4,7 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 codemodernbert_crow_meta = ModelMeta(
     loader=sentence_transformers_loader,
     name="Shuu12121/CodeSearch-ModernBERT-Crow-Plus",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="044a7a4b552f86e284817234c336bccf16f895ce",

@@ -127,6 +127,19 @@ def test_check_training_datasets_can_be_derived(model_meta: ModelMeta):
     model_meta.get_training_datasets()
 
 
+def test_loader_kwargs_persisted_in_metadata():
+    model = mteb.get_model(
+        "baseline/random-encoder-baseline",
+        not_existing_param=123,
+    )
+
+    assert hasattr(model, "mteb_model_meta")
+    meta = model.mteb_model_meta
+
+    assert "not_existing_param" in meta.loader_kwargs
+    assert meta.loader_kwargs["not_existing_param"] == 123
+
+
 def test_model_to_python():
     meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
     assert meta.to_python() == (
@@ -153,7 +166,7 @@ def test_model_to_python():
     adapted_from=None,
     superseded_by=None,
     modalities=['text'],
-    is_cross_encoder=None,
+    model_type=['dense'],
     citation=\'@inproceedings{reimers-2019-sentence-bert,\\n    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",\\n    author = "Reimers, Nils and Gurevych, Iryna",\\n    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",\\n    month = "11",\\n    year = "2019",\\n    publisher = "Association for Computational Linguistics",\\n    url = "http://arxiv.org/abs/1908.10084",\\n}\\n\',
     contacts=None,
 )"""

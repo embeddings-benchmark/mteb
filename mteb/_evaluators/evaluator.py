@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from collections.abc import Iterable, Mapping
 from typing import Any
 
 from mteb.abstasks.abstask import _set_seed
@@ -18,7 +19,7 @@ class Evaluator(ABC):
     @abstractmethod
     def __call__(
         self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
-    ) -> dict[str, float]:
+    ) -> Mapping[str, float] | Iterable[Any]:
         """This is called during training to evaluate the model.
 
         It returns scores.

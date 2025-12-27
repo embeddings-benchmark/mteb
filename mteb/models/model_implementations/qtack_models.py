@@ -25,6 +25,7 @@ mini_gte_datasets = {
 mini_gte = ModelMeta(
     loader=sentence_transformers_loader,
     name="prdev/mini-gte",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="7fbe6f9b4cc42615e0747299f837ad7769025492",

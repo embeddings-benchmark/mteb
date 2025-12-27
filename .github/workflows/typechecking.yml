@@ -1,0 +1,45 @@
+name: Typechecking
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free disk space
+        run: |
+          sudo rm -rf \
+            "$AGENT_TOOLSDIRECTORY" \
+            /opt/ghc \
+            /opt/google/chrome \
+            /opt/microsoft/msedge \
+            /opt/microsoft/powershell \
+            /opt/pipx \
+            /usr/lib/mono \
+            /usr/local/julia* \
+            /usr/local/lib/android \
+            /usr/local/lib/node_modules \
+            /usr/local/share/chromium \
+            /usr/local/share/powershell \
+            /usr/local/share/powershell \
+            /usr/share/dotnet \
+            /usr/share/swift
+          docker system prune -af
+
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+
+      - name: Dependencies
+        run: |
+          make install-for-tests
+          pip install -e . --group typing
+
+      - name: Build and Deploy
+        run: |
+          make typecheck

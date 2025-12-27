@@ -65,14 +65,16 @@ class LlamaNemoretrieverColembed(AbsEncoder):
             iterator = DataLoader(images, batch_size=batch_size)
 
         for batch in iterator:
-            for b in batch:
+            for image in batch["image"]:
                 pil_img = (
-                    F.to_pil_image(b.to("cpu")) if not isinstance(b, Image.Image) else b
+                    image
+                    if isinstance(image, Image.Image)
+                    else F.to_pil_image(image.to("cpu"))
                 )
                 all_images.append(pil_img)
 
         batch_size = 1
-        return self.model.forward_passages(all_images, batch_size=batch_size)
+        return self.model.forward_images(all_images, batch_size=batch_size)
 
     def calculate_probs(self, text_embeddings, image_embeddings):
         scores = self.similarity(text_embeddings, image_embeddings)
@@ -144,6 +146,7 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
         trust_remote_code=True,
     ),
     name="nvidia/llama-nemoretriever-colembed-1b-v1",
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
     revision="1f0fdea7f5b19532a750be109b19072d719b8177",
     release_date="2025-06-27",
@@ -170,6 +173,7 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
         trust_remote_code=True,
     ),
     name="nvidia/llama-nemoretriever-colembed-3b-v1",
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
     revision="50c36f4d5271c6851aa08bd26d69f6e7ca8b870c",
     release_date="2025-06-27",

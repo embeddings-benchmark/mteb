@@ -2,6 +2,7 @@ from mteb.models import ModelMeta, sentence_transformers_loader
 
 bica_base = ModelMeta(
     name="bisectgroup/BiCA-base",
+    model_type=["dense"],
     loader=sentence_transformers_loader,
     languages=["eng-Latn"],
     open_weights=True,

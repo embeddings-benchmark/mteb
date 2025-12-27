@@ -113,6 +113,7 @@ sent_trf_training_dataset = {
 all_minilm_l6_v2 = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/all-MiniLM-L6-v2",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="8b3219a92973c328a8e22fadcfa821b5dc75636a",
@@ -137,6 +138,7 @@ all_minilm_l6_v2 = ModelMeta(
 all_minilm_l12_v2 = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/all-MiniLM-L12-v2",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="364dd28d28dcd3359b537f3cf1f5348ba679da62",
@@ -161,6 +163,7 @@ all_minilm_l12_v2 = ModelMeta(
 paraphrase_multilingual_minilm_l12_v2 = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    model_type=["dense"],
     languages=paraphrase_langs,
     open_weights=True,
     revision="bf3bf13ab40c3157080a7ab344c831b9ad18b5eb",
@@ -185,6 +188,7 @@ paraphrase_multilingual_minilm_l12_v2 = ModelMeta(
 paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    model_type=["dense"],
     languages=paraphrase_langs,
     open_weights=True,
     revision="79f2382ceacceacdf38563d7c5d16b9ff8d725d6",
@@ -220,6 +224,7 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
 labse = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/LaBSE",
+    model_type=["dense"],
     languages=paraphrase_langs,
     open_weights=True,
     revision="e34fab64a3011d2176c99545a93d5cbddc9a91b7",
@@ -257,6 +262,7 @@ labse = ModelMeta(
 multi_qa_minilm_l6_cos_v1 = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/multi-qa-MiniLM-L6-cos-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="b207367332321f8e44f96e224ef15bc607f4dbf0",
@@ -281,6 +287,7 @@ multi_qa_minilm_l6_cos_v1 = ModelMeta(
 all_mpnet_base_v2 = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/all-mpnet-base-v2",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="9a3225965996d404b775526de6dbfe85d3368642",
@@ -380,6 +387,7 @@ static_multi_languages = [
 
 static_similarity_mrl_multilingual_v1 = ModelMeta(
     name="sentence-transformers/static-similarity-mrl-multilingual-v1",
+    model_type=["dense"],
     loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         device="cpu",  # CPU is just as quick, if not quicker
@@ -402,11 +410,21 @@ static_similarity_mrl_multilingual_v1 = ModelMeta(
     training_datasets=static_multi_datasets,
     public_training_code="https://huggingface.co/blog/static-embeddings",
     public_training_data="https://huggingface.co/collections/sentence-transformers/embedding-model-datasets-6644d7a3673a511914aa7552",
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )
 
 contriever = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     name="facebook/contriever-msmarco",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="abe8c1493371369031bcb1e02acb754cf4e162fa",
@@ -436,6 +454,7 @@ contriever = ModelMeta(
 microllama_text_embedding = ModelMeta(
     loader=sentence_transformers_loader,
     name="keeeeenw/MicroLlama-text-embedding",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="98f70f14cdf12d7ea217ed2fd4e808b0195f1e7e",
@@ -467,9 +486,21 @@ microllama_text_embedding = ModelMeta(
     public_training_data=None,
 )
 
+SENTENCE_T5_CITATION = """
+@misc{ni2021sentencet5scalablesentenceencoders,
+      title={Sentence-T5: Scalable Sentence Encoders from Pre-trained Text-to-Text Models}, 
+      author={Jianmo Ni and Gustavo Hernández Ábrego and Noah Constant and Ji Ma and Keith B. Hall and Daniel Cer and Yinfei Yang},
+      year={2021},
+      eprint={2108.08877},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2108.08877}, 
+}
+"""
 sentence_t5_base = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-base",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="50c53e206f8b01c9621484a3c0aafce4e55efebf",
@@ -486,11 +517,13 @@ sentence_t5_base = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
+    citation=SENTENCE_T5_CITATION,
 )
 
 sentence_t5_large = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-large",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="1fc08ea477205aa54a3e5b13f0971ae16b86410a",
@@ -507,11 +540,13 @@ sentence_t5_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
+    citation=SENTENCE_T5_CITATION,
 )
 
 sentence_t5_xl = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-xl",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="2965d31b368fb14117688e0bde77cbd720e91f53",
@@ -528,11 +563,13 @@ sentence_t5_xl = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
+    citation=SENTENCE_T5_CITATION,
 )
 
 sentence_t5_xxl = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-xxl",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="4d122282ba80e807e9e6eb8c358269e92796365d",
@@ -549,10 +586,23 @@ sentence_t5_xxl = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
+    citation=SENTENCE_T5_CITATION,
 )
+GTR_CITATION = """
+@misc{ni2021largedualencodersgeneralizable,
+      title={Large Dual Encoders Are Generalizable Retrievers}, 
+      author={Jianmo Ni and Chen Qu and Jing Lu and Zhuyun Dai and Gustavo Hernández Ábrego and Ji Ma and Vincent Y. Zhao and Yi Luan and Keith B. Hall and Ming-Wei Chang and Yinfei Yang},
+      year={2021},
+      eprint={2112.07899},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2112.07899}, 
+}
+"""
 gtr_t5_large = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-large",
+    model_type=["dense"],
     languages=["eng-Latn"],  # in format eng-Latn
     open_weights=True,
     revision="a2c8ac47f998531948d4cbe32a0b577a7037a5e3",
@@ -581,11 +631,13 @@ gtr_t5_large = ModelMeta(
         "NQ-PL",  # translation not trained on
         "Community QA",
     },
+    citation=GTR_CITATION,
 )
 
 gtr_t5_xl = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-xl",
+    model_type=["dense"],
     languages=["eng-Latn"],  # in format eng-Latn
     open_weights=True,
     revision="23a8d667a1ad2578af181ce762867003c498d1bf",
@@ -614,10 +666,12 @@ gtr_t5_xl = ModelMeta(
         "NQ-PL",  # translation not trained on
         "Community QA",
     },
+    citation=GTR_CITATION,
 )
 gtr_t5_xxl = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-xxl",
+    model_type=["dense"],
     languages=["eng-Latn"],  # in format eng-Latn
     open_weights=True,
     revision="73f2a9156a3dcc2194dfdb2bf201cd7d17e17884",
@@ -646,11 +700,13 @@ gtr_t5_xxl = ModelMeta(
         "NQ-PL",  # translation not trained on
         "Community QA",
     },
+    citation=GTR_CITATION,
 )
 
 gtr_t5_base = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-base",
+    model_type=["dense"],
     languages=["eng-Latn"],  # in format eng-Latn
     open_weights=True,
     revision="7027e9594267928589816394bdd295273ddc0739",
@@ -679,4 +735,5 @@ gtr_t5_base = ModelMeta(
         "NQ-PL",  # translation not trained on
         "Community QA",
     },
+    citation=GTR_CITATION,
 )
