@@ -1,4 +1,3 @@
-from mteb.abstasks import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
 from mteb.tasks.retrieval.pol.cqadupstack_pl_retrieval import (
     CQADupstackAndroidRetrievalPL,
@@ -15,7 +14,7 @@ from mteb.tasks.retrieval.pol.cqadupstack_pl_retrieval import (
     CQADupstackWordpressRetrievalPL,
 )
 
-task_list_cqa: list[AbsTask] = [
+task_list_cqa = [
     CQADupstackAndroidRetrievalPL(),
     CQADupstackEnglishRetrievalPL(),
     CQADupstackGamingRetrievalPL(),

@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 import logging
 from collections import defaultdict
-from collections.abc import Mapping
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pandas as pd
@@ -9,7 +10,12 @@ import pytrec_eval
 from packaging.version import Version
 from sklearn.metrics import auc
 
-from mteb.types import RelevantDocumentsType, RetrievalEvaluationResult
+from mteb.types import RetrievalEvaluationResult
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+    from mteb.types import RelevantDocumentsType
 
 logger = logging.getLogger(__name__)
 

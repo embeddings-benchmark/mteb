@@ -1,4 +1,3 @@
-from mteb.abstasks import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
 from mteb.tasks.classification import (
     SynPerChatbotConvSAAnger,
@@ -12,7 +11,7 @@ from mteb.tasks.classification import (
     SynPerChatbotConvSASurprise,
 )
 
-task_list_cqa: list[AbsTask] = [
+task_list_cqa = [
     SynPerChatbotConvSAAnger(),
     SynPerChatbotConvSASatisfaction(),
     SynPerChatbotConvSAFriendship(),

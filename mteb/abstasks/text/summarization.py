@@ -1,23 +1,32 @@
+from __future__ import annotations
+
 import logging
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
-from datasets import Dataset
 
 from mteb._evaluators import SummarizationEvaluator
-from mteb._evaluators.text.summarization_evaluator import SummarizationMetrics
 from mteb.abstasks._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,
 )
 from mteb.abstasks.abstask import AbsTask
-from mteb.models import EncoderProtocol, MTEBModels
+from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
-    ScoreStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from datasets import Dataset
+
+    from mteb._evaluators.text.summarization_evaluator import SummarizationMetrics
+    from mteb.models import MTEBModels
+    from mteb.types.statistics import (
+        ScoreStatistics,
+        TextStatistics,
+    )
 
 logger = logging.getLogger(__name__)
 

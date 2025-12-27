@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import logging
-from typing import TypedDict
+from typing import TYPE_CHECKING, TypedDict
 
 from datasets import (
     Dataset,
@@ -11,13 +13,14 @@ from datasets import (
     load_dataset,
 )
 
-from mteb.types import (
-    CorpusDatasetType,
-    InstructionDatasetType,
-    QueryDatasetType,
-    RelevantDocumentsType,
-    TopRankedDocumentsType,
-)
+if TYPE_CHECKING:
+    from mteb.types import (
+        CorpusDatasetType,
+        InstructionDatasetType,
+        QueryDatasetType,
+        RelevantDocumentsType,
+        TopRankedDocumentsType,
+    )
 
 logger = logging.getLogger(__name__)
 

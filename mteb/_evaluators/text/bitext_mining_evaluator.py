@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
 from datasets import Dataset
@@ -7,9 +9,11 @@ from tqdm.auto import tqdm
 
 from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb._evaluators.evaluator import Evaluator
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import EncoderProtocol
-from mteb.types import Array
+
+if TYPE_CHECKING:
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import EncoderProtocol
+    from mteb.types import Array
 
 logger = logging.getLogger(__name__)
 

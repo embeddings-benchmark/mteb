@@ -4,31 +4,35 @@ import functools
 import json
 import logging
 import warnings
-from collections.abc import Callable, Iterable, Iterator
 from pathlib import Path
-from typing import Any, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 import pandas as pd
 from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
-from typing_extensions import Self
 
-from mteb.abstasks.abstask import AbsTask
-from mteb.abstasks.task_metadata import (
-    TaskDomain,
-    TaskType,
-)
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
-from mteb.types import (
-    ISOLanguage,
-    ISOLanguageScript,
-    Modalities,
-    Score,
-    ScoresDict,
-    SplitName,
-)
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable, Iterator
+
+    from typing_extensions import Self
+
+    from mteb.abstasks.abstask import AbsTask
+    from mteb.abstasks.task_metadata import (
+        TaskDomain,
+        TaskType,
+    )
+    from mteb.types import (
+        ISOLanguage,
+        ISOLanguageScript,
+        Modalities,
+        Score,
+        ScoresDict,
+        SplitName,
+    )
 
 from .model_result import ModelResult, _aggregate_and_pivot
 
@@ -144,7 +148,7 @@ class BenchmarkResults(BaseModel):
                     raise ValueError("name in ModelMeta is None. It must be a string.")
                 name_rev[name.name] = name.revision
             else:
-                name_ = cast(str, name)
+                name_ = cast("str", name)
                 name_rev[name_] = revision
 
         for model_res in self.model_results:

@@ -1,18 +1,16 @@
+from __future__ import annotations
+
 import logging
-from pathlib import Path
-from typing import Any, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 
 import torch
 from datasets import Dataset
 from sklearn import metrics
 
 from mteb._evaluators import ZeroShotClassificationEvaluator
-from mteb.models import EncoderProtocol, MTEBModels
+from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
-    ImageStatistics,
-    LabelStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
 
 from ._statistics_calculation import (
@@ -21,6 +19,16 @@ from ._statistics_calculation import (
     calculate_text_statistics,
 )
 from .abstask import AbsTask
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from mteb.models import MTEBModels
+    from mteb.types.statistics import (
+        ImageStatistics,
+        LabelStatistics,
+        TextStatistics,
+    )
 
 logger = logging.getLogger(__name__)
 

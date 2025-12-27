@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -14,11 +13,14 @@ from mteb._create_dataloaders import (
 )
 from mteb._evaluators.evaluator import Evaluator
 from mteb._requires_package import requires_image_dependencies
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.models_protocols import EncoderProtocol
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from PIL.Image import Image
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
 
 
 logger = logging.getLogger(__name__)

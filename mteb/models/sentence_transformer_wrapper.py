@@ -7,18 +7,19 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 import torch
 from packaging.version import Version
-from torch.utils.data import DataLoader
 
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder
 
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder, SentenceTransformer
+    from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 

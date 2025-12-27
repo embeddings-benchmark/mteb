@@ -23,7 +23,7 @@ repos:
     rev: v1.38.1
     hooks:
     - id: typos
-      args: ["--diff"]
+      args: ["--diff", "-c", "pyproject.toml"]
 
   - repo: local
     hooks:

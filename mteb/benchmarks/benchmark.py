@@ -1,16 +1,16 @@
 from __future__ import annotations
 
-from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Literal
 
 import pandas as pd
 
-from mteb.abstasks.abstask import AbsTask
-from mteb.types import StrURL
-
 if TYPE_CHECKING:
+    from collections.abc import Iterator, Sequence
+
+    from mteb.abstasks.abstask import AbsTask
     from mteb.results import BenchmarkResults
+    from mteb.types import StrURL
 
 
 @dataclass

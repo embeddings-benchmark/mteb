@@ -1,14 +1,21 @@
+from __future__ import annotations
+
 import difflib
 import logging
-from collections.abc import Iterable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from mteb.abstasks import AbsTask
 from mteb.models import (
     ModelMeta,
-    MTEBModels,
 )
 from mteb.models.model_implementations import MODEL_REGISTRY
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+    from mteb.abstasks import AbsTask
+    from mteb.models import (
+        MTEBModels,
+    )
 
 logger = logging.getLogger(__name__)
 

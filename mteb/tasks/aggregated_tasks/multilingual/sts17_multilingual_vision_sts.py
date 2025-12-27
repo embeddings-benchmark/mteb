@@ -1,10 +1,9 @@
-from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
 from mteb.tasks.sts.multilingual.sts17_multilingual_visual_sts import (
     STS17MultilingualVisualSTS,
 )
 
-task_list_sts17_multi: list[AbsTask] = [
+task_list_sts17_multi = [
     STS17MultilingualVisualSTS().filter_languages(
         languages=["ara", "eng", "spa", "kor"],
         hf_subsets=[
