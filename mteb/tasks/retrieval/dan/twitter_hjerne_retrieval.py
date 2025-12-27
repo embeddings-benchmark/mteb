@@ -40,7 +40,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.dataset_transform()
         self.data_loaded = True
 
@@ -57,7 +57,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         text2id = {}
 
         for split in self.dataset:
-            ds: datasets.Dataset = self.dataset[split]  # type: ignore
+            ds: datasets.Dataset = self.dataset[split]
             ds = ds.map(answers_to_list)
 
             self.queries[split] = {}

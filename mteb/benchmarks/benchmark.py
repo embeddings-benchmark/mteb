@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Literal
 
@@ -47,7 +47,7 @@ class Benchmark:
     display_name: str | None = None
     language_view: list[str] | Literal["all"] = field(default_factory=list)
 
-    def __iter__(self) -> Iterable[AbsTask]:
+    def __iter__(self) -> Iterator[AbsTask]:
         return iter(self.tasks)
 
     def __len__(self) -> int:

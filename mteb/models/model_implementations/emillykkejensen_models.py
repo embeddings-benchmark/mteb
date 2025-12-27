@@ -2,8 +2,9 @@ from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 embedding_gemma_300m_scandi = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore
+    loader=sentence_transformers_loader,
     name="emillykkejensen/EmbeddingGemma-Scandi-300m",
+    model_type=["dense"],
     languages=["dan-Latn", "swe-Latn", "nor-Latn", "nob-Latn", "nno-Latn"],
     open_weights=True,
     revision="9f3307b9f601db564a9190cb475324d128dcfe86",
@@ -34,8 +35,9 @@ embedding_gemma_300m_scandi = ModelMeta(
 
 
 qwen_scandi = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore
+    loader=sentence_transformers_loader,
     name="emillykkejensen/Qwen3-Embedding-Scandi-0.6B",
+    model_type=["dense"],
     languages=["dan-Latn", "swe-Latn", "nor-Latn", "nob-Latn", "nno-Latn"],
     open_weights=True,
     revision="cf1e7ba36ebd3d605549d8f02930a18e17b54513",
@@ -57,8 +59,9 @@ qwen_scandi = ModelMeta(
 
 
 mmbert_scandi = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore
+    loader=sentence_transformers_loader,
     name="emillykkejensen/mmBERTscandi-base-embedding",
+    model_type=["dense"],
     languages=["dan-Latn", "swe-Latn", "nor-Latn", "nob-Latn", "nno-Latn"],
     open_weights=True,
     revision="82d74c7a5d8e1ddf31b132865df2d16b2b0294ee",

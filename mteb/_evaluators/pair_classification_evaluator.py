@@ -148,7 +148,9 @@ class PairClassificationEvaluator(Evaluator):
         hf_subset: str,
         **encode_kwargs: Any,
     ) -> np.ndarray:
-        index_map, all_unique_texts, all_texts_indexes = {}, [], []
+        index_map = {}
+        all_unique_texts: list[str] = []
+        all_texts_indexes = []
         for text in all_texts:
             text_hash = hash(text)
             if text_hash not in index_map:

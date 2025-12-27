@@ -32,6 +32,7 @@ Linq_Embed_Mistral = ModelMeta(
         normalized=True,
     ),
     name="Linq-AI-Research/Linq-Embed-Mistral",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="0c1a0b0589177079acc552433cad51d7c9132379",
