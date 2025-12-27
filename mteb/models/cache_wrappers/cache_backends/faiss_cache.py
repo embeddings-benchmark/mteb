@@ -1,5 +1,6 @@
 import json
 import logging
+import warnings
 from pathlib import Path
 from typing import Any
 
@@ -72,7 +73,9 @@ class FaissCache:
         try:
             return self.index.reconstruct(idx)
         except Exception:
-            logger.warning(f"Vector id {idx} missing for hash {item_hash}")
+            msg = f"Vector id {idx} missing for hash {item_hash}"
+            logger.warning(msg)
+            warnings.warn(msg)
             return None
 
     def save(self) -> None:

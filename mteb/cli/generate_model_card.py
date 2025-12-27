@@ -1,4 +1,5 @@
 import logging
+import warnings
 from collections.abc import Sequence
 from pathlib import Path
 
@@ -94,9 +95,9 @@ def generate_model_card(
         if repo_exists(existing_model_card_id_or_path):
             existing_model_card.push_to_hub(existing_model_card_id_or_path, token=token)
         else:
-            logger.warning(
-                f"Repository {existing_model_card_id_or_path} does not exist on the Hub. Skipping push to hub."
-            )
+            msg = f"Repository {existing_model_card_id_or_path} does not exist on the Hub. Skipping push to hub."
+            logger.warning(msg)
+            warnings.warn(msg)
     existing_model_card.save(output_path)
 
 

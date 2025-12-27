@@ -1,5 +1,6 @@
 import json
 import logging
+import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Mapping, Sequence
 from copy import copy
@@ -102,9 +103,9 @@ class AbsTask(ABC):
     def check_if_dataset_is_superseded(self) -> None:
         """Check if the dataset is superseded by a newer version."""
         if self.superseded_by:
-            logger.warning(
-                f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}', you might consider using the newer version of the dataset."
-            )
+            msg = f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}'. We recommend using the newer version of the dataset unless you are running a specific benchmark. See `get_task('{self.superseded_by}').metadata.description` to get a description of the task and changes."
+            logger.warning(msg)
+            warnings.warn(msg)
 
     def dataset_transform(self):
         """A transform operations applied to the dataset after loading.
@@ -613,9 +614,8 @@ class AbsTask(ABC):
             self.data_loaded = False
             logger.info(f"Unloaded dataset {self.metadata.name} from memory.")
         else:
-            logger.warning(
-                f"Dataset {self.metadata.name} is not loaded, cannot unload it."
-            )
+            msg = f"Dataset `{self.metadata.name}` is not loaded, cannot unload it."
+            logger.warning(msg)
 
     @property
     def superseded_by(self) -> str | None:

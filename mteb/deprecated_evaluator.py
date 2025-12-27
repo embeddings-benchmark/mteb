@@ -5,6 +5,7 @@ import logging
 import os
 import sys
 import traceback
+import warnings
 from collections.abc import Iterable, Sequence
 from copy import deepcopy
 from datetime import datetime
@@ -479,9 +480,9 @@ class MTEB:
                             raise ImportError(
                                 "codecarbon is not installed. Please install it using `pip install 'mteb[codecarbon]'` to track CO₂ emissions."
                             )
-                        logger.warning(
-                            "Evaluating multiple MTEB runs simultaneously will produce incorrect CO₂ results"
-                        )
+                        msg = "Evaluating multiple MTEB runs simultaneously will produce incorrect CO₂ results"
+                        logger.warning(msg)
+                        warnings.warn(msg)
                         with EmissionsTracker(
                             save_to_file=False,
                             save_to_api=False,

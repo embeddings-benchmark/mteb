@@ -508,7 +508,9 @@ class ModelMeta(BaseModel):
                 if adapted_training_datasets is not None:
                     training_datasets |= adapted_training_datasets
             except (ValueError, KeyError) as e:
-                logger.warning(f"Could not get source model: {e} in MTEB")
+                msg = f"Could not get source model: {e} in MTEB"
+                logger.warning(msg)
+                warnings.warn(msg)
 
         return_dataset = training_datasets.copy()
         visited: set[str] = set()
