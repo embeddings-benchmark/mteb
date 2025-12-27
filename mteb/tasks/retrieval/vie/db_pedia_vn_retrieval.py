@@ -5,11 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class DBPediaVN(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="DBPedia-VN",
-        description="""A translated dataset from DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base
-            The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system:
-            - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
-            - Applies advanced embedding models to filter the translations.
-            - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
+        description="A translated dataset from DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://github.com/iai-group/DBpedia-Entity/",
         dataset={
             "path": "GreenNode/dbpedia-vn",

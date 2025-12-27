@@ -90,9 +90,9 @@ class CachedEmbeddingWrapper:
         try:
             cache = self._get_or_create_cache(task_name)
 
-            uncached_items: list[BatchedInput] = []
+            uncached_items: list[dict[str, Any]] = []
             uncached_indices: list[int] = []
-            all_items = inputs.dataset
+            all_items: Dataset = inputs.dataset
             cached_vectors: dict[int, np.ndarray] = {}
 
             for i, item in enumerate(all_items):
@@ -112,7 +112,7 @@ class CachedEmbeddingWrapper:
                     dataset,
                     task_metadata=task_metadata,
                     prompt_type=prompt_type,
-                    batch_size=batch_size,
+                    **kwargs,
                 )
                 new_vectors = self._model.encode(
                     dl,

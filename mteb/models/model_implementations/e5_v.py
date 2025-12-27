@@ -160,6 +160,7 @@ e5_v = ModelMeta(
         device_map="auto",
     ),
     name="royokong/e5-v",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="0c1f22679417b3ae925d779442221c40cd1861ab",
     release_date="2024-07-17",

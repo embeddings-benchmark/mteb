@@ -3,12 +3,15 @@ import logging
 import os
 import shutil
 import subprocess
+import warnings
 from collections import defaultdict
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import cast
 
+import mteb
 from mteb.abstasks import AbsTask
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
 from mteb.types import ModelName, Revision
@@ -62,7 +65,11 @@ class ResultCache:
         Returns:
             The path to the results of the task.
         """
-        results_folder = "results" if not remote else "remote"
+        results_folder = (
+            self.cache_path / "results"
+            if not remote
+            else self.cache_path / "remote" / "results"
+        )
 
         if isinstance(model_name, ModelMeta):
             if model_revision is not None:
@@ -74,12 +81,12 @@ class ResultCache:
         elif isinstance(model_name, str):
             model_name = model_name.replace("/", "__").replace(" ", "_")
 
-        model_path = self.cache_path / results_folder / model_name
+        model_path = results_folder / model_name
 
         if model_revision is None:
-            logger.warning(
-                "model_revision is not specified, attempting to load the latest revision. To disable this behavior, specify model_revision explicitly."
-            )
+            msg = "`model_revision` is not specified, attempting to load the latest revision. To disable this behavior, specify the 'model_revision` explicitly."
+            logger.warning(msg)
+            warnings.warn(msg)
             # get revs from paths
             revisions = [p for p in model_path.glob("*") if p.is_dir()]
             if not revisions:
@@ -191,12 +198,14 @@ class ResultCache:
         self,
         remote: str = "https://github.com/embeddings-benchmark/results",
         download_latest: bool = True,
+        revision: str | None = None,
     ) -> Path:
         """Downloads the latest version of the results repository from GitHub to a local cache directory. Required git to be installed.
 
         Args:
             remote: The URL of the results repository on GitHub.
             download_latest: If True it will download the latest version of the repository, otherwise it will only update the existing repository.
+            revision: If specified, it will checkout the given revision after cloning or pulling the repository.
 
         Returns:
             The path to the local cache directory.
@@ -224,14 +233,27 @@ class ResultCache:
                 )
                 raise ValueError(msg)
 
-            if download_latest:
+            if revision or download_latest:
                 logger.info(
-                    f"remote repository already exists in {results_directory}, updating it using git pull"
+                    f"remote repository already exists in {results_directory}, fetching updates"
                 )
-                subprocess.run(["git", "pull"], cwd=results_directory)
+                subprocess.run(
+                    ["git", "fetch", "--all", "--tags"],
+                    cwd=results_directory,
+                    check=True,
+                )
             else:
                 logger.debug(
-                    f"Results repository already exists in {results_directory}, skipping update, set download_latest=True to update it"
+                    f"Results repository already exists in {results_directory}, skipping update, "
+                    f"set download_latest=True to update it"
+                )
+
+            if revision:
+                logger.info(f"Checking out revision '{revision}'")
+                subprocess.run(
+                    ["git", "checkout", revision],
+                    cwd=results_directory,
+                    check=True,
                 )
             return results_directory
 
@@ -239,7 +261,18 @@ class ResultCache:
             f"No results repository found in {results_directory}, cloning it from {remote}"
         )
 
-        subprocess.run(["git", "clone", remote, "remote"], cwd=self.cache_path)
+        clone_cmd = ["git", "clone", "--depth", "1"]
+
+        if revision:
+            logger.info(f"Cloning repository at revision '{revision}'")
+            clone_cmd.append(f"--revision={revision}")
+        clone_cmd.extend([remote, "remote"])
+
+        subprocess.run(
+            clone_cmd,
+            cwd=self.cache_path,
+            check=True,
+        )
 
         return results_directory
 
@@ -249,15 +282,17 @@ class ResultCache:
             shutil.rmtree(self.cache_path)
             logger.info(f"Cache directory {self.cache_path} cleared.")
         else:
-            logger.warning(f"Cache directory {self.cache_path} does not exist.")
+            msg = f"Cache directory `{self.cache_path}` does not exist."
+            logger.warning(msg)
+            warnings.warn(msg)
 
     def __repr__(self) -> str:
         return f"ResultCache(cache_path={self.cache_path})"
 
     def get_cache_paths(
         self,
-        models: Sequence[str] | Sequence[ModelMeta] | None = None,
-        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        models: Sequence[str] | Iterable[ModelMeta] | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
     ) -> list[Path]:
@@ -390,7 +425,7 @@ class ResultCache:
     @staticmethod
     def _filter_paths_by_model_and_revision(
         paths: list[Path],
-        models: Sequence[str] | Sequence[ModelMeta] | None = None,
+        models: Sequence[str] | Iterable[ModelMeta] | None = None,
     ) -> list[Path]:
         """Filter a list of paths by model name and optional revision.
 
@@ -400,8 +435,9 @@ class ResultCache:
         if not models:
             return paths
 
-        if isinstance(models[0], ModelMeta):
-            models = cast(list[ModelMeta], models)
+        first_model = next(iter(models))
+        if isinstance(first_model, ModelMeta):
+            models = cast(Iterable[ModelMeta], models)
             name_and_revision = {
                 (m.model_name_as_path(), m.revision or "no_revision_available")
                 for m in models
@@ -412,13 +448,14 @@ class ResultCache:
                 if (p.parent.parent.name, p.parent.name) in name_and_revision
             ]
 
-        model_names = {m.replace("/", "__").replace(" ", "_") for m in models}
+        str_models = cast(Sequence[str], models)
+        model_names = {m.replace("/", "__").replace(" ", "_") for m in str_models}
         return [p for p in paths if p.parent.parent.name in model_names]
 
     @staticmethod
     def _filter_paths_by_task(
         paths: list[Path],
-        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
     ) -> list[Path]:
         if tasks is not None:
             task_names = set()
@@ -434,8 +471,8 @@ class ResultCache:
 
     def load_results(
         self,
-        models: Sequence[str] | Sequence[ModelMeta] | None = None,
-        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        models: Sequence[str] | Iterable[ModelMeta] | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | str | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
         validate_and_filter: bool = False,
@@ -445,7 +482,8 @@ class ResultCache:
 
         Args:
             models: A list of model names to load the results for. If None it will load the results for all models.
-            tasks: A list of task names to load the results for. If None it will load the results for all tasks.
+            tasks: A list of task names to load the results for. If str is passed, then benchmark will be loaded.
+                If None it will load the results for all tasks.
             require_model_meta: If True it will ignore results that do not have a model_meta.json file. If false it attempt to
                 extract the model name and revision from the path.
             include_remote: If True, it will include results from the remote repository.
@@ -467,6 +505,9 @@ class ResultCache:
             ...     require_model_meta=True,
             ... )
         """
+        if isinstance(tasks, str):
+            tasks = mteb.get_benchmark(tasks)
+
         paths = self.get_cache_paths(
             models=models,
             tasks=tasks,
@@ -475,7 +516,7 @@ class ResultCache:
         )
         models_results = defaultdict(list)
 
-        task_names = {}
+        task_names: dict[str, AbsTask | None] = {}
         if tasks is not None:
             for task in tasks:
                 if isinstance(task, AbsTask):
@@ -493,9 +534,11 @@ class ResultCache:
             )
 
             if validate_and_filter:
-                task = task_names[task_result.task_name]
+                task_instance = task_names[task_result.task_name]
                 try:
-                    task_result.validate_and_filter_scores(task=task)
+                    task_result = task_result.validate_and_filter_scores(
+                        task=task_instance
+                    )
                 except Exception as e:
                     logger.info(
                         f"Validation failed for {task_result.task_name} in {model_name} {revision}: {e}"
@@ -505,7 +548,7 @@ class ResultCache:
             models_results[(model_name, revision)].append(task_result)
 
         # create BenchmarkResults object
-        models_results = [
+        models_results_object = [
             ModelResult(
                 model_name=model_name,
                 model_revision=revision,
@@ -514,8 +557,7 @@ class ResultCache:
             for (model_name, revision), task_results in models_results.items()
         ]
 
-        benchmark_results = BenchmarkResults(
-            model_results=models_results,
+        return BenchmarkResults(
+            model_results=models_results_object,
+            benchmark=tasks if isinstance(tasks, Benchmark) else None,
         )
-
-        return benchmark_results

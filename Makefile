@@ -12,12 +12,14 @@ lint:
 	@echo "--- 🧹 Running linters ---"
 	ruff format . 			# running ruff formatting
 	ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
+	typos
 
 lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
 	# Required for CI to work, otherwise it will just pass
 	ruff format . --check						    # running ruff formatting
 	ruff check .    						        # running ruff linting
+	typos --diff
 
 test:
 	@echo "--- 🧪 Running tests ---"
@@ -33,9 +35,8 @@ pr:
 	make lint
 	make test
 
-build-docs:
+build-docs: build-docs-overview
 	@echo "--- 📚 Building documentation ---"
-	make build-docs-overview
 	python -m mkdocs build
 
 

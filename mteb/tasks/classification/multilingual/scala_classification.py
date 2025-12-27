@@ -12,8 +12,7 @@ _LANGS = {
 class ScalaClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ScalaClassification",
-        description="""ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks.
-        Published as part of 'ScandEval: A Benchmark for Scandinavian Natural Language Processing'""",
+        description="ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks. Published as part of 'ScandEval: A Benchmark for Scandinavian Natural Language Processing'",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
         dataset={
             "path": "mteb/multilingual-scala-classification",
@@ -58,7 +57,7 @@ Fishel, Mark},
     def dataset_transform(self):
         for lang in self.dataset.keys():
             # convert label to a 0/1 label
-            labels = self.dataset[lang]["train"]["label"]  # type: ignore
+            labels = self.dataset[lang]["train"]["label"]
             lab2idx = {lab: idx for idx, lab in enumerate(set(labels))}
             self.dataset[lang] = self.dataset[lang].map(
                 lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"]

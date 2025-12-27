@@ -4,6 +4,7 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 arabic_triplet_matryoshka = ModelMeta(
     loader=sentence_transformers_loader,
     name="Omartificial-Intelligence-Space/Arabic-Triplet-Matryoshka-V2",
+    model_type=["dense"],
     languages=["ara-Arab"],
     open_weights=True,
     revision="ed357f222f0b6ea6670d2c9b5a1cb93950d34200",
@@ -23,4 +24,11 @@ arabic_triplet_matryoshka = ModelMeta(
     training_datasets=set(
         #  "akhooli/arabic-triplets-1m-curated-sims-len"
     ),
+    citation="""
+    @article{nacar2025gate,
+    title={GATE: General Arabic Text Embedding for Enhanced Semantic Textual Similarity with Matryoshka Representation Learning and Hybrid Loss Training},
+    author={Nacar, Omer and Koubaa, Anis and Sibaee, Serry and Al-Habashi, Yasser and Ammar, Adel and Boulila, Wadii},
+    journal={arXiv preprint arXiv:2505.24581},
+    year={2025}
+}""",
 )

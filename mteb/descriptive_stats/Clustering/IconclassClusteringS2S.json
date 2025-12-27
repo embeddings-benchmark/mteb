@@ -1,0 +1,48 @@
+{
+    "test": {
+        "num_samples": 202,
+        "text_statistics": {
+            "total_text_length": 11827,
+            "min_text_length": 6,
+            "average_text_length": 58.54950495049505,
+            "max_text_length": 403,
+            "unique_texts": 202
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 9,
+            "labels": {
+                "Geschiedenis": {
+                    "count": 22
+                },
+                "Klassieke mythologie en Oude Geschiedenis": {
+                    "count": 22
+                },
+                "Literatuur": {
+                    "count": 23
+                },
+                "Natuur": {
+                    "count": 23
+                },
+                "De mens, de mensheid in het algemeen": {
+                    "count": 22
+                },
+                "Maatschappij, civilisatie en cultuur": {
+                    "count": 22
+                },
+                "Abstracte idee\u00ebn en concepten": {
+                    "count": 23
+                },
+                "Religie en magie": {
+                    "count": 22
+                },
+                "Bijbel": {
+                    "count": 23
+                }
+            }
+        }
+    }
+}

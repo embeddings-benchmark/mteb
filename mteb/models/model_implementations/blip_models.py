@@ -10,6 +10,17 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
+BLIP_CITATION = """@misc{https://doi.org/10.48550/arxiv.2201.12086,
+    doi = {10.48550/ARXIV.2201.12086},
+    url = {https://arxiv.org/abs/2201.12086},
+    author = {Li, Junnan and Li, Dongxu and Xiong, Caiming and Hoi, Steven},
+    keywords = {Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences},
+    title = {BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation},
+    publisher = {arXiv},
+    year = {2022},
+    copyright = {Creative Commons Attribution 4.0 International}
+}"""
+
 
 class BLIPModel(AbsEncoder):
     def __init__(
@@ -117,8 +128,9 @@ class BLIPModel(AbsEncoder):
 
 # in descending order of usage (downloads from huggingface)
 blip_image_captioning_large = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-image-captioning-large",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="2227ac38c9f16105cb0412e7cab4759978a8fd90",
     release_date="2023-12-07",
@@ -140,11 +152,13 @@ blip_image_captioning_large = ModelMeta(
         # CC3M+CC12M+SBU
         # LAION115M
     ),
+    citation=BLIP_CITATION,
 )
 
 blip_image_captioning_base = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-image-captioning-base",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="89b09ea1789f7addf2f6d6f0dfc4ce10ab58ef84",
     release_date="2023-08-01",
@@ -166,12 +180,14 @@ blip_image_captioning_base = ModelMeta(
         # CC3M+CC12M+SBU
         # LAION115M
     ),
+    citation=BLIP_CITATION,
 )
 
 
 blip_vqa_base = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-vqa-base",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="c7df8e7cd7aa2ee9af18f56e2b29e59a92651b64",
     release_date="2023-12-07",
@@ -192,11 +208,13 @@ blip_vqa_base = ModelMeta(
         # CC3M+CC12M+SBU
         # LAION115M
     ),
+    citation=BLIP_CITATION,
 )
 
 blip_vqa_capfilt_large = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-vqa-capfilt-large",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="e53f95265aeab69013fabb5380500ab984adbbb4",
     release_date="2023-01-22",
@@ -217,11 +235,13 @@ blip_vqa_capfilt_large = ModelMeta(
         # CC3M+CC12M+SBU
         # LAION115M
     ),
+    citation=BLIP_CITATION,
 )
 
 blip_itm_base_coco = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-base-coco",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="7eaa90c11850c0b17fc38c6a11e7d88bd6ac231f",
     release_date="2023-08-01",
@@ -242,11 +262,13 @@ blip_itm_base_coco = ModelMeta(
         # CC3M+CC12M+SBU
         # LAION115M
     ),
+    citation=BLIP_CITATION,
 )
 
 blip_itm_large_coco = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-large-coco",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="fef05cafc05298067cbbca00b125749394a77a6f",
     release_date="2023-08-01",
@@ -268,11 +290,13 @@ blip_itm_large_coco = ModelMeta(
         # CC3M+CC12M+SBU
         # LAION115M
     ),
+    citation=BLIP_CITATION,
 )
 
 blip_itm_base_flickr = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-base-flickr",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="1de29e660d91ae1786c1876212ea805a22eab251",
     release_date="2023-08-01",
@@ -294,11 +318,13 @@ blip_itm_base_flickr = ModelMeta(
         # LAION115M
         # Flickr30k
     ),
+    citation=BLIP_CITATION,
 )
 
 blip_itm_large_flickr = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-large-flickr",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="bda12e6506758f54261b5ab174b2c55a3ba143fb",
     release_date="2023-08-01",
@@ -319,4 +345,5 @@ blip_itm_large_flickr = ModelMeta(
         # CC3M+CC12M+SBU
         # LAION115M
     ),
+    citation=BLIP_CITATION,
 )

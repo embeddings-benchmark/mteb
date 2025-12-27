@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
@@ -14,6 +15,9 @@ from mteb.models.model_meta import ModelMeta
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
+
+if TYPE_CHECKING:
+    from PIL import Image
 
 
 class GraniteVisionEmbeddingWrapper:
@@ -162,6 +166,7 @@ granite_vision_embedding = ModelMeta(
         torch_dtype=torch.float16,
     ),
     name="ibm-granite/granite-vision-3.3-2b-embedding",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="cee615db64d89d1552a4ee39c50f25c0fc5c66ca",
     release_date="2025-06-11",

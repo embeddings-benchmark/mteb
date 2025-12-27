@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 import logging
 import math
-from typing import Any
+import warnings
+from typing import TYPE_CHECKING, Any
 
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.autonotebook import tqdm
 
@@ -11,6 +13,9 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from PIL import Image
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +44,7 @@ class Encoder(torch.nn.Module):
         self.max_length = max_length
         self.normalize = normalize
         self.processor.tokenizer.padding_side = "right"
-        self.defualt_instruction = "You are a helpful assistant."
+        self.default_instruction = "You are a helpful assistant."
 
     def forward(
         self,
@@ -103,7 +108,7 @@ class Encoder(torch.nn.Module):
         instruction=None,
         **kwargs,
     ):
-        instruction = instruction or self.defualt_instruction
+        instruction = instruction or self.default_instruction
         # Inputs must be batched
         input_texts, input_images = [], []
         for t, i in zip(texts, images):
@@ -257,9 +262,9 @@ def smart_resize(
         w_bar = ceil_by_factor(width * beta, factor)
 
     if max(h_bar, w_bar) / min(h_bar, w_bar) > MAX_RATIO:
-        logger.warning(
-            f"Absolute aspect ratio must be smaller than {MAX_RATIO}, got {max(h_bar, w_bar) / min(h_bar, w_bar)}"
-        )
+        msg = f"Absolute aspect ratio must be smaller than {MAX_RATIO}, got {max(h_bar, w_bar) / min(h_bar, w_bar)}"
+        logger.warning(msg)
+        warnings.warn(msg)
         if h_bar > w_bar:
             h_bar = w_bar * MAX_RATIO
         else:
@@ -267,9 +272,9 @@ def smart_resize(
     return h_bar, w_bar
 
 
-def fetch_image(
-    image: str | Image.Image, size_factor: int = IMAGE_FACTOR
-) -> Image.Image:
+def fetch_image(image: Image.Image, size_factor: int = IMAGE_FACTOR) -> Image.Image:
+    from PIL import Image
+
     image_obj = None
     if isinstance(image, Image.Image):
         image_obj = image
@@ -342,6 +347,7 @@ training_data = {
 gme_qwen2vl_2b = ModelMeta(
     loader=GmeQwen2VL,
     name="Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+    model_type=["dense"],
     languages=["eng-Latn", "cmn-Hans"],
     open_weights=True,
     revision="ce765ae71b8cdb208203cd8fb64a170b1b84293a",
@@ -365,6 +371,7 @@ gme_qwen2vl_2b = ModelMeta(
 gme_qwen2vl_7b = ModelMeta(
     loader=GmeQwen2VL,
     name="Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
+    model_type=["dense"],
     languages=["eng-Latn", "cmn-Hans"],
     open_weights=True,
     revision="477027a6480f8630363be77751f169cc3434b673",

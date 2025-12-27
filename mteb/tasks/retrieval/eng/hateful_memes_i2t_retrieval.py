@@ -24,9 +24,7 @@ def _load_data(path: str, splits: str, revision: str | None = None):
     shared_corpus = shared_corpus.map(
         lambda x: {
             "id": "corpus-" + str(x["id"]),
-            # "text": x["text"],
             "modality": "text",
-            "image": None,
         },
         remove_columns=[
             "split",
@@ -40,9 +38,7 @@ def _load_data(path: str, splits: str, revision: str | None = None):
         queries[split] = split_dataset.map(
             lambda x: {
                 "id": "query-" + str(x["id"]),
-                "text": None,
                 "modality": "image",
-                # "image": x["image"],
             },
             remove_columns=[
                 "split",

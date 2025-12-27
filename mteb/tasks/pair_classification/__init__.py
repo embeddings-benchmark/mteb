@@ -9,6 +9,7 @@ from .ind import *
 from .ita import *
 from .kor import *
 from .multilingual import *
+from .nld import *
 from .pol import *
 from .por import *
 from .rus import *

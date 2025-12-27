@@ -21,9 +21,9 @@ class BUCCBitextMining(AbsTaskBitextMining):
         name="BUCC",
         dataset={
             "path": "mteb/BUCC",
-            "revision": "39f20d5ac4a82e59dbcecaabdd599b82cbefa666",
+            "revision": "414572247440f0ccacf7eb0bb70a31533a0e5443",
         },
-        description="BUCC bitext mining dataset",
+        description="BUCC bitext mining dataset train split.",
         reference="https://comparable.limsi.fr/bucc2018/bucc2018-task.html",
         type="BitextMining",
         category="t2t",
@@ -71,7 +71,9 @@ Rapp, Reinhard},
 
                 sentence1 = data["sentence1"][0]
                 sentence2 = data["sentence2"][0]
-                sentence1 = [sentence1[i] for (i, j) in gold]
+                sentence1 = [
+                    sentence1[i] for (i, j) in gold
+                ]  # keep only sentences in gold. The 2nd value is meant for sentence2 but not used here. This is fixed in BUCC.v2.
                 logger.info(f"Lang {lang} num gold {len(gold)}")
                 logger.info(f"Lang {lang} num sentence1 {len(sentence1)}")
                 logger.info(f"Lang {lang} num sentence2 {len(sentence2)}")

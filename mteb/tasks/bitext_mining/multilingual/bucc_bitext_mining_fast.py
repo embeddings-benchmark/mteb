@@ -20,7 +20,7 @@ class BUCCBitextMiningFast(AbsTaskBitextMining):
             "path": "mteb/bucc-bitext-mining",
             "revision": "1739dc11ffe9b7bfccd7f3d585aeb4c544fc6677",
         },
-        description="BUCC bitext mining dataset",
+        description="BUCC bitext mining dataset train split, gold set only.",
         reference="https://comparable.limsi.fr/bucc2018/bucc2018-task.html",
         type="BitextMining",
         category="t2t",

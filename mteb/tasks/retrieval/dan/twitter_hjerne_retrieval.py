@@ -40,14 +40,14 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.dataset_transform()
         self.data_loaded = True
 
     def dataset_transform(self) -> None:
-        """And transform to a retrieval datset, which have the following attributes
+        """And transform to a retrieval dataset, which have the following attributes
 
-        self.corpus = dict[doc_id, dict[str, str]] #id => dict with document datas like title and text
+        self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text
         self.queries = dict[query_id, str] #id => query
         self.relevant_docs = dict[query_id, dict[[doc_id, score]]
         """
@@ -57,7 +57,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         text2id = {}
 
         for split in self.dataset:
-            ds: datasets.Dataset = self.dataset[split]  # type: ignore
+            ds: datasets.Dataset = self.dataset[split]
             ds = ds.map(answers_to_list)
 
             self.queries[split] = {}

@@ -10,7 +10,7 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 ## Adding a model implementation
 
 Adding a model implementation to `mteb` is quite straightforward.
-Typically it only requires that you fill in metadata about the model and add it to the [model directory](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/model_implementations):
+Typically, it only requires that you fill in metadata about the model and add it to the [model directory](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/model_implementations):
 
 ??? example "Adding a ModelMeta object"
     ```python
@@ -39,6 +39,36 @@ Typically it only requires that you fill in metadata about the model and add it 
     ```
 
 This works for all [Sentence Transformers](https://sbert.net) compatible models. Once filled out, you can submit your model to `mteb` by submitting a PR.
+
+You can generate it automatically by using:
+
+=== "General model from hub"
+    ```python
+    from mteb.models import ModelMeta
+
+    meta = ModelMeta.from_hub("Qwen/Qwen3-Embedding-0.6B")
+    print(meta.to_python())
+    ```
+
+=== "For Sentence transformers model"
+    ```python
+    from mteb.models import ModelMeta
+    from sentence_transformers import SentenceTransformer
+
+    model = SentenceTransformer("Qwen/Qwen3-Embedding-0.6B", device="cpu")
+    meta = ModelMeta.from_sentence_transformer_model(model)
+    print(meta.to_python())
+    ```
+
+=== "For CrossEncoder"
+    ```python
+    from mteb.models import ModelMeta
+    from sentence_transformers import CrossEncoder
+
+    model = SentenceTransformer("Qwen/Qwen3-Reranker-0.6B", device="cpu")
+    meta = ModelMeta.from_cross_encoder(model)
+    print(meta.to_python())
+    ```
 
 
 ### Calculating the Memory Usage
@@ -140,7 +170,7 @@ As it is an optional dependency, you can't use top-level dependencies, but will 
 
 ### Submitting your model as a PR
 
-When submitting you models as a PR, please copy and paste the following checklist into pull request message:
+When submitting you models as a PR, please copy and paste the following checklist into the pull request message:
 
 ```markdown
 - [ ] I have filled out the ModelMeta object to the extent possible
@@ -148,5 +178,5 @@ When submitting you models as a PR, please copy and paste the following checklis
   - [ ] `mteb.get_model(model_name, revision)` and
   - [ ] `mteb.get_model_meta(model_name, revision)`
 - [ ] I have tested the implementation works on a representative set of tasks.
-- [ ] The model is public, i.e. is available either as an API or the weight are publicly available to download
+- [ ] The model is public, i.e., is available either as an API or the weights are publicly available to download
 ```

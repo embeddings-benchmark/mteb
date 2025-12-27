@@ -24,6 +24,16 @@ if TYPE_CHECKING:
     )
 logger = logging.getLogger(__name__)
 
+CDE_CITATION = """@misc{morris2024contextualdocumentembeddings,
+    title={Contextual Document Embeddings},
+    author={John X. Morris and Alexander M. Rush},
+    year={2024},
+    eprint={2410.02525},
+    archivePrefix={arXiv},
+    primaryClass={cs.CL},
+    url={https://arxiv.org/abs/2410.02525},
+}"""
+
 
 class CDEWrapper(SentenceTransformerEncoderWrapper):
     dataset_embeddings: torch.Tensor | None = None
@@ -199,6 +209,7 @@ cde_small_v1 = ModelMeta(
         trust_remote_code=True,
     ),
     name="jxm/cde-small-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="e151df18af0d7f1d1c37b074fee58406ececf19f",
@@ -217,6 +228,7 @@ cde_small_v1 = ModelMeta(
     training_datasets=bge_full_data,
     public_training_code="https://github.com/jxmorris12/cde",
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
+    citation=CDE_CITATION,
 )
 
 cde_small_v2 = ModelMeta(
@@ -226,6 +238,7 @@ cde_small_v2 = ModelMeta(
         trust_remote_code=True,
     ),
     name="jxm/cde-small-v2",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="4e1d021a6c3fd7ce8aa0a7204057eee5ae61d390",
@@ -244,4 +257,5 @@ cde_small_v2 = ModelMeta(
     training_datasets=bge_full_data,
     public_training_code="https://github.com/jxmorris12/cde",
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
+    citation=CDE_CITATION,
 )

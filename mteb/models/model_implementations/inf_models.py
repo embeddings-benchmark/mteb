@@ -4,7 +4,7 @@ from mteb.models.model_meta import (
 )
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
-inf_retreiver_v1_training_data = {
+inf_retriever_v1_training_data = {
     # eng_Latn
     "ArguAna",
     "CQADupstackRetrieval",
@@ -50,6 +50,7 @@ inf_retriever_v1 = ModelMeta(
         trust_remote_code=True,
     ),
     name="infly/inf-retriever-v1",
+    model_type=["dense"],
     languages=["eng-Latn", "zho-Hans"],
     open_weights=True,
     revision="cb70ca7c31dfa866b2eff2dad229c144d8ddfd91",
@@ -66,7 +67,7 @@ inf_retriever_v1 = ModelMeta(
     adapted_from="Alibaba-NLP/gte-Qwen2-7B-instruct",
     public_training_code=None,
     public_training_data=None,
-    training_datasets=inf_retreiver_v1_training_data,
+    training_datasets=inf_retriever_v1_training_data,
     citation=INF_RETRIEVER_CITATION,
 )
 
@@ -76,6 +77,7 @@ inf_retriever_v1_1_5b = ModelMeta(
         trust_remote_code=True,
     ),
     name="infly/inf-retriever-v1-1.5b",
+    model_type=["dense"],
     languages=["eng-Latn", "zho-Hans"],
     open_weights=True,
     revision="c9c05c2dd50707a486966ba81703021ae2094a06",
@@ -92,6 +94,6 @@ inf_retriever_v1_1_5b = ModelMeta(
     adapted_from="Alibaba-NLP/gte-Qwen2-1.5B-instruct",
     public_training_code=None,
     public_training_data=None,
-    training_datasets=inf_retreiver_v1_training_data,
+    training_datasets=inf_retriever_v1_training_data,
     citation=INF_RETRIEVER_CITATION,
 )

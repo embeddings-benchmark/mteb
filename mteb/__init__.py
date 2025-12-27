@@ -1,5 +1,6 @@
 from importlib.metadata import version
 
+from mteb import types
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.deprecated_evaluator import MTEB
@@ -7,7 +8,14 @@ from mteb.evaluate import evaluate
 from mteb.filter_tasks import filter_tasks
 from mteb.get_tasks import get_task, get_tasks
 from mteb.load_results import load_results
-from mteb.models import EncoderProtocol, SentenceTransformerEncoderWrapper
+from mteb.models import (
+    CacheBackendProtocol,
+    CrossEncoderProtocol,
+    EncoderProtocol,
+    IndexEncoderSearchProtocol,
+    SearchProtocol,
+    SentenceTransformerEncoderWrapper,
+)
 from mteb.models.get_model_meta import get_model, get_model_meta, get_model_metas
 from mteb.results import BenchmarkResults, TaskResult
 
@@ -21,7 +29,11 @@ __all__ = [
     "AbsTask",
     "Benchmark",
     "BenchmarkResults",
+    "CacheBackendProtocol",
+    "CrossEncoderProtocol",
     "EncoderProtocol",
+    "IndexEncoderSearchProtocol",
+    "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
     "TaskMetadata",
     "TaskResult",
@@ -35,4 +47,5 @@ __all__ = [
     "get_task",
     "get_tasks",
     "load_results",
+    "types",
 ]

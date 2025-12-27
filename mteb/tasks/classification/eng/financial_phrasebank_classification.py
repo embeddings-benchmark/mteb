@@ -36,15 +36,11 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
         superseded_by="FinancialPhrasebankClassification.v2",
     )
 
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_column("sentence", "text")
-
 
 class FinancialPhrasebankClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FinancialPhrasebankClassification.v2",
-        description="""Polar sentiment dataset of sentences from financial news, categorized by sentiment into positive, negative, or neutral.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        description="Polar sentiment dataset of sentences from financial news, categorized by sentiment into positive, negative, or neutral. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://arxiv.org/abs/1307.5336",
         dataset={
             "path": "mteb/financial_phrasebank",

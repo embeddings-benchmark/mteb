@@ -48,7 +48,7 @@ class BMRetrieverWrapper(InstructSentenceTransformerModel):
         if padding_side is not None:
             tokenizer_params["padding_side"] = padding_side
         kwargs.setdefault("tokenizer_args", {}).update(tokenizer_params)
-        kwargs.setdefault("config_args", {}).update(revison=revision)
+        kwargs.setdefault("config_args", {}).update(revision=revision)
 
         transformer = Transformer(
             model_name,
@@ -90,6 +90,7 @@ BMRetriever_410M = ModelMeta(
         apply_instruction_to_passages=True,
     ),
     name="BMRetriever/BMRetriever-410M",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="e3569bfbcfe3a1bc48c142e11a7b0f38e86065a3",
@@ -119,6 +120,7 @@ BMRetriever_1B = ModelMeta(
         apply_instruction_to_passages=True,
     ),
     name="BMRetriever/BMRetriever-1B",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="1b758c5f4d3af48ef6035cc4088bdbcd7df43ca6",
@@ -148,6 +150,7 @@ BMRetriever_2B = ModelMeta(
         apply_instruction_to_passages=True,
     ),
     name="BMRetriever/BMRetriever-2B",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="718179afd57926369c347f46eee616db81084941",
@@ -177,6 +180,7 @@ BMRetriever_7B = ModelMeta(
         apply_instruction_to_passages=True,
     ),
     name="BMRetriever/BMRetriever-7B",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="13e6adb9273c5f254e037987d6b44e9e4b005b9a",

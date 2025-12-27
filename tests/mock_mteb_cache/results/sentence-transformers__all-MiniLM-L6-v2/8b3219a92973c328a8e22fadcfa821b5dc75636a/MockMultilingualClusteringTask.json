@@ -1,0 +1,35 @@
+{
+    "dataset_revision": "NA",
+    "task_name": "MockMultilingualClusteringTask",
+    "mteb_version": "2.1.15",
+    "scores": {
+        "test": [
+            {
+                "v_measure": 1.0,
+                "v_measure_std": 0.0,
+                "v_measures": [
+                    1.0
+                ],
+                "main_score": 1.0,
+                "hf_subset": "eng",
+                "languages": [
+                    "eng-Latn"
+                ]
+            },
+            {
+                "v_measure": 1.0,
+                "v_measure_std": 0.0,
+                "v_measures": [
+                    1.0
+                ],
+                "main_score": 1.0,
+                "hf_subset": "fra",
+                "languages": [
+                    "fra-Latn"
+                ]
+            }
+        ]
+    },
+    "evaluation_time": 0.35044336318969727,
+    "kg_co2_emissions": null
+}

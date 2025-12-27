@@ -27,7 +27,7 @@ SFR_TRAINING_DATA = {  # inherits from e5
     "HotpotQA-PL",  # translation not trained on
     "HotpotQA-NL",  # translation not trained on
     # source: https://github.com/embeddings-benchmark/leaderboard/issues/41
-    # qoute: In the realm of Semantic Textual Similarity (STS), it is trained on STS12, STS22, and STSBenchmark
+    # quote: In the realm of Semantic Textual Similarity (STS), it is trained on STS12, STS22, and STSBenchmark
     "STS12",
     "STS22",
     "STSBenchmark",
@@ -46,6 +46,7 @@ SFR_Embedding_2_R = ModelMeta(
         normalized=True,
     ),
     name="Salesforce/SFR-Embedding-2_R",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="91762139d94ed4371a9fa31db5551272e0b83818",
@@ -83,6 +84,7 @@ SFR_Embedding_Code_2B_R = ModelMeta(
         normalized=True,
     ),
     name="Salesforce/SFR-Embedding-Code-2B_R",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="c73d8631a005876ed5abde34db514b1fb6566973",
@@ -120,6 +122,7 @@ SFR_Embedding_Mistral = ModelMeta(
         normalized=True,
     ),
     name="Salesforce/SFR-Embedding-Mistral",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="938c560d1c236aa563b2dbdf084f28ab28bccb11",

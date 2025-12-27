@@ -1,6 +1,7 @@
 import torch
 
 from mteb.models import EncoderProtocol
+from mteb.models.model_meta import ScoringFunction
 from mteb.types import Array
 
 
@@ -36,6 +37,54 @@ def compute_pairwise_similarity(
     if hasattr(model, "similarity_pairwise"):
         return model.similarity_pairwise(embedding1, embedding2)
     return pairwise_cos_sim(embedding1, embedding2)
+
+
+def select_similarity(
+    embedding1: Array,
+    embedding2: Array,
+    similarity_fn: ScoringFunction,
+) -> Array:
+    """Compute similarity between two sets of embeddings using the specified similarity function.
+
+    Args:
+        embedding1: The first set of embeddings.
+        embedding2: The second set of embeddings.
+        similarity_fn: The similarity function to use (COSINE, DOT_PRODUCT, EUCLIDEAN).
+
+    Returns:
+        Array: The computed similarity scores.
+    """
+    if similarity_fn is ScoringFunction.COSINE:
+        return cos_sim(embedding1, embedding2)
+    elif similarity_fn is ScoringFunction.DOT_PRODUCT:
+        return dot_score(embedding1, embedding2)
+    elif similarity_fn is ScoringFunction.EUCLIDEAN:
+        return euclidean_sim(embedding1, embedding2)
+    raise ValueError(f"Unsupported similarity function: {similarity_fn}")
+
+
+def select_pairwise_similarity(
+    embedding1: Array,
+    embedding2: Array,
+    similarity_fn: ScoringFunction,
+) -> Array:
+    """Compute pairwise similarity between two sets of embeddings using the specified similarity function.
+
+    Args:
+        embedding1: The first set of embeddings.
+        embedding2: The second set of embeddings.
+        similarity_fn: The similarity function to use (COSINE, DOT_PRODUCT, EUCLIDEAN).
+
+    Returns:
+        Array: The computed pairwise similarity scores.
+    """
+    if similarity_fn is ScoringFunction.COSINE:
+        return pairwise_cos_sim(embedding1, embedding2)
+    elif similarity_fn is ScoringFunction.DOT_PRODUCT:
+        return pairwise_dot_score(embedding1, embedding2)
+    elif similarity_fn is ScoringFunction.EUCLIDEAN:
+        return pairwise_euclidean_sim(embedding1, embedding2)
+    raise ValueError(f"Unsupported similarity function: {similarity_fn}")
 
 
 def _normalize_embeddings(embeddings: Array) -> torch.Tensor:
@@ -137,7 +186,7 @@ def max_sim(a: Array, b: Array) -> torch.Tensor:
         b,
     )
 
-    return scores.max(axis=-1).values.sum(axis=-1)
+    return scores.max(axis=-1).values.sum(axis=-1)  # type: ignore[call-overload]
 
 
 # https://github.com/lightonai/pylate/blob/2d094a724866d6e15701781528368438081c0157/pylate/scores/scores.py#L67C1-L122C38
@@ -168,7 +217,7 @@ def pairwise_max_sim(
             document_embedding,
         )
 
-        scores.append(query_document_score.max(axis=-1).values.sum())
+        scores.append(query_document_score.max(axis=-1).values.sum())  # type: ignore[call-overload]
 
     return torch.stack(scores, dim=0)
 
@@ -268,11 +317,15 @@ def similarity(text_embeddings: Array, input_embeddings: Array) -> Array:
     Returns:
         Matrix with similarities
     """
-    text_embeddings = _convert_to_tensor(text_embeddings)
-    input_embeddings = _convert_to_tensor(input_embeddings)
+    text_embeddings_tensor = _convert_to_tensor(text_embeddings)
+    input_embeddings_tensor = _convert_to_tensor(input_embeddings)
 
-    text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
-    input_embeddings = input_embeddings / input_embeddings.norm(dim=-1, keepdim=True)
-    logits = torch.matmul(input_embeddings, text_embeddings.T)
+    text_embeddings_tensor = text_embeddings_tensor / text_embeddings_tensor.norm(
+        dim=-1, keepdim=True
+    )
+    input_embeddings_tensor = input_embeddings_tensor / input_embeddings_tensor.norm(
+        dim=-1, keepdim=True
+    )
+    logits = torch.matmul(input_embeddings_tensor, text_embeddings_tensor.T)
     probs = (logits * 100).softmax(dim=-1)
     return probs

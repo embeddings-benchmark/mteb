@@ -108,6 +108,7 @@ ReasonIR_8B = ModelMeta(
         prompts_dict=_prompts_dict,
     ),
     name="ReasonIR/ReasonIR-8B",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="c3d0690370ff4a8c3d3882d8dfa85c43650034fa",

@@ -53,7 +53,7 @@ ACKNOWLEDGEMENT = """
         <img src="https://play-lh.googleusercontent.com/HdfHZ5jnfMM1Ep7XpPaVdFIVSRx82wKlRC_qmnHx9H1E4aWNp4WKoOcH0x95NAnuYg" width="60" height="55" style="padding: 10px;">
     </a>
     <a href="https://huggingface.co">
-        <img src="https://raw.githubusercontent.com/embeddings-benchmark/mteb/main/docs/images/hf_logo.png" width="60" height="55" style="padding: 10px;">
+        <img src="https://raw.githubusercontent.com/embeddings-benchmark/mteb/main/docs/images/logos/hf_logo.png" width="60" height="55" style="padding: 10px;">
     </a>
 </div>
 

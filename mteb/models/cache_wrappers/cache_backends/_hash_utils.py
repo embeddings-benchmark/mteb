@@ -1,16 +1,17 @@
 import hashlib
-
-from PIL import Image
-
-from mteb.types import BatchedInput
+from collections.abc import Mapping
+from typing import Any
 
 
-def _hash_item(item: BatchedInput) -> str:
+def _hash_item(item: Mapping[str, Any]) -> str:
     item_hash = ""
     if "text" in item:
-        item_hash = hashlib.sha256(item["text"].encode()).hexdigest()
+        item_text: str = item["text"]
+        item_hash = hashlib.sha256(item_text.encode()).hexdigest()
 
     if "image" in item:
+        from PIL import Image
+
         image: Image.Image = item["image"]
         item_hash += hashlib.sha256(image.tobytes()).hexdigest()
 

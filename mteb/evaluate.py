@@ -1,23 +1,23 @@
 from __future__ import annotations
 
 import logging
+import warnings
 from collections.abc import Iterable
-from copy import deepcopy
 from pathlib import Path
 from time import time
 from typing import TYPE_CHECKING, Any, cast
 
+from datasets.exceptions import DatasetNotFoundError
 from tqdm.auto import tqdm
 
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import (
-    CrossEncoderProtocol,
-    EncoderProtocol,
     MTEBModels,
 )
 from mteb.models.sentence_transformer_wrapper import (
@@ -25,6 +25,7 @@ from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
 from mteb.results import ModelResult, TaskResult
+from mteb.results.task_result import TaskError
 from mteb.types import HFSubset, PromptType, SplitName
 from mteb.types._metadata import ModelName, Revision
 
@@ -51,62 +52,31 @@ class OverwriteStrategy(HelpfulStrEnum):
     ONLY_CACHE = "only-cache"
 
 
-_empty_model_meta = ModelMeta(
-    loader=None,
-    name=None,
-    revision=None,
-    release_date=None,
-    languages=None,
-    framework=[],
-    similarity_fn_name=None,
-    n_parameters=None,
-    memory_usage_mb=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
-    public_training_data=None,
-    use_instructions=None,
-    training_datasets=None,
-    modalities=[],
-)
-
-
-def _create_empty_model_meta() -> ModelMeta:
-    logger.warning("Model metadata is missing. Using empty metadata.")
-    meta = deepcopy(_empty_model_meta)
-    meta.revision = "no_revision_available"
-    meta.name = "no_model_name_available"
-    return meta
-
-
 def _sanitize_model(
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
 ) -> tuple[MTEBModels | ModelMeta, ModelMeta, ModelName, Revision]:
     from sentence_transformers import CrossEncoder, SentenceTransformer
 
+    wrapped_model: MTEBModels | ModelMeta
     if isinstance(model, SentenceTransformer):
-        _mdl = SentenceTransformerEncoderWrapper(model)
-        meta = _mdl.mteb_model_meta
-        _mdl = cast(EncoderProtocol, _mdl)
-        model = _mdl
+        wrapped_model = SentenceTransformerEncoderWrapper(model)
+        meta = wrapped_model.mteb_model_meta
     elif isinstance(model, CrossEncoder):
-        _mdl = CrossEncoderWrapper(model)
-        _mdl = cast(CrossEncoderProtocol, _mdl)
-        meta = _mdl.mteb_model_meta
-        model = _mdl
+        wrapped_model = CrossEncoderWrapper(model)
+        meta = wrapped_model.mteb_model_meta
     elif hasattr(model, "mteb_model_meta"):
-        meta = model.mteb_model_meta  # type: ignore[attr-defined]
+        meta = getattr(model, "mteb_model_meta")
         if not isinstance(meta, ModelMeta):
-            meta = _create_empty_model_meta()
+            meta = ModelMeta._from_hub(None)
+        wrapped_model = cast(MTEBModels | ModelMeta, model)
     else:
-        meta = _create_empty_model_meta() if not isinstance(model, ModelMeta) else model
+        meta = ModelMeta._from_hub(None) if not isinstance(model, ModelMeta) else model
+        wrapped_model = meta
 
     model_name = cast(str, meta.name)
     model_revision = cast(str, meta.revision)
 
-    return model, meta, model_name, model_revision
+    return wrapped_model, meta, model_name, model_revision
 
 
 def _evaluate_task(
@@ -117,7 +87,8 @@ def _evaluate_task(
     co2_tracker: bool | None,
     encode_kwargs: dict[str, Any],
     prediction_folder: Path | None,
-) -> TaskResult:
+    public_only: bool | None,
+) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
 
     Returns:
@@ -149,8 +120,10 @@ def _evaluate_task(
                 encode_kwargs=encode_kwargs,
                 co2_tracker=False,
                 prediction_folder=prediction_folder,
+                public_only=public_only,
             )
-        result.kg_co2_emissions = tracker.final_emissions
+        if isinstance(result, TaskResult):
+            result.kg_co2_emissions = tracker.final_emissions
         return result
 
     task_results = {}
@@ -159,9 +132,24 @@ def _evaluate_task(
 
     data_loaded = task.data_loaded
     if not data_loaded:
-        task.load_data()
+        try:
+            task.load_data()
+        except DatasetNotFoundError as e:
+            if not task.metadata.is_public and public_only is None:
+                msg = (
+                    f"Dataset for private task '{task.metadata.name}' not found. "
+                    "Make sure you have access to the dataset and that you have set up the authentication correctly. To disable this warning set `public_only=False`"
+                )
+                logger.warning(msg)
+                warnings.warn(msg)
+                return TaskError(
+                    task_name=task.metadata.name,
+                    exception=str(e),
+                )
+            if public_only is False:
+                raise e
 
-    evaluation_time = 0
+    evaluation_time = 0.0
 
     for split, hf_subsets in splits.items():
         tick = time()
@@ -208,12 +196,18 @@ def _check_model_modalities(
         return
 
     model_modalities = set(model.modalities)
+    check_tasks: Iterable[AbsTask] = []
     if isinstance(tasks, AbsTask):
-        tasks = [tasks]
+        check_tasks = [tasks]
+    elif isinstance(tasks, Benchmark):
+        benchmark = cast(Benchmark, tasks)
+        check_tasks = benchmark.tasks
+    else:
+        check_tasks = cast(Iterable[AbsTask], tasks)
 
     warnings, errors = [], []
 
-    for task in tasks:
+    for task in check_tasks:
         # only retrieval tasks have different modalities for query and document and can be run with partial overlaps
         if isinstance(task, AbsTaskRetrieval):
             query_mods = set(task.metadata.get_modalities(PromptType.query))
@@ -256,6 +250,20 @@ def _check_model_modalities(
         logger.warning(msg)
 
 
+def _requires_merge(task: AbsTask, existing_results: TaskResult) -> bool:
+    """Check if the existing results require merging with new results."""
+    # If the task has multiple eval splits and existing results cover only a subset, we need to merge
+    required_evals = dict.fromkeys(task.eval_splits, task.hf_subsets)
+    for split, subsets in required_evals.items():
+        res = existing_results.scores.get(split, None)
+        if res is None:
+            return True
+        hf_subsets = [r["hf_subset"] for r in res]
+        if not set(subsets).issubset(set(hf_subsets)):
+            return True
+    return False
+
+
 def evaluate(
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
     tasks: AbsTask | Iterable[AbsTask],
@@ -267,6 +275,7 @@ def evaluate(
     overwrite_strategy: str | OverwriteStrategy = "only-missing",
     prediction_folder: Path | str | None = None,
     show_progress_bar: bool = True,
+    public_only: bool | None = None,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -290,6 +299,7 @@ def evaluate(
         prediction_folder: Optional folder in which to save model predictions for the task. Predictions of the tasks will be sabed in `prediction_folder/{task_name}_predictions.json`
         show_progress_bar: Whether to show a progress bar when running the evaluation. Default is True. Setting this to False will also set the
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
+        public_only: Run only public tasks. If None, it will attempt to run the private task.
 
     Returns:
         The results of the evaluation.
@@ -330,10 +340,10 @@ def evaluate(
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
-        task = cast(AbsTaskAggregate, tasks)
+        aggregated_task = cast(AbsTaskAggregate, tasks)
         results = evaluate(
             model,
-            task.metadata.task_list,
+            aggregated_task.metadata.tasks,
             co2_tracker=co2_tracker,
             raise_error=raise_error,
             encode_kwargs=encode_kwargs,
@@ -341,18 +351,21 @@ def evaluate(
             overwrite_strategy=overwrite_strategy,
             prediction_folder=prediction_folder,
             show_progress_bar=show_progress_bar,
+            public_only=public_only,
         )
-        result = task.combine_task_results(results.task_results)
+        combined_results = aggregated_task.combine_task_results(results.task_results)
         return ModelResult(
             model_name=results.model_name,
             model_revision=results.model_revision,
-            task_results=[result],
+            task_results=[combined_results],
         )
 
     if isinstance(tasks, AbsTask):
         task = tasks
     else:
-        results = []
+        tasks = cast(Iterable[AbsTask], tasks)
+        evaluate_results = []
+        exceptions = []
         tasks_tqdm = tqdm(
             tasks,
             desc="Evaluating tasks",
@@ -370,31 +383,40 @@ def evaluate(
                 overwrite_strategy=overwrite_strategy,
                 prediction_folder=prediction_folder,
                 show_progress_bar=False,
+                public_only=public_only,
             )
-            results.extend(_res.task_results)
+            evaluate_results.extend(_res.task_results)
+            if _res.exceptions:
+                exceptions.extend(_res.exceptions)
         return ModelResult(
             model_name=_res.model_name,
             model_revision=_res.model_revision,
-            task_results=results,
+            task_results=evaluate_results,
+            exceptions=exceptions,
         )
 
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
 
-    existing_results = None
+    existing_results: TaskResult | None = None
     if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
-        results = cache.load_task_result(task.metadata.name, meta)
-        if results:
-            existing_results = results
+        cache_results = cache.load_task_result(task.metadata.name, meta)
+        if cache_results:
+            existing_results = cache_results
 
     if (
         existing_results
-        and overwrite_strategy == "only-missing"
-        and overwrite_strategy == OverwriteStrategy.ONLY_MISSING
-        and existing_results.is_mergeable(task)
+        and overwrite_strategy
+        not in (OverwriteStrategy.ALWAYS, OverwriteStrategy.NEVER)
+        and (
+            not _requires_merge(task, existing_results)
+            or existing_results.is_mergeable(task)
+        )
     ):
         missing_eval = existing_results.get_missing_evaluations(task)
     else:
         missing_eval = dict.fromkeys(task.eval_splits, task.hf_subsets)
+        # Will be fully recomputed so we set it to None to avoid merging:
+        existing_results = None
 
     if (
         existing_results
@@ -415,12 +437,13 @@ def evaluate(
         OverwriteStrategy.ONLY_CACHE,
     ]:
         raise ValueError(
-            f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists. However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
+            f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists for task {task.metadata.name}. "
+            + f"However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
         )
 
     if existing_results:
         logger.info(
-            f"Found existing results for {task.metadata.name}, only running missing splits: {list(missing_eval.keys())}"
+            f"Found existing results for {task.metadata.name}, only running missing splits (subsets): {missing_eval}"
         )
 
     if isinstance(model, ModelMeta):
@@ -439,16 +462,13 @@ def evaluate(
                 co2_tracker=co2_tracker,
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
+                public_only=public_only,
             )
         except Exception as e:
             logger.error(
                 f"Error while running task {task.metadata.name} on splits {list(missing_eval.keys())}: {e}"
             )
-            return ModelResult(
-                model_name=model_name,
-                model_revision=model_revision,
-                task_results=[],
-            )
+            result = TaskError(task_name=task.metadata.name, exception=str(e))
     else:
         result = _evaluate_task(
             model=model,
@@ -457,8 +477,17 @@ def evaluate(
             co2_tracker=False,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
+            public_only=public_only,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
+
+    if isinstance(result, TaskError):
+        return ModelResult(
+            model_name=model_name,
+            model_revision=model_revision,
+            task_results=[],
+            exceptions=[result],
+        )
 
     if existing_results:
         result = result.merge(existing_results)

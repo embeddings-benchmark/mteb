@@ -1,4 +1,4 @@
-from datasets import DatasetDict, load_dataset
+from datasets import DatasetDict, Image, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -16,7 +16,7 @@ _LANGUAGES = {
 
 
 def _load_xflickrco_data(
-    path: str, langs: list, splits: str, revision: str | None = None
+    path: str, langs: list, splits: list[str], revision: str | None = None
 ):
     corpus = {lang: dict.fromkeys(splits) for lang in langs}
     queries = {lang: dict.fromkeys(splits) for lang in langs}
@@ -32,22 +32,23 @@ def _load_xflickrco_data(
         lang_corpus = lang_data.map(
             lambda x: {
                 "id": "corpus-" + x["id"],
-                "text": None,
                 "modality": "image",
-                "image": x["image"]["bytes"],
+                "image": x["image"],
             },
             remove_columns=["sentences"],
         )
+        lang_corpus = lang_corpus.cast_column("image", Image())
 
         lang_queries = lang_data.map(
             lambda x: {
                 "id": "query-" + x["id"],
                 "text": x["sentences"],
                 "modality": "text",
-                "image": None,
             },
             remove_columns=["sentences"],
         )
+        # None values
+        lang_queries = lang_queries.remove_columns(["image"])
 
         relevant_docs[lang][split] = {}
         for row in lang_data:

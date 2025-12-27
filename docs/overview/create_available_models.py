@@ -5,9 +5,6 @@ from pathlib import Path
 import mteb
 from mteb.models import ModelMeta
 
-START_INSERT = "<!-- START TASK DESCRIPTION -->"
-END_INSERT = "<!-- END TASK DESCRIPTION -->"
-
 model_entry = """
 ####  {model_name_w_link}
 
@@ -174,5 +171,5 @@ def main(folder: Path) -> None:
 
 
 if __name__ == "__main__":
-    root = Path(__file__).parent / ".." / ".."
-    main(root / "docs" / "overview" / "available_models")
+    root = Path(__file__).parent
+    main(root / "available_models")

@@ -91,10 +91,6 @@ class OpenAIModel(AbsEncoder):
 
         from openai import NotGiven
 
-        if self.model_name == "text-embedding-ada-002" and self._embed_dim is not None:
-            logger.warning(
-                "Reducing embedding size available only for text-embedding-3-* models"
-            )
         sentences = [text for batch in inputs for text in batch["text"]]
 
         mask_sents = [(i, t) for i, t in enumerate(sentences) if t.strip()]
@@ -122,13 +118,22 @@ class OpenAIModel(AbsEncoder):
 
         no_empty_embeddings = []
 
+        # Set dimensions only for models that support it
+        dimensions = (
+            self._embed_dim or NotGiven()
+            if not self.model_name == "text-embedding-ada-002"
+            else NotGiven()
+        )
+        default_kwargs = dict(
+            model=self.model_name,
+            encoding_format="float",
+            dimensions=dimensions,
+        )
+
         for sublist in tqdm(sublists, leave=False, disable=not show_progress_bar):
             try:
                 response = self._client.embeddings.create(
-                    input=sublist,
-                    model=self.model_name,
-                    encoding_format="float",
-                    dimensions=self._embed_dim or NotGiven(),
+                    input=sublist, **default_kwargs
                 )
             except Exception as e:
                 # Sleep due to too many requests
@@ -138,19 +143,13 @@ class OpenAIModel(AbsEncoder):
                 time.sleep(10)
                 try:
                     response = self._client.embeddings.create(
-                        input=sublist,
-                        model=self.model_name,
-                        encoding_format="float",
-                        dimensions=self._embed_dim or NotGiven(),
+                        input=sublist, **default_kwargs
                     )
                 except Exception as e:
                     logger.info("Sleeping for 60 seconds due to error", e)
                     time.sleep(60)
                     response = self._client.embeddings.create(
-                        input=sublist,
-                        model=self.model_name,
-                        encoding_format="float",
-                        dimensions=self._embed_dim or NotGiven(),
+                        input=sublist, **default_kwargs
                     )
             no_empty_embeddings.extend(self._to_numpy(response))
 
@@ -168,6 +167,7 @@ class OpenAIModel(AbsEncoder):
 
 text_embedding_3_small = ModelMeta(
     name="openai/text-embedding-3-small",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -192,6 +192,7 @@ text_embedding_3_small = ModelMeta(
 )
 text_embedding_3_large = ModelMeta(
     name="openai/text-embedding-3-large",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -216,6 +217,7 @@ text_embedding_3_large = ModelMeta(
 )
 text_embedding_ada_002 = ModelMeta(
     name="openai/text-embedding-ada-002",
+    model_type=["dense"],
     revision="3",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
@@ -241,6 +243,7 @@ text_embedding_ada_002 = ModelMeta(
 
 text_embedding_3_small_512 = ModelMeta(
     name="openai/text-embedding-3-small (embed_dim=512)",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -267,6 +270,7 @@ text_embedding_3_small_512 = ModelMeta(
 
 text_embedding_3_large_512 = ModelMeta(
     name="openai/text-embedding-3-large (embed_dim=512)",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified

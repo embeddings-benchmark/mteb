@@ -1,9 +1,11 @@
 """This implements minimal viable mock tasks for testing the benchmarking framework."""
 
+import datasets
 from datasets import Dataset, DatasetDict
-from PIL import Image
 from sklearn.linear_model import LogisticRegression
 
+from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
@@ -110,7 +112,7 @@ def instruction_retrieval_datasplit() -> RetrievalSplitData:
 
 
 class MockClassificationTask(AbsTaskClassification):
-    classifier = LogisticRegression(n_jobs=1, max_iter=10)  # type: ignore
+    classifier = LogisticRegression(n_jobs=1, max_iter=10)
 
     expected_stats = {
         "test": {
@@ -157,7 +159,7 @@ class MockClassificationTask(AbsTaskClassification):
         type="Classification",
         name="MockClassificationTask",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
     def load_data(self) -> None:
@@ -313,7 +315,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
         type="Classification",
         name="MockMultilingualClassificationTask",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
@@ -372,7 +374,7 @@ class MockBitextMiningTask(AbsTaskBitextMining):
         type="BitextMining",
         name="MockBitextMiningTask",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
     def load_data(self) -> None:
@@ -462,7 +464,7 @@ class MockMultilingualBitextMiningTask(AbsTaskBitextMining):
         type="BitextMining",
         name="MockMultilingualBitextMiningTask",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
@@ -557,7 +559,7 @@ class MockMultilingualParallelBitextMiningTask(AbsTaskBitextMining):
         type="BitextMining",
         name="MockMultilingualParallelBitextMiningTask",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = {
         "eng_Latn-fra_Latn": ["eng-Latn", "fra-Latn"],
@@ -610,7 +612,7 @@ class MockClusteringTask(AbsTaskClusteringLegacy):
         type="Clustering",
         name="MockClusteringTask",
         main_score="v_measure",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
     def load_data(self) -> None:
@@ -708,7 +710,7 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
         type="Clustering",
         name="MockMultilingualClusteringTask",
         main_score="v_measure",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
@@ -769,7 +771,7 @@ class MockClusteringFastTask(AbsTaskClustering):
         type="Clustering",
         name="MockClusteringFastTask",
         main_score="v_measure",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
     def load_data(self) -> None:
@@ -868,7 +870,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClustering):
         type="Clustering",
         name="MockMultilingualClusteringFastTask",
         main_score="v_measure",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
@@ -933,7 +935,7 @@ class MockPairClassificationTask(AbsTaskPairClassification):
         type="PairClassification",
         name="MockPairClassificationTask",
         main_score="similarity_ap",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
     def load_data(self) -> None:
@@ -1052,7 +1054,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
         type="PairClassification",
         name="MockMultilingualPairClassificationTask",
         main_score="similarity_ap",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
@@ -1123,7 +1125,7 @@ class MockPairImageClassificationTask(AbsTaskPairClassification):
         type="PairClassification",
         name="MockPairImageClassificationTask",
         main_score="similarity_ap",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
 
@@ -1131,6 +1133,8 @@ class MockPairImageClassificationTask(AbsTaskPairClassification):
     input2_column_name = "image2"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images1 = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images1 = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images1
@@ -1187,7 +1191,7 @@ class MockSTSTask(AbsTaskSTS):
         type="STS",
         name="MockSTSTask",
         main_score="cosine_spearman",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
     def load_data(self) -> None:
@@ -1299,7 +1303,7 @@ class MockMultilingualSTSTask(AbsTaskSTS):
         type="STS",
         name="MockMultilingualSTSTask",
         main_score="cosine_spearman",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
@@ -1364,7 +1368,7 @@ class MockSummarizationTask(AbsTaskSummarization):
         type="Summarization",
         name="MockSummarizationTask",
         main_score="cosine_spearman",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
     def load_data(self) -> None:
@@ -1493,7 +1497,7 @@ class MockMultilingualSummarizationTask(AbsTaskSummarization):
         type="Summarization",
         name="MockMultilingualSummarizationTask",
         main_score="cosine_spearman",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
@@ -1571,7 +1575,7 @@ class MockRerankingTask(AbsTaskRetrieval):
         type="Reranking",
         name="MockRerankingTask",
         main_score="map_at_1000",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
     def load_data(self) -> None:
@@ -1690,7 +1694,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
         type="Reranking",
         name="MockMultilingualRerankingTask",
         main_score="map_at_10",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
@@ -1704,7 +1708,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
 
 
 class MockRetrievalTask(AbsTaskRetrieval):
-    _top_k = 1
+    _top_k = 2
     expected_stats = {
         "val": {
             "num_samples": 4,
@@ -1768,7 +1772,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
         type="Retrieval",
         name="MockRetrievalTask",
         main_score="ndcg_at_10",
-        **dict(general_args | {"eval_splits": ["val", "test"]}),  # type: ignore
+        **dict(general_args | {"eval_splits": ["val", "test"]}),
     )
 
     def load_data(self) -> None:
@@ -1844,7 +1848,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
         type="Retrieval",
         name="MockRetrievalDialogTask",
         main_score="ndcg_at_10",
-        **dict(general_args | {"eval_splits": ["val", "test"]}),  # type: ignore
+        **dict(general_args | {"eval_splits": ["val", "test"]}),
     )
 
     def load_data(self) -> None:
@@ -2053,7 +2057,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
         type="Retrieval",
         name="MockMultilingualRetrievalTask",
         main_score="ndcg_at_10",
-        **dict(general_args | {"eval_splits": ["val", "test"]}),  # type: ignore
+        **dict(general_args | {"eval_splits": ["val", "test"]}),
     )
     metadata.eval_langs = multilingual_eval_langs
 
@@ -2114,7 +2118,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
         type="MultilabelClassification",
         name="MockMultilabelClassification",
         main_score="lrap",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
     def load_data(self) -> None:
@@ -2267,7 +2271,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
         type="MultilabelClassification",
         name="MockMultilingualMultilabelClassification",
         main_score="lrap",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
@@ -2336,7 +2340,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
         type="InstructionRetrieval",
         name="MockInstructionRetrieval",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
     def load_data(self) -> None:
@@ -2388,7 +2392,7 @@ class MockInstructionReranking(AbsTaskRetrieval):
         type="InstructionReranking",
         name="MockInstructionReranking",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
     def load_data(self) -> None:
@@ -2491,7 +2495,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
         type="InstructionRetrieval",
         name="MockMultilingualInstructionRetrieval",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
@@ -2614,7 +2618,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
         type="InstructionReranking",
         name="MockMultilingualInstructionReranking",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
@@ -2625,6 +2629,19 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
             "fra": {"test": base_datasplit, "val": base_datasplit},
         }
         self.data_loaded = True
+
+
+class MockAggregatedTask(AbsTaskAggregate):
+    metadata = AggregateTaskMetadata(
+        type="InstructionReranking",
+        name="MockMultilingualInstructionReranking",
+        main_score="ndcg_at_10",
+        tasks=[
+            MockRetrievalTask(),
+            MockRerankingTask(),
+        ],
+        **general_args,
+    )
 
 
 class MockMultiChoiceTask(AbsTaskRetrieval):
@@ -2678,12 +2695,14 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
         type="Any2AnyMultiChoice",
         name="MockMultiChoice",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image", "text"]
     metadata.category = "it2i"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -2859,13 +2878,15 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
         type="Any2AnyMultiChoice",
         name="MockMultilingualMultiChoice",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
     metadata.modalities = ["image", "text"]
     metadata.category = "it2i"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -2949,12 +2970,14 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalI2T",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3026,12 +3049,14 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalT2I",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image", "text"]
     metadata.category = "t2i"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3115,7 +3140,7 @@ class MockImageClassificationTask(AbsTaskClassification):
         type="ImageClassification",
         name="MockImageClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     metadata.category = "i2c"
@@ -3124,6 +3149,8 @@ class MockImageClassificationTask(AbsTaskClassification):
     input_column_name = "image"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3289,7 +3316,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
         type="ImageClassification",
         name="MockMultilingualImageClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     metadata.category = "i2c"
@@ -3297,6 +3324,8 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
     input_column_name = "image"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3354,13 +3383,15 @@ class MockImageClusteringTask(AbsTaskClusteringLegacy):
         type="ImageClustering",
         name="MockImageClustering",
         main_score="nmi",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     input_column_name = "image"
     label_column_name = "label"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3408,7 +3439,7 @@ class MockImageClusteringFastTask(AbsTaskClustering):
         type="ImageClustering",
         name="MockImageClusteringFastTask",
         main_score="v_measure",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     input_column_name = "image"
@@ -3417,6 +3448,8 @@ class MockImageClusteringFastTask(AbsTaskClustering):
     max_document_to_embed = 2
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3496,7 +3529,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
         type="ImageMultilabelClassification",
         name="MockImageMultilabelClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     metadata.category = "i2c"
@@ -3505,6 +3538,8 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
     input_column_name = "image"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3700,7 +3735,7 @@ class MockMultilingualImageMultilabelClassificationTask(
         type="ImageMultilabelClassification",
         name="MockMultilingualImageMultilabelClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     metadata.eval_langs = multilingual_eval_langs
@@ -3708,6 +3743,8 @@ class MockMultilingualImageMultilabelClassificationTask(
     input_column_name = "image"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3765,12 +3802,14 @@ class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
         type="Compositionality",
         name="MockImageTextPairClassification",
         main_score="text_acc",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3859,7 +3898,7 @@ class MockMultilingualImageTextPairClassificationTask(
         type="Compositionality",
         name="MockMultilingualImageTextPairClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
@@ -3867,6 +3906,8 @@ class MockMultilingualImageTextPairClassificationTask(
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self) -> None:
+        from PIL import Image
+
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3924,14 +3965,15 @@ class MockVisualSTSTask(AbsTaskSTS):
         type="VisualSTS(eng)",
         name="MockVisualSTS",
         main_score="cosine_spearman",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     metadata.category = "i2i"
 
     def load_data(self) -> None:
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
+        from PIL import Image
 
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
@@ -3948,6 +3990,8 @@ class MockVisualSTSTask(AbsTaskSTS):
                 ),
             }
         )
+        self.dataset = self.dataset.cast_column("sentence1", datasets.Image())
+        self.dataset = self.dataset.cast_column("sentence2", datasets.Image())
         self.data_loaded = True
 
 
@@ -3987,14 +4031,15 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
         type="ZeroShotClassification",
         name="MockZeroShotClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
     def load_data(self) -> None:
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
+        from PIL import Image
 
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
@@ -4050,7 +4095,7 @@ class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
         type="ZeroShotClassification",
         name="MockTextZeroShotClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["text"]
     metadata.category = "t2t"
@@ -4110,7 +4155,7 @@ class MockRegressionTask(AbsTaskRegression):
         type="Regression",
         name="MockRegressionTask",
         main_score="kendalltau",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
     def load_data(self, **kwargs):
@@ -4176,13 +4221,15 @@ class MockImageRegressionTask(AbsTaskRegression):
         type="Regression",
         name="MockRegressionTask",
         main_score="kendalltau",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     metadata.category = "i2c"
     input_column_name = "image"
 
     def load_data(self, **kwargs):
+        from PIL import Image
+
         train_images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         train_images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA")

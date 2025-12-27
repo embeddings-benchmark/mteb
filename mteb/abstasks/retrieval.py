@@ -1,7 +1,7 @@
 import json
 import logging
 from collections import defaultdict
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from pathlib import Path
 from time import time
 from typing import Any, Literal
@@ -286,7 +286,7 @@ class AbsTaskRetrieval(AbsTask):
         encode_kwargs: dict[str, Any],
         prediction_folder: Path | None = None,
         **kwargs,
-    ) -> dict[HFSubset, ScoresDict]:
+    ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluate the model on the retrieval task.
 
         Args:
@@ -356,6 +356,8 @@ class AbsTaskRetrieval(AbsTask):
             top_k=self._top_k,
             **kwargs,
         )
+
+        search_model: SearchProtocol
 
         if isinstance(model, EncoderProtocol) and not isinstance(model, SearchProtocol):
             search_model = SearchEncoderWrapper(model)
@@ -578,11 +580,12 @@ class AbsTaskRetrieval(AbsTask):
                 if isinstance(data[split][subset_item], Dataset):
                     sections[split] = data[split][subset_item]
                 elif converter is not None:
+                    subset_data = data[split][subset_item]
+                    if subset_data is None:
+                        continue
+
                     sections[split] = Dataset.from_list(
-                        [
-                            converter(idx, item)
-                            for idx, item in data[split][subset_item].items()
-                        ]
+                        [converter(idx, item) for idx, item in subset_data.items()]
                     )
                 else:
                     raise ValueError(
@@ -653,6 +656,8 @@ class AbsTaskRetrieval(AbsTask):
             FileNotFoundError: If the specified path does not exist.
             ValueError: If the loaded top ranked results are not in the expected format.
         """
+        self._top_k = top_k
+
         top_ranked_path = Path(top_ranked_path)
         if top_ranked_path.is_dir():
             top_ranked_path = self._predictions_path(top_ranked_path)
@@ -678,19 +683,18 @@ class AbsTaskRetrieval(AbsTask):
 
                 top_k_sorted = defaultdict(list)
                 for query_id, values in top_ranked.items():
-                    sorted_keys = sorted(values, key=values.get, reverse=True)
+                    sorted_keys = sorted(values, key=lambda k: values[k], reverse=True)
                     top_k_sorted[query_id] = sorted_keys[: self._top_k]
 
                 self.dataset[subset][split]["top_ranked"] = top_k_sorted
-        self._top_k = top_k
         return self
 
 
 def _process_relevant_docs(
-    collection: dict[str, dict[str, float]],
+    collection: Mapping[str, Mapping[str, int]],
     hf_subset: str,
     split: str,
-) -> dict[str, dict[str, float]]:
+) -> dict[str, dict[str, int]]:
     """Collections can contain overlapping ids in different splits. Prepend split and subset to avoid this
 
     Returns:

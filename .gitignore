@@ -158,3 +158,6 @@ powermetrics_log.txt
 # vscode
 .vscode/launch.json
 
+/docs/overview/available_models/
+/docs/overview/available_tasks/
+/docs/overview/available_benchmarks.md

@@ -2,9 +2,10 @@ import json
 import logging
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
 from huggingface_hub import (
+    CardData,
     DatasetCard,
     DatasetCardData,
     constants,
@@ -107,6 +108,7 @@ The domains follow the categories used in the [Universal Dependencies project](h
 SampleCreationMethod = Literal[
     "found",
     "created",
+    "created and machine-translated",
     "human-translated and localized",
     "human-translated",
     "machine-translated",
@@ -149,7 +151,7 @@ _TASK_TYPE = (
     "InstructionReranking",
 ) + MIEB_TASK_TYPE
 
-TaskType = Literal[_TASK_TYPE]
+TaskType = Literal[_TASK_TYPE]  # type: ignore[valid-type]
 """The type of the task. E.g. includes "Classification", "Retrieval" and "Clustering"."""
 
 
@@ -191,8 +193,10 @@ AnnotatorType = Literal[
 """The type of the annotators. Is often important for understanding the quality of a dataset."""
 
 
-PromptDict = TypedDict(
-    "PromptDict", {prompt_type.value: str for prompt_type in PromptType}, total=False
+PromptDict = TypedDict(  # type: ignore[misc]
+    "PromptDict",
+    {prompt_type.value: str for prompt_type in PromptType},
+    total=False,
 )
 """A dictionary containing the prompt used for the task.
 
@@ -364,7 +368,7 @@ class TaskMetadata(BaseModel):
         """Return a dictionary mapping huggingface subsets to languages."""
         if isinstance(self.eval_langs, dict):
             return self.eval_langs
-        return {"default": self.eval_langs}  # type: ignore
+        return {"default": cast(list[str], self.eval_langs)}
 
     @property
     def intext_citation(self, include_cite: bool = True) -> str:
@@ -375,9 +379,8 @@ class TaskMetadata(BaseModel):
         if include_cite and cite:
             # check for whitespace in the citation
             if " " in cite:
-                logger.warning(
-                    "Citation contains whitespace. Please ensure that the citation is correctly formatted."
-                )
+                msg = "Citation contains whitespace. Please ensure that the citation is correctly formatted."
+                logger.warning(msg)
             return f"\\cite{{{cite}}}"
         return cite
 
@@ -413,7 +416,7 @@ class TaskMetadata(BaseModel):
         for subset, subset_value in stats.items():
             if subset == "hf_subset_descriptive_stats":
                 continue
-            n_samples[subset] = subset_value["num_samples"]  # type: ignore
+            n_samples[subset] = subset_value["num_samples"]
         return n_samples
 
     @property
@@ -446,7 +449,7 @@ class TaskMetadata(BaseModel):
         Raises:
             ValueError: If the prompt type is not recognized.
         """
-        if prompt_type is None:
+        if prompt_type is None or self.category is None:
             return self.modalities
         query_modalities, doc_modalities = self.category.split("2")
         category_to_modality: dict[str, Modalities] = {
@@ -466,7 +469,7 @@ class TaskMetadata(BaseModel):
 
     def _create_dataset_card_data(
         self,
-        existing_dataset_card_data: DatasetCardData | None = None,
+        existing_dataset_card_data: CardData | None = None,
     ) -> tuple[DatasetCardData, dict[str, Any]]:
         """Create a DatasetCardData object from the task metadata.
 
@@ -501,12 +504,13 @@ class TaskMetadata(BaseModel):
 
         tags = ["mteb"] + self.modalities
 
-        descriptive_stats = self.descriptive_stats
-        if descriptive_stats is not None:
-            for split, split_stat in descriptive_stats.items():
+        descriptive_stats = ""
+        if self.descriptive_stats is not None:
+            descriptive_stats_ = self.descriptive_stats
+            for split, split_stat in descriptive_stats_.items():
                 if len(split_stat.get("hf_subset_descriptive_stats", {})) > 10:
                     split_stat.pop("hf_subset_descriptive_stats", {})
-            descriptive_stats = json.dumps(descriptive_stats, indent=4)
+            descriptive_stats = json.dumps(descriptive_stats_, indent=4)
 
         dataset_card_data_params = existing_dataset_card_data.to_dict()
         # override the existing values
@@ -532,7 +536,7 @@ class TaskMetadata(BaseModel):
                 citation=self.bibtex_citation,
                 dataset_description=self.description,
                 dataset_reference=self.reference,
-                descritptive_stats=descriptive_stats,
+                descriptive_stats=descriptive_stats,
                 dataset_task_name=self.name,
                 category=self.category,
                 domains=", ".join(self.domains) if self.domains else None,
@@ -694,11 +698,11 @@ class TaskMetadata(BaseModel):
 
     def _hf_languages(self) -> list[str]:
         languages: list[str] = []
-        if self.is_multilingual:
-            for val in list(self.eval_langs.values()):
+        if self.is_multilingual and isinstance(self.eval_langs, dict):
+            for val in self.eval_langs.values():
                 languages.extend(val)
         else:
-            languages = self.eval_langs
+            languages = cast(list[str], self.eval_langs)
         # value "python" is not valid. It must be an ISO 639-1, 639-2 or 639-3 code (two/three letters),
         # or a special value like "code", "multilingual".
         readme_langs = []
@@ -710,7 +714,7 @@ class TaskMetadata(BaseModel):
                 readme_langs.append(lang_name)
         return sorted(set(readme_langs))
 
-    def _hf_license(self) -> str:
+    def _hf_license(self) -> str | None:
         dataset_license = self.license
         if dataset_license:
             license_mapping = {

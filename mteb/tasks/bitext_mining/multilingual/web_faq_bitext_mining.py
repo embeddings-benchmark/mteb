@@ -198,9 +198,7 @@ _SPLITS = ["default"]
 class WebFAQBitextMiningQuestions(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="WebFAQBitextMiningQuestions",
-        description="""The WebFAQ Bitext Dataset consists of natural FAQ-style Question-Answer pairs that align across languages.
-A sentence in the "WebFAQBitextMiningQuestions" task is the question originating from an aligned QA.
-The dataset is sourced from FAQ pages on the web.""",
+        description='The WebFAQ Bitext Dataset consists of natural FAQ-style Question-Answer pairs that align across languages. A sentence in the "WebFAQBitextMiningQuestions" task is the question originating from an aligned QA. The dataset is sourced from FAQ pages on the web.',
         reference="https://huggingface.co/PaDaS-Lab",
         dataset={
             "path": "PaDaS-Lab/webfaq-bitexts",
@@ -254,9 +252,7 @@ The dataset is sourced from FAQ pages on the web.""",
 class WebFAQBitextMiningQAs(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="WebFAQBitextMiningQAs",
-        description="""The WebFAQ Bitext Dataset consists of natural FAQ-style Question-Answer pairs that align across languages.
-A sentence in the "WebFAQBitextMiningQAs" task is a concatenation of a question and its corresponding answer.
-The dataset is sourced from FAQ pages on the web.""",
+        description='The WebFAQ Bitext Dataset consists of natural FAQ-style Question-Answer pairs that align across languages. A sentence in the "WebFAQBitextMiningQAs" task is a concatenation of a question and its corresponding answer. The dataset is sourced from FAQ pages on the web.',
         reference="https://huggingface.co/PaDaS-Lab",
         dataset={
             "path": "PaDaS-Lab/webfaq-bitexts",

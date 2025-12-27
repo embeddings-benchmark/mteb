@@ -6,6 +6,7 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 piccolo_base_zh = ModelMeta(
     loader=sentence_transformers_loader,
     name="sensenova/piccolo-base-zh",
+    model_type=["dense"],
     languages=["zho-Hans"],
     open_weights=True,
     revision="47c0a63b8f667c3482e05b2fd45577bb19252196",
@@ -29,6 +30,7 @@ piccolo_base_zh = ModelMeta(
 piccolo_large_zh_v2 = ModelMeta(
     loader=sentence_transformers_loader,
     name="sensenova/piccolo-large-zh-v2",
+    model_type=["dense"],
     languages=["zho-Hans"],
     open_weights=False,  # They "temporarily" removed it in may last year
     # "Due to certain internal company considerations"
@@ -48,4 +50,10 @@ piccolo_large_zh_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,  # They don't say
+    citation="""@misc{2405.06932,
+    Author = {Junqin Huang and Zhongjie Hu and Zihao Jing and Mengya Gao and Yichao Wu},
+    Title = {Piccolo2: General Text Embedding with Multi-task Hybrid Loss Training},
+    Year = {2024},
+    Eprint = {arXiv:2405.06932},
+}""",
 )

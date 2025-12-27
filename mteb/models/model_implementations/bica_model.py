@@ -1,0 +1,35 @@
+from mteb.models import ModelMeta, sentence_transformers_loader
+
+bica_base = ModelMeta(
+    name="bisectgroup/BiCA-base",
+    model_type=["dense"],
+    loader=sentence_transformers_loader,
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="31237a836e5ae908c308a256573e5f0986498574",
+    release_date="2025-11-14",
+    n_parameters=110_000_000,
+    memory_usage_mb=418,
+    embed_dim=768,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/bisectgroup/BiCA-base",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code="https://github.com/NiravBhattLab/BiCA",
+    public_training_data="https://huggingface.co/datasets/bisectgroup/hard-negatives-traversal",
+    adapted_from="thenlper/gte-base",
+    citation="""
+@misc{sinha2025bicaeffectivebiomedicaldense,
+      title={BiCA: Effective Biomedical Dense Retrieval with Citation-Aware Hard Negatives}, 
+      author={Aarush Sinha and Pavan Kumar S and Roshan Balaji and Nirav Pravinbhai Bhatt},
+      year={2025},
+      eprint={2511.08029},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2511.08029}, 
+}
+""",
+    training_datasets=set(),
+)

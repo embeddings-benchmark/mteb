@@ -1,17 +1,18 @@
 import argparse
 import logging
 import os
+import warnings
 from pathlib import Path
 
 import torch
 from rich.logging import RichHandler
 
 import mteb
+from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
+from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
-
-from ._display_tasks import _display_benchmarks, _display_tasks
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +54,7 @@ def run(args: argparse.Namespace) -> None:
 
     if args.benchmarks:
         benchmarks = mteb.get_benchmarks(names=args.benchmarks)
-        tasks = [t for b in benchmarks for t in b.tasks]
+        tasks = tuple(t for b in benchmarks for t in b.tasks)
     else:
         tasks = mteb.get_tasks(
             categories=args.categories,
@@ -69,15 +70,17 @@ def run(args: argparse.Namespace) -> None:
 
     overwrite_strategy = args.overwrite_strategy
     if args.overwrite:
-        logger.warning(
-            "`--overwrite` is deprecated, please use `--overwrite-strategy 'always'` instead."
+        warnings.warn(
+            "`--overwrite` is deprecated, please use `--overwrite-strategy 'always'` instead.",
+            DeprecationWarning,
         )
         overwrite_strategy = OverwriteStrategy.ALWAYS.value
 
     prediction_folder = args.prediction_folder
     if args.save_predictions:
-        logger.warning(
-            "`--save_predictions` is deprecated, please use `--prediction-folder` instead."
+        warnings.warn(
+            "`--save_predictions` is deprecated, please use `--prediction-folder` instead.",
+            DeprecationWarning,
         )
         prediction_folder = args.output_folder
 
@@ -279,15 +282,17 @@ def _create_meta(args: argparse.Namespace) -> None:
         from_existing = Path(from_existing)
 
     if output_path.exists() and overwrite:
-        logger.warning("Output path already exists, overwriting.")
+        msg = "Output path already exists, overwriting."
+        logger.warning(msg)
+        warnings.warn(msg)
     elif output_path.exists():
         raise FileExistsError(
             "Output path already exists, use --overwrite to overwrite."
         )
 
-    tasks = []
+    tasks: list[AbsTask] = []
     if tasks_names is not None:
-        tasks = mteb.get_tasks(tasks_names)
+        tasks = list(mteb.get_tasks(tasks_names))
     if benchmarks is not None:
         benchmarks = mteb.get_benchmarks(benchmarks)
         for benchmark in benchmarks:

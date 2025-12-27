@@ -12,6 +12,7 @@ from mteb._create_dataloaders import create_dataloader
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import EncoderProtocol
 from mteb.similarity_functions import compute_pairwise_similarity
+from mteb.types import PromptType
 
 from .evaluator import Evaluator
 
@@ -42,44 +43,49 @@ class AnySTSEvaluator(Evaluator):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
+        input1_prompt_type: PromptType | None,
+        input2_prompt_type: PromptType | None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
-        self.first_column = create_dataloader(
-            dataset,
-            task_metadata,
-            input_column=sentences_column_names[0],
-        )
-        self.second_column = create_dataloader(
-            dataset,
-            task_metadata,
-            input_column=sentences_column_names[1],
-        )
+        self.dataset = dataset
+        self.input_columns = sentences_column_names
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
+        self.input1_prompt_type = input1_prompt_type
+        self.input2_prompt_type = input2_prompt_type
 
     def __call__(
-        self,
-        model: EncoderProtocol,
-        *,
-        encode_kwargs: dict[str, Any],
+        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
     ) -> STSEvaluatorScores:
         logger.info("Running semantic similarity - Encoding samples (1/2)")
         embeddings1 = model.encode(
-            self.first_column,
+            create_dataloader(
+                self.dataset,
+                self.task_metadata,
+                input_column=self.input_columns[0],
+                **encode_kwargs,
+            ),
             task_metadata=self.task_metadata,
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
+            prompt_type=self.input1_prompt_type,
             **encode_kwargs,
         )
 
         logger.info("Running semantic similarity - Encoding samples (2/2)...")
         embeddings2 = model.encode(
-            self.second_column,
+            create_dataloader(
+                self.dataset,
+                self.task_metadata,
+                input_column=self.input_columns[1],
+                **encode_kwargs,
+            ),
             task_metadata=self.task_metadata,
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
+            prompt_type=self.input2_prompt_type,
             **encode_kwargs,
         )
 

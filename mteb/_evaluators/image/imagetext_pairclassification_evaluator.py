@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, Any
 
 import torch
 import torch.nn.functional as F
 from datasets import Dataset
-from PIL.Image import Image
 from torch.utils.data import DataLoader
 
 from mteb._create_dataloaders import (
@@ -14,6 +16,10 @@ from mteb._evaluators.evaluator import Evaluator
 from mteb._requires_package import requires_image_dependencies
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.models_protocols import EncoderProtocol
+
+if TYPE_CHECKING:
+    from PIL.Image import Image
+
 
 logger = logging.getLogger(__name__)
 
@@ -56,8 +62,8 @@ class ImageTextPairClassificationEvaluator(Evaluator):
     def __init__(
         self,
         dataset,
-        images_column_names: str | list[str],
-        texts_column_names: str | list[str],
+        images_column_names: str | Sequence[str],
+        texts_column_names: str | Sequence[str],
         num_images_per_sample: int,
         num_texts_per_sample: int,
         task_metadata: TaskMetadata,
@@ -77,10 +83,8 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
 
-    def __call__(
-        self,
-        model: EncoderProtocol,
-        encode_kwargs: dict[str, Any],
+    def __call__(  # type: ignore[override]
+        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
     ) -> list[torch.Tensor]:
         images = []
         if isinstance(self.images_column_names, str):
@@ -103,7 +107,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         text_embeddings = model.encode(
             DataLoader(
                 Dataset.from_dict({"text": texts}),
-                batch_size=encode_kwargs["batch_size"],
+                **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,
@@ -122,8 +126,8 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         image_embeddings = model.encode(
             DataLoader(
                 CustomImageDataset(images),
-                batch_size=encode_kwargs["batch_size"],
                 collate_fn=lambda x: {"image": [item["image"] for item in x]},
+                **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,

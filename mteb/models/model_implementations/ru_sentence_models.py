@@ -43,11 +43,19 @@ GIGA_task_prompts = {
         "query": "Given a news title, retrieve relevant news article",
         "document": "",
     },
+    "RiaNewsRetrievalHardNegatives.v2": {
+        "query": "Given a news title, retrieve relevant news article",
+        "document": "",
+    },
     "MIRACLReranking": {
         "query": "Given a question, retrieve Wikipedia passages that answer the question",
         "document": "",
     },
     "MIRACLRetrieval": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question",
+        "document": "",
+    },
+    "MIRACLRetrievalHardNegatives.v2": {
         "query": "Given a question, retrieve Wikipedia passages that answer the question",
         "document": "",
     },
@@ -230,6 +238,7 @@ GIGA_task_prompts = {
 rubert_tiny = ModelMeta(
     loader=sentence_transformers_loader,
     name="cointegrated/rubert-tiny",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="5441c5ea8026d4f6d7505ec004845409f1259fb1",
@@ -255,6 +264,7 @@ rubert_tiny = ModelMeta(
 rubert_tiny2 = ModelMeta(
     loader=sentence_transformers_loader,
     name="cointegrated/rubert-tiny2",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="dad72b8f77c5eef6995dd3e4691b758ba56b90c3",
@@ -281,6 +291,7 @@ rubert_tiny2 = ModelMeta(
 sbert_large_nlu_ru = ModelMeta(
     loader=sentence_transformers_loader,
     name="ai-forever/sbert_large_nlu_ru",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="af977d5dfa46a3635e29bf0ef383f2df2a08d47a",
@@ -306,6 +317,7 @@ sbert_large_nlu_ru = ModelMeta(
 sbert_large_mt_nlu_ru = ModelMeta(
     loader=sentence_transformers_loader,
     name="ai-forever/sbert_large_mt_nlu_ru",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="05300876c2b83f46d3ddd422a7f17e45cf633bb0",
@@ -333,6 +345,7 @@ user_base_ru = ModelMeta(
         model_prompts={"query": "query: ", "document": "passage: "},
     ),
     name="deepvk/USER-base",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="436a489a2087d61aa670b3496a9915f84e46c861",
@@ -393,6 +406,7 @@ user_base_ru = ModelMeta(
 user_bge_m3 = ModelMeta(
     loader=sentence_transformers_loader,
     name="deepvk/USER-bge-m3",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="0cc6cfe48e260fb0474c753087a69369e88709ae",
@@ -431,11 +445,19 @@ user_bge_m3 = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
+    citation="""@misc{deepvk2024user,
+    title={USER: Universal Sentence Encoder for Russian},
+    author={Malashenko, Boris and  Zemerov, Anton and Spirin, Egor},
+    url={https://huggingface.co/datasets/deepvk/USER-base},
+    publisher={Hugging Face},
+    year={2024},
+}""",
 )
 
 deberta_v1_ru = ModelMeta(
     loader=sentence_transformers_loader,
     name="deepvk/deberta-v1-base",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="bdd30b0e19757e6940c92c7aff19e8fc0a60dff4",
@@ -466,6 +488,7 @@ deberta_v1_ru = ModelMeta(
 rubert_base_cased = ModelMeta(
     loader=sentence_transformers_loader,
     name="DeepPavlov/rubert-base-cased",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="4036cab694767a299f2b9e6492909664d9414229",
@@ -501,6 +524,7 @@ rubert_base_cased = ModelMeta(
 distilrubert_small_cased_conversational = ModelMeta(
     loader=sentence_transformers_loader,
     name="DeepPavlov/distilrubert-small-cased-conversational",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="e348066b4a7279b97138038299bddc6580a9169a",
@@ -535,6 +559,7 @@ distilrubert_small_cased_conversational = ModelMeta(
 rubert_base_cased_sentence = ModelMeta(
     loader=sentence_transformers_loader,
     name="DeepPavlov/rubert-base-cased-sentence",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="78b5122d6365337dd4114281b0d08cd1edbb3bc8",
@@ -559,6 +584,7 @@ rubert_base_cased_sentence = ModelMeta(
 labse_en_ru = ModelMeta(
     loader=sentence_transformers_loader,
     name="cointegrated/LaBSE-en-ru",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="cf0714e606d4af551e14ad69a7929cd6b0da7f7e",
@@ -586,6 +612,7 @@ turbo_models_datasets = set(
 rubert_tiny_turbo = ModelMeta(
     loader=sentence_transformers_loader,
     name="sergeyzh/rubert-tiny-turbo",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="8ce0cf757446ce9bb2d5f5a4ac8103c7a1049054",
@@ -608,6 +635,7 @@ rubert_tiny_turbo = ModelMeta(
 rubert_mini_frida = ModelMeta(
     loader=sentence_transformers_loader,
     name="sergeyzh/rubert-mini-frida",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="19b279b78afd945b5ccae78f63e284909814adc2",
@@ -635,6 +663,7 @@ rubert_mini_frida = ModelMeta(
 labse_ru_turbo = ModelMeta(
     loader=sentence_transformers_loader,
     name="sergeyzh/LaBSE-ru-turbo",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="1940b046c6b5e125df11722b899130329d0a46da",
@@ -683,6 +712,7 @@ rosberta_ru_en = ModelMeta(
         model_prompts=rosberta_prompts,
     ),
     name="ai-forever/ru-en-RoSBERTa",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
@@ -755,6 +785,7 @@ frida_prompts = {
     "SensitiveTopicsClassification": "categorize_topic: ",
     "TERRa": "categorize_entailment: ",
     "RiaNewsRetrieval": "categorize: ",
+    "RiaNewsRetrievalHardNegatives.v2": "",
 }
 
 frida_training_datasets = {
@@ -847,6 +878,7 @@ frida = ModelMeta(
         model_prompts=frida_prompts,
     ),
     name="ai-forever/FRIDA",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="7292217af9a9e6dbf07048f76b434ad1e2aa8b76",
@@ -864,6 +896,7 @@ frida = ModelMeta(
     public_training_data=None,
     public_training_code=None,
     framework=["Sentence Transformers", "PyTorch"],
+    citation=None,
 )
 
 giga_embeddings = ModelMeta(
@@ -879,6 +912,7 @@ giga_embeddings = ModelMeta(
         },
     ),
     name="ai-sage/Giga-Embeddings-instruct",
+    model_type=["dense"],
     languages=["eng-Latn", "rus-Cyrl"],
     open_weights=True,
     revision="0ad5b29bfecd806cecc9d66b927d828a736594dc",
@@ -910,6 +944,7 @@ berta_training_datasets = (
 berta = ModelMeta(
     loader=sentence_transformers_loader,
     name="sergeyzh/BERTA",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="914c8c8aed14042ed890fc2c662d5e9e66b2faa7",
@@ -982,6 +1017,7 @@ user2_small = ModelMeta(
         model_prompts=user2_prompts,
     ),
     name="deepvk/USER2-small",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="23f65b34cf7632032061f5cc66c14714e6d4cee4",
@@ -999,6 +1035,13 @@ user2_small = ModelMeta(
     public_training_data=None,
     public_training_code="https://github.com/BlessedTatonka/some_code/tree/2899f27d51efdf4217fc6453799ff197e9792f1e",
     framework=["Sentence Transformers", "PyTorch"],
+    citation="""@misc{deepvk2025user,
+    title={USER2},
+    author={Malashenko, Boris and Spirin, Egor and Sokolov Andrey},
+    url={https://huggingface.co/deepvk/USER2-small},
+    publisher={Hugging Face},
+    year={2025},
+}""",
 )
 
 user2_base = ModelMeta(
@@ -1007,6 +1050,7 @@ user2_base = ModelMeta(
         model_prompts=user2_prompts,
     ),
     name="deepvk/USER2-base",
+    model_type=["dense"],
     languages=["rus-Cyrl"],
     open_weights=True,
     revision="0942cf96909b6d52e61f79a01e2d30c7be640b27",
@@ -1024,4 +1068,11 @@ user2_base = ModelMeta(
     public_training_data=None,
     public_training_code="https://github.com/BlessedTatonka/some_code/tree/2899f27d51efdf4217fc6453799ff197e9792f1e",
     framework=["Sentence Transformers", "PyTorch"],
+    citation="""@misc{deepvk2025user,
+    title={USER2},
+    author={Malashenko, Boris and Spirin, Egor and Sokolov Andrey},
+    url={https://huggingface.co/deepvk/USER2-base},
+    publisher={Hugging Face},
+    year={2025},
+}""",
 )

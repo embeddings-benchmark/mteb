@@ -1,14 +1,15 @@
+from __future__ import annotations
+
 import base64
 import logging
 import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from io import BytesIO
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import requests
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 
 from mteb._requires_package import requires_package
@@ -18,6 +19,10 @@ from mteb.models.model_implementations.bge_models import bge_chinese_training_da
 from mteb.models.model_implementations.nvidia_models import nvidia_training_datasets
 from mteb.models.model_meta import ModelMeta
 from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from PIL import Image
+
 
 logger = logging.getLogger(__name__)
 
@@ -344,7 +349,7 @@ TASK_NAME_TO_INSTRUCTION = {
     "SprintDuplicateQuestions": "Retrieve semantically similar text\n{}",
     "TwitterSemEval2015": "Retrieve semantically similar text\n{}",
     "TwitterURLCorpus": "Retrieve semantically similar text\n{}",
-    "CQADupstackGamingRetrieval": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given questionn\n{}",
+    "CQADupstackGamingRetrieval": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question\n{}",
     "CQADupstackUnixRetrieval": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question\n{}",
     "DuRetrieval": "为这个句子生成表示以用于检索相关内容：{}",
     "T2Retrieval": "为这个句子生成表示以用于检索相关内容：{}",
@@ -408,6 +413,7 @@ TASK_NAME_TO_INSTRUCTION = {
 
 seed_embedding = ModelMeta(
     name="Bytedance/Seed1.6-embedding",
+    model_type=["dense"],
     revision="1",
     release_date="2025-06-18",
     languages=[

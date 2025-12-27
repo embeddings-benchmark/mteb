@@ -1,4 +1,4 @@
-from datasets import Dataset, DatasetDict, load_dataset
+from datasets import Dataset, DatasetDict, Image, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -61,9 +61,8 @@ def _load_xm3600_data(
         lang_corpus = lang_data.map(
             lambda x: {
                 "id": "corpus-" + x["image_id"],
-                "text": None,
                 "modality": "image",
-                "image": x["image"]["bytes"],
+                "image": x["image"],
             },
             remove_columns=[
                 "captions",
@@ -73,6 +72,7 @@ def _load_xm3600_data(
                 "image_id",
             ],
         )
+        lang_corpus = lang_corpus.cast_column("image", Image())
 
         corpus[lang][split] = lang_corpus
 
@@ -90,7 +90,6 @@ def _load_xm3600_data(
                         "id": query_id,
                         "text": caption,
                         "modality": "text",
-                        "image": None,
                     }
                 )
                 if query_id not in relevant_docs[lang][split]:

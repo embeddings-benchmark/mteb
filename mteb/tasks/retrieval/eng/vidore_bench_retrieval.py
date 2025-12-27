@@ -24,7 +24,6 @@ def _load_data(
             lambda x: {
                 "id": f"query-{split}-{x['query-id']}",
                 "text": x["query"],
-                "image": None,
                 "modality": "text",
             },
             remove_columns=["query-id", "query"],
@@ -40,7 +39,6 @@ def _load_data(
         corpus_ds = corpus_ds.map(
             lambda x: {
                 "id": f"corpus-{split}-{x['corpus-id']}",
-                "text": None,
                 "modality": "image",
             },
             remove_columns=["corpus-id"],
@@ -353,6 +351,7 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
+        adapted_from=["VidoreDocVQARetrieval"],
     )
 
     def load_data(self) -> None:
@@ -396,6 +395,7 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
+        adapted_from=["VidoreDocVQARetrieval"],
     )
 
     def load_data(self) -> None:
@@ -439,6 +439,7 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
+        adapted_from=["VidoreDocVQARetrieval"],
     )
 
     def load_data(self) -> None:
@@ -482,6 +483,7 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
+        adapted_from=["VidoreDocVQARetrieval"],
     )
 
     def load_data(self) -> None:

@@ -1,8 +1,10 @@
 import logging
+from collections import defaultdict
 from typing import Any, ClassVar
 
 import numpy as np
 import torch
+from sentence_transformers import CrossEncoder
 from torch.utils.data import DataLoader
 
 from mteb._requires_package import requires_package
@@ -10,12 +12,91 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import PROGRAMMING_LANGS
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.models.sentence_transformer_wrapper import (
+    CrossEncoderWrapper,
+    SentenceTransformerEncoderWrapper,
+)
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 MIN_SENTENCE_TRANSFORMERS_VERSION = (3, 1, 0)
+
+multilingual_langs = [
+    "afr-Latn",
+    "ara-Arab",
+    "aze-Latn",
+    "bel-Cyrl",
+    "bul-Cyrl",
+    "ben-Beng",
+    "cat-Latn",
+    "ceb-Latn",
+    "ces-Latn",
+    "cym-Latn",
+    "dan-Latn",
+    "deu-Latn",
+    "ell-Grek",
+    "eng-Latn",
+    "spa-Latn",
+    "est-Latn",
+    "eus-Latn",
+    "fas-Arab",
+    "fin-Latn",
+    "fra-Latn",
+    "glg-Latn",
+    "guj-Gujr",
+    "heb-Hebr",
+    "hin-Deva",
+    "hrv-Latn",
+    "hat-Latn",
+    "hun-Latn",
+    "hye-Armn",
+    "ind-Latn",
+    "isl-Latn",
+    "ita-Latn",
+    "jpn-Jpan",
+    "jav-Latn",
+    "kat-Geor",
+    "kaz-Cyrl",
+    "khm-Khmr",
+    "kan-Knda",
+    "kor-Hang",
+    "kir-Cyrl",
+    "lao-Laoo",
+    "lit-Latn",
+    "lav-Latn",
+    "mkd-Cyrl",
+    "mal-Mlym",
+    "mon-Cyrl",
+    "mar-Deva",
+    "msa-Latn",
+    "mya-Mymr",
+    "nep-Deva",
+    "nld-Latn",
+    "nor-Latn",
+    "nob-Latn",
+    "nno-Latn",
+    "pan-Guru",
+    "pol-Latn",
+    "por-Latn",
+    "que-Latn",
+    "ron-Latn",
+    "rus-Cyrl",
+    "sin-Sinh",
+    "slk-Latn",
+    "slv-Latn",
+    "swa-Latn",
+    "tam-Taml",
+    "tel-Telu",
+    "tha-Thai",
+    "tgl-Latn",
+    "tur-Latn",
+    "ukr-Cyrl",
+    "urd-Arab",
+    "vie-Latn",
+    "yor-Latn",
+    "zho-Hans",
+]
 
 XLMR_LANGUAGES = [
     "afr-Latn",
@@ -119,6 +200,28 @@ XLMR_LANGUAGES = [
     "zho-Hans",
 ]
 
+JINARerankerV3_TRAINING_DATA = {
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MIRACLReranking",
+    "CMedQAv1-reranking",
+    "CMedQAv2-reranking",
+    "MrTidyRetrieval",
+    "T2Reranking",
+    "MSMARCO",
+    "MSMARCOHardNegatives",
+    "NQ",
+    "NQHardNegatives",
+    "HotpotQA",
+    "HotpotQAHardNegatives",
+    "T2Retrieval",
+    "DuRetrieval",
+    "MMarcoReranking",
+    "CornStack",
+    "MultiLongDocRetrieval",
+    "StackOverflowQA",
+}
+
 JinaV4_TRAINING_DATA = {
     "MSMARCO",
     "MSMARCOHardNegatives",
@@ -139,12 +242,70 @@ JinaV4_TRAINING_DATA = {
     "CornStack",
     "VDRMultilingualRetrieval",
     # from https://huggingface.co/datasets/vidore/colpali_train_set
-    "DocVQA",
-    "InfoVQA",
-    "TATDQA",
-    "arXivQA",
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreArxivQARetrieval",
     # "other", # inhouse dataset including synthetic datasets
 }
+
+
+class JinaRerankerV3Wrapper(CrossEncoderWrapper):
+    """Wrapper integration for MTEB."""
+
+    def __init__(
+        self,
+        model: CrossEncoder | str,
+        revision: str | None = None,
+        trust_remote_code: bool = True,
+        **kwargs: Any,
+    ) -> None:
+        from sentence_transformers.util import get_device_name
+        from transformers import AutoModel
+
+        self.model = AutoModel.from_pretrained(
+            model, trust_remote_code=trust_remote_code, dtype="auto"
+        )
+
+        device = kwargs.get("device", None)
+        if device is None:
+            device = get_device_name()
+            logger.info(f"Use pytorch device: {device}")
+
+        self.model.to(device)
+        self.model.eval()
+
+    def predict(
+        self,
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        all_corpus = [text for batch in inputs2 for text in batch["text"]]
+        all_queries = [text for batch in inputs1 for text in batch["text"]]
+
+        sentences_count = len(all_corpus)
+        query_groups: dict[str, list[tuple[int, str]]] = defaultdict(list)
+        for idx, (query, doc) in enumerate(zip(all_queries, all_corpus)):
+            query_groups[query].append((idx, doc))
+
+        results = np.zeros(sentences_count, dtype=np.float32)
+        for query, doc_infos in query_groups.items():
+            original_indices, docs = zip(*doc_infos)
+
+            scores = self.model.rerank(
+                query, list(docs), max_query_length=3072, max_doc_length=2048
+            )
+            for scr in scores:
+                original_idx = original_indices[scr["index"]]
+                results[original_idx] = float(scr["relevance_score"])
+
+        return results
 
 
 class JinaWrapper(SentenceTransformerEncoderWrapper):
@@ -310,9 +471,19 @@ class JinaV4Wrapper(AbsEncoder):
         text_embeddings = None
         image_embeddings = None
         if "text" in inputs.dataset.features:
-            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+            text_embeddings = self.get_text_embeddings(
+                inputs,
+                task_metadata=task_metadata,
+                prompt_type=prompt_type,
+                **kwargs,
+            )
         if "image" in inputs.dataset.features:
-            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
+            image_embeddings = self.get_image_embeddings(
+                inputs,
+                task_metadata=task_metadata,
+                prompt_type=prompt_type,
+                **kwargs,
+            )
 
         if text_embeddings is not None and image_embeddings is not None:
             if len(text_embeddings) != len(image_embeddings):
@@ -543,6 +714,43 @@ def get_programming_task_override(
     return current_task_name
 
 
+jina_reranker_v3 = ModelMeta(
+    loader=JinaRerankerV3Wrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+    ),
+    name="jinaai/jina-reranker-v3",
+    model_type=["cross-encoder"],
+    languages=multilingual_langs,
+    open_weights=True,
+    revision="050e171c4f75dfec5b648ed8470a2475e5a30f30",
+    release_date="2025-09-18",  # official release date
+    modalities=["text"],
+    n_parameters=int(0.6 * 1e9),
+    memory_usage_mb=1138,
+    max_tokens=131072,
+    embed_dim=None,
+    license="cc-by-nc-4.0",
+    similarity_fn_name=None,
+    framework=["PyTorch"],
+    use_instructions=None,
+    reference="https://huggingface.co/jinaai/jina-reranker-v3",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=JINARerankerV3_TRAINING_DATA,
+    adapted_from="Qwen/Qwen3-0.6B",
+    citation="""@misc{wang2025jinarerankerv3lateinteractionlistwise,
+      title={jina-reranker-v3: Last but Not Late Interaction for Listwise Document Reranking},
+      author={Feng Wang and Yuqing Li and Han Xiao},
+      year={2025},
+      eprint={2509.25085},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2509.25085},}
+""",
+)
+
+
 jina_embeddings_v4 = ModelMeta(
     loader=JinaV4Wrapper,
     loader_kwargs=dict(
@@ -555,6 +763,7 @@ jina_embeddings_v4 = ModelMeta(
         },
     ),
     name="jinaai/jina-embeddings-v4",
+    model_type=["dense"],
     languages=XLMR_LANGUAGES,
     open_weights=True,
     revision="4a58ca57710c49f51896e4bc820e202fbf64904b",
@@ -586,7 +795,7 @@ jina_embeddings_v4 = ModelMeta(
 
 
 jina_embeddings_v3 = ModelMeta(
-    loader=JinaWrapper,  # type: ignore
+    loader=JinaWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts={
@@ -603,6 +812,7 @@ jina_embeddings_v3 = ModelMeta(
         },
     ),
     name="jinaai/jina-embeddings-v3",
+    model_type=["dense"],
     languages=XLMR_LANGUAGES,
     open_weights=True,
     revision="215a6e121fa0183376388ac6b1ae230326bfeaed",
@@ -656,6 +866,7 @@ jina_embeddings_v2_base_en = ModelMeta(
         trust_remote_code=True,
     ),
     name="jinaai/jina-embeddings-v2-base-en",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="6e85f575bc273f1fd840a658067d0157933c83f0",
@@ -719,6 +930,7 @@ jina_embeddings_v2_small_en = ModelMeta(
         trust_remote_code=True,
     ),
     name="jinaai/jina-embeddings-v2-small-en",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="44e7d1d6caec8c883c2d4b207588504d519788d0",
@@ -779,6 +991,7 @@ jina_embeddings_v2_small_en = ModelMeta(
 jina_embedding_b_en_v1 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     name="jinaai/jina-embedding-b-en-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="32aa658e5ceb90793454d22a57d8e3a14e699516",
@@ -835,6 +1048,7 @@ jina_embedding_b_en_v1 = ModelMeta(
 jina_embedding_s_en_v1 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     name="jinaai/jina-embedding-s-en-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="5ac6cd473e2324c6d5f9e558a6a9f65abb57143e",

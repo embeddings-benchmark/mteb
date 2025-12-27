@@ -5,6 +5,7 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 
 xlm_roberta_ua_distilled = ModelMeta(
     name="panalexeu/xlm-roberta-ua-distilled",
+    model_type=["dense"],
     loader=sentence_transformers_loader,
     n_parameters=278_000_000,
     memory_usage_mb=1061,
@@ -28,4 +29,13 @@ xlm_roberta_ua_distilled = ModelMeta(
     modalities=["text"],
     public_training_data=None,
     use_instructions=False,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}""",
 )

@@ -5,7 +5,6 @@ from typing import Any, TypedDict
 
 import numpy as np
 from datasets import Dataset, DatasetDict
-from PIL import ImageFile
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     accuracy_score,
@@ -32,7 +31,6 @@ from ._statistics_calculation import (
 )
 from .abstask import AbsTask
 
-ImageFile.LOAD_TRUNCATED_IMAGES = True
 logger = logging.getLogger(__name__)
 
 
@@ -145,6 +143,9 @@ class AbsTaskClassification(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
+        if self.dataset is None:
+            raise RuntimeError("Dataset not loaded.")
+
         if "random_state" in self.evaluator_model.get_params():
             self.evaluator_model = self.evaluator_model.set_params(
                 random_state=self.seed
@@ -177,11 +178,11 @@ class AbsTaskClassification(AbsTask):
             )
             self._add_main_score(scores[hf_subset])
 
-        return scores
+        return scores  # type: ignore[return-value]
 
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: DatasetDict,
         *,
         encode_kwargs: dict[str, Any],
@@ -190,6 +191,9 @@ class AbsTaskClassification(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
+
         train_split = data_split[self.train_split]
         eval_split = data_split[hf_split]
 
@@ -239,7 +243,7 @@ class AbsTaskClassification(AbsTask):
             # ap will be none for non binary classification tasks
             k: (
                 float(np.mean(values))
-                if (values := [s[k] for s in scores if s[k] is not None])
+                if (values := [s[k] for s in scores if s[k] is not None])  # type: ignore[literal-required]
                 else np.nan
             )
             for k in scores[0].keys()
@@ -247,7 +251,7 @@ class AbsTaskClassification(AbsTask):
         logger.info(f"Running {self.metadata.name} - Finished.")
         return FullClassificationMetrics(
             scores_per_experiment=scores,
-            **avg_scores,
+            **avg_scores,  # type: ignore[typeddict-item]
         )
 
     def _calculate_scores(

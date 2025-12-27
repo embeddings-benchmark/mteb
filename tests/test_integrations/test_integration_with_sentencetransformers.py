@@ -7,6 +7,7 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
 from mteb.abstasks import AbsTask
+from mteb.models import ModelMeta
 from tests.mock_tasks import (
     MockInstructionReranking,
     MockRerankingTask,
@@ -44,3 +45,56 @@ def test_sentence_transformer_integration_cross_encoder(task: AbsTask, model_nam
     """Test that a task can be fetched and run"""
     model = CrossEncoder(model_name)
     mteb.evaluate(model, task, cache=None)
+
+
+def test_model_meta_load_sentence_transformer_metadata_from_model():
+    # used also in test CLI
+    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    meta = ModelMeta.from_sentence_transformer_model(model)
+
+    assert meta.name == "sentence-transformers/all-MiniLM-L6-v2"
+    assert meta.revision is not None
+    assert meta.release_date == "2021-08-30"
+    assert meta.n_parameters == 22713728
+    assert meta.memory_usage_mb == 87
+    assert meta.max_tokens == 256
+    assert meta.embed_dim == 384
+    assert meta.license == "apache-2.0"
+    assert meta.similarity_fn_name.value == "cosine"
+
+
+@pytest.mark.parametrize("as_sentence_transformer", [True, False])
+@pytest.mark.parametrize("model_name", ["sentence-transformers/all-MiniLM-L6-v2"])
+def test_model_meta_sentence_transformer_from_hub(as_sentence_transformer, model_name):
+    if as_sentence_transformer:
+        meta = ModelMeta.from_hub(model_name)
+    else:
+        meta = ModelMeta._from_hub(model_name)
+
+    assert meta.name == "sentence-transformers/all-MiniLM-L6-v2"
+    assert meta.revision is not None
+    assert meta.release_date == "2021-08-30"
+    assert meta.n_parameters == 22713728
+    assert meta.memory_usage_mb == 87
+    assert meta.embed_dim == 384
+    assert meta.license == "apache-2.0"
+    # model have max_position_embeddings 512, but in sentence_bert_config 256
+    if as_sentence_transformer:
+        assert meta.similarity_fn_name.value == "cosine"
+        assert meta.max_tokens == 256
+    else:
+        assert meta.max_tokens == 512
+
+
+@pytest.mark.parametrize("model_name", ["cross-encoder/ms-marco-TinyBERT-L2-v2"])
+def test_cross_encoder_model_meta(model_name: str):
+    model = CrossEncoder(model_name)
+    meta = ModelMeta.from_cross_encoder(model)
+
+    assert meta.name == "cross-encoder/ms-marco-TinyBERT-L2-v2"
+    assert meta.revision is not None
+    assert meta.release_date == "2021-04-15"
+    assert meta.n_parameters == 4386561
+    assert meta.memory_usage_mb == 17
+    assert meta.max_tokens == 512
+    assert meta.license == "apache-2.0"

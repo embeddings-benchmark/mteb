@@ -105,6 +105,7 @@ class ALIGNModel(AbsEncoder):
 align_base = ModelMeta(
     loader=ALIGNModel,
     name="kakaobrain/align-base",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="e96a37facc7b1f59090ece82293226b817afd6ba",
     release_date="2023-02-24",
@@ -124,4 +125,10 @@ align_base = ModelMeta(
     training_datasets=set(
         #  COYO-700M
     ),
+    citation="""@misc{kakaobrain2022coyo-align,
+    title         = {COYO-ALIGN},
+    author        = {Yoon, Boogeo and Lee, Youhan and Baek, Woonhyuk},
+    year          = {2022},
+    howpublished  = {https://github.com/kakaobrain/coyo-align},
+}""",
 )

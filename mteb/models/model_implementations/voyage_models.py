@@ -156,16 +156,15 @@ class VoyageModel(AbsEncoder):
                 and len(batch) < batch_size
                 and batch_tokens < self._max_tokens_per_batch
             ):
-                n_tokens = len(
-                    self._client.tokenize([sentences[index]], model=self._model_name)[0]
-                )
+                txt = sentences[index] if len(sentences[index]) > 0 else " "
+                n_tokens = len(self._client.tokenize([txt], model=self._model_name)[0])
                 if (
                     batch_tokens + n_tokens > self._max_tokens_per_batch
                     and len(batch) > 0
                 ):
                     break
                 batch_tokens += n_tokens
-                batch.append(sentences[index])
+                batch.append(txt)
                 index += 1
 
             embeddings.extend(
@@ -209,6 +208,7 @@ model_prompts = {
 
 voyage_3_large = ModelMeta(
     name="voyageai/voyage-3-large",  # Date of publication of this post https://blog.voyageai.com/2025/01/07/voyage-3-large/
+    model_type=["dense"],
     revision="1",
     release_date="2025-01-07",
     languages=None,  # supported languages not specified
@@ -235,6 +235,7 @@ voyage_3_large = ModelMeta(
 
 voyage_3_5 = ModelMeta(
     name="voyageai/voyage-3.5",
+    model_type=["dense"],
     revision="1",
     release_date="2025-01-21",
     languages=None,  # supported languages not specified
@@ -249,7 +250,7 @@ voyage_3_5 = ModelMeta(
     n_parameters=None,
     memory_usage_mb=None,
     license=None,
-    reference="https://docs.voyageai.com/docs/embeddings",
+    reference="https://blog.voyageai.com/2025/05/20/voyage-3-5/",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
@@ -260,6 +261,7 @@ voyage_3_5 = ModelMeta(
 
 voyage_3_5_int8 = ModelMeta(
     name="voyageai/voyage-3.5 (output_dtype=int8)",
+    model_type=["dense"],
     revision="1",
     release_date="2025-01-21",
     languages=None,  # supported languages not specified
@@ -274,7 +276,7 @@ voyage_3_5_int8 = ModelMeta(
     n_parameters=None,
     memory_usage_mb=None,
     license=None,
-    reference="https://docs.voyageai.com/docs/flexible-dimensions-and-quantization",
+    reference="https://blog.voyageai.com/2025/05/20/voyage-3-5/",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
@@ -286,6 +288,7 @@ voyage_3_5_int8 = ModelMeta(
 
 voyage_3_5_binary = ModelMeta(
     name="voyageai/voyage-3.5 (output_dtype=binary)",
+    model_type=["dense"],
     revision="1",
     release_date="2025-01-21",
     languages=None,  # supported languages not specified
@@ -300,7 +303,7 @@ voyage_3_5_binary = ModelMeta(
     n_parameters=None,
     memory_usage_mb=None,
     license=None,
-    reference="https://docs.voyageai.com/docs/flexible-dimensions-and-quantization",
+    reference="https://blog.voyageai.com/2025/05/20/voyage-3-5/",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
@@ -312,6 +315,7 @@ voyage_3_5_binary = ModelMeta(
 
 voyage_large_2_instruct = ModelMeta(
     name="voyageai/voyage-large-2-instruct",
+    model_type=["dense"],
     revision="1",
     release_date="2024-05-05",
     languages=None,  # supported languages not specified
@@ -337,6 +341,7 @@ voyage_large_2_instruct = ModelMeta(
 
 voyage_finance_2 = ModelMeta(
     name="voyageai/voyage-finance-2",
+    model_type=["dense"],
     revision="1",
     release_date="2024-05-30",
     languages=None,  # supported languages not specified
@@ -362,6 +367,7 @@ voyage_finance_2 = ModelMeta(
 
 voyage_law_2 = ModelMeta(
     name="voyageai/voyage-law-2",
+    model_type=["dense"],
     revision="1",
     release_date="2024-04-15",
     languages=None,  # supported languages not specified
@@ -387,6 +393,7 @@ voyage_law_2 = ModelMeta(
 
 voyage_code_2 = ModelMeta(
     name="voyageai/voyage-code-2",
+    model_type=["dense"],
     revision="1",
     release_date="2024-01-23",
     languages=None,  # supported languages not specified
@@ -412,6 +419,7 @@ voyage_code_2 = ModelMeta(
 
 voyage_code_3 = ModelMeta(
     name="voyageai/voyage-code-3",
+    model_type=["dense"],
     revision="1",
     release_date="2024-12-04",
     languages=None,  # supported languages not specified
@@ -438,6 +446,7 @@ voyage_code_3 = ModelMeta(
 
 voyage_large_2 = ModelMeta(
     name="voyageai/voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
+    model_type=["dense"],
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
@@ -463,6 +472,7 @@ voyage_large_2 = ModelMeta(
 
 voyage_2 = ModelMeta(
     name="voyageai/voyage-2",
+    model_type=["dense"],
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
@@ -487,6 +497,7 @@ voyage_2 = ModelMeta(
 )
 voyage_multilingual_2 = ModelMeta(
     name="voyageai/voyage-multilingual-2",
+    model_type=["dense"],
     revision="1",
     release_date="2024-06-10",
     languages=None,  # supported languages not specified
@@ -512,6 +523,7 @@ voyage_multilingual_2 = ModelMeta(
 
 voyage_3 = ModelMeta(
     name="voyageai/voyage-3",
+    model_type=["dense"],
     revision="1",
     release_date="2024-09-18",
     languages=None,  # supported languages not specified
@@ -537,6 +549,7 @@ voyage_3 = ModelMeta(
 
 voyage_3_lite = ModelMeta(
     name="voyageai/voyage-3-lite",
+    model_type=["dense"],
     revision="1",
     release_date="2024-09-18",
     languages=None,  # supported languages not specified
@@ -562,6 +575,7 @@ voyage_3_lite = ModelMeta(
 
 voyage_3_exp = ModelMeta(
     name="voyageai/voyage-3-m-exp",
+    model_type=["dense"],
     revision="1",
     release_date="2025-01-08",
     languages=["eng-Latn"],

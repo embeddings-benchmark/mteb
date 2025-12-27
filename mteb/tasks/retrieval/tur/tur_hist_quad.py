@@ -42,9 +42,9 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, **kwargs) -> None:
-        """And transform to a retrieval datset, which have the following attributes
+        """And transform to a retrieval dataset, which have the following attributes
 
-        self.corpus = dict[doc_id, dict[str, str]] #id => dict with document datas like title and text
+        self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text
         self.queries = dict[query_id, str] #id => query
         self.relevant_docs = dict[query_id, dict[[doc_id, score]]
         """
@@ -59,7 +59,7 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
         text2id = {}
 
         for split in self.metadata.eval_splits:
-            ds: datasets.Dataset = self.dataset[split]  # type: ignore
+            ds: datasets.Dataset = self.dataset[split]
             ds = ds.shuffle(seed=42)
             max_samples = min(1024, len(ds))
             ds = ds.select(

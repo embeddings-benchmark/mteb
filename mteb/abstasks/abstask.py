@@ -1,10 +1,11 @@
 import json
 import logging
+import warnings
 from abc import ABC, abstractmethod
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from copy import copy
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, Literal, cast
 
 import numpy as np
 from datasets import ClassLabel, Dataset, DatasetDict, load_dataset
@@ -78,8 +79,8 @@ class AbsTask(ABC):
     """
 
     metadata: TaskMetadata
-    abstask_prompt: str | None = None
-    _eval_splits: list[str] | None = None
+    abstask_prompt: str
+    _eval_splits: Sequence[str] | None = None
     dataset: dict[HFSubset, DatasetDict] | None = None
     data_loaded: bool = False
     hf_subsets: list[HFSubset]
@@ -102,9 +103,9 @@ class AbsTask(ABC):
     def check_if_dataset_is_superseded(self) -> None:
         """Check if the dataset is superseded by a newer version."""
         if self.superseded_by:
-            logger.warning(
-                f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}', you might consider using the newer version of the dataset."
-            )
+            msg = f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}'. We recommend using the newer version of the dataset unless you are running a specific benchmark. See `get_task('{self.superseded_by}').metadata.description` to get a description of the task and changes."
+            logger.warning(msg)
+            warnings.warn(msg)
 
     def dataset_transform(self):
         """A transform operations applied to the dataset after loading.
@@ -123,7 +124,7 @@ class AbsTask(ABC):
         encode_kwargs: dict[str, Any],
         prediction_folder: Path | None = None,
         **kwargs: Any,
-    ) -> dict[HFSubset, ScoresDict]:
+    ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluates an MTEB compatible model on the task.
 
         Args:
@@ -195,12 +196,12 @@ class AbsTask(ABC):
     @abstractmethod
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: Dataset,
         *,
-        encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
+        encode_kwargs: dict[str, Any],
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
@@ -210,7 +211,7 @@ class AbsTask(ABC):
 
     def _save_task_predictions(
         self,
-        predictions: dict[str, Any] | list[Any],
+        predictions: Mapping[str, Any] | list[Any],
         model: MTEBModels,
         prediction_folder: Path,
         hf_split: str,
@@ -226,7 +227,7 @@ class AbsTask(ABC):
             hf_subset: The subset of the dataset (e.g. "en").
         """
         predictions_path = self._predictions_path(prediction_folder)
-        existing_results = {
+        existing_results: dict[str, Any] = {
             "mteb_model_meta": {
                 "model_name": model.mteb_model_meta.name,
                 "revision": model.mteb_model_meta.revision,
@@ -326,7 +327,7 @@ class AbsTask(ABC):
                     )
         else:
             # some of monolingual datasets explicitly adding the split name to the dataset name
-            self.dataset = load_dataset(**self.metadata.dataset)  # type: ignore
+            self.dataset = load_dataset(**self.metadata.dataset)
         self.dataset_transform()
         self.data_loaded = True
 
@@ -362,15 +363,19 @@ class AbsTask(ABC):
         """
         from mteb.abstasks import AbsTaskClassification
 
-        if self.metadata.descriptive_stat_path.exists() and not overwrite_results:
+        existing_stats = self.metadata.descriptive_stats
+
+        if existing_stats is not None and not overwrite_results:
             logger.info("Loading metadata descriptive statistics from cache.")
-            return self.metadata.descriptive_stats
+            return existing_stats
 
         if not self.data_loaded:
             self.load_data()
 
         descriptive_stats: dict[str, DescriptiveStatistics] = {}
-        hf_subset_stat = "hf_subset_descriptive_stats"
+        hf_subset_stat: Literal["hf_subset_descriptive_stats"] = (
+            "hf_subset_descriptive_stats"
+        )
         eval_splits = self.metadata.eval_splits
         if isinstance(self, AbsTaskClassification):
             eval_splits.append(self.train_split)
@@ -381,7 +386,7 @@ class AbsTask(ABC):
             logger.info(f"Processing metadata for split {split}")
             if self.metadata.is_multilingual:
                 descriptive_stats[split] = (
-                    self._calculate_descriptive_statistics_from_split(
+                    self._calculate_descriptive_statistics_from_split(  # type: ignore[assignment]
                         split, compute_overall=True
                     )
                 )
@@ -400,7 +405,7 @@ class AbsTask(ABC):
                     descriptive_stats[split][hf_subset_stat][hf_subset] = split_details
             else:
                 split_details = self._calculate_descriptive_statistics_from_split(split)
-                descriptive_stats[split] = split_details
+                descriptive_stats[split] = split_details  # type: ignore[assignment]
 
         with self.metadata.descriptive_stat_path.open("w") as f:
             json.dump(descriptive_stats, f, indent=4)
@@ -437,7 +442,7 @@ class AbsTask(ABC):
 
         return self.metadata.languages
 
-    def filter_eval_splits(self, eval_splits: list[str] | None) -> Self:
+    def filter_eval_splits(self, eval_splits: Sequence[str] | None) -> Self:
         """Filter the evaluation splits of the task.
 
         Args:
@@ -451,15 +456,15 @@ class AbsTask(ABC):
 
     def filter_languages(
         self,
-        languages: list[str] | None,
-        script: list[str] | None = None,
-        hf_subsets: list[HFSubset] | None = None,
+        languages: Sequence[str] | None,
+        script: Sequence[str] | None = None,
+        hf_subsets: Sequence[HFSubset] | None = None,
         exclusive_language_filter: bool = False,
     ) -> Self:
         """Filter the languages of the task.
 
         Args:
-            languages: list of languages to filter the task by can be either a 3-letter langauge code (e.g. "eng") or also include the script
+            languages: list of languages to filter the task by can be either a 3-letter language code (e.g. "eng") or also include the script
                 (e.g. "eng-Latn")
             script: A list of scripts to filter the task by. Will be ignored if language code specified the script. If None, all scripts are included.
                 If the language code does not specify the script the intersection of the language and script will be used.
@@ -491,15 +496,22 @@ class AbsTask(ABC):
                 if lang_scripts.contains_languages(langs):
                     subsets_to_keep.append(hf_subset)
 
+        if len(subsets_to_keep) == 0:
+            raise ValueError(
+                f"No subsets were found for {self.metadata.name} with filters: language code {languages}, script {script}, hf subsets {hf_subsets}."
+            )
+
         self.hf_subsets = subsets_to_keep
         return self
 
-    def _add_main_score(self, scores: dict[HFSubset, ScoresDict]) -> None:
+    def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _upload_dataset_to_hub(
         self, repo_name: str, fields: list[str] | dict[str, str]
     ) -> None:
+        if self.dataset is None:
+            raise ValueError("Dataset not loaded")
         if self.metadata.is_multilingual:
             for config in self.metadata.eval_langs:
                 logger.info(f"Converting {config} of {self.metadata.name}")
@@ -569,7 +581,7 @@ class AbsTask(ABC):
         return False
 
     @property
-    def eval_splits(self) -> list[str]:
+    def eval_splits(self) -> Sequence[str]:
         """Returns the evaluation splits of the task."""
         if self._eval_splits:
             return self._eval_splits
@@ -602,9 +614,8 @@ class AbsTask(ABC):
             self.data_loaded = False
             logger.info(f"Unloaded dataset {self.metadata.name} from memory.")
         else:
-            logger.warning(
-                f"Dataset {self.metadata.name} is not loaded, cannot unload it."
-            )
+            msg = f"Dataset `{self.metadata.name}` is not loaded, cannot unload it."
+            logger.warning(msg)
 
     @property
     def superseded_by(self) -> str | None:

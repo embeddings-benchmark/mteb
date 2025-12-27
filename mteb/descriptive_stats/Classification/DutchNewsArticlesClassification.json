@@ -1,0 +1,90 @@
+{
+    "test": {
+        "num_samples": 1200,
+        "number_texts_intersect_with_train": 1,
+        "text_statistics": {
+            "total_text_length": 2034506,
+            "min_text_length": 184,
+            "average_text_length": 1695.4216666666666,
+            "max_text_length": 8825,
+            "unique_texts": 1200
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 8,
+            "labels": {
+                "Opmerkelijk": {
+                    "count": 150
+                },
+                "Buitenland": {
+                    "count": 150
+                },
+                "Cultuur & Media": {
+                    "count": 150
+                },
+                "Binnenland": {
+                    "count": 150
+                },
+                "Politiek": {
+                    "count": 150
+                },
+                "Economie": {
+                    "count": 150
+                },
+                "Tech": {
+                    "count": 150
+                },
+                "Regionaal nieuws": {
+                    "count": 150
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 5600,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 9620538,
+            "min_text_length": 106,
+            "average_text_length": 1717.9532142857142,
+            "max_text_length": 29389,
+            "unique_texts": 5600
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 8,
+            "labels": {
+                "Cultuur & Media": {
+                    "count": 700
+                },
+                "Binnenland": {
+                    "count": 700
+                },
+                "Buitenland": {
+                    "count": 700
+                },
+                "Regionaal nieuws": {
+                    "count": 700
+                },
+                "Politiek": {
+                    "count": 700
+                },
+                "Economie": {
+                    "count": 700
+                },
+                "Opmerkelijk": {
+                    "count": 700
+                },
+                "Tech": {
+                    "count": 700
+                }
+            }
+        }
+    }
+}

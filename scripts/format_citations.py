@@ -1,6 +1,7 @@
 import argparse
 import ast
 import logging
+import warnings
 from pathlib import Path
 
 import bibtexparser
@@ -53,9 +54,9 @@ class KeywordLiteralFinder(ast.NodeVisitor):
                     )
                 )
             else:
-                logger.warning(
-                    f"Could not get end location for a {self.target_keyword_arg} string. Skipping this instance."
-                )
+                msg = f"Could not get end location for a {self.target_keyword_arg} string. Skipping this instance."
+                logger.warning(msg)
+                warnings.warn(msg)
         self.generic_visit(node)
 
 
@@ -102,7 +103,9 @@ def format_bibtex(bibtex_str: str) -> str | None:
     try:
         bib_database = bibtexparser.loads(bibtex_str, parser=parser)
         if not bib_database.entries:
-            logger.warning(f"No entries found in BibTeX string. {bibtex_str}")
+            msg = f"No entries found in BibTeX string. {bibtex_str}"
+            logger.warning(msg)
+            warnings.warn(msg)
             return None
         bib_database.comments = []
 
@@ -113,7 +116,9 @@ def format_bibtex(bibtex_str: str) -> str | None:
 
         return writer.write(bib_database).strip()
     except Exception as e:
-        logger.warning(f"Failed to parse BibTeX: {e}")
+        msg = f"Failed to parse BibTeX: {e}"
+        logger.warning(msg)
+        warnings.warn(msg)
         return None
 
 
@@ -195,9 +200,9 @@ def process_file(
                 replacements_for_file.append((actual_start, actual_end, new_literal))
                 num_modified_in_file += 1
             except ValueError:
-                logger.warning(
-                    f"In {file_path.name}: Could not find exact original literal match for {target_keyword_arg} at {location}. Using offset-based replacement."
-                )
+                msg = f"In {file_path.name}: Could not find exact original literal match for {target_keyword_arg} at {location}. Using offset-based replacement."
+                logger.warning(msg)
+                warnings.warn(msg)
                 replacements_for_file.append(
                     (start_char_index, end_char_index, new_literal)
                 )
@@ -351,7 +356,7 @@ def main():
     benchmarks_parser.add_argument(
         "--benchmarks_file",
         type=str,
-        default=str(Path("mteb/benchmarks/benchmarks.py")),
+        default=str(Path("mteb/benchmarks/benchmarks/benchmarks.py")),
         help="Path to the benchmarks.py file.",
     )
     benchmarks_parser.add_argument(

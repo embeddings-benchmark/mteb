@@ -5,7 +5,7 @@ from mteb.models.model_meta import (
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 mixedbread_training_data = {
-    # from correspondance:
+    # from correspondence:
     # as mentioned in our blog post
     # (https://www.mixedbread.com/blog/mxbai-embed-large-v1#built-for-rag-and-real-world-use-cases:~:text=During%20the%20whole,related%20use%20cases.)
     # We do not train on any data (except the MSMarco training split) of MTEB. We have a strong filtering process to ensure the OOD setting. That's true
@@ -21,6 +21,7 @@ mxbai_embed_large_v1 = ModelMeta(
         },
     ),
     name="mixedbread-ai/mxbai-embed-large-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="990580e27d329c7408b3741ecff85876e128e203",
@@ -57,6 +58,7 @@ mxbai_embed_large_v1 = ModelMeta(
 mxbai_embed_2d_large_v1 = ModelMeta(
     loader=sentence_transformers_loader,
     name="mixedbread-ai/mxbai-embed-2d-large-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="7e639ca8e344af398876ead3b19ec3c0b9068f49",
@@ -81,6 +83,7 @@ mxbai_embed_2d_large_v1 = ModelMeta(
 mxbai_embed_xsmall_v1 = ModelMeta(
     loader=sentence_transformers_loader,
     name="mixedbread-ai/mxbai-embed-xsmall-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="2f741ec33328bb57e4704e1238fc59a4a5745705",
@@ -99,4 +102,10 @@ mxbai_embed_xsmall_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=mixedbread_training_data,
+    citation="""@online{xsmall2024mxbai,
+  title={Every Byte Matters: Introducing mxbai-embed-xsmall-v1},
+  author={Sean Lee and Julius Lipp and Rui Huang and Darius Koenig},
+  year={2024},
+  url={https://www.mixedbread.ai/blog/mxbai-embed-xsmall-v1},
+}""",
 )

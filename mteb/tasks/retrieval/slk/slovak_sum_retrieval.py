@@ -7,13 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class SlovakSumRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SlovakSumRetrieval",
-        description="""
-            SlovakSum, a Slovak news summarization dataset consisting of over 200 thousand
-            news articles with titles and short abstracts obtained from multiple Slovak newspapers.
-
-            Originally intended as a summarization task, but since no human annotations were provided
-            here reformulated to a retrieval task.
-        """,
+        description="SlovakSum, a Slovak news summarization dataset consisting of over 200 thousand news articles with titles and short abstracts obtained from multiple Slovak newspapers. Originally intended as a summarization task, but since no human annotations were provided here reformulated to a retrieval task.",
         reference="https://huggingface.co/datasets/NaiveNeuron/slovaksum",
         dataset={
             "path": "NaiveNeuron/slovaksum",

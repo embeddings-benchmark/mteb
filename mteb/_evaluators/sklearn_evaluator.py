@@ -1,15 +1,15 @@
 import logging
-from typing import Any, Protocol
+from typing import Any, Protocol, cast
 
 import numpy as np
 from datasets import Dataset
 from torch.utils.data import DataLoader
 from typing_extensions import Self
 
-from mteb._create_dataloaders import _create_image_dataloader
+from mteb._create_dataloaders import create_dataloader
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import EncoderProtocol
-from mteb.types import BatchedInput
+from mteb.types import Array, BatchedInput
 
 from .evaluator import Evaluator
 
@@ -17,11 +17,11 @@ logger = logging.getLogger(__name__)
 
 
 class SklearnModelProtocol(Protocol):
-    def fit(self, X: np.ndarray, y: np.ndarray | list[int]) -> None: ...  # noqa: N803
-    def predict(self, X: np.ndarray) -> np.ndarray: ...  # noqa: N803
+    def fit(self, X: Array, y: np.ndarray | list[int]) -> None: ...  # noqa: N803
+    def predict(self, X: Array) -> np.ndarray: ...  # noqa: N803
     def get_params(self) -> dict[str, Any]: ...
-    def set_params(self, **kwargs: dict[str, Any]) -> Self: ...
-    def score(self, X: np.ndarray, y: np.ndarray | list[int]) -> float: ...  # noqa: N803
+    def set_params(self, random_state: int, **kwargs: dict[str, Any]) -> Self: ...
+    def score(self, X: Array, y: np.ndarray | list[int]) -> float: ...  # noqa: N803
 
 
 class SklearnEvaluator(Evaluator):
@@ -50,33 +50,20 @@ class SklearnEvaluator(Evaluator):
         self.evaluator_model = evaluator_model
 
     def create_dataloaders(
-        self, batch_size: int
+        self, encode_kwargs: dict[str, Any]
     ) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
-        if self.task_metadata.modalities == ["image"]:
-            dataloader_train = _create_image_dataloader(
-                self.train_dataset,
-                image_column_name=self.values_column_name,
-                batch_size=batch_size,
-            )
-            dataloader_test = _create_image_dataloader(
-                self.eval_dataset,
-                image_column_name=self.values_column_name,
-                batch_size=batch_size,
-            )
-        elif self.task_metadata.modalities == ["text"]:
-            if self.values_column_name != "text":
-                self.train_dataset = self.train_dataset.rename_column(
-                    self.values_column_name, "text"
-                )
-                self.eval_dataset = self.eval_dataset.rename_column(
-                    self.values_column_name, "text"
-                )
-            dataloader_train = DataLoader(self.train_dataset)
-            dataloader_test = DataLoader(self.eval_dataset)
-        else:
-            raise ValueError(
-                "ClassificationEvaluator only supports image and text modalities."
-            )
+        dataloader_train = create_dataloader(
+            self.train_dataset,
+            self.task_metadata,
+            input_column=self.values_column_name,
+            **encode_kwargs,
+        )
+        dataloader_test = create_dataloader(
+            self.eval_dataset,
+            self.task_metadata,
+            input_column=self.values_column_name,
+            **encode_kwargs,
+        )
         return dataloader_train, dataloader_test
 
     def __call__(  # type: ignore[override]
@@ -84,8 +71,8 @@ class SklearnEvaluator(Evaluator):
         model: EncoderProtocol,
         *,
         encode_kwargs: dict[str, Any],
-        test_cache: np.ndarray | None = None,
-    ) -> tuple[np.ndarray, np.ndarray]:
+        test_cache: Array | None = None,
+    ) -> tuple[np.ndarray, Array]:
         """Classification evaluation by training a sklearn classifier on the embeddings of the training set and evaluating on the embeddings of the test set.
 
         Args:
@@ -98,7 +85,7 @@ class SklearnEvaluator(Evaluator):
 
         """
         dataloader_train, dataloader_test = self.create_dataloaders(
-            batch_size=encode_kwargs["batch_size"]
+            encode_kwargs=encode_kwargs,
         )
 
         logger.info("Running - Encoding samples...")
@@ -117,6 +104,7 @@ class SklearnEvaluator(Evaluator):
                 hf_subset=self.hf_subset,
                 **encode_kwargs,
             )
+            test_cache = cast(Array, test_cache)
 
         logger.info("Running - Fitting classifier...")
         y_train = self.train_dataset[self.label_column_name]

@@ -1,9 +1,12 @@
+from __future__ import annotations
+
+import functools
 import json
 import logging
 import warnings
-from collections.abc import Callable, Iterable, Iterator, Sequence
+from collections.abc import Callable, Iterable, Iterator
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
 import pandas as pd
 from packaging.version import InvalidVersion, Version
@@ -15,6 +18,7 @@ from mteb.abstasks.task_metadata import (
     TaskDomain,
     TaskType,
 )
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.types import (
@@ -31,6 +35,25 @@ from .model_result import ModelResult, _aggregate_and_pivot
 logger = logging.getLogger(__name__)
 
 
+@functools.lru_cache
+def _get_cached_model_metas() -> dict[str, str | None]:
+    """Cache model metas to avoid repeated calls."""
+    return {
+        meta.name: meta.revision for meta in get_model_metas() if meta.name is not None
+    }
+
+
+@functools.lru_cache(maxsize=10000)
+def _parse_version_cached(version_str: str | None) -> Version | None:
+    """Cache version parsing to avoid repeated parsing."""
+    if version_str is None:
+        return None
+    try:
+        return Version(version_str)
+    except (InvalidVersion, TypeError):
+        return None
+
+
 class BenchmarkResults(BaseModel):
     """Data class to hold the benchmark results of a model.
 
@@ -39,10 +62,10 @@ class BenchmarkResults(BaseModel):
     """
 
     model_results: list[ModelResult]
-    model_config = (
-        ConfigDict(  # to free up the name model_results which is otherwise protected
-            protected_namespaces=(),
-        )
+    benchmark: Benchmark | None = None
+    model_config = ConfigDict(
+        protected_namespaces=(),  # to free up the name model_results which is otherwise protected
+        arbitrary_types_allowed=True,  # Benchmark is dataclasses.dataclass
     )
 
     def __repr__(self) -> str:
@@ -57,10 +80,10 @@ class BenchmarkResults(BaseModel):
         task_names: list[str] | None = None,
         languages: list[str] | None = None,
         domains: list[TaskDomain] | None = None,
-        task_types: list[TaskType] | None = None,  # type: ignore
+        task_types: list[TaskType] | None = None,
         modalities: list[Modalities] | None = None,
         is_public: bool | None = None,
-    ) -> Self:
+    ) -> BenchmarkResults:
         # TODO: Same as filter_models
         model_results = [
             res._filter_tasks(
@@ -77,7 +100,7 @@ class BenchmarkResults(BaseModel):
             model_results=[res for res in model_results if res.task_results]
         )
 
-    def select_tasks(self, tasks: Sequence[AbsTask]) -> Self:
+    def select_tasks(self, tasks: Iterable[AbsTask]) -> BenchmarkResults:
         """Select tasks from the benchmark results.
 
         Args:
@@ -95,7 +118,7 @@ class BenchmarkResults(BaseModel):
         self,
         names: list[str] | list[ModelMeta],
         revisions: list[str | None] | None = None,
-    ) -> Self:
+    ) -> BenchmarkResults:
         """Get models by name and revision.
 
         Args:
@@ -108,7 +131,7 @@ class BenchmarkResults(BaseModel):
         models_res = []
         _revisions = revisions if revisions is not None else [None] * len(names)
 
-        name_rev = {}
+        name_rev: dict[str, str | None] = {}
 
         if len(names) != len(_revisions):
             raise ValueError(
@@ -117,9 +140,12 @@ class BenchmarkResults(BaseModel):
 
         for name, revision in zip(names, _revisions):
             if isinstance(name, ModelMeta):
+                if name.name is None:
+                    raise ValueError("name in ModelMeta is None. It must be a string.")
                 name_rev[name.name] = name.revision
             else:
-                name_rev[name] = revision
+                name_ = cast(str, name)
+                name_rev[name_] = revision
 
         for model_res in self.model_results:
             model_name = model_res.model_name
@@ -139,7 +165,7 @@ class BenchmarkResults(BaseModel):
         n_parameters_range: tuple[int | None, int | None] = (None, None),
         use_instructions: bool | None = None,
         zero_shot_on: list[AbsTask] | None = None,
-    ) -> Self:
+    ) -> BenchmarkResults:
         # mostly a utility function for the leaderboard app.
         # I would probably move the filtering of the models outside of this call. No need to call get_model_metas inside the filter.
         # interface would then be the same as the get_models function
@@ -162,7 +188,7 @@ class BenchmarkResults(BaseModel):
 
         return type(self).model_construct(model_results=new_model_results)
 
-    def join_revisions(self) -> Self:
+    def join_revisions(self) -> BenchmarkResults:
         """Join revisions of the same model.
 
         In case of conflicts, the following rules are applied:
@@ -173,40 +199,6 @@ class BenchmarkResults(BaseModel):
         Returns:
             A new BenchmarkResults object with the revisions joined.
         """
-
-        def parse_version(version_str: str) -> Version | None:
-            try:
-                return Version(version_str)
-            except (InvalidVersion, TypeError):
-                return None
-
-        def keep_best(group: pd.DataFrame) -> pd.DataFrame:
-            # Filtering out task_results where no scores are present
-            group = group[group["has_scores"]]
-            is_main_revision = group["revision"] == group["main_revision"]
-            # If the main revision is present we select that
-            if is_main_revision.sum() > 0:
-                return group[is_main_revision].head(n=1)
-            unique_revisions = group["revision"].unique()
-
-            # ensure None/NA/"external" revisions is filtered out
-            group.loc[group["revision"].isna(), "revision"] = "no_revision_available"
-            group.loc[group["revision"] == "external", "revision"] = (
-                "no_revision_available"
-            )
-
-            # Filtering out no_revision_available if other revisions are present
-            if (len(unique_revisions) > 1) and (
-                "no_revision_available" in unique_revisions
-            ):
-                group = group[group["revision"] != "no_revision_available"]
-            # If there are any not-NA mteb versions, we select the latest one
-            if group["mteb_version"].notna().any():
-                group = group.dropna(subset=["mteb_version"])
-                group = group.sort_values("mteb_version", ascending=False)
-                return group.head(n=1)
-            return group.head(n=1)
-
         records = []
         for model_result in self:
             for task_result in model_result.task_results:
@@ -223,21 +215,58 @@ class BenchmarkResults(BaseModel):
         if not records:
             return BenchmarkResults.model_construct(model_results=[])
         task_df = pd.DataFrame.from_records(records)
-        model_to_main_revision = {
-            meta.name: meta.revision for meta in get_model_metas()
-        }
-        task_df["main_revision"] = task_df["model"].map(model_to_main_revision)  # type: ignore
-        task_df["mteb_version"] = task_df["mteb_version"].map(parse_version)  # type: ignore
-        task_df = (
-            task_df.groupby(["model", "task_name"])
-            .apply(keep_best)
-            .reset_index(drop=True)
+
+        # Use cached model metas
+        model_to_main_revision = _get_cached_model_metas()
+        task_df["main_revision"] = task_df["model"].map(model_to_main_revision)
+
+        # Use cached version parsing
+        task_df["mteb_version"] = task_df["mteb_version"].map(_parse_version_cached)
+
+        # Filter out rows without scores first
+        task_df = task_df[task_df["has_scores"]]
+
+        # Optimize groupby with vectorized operations
+        # Sort by priority: main_revision match, then mteb_version (descending), then revision
+        task_df["is_main_revision"] = task_df["revision"] == task_df["main_revision"]
+
+        # Handle None/NA/external revisions
+        task_df["revision_clean"] = task_df["revision"].copy()
+        task_df.loc[task_df["revision"].isna(), "revision_clean"] = (
+            "no_revision_available"
         )
+        task_df.loc[task_df["revision"] == "external", "revision_clean"] = (
+            "no_revision_available"
+        )
+
+        # Create a priority column for sorting
+        # Higher priority = better to keep
+        # Priority: main_revision (1000), has valid mteb_version (100), has valid revision (10)
+        task_df["priority"] = 0
+        task_df.loc[task_df["is_main_revision"], "priority"] += 1000
+        task_df.loc[task_df["mteb_version"].notna(), "priority"] += 100
+        task_df.loc[
+            task_df["revision_clean"] != "no_revision_available", "priority"
+        ] += 10
+
+        # Sort by priority (desc), mteb_version (desc), and take first per group
+        task_df = task_df.sort_values(
+            ["model", "task_name", "priority", "mteb_version"],
+            ascending=[True, True, False, False],
+            na_position="last",
+        )
+
+        task_df = task_df.groupby(["model", "task_name"], as_index=False).first()
+
+        # Reconstruct model results
         model_results = []
+        # Group by original revision to maintain deterministic behavior
+        # After the first() selection above, each (model, task_name) is unique,
+        # so grouping by original revision ensures consistent ModelResult creation
         for (model, model_revision), group in task_df.groupby(["model", "revision"]):
             model_result = ModelResult.model_construct(
-                model_name=model,
-                model_revision=model_revision,
+                model_name=model,  # type: ignore[arg-type]
+                model_revision=model_revision,  # type: ignore[arg-type]
                 task_results=list(group["task_result"]),
             )
             model_results.append(model_result)
@@ -268,7 +297,7 @@ class BenchmarkResults(BaseModel):
                         {
                             "model": model_res.model_name,
                             "revision": model_res.model_revision,
-                            **model_scores,  # type: ignore
+                            **model_scores,
                         }
                     )
                 except Exception as e:
@@ -296,7 +325,7 @@ class BenchmarkResults(BaseModel):
 
     def to_dataframe(
         self,
-        aggregation_level: Literal["subset", "split", "task"] = "task",
+        aggregation_level: Literal["subset", "split", "task", "language"] = "task",
         aggregation_fn: Callable[[list[Score]], Any] | None = None,
         include_model_revision: bool = False,
         format: Literal["wide", "long"] = "wide",
@@ -321,6 +350,7 @@ class BenchmarkResults(BaseModel):
                 - "subset"/None: No aggregation will be done. The DataFrame will have one row per model, task, split and subset.
                 - "split": Aggregates the scores by split. The DataFrame will have one row per model, task and split.
                 - "task": Aggregates the scores by task. The DataFrame will have one row per model and task.
+                - "language": Aggregates the scores by language. The DataFrame will have one row per model and language.
             aggregation_fn: The function to use for aggregation. If None, the mean will be used.
             include_model_revision: If True, the model revision will be included in the DataFrame. If False, it will be excluded.
                 If there are multiple revisions for the same model, they will be joined using the `join_revisions` method.
@@ -340,7 +370,9 @@ class BenchmarkResults(BaseModel):
             scores_data.extend(model_result._get_score_for_table())
 
         if not scores_data:
-            logger.warning("No scores data available. Returning empty DataFrame.")
+            msg = "No scores data available. Returning empty DataFrame."
+            logger.warning(msg)
+            warnings.warn(msg)
             return pd.DataFrame()
 
         # Create DataFrame
@@ -361,7 +393,24 @@ class BenchmarkResults(BaseModel):
             format=format,
         )
 
-    def __iter__(self) -> Iterator[ModelResult]:
+    def get_benchmark_result(self) -> pd.DataFrame:
+        """Get aggregated scores for each model in the benchmark.
+
+        Uses the benchmark's summary table creation method to compute scores.
+
+        Returns:
+            A DataFrame with the aggregated benchmark scores for each model.
+        """
+        if self.benchmark is None:
+            raise ValueError(
+                "No benchmark associated with these results (self.benchmark is None). "
+                "To get benchmark results, load results with a Benchmark object. "
+                "`results = cache.load_results(tasks='MTEB(eng, v2)')`"
+            )
+
+        return self.benchmark._create_summary_table(self)
+
+    def __iter__(self) -> Iterator[ModelResult]:  # type: ignore[override]
         return iter(self.model_results)
 
     def __getitem__(self, index: int) -> ModelResult:
@@ -383,7 +432,7 @@ class BenchmarkResults(BaseModel):
             out_file.write(self.model_dump_json(indent=2))
 
     @classmethod
-    def from_validated(cls, **data) -> Self:
+    def from_validated(cls, **data) -> BenchmarkResults:
         """Create BenchmarkResults from validated data.
 
         Args:

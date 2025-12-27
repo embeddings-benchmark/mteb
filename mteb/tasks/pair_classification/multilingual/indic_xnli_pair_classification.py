@@ -23,14 +23,15 @@ class IndicXnliPairClassification(AbsTaskPairClassification):
             "path": "mteb/IndicXnliPairClassification",
             "revision": "027e97b9afe84ea3447b57b7705b8864bb2b3a83",
         },
-        description="""INDICXNLI is similar to existing XNLI dataset in shape/form, but
-        focusses on Indic language family.
-        The train (392,702), validation (2,490), and evaluation sets (5,010) of English
-        XNLI were translated from English into each of the eleven Indic languages. IndicTrans
-        is a large Transformer-based sequence to sequence model. It is trained on Samanantar
-        dataset (Ramesh et al., 2021), which is the largest parallel multi- lingual corpus
-        over eleven Indic languages.
-        """,
+        description=(
+            "INDICXNLI is similar to existing XNLI dataset in shape/form, but "
+            "focuses on Indic language family. "
+            "The train (392,702), validation (2,490), and evaluation sets (5,010) of English "
+            "XNLI were translated from English into each of the eleven Indic languages. IndicTrans "
+            "is a large Transformer-based sequence to sequence model. It is trained on Samanantar "
+            "dataset (Ramesh et al., 2021), which is the largest parallel multi- lingual corpus "
+            "over eleven Indic languages."
+        ),
         reference="https://gem-benchmark.com/data_cards/opusparcus",
         category="t2t",
         modalities=["text"],

@@ -1,6 +1,6 @@
-import math
 import re
 from collections import defaultdict
+from typing import Literal
 
 import numpy as np
 import pandas as pd
@@ -32,26 +32,18 @@ def _split_on_capital(s: str) -> str:
     return " ".join(re.findall(r"[A-Z]?[a-z]+|[A-Z]+(?=[A-Z]|$)", s))
 
 
-def _format_n_parameters(n_parameters) -> str:
-    if (n_parameters is None) or (not int(n_parameters)):
-        return "Unknown"
-    n_thousand = int(n_parameters // 1e3)
-    if n_thousand < 1:
-        return str(int(n_parameters))
-    n_zeros = math.log10(n_thousand)
-    if n_zeros >= 6:
-        return str(n_thousand // (10**6)) + "B"
-    if n_zeros >= 3:
-        return str(n_thousand // (10**3)) + "M"
-    return str(n_thousand) + "K"
+def _format_n_parameters(n_parameters) -> float | None:
+    """Format n_parameters to be in billions with decimals down to 1 million. I.e. 7M -> 0.007B, 1.5B -> 1.5B, None -> None"""
+    if n_parameters:
+        n_parameters = float(n_parameters)
+        return round(n_parameters / 1e9, 3)
+    return None
 
 
-def _format_max_tokens(max_tokens: float | None) -> str:
-    if max_tokens is None:
-        return "Unknown"
-    if max_tokens == np.inf:
-        return "Infinite"
-    return str(int(max_tokens))
+def _format_max_tokens(max_tokens: float | None) -> float | None:
+    if max_tokens is None or max_tokens == np.inf:
+        return None
+    return float(max_tokens)
 
 
 def _get_means_per_types(per_task: pd.DataFrame):
@@ -144,18 +136,18 @@ def _create_summary_table_from_benchmark_results(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: str(int(m.embed_dim)) if m.embed_dim else "Unknown"),
+        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
     )
     joint_table.insert(
         1,
-        "Number of Parameters",
+        "Number of Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(
         1,
         "Memory Usage (MB)",
         model_metas.map(
-            lambda m: str(int(m.memory_usage_mb)) if m.memory_usage_mb else "Unknown"
+            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
         ),
     )
 
@@ -250,6 +242,65 @@ def _create_per_task_table_from_benchmark_results(
     return per_task
 
 
+def _create_per_language_table_from_benchmark_results(
+    benchmark_results: BenchmarkResults,
+    language_view: list[str] | Literal["all"],
+) -> pd.DataFrame:
+    """Create per-language table from BenchmarkResults.
+
+    Returns a DataFrame with one row per model and one column per language.
+
+    Args:
+        benchmark_results: BenchmarkResults object containing model results
+        language_view: List of languages to include in the per-language table, or "all" for all languages present in the results
+    Returns:
+        DataFrame with per-language scores, ready for styling in the leaderboard
+    """
+    if language_view != "all" and not isinstance(language_view, list):
+        raise ValueError("language_view must be a list of languages or 'all'")
+
+    data = benchmark_results.to_dataframe(aggregation_level="language", format="long")
+
+    if data.empty:
+        no_results_frame = pd.DataFrame(
+            {"No results": ["You can try relaxing your criteria"]}
+        )
+        return no_results_frame
+
+    if language_view != "all":
+        data = data[data["language"].isin(language_view)]
+
+    per_language = data.pivot_table(
+        index="model_name", columns="language", values="score", aggfunc="mean"
+    )
+
+    to_remove = per_language.isna().all(axis="columns")
+    if to_remove.all():
+        no_results_frame = pd.DataFrame(
+            {"No results": ["You can try relaxing your criteria"]}
+        )
+        return no_results_frame
+
+    models_to_remove = list(per_language[to_remove].index)
+    per_language = per_language.drop(models_to_remove, axis=0)
+
+    per_language["borda_rank"] = _get_borda_rank(per_language)
+    per_language = per_language.sort_values("borda_rank", ascending=True)
+    per_language = per_language.drop(columns=["borda_rank"])
+    per_language = per_language.reset_index()
+
+    per_language["model_name"] = per_language["model_name"].map(
+        lambda name: name.split("/")[-1]
+    )
+    per_language = per_language.rename(
+        columns={
+            "model_name": "Model",
+        }
+    )
+
+    return per_language
+
+
 def _create_summary_table_mean_public_private(
     benchmark_results: BenchmarkResults,
 ) -> pd.DataFrame:
@@ -323,18 +374,18 @@ def _create_summary_table_mean_public_private(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: str(int(m.embed_dim)) if m.embed_dim else "Unknown"),
+        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
     )
     joint_table.insert(
         1,
-        "Number of Parameters",
+        "Number of Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(
         1,
         "Memory Usage (MB)",
         model_metas.map(
-            lambda m: str(int(m.memory_usage_mb)) if m.memory_usage_mb else "Unknown"
+            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
         ),
     )
 
@@ -358,9 +409,7 @@ def _create_summary_table_mean_public_private(
         "mean(public)": "Mean (Public)",
         "mean(private)": "Mean (Private)",
     }
-    # For RTEB: all tasks are Retrieval type, so Retrieval column = Mean (Task)
-    if "Retrieval" in joint_table.columns:
-        rename_dict["Retrieval"] = "Mean (Task)"
+
     joint_table = joint_table.rename(columns=rename_dict)
 
     # Move borda rank to front
@@ -447,18 +496,18 @@ def _create_summary_table_mean_subset(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: str(int(m.embed_dim)) if m.embed_dim else "Unknown"),
+        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
     )
     joint_table.insert(
         1,
-        "Number of Parameters",
+        "Number of Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(
         1,
         "Memory Usage (MB)",
         model_metas.map(
-            lambda m: str(int(m.memory_usage_mb)) if m.memory_usage_mb else "Unknown"
+            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
         ),
     )
 
@@ -560,25 +609,23 @@ def _create_summary_table_mean_task_type(
 
     # Insert model metadata columns
     joint_table.insert(
-        1,
-        "Max Tokens",
-        model_metas.map(lambda m: _format_max_tokens(m.max_tokens)),
+        1, "Max Tokens", model_metas.map(lambda m: _format_max_tokens(m.max_tokens))
     )
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: str(int(m.embed_dim)) if m.embed_dim else "Unknown"),
+        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
     )
     joint_table.insert(
         1,
-        "Number of Parameters",
+        "Number of Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(
         1,
         "Memory Usage (MB)",
         model_metas.map(
-            lambda m: str(int(m.memory_usage_mb)) if m.memory_usage_mb else "Unknown"
+            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
         ),
     )
 

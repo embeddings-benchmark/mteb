@@ -7,7 +7,8 @@ from scipy.stats import pearsonr, spearmanr
 
 from mteb._evaluators import AnySTSEvaluator
 from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
-from mteb.models import EncoderProtocol
+from mteb.models import EncoderProtocol, MTEBModels
+from mteb.types import PromptType
 from mteb.types.statistics import (
     ImageStatistics,
     ScoreStatistics,
@@ -89,16 +90,20 @@ class AbsTaskSTS(AbsTask):
         min_score: Minimum possible score in the dataset.
         max_score: Maximum possible score in the dataset.
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
+        input1_prompt_type: Type of prompt of first input. Used for asymmetric tasks.
+        input2_prompt_type: Type of prompt of second input. Used for asymmetric tasks.
     """
 
     abstask_prompt = "Retrieve semantically similar text."
     column_names: tuple[str, str] = ("sentence1", "sentence2")
     min_score: int = 0
     max_score: int = 5
+    input1_prompt_type: PromptType | None = None
+    input2_prompt_type: PromptType | None = None
 
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: Dataset,
         encode_kwargs: dict[str, Any],
         hf_split: str,
@@ -106,6 +111,9 @@ class AbsTaskSTS(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> STSMetrics:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
+
         normalized_scores = list(map(self._normalize, data_split["score"]))
         data_split = data_split.select_columns(list(self.column_names))
 
@@ -115,6 +123,8 @@ class AbsTaskSTS(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            input1_prompt_type=self.input1_prompt_type,
+            input2_prompt_type=self.input2_prompt_type,
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)
@@ -135,7 +145,7 @@ class AbsTaskSTS(AbsTask):
     ) -> STSMetrics:
         def compute_corr(x: list[float], y: list[float]) -> tuple[float, float]:
             """Return (pearson, spearman) correlations between x and y."""
-            return pearsonr(x, y)[0], spearmanr(x, y)[0]
+            return float(pearsonr(x, y)[0]), float(spearmanr(x, y)[0])
 
         cosine_pearson, cosine_spearman = compute_corr(
             normalized_scores, scores["cosine_scores"]

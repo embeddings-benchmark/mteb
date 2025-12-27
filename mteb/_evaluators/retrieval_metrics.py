@@ -1,11 +1,11 @@
 import logging
 from collections import defaultdict
+from collections.abc import Mapping
 from typing import Any
 
 import numpy as np
 import pandas as pd
 import pytrec_eval
-import torch
 from packaging.version import Version
 from sklearn.metrics import auc
 
@@ -14,17 +14,9 @@ from mteb.types import RelevantDocumentsType, RetrievalEvaluationResult
 logger = logging.getLogger(__name__)
 
 
-try:
-    # speeds up computation if available
-    torch.set_float32_matmul_precision("high")
-    logger.info("Setting torch float32 matmul precision to high for a speedup")
-except Exception:
-    pass
-
-
 def mrr(
     qrels: RelevantDocumentsType,
-    results: dict[str, dict[str, float]],
+    results: Mapping[str, Mapping[str, float]],
     k_values: list[int],
 ) -> dict[str, list[float]]:
     mrr_metrics = defaultdict(list)
@@ -41,7 +33,7 @@ def mrr(
             doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0
         }
         for k in k_values:
-            rr = 0
+            rr = 0.0
             for rank, hit in enumerate(top_hits[query_id][0:k]):
                 if hit[0] in query_relevant_docs:
                     rr = 1.0 / (rank + 1)
@@ -54,8 +46,8 @@ def recall_cap(
     qrels: RelevantDocumentsType,
     results: dict[str, dict[str, float]],
     k_values: list[int],
-) -> dict[str, list[float]]:
-    capped_recall = defaultdict(list)
+) -> dict[str, list[float | None]]:
+    capped_recall: dict[str, list[float | None]] = defaultdict(list)
 
     k_max = max(k_values)
 
@@ -197,7 +189,7 @@ def evaluate_p_mrr_change(
     Returns:
         A dictionary with the scores, including "p-MRR", "og" and "changed" keys.
     """
-    followir_scores = defaultdict(dict)
+    followir_scores: dict[str, float | dict[str, float]] = defaultdict(dict)
 
     qrels_sep = {
         "og": {k: v for k, v in qrels.items() if k.endswith("-og")},
@@ -236,7 +228,7 @@ def evaluate_p_mrr_change(
             ndcg, _map, recall, precision, naucs, avg_mrr, naucs_mrr, cv_recall, {}
         )
         for key, value in scores_dict.items():
-            followir_scores[name][key] = value
+            followir_scores[name][key] = value  # type: ignore[index]
 
     return followir_scores
 
@@ -263,8 +255,8 @@ def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
     sim_scores_sorted = sorted(sim_scores)[::-1]
 
     cs_max = sim_scores_sorted[0]
-    cs_std = np.std(sim_scores)
-    cs_diff1 = None
+    cs_std = float(np.std(sim_scores))
+    cs_diff1 = 0.0
     if len(sim_scores) > 1:
         cs_diff1 = sim_scores_sorted[0] - sim_scores_sorted[1]
     elif len(sim_scores) == 1:
@@ -419,7 +411,7 @@ def make_score_dict(
     cv_recall: dict[str, float],
     task_scores: dict[str, float],
     previous_results_model_meta: dict[str, Any] | None = None,
-) -> dict[str, float]:
+) -> dict[str, Any]:
     return {
         **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
         **{f"map_at_{k.split('@')[1]}": v for (k, v) in _map.items()},
@@ -537,7 +529,7 @@ def max_over_subqueries(
 
 
 def calculate_retrieval_scores(
-    results: dict[str, dict[str, float]],
+    results: Mapping[str, Mapping[str, float]],
     qrels: RelevantDocumentsType,
     k_values: list[int],
     skip_first_result: bool = False,
@@ -585,7 +577,7 @@ def calculate_retrieval_scores(
 
 
 def evaluate_abstention(
-    results: dict[str, dict[str, float]],
+    results: Mapping[str, Mapping[str, float]],
     metric_scores: dict[str, list[float]],
 ) -> dict[str, float]:
     """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
@@ -600,21 +592,21 @@ def evaluate_abstention(
     all_sim_scores = [list(results[qid].values()) for qid in list(results.keys())]
     all_conf_scores = [confidence_scores(sim_scores) for sim_scores in all_sim_scores]
     conf_fcts = list(all_conf_scores[0].keys())
-    all_conf_scores = {
+    all_conf_scores_ = {
         fct: np.array([x[fct] for x in all_conf_scores]) for fct in conf_fcts
     }
-    metric_scores = {k: np.array(v) for k, v in metric_scores.items()}
+    metric_scores_ = {k: np.array(v) for k, v in metric_scores.items()}
     naucs = {}
 
-    for metric_name, scores in metric_scores.items():
-        for fct, conf_scores in all_conf_scores.items():
+    for metric_name, scores in metric_scores_.items():
+        for fct, conf_scores in all_conf_scores_.items():
             naucs[f"nAUC_{metric_name}_{fct}"] = nauc(conf_scores, scores)
 
     return naucs
 
 
 def calculate_cv_recall(
-    results: dict[str, dict[str, float]],
+    results: Mapping[str, Mapping[str, float]],
     qrels: RelevantDocumentsType,
     k_values: list[int],
     skip_first_result: bool = False,

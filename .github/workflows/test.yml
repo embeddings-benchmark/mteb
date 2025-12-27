@@ -8,6 +8,10 @@ on:
     branches: [main]
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -15,14 +19,35 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest] #, macos-latest, windows-latest]
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
         include:
           # Add Windows with Python 3.10 only to avoid tests taking too long
           - os: windows-latest
             python-version: "3.10"
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Free disk space
+        if: runner.os != 'Windows'
+        run: |
+          sudo rm -rf \
+            "$AGENT_TOOLSDIRECTORY" \
+            /opt/ghc \
+            /opt/google/chrome \
+            /opt/microsoft/msedge \
+            /opt/microsoft/powershell \
+            /opt/pipx \
+            /usr/lib/mono \
+            /usr/local/julia* \
+            /usr/local/lib/android \
+            /usr/local/lib/node_modules \
+            /usr/local/share/chromium \
+            /usr/local/share/powershell \
+            /usr/local/share/powershell \
+            /usr/share/dotnet \
+            /usr/share/swift
+          docker system prune -af
+
+      - uses: actions/checkout@v6
 
       - name: Cache Hugging Face
         id: cache-hf
@@ -32,7 +57,7 @@ jobs:
           key: ${{ runner.os }}-hf
 
       - name: Setup Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
           cache: "pip"

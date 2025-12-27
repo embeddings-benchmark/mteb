@@ -12,7 +12,7 @@ class OVENIT2TRetrieval(AbsTaskRetrieval):
             "revision": "2192074af29422bc1dc41cf07936f198b8c69bd0",
         },
         type="Any2AnyRetrieval",
-        category="it2i",
+        category="it2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",

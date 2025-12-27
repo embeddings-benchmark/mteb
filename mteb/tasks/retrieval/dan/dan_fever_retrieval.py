@@ -51,12 +51,12 @@ Derczynski, Leon},
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.dataset_transform()
         self.data_loaded = True
 
     def dataset_transform(self) -> None:
-        """And transform to a retrieval datset, which have the following attributes
+        """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text
         self.queries = dict[query_id, str] #id => query

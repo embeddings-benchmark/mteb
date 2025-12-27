@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import hashlib
 from collections import Counter
-
-from PIL import Image
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, cast
 
 from mteb.types import TopRankedDocumentsType
 from mteb.types.statistics import (
@@ -12,6 +14,9 @@ from mteb.types.statistics import (
     TextStatistics,
     TopRankedStatistics,
 )
+
+if TYPE_CHECKING:
+    from PIL import Image
 
 
 def calculate_text_statistics(texts: list[str]) -> TextStatistics:
@@ -48,7 +53,7 @@ def calculate_image_statistics(images: list[Image.Image]) -> ImageStatistics:
     seen_hashes: set[str] = set()
 
     for img in images:
-        width, height = img.size  # type: ignore
+        width, height = img.size
         img_heights.append(height)
         img_widths.append(width)
 
@@ -78,17 +83,24 @@ def calculate_label_statistics(labels: list[int | list[int]]) -> LabelStatistics
         LabelStatistics: A dictionary containing the descriptive statistics.
 
     """
+    total_labels: list[int | None] = []
+
     if not isinstance(labels[0], list):
-        label_len = [1] * len(labels)
-        total_label_len = len(labels)
-        total_labels = labels
+        # single label classification
+        single_label = cast(list[int], labels)
+        label_len = [1] * len(single_label)
+        total_label_len = len(single_label)
+        total_labels.extend(single_label)
     elif isinstance(labels[0], list):
         # multilabel classification
-        label_len = [len(l) for l in labels]
+        multilabel_labels = cast(list[list[int]], labels)
+        label_len = [len(l) for l in multilabel_labels]
         total_label_len = sum(label_len)
-        total_labels = []
-        for l in labels:
-            total_labels.extend(l if len(l) > 0 else [None])
+        for l in multilabel_labels:
+            if l and len(l) > 0:
+                total_labels.extend(l)
+            else:
+                total_labels.append(None)
     else:
         raise ValueError(
             "Labels must be a list of integers or a list of lists of integers."
@@ -155,7 +167,7 @@ def calculate_top_ranked_statistics(
 
 
 def calculate_relevant_docs_statistics(
-    relevant_docs: dict[str, dict[str, float]],
+    relevant_docs: Mapping[str, Mapping[str, int]],
 ) -> RelevantDocsStatistics:
     qrels_lengths = [len(relevant_docs[qid]) for qid in relevant_docs]
     unique_qrels = len({doc for qid in relevant_docs for doc in relevant_docs[qid]})

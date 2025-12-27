@@ -10,6 +10,13 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
+BLIP2_CITATION = """@inproceedings{li2023blip2,
+    title={{BLIP-2:} Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models},
+    author={Junnan Li and Dongxu Li and Silvio Savarese and Steven Hoi},
+    year={2023},
+    booktitle={ICML},
+}"""
+
 
 def blip2_loader(model_name, **kwargs):
     requires_package(
@@ -159,6 +166,7 @@ blip2_training_datasets = set(
 blip2_opt_2_7b = ModelMeta(
     loader=blip2_loader,
     name="Salesforce/blip2-opt-2.7b",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="51572668da0eb669e01a189dc22abe6088589a24",
     release_date="2024-03-22",
@@ -176,11 +184,13 @@ blip2_opt_2_7b = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=blip2_training_datasets,
+    citation=BLIP2_CITATION,
 )
 
 blip2_opt_6_7b_coco = ModelMeta(
     loader=blip2_loader,
     name="Salesforce/blip2-opt-6.7b-coco",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="0d580de59320a25a4d2c386387bcef310d5f286e",
     release_date="2024-03-31",
@@ -198,4 +208,5 @@ blip2_opt_6_7b_coco = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=blip2_training_datasets,
+    citation=BLIP2_CITATION,
 )

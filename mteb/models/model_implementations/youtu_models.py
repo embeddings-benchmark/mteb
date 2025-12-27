@@ -115,6 +115,7 @@ Youtu_Embedding_V1 = ModelMeta(
         max_seq_length=8192,
     ),
     name="tencent/Youtu-Embedding",
+    model_type=["dense"],
     languages=["zho-Hans"],
     revision="32e04afc24817c187a8422e7bdbb493b19796d47",
     release_date="2025-09-28",

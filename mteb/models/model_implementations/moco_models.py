@@ -10,6 +10,13 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
+MOCOV3_CITATION = """@Article{chen2021mocov3,
+    author  = {Xinlei Chen* and Saining Xie* and Kaiming He},
+    title   = {An Empirical Study of Training Self-Supervised Vision Transformers},
+    journal = {arXiv preprint arXiv:2104.02057},
+    year    = {2021},
+}"""
+
 
 def mocov3_loader(model_name, **kwargs):
     requires_package(mocov3_loader, "timm", model_name, "pip install 'mteb[timm]'")
@@ -110,8 +117,9 @@ mocov3_training_datasets = set(
 )
 
 mocov3_vit_base = ModelMeta(
-    loader=mocov3_loader,  # type: ignore
+    loader=mocov3_loader,
     name="nyu-visionx/moco-v3-vit-b",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
     release_date="2024-06-03",
@@ -129,11 +137,13 @@ mocov3_vit_base = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=mocov3_training_datasets,
+    citation=MOCOV3_CITATION,
 )
 
 mocov3_vit_large = ModelMeta(
-    loader=mocov3_loader,  # type: ignore
+    loader=mocov3_loader,
     name="nyu-visionx/moco-v3-vit-l",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="7bf75358d616f39b9716148bf4e3425f3bd35b47",
     release_date="2024-06-03",
@@ -151,4 +161,5 @@ mocov3_vit_large = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=mocov3_training_datasets,
+    citation=MOCOV3_CITATION,
 )

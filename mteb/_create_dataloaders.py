@@ -1,9 +1,10 @@
 import logging
+import warnings
 from collections.abc import Callable
 from typing import Any, cast
 
 import torch
-from datasets import Dataset
+from datasets import Dataset, Image
 from torch.utils.data import DataLoader, default_collate
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -22,12 +23,14 @@ logger = logging.getLogger(__name__)
 def _create_dataloader_from_texts(
     text: list[str],
     batch_size: int = 32,
+    **kwargs: dict[str, Any],
 ) -> DataLoader[TextInput]:
     """Create a dataloader from a list of text.
 
     Args:
         text: A list of text to create a dataloader from.
         batch_size: Batch size for the dataloader.
+        kwargs: Not used, present catching extra arguments.
 
     Returns:
         A dataloader with the text.
@@ -111,11 +114,8 @@ def _create_text_dataloader_for_queries(
     )
 
 
-_warned_about_user_role = False
-
-
 def _convert_conv_history_to_query(
-    row: dict[str, list[str] | Conversation],
+    row: dict[str, str | list[str] | Conversation],
 ) -> dict[str, str | Conversation]:
     """Convert a conversation history to a single query string.
 
@@ -125,21 +125,18 @@ def _convert_conv_history_to_query(
     Returns:
         The updated row with the "query" and "text" fields set to the conversation string, and the "conversation" field set to the list of ConversationTurn.
     """
-    global _warned_about_user_role
-
     conversation = row["text"]
     # if it's a list of strings, just join them
     if isinstance(conversation, list) and isinstance(conversation[0], str):
-        conversation = cast(list[str], conversation)
-        conv_str = "; ".join(conversation)
+        conversation_ = cast(list[str], conversation)
+        conv_str = "; ".join(conversation_)
         current_conversation = [
-            ConversationTurn(role="user", content=message) for message in conversation
+            ConversationTurn(role="user", content=message) for message in conversation_
         ]
-        if not _warned_about_user_role:
-            logger.warning(
-                "Conversations are a list of strings. Used 'user' role for all turns."
-            )
-            _warned_about_user_role = True
+        warnings.warn(
+            "Conversations are a list of strings. Used 'user' role for all turns.",
+            category=UserWarning,
+        )
     # otherwise, it's a list of dictionaries, which we need to convert to strings
     elif isinstance(conversation, list) and isinstance(conversation[0], dict):
         conv = []
@@ -176,7 +173,7 @@ def _convert_conv_history_to_query(
 
     row["text"] = conv_str
     row["conversation"] = current_conversation
-    return row
+    return cast(dict[str, str | list[ConversationTurn]], row)
 
 
 def _create_dataloader_for_queries_conversation(
@@ -244,14 +241,15 @@ def _prepare_image_dataset(
     transform: Callable[[Any], Any] | None = None,
 ) -> Dataset:
     """Prepare the image dataset by converting images to RGB and applying transformations."""
-    # If the dataset uses a different column name for images, rename it to "image".
     if (
         image_column_name
         and image_column_name in dataset.column_names
         and "image" not in dataset.column_names
     ):
         dataset = dataset.rename_column(image_column_name, "image")
-    # Map the conversion function over the dataset.
+    # don't process image if it's already in the correct format
+    if isinstance(dataset.features["image"], Image):
+        return dataset
     return dataset.map(
         _convert_images_to_rgb,
         fn_kwargs={"image_col_name": "image", "transform": transform},
@@ -277,6 +275,8 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
             # Leave the images as a list to avoid stacking errors.
             collated[key] = [item[key] for item in batch]
         else:
+            if any(item[key] is None for item in batch):
+                raise ValueError(f"Found None in batch for key '{key}'")
             collated[key] = default_collate([item[key] for item in batch])
     return collated
 
