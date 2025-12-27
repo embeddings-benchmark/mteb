@@ -4,7 +4,6 @@ import logging
 from typing import TYPE_CHECKING, Any, Literal
 
 import torch
-from PIL import Image
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_image_dependencies, requires_package
@@ -13,6 +12,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from PIL import Image
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -27,6 +27,8 @@ def _downsample_image(
     Returns:
         The downsampled image.
     """
+    from PIL.Image import Resampling
+
     width, height = image.size
     pixels = width * height
 
@@ -42,15 +44,15 @@ def _downsample_image(
         logging.info(
             f"Downsampling image from {width}x{height} to {new_width}x{new_height}"
         )
-        return image.resize(new_size, Image.LANCZOS)
+        return image.resize(new_size, Resampling.LANCZOS)
     if width > height:
         if width > 10000:
             logging.error("Processing extremely wide images.")
-            return image.resize((10000, height), Image.LANCZOS)
+            return image.resize((10000, height), Resampling.LANCZOS)
     else:
         if height > 10000:
             logging.error("Processing extremely high images.")
-            return image.resize((width, 10000), Image.LANCZOS)
+            return image.resize((width, 10000), Resampling.LANCZOS)
     return image
 
 
