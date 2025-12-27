@@ -1,6 +1,5 @@
 import difflib
 import logging
-import warnings
 from functools import lru_cache
 
 from .benchmark import Benchmark
@@ -20,53 +19,16 @@ def _build_registry() -> dict[str, Benchmark]:
     return benchmark_registry
 
 
-def _get_previous_benchmark_names() -> dict[str, str]:
-    from .benchmarks import (
-        BRIGHT_LONG,
-        C_MTEB,
-        FA_MTEB,
-        MTEB_DEU,
-        MTEB_EN,
-        MTEB_ENG_CLASSIC,
-        MTEB_EU,
-        MTEB_FRA,
-        MTEB_INDIC,
-        MTEB_JPN,
-        MTEB_KOR,
-        MTEB_MAIN_RU,
-        MTEB_POL,
-        MTEB_RETRIEVAL_LAW,
-        MTEB_RETRIEVAL_MEDICAL,
-        MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
-        SEB,
-        VISUAL_DOCUMENT_RETRIEVAL,
-        MTEB_code,
-        MTEB_multilingual_v2,
-    )
+@lru_cache
+def _build_aliases_registry() -> dict[str, Benchmark]:
+    import mteb.benchmarks.benchmarks as benchmark_module
 
-    previous_benchmark_names = {
-        "MTEB(eng)": MTEB_EN.name,
-        "MTEB(eng, classic)": MTEB_ENG_CLASSIC.name,
-        "MTEB(rus)": MTEB_MAIN_RU.name,
-        "MTEB(Retrieval w/Instructions)": MTEB_RETRIEVAL_WITH_INSTRUCTIONS.name,
-        "MTEB(law)": MTEB_RETRIEVAL_LAW.name,
-        "MTEB(Medical)": MTEB_RETRIEVAL_MEDICAL.name,
-        "MTEB(Scandinavian)": SEB.name,
-        "MTEB(fra)": MTEB_FRA.name,
-        "MTEB(deu)": MTEB_DEU.name,
-        "MTEB(kor)": MTEB_KOR.name,
-        "MTEB(pol)": MTEB_POL.name,
-        "MTEB(code)": MTEB_code.name,
-        "MTEB(Multilingual)": MTEB_multilingual_v2.name,
-        "MTEB(jpn)": MTEB_JPN.name,
-        "MTEB(Indic)": MTEB_INDIC.name,
-        "MTEB(Europe)": MTEB_EU.name,
-        "MTEB(Chinese)": C_MTEB.name,
-        "FaMTEB(fas, beta)": FA_MTEB.name,
-        "BRIGHT(long)": BRIGHT_LONG.name,
-        "VisualDocumentRetrieval": VISUAL_DOCUMENT_RETRIEVAL.name,
-    }
-    return previous_benchmark_names
+    aliases: dict[str, Benchmark] = {}
+    for _, inst in benchmark_module.__dict__.items():
+        if isinstance(inst, Benchmark) and inst.aliases is not None:
+            for alias in inst.aliases:
+                aliases[alias] = inst
+    return aliases
 
 
 def get_benchmark(
@@ -80,14 +42,11 @@ def get_benchmark(
     Returns:
         The Benchmark instance corresponding to the given name.
     """
-    previous_benchmark_names = _get_previous_benchmark_names()
     benchmark_registry = _build_registry()
-    if benchmark_name in previous_benchmark_names:
-        warnings.warn(
-            f"Using the previous benchmark name '{benchmark_name}' is deprecated. Please use '{previous_benchmark_names[benchmark_name]}' instead.",
-            DeprecationWarning,
-        )
-        benchmark_name = previous_benchmark_names[benchmark_name]
+    aliases_registry = _build_aliases_registry()
+
+    if benchmark_name in aliases_registry:
+        return aliases_registry[benchmark_name]
     if benchmark_name not in benchmark_registry:
         close_matches = difflib.get_close_matches(
             benchmark_name, benchmark_registry.keys()
