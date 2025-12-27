@@ -131,12 +131,15 @@ def get_model_meta(
         return model_meta
 
         if compute_missing:
-            logger.info(
-                f"Number of parameters and memory usage are missing for model '{model_name}'. Computing them now using Huggingface Hub."
-            )
             if model_meta.n_parameters is None:
+                logger.info(
+                    f"Number of parameters is missing for model '{model_name}'. Computing them now using Huggingface Hub."
+                )
                 model_meta.n_parameters = model_meta.calculate_num_parameters_from_hub()
             if model_meta.memory_usage_mb is None:
+                logger.info(
+                    f"Memory usage is missing for model '{model_name}'. Computing them now using Huggingface Hub."
+                )
                 model_meta.memory_usage_mb = model_meta.calculate_memory_usage_mb()
 
     if fetch_from_hf:
