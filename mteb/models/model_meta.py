@@ -11,9 +11,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
 from huggingface_hub import (
-    GitCommitInfo,
     ModelCard,
-    ModelCardData,
     get_safetensors_metadata,
     hf_hub_download,
     list_repo_commits,

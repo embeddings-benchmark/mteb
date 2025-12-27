@@ -19,10 +19,10 @@ from mteb.models.cache_wrappers.cache_wrapper import CachedEmbeddingWrapper
 from mteb.models.model_implementations.random_baseline import RandomEncoderBaseline
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import PromptType
+from tests.mock_tasks import MockMultiChoiceTask, MockRetrievalTask
 
 if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput
-from tests.mock_tasks import MockMultiChoiceTask, MockRetrievalTask
 
 
 class DummyModel(RandomEncoderBaseline):
