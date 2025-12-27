@@ -6,18 +6,16 @@ install:
 
 lint:
 	@echo "--- 🧹 Running linters ---"
-	uv sync --group lint
-	uv run --no-sync --group lint ruff format . 			# running ruff formatting
-	uv run --no-sync --group lint ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
-	uv run --no-sync --group lint typos
+	uv run --group lint ruff format . 			# running ruff formatting
+	uv run --group lint ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
+	uv run --group lint typos
 
 lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
 	# Required for CI to work, otherwise it will just pass
-	uv sync --group lint
-	uv run --no-sync --group lint ruff format . --check
-	uv run --no-sync --group lint ruff check .
-	uv run --no-sync --group lint typos --diff
+	uv run --group lint ruff format . --check
+	uv run --group lint ruff check .
+	uv run --group lint typos --diff
 
 test:
 	@echo "--- 🧪 Running tests ---"
@@ -67,8 +65,7 @@ dataset-load-test-pr:
 
 leaderboard-build-test:
 	@echo "--- 🚀 Running leaderboard build test ---"
-	uv sync --extra leaderboard --group dev
-	uv run --no-sync --group test pytest -n auto -m leaderboard_stability
+	uv run --group test pytest -n auto -m leaderboard_stability
 
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
