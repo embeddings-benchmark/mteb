@@ -9,6 +9,7 @@ import pytest
 import mteb
 from mteb import Benchmark
 from mteb.cache import ResultCache
+from mteb.cli.generate_model_card import generate_model_card
 from mteb.results import BenchmarkResults, ModelResult
 
 
@@ -187,3 +188,101 @@ def test_benchmark_results(cache_path: Path) -> None:
     assert "Retrieval" in df.columns
     assert df.shape[0] == 2
     assert df.at[0, "Mean (Task)"] == pytest.approx(0.616616)
+
+
+@pytest.fixture
+def temp_output(tmp_path) -> Path:
+    return tmp_path / "model_card.md"
+
+
+def test_generate_model_card_with_tasks(cache_path: Path, temp_output: Path) -> None:
+    """Test generating model card with tasks."""
+    tasks = [mteb.get_task("STS12"), mteb.get_task("Banking77Classification")]
+
+    generate_model_card(
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        tasks=tasks,
+        results_cache=ResultCache(cache_path),
+        output_path=temp_output,
+    )
+
+    assert temp_output.exists(), "Model card file not created"
+    content = temp_output.read_text()
+    assert "---" in content, "YAML frontmatter not found"
+    assert "model-index" in content, "Model index not found in frontmatter"
+
+
+def test_generate_model_card_with_benchmarks(
+    cache_path: Path, temp_output: Path
+) -> None:
+    """Test generating model card with multiple benchmarks."""
+    benchmarks = [
+        Benchmark(
+            name="TestBenchmark1",
+            tasks=mteb.get_tasks(["STS12"]),
+        ),
+        Benchmark(
+            name="TestBenchmark2",
+            tasks=mteb.get_tasks(["Banking77Classification"]),
+        ),
+    ]
+
+    generate_model_card(
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        benchmarks=benchmarks,
+        results_cache=ResultCache(cache_path),
+        output_path=temp_output,
+    )
+
+    assert temp_output.exists(), "Model card file not created"
+    content = temp_output.read_text()
+    assert "---" in content, "YAML frontmatter not found"
+
+
+def test_generate_model_card_with_table_and_tasks(
+    cache_path: Path, temp_output: Path
+) -> None:
+    """Test generating model card with results table for tasks."""
+    tasks = [mteb.get_task("STS12"), mteb.get_task("Banking77Classification")]
+
+    generate_model_card(
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        tasks=tasks,
+        results_cache=ResultCache(cache_path),
+        output_path=temp_output,
+        add_table_to_model_card=True,
+    )
+
+    assert temp_output.exists(), "Model card file not created"
+    content = temp_output.read_text()
+
+    assert "# MTEB Results" in content or "# MTEB results" in content, (
+        "Results table heading not found"
+    )
+    assert "STS12" in content or "Banking77" in content, "Task names not in content"
+
+
+def test_generate_model_card_with_table_and_benchmark(
+    cache_path: Path, temp_output: Path
+) -> None:
+    """Test generating model card with results table for benchmarks."""
+    benchmark = Benchmark(
+        name="TestBenchmark",
+        tasks=mteb.get_tasks(["STS12", "Banking77Classification"]),
+    )
+
+    generate_model_card(
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        benchmarks=[benchmark],
+        results_cache=ResultCache(cache_path),
+        output_path=temp_output,
+        add_table_to_model_card=True,
+    )
+
+    assert temp_output.exists(), "Model card file not created"
+    content = temp_output.read_text()
+
+    assert "# MTEB Results" in content or "# MTEB results" in content, (
+        "Results table heading not found"
+    )
+    assert len(content.split("|")) > 3, "Table should have multiple columns"
