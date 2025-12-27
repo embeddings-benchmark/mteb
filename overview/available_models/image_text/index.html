@@ -1,0 +1,5437 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../image/">
+      
+      
+        <link rel="next" href="../text/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../images/logos/mteb_logo/dots-icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Image-text Model - Massive Text Embedding Benchmark</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#image-text-model" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Massive Text Embedding Benchmark" class="md-header__button md-logo" aria-label="Massive Text Embedding Benchmark" data-md-component="logo">
+      
+  <img src="../../../images/logos/mteb_logo/dots-icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Massive Text Embedding Benchmark
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Image-text Model
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="light-blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="light-blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/embeddings-benchmark/mteb" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../.." class="md-tabs__link">
+          
+  
+  
+    
+  
+  Get Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../contributing/adding_a_model/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Contributing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Overview
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../api/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  API
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://huggingface.co/spaces/mteb/leaderboard" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Leaderboard
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Massive Text Embedding Benchmark" class="md-nav__button md-logo" aria-label="Massive Text Embedding Benchmark" data-md-component="logo">
+      
+  <img src="../../../images/logos/mteb_logo/dots-icon.png" alt="logo">
+
+    </a>
+    Massive Text Embedding Benchmark
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/embeddings-benchmark/mteb" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../.." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Get Started
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Get Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../whats_new/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    New in v2.0 🎉
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Usage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/get_started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Get Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/defining_the_model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Defining the Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/selecting_tasks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Selecting Tasks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/running_the_evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running the Evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/loading_results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loading Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Command Line Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/leaderboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running the Leaderboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_5" id="__nav_1_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Usage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced Usage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced_usage/two_stage_reranking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Two stage reranking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced_usage/cache_embeddings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cache embeddings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced_usage/retrieval_backend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Retrieval backend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contributing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/adding_a_model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding a Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/adding_a_dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding a Task
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/adding_a_benchmark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding a Benchmark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guidelines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Overview
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Benchmarks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_benchmarks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Available Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tasks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tasks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3_1" id="__nav_3_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Available Tasks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Available Tasks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/any2anymultilingualretrieval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Any2AnyMultilingualRetrieval
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/any2anyretrieval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Any2AnyRetrieval
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/bitextmining/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BitextMining
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/classification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Classification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/clustering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clustering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/compositionality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compositionality
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/documentunderstanding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DocumentUnderstanding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/imageclassification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ImageClassification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/imageclustering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ImageClustering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/instructionreranking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    InstructionReranking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/instructionretrieval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    InstructionRetrieval
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/multilabelclassification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MultilabelClassification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/pairclassification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PairClassification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/reranking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reranking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/retrieval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Retrieval
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/sts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    STS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/summarization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Summarization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/visioncentricqa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VisionCentricQA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/visualsts%28eng%29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VisualSTS(eng)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/visualsts%28multi%29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VisualSTS(multi)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_tasks/zeroshotclassification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ZeroShotClassification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Models
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_4_1" id="__nav_3_4_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Available Models
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_4_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Available Models
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../image/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Image Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Image-text Model
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Image-text Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#instruction-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instruction Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#non-instruction-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Non-instruction Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../text/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Text Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../api/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/benchmark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/task/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Task
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Additional Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://huggingface.co/spaces/mteb/leaderboard" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Leaderboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#instruction-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instruction Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#non-instruction-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Non-instruction Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/embeddings-benchmark/mteb/blob/main/docs/overview/available_models/image_text.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/embeddings-benchmark/mteb/raw/main/docs/overview/available_models/image_text.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="image-text-model">Image-text Model<a class="headerlink" href="#image-text-model" title="Permanent link">&para;</a></h1>
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
+
+<ul>
+<li><strong>Number of models:</strong> 46</li>
+</ul>
+<h2 id="instruction-model">Instruction Model<a class="headerlink" href="#instruction-model" title="Permanent link">&para;</a></h2>
+<h4 id="alibaba-nlpgme-qwen2-vl-2b-instruct"><a href="https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"><code>Alibaba-NLP/gme-Qwen2-VL-2B-Instruct</code></a><a class="headerlink" href="#alibaba-nlpgme-qwen2-vl-2b-instruct" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>32.8K</td>
+<td>1536</td>
+<td>2.2B</td>
+<td>8.2 GB</td>
+<td>2024-12-24</td>
+<td>cmn-Hans, eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">zhang2024gme</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{GME: Improving Universal Multimodal Retrieval by Multimodal LLMs}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Zhang, Xin and Zhang, Yanzhao and Xie, Wen and Li, Mingxin and Dai, Ziqi and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Li, Wenjie and Zhang, Min}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2412.16855}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CL}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">url</span><span class="p">=</span><span class="s">{http://arxiv.org/abs/2412.16855}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="alibaba-nlpgme-qwen2-vl-7b-instruct"><a href="https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-7B-Instruct"><code>Alibaba-NLP/gme-Qwen2-VL-7B-Instruct</code></a><a class="headerlink" href="#alibaba-nlpgme-qwen2-vl-7b-instruct" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>32.8K</td>
+<td>3584</td>
+<td>8.3B</td>
+<td>30.9 GB</td>
+<td>2024-12-24</td>
+<td>cmn-Hans, eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">zhang2024gme</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{GME: Improving Universal Multimodal Retrieval by Multimodal LLMs}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Zhang, Xin and Zhang, Yanzhao and Xie, Wen and Li, Mingxin and Dai, Ziqi and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Li, Wenjie and Zhang, Min}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2412.16855}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CL}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">url</span><span class="p">=</span><span class="s">{http://arxiv.org/abs/2412.16855}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="apsarastackmaasevoqwen25-vl-retriever-3b-v1"><a href="https://huggingface.co/ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-3B-v1"><code>ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-3B-v1</code></a><a class="headerlink" href="#apsarastackmaasevoqwen25-vl-retriever-3b-v1" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>128.0K</td>
+<td>128</td>
+<td>3.0B</td>
+<td>7.0 GB</td>
+<td>2025-11-04</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<h4 id="apsarastackmaasevoqwen25-vl-retriever-7b-v1"><a href="https://huggingface.co/ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-7B-v1"><code>ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-7B-v1</code></a><a class="headerlink" href="#apsarastackmaasevoqwen25-vl-retriever-7b-v1" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>128.0K</td>
+<td>128</td>
+<td>7.0B</td>
+<td>14.1 GB</td>
+<td>2025-11-04</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<h4 id="tiger-labvlm2vec-full"><a href="https://huggingface.co/TIGER-Lab/VLM2Vec-Full"><code>TIGER-Lab/VLM2Vec-Full</code></a><a class="headerlink" href="#tiger-labvlm2vec-full" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>131.1K</td>
+<td>3072</td>
+<td>4.2B</td>
+<td>7.7 GB</td>
+<td>2024-10-08</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">jiang2024vlm2vec</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{VLM2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Jiang, Ziyan and Meng, Rui and Yang, Xinyi and Yavuz, Semih and Zhou, Yingbo and Chen, Wenhu}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2410.05160}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="tiger-labvlm2vec-lora"><a href="https://huggingface.co/TIGER-Lab/VLM2Vec-LoRA"><code>TIGER-Lab/VLM2Vec-LoRA</code></a><a class="headerlink" href="#tiger-labvlm2vec-lora" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>131.1K</td>
+<td>3072</td>
+<td>not specified</td>
+<td>not specified</td>
+<td>2024-10-08</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">jiang2024vlm2vec</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{VLM2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Jiang, Ziyan and Meng, Rui and Yang, Xinyi and Yavuz, Semih and Zhou, Yingbo and Chen, Wenhu}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2410.05160}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="tomoroaitomoro-colqwen3-embed-4b"><a href="https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-4b"><code>TomoroAI/tomoro-colqwen3-embed-4b</code></a><a class="headerlink" href="#tomoroaitomoro-colqwen3-embed-4b" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>262.1K</td>
+<td>320</td>
+<td>4.0B</td>
+<td>8.3 GB</td>
+<td>2025-11-26</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">huang2025tomoro_colqwen3_embed</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{TomoroAI/tomoro-colqwen3-embed}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Xin Huang and Kye Min Tan and Albert Phelps}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2025}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="p">=</span><span class="s">{https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-8b}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="tomoroaitomoro-colqwen3-embed-8b"><a href="https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-8b"><code>TomoroAI/tomoro-colqwen3-embed-8b</code></a><a class="headerlink" href="#tomoroaitomoro-colqwen3-embed-8b" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>262.1K</td>
+<td>320</td>
+<td>8.0B</td>
+<td>16.3 GB</td>
+<td>2025-11-26</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">huang2025tomoro_colqwen3_embed</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{TomoroAI/tomoro-colqwen3-embed}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Xin Huang and Kye Min Tan and Albert Phelps}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2025}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="p">=</span><span class="s">{https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-8b}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="eagerworkseager-embed-v1"><a href="https://huggingface.co/eagerworks/eager-embed-v1"><code>eagerworks/eager-embed-v1</code></a><a class="headerlink" href="#eagerworkseager-embed-v1" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>262.1K</td>
+<td>2560</td>
+<td>4.0B</td>
+<td>16.5 GB</td>
+<td>2025-11-20</td>
+<td>deu-Latn, eng-Latn, fra-Latn, spa-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">EagerEmbed</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{Eager Embed V1: Multimodal Dense Embeddings for Retrieval}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Juan Pablo Balarini}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2025}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">publisher</span><span class="p">=</span><span class="s">{Eagerworks}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="p">=</span><span class="s">{https://github.com/eagerworks/eager-embed}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="ibm-granitegranite-vision-33-2b-embedding"><a href="https://huggingface.co/ibm-granite/granite-vision-3.3-2b-embedding"><code>ibm-granite/granite-vision-3.3-2b-embedding</code></a><a class="headerlink" href="#ibm-granitegranite-vision-33-2b-embedding" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>128.0K</td>
+<td>128</td>
+<td>3.0B</td>
+<td>11.1 GB</td>
+<td>2025-06-11</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">karlinsky2025granitevision</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{Granite Vision: a lightweight, open-source multimodal model for enterprise Intelligence}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Granite Vision Team and Karlinsky, Leonid and Arbelle, Assaf and Daniels, Abraham and Nassar, Ahmed and Alfassi, Amit and Wu, Bo and Schwartz, Eli and Joshi, Dhiraj and Kondic, Jovana and Shabtay, Nimrod and Li, Pengyuan and Herzig, Roei and Abedin, Shafiq and Perek, Shaked and Harary, Sivan and Barzelay, Udi and Raz Goldfarb, Adi and Oliva, Aude and Wieles, Ben and Bhattacharjee, Bishwaranjan and Huang, Brandon and Auer, Christoph and Gutfreund, Dan and Beymer, David and Wood, David and Kuehne, Hilde and Hansen, Jacob and Shtok, Joseph and Wong, Ken and Bathen, Luis Angel and Mishra, Mayank and Lysak, Maksym and Dolfi, Michele and Yurochkin, Mikhail and Livathinos, Nikolaos and Harel, Nimrod and Azulai, Ophir and Naparstek, Oshri and de Lima, Rafael Teixeira and Panda, Rameswar and Doveh, Sivan and Gupta, Shubham and Das, Subhro and Zawad, Syed and Kim, Yusik and He, Zexue and Brooks, Alexander and Goodhart, Gabe and Govindjee, Anita and Leist, Derek and Ibrahim, Ibrahim and Soffer, Aya and Cox, David and Soule, Kate and Lastras, Luis and Desai, Nirmit and Ofek-koifman, Shila and Raghavan, Sriram and Syeda-Mahmood, Tanveer and Staar, Peter and Drory, Tal and Feris, Rogerio}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2502.09927}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2025}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="intfloatmme5-mllama-11b-instruct"><a href="https://huggingface.co/intfloat/mmE5-mllama-11b-instruct"><code>intfloat/mmE5-mllama-11b-instruct</code></a><a class="headerlink" href="#intfloatmme5-mllama-11b-instruct" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>128.0K</td>
+<td>4096</td>
+<td>10.6B</td>
+<td>19.8 GB</td>
+<td>2025-02-12</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">chen2025mmE5</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Chen, Haonan and Wang, Liang and Yang, Nan and Zhu, Yutao and Zhao, Ziliang and Wei, Furu and Dou, Zhicheng}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2502.08468}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2025}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="jinaaijina-clip-v1"><a href="https://huggingface.co/jinaai/jina-clip-v1"><code>jinaai/jina-clip-v1</code></a><a class="headerlink" href="#jinaaijina-clip-v1" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8.2K</td>
+<td>768</td>
+<td>223.0M</td>
+<td>849.0 MB</td>
+<td>2024-05-30</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">koukounas2024jinaclip</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{Jina CLIP: Your CLIP Model Is Also Your Text Retriever}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Koukounas, Andreas and Mastrapas, Georgios and Günther, Michael and Wang, Bo and Martens, Scott and Mohr, Isabelle and Sturua, Saba and Akram, Mohammad Kalim and Martínez, Joan Fontanals and Ognawala, Saahil and Guzman, Susana and Werk, Maximilian and Wang, Nan and Xiao, Han}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2405.20204}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="jinaaijina-embeddings-v4"><a href="https://huggingface.co/jinaai/jina-embeddings-v4"><code>jinaai/jina-embeddings-v4</code></a><a class="headerlink" href="#jinaaijina-embeddings-v4" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> cc-by-nc-4.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>32.8K</td>
+<td>2048</td>
+<td>3.8B</td>
+<td>7.3 GB</td>
+<td>2025-06-24</td>
+<td>afr-Latn, amh-Latn, ara-Latn, asm-Latn, aze-Latn, ... (99)</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">günther2025jinaembeddingsv4universalembeddingsmultimodal</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Sedigheh Eslami and Scott Martens and Bo Wang and Nan Wang and Han Xiao}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2025}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2506.18902}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.AI}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">url</span><span class="p">=</span><span class="s">{https://arxiv.org/abs/2506.18902}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="microsoftllm2clip-openai-b-16"><a href="https://huggingface.co/microsoft/LLM2CLIP-Openai-B-16"><code>microsoft/LLM2CLIP-Openai-B-16</code></a><a class="headerlink" href="#microsoftllm2clip-openai-b-16" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>not specified</td>
+<td>1280</td>
+<td>361.0M</td>
+<td>not specified</td>
+<td>2024-11-07</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">huang2024llm2clippowerfullanguagemodel</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{LLM2CLIP: Powerful Language Model Unlock Richer Visual Representation}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Weiquan Huang and Aoqi Wu and Yifan Yang and Xufang Luo and Yuqing Yang and Liang Hu and Qi Dai and Xiyang Dai and Dongdong Chen and Chong Luo and Lili Qiu}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2411.04997}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CV}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="p">=</span><span class="s">{https://arxiv.org/abs/2411.04997}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="microsoftllm2clip-openai-l-14-224"><a href="https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224"><code>microsoft/LLM2CLIP-Openai-L-14-224</code></a><a class="headerlink" href="#microsoftllm2clip-openai-l-14-224" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>not specified</td>
+<td>1280</td>
+<td>578.0M</td>
+<td>not specified</td>
+<td>2024-11-07</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">huang2024llm2clippowerfullanguagemodel</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{LLM2CLIP: Powerful Language Model Unlock Richer Visual Representation}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Weiquan Huang and Aoqi Wu and Yifan Yang and Xufang Luo and Yuqing Yang and Liang Hu and Qi Dai and Xiyang Dai and Dongdong Chen and Chong Luo and Lili Qiu}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2411.04997}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CV}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="p">=</span><span class="s">{https://arxiv.org/abs/2411.04997}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="microsoftllm2clip-openai-l-14-336"><a href="https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-336"><code>microsoft/LLM2CLIP-Openai-L-14-336</code></a><a class="headerlink" href="#microsoftllm2clip-openai-l-14-336" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>not specified</td>
+<td>1280</td>
+<td>579.0M</td>
+<td>not specified</td>
+<td>2024-11-07</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">huang2024llm2clippowerfullanguagemodel</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{LLM2CLIP: Powerful Language Model Unlock Richer Visual Representation}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Weiquan Huang and Aoqi Wu and Yifan Yang and Xufang Luo and Yuqing Yang and Liang Hu and Qi Dai and Xiyang Dai and Dongdong Chen and Chong Luo and Lili Qiu}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2411.04997}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CV}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="p">=</span><span class="s">{https://arxiv.org/abs/2411.04997}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="nomic-aicolnomic-embed-multimodal-3b"><a href="https://huggingface.co/nomic-ai/colnomic-embed-multimodal-3b"><code>nomic-ai/colnomic-embed-multimodal-3b</code></a><a class="headerlink" href="#nomic-aicolnomic-embed-multimodal-3b" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>128.0K</td>
+<td>128</td>
+<td>3.0B</td>
+<td>7.0 GB</td>
+<td>2025-03-31</td>
+<td>deu-Latn, eng-Latn, fra-Latn, ita-Latn, spa-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">nomicembedmultimodal2025</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{Nomic Embed Multimodal: Interleaved Text, Image, and Screenshots for Visual Document Retrieval}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Nomic Team}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2025}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">publisher</span><span class="p">=</span><span class="s">{Nomic AI}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="p">=</span><span class="s">{https://nomic.ai/blog/posts/nomic-embed-multimodal}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="nomic-aicolnomic-embed-multimodal-7b"><a href="https://huggingface.co/nomic-ai/colnomic-embed-multimodal-7b"><code>nomic-ai/colnomic-embed-multimodal-7b</code></a><a class="headerlink" href="#nomic-aicolnomic-embed-multimodal-7b" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>128.0K</td>
+<td>128</td>
+<td>7.0B</td>
+<td>14.1 GB</td>
+<td>2025-03-31</td>
+<td>deu-Latn, eng-Latn, fra-Latn, ita-Latn, spa-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">nomicembedmultimodal2025</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{Nomic Embed Multimodal: Interleaved Text, Image, and Screenshots for Visual Document Retrieval}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Nomic Team}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2025}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">publisher</span><span class="p">=</span><span class="s">{Nomic AI}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="p">=</span><span class="s">{https://nomic.ai/blog/posts/nomic-embed-multimodal}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="nomic-ainomic-embed-vision-v15"><a href="https://huggingface.co/nomic-ai/nomic-embed-vision-v1.5"><code>nomic-ai/nomic-embed-vision-v1.5</code></a><a class="headerlink" href="#nomic-ainomic-embed-vision-v15" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2.0K</td>
+<td>768</td>
+<td>92.9M</td>
+<td>355.0 MB</td>
+<td>2024-06-08</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">nussbaum2024nomicembedvision</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{Nomic Embed Vision: Expanding the Latent Space}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Nussbaum, Zach and Duderstadt, Brandon and Mulyar, Andriy}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2406.18587}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2406.18587}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">url</span><span class="p">=</span><span class="s">{https://arxiv.org/abs/2406.18587}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="nvidiallama-nemoretriever-colembed-1b-v1"><a href="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1"><code>nvidia/llama-nemoretriever-colembed-1b-v1</code></a><a class="headerlink" href="#nvidiallama-nemoretriever-colembed-1b-v1" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1/blob/main/LICENSE</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8.2K</td>
+<td>2048</td>
+<td>2.4B</td>
+<td>4.5 GB</td>
+<td>2025-06-27</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">xu2025llamanemoretrievercolembedtopperforming</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{Llama Nemoretriever Colembed: Top-Performing Text-Image Retrieval Model}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Mengyao Xu and Gabriel Moreira and Ronay Ak and Radek Osmulski and Yauhen Babakhin and Zhiding Yu and Benedikt Schifferer and Even Oldridge}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2025}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2507.05513}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CV}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">url</span><span class="p">=</span><span class="s">{https://arxiv.org/abs/2507.05513}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="nvidiallama-nemoretriever-colembed-3b-v1"><a href="https://huggingface.co/nvidia/llama-nemoretriever-colembed-3b-v1"><code>nvidia/llama-nemoretriever-colembed-3b-v1</code></a><a class="headerlink" href="#nvidiallama-nemoretriever-colembed-3b-v1" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1/blob/main/LICENSE</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8.2K</td>
+<td>3072</td>
+<td>4.4B</td>
+<td>8.2 GB</td>
+<td>2025-06-27</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">xu2025llamanemoretrievercolembedtopperforming</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{Llama Nemoretriever Colembed: Top-Performing Text-Image Retrieval Model}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Mengyao Xu and Gabriel Moreira and Ronay Ak and Radek Osmulski and Yauhen Babakhin and Zhiding Yu and Benedikt Schifferer and Even Oldridge}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2025}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2507.05513}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CV}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">url</span><span class="p">=</span><span class="s">{https://arxiv.org/abs/2507.05513}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="royokonge5-v"><a href="https://huggingface.co/royokong/e5-v"><code>royokong/e5-v</code></a><a class="headerlink" href="#royokonge5-v" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> not specified</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8.2K</td>
+<td>4096</td>
+<td>8.4B</td>
+<td>15.6 GB</td>
+<td>2024-07-17</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">jiang2024e5v</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{E5-V: Universal Embeddings with Multimodal Large Language Models}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Jiang, Ting and Song, Minghui and Zhang, Zihan and Huang, Haizhen and Deng, Weiwei and Sun, Feng and Zhang, Qi and Wang, Deqing and Zhuang, Fuzhen}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2407.12580}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2407.12580}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">url</span><span class="p">=</span><span class="s">{https://arxiv.org/abs/2407.12580}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="vidorecolsmol-256m"><a href="https://huggingface.co/vidore/colSmol-256M"><code>vidore/colSmol-256M</code></a><a class="headerlink" href="#vidorecolsmol-256m" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8.2K</td>
+<td>128</td>
+<td>256.0M</td>
+<td>800.0 MB</td>
+<td>2025-01-22</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">faysse2024colpali</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{ColPali: Efficient Document Retrieval with Vision Language Models}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C&#39;eline and Colombo, Pierre}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2407.01449}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.IR}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="vidorecolsmol-500m"><a href="https://huggingface.co/vidore/colSmol-500M"><code>vidore/colSmol-500M</code></a><a class="headerlink" href="#vidorecolsmol-500m" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8.2K</td>
+<td>128</td>
+<td>500.0M</td>
+<td>1.2 GB</td>
+<td>2025-01-22</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">faysse2024colpali</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{ColPali: Efficient Document Retrieval with Vision Language Models}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C&#39;eline and Colombo, Pierre}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2407.01449}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.IR}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="vidorecolpali-v11"><a href="https://huggingface.co/vidore/colpali-v1.1"><code>vidore/colpali-v1.1</code></a><a class="headerlink" href="#vidorecolpali-v11" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16.4K</td>
+<td>128</td>
+<td>2.9B</td>
+<td>4.6 GB</td>
+<td>2024-08-21</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">faysse2024colpali</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{ColPali: Efficient Document Retrieval with Vision Language Models}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C&#39;eline and Colombo, Pierre}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2407.01449}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.IR}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="vidorecolpali-v12"><a href="https://huggingface.co/vidore/colpali-v1.2"><code>vidore/colpali-v1.2</code></a><a class="headerlink" href="#vidorecolpali-v12" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16.4K</td>
+<td>128</td>
+<td>2.9B</td>
+<td>4.6 GB</td>
+<td>2024-08-26</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">faysse2024colpali</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{ColPali: Efficient Document Retrieval with Vision Language Models}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C&#39;eline and Colombo, Pierre}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2407.01449}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.IR}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="vidorecolpali-v13"><a href="https://huggingface.co/vidore/colpali-v1.3"><code>vidore/colpali-v1.3</code></a><a class="headerlink" href="#vidorecolpali-v13" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16.4K</td>
+<td>128</td>
+<td>2.9B</td>
+<td>4.6 GB</td>
+<td>2024-11-01</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">faysse2024colpali</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{ColPali: Efficient Document Retrieval with Vision Language Models}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C&#39;eline and Colombo, Pierre}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2407.01449}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.IR}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="vidorecolqwen2-v10"><a href="https://huggingface.co/vidore/colqwen2-v1.0"><code>vidore/colqwen2-v1.0</code></a><a class="headerlink" href="#vidorecolqwen2-v10" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>32.8K</td>
+<td>128</td>
+<td>2.2B</td>
+<td>7.0 GB</td>
+<td>2025-11-03</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">faysse2024colpali</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{ColPali: Efficient Document Retrieval with Vision Language Models}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C&#39;eline and Colombo, Pierre}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2407.01449}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.IR}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="vidorecolqwen25-v02"><a href="https://huggingface.co/vidore/colqwen2.5-v0.2"><code>vidore/colqwen2.5-v0.2</code></a><a class="headerlink" href="#vidorecolqwen25-v02" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>128.0K</td>
+<td>128</td>
+<td>3.0B</td>
+<td>7.0 GB</td>
+<td>2025-01-31</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">faysse2024colpali</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{ColPali: Efficient Document Retrieval with Vision Language Models}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C&#39;eline and Colombo, Pierre}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2407.01449}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.IR}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h2 id="non-instruction-model">Non-instruction Model<a class="headerlink" href="#non-instruction-model" title="Permanent link">&para;</a></h2>
+<h4 id="baaibge-visualized-base"><a href="https://huggingface.co/BAAI/bge-visualized"><code>BAAI/bge-visualized-base</code></a><a class="headerlink" href="#baaibge-visualized-base" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> not specified</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>512</td>
+<td>768</td>
+<td>196.0M</td>
+<td>1.6 GB</td>
+<td>2024-06-06</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">zhou2024vista</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{VISTA: Visualized Text Embedding For Universal Multi-Modal Retrieval}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Zhou, Junjie and Liu, Zheng and Xiao, Shitao and Zhao, Bo and Xiong, Yongping}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2406.04292}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="baaibge-visualized-m3"><a href="https://huggingface.co/BAAI/bge-visualized"><code>BAAI/bge-visualized-m3</code></a><a class="headerlink" href="#baaibge-visualized-m3" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> not specified</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8.2K</td>
+<td>1024</td>
+<td>872.9M</td>
+<td>4.2 GB</td>
+<td>2024-06-06</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">zhou2024vista</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{VISTA: Visualized Text Embedding For Universal Multi-Modal Retrieval}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Zhou, Junjie and Liu, Zheng and Xiao, Shitao and Zhao, Bo and Xiong, Yongping}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2406.04292}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2024}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="coherecohere-embed-v40"><a href="https://docs.cohere.com/docs/cohere-embed"><code>Cohere/Cohere-embed-v4.0</code></a><a class="headerlink" href="#coherecohere-embed-v40" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> not specified</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>128.0K</td>
+<td>1536</td>
+<td>not specified</td>
+<td>not specified</td>
+<td>2024-12-01</td>
+<td>afr-Latn, amh-Ethi, ara-Arab, asm-Beng, aze-Latn, ... (111)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="coherecohere-embed-v40-output_dtypebinary"><a href="https://docs.cohere.com/docs/embeddings"><code>Cohere/Cohere-embed-v4.0 (output_dtype=binary)</code></a><a class="headerlink" href="#coherecohere-embed-v40-output_dtypebinary" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> not specified</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>128.0K</td>
+<td>1536</td>
+<td>not specified</td>
+<td>not specified</td>
+<td>2024-12-01</td>
+<td>afr-Latn, amh-Ethi, ara-Arab, asm-Beng, aze-Latn, ... (111)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="coherecohere-embed-v40-output_dtypeint8"><a href="https://docs.cohere.com/docs/embeddings"><code>Cohere/Cohere-embed-v4.0 (output_dtype=int8)</code></a><a class="headerlink" href="#coherecohere-embed-v40-output_dtypeint8" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> not specified</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>128.0K</td>
+<td>1536</td>
+<td>not specified</td>
+<td>not specified</td>
+<td>2024-12-01</td>
+<td>afr-Latn, amh-Ethi, ara-Arab, asm-Beng, aze-Latn, ... (111)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="quansuneva02-clip-b-16"><a href="https://huggingface.co/QuanSun/EVA-CLIP"><code>QuanSun/EVA02-CLIP-B-16</code></a><a class="headerlink" href="#quansuneva02-clip-b-16" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>77</td>
+<td>512</td>
+<td>149.0M</td>
+<td>568.0 MB</td>
+<td>2023-04-26</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">EVA-CLIP</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{EVA-CLIP: Improved Training Techniques for CLIP at Scale}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Sun, Quan and Fang, Yuxin and Wu, Ledell and Wang, Xinlong and Cao, Yue}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2303.15389}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="quansuneva02-clip-l-14"><a href="https://huggingface.co/QuanSun/EVA-CLIP"><code>QuanSun/EVA02-CLIP-L-14</code></a><a class="headerlink" href="#quansuneva02-clip-l-14" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>77</td>
+<td>768</td>
+<td>428.0M</td>
+<td>1.6 GB</td>
+<td>2023-04-26</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">EVA-CLIP</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{EVA-CLIP: Improved Training Techniques for CLIP at Scale}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Sun, Quan and Fang, Yuxin and Wu, Ledell and Wang, Xinlong and Cao, Yue}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2303.15389}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="quansuneva02-clip-bige-14"><a href="https://huggingface.co/QuanSun/EVA-CLIP"><code>QuanSun/EVA02-CLIP-bigE-14</code></a><a class="headerlink" href="#quansuneva02-clip-bige-14" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>77</td>
+<td>1024</td>
+<td>4.7B</td>
+<td>17.5 GB</td>
+<td>2023-04-26</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">EVA-CLIP</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{EVA-CLIP: Improved Training Techniques for CLIP at Scale}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Sun, Quan and Fang, Yuxin and Wu, Ledell and Wang, Xinlong and Cao, Yue}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2303.15389}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="quansuneva02-clip-bige-14-plus"><a href="https://huggingface.co/QuanSun/EVA-CLIP"><code>QuanSun/EVA02-CLIP-bigE-14-plus</code></a><a class="headerlink" href="#quansuneva02-clip-bige-14-plus" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>77</td>
+<td>1024</td>
+<td>5.0B</td>
+<td>18.6 GB</td>
+<td>2023-04-26</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">EVA-CLIP</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{EVA-CLIP: Improved Training Techniques for CLIP at Scale}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Sun, Quan and Fang, Yuxin and Wu, Ledell and Wang, Xinlong and Cao, Yue}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2303.15389}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="salesforceblip-image-captioning-base"><a href="https://huggingface.co/Salesforce/blip-image-captioning-base"><code>Salesforce/blip-image-captioning-base</code></a><a class="headerlink" href="#salesforceblip-image-captioning-base" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> bsd-3-clause</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>512</td>
+<td>768</td>
+<td>247.0M</td>
+<td>942.0 MB</td>
+<td>2023-08-01</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">https://doi.org/10.48550/arxiv.2201.12086</span><span class="p">,</span>
+<span class="w">    </span><span class="na">doi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{10.48550/ARXIV.2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://arxiv.org/abs/2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Li, Junnan and Li, Dongxu and Xiong, Caiming and Hoi, Steven}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">keywords</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2022}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">copyright</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Creative Commons Attribution 4.0 International}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="salesforceblip-image-captioning-large"><a href="https://huggingface.co/Salesforce/blip-image-captioning-large"><code>Salesforce/blip-image-captioning-large</code></a><a class="headerlink" href="#salesforceblip-image-captioning-large" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> bsd-3-clause</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>512</td>
+<td>768</td>
+<td>470.0M</td>
+<td>1.8 GB</td>
+<td>2023-12-07</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">https://doi.org/10.48550/arxiv.2201.12086</span><span class="p">,</span>
+<span class="w">    </span><span class="na">doi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{10.48550/ARXIV.2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://arxiv.org/abs/2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Li, Junnan and Li, Dongxu and Xiong, Caiming and Hoi, Steven}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">keywords</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2022}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">copyright</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Creative Commons Attribution 4.0 International}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="salesforceblip-itm-base-coco"><a href="https://huggingface.co/Salesforce/blip-itm-base-coco"><code>Salesforce/blip-itm-base-coco</code></a><a class="headerlink" href="#salesforceblip-itm-base-coco" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> bsd-3-clause</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>512</td>
+<td>768</td>
+<td>247.0M</td>
+<td>942.0 MB</td>
+<td>2023-08-01</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">https://doi.org/10.48550/arxiv.2201.12086</span><span class="p">,</span>
+<span class="w">    </span><span class="na">doi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{10.48550/ARXIV.2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://arxiv.org/abs/2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Li, Junnan and Li, Dongxu and Xiong, Caiming and Hoi, Steven}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">keywords</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2022}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">copyright</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Creative Commons Attribution 4.0 International}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="salesforceblip-itm-base-flickr"><a href="https://huggingface.co/Salesforce/blip-itm-base-flickr"><code>Salesforce/blip-itm-base-flickr</code></a><a class="headerlink" href="#salesforceblip-itm-base-flickr" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> bsd-3-clause</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>512</td>
+<td>768</td>
+<td>247.0M</td>
+<td>942.0 MB</td>
+<td>2023-08-01</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">https://doi.org/10.48550/arxiv.2201.12086</span><span class="p">,</span>
+<span class="w">    </span><span class="na">doi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{10.48550/ARXIV.2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://arxiv.org/abs/2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Li, Junnan and Li, Dongxu and Xiong, Caiming and Hoi, Steven}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">keywords</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2022}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">copyright</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Creative Commons Attribution 4.0 International}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="salesforceblip-itm-large-coco"><a href="https://huggingface.co/Salesforce/blip-itm-large-coco"><code>Salesforce/blip-itm-large-coco</code></a><a class="headerlink" href="#salesforceblip-itm-large-coco" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> bsd-3-clause</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>512</td>
+<td>768</td>
+<td>470.0M</td>
+<td>1.8 GB</td>
+<td>2023-08-01</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">https://doi.org/10.48550/arxiv.2201.12086</span><span class="p">,</span>
+<span class="w">    </span><span class="na">doi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{10.48550/ARXIV.2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://arxiv.org/abs/2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Li, Junnan and Li, Dongxu and Xiong, Caiming and Hoi, Steven}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">keywords</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2022}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">copyright</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Creative Commons Attribution 4.0 International}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="salesforceblip-itm-large-flickr"><a href="https://huggingface.co/Salesforce/blip-itm-large-flickr"><code>Salesforce/blip-itm-large-flickr</code></a><a class="headerlink" href="#salesforceblip-itm-large-flickr" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> bsd-3-clause</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>512</td>
+<td>768</td>
+<td>470.0M</td>
+<td>1.8 GB</td>
+<td>2023-08-01</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">https://doi.org/10.48550/arxiv.2201.12086</span><span class="p">,</span>
+<span class="w">    </span><span class="na">doi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{10.48550/ARXIV.2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://arxiv.org/abs/2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Li, Junnan and Li, Dongxu and Xiong, Caiming and Hoi, Steven}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">keywords</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2022}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">copyright</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Creative Commons Attribution 4.0 International}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="salesforceblip-vqa-base"><a href="https://huggingface.co/Salesforce/blip-vqa-base"><code>Salesforce/blip-vqa-base</code></a><a class="headerlink" href="#salesforceblip-vqa-base" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> bsd-3-clause</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>512</td>
+<td>768</td>
+<td>247.0M</td>
+<td>1.4 GB</td>
+<td>2023-12-07</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">https://doi.org/10.48550/arxiv.2201.12086</span><span class="p">,</span>
+<span class="w">    </span><span class="na">doi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{10.48550/ARXIV.2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://arxiv.org/abs/2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Li, Junnan and Li, Dongxu and Xiong, Caiming and Hoi, Steven}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">keywords</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2022}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">copyright</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Creative Commons Attribution 4.0 International}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="salesforceblip-vqa-capfilt-large"><a href="https://huggingface.co/Salesforce/blip-vqa-capfilt-large"><code>Salesforce/blip-vqa-capfilt-large</code></a><a class="headerlink" href="#salesforceblip-vqa-capfilt-large" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> bsd-3-clause</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>512</td>
+<td>768</td>
+<td>247.0M</td>
+<td>942.0 MB</td>
+<td>2023-01-22</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">https://doi.org/10.48550/arxiv.2201.12086</span><span class="p">,</span>
+<span class="w">    </span><span class="na">doi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{10.48550/ARXIV.2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://arxiv.org/abs/2201.12086}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Li, Junnan and Li, Dongxu and Xiong, Caiming and Hoi, Steven}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">keywords</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2022}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">copyright</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Creative Commons Attribution 4.0 International}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="salesforceblip2-opt-27b"><a href="https://huggingface.co/Salesforce/blip2-opt-2.7b"><code>Salesforce/blip2-opt-2.7b</code></a><a class="headerlink" href="#salesforceblip2-opt-27b" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>not specified</td>
+<td>768</td>
+<td>3.7B</td>
+<td>14.0 GB</td>
+<td>2024-03-22</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">li2023blip2</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="p">=</span><span class="s">{{BLIP-2:} Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="p">=</span><span class="s">{Junnan Li and Dongxu Li and Silvio Savarese and Steven Hoi}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">booktitle</span><span class="p">=</span><span class="s">{ICML}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="salesforceblip2-opt-67b-coco"><a href="https://huggingface.co/Salesforce/blip2-opt-6.7b-coco"><code>Salesforce/blip2-opt-6.7b-coco</code></a><a class="headerlink" href="#salesforceblip2-opt-67b-coco" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>not specified</td>
+<td>768</td>
+<td>7.8B</td>
+<td>28.9 GB</td>
+<td>2024-03-31</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">li2023blip2</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="p">=</span><span class="s">{{BLIP-2:} Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="p">=</span><span class="s">{Junnan Li and Dongxu Li and Silvio Savarese and Steven Hoi}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">booktitle</span><span class="p">=</span><span class="s">{ICML}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="baselinerandom-cross-encoder-baseline">baseline/random-cross-encoder-baseline<a class="headerlink" href="#baselinerandom-cross-encoder-baseline" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>infP</td>
+<td>32</td>
+<td>0</td>
+<td>0.0 MB</td>
+<td>not specified</td>
+<td>not specified</td>
+</tr>
+</tbody>
+</table>
+<h4 id="baselinerandom-encoder-baseline">baseline/random-encoder-baseline<a class="headerlink" href="#baselinerandom-encoder-baseline" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>infP</td>
+<td>32</td>
+<td>0</td>
+<td>0.0 MB</td>
+<td>not specified</td>
+<td>not specified</td>
+</tr>
+</tbody>
+</table>
+<h4 id="cohereembed-english-v30"><a href="https://huggingface.co/Cohere/Cohere-embed-english-v3.0"><code>cohere/embed-english-v3.0</code></a><a class="headerlink" href="#cohereembed-english-v30" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> not specified</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>not specified</td>
+<td>1024</td>
+<td>not specified</td>
+<td>not specified</td>
+<td>2024-10-24</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<h4 id="cohereembed-multilingual-v30"><a href="https://huggingface.co/Cohere/Cohere-embed-multilingual-v3.0"><code>cohere/embed-multilingual-v3.0</code></a><a class="headerlink" href="#cohereembed-multilingual-v30" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> not specified</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>not specified</td>
+<td>1024</td>
+<td>not specified</td>
+<td>not specified</td>
+<td>2024-10-24</td>
+<td>not specified</td>
+</tr>
+</tbody>
+</table>
+<h4 id="googlesiglip-base-patch16-224"><a href="https://huggingface.co/google/siglip-base-patch16-224"><code>google/siglip-base-patch16-224</code></a><a class="headerlink" href="#googlesiglip-base-patch16-224" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>64</td>
+<td>768</td>
+<td>203.0M</td>
+<td>775.0 MB</td>
+<td>2024-01-08</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">zhai2023sigmoid</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{Sigmoid Loss for Language Image Pre-Training}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2303.15343}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CV}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="googlesiglip-base-patch16-256"><a href="https://huggingface.co/google/siglip-base-patch16-256"><code>google/siglip-base-patch16-256</code></a><a class="headerlink" href="#googlesiglip-base-patch16-256" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>64</td>
+<td>768</td>
+<td>203.0M</td>
+<td>775.0 MB</td>
+<td>2024-01-08</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">zhai2023sigmoid</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{Sigmoid Loss for Language Image Pre-Training}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2303.15343}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CV}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="googlesiglip-base-patch16-256-multilingual"><a href="https://huggingface.co/google/siglip-base-patch16-256-multilingual"><code>google/siglip-base-patch16-256-multilingual</code></a><a class="headerlink" href="#googlesiglip-base-patch16-256-multilingual" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>64</td>
+<td>768</td>
+<td>371.0M</td>
+<td>1.4 GB</td>
+<td>2024-01-08</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">zhai2023sigmoid</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{Sigmoid Loss for Language Image Pre-Training}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2303.15343}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CV}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="googlesiglip-base-patch16-384"><a href="https://huggingface.co/google/siglip-base-patch16-384"><code>google/siglip-base-patch16-384</code></a><a class="headerlink" href="#googlesiglip-base-patch16-384" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>64</td>
+<td>768</td>
+<td>203.0M</td>
+<td>776.0 MB</td>
+<td>2024-01-08</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">zhai2023sigmoid</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{Sigmoid Loss for Language Image Pre-Training}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2303.15343}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CV}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="googlesiglip-base-patch16-512"><a href="https://huggingface.co/google/siglip-base-patch16-512"><code>google/siglip-base-patch16-512</code></a><a class="headerlink" href="#googlesiglip-base-patch16-512" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>64</td>
+<td>768</td>
+<td>204.0M</td>
+<td>777.0 MB</td>
+<td>2024-01-08</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">zhai2023sigmoid</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{Sigmoid Loss for Language Image Pre-Training}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2303.15343}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CV}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="googlesiglip-large-patch16-256"><a href="https://huggingface.co/google/siglip-large-patch16-256"><code>google/siglip-large-patch16-256</code></a><a class="headerlink" href="#googlesiglip-large-patch16-256" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>64</td>
+<td>1024</td>
+<td>652.0M</td>
+<td>2.4 GB</td>
+<td>2024-01-08</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">zhai2023sigmoid</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{Sigmoid Loss for Language Image Pre-Training}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2303.15343}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CV}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="googlesiglip-large-patch16-384"><a href="https://huggingface.co/google/siglip-large-patch16-384"><code>google/siglip-large-patch16-384</code></a><a class="headerlink" href="#googlesiglip-large-patch16-384" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>64</td>
+<td>1024</td>
+<td>652.0M</td>
+<td>2.4 GB</td>
+<td>2024-01-08</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">zhai2023sigmoid</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{Sigmoid Loss for Language Image Pre-Training}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2303.15343}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CV}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="googlesiglip-so400m-patch14-224"><a href="https://huggingface.co/google/siglip-so400m-patch14-224"><code>google/siglip-so400m-patch14-224</code></a><a class="headerlink" href="#googlesiglip-so400m-patch14-224" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16</td>
+<td>1152</td>
+<td>877.0M</td>
+<td>3.3 GB</td>
+<td>2024-01-08</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">zhai2023sigmoid</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{Sigmoid Loss for Language Image Pre-Training}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2303.15343}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CV}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="googlesiglip-so400m-patch14-384"><a href="https://huggingface.co/google/siglip-so400m-patch14-384"><code>google/siglip-so400m-patch14-384</code></a><a class="headerlink" href="#googlesiglip-so400m-patch14-384" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>64</td>
+<td>1152</td>
+<td>878.0M</td>
+<td>3.3 GB</td>
+<td>2024-01-08</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">zhai2023sigmoid</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{Sigmoid Loss for Language Image Pre-Training}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2303.15343}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CV}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="googlesiglip-so400m-patch16-256-i18n"><a href="https://huggingface.co/google/siglip-so400m-patch16-256-i18n"><code>google/siglip-so400m-patch16-256-i18n</code></a><a class="headerlink" href="#googlesiglip-so400m-patch16-256-i18n" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> apache-2.0</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>64</td>
+<td>1152</td>
+<td>1.1B</td>
+<td>4.2 GB</td>
+<td>2024-01-08</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">zhai2023sigmoid</span><span class="p">,</span>
+<span class="w">      </span><span class="na">title</span><span class="p">=</span><span class="s">{Sigmoid Loss for Language Image Pre-Training}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">author</span><span class="p">=</span><span class="s">{Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">eprint</span><span class="p">=</span><span class="s">{2303.15343}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">archivePrefix</span><span class="p">=</span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">      </span><span class="na">primaryClass</span><span class="p">=</span><span class="s">{cs.CV}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="kakaobrainalign-base"><a href="https://huggingface.co/kakaobrain/align-base"><code>kakaobrain/align-base</code></a><a class="headerlink" href="#kakaobrainalign-base" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> not specified</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>64</td>
+<td>768</td>
+<td>176.0M</td>
+<td>671.0 MB</td>
+<td>2023-02-24</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">kakaobrain2022coyo-align</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{COYO-ALIGN}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{Yoon, Boogeo and Lee, Youhan and Baek, Woonhyuk}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{2022}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">howpublished</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="s">{https://github.com/kakaobrain/coyo-align}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="laionclip-vit-b-16-datacompxl-s13b-b90k"><a href="https://huggingface.co/laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K"><code>laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K</code></a><a class="headerlink" href="#laionclip-vit-b-16-datacompxl-s13b-b90k" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>77</td>
+<td>512</td>
+<td>150.0M</td>
+<td>572.0 MB</td>
+<td>2023-04-26</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">cherti2023reproducible</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="p">=</span><span class="s">{Reproducible scaling laws for contrastive language-image learning}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="p">=</span><span class="s">{Cherti, Mehdi and Beaumont, Romain and Wightman, Ross and Wortsman, Mitchell and Ilharco, Gabriel and Gordon, Cade and Schuhmann, Christoph and Schmidt, Ludwig and Jitsev, Jenia}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">booktitle</span><span class="p">=</span><span class="s">{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">pages</span><span class="p">=</span><span class="s">{2818--2829}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="laionclip-vit-b-32-datacompxl-s13b-b90k"><a href="https://huggingface.co/laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K"><code>laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K</code></a><a class="headerlink" href="#laionclip-vit-b-32-datacompxl-s13b-b90k" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>77</td>
+<td>512</td>
+<td>151.0M</td>
+<td>576.0 MB</td>
+<td>2023-04-26</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">cherti2023reproducible</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="p">=</span><span class="s">{Reproducible scaling laws for contrastive language-image learning}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="p">=</span><span class="s">{Cherti, Mehdi and Beaumont, Romain and Wightman, Ross and Wortsman, Mitchell and Ilharco, Gabriel and Gordon, Cade and Schuhmann, Christoph and Schmidt, Ludwig and Jitsev, Jenia}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">booktitle</span><span class="p">=</span><span class="s">{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">pages</span><span class="p">=</span><span class="s">{2818--2829}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="laionclip-vit-b-32-laion2b-s34b-b79k"><a href="https://huggingface.co/laion/CLIP-ViT-B-32-laion2B-s34B-b79K"><code>laion/CLIP-ViT-B-32-laion2B-s34B-b79K</code></a><a class="headerlink" href="#laionclip-vit-b-32-laion2b-s34b-b79k" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>77</td>
+<td>512</td>
+<td>151.0M</td>
+<td>577.0 MB</td>
+<td>2022-09-15</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">cherti2023reproducible</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="p">=</span><span class="s">{Reproducible scaling laws for contrastive language-image learning}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="p">=</span><span class="s">{Cherti, Mehdi and Beaumont, Romain and Wightman, Ross and Wortsman, Mitchell and Ilharco, Gabriel and Gordon, Cade and Schuhmann, Christoph and Schmidt, Ludwig and Jitsev, Jenia}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">booktitle</span><span class="p">=</span><span class="s">{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">pages</span><span class="p">=</span><span class="s">{2818--2829}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="laionclip-vit-h-14-laion2b-s32b-b79k"><a href="https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K"><code>laion/CLIP-ViT-H-14-laion2B-s32B-b79K</code></a><a class="headerlink" href="#laionclip-vit-h-14-laion2b-s32b-b79k" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>77</td>
+<td>1024</td>
+<td>986.0M</td>
+<td>3.7 GB</td>
+<td>2022-09-15</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">cherti2023reproducible</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="p">=</span><span class="s">{Reproducible scaling laws for contrastive language-image learning}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="p">=</span><span class="s">{Cherti, Mehdi and Beaumont, Romain and Wightman, Ross and Wortsman, Mitchell and Ilharco, Gabriel and Gordon, Cade and Schuhmann, Christoph and Schmidt, Ludwig and Jitsev, Jenia}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">booktitle</span><span class="p">=</span><span class="s">{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">pages</span><span class="p">=</span><span class="s">{2818--2829}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="laionclip-vit-l-14-datacompxl-s13b-b90k"><a href="https://huggingface.co/laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K"><code>laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K</code></a><a class="headerlink" href="#laionclip-vit-l-14-datacompxl-s13b-b90k" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>77</td>
+<td>768</td>
+<td>428.0M</td>
+<td>1.6 GB</td>
+<td>2023-04-26</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">cherti2023reproducible</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="p">=</span><span class="s">{Reproducible scaling laws for contrastive language-image learning}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="p">=</span><span class="s">{Cherti, Mehdi and Beaumont, Romain and Wightman, Ross and Wortsman, Mitchell and Ilharco, Gabriel and Gordon, Cade and Schuhmann, Christoph and Schmidt, Ludwig and Jitsev, Jenia}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">booktitle</span><span class="p">=</span><span class="s">{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">pages</span><span class="p">=</span><span class="s">{2818--2829}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="laionclip-vit-l-14-laion2b-s32b-b82k"><a href="https://huggingface.co/laion/CLIP-ViT-L-14-laion2B-s32B-b82K"><code>laion/CLIP-ViT-L-14-laion2B-s32B-b82K</code></a><a class="headerlink" href="#laionclip-vit-l-14-laion2b-s32b-b82k" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>77</td>
+<td>768</td>
+<td>428.0M</td>
+<td>1.6 GB</td>
+<td>2022-09-15</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">cherti2023reproducible</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="p">=</span><span class="s">{Reproducible scaling laws for contrastive language-image learning}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="p">=</span><span class="s">{Cherti, Mehdi and Beaumont, Romain and Wightman, Ross and Wortsman, Mitchell and Ilharco, Gabriel and Gordon, Cade and Schuhmann, Christoph and Schmidt, Ludwig and Jitsev, Jenia}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">booktitle</span><span class="p">=</span><span class="s">{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">pages</span><span class="p">=</span><span class="s">{2818--2829}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="laionclip-vit-bigg-14-laion2b-39b-b160k"><a href="https://huggingface.co/laion/CLIP-ViT-bigG-14-laion2B-39B-b160k"><code>laion/CLIP-ViT-bigG-14-laion2B-39B-b160k</code></a><a class="headerlink" href="#laionclip-vit-bigg-14-laion2b-39b-b160k" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>77</td>
+<td>1280</td>
+<td>2.5B</td>
+<td>9.5 GB</td>
+<td>2023-01-23</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">cherti2023reproducible</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="p">=</span><span class="s">{Reproducible scaling laws for contrastive language-image learning}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="p">=</span><span class="s">{Cherti, Mehdi and Beaumont, Romain and Wightman, Ross and Wortsman, Mitchell and Ilharco, Gabriel and Gordon, Cade and Schuhmann, Christoph and Schmidt, Ludwig and Jitsev, Jenia}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">booktitle</span><span class="p">=</span><span class="s">{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">pages</span><span class="p">=</span><span class="s">{2818--2829}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="laionclip-vit-g-14-laion2b-s34b-b88k"><a href="https://huggingface.co/laion/CLIP-ViT-g-14-laion2B-s34B-b88K"><code>laion/CLIP-ViT-g-14-laion2B-s34B-b88K</code></a><a class="headerlink" href="#laionclip-vit-g-14-laion2b-s34b-b88k" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>77</td>
+<td>1024</td>
+<td>1.4B</td>
+<td>5.1 GB</td>
+<td>2023-03-06</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">cherti2023reproducible</span><span class="p">,</span>
+<span class="w">    </span><span class="na">title</span><span class="p">=</span><span class="s">{Reproducible scaling laws for contrastive language-image learning}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">author</span><span class="p">=</span><span class="s">{Cherti, Mehdi and Beaumont, Romain and Wightman, Ross and Wortsman, Mitchell and Ilharco, Gabriel and Gordon, Cade and Schuhmann, Christoph and Schmidt, Ludwig and Jitsev, Jenia}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">booktitle</span><span class="p">=</span><span class="s">{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">pages</span><span class="p">=</span><span class="s">{2818--2829}</span><span class="p">,</span>
+<span class="w">    </span><span class="na">year</span><span class="p">=</span><span class="s">{2023}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="openaiclip-vit-base-patch16"><a href="https://huggingface.co/openai/clip-vit-base-patch16"><code>openai/clip-vit-base-patch16</code></a><a class="headerlink" href="#openaiclip-vit-base-patch16" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> not specified</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>77</td>
+<td>512</td>
+<td>151.0M</td>
+<td>576.0 MB</td>
+<td>2021-02-26</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">radford2021learning</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{Learning Transferable Visual Models From Natural Language Supervision}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2103.00020}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2021}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="openaiclip-vit-base-patch32"><a href="https://huggingface.co/openai/clip-vit-base-patch32"><code>openai/clip-vit-base-patch32</code></a><a class="headerlink" href="#openaiclip-vit-base-patch32" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> not specified</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>77</td>
+<td>512</td>
+<td>151.0M</td>
+<td>576.0 MB</td>
+<td>2021-02-26</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">radford2021learning</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{Learning Transferable Visual Models From Natural Language Supervision}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2103.00020}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2021}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="openaiclip-vit-large-patch14"><a href="https://huggingface.co/openai/clip-vit-large-patch14"><code>openai/clip-vit-large-patch14</code></a><a class="headerlink" href="#openaiclip-vit-large-patch14" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> not specified</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>77</td>
+<td>768</td>
+<td>428.0M</td>
+<td>1.6 GB</td>
+<td>2021-02-26</td>
+<td>eng-Latn</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">radford2021learning</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="p">=</span><span class="s">{Learning Transferable Visual Models From Natural Language Supervision}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="p">=</span><span class="s">{Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2103.00020}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="p">=</span><span class="s">{2021}</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="voyageaivoyage-multimodal-3"><a href="https://huggingface.co/voyageai/voyage-multimodal-3"><code>voyageai/voyage-multimodal-3</code></a><a class="headerlink" href="#voyageaivoyage-multimodal-3" title="Permanent link">&para;</a></h4>
+<p><strong>License:</strong> mit</p>
+<table>
+<thead>
+<tr>
+<th>Max Tokens</th>
+<th>Embedding dimension</th>
+<th>Parameters</th>
+<th>Required Memory (Mb)</th>
+<th>Release date</th>
+<th>Languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>32.8K</td>
+<td>1024</td>
+<td>not specified</td>
+<td>not specified</td>
+<td>2024-11-10</td>
+<td>not specified</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../image/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Image Model">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Image Model
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../text/" class="md-footer__link md-footer__link--next" aria-label="Next: Text Model">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Text Model
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      This text is freely available under a Creative Commons Attribution 4.0 license
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/embeddings-benchmark/mteb" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.instant", "navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy", "content.action.edit", "content.action.view", "content.code.annotate", "content.tooltips", "navigation.footer", "navigation.indexes", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

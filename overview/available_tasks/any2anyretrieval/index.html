@@ -1,0 +1,4580 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../any2anymultilingualretrieval/">
+      
+      
+        <link rel="next" href="../bitextmining/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../images/logos/mteb_logo/dots-icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Any2AnyRetrieval - Massive Text Embedding Benchmark</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#any2anyretrieval" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Massive Text Embedding Benchmark" class="md-header__button md-logo" aria-label="Massive Text Embedding Benchmark" data-md-component="logo">
+      
+  <img src="../../../images/logos/mteb_logo/dots-icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Massive Text Embedding Benchmark
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Any2AnyRetrieval
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="light-blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="light-blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/embeddings-benchmark/mteb" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../.." class="md-tabs__link">
+          
+  
+  
+    
+  
+  Get Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../contributing/adding_a_model/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Contributing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Overview
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../api/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  API
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://huggingface.co/spaces/mteb/leaderboard" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Leaderboard
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Massive Text Embedding Benchmark" class="md-nav__button md-logo" aria-label="Massive Text Embedding Benchmark" data-md-component="logo">
+      
+  <img src="../../../images/logos/mteb_logo/dots-icon.png" alt="logo">
+
+    </a>
+    Massive Text Embedding Benchmark
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/embeddings-benchmark/mteb" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../.." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Get Started
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Get Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../whats_new/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    New in v2.0 🎉
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Usage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/get_started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Get Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/defining_the_model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Defining the Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/selecting_tasks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Selecting Tasks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/running_the_evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running the Evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/loading_results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loading Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Command Line Interface
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/leaderboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running the Leaderboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_5" id="__nav_1_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Usage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced Usage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced_usage/two_stage_reranking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Two stage reranking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced_usage/cache_embeddings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cache embeddings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced_usage/retrieval_backend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Retrieval backend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contributing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/adding_a_model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding a Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/adding_a_dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding a Task
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/adding_a_benchmark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding a Benchmark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guidelines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Overview
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Benchmarks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_benchmarks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Available Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tasks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tasks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3_1" id="__nav_3_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Available Tasks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Available Tasks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../any2anymultilingualretrieval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Any2AnyMultilingualRetrieval
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Any2AnyRetrieval
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bitextmining/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BitextMining
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../classification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Classification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clustering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clustering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compositionality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compositionality
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../documentunderstanding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DocumentUnderstanding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../imageclassification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ImageClassification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../imageclustering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ImageClustering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../instructionreranking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    InstructionReranking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../instructionretrieval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    InstructionRetrieval
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multilabelclassification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MultilabelClassification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pairclassification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PairClassification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../regression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reranking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reranking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../retrieval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Retrieval
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    STS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../summarization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Summarization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visioncentricqa/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VisionCentricQA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visualsts%28eng%29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VisualSTS(eng)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visualsts%28multi%29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VisualSTS(multi)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zeroshotclassification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ZeroShotClassification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Models
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4_1" id="__nav_3_4_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Available Models
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Available Models
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_models/image/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Image Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_models/image_text/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Image-text Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../available_models/text/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Text Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../api/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/benchmark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/task/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Task
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Additional Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://huggingface.co/spaces/mteb/leaderboard" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Leaderboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/embeddings-benchmark/mteb/blob/main/docs/overview/available_tasks/any2anyretrieval.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/embeddings-benchmark/mteb/raw/main/docs/overview/available_tasks/any2anyretrieval.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="any2anyretrieval">Any2AnyRetrieval<a class="headerlink" href="#any2anyretrieval" title="Permanent link">&para;</a></h1>
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
+
+<ul>
+<li><strong>Number of tasks:</strong> 49</li>
+</ul>
+<h4 id="blinkit2iretrieval">BLINKIT2IRetrieval<a class="headerlink" href="#blinkit2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve images based on images and specific retrieval instructions.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/blink-it2i"><code>JamieSJS/blink-it2i</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://arxiv.org/abs/2404.12390">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image, text to image (it2i)</td>
+<td>cv_recall_at_1</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">fu2024blink</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Fu, Xingyu and Hu, Yushi and Li, Bangzheng and Feng, Yu and Wang, Haoyu and Lin, Xudong and Roth, Dan and Smith, Noah A and Ma, Wei-Chiu and Krishna, Ranjay}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv preprint arXiv:2404.12390}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Blink: Multimodal large language models can see but not perceive}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2024}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="blinkit2tretrieval">BLINKIT2TRetrieval<a class="headerlink" href="#blinkit2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve images based on images and specific retrieval instructions.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/blink-it2t"><code>JamieSJS/blink-it2t</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://arxiv.org/abs/2404.12390">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image, text to text (it2t)</td>
+<td>cv_recall_at_1</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">fu2024blink</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Fu, Xingyu and Hu, Yushi and Li, Bangzheng and Feng, Yu and Wang, Haoyu and Lin, Xudong and Roth, Dan and Smith, Noah A and Ma, Wei-Chiu and Krishna, Ranjay}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv preprint arXiv:2404.12390}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Blink: Multimodal large language models can see but not perceive}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2024}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="cirrit2iretrieval">CIRRIT2IRetrieval<a class="headerlink" href="#cirrit2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve images based on texts and images.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/MRBench/mbeir_cirr_task7"><code>MRBench/mbeir_cirr_task7</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://openaccess.thecvf.com/content/ICCV2021/html/Liu_Image_Retrieval_on_Real-Life_Images_With_Pre-Trained_Vision-and-Language_Models_ICCV_2021_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image, text to image (it2i)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">liu2021image</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Liu, Zheyuan and Rodriguez-Opazo, Cristian and Teney, Damien and Gould, Stephen}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE/CVF International Conference on Computer Vision}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2125--2134}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Image retrieval on real-life images with pre-trained vision-and-language models}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2021}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="cub200i2iretrieval">CUB200I2IRetrieval<a class="headerlink" href="#cub200i2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve bird images from 200 classes.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/isaacchung/cub200_retrieval"><code>isaacchung/cub200_retrieval</code></a> • <strong>License:</strong> not specified • <a href="https://www.florian-schroff.de/publications/CUB-200.pdf">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to image (i2i)</td>
+<td>cv_recall_at_1</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">article</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Welinder, Peter and Branson, Steve and Mita, Takeshi and Wah, Catherine and Schroff, Florian and Belongie, Serge and Perona, Pietro}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">month</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{09}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Caltech-UCSD Birds 200}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2010}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="edist2itretrieval">EDIST2ITRetrieval<a class="headerlink" href="#edist2itretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve news images and titles based on news content.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/MRBench/mbeir_edis_task2"><code>MRBench/mbeir_edis_task2</code></a> • <strong>License:</strong> apache-2.0 • <a href="https://aclanthology.org/2023.emnlp-main.297/">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text to image, text (t2it)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>News</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">liu2023edis</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Liu, Siqi and Feng, Weixi and Fu, Tsu-Jui and Chen, Wenhu and Wang, William}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{4877--4894}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{EDIS: Entity-Driven Image Search over Multimodal Web Content}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2023}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="encyclopediavqait2itretrieval">EncyclopediaVQAIT2ITRetrieval<a class="headerlink" href="#encyclopediavqait2itretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieval Wiki passage and image and passage to answer query about an image.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/izhx/UMRB-EncyclopediaVQA"><code>izhx/UMRB-EncyclopediaVQA</code></a> • <strong>License:</strong> cc-by-4.0 • <a href="https://github.com/google-research/google-research/tree/master/encyclopedic_vqa">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image, text to image, text (it2it)</td>
+<td>cv_recall_at_5</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">mensink2023encyclopedic</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Mensink, Thomas and Uijlings, Jasper and Castrejon, Lluis and Goel, Arushi and Cadar, Felipe and Zhou, Howard and Sha, Fei and Araujo, Andr{\&#39;e} and Ferrari, Vittorio}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE/CVF International Conference on Computer Vision}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{3113--3124}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Encyclopedic VQA: Visual questions about detailed properties of fine-grained categories}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2023}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="forbi2iretrieval">FORBI2IRetrieval<a class="headerlink" href="#forbi2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve flat object images from 8 classes.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/isaacchung/forb_retrieval"><code>isaacchung/forb_retrieval</code></a> • <strong>License:</strong> not specified • <a href="https://github.com/pxiangwu/FORB">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to image (i2i)</td>
+<td>cv_recall_at_1</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@misc</span><span class="p">{</span><span class="nl">wu2023forbflatobjectretrieval</span><span class="p">,</span>
+<span class="w">  </span><span class="na">archiveprefix</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Pengxiang Wu and Siman Wang and Kevin Dela Rosa and Derek Hao Hu}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">eprint</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2309.16249}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">primaryclass</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{cs.CV}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{FORB: A Flat Object Retrieval Benchmark for Universal Image Embedding}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://arxiv.org/abs/2309.16249}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2023}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="fashion200ki2tretrieval">Fashion200kI2TRetrieval<a class="headerlink" href="#fashion200ki2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve clothes based on descriptions.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/MRBench/mbeir_fashion200k_task3"><code>MRBench/mbeir_fashion200k_task3</code></a> • <strong>License:</strong> apache-2.0 • <a href="https://openaccess.thecvf.com/content_iccv_2017/html/Han_Automatic_Spatially-Aware_Fashion_ICCV_2017_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to text (i2t)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">han2017automatic</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Han, Xintong and Wu, Zuxuan and Huang, Phoenix X and Zhang, Xiao and Zhu, Menglong and Li, Yuan and Zhao, Yang and Davis, Larry S}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE international conference on computer vision}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{1463--1471}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Automatic spatially-aware fashion concept discovery}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2017}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="fashion200kt2iretrieval">Fashion200kT2IRetrieval<a class="headerlink" href="#fashion200kt2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve clothes based on descriptions.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/MRBench/mbeir_fashion200k_task0"><code>MRBench/mbeir_fashion200k_task0</code></a> • <strong>License:</strong> apache-2.0 • <a href="https://openaccess.thecvf.com/content_iccv_2017/html/Han_Automatic_Spatially-Aware_Fashion_ICCV_2017_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text to image (t2i)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">han2017automatic</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Han, Xintong and Wu, Zuxuan and Huang, Phoenix X and Zhang, Xiao and Zhu, Menglong and Li, Yuan and Zhao, Yang and Davis, Larry S}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE international conference on computer vision}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{1463--1471}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Automatic spatially-aware fashion concept discovery}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2017}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="fashioniqit2iretrieval">FashionIQIT2IRetrieval<a class="headerlink" href="#fashioniqit2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve clothes based on descriptions.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/MRBench/mbeir_fashioniq_task7"><code>MRBench/mbeir_fashioniq_task7</code></a> • <strong>License:</strong> apache-2.0 • <a href="https://openaccess.thecvf.com/content/CVPR2021/html/Wu_Fashion_IQ_A_New_Dataset_Towards_Retrieving_Images_by_Natural_CVPR_2021_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image, text to image (it2i)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">wu2021fashion</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Wu, Hui and Gao, Yupeng and Guo, Xiaoxiao and Al-Halah, Ziad and Rennie, Steven and Grauman, Kristen and Feris, Rogerio}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE/CVF Conference on computer vision and pattern recognition}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{11307--11317}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Fashion iq: A new dataset towards retrieving images by natural language feedback}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2021}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="flickr30ki2tretrieval">Flickr30kI2TRetrieval<a class="headerlink" href="#flickr30ki2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve captions based on images.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/isaacchung/flickr30ki2t"><code>isaacchung/flickr30ki2t</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://www.semanticscholar.org/paper/From-image-descriptions-to-visual-denotations%3A-New-Young-Lai/44040913380206991b1991daf1192942e038fe31">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to text (i2t)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Web, Written</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">Young2014FromID</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Peter Young and Alice Lai and Micah Hodosh and J. Hockenmaier}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Transactions of the Association for Computational Linguistics}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{67-78}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{From image descriptions to visual denotations: New similarity metrics for semantic inference over event descriptions}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://api.semanticscholar.org/CorpusID:3104920}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">volume</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2014}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="flickr30kt2iretrieval">Flickr30kT2IRetrieval<a class="headerlink" href="#flickr30kt2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve images based on captions.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/isaacchung/flickr30kt2i"><code>isaacchung/flickr30kt2i</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://www.semanticscholar.org/paper/From-image-descriptions-to-visual-denotations%3A-New-Young-Lai/44040913380206991b1991daf1192942e038fe31">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text to image (t2i)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Web, Written</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">Young2014FromID</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Peter Young and Alice Lai and Micah Hodosh and J. Hockenmaier}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Transactions of the Association for Computational Linguistics}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{67-78}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{From image descriptions to visual denotations: New similarity metrics for semantic inference over event descriptions}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://api.semanticscholar.org/CorpusID:3104920}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">volume</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2014}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="gldv2i2iretrieval">GLDv2I2IRetrieval<a class="headerlink" href="#gldv2i2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve names of landmarks based on their image.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/gowitheflow/gld-v2"><code>gowitheflow/gld-v2</code></a> • <strong>License:</strong> apache-2.0 • <a href="https://openaccess.thecvf.com/content_CVPR_2020/html/Weyand_Google_Landmarks_Dataset_v2_-_A_Large-Scale_Benchmark_for_Instance-Level_CVPR_2020_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to image (i2i)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">Weyand_2020_CVPR</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Weyand, Tobias and Araujo, Andre and Cao, Bingyi and Sim, Jack}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">month</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{June}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Google Landmarks Dataset v2 - A Large-Scale Benchmark for Instance-Level Recognition and Retrieval}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2020}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="gldv2i2tretrieval">GLDv2I2TRetrieval<a class="headerlink" href="#gldv2i2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve names of landmarks based on their image.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/gld-v2-i2t"><code>JamieSJS/gld-v2-i2t</code></a> • <strong>License:</strong> apache-2.0 • <a href="https://openaccess.thecvf.com/content_CVPR_2020/html/Weyand_Google_Landmarks_Dataset_v2_-_A_Large-Scale_Benchmark_for_Instance-Level_CVPR_2020_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to text (i2t)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">Weyand_2020_CVPR</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Weyand, Tobias and Araujo, Andre and Cao, Bingyi and Sim, Jack}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">month</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{June}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Google Landmarks Dataset v2 - A Large-Scale Benchmark for Instance-Level Recognition and Retrieval}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2020}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="hatefulmemesi2tretrieval">HatefulMemesI2TRetrieval<a class="headerlink" href="#hatefulmemesi2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve captions based on memes to assess OCR abilities.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/Ahren09/MMSoc_HatefulMemes"><code>Ahren09/MMSoc_HatefulMemes</code></a> • <strong>License:</strong> mit • <a href="https://arxiv.org/pdf/2005.04790">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to text (i2t)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">kiela2020hateful</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Kiela, Douwe and Firooz, Hamed and Mohan, Aravind and Goswami, Vedanuj and Singh, Amanpreet and Ringshia, Pratik and Testuggine, Davide}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Advances in neural information processing systems}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2611--2624}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{The hateful memes challenge: Detecting hate speech in multimodal memes}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">volume</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{33}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2020}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="hatefulmemest2iretrieval">HatefulMemesT2IRetrieval<a class="headerlink" href="#hatefulmemest2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve captions based on memes to assess OCR abilities.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/Ahren09/MMSoc_HatefulMemes"><code>Ahren09/MMSoc_HatefulMemes</code></a> • <strong>License:</strong> mit • <a href="https://arxiv.org/pdf/2005.04790">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text to image (t2i)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">kiela2020hateful</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Kiela, Douwe and Firooz, Hamed and Mohan, Aravind and Goswami, Vedanuj and Singh, Amanpreet and Ringshia, Pratik and Testuggine, Davide}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Advances in neural information processing systems}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2611--2624}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{The hateful memes challenge: Detecting hate speech in multimodal memes}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">volume</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{33}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2020}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="imagecodet2iretrieval">ImageCoDeT2IRetrieval<a class="headerlink" href="#imagecodet2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve a specific video frame based on a precise caption.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/imagecode"><code>JamieSJS/imagecode</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://aclanthology.org/2022.acl-long.241.pdf">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text to image (t2i)</td>
+<td>cv_recall_at_3</td>
+<td>eng</td>
+<td>Web, Written</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">krojer2022image</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Krojer, Benno and Adlakha, Vaibhav and Vineet, Vibhav and Goyal, Yash and Ponti, Edoardo and Reddy, Siva}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv preprint arXiv:2203.15867}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Image retrieval from contextual descriptions}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2022}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="infoseekit2itretrieval">InfoSeekIT2ITRetrieval<a class="headerlink" href="#infoseekit2itretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve source text and image information to answer questions about images.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/mteb/InfoSeekIT2ITRetrieval"><code>mteb/InfoSeekIT2ITRetrieval</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://aclanthology.org/2023.emnlp-main.925">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image, text to image, text (it2it)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">chen2023can</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Chen, Yang and Hu, Hexiang and Luan, Yi and Sun, Haitian and Changpinyo, Soravit and Ritter, Alan and Chang, Ming-Wei}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{14948--14968}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Can Pre-trained Vision and Language Models Answer Visual Information-Seeking Questions?}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2023}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="infoseekit2tretrieval">InfoSeekIT2TRetrieval<a class="headerlink" href="#infoseekit2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve source information to answer questions about images.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/MRBench/mbeir_infoseek_task6"><code>MRBench/mbeir_infoseek_task6</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://aclanthology.org/2023.emnlp-main.925">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image, text to text (it2t)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">chen2023can</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Chen, Yang and Hu, Hexiang and Luan, Yi and Sun, Haitian and Changpinyo, Soravit and Ritter, Alan and Chang, Ming-Wei}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{14948--14968}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Can Pre-trained Vision and Language Models Answer Visual Information-Seeking Questions?}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2023}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="llavait2tretrieval">LLaVAIT2TRetrieval<a class="headerlink" href="#llavait2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve responses to answer questions about images.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/izhx/UMRB-LLaVA"><code>izhx/UMRB-LLaVA</code></a> • <strong>License:</strong> cc-by-4.0 • <a href="https://github.com/LinWeizheDragon/FLMR/blob/main/docs/Datasets.md">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image, text to text (it2t)</td>
+<td>cv_recall_at_5</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">lin-etal-2024-preflmr</span><span class="p">,</span>
+<span class="w">  </span><span class="na">address</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Bangkok, Thailand}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Lin, Weizhe  and</span>
+<span class="s">Mei, Jingbiao  and</span>
+<span class="s">Chen, Jinghong  and</span>
+<span class="s">Byrne, Bill}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">doi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{10.18653/v1/2024.acl-long.289}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">editor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Ku, Lun-Wei  and</span>
+<span class="s">Martins, Andre  and</span>
+<span class="s">Srikumar, Vivek}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">month</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nv">aug</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{5294--5316}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Association for Computational Linguistics}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{{P}re{FLMR}: Scaling Up Fine-Grained Late-Interaction Multi-modal Retrievers}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://aclanthology.org/2024.acl-long.289}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2024}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="meti2iretrieval">METI2IRetrieval<a class="headerlink" href="#meti2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve photos of more than 224k artworks.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/met"><code>JamieSJS/met</code></a> • <strong>License:</strong> not specified • <a href="https://arxiv.org/abs/2202.01747">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to image (i2i)</td>
+<td>cv_recall_at_1</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">ypsilantis2021met</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Ypsilantis, Nikolaos-Antonios and Garcia, Noa and Han, Guangxing and Ibrahimi, Sarah and Van Noord, Nanne and Tolias, Giorgos}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{The met dataset: Instance-level recognition for artworks}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2021}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="mscocoi2tretrieval">MSCOCOI2TRetrieval<a class="headerlink" href="#mscocoi2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve captions based on images.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/MRBench/mbeir_mscoco_task3"><code>MRBench/mbeir_mscoco_task3</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://link.springer.com/chapter/10.1007/978-3-319-10602-1_48">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to text (i2t)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">lin2014microsoft</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Lin, Tsung-Yi and Maire, Michael and Belongie, Serge and Hays, James and Perona, Pietro and Ramanan, Deva and Doll{\&#39;a}r, Piotr and Zitnick, C Lawrence}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Computer Vision--ECCV 2014: 13th European Conference, Zurich, Switzerland, September 6-12, 2014, Proceedings, Part V 13}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">organization</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Springer}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{740--755}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Microsoft coco: Common objects in context}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2014}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="mscocot2iretrieval">MSCOCOT2IRetrieval<a class="headerlink" href="#mscocot2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve images based on captions.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/MRBench/mbeir_mscoco_task0"><code>MRBench/mbeir_mscoco_task0</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://link.springer.com/chapter/10.1007/978-3-319-10602-1_48">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text to image (t2i)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">lin2014microsoft</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Lin, Tsung-Yi and Maire, Michael and Belongie, Serge and Hays, James and Perona, Pietro and Ramanan, Deva and Doll{\&#39;a}r, Piotr and Zitnick, C Lawrence}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Computer Vision--ECCV 2014: 13th European Conference, Zurich, Switzerland, September 6-12, 2014, Proceedings, Part V 13}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">organization</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Springer}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{740--755}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Microsoft coco: Common objects in context}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2014}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="memotioni2tretrieval">MemotionI2TRetrieval<a class="headerlink" href="#memotioni2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve captions based on memes.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/Ahren09/MMSoc_Memotion"><code>Ahren09/MMSoc_Memotion</code></a> • <strong>License:</strong> mit • <a href="https://aclanthology.org/2020.semeval-1.99/">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to text (i2t)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">sharma2020semeval</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Sharma, Chhavi and Bhageria, Deepesh and Scott, William and Pykl, Srinivas and Das, Amitava and Chakraborty, Tanmoy and Pulabaigari, Viswanath and Gamb{\&quot;a}ck, Bj{\&quot;o}rn}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the Fourteenth Workshop on Semantic Evaluation}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{759--773}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{SemEval-2020 Task 8: Memotion Analysis-the Visuo-Lingual Metaphor!}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2020}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="memotiont2iretrieval">MemotionT2IRetrieval<a class="headerlink" href="#memotiont2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve memes based on captions.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/Ahren09/MMSoc_Memotion"><code>Ahren09/MMSoc_Memotion</code></a> • <strong>License:</strong> mit • <a href="https://aclanthology.org/2020.semeval-1.99/">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text to image (t2i)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">sharma2020semeval</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Sharma, Chhavi and Bhageria, Deepesh and Scott, William and Pykl, Srinivas and Das, Amitava and Chakraborty, Tanmoy and Pulabaigari, Viswanath and Gamb{\&quot;a}ck, Bj{\&quot;o}rn}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the Fourteenth Workshop on Semantic Evaluation}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{759--773}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{SemEval-2020 Task 8: Memotion Analysis-the Visuo-Lingual Metaphor!}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2020}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="nightsi2iretrieval">NIGHTSI2IRetrieval<a class="headerlink" href="#nightsi2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieval identical image to the given image.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/MRBench/mbeir_nights_task4"><code>MRBench/mbeir_nights_task4</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://proceedings.neurips.cc/paper_files/paper/2023/hash/9f09f316a3eaf59d9ced5ffaefe97e0f-Abstract-Conference.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to image (i2i)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">fu2024dreamsim</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Fu, Stephanie and Tamir, Netanel and Sundaram, Shobhita and Chai, Lucy and Zhang, Richard and Dekel, Tali and Isola, Phillip}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Advances in Neural Information Processing Systems}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{DreamSim: Learning New Dimensions of Human Visual Similarity using Synthetic Data}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">volume</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{36}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2024}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="okvqait2tretrieval">OKVQAIT2TRetrieval<a class="headerlink" href="#okvqait2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieval a Wiki passage to answer query about an image.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/izhx/UMRB-OKVQA"><code>izhx/UMRB-OKVQA</code></a> • <strong>License:</strong> cc-by-4.0 • <a href="https://okvqa.allenai.org/">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image, text to text (it2t)</td>
+<td>cv_recall_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">marino2019ok</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Marino, Kenneth and Rastegari, Mohammad and Farhadi, Ali and Mottaghi, Roozbeh}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE/cvf conference on computer vision and pattern recognition}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{3195--3204}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Ok-vqa: A visual question answering benchmark requiring external knowledge}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2019}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="ovenit2itretrieval">OVENIT2ITRetrieval<a class="headerlink" href="#ovenit2itretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieval a Wiki image and passage to answer query about an image.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/MRBench/mbeir_oven_task8"><code>MRBench/mbeir_oven_task8</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://openaccess.thecvf.com/content/ICCV2023/html/Hu_Open-domain_Visual_Entity_Recognition_Towards_Recognizing_Millions_of_Wikipedia_Entities_ICCV_2023_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image, text to image, text (it2it)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">hu2023open</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Hu, Hexiang and Luan, Yi and Chen, Yang and Khandelwal, Urvashi and Joshi, Mandar and Lee, Kenton and Toutanova, Kristina and Chang, Ming-Wei}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE/CVF International Conference on Computer Vision}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{12065--12075}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Open-domain visual entity recognition: Towards recognizing millions of wikipedia entities}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2023}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="ovenit2tretrieval">OVENIT2TRetrieval<a class="headerlink" href="#ovenit2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieval a Wiki passage to answer query about an image.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/MRBench/mbeir_oven_task6"><code>MRBench/mbeir_oven_task6</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://openaccess.thecvf.com/content/ICCV2023/html/Hu_Open-domain_Visual_Entity_Recognition_Towards_Recognizing_Millions_of_Wikipedia_Entities_ICCV_2023_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image, text to text (it2t)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">hu2023open</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Hu, Hexiang and Luan, Yi and Chen, Yang and Khandelwal, Urvashi and Joshi, Mandar and Lee, Kenton and Toutanova, Kristina and Chang, Ming-Wei}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE/CVF International Conference on Computer Vision}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{12065--12075}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Open-domain visual entity recognition: Towards recognizing millions of wikipedia entities}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2023}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="roxfordeasyi2iretrieval">ROxfordEasyI2IRetrieval<a class="headerlink" href="#roxfordeasyi2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve photos of landmarks in Oxford, UK.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/r-oxford-easy-multi"><code>JamieSJS/r-oxford-easy-multi</code></a> • <strong>License:</strong> not specified • <a href="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to image (i2i)</td>
+<td>map_at_5</td>
+<td>eng</td>
+<td>Web</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">radenovic2018revisiting</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Radenovi{\&#39;c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE conference on computer vision and pattern recognition}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{5706--5715}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Revisiting oxford and paris: Large-scale image retrieval benchmarking}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2018}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="roxfordhardi2iretrieval">ROxfordHardI2IRetrieval<a class="headerlink" href="#roxfordhardi2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve photos of landmarks in Oxford, UK.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/r-oxford-hard-multi"><code>JamieSJS/r-oxford-hard-multi</code></a> • <strong>License:</strong> not specified • <a href="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to image (i2i)</td>
+<td>map_at_5</td>
+<td>eng</td>
+<td>Web</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">radenovic2018revisiting</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Radenovi{\&#39;c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE conference on computer vision and pattern recognition}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{5706--5715}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Revisiting oxford and paris: Large-scale image retrieval benchmarking}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2018}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="roxfordmediumi2iretrieval">ROxfordMediumI2IRetrieval<a class="headerlink" href="#roxfordmediumi2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve photos of landmarks in Oxford, UK.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/r-oxford-medium-multi"><code>JamieSJS/r-oxford-medium-multi</code></a> • <strong>License:</strong> not specified • <a href="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to image (i2i)</td>
+<td>map_at_5</td>
+<td>eng</td>
+<td>Web</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">radenovic2018revisiting</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Radenovi{\&#39;c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE conference on computer vision and pattern recognition}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{5706--5715}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Revisiting oxford and paris: Large-scale image retrieval benchmarking}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2018}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="rp2ki2iretrieval">RP2kI2IRetrieval<a class="headerlink" href="#rp2ki2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve photos of 39457 products.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/rp2k"><code>JamieSJS/rp2k</code></a> • <strong>License:</strong> not specified • <a href="https://arxiv.org/abs/2006.12634">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to image (i2i)</td>
+<td>cv_recall_at_1</td>
+<td>eng</td>
+<td>Web</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">peng2020rp2k</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Peng, Jingtian and Xiao, Chang and Li, Yifan}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv preprint arXiv:2006.12634}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{RP2K: A large-scale retail product dataset for fine-grained image classification}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2020}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="rpariseasyi2iretrieval">RParisEasyI2IRetrieval<a class="headerlink" href="#rpariseasyi2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve photos of landmarks in Paris, UK.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/r-paris-easy-multi"><code>JamieSJS/r-paris-easy-multi</code></a> • <strong>License:</strong> not specified • <a href="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to image (i2i)</td>
+<td>map_at_5</td>
+<td>eng</td>
+<td>Web</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">radenovic2018revisiting</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Radenovi{\&#39;c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE conference on computer vision and pattern recognition}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{5706--5715}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Revisiting oxford and paris: Large-scale image retrieval benchmarking}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2018}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="rparishardi2iretrieval">RParisHardI2IRetrieval<a class="headerlink" href="#rparishardi2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve photos of landmarks in Paris, UK.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/r-paris-hard-multi"><code>JamieSJS/r-paris-hard-multi</code></a> • <strong>License:</strong> not specified • <a href="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to image (i2i)</td>
+<td>map_at_5</td>
+<td>eng</td>
+<td>Web</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">radenovic2018revisiting</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Radenovi{\&#39;c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE conference on computer vision and pattern recognition}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{5706--5715}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Revisiting oxford and paris: Large-scale image retrieval benchmarking}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2018}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="rparismediumi2iretrieval">RParisMediumI2IRetrieval<a class="headerlink" href="#rparismediumi2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve photos of landmarks in Paris, UK.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/r-paris-medium-multi"><code>JamieSJS/r-paris-medium-multi</code></a> • <strong>License:</strong> not specified • <a href="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to image (i2i)</td>
+<td>map_at_5</td>
+<td>eng</td>
+<td>Web</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">radenovic2018revisiting</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Radenovi{\&#39;c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE conference on computer vision and pattern recognition}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{5706--5715}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Revisiting oxford and paris: Large-scale image retrieval benchmarking}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2018}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="remuqit2tretrieval">ReMuQIT2TRetrieval<a class="headerlink" href="#remuqit2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieval of a Wiki passage to answer a query about an image.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/izhx/UMRB-ReMuQ"><code>izhx/UMRB-ReMuQ</code></a> • <strong>License:</strong> cc0-1.0 • <a href="https://github.com/luomancs/ReMuQ">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image, text to text (it2t)</td>
+<td>cv_recall_at_5</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">luo-etal-2023-end</span><span class="p">,</span>
+<span class="w">  </span><span class="na">address</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Toronto, Canada}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Luo, Man  and</span>
+<span class="s">Fang, Zhiyuan  and</span>
+<span class="s">Gokhale, Tejas  and</span>
+<span class="s">Yang, Yezhou  and</span>
+<span class="s">Baral, Chitta}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">doi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{10.18653/v1/2023.acl-long.478}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">editor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Rogers, Anna  and</span>
+<span class="s">Boyd-Graber, Jordan  and</span>
+<span class="s">Okazaki, Naoaki}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">month</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nv">jul</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{8573--8589}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Association for Computational Linguistics}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{End-to-end Knowledge Retrieval with Multi-modal Queries}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://aclanthology.org/2023.acl-long.478}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2023}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="sopi2iretrieval">SOPI2IRetrieval<a class="headerlink" href="#sopi2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve product photos of 22634 online products.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/stanford-online-products"><code>JamieSJS/stanford-online-products</code></a> • <strong>License:</strong> not specified • <a href="https://paperswithcode.com/dataset/stanford-online-products">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to image (i2i)</td>
+<td>cv_recall_at_1</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">oh2016deep</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Oh Song, Hyun and Xiang, Yu and Jegelka, Stefanie and Savarese, Silvio}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE conference on computer vision and pattern recognition}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{4004--4012}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Deep metric learning via lifted structured feature embedding}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2016}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="scimmiri2tretrieval">SciMMIRI2TRetrieval<a class="headerlink" href="#scimmiri2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve captions based on figures and tables.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/m-a-p/SciMMIR"><code>m-a-p/SciMMIR</code></a> • <strong>License:</strong> mit • <a href="https://aclanthology.org/2024.findings-acl.746/">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to text (i2t)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Academic</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">wu2024scimmir</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Wu, Siwei and Li, Yizhi and Zhu, Kang and Zhang, Ge and Liang, Yiming and Ma, Kaijing and Xiao, Chenghao and Zhang, Haoran and Yang, Bohao and Chen, Wenhu and others}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv preprint arXiv:2401.13478}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{SciMMIR: Benchmarking Scientific Multi-modal Information Retrieval}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2024}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="scimmirt2iretrieval">SciMMIRT2IRetrieval<a class="headerlink" href="#scimmirt2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve figures and tables based on captions.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/m-a-p/SciMMIR"><code>m-a-p/SciMMIR</code></a> • <strong>License:</strong> mit • <a href="https://aclanthology.org/2024.findings-acl.746/">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text to image (t2i)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Academic</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">wu2024scimmir</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Wu, Siwei and Li, Yizhi and Zhu, Kang and Zhang, Ge and Liang, Yiming and Ma, Kaijing and Xiao, Chenghao and Zhang, Haoran and Yang, Bohao and Chen, Wenhu and others}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{arXiv preprint arXiv:2401.13478}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{SciMMIR: Benchmarking Scientific Multi-modal Information Retrieval}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2024}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="sketchyi2iretrieval">SketchyI2IRetrieval<a class="headerlink" href="#sketchyi2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve photos from sketches.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/sketchy"><code>JamieSJS/sketchy</code></a> • <strong>License:</strong> not specified • <a href="https://arxiv.org/abs/2202.01747">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to image (i2i)</td>
+<td>cv_recall_at_1</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">ypsilantis2021met</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Ypsilantis, Nikolaos-Antonios and Garcia, Noa and Han, Guangxing and Ibrahimi, Sarah and Van Noord, Nanne and Tolias, Giorgos}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{The met dataset: Instance-level recognition for artworks}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2021}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="stanfordcarsi2iretrieval">StanfordCarsI2IRetrieval<a class="headerlink" href="#stanfordcarsi2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve car images from 196 makes.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/isaacchung/stanford_cars_retrieval"><code>isaacchung/stanford_cars_retrieval</code></a> • <strong>License:</strong> not specified • <a href="https://pure.mpg.de/rest/items/item_2029263/component/file_2029262/content">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to image (i2i)</td>
+<td>cv_recall_at_1</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">Krause2013CollectingAL</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Jonathan Krause and Jia Deng and Michael Stark and Li Fei-Fei}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Collecting a Large-scale Dataset of Fine-grained Cars}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{https://api.semanticscholar.org/CorpusID:16632981}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2013}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="tuberlint2iretrieval">TUBerlinT2IRetrieval<a class="headerlink" href="#tuberlint2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve sketch images based on text descriptions.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/gowitheflow/tu-berlin"><code>gowitheflow/tu-berlin</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://dl.acm.org/doi/pdf/10.1145/2185520.2185540">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text to image (t2i)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@article</span><span class="p">{</span><span class="nl">eitz2012humans</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Eitz, Mathias and Hays, James and Alexa, Marc}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">journal</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{ACM Transactions on graphics (TOG)}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">number</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{4}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{1--10}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Acm New York, NY, USA}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{How do humans sketch objects?}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">volume</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{31}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2012}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="vqa2it2tretrieval">VQA2IT2TRetrieval<a class="headerlink" href="#vqa2it2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve the correct answer for a question about an image.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/vqa-2"><code>JamieSJS/vqa-2</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://openaccess.thecvf.com/content_cvpr_2017/html/Goyal_Making_the_v_CVPR_2017_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image, text to text (it2t)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Web</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">Goyal_2017_CVPR</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Goyal, Yash and Khot, Tejas and Summers-Stay, Douglas and Batra, Dhruv and Parikh, Devi}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">month</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{July}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Making the v in VQA Matter: Elevating the Role of Image Understanding in Visual Question Answering}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2017}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="visualnewsi2tretrieval">VisualNewsI2TRetrieval<a class="headerlink" href="#visualnewsi2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieval entity-rich captions for news images.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/MRBench/mbeir_visualnews_task3"><code>MRBench/mbeir_visualnews_task3</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://aclanthology.org/2021.emnlp-main.542/">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image to text (i2t)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">liu2021visual</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Liu, Fuxiao and Wang, Yinghan and Wang, Tianlu and Ordonez, Vicente}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{6761--6771}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Visual News: Benchmark and Challenges in News Image Captioning}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2021}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="visualnewst2iretrieval">VisualNewsT2IRetrieval<a class="headerlink" href="#visualnewst2iretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve news images with captions.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/MRBench/mbeir_visualnews_task0"><code>MRBench/mbeir_visualnews_task0</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://aclanthology.org/2021.emnlp-main.542/">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text to image (t2i)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">liu2021visual</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Liu, Fuxiao and Wang, Yinghan and Wang, Tianlu and Ordonez, Vicente}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{6761--6771}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Visual News: Benchmark and Challenges in News Image Captioning}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2021}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="vizwizit2tretrieval">VizWizIT2TRetrieval<a class="headerlink" href="#vizwizit2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve the correct answer for a question about an image.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/JamieSJS/vizwiz"><code>JamieSJS/vizwiz</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://openaccess.thecvf.com/content_cvpr_2018/papers/Gurari_VizWiz_Grand_Challenge_CVPR_2018_paper.pdf">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image, text to text (it2t)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Web</td>
+<td>derived</td>
+<td>found</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">gurari2018vizwiz</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Gurari, Danna and Li, Qing and Stangl, Abigale J and Guo, Anhong and Lin, Chi and Grauman, Kristen and Luo, Jiebo and Bigham, Jeffrey P}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE conference on computer vision and pattern recognition}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{3608--3617}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Vizwiz grand challenge: Answering visual questions from blind people}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2018}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="webqat2itretrieval">WebQAT2ITRetrieval<a class="headerlink" href="#webqat2itretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve sources of information based on questions.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/MRBench/mbeir_webqa_task2"><code>MRBench/mbeir_webqa_task2</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://openaccess.thecvf.com/content/CVPR2022/html/Chang_WebQA_Multihop_and_Multimodal_QA_CVPR_2022_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text to image, text (t2it)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">chang2022webqa</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Chang, Yingshan and Narang, Mridu and Suzuki, Hisami and Cao, Guihong and Gao, Jianfeng and Bisk, Yonatan}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE/CVF conference on computer vision and pattern recognition}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{16495--16504}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Webqa: Multihop and multimodal qa}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2022}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+<h4 id="webqat2tretrieval">WebQAT2TRetrieval<a class="headerlink" href="#webqat2tretrieval" title="Permanent link">&para;</a></h4>
+<p>Retrieve sources of information based on questions.</p>
+<p><strong>Dataset:</strong> <a href="https://huggingface.co/datasets/MRBench/mbeir_webqa_task1"><code>MRBench/mbeir_webqa_task1</code></a> • <strong>License:</strong> cc-by-sa-4.0 • <a href="https://openaccess.thecvf.com/content/CVPR2022/html/Chang_WebQA_Multihop_and_Multimodal_QA_CVPR_2022_paper.html">Learn more →</a></p>
+<table>
+<thead>
+<tr>
+<th>Task category</th>
+<th>Score</th>
+<th>Languages</th>
+<th>Domains</th>
+<th>Annotations Creators</th>
+<th>Sample Creation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text to text (t2t)</td>
+<td>ndcg_at_10</td>
+<td>eng</td>
+<td>Encyclopaedic</td>
+<td>derived</td>
+<td>created</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Citation</summary>
+<div class="highlight"><pre><span></span><code><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">chang2022webqa</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Chang, Yingshan and Narang, Mridu and Suzuki, Hisami and Cao, Guihong and Gao, Jianfeng and Bisk, Yonatan}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the IEEE/CVF conference on computer vision and pattern recognition}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{16495--16504}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{Webqa: Multihop and multimodal qa}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">{2022}</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../any2anymultilingualretrieval/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Any2AnyMultilingualRetrieval">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Any2AnyMultilingualRetrieval
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../bitextmining/" class="md-footer__link md-footer__link--next" aria-label="Next: BitextMining">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                BitextMining
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      This text is freely available under a Creative Commons Attribution 4.0 license
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/embeddings-benchmark/mteb" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tracking", "navigation.instant", "navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy", "content.action.edit", "content.action.view", "content.code.annotate", "content.tooltips", "navigation.footer", "navigation.indexes", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
