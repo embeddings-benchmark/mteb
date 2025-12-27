@@ -105,7 +105,10 @@ def get_model(
 
 
 def get_model_meta(
-    model_name: str, revision: str | None = None, fetch_from_hf: bool = True
+    model_name: str,
+    revision: str | None = None,
+    fetch_from_hf: bool = True,
+    compute_missing: bool = False,
 ) -> ModelMeta:
     """A function to fetch a model metadata object by name.
 
@@ -113,6 +116,7 @@ def get_model_meta(
         model_name: Name of the model to fetch
         revision: Revision of the model to fetch
         fetch_from_hf: Whether to fetch the model from HuggingFace Hub if not found in the registry
+        compute_missing: Computes missing attributes from the metadata including number of parameters and memory usage.
 
     Returns:
         A model metadata object
@@ -125,6 +129,16 @@ def get_model_meta(
                 f"Model revision {revision} not found for model {model_name}. Expected {model_meta.revision}."
             )
         return model_meta
+
+        if compute_missing:
+            logger.info(
+                f"Number of parameters and memory usage are missing for model '{model_name}'. Computing them now using Huggingface Hub."
+            )
+            if model_meta.n_parameters is None:
+                model_meta.n_parameters = model_meta.calculate_num_parameters_from_hub()
+            if model_meta.memory_usage_mb is None:
+                model_meta.memory_usage_mb = model_meta.calculate_memory_usage_mb()
+
     if fetch_from_hf:
         logger.info(
             "Model not found in model registry. Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
