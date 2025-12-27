@@ -31,6 +31,12 @@ jobs:
           docker system prune -af
 
       - uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          
       - uses: actions/setup-python@v6
         with:
           python-version: "3.10"
