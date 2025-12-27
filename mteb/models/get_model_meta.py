@@ -36,7 +36,6 @@ def get_model_metas(
         zero_shot_on: A list of tasks on which the model is zero-shot. If None this filter is ignored.
         model_types: A list of model types to filter by. If None, all model types are included.
 
-
     Returns:
         A list of model metadata objects that fit the specified criteria.
     """
