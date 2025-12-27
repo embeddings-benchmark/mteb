@@ -6,9 +6,15 @@ from typing import TYPE_CHECKING
 
 from pydantic import ConfigDict, Field, model_validator
 
+from mteb.types import (
+    Languages,
+)
+
+from .abstask import AbsTask
 from .task_metadata import (
     MetadataDatasetDict,
     TaskMetadata,
+    TaskType,
 )
 
 if TYPE_CHECKING:
@@ -16,19 +22,16 @@ if TYPE_CHECKING:
 
     from mteb.types import (
         ISOLanguageScript,
-        Languages,
         Licenses,
         Modalities,
         StrDate,
     )
 
-    from .abstask import AbsTask
     from .task_metadata import (
         AnnotatorType,
         SampleCreationMethod,
         TaskDomain,
         TaskSubtype,
-        TaskType,
     )
 
 logger = logging.getLogger(__name__)

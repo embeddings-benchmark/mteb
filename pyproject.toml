@@ -285,7 +285,10 @@ suppress-none-returning = true
 
 [tool.ruff.lint.flake8-type-checking]
 strict = true
-runtime-evaluated-base-classes = ["pydantic.BaseModel"]
+runtime-evaluated-base-classes = [
+    "pydantic.BaseModel",
+    "mteb.abstasks.task_metadata.TaskMetadata",
+]
 
 [tool.semantic_release]
 branch = "main"

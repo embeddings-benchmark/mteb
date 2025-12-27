@@ -18,7 +18,7 @@ from pydantic import (
     ConfigDict,
     field_validator,
 )
-from typing_extensions import TypedDict
+from typing_extensions import Required, TypedDict  # noqa: TC002
 
 import mteb
 from mteb.languages import check_language_code
@@ -35,7 +35,6 @@ if TYPE_CHECKING:
     from huggingface_hub import (
         CardData,
     )
-    from typing_extensions import Required
 
     from mteb.types import (
         HFSubset,
