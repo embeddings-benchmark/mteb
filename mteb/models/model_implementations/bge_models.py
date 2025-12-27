@@ -6,7 +6,29 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 
-model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
+model_prompts = {
+    "query": "Represent this sentence for searching relevant passages: ",
+    "BrightBiologyRetrieval-query": "Represent this biology post for searching relevant passages: ",
+    "BrightEarthScienceRetrieval-query": "Represent this earth_science post for searching relevant passages: ",
+    "BrightEconomicsRetrieval-query": "Represent this economics post for searching relevant passages: ",
+    "BrightPsychologyRetrieval-query": "Represent this psychology post for searching relevant passages: ",
+    "BrightRoboticsRetrieval-query": "Represent this robotics post for searching relevant passages: ",
+    "BrightStackoverflowRetrieval-query": "Represent this stackoverflow post for searching relevant passages: ",
+    "BrightSustainableLivingRetrieval-query": "Represent this sustainable_living post for searching relevant passages: ",
+    "BrightPonyRetrieval-query": "Represent this Pony question for searching relevant passages: ",
+    "BrightLeetcodeRetrieval-query": "Represent this Coding problem for searching relevant examples: ",
+    "BrightAopsRetrieval-query": "Represent this Math problem for searching relevant examples: ",
+    "BrightTheoremQATheoremsRetrieval-query": "Represent this Math problem for searching relevant examples: ",
+    "BrightTheoremQAQuestionsRetrieval-query": "Represent this Math problem for searching relevant theorems: ",
+    "BrightBiologyLongRetrieval-query": "Represent this biology post for searching relevant documents: ",
+    "BrightEarthScienceLongRetrieval-query": "Represent this earth_science post for searching relevant documents: ",
+    "BrightEconomicsLongRetrieval-query": "Represent this economics post for searching relevant documents: ",
+    "BrightPsychologyLongRetrieval-query": "Represent this psychology post for searching relevant documents: ",
+    "BrightRoboticsLongRetrieval-query": "Represent this robotics post for searching relevant document: ",
+    "BrightStackoverflowLongRetrieval-query": "Represent this stackoverflow post for searching relevant document: ",
+    "BrightSustainableLivingLongRetrieval-query": "Represent this sustainable_living post for searching relevant documents: ",
+    "BrightPonyLongRetrieval-query": "Represent this Pony question for searching relevant documents: ",
+}
 BGE_15_CITATION = """@misc{bge_embedding,
       title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
       author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},

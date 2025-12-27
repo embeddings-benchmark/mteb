@@ -18,7 +18,7 @@ def instruction_template(
 ) -> str:
     return (
         # https://github.com/facebookresearch/ReasonIR/blob/0aac96269e455965949df16520fab72da68ffc22/evaluation/bright/configs/reasonir/economics.json#L3
-        f"<|user|>\n{instruction}<|embed|>\n"
+        f"<|user|>\n{instruction}\n<|embed|>\n"
         if (prompt_type is None or prompt_type == PromptType.query) and instruction
         else "<|embed|>\n"
     )
@@ -36,12 +36,76 @@ REASONIR_TRAINING_DATA = {
     "DuRetrieval",
     "QuoraRetrieval",
 }
+_prompts_dict = {
+    "BrightBiologyRetrieval": {
+        "query": "Given a Biology post, retrieve relevant passages that help answer the post"
+    },
+    "BrightEarthScienceRetrieval": {
+        "query": "Given a Earth Science post, retrieve relevant passages that help answer the post"
+    },
+    "BrightEconomicsRetrieval": {
+        "query": "Given a Economics post, retrieve relevant passages that help answer the post"
+    },
+    "BrightPsychologyRetrieval": {
+        "query": "Given a Psychology post, retrieve relevant passages that help answer the post"
+    },
+    "BrightRoboticsRetrieval": {
+        "query": "Given a Robotics post, retrieve relevant passages that help answer the post"
+    },
+    "BrightStackoverflowRetrieval": {
+        "query": "Given a Stackoverflow post, retrieve relevant passages that help answer the post"
+    },
+    "BrightSustainableLivingRetrieval": {
+        "query": "Given a Sustainable Living post, retrieve relevant passages that help answer the post"
+    },
+    "BrightPonyRetrieval": {
+        "query": "Given a Pony question, retrieve relevant passages that help answer the question"
+    },
+    "BrightLeetcodeRetrieval": {
+        "query": "Given a coding problem, retrieve relevant examples that help answer the problem",
+    },
+    "BrightAopsRetrieval": {
+        "query": "Given a Math problem, retrieve relevant examples that help answer the problem"
+    },
+    "BrightTheoremQATheoremsRetrieval": {
+        "query": "Given a Math problem, retrieve relevant theorems that help answer the problem",
+    },
+    "BrightTheoremQAQuestionsRetrieval": {
+        "query": "Given a Math problem, retrieve relevant examples that help answer the problem",
+    },
+    "BrightBiologyLongRetrieval": {
+        "query": "Given a Biology post, retrieve relevant documents that help answer the post"
+    },
+    "BrightEarthScienceLongRetrieval": {
+        "query": "Given a Earth Science post, retrieve relevant documents that help answer the post"
+    },
+    "BrightEconomicsLongRetrieval": {
+        "query": "Given a Economics post, retrieve relevant documents that help answer the post"
+    },
+    "BrightPsychologyLongRetrieval": {
+        "query": "Given a Psychology post, retrieve relevant documents that help answer the post"
+    },
+    "BrightRoboticsLongRetrieval": {
+        "query": "Given a Robotics post, retrieve relevant documents that help answer the post"
+    },
+    "BrightStackoverflowLongRetrieval": {
+        "query": "Given a Stackoverflow post, retrieve relevant documents that help answer the post"
+    },
+    "BrightSustainableLivingLongRetrieval": {
+        "query": "Given a Sustainable Living post, retrieve relevant documents that help answer the post"
+    },
+    "BrightPonyLongRetrieval": {
+        "query": "Given a Pony question, retrieve relevant documents that help answer the question"
+    },
+}
+
 
 ReasonIR_8B = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
         trust_remote_code=True,
+        prompts_dict=_prompts_dict,
     ),
     name="ReasonIR/ReasonIR-8B",
     languages=["eng-Latn"],
