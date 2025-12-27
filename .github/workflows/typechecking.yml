@@ -35,11 +35,6 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Dependencies
-        run: |
-          make install-for-tests
-          pip install -e . --group typing
-
       - name: Build and Deploy
         run: |
           make typecheck
