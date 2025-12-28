@@ -352,16 +352,16 @@ class ResultCache:
 
             # Validate content-type header
             content_type = response.headers.get("content-type", "").lower()
+            expected_content_types = [
+                "application/gzip",
+                "application/octet-stream",
+                "application/x-gzip",
+            ]
             if content_type and not any(
-                ct in content_type
-                for ct in [
-                    "application/gzip",
-                    "application/octet-stream",
-                    "application/x-gzip",
-                ]
+                ct in content_type for ct in expected_content_types
             ):
-                logger.warning(
-                    f"Unexpected content-type: {content_type}, continuing anyway..."
+                raise Exception(
+                    f"Unexpected content-type: {content_type}. Expected one of: {expected_content_types}"
                 )
 
             # Validate file size
@@ -376,18 +376,9 @@ class ResultCache:
             )
             content = response.content
 
-        except requests.exceptions.Timeout as e:
-            logger.error(f"HTTP timeout after {timeout}s: {e}")
-            raise
-        except requests.exceptions.ConnectionError as e:
-            logger.error(f"HTTP connection error: {e}")
-            raise
-        except requests.exceptions.HTTPError as e:
-            logger.error(f"HTTP error {response.status_code}: {e}")
-            raise
         except Exception as e:
             logger.error(f"Unexpected HTTP error: {type(e).__name__}: {e}")
-            raise
+            raise e
 
         # Step 2: Decompress gzip data
         logger.info("Attempting gzip decompression...")
@@ -397,39 +388,24 @@ class ResultCache:
                 data = gz_file.read()
             logger.info(f"Decompression successful, data length: {len(data)} chars")
 
-        except gzip.BadGzipFile as e:
-            logger.error(f"Invalid gzip file: {e}")
-            raise
-        except UnicodeDecodeError as e:
-            logger.error(f"UTF-8 decode error during decompression: {e}")
-            raise
         except Exception as e:
             logger.error(f"Unexpected decompression error: {type(e).__name__}: {e}")
-            raise
+            raise e
 
         # Step 3: Write to disk
         logger.info(f"Attempting to write to: {output_path}")
 
         # Check parent directory exists and is writable
-        parent_dir = output_path.parent
-        if not parent_dir.exists():
-            logger.info(f"Creating parent directory: {parent_dir}")
-            parent_dir.mkdir(parents=True)
+        _ = output_path.parent.mkdir(parents=True, exist_ok=True)
 
         try:
             output_path.write_text(data, encoding="utf-8")
             logger.info(
                 f"File write successful, size: {output_path.stat().st_size} bytes"
             )
-        except PermissionError as e:
-            logger.error(f"Permission denied writing to {output_path}: {e}")
-            raise
-        except OSError as e:
-            logger.error(f"OS error writing to {output_path}: {e}")
-            raise
         except Exception as e:
             logger.error(f"Unexpected file write error: {type(e).__name__}: {e}")
-            raise
+            raise e
 
         return output_path
 
