@@ -396,7 +396,7 @@ class ResultCache:
         logger.info(f"Attempting to write to: {output_path}")
 
         # Check parent directory exists and is writable
-        _ = output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
 
         try:
             output_path.write_text(data, encoding="utf-8")
