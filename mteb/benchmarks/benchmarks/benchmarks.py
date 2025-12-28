@@ -90,7 +90,7 @@ The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb
 
 MTEB_ENG_CLASSIC = Benchmark(
     name="MTEB(eng, v1)",
-    aliases=["MTEB(eng, classic)"],
+    aliases=["MTEB(eng, classic)", "MTEB"],
     display_name="English Legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/gb.svg",
     tasks=MTEBTasks(
