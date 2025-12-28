@@ -13,12 +13,6 @@ def mock_benchmark_json():
 
 
 @pytest.fixture
-def mock_invalid_json():
-    """Sample invalid JSON for testing error handling."""
-    return '{"results": [invalid json structure}'
-
-
-@pytest.fixture
 def mock_gzipped_content():
     """Generate mock gzipped content for testing."""
 
