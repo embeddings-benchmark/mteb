@@ -12,6 +12,7 @@ from mteb.cli.build_cli import (
     _available_benchmarks,
     _available_tasks,
     _create_meta,
+    _leaderboard,
     run,
 )
 
@@ -197,3 +198,130 @@ def test_create_meta_from_existing(
     command = f"{sys.executable} -m mteb create-model-results --model-name {model_name} --results-folder {output_folder.as_posix()} --output-path {output_path.as_posix()} --from-existing {existing_readme.as_posix()} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
+
+
+def test_leaderboard_help():
+    """Test that leaderboard help command works."""
+    command = [sys.executable, "-m", "mteb", "leaderboard", "--help"]
+    result = subprocess.run(command, capture_output=True, text=True)
+
+    assert result.returncode == 0, "Leaderboard help command failed"
+    assert "--cache-path" in result.stdout, "--cache-path option not found in help"
+    assert "--host" in result.stdout, "--host option not found in help"
+    assert "--port" in result.stdout, "--port option not found in help"
+    assert "--share" in result.stdout, "--share option not found in help"
+    assert "Path to the cache folder containing model results" in result.stdout, (
+        "Cache path description not found"
+    )
+
+
+def test_leaderboard_args(tmp_path: Path, monkeypatch):
+    """Test leaderboard function with different arguments."""
+    from unittest.mock import MagicMock, patch
+
+    # Mock the gradio app to avoid actually launching it
+    mock_app = MagicMock()
+    mock_app.launch = MagicMock()
+
+    with patch("mteb.cli.build_cli.get_leaderboard_app", return_value=mock_app):
+        # Test with cache-path
+        args = Namespace(
+            cache_path=str(tmp_path / "custom_cache"),
+            host="127.0.0.1",
+            port=7860,
+            share=False,
+        )
+
+        _leaderboard(args)
+
+        # Verify get_leaderboard_app was called with ResultCache
+        from mteb.cli.build_cli import get_leaderboard_app
+
+        assert get_leaderboard_app.called
+
+        # Verify launch was called with correct parameters
+        mock_app.launch.assert_called_once_with(
+            server_name="127.0.0.1",
+            server_port=7860,
+            share=False,
+        )
+
+
+def test_leaderboard_custom_cache_path(tmp_path: Path):
+    """Test leaderboard with custom cache path."""
+    from unittest.mock import MagicMock, patch
+
+    custom_cache = tmp_path / "my_results"
+    custom_cache.mkdir(exist_ok=True)
+
+    mock_app = MagicMock()
+    mock_app.launch = MagicMock()
+
+    with patch(
+        "mteb.cli.build_cli.get_leaderboard_app", return_value=mock_app
+    ) as mock_get_app:
+        with patch("mteb.cli.build_cli.ResultCache") as mock_result_cache:
+            mock_cache_instance = MagicMock()
+            mock_result_cache.return_value = mock_cache_instance
+
+            args = Namespace(
+                cache_path=str(custom_cache),
+                host="localhost",
+                port=8080,
+                share=True,
+            )
+
+            _leaderboard(args)
+
+            # Verify ResultCache was initialized with custom path
+            mock_result_cache.assert_called_once_with(str(custom_cache))
+
+            # Verify get_leaderboard_app was called with the cache instance
+            mock_get_app.assert_called_once_with(mock_cache_instance)
+
+            # Verify launch parameters
+            mock_app.launch.assert_called_once_with(
+                server_name="localhost",
+                server_port=8080,
+                share=True,
+            )
+
+
+def test_leaderboard_default_cache():
+    """Test leaderboard with default cache path."""
+    from unittest.mock import MagicMock, patch
+
+    mock_app = MagicMock()
+    mock_app.launch = MagicMock()
+
+    with patch(
+        "mteb.cli.build_cli.get_leaderboard_app", return_value=mock_app
+    ) as mock_get_app:
+        with patch("mteb.cli.build_cli.ResultCache") as mock_result_cache:
+            mock_cache_instance = MagicMock()
+            mock_result_cache.return_value = mock_cache_instance
+
+            args = Namespace(
+                cache_path=None,  # No cache path provided
+                host="127.0.0.1",
+                port=7860,
+                share=False,
+            )
+
+            _leaderboard(args)
+
+            # Verify ResultCache was initialized without arguments (default)
+            mock_result_cache.assert_called_once_with()
+
+            # Verify get_leaderboard_app was called with the cache instance
+            mock_get_app.assert_called_once_with(mock_cache_instance)
+
+
+def test_leaderboard_cli_integration():
+    """Test the full CLI command integration."""
+    # Test that the command is recognized by the CLI
+    command = [sys.executable, "-m", "mteb", "--help"]
+    result = subprocess.run(command, capture_output=True, text=True)
+
+    assert result.returncode == 0
+    assert "leaderboard" in result.stdout, "Leaderboard command not found in main help"
