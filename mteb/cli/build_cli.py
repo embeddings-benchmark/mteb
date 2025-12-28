@@ -13,7 +13,6 @@ from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
-from mteb.leaderboard import get_leaderboard_app
 
 logger = logging.getLogger(__name__)
 
@@ -396,6 +395,17 @@ def _add_leaderboard_parser(subparsers) -> None:
 
 def _leaderboard(args: argparse.Namespace) -> None:
     """Launch the MTEB leaderboard with specified cache path."""
+    # Import leaderboard module only when needed to avoid requiring leaderboard dependencies
+    # for other CLI commands
+    try:
+        from mteb.leaderboard import get_leaderboard_app
+    except ImportError as e:
+        logger.error(
+            "Leaderboard dependencies are not installed. "
+            "Please install with: pip install mteb[leaderboard]"
+        )
+        raise e
+
     cache_path = args.cache_path
 
     if cache_path:

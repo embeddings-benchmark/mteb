@@ -223,7 +223,7 @@ def test_leaderboard_args(tmp_path: Path, monkeypatch):
     mock_app = MagicMock()
     mock_app.launch = MagicMock()
 
-    with patch("mteb.cli.build_cli.get_leaderboard_app", return_value=mock_app):
+    with patch("mteb.leaderboard.get_leaderboard_app", return_value=mock_app):
         # Test with cache-path
         args = Namespace(
             cache_path=str(tmp_path / "custom_cache"),
@@ -233,11 +233,6 @@ def test_leaderboard_args(tmp_path: Path, monkeypatch):
         )
 
         _leaderboard(args)
-
-        # Verify get_leaderboard_app was called with ResultCache
-        from mteb.cli.build_cli import get_leaderboard_app
-
-        assert get_leaderboard_app.called
 
         # Verify launch was called with correct parameters
         mock_app.launch.assert_called_once_with(
@@ -258,7 +253,7 @@ def test_leaderboard_custom_cache_path(tmp_path: Path):
     mock_app.launch = MagicMock()
 
     with patch(
-        "mteb.cli.build_cli.get_leaderboard_app", return_value=mock_app
+        "mteb.leaderboard.get_leaderboard_app", return_value=mock_app
     ) as mock_get_app:
         with patch("mteb.cli.build_cli.ResultCache") as mock_result_cache:
             mock_cache_instance = MagicMock()
@@ -295,7 +290,7 @@ def test_leaderboard_default_cache():
     mock_app.launch = MagicMock()
 
     with patch(
-        "mteb.cli.build_cli.get_leaderboard_app", return_value=mock_app
+        "mteb.leaderboard.get_leaderboard_app", return_value=mock_app
     ) as mock_get_app:
         with patch("mteb.cli.build_cli.ResultCache") as mock_result_cache:
             mock_cache_instance = MagicMock()
