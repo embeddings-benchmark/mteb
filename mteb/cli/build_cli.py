@@ -13,6 +13,7 @@ from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
+from mteb.leaderboard import get_leaderboard_app
 
 logger = logging.getLogger(__name__)
 
@@ -361,6 +362,62 @@ def _add_create_meta_parser(subparsers) -> None:
     parser.set_defaults(func=_create_meta)
 
 
+def _add_leaderboard_parser(subparsers) -> None:
+    parser = subparsers.add_parser("leaderboard", help="Launch the MTEB leaderboard")
+
+    parser.add_argument(
+        "--cache-path",
+        type=str,
+        help="Path to the cache folder containing model results",
+        required=False,
+        default=None,
+    )
+    parser.add_argument(
+        "--host",
+        type=str,
+        default="127.0.0.1",
+        help="Host to run the leaderboard server on",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=7860,
+        help="Port to run the leaderboard server on",
+    )
+    parser.add_argument(
+        "--share",
+        action="store_true",
+        default=False,
+        help="Create a public URL for the leaderboard",
+    )
+
+    parser.set_defaults(func=_leaderboard)
+
+
+def _leaderboard(args: argparse.Namespace) -> None:
+    """Launch the MTEB leaderboard with specified cache path."""
+    cache_path = args.cache_path
+
+    if cache_path:
+        logger.info(f"Using cache path: {cache_path}")
+        cache = ResultCache(cache_path)
+    else:
+        logger.info("Using default cache path")
+        cache = ResultCache()
+
+    app = get_leaderboard_app(cache)
+
+    logger.info(f"Starting leaderboard on {args.host}:{args.port}")
+    if args.share:
+        logger.info("Creating public URL...")
+
+    app.launch(
+        server_name=args.host,
+        server_port=args.port,
+        share=args.share,
+    )
+
+
 def build_cli() -> argparse.ArgumentParser:
     """Builds the argument parser for the MTEB CLI.
 
@@ -380,6 +437,7 @@ def build_cli() -> argparse.ArgumentParser:
     _add_available_tasks_parser(subparsers)
     _add_available_benchmarks_parser(subparsers)
     _add_create_meta_parser(subparsers)
+    _add_leaderboard_parser(subparsers)
 
     return parser
 
