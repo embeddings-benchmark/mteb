@@ -296,7 +296,7 @@ COLPALI_CITATION = """
 
 # ColQwen3-1.7B Turbo: ~1.7B params → 3.4 GB VRAM in bfloat16
 slm_colqwen3_1_7b_turbo = ModelMeta(
-    loader=partial(SLMColQwen3Wrapper),
+    loader=SLMColQwen3Wrapper,
     name="VAGOsolutions/SauerkrautLM-ColQwen3-1.7b-Turbo-v0.1",
     languages=SUPPORTED_LANGUAGES,
     revision="main",
