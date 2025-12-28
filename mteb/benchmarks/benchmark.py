@@ -39,7 +39,7 @@ class Benchmark:
 
     name: str
     tasks: Sequence[AbsTask]
-    aliases: Sequence[str] | None = None
+    aliases: Sequence[str] = field(default_factory=tuple)
     description: str | None = None
     reference: StrURL | None = None
     citation: str | None = None
