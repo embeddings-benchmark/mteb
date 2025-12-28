@@ -436,7 +436,7 @@ class BenchmarkResults(BaseModel):
         """Create BenchmarkResults from validated data.
 
         Args:
-            data: Dictionary containing the data.
+            **data: Arbitrary keyword arguments containing the data.
 
         Returns:
             An instance of BenchmarkResults.
