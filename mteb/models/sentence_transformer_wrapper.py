@@ -278,8 +278,8 @@ class CrossEncoderWrapper:
             self.model = CrossEncoder(model, revision=revision, **kwargs)
 
         self.mteb_model_meta = ModelMeta.from_cross_encoder(self.model)
-        self.query_prefix = query_prefix or ""
-        self.passage_prefix = passage_prefix or ""
+        self.query_prefix = query_prefix
+        self.passage_prefix = passage_prefix
 
     def predict(
         self,
