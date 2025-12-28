@@ -330,11 +330,11 @@ class TestDownloadCachedResultsFromBranch:
         assert result_path.exists()
 
     @pytest.mark.parametrize(
-        "content_type,should_warn",
+        "content_type,should_raise_exception",
         [
             ("application/gzip", False),  # Expected type
-            ("text/html", True),  # Unexpected type
-            ("", False),  # Empty content-type should not warn
+            ("text/html", True),  # Unexpected type - should raise exception
+            ("", False),  # Empty content-type should not raise exception
         ],
     )
     @patch("requests.get")
@@ -343,7 +343,7 @@ class TestDownloadCachedResultsFromBranch:
         mock_get,
         tmp_path,
         content_type,
-        should_warn,
+        should_raise_exception,
         mock_benchmark_json,
         mock_gzipped_content,
     ):
@@ -356,25 +356,17 @@ class TestDownloadCachedResultsFromBranch:
         mock_response.content = mock_gzipped_content(mock_benchmark_json)
         mock_get.return_value = mock_response
 
-        with patch("mteb.cache.logger.warning") as mock_warning:
-            output_path = tmp_path / "test.json"
+        output_path = tmp_path / "test.json"
+
+        if should_raise_exception:
+            with pytest.raises(Exception, match="Unexpected content-type"):
+                cache._download_cached_results_from_branch(output_path=output_path)
+        else:
             result_path = cache._download_cached_results_from_branch(
                 output_path=output_path
             )
-
             assert result_path.exists()
-
-            if should_warn:
-                mock_warning.assert_called()
-                assert "Unexpected content-type" in str(mock_warning.call_args)
-            else:
-                # Filter out other warnings
-                warning_calls = [
-                    call
-                    for call in mock_warning.call_args_list
-                    if "Unexpected content-type" in str(call)
-                ]
-                assert len(warning_calls) == 0
+            assert result_path.read_text(encoding="utf-8") == mock_benchmark_json
 
     @pytest.mark.parametrize(
         "file_size,max_size_mb,should_fail",
