@@ -397,7 +397,7 @@ slm_colqwen3_8b = ModelMeta(
 
 # ColLFM2-450M: ~450M params → 900 MB VRAM in bfloat16
 slm_collfm2_450m = ModelMeta(
-    loader=partial(SLMColLFM2Wrapper),
+    loader=SLMColLFM2Wrapper,
     name="VAGOsolutions/SauerkrautLM-ColLFM2-450M-v0.1",
     languages=SUPPORTED_LANGUAGES,
     revision="main",
