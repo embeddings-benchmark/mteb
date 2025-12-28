@@ -399,7 +399,7 @@ def _leaderboard(args: argparse.Namespace) -> None:
     # for other CLI commands
     try:
         from mteb.leaderboard import get_leaderboard_app
-    except ImportError as e:
+    except ImportError:
         raise ImportError(
             "Leaderboard dependencies are not installed. "
             "Please install with: pip install mteb[leaderboard]"
