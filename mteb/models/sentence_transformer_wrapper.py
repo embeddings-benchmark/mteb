@@ -261,8 +261,8 @@ class CrossEncoderWrapper:
         self,
         model: CrossEncoder | str,
         revision: str | None = None,
-        query_prefix: str | None = None,
-        passage_prefix: str | None = None,
+        query_prefix: str = "",
+        passage_prefix: str = "",
         **kwargs,
     ) -> None:
         from sentence_transformers import CrossEncoder
