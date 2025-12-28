@@ -279,7 +279,7 @@ class ResultCache:
 
         return results_directory
 
-    def download_cached_results_from_branch(
+    def _download_cached_results_from_branch(
         self,
         branch: str = "cached-data",
         filename: str = "__cached_results.json.gz",
@@ -322,9 +322,9 @@ class ResultCache:
             >>> from mteb.cache import ResultCache
             >>> cache = ResultCache()
             >>> # Download optimized cached results
-            >>> cache_file = cache.download_cached_results_from_branch()
+            >>> cache_file = cache._download_cached_results_from_branch()
             >>> # Use custom output path
-            >>> cache_file = cache.download_cached_results_from_branch(
+            >>> cache_file = cache._download_cached_results_from_branch(
             ...     output_path=Path("/tmp/my_cache.json")
             ... )
         """

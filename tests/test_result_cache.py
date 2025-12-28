@@ -212,11 +212,11 @@ def test_cache_filter_languages():
     assert len(eng_results.model_results[0].task_results[0].scores["test"]) == 1
 
 
-# Tests for download_cached_results_from_branch method
+# Tests for _download_cached_results_from_branch method
 
 
 class TestDownloadCachedResultsFromBranch:
-    """Test the download_cached_results_from_branch method."""
+    """Test the _download_cached_results_from_branch method."""
 
     @patch("requests.get")
     def test_successful_download(
@@ -233,7 +233,9 @@ class TestDownloadCachedResultsFromBranch:
 
         # Test basic download
         output_path = tmp_path / "test_cached_results.json"
-        result_path = cache.download_cached_results_from_branch(output_path=output_path)
+        result_path = cache._download_cached_results_from_branch(
+            output_path=output_path
+        )
 
         assert result_path == output_path
         assert result_path.exists()
@@ -242,7 +244,7 @@ class TestDownloadCachedResultsFromBranch:
 
         # Test parent directory creation
         nested_output_path = tmp_path / "nested" / "dir" / "test_cache.json"
-        nested_result_path = cache.download_cached_results_from_branch(
+        nested_result_path = cache._download_cached_results_from_branch(
             output_path=nested_output_path
         )
 
@@ -264,7 +266,7 @@ class TestDownloadCachedResultsFromBranch:
         mock_get.return_value = mock_response
 
         with pytest.raises(ValueError, match="Downloaded file too large"):
-            cache.download_cached_results_from_branch(max_size_mb=50)
+            cache._download_cached_results_from_branch(max_size_mb=50)
 
     @pytest.mark.parametrize(
         "error_type,exception_class",
@@ -303,7 +305,7 @@ class TestDownloadCachedResultsFromBranch:
             mock_get.return_value = mock_response
 
         with pytest.raises(exception_class):
-            cache.download_cached_results_from_branch(timeout=30)
+            cache._download_cached_results_from_branch(timeout=30)
 
     @patch("requests.get")
     def test_default_output_path(
@@ -318,7 +320,7 @@ class TestDownloadCachedResultsFromBranch:
         mock_response.content = mock_gzipped_content(mock_benchmark_json)
         mock_get.return_value = mock_response
 
-        result_path = cache.download_cached_results_from_branch()
+        result_path = cache._download_cached_results_from_branch()
 
         # Default path should be mteb/leaderboard/__cached_results.json
         # Get the mteb package directory
@@ -356,7 +358,7 @@ class TestDownloadCachedResultsFromBranch:
 
         with patch("mteb.cache.logger.warning") as mock_warning:
             output_path = tmp_path / "test.json"
-            result_path = cache.download_cached_results_from_branch(
+            result_path = cache._download_cached_results_from_branch(
                 output_path=output_path
             )
 
@@ -411,7 +413,7 @@ class TestDownloadCachedResultsFromBranch:
             mock_get.return_value = mock_response
 
             with pytest.raises(ValueError, match="Downloaded file too large"):
-                cache.download_cached_results_from_branch(max_size_mb=max_size_mb)
+                cache._download_cached_results_from_branch(max_size_mb=max_size_mb)
         else:
             # For success cases, use valid gzipped content
             # Create small content and gzip it
@@ -424,7 +426,7 @@ class TestDownloadCachedResultsFromBranch:
             mock_response.content = gzipped
             mock_get.return_value = mock_response
 
-            result_path = cache.download_cached_results_from_branch(
+            result_path = cache._download_cached_results_from_branch(
                 max_size_mb=max_size_mb
             )
             assert result_path.exists()

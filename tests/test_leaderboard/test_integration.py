@@ -26,7 +26,9 @@ class TestIntegrationScenarios:
 
         # Test the full workflow through ResultCache
         output_path = tmp_path / "cached_results.json"
-        result_path = cache.download_cached_results_from_branch(output_path=output_path)
+        result_path = cache._download_cached_results_from_branch(
+            output_path=output_path
+        )
 
         # Verify the workflow completed correctly
         assert result_path == output_path
@@ -42,4 +44,4 @@ class TestIntegrationScenarios:
         mock_get.side_effect = Exception("Network error")
 
         with pytest.raises(Exception, match="Network error"):
-            cache.download_cached_results_from_branch()
+            cache._download_cached_results_from_branch()
