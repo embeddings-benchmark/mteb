@@ -16,6 +16,67 @@ results = mteb.evaluate(model, tasks=benchmark)
 
 The benchmark specifies not only a list of tasks, but also what splits and language to run on.
 
+### Filtering Benchmark Tasks by Type
+
+You can filter a benchmark to only include specific task types. This is useful when you want to evaluate your model on a subset of tasks, such as only retrieval tasks:
+
+```python
+import mteb
+
+# Get the full English benchmark
+benchmark = mteb.get_benchmark("MTEB(eng, v2)")
+
+# Filter to only retrieval tasks
+retrieval_tasks = [task for task in benchmark.tasks if task.metadata.type == "Retrieval"]
+print(f"Found {len(retrieval_tasks)} retrieval tasks")
+
+# Run evaluation on only retrieval tasks
+model = mteb.get_model(...)
+results = mteb.evaluate(model, tasks=retrieval_tasks)
+```
+
+You can filter by any task type, including:
+- `"Retrieval"` - Information retrieval tasks
+- `"Classification"` - Text classification tasks
+- `"Clustering"` - Document clustering tasks
+- `"STS"` - Semantic textual similarity tasks
+- `"PairClassification"` - Pair classification tasks
+- `"Reranking"` - Reranking tasks
+- `"Summarization"` - Text summarization tasks
+- `"InstructionRetrieval"` - Instruction-based retrieval tasks
+
+For multiple task types, you can combine filters:
+
+```python
+# Get retrieval and reranking tasks from a benchmark
+filtered_tasks = [
+    task for task in benchmark.tasks
+    if task.metadata.type in ["Retrieval", "Reranking"]
+]
+```
+
+### Creating Custom Benchmarks from Filtered Tasks
+
+You can create a custom benchmark with filtered tasks:
+
+```python
+import mteb
+from mteb.benchmarks.benchmark import Benchmark
+
+# Get the full English benchmark
+original = mteb.get_benchmark("MTEB(eng, v2)")
+
+# Create a retrieval-only benchmark
+retrieval_benchmark = Benchmark(
+    name="MTEB(eng, retrieval-only)",
+    tasks=[task for task in original.tasks if task.metadata.type == "Retrieval"],
+    description="English retrieval tasks from MTEB"
+)
+
+# Use it for evaluation
+results = mteb.evaluate(model, tasks=retrieval_benchmark)
+```
+
 !!! note
     Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark.
     In the case of a language, we use the three-letter language code.
@@ -59,6 +120,56 @@ tasks = mteb.get_tasks(modalities=["text", "image"]) # Only select tasks with te
 tasks = get_tasks(languages=["eng", "deu"], script=["Latn"], domains=["Legal"])
 ```
 
+### Filtering Tasks from Existing Benchmarks
+
+You can also filter existing benchmarks to get specific task types. For example, to get all retrieval tasks from multiple benchmarks:
+
+```python
+import mteb
+
+# Get retrieval tasks from all English tasks
+retrieval_tasks = mteb.get_tasks(
+    task_types=["Retrieval"],
+    languages=["eng"]
+)
+
+# Get retrieval tasks that are also part of the main English benchmark
+eng_benchmark = mteb.get_benchmark("MTEB(eng, v2)")
+benchmark_task_names = [task.metadata.name for task in eng_benchmark.tasks]
+
+retrieval_from_benchmark = mteb.get_tasks(
+    task_types=["Retrieval"],
+    tasks=benchmark_task_names  # Only tasks from the benchmark
+)
+
+print(f"Found {len(retrieval_from_benchmark)} retrieval tasks in MTEB(eng, v2)")
+```
+
+### Advanced Filtering with Multiple Criteria
+
+You can combine multiple filtering criteria to get very specific subsets:
+
+```python
+import mteb
+
+# Get English retrieval tasks in specific domains
+specialized_tasks = mteb.get_tasks(
+    task_types=["Retrieval", "InstructionRetrieval"],
+    languages=["eng"],
+    domains=["Scientific", "Medical", "Legal"]
+)
+
+# Filter multilingual retrieval tasks
+multilingual_retrieval = mteb.get_tasks(
+    task_types=["Retrieval"],
+    modalities=["text"]
+)
+# Then filter for tasks supporting multiple languages
+multilingual_retrieval = [
+    task for task in multilingual_retrieval
+    if len(task.metadata.languages) > 1
+]
+```
 
 You can also specify which languages to load for multilingual/cross-lingual tasks like below:
 
