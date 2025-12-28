@@ -1,5 +1,7 @@
 """This implements minimal viable mock tasks for testing the benchmarking framework."""
 
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 import datasets
