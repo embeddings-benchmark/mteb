@@ -413,6 +413,7 @@ TASK_NAME_TO_INSTRUCTION = {
 
 seed_embedding = ModelMeta(
     name="Bytedance/Seed1.6-embedding",
+    model_type=["dense"],
     revision="1",
     release_date="2025-06-18",
     languages=[

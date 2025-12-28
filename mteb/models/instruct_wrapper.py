@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def instruct_wrapper(
     model_name_or_path: str,
     mode: str,
-    instruction_template: str | Callable[[str], str] | None = None,
+    instruction_template: str | Callable[[str, PromptType | None], str] | None = None,
     **kwargs,
 ):
     """Instruct wrapper for models. Uses GritLM to pass instructions to the model.
@@ -40,7 +40,9 @@ def instruct_wrapper(
             self,
             model_name_or_path: str,
             mode: str,
-            instruction_template: str | Callable[[str, PromptType], str] | None = None,
+            instruction_template: str
+            | Callable[[str, PromptType | None], str]
+            | None = None,
             **kwargs,
         ):
             if (
@@ -82,8 +84,11 @@ def instruct_wrapper(
             logger.info(
                 f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
             )
-            embeddings = super().encode(
-                _inputs, instruction=instruction, *args, **kwargs
+            embeddings = super().encode(  # type: ignore[safe-super]
+                _inputs,  # type: ignore[arg-type]
+                instruction=instruction,
+                *args,
+                **kwargs,
             )
             if isinstance(embeddings, torch.Tensor):
                 # sometimes in kwargs can be return_tensors=True
@@ -122,7 +127,8 @@ class InstructSentenceTransformerModel(AbsEncoder):
             apply_instruction_to_passages: Whether to apply the instruction template to the passages.
             padding_side: Padding side. If None, the padding side will be read from the model config.
             add_eos_token: Whether to add the eos token to each input example.
-            prompts_dict: Dictionary of task names to prompt names. If None, the prompts will be read from the model config.
+            prompts_dict: Dictionary of task names to prompt names. If task name is missing in the dict or prompts dict is None, prompt from task metadata or
+                AbsTask.abstask_prompt will be used.
             **kwargs: Kwargs for Sentence Transformer model.
         """
         from sentence_transformers import SentenceTransformer
@@ -140,7 +146,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             )
 
         self.instruction_template = instruction_template
-        tokenizer_params = {}
+        tokenizer_params: dict[str, Any] = {}
         if add_eos_token:
             tokenizer_params["add_eos_token"] = add_eos_token
         if max_seq_length is not None:
@@ -192,6 +198,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
         """
         sentences = [text for batch in inputs for text in batch["text"]]
+        instruction: str | None
         instruction = self.get_task_instruction(task_metadata, prompt_type)
 
         # to passage prompts won't be applied to passages

@@ -150,6 +150,7 @@ google_text_emb_004 = ModelMeta(
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-embedding-004",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=False,
     revision="1",  # revision is intended for implementation
@@ -174,6 +175,7 @@ google_text_emb_005 = ModelMeta(
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-embedding-005",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=False,
     revision="1",  # revision is intended for implementation
@@ -198,6 +200,7 @@ google_text_multilingual_emb_002 = ModelMeta(
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-multilingual-embedding-002",
+    model_type=["dense"],
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,  # From the list of evaluated languages in https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/text-embeddings-api#supported_text_languages
     open_weights=False,
     revision="1",
@@ -222,6 +225,7 @@ google_gemini_embedding_001 = ModelMeta(
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/gemini-embedding-001",
+    model_type=["dense"],
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
     open_weights=False,
     revision="1",
@@ -256,6 +260,7 @@ def gemma_embedding_loader(model_name: str, revision: str, **kwargs):
 embedding_gemma_300m = ModelMeta(
     loader=gemma_embedding_loader,
     name="google/embeddinggemma-300m",
+    model_type=["dense"],
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
     open_weights=True,
     revision="64614b0b8b64f0c6c1e52b07e4e9a4e8fe4d2da2",

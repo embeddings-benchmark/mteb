@@ -4,6 +4,7 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 Euler_Legal_Embedding_V1 = ModelMeta(
     loader=sentence_transformers_loader,
     name="Mira190/Euler-Legal-Embedding-V1",
+    model_type=["dense"],
     revision="df607ed9e25e569514a99c27cdaaab16e76b6dd4",
     release_date="2025-11-06",
     languages=["eng-Latn"],
@@ -22,4 +23,10 @@ Euler_Legal_Embedding_V1 = ModelMeta(
     training_datasets=set(),  # final-data-new-anonymized-grok4-filtered
     adapted_from="Qwen/Qwen3-Embedding-8B",
     superseded_by=None,
+    citation="""@misc{euler2025legal,
+      title={Euler-Legal-Embedding: Advanced Legal Representation Learning}, 
+      author={LawRank Team},
+      year={2025},
+      publisher={Hugging Face}
+}""",
 )

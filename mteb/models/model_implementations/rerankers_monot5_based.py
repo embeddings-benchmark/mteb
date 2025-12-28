@@ -315,6 +315,7 @@ monot5_small = ModelMeta(
         fp_options="float16",
     ),
     name="castorini/monot5-small-msmarco-10k",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="77f8e3f7b1eb1afe353aa21a7c3a2fc8feca702e",
@@ -330,7 +331,6 @@ monot5_small = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -343,11 +343,12 @@ monot5_small = ModelMeta(
 )
 
 monot5_base = ModelMeta(
-    loader=MonoT5Reranker,  # type: ignore
+    loader=MonoT5Reranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
     name="castorini/monot5-base-msmarco-10k",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="f15657ab3d2a5dd0b9a30c8c0b6a0a73c9cb5884",
@@ -372,7 +373,6 @@ monot5_base = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )
 
 monot5_large = ModelMeta(
@@ -381,6 +381,7 @@ monot5_large = ModelMeta(
         fp_options="float16",
     ),
     name="castorini/monot5-large-msmarco-10k",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="48cfad1d8dd587670393f27ee8ec41fde63e3d98",
@@ -396,7 +397,6 @@ monot5_large = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -414,6 +414,7 @@ monot5_3b = ModelMeta(
         fp_options="float16",
     ),
     name="castorini/monot5-3b-msmarco-10k",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="bc0c419a438c81f592f878ce32430a1823f5db6c",
@@ -429,7 +430,6 @@ monot5_3b = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -442,11 +442,12 @@ monot5_3b = ModelMeta(
 )
 
 flant5_base = ModelMeta(
-    loader=FLANT5Reranker,  # type: ignore
+    loader=FLANT5Reranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
     name="google/flan-t5-base",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="7bcac572ce56db69c1ea7c8af255c5d7c9672fc2",
@@ -484,7 +485,6 @@ flant5_base = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )
 
 flant5_large = ModelMeta(
@@ -493,6 +493,7 @@ flant5_large = ModelMeta(
         fp_options="float16",
     ),
     name="google/flan-t5-large",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a",
@@ -530,7 +531,6 @@ flant5_large = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )
 
 flant5_xl = ModelMeta(
@@ -539,6 +539,7 @@ flant5_xl = ModelMeta(
         fp_options="float16",
     ),
     name="google/flan-t5-xl",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="7d6315df2c2fb742f0f5b556879d730926ca9001",
@@ -576,7 +577,6 @@ flant5_xl = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )
 
 flant5_xxl = ModelMeta(
@@ -585,6 +585,7 @@ flant5_xxl = ModelMeta(
         fp_options="float16",
     ),
     name="google/flan-t5-xxl",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="ae7c9136adc7555eeccc78cdd960dfd60fb346ce",
@@ -622,7 +623,6 @@ flant5_xxl = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )
 
 
@@ -632,6 +632,7 @@ llama2_7b = ModelMeta(
         fp_options="float16",
     ),
     name="meta-llama/Llama-2-7b-hf",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9",
@@ -656,7 +657,6 @@ llama2_7b = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2307.09288},
     }""",
-    is_cross_encoder=True,
 )
 
 llama2_7b_chat = ModelMeta(
@@ -665,6 +665,7 @@ llama2_7b_chat = ModelMeta(
         fp_options="float16",
     ),
     name="meta-llama/Llama-2-7b-chat-hf",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="f5db02db724555f92da89c216ac04704f23d4590",
@@ -689,7 +690,6 @@ llama2_7b_chat = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )
 
 mistral_7b = ModelMeta(
@@ -698,6 +698,7 @@ mistral_7b = ModelMeta(
         fp_options="float16",
     ),
     name="mistralai/Mistral-7B-Instruct-v0.2",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="3ad372fc79158a2148299e3318516c786aeded6c",
@@ -722,7 +723,6 @@ mistral_7b = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2310.06825},
     }""",
-    is_cross_encoder=True,
 )
 
 followir_7b = ModelMeta(
@@ -731,6 +731,7 @@ followir_7b = ModelMeta(
         fp_options="float16",
     ),
     name="jhu-clsp/FollowIR-7B",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="4d25d437e38b510c01852070c0731e8f6e1875d1",
@@ -758,7 +759,6 @@ followir_7b = ModelMeta(
       primaryClass={cs.IR}
     }
     """,
-    is_cross_encoder=True,
 )
 
 
@@ -874,6 +874,7 @@ mt5_base_mmarco_v2 = ModelMeta(
         fp_options="float16",
     ),
     name="unicamp-dl/mt5-base-mmarco-v2",
+    model_type=["cross-encoder"],
     languages=mt5_languages,
     open_weights=True,
     revision="cc0a949b9f21efcaba45c8cabb998ad02ce8d4e7",
@@ -898,15 +899,15 @@ mt5_base_mmarco_v2 = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )
 
 mt5_13b_mmarco_100k = ModelMeta(
-    loader=MonoT5Reranker,  # type: ignore
+    loader=MonoT5Reranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
     name="unicamp-dl/mt5-13b-mmarco-100k",
+    model_type=["cross-encoder"],
     languages=mt5_languages,
     open_weights=True,
     revision="e1a4317e102a525ea9e16745ad21394a4f1bffbc",
@@ -922,5 +923,4 @@ mt5_13b_mmarco_100k = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
-    is_cross_encoder=True,
 )
