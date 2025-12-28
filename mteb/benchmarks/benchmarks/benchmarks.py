@@ -476,7 +476,7 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
 
 SEB = Benchmark(
     name="MTEB(Scandinavian, v1)",
-    aliases=["MTEB(Scandinavian)"],
+    aliases=["MTEB(Scandinavian)", "SEB"],
     display_name="Scandinavian",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/dk.svg",
     language_view=["dan-Latn", "swe-Latn", "nno-Latn", "nob-Latn"],
@@ -966,7 +966,7 @@ MTEB_multilingual_v1 = Benchmark(
 
 MTEB_multilingual_v2 = Benchmark(
     name="MTEB(Multilingual, v2)",
-    aliases=["MTEB(Multilingual)"],
+    aliases=["MTEB(Multilingual)", "MMTEB"],
     display_name="Multilingual",
     language_view=[
         "eng-Latn",  # English
@@ -1418,7 +1418,7 @@ NANOBEIR = Benchmark(
 
 C_MTEB = Benchmark(
     name="MTEB(cmn, v1)",
-    aliases=["MTEB(Chinese)"],
+    aliases=["MTEB(Chinese)", "CMTEB"],
     display_name="Chinese",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/cn.svg",
     tasks=MTEBTasks(
