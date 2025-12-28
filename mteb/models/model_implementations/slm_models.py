@@ -296,11 +296,11 @@ COLPALI_CITATION = """
 
 # ColQwen3-1.7B Turbo: ~1.7B params → 3.4 GB VRAM in bfloat16
 slm_colqwen3_1_7b_turbo = ModelMeta(
-    loader=SLMColQwen3Wrapper,
+    loader=partial(SLMColQwen3Wrapper),
     name="VAGOsolutions/SauerkrautLM-ColQwen3-1.7b-Turbo-v0.1",
     languages=SUPPORTED_LANGUAGES,
-    revision="main",
-    release_date="2025-01-01",
+    revision="19c295a18e057d6d82754f627c09408117ffdb66",
+    release_date="2025-12-20",
     modalities=["image", "text"],
     n_parameters=1_700_000_000,
     memory_usage_mb=3400,
@@ -320,11 +320,11 @@ slm_colqwen3_1_7b_turbo = ModelMeta(
 
 # ColQwen3-2B: ~2.2B params → 4.4 GB VRAM in bfloat16
 slm_colqwen3_2b = ModelMeta(
-    loader=SLMColQwen3Wrapper,
+    loader=partial(SLMColQwen3Wrapper),
     name="VAGOsolutions/SauerkrautLM-ColQwen3-2b-v0.1",
     languages=SUPPORTED_LANGUAGES,
-    revision="main",
-    release_date="2025-01-01",
+    revision="48f699713c10af754684e12060a2af9266462cc9",
+    release_date="2025-12-20",
     modalities=["image", "text"],
     n_parameters=2_200_000_000,
     memory_usage_mb=4400,
@@ -344,11 +344,11 @@ slm_colqwen3_2b = ModelMeta(
 
 # ColQwen3-4B: ~4B params → 8 GB VRAM in bfloat16
 slm_colqwen3_4b = ModelMeta(
-    loader=SLMColQwen3Wrapper,
+    loader=partial(SLMColQwen3Wrapper),
     name="VAGOsolutions/SauerkrautLM-ColQwen3-4b-v0.1",
     languages=SUPPORTED_LANGUAGES,
-    revision="main",
-    release_date="2025-01-01",
+    revision="b635fbb3ab145f07608ed10a85def33544de1723",
+    release_date="2025-12-20",
     modalities=["image", "text"],
     n_parameters=4_000_000_000,
     memory_usage_mb=8000,
@@ -368,11 +368,11 @@ slm_colqwen3_4b = ModelMeta(
 
 # ColQwen3-8B: ~8B params → 16 GB VRAM in bfloat16
 slm_colqwen3_8b = ModelMeta(
-    loader=SLMColQwen3Wrapper,
+    loader=partial(SLMColQwen3Wrapper),
     name="VAGOsolutions/SauerkrautLM-ColQwen3-8b-v0.1",
     languages=SUPPORTED_LANGUAGES,
-    revision="main",
-    release_date="2025-01-01",
+    revision="36ac136e451a7b8d8229725d69d4ec23aa4f03c8",
+    release_date="2025-12-20",
     modalities=["image", "text"],
     n_parameters=8_000_000_000,
     memory_usage_mb=16000,
@@ -397,11 +397,11 @@ slm_colqwen3_8b = ModelMeta(
 
 # ColLFM2-450M: ~450M params → 900 MB VRAM in bfloat16
 slm_collfm2_450m = ModelMeta(
-    loader=SLMColLFM2Wrapper,
+    loader=partial(SLMColLFM2Wrapper),
     name="VAGOsolutions/SauerkrautLM-ColLFM2-450M-v0.1",
     languages=SUPPORTED_LANGUAGES,
-    revision="main",
-    release_date="2025-01-01",
+    revision="a65223fd6633f331ccff4483e47575c3c620dc60",
+    release_date="2025-12-20",
     modalities=["image", "text"],
     n_parameters=450_000_000,
     memory_usage_mb=900,
@@ -426,11 +426,11 @@ slm_collfm2_450m = ModelMeta(
 
 # ColMinistral3-3B: ~3B params → 6 GB VRAM in bfloat16
 slm_colministral3_3b = ModelMeta(
-    loader=SLMColMinistral3Wrapper,
+    loader=partial(SLMColMinistral3Wrapper),
     name="VAGOsolutions/SauerkrautLM-ColMinistral3-3b-v0.1",
     languages=SUPPORTED_LANGUAGES,
-    revision="main",
-    release_date="2025-01-01",
+    revision="54aa3ffbbce20471fdcc4afc07d13989c65e71b8",
+    release_date="2025-12-20",
     modalities=["image", "text"],
     n_parameters=3_000_000_000,
     memory_usage_mb=6000,
