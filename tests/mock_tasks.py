@@ -1,6 +1,9 @@
 """This implements minimal viable mock tasks for testing the benchmarking framework."""
 
+from typing import TYPE_CHECKING
+
 import datasets
+import numpy as np
 from datasets import Dataset, DatasetDict
 from sklearn.linear_model import LogisticRegression
 
@@ -25,6 +28,9 @@ from mteb.abstasks.text.summarization import AbsTaskSummarization
 from mteb.abstasks.zeroshot_classification import (
     AbsTaskZeroShotClassification,
 )
+
+if TYPE_CHECKING:
+    from PIL.Image import Image
 
 general_args = {
     "description": "a mock task for testing",
@@ -109,6 +115,13 @@ def instruction_retrieval_datasplit() -> RetrievalSplitData:
         ]
     )
     return base_ds
+
+
+def create_mock_images(np_rng: np.random.Generator, n: int = 2) -> list[Image]:
+    from PIL import Image
+
+    images = [np_rng.integers(0, 255, (100, 100, 3)) for _ in range(n)]
+    return [Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images]
 
 
 class MockClassificationTask(AbsTaskClassification):
@@ -1133,17 +1146,8 @@ class MockPairImageClassificationTask(AbsTaskPairClassification):
     input2_column_name = "image2"
 
     def load_data(self) -> None:
-        from PIL import Image
-
-        images1 = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images1 = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images1
-        ]
-
-        images2 = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images2 = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images2
-        ]
+        images1 = create_mock_images(self.np_rng)
+        images2 = create_mock_images(self.np_rng)
 
         labels = [1, 0]
 
@@ -2701,12 +2705,7 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
     metadata.category = "it2i"
 
     def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+        images = create_mock_images(self.np_rng)
         retrieval_split_data = RetrievalSplitData(
             queries=Dataset.from_dict(
                 {
@@ -2716,14 +2715,12 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
                         "This is a positive sentence",
                         "This is another positive sentence",
                     ],
-                    "modality": ["image,text" for _ in range(2)],
                 }
             ),
             corpus=Dataset.from_dict(
                 {
                     "id": ["d1", "d2"],
                     "image": [images[i] for i in range(2)],
-                    "modality": ["image" for _ in range(2)],
                 }
             ),
             relevant_docs={
@@ -2885,12 +2882,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
     metadata.category = "it2i"
 
     def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+        images = create_mock_images(self.np_rng)
 
         split_data = RetrievalSplitData(
             queries=Dataset.from_dict(
@@ -2901,14 +2893,12 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "This is a positive sentence",
                         "This is another positive sentence",
                     ],
-                    "modality": ["image,text" for _ in range(2)],
                 }
             ),
             corpus=Dataset.from_dict(
                 {
                     "id": ["d1", "d2"],
                     "image": [images[i] for i in range(2)],
-                    "modality": ["image" for _ in range(2)],
                 }
             ),
             relevant_docs={
@@ -2976,19 +2966,13 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
     metadata.category = "i2t"
 
     def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+        images = create_mock_images(self.np_rng)
 
         retrieval_split_data = RetrievalSplitData(
             queries=Dataset.from_dict(
                 {
                     "id": [f"q{i}" for i in range(2)],
                     "image": [images[i] for i in range(2)],
-                    "modality": ["image" for _ in range(2)],
                 }
             ),
             corpus=Dataset.from_dict(
@@ -2998,7 +2982,6 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
                         "This is a positive sentence",
                         "This is another positive sentence",
                     ],
-                    "modality": ["text" for _ in range(2)],
                 }
             ),
             relevant_docs={
@@ -3055,12 +3038,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
     metadata.category = "t2i"
 
     def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+        images = create_mock_images(self.np_rng)
 
         retrieval_split_data = RetrievalSplitData(
             queries=Dataset.from_dict(
@@ -3070,14 +3048,12 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
                         "This is a positive sentence",
                         "This is another positive sentence",
                     ],
-                    "modality": ["text" for _ in range(2)],
                 }
             ),
             corpus=Dataset.from_dict(
                 {
                     "id": ["d1", "d2"],
                     "image": [images[i] for i in range(2)],
-                    "modality": ["image" for _ in range(2)],
                 }
             ),
             relevant_docs={
@@ -3149,12 +3125,7 @@ class MockImageClassificationTask(AbsTaskClassification):
     input_column_name = "image"
 
     def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+        images = create_mock_images(self.np_rng)
         labels = [1, 0]
 
         self.dataset = DatasetDict(
@@ -3324,12 +3295,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
     input_column_name = "image"
 
     def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+        images = create_mock_images(self.np_rng)
         labels = [1, 0]
         data = {
             "test": Dataset.from_dict(
@@ -3390,12 +3356,7 @@ class MockImageClusteringTask(AbsTaskClusteringLegacy):
     label_column_name = "label"
 
     def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+        images = create_mock_images(self.np_rng)
         labels = [1, 0]
 
         self.dataset = DatasetDict(
@@ -3448,12 +3409,7 @@ class MockImageClusteringFastTask(AbsTaskClustering):
     max_document_to_embed = 2
 
     def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+        images = create_mock_images(self.np_rng)
         labels = [1, 0]
 
         self.dataset = DatasetDict(
@@ -3538,12 +3494,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
     input_column_name = "image"
 
     def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+        images = create_mock_images(self.np_rng)
         labels = [["0", "3"], ["1", "2"]]
 
         self.dataset = DatasetDict(
@@ -3743,12 +3694,7 @@ class MockMultilingualImageMultilabelClassificationTask(
     input_column_name = "image"
 
     def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+        images = create_mock_images(self.np_rng)
         labels = [["0", "3"], ["1", "2"]]
 
         data = {
@@ -3808,12 +3754,7 @@ class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
     metadata.category = "i2t"
 
     def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+        images = create_mock_images(self.np_rng)
         texts = ["This is a test sentence", "This is another test sentence"]
 
         self.dataset = DatasetDict(
@@ -3906,12 +3847,7 @@ class MockMultilingualImageTextPairClassificationTask(
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+        images = create_mock_images(self.np_rng)
         texts = ["This is a test sentence", "This is another test sentence"]
         data = {
             "test": Dataset.from_dict(
@@ -3971,12 +3907,7 @@ class MockVisualSTSTask(AbsTaskSTS):
     metadata.category = "i2i"
 
     def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+        images = create_mock_images(self.np_rng)
         scores = [0.5, 0.5]
 
         self.dataset = DatasetDict(
@@ -4037,12 +3968,7 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
     metadata.category = "i2t"
 
     def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+        images = create_mock_images(self.np_rng)
         labels = ["label1", "label2"]
 
         self.dataset = DatasetDict(
@@ -4228,19 +4154,8 @@ class MockImageRegressionTask(AbsTaskRegression):
     input_column_name = "image"
 
     def load_data(self, **kwargs):
-        from PIL import Image
-
-        train_images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        train_images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA")
-            for image in train_images
-        ]
-
-        test_images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        test_images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA")
-            for image in test_images
-        ]
+        train_images = create_mock_images(self.np_rng)
+        test_images = create_mock_images(self.np_rng)
 
         train_values = [1.0, 0.0]
         test_values = [1.0, 0.0]
