@@ -426,7 +426,7 @@ slm_collfm2_450m = ModelMeta(
 
 # ColMinistral3-3B: ~3B params → 6 GB VRAM in bfloat16
 slm_colministral3_3b = ModelMeta(
-    loader=partial(SLMColMinistral3Wrapper),
+    loader=SLMColMinistral3Wrapper,
     name="VAGOsolutions/SauerkrautLM-ColMinistral3-3b-v0.1",
     languages=SUPPORTED_LANGUAGES,
     revision="main",
