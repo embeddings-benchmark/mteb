@@ -77,6 +77,8 @@ class SLMBaseWrapper(AbsEncoder):
         
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self._load_model_and_processor(model_name, revision, use_flash_attn, **kwargs)
+        self.mdl = self.mdl.to(self.device)
+        self.mdl.eval()
 
     def _load_model_and_processor(self, model_name, revision, use_flash_attn, **kwargs):
         """Override in subclasses to load specific model/processor."""
@@ -175,22 +177,6 @@ class SLMBaseWrapper(AbsEncoder):
         )
         return padded
 
-    def get_fused_embeddings(
-        self,
-        texts: list[str] | None = None,
-        images: list[Image.Image] | DataLoader | None = None,
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
-        fusion_mode: str = "sum",
-        **kwargs: Any,
-    ):
-        raise NotImplementedError(
-            "Fused embeddings are not supported. "
-            "Please use get_text_embeddings or get_image_embeddings."
-        )
-
     def calculate_probs(
         self, 
         text_embeddings: torch.Tensor, 
@@ -224,9 +210,6 @@ class SLMColQwen3Wrapper(SLMBaseWrapper):
             revision=revision,
             **kwargs,
         )
-        # Explicitly move to device
-        self.mdl = self.mdl.to(self.device)
-        self.mdl.eval()
 
         self.processor = ColQwen3Processor.from_pretrained(
             model_name,
@@ -252,9 +235,6 @@ class SLMColLFM2Wrapper(SLMBaseWrapper):
             revision=revision,
             **kwargs,
         )
-        # Explicitly move to device
-        self.mdl = self.mdl.to(self.device)
-        self.mdl.eval()
 
         self.processor = ColLFM2Processor.from_pretrained(
             model_name,
@@ -274,29 +254,14 @@ class SLMColMinistral3Wrapper(SLMBaseWrapper):
     def _load_model_and_processor(self, model_name, revision, use_flash_attn, **kwargs):
         from sauerkrautlm_colpali.models.ministral3.colministral3 import ColMinistral3, ColMinistral3Processor
 
-        # ColMinistral3.__init__ doesn't accept extra kwargs - only pass model_name
-        self.mdl = ColMinistral3.from_pretrained(model_name)
-        # Explicitly move to device and convert to bfloat16
-        self.mdl = self.mdl.to(dtype=torch.bfloat16, device=self.device)
-        self.mdl.eval()
+        self.mdl = ColMinistral3.from_pretrained(
+            model_name,
+            torch_dtype=torch.bfloat16,
+        )
 
         self.processor = ColMinistral3Processor.from_pretrained(model_name)
         
         logger.info(f"SLM-ColMinistral3 loaded: dim={self.mdl.dim}, device={self.device}")
-
-
-# =============================================================================
-# Loader Functions
-# =============================================================================
-
-def slm_colqwen3_loader(model_name: str, revision: str | None = None, device: str | None = None, **kwargs) -> SLMColQwen3Wrapper:
-    return SLMColQwen3Wrapper(model_name=model_name, revision=revision, device=device, **kwargs)
-
-def slm_collfm2_loader(model_name: str, revision: str | None = None, device: str | None = None, **kwargs) -> SLMColLFM2Wrapper:
-    return SLMColLFM2Wrapper(model_name=model_name, revision=revision, device=device, **kwargs)
-
-def slm_colministral3_loader(model_name: str, revision: str | None = None, device: str | None = None, **kwargs) -> SLMColMinistral3Wrapper:
-    return SLMColMinistral3Wrapper(model_name=model_name, revision=revision, device=device, **kwargs)
 
 
 # =============================================================================
@@ -331,7 +296,7 @@ COLPALI_CITATION = """
 
 # ColQwen3-1.7B Turbo: ~1.7B params → 3.4 GB VRAM in bfloat16
 slm_colqwen3_1_7b_turbo = ModelMeta(
-    loader=partial(slm_colqwen3_loader),
+    loader=partial(SLMColQwen3Wrapper),
     name="VAGOsolutions/SauerkrautLM-ColQwen3-1.7b-Turbo-v0.1",
     languages=SUPPORTED_LANGUAGES,
     revision="main",
@@ -355,7 +320,7 @@ slm_colqwen3_1_7b_turbo = ModelMeta(
 
 # ColQwen3-2B: ~2.2B params → 4.4 GB VRAM in bfloat16
 slm_colqwen3_2b = ModelMeta(
-    loader=partial(slm_colqwen3_loader),
+    loader=partial(SLMColQwen3Wrapper),
     name="VAGOsolutions/SauerkrautLM-ColQwen3-2b-v0.1",
     languages=SUPPORTED_LANGUAGES,
     revision="main",
@@ -379,7 +344,7 @@ slm_colqwen3_2b = ModelMeta(
 
 # ColQwen3-4B: ~4B params → 8 GB VRAM in bfloat16
 slm_colqwen3_4b = ModelMeta(
-    loader=partial(slm_colqwen3_loader),
+    loader=partial(SLMColQwen3Wrapper),
     name="VAGOsolutions/SauerkrautLM-ColQwen3-4b-v0.1",
     languages=SUPPORTED_LANGUAGES,
     revision="main",
@@ -403,7 +368,7 @@ slm_colqwen3_4b = ModelMeta(
 
 # ColQwen3-8B: ~8B params → 16 GB VRAM in bfloat16
 slm_colqwen3_8b = ModelMeta(
-    loader=partial(slm_colqwen3_loader),
+    loader=partial(SLMColQwen3Wrapper),
     name="VAGOsolutions/SauerkrautLM-ColQwen3-8b-v0.1",
     languages=SUPPORTED_LANGUAGES,
     revision="main",
@@ -432,7 +397,7 @@ slm_colqwen3_8b = ModelMeta(
 
 # ColLFM2-450M: ~450M params → 900 MB VRAM in bfloat16
 slm_collfm2_450m = ModelMeta(
-    loader=partial(slm_collfm2_loader),
+    loader=partial(SLMColLFM2Wrapper),
     name="VAGOsolutions/SauerkrautLM-ColLFM2-450M-v0.1",
     languages=SUPPORTED_LANGUAGES,
     revision="main",
@@ -461,7 +426,7 @@ slm_collfm2_450m = ModelMeta(
 
 # ColMinistral3-3B: ~3B params → 6 GB VRAM in bfloat16
 slm_colministral3_3b = ModelMeta(
-    loader=partial(slm_colministral3_loader),
+    loader=partial(SLMColMinistral3Wrapper),
     name="VAGOsolutions/SauerkrautLM-ColMinistral3-3b-v0.1",
     languages=SUPPORTED_LANGUAGES,
     revision="main",
