@@ -592,7 +592,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                             with gr.Column():
                                 model_type_select = gr.CheckboxGroup(
                                     MODEL_TYPE_CHOICES,
-                                    value=[],
+                                    value=MODEL_TYPE_CHOICES,
                                     label="Model Type",
                                 )
 
