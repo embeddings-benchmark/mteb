@@ -422,6 +422,17 @@ def _leaderboard(args: argparse.Namespace) -> None:
     if args.share:
         logger.info("Creating public URL...")
 
+    logging.getLogger("mteb.load_results.task_results").setLevel(
+        logging.ERROR
+    )  # Warnings related to task split
+    logging.getLogger("mteb.model_meta").setLevel(
+        logging.ERROR
+    )  # Warning related to model metadata (fetch_from_hf=False)
+    logging.getLogger("mteb.load_results.benchmark_results").setLevel(
+        logging.ERROR
+    )  # Warning related to model metadata (fetch_from_hf=False)
+    warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
+
     # Head content for Tailwind CSS
     head = """
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
