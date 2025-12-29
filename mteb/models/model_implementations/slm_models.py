@@ -13,11 +13,9 @@ Based on:
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any
 
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
@@ -141,6 +139,7 @@ class SLMBaseWrapper(AbsEncoder):
 
         with torch.no_grad():
             for batch in tqdm(images, desc="Encoding images"):
+                from PIL import Image
                 imgs = [
                     F.to_pil_image(b)
                     if not isinstance(b, Image.Image)
@@ -296,7 +295,7 @@ COLPALI_CITATION = """
 
 # ColQwen3-1.7B Turbo: ~1.7B params → 3.4 GB VRAM in bfloat16
 slm_colqwen3_1_7b_turbo = ModelMeta(
-    loader=partial(SLMColQwen3Wrapper),
+    loader=SLMColQwen3Wrapper,
     name="VAGOsolutions/SauerkrautLM-ColQwen3-1.7b-Turbo-v0.1",
     languages=SUPPORTED_LANGUAGES,
     revision="19c295a18e057d6d82754f627c09408117ffdb66",
@@ -314,13 +313,14 @@ slm_colqwen3_1_7b_turbo = ModelMeta(
     reference="https://huggingface.co/VAGOsolutions/SauerkrautLM-ColQwen3-1.7b-Turbo-v0.1",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
-    training_datasets=None,
+    adapted_from="Qwen/Qwen3-VL-2B-Instruct",
+    training_datasets={"vidore/colpali_train_set"},
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
 # ColQwen3-2B: ~2.2B params → 4.4 GB VRAM in bfloat16
 slm_colqwen3_2b = ModelMeta(
-    loader=partial(SLMColQwen3Wrapper),
+    loader=SLMColQwen3Wrapper,
     name="VAGOsolutions/SauerkrautLM-ColQwen3-2b-v0.1",
     languages=SUPPORTED_LANGUAGES,
     revision="48f699713c10af754684e12060a2af9266462cc9",
@@ -338,13 +338,14 @@ slm_colqwen3_2b = ModelMeta(
     reference="https://huggingface.co/VAGOsolutions/SauerkrautLM-ColQwen3-2b-v0.1",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
-    training_datasets=None,
+    adapted_from="Qwen/Qwen3-VL-2B-Instruct",
+    training_datasets={"vidore/colpali_train_set"},
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
 # ColQwen3-4B: ~4B params → 8 GB VRAM in bfloat16
 slm_colqwen3_4b = ModelMeta(
-    loader=partial(SLMColQwen3Wrapper),
+    loader=SLMColQwen3Wrapper,
     name="VAGOsolutions/SauerkrautLM-ColQwen3-4b-v0.1",
     languages=SUPPORTED_LANGUAGES,
     revision="b635fbb3ab145f07608ed10a85def33544de1723",
@@ -362,13 +363,14 @@ slm_colqwen3_4b = ModelMeta(
     reference="https://huggingface.co/VAGOsolutions/SauerkrautLM-ColQwen3-4b-v0.1",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
-    training_datasets=None,
+    adapted_from="Qwen/Qwen3-VL-4B-Instruct",
+    training_datasets={"vidore/colpali_train_set"},
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
 # ColQwen3-8B: ~8B params → 16 GB VRAM in bfloat16
 slm_colqwen3_8b = ModelMeta(
-    loader=partial(SLMColQwen3Wrapper),
+    loader=SLMColQwen3Wrapper,
     name="VAGOsolutions/SauerkrautLM-ColQwen3-8b-v0.1",
     languages=SUPPORTED_LANGUAGES,
     revision="36ac136e451a7b8d8229725d69d4ec23aa4f03c8",
@@ -386,7 +388,8 @@ slm_colqwen3_8b = ModelMeta(
     reference="https://huggingface.co/VAGOsolutions/SauerkrautLM-ColQwen3-8b-v0.1",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
-    training_datasets=None,
+    adapted_from="Qwen/Qwen3-VL-8B-Instruct",
+    training_datasets={"vidore/colpali_train_set"},
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
@@ -397,7 +400,7 @@ slm_colqwen3_8b = ModelMeta(
 
 # ColLFM2-450M: ~450M params → 900 MB VRAM in bfloat16
 slm_collfm2_450m = ModelMeta(
-    loader=partial(SLMColLFM2Wrapper),
+    loader=SLMColLFM2Wrapper,
     name="VAGOsolutions/SauerkrautLM-ColLFM2-450M-v0.1",
     languages=SUPPORTED_LANGUAGES,
     revision="a65223fd6633f331ccff4483e47575c3c620dc60",
@@ -415,7 +418,8 @@ slm_collfm2_450m = ModelMeta(
     reference="https://huggingface.co/VAGOsolutions/SauerkrautLM-ColLFM2-450M-v0.1",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
-    training_datasets=None,
+    adapted_from="LiquidAI/LFM2-VL-450M",
+    training_datasets={"vidore/colpali_train_set"},
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
@@ -426,7 +430,7 @@ slm_collfm2_450m = ModelMeta(
 
 # ColMinistral3-3B: ~3B params → 6 GB VRAM in bfloat16
 slm_colministral3_3b = ModelMeta(
-    loader=partial(SLMColMinistral3Wrapper),
+    loader=SLMColMinistral3Wrapper,
     name="VAGOsolutions/SauerkrautLM-ColMinistral3-3b-v0.1",
     languages=SUPPORTED_LANGUAGES,
     revision="54aa3ffbbce20471fdcc4afc07d13989c65e71b8",
@@ -444,6 +448,7 @@ slm_colministral3_3b = ModelMeta(
     reference="https://huggingface.co/VAGOsolutions/SauerkrautLM-ColMinistral3-3b-v0.1",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
-    training_datasets=None,
+    adapted_from="mistralai/Ministral-3B-Instruct-2410",
+    training_datasets={"vidore/colpali_train_set"},
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
