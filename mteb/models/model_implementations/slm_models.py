@@ -35,10 +35,6 @@ from mteb.types import Array, BatchedInput, PromptType
 logger = logging.getLogger(__name__)
 
 
-# =============================================================================
-# Supported Languages
-# =============================================================================
-
 SUPPORTED_LANGUAGES = [
     "eng-Latn",  # English
     "deu-Latn",  # German
@@ -49,11 +45,14 @@ SUPPORTED_LANGUAGES = [
 ]
 
 
+<<<<<<< HEAD
 # =============================================================================
 # Base Wrapper Class
 # =============================================================================
 
 
+=======
+>>>>>>> 32881a4 (fix: remove section headers and use PyPI package instead of Git URL)
 class SLMBaseWrapper(AbsEncoder):
     """
     Base wrapper for SauerkrautLM multi-vector embedding models.
@@ -196,11 +195,14 @@ class SLMBaseWrapper(AbsEncoder):
         return self.processor.score(a, b, device=self.device)
 
 
+<<<<<<< HEAD
 # =============================================================================
 # ColQwen3 Wrapper
 # =============================================================================
 
 
+=======
+>>>>>>> 32881a4 (fix: remove section headers and use PyPI package instead of Git URL)
 class SLMColQwen3Wrapper(SLMBaseWrapper):
     """Wrapper for SLM-ColQwen3 models (Qwen3-VL backbone)."""
 
@@ -226,11 +228,14 @@ class SLMColQwen3Wrapper(SLMBaseWrapper):
         logger.info(f"SLM-ColQwen3 loaded: dim={self.mdl.dim}, device={self.device}")
 
 
+<<<<<<< HEAD
 # =============================================================================
 # ColLFM2 Wrapper
 # =============================================================================
 
 
+=======
+>>>>>>> 32881a4 (fix: remove section headers and use PyPI package instead of Git URL)
 class SLMColLFM2Wrapper(SLMBaseWrapper):
     """Wrapper for SLM-ColLFM2 models (LFM2 backbone)."""
 
@@ -252,11 +257,14 @@ class SLMColLFM2Wrapper(SLMBaseWrapper):
         logger.info(f"SLM-ColLFM2 loaded: dim={self.mdl.dim}, device={self.device}")
 
 
+<<<<<<< HEAD
 # =============================================================================
 # ColMinistral3 Wrapper
 # =============================================================================
 
 
+=======
+>>>>>>> 32881a4 (fix: remove section headers and use PyPI package instead of Git URL)
 class SLMColMinistral3Wrapper(SLMBaseWrapper):
     """Wrapper for SLM-ColMinistral3 models (Ministral3 backbone)."""
 
@@ -278,10 +286,6 @@ class SLMColMinistral3Wrapper(SLMBaseWrapper):
         )
 
 
-# =============================================================================
-# Citations
-# =============================================================================
-
 SAUERKRAUTLM_CITATION = """
 @misc{sauerkrautlm-colpali-2025,
   title={SauerkrautLM-ColPali: Multi-Vector Vision Retrieval Models},
@@ -293,6 +297,7 @@ SAUERKRAUTLM_CITATION = """
 """
 
 
+<<<<<<< HEAD
 # =============================================================================
 # ColQwen3 Model Metadata
 # =============================================================================
@@ -302,6 +307,8 @@ _SLM_TRAINING_DATASETS = {
     "VDRMultilingualRetrieval",
 } | COLPALI_TRAINING_DATA
 
+=======
+>>>>>>> 32881a4 (fix: remove section headers and use PyPI package instead of Git URL)
 # ColQwen3-1.7B Turbo: ~1.7B params → 3.4 GB VRAM in bfloat16
 slm_colqwen3_1_7b_turbo = ModelMeta(
     loader=SLMColQwen3Wrapper,
@@ -350,7 +357,11 @@ slm_colqwen3_2b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     adapted_from="Qwen/Qwen3-VL-2B-Instruct",
+<<<<<<< HEAD
     training_datasets=_SLM_TRAINING_DATASETS,
+=======
+    training_datasets={"vidore/colpali_train_set"},
+>>>>>>> 32881a4 (fix: remove section headers and use PyPI package instead of Git URL)
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
@@ -406,11 +417,6 @@ slm_colqwen3_8b = ModelMeta(
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
-
-# =============================================================================
-# ColLFM2 Model Metadata
-# =============================================================================
-
 # ColLFM2-450M: ~450M params → 900 MB VRAM in bfloat16
 slm_collfm2_450m = ModelMeta(
     loader=SLMColLFM2Wrapper,
@@ -436,11 +442,6 @@ slm_collfm2_450m = ModelMeta(
     training_datasets=_SLM_TRAINING_DATASETS,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
-
-
-# =============================================================================
-# ColMinistral3 Model Metadata
-# =============================================================================
 
 # ColMinistral3-3B: ~3B params → 6 GB VRAM in bfloat16
 slm_colministral3_3b = ModelMeta(
