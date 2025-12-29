@@ -25,7 +25,10 @@ from mteb._requires_package import (
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.model_implementations.colpali_models import COLPALI_CITATION
+from mteb.models.model_implementations.colpali_models import (
+    COLPALI_CITATION,
+    COLPALI_TRAINING_DATA,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
@@ -50,13 +53,14 @@ SUPPORTED_LANGUAGES = [
 # Base Wrapper Class
 # =============================================================================
 
+
 class SLMBaseWrapper(AbsEncoder):
     """
     Base wrapper for SauerkrautLM multi-vector embedding models.
-    
+
     All our models use late interaction (MaxSim) for retrieval scoring.
     """
-    
+
     model_class = None
     processor_class = None
     model_name_prefix = "SLM"
@@ -73,7 +77,7 @@ class SLMBaseWrapper(AbsEncoder):
         requires_package(
             self, "sauerkrautlm_colpali", model_name, "pip install sauerkrautlm-colpali"
         )
-        
+
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self._load_model_and_processor(model_name, revision, use_flash_attn, **kwargs)
         self.mdl = self.mdl.to(self.device)
@@ -95,7 +99,7 @@ class SLMBaseWrapper(AbsEncoder):
     ) -> Array:
         text_embeddings = None
         image_embeddings = None
-        
+
         if "text" in inputs.dataset.features:
             text_embeddings = self.get_text_embeddings(inputs, **kwargs)
         if "image" in inputs.dataset.features:
@@ -141,10 +145,9 @@ class SLMBaseWrapper(AbsEncoder):
         with torch.no_grad():
             for batch in tqdm(images, desc="Encoding images"):
                 from PIL import Image
+
                 imgs = [
-                    F.to_pil_image(b)
-                    if not isinstance(b, Image.Image)
-                    else b
+                    F.to_pil_image(b) if not isinstance(b, Image.Image) else b
                     for b in batch["image"]
                 ]
                 inputs = self.processor.process_images(imgs)
@@ -164,7 +167,7 @@ class SLMBaseWrapper(AbsEncoder):
         **kwargs,
     ) -> torch.Tensor:
         all_embeds = []
-        
+
         with torch.no_grad():
             for batch in tqdm(texts, desc="Encoding texts"):
                 inputs = self.processor.process_queries(batch["text"])
@@ -178,16 +181,16 @@ class SLMBaseWrapper(AbsEncoder):
         return padded
 
     def calculate_probs(
-        self, 
-        text_embeddings: torch.Tensor, 
+        self,
+        text_embeddings: torch.Tensor,
         image_embeddings: torch.Tensor,
     ) -> torch.Tensor:
         scores = self.similarity(text_embeddings, image_embeddings).T
         return scores.softmax(dim=-1)
 
     def similarity(
-        self, 
-        a: torch.Tensor | list, 
+        self,
+        a: torch.Tensor | list,
         b: torch.Tensor | list,
     ) -> torch.Tensor:
         return self.processor.score(a, b, device=self.device)
@@ -197,11 +200,15 @@ class SLMBaseWrapper(AbsEncoder):
 # ColQwen3 Wrapper
 # =============================================================================
 
+
 class SLMColQwen3Wrapper(SLMBaseWrapper):
     """Wrapper for SLM-ColQwen3 models (Qwen3-VL backbone)."""
 
     def _load_model_and_processor(self, model_name, revision, use_flash_attn, **kwargs):
-        from sauerkrautlm_colpali.models.qwen3.colqwen3 import ColQwen3, ColQwen3Processor
+        from sauerkrautlm_colpali.models.qwen3.colqwen3 import (
+            ColQwen3,
+            ColQwen3Processor,
+        )
 
         self.mdl = ColQwen3.from_pretrained(
             model_name,
@@ -215,13 +222,14 @@ class SLMColQwen3Wrapper(SLMBaseWrapper):
             model_name,
             revision=revision,
         )
-        
+
         logger.info(f"SLM-ColQwen3 loaded: dim={self.mdl.dim}, device={self.device}")
 
 
 # =============================================================================
 # ColLFM2 Wrapper
 # =============================================================================
+
 
 class SLMColLFM2Wrapper(SLMBaseWrapper):
     """Wrapper for SLM-ColLFM2 models (LFM2 backbone)."""
@@ -240,7 +248,7 @@ class SLMColLFM2Wrapper(SLMBaseWrapper):
             model_name,
             revision=revision,
         )
-        
+
         logger.info(f"SLM-ColLFM2 loaded: dim={self.mdl.dim}, device={self.device}")
 
 
@@ -248,11 +256,15 @@ class SLMColLFM2Wrapper(SLMBaseWrapper):
 # ColMinistral3 Wrapper
 # =============================================================================
 
+
 class SLMColMinistral3Wrapper(SLMBaseWrapper):
     """Wrapper for SLM-ColMinistral3 models (Ministral3 backbone)."""
 
     def _load_model_and_processor(self, model_name, revision, use_flash_attn, **kwargs):
-        from sauerkrautlm_colpali.models.ministral3.colministral3 import ColMinistral3, ColMinistral3Processor
+        from sauerkrautlm_colpali.models.ministral3.colministral3 import (
+            ColMinistral3,
+            ColMinistral3Processor,
+        )
 
         self.mdl = ColMinistral3.from_pretrained(
             model_name,
@@ -260,8 +272,10 @@ class SLMColMinistral3Wrapper(SLMBaseWrapper):
         )
 
         self.processor = ColMinistral3Processor.from_pretrained(model_name)
-        
-        logger.info(f"SLM-ColMinistral3 loaded: dim={self.mdl.dim}, device={self.device}")
+
+        logger.info(
+            f"SLM-ColMinistral3 loaded: dim={self.mdl.dim}, device={self.device}"
+        )
 
 
 # =============================================================================
@@ -279,10 +293,14 @@ SAUERKRAUTLM_CITATION = """
 """
 
 
-
 # =============================================================================
 # ColQwen3 Model Metadata
 # =============================================================================
+
+_SLM_TRAINING_DATASETS = {
+    "MMarcoReranking",
+    "VDRMultilingualRetrieval",
+} | COLPALI_TRAINING_DATA
 
 # ColQwen3-1.7B Turbo: ~1.7B params → 3.4 GB VRAM in bfloat16
 slm_colqwen3_1_7b_turbo = ModelMeta(
@@ -306,7 +324,7 @@ slm_colqwen3_1_7b_turbo = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     adapted_from="Qwen/Qwen3-VL-2B-Instruct",
-    training_datasets={"vidore/colpali_train_set"},
+    training_datasets=_SLM_TRAINING_DATASETS,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
@@ -332,7 +350,7 @@ slm_colqwen3_2b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     adapted_from="Qwen/Qwen3-VL-2B-Instruct",
-    training_datasets={"MMarcoReranking", "VDRMultilingualRetrieval"} | COLPALI_TRAINING_DATA,
+    training_datasets=_SLM_TRAINING_DATASETS,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
@@ -358,7 +376,7 @@ slm_colqwen3_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     adapted_from="Qwen/Qwen3-VL-4B-Instruct",
-    training_datasets={"vidore/colpali_train_set"},
+    training_datasets=_SLM_TRAINING_DATASETS,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
@@ -384,7 +402,7 @@ slm_colqwen3_8b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     adapted_from="Qwen/Qwen3-VL-8B-Instruct",
-    training_datasets={"vidore/colpali_train_set"},
+    training_datasets=_SLM_TRAINING_DATASETS,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
@@ -415,7 +433,7 @@ slm_collfm2_450m = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     adapted_from="LiquidAI/LFM2-VL-450M",
-    training_datasets={"vidore/colpali_train_set"},
+    training_datasets=_SLM_TRAINING_DATASETS,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
@@ -446,6 +464,6 @@ slm_colministral3_3b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     adapted_from="mistralai/Ministral-3B-Instruct-2410",
-    training_datasets={"vidore/colpali_train_set"},
+    training_datasets=_SLM_TRAINING_DATASETS,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
