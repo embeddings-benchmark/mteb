@@ -102,7 +102,7 @@ class VllmWrapperBase:
         model_name = model if isinstance(model, str) else model.name
         if isinstance(model, ModelMeta):
             logger.info(
-                f"Using revision from model meta. Passed revision will be ignored"
+                "Using revision from model meta. Passed revision will be ignored"
             )
             revision = model.revision
 
@@ -241,7 +241,11 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
             prompt_name = self.get_prompt_name(task_metadata, prompt_type)
             prompt = self.model_prompts.get(prompt_name, "")
 
-        if self.use_instructions and self.apply_instruction_to_passages is False and prompt_type == PromptType.document:
+        if (
+            self.use_instructions
+            and self.apply_instruction_to_passages is False
+            and prompt_type == PromptType.document
+        ):
             logger.info(
                 f"No instruction used, because prompt type = {prompt_type.document}"
             )
