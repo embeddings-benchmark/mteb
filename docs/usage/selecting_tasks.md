@@ -55,28 +55,6 @@ filtered_tasks = [
 ]
 ```
 
-### Creating Custom Benchmarks from Filtered Tasks
-
-You can create a custom benchmark with filtered tasks:
-
-```python
-import mteb
-from mteb.benchmarks.benchmark import Benchmark
-
-# Get the full English benchmark
-original = mteb.get_benchmark("MTEB(eng, v2)")
-
-# Create a retrieval-only benchmark
-retrieval_benchmark = Benchmark(
-    name="MTEB(eng, retrieval-only)",
-    tasks=[task for task in original.tasks if task.metadata.type == "Retrieval"],
-    description="English retrieval tasks from MTEB"
-)
-
-# Use it for evaluation
-results = mteb.evaluate(model, tasks=retrieval_benchmark)
-```
-
 !!! note
     Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark.
     In the case of a language, we use the three-letter language code.
