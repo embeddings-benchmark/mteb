@@ -115,36 +115,19 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
         file_size = results_cache_path.stat().st_size
         logger.info(f"File exists, size: {file_size} bytes")
 
-        try:
-            with results_cache_path.open() as cache_file:
-                logger.info("File opened successfully, attempting JSON parse...")
-                json_data = json.load(cache_file)
-                logger.info(
-                    f"JSON parsed successfully, keys: {list(json_data.keys()) if isinstance(json_data, dict) else 'not a dict'}"
-                )
-        except json.JSONDecodeError as e:
-            logger.error(f"JSON decode error: {e}")
-            logger.error(f"Error at line {e.lineno}, column {e.colno}: {e.msg}")
-            raise
-        except Exception as e:
-            logger.error(f"Unexpected file read error: {type(e).__name__}: {e}")
-            raise
+        with results_cache_path.open() as cache_file:
+            logger.info("File opened successfully, attempting JSON parse...")
+            json_data = json.load(cache_file)
+            logger.info(
+                f"JSON parsed successfully, keys: {list(json_data.keys()) if isinstance(json_data, dict) else 'not a dict'}"
+            )
 
-        try:
-            logger.info("Attempting BenchmarkResults.from_validated...")
-            results = mteb.BenchmarkResults.from_validated(**json_data)
-            logger.info("BenchmarkResults.from_validated successful")
-        except TypeError as e:
-            logger.error(f"Type error in from_validated (invalid kwargs): {e}")
-            raise
-        except ValueError as e:
-            logger.error(f"Value error in from_validated (invalid data): {e}")
-            raise
-        except Exception as e:
-            logger.error(f"Unexpected error in from_validated: {type(e).__name__}: {e}")
-            raise
+        logger.info("Attempting BenchmarkResults.from_validated...")
+        results = mteb.BenchmarkResults.from_validated(**json_data)
+        logger.info("BenchmarkResults.from_validated successful")
 
     except Exception as e:
+        # TODO: Handle the case when we fail to load cached results from disk.
         logger.error(
             f"Failed to load cached results from disk: {type(e).__name__}: {e}"
         )
