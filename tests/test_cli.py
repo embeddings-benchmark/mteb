@@ -248,37 +248,45 @@ def test_leaderboard_custom_cache_path(tmp_path: Path):
     custom_cache = tmp_path / "my_results"
     custom_cache.mkdir(exist_ok=True)
 
+    # Mock the get_leaderboard_app function and the gradio app
     mock_app = MagicMock()
     mock_app.launch = MagicMock()
 
-    with patch(
-        "mteb.leaderboard.get_leaderboard_app", return_value=mock_app
-    ) as mock_get_app:
-        with patch("mteb.cli.build_cli.ResultCache") as mock_result_cache:
-            mock_cache_instance = MagicMock()
-            mock_result_cache.return_value = mock_cache_instance
+    # Create a mock function that captures the cache argument and returns our mock app
+    def mock_get_app_func(cache):
+        # Store the cache for verification
+        mock_get_app_func.called_with_cache = cache
+        return mock_app
 
-            args = Namespace(
-                cache_path=str(custom_cache),
-                host="localhost",
-                port=8080,
-                share=True,
-            )
+    # Patch the local import inside _leaderboard function
+    with patch.dict(
+        "sys.modules",
+        {"mteb.leaderboard": MagicMock(get_leaderboard_app=mock_get_app_func)},
+    ):
+        args = Namespace(
+            cache_path=str(custom_cache),
+            host="localhost",
+            port=8080,
+            share=True,
+        )
 
-            _leaderboard(args)
+        _leaderboard(args)
 
-            # Verify ResultCache was initialized with custom path
-            mock_result_cache.assert_called_once_with(str(custom_cache))
+        # Verify get_leaderboard_app was called with a cache that has the correct path
+        assert hasattr(mock_get_app_func, "called_with_cache"), (
+            "get_leaderboard_app was not called"
+        )
+        cache_instance = mock_get_app_func.called_with_cache
+        assert cache_instance.cache_path == custom_cache, (
+            f"Expected cache path {custom_cache}, got {cache_instance.cache_path}"
+        )
 
-            # Verify get_leaderboard_app was called with the cache instance
-            mock_get_app.assert_called_once_with(mock_cache_instance)
-
-            # Verify launch parameters
-            mock_app.launch.assert_called_once_with(
-                server_name="localhost",
-                server_port=8080,
-                share=True,
-            )
+        # Verify launch parameters
+        mock_app.launch.assert_called_once_with(
+            server_name="localhost",
+            server_port=8080,
+            share=True,
+        )
 
 
 def test_leaderboard_default_cache():
@@ -287,27 +295,38 @@ def test_leaderboard_default_cache():
     mock_app = MagicMock()
     mock_app.launch = MagicMock()
 
-    with patch(
-        "mteb.leaderboard.get_leaderboard_app", return_value=mock_app
-    ) as mock_get_app:
-        with patch("mteb.cli.build_cli.ResultCache") as mock_result_cache:
-            mock_cache_instance = MagicMock()
-            mock_result_cache.return_value = mock_cache_instance
+    # Create a mock function that captures the cache argument and returns our mock app
+    def mock_get_app_func(cache):
+        # Store the cache for verification
+        mock_get_app_func.called_with_cache = cache
+        return mock_app
 
-            args = Namespace(
-                cache_path=None,  # No cache path provided
-                host="127.0.0.1",
-                port=7860,
-                share=False,
-            )
+    # Patch the local import inside _leaderboard function
+    with patch.dict(
+        "sys.modules",
+        {"mteb.leaderboard": MagicMock(get_leaderboard_app=mock_get_app_func)},
+    ):
+        args = Namespace(
+            cache_path=None,  # No cache path provided
+            host="127.0.0.1",
+            port=7860,
+            share=False,
+        )
 
-            _leaderboard(args)
+        _leaderboard(args)
 
-            # Verify ResultCache was initialized without arguments (default)
-            mock_result_cache.assert_called_once_with()
+        # Verify get_leaderboard_app was called with a cache using the default path
+        assert hasattr(mock_get_app_func, "called_with_cache"), (
+            "get_leaderboard_app was not called"
+        )
+        cache_instance = mock_get_app_func.called_with_cache
+        # For default cache, we can verify it uses the default_cache_path
+        from mteb.cache import ResultCache
 
-            # Verify get_leaderboard_app was called with the cache instance
-            mock_get_app.assert_called_once_with(mock_cache_instance)
+        expected_default_path = ResultCache().default_cache_path
+        assert cache_instance.cache_path == expected_default_path, (
+            f"Expected default cache path {expected_default_path}, got {cache_instance.cache_path}"
+        )
 
 
 def test_leaderboard_cli_integration():
