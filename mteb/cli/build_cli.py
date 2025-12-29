@@ -374,7 +374,7 @@ def _add_leaderboard_parser(subparsers) -> None:
     parser.add_argument(
         "--host",
         type=str,
-        default="127.0.0.1",
+        default="0.0.0.0",
         help="Host to run the leaderboard server on",
     )
     parser.add_argument(
@@ -398,6 +398,8 @@ def _leaderboard(args: argparse.Namespace) -> None:
     # Import leaderboard module only when needed to avoid requiring leaderboard dependencies
     # for other CLI commands
     try:
+        import gradio as gr
+
         from mteb.leaderboard import get_leaderboard_app
     except ImportError:
         raise ImportError(
@@ -420,10 +422,19 @@ def _leaderboard(args: argparse.Namespace) -> None:
     if args.share:
         logger.info("Creating public URL...")
 
+    # Head content for Tailwind CSS
+    head = """
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    """
+
     app.launch(
         server_name=args.host,
         server_port=args.port,
         share=args.share,
+        theme=gr.themes.Soft(
+            font=[gr.themes.GoogleFont("Roboto Mono"), "Arial", "sans-serif"],
+        ),
+        head=head,
     )
 
 
