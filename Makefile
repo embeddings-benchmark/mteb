@@ -37,7 +37,7 @@ pr:
 
 build-docs: build-docs-overview
 	@echo "--- 📚 Building documentation ---"
-	python -m mkdocs build
+	python -m mkdocs build --strict
 
 
 build-docs-overview:
