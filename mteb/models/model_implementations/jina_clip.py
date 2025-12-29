@@ -174,7 +174,7 @@ jina_clip_v2 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=_JINA_CLIP_TRAIN_DATASETS_V1 | COLPALI_TRAINING_DATA,
-    modalities=["text"],
+    modalities=["text", "image"],
     model_type=["dense"],
     citation="""
 @misc{koukounas2024jinaclipv2multilingualmultimodalembeddings,
