@@ -146,8 +146,8 @@ class VllmWrapperBase:
         if self.llm is None:
             return
 
-        from vllm.distributed import (
-            cleanup_dist_env_and_memory,  # type: ignore[import-not-found]
+        from vllm.distributed import (  # type: ignore[import-not-found]
+            cleanup_dist_env_and_memory,
         )
 
         self.llm = None
