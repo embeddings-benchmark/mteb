@@ -130,7 +130,7 @@ def get_model_meta(
             )
 
         if compute_missing and fetch_from_hf:
-            new_meta = ModelMeta.from_hf(model_name)
+            new_meta = ModelMeta.from_hub(model_name)
             return ModelMeta(
                 **model_meta.model_dump(), **new_meta.model_dump(exclude_none=True)
             )
