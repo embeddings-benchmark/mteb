@@ -339,7 +339,7 @@ slm_colqwen3_2b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     adapted_from="Qwen/Qwen3-VL-2B-Instruct",
-    training_datasets={"vidore/colpali_train_set"},
+    training_datasets={"MMarcoReranking", "VDRMultilingualRetrieval"} | COLPALI_TRAINING_DATA,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
