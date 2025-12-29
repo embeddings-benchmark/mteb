@@ -27,7 +27,7 @@ import mteb
 benchmark = mteb.get_benchmark("MTEB(eng, v2)")
 
 # Filter to only retrieval tasks
-retrieval_tasks = [task for task in benchmark.tasks if task.metadata.type == "Retrieval"]
+retrieval_tasks = mteb.filter_tasks(benchmark, task_types=["Retrieval"])
 print(f"Found {len(retrieval_tasks)} retrieval tasks")
 
 # Run evaluation on only retrieval tasks
