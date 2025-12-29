@@ -25,6 +25,7 @@ from mteb._requires_package import (
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_implementations.colpali_models import COLPALI_CITATION
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
@@ -277,16 +278,6 @@ SAUERKRAUTLM_CITATION = """
 }
 """
 
-COLPALI_CITATION = """
-@misc{faysse2024colpali,
-  title={ColPali: Efficient Document Retrieval with Vision Language Models},
-  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C\\'eline and Colombo, Pierre},
-  year={2024},
-  eprint={2407.01449},
-  archivePrefix={arXiv},
-  primaryClass={cs.IR}
-}
-"""
 
 
 # =============================================================================
@@ -301,6 +292,7 @@ slm_colqwen3_1_7b_turbo = ModelMeta(
     revision="19c295a18e057d6d82754f627c09408117ffdb66",
     release_date="2025-12-20",
     modalities=["image", "text"],
+    model_type=["late-interaction"],
     n_parameters=1_700_000_000,
     memory_usage_mb=3400,
     max_tokens=262144,
@@ -326,6 +318,7 @@ slm_colqwen3_2b = ModelMeta(
     revision="48f699713c10af754684e12060a2af9266462cc9",
     release_date="2025-12-20",
     modalities=["image", "text"],
+    model_type=["late-interaction"],
     n_parameters=2_200_000_000,
     memory_usage_mb=4400,
     max_tokens=262144,
@@ -351,6 +344,7 @@ slm_colqwen3_4b = ModelMeta(
     revision="b635fbb3ab145f07608ed10a85def33544de1723",
     release_date="2025-12-20",
     modalities=["image", "text"],
+    model_type=["late-interaction"],
     n_parameters=4_000_000_000,
     memory_usage_mb=8000,
     max_tokens=262144,
@@ -376,6 +370,7 @@ slm_colqwen3_8b = ModelMeta(
     revision="36ac136e451a7b8d8229725d69d4ec23aa4f03c8",
     release_date="2025-12-20",
     modalities=["image", "text"],
+    model_type=["late-interaction"],
     n_parameters=8_000_000_000,
     memory_usage_mb=16000,
     max_tokens=262144,
@@ -406,6 +401,7 @@ slm_collfm2_450m = ModelMeta(
     revision="a65223fd6633f331ccff4483e47575c3c620dc60",
     release_date="2025-12-20",
     modalities=["image", "text"],
+    model_type=["late-interaction"],
     n_parameters=450_000_000,
     memory_usage_mb=900,
     max_tokens=32768,
@@ -436,6 +432,7 @@ slm_colministral3_3b = ModelMeta(
     revision="54aa3ffbbce20471fdcc4afc07d13989c65e71b8",
     release_date="2025-12-20",
     modalities=["image", "text"],
+    model_type=["late-interaction"],
     n_parameters=3_000_000_000,
     memory_usage_mb=6000,
     max_tokens=262144,
