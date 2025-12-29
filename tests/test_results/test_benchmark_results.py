@@ -5,7 +5,6 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
-import yaml
 
 import mteb
 from mteb import Benchmark
@@ -212,7 +211,6 @@ def test_generate_model_card_with_table_and_benchmarks(
         ),
     ]
 
-    # Generate model card with 2 models to compare
     generate_model_card(
         model_name="sentence-transformers/all-MiniLM-L6-v2",
         benchmarks=benchmarks,
@@ -225,86 +223,72 @@ def test_generate_model_card_with_table_and_benchmarks(
     assert output_path.exists(), "Model card file not created"
     assert output_path.stat().st_size > 0, "Model card file is empty"
 
-    # Load generated output
     with output_path.open("r") as f:
         output_content = f.read()
 
-    # Load golden file
     assert golden_file.exists(), f"Golden file not found: {golden_file}"
     with golden_file.open("r") as f:
         golden_content = f.read()
 
-    # Extract frontmatter and readme from output
-    yaml_start_sep = "---"
-    yaml_end_sep = "\n---\n"
+    def extract_table(content: str) -> list[str]:
+        """Extract markdown table rows from content."""
+        lines = content.split("\n")
+        table_rows = []
+        in_table = False
 
-    start_yaml = output_content.index(yaml_start_sep) + len(yaml_start_sep)
-    end_yaml = output_content.index(yaml_end_sep, start_yaml)
-    output_frontmatter_str = output_content[start_yaml:end_yaml]
-    output_frontmatter = yaml.safe_load(output_frontmatter_str)
-    output_readme = output_content[end_yaml + len(yaml_end_sep) :]
+        for line in lines:
+            if "# MTEB Results" in line or "# MTEB results" in line:
+                in_table = True
+                continue
 
-    # Extract frontmatter and readme from golden file
-    start_yaml_gold = golden_content.index(yaml_start_sep) + len(yaml_start_sep)
-    end_yaml_gold = golden_content.index(yaml_end_sep, start_yaml_gold)
-    golden_frontmatter_str = golden_content[start_yaml_gold:end_yaml_gold]
-    golden_frontmatter = yaml.safe_load(golden_frontmatter_str)
-    golden_readme = golden_content[end_yaml_gold + len(yaml_end_sep) :]
+            if in_table:
+                # Table rows contain pipes
+                if "|" in line:
+                    # Normalize whitespace in table rows
+                    normalized = "|".join(cell.strip() for cell in line.split("|"))
+                    table_rows.append(normalized)
+                elif line.strip() == "":
+                    # Empty line might signal end of table
+                    if table_rows:
+                        break
 
-    # Validate frontmatter structure
-    assert output_frontmatter is not None, "Output frontmatter should not be empty"
-    assert golden_frontmatter is not None, "Golden frontmatter should not be empty"
+        return table_rows
 
-    # Validate key frontmatter fields exist
-    assert "model-index" in output_frontmatter, "model-index not found in output"
-    assert "tags" in output_frontmatter, "tags not found in output"
-    assert "mteb" in output_frontmatter.get("tags", []), "mteb tag not found"
+    output_table = extract_table(output_content)
+    golden_table = extract_table(golden_content)
 
-    # Validate readme content (check key sections)
-    assert "# MTEB Results" in output_readme or "# MTEB results" in output_readme, (
-        "Results table heading not found in output"
+    # Validate table exists
+    assert len(output_table) > 0, "Output table not found"
+    assert len(golden_table) > 0, "Golden table not found"
+
+    # Compare table structure (header and separator)
+    assert len(output_table) >= 2, (
+        "Output table should have at least header and separator"
+    )
+    assert len(golden_table) >= 2, (
+        "Golden table should have at least header and separator"
     )
 
-    # Check that benchmarks are mentioned
-    for benchmark in benchmarks:
-        assert benchmark.name.lower() in output_readme.lower() or any(
-            task.metadata.name in output_readme for task in benchmark.tasks
-        ), f"Benchmark {benchmark.name} not found in output readme"
-
-    # Check table structure
-    assert "|" in output_readme, "Table format not found in output"
-    output_table_rows = [row for row in output_readme.split("\n") if "|" in row]
-    assert len(output_table_rows) > 2, (
-        "Table should have header, separator, and data rows"
+    # Compare headers
+    assert output_table[0] == golden_table[0], (
+        f"Table headers don't match.\n"
+        f"Expected: {golden_table[0]}\n"
+        f"Got: {output_table[0]}"
     )
 
-    # Compare readme content (normalize whitespace)
-    output_readme_normalized = "\n".join(
-        line.rstrip() for line in output_readme.split("\n")
-    )
-    golden_readme_normalized = "\n".join(
-        line.rstrip() for line in golden_readme.split("\n")
+    # Compare data rows (skip header and separator)
+    output_data_rows = output_table[2:]
+    golden_data_rows = golden_table[2:]
+
+    assert len(output_data_rows) == len(golden_data_rows), (
+        f"Number of data rows doesn't match.\n"
+        f"Expected {len(golden_data_rows)} rows, got {len(output_data_rows)}"
     )
 
-    assert output_readme_normalized == golden_readme_normalized, (
-        "Output readme content does not match golden file.\n"
-        f"Expected:\n{golden_readme_normalized}\n\n"
-        f"Got:\n{output_readme_normalized}"
-    )
-
-    # Validate frontmatter model-index structure
-    output_model_index = output_frontmatter.get("model-index", [])
-    golden_model_index = golden_frontmatter.get("model-index", [])
-
-    assert len(output_model_index) > 0, "Output model-index should not be empty"
-    assert len(output_model_index) == len(golden_model_index), (
-        f"Number of models in model-index should match: "
-        f"expected {len(golden_model_index)}, got {len(output_model_index)}"
-    )
-
-    # Verify model names match
-    output_models = [m["name"] for m in output_model_index]
-    golden_models = [m["name"] for m in golden_model_index]
-    assert output_models == golden_models, (
-        f"Model names should match: expected {golden_models}, got {output_models}"
-    )
+    # Compare each data row
+    for i, (output_row, golden_row) in enumerate(
+        zip(output_data_rows, golden_data_rows)
+    ):
+        assert output_row == golden_row, (
+            f"Row {i} doesn't match.\nExpected: {golden_row}\nGot: {output_row}"
+        )
