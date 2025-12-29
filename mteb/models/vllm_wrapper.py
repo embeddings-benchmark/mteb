@@ -18,6 +18,8 @@ from mteb.types import Array, BatchedInput, PromptType
 
 if TYPE_CHECKING:
     from vllm.config import PoolerConfig  # type: ignore[import-not-found]
+else:
+    PoolerConfig = dict[str, Any]
 
 logger = logging.getLogger(__name__)
 
