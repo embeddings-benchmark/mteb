@@ -105,6 +105,7 @@ class ALIGNModel(AbsEncoder):
 align_base = ModelMeta(
     loader=ALIGNModel,
     name="kakaobrain/align-base",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="e96a37facc7b1f59090ece82293226b817afd6ba",
     release_date="2023-02-24",

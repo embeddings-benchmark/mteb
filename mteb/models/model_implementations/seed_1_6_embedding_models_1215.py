@@ -648,7 +648,7 @@ seed_embedding = ModelMeta(
     n_parameters=None,
     memory_usage_mb=None,
     license=None,
-    reference="https://seed1-6-embedding-1215.github.io/",
+    reference="https://console.volcengine.com/ark/region:ark+cn-beijing/model/detail?Id=doubao-embedding-vision",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,

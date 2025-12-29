@@ -193,12 +193,13 @@ NOMIC_CITATION = """
 """
 
 nomic_embed_v1_5 = ModelMeta(
-    loader=NomicWrapper,  # type: ignore
+    loader=NomicWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v1.5",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="b0753ae76394dd36bcfb912a46018088bca48be0",
@@ -221,12 +222,13 @@ nomic_embed_v1_5 = ModelMeta(
 )
 
 nomic_embed_v1 = ModelMeta(
-    loader=NomicWrapper,  # type: ignore
+    loader=NomicWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="0759316f275aa0cb93a5b830973843ca66babcf5",
@@ -249,12 +251,13 @@ nomic_embed_v1 = ModelMeta(
 )
 
 nomic_embed_v1_ablated = ModelMeta(
-    loader=NomicWrapper,  # type: ignore
+    loader=NomicWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v1-ablated",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="7d948905c5d5d3874fa55a925d68e49dbf411e5f",
@@ -276,12 +279,13 @@ nomic_embed_v1_ablated = ModelMeta(
 )
 
 nomic_embed_v1_unsupervised = ModelMeta(
-    loader=NomicWrapper,  # type: ignore
+    loader=NomicWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v1-unsupervised",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="b53d557b15ae63852847c222d336c1609eced93c",
@@ -309,6 +313,7 @@ nomic_modern_bert_embed = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="nomic-ai/modernbert-embed-base",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="5960f1566fb7cb1adf1eb6e816639cf4646d9b12",
@@ -329,7 +334,7 @@ nomic_modern_bert_embed = ModelMeta(
     training_datasets=nomic_training_data,
     public_training_data=None,
     citation="""@misc{nussbaum2024nomic,
-      title={Nomic Embed: Training a Reproducible Long Context Text Embedder}, 
+      title={Nomic Embed: Training a Reproducible Long Context Text Embedder},
       author={Zach Nussbaum and John X. Morris and Brandon Duderstadt and Andriy Mulyar},
       year={2024},
       eprint={2402.01613},
@@ -441,12 +446,13 @@ m_languages = [
 ]
 
 nomic_embed_text_v2_moe = ModelMeta(
-    loader=NomicWrapper,  # type: ignore
+    loader=NomicWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v2-moe",
+    model_type=["dense"],
     languages=m_languages,
     open_weights=True,
     revision="1066b6599d099fbb93dfcb64f9c37a7c9e503e85",
@@ -466,12 +472,12 @@ nomic_embed_text_v2_moe = ModelMeta(
     training_datasets=None,  # did not look into this further
     superseded_by=None,
     citation="""@misc{nussbaum2025trainingsparsemixtureexperts,
-      title={Training Sparse Mixture Of Experts Text Embedding Models}, 
+      title={Training Sparse Mixture Of Experts Text Embedding Models},
       author={Zach Nussbaum and Brandon Duderstadt},
       year={2025},
       eprint={2502.07972},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2502.07972}, 
+      url={https://arxiv.org/abs/2502.07972},
 }""",
 )

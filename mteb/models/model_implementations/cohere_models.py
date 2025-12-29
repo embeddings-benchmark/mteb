@@ -222,7 +222,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
     ) -> None:
         requires_package(self, "cohere", model_name, "pip install 'mteb[cohere]'")
 
-        import cohere  # type: ignore
+        import cohere
 
         self.model_name = model_name.removeprefix("Cohere/Cohere-")
         self.sep = sep
@@ -380,6 +380,7 @@ cohere_mult_3 = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="Cohere/Cohere-embed-multilingual-v3.0",
+    model_type=["dense"],
     languages=supported_languages,
     open_weights=False,
     revision="1",
@@ -404,6 +405,7 @@ cohere_eng_3 = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="Cohere/Cohere-embed-english-v3.0",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=False,
     reference="https://cohere.com/blog/introducing-embed-v3",
@@ -428,6 +430,7 @@ cohere_mult_light_3 = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="Cohere/Cohere-embed-multilingual-light-v3.0",
+    model_type=["dense"],
     languages=supported_languages,
     open_weights=False,
     revision="1",
@@ -452,6 +455,7 @@ cohere_eng_light_3 = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="Cohere/Cohere-embed-english-light-v3.0",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=False,
     reference="https://cohere.com/blog/introducing-embed-v3",

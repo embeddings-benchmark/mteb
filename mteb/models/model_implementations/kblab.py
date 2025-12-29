@@ -4,6 +4,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 sbert_swedish = ModelMeta(
     loader=sentence_transformers_loader,  # type: ignore[arg-type]
     name="KBLab/sentence-bert-swedish-cased",
+    model_type=["dense"],
     languages=["swe-Latn"],
     open_weights=True,
     revision="6b5e83cd29c03729cfdc33d13b1423399b0efb5c",

@@ -111,6 +111,7 @@ NV_embed_v2 = ModelMeta(
         add_eos_token=True,
     ),
     name="nvidia/NV-Embed-v2",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="7604d305b621f14095a1aa23d351674c2859553a",
@@ -141,6 +142,7 @@ NV_embed_v1 = ModelMeta(
         add_eos_token=True,
     ),
     name="nvidia/NV-Embed-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="570834afd5fef5bf3a3c2311a2b6e0a66f6f4f2c",
@@ -528,6 +530,7 @@ class LlamaEmbedNemotron(AbsEncoder):
 llama_embed_nemotron_8b = ModelMeta(
     loader=LlamaEmbedNemotron,
     name="nvidia/llama-embed-nemotron-8b",
+    model_type=["dense"],
     languages=llama_embed_nemotron_evaluated_languages,
     open_weights=True,
     revision="84a375593d27d3528beb4e104822515659e093b4",
