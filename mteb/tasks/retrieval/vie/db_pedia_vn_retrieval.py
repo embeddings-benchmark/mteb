@@ -44,8 +44,8 @@ class NanoDBPediaVN(AbsTaskRetrieval):
         description="A translated dataset from DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://github.com/iai-group/DBpedia-Entity/",
         dataset={
-            "path": "GreenNode/dbpedia-vn",
-            "revision": "c3e20179fbcee16217ef9461a14a54b7faca9b63",
+            "path": "GreenNode/nano-dbpedia-vn",
+            "revision": "fa2ba2b17e4a38f0b39246270107eb2fa58ceeb6",
         },
         type="Retrieval",
         category="t2t",
