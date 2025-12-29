@@ -250,10 +250,22 @@ def test_leaderboard_cache_paths(
         mock_get_app_func.called_with_cache = cache
         return mock_app
 
+    # Mock gradio themes
+    mock_theme = MagicMock()
+    mock_font = MagicMock()
+
     # Patch the local import inside _leaderboard function
     with patch.dict(
         "sys.modules",
-        {"mteb.leaderboard": MagicMock(get_leaderboard_app=mock_get_app_func)},
+        {
+            "mteb.leaderboard": MagicMock(get_leaderboard_app=mock_get_app_func),
+            "gradio": MagicMock(
+                themes=MagicMock(
+                    Soft=MagicMock(return_value=mock_theme),
+                    GoogleFont=MagicMock(return_value=mock_font),
+                )
+            ),
+        },
     ):
         args = Namespace(
             cache_path=cache_path,
@@ -278,6 +290,8 @@ def test_leaderboard_cache_paths(
             server_name=host,
             server_port=port,
             share=share,
+            theme=mock_theme,
+            head='\n    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">\n    ',
         )
 
 
