@@ -129,10 +129,12 @@ def get_model_meta(
                 f"Model revision {revision} not found for model {model_name}. Expected {model_meta.revision}."
             )
 
-        new_meta = ModelMeta.from_hf(model_name)
-        return ModelMeta(
-            **model_meta.model_dump(), **new_meta.model_dump(exclude_none=True)
-        )
+        if compute_missing and fetch_from_hf:
+            new_meta = ModelMeta.from_hf(model_name)
+            return ModelMeta(
+                **model_meta.model_dump(), **new_meta.model_dump(exclude_none=True)
+            )
+        return model_meta
 
     if fetch_from_hf:
         logger.info(
