@@ -129,22 +129,14 @@ def get_model_meta(
                 f"Model revision {revision} not found for model {model_name}. Expected {model_meta.revision}."
             )
 
-        if compute_missing:
-            if model_meta.n_parameters is None:
-                logger.info(
-                    f"Number of parameters is missing for model '{model_name}'. Computing them now using Huggingface Hub."
-                )
-                model_meta.n_parameters = model_meta.calculate_num_parameters_from_hub()
-            if model_meta.memory_usage_mb is None:
-                logger.info(
-                    f"Memory usage is missing for model '{model_name}'. Computing them now using Huggingface Hub."
-                )
-                model_meta.memory_usage_mb = model_meta.calculate_memory_usage_mb()
-        return model_meta
+        new_meta = ModelMeta.from_hf(model_name)
+        return ModelMeta(
+            **model_meta.model_dump(), **new_meta.model_dump(exclude_none=True)
+        )
 
     if fetch_from_hf:
         logger.info(
-            "Model not found in model registry. Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
+            f"Model not found in model registry. Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
         )
         meta = ModelMeta.from_hub(model_name, revision)
         return meta
