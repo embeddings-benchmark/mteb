@@ -411,8 +411,8 @@ def _leaderboard(args: argparse.Namespace) -> None:
         logger.info(f"Using cache path: {cache_path}")
         cache = ResultCache(cache_path)
     else:
-        logger.info("Using default cache path")
         cache = ResultCache()
+        logger.info(f"Using default cache path: {cache.cache_path}")
 
     app = get_leaderboard_app(cache)
 
