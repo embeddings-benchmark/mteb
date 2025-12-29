@@ -4,6 +4,7 @@ import subprocess
 import sys
 from argparse import Namespace
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 import pytest
 import yaml
@@ -217,7 +218,6 @@ def test_leaderboard_help():
 
 def test_leaderboard_args(tmp_path: Path, monkeypatch):
     """Test leaderboard function with different arguments."""
-    from unittest.mock import MagicMock, patch
 
     # Mock the gradio app to avoid actually launching it
     mock_app = MagicMock()
@@ -244,7 +244,6 @@ def test_leaderboard_args(tmp_path: Path, monkeypatch):
 
 def test_leaderboard_custom_cache_path(tmp_path: Path):
     """Test leaderboard with custom cache path."""
-    from unittest.mock import MagicMock, patch
 
     custom_cache = tmp_path / "my_results"
     custom_cache.mkdir(exist_ok=True)
@@ -284,7 +283,6 @@ def test_leaderboard_custom_cache_path(tmp_path: Path):
 
 def test_leaderboard_default_cache():
     """Test leaderboard with default cache path."""
-    from unittest.mock import MagicMock, patch
 
     mock_app = MagicMock()
     mock_app.launch = MagicMock()
