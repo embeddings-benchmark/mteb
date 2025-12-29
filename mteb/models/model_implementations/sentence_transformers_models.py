@@ -1,5 +1,7 @@
 """Implementation of Sentence Transformers model validated in MTEB."""
 
+import numpy as np
+
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
@@ -488,13 +490,13 @@ microllama_text_embedding = ModelMeta(
 
 SENTENCE_T5_CITATION = """
 @misc{ni2021sentencet5scalablesentenceencoders,
-      title={Sentence-T5: Scalable Sentence Encoders from Pre-trained Text-to-Text Models}, 
+      title={Sentence-T5: Scalable Sentence Encoders from Pre-trained Text-to-Text Models},
       author={Jianmo Ni and Gustavo Hernández Ábrego and Noah Constant and Ji Ma and Keith B. Hall and Daniel Cer and Yinfei Yang},
       year={2021},
       eprint={2108.08877},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2108.08877}, 
+      url={https://arxiv.org/abs/2108.08877},
 }
 """
 sentence_t5_base = ModelMeta(
@@ -590,13 +592,13 @@ sentence_t5_xxl = ModelMeta(
 )
 GTR_CITATION = """
 @misc{ni2021largedualencodersgeneralizable,
-      title={Large Dual Encoders Are Generalizable Retrievers}, 
+      title={Large Dual Encoders Are Generalizable Retrievers},
       author={Jianmo Ni and Chen Qu and Jing Lu and Zhuyun Dai and Gustavo Hernández Ábrego and Ji Ma and Vincent Y. Zhao and Yi Luan and Keith B. Hall and Ming-Wei Chang and Yinfei Yang},
       year={2021},
       eprint={2112.07899},
       archivePrefix={arXiv},
       primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2112.07899}, 
+      url={https://arxiv.org/abs/2112.07899},
 }
 """
 gtr_t5_large = ModelMeta(
@@ -736,4 +738,68 @@ gtr_t5_base = ModelMeta(
         "Community QA",
     },
     citation=GTR_CITATION,
+)
+
+static_retrieval_mrl_en_v1 = ModelMeta(
+    loader=sentence_transformers_loader,
+    name="sentence-transformers/static-retrieval-mrl-en-v1",
+    revision="f60985c706f192d45d218078e49e5a8b6f15283a",
+    release_date="2024-10-24",
+    languages=["eng-Latn"],
+    n_parameters=3_125_4528,
+    memory_usage_mb=119,
+    max_tokens=np.inf,
+    embed_dim=1024,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://huggingface.co/sentence-transformers/static-retrieval-mrl-en-v1/blob/main/train.py",
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/sentence-transformers/static-retrieval-mrl-en-v1",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets={
+        "MSMARCO",
+        # gooaq
+        # s2orc
+        # allnli
+        # paq
+        # trivia-qa
+        # swim-ir-monolingual
+        # PubMedQA
+        # swim
+        "MIRACLRetrieval",
+        "MultiLongDocRetrieval",
+        "MrTidyRetrieval",
+    },
+    modalities=["text"],
+    model_type=["dense"],
+)
+
+multi_qa_mpnet_base_dot_v1 = ModelMeta(
+    loader=sentence_transformers_loader,
+    name="sentence-transformers/multi-qa-mpnet-base-dot-v1",
+    revision="3af7c6da5b3e1bea796ef6c97fe237538cbe6e7f",
+    release_date="2021-08-23",
+    languages=["eng-Latn"],
+    n_parameters=109486978,
+    memory_usage_mb=418.0,
+    max_tokens=512,
+    embed_dim=768,
+    license=None,
+    open_weights=True,
+    public_training_code="https://huggingface.co/sentence-transformers/multi-qa-mpnet-base-dot-v1/blob/main/train_script.py",
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/sentence-transformers/multi-qa-mpnet-base-dot-v1",
+    similarity_fn_name=ScoringFunction.DOT_PRODUCT,
+    use_instructions=False,
+    training_datasets={
+        "MSMARCO",
+        "YahooAnswersTopicsClassification",
+        "NQ",
+    },
+    adapted_from="microsoft/mpnet-base",
+    modalities=["text"],
+    model_type=["dense"],
 )
