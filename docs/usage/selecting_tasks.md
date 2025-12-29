@@ -25,18 +25,18 @@ You can filter benchmarks to evaluate your model on specific subsets of tasks. U
     Filter a benchmark to only include specific task types. This is useful when you want to evaluate your model on a subset of tasks:
 
     ```python
-import mteb
+    import mteb
 
-# Get the full English benchmark
-benchmark = mteb.get_benchmark("MTEB(eng, v2)")
+    # Get the full English benchmark
+    benchmark = mteb.get_benchmark("MTEB(eng, v2)")
 
-# Filter to only retrieval tasks
-retrieval_tasks = mteb.filter_tasks(benchmark, task_types=["Retrieval"])
-print(f"Found {len(retrieval_tasks)} retrieval tasks")
+    # Filter to only retrieval tasks
+    retrieval_tasks = mteb.filter_tasks(benchmark, task_types=["Retrieval"])
+    print(f"Found {len(retrieval_tasks)} retrieval tasks")
 
-# Run evaluation on only retrieval tasks
-model = mteb.get_model(...)
-results = mteb.evaluate(model, tasks=retrieval_tasks)
+    # Run evaluation on only retrieval tasks
+    model = mteb.get_model(...)
+    results = mteb.evaluate(model, tasks=retrieval_tasks)
     ```
 
     You can filter by any task type:
