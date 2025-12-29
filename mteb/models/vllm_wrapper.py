@@ -4,6 +4,7 @@ import atexit
 import gc
 import logging
 import os
+from collections.abc import Callable
 from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
@@ -34,7 +35,7 @@ class VllmWrapperBase:
 
     def __init__(
         self,
-        model: str,
+        model: str | ModelMeta,
         revision: str | None = None,
         trust_remote_code: bool = True,
         dtype: Dtype = "auto",
@@ -49,7 +50,6 @@ class VllmWrapperBase:
         hf_overrides: dict[str, Any] | None = None,
         pooler_config: PoolerConfig | None = None,
         enforce_eager: bool = False,
-        model_prompts: dict[str, str] | None = None,
         **kwargs,
     ):
         """Wrapper for vllm serving engine.
@@ -81,11 +81,6 @@ class VllmWrapperBase:
             hf_overrides: Dictionary mapping Hugging Face configuration keys to override values.
             pooler_config: Controls the behavior of output pooling in pooling models..
             enforce_eager: Whether to disable CUDA graph optimization and use eager execution.
-            model_prompts: A dictionary mapping task names to prompt names.
-                First priority is given to the composed prompt of task name + prompt type (query
-                or passage), then to the specific task prompt, then to the composed prompt of
-                task type + prompt type, then to the specific task type prompt, and finally to
-                the specific prompt type.
             **kwargs: Additional arguments to pass to the vllm serving engine model.
         """
         requires_package(
@@ -104,8 +99,15 @@ class VllmWrapperBase:
         if head_dtype is not None:
             hf_overrides["head_dtype"] = head_dtype
 
+        model_name = model if isinstance(model, str) else model.name
+        if isinstance(model, ModelMeta):
+            logger.info(
+                f"Using revision from model meta. Passed revision will be ignored"
+            )
+            revision = model.revision
+
         args = EngineArgs(
-            model=model,
+            model=model_name,
             revision=revision,
             runner="pooling",
             convert=self.convert,
@@ -124,22 +126,11 @@ class VllmWrapperBase:
             **kwargs,
         )
         self.llm = LLM(**vars(args))
-        self.model_prompts = model_prompts
 
-        self.mteb_model_meta = ModelMeta.from_hub(model=model, revision=revision)
-
-        if (
-            self.model_prompts
-            and len(self.model_prompts) <= 2
-            and (
-                PromptType.query.value not in self.model_prompts
-                or PromptType.document.value not in self.model_prompts
-            )
-        ):
-            logger.warning(
-                "Encode models use prompts most often need to be configured with at least 'query' and"
-                f" 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
-            )
+        if isinstance(model, str):
+            self.mteb_model_meta = ModelMeta.from_hub(model=model, revision=revision)
+        else:
+            self.mteb_model_meta = model
 
         atexit.register(self.cleanup)
 
@@ -164,9 +155,60 @@ class VllmWrapperBase:
 
 
 class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
-    """vLLM wrapper for Encoder models."""
+    """vLLM wrapper for Encoder models.
+
+    Args:
+        model: model name string or ModelMeta.
+        revision: The revision of the model to use.
+        prompt_dict: A dictionary mapping task names to prompt strings.
+        use_instructions: Whether to use instructions from the prompt_dict.
+            When False, values from prompt_dict are used as static prompts (prefixes).
+            When True, values from prompt_dict are used as instructions to be formatted
+            using the instruction_template.
+        instruction_template: A template or callable to format instructions.
+            Can be a string with '{instruction}' placeholder or a callable that takes
+            the instruction and prompt type and returns a formatted string.
+        apply_instruction_to_documents: Whether to apply instructions to documents prompts.
+        **kwargs: Additional arguments to pass to the vllm serving engine model.
+    """
 
     convert = "embed"
+
+    def __init__(
+        self,
+        model: str | ModelMeta,
+        revision: str | None = None,
+        prompt_dict: dict[str, str] | None = None,
+        use_instructions: bool = False,
+        instruction_template: (
+            str | Callable[[str, PromptType | None], str] | None
+        ) = None,
+        apply_instruction_to_documents: bool = True,
+        **kwargs: dict[str, Any],
+    ):
+        if use_instructions and instruction_template is None:
+            raise ValueError(
+                "To use instructions, an instruction_template must be provided. "
+                "For example, `Instruction: {instruction}`"
+            )
+
+        if (
+            isinstance(instruction_template, str)
+            and "{instruction}" not in instruction_template
+        ):
+            raise ValueError(
+                "Instruction template must contain the string '{instruction}'."
+            )
+
+        self.prompts_dict = prompt_dict
+        self.use_instructions = use_instructions
+        self.instruction_template = instruction_template
+        self.apply_instruction_to_passages = apply_instruction_to_documents
+        super().__init__(
+            model,
+            revision,
+            **kwargs,
+        )
 
     def encode(
         self,
@@ -192,8 +234,24 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
         Returns:
             The encoded sentences.
         """
-        # TODO: support task prompt
-        prompts = [text for batch in inputs for text in batch["text"]]
+        prompt = ""
+        if self.use_instructions and self.prompts_dict is not None:
+            prompt = self.get_task_instruction(task_metadata, prompt_type)
+        elif self.prompts_dict is not None:
+            prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+            prompt = self.model_prompts.get(prompt_name, "")
+
+        if self.use_instructions and self.apply_instruction_to_passages is False and prompt_type == PromptType.document:
+            logger.info(
+                f"No instruction used, because prompt type = {prompt_type.document}"
+            )
+            prompt = ""
+        else:
+            logger.info(
+                f"Using instruction: '{prompt}' for task: '{task_metadata.name}' prompt type: '{prompt_type}'"
+            )
+
+        prompts = [prompt + text for batch in inputs for text in batch["text"]]
         outputs = self.llm.encode(
             prompts, pooling_task="embed", truncate_prompt_tokens=-1
         )
@@ -205,6 +263,22 @@ class VllmCrossEncoderWrapper(VllmWrapperBase):
     """vLLM wrapper for CrossEncoder models."""
 
     convert = "classify"
+
+    def __init__(
+        self,
+        model: str | ModelMeta,
+        revision: str | None = None,
+        query_prefix: str = "",
+        document_prefix: str = "",
+        **kwargs: dict[str, Any],
+    ):
+        super().__init__(
+            model,
+            revision,
+            **kwargs,
+        )
+        self.query_prefix = query_prefix
+        self.document_prefix = document_prefix
 
     def predict(
         self,
@@ -232,10 +306,12 @@ class VllmCrossEncoderWrapper(VllmWrapperBase):
         Returns:
             The predicted relevance scores for each inputs pair.
         """
-        queries = [text for batch in inputs1 for text in batch["text"]]
-        corpus = [text for batch in inputs2 for text in batch["text"]]
-
-        # TODO: support task prompt
+        queries = [
+            self.query_prefix + text for batch in inputs1 for text in batch["text"]
+        ]
+        corpus = [
+            self.document_prefix + text for batch in inputs2 for text in batch["text"]
+        ]
         # TODO: support score prompt
 
         outputs = self.llm.score(
