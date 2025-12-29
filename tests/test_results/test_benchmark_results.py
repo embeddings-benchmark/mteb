@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
+import yaml
 
 import mteb
 from mteb import Benchmark
@@ -190,99 +191,120 @@ def test_benchmark_results(cache_path: Path) -> None:
     assert df.at[0, "Mean (Task)"] == pytest.approx(0.616616)
 
 
-@pytest.fixture
-def temp_output(tmp_path) -> Path:
-    return tmp_path / "model_card.md"
-
-
-def test_generate_model_card_with_tasks(cache_path: Path, temp_output: Path) -> None:
-    """Test generating model card with tasks."""
-    tasks = [mteb.get_task("STS12"), mteb.get_task("Banking77Classification")]
-
-    generate_model_card(
-        model_name="sentence-transformers/all-MiniLM-L6-v2",
-        tasks=tasks,
-        results_cache=ResultCache(cache_path),
-        output_path=temp_output,
-    )
-
-    assert temp_output.exists(), "Model card file not created"
-    content = temp_output.read_text()
-    assert "---" in content, "YAML frontmatter not found"
-    assert "model-index" in content, "Model index not found in frontmatter"
-
-
-def test_generate_model_card_with_benchmarks(
-    cache_path: Path, temp_output: Path
+def test_generate_model_card_with_table_and_benchmarks(
+    cache_path: Path, tmp_path: Path
 ) -> None:
-    """Test generating model card with multiple benchmarks."""
+    """Test generating model card with results table for multiple benchmarks and models."""
+    test_folder = Path(__file__).parent.parent
+    golden_files_path = test_folder / "create_meta"
+    output_path = tmp_path / "model_card_benchmark.md"
+    golden_file = golden_files_path / "model_card_benchmark_gold.md"
+
+    # Create benchmarks
     benchmarks = [
         Benchmark(
-            name="TestBenchmark1",
-            tasks=mteb.get_tasks(["STS12"]),
+            name="STS_Benchmark",
+            tasks=mteb.get_tasks(["STS12", "STS13"]),
         ),
         Benchmark(
-            name="TestBenchmark2",
+            name="Classification_Benchmark",
             tasks=mteb.get_tasks(["Banking77Classification"]),
         ),
     ]
 
+    # Generate model card with 2 models to compare
     generate_model_card(
         model_name="sentence-transformers/all-MiniLM-L6-v2",
         benchmarks=benchmarks,
         results_cache=ResultCache(cache_path),
-        output_path=temp_output,
-    )
-
-    assert temp_output.exists(), "Model card file not created"
-    content = temp_output.read_text()
-    assert "---" in content, "YAML frontmatter not found"
-
-
-def test_generate_model_card_with_table_and_tasks(
-    cache_path: Path, temp_output: Path
-) -> None:
-    """Test generating model card with results table for tasks."""
-    tasks = [mteb.get_task("STS12"), mteb.get_task("Banking77Classification")]
-
-    generate_model_card(
-        model_name="sentence-transformers/all-MiniLM-L6-v2",
-        tasks=tasks,
-        results_cache=ResultCache(cache_path),
-        output_path=temp_output,
+        output_path=output_path,
         add_table_to_model_card=True,
+        models_to_compare=["baseline/random-encoder-baseline"],
     )
 
-    assert temp_output.exists(), "Model card file not created"
-    content = temp_output.read_text()
+    assert output_path.exists(), "Model card file not created"
+    assert output_path.stat().st_size > 0, "Model card file is empty"
 
-    assert "# MTEB Results" in content or "# MTEB results" in content, (
-        "Results table heading not found"
+    # Load generated output
+    with output_path.open("r") as f:
+        output_content = f.read()
+
+    # Load golden file
+    assert golden_file.exists(), f"Golden file not found: {golden_file}"
+    with golden_file.open("r") as f:
+        golden_content = f.read()
+
+    # Extract frontmatter and readme from output
+    yaml_start_sep = "---"
+    yaml_end_sep = "\n---\n"
+
+    start_yaml = output_content.index(yaml_start_sep) + len(yaml_start_sep)
+    end_yaml = output_content.index(yaml_end_sep, start_yaml)
+    output_frontmatter_str = output_content[start_yaml:end_yaml]
+    output_frontmatter = yaml.safe_load(output_frontmatter_str)
+    output_readme = output_content[end_yaml + len(yaml_end_sep) :]
+
+    # Extract frontmatter and readme from golden file
+    start_yaml_gold = golden_content.index(yaml_start_sep) + len(yaml_start_sep)
+    end_yaml_gold = golden_content.index(yaml_end_sep, start_yaml_gold)
+    golden_frontmatter_str = golden_content[start_yaml_gold:end_yaml_gold]
+    golden_frontmatter = yaml.safe_load(golden_frontmatter_str)
+    golden_readme = golden_content[end_yaml_gold + len(yaml_end_sep) :]
+
+    # Validate frontmatter structure
+    assert output_frontmatter is not None, "Output frontmatter should not be empty"
+    assert golden_frontmatter is not None, "Golden frontmatter should not be empty"
+
+    # Validate key frontmatter fields exist
+    assert "model-index" in output_frontmatter, "model-index not found in output"
+    assert "tags" in output_frontmatter, "tags not found in output"
+    assert "mteb" in output_frontmatter.get("tags", []), "mteb tag not found"
+
+    # Validate readme content (check key sections)
+    assert "# MTEB Results" in output_readme or "# MTEB results" in output_readme, (
+        "Results table heading not found in output"
     )
-    assert "STS12" in content or "Banking77" in content, "Task names not in content"
 
+    # Check that benchmarks are mentioned
+    for benchmark in benchmarks:
+        assert benchmark.name.lower() in output_readme.lower() or any(
+            task.metadata.name in output_readme for task in benchmark.tasks
+        ), f"Benchmark {benchmark.name} not found in output readme"
 
-def test_generate_model_card_with_table_and_benchmark(
-    cache_path: Path, temp_output: Path
-) -> None:
-    """Test generating model card with results table for benchmarks."""
-    benchmark = Benchmark(
-        name="TestBenchmark",
-        tasks=mteb.get_tasks(["STS12", "Banking77Classification"]),
+    # Check table structure
+    assert "|" in output_readme, "Table format not found in output"
+    output_table_rows = [row for row in output_readme.split("\n") if "|" in row]
+    assert len(output_table_rows) > 2, (
+        "Table should have header, separator, and data rows"
     )
 
-    generate_model_card(
-        model_name="sentence-transformers/all-MiniLM-L6-v2",
-        benchmarks=[benchmark],
-        results_cache=ResultCache(cache_path),
-        output_path=temp_output,
-        add_table_to_model_card=True,
+    # Compare readme content (normalize whitespace)
+    output_readme_normalized = "\n".join(
+        line.rstrip() for line in output_readme.split("\n")
+    )
+    golden_readme_normalized = "\n".join(
+        line.rstrip() for line in golden_readme.split("\n")
     )
 
-    assert temp_output.exists(), "Model card file not created"
-    content = temp_output.read_text()
-
-    assert "# MTEB Results" in content or "# MTEB results" in content, (
-        "Results table heading not found"
+    assert output_readme_normalized == golden_readme_normalized, (
+        "Output readme content does not match golden file.\n"
+        f"Expected:\n{golden_readme_normalized}\n\n"
+        f"Got:\n{output_readme_normalized}"
     )
-    assert len(content.split("|")) > 3, "Table should have multiple columns"
+
+    # Validate frontmatter model-index structure
+    output_model_index = output_frontmatter.get("model-index", [])
+    golden_model_index = golden_frontmatter.get("model-index", [])
+
+    assert len(output_model_index) > 0, "Output model-index should not be empty"
+    assert len(output_model_index) == len(golden_model_index), (
+        f"Number of models in model-index should match: "
+        f"expected {len(golden_model_index)}, got {len(output_model_index)}"
+    )
+
+    # Verify model names match
+    output_models = [m["name"] for m in output_model_index]
+    golden_models = [m["name"] for m in golden_model_index]
+    assert output_models == golden_models, (
+        f"Model names should match: expected {golden_models}, got {output_models}"
+    )
