@@ -15,10 +15,14 @@ def benchmark_hf(args):
         for batchsize in args.batchsize:
             for input_len in args.input_len:
                 prompt = "你" * (input_len - 2)
-                requests = [prompt for _ in range(args.num_prompts)]
-
                 inputs_batch = model.tokenizer(prompt)
                 assert len(inputs_batch["input_ids"]) == input_len
+
+                requests = []
+                half = input_len // 2
+                for i in range(args.num_prompts // 2):
+                    requests.append("你" * (input_len - half - 2))
+                    requests.append("你" * (input_len + half - 2))
 
                 start = time.perf_counter()
 
@@ -63,6 +67,5 @@ if __name__ == "__main__":
             f = executor.submit(benchmark_hf, args)
             f.result()
 
-    for dtype in ["float16", "float32"]:
-        args.dtype = dtype
-        run(args)
+    args.dtype = "float16"
+    run(args)

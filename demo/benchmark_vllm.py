@@ -31,4 +31,3 @@ if __name__ == "__main__":
     tasks = ["T2Reranking"]
 
     results = get_results(model=model, tasks=tasks)
-

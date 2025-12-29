@@ -3,25 +3,6 @@
 !!! note 
     vLLM currently only supports a limited number of models, with many model implementations having subtle differences compared to the default implementations in mteb. We are working on it. For full list of supported models you can refer to [vllm documentation](https://docs.vllm.ai/en/stable/models/supported_models/#pooling-models).
 
-## vLLM is fast with
-
-For models that use bidirectional attention, such as BERT.
-- Optimized CUDA kernels, including integration with FlashAttention and FlashInfer
-- CUDA Graphs & torch.compile for reduced overhead and accelerated execution
-- Tensor, pipeline, data and expert parallelism support for distributed inference
-- Quantizations: GPTQ, AWQ, AutoRound, INT4, INT8, and FP8 for efficient deployment
-- Continuous batching of incoming requests to maximize throughput
-- When requests of varying lengths are batched together, there is no need to pad all inputs to the length of the longest request.
-
-For models that use causal attention, such as the Qwen3 reranker. The following optimization can also be used.
-- Efficient management of attention key and value memory with PagedAttention
-- Chunked prefill
-- Prefix caching
-
-For full list of features you can refer to [vllm documentation](https://docs.vllm.ai/en/latest/features/)
-
-!!! note 
-    vllm uses flash attention by default, which does not support fp32. Therefore, it defaults to using fp16 for inference on fp32 models. Testing has shown a relatively small drop in accuracy. You can manually opt for fp32, but inference speed will be very slow.
 
 ## Installation
 
@@ -32,7 +13,9 @@ Reference: https://docs.vllm.ai/en/latest/getting_started/installation/
     uv pip install mteb[vllm]
     ```
 
-## vllm EngineArgs
+## Usage
+
+### vllm EngineArgs
 
 vLLM has a large number of parameters; here are some commonly used ones:
 
@@ -40,7 +23,7 @@ vLLM has a large number of parameters; here are some commonly used ones:
 
 For all vLLM parameters, please refer to https://docs.vllm.ai/en/latest/configuration/engine_args/.
 
-## Embedding models
+### Embedding models
 
 :::mteb.models.vllm_wrapper.VllmEncoderWrapper
 
@@ -70,7 +53,7 @@ if __name__ == "__main__":
     print(results)
 ```
 
-## Rerank models
+### Rerank models
 
 To use a cross encoder for reranking. The following code shows a two-stage run with the second stage reading results saved from the first stage.
 
@@ -133,3 +116,61 @@ if __name__ == "__main__":
     )
     print(results)
 ```
+
+## vLLM is fast with
+
+### Half-Precision Inference
+
+By default, vLLM uses Flash Attention, which only supports float16 and bfloat16 but not float32. vLLM does not optimize inference performance for float32.
+
+<img src="https://raw.githubusercontent.com/embeddings-benchmark/mteb/main/docs/images/visualizations/half_precision_Inference.png">
+
+X-axis: Throughput (request/s)
+Y-axis: Latency, Time needed for one step (ms) <- logarithmic scale
+The curve lower right is better ↘
+
+The throughput using float16 is approximately four times that of float32.
+
+!!! note 
+    |--------+------+----------+----------|
+    | Format | Bits | Exponent | Fraction |
+    |--------+------+----------+----------|
+    | float32 | 32 | 8 | 23 |
+    | float16 | 16 | 5 | 10 |
+    | bfloat16 | 16 | 8 | 7 |
+    |--------+------+----------+----------|
+
+    If the model weights are stored in float32:
+    - VLLM uses float16 for inference by default to inference a float32 model, it will keep numerical precision in most cases, for it have retains relatively more Fraction bits. However, due to the smaller Exponent part (only 5 bits), some models (e.g., the Gemma family) may risk producing NaN. VLLM maintains a list models that may cause NaN values and uses bfloat16 for inference by default.
+    - Using bfloat16 for inference avoids NaN risks because its Exponent part matches float32 with 8 bits. However, with only 7 Fraction bits, numerical precision decreases noticeably.
+    - Using float32 for inference incurs no precision loss but is about four times slower than float16/bfloat16.
+    If model weights are stored in float16 or bfloat16, vLLM defaults to using the original dtype for inference.
+    Quantization: With the advancement of open-source large models, fine-tuning of larger models for tasks like embedding and reranking is increasing. Exploring quantization methods to accelerate inference and reduce GPU memory usage may become necessary.
+
+### Unpadding
+
+By default, Sentence Transformers pads all inputs in a batch to the length of the longest one, which is undoubtedly very inefficient. VLLM avoids the use of padding entirely during inference.
+
+<img src="https://raw.githubusercontent.com/embeddings-benchmark/mteb/main/docs/images/visualizations/unpadding.png">
+
+X-axis: Throughput (request/s)
+Y-axis: Latency, Time needed for one step (ms) <- logarithmic scale
+The curve lower right is better ↘
+
+Sentence Transformers suffers a noticeable drop in speed when handling requests with varied input lengths, whereas vLLM does not.
+
+### Others
+
+For models using bidirectional attention, such as BERT, VLLM offers a range of performance optimizations:
+- Optimized CUDA kernels, including FlashAttention and FlashInfer integration
+- CUDA Graphs and torch.compile support to reduce overhead and accelerate execution
+- Support for tensor, pipeline, data, and expert parallelism for distributed inference
+- Multiple quantization schemes—GPTQ, AWQ, AutoRound, INT4, INT8, and FP8—for efficient deployment
+- Continuous batching of incoming requests to maximize throughput
+
+For causal attention models, such as the Qwen3 reranker, the following optimizations are also applicable:
+- Efficient KV cache memory management via PagedAttention
+- Chunked prefill for improved memory handling during long-context processing
+- Prefix caching to accelerate repeated prompt processing
+
+VLLM’s optimizations are primarily designed for and most effective with causal language models (generative models). For full list of features you can refer to [vllm documentation](https://docs.vllm.ai/en/latest/features/)
