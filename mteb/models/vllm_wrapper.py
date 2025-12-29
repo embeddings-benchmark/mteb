@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import atexit
 import gc
 import logging
@@ -15,13 +17,11 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 
 if TYPE_CHECKING:
-    from vllm.config import PoolerConfig
-else:
-    PoolerConfig = Any
+    from vllm.config import PoolerConfig  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 
-Dtype = Literal["half", "float16", "float", "float32", "bfloat16"]
+Dtype = Literal["half", "float16", "float", "float32", "bfloat16", "auto"]
 
 
 class VllmWrapperBase:
@@ -146,7 +146,9 @@ class VllmWrapperBase:
         if self.llm is None:
             return
 
-        from vllm.distributed import cleanup_dist_env_and_memory
+        from vllm.distributed import (
+            cleanup_dist_env_and_memory,  # type: ignore[import-not-found]
+        )
 
         self.llm = None
         gc.collect()

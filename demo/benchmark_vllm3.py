@@ -98,4 +98,3 @@ if __name__ == "__main__":
 
     args.dtype = "float16"
     run(args)
-

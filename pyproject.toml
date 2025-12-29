@@ -344,6 +344,7 @@ module = [
     "sklearn",
     "sklearn.*",
     "faiss",
+    "vllm",
 ]
 ignore_missing_imports = true
 
