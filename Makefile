@@ -73,7 +73,7 @@ leaderboard-build-test:
 
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
-	python -m mteb leaderboard
+	python -m mteb.leaderboard.app
 
 format-citations:
 	@echo "--- 🧹 Formatting citations ---"

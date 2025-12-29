@@ -3,6 +3,7 @@ import json
 import logging
 import tempfile
 import time
+import warnings
 from pathlib import Path
 from typing import Literal
 from urllib.parse import urlencode
@@ -1019,3 +1020,30 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
     total_time = time.time() - app_start
     logger.info(f"=== Leaderboard app initialization complete in {total_time:.2f}s ===")
     return demo
+
+
+if __name__ == "__main__":
+    logging.getLogger("mteb.load_results.task_results").setLevel(
+        logging.ERROR
+    )  # Warnings related to task split
+    logging.getLogger("mteb.model_meta").setLevel(
+        logging.ERROR
+    )  # Warning related to model metadata (fetch_from_hf=False)
+    logging.getLogger("mteb.load_results.benchmark_results").setLevel(
+        logging.ERROR
+    )  # Warning related to model metadata (fetch_from_hf=False)
+    warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
+
+    app = get_leaderboard_app()
+
+    head = """
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    """
+    app.launch(
+        server_name="0.0.0.0",
+        server_port=7860,
+        theme=gr.themes.Soft(
+            font=[gr.themes.GoogleFont("Roboto Mono"), "Arial", "sans-serif"],
+        ),
+        head=head,
+    )
