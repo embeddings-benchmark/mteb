@@ -1,6 +1,7 @@
 from importlib.metadata import version
 
 from mteb import types
+from mteb._evaluators import SklearnModelProtocol
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.deprecated_evaluator import MTEB
@@ -35,6 +36,7 @@ __all__ = [
     "IndexEncoderSearchProtocol",
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
+    "SklearnModelProtocol",
     "TaskMetadata",
     "TaskResult",
     "evaluate",
