@@ -472,7 +472,7 @@ class ResultCache:
     def load_results(
         self,
         models: Sequence[str] | Iterable[ModelMeta] | None = None,
-        tasks: Sequence[str] | Iterable[AbsTask] | str | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | Benchmark | str | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
         validate_and_filter: bool = False,
@@ -483,6 +483,7 @@ class ResultCache:
         Args:
             models: A list of model names to load the results for. If None it will load the results for all models.
             tasks: A list of task names to load the results for. If str is passed, then benchmark will be loaded.
+                If Benchmark is passed, then all tasks in the benchmark will be loaded.
                 If None it will load the results for all tasks.
             require_model_meta: If True it will ignore results that do not have a model_meta.json file. If false it attempt to
                 extract the model name and revision from the path.
