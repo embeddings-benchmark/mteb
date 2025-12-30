@@ -7,7 +7,35 @@ This section contains information on how to interact with the leaderboard includ
 It is possible to completely deploy the leaderboard locally or self-host it. This can e.g. be relevant for companies that might want to
 integrate build their own benchmarks or integrate custom tasks into existing benchmarks.
 
-Running the leaderboard is quite easy. Simply run:
+The leaderboard can be run in two ways:
+
+#### Using the CLI Command
+
+The easiest way to run the leaderboard is using the MTEB CLI:
+
+```bash
+mteb leaderboard
+```
+
+You can also specify a custom cache path for model results:
+
+```bash
+mteb leaderboard --cache-path results
+```
+
+Additional options:
+- `--host HOST`: Specify the host to run the server on (default: 0.0.0.0)
+- `--port PORT`: Specify the port to run the server on (default: 7860)
+- `--share`: Create a public URL for the leaderboard
+
+Example with all options:
+```bash
+mteb leaderboard --cache-path results --port 8080 --share
+```
+
+#### Using Make Command
+
+Alternatively, you can use the Makefile:
 ```bash
 make run-leaderboard
 ```
