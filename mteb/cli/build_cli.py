@@ -403,9 +403,9 @@ def _leaderboard(args: argparse.Namespace) -> None:
         from mteb.leaderboard import get_leaderboard_app
     except ImportError as e:
         raise ImportError(
-            "Seems like some dependencies are not installed. " + 
-            "You can likely install these using: `pip install mteb[leaderboard]`. " + 
-            f"{e}"
+            "Seems like some dependencies are not installed. "
+            + "You can likely install these using: `pip install mteb[leaderboard]`. "
+            + f"{e}"
         )
 
     cache_path = args.cache_path
