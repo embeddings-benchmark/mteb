@@ -171,3 +171,9 @@ def test_model_to_python():
     contacts=None,
 )"""
     )
+
+
+def test_model_meta_local_path():
+    meta = ModelMeta.from_hub("/path/to/local/model")
+    assert meta.name == "/path/to/local/model"
+    assert meta.revision == "no_revision_available"
