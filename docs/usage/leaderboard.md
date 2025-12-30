@@ -40,7 +40,7 @@ Alternatively, you can use the Makefile:
 make run-leaderboard
 ```
 
-The leaderboard requires gradio install, which can be installed using `pip install mteb[leaderboard]` and requires python >3.10.
+The leaderboard requires gradio install, which can be installed using `pip install mteb[leaderboard]` or `uv add "mteb[leaderboard]"` and requires python >3.10.
 
 ### Annotate Contamination
 

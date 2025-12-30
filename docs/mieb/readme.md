@@ -17,7 +17,11 @@ If you’re already familiar with how MTEB works, then run any benchmark, task, 
 ### Run MIEB in 2 lines via CLI
 First, install the `mieb` dependencies:
 ```sh
+# pip
 pip install mteb[image]
+
+# or uv
+uv add "mteb[image]"
 ```
 
 Then, run the multilingual benchmark with a selected model, e.g. CLIP:
