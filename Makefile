@@ -71,6 +71,10 @@ leaderboard-build-test:
 	@echo "--- 🚀 Running leaderboard build test ---"
 	uv run --group test --extra leaderboard pytest -n auto -m leaderboard_stability
 
+leaderboard-test-all:
+	@echo "--- 🧪 Running all leaderboard tests ---"
+	uv run --group test --extra leaderboard pytest tests/test_leaderboard/ -v
+
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
 	uv run --extra leaderboard python -m mteb.leaderboard.app
