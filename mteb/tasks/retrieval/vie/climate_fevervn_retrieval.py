@@ -45,7 +45,7 @@ class NanoClimateFEVERVN(AbsTaskRetrieval):
         reference="https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html",
         dataset={
             "path": "GreenNode/nano-climate-fever-vn",
-            "revision": "1f56a588b2a532ab7d41ccc440afdec7950d76f5",
+            "revision": "1852e852f07403d4529a8520d52b91ff6d57869b",
         },
         type="Retrieval",
         category="t2t",
@@ -70,5 +70,8 @@ class NanoClimateFEVERVN(AbsTaskRetrieval):
   year = {2025},
 }
 """,
+        prompt={
+            "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
+        },
         adapted_from=["ClimateFEVER-VN"],
     )

@@ -43,7 +43,7 @@ class NanoNQVN(AbsTaskRetrieval):
         name="NanoNQ-VN",
         dataset={
             "path": "GreenNode/nano-nq-vn",
-            "revision": "5b66075af941f620cf9860c10a002a29c5fa79ba",
+            "revision": "1ad4d6556fe0e5314994839089ce070fb0db8b19",
         },
         description="A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://ai.google.com/research/NaturalQuestions/",
@@ -70,5 +70,8 @@ class NanoNQVN(AbsTaskRetrieval):
   year = {2025},
 }
 """,
+        prompt={
+            "query": "Given a question, retrieve Wikipedia passages that answer the question"
+        },
         adapted_from=["NQ-VN"],
     )

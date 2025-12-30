@@ -43,7 +43,7 @@ class NanoHotpotQAVN(AbsTaskRetrieval):
         name="NanoHotpotQA-VN",
         dataset={
             "path": "GreenNode/nano-hotpotqa-vn",
-            "revision": "e36b4c1f301804f3f26f5dc81873ac4b522c295a",
+            "revision": "f4de19a2fae1a582de114e5bcd178bb262183113",
         },
         description="A translated dataset from HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://hotpotqa.github.io/",
@@ -70,5 +70,8 @@ class NanoHotpotQAVN(AbsTaskRetrieval):
   year = {2025},
 }
 """,
+        prompt={
+            "query": "Given a multi-hop question, retrieve documents that can help answer the question"
+        },
         adapted_from=["HotpotQA-VN"],
     )

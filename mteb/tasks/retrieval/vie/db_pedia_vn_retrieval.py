@@ -45,7 +45,7 @@ class NanoDBPediaVN(AbsTaskRetrieval):
         reference="https://github.com/iai-group/DBpedia-Entity/",
         dataset={
             "path": "GreenNode/nano-dbpedia-vn",
-            "revision": "fa2ba2b17e4a38f0b39246270107eb2fa58ceeb6",
+            "revision": "bbc3259bc63bf1e250d7034024092cc3230d5850",
         },
         type="Retrieval",
         category="t2t",
@@ -70,5 +70,8 @@ class NanoDBPediaVN(AbsTaskRetrieval):
   year = {2025},
 }
 """,
+        prompt={
+            "query": "Given a query, retrieve relevant entity descriptions from DBPedia"
+        },
         adapted_from=["DBPedia-VN"],
     )
