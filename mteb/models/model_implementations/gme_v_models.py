@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import torch
 from torch.utils.data import DataLoader
@@ -11,9 +11,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
-
-if TYPE_CHECKING:
-    pass
 
 logger = logging.getLogger(__name__)
 
@@ -34,13 +31,14 @@ class GmeQwen2VL(AbsEncoder):
         model_name: str,
         revision: str,
         model_path: str | None = None,
+        trust_remote_code: bool = True,
         **kwargs,
     ) -> None:
         from sentence_transformers import SentenceTransformer
 
         model_name = model_path or model_name
         self.model: SentenceTransformer = SentenceTransformer(
-            model_name, revision=revision, trust_remote_code=True, **kwargs
+            model_name, revision=revision, trust_remote_code=trust_remote_code, **kwargs
         )
         self.model.eval()
 
@@ -136,11 +134,14 @@ training_data = {
 
 gme_qwen2vl_2b = ModelMeta(
     loader=GmeQwen2VL,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+    ),
     name="Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
     model_type=["dense"],
     languages=["eng-Latn", "cmn-Hans"],
     open_weights=True,
-    revision="ce765ae71b8cdb208203cd8fb64a170b1b84293a",
+    revision="9cfa6413f704a7c1cf5064d240748e10c876b286",
     release_date="2024-12-24",
     modalities=["image", "text"],
     n_parameters=2_210_000_000,
@@ -160,11 +161,14 @@ gme_qwen2vl_2b = ModelMeta(
 
 gme_qwen2vl_7b = ModelMeta(
     loader=GmeQwen2VL,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+    ),
     name="Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
     model_type=["dense"],
     languages=["eng-Latn", "cmn-Hans"],
     open_weights=True,
-    revision="477027a6480f8630363be77751f169cc3434b673",
+    revision="e54cb53a76dba4895a7a2f88fc8021f3679ed4f1",
     release_date="2024-12-24",
     modalities=["image", "text"],
     n_parameters=8_290_000_000,
