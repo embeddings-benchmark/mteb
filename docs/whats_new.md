@@ -79,7 +79,9 @@ batch_input: BatchedInput = {
 
 Where `text` is a batch of texts and `list[images]` is a batch for that texts. This e.g. allows markdown documents with multiple figures like so:
 
-> As you see in the following figure figure 1 there is a correlation between A and B.
+```markdown
+> As you see in the following figure [figure 1](image_1) there is a correlation between A and B.
+```
 
 !!! Note
     More examples of new multimodal inputs you can find in [BatchedInput][mteb.types._encoder_io.BatchedInput] documentation.
