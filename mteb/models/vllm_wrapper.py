@@ -79,7 +79,7 @@ class VllmWrapperBase:
                 If None, uses the model's default setting.
             gpu_memory_utilization: Target GPU memory utilization ratio (0.0 to 1.0).
             hf_overrides: Dictionary mapping Hugging Face configuration keys to override values.
-            pooler_config: Controls the behavior of output pooling in pooling models..
+            pooler_config: Controls the behavior of output pooling in pooling models.
             enforce_eager: Whether to disable CUDA graph optimization and use eager execution.
             **kwargs: Additional arguments to pass to the vllm serving engine model.
         """
@@ -100,6 +100,7 @@ class VllmWrapperBase:
             hf_overrides["head_dtype"] = head_dtype
 
         model_name = model if isinstance(model, str) else model.name
+        assert isinstance(model_name, str)
         if isinstance(model, ModelMeta):
             logger.info(
                 "Using revision from model meta. Passed revision will be ignored"
@@ -110,7 +111,7 @@ class VllmWrapperBase:
             model=model_name,
             revision=revision,
             runner="pooling",
-            convert=self.convert,
+            convert=self.convert,  # type: ignore[arg-type]
             max_model_len=max_model_len,
             max_num_batched_tokens=max_num_batched_tokens,
             max_num_seqs=max_num_seqs,
@@ -207,7 +208,7 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
         super().__init__(
             model,
             revision,
-            **kwargs,
+            **kwargs,  # type: ignore[arg-type]
         )
 
     def encode(
@@ -237,9 +238,10 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
         prompt = ""
         if self.use_instructions and self.prompts_dict is not None:
             prompt = self.get_task_instruction(task_metadata, prompt_type)
-        elif self.prompts_dict is not None:
+        elif self.prompts_dict is not None and self.model_prompts is not None:
             prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-            prompt = self.model_prompts.get(prompt_name, "")
+            if prompt_name is not None:
+                prompt = self.model_prompts.get(prompt_name, "")
 
         if (
             self.use_instructions
@@ -279,7 +281,7 @@ class VllmCrossEncoderWrapper(VllmWrapperBase):
         super().__init__(
             model,
             revision,
-            **kwargs,
+            **kwargs,  # type: ignore[arg-type]
         )
         self.query_prefix = query_prefix
         self.document_prefix = document_prefix
