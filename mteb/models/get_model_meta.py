@@ -75,7 +75,10 @@ def get_model_metas(
 
 
 def get_model(
-    model_name: str, revision: str | None = None, **kwargs: Any
+    model_name: str,
+    revision: str | None = None,
+    device: str | None = None,
+    **kwargs: Any,
 ) -> MTEBModels:
     """A function to fetch and load model object by name.
 
@@ -85,13 +88,14 @@ def get_model(
     Args:
         model_name: Name of the model to fetch
         revision: Revision of the model to fetch
+        device: Device used to load the model
         **kwargs: Additional keyword arguments to pass to the model loader
 
     Returns:
         A model object
     """
     meta = get_model_meta(model_name, revision)
-    model = meta.load_model(**kwargs)
+    model = meta.load_model(device=device, **kwargs)
 
     if kwargs:
         logger.info(

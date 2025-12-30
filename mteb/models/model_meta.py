@@ -250,7 +250,7 @@ class ModelMeta(BaseModel):
             )
         return v
 
-    def load_model(self, **kwargs: Any) -> MTEBModels:
+    def load_model(self, device: str | None = None, **kwargs: Any) -> MTEBModels:
         """Loads the model using the specified loader function."""
         if self.loader is None:
             raise NotImplementedError(
@@ -262,6 +262,8 @@ class ModelMeta(BaseModel):
         # Allow overwrites
         _kwargs = self.loader_kwargs.copy()
         _kwargs.update(kwargs)
+        if device is not None:
+            _kwargs["device"] = device
 
         model: MTEBModels = self.loader(self.name, revision=self.revision, **_kwargs)
         model.mteb_model_meta = self  # type: ignore[misc]

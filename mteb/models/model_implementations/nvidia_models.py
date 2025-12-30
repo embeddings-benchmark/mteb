@@ -356,9 +356,7 @@ class LlamaEmbedNemotron(AbsEncoder):
         self.attn_implementation = (
             "flash_attention_2" if torch.cuda.is_available() else "eager"
         )
-        self.device = device or torch.device(
-            "cuda" if torch.cuda.is_available() else "cpu"
-        )
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.task_prompts = TASK_PROMPTS
         self.instruction_template = self._instruction_template
 

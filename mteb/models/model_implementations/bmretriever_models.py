@@ -53,7 +53,7 @@ class BMRetrieverWrapper(InstructSentenceTransformerModel):
 
         transformer = Transformer(
             model_name,
-            device,
+            device=device,
             **kwargs,
         )
         pooling = Pooling(
