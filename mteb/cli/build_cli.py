@@ -401,10 +401,11 @@ def _leaderboard(args: argparse.Namespace) -> None:
         import gradio as gr
 
         from mteb.leaderboard import get_leaderboard_app
-    except ImportError:
+    except ImportError as e:
         raise ImportError(
-            "Leaderboard dependencies are not installed. "
-            "Please install with: pip install mteb[leaderboard]"
+            "Seems like some dependencies are not installed. " + 
+            "You can likely install these using: `pip install mteb[leaderboard]`. " + 
+            f"{e}"
         )
 
     cache_path = args.cache_path
