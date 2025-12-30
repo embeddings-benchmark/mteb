@@ -41,20 +41,23 @@ def main():
     # Process output line by line
     for line in process.stdout:
         # Check if this is a BibTeX warning we want to suppress
-        if "WARNING" in line and "Inline reference to unknown key" in line:
+        if "WARNING -  Inline reference to unknown key" in line:
             bibtex_warnings_count += 1
             # Don't print BibTeX warnings
             continue
 
-        # Count other warnings
+        # Count other warnings (already excluded BibTeX warnings above)
         if line.startswith("WARNING"):
             real_warnings_count += 1
 
         # For the final "Aborted with X warnings" message, adjust it
         if "Aborted with" in line and "warnings in strict mode" in line:
             if real_warnings_count > 0:
-                # There were real warnings, print the abort message
-                print(line, end="")
+                # There were real warnings, print the abort message with adjusted count
+                print(
+                    f"\nAborted with {real_warnings_count} warnings in strict mode! (suppressed {bibtex_warnings_count} BibTeX warnings)"
+                )
+                sys.exit(1)  # Exit with failure for real warnings
             else:
                 # Only BibTeX warnings, indicate success
                 print(
