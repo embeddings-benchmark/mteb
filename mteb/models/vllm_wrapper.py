@@ -37,6 +37,7 @@ class VllmWrapperBase:
         self,
         model: str | ModelMeta,
         revision: str | None = None,
+        *,
         trust_remote_code: bool = True,
         dtype: Dtype = "auto",
         head_dtype: Literal["model"] | Dtype | None = None,
@@ -100,7 +101,7 @@ class VllmWrapperBase:
             hf_overrides["head_dtype"] = head_dtype
 
         model_name = model if isinstance(model, str) else model.name
-        assert isinstance(model_name, str)
+
         if isinstance(model, ModelMeta):
             logger.info(
                 "Using revision from model meta. Passed revision will be ignored"
@@ -185,7 +186,7 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
             str | Callable[[str, PromptType | None], str] | None
         ) = None,
         apply_instruction_to_documents: bool = True,
-        **kwargs: dict[str, Any],
+        **kwargs: Any,
     ):
         if use_instructions and instruction_template is None:
             raise ValueError(
@@ -208,7 +209,7 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
         super().__init__(
             model,
             revision,
-            **kwargs,  # type: ignore[arg-type]
+            **kwargs,
         )
 
     def encode(
@@ -238,10 +239,10 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
         prompt = ""
         if self.use_instructions and self.prompts_dict is not None:
             prompt = self.get_task_instruction(task_metadata, prompt_type)
-        elif self.prompts_dict is not None and self.model_prompts is not None:
+        elif self.prompts_dict is not None:
             prompt_name = self.get_prompt_name(task_metadata, prompt_type)
             if prompt_name is not None:
-                prompt = self.model_prompts.get(prompt_name, "")
+                prompt = self.prompts_dict.get(prompt_name, "")
 
         if (
             self.use_instructions
@@ -276,12 +277,12 @@ class VllmCrossEncoderWrapper(VllmWrapperBase):
         revision: str | None = None,
         query_prefix: str = "",
         document_prefix: str = "",
-        **kwargs: dict[str, Any],
+        **kwargs: Any,
     ):
         super().__init__(
             model,
             revision,
-            **kwargs,  # type: ignore[arg-type]
+            **kwargs,
         )
         self.query_prefix = query_prefix
         self.document_prefix = document_prefix

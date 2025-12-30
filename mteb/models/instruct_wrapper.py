@@ -40,9 +40,9 @@ def instruct_wrapper(
             self,
             model_name_or_path: str,
             mode: str,
-            instruction_template: str
-            | Callable[[str, PromptType | None], str]
-            | None = None,
+            instruction_template: (
+                str | Callable[[str, PromptType | None], str] | None
+            ) = None,
             **kwargs,
         ):
             if (
@@ -105,9 +105,9 @@ class InstructSentenceTransformerModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        instruction_template: str
-        | Callable[[str, PromptType | None], str]
-        | None = None,
+        instruction_template: (
+            str | Callable[[str, PromptType | None], str] | None
+        ) = None,
         max_seq_length: int | None = None,
         apply_instruction_to_passages: bool = True,
         padding_side: str | None = None,
