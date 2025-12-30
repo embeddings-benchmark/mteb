@@ -60,7 +60,9 @@ def get_model_metas(
             model_meta.use_instructions != use_instructions
         ):
             continue
-        if model_types_set and not model_types_set.intersection(model_meta.model_type):
+        if model_types_set is not None and not model_types_set.intersection(
+            model_meta.model_type
+        ):
             continue
 
         lower, upper = n_parameters_range

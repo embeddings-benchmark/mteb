@@ -273,7 +273,7 @@ def _cache_on_benchmark_select(benchmark_name, all_benchmark_results):
         instructions=None,
         max_model_size=MAX_MODEL_SIZE,
         zero_shot_setting="allow_all",
-        model_types=None,
+        model_types=MODEL_TYPE_CHOICES,
     )
     # Sort to ensure consistency with update_models
     initial_models = sorted(initial_models)
@@ -392,7 +392,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         instructions=None,
         max_model_size=MAX_MODEL_SIZE,
         zero_shot_setting="allow_all",
-        model_types=None,
+        model_types=MODEL_TYPE_CHOICES,
     )
     default_filtered_scores = [
         entry for entry in default_scores if entry["model_name"] in filtered_models
@@ -789,7 +789,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             instructions: bool | None,
             max_model_size: int,
             zero_shot: Literal["allow_all", "remove_unknown", "only_zero_shot"],
-            model_type_select: list[str] | None,
+            model_type_select: list[str],
         ):
             start_time = time.time()
             model_names = list({entry["model_name"] for entry in scores})
