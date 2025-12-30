@@ -5,11 +5,25 @@ import subprocess
 import sys
 import re
 import os
+import shutil
 
 
 def main():
-    # Get the path to mkdocs in the activated environment
-    mkdocs_path = "/opt/miniconda3/envs/mteb/bin/mkdocs"
+    # Find mkdocs in the current environment
+    mkdocs_path = shutil.which("mkdocs")
+    if not mkdocs_path:
+        # If mkdocs is not in PATH, try common locations
+        possible_paths = [
+            "/opt/miniconda3/envs/mteb/bin/mkdocs",
+            "mkdocs",  # Will use system PATH
+        ]
+        for path in possible_paths:
+            if os.path.exists(path) or shutil.which(path):
+                mkdocs_path = path
+                break
+        else:
+            print("ERROR: mkdocs not found. Please ensure mkdocs is installed.")
+            sys.exit(1)
 
     # Run mkdocs build with strict mode
     process = subprocess.Popen(
