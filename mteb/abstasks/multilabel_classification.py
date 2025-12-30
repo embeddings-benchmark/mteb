@@ -71,7 +71,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         label_column_name: Name of the column containing the labels.
         samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
         evaluator: Classifier to use for evaluation. Must implement the SklearnModelProtocol.
-            See :class:`~mteb._evaluators.sklearn_evaluator.SklearnModelProtocol` for full API details.
+            See [SklearnModelProtocol][mteb._evaluators.sklearn_evaluator.SklearnModelProtocol] for full API details.
     """
 
     evaluator: SklearnModelProtocol = KNeighborsClassifier(n_neighbors=5)  # type: ignore[assignment]
