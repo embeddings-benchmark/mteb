@@ -6,7 +6,7 @@ from .image.imagetext_pairclassification_evaluator import (
 )
 from .pair_classification_evaluator import PairClassificationEvaluator
 from .retrieval_evaluator import RetrievalEvaluator
-from .sklearn_evaluator import SklearnEvaluator
+from .sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
 from .text.bitext_mining_evaluator import BitextMiningEvaluator
 from .text.summarization_evaluator import (
     DeprecatedSummarizationEvaluator,
@@ -24,6 +24,7 @@ __all__ = [
     "PairClassificationEvaluator",
     "RetrievalEvaluator",
     "SklearnEvaluator",
+    "SklearnModelProtocol",
     "SummarizationEvaluator",
     "ZeroShotClassificationEvaluator",
 ]
