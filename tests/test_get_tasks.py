@@ -58,7 +58,7 @@ def test_get_tasks_filtering():
 @pytest.mark.parametrize("modalities", [["text"], ["image"], None])
 def test_mteb_mteb_tasks(
     script: list[str],
-    task_types: list[TaskType] | None,  # type: ignore
+    task_types: list[TaskType] | None,
     modalities: list[Modalities] | None,
 ):
     tasks = mteb.get_tasks(script=script, task_types=task_types, modalities=modalities)

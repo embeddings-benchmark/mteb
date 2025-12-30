@@ -4,6 +4,7 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 arabic_triplet_matryoshka = ModelMeta(
     loader=sentence_transformers_loader,
     name="Omartificial-Intelligence-Space/Arabic-Triplet-Matryoshka-V2",
+    model_type=["dense"],
     languages=["ara-Arab"],
     open_weights=True,
     revision="ed357f222f0b6ea6670d2c9b5a1cb93950d34200",

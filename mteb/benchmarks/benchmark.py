@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Literal
 
@@ -19,6 +19,7 @@ class Benchmark:
 
     Args:
         name: The name of the benchmark
+        aliases: Alternative names for the benchmark
         tasks: The tasks within the benchmark.
         description: A description of the benchmark, should include its intended goal and potentially a description of its construction
         reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
@@ -38,6 +39,7 @@ class Benchmark:
 
     name: str
     tasks: Sequence[AbsTask]
+    aliases: Sequence[str] = field(default_factory=tuple)
     description: str | None = None
     reference: StrURL | None = None
     citation: str | None = None
@@ -47,7 +49,7 @@ class Benchmark:
     display_name: str | None = None
     language_view: list[str] | Literal["all"] = field(default_factory=list)
 
-    def __iter__(self) -> Iterable[AbsTask]:
+    def __iter__(self) -> Iterator[AbsTask]:
         return iter(self.tasks)
 
     def __len__(self) -> int:

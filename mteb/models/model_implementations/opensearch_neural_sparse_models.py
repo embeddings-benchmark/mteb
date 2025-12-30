@@ -128,6 +128,7 @@ class SparseEncoderWrapper(AbsEncoder):
 
 opensearch_neural_sparse_encoding_doc_v3_gte = ModelMeta(
     name="opensearch-project/opensearch-neural-sparse-encoding-doc-v3-gte",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="a8abaa916125ee512a7a8f4d706d07eb0128a8e6",
@@ -153,6 +154,7 @@ opensearch_neural_sparse_encoding_doc_v3_gte = ModelMeta(
 
 opensearch_neural_sparse_encoding_doc_v3_distill = ModelMeta(
     name="opensearch-project/opensearch-neural-sparse-encoding-doc-v3-distill",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="babf71f3c48695e2e53a978208e8aba48335e3c0",
@@ -174,6 +176,7 @@ opensearch_neural_sparse_encoding_doc_v3_distill = ModelMeta(
 
 opensearch_neural_sparse_encoding_doc_v2_distill = ModelMeta(
     name="opensearch-project/opensearch-neural-sparse-encoding-doc-v2-distill",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="8921a26c78b8559d6604eb1f5c0b74c079bee38f",
@@ -196,6 +199,7 @@ opensearch_neural_sparse_encoding_doc_v2_distill = ModelMeta(
 
 opensearch_neural_sparse_encoding_doc_v2_mini = ModelMeta(
     name="opensearch-project/opensearch-neural-sparse-encoding-doc-v2-mini",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="4af867a426867dfdd744097531046f4289a32fdd",
@@ -217,6 +221,7 @@ opensearch_neural_sparse_encoding_doc_v2_mini = ModelMeta(
 
 opensearch_neural_sparse_encoding_doc_v1 = ModelMeta(
     name="opensearch-project/opensearch-neural-sparse-encoding-doc-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="98cdcbd72867c547f72f2b7b7bed9cdf9f09922d",

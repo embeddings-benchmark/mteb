@@ -7,6 +7,7 @@ from mteb.models.model_meta import ModelMeta
 
 geoembedding = ModelMeta(
     name="GeoGPT-Research-Project/GeoEmbedding",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="29803c28ea7ef6871194a8ebc85ad7bfe174928e",

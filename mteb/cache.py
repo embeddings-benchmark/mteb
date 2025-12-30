@@ -5,8 +5,9 @@ import logging
 import os
 import shutil
 import subprocess
+import warnings
 from collections import defaultdict
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import cast
 
@@ -87,9 +88,9 @@ class ResultCache:
         model_path = results_folder / model_name
 
         if model_revision is None:
-            logger.warning(
-                "model_revision is not specified, attempting to load the latest revision. To disable this behavior, specify model_revision explicitly."
-            )
+            msg = "`model_revision` is not specified, attempting to load the latest revision. To disable this behavior, specify the 'model_revision` explicitly."
+            logger.warning(msg)
+            warnings.warn(msg)
             # get revs from paths
             revisions = [p for p in model_path.glob("*") if p.is_dir()]
             if not revisions:
@@ -415,15 +416,17 @@ class ResultCache:
             shutil.rmtree(self.cache_path)
             logger.info(f"Cache directory {self.cache_path} cleared.")
         else:
-            logger.warning(f"Cache directory {self.cache_path} does not exist.")
+            msg = f"Cache directory `{self.cache_path}` does not exist."
+            logger.warning(msg)
+            warnings.warn(msg)
 
     def __repr__(self) -> str:
         return f"ResultCache(cache_path={self.cache_path})"
 
     def get_cache_paths(
         self,
-        models: Sequence[str] | Sequence[ModelMeta] | None = None,
-        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        models: Sequence[str] | Iterable[ModelMeta] | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
     ) -> list[Path]:
@@ -556,7 +559,7 @@ class ResultCache:
     @staticmethod
     def _filter_paths_by_model_and_revision(
         paths: list[Path],
-        models: Sequence[str] | Sequence[ModelMeta] | None = None,
+        models: Sequence[str] | Iterable[ModelMeta] | None = None,
     ) -> list[Path]:
         """Filter a list of paths by model name and optional revision.
 
@@ -566,8 +569,9 @@ class ResultCache:
         if not models:
             return paths
 
-        if isinstance(models[0], ModelMeta):
-            models = cast(list[ModelMeta], models)
+        first_model = next(iter(models))
+        if isinstance(first_model, ModelMeta):
+            models = cast(Iterable[ModelMeta], models)
             name_and_revision = {
                 (m.model_name_as_path(), m.revision or "no_revision_available")
                 for m in models
@@ -578,13 +582,14 @@ class ResultCache:
                 if (p.parent.parent.name, p.parent.name) in name_and_revision
             ]
 
-        model_names = {m.replace("/", "__").replace(" ", "_") for m in models}
+        str_models = cast(Sequence[str], models)
+        model_names = {m.replace("/", "__").replace(" ", "_") for m in str_models}
         return [p for p in paths if p.parent.parent.name in model_names]
 
     @staticmethod
     def _filter_paths_by_task(
         paths: list[Path],
-        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
     ) -> list[Path]:
         if tasks is not None:
             task_names = set()
@@ -600,8 +605,8 @@ class ResultCache:
 
     def load_results(
         self,
-        models: Sequence[str] | Sequence[ModelMeta] | None = None,
-        tasks: Sequence[str] | Sequence[AbsTask] | Benchmark | str | None = None,
+        models: Sequence[str] | Iterable[ModelMeta] | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | Benchmark | str | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
         validate_and_filter: bool = False,
@@ -612,6 +617,7 @@ class ResultCache:
         Args:
             models: A list of model names to load the results for. If None it will load the results for all models.
             tasks: A list of task names to load the results for. If str is passed, then benchmark will be loaded.
+                If Benchmark is passed, then all tasks in the benchmark will be loaded.
                 If None it will load the results for all tasks.
             require_model_meta: If True it will ignore results that do not have a model_meta.json file. If false it attempt to
                 extract the model name and revision from the path.
@@ -645,7 +651,7 @@ class ResultCache:
         )
         models_results = defaultdict(list)
 
-        task_names = {}
+        task_names: dict[str, AbsTask | None] = {}
         if tasks is not None:
             for task in tasks:
                 if isinstance(task, AbsTask):
@@ -663,9 +669,11 @@ class ResultCache:
             )
 
             if validate_and_filter:
-                task = task_names[task_result.task_name]
+                task_instance = task_names[task_result.task_name]
                 try:
-                    task_result = task_result.validate_and_filter_scores(task=task)
+                    task_result = task_result.validate_and_filter_scores(
+                        task=task_instance
+                    )
                 except Exception as e:
                     logger.info(
                         f"Validation failed for {task_result.task_name} in {model_name} {revision}: {e}"
@@ -675,7 +683,7 @@ class ResultCache:
             models_results[(model_name, revision)].append(task_result)
 
         # create BenchmarkResults object
-        models_results = [
+        models_results_object = [
             ModelResult(
                 model_name=model_name,
                 model_revision=revision,
@@ -684,9 +692,7 @@ class ResultCache:
             for (model_name, revision), task_results in models_results.items()
         ]
 
-        benchmark_results = BenchmarkResults(
-            model_results=models_results,
+        return BenchmarkResults(
+            model_results=models_results_object,
             benchmark=tasks if isinstance(tasks, Benchmark) else None,
         )
-
-        return benchmark_results
