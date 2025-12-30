@@ -76,21 +76,21 @@ class GmeQwen2VL(AbsEncoder):
                 # Fused-modal: both text and image
                 for text, image in zip(batch["text"], batch["image"]):
                     item = {"text": text, "image": image}
-                    if instruction and prompt_type == PromptType.query:
+                    if instruction:
                         item["prompt"] = instruction
                     batch_inputs.append(item)
             elif has_text:
                 # Text-only
                 for text in batch["text"]:
                     item = {"text": text}
-                    if instruction and prompt_type == PromptType.query:
+                    if instruction:
                         item["prompt"] = instruction
                     batch_inputs.append(item)
             elif has_image:
                 # Image-only
                 for image in batch["image"]:
                     item = {"image": image}
-                    if instruction and prompt_type == PromptType.query:
+                    if instruction:
                         item["prompt"] = instruction
                     batch_inputs.append(item)
             else:
