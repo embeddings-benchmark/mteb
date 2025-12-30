@@ -40,6 +40,7 @@ def instruct_wrapper(
             self,
             model_name_or_path: str,
             mode: str,
+            device: str | None = None,
             instruction_template: str
             | Callable[[str, PromptType | None], str]
             | None = None,
@@ -63,7 +64,12 @@ def instruct_wrapper(
                 )
 
             self.instruction_template = instruction_template
-            super().__init__(model_name_or_path=model_name_or_path, mode=mode, **kwargs)
+            super().__init__(
+                model_name_or_path=model_name_or_path,
+                mode=mode,
+                device=device,
+                **kwargs,
+            )
 
         def encode(
             self,
@@ -105,6 +111,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
+        device: str | None = None,
         instruction_template: str
         | Callable[[str, PromptType | None], str]
         | None = None,
@@ -122,6 +129,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         Arguments:
             model_name: Model name of the sentence transformers model.
             revision: Revision of the sentence transformers model.
+            device: Device used to load the model.
             instruction_template: Model template. Should contain the string '{instruction}'.
             max_seq_length: Maximum sequence length. If None, the maximum sequence length will be read from the model config.
             apply_instruction_to_passages: Whether to apply the instruction template to the passages.
@@ -158,7 +166,9 @@ class InstructSentenceTransformerModel(AbsEncoder):
         kwargs.setdefault("tokenizer_kwargs", {}).update(tokenizer_params)
 
         self.model_name = model_name
-        self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
+        self.model = SentenceTransformer(
+            model_name, revision=revision, device=device, **kwargs
+        )
         if max_seq_length:
             # https://github.com/huggingface/sentence-transformers/issues/3575
             self.model.max_seq_length = max_seq_length

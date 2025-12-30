@@ -49,10 +49,12 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
         "InstructionReranking",
     )
 
-    def __init__(self, model: str, *args, **kwargs: Any) -> None:
+    def __init__(
+        self, model: str, device: str | None = None, *args, **kwargs: Any
+    ) -> None:
         from transformers import AutoConfig
 
-        super().__init__(model, *args, **kwargs)
+        super().__init__(model, device=device, *args, **kwargs)
         model_config = AutoConfig.from_pretrained(model, trust_remote_code=True)
         self.max_sentences = model_config.transductive_corpus_size
 
