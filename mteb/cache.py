@@ -1,3 +1,5 @@
+import gzip
+import io
 import json
 import logging
 import os
@@ -8,6 +10,8 @@ from collections import defaultdict
 from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import cast
+
+import requests
 
 import mteb
 from mteb.abstasks import AbsTask
@@ -275,6 +279,136 @@ class ResultCache:
         )
 
         return results_directory
+
+    def _download_cached_results_from_branch(
+        self,
+        branch: str = "cached-data",
+        filename: str = "__cached_results.json.gz",
+        output_path: Path | None = None,
+        remote: str = "https://github.com/embeddings-benchmark/results",
+        timeout: int = 60,
+        max_size_mb: int = 500,
+    ) -> Path:
+        """Download pre-computed cached results from a specific branch.
+
+        This is significantly faster than download_from_remote() since it downloads
+        only a compressed cache file instead of cloning the entire repository.
+
+        The method performs the following steps:
+        1. Downloads a gzipped JSON file from the specified branch
+        2. Validates file size and content type
+        3. Decompresses the gzip content
+        4. Writes the decompressed JSON to disk
+
+        Args:
+            branch: Branch name to download from (default: "cached-data")
+            filename: Name of the cached results file (default: "__cached_results.json.gz")
+            output_path: Where to save the file. If None, uses mteb/leaderboard/__cached_results.json
+            remote: Base URL of the results repository
+            timeout: Request timeout in seconds (default: 60)
+            max_size_mb: Maximum allowed file size in megabytes (default: 500)
+
+        Returns:
+            Path to the downloaded and decompressed cache file
+
+        Raises:
+            requests.exceptions.RequestException: On HTTP errors
+            ValueError: On validation failures (size, content-type)
+            gzip.BadGzipFile: If content is not valid gzip
+            UnicodeDecodeError: If content cannot be decoded as UTF-8
+            PermissionError: If file cannot be written due to permissions
+            OSError: On other file system errors
+
+        Examples:
+            >>> from mteb.cache import ResultCache
+            >>> cache = ResultCache()
+            >>> # Download optimized cached results
+            >>> cache_file = cache._download_cached_results_from_branch()
+            >>> # Use custom output path
+            >>> cache_file = cache._download_cached_results_from_branch(
+            ...     output_path=Path("/tmp/my_cache.json")
+            ... )
+        """
+        if output_path is None:
+            # Default to saving in mteb/leaderboard/__cached_results.json
+            # Get the mteb package directory (parent of this file)
+            mteb_package_dir = Path(__file__).parent
+            output_path = mteb_package_dir / "leaderboard" / "__cached_results.json"
+
+        # Extract repository owner and name from the remote URL
+        # e.g., "https://github.com/embeddings-benchmark/results" -> "embeddings-benchmark/results"
+        repo_path = remote.replace("https://github.com/", "").replace(
+            "http://github.com/", ""
+        )
+
+        url = f"https://raw.githubusercontent.com/{repo_path}/{branch}/{filename}"
+        logger.info(f"Downloading cached results from {url}")
+
+        # Step 1: Download with validation
+        max_size_bytes = max_size_mb * 1024 * 1024
+
+        try:
+            response = requests.get(url, timeout=timeout)
+            response.raise_for_status()
+
+            # Validate content-type header
+            content_type = response.headers.get("content-type", "").lower()
+            expected_content_types = [
+                "application/gzip",
+                "application/octet-stream",
+                "application/x-gzip",
+            ]
+            if content_type and not any(
+                ct in content_type for ct in expected_content_types
+            ):
+                raise Exception(
+                    f"Unexpected content-type: {content_type}. Expected one of: {expected_content_types}"
+                )
+
+            # Validate file size
+            content_length = len(response.content)
+            if content_length > max_size_bytes:
+                raise ValueError(
+                    f"Downloaded file too large: {content_length} bytes (max: {max_size_bytes})"
+                )
+
+            logger.info(
+                f"HTTP request successful, content length: {content_length} bytes"
+            )
+            content = response.content
+
+        except Exception as e:
+            logger.error(f"Unexpected HTTP error: {type(e).__name__}: {e}")
+            raise e
+
+        # Step 2: Decompress gzip data
+        logger.info("Attempting gzip decompression...")
+
+        try:
+            with gzip.open(io.BytesIO(content), "rt", encoding="utf-8") as gz_file:
+                data = gz_file.read()
+            logger.info(f"Decompression successful, data length: {len(data)} chars")
+
+        except Exception as e:
+            logger.error(f"Unexpected decompression error: {type(e).__name__}: {e}")
+            raise e
+
+        # Step 3: Write to disk
+        logger.info(f"Attempting to write to: {output_path}")
+
+        # Check parent directory exists and is writable
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        try:
+            output_path.write_text(data, encoding="utf-8")
+            logger.info(
+                f"File write successful, size: {output_path.stat().st_size} bytes"
+            )
+        except Exception as e:
+            logger.error(f"Unexpected file write error: {type(e).__name__}: {e}")
+            raise e
+
+        return output_path
 
     def clear_cache(self) -> None:
         """Clear the local cache directory."""

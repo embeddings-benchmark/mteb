@@ -6,7 +6,7 @@ install:
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	pip install ".[bm25s,pylate,image,codecarbon,leaderboard,faiss-cpu]" --group dev
+	pip install ".[bm25s,pylate,image,codecarbon,faiss-cpu,leaderboard]" --group dev
 
 lint:
 	@echo "--- 🧹 Running linters ---"
@@ -69,7 +69,11 @@ dataset-load-test-pr:
 
 leaderboard-build-test:
 	@echo "--- 🚀 Running leaderboard build test ---"
-	pytest -n auto -m leaderboard_stability
+	pytest tests/test_leaderboard/test_leaderboard.py -m leaderboard_stability --log-cli-level=INFO -s -v
+
+leaderboard-test-all:
+	@echo "--- 🧪 Running all leaderboard tests ---"
+	pytest tests/test_leaderboard/ -v
 
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
