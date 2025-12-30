@@ -18,6 +18,7 @@ def instruct_wrapper(
     model_name_or_path: str,
     mode: str,
     instruction_template: str | Callable[[str, PromptType | None], str] | None = None,
+    device: str | None = None,
     **kwargs,
 ):
     """Instruct wrapper for models. Uses GritLM to pass instructions to the model.
@@ -28,6 +29,7 @@ def instruct_wrapper(
         model_name_or_path: Model name or path.
         mode: Mode of the model. Either 'query' or 'passage'.
         instruction_template: Instruction template. Should contain the string '{instruction}'.
+        device: Device used to load the model.
         **kwargs: Additional arguments to pass to the model.
     """
     requires_package(
@@ -101,7 +103,9 @@ def instruct_wrapper(
                 embeddings = embeddings.cpu().detach().float().numpy()
             return embeddings
 
-    return InstructGritLMModel(model_name_or_path, mode, instruction_template, **kwargs)
+    return InstructGritLMModel(
+        model_name_or_path, mode, instruction_template=instruction_template, **kwargs
+    )
 
 
 class InstructSentenceTransformerModel(AbsEncoder):

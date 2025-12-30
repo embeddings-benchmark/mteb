@@ -52,7 +52,7 @@ class AbsEncoder(ABC):
         task_metadata: TaskMetadata,
         prompt_type: PromptType | None,
     ) -> str | None:
-        """A wrapper function around the mol.encode method that handles the prompt_name argument and standardizes the output to a numpy array.
+        """A wrapper function around the model.encode method that handles the prompt_name argument and standardizes the output to a numpy array.
 
         The order of priorities for prompt selection are:
             1. Composed prompt of task name + prompt type
