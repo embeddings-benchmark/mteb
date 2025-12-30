@@ -23,12 +23,12 @@ lint-check:
 
 test:
 	@echo "--- 🧪 Running tests ---"
-	uv run --no-sync --group test --extra faiss-cpu pytest -n auto -m "not (test_datasets or leaderboard_stability)"
+	uv run --no-sync --group test pytest -n auto -m "not (test_datasets or leaderboard_stability)"
 
 
 test-with-coverage:
 	@echo "--- 🧪 Running tests with coverage ---"
-	uv run --no-sync --group test --extra faiss-cpu pytest -n auto --cov-report=term-missing --cov-config=pyproject.toml --cov=mteb
+	uv run --no-sync --group test pytest -n auto --cov-report=term-missing --cov-config=pyproject.toml --cov=mteb
 
 pr:
 	@echo "--- 🚀 Running requirements for a PR ---"
