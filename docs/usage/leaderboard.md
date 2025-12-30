@@ -24,13 +24,13 @@ mteb leaderboard --cache-path results
 ```
 
 Additional options:
-- `--host HOST`: Specify the host to run the server on (default: 127.0.0.1)
+- `--host HOST`: Specify the host to run the server on (default: 0.0.0.0)
 - `--port PORT`: Specify the port to run the server on (default: 7860)
 - `--share`: Create a public URL for the leaderboard
 
 Example with all options:
 ```bash
-mteb leaderboard --cache-path results --host 0.0.0.0 --port 8080 --share
+mteb leaderboard --cache-path results --port 8080 --share
 ```
 
 #### Using Make Command
