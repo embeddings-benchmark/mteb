@@ -25,7 +25,7 @@ from mteb._requires_package import (
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.model_implementations.colpali_models import COLPALI_CITATION
+from mteb.models.model_implementations.colpali_models import COLPALI_CITATION, COLPALI_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
@@ -276,7 +276,7 @@ slm_colqwen3_1_7b_turbo = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     adapted_from="Qwen/Qwen3-VL-2B-Instruct",
-    training_datasets={"vidore/colpali_train_set"},
+    training_datasets=COLPALI_TRAINING_DATA,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
@@ -301,7 +301,7 @@ slm_colqwen3_2b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     adapted_from="Qwen/Qwen3-VL-2B-Instruct",
-    training_datasets={"vidore/colpali_train_set"},
+    training_datasets=COLPALI_TRAINING_DATA,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
@@ -326,7 +326,7 @@ slm_colqwen3_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     adapted_from="Qwen/Qwen3-VL-4B-Instruct",
-    training_datasets={"vidore/colpali_train_set"},
+    training_datasets=COLPALI_TRAINING_DATA,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
@@ -351,7 +351,7 @@ slm_colqwen3_8b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     adapted_from="Qwen/Qwen3-VL-8B-Instruct",
-    training_datasets={"vidore/colpali_train_set"},
+    training_datasets=COLPALI_TRAINING_DATA,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
@@ -376,7 +376,7 @@ slm_collfm2_450m = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     adapted_from="LiquidAI/LFM2-VL-450M",
-    training_datasets={"vidore/colpali_train_set"},
+    training_datasets=COLPALI_TRAINING_DATA,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
 
@@ -401,6 +401,6 @@ slm_colministral3_3b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     adapted_from="mistralai/Ministral-3B-Instruct-2410",
-    training_datasets={"vidore/colpali_train_set"},
+    training_datasets=COLPALI_TRAINING_DATA,
     citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
 )
