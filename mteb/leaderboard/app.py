@@ -5,7 +5,7 @@ import tempfile
 import time
 import warnings
 from pathlib import Path
-from typing import Literal
+from typing import Literal, get_args
 from urllib.parse import urlencode
 
 import cachetools
@@ -29,10 +29,12 @@ from mteb.leaderboard.table import (
     apply_summary_styling_from_benchmark,
 )
 from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
+from mteb.models.model_meta import MODEL_TYPES
 
 logger = logging.getLogger(__name__)
 
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
+MODEL_TYPE_CHOICES = list(get_args(MODEL_TYPES))
 
 
 def _load_results(cache: ResultCache) -> BenchmarkResults:
@@ -187,6 +189,7 @@ def _filter_models(
     instructions: bool | None,
     max_model_size: int,
     zero_shot_setting: Literal["only_zero_shot", "allow_all", "remove_unknown"],
+    model_types: list[str] | None,
 ):
     lower, upper = 0, max_model_size
     # Setting to None, when the user doesn't specify anything
@@ -205,6 +208,7 @@ def _filter_models(
         use_instructions=instructions,
         frameworks=compatibility,
         n_parameters_range=(lower, upper),
+        model_types=model_types,
     )
 
     models_to_keep = set()
@@ -269,6 +273,7 @@ def _cache_on_benchmark_select(benchmark_name, all_benchmark_results):
         instructions=None,
         max_model_size=MAX_MODEL_SIZE,
         zero_shot_setting="allow_all",
+        model_types=MODEL_TYPE_CHOICES,
     )
     # Sort to ensure consistency with update_models
     initial_models = sorted(initial_models)
@@ -387,6 +392,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         instructions=None,
         max_model_size=MAX_MODEL_SIZE,
         zero_shot_setting="allow_all",
+        model_types=MODEL_TYPE_CHOICES,
     )
     default_filtered_scores = [
         entry for entry in default_scores if entry["model_name"] in filtered_models
@@ -583,6 +589,12 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                                     label="Model Parameters",
                                     interactive=True,
                                 )
+                            with gr.Column():
+                                model_type_select = gr.CheckboxGroup(
+                                    MODEL_TYPE_CHOICES,
+                                    value=MODEL_TYPE_CHOICES,
+                                    label="Model Type",
+                                )
 
         with gr.Tab("Summary"):
             summary_table.render()
@@ -755,7 +767,8 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             compatibility,
             instructions,
             max_model_size,
-            zero_shot: hash(
+            zero_shot,
+            model_type_select: hash(
                 (
                     id(scores),
                     hash(tuple(tasks)),
@@ -764,6 +777,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                     hash(instructions),
                     hash(max_model_size),
                     hash(zero_shot),
+                    hash(tuple(model_type_select)),
                 )
             ),
         )
@@ -775,6 +789,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             instructions: bool | None,
             max_model_size: int,
             zero_shot: Literal["allow_all", "remove_unknown", "only_zero_shot"],
+            model_type_select: list[str],
         ):
             start_time = time.time()
             model_names = list({entry["model_name"] for entry in scores})
@@ -786,6 +801,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot_setting=zero_shot,
+                model_types=model_type_select,
             )
             elapsed = time.time() - start_time
             logger.debug(f"update_models callback: {elapsed}s")
@@ -803,6 +819,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                model_type_select,
             ],
             outputs=[models],
         )
@@ -817,6 +834,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                model_type_select,
             ],
             outputs=[models],
         )
@@ -830,6 +848,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                model_type_select,
             ],
             outputs=[models],
         )
@@ -843,6 +862,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                model_type_select,
             ],
             outputs=[models],
         )
@@ -856,6 +876,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                model_type_select,
             ],
             outputs=[models],
         )
@@ -869,6 +890,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                model_type_select,
             ],
             outputs=[models],
         )
@@ -882,6 +904,21 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                model_type_select,
+            ],
+            outputs=[models],
+        )
+        model_type_select.change(
+            update_models,
+            inputs=[
+                scores,
+                task_select,
+                availability,
+                compatibility,
+                instructions,
+                max_model_size,
+                zero_shot,
+                model_type_select,
             ],
             outputs=[models],
         )
