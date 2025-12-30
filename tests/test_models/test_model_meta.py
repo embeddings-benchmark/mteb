@@ -127,6 +127,15 @@ def test_check_training_datasets_can_be_derived(model_meta: ModelMeta):
     model_meta.get_training_datasets()
 
 
+@pytest.mark.parametrize("model_type", ["dense", "cross-encoder", "late-interaction"])
+def test_get_model_metas_each_model_type(model_type):
+    """Test filtering by each individual model type."""
+    models = mteb.get_model_metas(model_types=[model_type])
+
+    for model in models:
+        assert model_type in model.model_type
+
+
 def test_loader_kwargs_persisted_in_metadata():
     model = mteb.get_model(
         "baseline/random-encoder-baseline",

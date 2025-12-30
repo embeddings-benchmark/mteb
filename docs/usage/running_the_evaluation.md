@@ -160,7 +160,11 @@ A last option is to make a [custom implementation](./defining_the_model.md#using
 The simplest way to speed up downloads is by using Huggingface's [`xet`](https://huggingface.co/blog/xet-on-the-hub). You can use this simply using:
 
 ```bash
+# pip
 pip install mteb[xet]
+
+# or uv
+uv add "mteb[xet]"
 ```
 
 For one of the larger datasets, `MrTidyRetrieval` (~15 GB), we have seen speed-ups from ~40 minutes to ~30 minutes while using `xet`.

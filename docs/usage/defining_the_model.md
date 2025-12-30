@@ -23,7 +23,7 @@ openai_models = [meta for meta in model_metas if "openai" in meta.name]
 
 !!! tip
     Some models require additional dependencies to run on MTEB. An example of such a model is the OpenAI APIs.
-    These dependencies can be installed using `pip install mteb[openai]`
+    These dependencies can be installed using `pip install mteb[openai]` or `uv add "mteb[openai]"`
 
 ## Using a Sentence Transformer Model
 
