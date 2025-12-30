@@ -1,7 +1,7 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	uv sync --extra bm25s --extra pylate --extra image --extra codecarbon --extra faiss-cpu --group dev
+	uv sync --extra bm25s --extra pylate --extra image --extra codecarbon --extra leaderboard --extra faiss-cpu --group dev
 	uv run --no-sync pre-commit install
 
 lint:
