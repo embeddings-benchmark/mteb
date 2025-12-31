@@ -56,11 +56,10 @@ jobs:
           path: ~/.cache/huggingface
           key: ${{ runner.os }}-hf
 
-      - name: Setup Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v6
+      - name: Install uv and set the Python version
+        uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
-          cache: "pip"
 
       - name: Install dependencies
         shell: bash
