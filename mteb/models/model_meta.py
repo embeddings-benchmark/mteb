@@ -56,6 +56,10 @@ FRAMEWORKS = Literal[
     "PyLate",
     "ColBERT",
     "ColPali",
+    "GGUF",
+    "safetensors",
+    "ONNX",
+    "Transformers",
 ]
 
 MODEL_TYPES = Literal["dense", "cross-encoder", "late-interaction"]
