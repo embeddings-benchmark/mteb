@@ -41,7 +41,7 @@ class ClimateFEVERVN(AbsTaskRetrieval):
 class NanoClimateFEVERVN(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoClimateFEVER-VN",
-        description="A translated dataset from CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
+        description="NanoClimateFEVERVN is a small version of A translated dataset from CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
         reference="https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html",
         dataset={
             "path": "GreenNode/nano-climate-fever-vn",
