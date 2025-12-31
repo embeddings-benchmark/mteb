@@ -130,13 +130,14 @@ def get_model_meta(
             )
 
         if compute_missing and fetch_from_hf:
+            original_meta_dict = model_meta.model_dump()
             new_meta = ModelMeta.from_hub(model_name)
             new_meta_dict = new_meta.model_dump(exclude_none=True)
 
             updates = {
                 k: v
                 for k, v in new_meta_dict.items()
-                if model_meta.model_dump().get(k) is None
+                if original_meta_dict.get(k) is None
             }
 
             if updates:
