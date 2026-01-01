@@ -46,8 +46,10 @@ class EncodecWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         import torchaudio
+        import numpy as np
 
         all_embeddings = []
+        max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
         for batch in tqdm(
             inputs,
@@ -76,22 +78,46 @@ class EncodecWrapper(AbsEncoder):
                     array = resampler(array)
 
                 array = array.squeeze()
+                
+                # Handle edge case where squeeze results in 0-dim tensor
+                if array.dim() == 0:
+                    array = array.unsqueeze(0)
+                
+                # Ensure we have at least some samples
+                if len(array) == 0:
+                    # Create a minimal silent audio if completely empty
+                    array = torch.zeros(self.sampling_rate)  # 1 second of silence
+                
+                # Encodec has multiple downsampling layers with total stride ~320
+                # Need enough samples to produce at least 1 frame in the latent space
+                # Being more conservative with 1 second minimum to ensure encoder works
+                min_samples = self.sampling_rate  # 1 second minimum
+                if len(array) < min_samples:
+                    padding = torch.zeros(min_samples - len(array))
+                    array = torch.cat([array, padding])
+                
+                # Pad or truncate to fixed length for consistent batching
+                if len(array) > max_samples:
+                    array = array[:max_samples]
+                elif len(array) < max_samples:
+                    padding = torch.zeros(max_samples - len(array))
+                    array = torch.cat([array, padding])
+                
                 audio_arrays.append(array.numpy())
 
             with torch.no_grad():
-                # Process audio through EnCodec's processor
-                max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
-
-                feature_inputs = self.processor(
-                    raw_audio=audio_arrays,
-                    sampling_rate=self.sampling_rate,
-                    return_tensors="pt",
-                    padding="max_length",
-                    max_length=max_samples,
-                ).to(self.device)
+                # Stack into batch - now all same length
+                audio_batch = np.stack(audio_arrays, axis=0)
+                
+                # Convert to tensor and move to device
+                input_values = torch.tensor(audio_batch, dtype=torch.float32).to(self.device)
+                
+                # Add channel dimension if needed (B, T) -> (B, 1, T)
+                if input_values.dim() == 2:
+                    input_values = input_values.unsqueeze(1)
 
                 # Get the latent representations directly from the encoder
-                latent = self.model.encoder(feature_inputs.input_values)
+                latent = self.model.encoder(input_values)
 
                 # Apply mean pooling over the time dimension to get fixed-size embeddings
                 embeddings = torch.mean(latent, dim=2)  # Average over time dimension
