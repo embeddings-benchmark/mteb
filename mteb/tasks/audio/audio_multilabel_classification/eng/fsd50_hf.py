@@ -8,12 +8,12 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class FSD50HFMultilingualClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
         name="FSD50K",
-        description="Multilabel Audio Classification.",
-        reference="https://huggingface.co/datasets/Chand0320/fsd50k_hf",
+        description="Multilabel Audio Classification on a subsampled version of FSD50K.",
+        reference="https://huggingface.co/datasets/mteb/fsd50k_mini",
         dataset={
-            "path": "Chand0320/fsd50k_hf",
-            "revision": "ca72d33100074e2933437e844028c941d8e8f065",
-        },  # this is actually used to download the data
+            "path": "mteb/fsd50k_mini",
+            "revision": "a574eeb10bb11d28eff83dd522151028d529551d",
+        },
         type="AudioMultilabelClassification",
         category="a2t",
         eval_splits=["test"],
@@ -22,7 +22,7 @@ class FSD50HFMultilingualClassification(AbsTaskMultilabelClassification):
         date=(
             "2020-01-01",
             "2020-01-30",
-        ),  # Estimated date when this dataset was committed, what should be the second tuple?
+        ),
         domains=["Web"],  # obtained from Freesound - online collaborative platform
         task_subtypes=["Environment Sound Classification"],
         license="cc-by-4.0",
@@ -50,17 +50,3 @@ class FSD50HFMultilingualClassification(AbsTaskMultilabelClassification):
     label_column_name: str = "labels"
     samples_per_label: int = 8
 
-    def dataset_transform(self):
-        # labels column is a string of comma separated labels, this function converts it to a list of labels
-        self.dataset = self.dataset.map(
-            lambda x: {
-                self.label_column_name: x[self.label_column_name].split(","),
-            }
-        )
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            seed=self.seed,
-            splits=self.eval_splits,
-            label=self.label_column_name,
-            n_samples=2048,
-        )
