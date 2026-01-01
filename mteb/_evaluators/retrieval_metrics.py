@@ -140,7 +140,7 @@ def calculate_pmrr(original_run, new_run, changed_qrels):
     changes = []
     for qid in changed_qrels.keys():
         if qid + "-og" not in original_run or qid + "-changed" not in new_run:
-            logging.warning(f"Query {qid} not found in the runs for calculating p-MRR")
+            logger.warning(f"Query {qid} not found in the runs for calculating p-MRR")
             continue
         original_qid_run = original_run[qid + "-og"]
         new_qid_run = new_run[qid + "-changed"]
