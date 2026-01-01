@@ -55,4 +55,7 @@ __all__ = [
     "SpokenSQuADT2ARetrieval",
     "UrbanSound8KA2TRetrieval",
     "UrbanSound8KT2ARetrieval",
+    "JamAltArtist",
+    "JamAltLyricsA2T",
+    "JamAltLyricsT2A",
 ]
