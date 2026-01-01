@@ -148,11 +148,11 @@ class MCTCTWrapper(AbsEncoder):
                 outputs = self.model(
                     input_features=feature_inputs.input_features,
                     attention_mask=feature_inputs.attention_mask,
-                    output_hidden_states=True,
+                    output_hidden_states=False, 
                     return_dict=True,
                 )
 
-                last_hidden = outputs.hidden_states[-1]
+                last_hidden = outputs.last_hidden_state
 
                 # Apply attention-masked pooling to exclude padding tokens
                 batch_size, hidden_seq_len, hidden_size = last_hidden.shape
@@ -177,6 +177,11 @@ class MCTCTWrapper(AbsEncoder):
                 masked_embeddings = last_hidden * hidden_attention_mask
                 valid_tokens = hidden_attention_mask.sum(dim=1)
                 embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
+
+                # Replace any NaNs with zeros to prevent crashes in downstream classifiers
+                embeddings = torch.where(
+                    torch.isnan(embeddings), torch.zeros_like(embeddings), embeddings
+                )
 
                 all_embeddings.append(embeddings.cpu().detach())
 
