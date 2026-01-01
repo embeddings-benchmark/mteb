@@ -9,7 +9,8 @@ from tqdm.auto import tqdm
 
 from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies, requires_package
-from mteb.models import ModelMeta
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_meta import ModelMeta
 from mteb.types import Array, BatchedInput, PromptType
 from mteb.types._encoder_io import AudioInput
 
@@ -28,7 +29,7 @@ def vggish_loader(*args, **kwargs):
     from torch_vggish_yamnet import vggish
     from torch_vggish_yamnet.input_proc import WaveformToInput
 
-    class VGGishWrapper:
+    class VGGishWrapper(AbsEncoder):
         def __init__(
             self,
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
@@ -70,7 +71,7 @@ def vggish_loader(*args, **kwargs):
                 audio = audio[..., :max_length]
 
             # Normalize to [-1.0, 1.0]
-            if audio.abs().max() > 1.0:
+            if audio.numel() > 0 and audio.abs().max() > 1.0:
                 audio = audio / audio.abs().max()
 
             # Pad to minimum length
