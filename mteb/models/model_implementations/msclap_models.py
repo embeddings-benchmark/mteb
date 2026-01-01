@@ -58,6 +58,9 @@ class MSClapWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
+        import tempfile
+
+        import soundfile as sf
         import torchaudio
 
         all_embeddings = []
@@ -66,34 +69,50 @@ class MSClapWrapper(AbsEncoder):
             inputs,
             disable=not show_progress_bar,
         ):
-            audio_arrays = []
-            for a in batch["audio"]:
-                array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate", None)
-                if sr is None:
-                    warnings.warn(
-                        f"No sampling_rate provided for an audio sample. "
-                        f"Assuming {self.sampling_rate} Hz (model default)."
+            temp_files = []
+            try:
+                for a in batch["audio"]:
+                    array = torch.tensor(a["array"], dtype=torch.float32)
+                    sr = a.get("sampling_rate", None)
+                    if sr is None:
+                        warnings.warn(
+                            f"No sampling_rate provided for an audio sample. "
+                            f"Assuming {self.sampling_rate} Hz (model default)."
+                        )
+                        sr = self.sampling_rate
+
+                    if sr != self.sampling_rate:
+                        resampler = torchaudio.transforms.Resample(
+                            orig_freq=sr, new_freq=self.sampling_rate
+                        )
+                        array = resampler(array)
+
+                    # Write to temp file - msclap expects file paths
+                    temp_file = tempfile.NamedTemporaryFile(
+                        suffix=".wav", delete=False
                     )
-                    sr = self.sampling_rate
+                    temp_files.append(temp_file.name)
+                    sf.write(temp_file.name, array.numpy(), self.sampling_rate)
 
-                if sr != self.sampling_rate:
-                    resampler = torchaudio.transforms.Resample(
-                        orig_freq=sr, new_freq=self.sampling_rate
+                with torch.no_grad():
+                    # Use the official API that expects file paths
+                    audio_features = self.model.get_audio_embeddings(
+                        temp_files, resample=False
                     )
-                    array = resampler(array)
-                audio_arrays.append(array.numpy())
+                    # Normalize embeddings
+                    audio_features = audio_features / audio_features.norm(
+                        dim=-1, keepdim=True
+                    )
+                    all_embeddings.append(audio_features.cpu().detach().numpy())
+            finally:
+                # Clean up temp files
+                import os
 
-            with torch.no_grad():
-                # Use the internal audio encoder directly
-                # [0] gives audio embeddings, [1] gives class probabilities
-                audio_features = self.model.clap.audio_encoder(audio_arrays)[0]
-
-                # Normalize embeddings
-                audio_features = audio_features / audio_features.norm(
-                    dim=-1, keepdim=True
-                )
-                all_embeddings.append(audio_features.cpu().detach().numpy())
+                for f in temp_files:
+                    try:
+                        os.unlink(f)
+                    except OSError:
+                        pass
 
         return np.vstack(all_embeddings)
 
