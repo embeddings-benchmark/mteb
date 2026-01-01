@@ -68,24 +68,26 @@ class SeamlessM4TWrapper(AbsEncoder):
                         orig_freq=sr, new_freq=self.sampling_rate
                     )
                     array = resampler(array)
-                # truncate audio
-                array = array.cpu().detach().numpy()[:max_samples]
+                # truncate audio and convert to numpy for processor
+                array = array.squeeze().cpu().detach().numpy()[:max_samples]
                 audio_arrays.append(array)
 
-                features = self.processor(
-                    audios=audio_arrays,
-                    sampling_rate=self.sampling_rate,
-                    return_tensors="pt",
-                    padding=True,
-                )
+            # Process the entire batch at once
+            features = self.processor(
+                audios=audio_arrays,
+                sampling_rate=self.sampling_rate,
+                return_tensors="pt",
+                padding=True,
+            )
 
-                input_features = features.input_features.to(self.device)
-                attention_mask = (
-                    features.attention_mask.to(self.device)
-                    if hasattr(features, "attention_mask")
-                    else None
-                )
+            input_features = features.input_features.to(self.device)
+            attention_mask = (
+                features.attention_mask.to(self.device)
+                if hasattr(features, "attention_mask")
+                else None
+            )
 
+            with torch.no_grad():
                 outputs = self.speech_encoder(
                     input_features,
                     attention_mask=attention_mask,
@@ -137,7 +139,7 @@ class SeamlessM4TWrapper(AbsEncoder):
 
                 all_embeddings.append(embeddings.cpu())
 
-        return torch.cat(all_embeddings, dim=0)
+        return torch.cat(all_embeddings, dim=0).numpy()
 
     def encode(
         self,
