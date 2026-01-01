@@ -1,6 +1,8 @@
 from sklearn.linear_model import LogisticRegression
 from sklearn.multioutput import MultiOutputClassifier
 
+from datasets import Audio, Sequence, Value
+
 from mteb.abstasks import AbsTaskMultilabelClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -18,7 +20,7 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
         },
         type="AudioClassification",
         category="a2t",
-        eval_splits=["test_5s", "test"],
+        eval_splits=["test_5s"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2025-01-01", "2025-12-31"),  # Competition year
@@ -55,6 +57,11 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
                 new_column_name=self.label_column_name,  # "labels"
             )
 
+        # Disable audio decoding initially to save RAM during transformation
+        self.dataset = self.dataset.cast_column(
+            self.input_column_name, Audio(sampling_rate=32000, decode=False)
+        )
+
         id2name = {
             0: "Gray-crowned Rosy-Finch",
             1: "White-crowned Sparrow",
@@ -81,22 +88,47 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
 
         def ids_to_names(example):
             """Convert a list of ints to a list of bird-name strings."""
+            labels = example[self.label_column_name]
+            if labels is None:
+                return {self.label_column_name: []}
             return {
                 self.label_column_name: [
-                    id2name[i] for i in example[self.label_column_name]
+                    id2name[i] for i in labels
                 ]
             }
 
-        # Apply to every split you evaluate on (e.g. "test_5s" and "test")
-        self.dataset = self.dataset.map(
-            ids_to_names,
-            num_proc=4,  # speed-up; adjust or drop if you’re low on RAM
+        # Cast to int64 to remove ClassLabel schema before mapping to strings
+        self.dataset = self.dataset.cast_column(
+            self.label_column_name, Sequence(Value("int64"))
         )
 
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            seed=self.seed,
-            splits=self.eval_splits,
-            label=self.label_column_name,
-            n_samples=2048,
+        self.dataset = self.dataset.map(
+            ids_to_names,
+            num_proc=4,
+        )
+
+        # Filter out empty labels
+        self.dataset = self.dataset.filter(
+            lambda x: x[self.label_column_name] is not None and len(x[self.label_column_name]) > 0
+        )
+
+        # Only subsample splits that are larger than n_samples to avoid division by zero
+        n_samples = 2048
+        splits_to_subsample = [
+            split for split in self.eval_splits 
+            if len(self.dataset[split]) > n_samples
+        ]
+        
+        if splits_to_subsample:
+            self.dataset = self.stratified_subsampling(
+                self.dataset,
+                seed=self.seed,
+                splits=splits_to_subsample,
+                label=self.label_column_name,
+                n_samples=n_samples,
+            )
+
+        # Enable audio decoding after subsampling and transformation
+        self.dataset = self.dataset.cast_column(
+            self.input_column_name, Audio(sampling_rate=32000, decode=True)
         )
