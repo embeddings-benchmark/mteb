@@ -35,19 +35,22 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build Docker image
+    - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
         context: .
         file: ./Dockerfile
         push: true
-        load: true
         tags: |
-          mteb-leaderboard:test
           ghcr.io/${{ github.repository }}/leaderboard:${{ github.sha }}
           ghcr.io/${{ github.repository }}/leaderboard:latest
         cache-from: type=gha
         cache-to: type=gha,mode=max
+
+    - name: Pull image for local testing
+      run: |
+        docker pull ghcr.io/${{ github.repository }}/leaderboard:${{ github.sha }}
+        docker tag ghcr.io/${{ github.repository }}/leaderboard:${{ github.sha }} mteb-leaderboard:test
 
     - name: Test container can start and run
       timeout-minutes: 6
