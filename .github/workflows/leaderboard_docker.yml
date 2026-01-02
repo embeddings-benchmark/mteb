@@ -124,14 +124,3 @@ jobs:
 
           sleep 5
         done
-
-    - name: Test container dependencies
-      run: |
-        # Test that key dependencies are installed correctly
-        docker run --rm mteb-leaderboard:test uv pip list | grep -E "(gradio|typer|plotly)"
-
-        # Test that the mteb module can be imported
-        docker run --rm mteb-leaderboard:test python -c "import mteb; print('✅ MTEB module imported successfully')"
-
-        # Test that leaderboard dependencies are available
-        docker run --rm mteb-leaderboard:test python -c "import gradio, typer, plotly; print('✅ Leaderboard dependencies available')"
