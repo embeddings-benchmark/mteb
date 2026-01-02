@@ -82,6 +82,7 @@ jobs:
         START_TIME=$(date +%s)
         STARTUP_DETECTED=false
         PROGRESS_DETECTED=false
+        INIT_COMPLETE_DETECTED=false
 
         while true; do
           CURRENT_TIME=$(date +%s)
@@ -105,8 +106,7 @@ jobs:
             # Check if we made good progress before exit
             LOGS=$(docker logs mteb-test 2>&1)
             if echo "$LOGS" | grep -q "=== Leaderboard app initialization complete" || \
-               echo "$LOGS" | grep -q "Running on.*http" || \
-               echo "$LOGS" | grep -q "Step 1/7 complete.*Loaded results"; then
+               echo "$LOGS" | grep -q "Running on.*http"; then
               echo "✅ Container completed significant startup progress successfully"
               docker rm mteb-test
               exit 0
@@ -128,16 +128,23 @@ jobs:
             STARTUP_DETECTED=true
           fi
 
-          # Check for significant progress milestones
-          if echo "$LOGS" | grep -q "Step 1/7 complete.*Loaded results"; then
-            echo "✅ Detected Step 1/7 complete - Results loaded successfully"
-            PROGRESS_DETECTED=true
-          fi
-
           # Check for full initialization complete
-          if echo "$LOGS" | grep -q "=== Leaderboard app initialization complete"; then
+          if [ "$INIT_COMPLETE_DETECTED" = "false" ] && echo "$LOGS" | grep -q "=== Leaderboard app initialization complete"; then
             echo "✅ Detected full app initialization complete!"
-            PROGRESS_DETECTED=true
+            INIT_COMPLETE_DETECTED=true
+            echo "🔄 Testing if server is responding..."
+            # Give it a moment for the server to fully start
+            sleep 3
+            # Try to ping the server
+            if curl -s --max-time 5 http://localhost:7860/ > /dev/null; then
+              echo "✅ Server is responding - container fully operational!"
+              docker stop mteb-test
+              docker rm mteb-test
+              exit 0
+            else
+              echo "⏳ Server not yet responding, continuing to wait..."
+              PROGRESS_DETECTED=true
+            fi
           fi
 
           # Check for Gradio server ready
@@ -150,7 +157,7 @@ jobs:
 
           # Show progress every 30 seconds
           if [ $((ELAPSED % 30)) -eq 0 ] && [ $ELAPSED -gt 0 ]; then
-            echo "Container still running after ${ELAPSED}s... (startup: $STARTUP_DETECTED, progress: $PROGRESS_DETECTED)"
+            echo "Container still running after ${ELAPSED}s... (startup: $STARTUP_DETECTED, init_complete: $INIT_COMPLETE_DETECTED)"
             # Show last few lines of logs for progress
             echo "$LOGS" | grep -E "(Step [0-9]/7|Starting leaderboard|initialization complete|Running on)" | tail -2
           fi
