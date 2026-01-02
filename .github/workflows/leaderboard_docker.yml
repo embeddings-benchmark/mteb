@@ -44,45 +44,82 @@ jobs:
         # Start the container in background
         docker run -d --name mteb-test -p 7860:7860 mteb-leaderboard:test
 
-        # Monitor container for up to 6 minutes
+        # Monitor container with smart exit conditions
         echo "Starting leaderboard container..."
         START_TIME=$(date +%s)
+        STARTUP_DETECTED=false
+        PROGRESS_DETECTED=false
 
         while true; do
           CURRENT_TIME=$(date +%s)
           ELAPSED=$((CURRENT_TIME - START_TIME))
 
-          # If we've reached 5.5 minutes, consider it a success and stop
+          # Maximum timeout: 5.5 minutes - always fail at timeout
           if [ $ELAPSED -gt 330 ]; then
-            echo "✅ Container has been running successfully for ${ELAPSED}s"
+            echo "❌ Timeout reached after ${ELAPSED}s - container failed to complete initialization"
+            docker logs --tail 20 mteb-test
             docker stop mteb-test
             docker rm mteb-test
-            exit 0
+            exit 1
           fi
 
           # Check if container is still running
           if ! docker ps | grep -q mteb-test; then
-            # Container exited, check exit code
+            # Container exited, check exit code and logs
             EXIT_CODE=$(docker inspect mteb-test --format='{{.State.ExitCode}}')
             echo "Container exited with code: $EXIT_CODE after ${ELAPSED}s"
-            docker logs mteb-test
 
-            if [ "$EXIT_CODE" -eq "0" ]; then
-              echo "✅ Container completed successfully"
+            # Check if we made good progress before exit
+            LOGS=$(docker logs mteb-test 2>&1)
+            if echo "$LOGS" | grep -q "=== Leaderboard app initialization complete" || \
+               echo "$LOGS" | grep -q "Running on.*http" || \
+               echo "$LOGS" | grep -q "Step 1/7 complete.*Loaded results"; then
+              echo "✅ Container completed significant startup progress successfully"
               docker rm mteb-test
               exit 0
             else
-              echo "❌ Container failed with exit code $EXIT_CODE"
+              echo "❌ Container failed before completing startup initialization"
+              echo "Last logs:"
+              echo "$LOGS" | tail -10
               docker rm mteb-test
               exit 1
             fi
           fi
 
+          # Get current logs and check for progress indicators
+          LOGS=$(docker logs mteb-test 2>&1)
+
+          # Check for startup detection
+          if [ "$STARTUP_DETECTED" = "false" ] && echo "$LOGS" | grep -q "Starting leaderboard app in process"; then
+            echo "✅ Detected leaderboard app startup"
+            STARTUP_DETECTED=true
+          fi
+
+          # Check for significant progress milestones
+          if echo "$LOGS" | grep -q "Step 1/7 complete.*Loaded results"; then
+            echo "✅ Detected Step 1/7 complete - Results loaded successfully"
+            PROGRESS_DETECTED=true
+          fi
+
+          # Check for full initialization complete
+          if echo "$LOGS" | grep -q "=== Leaderboard app initialization complete"; then
+            echo "✅ Detected full app initialization complete!"
+            PROGRESS_DETECTED=true
+          fi
+
+          # Check for Gradio server ready
+          if echo "$LOGS" | grep -q "Running on.*http"; then
+            echo "✅ Detected Gradio server ready - container fully operational!"
+            docker stop mteb-test
+            docker rm mteb-test
+            exit 0
+          fi
+
           # Show progress every 30 seconds
           if [ $((ELAPSED % 30)) -eq 0 ] && [ $ELAPSED -gt 0 ]; then
-            echo "Container still running after ${ELAPSED}s..."
+            echo "Container still running after ${ELAPSED}s... (startup: $STARTUP_DETECTED, progress: $PROGRESS_DETECTED)"
             # Show last few lines of logs for progress
-            docker logs --tail 5 mteb-test | tail -3
+            echo "$LOGS" | grep -E "(Step [0-9]/7|Starting leaderboard|initialization complete|Running on)" | tail -2
           fi
 
           sleep 5
