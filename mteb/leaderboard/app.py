@@ -1154,6 +1154,13 @@ if __name__ == "__main__":
     logging.getLogger("mteb.results.benchmark_results").setLevel(logging.ERROR)
 
     warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
+    warnings.filterwarnings("ignore", message="Could not get source model: .*")
+    warnings.filterwarnings(
+        "ignore", message="No scores data available. Returning empty DataFrame."
+    )
+    warnings.filterwarnings("ignore", message="Main score .* not found in scores")
+    warnings.filterwarnings("ignore", message=".*: Missing subsets .* for split .*")
+    warnings.filterwarnings("ignore", message=".*: Missing splits .*")
 
     app = get_leaderboard_app()
 
