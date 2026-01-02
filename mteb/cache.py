@@ -351,8 +351,20 @@ class ResultCache:
             response = requests.get(url, timeout=timeout)
             response.raise_for_status()
 
-            # Validate content-type header
+            # Check if this is a Git LFS pointer file
             content_type = response.headers.get("content-type", "").lower()
+            if (
+                content_type == "text/plain; charset=utf-8"
+                and b"git-lfs" in response.content
+            ):
+                # Try Git LFS media URL instead
+                media_url = f"https://media.githubusercontent.com/media/{repo_path}/{branch}/{filename}"
+                logger.info(f"Detected Git LFS file, trying media URL: {media_url}")
+                response = requests.get(media_url, timeout=timeout)
+                response.raise_for_status()
+                content_type = response.headers.get("content-type", "").lower()
+
+            # Validate content-type header
             expected_content_types = [
                 "application/gzip",
                 "application/octet-stream",
