@@ -69,6 +69,7 @@ leaderboard = [
     "plotly>=5.24.0,<6.0.0",
     "cachetools>=5.2.0",
     "matplotlib>=3.9.4",
+    "typer>=0.20.0",
 ]
 
 # model specific optional dependencies:

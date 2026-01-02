@@ -1,0 +1,100 @@
+name: Test Leaderboard Dockerfile
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'Dockerfile'
+      - '.github/workflows/leaderboard_docker.yml'
+      - 'pyproject.toml'
+      - 'uv.lock'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'Dockerfile'
+      - '.github/workflows/leaderboard_docker.yml'
+      - 'pyproject.toml'
+      - 'uv.lock'
+  workflow_dispatch:
+
+jobs:
+  test-dockerfile:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile
+        push: false
+        tags: mteb-leaderboard:test
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Test container can start and run
+      timeout-minutes: 6
+      run: |
+        # Start the container in background
+        docker run -d --name mteb-test -p 7860:7860 mteb-leaderboard:test
+
+        # Monitor container for up to 6 minutes
+        echo "Starting leaderboard container..."
+        START_TIME=$(date +%s)
+
+        while true; do
+          CURRENT_TIME=$(date +%s)
+          ELAPSED=$((CURRENT_TIME - START_TIME))
+
+          # If we've reached 5.5 minutes, consider it a success and stop
+          if [ $ELAPSED -gt 330 ]; then
+            echo "✅ Container has been running successfully for ${ELAPSED}s"
+            docker stop mteb-test
+            docker rm mteb-test
+            exit 0
+          fi
+
+          # Check if container is still running
+          if ! docker ps | grep -q mteb-test; then
+            # Container exited, check exit code
+            EXIT_CODE=$(docker inspect mteb-test --format='{{.State.ExitCode}}')
+            echo "Container exited with code: $EXIT_CODE after ${ELAPSED}s"
+            docker logs mteb-test
+
+            if [ "$EXIT_CODE" -eq "0" ]; then
+              echo "✅ Container completed successfully"
+              docker rm mteb-test
+              exit 0
+            else
+              echo "❌ Container failed with exit code $EXIT_CODE"
+              docker rm mteb-test
+              exit 1
+            fi
+          fi
+
+          # Show progress every 30 seconds
+          if [ $((ELAPSED % 30)) -eq 0 ] && [ $ELAPSED -gt 0 ]; then
+            echo "Container still running after ${ELAPSED}s..."
+            # Show last few lines of logs for progress
+            docker logs --tail 5 mteb-test | tail -3
+          fi
+
+          sleep 5
+        done
+
+    - name: Test container dependencies
+      run: |
+        # Test that key dependencies are installed correctly
+        docker run --rm mteb-leaderboard:test uv pip list | grep -E "(gradio|typer|plotly)"
+
+        # Test that the mteb module can be imported
+        docker run --rm mteb-leaderboard:test python -c "import mteb; print('✅ MTEB module imported successfully')"
+
+        # Test that leaderboard dependencies are available
+        docker run --rm mteb-leaderboard:test python -c "import gradio, typer, plotly; print('✅ Leaderboard dependencies available')"
