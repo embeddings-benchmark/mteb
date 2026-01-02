@@ -25,6 +25,25 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Free disk space
+      run: |
+        sudo rm -rf \
+          "$AGENT_TOOLSDIRECTORY" \
+          /opt/ghc \
+          /opt/google/chrome \
+          /opt/microsoft/msedge \
+          /opt/microsoft/powershell \
+          /opt/pipx \
+          /usr/lib/mono \
+          /usr/local/julia* \
+          /usr/local/lib/android \
+          /usr/local/lib/node_modules \
+          /usr/local/share/chromium \
+          /usr/local/share/powershell \
+          /usr/share/dotnet \
+          /usr/share/swift
+        docker system prune -af
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
