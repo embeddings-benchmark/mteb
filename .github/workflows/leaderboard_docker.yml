@@ -59,16 +59,16 @@ jobs:
       with:
         context: .
         file: ./Dockerfile
-        push: true
+        push: ${{ github.ref == 'refs/heads/main' }}
         tags: |
           ghcr.io/${{ github.repository }}/leaderboard:${{ github.sha }}
           ghcr.io/${{ github.repository }}/leaderboard:latest
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        load: true
 
-    - name: Pull image for local testing
+    - name: Prepare image for local testing
       run: |
-        docker pull ghcr.io/${{ github.repository }}/leaderboard:${{ github.sha }}
         docker tag ghcr.io/${{ github.repository }}/leaderboard:${{ github.sha }} mteb-leaderboard:test
 
     - name: Test container can start and run
