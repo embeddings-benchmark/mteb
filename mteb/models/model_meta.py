@@ -673,12 +673,9 @@ class ModelMeta(BaseModel):
 
         frameworks: list[FRAMEWORKS] = []
 
-        for tag in info.tags:
-            tag_lower = tag.lower()
-            if tag_lower in tag_to_framework.keys():
-                framework_name = tag_to_framework.get(tag_lower)
-                if framework_name and framework_name not in frameworks:
-                    frameworks.append(framework_name)
+        for framework_tag in tag_to_framework.keys():
+            if framework_tag in info.tags:
+                frameworks.append(tag_to_framework[framework_tag])
 
         return frameworks
 
