@@ -638,10 +638,12 @@ class ModelMeta(BaseModel):
         Returns:
             Frameworks supported by the model.
         """
+        if self.name is None:
+            return []
         return self._get_frameworks_from_hf_tags(self.name)
 
     @staticmethod
-    def _get_frameworks_from_hf_tags(model_name: str | None = None) -> list[FRAMEWORKS]:
+    def _get_frameworks_from_hf_tags(model_name: str) -> list[FRAMEWORKS]:
         """Extract frameworks from HuggingFace model tags.
 
         Args:
