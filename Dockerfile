@@ -7,8 +7,8 @@ ENV PATH="/home/user/.local/bin:$PATH"
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
-RUN git clone https://github.com/embeddings-benchmark/mteb.git
-RUN chown -R user:user /mteb
+# Copy the current directory contents into the container
+COPY --chown=user:user . /mteb
 
 USER user
 WORKDIR /mteb
