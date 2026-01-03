@@ -22,8 +22,8 @@ __all__ = [
     "Evaluator",
     "ImageTextPairClassificationEvaluator",
     "PairClassificationEvaluator",
-   "RetrievalEvaluator",
-   "SklearnEvaluator",
-   "SummarizationEvaluator",
+    "RetrievalEvaluator",
+    "SklearnEvaluator",
+    "SummarizationEvaluator",
     "ZeroShotClassificationEvaluator",
 ]
