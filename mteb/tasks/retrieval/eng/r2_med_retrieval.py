@@ -70,7 +70,7 @@ class R2MEDBiologyRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1) -> None:
         if self.data_loaded:
             return
 
@@ -114,7 +114,7 @@ class R2MEDBioinformaticsRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1) -> None:
         if self.data_loaded:
             return
 
@@ -158,7 +158,7 @@ class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1) -> None:
         if self.data_loaded:
             return
 
@@ -202,7 +202,7 @@ class R2MEDMedXpertQAExamRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1) -> None:
         if self.data_loaded:
             return
 
@@ -246,7 +246,7 @@ class R2MEDMedQADiagRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1) -> None:
         if self.data_loaded:
             return
 
@@ -290,7 +290,7 @@ class R2MEDPMCTreatmentRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1) -> None:
         if self.data_loaded:
             return
 
@@ -334,7 +334,7 @@ class R2MEDPMCClinicalRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1) -> None:
         if self.data_loaded:
             return
 
@@ -378,7 +378,7 @@ class R2MEDIIYiClinicalRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1) -> None:
         if self.data_loaded:
             return
 
