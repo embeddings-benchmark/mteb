@@ -37,7 +37,8 @@ pr:
 
 build-docs: build-docs-overview
 	@echo "--- 📚 Building documentation ---"
-	uv run --group docs python -m mkdocs build
+	@echo "--- 🔍 Building with strict mode ---"
+	uv run --group docs mkdocs build --strict
 
 
 build-docs-overview:
