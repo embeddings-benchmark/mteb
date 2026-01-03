@@ -62,7 +62,7 @@ Dolan, Bill},
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         _dataset = {}
         for lang in self.hf_subsets:
             _dataset[lang] = {}
