@@ -70,10 +70,10 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         input_column_name: Name of the column containing the input text.
         label_column_name: Name of the column containing the labels.
         samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
-        evaluator: Classifier to use for evaluation. Must implement the SklearnModelProtocol.
+        evaluator: Classifier to use for evaluation. Must be sklearn-compatible.
     """
 
-    evaluator: SklearnModelProtocol = KNeighborsClassifier(n_neighbors=5)  # type: ignore[assignment]
+    evaluator: SklearnModelProtocol = KNeighborsClassifier(n_neighbors=5)
     input_column_name: str = "text"
     label_column_name: str = "label"
 

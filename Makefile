@@ -37,8 +37,8 @@ pr:
 
 build-docs: build-docs-overview
 	@echo "--- 📚 Building documentation ---"
-	@echo "--- 🔍 Building with strict mode (BibTeX warnings filtered) ---"
-	uv run --group docs python scripts/build_docs_strict_filtered.py
+	@echo "--- 🔍 Building with strict mode ---"
+	uv run --group docs mkdocs build --strict
 
 
 build-docs-overview:
