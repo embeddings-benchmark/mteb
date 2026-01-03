@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import TypedDict
 
 import torch
 from datasets import Dataset
@@ -8,6 +8,7 @@ from sklearn import metrics
 
 from mteb._evaluators import ZeroShotClassificationEvaluator
 from mteb.models import EncoderProtocol, MTEBModels
+from mteb.types import EncodeKwargs
 from mteb.types.statistics import (
     ImageStatistics,
     LabelStatistics,
@@ -116,7 +117,7 @@ class AbsTaskZeroShotClassification(AbsTask):
         *,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         **kwargs,
     ) -> ZeroShotClassificationMetrics:

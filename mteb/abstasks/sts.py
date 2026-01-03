@@ -8,7 +8,7 @@ from scipy.stats import pearsonr, spearmanr
 from mteb._evaluators import AnySTSEvaluator
 from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
 from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import PromptType
+from mteb.types import EncodeKwargs, PromptType
 from mteb.types.statistics import (
     ImageStatistics,
     ScoreStatistics,
@@ -105,7 +105,7 @@ class AbsTaskSTS(AbsTask):
         self,
         model: MTEBModels,
         data_split: Dataset,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,

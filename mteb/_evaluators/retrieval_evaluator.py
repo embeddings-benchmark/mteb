@@ -1,11 +1,11 @@
 import logging
 from collections.abc import Sequence
-from typing import Any
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import SearchProtocol
 from mteb.types import (
     CorpusDatasetType,
+    EncodeKwargs,
     QueryDatasetType,
     RelevantDocumentsType,
     RetrievalEvaluationResult,
@@ -48,7 +48,7 @@ class RetrievalEvaluator(Evaluator):
     def __call__(  # type: ignore[override]
         self,
         search_model: SearchProtocol,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> RetrievalOutputType:
         logger.info("Running retrieval task - Indexing corpus...")
         search_model.index(
