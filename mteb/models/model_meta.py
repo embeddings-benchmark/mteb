@@ -17,6 +17,7 @@ from huggingface_hub import (
     get_safetensors_metadata,
     hf_hub_download,
     list_repo_commits,
+    model_info,
     repo_exists,
 )
 from huggingface_hub.errors import (
@@ -84,9 +85,6 @@ def _get_loader_name(
     if hasattr(loader, "func"):  # partial class wrapper
         return loader.func.__name__
     return loader.__name__
-
-
-_SENTENCE_TRANSFORMER_LIB_NAME: FRAMEWORKS = "Sentence Transformers"
 
 
 class ModelMeta(BaseModel):
@@ -321,14 +319,8 @@ class ModelMeta(BaseModel):
                 model_config = None
                 logger.warning(f"Can't get configuration for {model_name}. Error: {e}")
 
-            if card_data.library_name == _SENTENCE_TRANSFORMER_LIB_NAME or (
-                card_data.tags and _SENTENCE_TRANSFORMER_LIB_NAME in card_data.tags
-            ):
-                frameworks.append(_SENTENCE_TRANSFORMER_LIB_NAME)
-            else:
-                msg = "Model library not recognized, defaulting to Sentence Transformers loader."
-                logger.warning(msg)
-                warnings.warn(msg)
+            hf_frameworks = cls._get_frameworks_from_hf_tags(model_name)
+            frameworks.extend(hf_frameworks)
 
             if revision is None:
                 revisions = _get_repo_commits(model_name, "model")
@@ -388,8 +380,6 @@ class ModelMeta(BaseModel):
             else model.model_card_data.base_model
         )
         meta = cls._from_hub(name, revision, compute_metadata)
-        if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
-            meta.framework.append("Sentence Transformers")
         meta.revision = model.model_card_data.base_model_revision or meta.revision
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
@@ -415,8 +405,6 @@ class ModelMeta(BaseModel):
             The generated ModelMeta.
         """
         meta = cls._from_hub(model, revision, compute_metadata)
-        if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
-            meta.framework.append("Sentence Transformers")
         meta.modalities = ["text"]
 
         if model and compute_metadata and _repo_exists(model):
@@ -463,8 +451,6 @@ class ModelMeta(BaseModel):
         from mteb.models import CrossEncoderWrapper
 
         meta = cls._from_hub(model.model.name_or_path, revision, compute_metadata)
-        if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
-            meta.framework.append("Sentence Transformers")
         meta.revision = model.config._commit_hash or meta.revision
         meta.loader = CrossEncoderWrapper
         meta.embed_dim = None
@@ -645,6 +631,63 @@ class ModelMeta(BaseModel):
             release_date = initial_commit.created_at.strftime("%Y-%m-%d")
             return release_date
         return None
+
+    def calculate_frameworks_from_hub(self) -> list[FRAMEWORKS]:
+        """Calculates the frameworks supported by the model.
+
+        Returns:
+            Frameworks supported by the model.
+        """
+        return self._get_frameworks_from_hf_tags(self.name)
+
+    @staticmethod
+    def _get_frameworks_from_hf_tags(model_name: str | None = None) -> list[FRAMEWORKS]:
+        """Extract frameworks from HuggingFace model tags.
+
+        Args:
+            model_name: HuggingFace model name
+
+        Returns:
+            List of framework names found in tags. Defaults to empty list if no frameworks found.
+        """
+        try:
+            info = model_info(model_name)
+            if not info.tags:
+                return []
+
+            # Master framework list to match against HuggingFace tags
+            master_framework_list = {
+                "sentence-transformers",
+                "transformers",
+                "onnx",
+                "safetensors",
+                "gguf",
+            }
+
+            # Mapping from HuggingFace tags to MTEB framework names
+            tag_to_framework: dict[str, FRAMEWORKS] = {
+                "sentence-transformers": "Sentence Transformers",
+                "transformers": "Transformers",
+                "onnx": "ONNX",
+                "safetensors": "safetensors",
+                "gguf": "GGUF",
+            }
+
+            frameworks: list[FRAMEWORKS] = []
+
+            for tag in info.tags:
+                tag_lower = tag.lower()
+                if tag_lower in master_framework_list:
+                    framework_name = tag_to_framework.get(tag_lower)
+                    if framework_name and framework_name not in frameworks:
+                        frameworks.append(framework_name)
+
+            return frameworks
+        except Exception as e:
+            logger.warning(
+                f"Failed to fetch frameworks from HuggingFace tags for {model_name}: {e}"
+            )
+            return []
 
     def to_python(self) -> str:
         """Returns a string representation of the model."""
