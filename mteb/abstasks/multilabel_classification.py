@@ -70,10 +70,10 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         input_column_name: Name of the column containing the input text.
         label_column_name: Name of the column containing the labels.
         samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
-        evaluator: Classifier to use for evaluation. Must be sklearn-compatible.
+        multilabel_classifier: Classifier to use for evaluation. Must be sklearn-compatible.
     """
 
-    evaluator: SklearnModelProtocol = KNeighborsClassifier(n_neighbors=5)
+    multilabel_classifier: SklearnModelProtocol = KNeighborsClassifier(n_neighbors=5)
     input_column_name: str = "text"
     label_column_name: str = "label"
 
@@ -169,7 +169,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             y_train = train_split.select(sample_indices)[self.label_column_name]
             y_train = binarizer.transform(y_train)
             y_pred, current_classifier = _evaluate_classifier(
-                X_train, y_train, X_test, self.evaluator
+                X_train, y_train, X_test, self.multilabel_classifier
             )
             if prediction_folder:
                 all_predictions.append(y_pred.tolist())
