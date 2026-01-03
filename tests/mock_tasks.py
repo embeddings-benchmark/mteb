@@ -4663,11 +4663,15 @@ class MockAudioClassification(AbsTaskClassification):
             "image_statistics": None,
             "audio_statistics": {
                 "total_audio_length": 32000,
-                "min_audio_length": 16000,
-                "average_audio_length": 16000.0,
-                "max_audio_length": 16000,
+                "min_audio_frames_length": 16000,
+                "min_audio_seconds_length": 1.0,
+                "average_audio_frames_length": 16000.0,
+                "average_audio_seconds_length": 1.5,
+                "max_audio_frames_length": 16000,
+                "max_audio_seconds_length": 2.0,
                 "unique_audios": 2,
-                "avg_sampling_rate": 16000.0,
+                "average_sampling_rate": 12000.0,
+                "sampling_rates": [16000, 8000],
             },
             "label_statistics": {
                 "min_labels_per_text": 1,
@@ -4684,11 +4688,15 @@ class MockAudioClassification(AbsTaskClassification):
             "image_statistics": None,
             "audio_statistics": {
                 "total_audio_length": 160000,
-                "min_audio_length": 16000,
-                "average_audio_length": 16000.0,
-                "max_audio_length": 16000,
+                "min_audio_frames_length": 16000,
+                "min_audio_seconds_length": 1.0,
+                "average_audio_frames_length": 16000.0,
+                "average_audio_seconds_length": 1.5,
+                "max_audio_frames_length": 16000,
+                "max_audio_seconds_length": 2.0,
                 "unique_audios": 2,
-                "avg_sampling_rate": 16000.0,
+                "average_sampling_rate": 12000.0,
+                "sampling_rates": [16000, 8000],
             },
             "label_statistics": {
                 "min_labels_per_text": 1,
@@ -4701,12 +4709,13 @@ class MockAudioClassification(AbsTaskClassification):
     }
 
     def load_data(self, **kwargs):
+        sampling_rates = [16000, 8000]
         mock_audio = [
             {
                 "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
+                "sampling_rate": sampling_rates[i],
             }
-            for _ in range(2)
+            for i in range(2)
         ]
 
         self.dataset = DatasetDict(
@@ -4779,6 +4788,33 @@ class MockAudioClassificationCrossVal(AbsTaskClassification):
     metadata.eval_splits = ["train"]
     input_column_name = "audio"
     is_cross_validation = True
+    expected_stats = {
+        "train": {
+            "num_samples": 10,
+            "number_texts_intersect_with_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_audio_length": 160000,
+                "min_audio_frames_length": 16000,
+                "min_audio_seconds_length": 1.0,
+                "average_audio_frames_length": 16000.0,
+                "average_audio_seconds_length": 1.0,
+                "max_audio_frames_length": 16000,
+                "max_audio_seconds_length": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": [16000],
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 5}, "2": {"count": 5}},
+            },
+        }
+    }
 
     def load_data(self, **kwargs):
         mock_audio = [

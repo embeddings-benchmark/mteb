@@ -64,21 +64,30 @@ class AudioStatistics(TypedDict):
 
     Attributes:
         total_audio_length: Total length of all audio clips in total frames
-        min_audio_length: Minimum length of audio clip in total frames
-        average_audio_length: Average length of audio clip in total frames
-        max_audio_length: Maximum length of audio clip in total frames
+        min_audio_frames_length: Minimum length of audio clip in frames
+        min_audio_seconds_length: Minimum length of audio clip in seconds
+        average_audio_frames_length: Average length of audio clip in frames
+        average_audio_seconds_length: Average length of audio clip in seconds
+        max_audio_frames_length: Maximum length of audio clip in frames
+        max_audio_seconds_length: Maximum length of audio clip in seconds
         unique_audios: Number of unique audio clips
-        avg_sampling_rate: Sampling rate of the audio clips
+        average_sampling_rate: Average sampling rate
+        sampling_rates: List of unique sampling rates
     """
 
     total_audio_length: float
 
-    min_audio_length: float
-    average_audio_length: float
-    max_audio_length: float
+    min_audio_frames_length: float
+    min_audio_seconds_length: float | None
+    average_audio_frames_length: float
+    average_audio_seconds_length: float | None
+    max_audio_frames_length: float
+    max_audio_seconds_length: float | None
 
     unique_audios: int
-    avg_sampling_rate: int | None
+
+    average_sampling_rate: float | None
+    sampling_rates: list[int] | None
 
 
 class LabelStatistics(TypedDict):

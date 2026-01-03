@@ -87,6 +87,8 @@ def calculate_audio_statistics(audios: list[AudioInputItem]) -> AudioStatistics:
     seen_hashes: set[str] = set()
     total_sampling_rate = 0
     num_sampling_rates = 0
+    audio_seconds_length = []
+    sampling_rates = set()
 
     for audio in audios:
         array = audio["array"]
@@ -101,18 +103,31 @@ def calculate_audio_statistics(audios: list[AudioInputItem]) -> AudioStatistics:
         if sampling_rate is not None:
             total_sampling_rate += sampling_rate
             num_sampling_rates += 1
-
-    avg_sampling_rate = (
+            audio_seconds_length.append(len(array) / sampling_rate)
+            sampling_rates.add(sampling_rate)
+    average_sampling_rate = (
         total_sampling_rate / num_sampling_rates if num_sampling_rates > 0 else None
     )
-
+    average_seconds_length = (
+        sum(audio_seconds_length) / len(audio_seconds_length)
+        if audio_seconds_length
+        else None
+    )
     return AudioStatistics(
         total_audio_length=sum(audio_lengths),
-        min_audio_length=min(audio_lengths),
-        average_audio_length=sum(audio_lengths) / len(audio_lengths),
-        max_audio_length=max(audio_lengths),
+        min_audio_frames_length=min(audio_lengths),
+        min_audio_seconds_length=(
+            min(audio_seconds_length) if average_sampling_rate is not None else None
+        ),
+        average_audio_frames_length=sum(audio_lengths) / len(audio_lengths),
+        average_audio_seconds_length=average_seconds_length,
+        max_audio_frames_length=max(audio_lengths),
+        max_audio_seconds_length=(
+            max(audio_seconds_length) if average_sampling_rate is not None else None
+        ),
         unique_audios=len(seen_hashes),
-        avg_sampling_rate=avg_sampling_rate,
+        average_sampling_rate=average_sampling_rate,
+        sampling_rates=list(sampling_rates) if sampling_rates else None,
     )
 
 
