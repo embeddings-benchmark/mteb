@@ -2,9 +2,10 @@ import logging
 import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Sequence
-from typing import Any, Literal, Unpack, cast, get_args, overload
+from typing import Any, Literal, cast, get_args, overload
 
 from torch.utils.data import DataLoader
+from typing_extensions import Unpack
 
 import mteb
 from mteb.abstasks.task_metadata import TaskMetadata, TaskType
