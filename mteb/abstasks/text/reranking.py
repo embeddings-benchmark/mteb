@@ -34,7 +34,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
         For dataformat and other information, see [AbsTaskRetrieval][mteb.abstasks.retrieval.AbsTaskRetrieval].
     """
 
-    def load_data(self, num_proc: int = 1) -> None:
+    def load_data(self) -> None:
         """Load the dataset."""
         if self.data_loaded:
             return
