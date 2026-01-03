@@ -33,6 +33,7 @@ def _load_data(
             "queries",
             split=split,
             revision=revision,
+            num_proc=num_proc,
         )
         query_ds = query_ds.map(
             lambda x: {
@@ -41,6 +42,7 @@ def _load_data(
                 "modality": "text",
             },
             remove_columns=["query-id", "query"],
+            num_proc=num_proc,
         )
 
         corpus_ds = load_dataset(
@@ -48,6 +50,7 @@ def _load_data(
             "corpus",
             split=split,
             revision=revision,
+            num_proc=num_proc,
         )
         corpus_ds = corpus_ds.map(
             lambda x: {
@@ -55,6 +58,7 @@ def _load_data(
                 "modality": "image",
             },
             remove_columns=["corpus-id"],
+            num_proc=num_proc,
         )
         corpus_ds = corpus_ds.select_columns(["id", "image"])
 
@@ -63,6 +67,7 @@ def _load_data(
             "qrels",
             split=split,
             revision=revision,
+            num_proc=num_proc,
         )
 
         if langs is None:
