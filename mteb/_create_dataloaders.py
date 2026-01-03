@@ -402,7 +402,6 @@ def create_dataloader(
         prompt_type: The type of prompt to create a dataloader for. If None, it will be inferred from the task metadata.
         input_column: The column to use as input. If None, it will use the first column that matches the modality.
         batch_size: The batch size for the dataloader.
-        num_proc: The number of processes to use for the dataloader.
         **kwargs: Additional arguments to pass to the dataloader creation functions.
 
     Returns:

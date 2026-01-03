@@ -135,7 +135,7 @@ def _evaluate_task(
     data_loaded = task.data_loaded
     if not data_loaded:
         try:
-            task.load_data(num_proc=num_proc)
+            task.load_data()
         except DatasetNotFoundError as e:
             if not task.metadata.is_public and public_only is None:
                 msg = (
@@ -336,7 +336,6 @@ def evaluate(
         logger.info(
             "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`. Explicitly set the batch size to silence this message."
         )
-    num_proc = encode_kwargs.pop("num_proc", 1)
 
     model, meta, model_name, model_revision = _sanitize_model(model)
     _check_model_modalities(meta, tasks)
@@ -466,7 +465,6 @@ def evaluate(
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 public_only=public_only,
-                num_proc=num_proc,
             )
         except Exception as e:
             logger.error(
@@ -482,7 +480,6 @@ def evaluate(
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             public_only=public_only,
-            num_proc=num_proc,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 
