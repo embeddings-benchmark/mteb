@@ -477,7 +477,7 @@ class MTEB:
 
                     if co2_tracker:
                         try:
-                            from codecarbon import (  # type: ignore[import-untyped]
+                            from codecarbon import (  # type: ignore[import-not-found,import-untyped]
                                 EmissionsTracker,
                             )
                         except ImportError:

@@ -29,6 +29,7 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
         self,
         model_name: str,
         revision: str,
+        device: str | None = None,
         model_prompts: dict[str, str] | None = None,
         **kwargs: Any,
     ):
@@ -43,7 +44,9 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
                 f"Current transformers version is {transformers.__version__} is lower than the required version"
                 f" {MODERN_BERT_TRANSFORMERS_MIN_VERSION}"
             )
-        super().__init__(model_name, revision, model_prompts, **kwargs)
+        super().__init__(
+            model_name, revision, device=device, model_prompts=model_prompts, **kwargs
+        )
 
     def to(self, device: torch.device) -> None:
         self.model.to(device)

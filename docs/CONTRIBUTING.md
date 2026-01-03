@@ -3,18 +3,26 @@ We welcome contributions. Please see the current open issues or open an issue yo
 
 
 ### Development Installation
-If you want to submit a dataset or in other ways contribute to MTEB, you can install the package in development mode:
+
+MTEB now uses [uv](https://docs.astral.sh/uv/) for fast dependency management. If you want to contribute to MTEB:
 
 ```bash
-# download the git repository
+# Install uv if you don't have it
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Clone and setup
 git clone https://github.com/embeddings-benchmark/mteb
 cd mteb
-
-# create your virtual environment and activate it
-make install
+make install  # Uses uv sync with dev dependencies
 ```
 
-This uses [make](https://www.gnu.org/software/make/) to define the install command. You can see what each command does in the [makefile](https://github.com/embeddings-benchmark/mteb/blob/main/Makefile).
+The `make install` command now uses uv under the hood for faster dependency resolution. You can also install manually with uv:
+
+```bash
+uv sync --extra image --group dev
+```
+
+This uses [make](https://www.gnu.org/software/make/) to define the install command. You can see what each command does in the [makefile](https://github.com/embeddings-benchmark/mteb/blob/main/Makefile). All commands now use `uv run` and `uv sync` for better performance and reliability.
 
 ### Running Tests
 To run the tests, you can use the following command:

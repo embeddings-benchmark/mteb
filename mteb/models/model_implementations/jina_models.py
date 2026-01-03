@@ -262,6 +262,7 @@ class JinaRerankerV3Wrapper(CrossEncoderWrapper):
         self,
         model: CrossEncoder | str,
         revision: str | None = None,
+        device: str | None = None,
         trust_remote_code: bool = True,
         **kwargs: Any,
     ) -> None:
@@ -272,10 +273,7 @@ class JinaRerankerV3Wrapper(CrossEncoderWrapper):
             model, trust_remote_code=trust_remote_code, dtype="auto"
         )
 
-        device = kwargs.get("device", None)
-        if device is None:
-            device = get_device_name()
-            logger.info(f"Use pytorch device: {device}")
+        device = device or get_device_name()
 
         self.model.to(device)
         self.model.eval()
@@ -325,6 +323,7 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
         self,
         model: str,
         revision: str,
+        device: str | None = None,
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
@@ -344,7 +343,9 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
         )
         import flash_attn  # noqa: F401
 
-        super().__init__(model, revision, model_prompts, **kwargs)
+        super().__init__(
+            model, revision, device=device, model_prompts=model_prompts, **kwargs
+        )
 
     def encode(
         self,

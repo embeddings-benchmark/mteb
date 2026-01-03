@@ -107,9 +107,8 @@ class AbsTaskClassification(AbsTask):
             text: str (for text) or PIL.Image (for image). Column name can be changed via `input_column_name` attribute.
             label: int. Column name can be changed via `label_column_name` attribute.
         evaluator_model: The model to use for evaluation. Can be any sklearn compatible model. Default is `LogisticRegression`.
-            Full details of api in [`SklearnModelProtocol`][mteb._evaluators.sklearn_evaluator.SklearnModelProtocol].
-        samples_per_label: Number of samples per label to use for training the evaluator model. Default is 8.
-        n_experiments: Number of experiments to run. Default is 10.
+       samples_per_label: Number of samples per label to use for training the evaluator model. Default is 8.
+       n_experiments: Number of experiments to run. Default is 10.
         train_split: Name of the split to use for training the evaluator model. Default is "train".
         label_column_name: Name of the column containing the labels. Default is "label".
         input_column_name: Name of the column containing the input data. Default is "text".
