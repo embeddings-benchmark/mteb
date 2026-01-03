@@ -102,7 +102,6 @@ nav:
       - Evaluation: api/evaluation.md
       - Benchmark: api/benchmark.md
       - Task: api/task.md
-      - Evaluators: api/evaluators.md
       - Model: api/model.md
       - Results: api/results.md
       - Additional Types: api/types.md

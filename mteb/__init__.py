@@ -35,7 +35,6 @@ __all__ = [
     "IndexEncoderSearchProtocol",
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
-    "SklearnModelProtocol",
     "TaskMetadata",
     "TaskResult",
     "evaluate",
@@ -50,12 +49,3 @@ __all__ = [
     "load_results",
     "types",
 ]
-
-
-# Deferred import to avoid circular dependency
-def __getattr__(name: str):
-    if name == "SklearnModelProtocol":
-        from mteb._evaluators import SklearnModelProtocol
-
-        return SklearnModelProtocol
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
