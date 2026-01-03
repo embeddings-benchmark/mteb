@@ -143,7 +143,7 @@ class MIRACLVisionRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that is relevant to the user's query."},
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1) -> None:
         if self.data_loaded:
             return
 

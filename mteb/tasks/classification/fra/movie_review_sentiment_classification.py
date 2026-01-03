@@ -35,7 +35,7 @@ class MovieReviewSentimentClassification(AbsTaskClassification):
         superseded_by="MovieReviewSentimentClassification.v2",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_column("review", "text")
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["validation", "test"]
@@ -75,7 +75,7 @@ class MovieReviewSentimentClassificationV2(AbsTaskClassification):
         adapted_from=["MovieReviewSentimentClassification"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["validation", "test"]
         )

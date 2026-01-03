@@ -53,7 +53,7 @@ class VGClustering(AbsTaskClusteringLegacy):
         superseded_by="VGHierarchicalClusteringP2P",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         splits = self.metadata.eval_splits
 
         documents: list = []

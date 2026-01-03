@@ -42,7 +42,7 @@ class VaccinChatNLClassification(AbsTaskClassification):
         },
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         for split in self.dataset:
             self.dataset[split] = self.dataset[split].rename_columns(
                 {"sentence1": "text"}

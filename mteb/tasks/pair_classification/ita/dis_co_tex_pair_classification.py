@@ -37,7 +37,7 @@ class DisCoTexPairClassification(AbsTaskPairClassification):
 """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.remove_columns(["id", "source"])
         self.dataset = self.dataset.map(
             lambda x: {

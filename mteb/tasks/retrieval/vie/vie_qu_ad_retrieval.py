@@ -52,7 +52,7 @@ Zong, Chengqing},
 """,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1) -> None:
         if self.data_loaded:
             return
 

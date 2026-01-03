@@ -57,7 +57,7 @@ Piperidis, Stelios},
 """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_column("sent1", "sentence1")
         self.dataset = self.dataset.rename_column("sent2", "sentence2")
 
@@ -105,7 +105,7 @@ class PpcPC(AbsTaskPairClassification):
 """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_column("sent1", "sentence1")
         self.dataset = self.dataset.rename_column("sent2", "sentence2")
 
@@ -151,7 +151,7 @@ Kan, Min-Yen},
 """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_column("sent1", "sentence1")
         self.dataset = self.dataset.rename_column("sent2", "sentence2")
 
@@ -203,6 +203,6 @@ Piperidis, Stelios},
 """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_column("sent1", "sentence1")
         self.dataset = self.dataset.rename_column("sent2", "sentence2")

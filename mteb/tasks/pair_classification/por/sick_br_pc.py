@@ -47,7 +47,7 @@ and de Paiva, Valeria},
 """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         _dataset = {}
 
         # Do not process the subsets we won't use

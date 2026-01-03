@@ -43,7 +43,7 @@ class OpenTenderClusteringP2P(AbsTaskClustering):
         },
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         # reuse the dataset for classification
         for split in self.dataset:
             self.dataset[split] = self.dataset[split].map(

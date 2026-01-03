@@ -131,7 +131,7 @@ Piperidis, Stelios},
         adapted_from=["EightTagsClustering"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         ds = {}
         for split in self.metadata.eval_splits:
             labels = list(chain.from_iterable(self.dataset[split]["labels"]))
@@ -204,7 +204,7 @@ class PlscClusteringS2SFast(AbsTaskClustering):
         adapted_from=["PlscClusteringS2S"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         ds = {}
         for split in self.metadata.eval_splits:
             labels = self.dataset[split]["labels"]
@@ -286,7 +286,7 @@ class PlscClusteringP2PFast(AbsTaskClustering):
         adapted_from=["PlscClusteringP2P"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         ds = {}
         for split in self.metadata.eval_splits:
             labels = self.dataset[split]["labels"]

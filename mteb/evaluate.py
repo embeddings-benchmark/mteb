@@ -123,6 +123,7 @@ def _evaluate_task(
                 co2_tracker=False,
                 prediction_folder=prediction_folder,
                 public_only=public_only,
+                num_proc=num_proc,
             )
         if isinstance(result, TaskResult):
             result.kg_co2_emissions = tracker.final_emissions
@@ -135,7 +136,7 @@ def _evaluate_task(
     data_loaded = task.data_loaded
     if not data_loaded:
         try:
-            task.load_data()
+            task.load_data(num_proc=num_proc)
         except DatasetNotFoundError as e:
             if not task.metadata.is_public and public_only is None:
                 msg = (
@@ -286,7 +287,7 @@ def evaluate(
         tasks: A task to run.
         co2_tracker: If True, track the CO₂ emissions of the evaluation, required codecarbon to be installed, which can be installed using
             `pip install mteb[codecarbon]`. If none is passed co2 tracking will only be run if codecarbon is installed.
-        encode_kwargs: Additional keyword arguments passed to the models `encode` method.
+        encode_kwargs: Additional keyword arguments passed to the models `encode` and `load_data` methods;
         raise_error: If True, raise an error if the task fails. If False, return an empty list.
         cache: The cache to use for loading the results. If None, then no cache will be used. The default cache saved the cache in the
             `~/.cache/mteb` directory. It can be overridden by setting the `MTEB_CACHE` environment variable to a different directory or by directly
@@ -336,6 +337,14 @@ def evaluate(
         logger.info(
             "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`. Explicitly set the batch size to silence this message."
         )
+    num_proc = 1
+    if "num_proc" not in encode_kwargs:
+        encode_kwargs["num_proc"] = 1
+        logger.info(
+            "No num_proc defined in encode_kwargs. Setting `encode_kwargs['num_proc'] = 1`. Explicitly set the num_proc to silence this message."
+        )
+    else:
+        num_proc = encode_kwargs["num_proc"]
 
     model, meta, model_name, model_revision = _sanitize_model(model)
     _check_model_modalities(meta, tasks)
@@ -465,6 +474,7 @@ def evaluate(
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 public_only=public_only,
+                num_proc=num_proc,
             )
         except Exception as e:
             logger.error(
@@ -480,6 +490,7 @@ def evaluate(
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             public_only=public_only,
+            num_proc=num_proc,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 

@@ -41,7 +41,7 @@ class SciMMIR(AbsTaskZeroShotClassification):
 
     label_column_name: str = "class"
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         class_code = {
             "fig_result": 0,
             "fig_illustration": 1,
