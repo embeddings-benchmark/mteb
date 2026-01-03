@@ -656,40 +656,31 @@ class ModelMeta(BaseModel):
             info = model_info(model_name)
             if not info.tags:
                 return []
-
-            # Master framework list to match against HuggingFace tags
-            master_framework_list = {
-                "sentence-transformers",
-                "transformers",
-                "onnx",
-                "safetensors",
-                "gguf",
-            }
-
-            # Mapping from HuggingFace tags to MTEB framework names
-            tag_to_framework: dict[str, FRAMEWORKS] = {
-                "sentence-transformers": "Sentence Transformers",
-                "transformers": "Transformers",
-                "onnx": "ONNX",
-                "safetensors": "safetensors",
-                "gguf": "GGUF",
-            }
-
-            frameworks: list[FRAMEWORKS] = []
-
-            for tag in info.tags:
-                tag_lower = tag.lower()
-                if tag_lower in master_framework_list:
-                    framework_name = tag_to_framework.get(tag_lower)
-                    if framework_name and framework_name not in frameworks:
-                        frameworks.append(framework_name)
-
-            return frameworks
         except Exception as e:
             logger.warning(
                 f"Failed to fetch frameworks from HuggingFace tags for {model_name}: {e}"
             )
             return []
+
+        # Mapping from HuggingFace tags to MTEB framework names
+        tag_to_framework: dict[str, FRAMEWORKS] = {
+            "sentence-transformers": "Sentence Transformers",
+            "transformers": "Transformers",
+            "onnx": "ONNX",
+            "safetensors": "safetensors",
+            "gguf": "GGUF",
+        }
+
+        frameworks: list[FRAMEWORKS] = []
+
+        for tag in info.tags:
+            tag_lower = tag.lower()
+            if tag_lower in tag_to_framework.keys():
+                framework_name = tag_to_framework.get(tag_lower)
+                if framework_name and framework_name not in frameworks:
+                    frameworks.append(framework_name)
+
+        return frameworks
 
     def to_python(self) -> str:
         """Returns a string representation of the model."""
