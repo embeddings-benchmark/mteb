@@ -63,31 +63,25 @@ class AudioStatistics(TypedDict):
     """Class for descriptive statistics for audio.
 
     Attributes:
-        total_audio_length: Total length of all audio clips in total frames
-        min_audio_frames_length: Minimum length of audio clip in frames
+        total_audio_seconds_length: Total length of all audio clips in total frames
         min_audio_seconds_length: Minimum length of audio clip in seconds
-        average_audio_frames_length: Average length of audio clip in frames
         average_audio_seconds_length: Average length of audio clip in seconds
-        max_audio_frames_length: Maximum length of audio clip in frames
         max_audio_seconds_length: Maximum length of audio clip in seconds
         unique_audios: Number of unique audio clips
         average_sampling_rate: Average sampling rate
-        sampling_rates: List of unique sampling rates
+        sampling_rates: Dict of unique sampling rates and their frequencies
     """
 
-    total_audio_length: float
+    total_audio_seconds_length: float
 
-    min_audio_frames_length: float
-    min_audio_seconds_length: float | None
-    average_audio_frames_length: float
-    average_audio_seconds_length: float | None
-    max_audio_frames_length: float
-    max_audio_seconds_length: float | None
+    min_audio_seconds_length: float
+    average_audio_seconds_length: float
+    max_audio_seconds_length: float
 
     unique_audios: int
 
-    average_sampling_rate: float | None
-    sampling_rates: list[int] | None
+    average_sampling_rate: float
+    sampling_rates: dict[int, int]
 
 
 class LabelStatistics(TypedDict):

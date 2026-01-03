@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import hashlib
-from collections import Counter
+from collections import Counter, defaultdict
 from typing import TYPE_CHECKING
 
 from mteb.types import TopRankedDocumentsType
@@ -84,50 +84,30 @@ def calculate_audio_statistics(audios: list[AudioInputItem]) -> AudioStatistics:
         AudioStatistics: A dictionary containing the descriptive statistics.
     """
     audio_lengths = []
-    seen_hashes: set[str] = set()
-    total_sampling_rate = 0
-    num_sampling_rates = 0
-    audio_seconds_length = []
-    sampling_rates = set()
+    sampling_rates = defaultdict(int)
+    unique_audios = set()
 
     for audio in audios:
         array = audio["array"]
-        sampling_rate = audio.get("sampling_rate")
-
-        audio_lengths.append(len(array))
+        sampling_rate = audio["sampling_rate"]
+        length_in_seconds = len(array) / sampling_rate
+        audio_lengths.append(length_in_seconds)
+        sampling_rates[sampling_rate] += 1
 
         audio_bytes = array.tobytes()
         audio_hash = hashlib.md5(audio_bytes).hexdigest()
-        seen_hashes.add(audio_hash)
+        unique_audios.add(audio_hash)
 
-        if sampling_rate is not None:
-            total_sampling_rate += sampling_rate
-            num_sampling_rates += 1
-            audio_seconds_length.append(len(array) / sampling_rate)
-            sampling_rates.add(sampling_rate)
-    average_sampling_rate = (
-        total_sampling_rate / num_sampling_rates if num_sampling_rates > 0 else None
-    )
-    average_seconds_length = (
-        sum(audio_seconds_length) / len(audio_seconds_length)
-        if audio_seconds_length
-        else None
-    )
     return AudioStatistics(
-        total_audio_length=sum(audio_lengths),
-        min_audio_frames_length=min(audio_lengths),
-        min_audio_seconds_length=(
-            min(audio_seconds_length) if average_sampling_rate is not None else None
+        total_audio_seconds_length=sum(audio_lengths),
+        min_audio_seconds_length=min(audio_lengths),
+        average_audio_seconds_length=sum(audio_lengths) / len(audio_lengths),
+        max_audio_seconds_length=max(audio_lengths),
+        unique_audios=len(unique_audios),
+        average_sampling_rate=(
+            sum(rate * count for rate, count in sampling_rates.items()) / len(audios)
         ),
-        average_audio_frames_length=sum(audio_lengths) / len(audio_lengths),
-        average_audio_seconds_length=average_seconds_length,
-        max_audio_frames_length=max(audio_lengths),
-        max_audio_seconds_length=(
-            max(audio_seconds_length) if average_sampling_rate is not None else None
-        ),
-        unique_audios=len(seen_hashes),
-        average_sampling_rate=average_sampling_rate,
-        sampling_rates=list(sampling_rates) if sampling_rates else None,
+        sampling_rates=dict(sampling_rates),
     )
 
 

@@ -106,7 +106,7 @@ class AudioInputItem(TypedDict):
     """
 
     array: np.ndarray
-    sampling_rate: NotRequired[int | None]
+    sampling_rate: int
 
 
 class AudioInput(TypedDict):
