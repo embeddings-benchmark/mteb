@@ -5,7 +5,9 @@ from collections import Counter
 from typing import TYPE_CHECKING
 
 from mteb.types import TopRankedDocumentsType
+from mteb.types._encoder_io import AudioInputItem
 from mteb.types.statistics import (
+    AudioStatistics,
     ImageStatistics,
     LabelStatistics,
     RelevantDocsStatistics,
@@ -69,6 +71,48 @@ def calculate_image_statistics(images: list[Image.Image]) -> ImageStatistics:
         max_image_height=max(img_heights),
         # some image types (PngImageFile) may be unhashable
         unique_images=len(seen_hashes),
+    )
+
+
+def calculate_audio_statistics(audios: list[AudioInputItem]) -> AudioStatistics:
+    """Calculate descriptive statistics for a list of audio clips.
+
+    Args:
+        audios: List of audio clips to analyze. Each audio clip should be a dictionary with 'array' and 'sampling_rate' keys.
+
+    Returns:
+        AudioStatistics: A dictionary containing the descriptive statistics.
+    """
+    audio_lengths = []
+    seen_hashes: set[str] = set()
+    total_sampling_rate = 0
+    num_sampling_rates = 0
+
+    for audio in audios:
+        array = audio["array"]
+        sampling_rate = audio.get("sampling_rate")
+
+        audio_lengths.append(len(array))
+
+        audio_bytes = array.tobytes()
+        audio_hash = hashlib.md5(audio_bytes).hexdigest()
+        seen_hashes.add(audio_hash)
+
+        if sampling_rate is not None:
+            total_sampling_rate += sampling_rate
+            num_sampling_rates += 1
+
+    avg_sampling_rate = (
+        total_sampling_rate / num_sampling_rates if num_sampling_rates > 0 else None
+    )
+
+    return AudioStatistics(
+        total_audio_length=sum(audio_lengths),
+        min_audio_length=min(audio_lengths),
+        average_audio_length=sum(audio_lengths) / len(audio_lengths),
+        max_audio_length=max(audio_lengths),
+        unique_audios=len(seen_hashes),
+        avg_sampling_rate=avg_sampling_rate,
     )
 
 

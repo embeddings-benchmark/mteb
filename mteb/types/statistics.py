@@ -59,6 +59,28 @@ class ImageStatistics(TypedDict):
     unique_images: int
 
 
+class AudioStatistics(TypedDict):
+    """Class for descriptive statistics for audio.
+
+    Attributes:
+        total_audio_length: Total length of all audio clips in total frames
+        min_audio_length: Minimum length of audio clip in total frames
+        average_audio_length: Average length of audio clip in total frames
+        max_audio_length: Maximum length of audio clip in total frames
+        unique_audios: Number of unique audio clips
+        avg_sampling_rate: Sampling rate of the audio clips
+    """
+
+    total_audio_length: float
+
+    min_audio_length: float
+    average_audio_length: float
+    max_audio_length: float
+
+    unique_audios: int
+    avg_sampling_rate: int | None
+
+
 class LabelStatistics(TypedDict):
     """Class for descriptive statistics for texts.
 

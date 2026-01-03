@@ -4655,6 +4655,50 @@ class MockAudioClassification(AbsTaskClassification):
     )
     metadata.modalities = ["audio"]
     input_column_name = "audio"
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "number_texts_intersect_with_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_audio_length": 32000,
+                "min_audio_length": 16000,
+                "average_audio_length": 16000.0,
+                "max_audio_length": 16000,
+                "unique_audios": 2,
+                "avg_sampling_rate": 16000.0,
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 1}, "2": {"count": 1}},
+            },
+        },
+        "train": {
+            "num_samples": 10,
+            "number_texts_intersect_with_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_audio_length": 160000,
+                "min_audio_length": 16000,
+                "average_audio_length": 16000.0,
+                "max_audio_length": 16000,
+                "unique_audios": 2,
+                "avg_sampling_rate": 16000.0,
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 5}, "2": {"count": 5}},
+            },
+        },
+    }
 
     def load_data(self, **kwargs):
         mock_audio = [

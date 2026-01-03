@@ -21,6 +21,7 @@ from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelPro
 from mteb.models import EncoderProtocol, MTEBModels
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
+    AudioStatistics,
     ImageStatistics,
     LabelStatistics,
     SplitDescriptiveStatistics,
@@ -28,6 +29,7 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
+    calculate_audio_statistics,
     calculate_image_statistics,
     calculate_label_statistics,
     calculate_text_statistics,
@@ -46,6 +48,7 @@ class ClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
 
         text_statistics: Statistics for text
         image_statistics: Statistics for images
+        audio_statistics: Statistics for audio
         label_statistics: Statistics for labels
     """
 
@@ -54,6 +57,7 @@ class ClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
 
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
+    audio_statistics: AudioStatistics | None
     label_statistics: LabelStatistics
 
 
@@ -464,6 +468,7 @@ class AbsTaskClassification(AbsTask):
 
         image_statistics = None
         text_statistics = None
+        audio_statistics = None
         num_texts_in_train = None
 
         if "image" in self.metadata.modalities:
@@ -475,6 +480,8 @@ class AbsTaskClassification(AbsTask):
                 if split != self.train_split
                 else None
             )
+        if "audio" in self.metadata.modalities:
+            audio_statistics = calculate_audio_statistics(inputs)
 
         label_statistics = calculate_label_statistics(label)
 
@@ -483,6 +490,7 @@ class AbsTaskClassification(AbsTask):
             number_texts_intersect_with_train=num_texts_in_train,
             text_statistics=text_statistics,
             image_statistics=image_statistics,
+            audio_statistics=audio_statistics,
             label_statistics=label_statistics,
         )
 
