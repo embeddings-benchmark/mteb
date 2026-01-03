@@ -257,7 +257,7 @@ class AbsTaskBitextMining(AbsTask):
             sentence2_statistics=text2_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         if self.dataset is None:
             raise ValueError("Dataset is not loaded.")
 
@@ -280,7 +280,7 @@ class AbsTaskBitextMining(AbsTask):
             dataset_dict = DatasetDict(
                 {split: Dataset.from_dict(dataset[split]) for split in dataset}
             )
-            dataset_dict.push_to_hub(repo_name)
+            dataset_dict.push_to_hub(repo_name, num_proc=num_proc)
         else:
             sentences = {}
             for split in self.dataset:
@@ -292,4 +292,4 @@ class AbsTaskBitextMining(AbsTask):
                     }
                 )
             sentences = DatasetDict(sentences)
-            sentences.push_to_hub(repo_name)
+            sentences.push_to_hub(repo_name, num_proc=num_proc)

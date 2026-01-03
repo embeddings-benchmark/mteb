@@ -205,7 +205,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
             accuracy=torch.Tensor(all_correct_scores).float().mean().item(),
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         text_columns = (
             [self.texts_column_names]
             if isinstance(self.texts_column_names, str)
@@ -220,4 +220,5 @@ class AbsTaskImageTextPairClassification(AbsTask):
         self._upload_dataset_to_hub(
             repo_name,
             [*text_columns, *image_columns],
+            num_proc=num_proc,
         )

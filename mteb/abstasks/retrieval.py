@@ -279,7 +279,7 @@ class AbsTaskRetrieval(AbsTask):
         else:
             for split in eval_splits:
                 _process_data(split)
-        self.dataset_transform()
+        self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
     def evaluate(
@@ -605,6 +605,7 @@ class AbsTaskRetrieval(AbsTask):
                     repo_name,
                     hf_subset_name,
                     commit_message=f"Add {hf_subset_name}-{subset_item}",
+                    num_proc=num_proc,
                 )
 
         for subset in self.dataset:
@@ -638,6 +639,7 @@ class AbsTaskRetrieval(AbsTask):
                 repo_name,
                 f"{subset}-qrels" if subset != "default" else "qrels",
                 commit_message=f"Add {subset}-qrels",
+                num_proc=num_proc,
             )
 
             _push_section(

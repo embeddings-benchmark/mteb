@@ -43,7 +43,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
             self.transform_old_dataset_format()
         else:
             # use AbsTaskRetrieval default to load the data
-            return super().load_data()
+            return super().load_data(num_proc=num_proc)
 
     def _process_example(self, example: dict, split: str, query_idx: int) -> dict:
         """Process a single example from the dataset.

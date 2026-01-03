@@ -162,13 +162,14 @@ class AbsTaskZeroShotClassification(AbsTask):
             accuracy=metrics.accuracy_score(labels, predictions),
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         self._upload_dataset_to_hub(
             repo_name,
             [
                 self.input_column_name,
                 self.label_column_name,
             ],
+            num_proc=num_proc,
         )
         labels_dataset = Dataset.from_dict({"labels": self.get_candidate_labels()})
         labels_dataset.push_to_hub(repo_name, config_name="labels")
