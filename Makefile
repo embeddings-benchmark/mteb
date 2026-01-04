@@ -10,16 +10,16 @@ install-for-tests:
 
 lint:
 	@echo "--- 🧹 Running linters ---"
-	uv run --group lint ruff format . 			# running ruff formatting
-	uv run --group lint ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
-	uv run --group lint typos
+	uv run --no-sync --group lint ruff format . 			# running ruff formatting
+	uv run --no-sync --group lint ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
+	uv run --no-sync --group lint typos
 
 lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
 	# Required for CI to work, otherwise it will just pass
-	uv run --group lint ruff format . --check
-	uv run --group lint ruff check .
-	uv run --group lint typos --diff
+	uv run --no-sync --group lint ruff format . --check
+	uv run --no-sync --group lint ruff check .
+	uv run --no-sync --group lint typos --diff
 
 test:
 	@echo "--- 🧪 Running tests ---"
