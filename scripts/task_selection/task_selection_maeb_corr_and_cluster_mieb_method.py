@@ -116,6 +116,63 @@ def _(mteb_results):
 
 
 @app.cell
+def _(results_df):
+    import matplotlib.pyplot as _plt
+    import matplotlib.colors as _mcolors
+    import numpy as _np
+
+    # Create figure with appropriate size
+    _fig, _ax = _plt.subplots(
+        figsize=(max(20, len(results_df.columns) * 0.4), max(10, len(results_df) * 0.3))
+    )
+
+    # Create a blue colormap (light blue to dark blue)
+    _cmap = _mcolors.LinearSegmentedColormap.from_list(
+        "blue_gradient", ["#d4e6f1", "#1a5276"]
+    )
+    _cmap.set_bad(color="white")  # NaN values are white
+
+    # Get min/max for normalization (excluding NaN)
+    _vmin = _np.nanmin(results_df.values)
+    _vmax = _np.nanmax(results_df.values)
+
+    # Create heatmap
+    _im = _ax.imshow(
+        results_df.values, cmap=_cmap, aspect="auto", vmin=_vmin, vmax=_vmax
+    )
+
+    # Set ticks
+    _ax.set_xticks(_np.arange(len(results_df.columns)))
+    _ax.set_yticks(_np.arange(len(results_df.index)))
+    _ax.set_xticklabels(results_df.columns, rotation=90, ha="center", fontsize=8)
+    _ax.set_yticklabels(results_df.index, fontsize=8)
+
+    # Add text annotations with appropriate font color
+    _threshold = (_vmin + _vmax) / 2
+    for _i in range(len(results_df.index)):
+        for _j in range(len(results_df.columns)):
+            _val = results_df.iloc[_i, _j]
+            if _np.isnan(_val):
+                continue
+            _color = "white" if _val > _threshold else "black"
+            _ax.text(
+                _j,
+                _i,
+                f"{_val:.2f}",
+                ha="center",
+                va="center",
+                color=_color,
+                fontsize=6,
+            )
+
+    _ax.set_title("Model Performance Heatmap (rows=models, cols=tasks)", fontsize=12)
+    _plt.colorbar(_im, ax=_ax, label="Score")
+    _plt.tight_layout()
+    _plt.show()
+    return
+
+
+@app.cell
 def _(audio_tasks):
     # Count unique domains across all tasks
     from collections import Counter
