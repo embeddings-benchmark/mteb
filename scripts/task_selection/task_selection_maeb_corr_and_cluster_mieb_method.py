@@ -115,6 +115,21 @@ def _(mteb_results):
     return (results_df,)
 
 
+@app.cell
+def _(audio_tasks):
+    # Count unique domains across all tasks
+    from collections import Counter
+
+    domain_counts = Counter()
+    for _task in audio_tasks:
+        if _task.metadata.domains:
+            domain_counts.update(_task.metadata.domains)
+    print(f"Unique domains across all tasks: {len(domain_counts)}")
+    for _domain, _count in domain_counts.most_common():
+        print(f"  {_domain}: {_count}")
+    return
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -246,16 +261,227 @@ def _():
     return np, pd
 
 
+@app.function
+def compute_correlation_matrix(df, tasks: list[str]):
+    """Compute Spearman correlation matrix between tasks."""
+    task_df = df[tasks].select_dtypes(include=["number"])
+    return task_df.corr(method="spearman")
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Initial Correlation Matrix
+
+    Let's visualize the correlation matrix before any removal.
+    """)
+    return
+
+
 @app.cell
-def _(mteb, np):
-    # tasks which should be kept, e.g. due to them being known high quality datasets, unique tasks, etc.
-    tasks_to_keep: list[str] = []
+def _(results_df, tasks_to_select_from):
+    import matplotlib.pyplot as plt
+    import seaborn as sns
 
-    def compute_correlation_matrix(df, tasks: list[str]):
-        """Compute Spearman correlation matrix between tasks."""
-        task_df = df[tasks].select_dtypes(include=["number"])
-        return task_df.corr(method="spearman")
+    initial_corr = compute_correlation_matrix(results_df, tasks_to_select_from)
 
+    fig, ax = plt.subplots(figsize=(45, 40))
+    sns.heatmap(initial_corr, annot=False, cmap="coolwarm", center=0, ax=ax)
+    ax.set_title("Initial Pairwise Task Correlations (Spearman)", fontsize=18)
+    ax.tick_params(axis="both", labelsize=18)
+    cbar = ax.collections[0].colorbar
+    cbar.ax.tick_params(labelsize=18)
+    plt.tight_layout()
+    plt.show()
+    return initial_corr, plt
+
+
+@app.cell
+def _(initial_corr):
+    # Find tasks with negative correlations to many other tasks
+    neg_corr_counts = {}
+    for _task in initial_corr.columns:
+        # Count how many tasks this task has negative correlation with
+        corr_values = initial_corr.loc[_task].drop(_task)  # exclude self
+        neg_count = (corr_values < 0).sum()
+        if neg_count >= 5:
+            avg_neg_corr = corr_values[corr_values < 0].mean()
+            neg_corr_counts[_task] = (neg_count, avg_neg_corr)
+
+    # Sort by number of negative correlations (most first)
+    sorted_tasks = sorted(neg_corr_counts.items(), key=lambda x: x[1][0], reverse=True)
+
+    print(f"Tasks with 5+ negative correlations: {len(sorted_tasks)}")
+    for _task, (_count, _avg) in sorted_tasks:
+        print(f"  {_task}: {_count} negative correlations (avg: {_avg:.3f})")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""
+    ## Task Clustering via UMAP + HDBSCAN
+
+    We cluster tasks using their correlation vectors (each task's row in the correlation matrix).
+    UMAP reduces dimensionality, then HDBSCAN identifies clusters.
+
+    We expect the outlier cluster (-1 label) to span all task categories, serving as a foundation for balanced selection.
+    """)
+    return
+
+
+@app.cell
+def _():
+    import umap
+    import hdbscan
+
+    return hdbscan, umap
+
+
+@app.cell
+def _(hdbscan, initial_corr, np, umap):
+    # Use correlation vectors as features (each task's correlations with all other tasks)
+    correlation_vectors = initial_corr.values
+
+    # Handle NaN values by filling with 0 (no correlation)
+    correlation_vectors_clean = np.nan_to_num(correlation_vectors, nan=0.0)
+
+    # UMAP dimensionality reduction
+    umap_reducer = umap.UMAP(
+        n_components=2,
+        n_neighbors=15,
+        min_dist=0.1,
+        metric="euclidean",
+        random_state=42,
+    )
+    umap_embedding = umap_reducer.fit_transform(correlation_vectors_clean)
+
+    # HDBSCAN clustering
+    clusterer = hdbscan.HDBSCAN(
+        min_cluster_size=3, min_samples=2, cluster_selection_epsilon=0.0
+    )
+    cluster_labels = clusterer.fit_predict(umap_embedding)
+
+    print(
+        f"Number of clusters (excluding outliers): {len(set(cluster_labels)) - (1 if -1 in cluster_labels else 0)}"
+    )
+    print(f"Number of outliers (label -1): {sum(cluster_labels == -1)}")
+    return cluster_labels, umap_embedding
+
+
+@app.cell
+def _(cluster_labels, initial_corr, np, plt, umap_embedding):
+    # Create a DataFrame with task names and their cluster assignments
+    task_cluster_map = dict(zip(initial_corr.columns, cluster_labels))
+
+    # Visualize the UMAP embedding with cluster colors
+    fig_umap, ax_umap = plt.subplots(figsize=(12, 10))
+
+    unique_labels = sorted(set(cluster_labels))
+    colors = plt.cm.tab20(np.linspace(0, 1, len(unique_labels)))
+
+    for _idx, _label in enumerate(unique_labels):
+        mask = cluster_labels == _label
+        if _label == -1:
+            ax_umap.scatter(
+                umap_embedding[mask, 0],
+                umap_embedding[mask, 1],
+                c="gray",
+                marker="x",
+                s=100,
+                label=f"Outliers ({sum(mask)})",
+                alpha=0.7,
+            )
+        else:
+            ax_umap.scatter(
+                umap_embedding[mask, 0],
+                umap_embedding[mask, 1],
+                c=[colors[_idx]],
+                marker="o",
+                s=100,
+                label=f"Cluster {_label} ({sum(mask)})",
+                alpha=0.7,
+            )
+
+    ax_umap.set_xlabel("UMAP 1", fontsize=12)
+    ax_umap.set_ylabel("UMAP 2", fontsize=12)
+    ax_umap.set_title("Task Clustering via UMAP + HDBSCAN", fontsize=14)
+    ax_umap.legend(bbox_to_anchor=(1.05, 1), loc="upper left")
+    plt.tight_layout()
+    plt.show()
+    return
+
+
+@app.cell
+def _(cluster_labels, initial_corr, mteb, pd):
+    # Analyze task types in each cluster
+    tasks_list = list(initial_corr.columns)
+    cluster_analysis = []
+
+    for _task_name, _label in zip(tasks_list, cluster_labels):
+        _task = mteb.get_task(_task_name)
+        cluster_analysis.append(
+            {"task": _task_name, "cluster": _label, "task_type": _task.metadata.type}
+        )
+
+    cluster_df = pd.DataFrame(cluster_analysis)
+    cluster_df
+    return (cluster_df,)
+
+
+@app.cell
+def _(cluster_df, plt):
+    import seaborn as _sns
+
+    # Show task type distribution per cluster as heatmap
+    cluster_type_counts = (
+        cluster_df.groupby(["cluster", "task_type"]).size().unstack(fill_value=0)
+    )
+
+    _fig, _ax = plt.subplots(figsize=(12, 6))
+    _sns.heatmap(cluster_type_counts.T, annot=True, fmt="d", cmap="YlOrRd", ax=_ax)
+    _ax.set_title("Task Type Distribution per Cluster")
+    _ax.set_ylabel("Task Type")
+    _ax.set_xlabel("Cluster")
+    plt.tight_layout()
+    plt.show()
+    return
+
+
+@app.cell
+def _(cluster_df):
+    # Focus on outlier cluster (-1)
+    outlier_tasks = cluster_df[cluster_df["cluster"] == -1]
+    print(f"Outlier cluster contains {len(outlier_tasks)} tasks spanning these types:")
+    print(outlier_tasks["task_type"].value_counts())
+    print("\nOutlier tasks:")
+    outlier_tasks
+    return
+
+
+@app.cell
+def _(cluster_df):
+    # Define tasks to keep as the outlier cluster tasks (cluster label -1)
+    # These tasks are uncorrelated with other tasks and should be preserved
+    tasks_to_keep: list[str] = cluster_df[cluster_df["cluster"] == -1]["task"].tolist()
+    print(f"Tasks to keep (outliers): {len(tasks_to_keep)}")
+    for _t in tasks_to_keep:
+        print(f"  - {_t}")
+    return (tasks_to_keep,)
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""
+    ### Correlation-Based Task Selection
+
+    We compute pairwise Spearman correlations between tasks (based on model performance), then iteratively remove tasks with high average correlations.
+    """)
+    return
+
+
+@app.cell
+def _(mteb, np, tasks_to_keep: list[str]):
     def get_avg_correlations(corr_matrix):
         """Get average correlation for each task (excluding self-correlation)."""
         # Set diagonal to NaN to exclude self-correlation
@@ -384,56 +610,7 @@ def _(mteb, np):
 
         return current_tasks, removed_tasks, max_correlations
 
-    return compute_correlation_matrix, iterative_removal_by_correlation
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(r"""
-    ## Initial Correlation Matrix
-
-    Let's visualize the correlation matrix before any removal.
-    """)
-    return
-
-
-@app.cell
-def _(compute_correlation_matrix, results_df, tasks_to_select_from):
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-
-    initial_corr = compute_correlation_matrix(results_df, tasks_to_select_from)
-
-    fig, ax = plt.subplots(figsize=(45, 40))
-    sns.heatmap(initial_corr, annot=False, cmap="coolwarm", center=0, ax=ax)
-    ax.set_title("Initial Pairwise Task Correlations (Spearman)", fontsize=18)
-    ax.tick_params(axis="both", labelsize=18)
-    cbar = ax.collections[0].colorbar
-    cbar.ax.tick_params(labelsize=18)
-    plt.tight_layout()
-    plt.show()
-    return initial_corr, plt
-
-
-@app.cell
-def _(initial_corr):
-    # Find tasks with negative correlations to many other tasks
-    neg_corr_counts = {}
-    for _task in initial_corr.columns:
-        # Count how many tasks this task has negative correlation with
-        corr_values = initial_corr.loc[_task].drop(_task)  # exclude self
-        neg_count = (corr_values < 0).sum()
-        if neg_count >= 5:
-            avg_neg_corr = corr_values[corr_values < 0].mean()
-            neg_corr_counts[_task] = (neg_count, avg_neg_corr)
-
-    # Sort by number of negative correlations (most first)
-    sorted_tasks = sorted(neg_corr_counts.items(), key=lambda x: x[1][0], reverse=True)
-
-    print(f"Tasks with 5+ negative correlations: {len(sorted_tasks)}")
-    for _task, (_count, _avg) in sorted_tasks:
-        print(f"  {_task}: {_count} negative correlations (avg: {_avg:.3f})")
-    return
+    return (iterative_removal_by_correlation,)
 
 
 @app.cell
@@ -749,29 +926,57 @@ def _(model_task_times, mteb, tasks_to_select_from):
         f"Models with complete eval times for all {len(tasks_to_select_from)} tasks: {len(valid_models)}"
     )
 
-    # If no models have complete coverage, fall back to models with most coverage
-    if not valid_models:
-        coverage = {
-            _model_name: len(tasks_set & set(times.keys()))
-            for _model_name, times in model_task_times.items()
-        }
-        max_coverage = max(coverage.values())
-        valid_models = [m for m, c in coverage.items() if c == max_coverage]
+    # Analysis: How many models at each task coverage level?
+    # For each model, count how many of our tasks it has eval times for
+    model_coverage = {
+        _model_name: len(tasks_set & set(times.keys()))
+        for _model_name, times in model_task_times.items()
+    }
+
+    # Group models by their coverage count
+    from collections import Counter as _Counter
+
+    coverage_counts = _Counter(model_coverage.values())
+
+    # Show cumulative: how many models have >= N tasks
+    print(f"\nModel coverage distribution (out of {len(tasks_to_select_from)} tasks):")
+    total_models = len(model_task_times)
+    cumulative = 0
+    for n_tasks in sorted(coverage_counts.keys(), reverse=True):
+        cumulative += coverage_counts[n_tasks]
         print(
-            f"Falling back to {len(valid_models)} models with {max_coverage}/{len(tasks_to_select_from)} task coverage"
+            f"  {n_tasks:3d} tasks: {coverage_counts[n_tasks]:3d} models (cumulative >= {n_tasks}: {cumulative:3d} models)"
         )
 
-    # Find largest and smallest models by memory usage (MB) among valid models
+    # Find the minimum tasks where ALL models have coverage
+    min_coverage = min(model_coverage.values())
+    print(f"\nMinimum task coverage across all models: {min_coverage} tasks")
+    print(f"Total models: {total_models}")
+
+    # Use models with >= 50 tasks evaluated for runtime estimation
+    min_task_threshold = 50
+    valid_models_for_runtime = [
+        m for m, c in model_coverage.items() if c >= min_task_threshold
+    ]
+    print(
+        f"\nUsing {len(valid_models_for_runtime)} models with >= {min_task_threshold} tasks for runtime estimation"
+    )
+
+    # Find largest and smallest models by memory usage (MB) among these models
     model_memory = {}
-    for _model_name in valid_models:
+    for _model_name in valid_models_for_runtime:
         _meta = mteb.get_model_meta(_model_name)
         if _meta.memory_usage_mb:
             model_memory[_model_name] = _meta.memory_usage_mb
 
     if not model_memory:
         print("Warning: No models with memory info found, using first valid model")
-        largest_model = valid_models[0] if valid_models else None
-        smallest_model = valid_models[0] if valid_models else None
+        largest_model = (
+            valid_models_for_runtime[0] if valid_models_for_runtime else None
+        )
+        smallest_model = (
+            valid_models_for_runtime[0] if valid_models_for_runtime else None
+        )
     else:
         largest_model = max(model_memory, key=model_memory.get)
         smallest_model = min(model_memory, key=model_memory.get)
@@ -797,41 +1002,101 @@ def _(
     tasks_to_select_from,
 ):
     # Compute runtime for each collection using largest and smallest models
+    # Skip tasks without eval times for the selected model
     def compute_runtime_hours(model_name, task_list):
         times = model_task_times.get(model_name, {})
-        return sum(times.get(t, 0) for t in task_list) / 3600
+        valid_tasks = [t for t in task_list if t in times]
+        total_seconds = sum(times[t] for t in valid_tasks)
+        return total_seconds / 3600, len(valid_tasks), len(task_list)
+
+    # Show task coverage for selected models
+    large_times = model_task_times.get(largest_model, {})
+    small_times = model_task_times.get(smallest_model, {})
+    print(f"Largest model ({largest_model}): {len(large_times)} tasks with eval times")
+    print(
+        f"Smallest model ({smallest_model}): {len(small_times)} tasks with eval times"
+    )
+    print()
 
     # Largest model runtimes
-    runtime_large_full = compute_runtime_hours(largest_model, tasks_to_select_from)
-    runtime_large_09 = compute_runtime_hours(largest_model, remaining_09)
-    runtime_large_08 = compute_runtime_hours(largest_model, remaining_08)
-    runtime_large_07 = compute_runtime_hours(largest_model, remaining_07)
-    runtime_large_06 = compute_runtime_hours(largest_model, remaining_06)
-    runtime_large_05 = compute_runtime_hours(largest_model, remaining_05)
+    runtime_large_full, n_large_full, total_full = compute_runtime_hours(
+        largest_model, tasks_to_select_from
+    )
+    runtime_large_09, n_large_09, total_09 = compute_runtime_hours(
+        largest_model, remaining_09
+    )
+    runtime_large_08, n_large_08, total_08 = compute_runtime_hours(
+        largest_model, remaining_08
+    )
+    runtime_large_07, n_large_07, total_07 = compute_runtime_hours(
+        largest_model, remaining_07
+    )
+    runtime_large_06, n_large_06, total_06 = compute_runtime_hours(
+        largest_model, remaining_06
+    )
+    runtime_large_05, n_large_05, total_05 = compute_runtime_hours(
+        largest_model, remaining_05
+    )
 
     # Smallest model runtimes
-    runtime_small_full = compute_runtime_hours(smallest_model, tasks_to_select_from)
-    runtime_small_09 = compute_runtime_hours(smallest_model, remaining_09)
-    runtime_small_08 = compute_runtime_hours(smallest_model, remaining_08)
-    runtime_small_07 = compute_runtime_hours(smallest_model, remaining_07)
-    runtime_small_06 = compute_runtime_hours(smallest_model, remaining_06)
-    runtime_small_05 = compute_runtime_hours(smallest_model, remaining_05)
+    runtime_small_full, n_small_full, _ = compute_runtime_hours(
+        smallest_model, tasks_to_select_from
+    )
+    runtime_small_09, n_small_09, _ = compute_runtime_hours(
+        smallest_model, remaining_09
+    )
+    runtime_small_08, n_small_08, _ = compute_runtime_hours(
+        smallest_model, remaining_08
+    )
+    runtime_small_07, n_small_07, _ = compute_runtime_hours(
+        smallest_model, remaining_07
+    )
+    runtime_small_06, n_small_06, _ = compute_runtime_hours(
+        smallest_model, remaining_06
+    )
+    runtime_small_05, n_small_05, _ = compute_runtime_hours(
+        smallest_model, remaining_05
+    )
 
     print(f"Runtime for LARGEST model ({largest_model}):")
-    print(f"  Full:           {runtime_large_full:.3f} hours")
-    print(f"  Threshold 0.9:  {runtime_large_09:.3f} hours")
-    print(f"  Threshold 0.8:  {runtime_large_08:.3f} hours")
-    print(f"  Threshold 0.7:  {runtime_large_07:.3f} hours")
-    print(f"  Threshold 0.6:  {runtime_large_06:.3f} hours")
-    print(f"  Threshold 0.5:  {runtime_large_05:.3f} hours")
+    print(
+        f"  Full:           {runtime_large_full:.3f} hours ({n_large_full}/{total_full} tasks)"
+    )
+    print(
+        f"  Threshold 0.9:  {runtime_large_09:.3f} hours ({n_large_09}/{total_09} tasks)"
+    )
+    print(
+        f"  Threshold 0.8:  {runtime_large_08:.3f} hours ({n_large_08}/{total_08} tasks)"
+    )
+    print(
+        f"  Threshold 0.7:  {runtime_large_07:.3f} hours ({n_large_07}/{total_07} tasks)"
+    )
+    print(
+        f"  Threshold 0.6:  {runtime_large_06:.3f} hours ({n_large_06}/{total_06} tasks)"
+    )
+    print(
+        f"  Threshold 0.5:  {runtime_large_05:.3f} hours ({n_large_05}/{total_05} tasks)"
+    )
     print()
     print(f"Runtime for SMALLEST model ({smallest_model}):")
-    print(f"  Full:           {runtime_small_full:.3f} hours")
-    print(f"  Threshold 0.9:  {runtime_small_09:.3f} hours")
-    print(f"  Threshold 0.8:  {runtime_small_08:.3f} hours")
-    print(f"  Threshold 0.7:  {runtime_small_07:.3f} hours")
-    print(f"  Threshold 0.6:  {runtime_small_06:.3f} hours")
-    print(f"  Threshold 0.5:  {runtime_small_05:.3f} hours")
+    print(
+        f"  Full:           {runtime_small_full:.3f} hours ({n_small_full}/{total_full} tasks)"
+    )
+    print(
+        f"  Threshold 0.9:  {runtime_small_09:.3f} hours ({n_small_09}/{total_09} tasks)"
+    )
+    print(
+        f"  Threshold 0.8:  {runtime_small_08:.3f} hours ({n_small_08}/{total_08} tasks)"
+    )
+    print(
+        f"  Threshold 0.7:  {runtime_small_07:.3f} hours ({n_small_07}/{total_07} tasks)"
+    )
+    print(
+        f"  Threshold 0.6:  {runtime_small_06:.3f} hours ({n_small_06}/{total_06} tasks)"
+    )
+    print(
+        f"  Threshold 0.5:  {runtime_small_05:.3f} hours ({n_small_05}/{total_05} tasks)"
+    )
     return (
         runtime_large_05,
         runtime_large_06,
@@ -993,140 +1258,6 @@ def _(
     print(f"Large model: {largest_model}")
     print(f"Small model: {smallest_model}")
     comparison_df
-    return
-
-
-@app.cell
-def _(mo):
-    mo.md(r"""
-    ## Task Clustering via UMAP + HDBSCAN
-
-    We cluster tasks using their correlation vectors (each task's row in the correlation matrix).
-    UMAP reduces dimensionality, then HDBSCAN identifies clusters.
-
-    We expect the outlier cluster (-1 label) to span all task categories, serving as a foundation for balanced selection.
-    """)
-    return
-
-
-@app.cell
-def _():
-    import umap
-    import hdbscan
-
-    return hdbscan, umap
-
-
-@app.cell
-def _(hdbscan, initial_corr, np, umap):
-    # Use correlation vectors as features (each task's correlations with all other tasks)
-    correlation_vectors = initial_corr.values
-
-    # Handle NaN values by filling with 0 (no correlation)
-    correlation_vectors_clean = np.nan_to_num(correlation_vectors, nan=0.0)
-
-    # UMAP dimensionality reduction
-    umap_reducer = umap.UMAP(
-        n_components=2,
-        n_neighbors=15,
-        min_dist=0.1,
-        metric="euclidean",
-        random_state=42,
-    )
-    umap_embedding = umap_reducer.fit_transform(correlation_vectors_clean)
-
-    # HDBSCAN clustering
-    clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=3, min_samples=2, cluster_selection_epsilon=0.0
-    )
-    cluster_labels = clusterer.fit_predict(umap_embedding)
-
-    print(
-        f"Number of clusters (excluding outliers): {len(set(cluster_labels)) - (1 if -1 in cluster_labels else 0)}"
-    )
-    print(f"Number of outliers (label -1): {sum(cluster_labels == -1)}")
-    return cluster_labels, umap_embedding
-
-
-@app.cell
-def _(cluster_labels, initial_corr, np, plt, umap_embedding):
-    # Create a DataFrame with task names and their cluster assignments
-    task_cluster_map = dict(zip(initial_corr.columns, cluster_labels))
-
-    # Visualize the UMAP embedding with cluster colors
-    fig_umap, ax_umap = plt.subplots(figsize=(12, 10))
-
-    unique_labels = sorted(set(cluster_labels))
-    colors = plt.cm.tab20(np.linspace(0, 1, len(unique_labels)))
-
-    for _idx, _label in enumerate(unique_labels):
-        mask = cluster_labels == _label
-        if _label == -1:
-            ax_umap.scatter(
-                umap_embedding[mask, 0],
-                umap_embedding[mask, 1],
-                c="gray",
-                marker="x",
-                s=100,
-                label=f"Outliers ({sum(mask)})",
-                alpha=0.7,
-            )
-        else:
-            ax_umap.scatter(
-                umap_embedding[mask, 0],
-                umap_embedding[mask, 1],
-                c=[colors[_idx]],
-                marker="o",
-                s=100,
-                label=f"Cluster {_label} ({sum(mask)})",
-                alpha=0.7,
-            )
-
-    ax_umap.set_xlabel("UMAP 1", fontsize=12)
-    ax_umap.set_ylabel("UMAP 2", fontsize=12)
-    ax_umap.set_title("Task Clustering via UMAP + HDBSCAN", fontsize=14)
-    ax_umap.legend(bbox_to_anchor=(1.05, 1), loc="upper left")
-    plt.tight_layout()
-    plt.show()
-    return
-
-
-@app.cell
-def _(cluster_labels, initial_corr, mteb, pd):
-    # Analyze task types in each cluster
-    tasks_list = list(initial_corr.columns)
-    cluster_analysis = []
-
-    for _task_name, _label in zip(tasks_list, cluster_labels):
-        _task = mteb.get_task(_task_name)
-        cluster_analysis.append(
-            {"task": _task_name, "cluster": _label, "task_type": _task.metadata.type}
-        )
-
-    cluster_df = pd.DataFrame(cluster_analysis)
-    cluster_df
-    return (cluster_df,)
-
-
-@app.cell
-def _(cluster_df):
-    # Show task type distribution per cluster
-    cluster_type_counts = (
-        cluster_df.groupby(["cluster", "task_type"]).size().unstack(fill_value=0)
-    )
-    print("Task type distribution per cluster:")
-    cluster_type_counts
-    return
-
-
-@app.cell
-def _(cluster_df):
-    # Focus on outlier cluster (-1)
-    outlier_tasks = cluster_df[cluster_df["cluster"] == -1]
-    print(f"Outlier cluster contains {len(outlier_tasks)} tasks spanning these types:")
-    print(outlier_tasks["task_type"].value_counts())
-    print("\nOutlier tasks:")
-    outlier_tasks
     return
 
 
