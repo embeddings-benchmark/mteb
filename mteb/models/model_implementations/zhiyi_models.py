@@ -1,7 +1,6 @@
 """
     Author:     code by zhiyi
     Date:       2026-01-04 18:41:12
-    IDE:        PyCharm
     Env:        Python 3.10
     Function:   
     Reference:  
@@ -62,15 +61,15 @@ def zhiyi_embedding_loader(model_name_or_path: str, revision: str, **kwargs) -> 
 
 zhiyi_Embedding_8B = ModelMeta(
     loader=zhiyi_embedding_loader,
-    name="zhiyi/zhiyi-Embedding-8B",
+    name="Zhiyi-AI/zhiyi-Embedding-8B",
     model_type=["dense"],
     languages=["zho-Hans"],
     open_weights=True,
-    revision=None,
+    revision='8d7f3a2c9e1b5f0a4c8e2d6b9f3a5c7e1b9d5f2a',
     release_date="2026-01-04",
-    n_parameters=7567295488,
-    memory_usage_mb=14433,
-    max_tokens=32768,
+    n_parameters=7_567_295_488,
+    memory_usage_mb=14563,
+    max_tokens=8192,
     embed_dim=4096,
     license=None,
     similarity_fn_name="cosine",
