@@ -160,6 +160,8 @@ def test_model_to_python():
     release_date='2021-08-30',
     languages=['eng-Latn'],
     n_parameters=22700000,
+    active_parameters=10_992_768,
+    embedding_parameters=11_720_448,
     memory_usage_mb=87.0,
     max_tokens=256.0,
     embed_dim=384,
