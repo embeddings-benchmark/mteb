@@ -10,16 +10,16 @@ install-for-tests:
 
 lint:
 	@echo "--- 🧹 Running linters ---"
-	uv run --no-sync --group lint ruff format . 			# running ruff formatting
-	uv run --no-sync --group lint ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
-	uv run --no-sync --group lint typos
+	ruff format . 			# running ruff formatting
+	ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
+	typos
 
 lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
 	# Required for CI to work, otherwise it will just pass
-	uv run --no-sync --group lint ruff format . --check
-	uv run --no-sync --group lint ruff check .
-	uv run --no-sync --group lint typos --diff
+	ruff format . --check
+	ruff check .
+	typos --diff
 
 test:
 	@echo "--- 🧪 Running tests ---"
@@ -94,4 +94,4 @@ check: ## Run code quality tools.
 .PHONY: typecheck
 typecheck:
 	@echo "--- 🔍 Running type checks ---"
-	uv run --no-sync --group typing --extra leaderboard mypy mteb
+	mypy mteb

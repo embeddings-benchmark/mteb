@@ -43,7 +43,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --group typing
+          uv sync --group typing --extra leaderboard
 
       - name: Build and Deploy
         run: |
