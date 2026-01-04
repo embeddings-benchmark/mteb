@@ -44,7 +44,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          make install-for-tests
+          make install
 
       - name: Lint
         id: lint

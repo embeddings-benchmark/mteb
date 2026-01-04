@@ -43,7 +43,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          make install
+          make install-for-tests
 
       - name: Build and Deploy
         run: |
