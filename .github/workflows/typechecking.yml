@@ -44,7 +44,6 @@ jobs:
       - name: Install dependencies
         run: |
           make install
-          uv sync --group typing --extra leaderboard
 
       - name: Build and Deploy
         run: |

@@ -45,7 +45,6 @@ jobs:
       - name: Install dependencies
         run: |
           make install
-          uv sync --group linting
 
       - name: Lint
         id: lint
