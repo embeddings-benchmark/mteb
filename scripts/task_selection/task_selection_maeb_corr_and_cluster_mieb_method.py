@@ -560,6 +560,19 @@ def _(mteb, np, tasks_to_keep: list[str]):
 
         return True
 
+    def get_pairs_above_threshold(
+        corr_matrix, threshold: float
+    ) -> list[tuple[str, str, float]]:
+        """Get all task pairs with correlation above threshold, sorted by correlation descending."""
+        pairs = []
+        cols = corr_matrix.columns.tolist()
+        for i, task1 in enumerate(cols):
+            for task2 in cols[i + 1 :]:
+                corr_val = corr_matrix.loc[task1, task2]
+                if not np.isnan(corr_val) and corr_val > threshold:
+                    pairs.append((task1, task2, corr_val))
+        return sorted(pairs, key=lambda x: x[2], reverse=True)
+
     def iterative_removal_by_correlation(
         df,
         initial_tasks: list[str],
@@ -568,6 +581,7 @@ def _(mteb, np, tasks_to_keep: list[str]):
         """
         Iteratively remove tasks based on highest pairwise correlation.
         When a pair exceeds threshold, remove the task with higher avg correlation.
+        If neither task in a pair can be removed, skip to the next pair.
 
         Returns:
             remaining_tasks: Tasks that remain after filtering
@@ -577,35 +591,51 @@ def _(mteb, np, tasks_to_keep: list[str]):
         current_tasks = initial_tasks.copy()
         removed_tasks: list[str] = []
         max_correlations: list[float] = []
+        skipped_pairs: set[tuple[str, str]] = (
+            set()
+        )  # pairs where neither task can be removed
 
         while len(current_tasks) > 1:
             corr_matrix = compute_correlation_matrix(df, current_tasks)
-            task1, task2, max_corr = get_max_pairwise_correlation(corr_matrix)
+            pairs_above = get_pairs_above_threshold(corr_matrix, threshold)
 
-            if max_corr is None or max_corr <= threshold:
+            if not pairs_above:
                 break
 
-            # Decide which task to remove: the one with higher avg correlation
-            avg_corrs = get_avg_correlations(corr_matrix)
-
-            # Try to remove the one with higher avg correlation first
-            candidates = sorted(
-                [(task1, avg_corrs[task1]), (task2, avg_corrs[task2])],
-                key=lambda x: x[1],
-                reverse=True,
-            )
-
+            # Find the first pair where we can remove a task
             task_removed = False
-            for _task_name, _ in candidates:
-                if is_candidate_valid_removal(current_tasks, _task_name):
-                    current_tasks.remove(_task_name)
-                    removed_tasks.append(_task_name)
-                    max_correlations.append(max_corr)
-                    task_removed = True
+            for task1, task2, corr_val in pairs_above:
+                # Skip pairs we've already tried and couldn't remove
+                pair_key = (min(task1, task2), max(task1, task2))
+                if pair_key in skipped_pairs:
+                    continue
+
+                # Decide which task to remove: the one with higher avg correlation
+                avg_corrs = get_avg_correlations(corr_matrix)
+                candidates = sorted(
+                    [(task1, avg_corrs[task1]), (task2, avg_corrs[task2])],
+                    key=lambda x: x[1],
+                    reverse=True,
+                )
+
+                for _task_name, _ in candidates:
+                    if is_candidate_valid_removal(current_tasks, _task_name):
+                        current_tasks.remove(_task_name)
+                        removed_tasks.append(_task_name)
+                        max_correlations.append(corr_val)
+                        task_removed = True
+                        # Clear skipped pairs since task set changed
+                        skipped_pairs.clear()
+                        break
+
+                if task_removed:
                     break
+                else:
+                    # Neither task in this pair can be removed, mark as skipped
+                    skipped_pairs.add(pair_key)
 
             if not task_removed:
-                # Neither task in the pair can be removed
+                # All pairs above threshold have been processed and none could be removed
                 break
 
         return current_tasks, removed_tasks, max_correlations
