@@ -81,7 +81,7 @@ def calculate_audio_statistics(audios: list[AudioInputItem]) -> AudioStatistics:
         audios: List of audio clips to analyze. Each audio clip should be a dictionary with 'array' and 'sampling_rate' keys.
 
     Returns:
-        AudioStatistics: A dictionary containing the descriptive statistics.
+        A dictionary containing the descriptive statistics.
     """
     audio_lengths = []
     sampling_rates = defaultdict(int)
