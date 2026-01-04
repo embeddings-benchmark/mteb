@@ -94,4 +94,4 @@ check: ## Run code quality tools.
 .PHONY: typecheck
 typecheck:
 	@echo "--- 🔍 Running type checks ---"
-	uv run --group typing --extra leaderboard mypy mteb
+	uv run --no-sync --group typing --extra leaderboard mypy mteb
