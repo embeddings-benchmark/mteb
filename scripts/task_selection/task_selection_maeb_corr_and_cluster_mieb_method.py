@@ -146,13 +146,14 @@ def _(audio_tasks, tasks_to_remove):
     # we also want somewhat permissible licenses
     for t in audio_tasks:
         print(t.metadata.name, "-", t.metadata.license)
-    # remove tasks with "not specified" licenses
-    not_specified_license_tasks = [
-        t.metadata.name
-        for t in audio_tasks
-        if t.metadata.license is None or t.metadata.license.lower() == "not specified"
-    ]
-    tasks_to_remove_1 = tasks_to_remove + not_specified_license_tasks
+    # # remove tasks with "not specified" licenses
+    # not_specified_license_tasks = [
+    #     t.metadata.name
+    #     for t in audio_tasks
+    #     if t.metadata.license is None or t.metadata.license.lower() == "not specified"
+    # ]
+    # tasks_to_remove_1 = tasks_to_remove + not_specified_license_tasks
+    tasks_to_remove_1 = tasks_to_remove  # keep all tasks regardless of license
     return (tasks_to_remove_1,)
 
 
@@ -745,8 +746,20 @@ def _(model_task_times, mteb, tasks_to_select_from):
         if tasks_set.issubset(set(times.keys()))
     ]
     print(
-        f"Models with complete eval times for all {len(tasks_to_select_from)} tasks: {len(valid_models)}, {valid_models}"
+        f"Models with complete eval times for all {len(tasks_to_select_from)} tasks: {len(valid_models)}"
     )
+
+    # If no models have complete coverage, fall back to models with most coverage
+    if not valid_models:
+        coverage = {
+            _model_name: len(tasks_set & set(times.keys()))
+            for _model_name, times in model_task_times.items()
+        }
+        max_coverage = max(coverage.values())
+        valid_models = [m for m, c in coverage.items() if c == max_coverage]
+        print(
+            f"Falling back to {len(valid_models)} models with {max_coverage}/{len(tasks_to_select_from)} task coverage"
+        )
 
     # Find largest and smallest models by memory usage (MB) among valid models
     model_memory = {}
@@ -755,15 +768,19 @@ def _(model_task_times, mteb, tasks_to_select_from):
         if _meta.memory_usage_mb:
             model_memory[_model_name] = _meta.memory_usage_mb
 
-    largest_model = max(model_memory, key=model_memory.get)
-    smallest_model = min(model_memory, key=model_memory.get)
-
-    print(
-        f"Largest model (by memory):  {largest_model} ({model_memory[largest_model]:.1f} MB)"
-    )
-    print(
-        f"Smallest model (by memory): {smallest_model} ({model_memory[smallest_model]:.1f} MB)"
-    )
+    if not model_memory:
+        print("Warning: No models with memory info found, using first valid model")
+        largest_model = valid_models[0] if valid_models else None
+        smallest_model = valid_models[0] if valid_models else None
+    else:
+        largest_model = max(model_memory, key=model_memory.get)
+        smallest_model = min(model_memory, key=model_memory.get)
+        print(
+            f"Largest model (by memory):  {largest_model} ({model_memory[largest_model]:.1f} MB)"
+        )
+        print(
+            f"Smallest model (by memory): {smallest_model} ({model_memory[smallest_model]:.1f} MB)"
+        )
     return largest_model, smallest_model
 
 
@@ -842,6 +859,7 @@ def _(mo):
 @app.cell
 def _(
     largest_model,
+    mteb,
     pd,
     pearson_05,
     pearson_06,
@@ -873,6 +891,29 @@ def _(
     spearman_09,
     tasks_to_select_from,
 ):
+    # Helper function to count unique languages, domains, and categories
+    def get_coverage_stats(task_names: list[str]) -> tuple[int, int, int]:
+        tasks = mteb.get_tasks(tasks=task_names)
+        languages = set()
+        domains = set()
+        categories = set()
+        for t in tasks:
+            if t.metadata.languages:
+                languages.update(t.metadata.languages)
+            if t.metadata.domains:
+                domains.update(t.metadata.domains)
+            if t.metadata.category:
+                categories.add(t.metadata.category)
+        return len(languages), len(domains), len(categories)
+
+    # Get stats for each collection
+    stats_full = get_coverage_stats(tasks_to_select_from)
+    stats_09 = get_coverage_stats(remaining_09)
+    stats_08 = get_coverage_stats(remaining_08)
+    stats_07 = get_coverage_stats(remaining_07)
+    stats_06 = get_coverage_stats(remaining_06)
+    stats_05 = get_coverage_stats(remaining_05)
+
     # Enhanced summary table
     comparison_data = {
         "Collection": [
@@ -890,6 +931,30 @@ def _(
             len(remaining_07),
             len(remaining_06),
             len(remaining_05),
+        ],
+        "Languages": [
+            stats_full[0],
+            stats_09[0],
+            stats_08[0],
+            stats_07[0],
+            stats_06[0],
+            stats_05[0],
+        ],
+        "Domains": [
+            stats_full[1],
+            stats_09[1],
+            stats_08[1],
+            stats_07[1],
+            stats_06[1],
+            stats_05[1],
+        ],
+        "Categories": [
+            stats_full[2],
+            stats_09[2],
+            stats_08[2],
+            stats_07[2],
+            stats_06[2],
+            stats_05[2],
         ],
         "Spearman (vs Full)": [
             1.0,
