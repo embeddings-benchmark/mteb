@@ -10,6 +10,7 @@ from functools import partial
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
+import numpy as np
 from huggingface_hub import (
     GitCommitInfo,
     ModelCard,
@@ -28,7 +29,7 @@ from huggingface_hub.errors import (
     SafetensorsParsingError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
-from transformers import AutoConfig
+from transformers import AutoConfig, AutoModel
 from typing_extensions import Self
 
 from mteb._helpful_enum import HelpfulStrEnum
@@ -93,7 +94,9 @@ class ModelMeta(BaseModel):
         loader_kwargs: The keyword arguments to pass to the loader function.
         name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
         n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
-            if the loader returns a SentenceTransformer model from which it can be derived.
+            if the loader returns a SentenceTransformer model from which it can be derived. These are total number of parameter of model (active_parameters + embedding_parameters).
+        active_parameters: The number of active (trainable) parameters in the model. Can be None if the number of active parameters is not known (e.g. for proprietary models).
+        embedding_parameters: The number of parameters used for embedding generation. Can be None if the number of embedding parameters is not known (e.g. for proprietary models).
         memory_usage_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
@@ -132,6 +135,8 @@ class ModelMeta(BaseModel):
     release_date: StrDate | None
     languages: list[ISOLanguageScript] | None
     n_parameters: int | None
+    active_parameters: int | None = None
+    embedding_parameters: int | None = None
     memory_usage_mb: float | None
     max_tokens: float | None
     embed_dim: int | None
@@ -303,6 +308,8 @@ class ModelMeta(BaseModel):
         model_license = None
         reference = None
         n_parameters = None
+        active_parameters = None
+        embedding_parameters = None
         memory_usage_mb = None
         release_date = None
         embedding_dim = None
@@ -335,6 +342,9 @@ class ModelMeta(BaseModel):
             release_date = cls.fetch_release_date(model_name)
             model_license = card_data.license
             n_parameters = cls._calculate_num_parameters_from_hub(model_name)
+            active_parameters, embedding_parameters = (
+                cls._extract_parameter_breakdown_from_hub(model_name)
+            )
             memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
             if model_config and hasattr(model_config, "hidden_size"):
                 embedding_dim = model_config.hidden_size
@@ -353,6 +363,8 @@ class ModelMeta(BaseModel):
             training_datasets=None,
             similarity_fn_name=None,
             n_parameters=n_parameters,
+            active_parameters=active_parameters,
+            embedding_parameters=embedding_parameters,
             memory_usage_mb=memory_usage_mb,
             max_tokens=max_tokens,
             embed_dim=embedding_dim,
@@ -574,6 +586,40 @@ class ModelMeta(BaseModel):
             Number of parameters in the model.
         """
         return self._calculate_num_parameters_from_hub(self.name)
+
+    @staticmethod
+    def _extract_parameter_breakdown_from_hub(
+        model_name: str,
+    ) -> tuple[int | None, int | None]:
+        active_parameters, embedding_parameters = None, None
+        try:
+            model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
+            emb = model.get_input_embeddings()
+            if emb is not None:
+                embedding_parameters = int(np.prod(emb.weight.shape))
+
+            total_params = sum(p.numel() for p in model.parameters())
+            total_params = int(total_params)
+            if embedding_parameters is not None and total_params is not None:
+                active_parameters = total_params - embedding_parameters
+            elif total_params is not None:
+                active_parameters = total_params
+
+        except Exception as e:
+            logger.warning(
+                f"Could not calculate active/embedding parameters for {model_name}: {e}"
+            )
+        return active_parameters, embedding_parameters
+
+    def extract_parameter_breakdown_from_hub(self) -> tuple[int | None, int | None]:
+        """Extracts the breakdown of active and embedding parameters from the model.
+
+        Returns:
+            A tuple containing the number of active parameters and embedding parameters.
+        """
+        if not self.name:
+            return None, None
+        return self._extract_parameter_breakdown_from_hub(self.name)
 
     @staticmethod
     def _calculate_memory_usage_mb(
