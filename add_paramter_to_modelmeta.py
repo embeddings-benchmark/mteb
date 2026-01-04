@@ -1,13 +1,3 @@
-"""Populate active_parameters and embedding_parameters in ModelMeta definitions
-using values from a CSV file.
-
-Robust version:
-- Uses AST to find ModelMeta(name="...")
-- Updates exact ModelMeta call in source
-- Inserts fields immediately after n_parameters
-- Idempotent and safe to re-run
-"""
-
 import ast
 import csv
 import logging
@@ -22,13 +12,11 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-# ---------------------------------------------------------------------
-# CSV loading
-# ---------------------------------------------------------------------
 def load_parameters_from_csv(csv_path: Path) -> dict[str, dict[str, int | None]]:
+    """Load model parameters from CSV file."""
     parameters = {}
 
-    with open(csv_path, encoding="utf-8") as f:
+    with Path.open(csv_path, encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             model_name = row["model_name"]
@@ -46,9 +34,6 @@ def load_parameters_from_csv(csv_path: Path) -> dict[str, dict[str, int | None]]
     return parameters
 
 
-# ---------------------------------------------------------------------
-# AST helpers
-# ---------------------------------------------------------------------
 def find_modelmeta_call_by_name(
     content: str, model_name: str
 ) -> tuple[int, int] | None:
@@ -75,8 +60,7 @@ def find_modelmeta_call_by_name(
 
 
 def find_model_implementation_files() -> dict[str, Path]:
-    """Map model_name -> source file where ModelMeta(name="...") is defined.
-    """
+    """Map model_name -> source file where ModelMeta(name="...") is defined."""
     model_to_file = {}
     impl_dir = Path(__file__).parent / "mteb" / "models" / "model_implementations"
 
@@ -100,9 +84,6 @@ def find_model_implementation_files() -> dict[str, Path]:
     return model_to_file
 
 
-# ---------------------------------------------------------------------
-# Source update logic
-# ---------------------------------------------------------------------
 def update_modelmeta_parameters(
     file_path: Path,
     model_name: str,
@@ -150,18 +131,16 @@ def update_modelmeta_parameters(
     return True
 
 
-# ---------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------
 def main():
-    CSV_PATH = Path("model total and active parameters - model_parameters.csv")
-    RESULT_LOG = Path("parameter_update_results.csv")
+    """Update ModelMeta definitions with active_parameters and embedding_parameters from CSV."""
+    csv_path = Path("model total and active parameters - model_parameters.csv")
+    result_log = Path("parameter_update_results.csv")
 
-    if not CSV_PATH.exists():
-        logger.error(f"CSV not found: {CSV_PATH}")
+    if not csv_path.exists():
+        logger.error(f"CSV not found: {csv_path}")
         return
 
-    params = load_parameters_from_csv(CSV_PATH)
+    params = load_parameters_from_csv(csv_path)
     model_to_file = find_model_implementation_files()
 
     results = []
@@ -192,9 +171,9 @@ def main():
             }
         )
 
-        pd.DataFrame(results).to_csv(RESULT_LOG, index=False)
+        pd.DataFrame(results).to_csv(result_log, index=False)
 
-    logger.info(f"Finished. Results saved to {RESULT_LOG}")
+    logger.info(f"Finished. Results saved to {result_log}")
 
 
 if __name__ == "__main__":

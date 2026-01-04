@@ -159,7 +159,7 @@ def test_model_to_python():
     revision='8b3219a92973c328a8e22fadcfa821b5dc75636a',
     release_date='2021-08-30',
     languages=['eng-Latn'],
-    n_parameters=22700000,
+    n_parameters=22_700_000,
     active_parameters=10_992_768,
     embedding_parameters=11_720_448,
     memory_usage_mb=87.0,
