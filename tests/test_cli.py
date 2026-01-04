@@ -4,6 +4,7 @@ import subprocess
 import sys
 from argparse import Namespace
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 import pytest
 import yaml
@@ -12,6 +13,7 @@ from mteb.cli.build_cli import (
     _available_benchmarks,
     _available_tasks,
     _create_meta,
+    _leaderboard,
     run,
 )
 
@@ -197,3 +199,107 @@ def test_create_meta_from_existing(
     command = f"{sys.executable} -m mteb create-model-results --model-name {model_name} --results-folder {output_folder.as_posix()} --output-path {output_path.as_posix()} --from-existing {existing_readme.as_posix()} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
+
+
+def test_leaderboard_help():
+    """Test that leaderboard help command works."""
+    command = [sys.executable, "-m", "mteb", "leaderboard", "--help"]
+    result = subprocess.run(command, capture_output=True, text=True)
+
+    assert result.returncode == 0, "Leaderboard help command failed"
+    assert "--cache-path" in result.stdout, "--cache-path option not found in help"
+    assert "--host" in result.stdout, "--host option not found in help"
+    assert "--port" in result.stdout, "--port option not found in help"
+    assert "--share" in result.stdout, "--share option not found in help"
+    assert "Path to the cache folder containing model results" in result.stdout, (
+        "Cache path description not found"
+    )
+
+
+@pytest.mark.parametrize(
+    "cache_path_input,host,port,share,test_description",
+    [
+        ("custom", "localhost", 8080, True, "custom cache path"),
+        (None, "127.0.0.1", 7860, False, "default cache path"),
+    ],
+)
+def test_leaderboard_cache_paths(
+    tmp_path: Path, cache_path_input, host, port, share, test_description
+):
+    """Test leaderboard with different cache path configurations."""
+
+    # Set up cache path based on parameter
+    if cache_path_input == "custom":
+        custom_cache = tmp_path / "my_results"
+        custom_cache.mkdir(exist_ok=True)
+        cache_path = str(custom_cache)
+        expected_cache_path = custom_cache
+    else:
+        cache_path = None
+        from mteb.cache import ResultCache
+
+        expected_cache_path = ResultCache().default_cache_path
+
+    # Mock the get_leaderboard_app function and the gradio app
+    mock_app = MagicMock()
+    mock_app.launch = MagicMock()
+
+    # Create a mock function that captures the cache argument and returns our mock app
+    def mock_get_app_func(cache):
+        # Store the cache for verification
+        mock_get_app_func.called_with_cache = cache
+        return mock_app
+
+    # Mock gradio themes
+    mock_theme = MagicMock()
+    mock_font = MagicMock()
+
+    # Patch the local import inside _leaderboard function
+    with patch.dict(
+        "sys.modules",
+        {
+            "mteb.leaderboard": MagicMock(get_leaderboard_app=mock_get_app_func),
+            "gradio": MagicMock(
+                themes=MagicMock(
+                    Soft=MagicMock(return_value=mock_theme),
+                    GoogleFont=MagicMock(return_value=mock_font),
+                )
+            ),
+        },
+    ):
+        args = Namespace(
+            cache_path=cache_path,
+            host=host,
+            port=port,
+            share=share,
+        )
+
+        _leaderboard(args)
+
+        # Verify get_leaderboard_app was called with a cache that has the correct path
+        assert hasattr(mock_get_app_func, "called_with_cache"), (
+            "get_leaderboard_app was not called"
+        )
+        cache_instance = mock_get_app_func.called_with_cache
+        assert cache_instance.cache_path == expected_cache_path, (
+            f"Expected cache path {expected_cache_path}, got {cache_instance.cache_path}"
+        )
+
+        # Verify launch parameters
+        mock_app.launch.assert_called_once_with(
+            server_name=host,
+            server_port=port,
+            share=share,
+            theme=mock_theme,
+            head='\n    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">\n    ',
+        )
+
+
+def test_leaderboard_cli_integration():
+    """Test the full CLI command integration."""
+    # Test that the command is recognized by the CLI
+    command = [sys.executable, "-m", "mteb", "--help"]
+    result = subprocess.run(command, capture_output=True, text=True)
+
+    assert result.returncode == 0
+    assert "leaderboard" in result.stdout, "Leaderboard command not found in main help"
