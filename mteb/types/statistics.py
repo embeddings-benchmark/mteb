@@ -72,11 +72,11 @@ class AudioStatistics(TypedDict):
         sampling_rates: Dict of unique sampling rates and their frequencies
     """
 
-    total_audio_seconds_length: float
+    total_duration_seconds: float
 
-    min_audio_seconds_length: float
-    average_audio_seconds_length: float
-    max_audio_seconds_length: float
+    min_duration_seconds: float
+    average_duration_seconds: float
+    max_duration_seconds: float
 
     unique_audios: int
 
