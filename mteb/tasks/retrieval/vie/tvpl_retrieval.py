@@ -7,7 +7,7 @@ TEST_SAMPLES = 2048
 class TVPLRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="TVPLRetrieval",
-        description="A Vietnamese dataset for evaluating .",
+        description="A Vietnamese dataset for evaluating legal text retrieval. From Thu vien phap luat (TVPL) dataset: Optimizing Answer Generator in Vietnamese Legal Question Answering Systems Using Language Models.",
         reference="https://aclanthology.org/2020.coling-main.233.pdf",
         dataset={
             "path": "GreenNode/TVPL-Retrieval-VN",
@@ -37,6 +37,6 @@ class TVPLRetrieval(AbsTaskRetrieval):
   title = {Optimizing Answer Generator in Vietnamese Legal Question Answering Systems Using Language Models},
   url = {https://doi.org/10.1145/3732938},
   year = {2025},
-}     
+}
 """,
     )
