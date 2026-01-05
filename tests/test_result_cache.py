@@ -431,7 +431,7 @@ class TestLoadQuickcacheFromRemote:
     def test_local_cache_exists(self, tmp_path):
         """Test that if local cache exists, it loads from there without downloading."""
         cache = ResultCache(cache_path=tmp_path)
-        
+
         # Create a mock cache file with valid JSON content
         cache_file = tmp_path / "cached_results.json"
         test_data = {
@@ -439,87 +439,99 @@ class TestLoadQuickcacheFromRemote:
                 {
                     "model_name": "test-model",
                     "model_revision": "abc123",
-                    "task_results": []
+                    "task_results": [],
                 }
             ]
         }
         cache_file.write_text(json.dumps(test_data), encoding="utf-8")
-        
+
         # Mock BenchmarkResults.from_disk to return a known object
         mock_results = Mock(spec=BenchmarkResults)
-        with patch.object(BenchmarkResults, 'from_disk', return_value=mock_results) as mock_from_disk:
+        with patch.object(
+            BenchmarkResults, "from_disk", return_value=mock_results
+        ) as mock_from_disk:
             result = cache._load_quickcache_from_remote(cache_path=cache_file)
-        
+
         # Verify the result is what we expected
         assert result is mock_results
-        
+
         # Verify from_disk was called with the correct path
         mock_from_disk.assert_called_once_with(cache_file)
-        
+
     def test_local_cache_corrupt_downloads_fresh(self, tmp_path):
         """Test that if local cache is corrupt, it downloads a fresh copy."""
         cache = ResultCache(cache_path=tmp_path)
-        
+
         # Create a corrupt cache file
         cache_file = tmp_path / "cached_results.json"
         cache_file.write_text("CORRUPT DATA", encoding="utf-8")
-        
+
         # Mock the methods we expect to be called
         mock_download_result = tmp_path / "downloaded.json"
         mock_benchmark_results = Mock(spec=BenchmarkResults)
-        
-        with patch.object(BenchmarkResults, 'from_disk') as mock_from_disk, \
-             patch.object(cache, '_download_cached_results_from_branch', return_value=mock_download_result) as mock_download:
-            
+
+        with (
+            patch.object(BenchmarkResults, "from_disk") as mock_from_disk,
+            patch.object(
+                cache,
+                "_download_cached_results_from_branch",
+                return_value=mock_download_result,
+            ) as mock_download,
+        ):
             # First call to from_disk should fail (corrupt file)
             # Second call should succeed (after download)
             mock_from_disk.side_effect = [
                 Exception("Invalid JSON"),
-                mock_benchmark_results
+                mock_benchmark_results,
             ]
-            
+
             result = cache._load_quickcache_from_remote(cache_path=cache_file)
-        
+
         # Verify the result
         assert result is mock_benchmark_results
-        
+
         # Verify download was called
         mock_download.assert_called_once_with(output_path=cache_file)
-        
+
         # Verify from_disk was called twice (once for corrupt, once after download)
         assert mock_from_disk.call_count == 2
-        
-    @patch('mteb.get_model_metas')
+
+    @patch("mteb.get_model_metas")
     def test_download_fails_fallback_to_full_repo(self, mock_get_model_metas, tmp_path):
         """Test that if download from cached-data fails, it falls back to full repo clone."""
         cache = ResultCache(cache_path=tmp_path)
-        
+
         # Set up the cache path
         cache_file = tmp_path / "cached_results.json"
-        
+
         # Mock model metas
         mock_model1 = Mock()
         mock_model1.name = "model-1"
         mock_model2 = Mock()
         mock_model2.name = "model-2"
         mock_get_model_metas.return_value = [mock_model1, mock_model2]
-        
+
         # Mock results that will be returned by load_results
         mock_benchmark_results = Mock(spec=BenchmarkResults)
-        
-        with patch.object(cache, '_download_cached_results_from_branch') as mock_download, \
-             patch.object(cache, 'download_from_remote') as mock_download_remote, \
-             patch.object(cache, 'load_results', return_value=mock_benchmark_results) as mock_load_results, \
-             patch.object(mock_benchmark_results, 'to_disk') as mock_to_disk:
-            
+
+        with (
+            patch.object(
+                cache, "_download_cached_results_from_branch"
+            ) as mock_download,
+            patch.object(cache, "download_from_remote") as mock_download_remote,
+            patch.object(
+                cache, "load_results", return_value=mock_benchmark_results
+            ) as mock_load_results,
+            patch.object(mock_benchmark_results, "to_disk") as mock_to_disk,
+        ):
             # Make download from cached-data fail
             mock_download.side_effect = requests.exceptions.HTTPError("404 Not Found")
-            
+
             result = cache._load_quickcache_from_remote(cache_path=cache_file)
-        
+
         # Verify the result
         assert result is mock_benchmark_results
-        
+
         # Verify the fallback sequence was called
         mock_download.assert_called_once_with(output_path=cache_file)
         mock_download_remote.assert_called_once()
@@ -530,95 +542,109 @@ class TestLoadQuickcacheFromRemote:
             include_remote=True,
         )
         mock_to_disk.assert_called_once_with(cache_file)
-        
+
     def test_default_cache_path(self, tmp_path):
         """Test that default cache path is used when none is provided."""
         cache = ResultCache(cache_path=tmp_path)
-        
+
         # Create a mock results object
         mock_results = Mock(spec=BenchmarkResults)
-        
+
         # Get the expected default path
         mteb_package_dir = Path(mteb.__file__).parent
-        expected_default_path = mteb_package_dir / "leaderboard" / "__cached_results.json"
-        
+        expected_default_path = (
+            mteb_package_dir / "leaderboard" / "__cached_results.json"
+        )
+
         # Create the file at the default location
         expected_default_path.parent.mkdir(parents=True, exist_ok=True)
         test_data = {"results": []}
         expected_default_path.write_text(json.dumps(test_data), encoding="utf-8")
-        
+
         try:
-            with patch.object(BenchmarkResults, 'from_disk', return_value=mock_results) as mock_from_disk:
+            with patch.object(
+                BenchmarkResults, "from_disk", return_value=mock_results
+            ) as mock_from_disk:
                 result = cache._load_quickcache_from_remote()  # No cache_path provided
-            
+
             # Verify the result
             assert result is mock_results
-            
+
             # Verify from_disk was called with the default path
             mock_from_disk.assert_called_once_with(expected_default_path)
         finally:
             # Clean up the test file we created
             if expected_default_path.exists():
                 expected_default_path.unlink()
-    
-    @patch('mteb.get_model_metas')
-    def test_full_workflow_no_cache(self, mock_get_model_metas, tmp_path, mock_benchmark_json, mock_gzipped_content):
+
+    @patch("mteb.get_model_metas")
+    def test_full_workflow_no_cache(
+        self, mock_get_model_metas, tmp_path, mock_benchmark_json, mock_gzipped_content
+    ):
         """Test the full workflow when no cache exists and download succeeds."""
         cache = ResultCache(cache_path=tmp_path)
-        
+
         # Set up the cache path
         cache_file = tmp_path / "cached_results.json"
-        
+
         # Mock model metas (not needed for this path but good to have)
         mock_model1 = Mock()
         mock_model1.name = "model-1"
         mock_get_model_metas.return_value = [mock_model1]
-        
+
         # Mock the successful download
         mock_results = Mock(spec=BenchmarkResults)
-        
-        with patch.object(cache, '_download_cached_results_from_branch', return_value=cache_file) as mock_download, \
-             patch.object(BenchmarkResults, 'from_disk', return_value=mock_results) as mock_from_disk:
-            
+
+        with (
+            patch.object(
+                cache, "_download_cached_results_from_branch", return_value=cache_file
+            ) as mock_download,
+            patch.object(
+                BenchmarkResults, "from_disk", return_value=mock_results
+            ) as mock_from_disk,
+        ):
             # Ensure cache file doesn't exist
             assert not cache_file.exists()
-            
+
             result = cache._load_quickcache_from_remote(cache_path=cache_file)
-        
+
         # Verify the result
         assert result is mock_results
-        
+
         # Verify download was called since cache didn't exist
         mock_download.assert_called_once_with(output_path=cache_file)
-        
+
         # Verify from_disk was called to load the downloaded file
         mock_from_disk.assert_called_once_with(cache_file)
-    
-    @patch('mteb.get_model_metas')
+
+    @patch("mteb.get_model_metas")
     def test_all_strategies_fail(self, mock_get_model_metas, tmp_path):
         """Test behavior when all loading strategies fail."""
         cache = ResultCache(cache_path=tmp_path)
-        
+
         # Set up the cache path
         cache_file = tmp_path / "cached_results.json"
-        
+
         # Mock model metas
         mock_model1 = Mock()
         mock_model1.name = "model-1"
         mock_get_model_metas.return_value = [mock_model1]
-        
-        with patch.object(cache, '_download_cached_results_from_branch') as mock_download, \
-             patch.object(cache, 'download_from_remote') as mock_download_remote, \
-             patch.object(cache, 'load_results') as mock_load_results:
-            
+
+        with (
+            patch.object(
+                cache, "_download_cached_results_from_branch"
+            ) as mock_download,
+            patch.object(cache, "download_from_remote") as mock_download_remote,
+            patch.object(cache, "load_results") as mock_load_results,
+        ):
             # Make everything fail
             mock_download.side_effect = Exception("Download failed")
             mock_download_remote.side_effect = Exception("Remote clone failed")
-            
+
             # The method should raise an exception when everything fails
             with pytest.raises(Exception, match="Remote clone failed"):
                 cache._load_quickcache_from_remote(cache_path=cache_file)
-        
+
         # Verify the sequence of attempts
         mock_download.assert_called_once()
         mock_download_remote.assert_called_once()
