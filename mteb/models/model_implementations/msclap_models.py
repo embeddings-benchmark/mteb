@@ -1,4 +1,6 @@
 import logging
+import os
+import tempfile
 import warnings
 from typing import Any
 
@@ -58,8 +60,6 @@ class MSClapWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
-        import tempfile
-
         import soundfile as sf
         import torchaudio
 
@@ -95,7 +95,8 @@ class MSClapWrapper(AbsEncoder):
                     sf.write(temp_file.name, array.numpy(), self.sampling_rate)
 
                 with torch.no_grad():
-                    # Use the official API that expects file paths
+                    # Use the official msclap API that expects file paths
+                    # https://github.com/microsoft/CLAP#api
                     audio_features = self.model.get_audio_embeddings(
                         temp_files, resample=False
                     )
@@ -106,7 +107,6 @@ class MSClapWrapper(AbsEncoder):
                     all_embeddings.append(audio_features.cpu().detach().numpy())
             finally:
                 # Clean up temp files
-                import os
 
                 for f in temp_files:
                     try:
