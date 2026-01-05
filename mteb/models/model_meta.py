@@ -319,7 +319,9 @@ class ModelMeta(BaseModel):
                 model_config = None
                 logger.warning(f"Can't get configuration for {model_name}. Error: {e}")
 
-            hf_frameworks = cls._get_frameworks_from_hf_tags(model_name)
+            hf_frameworks = (
+                cls._get_frameworks_from_hf_tags(model_name) if model_name else []
+            )
             frameworks.extend(hf_frameworks)
 
             if revision is None:
@@ -632,19 +634,9 @@ class ModelMeta(BaseModel):
             return release_date
         return None
 
-    def calculate_frameworks_from_hub(self) -> list[FRAMEWORKS]:
-        """Calculates the frameworks supported by the model.
-
-        Returns:
-            Frameworks supported by the model.
-        """
-        if self.name is None:
-            return []
-        return self._get_frameworks_from_hf_tags(self.name)
-
     @staticmethod
     def _get_frameworks_from_hf_tags(model_name: str) -> list[FRAMEWORKS]:
-        """Extract frameworks from HuggingFace model tags.
+        """Extract frameworks supported by the model from HuggingFace model tags.
 
         Args:
             model_name: HuggingFace model name
