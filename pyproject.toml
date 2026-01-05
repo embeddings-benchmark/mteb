@@ -336,6 +336,11 @@ conflicts = [
     [{ extra = "sauerkrautlm-colpali" }, { extra = "pylate" }],
     [{ extra = "sauerkrautlm-colpali" }, { extra = "llm2vec" }],
     [{ extra = "sauerkrautlm-colpali" }, { extra = "llama-embed-nemotron" }],
+    [
+        { extra = "vllm"},
+        { extra = "model2vec" },
+        { extra = "pylate" },
+    ]
 ]
 
 [tool.uv.extra-build-dependencies]
