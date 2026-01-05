@@ -16,16 +16,22 @@ sbert_swedish = ModelMeta(
     max_tokens=384,
     reference="https://huggingface.co/KBLab/sentence-bert-swedish-cased",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "safetensors",
+        "GGUF",
+        "Transformers",
+    ],
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
     adapted_from="sentence-transformers/all-mpnet-base-v2",
-    citation="""@misc{rekathati2021introducing,  
-  author = {Rekathati, Faton},  
-  title = {The KBLab Blog: Introducing a Swedish Sentence Transformer},  
-  url = {https://kb-labb.github.io/posts/2021-08-23-a-swedish-sentence-transformer/},  
-  year = {2021}  
+    citation="""@misc{rekathati2021introducing,
+  author = {Rekathati, Faton},
+  title = {The KBLab Blog: Introducing a Swedish Sentence Transformer},
+  url = {https://kb-labb.github.io/posts/2021-08-23-a-swedish-sentence-transformer/},
+  year = {2021}
 }""",
 )

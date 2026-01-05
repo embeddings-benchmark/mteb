@@ -234,7 +234,7 @@ monobert_large = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers"],
 )
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
@@ -259,7 +259,13 @@ jina_reranker_multilingual = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "ONNX",
+        "safetensors",
+    ],
 )
 
 bge_reranker_v2_m3 = ModelMeta(
@@ -316,7 +322,7 @@ bge_reranker_v2_m3 = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=bge_m3_training_data,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     citation="""
     @misc{li2023making,
       title={Making Large Language Models A Better Foundation For Dense Retrieval},
