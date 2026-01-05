@@ -337,6 +337,7 @@ class LlamaEmbedNemotron(AbsEncoder):
         self,
         model_name: str,
         revision: str,
+        device: str | None = None,
     ) -> None:
         required_transformers_version = "4.51.0"
         if Version(transformers_version) != Version(required_transformers_version):
@@ -355,7 +356,7 @@ class LlamaEmbedNemotron(AbsEncoder):
         self.attn_implementation = (
             "flash_attention_2" if torch.cuda.is_available() else "eager"
         )
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.task_prompts = TASK_PROMPTS
         self.instruction_template = self._instruction_template
 

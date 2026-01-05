@@ -22,6 +22,7 @@ from huggingface_hub import (
 from huggingface_hub.errors import (
     EntryNotFoundError,
     GatedRepoError,
+    HFValidationError,
     NotASafetensorsRepoError,
     RepositoryNotFoundError,
     SafetensorsParsingError,
@@ -250,7 +251,7 @@ class ModelMeta(BaseModel):
             )
         return v
 
-    def load_model(self, **kwargs: Any) -> MTEBModels:
+    def load_model(self, device: str | None = None, **kwargs: Any) -> MTEBModels:
         """Loads the model using the specified loader function."""
         if self.loader is None:
             raise NotImplementedError(
@@ -262,6 +263,8 @@ class ModelMeta(BaseModel):
         # Allow overwrites
         _kwargs = self.loader_kwargs.copy()
         _kwargs.update(kwargs)
+        if device is not None:
+            _kwargs["device"] = device
 
         model: MTEBModels = self.loader(self.name, revision=self.revision, **_kwargs)
         model.mteb_model_meta = self  # type: ignore[misc]
@@ -305,7 +308,7 @@ class ModelMeta(BaseModel):
         embedding_dim = None
         max_tokens = None
 
-        if model_name and compute_metadata and repo_exists(model_name):
+        if model_name and compute_metadata and _repo_exists(model_name):
             reference = "https://huggingface.co/" + model_name
             card = ModelCard.load(model_name)
             card_data: ModelCardData = card.data
@@ -414,7 +417,7 @@ class ModelMeta(BaseModel):
             meta.framework.append("Sentence Transformers")
         meta.modalities = ["text"]
 
-        if model and compute_metadata and repo_exists(model):
+        if model and compute_metadata and _repo_exists(model):
             # have max_seq_length field
             sbert_config = _get_json_from_hub(
                 model, "sentence_bert_config.json", "model", revision=revision
@@ -785,3 +788,19 @@ def _get_file_on_hub(
     except (GatedRepoError, RepositoryNotFoundError, EntryNotFoundError) as e:
         logger.warning(f"Can't get file {file_name} of {repo_id}: {e}")
         return None
+
+
+def _repo_exists(repo_id: str, repo_type: str | None = None) -> bool:
+    """Checks if a repository exists on HuggingFace Hub.
+
+    Repo exists will raise HFValidationError for invalid local paths
+
+    Args:
+        repo_id: The repository ID.
+        repo_type: The type of repository (e.g., "model", "dataset", "space").
+    """
+    try:
+        return repo_exists(repo_id=repo_id, repo_type=repo_type)
+    except HFValidationError as e:
+        logger.warning(f"Can't check existence of {repo_id}: {e}")
+        return False

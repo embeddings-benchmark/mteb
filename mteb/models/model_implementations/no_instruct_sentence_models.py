@@ -30,13 +30,13 @@ class NoInstructModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
+        device: str | None = None,
         model_prompts: dict[str, str] | None = None,
         **kwargs: Any,
     ):
         from transformers import AutoModel, AutoTokenizer
 
         self.model_name = model_name
-        device = kwargs.pop("device", None)
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.model = AutoModel.from_pretrained(
             model_name, revision=revision, **kwargs
