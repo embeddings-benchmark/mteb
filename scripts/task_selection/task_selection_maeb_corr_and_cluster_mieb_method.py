@@ -108,10 +108,86 @@ def _(mo):
 
 
 @app.cell
-def _(mteb_results):
-    # Set task_name as index, then transpose so rows=models, columns=tasks
-    results_df = mteb_results.to_dataframe().set_index("task_name").T
-    results_df.head()  # inspect the dataframe
+def _(mo):
+    mo.md(r"""
+    ### Modality Filtering
+
+    Filter tasks by modality to ensure compatibility with model capabilities.
+    - **audio_only**: Tasks with modalities = ["audio"] only
+    - **audio_text**: Tasks with modalities containing both audio and text
+    - **any_audio**: Any task containing "audio" in modalities (no filtering)
+    """)
+    return
+
+
+@app.cell
+def _():
+    from typing import Literal
+
+    # Configure modality filter: "audio_only", "audio_text", or "any_audio"
+    modality_filter: Literal["audio_only", "audio_text", "any_audio"] = "audio_text"
+    return (modality_filter,)
+
+
+@app.cell
+def _(
+    audio_tasks,
+    modality_filter: 'Literal["audio_only", "audio_text", "any_audio"]',
+):
+    def filter_tasks_by_modality(tasks, filter_type: str) -> list:
+        """Filter tasks by modality type.
+
+        Args:
+            tasks: List of mteb tasks
+            filter_type: One of:
+                - "audio_only": Tasks with modalities == ["audio"]
+                - "audio_text": Tasks with both "audio" and "text" in modalities
+                - "any_audio": Any task with "audio" in modalities (no filtering)
+
+        Returns:
+            Filtered list of tasks
+        """
+        if filter_type == "any_audio":
+            return list(tasks)
+
+        filtered = []
+        for task in tasks:
+            mods = set(task.metadata.modalities)
+            if filter_type == "audio_only" and mods == {"audio"}:
+                filtered.append(task)
+            elif filter_type == "audio_text" and "audio" in mods and "text" in mods:
+                filtered.append(task)
+        return filtered
+
+    filtered_tasks = filter_tasks_by_modality(audio_tasks, modality_filter)
+    filtered_task_names = [t.metadata.name for t in filtered_tasks]
+
+    print(f"Modality filter: {modality_filter}")
+    print(f"Tasks before filter: {len(audio_tasks)}")
+    print(f"Tasks after filter: {len(filtered_tasks)}")
+    return (filtered_task_names,)
+
+
+@app.cell
+def _(filtered_task_names, mteb_results):
+    # Create full results dataframe
+    _full_df = mteb_results.to_dataframe().set_index("task_name").T
+
+    # Filter to only include tasks that pass the modality filter
+    available_tasks = [t for t in filtered_task_names if t in _full_df.columns]
+    _filtered_df = _full_df[available_tasks]
+
+    # Drop rows (models) with more than k NaN values
+    _nan_counts = _filtered_df.isna().sum(axis=1)
+    _rows_before = len(_filtered_df)
+    results_df = _filtered_df[_nan_counts <= 10]
+
+    print(f"Total tasks in results: {len(_full_df.columns)}")
+    print(f"Tasks after modality filter: {len(results_df.columns)}")
+    print(f"Models before NaN filter: {_rows_before}")
+    print(f"Models after NaN filter (<=4 NaN): {len(results_df)}")
+
+    results_df.head()
     return (results_df,)
 
 
@@ -209,7 +285,7 @@ def _(mo):
 @app.cell
 def _():
     # if you wish you can do some manual filtering here, which we will do in this example:
-    tasks_to_remove = []
+    tasks_to_remove = ["SoundDescsA2TRetrieval"]
     return (tasks_to_remove,)
 
 
@@ -254,13 +330,13 @@ def _(audio_tasks):
 
 
 @app.cell
-def _(audio_tasks, results_df, tasks_to_remove_1):
+def _(filtered_task_names, results_df, tasks_to_remove_1):
     # Filter to tasks not in removal list AND that have results
+    # Uses filtered_task_names (modality-filtered) instead of all audio_tasks
     tasks_to_select_from = [
-        task.metadata.name
-        for task in audio_tasks
-        if task.metadata.name not in tasks_to_remove_1
-        and task.metadata.name in results_df.columns
+        task_name
+        for task_name in filtered_task_names
+        if task_name not in tasks_to_remove_1 and task_name in results_df.columns
     ]
     len(tasks_to_select_from)
     return (tasks_to_select_from,)
@@ -703,6 +779,37 @@ def _(mteb, np, tasks_to_keep: list[str]):
 @app.cell
 def _(mo):
     mo.md(r"""
+    ## Run Task Selection at Threshold 0.95
+    """)
+    return
+
+
+@app.cell
+def _(iterative_removal_by_correlation, results_df, tasks_to_select_from):
+    remaining_095, removed_095, corrs_095 = iterative_removal_by_correlation(
+        results_df, tasks_to_select_from, threshold=0.95
+    )
+    print(
+        f"Threshold 0.95: {len(remaining_095)} tasks remaining, {len(removed_095)} removed"
+    )
+    return corrs_095, remaining_095, removed_095
+
+
+@app.cell
+def _(removed_095):
+    removed_095
+    return
+
+
+@app.cell
+def _(remaining_095):
+    remaining_095
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""
     ## Run Task Selection at Threshold 0.9
     """)
     return
@@ -870,18 +977,28 @@ def _(
     corrs_07,
     corrs_08,
     corrs_09,
+    corrs_095,
     plt,
     removed_05,
     removed_06,
     removed_07,
     removed_08,
     removed_09,
+    removed_095,
 ):
-    fig2, axes = plt.subplots(1, 5, figsize=(30, 5))
+    fig2, axes = plt.subplots(2, 3, figsize=(30, 10))
+    axes = axes.flatten()  # Convert 2D array to 1D for easier indexing
 
-    thresholds = [0.9, 0.8, 0.7, 0.6, 0.5]
-    removed_lists = [removed_09, removed_08, removed_07, removed_06, removed_05]
-    corrs_lists = [corrs_09, corrs_08, corrs_07, corrs_06, corrs_05]
+    thresholds = [0.95, 0.9, 0.8, 0.7, 0.6, 0.5]
+    removed_lists = [
+        removed_095,
+        removed_09,
+        removed_08,
+        removed_07,
+        removed_06,
+        removed_05,
+    ]
+    corrs_lists = [corrs_095, corrs_09, corrs_08, corrs_07, corrs_06, corrs_05]
 
     for _idx, (_thresh, _removed, _corrs) in enumerate(
         zip(thresholds, removed_lists, corrs_lists)
@@ -905,17 +1022,26 @@ def _(
 
 
 @app.cell
-def _(remaining_05, remaining_06, remaining_07, remaining_08, remaining_09):
+def _(
+    remaining_05,
+    remaining_06,
+    remaining_07,
+    remaining_08,
+    remaining_09,
+    remaining_095,
+):
     # Tasks in all thresholds (most restrictive)
     in_all = (
-        set(remaining_09)
+        set(remaining_095)
+        & set(remaining_09)
         & set(remaining_08)
         & set(remaining_07)
         & set(remaining_06)
         & set(remaining_05)
     )
 
-    print(f"Tasks in all five thresholds: {len(in_all)}")
+    print(f"Tasks in all six thresholds: {len(in_all)}")
+    print(f"Remaining at 0.95: {len(remaining_095)}")
     print(f"Remaining at 0.9: {len(remaining_09)}")
     print(f"Remaining at 0.8: {len(remaining_08)}")
     print(f"Remaining at 0.7: {len(remaining_07)}")
@@ -943,22 +1069,28 @@ def _(
     remaining_07,
     remaining_08,
     remaining_09,
+    remaining_095,
     results_df,
     tasks_to_select_from,
 ):
     # Compute average performance per model for each collection
     full_avg = results_df[tasks_to_select_from].mean(axis=1)
+    avg_095 = results_df[remaining_095].mean(axis=1)
     avg_09 = results_df[remaining_09].mean(axis=1)
     avg_08 = results_df[remaining_08].mean(axis=1)
     avg_07 = results_df[remaining_07].mean(axis=1)
     avg_06 = results_df[remaining_06].mean(axis=1)
     avg_05 = results_df[remaining_05].mean(axis=1)
-    return avg_05, avg_06, avg_07, avg_08, avg_09, full_avg
+    return avg_05, avg_06, avg_07, avg_08, avg_09, avg_095, full_avg
 
 
 @app.cell
-def _(avg_05, avg_06, avg_07, avg_08, avg_09, full_avg):
+def _(avg_05, avg_06, avg_07, avg_08, avg_09, avg_095, full_avg):
     from scipy.stats import spearmanr, pearsonr
+
+    # Full vs 0.95 threshold
+    spearman_095 = spearmanr(full_avg, avg_095)[0]
+    pearson_095 = pearsonr(full_avg, avg_095)[0]
 
     # Full vs 0.9 threshold
     spearman_09 = spearmanr(full_avg, avg_09)[0]
@@ -981,6 +1113,7 @@ def _(avg_05, avg_06, avg_07, avg_08, avg_09, full_avg):
     pearson_05 = pearsonr(full_avg, avg_05)[0]
 
     print("Correlation of average model performance (filtered vs full):")
+    print(f"  Threshold 0.95: Spearman={spearman_095:.4f}, Pearson={pearson_095:.4f}")
     print(f"  Threshold 0.9:  Spearman={spearman_09:.4f}, Pearson={pearson_09:.4f}")
     print(f"  Threshold 0.8:  Spearman={spearman_08:.4f}, Pearson={pearson_08:.4f}")
     print(f"  Threshold 0.7:  Spearman={spearman_07:.4f}, Pearson={pearson_07:.4f}")
@@ -992,11 +1125,13 @@ def _(avg_05, avg_06, avg_07, avg_08, avg_09, full_avg):
         pearson_07,
         pearson_08,
         pearson_09,
+        pearson_095,
         spearman_05,
         spearman_06,
         spearman_07,
         spearman_08,
         spearman_09,
+        spearman_095,
     )
 
 
@@ -1040,30 +1175,22 @@ def _(model_task_times, mteb, tasks_to_select_from):
     print(f"\nMinimum task coverage across all models: {min_coverage} tasks")
     print(f"Total models: {total_models}")
 
-    # Use models with >= 50 tasks evaluated for runtime estimation
-    min_task_threshold = 50
-    valid_models_for_runtime = [
-        m for m, c in model_coverage.items() if c >= min_task_threshold
-    ]
+    # Use models with complete eval times for ALL tasks for runtime estimation
     print(
-        f"\nUsing {len(valid_models_for_runtime)} models with >= {min_task_threshold} tasks for runtime estimation"
+        f"\nUsing {len(valid_models)} models with complete eval times for runtime estimation"
     )
 
     # Find largest and smallest models by memory usage (MB) among these models
     model_memory = {}
-    for _model_name in valid_models_for_runtime:
+    for _model_name in valid_models:
         _meta = mteb.get_model_meta(_model_name)
         if _meta.memory_usage_mb:
             model_memory[_model_name] = _meta.memory_usage_mb
 
     if not model_memory:
         print("Warning: No models with memory info found, using first valid model")
-        largest_model = (
-            valid_models_for_runtime[0] if valid_models_for_runtime else None
-        )
-        smallest_model = (
-            valid_models_for_runtime[0] if valid_models_for_runtime else None
-        )
+        largest_model = valid_models[0] if valid_models else None
+        smallest_model = valid_models[0] if valid_models else None
     else:
         largest_model = max(model_memory, key=model_memory.get)
         smallest_model = min(model_memory, key=model_memory.get)
@@ -1085,6 +1212,7 @@ def _(
     remaining_07,
     remaining_08,
     remaining_09,
+    remaining_095,
     smallest_model,
     tasks_to_select_from,
 ):
@@ -1109,6 +1237,9 @@ def _(
     runtime_large_full, n_large_full, total_full = compute_runtime_hours(
         largest_model, tasks_to_select_from
     )
+    runtime_large_095, n_large_095, total_095 = compute_runtime_hours(
+        largest_model, remaining_095
+    )
     runtime_large_09, n_large_09, total_09 = compute_runtime_hours(
         largest_model, remaining_09
     )
@@ -1128,6 +1259,9 @@ def _(
     # Smallest model runtimes
     runtime_small_full, n_small_full, _ = compute_runtime_hours(
         smallest_model, tasks_to_select_from
+    )
+    runtime_small_095, n_small_095, _ = compute_runtime_hours(
+        smallest_model, remaining_095
     )
     runtime_small_09, n_small_09, _ = compute_runtime_hours(
         smallest_model, remaining_09
@@ -1150,6 +1284,9 @@ def _(
         f"  Full:           {runtime_large_full:.3f} hours ({n_large_full}/{total_full} tasks)"
     )
     print(
+        f"  Threshold 0.95: {runtime_large_095:.3f} hours ({n_large_095}/{total_095} tasks)"
+    )
+    print(
         f"  Threshold 0.9:  {runtime_large_09:.3f} hours ({n_large_09}/{total_09} tasks)"
     )
     print(
@@ -1168,6 +1305,9 @@ def _(
     print(f"Runtime for SMALLEST model ({smallest_model}):")
     print(
         f"  Full:           {runtime_small_full:.3f} hours ({n_small_full}/{total_full} tasks)"
+    )
+    print(
+        f"  Threshold 0.95: {runtime_small_095:.3f} hours ({n_small_095}/{total_095} tasks)"
     )
     print(
         f"  Threshold 0.9:  {runtime_small_09:.3f} hours ({n_small_09}/{total_09} tasks)"
@@ -1190,12 +1330,14 @@ def _(
         runtime_large_07,
         runtime_large_08,
         runtime_large_09,
+        runtime_large_095,
         runtime_large_full,
         runtime_small_05,
         runtime_small_06,
         runtime_small_07,
         runtime_small_08,
         runtime_small_09,
+        runtime_small_095,
         runtime_small_full,
     )
 
@@ -1218,22 +1360,26 @@ def _(
     pearson_07,
     pearson_08,
     pearson_09,
+    pearson_095,
     remaining_05,
     remaining_06,
     remaining_07,
     remaining_08,
     remaining_09,
+    remaining_095,
     runtime_large_05,
     runtime_large_06,
     runtime_large_07,
     runtime_large_08,
     runtime_large_09,
+    runtime_large_095,
     runtime_large_full,
     runtime_small_05,
     runtime_small_06,
     runtime_small_07,
     runtime_small_08,
     runtime_small_09,
+    runtime_small_095,
     runtime_small_full,
     smallest_model,
     spearman_05,
@@ -1241,6 +1387,7 @@ def _(
     spearman_07,
     spearman_08,
     spearman_09,
+    spearman_095,
     tasks_to_select_from,
 ):
     # Helper function to count unique languages, domains, and categories
@@ -1260,6 +1407,7 @@ def _(
 
     # Get stats for each collection
     stats_full = get_coverage_stats(tasks_to_select_from)
+    stats_095 = get_coverage_stats(remaining_095)
     stats_09 = get_coverage_stats(remaining_09)
     stats_08 = get_coverage_stats(remaining_08)
     stats_07 = get_coverage_stats(remaining_07)
@@ -1270,6 +1418,7 @@ def _(
     comparison_data = {
         "Collection": [
             "Full",
+            "Threshold 0.95",
             "Threshold 0.9",
             "Threshold 0.8",
             "Threshold 0.7",
@@ -1278,6 +1427,7 @@ def _(
         ],
         "Tasks": [
             len(tasks_to_select_from),
+            len(remaining_095),
             len(remaining_09),
             len(remaining_08),
             len(remaining_07),
@@ -1286,6 +1436,7 @@ def _(
         ],
         "Languages": [
             stats_full[0],
+            stats_095[0],
             stats_09[0],
             stats_08[0],
             stats_07[0],
@@ -1294,6 +1445,7 @@ def _(
         ],
         "Domains": [
             stats_full[1],
+            stats_095[1],
             stats_09[1],
             stats_08[1],
             stats_07[1],
@@ -1302,6 +1454,7 @@ def _(
         ],
         "Categories": [
             stats_full[2],
+            stats_095[2],
             stats_09[2],
             stats_08[2],
             stats_07[2],
@@ -1310,6 +1463,7 @@ def _(
         ],
         "Spearman (vs Full)": [
             1.0,
+            spearman_095,
             spearman_09,
             spearman_08,
             spearman_07,
@@ -1318,6 +1472,7 @@ def _(
         ],
         "Pearson (vs Full)": [
             1.0,
+            pearson_095,
             pearson_09,
             pearson_08,
             pearson_07,
@@ -1326,6 +1481,7 @@ def _(
         ],
         "Runtime-Large (h)": [
             f"{runtime_large_full:.3f}",
+            f"{runtime_large_095:.3f}",
             f"{runtime_large_09:.3f}",
             f"{runtime_large_08:.3f}",
             f"{runtime_large_07:.3f}",
@@ -1334,6 +1490,7 @@ def _(
         ],
         "Runtime-Small (h)": [
             f"{runtime_small_full:.3f}",
+            f"{runtime_small_095:.3f}",
             f"{runtime_small_09:.3f}",
             f"{runtime_small_08:.3f}",
             f"{runtime_small_07:.3f}",

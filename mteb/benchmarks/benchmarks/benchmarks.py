@@ -2707,3 +2707,81 @@ JMTEB_LITE_V1 = Benchmark(
 """,
     contacts=["lsz05"],
 )
+
+MAEB_AUDIO = Benchmark(
+    name="MAEB(audio)",
+    display_name="Audio Embedding",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-music.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Classification
+            "CommonLanguageAgeDetection",
+            "LibriCount",
+            "MridinghamStroke",
+            "SpokeNEnglish",
+            "SpokenQAForIC",
+            "TUTAcousticScenes",
+            "VoxCelebSA",
+            "VoxPopuliAccentID",
+            "MInDS14",
+            "SIBFLEURS",
+            "VoxPopuliGenderID",
+            "BirdSet",
+            "FSD50K",
+            "FSD2019Kaggle",
+            # PairClassification
+            "CREMADPairClassification",
+            "NMSQAPairClassification",
+            "VocalSoundPairClassification",
+            # Reranking
+            "AudioCapsMiniReranking",
+            "FSDnoisy18kAudioReranking",
+            "VocalSoundAudioReranking",
+            # Zeroshot
+            "RavdessZeroshot",
+            "SpeechCommandsZeroshotv0.01",
+            # Clustering
+            "MusicGenreClustering",
+            "VoiceGenderClustering",
+            "VoxCelebClustering",
+            "VoxPopuliAccentClustering",
+        ]
+    ),
+    description="""MAEB(audio) is a benchmark for evaluating audio embedding models, covering 26 tasks across 5 task types: classification, pair classification, reranking, zero-shot classification, and clustering. Tasks were selected via correlation-based filtering (threshold=0.8) to maximize information diversity while minimizing redundancy.""",
+    reference=None,
+    citation="",
+    contacts=["isaac-chung", "KennethEnevoldsen"],
+)
+
+MAEB_AUDIO_TEXT = Benchmark(
+    name="MAEB(audio-text)",
+    display_name="Audio-Text Retrieval",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-music.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Audio-to-Text Retrieval
+            "AudioCapsA2TRetrieval",
+            "EmoVDBA2TRetrieval",
+            "FleursA2TRetrieval",
+            "JLCorpusA2TRetrieval",
+            "LibriTTSA2TRetrieval",
+            "MACSA2TRetrieval",
+            "MusicCapsA2TRetrieval",
+            "UrbanSound8KA2TRetrieval",
+            # Text-to-Audio Retrieval
+            "AudioSetStrongT2ARetrieval",
+            "CMUArcticT2ARetrieval",
+            "ClothoT2ARetrieval",
+            "GigaSpeechT2ARetrieval",
+            "LibriTTST2ARetrieval",
+            "MACST2ARetrieval",
+            "MusicCapsT2ARetrieval",
+            "SoundDescsT2ARetrieval",
+            "SpokenSQuADT2ARetrieval",
+        ]
+    ),
+    description="""MAEB(audio-text) is a benchmark for evaluating audio-text embedding models on cross-modal retrieval tasks, covering 17 tasks: 8 audio-to-text retrieval and 9 text-to-audio retrieval. Tasks were selected via correlation-based filtering (threshold=0.95) to maximize information diversity while minimizing redundancy.""",
+    reference=None,
+    citation="",
+    contacts=["isaac-chung", "KennethEnevoldsen"],
+)
