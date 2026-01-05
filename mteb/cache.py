@@ -280,6 +280,86 @@ class ResultCache:
 
         return results_directory
 
+    def _load_quickcache_from_remote(
+        self,
+        cache_path: Path | None = None,
+    ) -> BenchmarkResults:
+        """Load benchmark results using the best available strategy.
+        
+        Args:
+            cache_path: Path to local JSON cache file. If None, uses default location.
+        
+        Strategy:
+            1. If local cache exists at cache_path → load and return
+            2. Try downloading pre-computed cache from 'cached-data' branch → save to cache_path and return
+            3. Fallback: clone the full results repository, build from individual model files, 
+               call results.to_disk(cache_path), and return.
+        
+        Returns:
+            BenchmarkResults ready for leaderboard display
+        """
+        # Use default cache path if not provided
+        if cache_path is None:
+            # Default to mteb/leaderboard/__cached_results.json for consistency with existing code
+            mteb_package_dir = Path(__file__).parent
+            cache_path = mteb_package_dir / "leaderboard" / "__cached_results.json"
+        
+        # Strategy 1: Try to load from local cache if it exists
+        if cache_path.exists():
+            logger.info(f"Loading cached results from disk: {cache_path}")
+            try:
+                results = BenchmarkResults.from_disk(cache_path)
+                logger.info("Successfully loaded cached results from disk")
+                return results
+            except Exception as e:
+                logger.warning(
+                    f"Failed to load cached results from disk: {type(e).__name__}: {e}. "
+                    "Will try to download fresh cache."
+                )
+        
+        # Strategy 2: Try downloading pre-computed cache from 'cached-data' branch
+        logger.info("Cached results not found locally, trying to download from cached-data branch...")
+        try:
+            downloaded_path = self._download_cached_results_from_branch(
+                output_path=cache_path
+            )
+            logger.info(f"Downloaded cached results from cached-data branch to {downloaded_path}")
+            
+            # Load the downloaded cache
+            results = BenchmarkResults.from_disk(downloaded_path)
+            logger.info("Successfully loaded downloaded cached results")
+            return results
+            
+        except Exception as e:
+            logger.error(
+                f"Failed to download from cached-data branch: {type(e).__name__}: {e}. "
+                "Falling back to full repository clone."
+            )
+        
+        # Strategy 3: Fallback to cloning the full results repository
+        logger.info("Falling back to downloading full remote repository...")
+        self.download_from_remote()
+        logger.info("Downloaded remote results repository")
+        
+        # Build BenchmarkResults from individual model files
+        logger.info("Building BenchmarkResults from individual model files...")
+        all_model_names = [model_meta.name for model_meta in mteb.get_model_metas()]
+        
+        all_results = self.load_results(
+            models=all_model_names,
+            only_main_score=True,
+            require_model_meta=False,
+            include_remote=True,
+        )
+        
+        # Save the built results to cache for future use
+        logger.info(f"Saving built results to cache: {cache_path}")
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        all_results.to_disk(cache_path)
+        
+        logger.info("Successfully built and cached results from repository")
+        return all_results
+
     def _download_cached_results_from_branch(
         self,
         branch: str = "cached-data",

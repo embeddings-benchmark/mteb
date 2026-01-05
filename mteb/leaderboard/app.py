@@ -79,7 +79,7 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
         try:
             # Use ResultCache's optimized download method
             # Default saves to mteb/leaderboard/__cached_results.json
-            results_cache_path = cache._download_cached_results_from_branch()
+            results_cache_path = cache._load_quickcache_from_remote()
             download_time = time.time() - start_time
             logger.info(
                 f"Downloaded cached results from cached-data branch in {download_time:.2f}s"
