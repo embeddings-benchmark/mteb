@@ -415,6 +415,7 @@ def _(mo):
 def _(results_df, tasks_to_select_from):
     import matplotlib.pyplot as plt
     import seaborn as sns
+    import seaborn as sns
 
     initial_corr = compute_correlation_matrix(results_df, tasks_to_select_from)
 
