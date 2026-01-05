@@ -37,6 +37,7 @@ def load_parameters_from_csv(csv_path: Path) -> dict[str, dict[str, int | None]]
 def find_modelmeta_call_by_name(
     content: str, model_name: str
 ) -> tuple[int, int] | None:
+
     """Locate the exact ModelMeta(name="...") call in the file.
     Returns character offsets (start, end).
     """
@@ -90,6 +91,7 @@ def update_modelmeta_parameters(
     active_params: int | None,
     embedding_params: int | None,
 ) -> bool:
+
     """Insert active_parameters and embedding_parameters
     immediately after n_parameters inside the ModelMeta(...) call.
     """

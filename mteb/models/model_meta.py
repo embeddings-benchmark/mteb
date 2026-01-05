@@ -95,8 +95,8 @@ class ModelMeta(BaseModel):
         name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
         n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
             if the loader returns a SentenceTransformer model from which it can be derived. These are total number of parameter of model (active_parameters + embedding_parameters).
-        active_parameters: The number of active (trainable) parameters in the model. Can be None if the number of active parameters is not known (e.g. for proprietary models).
-        embedding_parameters: The number of parameters used for embedding generation. Can be None if the number of embedding parameters is not known (e.g. for proprietary models).
+        active_parameters: The number of active (trainable) parameters in the model. Can be None if the number of active parameters is not known (e.g. for proprietary models). To calculate it use the `extact_parameter_breakdown_from_hub` method
+        embedding_parameters: The number of parameters used for embedding generation. Can be None if the number of embedding parameters is not known (e.g. for proprietary models). To calculate it use the `extract_parameter_breakdown_from_hub` method.
         memory_usage_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
