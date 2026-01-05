@@ -35,10 +35,16 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         self.max_audio_length_s = max_audio_length_s
 
         # text side (CLIP) - we use the standard OpenAI CLIP model as mentioned in paper
+        # Wav2Clip aligns audio embeddings to CLIP's embedding space using this specific model
         clip_model_name = "openai/clip-vit-base-patch32"
-        self.clip = CLIPModel.from_pretrained(clip_model_name).to(device)
+        clip_revision = "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268"
+        self.clip = CLIPModel.from_pretrained(
+            clip_model_name, revision=clip_revision, device_map=device
+        )
         self.clip.eval()
-        self.clip_processor = CLIPProcessor.from_pretrained(clip_model_name)
+        self.clip_processor = CLIPProcessor.from_pretrained(
+            clip_model_name, revision=clip_revision
+        )
 
     def get_audio_embeddings(
         self,
@@ -70,7 +76,7 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
                         orig_freq=sr, new_freq=self.sampling_rate
                     )
                     array = resampler(array)
-                audio_arrays.append(array.numpy())
+                audio_arrays.append(array)  # Keep as tensor
 
             max_length = max(wav.shape[-1] for wav in audio_arrays)
             padded_wavs = []
@@ -78,13 +84,13 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
                 if wav.shape[-1] < max_length:
                     # Pad with zeros
                     pad_length = max_length - wav.shape[-1]
-                    padded_wav = np.pad(wav, (0, pad_length), mode="constant")
+                    padded_wav = torch.nn.functional.pad(wav, (0, pad_length))
                 else:
                     padded_wav = wav
                 padded_wavs.append(padded_wav)
 
-            # Stack into batch array
-            batch_tensor = np.stack(padded_wavs)
+            # Stack into batch array and convert to numpy for embed_audio
+            batch_tensor = torch.stack(padded_wavs).numpy()
 
             # Process entire batch at once
             batch_embeds = self.embed_audio(batch_tensor, self.audio_model)
