@@ -340,6 +340,14 @@ conflicts = [
         { extra = "vllm"},
         { extra = "model2vec" },
         { extra = "pylate" },
+        { extra = "llm2vec" },
+        { extra = "timm" },
+        { extra = "blip2" },
+        { extra = "colpali-engine" },
+        { extra = "colqwen3" },
+        { extra = "jina-v4" },
+        { extra = "llama-embed-nemotron" },
+        { extra = "sauerkrautlm-colpali" },
     ]
 ]
 
