@@ -25,6 +25,7 @@ class BMRetrieverWrapper(InstructSentenceTransformerModel):
         self,
         model_name: str,
         revision: str,
+        device: str | None = None,
         instruction_template: str
         | Callable[[str, PromptType | None], str]
         | None = None,
@@ -52,6 +53,7 @@ class BMRetrieverWrapper(InstructSentenceTransformerModel):
 
         transformer = Transformer(
             model_name,
+            device=device,
             **kwargs,
         )
         pooling = Pooling(

@@ -3,7 +3,7 @@ This section goes through new features added in v2. Below we give an overview of
 
 **Overview of changes:**
 
-- [New in v2.0 🎉](#new-in-v20-)
+- [New in v2.0 🎉](#new-in-v20-🎉)
     - [Easier evaluation](#easier-evaluation)
     - [Better local and online caching](#better-local-and-online-caching)
     - [Multimodal Input format](#multimodal-input-format)
@@ -79,7 +79,9 @@ batch_input: BatchedInput = {
 
 Where `text` is a batch of texts and `list[images]` is a batch for that texts. This e.g. allows markdown documents with multiple figures like so:
 
+```markdown
 > As you see in the following figure [figure 1](image_1) there is a correlation between A and B.
+```
 
 !!! Note
     More examples of new multimodal inputs you can find in [BatchedInput][mteb.types._encoder_io.BatchedInput] documentation.
@@ -152,7 +154,7 @@ class SearchProtocol(Protocol):
         ...
 ```
 
-We're automatically wrapping `Encoder` and `CrossEncoder` models support `SearchProtocol`. However, if your model needs a custom index you can implement this protocol directly, like was done for colbert-like models. <!-- [colbert-like models][mteb.models.model_implementations.pylate_models.PylateSearchEncoder]. -->
+We're automatically wrapping `Encoder` and `CrossEncoder` models support `SearchProtocol`. However, if your model needs a custom index you can implement this protocol directly, like was done for colbert-like models.
 
 ### New Documentation
 
