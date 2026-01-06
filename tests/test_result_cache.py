@@ -240,8 +240,8 @@ def test_cache_load_different_subsets():
     assert len(result1.model_results[0].task_results[0].scores["test"]) == 1
     assert len(result2.model_results[0].task_results[0].scores["test"]) == 2
 
-    assert pytest.approx(result1.model_results[0].task_results[0].get_score(), 0.01568)
-    assert pytest.approx(result2.model_results[0].task_results[0].get_score(), 0.01035)
+    assert result1.model_results[0].task_results[0].get_score() == 0.01568
+    assert result2.model_results[0].task_results[0].get_score() == 0.01035
 
     result1 = cache.load_results(
         models=[
@@ -262,8 +262,8 @@ def test_cache_load_different_subsets():
     assert len(result1.model_results[0].task_results[0].scores["test"]) == 2
     assert len(result2.model_results[0].task_results[0].scores["test"]) == 2
 
-    assert pytest.approx(result1.model_results[0].task_results[0].get_score(), 0.00784)
-    assert pytest.approx(result2.model_results[0].task_results[0].get_score(), 0.01035)
+    assert result1.model_results[0].task_results[0].get_score() == 0.00784
+    assert result2.model_results[0].task_results[0].get_score() == 0.01035
 
 
 # Tests for _download_cached_results_from_branch method
