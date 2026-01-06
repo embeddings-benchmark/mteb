@@ -12,6 +12,7 @@ from urllib.parse import urlencode
 
 import cachetools
 import gradio as gr
+import pandas as pd  # noqa: TC002 # gradio tries to validate typehints
 
 import mteb
 from mteb.benchmarks.benchmark import RtebBenchmark
@@ -32,8 +33,6 @@ from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 from mteb.models.model_meta import MODEL_TYPES
 
 if TYPE_CHECKING:
-    import pandas as pd
-
     from mteb import BenchmarkResults
 
 logger = logging.getLogger(__name__)
