@@ -27,10 +27,11 @@ Additional options:
 - `--host HOST`: Specify the host to run the server on (default: 0.0.0.0)
 - `--port PORT`: Specify the port to run the server on (default: 7860)
 - `--share`: Create a public URL for the leaderboard
+- `--rebuild`: Force rebuild from full results repository, bypassing cached JSON. This is useful when you suspect the cache is stale or corrupted.
 
 Example with all options:
 ```bash
-mteb leaderboard --cache-path results --port 8080 --share
+mteb leaderboard --cache-path results --port 8080 --share --rebuild
 ```
 
 #### Using Make Command
