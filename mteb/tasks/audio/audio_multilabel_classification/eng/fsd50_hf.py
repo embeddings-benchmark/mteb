@@ -8,7 +8,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class FSD50HFMultilingualClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
         name="FSD50K",
-        description="Multilabel Audio Classification on a subsampled version of FSD50K.",
+        description="Multilabel Audio Classification on a subsampled version of FSD50K using 2048 samples",
         reference="https://huggingface.co/datasets/mteb/fsd50k_mini",
         dataset={
             "path": "mteb/fsd50k_mini",
