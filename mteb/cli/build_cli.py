@@ -372,6 +372,12 @@ def _add_leaderboard_parser(subparsers) -> None:
         default=None,
     )
     parser.add_argument(
+        "--rebuild",
+        action="store_true",
+        default=False,
+        help="Force a full rebuild from the results repository, bypassing pre-computed JSON cache",
+    )
+    parser.add_argument(
         "--host",
         type=str,
         default="0.0.0.0",
@@ -417,7 +423,7 @@ def _leaderboard(args: argparse.Namespace) -> None:
         cache = ResultCache()
         logger.info(f"Using default cache path: {cache.cache_path}")
 
-    app = get_leaderboard_app(cache)
+    app = get_leaderboard_app(cache, rebuild=args.rebuild)
 
     logger.info(f"Starting leaderboard on {args.host}:{args.port}")
     if args.share:

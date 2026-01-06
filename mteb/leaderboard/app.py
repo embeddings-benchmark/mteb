@@ -1,10 +1,8 @@
 import itertools
-import json
 import logging
 import tempfile
 import time
 import warnings
-from pathlib import Path
 from typing import Literal, get_args
 from urllib.parse import urlencode
 
@@ -13,7 +11,6 @@ import gradio as gr
 import pandas as pd
 
 import mteb
-from mteb import BenchmarkResults
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.cache import ResultCache
 from mteb.leaderboard.benchmark_selector import (
@@ -36,108 +33,6 @@ logger = logging.getLogger(__name__)
 
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 MODEL_TYPE_CHOICES = list(get_args(MODEL_TYPES))
-
-
-def _load_results(cache: ResultCache) -> BenchmarkResults:
-    """Load benchmark results using an optimized caching strategy.
-
-    This function implements a two-tier caching strategy for faster leaderboard startup:
-
-    1. **Primary Strategy (Fast)**: Download pre-computed cached results from the
-       'cached-data' branch as a compressed JSON file (~2MB vs ~200MB full repo).
-       This avoids the need to clone the entire results repository and provides
-       near-instantaneous loading for most users.
-
-    2. **Fallback Strategy (Slower)**: If the cached download fails, fall back to
-       the original approach of downloading the full results repository and
-       building the cache from scratch.
-
-    The cached results file contains pre-aggregated benchmark data that eliminates
-    the need for expensive operations like task selection and revision joining
-    during app startup.
-
-    Args:
-        cache: ResultCache instance used for both optimized and fallback operations
-
-    Returns:
-        BenchmarkResults: Complete benchmark results ready for leaderboard display
-
-    Raises:
-        Various exceptions related to network issues, file I/O, or data validation
-        are logged and may cause fallback to the slower repository-based approach.
-    """
-    start_time = time.time()
-    results_cache_path = Path(__file__).parent.joinpath("__cached_results.json")
-
-    if not results_cache_path.exists():
-        # First try to download the cached results file from the cached-data branch
-        # This is faster than cloning the entire results repository
-        logger.info(
-            "Cached results not found, trying to download from cached-data branch..."
-        )
-
-        try:
-            # Use ResultCache's optimized download method
-            # Default saves to mteb/leaderboard/__cached_results.json
-            results_cache_path = cache._download_cached_results_from_branch()
-            download_time = time.time() - start_time
-            logger.info(
-                f"Downloaded cached results from cached-data branch in {download_time:.2f}s"
-            )
-
-        except Exception as e:
-            logger.error(
-                f"Failed to download from cached-data branch: {type(e).__name__}: {e}"
-            )
-            logger.info("Falling back to downloading full remote repository...")
-
-            # Fall back to the original approach: clone the full repo
-            cache.download_from_remote()
-            download_time = time.time() - start_time
-            logger.info(f"Downloaded remote results in {download_time:.2f}s")
-
-            load_start = time.time()
-            all_model_names = [model_meta.name for model_meta in mteb.get_model_metas()]
-
-            all_results = cache.load_results(
-                models=all_model_names,
-                only_main_score=True,
-                require_model_meta=False,
-                include_remote=True,
-            )
-            load_time = time.time() - load_start
-            logger.info(f"Loaded results from cache in {load_time:.2f}s")
-            return all_results
-
-    # Load the cached results file (either pre-existing or just downloaded)
-    logger.info("Loading cached results from disk...")
-    try:
-        logger.info(f"Opening file: {results_cache_path}")
-
-        file_size = results_cache_path.stat().st_size
-        logger.info(f"File exists, size: {file_size} bytes")
-
-        with results_cache_path.open() as cache_file:
-            logger.info("File opened successfully, attempting JSON parse...")
-            json_data = json.load(cache_file)
-            logger.info(
-                f"JSON parsed successfully, keys: {list(json_data.keys()) if isinstance(json_data, dict) else 'not a dict'}"
-            )
-
-        logger.info("Attempting BenchmarkResults.from_validated...")
-        results = mteb.BenchmarkResults.from_validated(**json_data)
-        logger.info("BenchmarkResults.from_validated successful")
-
-    except Exception as e:
-        # TODO: Handle the case when we fail to load cached results from disk.
-        logger.error(
-            f"Failed to load cached results from disk: {type(e).__name__}: {e}"
-        )
-        raise
-
-    total_time = time.time() - start_time
-    logger.info(f"Loaded cached results in {total_time:.2f}s")
-    return results
 
 
 def _produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
@@ -410,14 +305,16 @@ def _cache_update_task_list(
     return benchmark_tasks, tasks_to_keep
 
 
-def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
+def get_leaderboard_app(
+    cache: ResultCache = ResultCache(), rebuild: bool = False
+) -> gr.Blocks:
     """Returns a Gradio Blocks app for the MTEB leaderboard."""
     app_start = time.time()
     logger.info("=== Starting leaderboard app initialization ===")
 
     logger.info("Step 1/7: Loading all benchmark results...")
     load_start = time.time()
-    all_results = _load_results(cache)
+    all_results = cache.load_from_cache(rebuild=rebuild)
     load_time = time.time() - load_start
     logger.info(f"Step 1/7 complete: Loaded results in {load_time:.2f}s")
 

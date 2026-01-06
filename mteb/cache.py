@@ -432,6 +432,107 @@ class ResultCache:
             logger.warning(msg)
             warnings.warn(msg)
 
+    def load_from_cache(
+        self,
+        quick_cache_path: Path | None = None,
+        rebuild: bool = False,
+    ) -> BenchmarkResults:
+        """Load benchmark results using the best available strategy.
+
+        Args:
+            quick_cache_path: Path to local JSON cache file. If None, uses default location.
+            rebuild: If True, force a full rebuild from the results repository, bypassing any
+                     pre-computed JSON cache.
+
+        Strategy:
+            1. If rebuild=False and local cache exists at quick_cache_path → load and return
+            2. If rebuild=False, try downloading pre-computed cache from 'cached-data' branch
+               → save to quick_cache_path and return
+            3. Fallback (or if rebuild=True): clone the full results repository, build from
+               individual model files, call results.to_disk(quick_cache_path), and return.
+
+        Returns:
+            BenchmarkResults ready for leaderboard display
+        """
+        # Default quick cache path
+        if quick_cache_path is None:
+            mteb_package_dir = Path(__file__).parent
+            quick_cache_path = (
+                mteb_package_dir / "leaderboard" / "__cached_results.json"
+            )
+
+        # If rebuild=True, skip directly to full repository rebuild
+        if rebuild:
+            logger.info(
+                "Rebuild requested, forcing full repository clone and rebuild..."
+            )
+            return self._rebuild_from_full_repository(quick_cache_path)
+
+        # Strategy 1: Try loading from existing local quick cache
+        if quick_cache_path.exists():
+            logger.info(f"Loading existing quick cache from {quick_cache_path}")
+            try:
+                return BenchmarkResults.from_disk(quick_cache_path)
+            except Exception as e:
+                logger.warning(
+                    f"Failed to load quick cache: {e}. Trying other strategies..."
+                )
+
+        # Strategy 2: Try downloading from cached-data branch
+        try:
+            logger.info(
+                "Attempting to download pre-computed cache from cached-data branch..."
+            )
+            downloaded_path = self._download_cached_results_from_branch(
+                output_path=quick_cache_path
+            )
+            logger.info(f"Downloaded cache to {downloaded_path}")
+            return BenchmarkResults.from_disk(downloaded_path)
+        except Exception as e:
+            logger.warning(f"Failed to download from cached-data branch: {e}")
+
+        # Strategy 3: Fallback to full repository clone
+        logger.info("Falling back to full repository clone and rebuild...")
+        return self._rebuild_from_full_repository(quick_cache_path)
+
+    def _rebuild_from_full_repository(self, quick_cache_path: Path) -> BenchmarkResults:
+        """Clone/pull the full results repository and build BenchmarkResults from individual files.
+
+        This method performs a full rebuild by:
+        1. Downloading or updating the full results repository
+        2. Loading results from all individual model files
+        3. Saving the aggregated results to the quick cache path
+        4. Returning the BenchmarkResults object
+
+        Args:
+            quick_cache_path: Path where the rebuilt cache should be saved
+
+        Returns:
+            BenchmarkResults built from the full repository
+        """
+        # Download or update the full repository
+        self.download_from_remote()
+
+        # Load all results from individual model files
+        all_model_names = [
+            model_meta.name
+            for model_meta in mteb.get_model_metas()
+            if model_meta.name is not None
+        ]
+
+        all_results = self.load_results(
+            models=all_model_names,
+            only_main_score=True,
+            require_model_meta=False,
+            include_remote=True,
+        )
+
+        # Save to disk for future use
+        logger.info(f"Saving rebuilt cache to {quick_cache_path}")
+        all_results.to_disk(quick_cache_path)
+
+        return all_results
+
     def __repr__(self) -> str:
         return f"ResultCache(cache_path={self.cache_path})"
 
