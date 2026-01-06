@@ -12,19 +12,6 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 from mteb.types._encoder_io import AudioInput
 
-# Monkey-patch torchaudio.list_audio_backends if missing
-import torchaudio
-
-if not hasattr(torchaudio, "list_audio_backends"):
-    if hasattr(torchaudio, "backends") and hasattr(
-        torchaudio.backends, "list_audio_backends"
-    ):
-        torchaudio.list_audio_backends = torchaudio.backends.list_audio_backends
-    else:
-        torchaudio.list_audio_backends = lambda: []
-
-
-
 class CNN14Wrapper(AbsEncoder):
     def __init__(
         self,

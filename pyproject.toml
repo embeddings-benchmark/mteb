@@ -105,7 +105,7 @@ youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lk
 llama-embed-nemotron = ["transformers==4.51.0"]
 faiss-cpu = ["faiss-cpu>=1.12.0"]
 eager_embed = ["qwen_vl_utils>=0.0.14"]
-speechbrain = ["speechbrain>=0.5.12"]
+speechbrain = ["speechbrain>=0.5.12", "torchaudio>=2.6.0,<2.8"]
 muq = ["muq==0.1.0"]
 wav2clip = ["wav2clip==0.1.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
