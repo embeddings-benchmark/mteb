@@ -44,6 +44,9 @@ __all__ = [
     "HiFiTTST2ARetrieval",
     "JLCorpusA2TRetrieval",
     "JLCorpusT2ARetrieval",
+    "JamAltArtist",
+    "JamAltLyricsA2T",
+    "JamAltLyricsT2A",
     "LibriTTSA2TRetrieval",
     "LibriTTST2ARetrieval",
     "MACSA2TRetrieval",
@@ -55,7 +58,4 @@ __all__ = [
     "SpokenSQuADT2ARetrieval",
     "UrbanSound8KA2TRetrieval",
     "UrbanSound8KT2ARetrieval",
-    "JamAltArtist",
-    "JamAltLyricsA2T",
-    "JamAltLyricsT2A",
 ]
