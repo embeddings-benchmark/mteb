@@ -1,7 +1,11 @@
-from .jam_alt import JamAltArtist, JamAltLyricsA2T, JamAltLyricsT2A
+from .jam_alt import (
+    JamAltArtistA2ARetrieval,
+    JamAltLyricA2TRetrieval,
+    JamAltLyricT2ARetrieval,
+)
 
 __all__ = [
-    "JamAltArtist",
-    "JamAltLyricsA2T",
-    "JamAltLyricsT2A",
+    "JamAltArtistA2ARetrieval",
+    "JamAltLyricA2TRetrieval",
+    "JamAltLyricT2ARetrieval",
 ]
