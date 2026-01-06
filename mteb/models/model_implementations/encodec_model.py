@@ -2,7 +2,9 @@ import logging
 import warnings
 from typing import Any
 
+import numpy as np
 import torch
+import torchaudio
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import AutoProcessor, EncodecModel
@@ -45,9 +47,6 @@ class EncodecWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        import torchaudio
-        import numpy as np
-
         all_embeddings = []
         max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
@@ -78,40 +77,35 @@ class EncodecWrapper(AbsEncoder):
                     array = resampler(array)
 
                 array = array.squeeze()
-                
+
                 # Handle edge case where squeeze results in 0-dim tensor
                 if array.dim() == 0:
                     array = array.unsqueeze(0)
-                
-                # Ensure we have at least some samples
-                if len(array) == 0:
-                    # Create a minimal silent audio if completely empty
+
+                # Warn and handle empty audio
+                if array.shape[-1] == 0:
+                    logger.warning(
+                        f"Empty audio sample at index {idx}, using 1 second of silence."
+                    )
                     array = torch.zeros(self.sampling_rate)  # 1 second of silence
-                
-                # Encodec has multiple downsampling layers with total stride ~320
-                # Need enough samples to produce at least 1 frame in the latent space
-                # Being more conservative with 1 second minimum to ensure encoder works
-                min_samples = self.sampling_rate  # 1 second minimum
-                if len(array) < min_samples:
-                    padding = torch.zeros(min_samples - len(array))
-                    array = torch.cat([array, padding])
-                
-                # Pad or truncate to fixed length for consistent batching
-                if len(array) > max_samples:
+
+                # Truncate if too long (processor doesn't allow both padding and truncation)
+                if array.shape[-1] > max_samples:
                     array = array[:max_samples]
-                elif len(array) < max_samples:
-                    padding = torch.zeros(max_samples - len(array))
-                    array = torch.cat([array, padding])
-                
+
                 audio_arrays.append(array.numpy())
 
             with torch.no_grad():
-                # Stack into batch - now all same length
-                audio_batch = np.stack(audio_arrays, axis=0)
-                
-                # Convert to tensor and move to device
-                input_values = torch.tensor(audio_batch, dtype=torch.float32).to(self.device)
-                
+                # Use processor for padding (truncation done manually above)
+                processed = self.processor(
+                    raw_audio=audio_arrays,
+                    sampling_rate=self.sampling_rate,
+                    padding=True,
+                    max_length=max_samples,
+                    return_tensors="pt",
+                )
+                input_values = processed["input_values"].to(self.device)
+
                 # Add channel dimension if needed (B, T) -> (B, 1, T)
                 if input_values.dim() == 2:
                     input_values = input_values.unsqueeze(1)
