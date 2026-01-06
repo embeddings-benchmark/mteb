@@ -1,7 +1,9 @@
 """Mock models to be used for testing"""
 
+from __future__ import annotations
+
 from types import SimpleNamespace
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import torch
@@ -13,7 +15,10 @@ from torch.utils.data import DataLoader
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from mteb.types import Array, BatchedInput
 
 empty_metadata_kwargs = dict(
     loader=None,

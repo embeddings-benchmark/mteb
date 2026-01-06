@@ -1,5 +1,6 @@
-from collections.abc import Callable
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
 from sentence_transformers import SentenceTransformer
@@ -8,6 +9,9 @@ from sentence_transformers.models import Pooling, Transformer
 from mteb.models import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def instruction_template(

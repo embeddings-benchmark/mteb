@@ -1,8 +1,14 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import torch
 
-from mteb.models import EncoderProtocol
 from mteb.models.model_meta import ScoringFunction
-from mteb.types import Array
+
+if TYPE_CHECKING:
+    from mteb.models import EncoderProtocol
+    from mteb.types import Array
 
 
 def _use_torch_compile():

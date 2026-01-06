@@ -1,10 +1,11 @@
+from __future__ import annotations
+
 import logging
 from collections.abc import Sequence
-from pathlib import Path
-from typing import Any, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 
 import torch
-from datasets import Dataset, concatenate_datasets
+from datasets import concatenate_datasets
 
 from mteb._evaluators import ImageTextPairClassificationEvaluator
 from mteb.abstasks._statistics_calculation import (
@@ -12,12 +13,21 @@ from mteb.abstasks._statistics_calculation import (
     calculate_text_statistics,
 )
 from mteb.abstasks.abstask import AbsTask
-from mteb.models.models_protocols import EncoderProtocol, MTEBModels
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types.statistics import (
-    ImageStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from datasets import Dataset
+
+    from mteb.models.models_protocols import MTEBModels
+    from mteb.types.statistics import (
+        ImageStatistics,
+        TextStatistics,
+    )
 
 logger = logging.getLogger(__name__)
 

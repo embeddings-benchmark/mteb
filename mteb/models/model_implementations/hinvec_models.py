@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 import logging
+from typing import TYPE_CHECKING
 
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
-from mteb.types import PromptType
 
+if TYPE_CHECKING:
+    from mteb.types import PromptType
 logger = logging.getLogger(__name__)
 
 

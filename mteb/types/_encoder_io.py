@@ -7,11 +7,10 @@ from typing import TYPE_CHECKING, TypedDict
 import numpy as np
 import torch
 from datasets import Dataset
-from typing_extensions import NotRequired
 
 if TYPE_CHECKING:
     from PIL import Image
-
+    from typing_extensions import NotRequired
 
 # --- Output types ---
 Array = np.ndarray | torch.Tensor

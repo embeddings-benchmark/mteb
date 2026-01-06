@@ -1,5 +1,5 @@
-from mteb.abstasks import AbsTask
-from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
+from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.tasks.retrieval import (
     CQADupstackAndroidNLRetrieval,
     CQADupstackEnglishNLRetrieval,
@@ -15,7 +15,7 @@ from mteb.tasks.retrieval import (
     CQADupstackWordpressNLRetrieval,
 )
 
-task_list_cqa: list[AbsTask] = [
+task_list_cqa = [
     CQADupstackAndroidNLRetrieval(),
     CQADupstackEnglishNLRetrieval(),
     CQADupstackGamingNLRetrieval(),
