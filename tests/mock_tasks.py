@@ -4349,7 +4349,7 @@ class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalT2A",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["audio", "text"]
     metadata.category = "t2a"
@@ -4404,7 +4404,7 @@ class MockAny2AnyRetrievalA2TTask(AbsTaskRetrieval):
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalA2T",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["audio", "text"]
     metadata.category = "a2t"
@@ -4458,7 +4458,7 @@ class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalA2A",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["audio"]
     metadata.category = "a2a"
@@ -4512,7 +4512,7 @@ class MockAudioReranking(AbsTaskRetrieval):
         type="AudioReranking",
         name="MockAudioReranking",
         main_score="map_at_1",
-        **general_args,  # type: ignore
+        **general_args,  # type: ignore[arg-type]
     )
     metadata.category = "a2a"
     metadata.modalities = ["audio"]
@@ -4567,7 +4567,7 @@ class MockAudioClassification(AbsTaskClassification):
         type="AudioClassification",
         name="MockAudioClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["audio"]
     input_column_name = "audio"
@@ -4607,7 +4607,7 @@ class MockAudioPairClassification(AbsTaskPairClassification):
         type="AudioPairClassification",
         name="AbsTaskAudioPairClassification",
         main_score="max_ap",
-        **general_args,  # type: ignore
+        **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["audio"]
 
@@ -4645,7 +4645,7 @@ class MockAudioClassificationCrossVal(AbsTaskClassification):
         type="AudioClassification",
         name="MockAudioClassificationCrossVal",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["audio"]
     metadata.eval_splits = ["train"]

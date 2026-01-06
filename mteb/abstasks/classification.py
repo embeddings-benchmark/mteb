@@ -1,6 +1,5 @@
 import logging
 from collections import defaultdict
-from collections.abc import Iterable
 from pathlib import Path
 from typing import Any, TypedDict
 
@@ -19,7 +18,7 @@ from sklearn.model_selection import KFold
 from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
 from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import HFSubset, ScoresDict
+from mteb.types import Array, HFSubset, ScoresDict
 from mteb.types.statistics import (
     ImageStatistics,
     LabelStatistics,
@@ -326,14 +325,14 @@ class AbsTaskClassification(AbsTask):
         train_split: Dataset,
         eval_split: Dataset,
         experiment_num: int,
-        idxs: Iterable[int] | None,
-        test_cache: np.ndarray | None,
+        idxs: list[int] | None,
+        test_cache: Array | None,
         *,
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
-        train_cache: np.ndarray | None = None,
-    ) -> tuple[ClassificationMetrics, list[float], Iterable[int], np.ndarray]:
+        train_cache: Array | None = None,
+    ) -> tuple[ClassificationMetrics, list[float], list[int], Array]:
         train_dataset, idxs, selected_idx = self._undersample_data(
             train_split,
             experiment_num,

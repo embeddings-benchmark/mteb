@@ -7,7 +7,6 @@ import torch
 from datasets import Dataset, Image
 from torch.utils.data import DataLoader, default_collate
 
-from mteb._log_once import LogOnce
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.types import (
     BatchedInput,
