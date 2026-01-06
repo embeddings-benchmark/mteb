@@ -3,8 +3,6 @@ from typing import Any, Protocol, runtime_checkable
 
 import numpy as np
 
-from mteb.types import BatchedInput
-
 
 @runtime_checkable
 class CacheBackendProtocol(Protocol):
@@ -24,7 +22,7 @@ class CacheBackendProtocol(Protocol):
             **kwargs: Additional backend-specific arguments.
         """
 
-    def add(self, item: list[BatchedInput], vectors: np.ndarray) -> None:
+    def add(self, item: list[dict[str, Any]], vectors: np.ndarray) -> None:
         """Add a vector to the cache.
 
         Args:
@@ -32,7 +30,7 @@ class CacheBackendProtocol(Protocol):
             vectors: Embedding vector of shape (dim,) or (1, dim).
         """
 
-    def get_vector(self, item: BatchedInput) -> np.ndarray | None:
+    def get_vector(self, item: dict[str, Any]) -> np.ndarray | None:
         """Retrieve the cached vector for the given item.
 
         Args:
@@ -51,5 +49,5 @@ class CacheBackendProtocol(Protocol):
     def close(self) -> None:
         """Release resources or flush data."""
 
-    def __contains__(self, item: BatchedInput) -> bool:
+    def __contains__(self, item: dict[str, Any]) -> bool:
         """Check whether the cache contains an item."""

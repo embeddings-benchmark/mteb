@@ -32,7 +32,7 @@ def test_filter_tasks(
     languages: list[str],
     script: list[str],
     domains: list[TaskDomain],
-    task_types: list[TaskType] | None,  # type: ignore
+    task_types: list[TaskType] | None,
 ):
     """Tests that get_tasks filters tasks correctly. This could in principle be combined with the following tests, but they have been kept
     separate to reduce the grid size.
