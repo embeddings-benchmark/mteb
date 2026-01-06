@@ -94,8 +94,7 @@ class ModelMeta(BaseModel):
         loader_kwargs: The keyword arguments to pass to the loader function.
         name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
         n_parameters: The total number of parameters in the model, e.g. `7_000_000` for a 7M parameter model. Can be none in case the number of parameters is unknown.
-        active_parameters: The number of active (trainable) parameters in the model. Can be None if the number of active parameters is not known (e.g. for proprietary models). To calculate it use the `extact_parameter_breakdown_from_hub` method
-        n_embedding_parameters: The number of parameters used for the embedding layer. Can be None if the number of embedding parameters is not known (e.g. for proprietary models). To calculate it use the `extract_parameter_breakdown_from_hub` method.
+        n_embedding_parameters: The number of parameters used for the embedding layer. Can be None if the number of embedding parameters is not known (e.g. for proprietary models).
         memory_usage_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
@@ -134,8 +133,8 @@ class ModelMeta(BaseModel):
     release_date: StrDate | None
     languages: list[ISOLanguageScript] | None
     n_parameters: int | None
-    active_parameters: int | None = None
-    n_embedding_parameters: int | None = None
+    _n_active_parameters: int | None
+    n_embedding_parameters: int | None
     memory_usage_mb: float | None
     max_tokens: float | None
     embed_dim: int | None
@@ -193,6 +192,16 @@ class ModelMeta(BaseModel):
         Derived from model_type field. A model is considered a cross-encoder if "cross-encoder" is in its model_type list.
         """
         return "cross-encoder" in self.model_type
+
+    @property
+    def n_active_parameters(self):
+        """Number of active parameters. Assumed to be `n_parameters - n_embedding_parameters`. Can be overwritten using `_n_active_parameters` e.g. for MoE models."""
+        if self._n_active_parameters:
+            return self._n_active_parameters
+
+        if self.n_parameters and self.n_embedding_parameters:
+            return self.n_parameters - self.n_embedding_parameters
+        return None
 
     @field_validator("similarity_fn_name", mode="before")
     @classmethod
@@ -341,9 +350,6 @@ class ModelMeta(BaseModel):
             release_date = cls.fetch_release_date(model_name)
             model_license = card_data.license
             n_parameters = cls._calculate_num_parameters_from_hub(model_name)
-            active_parameters, n_embedding_parameters = (
-                cls._extract_parameter_breakdown_from_hub(model_name)
-            )
             memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
             if model_config and hasattr(model_config, "hidden_size"):
                 embedding_dim = model_config.hidden_size
@@ -397,6 +403,7 @@ class ModelMeta(BaseModel):
             else model.model_card_data.base_model
         )
         meta = cls._from_hub(name, revision, compute_metadata)
+        meta.n_embedding_parameters = cls._calculate_embedding_parameters(name)
         if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
             meta.framework.append("Sentence Transformers")
         meta.revision = model.model_card_data.base_model_revision or meta.revision
@@ -472,6 +479,9 @@ class ModelMeta(BaseModel):
         from mteb.models import CrossEncoderWrapper
 
         meta = cls._from_hub(model.model.name_or_path, revision, compute_metadata)
+        meta.n_embedding_parameters = cls._calculate_embedding_parameters(
+            model.model.name_or_path
+        )
         if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
             meta.framework.append("Sentence Transformers")
         meta.revision = model.config._commit_hash or meta.revision
@@ -587,38 +597,28 @@ class ModelMeta(BaseModel):
         return self._calculate_num_parameters_from_hub(self.name)
 
     @staticmethod
-    def _extract_parameter_breakdown_from_hub(
-        model_name: str,
-    ) -> tuple[int | None, int | None]:
-        active_parameters, n_embedding_parameters = None, None
+    def _calculate_embedding_parameters(model_name: str | None = None) -> int | None:
+        if not model_name:
+            return None
+        n_embedding_parameters = None
         try:
             model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
             emb = model.get_input_embeddings()
             if emb is not None:
                 n_embedding_parameters = int(np.prod(emb.weight.shape))
-
-            total_params = sum(p.numel() for p in model.parameters())
-            total_params = int(total_params)
-            if n_embedding_parameters is not None and total_params is not None:
-                active_parameters = total_params - n_embedding_parameters
-            elif total_params is not None:
-                active_parameters = total_params
-
         except Exception as e:
             logger.warning(
-                f"Could not calculate active/embedding parameters for {model_name}: {e}"
+                f"Could not calculate embedding parameters for {model_name}: {e}"
             )
-        return active_parameters, n_embedding_parameters
+        return n_embedding_parameters
 
-    def extract_parameter_breakdown_from_hub(self) -> tuple[int | None, int | None]:
-        """Extracts the breakdown of active and embedding parameters from the model.
+    def calculate_embedding_parameters(self) -> int | None:
+        """Calculates embedding parameters in the model.
 
         Returns:
-            A tuple containing the number of active parameters and embedding parameters.
+            Number of embedding parameters in the model.
         """
-        if not self.name:
-            return None, None
-        return self._extract_parameter_breakdown_from_hub(self.name)
+        return self._calculate_embedding_parameters(self.name)
 
     @staticmethod
     def _calculate_memory_usage_mb(
