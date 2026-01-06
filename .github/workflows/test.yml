@@ -54,7 +54,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
-          key: ${{ runner.os }}-hf
+          key: ${{ runner.os }}-hf-maeb
 
       - name: Install uv and set the Python version
         uses: astral-sh/setup-uv@v7
