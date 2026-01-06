@@ -21,7 +21,7 @@ from .speech_commands import SpeechCommandsClassification
 from .spoke_n import SpokeNEnglishClassification
 from .spoken_q_afor_ic import SpokenQAForIC
 from .tut_acoustic_scenes import TUTAcousticScenesClassification
-from .urban_sound8k import UrbanSound8kZeroshotClassification
+from .urban_sound8k import UrbanSound8kClassification
 from .vocal_sound import VocalSoundClassification
 from .vox_celeb_sa import VoxCelebSA
 from .vox_lingua107_top10 import VoxLingua107Top10
@@ -49,7 +49,7 @@ __all__ = [
     "SpokeNEnglishClassification",
     "SpokenQAForIC",
     "TUTAcousticScenesClassification",
-    "UrbanSound8kZeroshotClassification",
+    "UrbanSound8kClassification",
     "VocalSoundClassification",
     "VoxCelebSA",
     "VoxLingua107Top10",
