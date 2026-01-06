@@ -136,7 +136,7 @@ class RetrievalDatasetLoader:
                 "_id", "id"
             )
         logger.info("Loaded %d %s Documents.", len(corpus_ds), self.split.upper())
-        logger.info("Doc Example: %s", corpus_ds[0])
+        logger.debug("Doc Example: %s", corpus_ds[0])
         return corpus_ds
 
     def _load_queries(self) -> QueryDatasetType:
@@ -152,7 +152,7 @@ class RetrievalDatasetLoader:
             )
 
         logger.info("Loaded %d %s queries.", len(queries_ds), self.split.upper())
-        logger.info("Query Example: %s", queries_ds[0])
+        logger.debug("Query Example: %s", queries_ds[0])
 
         return queries_ds
 
