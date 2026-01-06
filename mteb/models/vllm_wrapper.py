@@ -50,7 +50,7 @@ class VllmWrapperBase:
         hf_overrides: dict[str, Any] | None = None,
         pooler_config: PoolerConfig | None = None,
         enforce_eager: bool = False,
-        **kwargs,
+        **kwargs: Any,
     ):
         """Wrapper for vllm serving engine.
 
@@ -73,8 +73,6 @@ class VllmWrapperBase:
                 If None, automatically determined.
             max_num_seqs: Maximum number of sequences to process concurrently.
             tensor_parallel_size: Number of GPUs for tensor parallelism.
-            data_parallel_size: Number of replicas for data parallelism. For small models,
-                using data_parallel is better than tensor_parallel.
             enable_prefix_caching: Whether to enable KV cache sharing for common prompt prefixes.
                 If None, uses the model's default setting.
             gpu_memory_utilization: Target GPU memory utilization ratio (0.0 to 1.0).
