@@ -86,7 +86,7 @@ class AbsTaskRegression(AbsTaskClassification):
         evaluator_model: The model to use for evaluation. Can be any sklearn compatible model. Default is `LinearRegression`.
     """
 
-    evaluator: type[SklearnModelProtocol] = SklearnEvaluator
+    evaluator: type[SklearnEvaluator] = SklearnEvaluator
     evaluator_model: SklearnModelProtocol = LinearRegression(n_jobs=-1)
 
     train_split: str = "train"
@@ -112,7 +112,7 @@ class AbsTaskRegression(AbsTaskClassification):
             )["train"]
         return train_split_sampled, []
 
-    def _calculate_scores(
+    def _calculate_scores(  # type: ignore[override]
         self,
         y_test: np.ndarray | list[int],
         y_pred: np.ndarray,
@@ -182,7 +182,7 @@ class AbsTaskRegression(AbsTaskClassification):
 
         return dataset_dict
 
-    def _calculate_descriptive_statistics_from_split(
+    def _calculate_descriptive_statistics_from_split(  # type: ignore[override]
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> RegressionDescriptiveStatistics:
         train_text = []

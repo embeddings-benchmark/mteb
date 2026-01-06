@@ -23,7 +23,7 @@ openai_models = [meta for meta in model_metas if "openai" in meta.name]
 
 !!! tip
     Some models require additional dependencies to run on MTEB. An example of such a model is the OpenAI APIs.
-    These dependencies can be installed using `pip install mteb[openai]`
+    These dependencies can be installed using `pip install mteb[openai]` or `uv add "mteb[openai]"`
 
 ## Using a Sentence Transformer Model
 
@@ -39,6 +39,9 @@ results = mteb.evaluate(model, tasks=tasks)
 ```
 
 However, we do recommend checking if mteb includes an implementation of the model before using sentence transformers since some models (e.g. the [multilingual e5 models](https://huggingface.co/collections/intfloat/multilingual-e5-text-embeddings-67b2b8bb9bff40dec9fb3534)) require a prompt and not specifying it may reduce performance.
+
+!!! note
+    If you want to evaluate a cross encoder for reranking, see the section on [running cross encoders for reranking](../advanced_usage/two_stage_reranking.md).
 
 ## Using a Custom Model
 

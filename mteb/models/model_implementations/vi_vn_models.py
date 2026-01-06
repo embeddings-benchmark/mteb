@@ -7,6 +7,7 @@ greennode_embedding_large_vn_v1_training_data = {
 
 greennode_embedding_large_vn_v1 = ModelMeta(
     name="GreenNode/GreenNode-Embedding-Large-VN-V1",
+    model_type=["dense"],
     revision="660def1f6e1c8ecdf39f6f9c95829e3cf0cef837",
     release_date="2024-04-11",
     languages=[
@@ -21,7 +22,7 @@ greennode_embedding_large_vn_v1 = ModelMeta(
     max_tokens=8194,
     reference="https://huggingface.co/GreenNode/GreenNode-Embedding-Large-VN-V1",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=False,
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/GreenNode/GreenNode-Table-Markdown-Retrieval-VN",
@@ -31,6 +32,7 @@ greennode_embedding_large_vn_v1 = ModelMeta(
 
 greennode_embedding_large_vn_mixed_v1 = ModelMeta(
     name="GreenNode/GreenNode-Embedding-Large-VN-Mixed-V1",
+    model_type=["dense"],
     revision="1d3dddb3862292dab4bd3eddf0664c0335ad5843",
     release_date="2024-04-11",
     languages=[
@@ -45,7 +47,7 @@ greennode_embedding_large_vn_mixed_v1 = ModelMeta(
     max_tokens=8194,
     reference="https://huggingface.co/GreenNode/GreenNode-Embedding-Large-VN-Mixed-V1",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=False,
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/GreenNode/GreenNode-Table-Markdown-Retrieval-VN",
@@ -55,6 +57,7 @@ greennode_embedding_large_vn_mixed_v1 = ModelMeta(
 
 aiteamvn_vietnamese_embeddings = ModelMeta(
     name="AITeamVN/Vietnamese_Embedding",
+    model_type=["dense"],
     revision="fcbbb905e6c3757d421aaa5db6fd7c53d038f6fb",
     release_date="2024-03-17",
     languages=[
@@ -69,16 +72,23 @@ aiteamvn_vietnamese_embeddings = ModelMeta(
     max_tokens=8194,
     reference="https://huggingface.co/AITeamVN/Vietnamese_Embedding",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "ONNX", "safetensors"],
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
     adapted_from="BAAI/bge-m3",
+    citation="""@misc{Vietnamese_Embedding,
+  title={Vietnamese_Embedding: Embedding model in Vietnamese language.},
+  author={Nguyen Nho Trung, Nguyen Nhat Quang, Nguyen Van Huy},
+  year={2025},
+  publisher={Huggingface},
+}""",
 )
 
 hiieu_halong_embedding = ModelMeta(
     name="hiieu/halong_embedding",
+    model_type=["dense"],
     revision="b57776031035f70ed2030d2e35ecc533eb0f8f71",
     release_date="2024-07-06",
     languages=[
@@ -94,15 +104,22 @@ hiieu_halong_embedding = ModelMeta(
     max_tokens=514,
     reference="https://huggingface.co/hiieu/halong_embedding",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
     adapted_from="intfloat/multilingual-e5-base",
+    citation="""@misc{HalongEmbedding,
+  title={HalongEmbedding: A Vietnamese Text Embedding},
+  author={Ngo Hieu},
+  year={2024},
+  publisher={Huggingface},
+}""",
 )
 
 sup_simcse_vietnamese_phobert_base_ = ModelMeta(
     name="VoVanPhuc/sup-SimCSE-VietNamese-phobert-base",
+    model_type=["dense"],
     revision="608779b86741a8acd8c8d38132974ff04086b138",
     release_date="2021-05-26",
     languages=[
@@ -118,14 +135,29 @@ sup_simcse_vietnamese_phobert_base_ = ModelMeta(
     license="apache-2.0",
     public_training_code=None,
     public_training_data=None,
-    framework=["PyTorch", "Sentence Transformers"],
+    framework=["PyTorch", "Sentence Transformers", "Transformers", "safetensors"],
     reference="https://huggingface.co/VoVanPhuc/sup-SimCSE-VietNamese-phobert-base",
     similarity_fn_name="cosine",
     training_datasets=None,
+    citation="""@article{gao2021simcse,
+   title={{SimCSE}: Simple Contrastive Learning of Sentence Embeddings},
+   author={Gao, Tianyu and Yao, Xingcheng and Chen, Danqi},
+   journal={arXiv preprint arXiv:2104.08821},
+   year={2021}
+}
+
+@inproceedings{phobert,
+title     = {{PhoBERT: Pre-trained language models for Vietnamese}},
+author    = {Dat Quoc Nguyen and Anh Tuan Nguyen},
+booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2020},
+year      = {2020},
+pages     = {1037--1042}
+}""",
 )
 
 bkai_foundation_models_vietnamese_bi_encoder = ModelMeta(
     name="bkai-foundation-models/vietnamese-bi-encoder",
+    model_type=["dense"],
     revision="84f9d9ada0d1a3c37557398b9ae9fcedcdf40be0",
     release_date="2023-09-09",
     languages=[
@@ -141,8 +173,15 @@ bkai_foundation_models_vietnamese_bi_encoder = ModelMeta(
     license="apache-2.0",
     public_training_code=None,
     public_training_data=None,
-    framework=["PyTorch", "Sentence Transformers"],
+    framework=["PyTorch", "Sentence Transformers", "safetensors", "Transformers"],
     reference="https://huggingface.co/bkai-foundation-models/vietnamese-bi-encoder",
     similarity_fn_name="cosine",
     training_datasets=None,
+    citation="""
+      @article{duc2024towards,
+    title={Towards Comprehensive Vietnamese Retrieval-Augmented Generation and Large Language Models},
+    author={Nguyen Quang Duc, Le Hai Son, Nguyen Duc Nhan, Nguyen Dich Nhat Minh, Le Thanh Huong, Dinh Viet Sang},
+    journal={arXiv preprint arXiv:2403.01616},
+    year={2024}
+  }""",
 )

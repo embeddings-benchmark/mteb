@@ -39,6 +39,7 @@ Bibtex:
 """
 
 import itertools
+from typing import Any
 
 import numpy as np
 import scipy.sparse as sp
@@ -119,8 +120,10 @@ def _get_most_desired_combination(samples_with_combination: dict):
         if support_size == 0:
             continue
         if currently_chosen is None or (
-            best_number_of_combinations < number_of_combinations  # type: ignore
-            and best_support_size > support_size  # type: ignore
+            best_number_of_combinations is not None
+            and best_support_size is not None
+            and best_number_of_combinations < number_of_combinations
+            and best_support_size > support_size
         ):
             currently_chosen = combination
             best_number_of_combinations, best_support_size = (
@@ -162,7 +165,7 @@ class IterativeStratification(_BaseKFold):
         self._rng_state = check_random_state(random_state)
         need_shuffle = shuffle or random_state is not None
         self.order = order
-        super().__init__(  # type: ignore
+        super().__init__(
             n_splits,
             shuffle=need_shuffle,
             random_state=self._rng_state if need_shuffle else None,
@@ -172,8 +175,7 @@ class IterativeStratification(_BaseKFold):
             self.percentage_per_fold = sample_distribution_per_fold
         else:
             self.percentage_per_fold = [
-                1 / float(self.n_splits)
-                for _ in range(self.n_splits)  # type: ignore
+                1 / float(self.n_splits) for _ in range(self.n_splits)
             ]
 
     def _prepare_stratification(
@@ -182,9 +184,9 @@ class IterativeStratification(_BaseKFold):
         list[list[int]],
         dict[int, bool],
         list[list[int]],
-        list[list[list[int]]],
-        dict[tuple[int, ...], list[int]],
-        list[list[int]],
+        list[list[Any]],
+        dict[str, list[Any]],
+        list[list[Any]],
     ]:
         """Prepares variables for performing stratification
 
@@ -206,14 +208,14 @@ class IterativeStratification(_BaseKFold):
         """
         self.n_samples, self.n_labels = y.shape
         self.desired_samples_per_fold = np.array(
-            [self.percentage_per_fold[i] * self.n_samples for i in range(self.n_splits)]  # type: ignore
+            [self.percentage_per_fold[i] * self.n_samples for i in range(self.n_splits)]
         )
         rows = sp.lil_matrix(y).rows
         rows_used = dict.fromkeys(range(self.n_samples), False)
         all_combinations = []
-        per_row_combinations = [[] for i in range(self.n_samples)]
-        samples_with_combination = {}
-        folds = [[] for _ in range(self.n_splits)]  # type: ignore
+        per_row_combinations: list[list[Any]] = [[] for i in range(self.n_samples)]
+        samples_with_combination: dict[str, list[Any]] = {}
+        folds: list[list[int]] = [[] for _ in range(self.n_splits)]
 
         # for every row
         for sample_index, label_assignment in enumerate(rows):
@@ -229,21 +231,19 @@ class IterativeStratification(_BaseKFold):
                 all_combinations.append(combination)
                 per_row_combinations[sample_index].append(combination)
 
-        all_combinations = [list(x) for x in set(all_combinations)]
-
         self.desired_samples_per_combination_per_fold = {
             combination: np.array(
                 [
                     len(evidence_for_combination) * self.percentage_per_fold[j]
-                    for j in range(self.n_splits)  # type: ignore
+                    for j in range(self.n_splits)
                 ]
             )
             for combination, evidence_for_combination in samples_with_combination.items()
         }
         return (
-            rows,
+            rows.tolist(),
             rows_used,
-            all_combinations,
+            [list(x) for x in set(all_combinations)],
             per_row_combinations,
             samples_with_combination,
             folds,
@@ -328,7 +328,7 @@ class IterativeStratification(_BaseKFold):
             per_row_combinations,
             samples_with_combination,
             folds,
-        ) = self._prepare_stratification(y)  # type: ignore
+        ) = self._prepare_stratification(y)
 
         self._distribute_positive_evidence(
             rows_used, folds, samples_with_combination, per_row_combinations

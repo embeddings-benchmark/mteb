@@ -48,7 +48,7 @@ results = mteb.evaluate(model, tasks=tasks)
 MTEB is not only text evaluating, but also allow you to evaluate image and image-text embeddings.
 
 !!! Note
-    Running MTEB on images requires you to install the optional dependencies using `pip install mteb[image]`
+    Running MTEB on images requires you to install the optional dependencies using `pip install mteb[image]` or `uv add "mteb[image]"`
 
 To evaluate image embeddings you can follow the same approach for any other task in `mteb`. Simply ensuring that the task contains the modality "image":
 

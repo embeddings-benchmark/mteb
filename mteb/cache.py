@@ -1,14 +1,21 @@
+import gzip
+import io
 import json
 import logging
 import os
 import shutil
 import subprocess
+import warnings
 from collections import defaultdict
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import cast
 
+import requests
+
+import mteb
 from mteb.abstasks import AbsTask
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
 from mteb.types import ModelName, Revision
@@ -81,9 +88,9 @@ class ResultCache:
         model_path = results_folder / model_name
 
         if model_revision is None:
-            logger.warning(
-                "model_revision is not specified, attempting to load the latest revision. To disable this behavior, specify model_revision explicitly."
-            )
+            msg = "`model_revision` is not specified, attempting to load the latest revision. To disable this behavior, specify the 'model_revision` explicitly."
+            logger.warning(msg)
+            warnings.warn(msg)
             # get revs from paths
             revisions = [p for p in model_path.glob("*") if p.is_dir()]
             if not revisions:
@@ -195,12 +202,14 @@ class ResultCache:
         self,
         remote: str = "https://github.com/embeddings-benchmark/results",
         download_latest: bool = True,
+        revision: str | None = None,
     ) -> Path:
         """Downloads the latest version of the results repository from GitHub to a local cache directory. Required git to be installed.
 
         Args:
             remote: The URL of the results repository on GitHub.
             download_latest: If True it will download the latest version of the repository, otherwise it will only update the existing repository.
+            revision: If specified, it will checkout the given revision after cloning or pulling the repository.
 
         Returns:
             The path to the local cache directory.
@@ -228,14 +237,27 @@ class ResultCache:
                 )
                 raise ValueError(msg)
 
-            if download_latest:
+            if revision or download_latest:
                 logger.info(
-                    f"remote repository already exists in {results_directory}, updating it using git pull"
+                    f"remote repository already exists in {results_directory}, fetching updates"
                 )
-                subprocess.run(["git", "pull"], cwd=results_directory)
+                subprocess.run(
+                    ["git", "fetch", "--all", "--tags"],
+                    cwd=results_directory,
+                    check=True,
+                )
             else:
                 logger.debug(
-                    f"Results repository already exists in {results_directory}, skipping update, set download_latest=True to update it"
+                    f"Results repository already exists in {results_directory}, skipping update, "
+                    f"set download_latest=True to update it"
+                )
+
+            if revision:
+                logger.info(f"Checking out revision '{revision}'")
+                subprocess.run(
+                    ["git", "checkout", revision],
+                    cwd=results_directory,
+                    check=True,
                 )
             return results_directory
 
@@ -243,13 +265,162 @@ class ResultCache:
             f"No results repository found in {results_directory}, cloning it from {remote}"
         )
 
+        clone_cmd = ["git", "clone", "--depth", "1"]
+
+        if revision:
+            logger.info(f"Cloning repository at revision '{revision}'")
+            clone_cmd.append(f"--revision={revision}")
+        clone_cmd.extend([remote, "remote"])
+
         subprocess.run(
-            ["git", "clone", "--depth", "1", remote, "remote"],
+            clone_cmd,
             cwd=self.cache_path,
             check=True,
         )
 
         return results_directory
+
+    def _download_cached_results_from_branch(
+        self,
+        branch: str = "cached-data",
+        filename: str = "__cached_results.json.gz",
+        output_path: Path | None = None,
+        remote: str = "https://github.com/embeddings-benchmark/results",
+        timeout: int = 60,
+        max_size_mb: int = 500,
+    ) -> Path:
+        """Download pre-computed cached results from a specific branch.
+
+        This is significantly faster than download_from_remote() since it downloads
+        only a compressed cache file instead of cloning the entire repository.
+
+        The method performs the following steps:
+        1. Downloads a gzipped JSON file from the specified branch
+        2. Validates file size and content type
+        3. Decompresses the gzip content
+        4. Writes the decompressed JSON to disk
+
+        Args:
+            branch: Branch name to download from (default: "cached-data")
+            filename: Name of the cached results file (default: "__cached_results.json.gz")
+            output_path: Where to save the file. If None, uses mteb/leaderboard/__cached_results.json
+            remote: Base URL of the results repository
+            timeout: Request timeout in seconds (default: 60)
+            max_size_mb: Maximum allowed file size in megabytes (default: 500)
+
+        Returns:
+            Path to the downloaded and decompressed cache file
+
+        Raises:
+            requests.exceptions.RequestException: On HTTP errors
+            ValueError: On validation failures (size, content-type)
+            gzip.BadGzipFile: If content is not valid gzip
+            UnicodeDecodeError: If content cannot be decoded as UTF-8
+            PermissionError: If file cannot be written due to permissions
+            OSError: On other file system errors
+
+        Examples:
+            >>> from mteb.cache import ResultCache
+            >>> cache = ResultCache()
+            >>> # Download optimized cached results
+            >>> cache_file = cache._download_cached_results_from_branch()
+            >>> # Use custom output path
+            >>> cache_file = cache._download_cached_results_from_branch(
+            ...     output_path=Path("/tmp/my_cache.json")
+            ... )
+        """
+        if output_path is None:
+            # Default to saving in mteb/leaderboard/__cached_results.json
+            # Get the mteb package directory (parent of this file)
+            mteb_package_dir = Path(__file__).parent
+            output_path = mteb_package_dir / "leaderboard" / "__cached_results.json"
+
+        # Extract repository owner and name from the remote URL
+        # e.g., "https://github.com/embeddings-benchmark/results" -> "embeddings-benchmark/results"
+        repo_path = remote.replace("https://github.com/", "").replace(
+            "http://github.com/", ""
+        )
+
+        url = f"https://raw.githubusercontent.com/{repo_path}/{branch}/{filename}"
+        logger.info(f"Downloading cached results from {url}")
+
+        # Step 1: Download with validation
+        max_size_bytes = max_size_mb * 1024 * 1024
+
+        try:
+            response = requests.get(url, timeout=timeout)
+            response.raise_for_status()
+
+            # Check if this is a Git LFS pointer file
+            content_type = response.headers.get("content-type", "").lower()
+            if (
+                content_type == "text/plain; charset=utf-8"
+                and b"git-lfs" in response.content
+            ):
+                # Try Git LFS media URL instead
+                media_url = f"https://media.githubusercontent.com/media/{repo_path}/{branch}/{filename}"
+                logger.info(f"Detected Git LFS file, trying media URL: {media_url}")
+                response = requests.get(media_url, timeout=timeout)
+                response.raise_for_status()
+                content_type = response.headers.get("content-type", "").lower()
+
+            # Validate content-type header
+            expected_content_types = [
+                "application/gzip",
+                "application/octet-stream",
+                "application/x-gzip",
+            ]
+            if content_type and not any(
+                ct in content_type for ct in expected_content_types
+            ):
+                raise Exception(
+                    f"Unexpected content-type: {content_type}. Expected one of: {expected_content_types}"
+                )
+
+            # Validate file size
+            content_length = len(response.content)
+            if content_length > max_size_bytes:
+                raise ValueError(
+                    f"Downloaded file too large: {content_length} bytes (max: {max_size_bytes})"
+                )
+
+            logger.info(
+                f"HTTP request successful, content length: {content_length} bytes"
+            )
+            content = response.content
+
+        except Exception as e:
+            logger.error(f"Unexpected HTTP error: {type(e).__name__}: {e}")
+            raise e
+
+        # Step 2: Decompress gzip data
+        logger.info("Attempting gzip decompression...")
+
+        try:
+            with gzip.open(io.BytesIO(content), "rt", encoding="utf-8") as gz_file:
+                data = gz_file.read()
+            logger.info(f"Decompression successful, data length: {len(data)} chars")
+
+        except Exception as e:
+            logger.error(f"Unexpected decompression error: {type(e).__name__}: {e}")
+            raise e
+
+        # Step 3: Write to disk
+        logger.info(f"Attempting to write to: {output_path}")
+
+        # Check parent directory exists and is writable
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        try:
+            output_path.write_text(data, encoding="utf-8")
+            logger.info(
+                f"File write successful, size: {output_path.stat().st_size} bytes"
+            )
+        except Exception as e:
+            logger.error(f"Unexpected file write error: {type(e).__name__}: {e}")
+            raise e
+
+        return output_path
 
     def clear_cache(self) -> None:
         """Clear the local cache directory."""
@@ -257,15 +428,17 @@ class ResultCache:
             shutil.rmtree(self.cache_path)
             logger.info(f"Cache directory {self.cache_path} cleared.")
         else:
-            logger.warning(f"Cache directory {self.cache_path} does not exist.")
+            msg = f"Cache directory `{self.cache_path}` does not exist."
+            logger.warning(msg)
+            warnings.warn(msg)
 
     def __repr__(self) -> str:
         return f"ResultCache(cache_path={self.cache_path})"
 
     def get_cache_paths(
         self,
-        models: Sequence[str] | Sequence[ModelMeta] | None = None,
-        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        models: Sequence[str] | Iterable[ModelMeta] | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
     ) -> list[Path]:
@@ -398,7 +571,7 @@ class ResultCache:
     @staticmethod
     def _filter_paths_by_model_and_revision(
         paths: list[Path],
-        models: Sequence[str] | Sequence[ModelMeta] | None = None,
+        models: Sequence[str] | Iterable[ModelMeta] | None = None,
     ) -> list[Path]:
         """Filter a list of paths by model name and optional revision.
 
@@ -408,8 +581,9 @@ class ResultCache:
         if not models:
             return paths
 
-        if isinstance(models[0], ModelMeta):
-            models = cast(list[ModelMeta], models)
+        first_model = next(iter(models))
+        if isinstance(first_model, ModelMeta):
+            models = cast(Iterable[ModelMeta], models)
             name_and_revision = {
                 (m.model_name_as_path(), m.revision or "no_revision_available")
                 for m in models
@@ -420,13 +594,14 @@ class ResultCache:
                 if (p.parent.parent.name, p.parent.name) in name_and_revision
             ]
 
-        model_names = {m.replace("/", "__").replace(" ", "_") for m in models}
+        str_models = cast(Sequence[str], models)
+        model_names = {m.replace("/", "__").replace(" ", "_") for m in str_models}
         return [p for p in paths if p.parent.parent.name in model_names]
 
     @staticmethod
     def _filter_paths_by_task(
         paths: list[Path],
-        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
     ) -> list[Path]:
         if tasks is not None:
             task_names = set()
@@ -442,8 +617,8 @@ class ResultCache:
 
     def load_results(
         self,
-        models: Sequence[str] | Sequence[ModelMeta] | None = None,
-        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        models: Sequence[str] | Iterable[ModelMeta] | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | Benchmark | str | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
         validate_and_filter: bool = False,
@@ -453,7 +628,9 @@ class ResultCache:
 
         Args:
             models: A list of model names to load the results for. If None it will load the results for all models.
-            tasks: A list of task names to load the results for. If None it will load the results for all tasks.
+            tasks: A list of task names to load the results for. If str is passed, then benchmark will be loaded.
+                If Benchmark is passed, then all tasks in the benchmark will be loaded.
+                If None it will load the results for all tasks.
             require_model_meta: If True it will ignore results that do not have a model_meta.json file. If false it attempt to
                 extract the model name and revision from the path.
             include_remote: If True, it will include results from the remote repository.
@@ -475,6 +652,9 @@ class ResultCache:
             ...     require_model_meta=True,
             ... )
         """
+        if isinstance(tasks, str):
+            tasks = mteb.get_benchmark(tasks)
+
         paths = self.get_cache_paths(
             models=models,
             tasks=tasks,
@@ -483,7 +663,7 @@ class ResultCache:
         )
         models_results = defaultdict(list)
 
-        task_names = {}
+        task_names: dict[str, AbsTask | None] = {}
         if tasks is not None:
             for task in tasks:
                 if isinstance(task, AbsTask):
@@ -501,9 +681,11 @@ class ResultCache:
             )
 
             if validate_and_filter:
-                task = task_names[task_result.task_name]
+                task_instance = task_names[task_result.task_name]
                 try:
-                    task_result = task_result.validate_and_filter_scores(task=task)
+                    task_result = task_result.validate_and_filter_scores(
+                        task=task_instance
+                    )
                 except Exception as e:
                     logger.info(
                         f"Validation failed for {task_result.task_name} in {model_name} {revision}: {e}"
@@ -513,7 +695,7 @@ class ResultCache:
             models_results[(model_name, revision)].append(task_result)
 
         # create BenchmarkResults object
-        models_results = [
+        models_results_object = [
             ModelResult(
                 model_name=model_name,
                 model_revision=revision,
@@ -522,8 +704,7 @@ class ResultCache:
             for (model_name, revision), task_results in models_results.items()
         ]
 
-        benchmark_results = BenchmarkResults(
-            model_results=models_results,
+        return BenchmarkResults(
+            model_results=models_results_object,
+            benchmark=tasks if isinstance(tasks, Benchmark) else None,
         )
-
-        return benchmark_results

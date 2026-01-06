@@ -73,6 +73,13 @@ class MockSentenceTransformer(SentenceTransformer):
     def get_sentence_embedding_dimension() -> int:
         return 10
 
+    def max_seq_length(self) -> int:
+        return 10
+
+    @property
+    def similarity_fn_name(self) -> Literal["cosine", "dot", "euclidean", "manhattan"]:
+        return "cosine"
+
 
 class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
     mteb_model_meta = ModelMeta(
@@ -95,7 +102,7 @@ class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
         normalize_embeddings: bool = False,
         **kwargs,
     ) -> list[Tensor] | np.ndarray | Tensor:
-        return torch.randn(len(sentences), 10, dtype=torch.bfloat16)  # type: ignore
+        return torch.randn(len(sentences), 10, dtype=torch.bfloat16)
 
 
 class MockSentenceTransformerWrapper(SentenceTransformerEncoderWrapper):

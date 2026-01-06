@@ -155,6 +155,7 @@ class BedrockModel(AbsEncoder):
 
 amazon_titan_embed_text_v1 = ModelMeta(
     name="bedrock/amazon-titan-embed-text-v1",
+    model_type=["dense"],
     revision="1",
     release_date="2023-09-27",
     languages=None,  # not specified
@@ -181,6 +182,7 @@ amazon_titan_embed_text_v1 = ModelMeta(
 
 amazon_titan_embed_text_v2 = ModelMeta(
     name="bedrock/amazon-titan-embed-text-v2",
+    model_type=["dense"],
     revision="1",
     release_date="2024-04-30",
     languages=None,  # not specified
@@ -216,6 +218,7 @@ cohere_embed_english_v3 = ModelMeta(
         model_prompts=cohere_model_prompts,
     ),
     name="bedrock/cohere-embed-english-v3",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=False,
     reference="https://cohere.com/blog/introducing-embed-v3",
@@ -243,6 +246,7 @@ cohere_embed_multilingual_v3 = ModelMeta(
         model_prompts=cohere_model_prompts,
     ),
     name="bedrock/cohere-embed-multilingual-v3",
+    model_type=["dense"],
     languages=cohere_supported_languages,
     open_weights=False,
     reference="https://cohere.com/blog/introducing-embed-v3",

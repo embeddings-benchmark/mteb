@@ -214,11 +214,12 @@ class JinaReranker(RerankerWrapper):
 
 
 monobert_large = ModelMeta(
-    loader=MonoBERTReranker,  # type: ignore
+    loader=MonoBERTReranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
     name="castorini/monobert-large-msmarco",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="0a97706f3827389da43b83348d5d18c9d53876fa",
@@ -233,17 +234,17 @@ monobert_large = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["Sentence Transformers", "PyTorch"],
-    is_cross_encoder=True,
+    framework=["Sentence Transformers", "PyTorch", "Transformers"],
 )
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
 jina_reranker_multilingual = ModelMeta(
-    loader=JinaReranker,  # type: ignore
+    loader=JinaReranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
     name="jinaai/jina-reranker-v2-base-multilingual",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="126747772a932960028d9f4dc93bd5d9c4869be4",
@@ -258,16 +259,22 @@ jina_reranker_multilingual = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["Sentence Transformers", "PyTorch"],
-    is_cross_encoder=True,
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "ONNX",
+        "safetensors",
+    ],
 )
 
 bge_reranker_v2_m3 = ModelMeta(
-    loader=BGEReranker,  # type: ignore
+    loader=BGEReranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
     name="BAAI/bge-reranker-v2-m3",
+    model_type=["cross-encoder"],
     languages=[
         "eng-Latn",
         "ara-Arab",
@@ -315,8 +322,7 @@ bge_reranker_v2_m3 = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=bge_m3_training_data,
-    framework=["Sentence Transformers", "PyTorch"],
-    is_cross_encoder=True,
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     citation="""
     @misc{li2023making,
       title={Making Large Language Models A Better Foundation For Dense Retrieval},

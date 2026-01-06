@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import logging
+import warnings
 from collections.abc import Iterable
-from copy import deepcopy
 from pathlib import Path
 from time import time
 from typing import TYPE_CHECKING, Any, cast
@@ -14,11 +14,10 @@ from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import (
-    CrossEncoderProtocol,
-    EncoderProtocol,
     MTEBModels,
 )
 from mteb.models.sentence_transformer_wrapper import (
@@ -53,62 +52,31 @@ class OverwriteStrategy(HelpfulStrEnum):
     ONLY_CACHE = "only-cache"
 
 
-_empty_model_meta = ModelMeta(
-    loader=None,
-    name=None,
-    revision=None,
-    release_date=None,
-    languages=None,
-    framework=[],
-    similarity_fn_name=None,
-    n_parameters=None,
-    memory_usage_mb=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
-    public_training_data=None,
-    use_instructions=None,
-    training_datasets=None,
-    modalities=[],
-)
-
-
-def _create_empty_model_meta() -> ModelMeta:
-    logger.warning("Model metadata is missing. Using empty metadata.")
-    meta = deepcopy(_empty_model_meta)
-    meta.revision = "no_revision_available"
-    meta.name = "no_model_name_available"
-    return meta
-
-
 def _sanitize_model(
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
 ) -> tuple[MTEBModels | ModelMeta, ModelMeta, ModelName, Revision]:
     from sentence_transformers import CrossEncoder, SentenceTransformer
 
+    wrapped_model: MTEBModels | ModelMeta
     if isinstance(model, SentenceTransformer):
-        _mdl = SentenceTransformerEncoderWrapper(model)
-        meta = _mdl.mteb_model_meta
-        _mdl = cast(EncoderProtocol, _mdl)
-        model = _mdl
+        wrapped_model = SentenceTransformerEncoderWrapper(model)
+        meta = wrapped_model.mteb_model_meta
     elif isinstance(model, CrossEncoder):
-        _mdl = CrossEncoderWrapper(model)
-        _mdl = cast(CrossEncoderProtocol, _mdl)
-        meta = _mdl.mteb_model_meta
-        model = _mdl
+        wrapped_model = CrossEncoderWrapper(model)
+        meta = wrapped_model.mteb_model_meta
     elif hasattr(model, "mteb_model_meta"):
-        meta = model.mteb_model_meta  # type: ignore[attr-defined]
+        meta = getattr(model, "mteb_model_meta")
         if not isinstance(meta, ModelMeta):
-            meta = _create_empty_model_meta()
+            meta = ModelMeta._from_hub(None)
+        wrapped_model = cast(MTEBModels | ModelMeta, model)
     else:
-        meta = _create_empty_model_meta() if not isinstance(model, ModelMeta) else model
+        meta = ModelMeta._from_hub(None) if not isinstance(model, ModelMeta) else model
+        wrapped_model = meta
 
     model_name = cast(str, meta.name)
     model_revision = cast(str, meta.revision)
 
-    return model, meta, model_name, model_revision
+    return wrapped_model, meta, model_name, model_revision
 
 
 def _evaluate_task(
@@ -154,7 +122,8 @@ def _evaluate_task(
                 prediction_folder=prediction_folder,
                 public_only=public_only,
             )
-        result.kg_co2_emissions = tracker.final_emissions
+        if isinstance(result, TaskResult):
+            result.kg_co2_emissions = tracker.final_emissions
         return result
 
     task_results = {}
@@ -167,10 +136,12 @@ def _evaluate_task(
             task.load_data()
         except DatasetNotFoundError as e:
             if not task.metadata.is_public and public_only is None:
-                logger.warning(
+                msg = (
                     f"Dataset for private task '{task.metadata.name}' not found. "
                     "Make sure you have access to the dataset and that you have set up the authentication correctly. To disable this warning set `public_only=False`"
                 )
+                logger.warning(msg)
+                warnings.warn(msg)
                 return TaskError(
                     task_name=task.metadata.name,
                     exception=str(e),
@@ -178,7 +149,7 @@ def _evaluate_task(
             if public_only is False:
                 raise e
 
-    evaluation_time = 0
+    evaluation_time = 0.0
 
     for split, hf_subsets in splits.items():
         tick = time()
@@ -225,12 +196,18 @@ def _check_model_modalities(
         return
 
     model_modalities = set(model.modalities)
+    check_tasks: Iterable[AbsTask] = []
     if isinstance(tasks, AbsTask):
-        tasks = [tasks]
+        check_tasks = [tasks]
+    elif isinstance(tasks, Benchmark):
+        benchmark = cast(Benchmark, tasks)
+        check_tasks = benchmark.tasks
+    else:
+        check_tasks = cast(Iterable[AbsTask], tasks)
 
     warnings, errors = [], []
 
-    for task in tasks:
+    for task in check_tasks:
         # only retrieval tasks have different modalities for query and document and can be run with partial overlaps
         if isinstance(task, AbsTaskRetrieval):
             query_mods = set(task.metadata.get_modalities(PromptType.query))
@@ -363,10 +340,10 @@ def evaluate(
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
-        task = cast(AbsTaskAggregate, tasks)
+        aggregated_task = cast(AbsTaskAggregate, tasks)
         results = evaluate(
             model,
-            task.metadata.tasks,
+            aggregated_task.metadata.tasks,
             co2_tracker=co2_tracker,
             raise_error=raise_error,
             encode_kwargs=encode_kwargs,
@@ -376,17 +353,18 @@ def evaluate(
             show_progress_bar=show_progress_bar,
             public_only=public_only,
         )
-        result = task.combine_task_results(results.task_results)
+        combined_results = aggregated_task.combine_task_results(results.task_results)
         return ModelResult(
             model_name=results.model_name,
             model_revision=results.model_revision,
-            task_results=[result],
+            task_results=[combined_results],
         )
 
     if isinstance(tasks, AbsTask):
         task = tasks
     else:
-        results = []
+        tasks = cast(Iterable[AbsTask], tasks)
+        evaluate_results = []
         exceptions = []
         tasks_tqdm = tqdm(
             tasks,
@@ -407,23 +385,23 @@ def evaluate(
                 show_progress_bar=False,
                 public_only=public_only,
             )
-            results.extend(_res.task_results)
+            evaluate_results.extend(_res.task_results)
             if _res.exceptions:
                 exceptions.extend(_res.exceptions)
         return ModelResult(
             model_name=_res.model_name,
             model_revision=_res.model_revision,
-            task_results=results,
+            task_results=evaluate_results,
             exceptions=exceptions,
         )
 
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
 
-    existing_results = None
+    existing_results: TaskResult | None = None
     if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
-        results = cache.load_task_result(task.metadata.name, meta)
-        if results:
-            existing_results = results
+        cache_results = cache.load_task_result(task.metadata.name, meta)
+        if cache_results:
+            existing_results = cache_results
 
     if (
         existing_results
