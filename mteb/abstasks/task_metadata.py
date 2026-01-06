@@ -494,7 +494,6 @@ class TaskMetadata(BaseModel):
         dataset_type = [
             *self._hf_task_type(),
             *self._hf_task_category(),
-            *self._hf_subtypes(),
         ]
         languages = self._hf_languages()
 
@@ -596,10 +595,8 @@ class TaskMetadata(BaseModel):
 
     def _hf_subtypes(self) -> list[str]:
         # to get full list of available task_ids execute
-        # requests.post("https://huggingface.co/api/validate-yaml", json={
-        #   "content": "---\ntask_ids: 'test'\n---",
-        #   "repoType": "dataset"
-        # })
+        # https://huggingface.co/api/datasets-tags-by-type?type=task_ids
+        # ref https://huggingface-openapi.hf.space/#tag/datasets/GET/api/datasets-tags-by-type
         mteb_to_hf_subtype = {
             "Article retrieval": ["document-retrieval"],
             "Conversational retrieval": ["conversational", "utterance-retrieval"],
@@ -621,7 +618,7 @@ class TaskMetadata(BaseModel):
                 "hate-speech-detection",
             ],
             "Thematic clustering": [],
-            "Scientific Reranking": [],
+            "Scientific Reranking": ["text-scoring"],
             "Claim verification": ["fact-checking", "fact-checking-retrieval"],
             "Topic classification": ["topic-classification"],
             "Code retrieval": [],
@@ -629,21 +626,21 @@ class TaskMetadata(BaseModel):
             "Cross-Lingual Semantic Discrimination": [],
             "Textual Entailment": ["natural-language-inference"],
             "Counterfactual Detection": [],
-            "Emotion classification": [],
+            "Emotion classification": ["sentiment-classification"],
             "Reasoning as Retrieval": [],
             "Rendered Texts Understanding": [],
             "Image Text Retrieval": [],
             "Object recognition": [],
             "Scene recognition": [],
             "Caption Pairing": ["image-captioning"],
-            "Emotion recognition": [],
+            "Emotion recognition": ["sentiment-scoring"],
             "Textures recognition": [],
             "Activity recognition": [],
             "Tumor detection": [],
             "Duplicate Detection": [],
             "Rendered semantic textual similarity": [
                 "semantic-similarity-scoring",
-                "rendered semantic textual similarity",
+                "semantic-similarity-classification",
             ],
             "Intent classification": [
                 "intent-classification",
@@ -657,10 +654,8 @@ class TaskMetadata(BaseModel):
 
     def _hf_task_type(self) -> list[str]:
         # to get full list of task_types execute:
-        # requests.post("https://huggingface.co/api/validate-yaml", json={
-        #     "content": "---\ntask_categories: ['test']\n---", "repoType": "dataset"
-        # }).json()
-        # or look at https://huggingface.co/tasks
+        # https://huggingface.co/api/datasets-tags-by-type?type=task_categories
+        # ref https://huggingface-openapi.hf.space/#tag/datasets/GET/api/datasets-tags-by-type
         mteb_task_type_to_datasets = {
             # Text
             "BitextMining": ["translation"],
@@ -679,7 +674,7 @@ class TaskMetadata(BaseModel):
             "Any2AnyRetrieval": ["visual-document-retrieval"],
             "Any2AnyMultilingualRetrieval": ["visual-document-retrieval"],
             "VisionCentricQA": ["visual-question-answering"],
-            "ImageClustering": ["image-clustering"],
+            "ImageClustering": ["image-feature-extraction"],
             "ImageClassification": ["image-classification"],
             "ImageMultilabelClassification": ["image-classification"],
             "DocumentUnderstanding": ["visual-document-retrieval"],
