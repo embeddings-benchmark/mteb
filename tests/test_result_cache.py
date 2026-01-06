@@ -212,6 +212,60 @@ def test_cache_filter_languages():
     assert len(eng_results.model_results[0].task_results[0].scores["test"]) == 1
 
 
+def test_cache_load_different_subsets():
+    cache = ResultCache(cache_path=test_cache_path)
+
+    task = mteb.get_task(
+        "BelebeleRetrieval", hf_subsets=["acm_Arab-acm_Arab", "nld_Latn-nld_Latn"]
+    )
+    model1 = mteb.get_model_meta(
+        "sentence-transformers/all-MiniLM-L6-v2"
+    )  # model have only arab subset results
+    model2 = mteb.get_model_meta(
+        "baseline/random-encoder-baseline"
+    )  # model have all subsets results
+
+    result1 = cache.load_results(
+        models=[
+            model1,
+        ],
+        tasks=[task],
+    )
+    result2 = cache.load_results(
+        models=[
+            model2,
+        ],
+        tasks=[task],
+    )
+    assert len(result1.model_results[0].task_results[0].scores["test"]) == 1
+    assert len(result2.model_results[0].task_results[0].scores["test"]) == 2
+
+    assert pytest.approx(result1.model_results[0].task_results[0].get_score(), 0.01568)
+    assert pytest.approx(result2.model_results[0].task_results[0].get_score(), 0.01035)
+
+    result1 = cache.load_results(
+        models=[
+            model1,
+        ],
+        tasks=[task],
+        validate_and_filter=True,
+        fill_missing_scores=True,
+    )
+    result2 = cache.load_results(
+        models=[
+            model2,
+        ],
+        tasks=[task],
+        validate_and_filter=True,
+        fill_missing_scores=True,
+    )
+    assert len(result1.model_results[0].task_results[0].scores["test"]) == 2
+    assert len(result2.model_results[0].task_results[0].scores["test"]) == 2
+
+    assert pytest.approx(result1.model_results[0].task_results[0].get_score(), 0.00784)
+    assert pytest.approx(result2.model_results[0].task_results[0].get_score(), 0.01035)
+
+
 # Tests for _download_cached_results_from_branch method
 
 

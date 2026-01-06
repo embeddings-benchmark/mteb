@@ -610,7 +610,11 @@ class TaskResult(BaseModel):
         new_res = {**self.to_dict(), "scores": new_scores}
         return TaskResult.from_validated(**new_res)
 
-    def validate_and_filter_scores(self, task: AbsTask | None = None) -> TaskResult:
+    def validate_and_filter_scores(
+        self,
+        task: AbsTask | None = None,
+        fill_missing_scores: bool = False,
+    ) -> TaskResult:
         """Validate and filter the scores against the task metadata.
 
         This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
@@ -620,6 +624,7 @@ class TaskResult(BaseModel):
         Args:
             task: The task to validate the scores against. E.g. if the task supplied is limited to certain splits and languages,
                 the scores will be filtered to only include those splits and languages. If None it will attempt to get the task from the task_name.
+            fill_missing_scores: If True, missing scores will be filled with 0.
 
         Returns:
             A new TaskResult object with the validated and filtered scores.
@@ -658,11 +663,35 @@ class TaskResult(BaseModel):
                 msg = f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
                 logger.warning(msg)
                 warnings.warn(msg)
+                if fill_missing_scores:
+                    for missing_subset in missing_subsets:
+                        new_scores[split].append(
+                            {
+                                "hf_subset": missing_subset,
+                                "main_score": 0.0,
+                                "languages": task.metadata.hf_subsets_to_langscripts.get(
+                                    missing_subset, []
+                                ),
+                            }
+                        )
             seen_splits.add(split)
         if seen_splits != set(splits):
             msg = f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
             logger.warning(msg)
             warnings.warn(msg)
+            if fill_missing_scores:
+                for missing_split in set(splits) - seen_splits:
+                    new_scores[missing_split] = []
+                    for missing_subset in hf_subsets:
+                        new_scores[missing_split].append(
+                            {
+                                "hf_subset": missing_subset,
+                                "main_score": 0.0,
+                                "languages": task.metadata.hf_subsets_to_langscripts.get(
+                                    missing_subset, []
+                                ),
+                            }
+                        )
         data = self.model_dump()
         data["scores"] = new_scores
         return type(self).model_construct(**data)
