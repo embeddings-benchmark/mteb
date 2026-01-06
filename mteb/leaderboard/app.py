@@ -308,7 +308,18 @@ def _cache_update_task_list(
 def get_leaderboard_app(
     cache: ResultCache = ResultCache(), rebuild: bool = False
 ) -> gr.Blocks:
-    """Returns a Gradio Blocks app for the MTEB leaderboard."""
+    """Returns a Gradio Blocks app for the MTEB leaderboard.
+
+    Args:
+        cache: ResultCache instance for managing benchmark data
+        rebuild: If True, bypasses any pre-computed JSON cache and forces a full rebuild
+                from the results repository. This clones/pulls the full results git repo,
+                builds BenchmarkResults from individual model files, and overwrites the
+                existing cache. Useful for ensuring the freshest data or debugging cache issues.
+
+    Returns:
+        gr.Blocks: A Gradio Blocks application configured with the MTEB leaderboard interface
+    """
     app_start = time.time()
     logger.info("=== Starting leaderboard app initialization ===")
 
