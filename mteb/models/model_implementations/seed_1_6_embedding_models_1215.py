@@ -614,7 +614,7 @@ seed_embedding = ModelMeta(
     open_weights=False,
     n_parameters=None,
     active_parameters=None,
-    embedding_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://console.volcengine.com/ark/region:ark+cn-beijing/model/detail?Id=doubao-embedding-vision",

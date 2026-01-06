@@ -161,7 +161,7 @@ def test_model_to_python():
     languages=['eng-Latn'],
     n_parameters=22700000,
     active_parameters=10992768,
-    embedding_parameters=11720448,
+    n_embedding_parameters=11720448,
     memory_usage_mb=87.0,
     max_tokens=256.0,
     embed_dim=384,
