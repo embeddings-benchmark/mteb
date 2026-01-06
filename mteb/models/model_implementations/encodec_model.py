@@ -93,15 +93,21 @@ class EncodecWrapper(AbsEncoder):
                 if array.shape[-1] > max_samples:
                     array = array[:max_samples]
 
+                # Ensure minimum length for encoder (Encodec needs ~320 samples per frame)
+                # Use 1 second minimum to be safe
+                min_samples = self.sampling_rate
+                if array.shape[-1] < min_samples:
+                    padding = torch.zeros(min_samples - array.shape[-1])
+                    array = torch.cat([array, padding])
+
                 audio_arrays.append(array.numpy())
 
             with torch.no_grad():
-                # Use processor for padding (truncation done manually above)
+                # Use processor for batch padding (truncation/min-length done manually above)
                 processed = self.processor(
                     raw_audio=audio_arrays,
                     sampling_rate=self.sampling_rate,
                     padding=True,
-                    max_length=max_samples,
                     return_tensors="pt",
                 )
                 input_values = processed["input_values"].to(self.device)
@@ -112,6 +118,13 @@ class EncodecWrapper(AbsEncoder):
 
                 # Get the latent representations directly from the encoder
                 latent = self.model.encoder(input_values)
+
+                # Validate latent has time frames
+                if latent.shape[2] == 0:
+                    raise ValueError(
+                        f"Encodec encoder produced 0 time frames. "
+                        f"Input shape: {input_values.shape}, latent shape: {latent.shape}"
+                    )
 
                 # Apply mean pooling over the time dimension to get fixed-size embeddings
                 embeddings = torch.mean(latent, dim=2)  # Average over time dimension
