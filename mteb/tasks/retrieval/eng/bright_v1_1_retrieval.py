@@ -94,7 +94,7 @@ class BrightBiologyRetrieval(AbsTaskRetrieval):
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Biology StackExchange answers.",
         type="Retrieval",
         prompt={
-            "query": "Represent this Biology post for searching relevant passages: "
+            "query": "Represent this biology post for searching relevant passages: "
         },
         category="t2t",
         eval_splits=["standard"],
@@ -138,7 +138,7 @@ class BrightEarthScienceRetrieval(AbsTaskRetrieval):
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Earth Science StackExchange answers.",
         type="Retrieval",
         prompt={
-            "query": "Represent this Earth Science post for searching relevant passages: "
+            "query": "Represent this earth_science post for searching relevant passages: "
         },
         category="t2t",
         eval_splits=["standard"],
@@ -182,7 +182,7 @@ class BrightEconomicsRetrieval(AbsTaskRetrieval):
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Economics StackExchange answers.",
         type="Retrieval",
         prompt={
-            "query": "Represent this Economics post for searching relevant passages: "
+            "query": "Represent this economics post for searching relevant passages: "
         },
         category="t2t",
         eval_splits=["standard"],
@@ -226,7 +226,7 @@ class BrightPsychologyRetrieval(AbsTaskRetrieval):
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Psychology StackExchange answers.",
         type="Retrieval",
         prompt={
-            "query": "Represent this Psychology post for searching relevant passages: "
+            "query": "Represent this psychology post for searching relevant passages: "
         },
         category="t2t",
         eval_splits=["standard"],
@@ -270,7 +270,7 @@ class BrightRoboticsRetrieval(AbsTaskRetrieval):
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Robotics StackExchange answers.",
         type="Retrieval",
         prompt={
-            "query": "Represent this Robotics post for searching relevant passages: "
+            "query": "Represent this robotics post for searching relevant passages: "
         },
         category="t2t",
         eval_splits=["standard"],
@@ -314,7 +314,7 @@ class BrightStackoverflowRetrieval(AbsTaskRetrieval):
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Stack Overflow answers.",
         type="Retrieval",
         prompt={
-            "query": "Represent this Stack Overflow post for searching relevant passages: "
+            "query": "Represent this stackoverflow post for searching relevant passages: "
         },
         category="t2t",
         eval_splits=["standard"],
@@ -358,7 +358,7 @@ class BrightSustainableLivingRetrieval(AbsTaskRetrieval):
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Sustainable Living StackExchange answers.",
         type="Retrieval",
         prompt={
-            "query": "Represent this Sustainable Living post for searching relevant passages: "
+            "query": "Represent this sustainable_living post for searching relevant passages: "
         },
         category="t2t",
         eval_splits=["standard"],
@@ -622,7 +622,7 @@ class BrightBiologyLongRetrieval(AbsTaskRetrieval):
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Biology StackExchange answers with long documents.",
         type="Retrieval",
         prompt={
-            "query": "Represent this Biology post for searching relevant passages: "
+            "query": "Represent this biology post for searching relevant passages: "
         },
         category="t2t",
         eval_splits=["long"],
@@ -666,7 +666,7 @@ class BrightEarthScienceLongRetrieval(AbsTaskRetrieval):
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Earth Science StackExchange answers with long documents.",
         type="Retrieval",
         prompt={
-            "query": "Represent this Earth Science post for searching relevant passages: "
+            "query": "Represent this earth_science post for searching relevant passages: "
         },
         category="t2t",
         eval_splits=["long"],
@@ -710,7 +710,7 @@ class BrightEconomicsLongRetrieval(AbsTaskRetrieval):
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Economics StackExchange answers with long documents.",
         type="Retrieval",
         prompt={
-            "query": "Represent this Economics post for searching relevant passages: "
+            "query": "Represent this economics post for searching relevant passages: "
         },
         category="t2t",
         eval_splits=["long"],
@@ -754,7 +754,7 @@ class BrightPsychologyLongRetrieval(AbsTaskRetrieval):
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Psychology StackExchange answers with long documents.",
         type="Retrieval",
         prompt={
-            "query": "Represent this Psychology post for searching relevant passages: "
+            "query": "Represent this psychology post for searching relevant passages: "
         },
         category="t2t",
         eval_splits=["long"],
@@ -798,7 +798,7 @@ class BrightRoboticsLongRetrieval(AbsTaskRetrieval):
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Robotics StackExchange answers with long documents.",
         type="Retrieval",
         prompt={
-            "query": "Represent this Robotics post for searching relevant passages: "
+            "query": "Represent this robotics post for searching relevant passages: "
         },
         category="t2t",
         eval_splits=["long"],
@@ -842,7 +842,7 @@ class BrightStackoverflowLongRetrieval(AbsTaskRetrieval):
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Stack Overflow answers with long documents.",
         type="Retrieval",
         prompt={
-            "query": "Represent this Stack Overflow post for searching relevant passages: "
+            "query": "Represent this stackoverflow post for searching relevant passages: "
         },
         category="t2t",
         eval_splits=["long"],
@@ -886,7 +886,7 @@ class BrightSustainableLivingLongRetrieval(AbsTaskRetrieval):
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Sustainable Living StackExchange answers with long documents.",
         type="Retrieval",
         prompt={
-            "query": "Represent this Sustainable Living post for searching relevant passages: "
+            "query": "Represent this sustainable_living post for searching relevant passages: "
         },
         category="t2t",
         eval_splits=["long"],
