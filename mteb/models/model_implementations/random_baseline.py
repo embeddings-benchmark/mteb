@@ -91,6 +91,7 @@ _common_mock_metadata = dict(
     public_training_code=None,  # No training code, as this is a random baseline
     public_training_data=None,  # No training data, as this is a random baseline
     training_datasets=set(),
+    modalities=["text", "image", "audio"],
 )
 
 
@@ -215,7 +216,6 @@ random_encoder_baseline = ModelMeta(
     loader=RandomEncoderBaseline,
     name="baseline/random-encoder-baseline",
     model_type=["dense"],
-    modalities=["text", "image"],
     **_common_mock_metadata,
 )
 
@@ -259,8 +259,6 @@ class RandomCrossEncoderBaseline:
 random_cross_encoder_baseline = ModelMeta(
     loader=RandomCrossEncoderBaseline,
     name="baseline/random-cross-encoder-baseline",
-    is_cross_encoder=True,
     model_type=["cross-encoder"],
-    modalities=["text", "image"],
     **_common_mock_metadata,
 )
