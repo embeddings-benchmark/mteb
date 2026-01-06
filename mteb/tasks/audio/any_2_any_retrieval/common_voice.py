@@ -245,7 +245,9 @@ class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
 
                 qid = set()
                 did = set()
-                for row in tqdm(lang_dataset, total=len(lang_dataset), desc=f"{lang}-{split}"):
+                for row in tqdm(
+                    lang_dataset, total=len(lang_dataset), desc=f"{lang}-{split}"
+                ):
                     query_id = str(row[id_col])
                     doc_id = str(row[id_col])
                     text = row[text_col]
@@ -337,7 +339,9 @@ class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
 
                 qid = set()
                 did = set()
-                for row in tqdm(lang_dataset, total=len(lang_dataset), desc=f"{lang}-{split}"):
+                for row in tqdm(
+                    lang_dataset, total=len(lang_dataset), desc=f"{lang}-{split}"
+                ):
                     query_id = str(row[id_col])
                     doc_id = str(row[id_col])
                     text = row[text_col]
@@ -429,7 +433,9 @@ class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
 
                 qid = set()
                 did = set()
-                for row in tqdm(lang_dataset, total=len(lang_dataset), desc=f"{lang}-{split}"):
+                for row in tqdm(
+                    lang_dataset, total=len(lang_dataset), desc=f"{lang}-{split}"
+                ):
                     query_id = str(row[id_col])
                     doc_id = str(row[id_col])
                     text = row[text_col]
@@ -521,7 +527,9 @@ class CommonVoice21T2ARetrieval(AbsTaskRetrieval):
 
                 qid = set()
                 did = set()
-                for row in tqdm(lang_dataset, total=len(lang_dataset), desc=f"{lang}-{split}"):
+                for row in tqdm(
+                    lang_dataset, total=len(lang_dataset), desc=f"{lang}-{split}"
+                ):
                     query_id = str(row[id_col])
                     doc_id = str(row[id_col])
                     text = row[text_col]
