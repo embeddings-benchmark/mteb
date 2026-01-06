@@ -31,7 +31,7 @@ classifiers = [
 ]
 requires-python = ">=3.10,<3.15"
 dependencies = [
-    "datasets>=4.0.0",
+    "datasets>=2.19.0",
     "numpy>=1.0.0,<3.0.0",
     "requests>=2.26.0",
     "scikit-learn>=1.4.0",
@@ -63,6 +63,7 @@ image = [
 ]
 audio = [
     "torchaudio>=2.6.0",
+    "datasets<4",  # https://github.com/huggingface/datasets/issues/7707
     "librosa>=0.11.0",
     "soundfile>=0.13.1",
 ]
