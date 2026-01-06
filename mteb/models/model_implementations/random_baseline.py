@@ -91,7 +91,6 @@ _common_mock_metadata = dict(
     public_training_code=None,  # No training code, as this is a random baseline
     public_training_data=None,  # No training data, as this is a random baseline
     training_datasets=set(),
-    modalities=["text", "image", "audio"],
 )
 
 
