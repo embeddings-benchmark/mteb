@@ -8,7 +8,7 @@ class SoundDescsA2TRetrieval(AbsTaskRetrieval):
         description="Natural language description for different audio sources from the BBC Sound Effects webpage.",
         reference="https://github.com/akoepke/audio-retrieval-benchmark",
         dataset={
-            "path": "mteb/audiocaps_a2t",
+            "path": "mteb/sounddescs_a2t",
             "revision": "dbdd4928c401ff122c5b0d6c66accee653b3355c",
         },
         type="Any2AnyRetrieval",
