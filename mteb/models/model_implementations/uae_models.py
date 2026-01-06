@@ -74,7 +74,13 @@ uae_large_v1 = ModelMeta(
     embed_dim=1024,
     license="mit",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "ONNX",
+        "safetensors",
+        "Transformers",
+    ],
     reference="https://huggingface.co/WhereIsAI/UAE-Large-V1",
     use_instructions=True,
     citation="""

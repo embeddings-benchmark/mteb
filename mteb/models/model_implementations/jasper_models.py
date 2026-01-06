@@ -300,7 +300,7 @@ jasper_en_v1 = ModelMeta(
     license="apache-2.0",
     reference="https://huggingface.co/infgrad/jasper_en_vision_language_v1",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
@@ -349,7 +349,7 @@ Jasper_Token_Compression_600M = ModelMeta(
     max_tokens=32768,
     reference="https://huggingface.co/infgrad/Jasper-Token-Compression-600M",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     public_training_code="https://github.com/DunZhang/Jasper-Token-Compression-Training",
     # public_training_data: unsupervised data for distillation

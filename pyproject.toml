@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.6.4"
+version = "2.6.5"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -95,6 +95,7 @@ nomic = ["einops>=0.8.1"]
 ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
 colpali_engine = ["colpali_engine>=0.3.12; python_full_version < '3.14'"]
 colqwen3 = ["transformers>=4.57", "torchvision>=0.22.1"]
+sauerkrautlm-colpali = ["sauerkrautlm-colpali>=0.1.0; python_full_version < '3.14'"]
 xet = ["huggingface_hub>=0.32.0"]
 youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lkeap>=3.0.1451"]
 llama-embed-nemotron = ["transformers==4.51.0"]
@@ -331,6 +332,9 @@ conflicts = [
     [{ extra = "colqwen3" }, { extra = "llama-embed-nemotron" }], # conflicting versions of transformers
     [{ extra = "jina-v4" }, { extra = "llm2vec" }],
     [{ extra = "jina-v4" }, { extra = "llama-embed-nemotron" }], # conflicting versions of transformers
+    [{ extra = "sauerkrautlm-colpali" }, { extra = "pylate" }],
+    [{ extra = "sauerkrautlm-colpali" }, { extra = "llm2vec" }],
+    [{ extra = "sauerkrautlm-colpali" }, { extra = "llama-embed-nemotron" }],
 ]
 
 [tool.uv.extra-build-dependencies]

@@ -49,7 +49,7 @@ cadet_embed = ModelMeta(
     max_tokens=512,
     reference="https://huggingface.co/manveertamber/cadet-embed-base-v1",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     public_training_code="https://github.com/manveertamber/cadet-dense-retrieval",
     # we provide the code to generate the training data

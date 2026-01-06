@@ -169,7 +169,7 @@ def test_model_to_python():
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
-    framework=['Sentence Transformers', 'PyTorch'],
+    framework=['Sentence Transformers', 'PyTorch', 'ONNX', 'safetensors', 'Transformers'],
     reference='https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2',
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
