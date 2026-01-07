@@ -1120,6 +1120,8 @@ def get_leaderboard_app(
     logger.info("Starting prerun on all benchmarks to populate caches...")
     prerun_start = time.time()
     # Prerun on all benchmarks, so that results of callbacks get cached
+    # Note: We call the underlying cached functions directly (not the wrapper
+    # functions that return gr.update() objects) to get raw values for caching
     for benchmark in benchmarks:
         (
             bench_languages,
@@ -1128,13 +1130,13 @@ def get_leaderboard_app(
             bench_modalities,
             bench_tasks,
             bench_scores,
-            zero_shot,
+            _show_zero_shot,
             bench_initial_models,
-        ) = on_benchmark_select(benchmark.name)
+        ) = _cache_on_benchmark_select(benchmark.name, all_benchmark_results)
         # Call update_tables to populate cache (simulating models.change trigger)
         update_tables(bench_scores, bench_tasks, bench_initial_models, benchmark.name)
         # Also cache the filtered tasks scenario
-        filtered_tasks = update_task_list(
+        _benchmark_tasks, filtered_tasks = _cache_update_task_list(
             benchmark.name,
             bench_types,
             bench_domains,
