@@ -79,6 +79,8 @@ models_to_annotate = [
     "ast-finetuned-audioset-10-10-0.4593",
     "clap-htsat-fused",
     "wav2vec2-xls-r-1b",
+    "larger_clap_general",
+    "MuQ-MuLan-large",
 ]
 
 

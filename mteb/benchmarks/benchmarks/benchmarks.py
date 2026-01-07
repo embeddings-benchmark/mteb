@@ -2729,102 +2729,9 @@ JMTEB_LITE_V1 = Benchmark(
     contacts=["lsz05"],
 )
 
-MAEB_AUDIO = Benchmark(
-    name="MAEB(audio)",
-    display_name="Audio Embedding",
-    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
-    tasks=get_tasks(
-        tasks=[
-            # Classification
-            "CommonLanguageAgeDetection",
-            "LibriCount",
-            "MridinghamStroke",
-            "SpokeNEnglish",
-            "SpokenQAForIC",
-            "TUTAcousticScenes",
-            "VoxCelebSA",
-            "VoxPopuliAccentID",
-            "MInDS14",
-            "SIBFLEURS",
-            "VoxPopuliGenderID",
-            "BirdSet",
-            "FSD50K",
-            "FSD2019Kaggle",
-            # PairClassification
-            "CREMADPairClassification",
-            "NMSQAPairClassification",
-            "VocalSoundPairClassification",
-            # Reranking
-            "AudioCapsMiniReranking",
-            "FSDnoisy18kAudioReranking",
-            "VocalSoundAudioReranking",
-            # Clustering
-            "MusicGenreClustering",
-            "VoiceGenderClustering",
-            "VoxCelebClustering",
-            "VoxPopuliAccentClustering",
-        ]
-    ),
-    description="""MAEB(audio) is a benchmark for evaluating audio embedding models, covering 24 tasks across 4 task types: classification, pair classification, reranking, and clustering. Tasks were selected via correlation-based filtering (threshold=0.8) to maximize information diversity while minimizing redundancy.""",
-    reference=None,
-    citation="",
-    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
-)
-
-MAEB_AUDIO_TEXT = Benchmark(
-    name="MAEB(audio-text)",
-    display_name="Audio-Text",
-    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
-    tasks=get_tasks(
-        tasks=[
-            # Audio-to-Text Retrieval (14 tasks)
-            "AudioCapsA2TRetrieval",
-            "AudioSetStrongA2TRetrieval",
-            "CMUArcticA2TRetrieval",
-            "ClothoA2TRetrieval",
-            "EmoVDBA2TRetrieval",
-            "FleursA2TRetrieval",
-            "GigaSpeechA2TRetrieval",
-            "HiFiTTSA2TRetrieval",
-            "JLCorpusA2TRetrieval",
-            "LibriTTSA2TRetrieval",
-            "MACSA2TRetrieval",
-            "MusicCapsA2TRetrieval",
-            "SoundDescsA2TRetrieval",
-            "UrbanSound8KA2TRetrieval",
-            # Text-to-Audio Retrieval (15 tasks)
-            "AudioCapsT2ARetrieval",
-            "AudioSetStrongT2ARetrieval",
-            "CMUArcticT2ARetrieval",
-            "ClothoT2ARetrieval",
-            "EmoVDBT2ARetrieval",
-            "FleursT2ARetrieval",
-            "GigaSpeechT2ARetrieval",
-            "HiFiTTST2ARetrieval",
-            "JLCorpusT2ARetrieval",
-            "LibriTTST2ARetrieval",
-            "MACST2ARetrieval",
-            "MusicCapsT2ARetrieval",
-            "SoundDescsT2ARetrieval",
-            "SpokenSQuADT2ARetrieval",
-            "UrbanSound8KT2ARetrieval",
-            # Zero-shot Classification (5 tasks)
-            "ESC50_Zeroshot",
-            "RavdessZeroshot",
-            "SpeechCommandsZeroshotv0.01",
-            "SpeechCommandsZeroshotv0.02",
-            "UrbanSound8kZeroshot",
-        ]
-    ),
-    description="""MAEB(audio-text) is a benchmark for evaluating audio-text embedding models, covering 34 tasks: 14 audio-to-text retrieval, 15 text-to-audio retrieval, and 5 zero-shot classification tasks.""",
-    reference=None,
-    citation="",
-    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
-)
-
 MAEB = Benchmark(
     name="MAEB",
-    display_name="Audio Embedding (Full)",
+    display_name="MAEB, Full",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
@@ -2942,7 +2849,7 @@ MAEB = Benchmark(
 
 MAEB_AUDIO_LITE = Benchmark(
     name="MAEB(audio, lite)",
-    display_name="Audio Embedding Lite",
+    display_name="Audio, Lite",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
@@ -2980,7 +2887,7 @@ MAEB_AUDIO_LITE = Benchmark(
 
 MAEB_AUDIO_EXTENDED = Benchmark(
     name="MAEB(audio, extended)",
-    display_name="Audio Embedding Extended",
+    display_name="Audio, Extended",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
@@ -3054,7 +2961,7 @@ MAEB_AUDIO_EXTENDED = Benchmark(
 
 MAEB_AUDIO_TEXT_LITE = Benchmark(
     name="MAEB(audio-text, lite)",
-    display_name="Audio-Text Embedding Lite",
+    display_name="Audio-Text, Lite",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
