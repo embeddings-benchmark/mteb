@@ -2788,8 +2788,7 @@ MAEB = Benchmark(
             "NMSQAPairClassification",
             "VocalSoundPairClassification",
             "VoxPopuliAccentPairClassification",
-            # Reranking (6)
-            "AudioCapsMiniReranking",
+            # Reranking (5)
             "ESC50AudioReranking",
             "FSDnoisy18kAudioReranking",
             "GTZANAudioReranking",
@@ -2841,7 +2840,7 @@ MAEB = Benchmark(
             "UrbanSound8KT2ARetrieval",
         ]
     ),
-    description="""MAEB is the full Massive Audio Embedding Benchmark (v1), containing 96 tasks with audio modality across 7 task types: classification, clustering, pair classification, reranking, zero-shot classification, audio-to-text retrieval, and text-to-audio retrieval.""",
+    description="""MAEB is the full Massive Audio Embedding Benchmark (v1), containing 95 tasks with audio modality across 7 task types: classification, clustering, pair classification, reranking, zero-shot classification, audio-to-text retrieval, and text-to-audio retrieval.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -2862,10 +2861,9 @@ MAEB_AUDIO_LITE = Benchmark(
             "VoxPopuliGenderID",
             "BeijingOpera",
             "AmbientAcousticContext",
-            # AudioReranking (6)
+            # AudioReranking (5)
             "ESC50AudioReranking",
             "UrbanSound8KAudioReranking",
-            "AudioCapsMiniReranking",
             "GTZANAudioReranking",
             "FSDnoisy18kAudioReranking",
             "VocalSoundAudioReranking",
@@ -2879,7 +2877,7 @@ MAEB_AUDIO_LITE = Benchmark(
             "VoxPopuliAccentPairClassification",
         ]
     ),
-    description="""MAEB(audio, lite) is a lightweight audio-only benchmark with 19 tasks optimized for maximum model coverage (44 models). Tasks span 5 task types: classification, multilabel classification, reranking, clustering, and pair classification. Selected by greedy task addition while maximizing the number of models with complete results.""",
+    description="""MAEB(audio, lite) is a lightweight audio-only benchmark with 18 tasks optimized for maximum model coverage (44 models). Tasks span 5 task types: classification, multilabel classification, reranking, clustering, and pair classification. Selected by greedy task addition while maximizing the number of models with complete results.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -2925,10 +2923,9 @@ MAEB_AUDIO_EXTENDED = Benchmark(
             "SpeechCommands",
             "MridinghamTonic",
             "BirdSet",
-            # AudioReranking (6)
+            # AudioReranking (5)
             "ESC50AudioReranking",
             "UrbanSound8KAudioReranking",
-            "AudioCapsMiniReranking",
             "GTZANAudioReranking",
             "FSDnoisy18kAudioReranking",
             "VocalSoundAudioReranking",
@@ -2953,7 +2950,7 @@ MAEB_AUDIO_EXTENDED = Benchmark(
             "JamAltArtistA2ARetrieval",
         ]
     ),
-    description="""MAEB(audio, extended) is an extended audio-only benchmark with 54 tasks supporting 38 models with complete results. Tasks span 6 task types: classification (28), multilabel classification (4), reranking (6), clustering (10), pair classification (5), and audio-to-audio retrieval (1). This benchmark provides broader task diversity while maintaining good model coverage.""",
+    description="""MAEB(audio, extended) is an extended audio-only benchmark with 53 tasks supporting 38 models with complete results. Tasks span 6 task types: classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), and audio-to-audio retrieval (1). This benchmark provides broader task diversity while maintaining good model coverage.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],

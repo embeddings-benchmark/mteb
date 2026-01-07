@@ -199,11 +199,16 @@ def _update_citation(benchmark_name: str) -> str:
     return citation
 
 
-def _update_description(
-    benchmark_name: str, languages: list[str], task_types: list[str], domains: list[str]
-) -> str:
+def _update_description(benchmark_name: str) -> str:
     benchmark = mteb.get_benchmark(benchmark_name)
     description = f"{benchmark.description}\n"
+    # Get counts from the benchmark itself (not from filter selections)
+    # This avoids race conditions with filter component values during benchmark switches
+    languages = {lang for task in benchmark.tasks for lang in (task.languages or [])}
+    task_types = {task.metadata.type for task in benchmark.tasks if task.metadata.type}
+    domains = {
+        domain for task in benchmark.tasks for domain in (task.metadata.domains or [])
+    }
     n_languages = len(languages)
     n_task_types = len(task_types)
     n_tasks = len(benchmark.tasks)
@@ -597,7 +602,7 @@ def get_leaderboard_app(
             with gr.Column(scale=1):
                 description = gr.Markdown(  # noqa: F841
                     _update_description,
-                    inputs=[benchmark_select, lang_select, type_select, domain_select],
+                    inputs=[benchmark_select],
                 )
 
             with gr.Column(scale=1):
@@ -764,21 +769,6 @@ def get_leaderboard_app(
                 initial_models,
             )
 
-        benchmark_select.change(
-            on_benchmark_select,
-            inputs=[benchmark_select],
-            outputs=[
-                lang_select,
-                domain_select,
-                type_select,
-                modality_select,
-                task_select,
-                scores,
-                zero_shot,
-                models,
-            ],
-        )
-
         @cachetools.cached(
             cache={},
             key=lambda benchmark_name, languages: hash(
@@ -795,12 +785,6 @@ def get_leaderboard_app(
             logger.debug(f"update_scores callback: {elapsed}s")
             return scores
 
-        lang_select.input(
-            update_scores_on_lang_change,
-            inputs=[benchmark_select, lang_select],
-            outputs=[scores],
-        )
-
         def update_task_list(
             benchmark_name, type_select, domain_select, lang_select, modality_select
         ):
@@ -809,7 +793,14 @@ def get_leaderboard_app(
             )
             return gr.update(choices=benchmark_tasks, value=tasks_to_keep)
 
-        type_select.input(
+        # Store references to filter event listeners so we can cancel them
+        # when benchmark changes (prevents race conditions with stale values)
+        lang_scores_event = lang_select.input(
+            update_scores_on_lang_change,
+            inputs=[benchmark_select, lang_select],
+            outputs=[scores],
+        )
+        type_task_event = type_select.input(
             update_task_list,
             inputs=[
                 benchmark_select,
@@ -820,7 +811,7 @@ def get_leaderboard_app(
             ],
             outputs=[task_select],
         )
-        domain_select.input(
+        domain_task_event = domain_select.input(
             update_task_list,
             inputs=[
                 benchmark_select,
@@ -831,7 +822,7 @@ def get_leaderboard_app(
             ],
             outputs=[task_select],
         )
-        lang_select.input(
+        lang_task_event = lang_select.input(
             update_task_list,
             inputs=[
                 benchmark_select,
@@ -842,7 +833,7 @@ def get_leaderboard_app(
             ],
             outputs=[task_select],
         )
-        modality_select.input(
+        modality_task_event = modality_select.input(
             update_task_list,
             inputs=[
                 benchmark_select,
@@ -852,6 +843,30 @@ def get_leaderboard_app(
                 modality_select,
             ],
             outputs=[task_select],
+        )
+
+        # Cancel pending filter events when benchmark changes to prevent
+        # race conditions where stale filter values don't match new choices
+        benchmark_select.change(
+            on_benchmark_select,
+            inputs=[benchmark_select],
+            outputs=[
+                lang_select,
+                domain_select,
+                type_select,
+                modality_select,
+                task_select,
+                scores,
+                zero_shot,
+                models,
+            ],
+            cancels=[
+                lang_scores_event,
+                type_task_event,
+                domain_task_event,
+                lang_task_event,
+                modality_task_event,
+            ],
         )
 
         @cachetools.cached(
