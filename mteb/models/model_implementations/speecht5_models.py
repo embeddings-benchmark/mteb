@@ -223,7 +223,7 @@ class SpeechT2Multimodal(AbsEncoder):
     ):
         # Revision is combined as "asr_revision-tts_revision"
         asr_revision, tts_revision = revision.split("-")
-        
+
         self.asr_encoder = SpeechT5Audio(
             model_name=model_name,
             revision=asr_revision,
