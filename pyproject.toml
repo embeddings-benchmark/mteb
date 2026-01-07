@@ -336,17 +336,19 @@ conflicts = [
     [{ extra = "sauerkrautlm-colpali" }, { extra = "pylate" }],
     [{ extra = "sauerkrautlm-colpali" }, { extra = "llm2vec" }],
     [{ extra = "sauerkrautlm-colpali" }, { extra = "llama-embed-nemotron" }],
-    [{ extra = "vllm"}, { extra = "model2vec" }],
-    [{ extra = "vllm"}, { extra = "pylate" }],
-    [{ extra = "vllm"}, { extra = "llm2vec" }],
-    [{ extra = "vllm"}, { extra = "timm" }],
-    [{ extra = "vllm"}, { extra = "blip2" }],
-    [{ extra = "vllm"}, { extra = "colpali-engine" }],
-    [{ extra = "vllm"}, { extra = "colqwen3" }],
-    [{ extra = "vllm"}, { extra = "jina-v4" }],
-    [{ extra = "vllm"}, { extra = "llama-embed-nemotron" }],
-    [{ extra = "vllm"}, { extra = "sauerkrautlm-colpali" }],
-]
+    [
+        { extra = "vllm" },
+        { extra = "model2vec" },
+        { extra = "pylate" },
+        { extra = "llm2vec" },
+        { extra = "timm" },
+        { extra = "blip2" },
+        { extra = "colpali-engine" },
+        { extra = "colqwen3" },
+        { extra = "jina-v4" },
+        { extra = "llama-embed-nemotron" },
+        { extra = "sauerkrautlm-colpali" }],
+    ]
 
 [tool.uv.extra-build-dependencies]
 flash-attn = [{ requirement = "torch", match-runtime = true }]
