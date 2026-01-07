@@ -10,6 +10,7 @@ from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
 from mteb.models import EncoderProtocol, MTEBModels
 from mteb.types import PromptType
 from mteb.types.statistics import (
+    AudioStatistics,
     ImageStatistics,
     ScoreStatistics,
     SplitDescriptiveStatistics,
@@ -40,6 +41,9 @@ class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
         image1_statistics: Statistics for image1
         image2_statistics: Statistics for image2
 
+        audio1_statistics: Statistics for audio1
+        audio2_statistics: Statistics for audio2
+
         label_statistics: Statistics for labels
     """
 
@@ -52,6 +56,9 @@ class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
 
     image1_statistics: ImageStatistics | None
     image2_statistics: ImageStatistics | None
+
+    audio1_statistics: AudioStatistics | None
+    audio2_statistics: AudioStatistics | None
 
     label_statistics: ScoreStatistics
 
@@ -218,6 +225,13 @@ class AbsTaskSTS(AbsTask):
             image1_statistics = None
             image2_statistics = None
 
+        if "audio" in self.metadata.modalities:
+            audio1_statistics = calculate_image_statistics(sentence1)
+            audio2_statistics = calculate_image_statistics(sentence2)
+        else:
+            audio1_statistics = None
+            audio2_statistics = None
+
         labels_statistics = calculate_score_statistics(score)
 
         return AnySTSDescriptiveStatistics(
@@ -233,6 +247,8 @@ class AbsTaskSTS(AbsTask):
             text2_statistics=text2_statistics,
             image1_statistics=image1_statistics,
             image2_statistics=image2_statistics,
+            audio1_statistics=audio1_statistics,
+            audio2_statistics=audio2_statistics,
             label_statistics=labels_statistics,
         )
 

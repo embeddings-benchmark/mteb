@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 import hashlib
-from collections import Counter
+from collections import Counter, defaultdict
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, cast
-from collections import Counter, defaultdict
-from typing import TYPE_CHECKING
 
 from mteb.types import TopRankedDocumentsType
 from mteb.types._encoder_io import AudioInputItem
@@ -102,10 +100,10 @@ def calculate_audio_statistics(audios: list[AudioInputItem]) -> AudioStatistics:
         unique_audios.add(audio_hash)
 
     return AudioStatistics(
-        total_audio_seconds_length=sum(audio_lengths),
-        min_audio_seconds_length=min(audio_lengths),
-        average_audio_seconds_length=sum(audio_lengths) / len(audio_lengths),
-        max_audio_seconds_length=max(audio_lengths),
+        total_duration_seconds=sum(audio_lengths),
+        min_duration_seconds=min(audio_lengths),
+        average_duration_seconds=sum(audio_lengths) / len(audio_lengths),
+        max_duration_seconds=max(audio_lengths),
         unique_audios=len(unique_audios),
         average_sampling_rate=(
             sum(rate * count for rate, count in sampling_rates.items()) / len(audios)

@@ -69,10 +69,10 @@ class AudioStatistics(TypedDict):
     """Class for descriptive statistics for audio.
 
     Attributes:
-        total_audio_seconds_length: Total length of all audio clips in total frames
-        min_audio_seconds_length: Minimum length of audio clip in seconds
-        average_audio_seconds_length: Average length of audio clip in seconds
-        max_audio_seconds_length: Maximum length of audio clip in seconds
+        total_duration_seconds: Total length of all audio clips in total frames
+        min_duration_seconds: Minimum length of audio clip in seconds
+        average_duration_seconds: Average length of audio clip in seconds
+        max_duration_seconds: Maximum length of audio clip in seconds
         unique_audios: Number of unique audio clips
         average_sampling_rate: Average sampling rate
         sampling_rates: Dict of unique sampling rates and their frequencies
