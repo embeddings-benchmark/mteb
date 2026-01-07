@@ -2771,12 +2771,12 @@ MAEB_AUDIO = Benchmark(
     description="""MAEB(audio) is a benchmark for evaluating audio embedding models, covering 26 tasks across 5 task types: classification, pair classification, reranking, zero-shot classification, and clustering. Tasks were selected via correlation-based filtering (threshold=0.8) to maximize information diversity while minimizing redundancy.""",
     reference=None,
     citation="",
-    contacts=["AdnanElAssadi56", "isaac-chung"],
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
 MAEB_AUDIO_TEXT = Benchmark(
     name="MAEB(audio-text)",
-    display_name="Audio-Text Retrieval",
+    display_name="Audio-Text",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-music.svg",
     tasks=get_tasks(
         tasks=[
@@ -2811,12 +2811,18 @@ MAEB_AUDIO_TEXT = Benchmark(
             "SoundDescsT2ARetrieval",
             "SpokenSQuADT2ARetrieval",
             "UrbanSound8KT2ARetrieval",
+            # Zero-shot Classification (5 tasks)
+            "ESC50_Zeroshot",
+            "RavdessZeroshot",
+            "SpeechCommandsZeroshotv0.01",
+            "SpeechCommandsZeroshotv0.02",
+            "UrbanSound8kZeroshot",
         ]
     ),
-    description="""MAEB(audio-text) is a benchmark for evaluating audio-text embedding models on cross-modal retrieval tasks, covering 29 tasks: 14 audio-to-text retrieval and 15 text-to-audio retrieval.""",
+    description="""MAEB(audio-text) is a benchmark for evaluating audio-text embedding models, covering 34 tasks: 14 audio-to-text retrieval, 15 text-to-audio retrieval, and 5 zero-shot classification tasks.""",
     reference=None,
     citation="",
-    contacts=["AdnanElAssadi56", "isaac-chung"],
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
 MAEB = Benchmark(
@@ -2934,5 +2940,5 @@ MAEB = Benchmark(
     description="""MAEB is the full Massive Audio Embedding Benchmark (v1), containing 96 tasks with audio modality across 7 task types: classification, clustering, pair classification, reranking, zero-shot classification, audio-to-text retrieval, and text-to-audio retrieval.""",
     reference=None,
     citation="",
-    contacts=["AdnanElAssadi56", "isaac-chung"],
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
