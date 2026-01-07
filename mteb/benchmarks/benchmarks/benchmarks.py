@@ -3051,3 +3051,50 @@ MAEB_AUDIO_EXTENDED = Benchmark(
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
+
+MAEB_AUDIO_TEXT_LITE = Benchmark(
+    name="MAEB(audio-text, lite)",
+    display_name="Audio-Text Embedding Lite",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Any2AnyRetrieval - Audio to Text (13)
+            "AudioCapsA2TRetrieval",
+            "AudioSetStrongA2TRetrieval",
+            "CMUArcticA2TRetrieval",
+            "EmoVDBA2TRetrieval",
+            "GigaSpeechA2TRetrieval",
+            "HiFiTTSA2TRetrieval",
+            "JLCorpusA2TRetrieval",
+            "JamAltLyricA2TRetrieval",
+            "LibriTTSA2TRetrieval",
+            "MACSA2TRetrieval",
+            "MusicCapsA2TRetrieval",
+            "SpokenSQuADT2ARetrieval",
+            "UrbanSound8KA2TRetrieval",
+            # Any2AnyRetrieval - Text to Audio (12)
+            "AudioCapsT2ARetrieval",
+            "AudioSetStrongT2ARetrieval",
+            "CMUArcticT2ARetrieval",
+            "EmoVDBT2ARetrieval",
+            "GigaSpeechT2ARetrieval",
+            "HiFiTTST2ARetrieval",
+            "JLCorpusT2ARetrieval",
+            "JamAltLyricT2ARetrieval",
+            "LibriTTST2ARetrieval",
+            "MACST2ARetrieval",
+            "MusicCapsT2ARetrieval",
+            "UrbanSound8KT2ARetrieval",
+            # AudioZeroshotClassification (5)
+            "ESC50_Zeroshot",
+            "RavdessZeroshot",
+            "SpeechCommandsZeroshotv0.01",
+            "SpeechCommandsZeroshotv0.02",
+            "UrbanSound8kZeroshot",
+        ]
+    ),
+    description="""MAEB(audio-text, lite) is a benchmark for audio-text cross-modal models with 30 tasks supporting 10 models with complete results. Tasks span 2 task types: audio-text retrieval (25) and zero-shot classification (5). Models include CLAP variants, wav2clip, and speecht5.""",
+    reference=None,
+    citation="",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+)
