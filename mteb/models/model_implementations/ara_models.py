@@ -4,6 +4,7 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 arabic_triplet_matryoshka = ModelMeta(
     loader=sentence_transformers_loader,
     name="Omartificial-Intelligence-Space/Arabic-Triplet-Matryoshka-V2",
+    model_type=["dense"],
     languages=["ara-Arab"],
     open_weights=True,
     revision="ed357f222f0b6ea6670d2c9b5a1cb93950d34200",
@@ -15,7 +16,7 @@ arabic_triplet_matryoshka = ModelMeta(
     max_tokens=768,
     reference="https://huggingface.co/Omartificial-Intelligence-Space/Arabic-Triplet-Matryoshka-V2",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     use_instructions=False,
     public_training_code=None,
     adapted_from="aubmindlab/bert-base-arabertv02",

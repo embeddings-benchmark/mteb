@@ -5,7 +5,6 @@ from pydantic import ConfigDict, Field, model_validator
 from typing_extensions import Self
 
 from mteb.types import (
-    HFSubset,
     ISOLanguageScript,
     Languages,
     Licenses,
@@ -60,14 +59,7 @@ class AggregateTaskMetadata(TaskMetadata):
     reference: str | None = None
     bibtex_citation: str | None = None
 
-    @property
-    def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISOLanguageScript]]:
-        """Return a dictionary mapping huggingface subsets to languages."""
-        if isinstance(self.eval_langs, dict):
-            return self.eval_langs
-        return {"default": self.eval_langs}  # type: ignore
-
-    @model_validator(mode="after")  # type: ignore
+    @model_validator(mode="after")
     def _compute_unfilled_cases(self) -> Self:
         if not self.eval_langs:
             self.eval_langs = self._compute_eval_langs()

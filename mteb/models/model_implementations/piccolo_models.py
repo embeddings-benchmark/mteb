@@ -6,6 +6,7 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 piccolo_base_zh = ModelMeta(
     loader=sentence_transformers_loader,
     name="sensenova/piccolo-base-zh",
+    model_type=["dense"],
     languages=["zho-Hans"],
     open_weights=True,
     revision="47c0a63b8f667c3482e05b2fd45577bb19252196",
@@ -17,7 +18,7 @@ piccolo_base_zh = ModelMeta(
     max_tokens=512,
     reference="https://huggingface.co/sensenova/piccolo-base-zh",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers"],
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
@@ -29,6 +30,7 @@ piccolo_base_zh = ModelMeta(
 piccolo_large_zh_v2 = ModelMeta(
     loader=sentence_transformers_loader,
     name="sensenova/piccolo-large-zh-v2",
+    model_type=["dense"],
     languages=["zho-Hans"],
     open_weights=False,  # They "temporarily" removed it in may last year
     # "Due to certain internal company considerations"

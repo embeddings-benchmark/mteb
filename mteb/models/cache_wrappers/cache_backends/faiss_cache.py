@@ -1,6 +1,8 @@
 import json
 import logging
+import warnings
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 
@@ -36,7 +38,7 @@ class FaissCache:
         logger.info(f"Initialized FAISS VectorCacheMap in {self.directory}")
         self.load()
 
-    def add(self, items: list[BatchedInput], vectors: np.ndarray) -> None:
+    def add(self, items: list[dict[str, Any]], vectors: np.ndarray) -> None:
         """Add vector to FAISS index."""
         import faiss
 
@@ -71,7 +73,9 @@ class FaissCache:
         try:
             return self.index.reconstruct(idx)
         except Exception:
-            logger.warning(f"Vector id {idx} missing for hash {item_hash}")
+            msg = f"Vector id {idx} missing for hash {item_hash}"
+            logger.warning(msg)
+            warnings.warn(msg)
             return None
 
     def save(self) -> None:
