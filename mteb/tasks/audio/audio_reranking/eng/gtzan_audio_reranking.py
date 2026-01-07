@@ -29,7 +29,7 @@ class GTZANAudioReranking(AbsTaskRetrieval):
         category="a2a",
         modalities=["audio"],
         eval_splits=["test"],
-        eval_langs=["eng-Latn"],
+        eval_langs=["zxx-Zxxx"],
         main_score="map_at_1000",
         date=("2001-01-01", "2001-12-31"),
         domains=["Music"],

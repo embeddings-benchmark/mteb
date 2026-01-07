@@ -14,7 +14,7 @@ class ESC50PairClassification(AbsTaskPairClassification):
         type="AudioPairClassification",
         category="a2a",
         eval_splits=["test"],
-        eval_langs=["eng-Latn"],
+        eval_langs=["zxx-Zxxx"],
         main_score="max_ap",
         date=("2023-01-07", "2023-01-07"),
         domains=["Encyclopaedic"],
