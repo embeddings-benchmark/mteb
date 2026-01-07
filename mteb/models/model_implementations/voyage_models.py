@@ -207,7 +207,7 @@ model_prompts = {
 }
 
 voyage_4_lite = ModelMeta(
-    name="voyageai/voyage-4-lite",  # Date of publication of this post https://blog.voyageai.com/2025/01/07/voyage-3-large/
+    name="voyageai/voyage-4-lite",
     model_type=["dense"],
     revision="1",
     release_date="2026-01-15",
@@ -233,7 +233,7 @@ voyage_4_lite = ModelMeta(
 )
 
 voyage_4_large = ModelMeta(
-    name="voyageai/voyage-4-large",  # Date of publication of this post https://blog.voyageai.com/2025/01/07/voyage-3-large/
+    name="voyageai/voyage-4-large",
     model_type=["dense"],
     revision="1",
     release_date="2026-01-15",
