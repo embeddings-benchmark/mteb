@@ -1,7 +1,7 @@
 import logging
-import os
 import tempfile
 import warnings
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -108,7 +108,7 @@ class MSClapWrapper(AbsEncoder):
 
                 for f in temp_files:
                     try:
-                        os.unlink(f)
+                        Path(f).unlink()
                     except OSError:
                         pass
 
