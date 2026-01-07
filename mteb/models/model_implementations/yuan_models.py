@@ -13,6 +13,7 @@ yuan_emb_zh_datasets = {
 
 yuan_embedding_2_zh = ModelMeta(
     name="IEITYuan/Yuan-embedding-2.0-zh",
+    model_type=["dense"],
     loader=sentence_transformers_loader,
     languages=["zho-Hans"],
     open_weights=True,
@@ -25,7 +26,7 @@ yuan_embedding_2_zh = ModelMeta(
     max_tokens=512,
     reference="https://huggingface.co/IEITYuan/Yuan-embedding-2.0-zh",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,

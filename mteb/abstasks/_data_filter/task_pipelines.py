@@ -89,6 +89,9 @@ def process_classification(
             subset=None,
         )
 
+    if task.dataset is None:
+        raise ValueError("Task dataset is None.")
+
     new_ds = {}
     for subset in task.dataset:
         new_ds[subset] = clean_dataset(

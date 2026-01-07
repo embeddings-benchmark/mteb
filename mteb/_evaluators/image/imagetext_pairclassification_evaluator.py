@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -61,8 +62,8 @@ class ImageTextPairClassificationEvaluator(Evaluator):
     def __init__(
         self,
         dataset,
-        images_column_names: str | list[str],
-        texts_column_names: str | list[str],
+        images_column_names: str | Sequence[str],
+        texts_column_names: str | Sequence[str],
         num_images_per_sample: int,
         num_texts_per_sample: int,
         task_metadata: TaskMetadata,
@@ -82,10 +83,8 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
 
-    def __call__(
-        self,
-        model: EncoderProtocol,
-        encode_kwargs: dict[str, Any],
+    def __call__(  # type: ignore[override]
+        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
     ) -> list[torch.Tensor]:
         images = []
         if isinstance(self.images_column_names, str):

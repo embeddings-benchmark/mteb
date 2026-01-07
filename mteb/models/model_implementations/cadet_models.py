@@ -35,6 +35,7 @@ cadet_embed = ModelMeta(
         },
     ),
     name="manveertamber/cadet-embed-base-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="8056d118be37a566f20972a5f35cda815f6bc47e",
     open_weights=True,
@@ -46,7 +47,7 @@ cadet_embed = ModelMeta(
     max_tokens=512,
     reference="https://huggingface.co/manveertamber/cadet-embed-base-v1",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     public_training_code="https://github.com/manveertamber/cadet-dense-retrieval",
     # we provide the code to generate the training data

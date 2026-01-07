@@ -107,6 +107,7 @@ XLMR_LANGUAGES = [
 xlmr_base = ModelMeta(
     loader=sentence_transformers_loader,  # type: ignore[arg-type]
     name="FacebookAI/xlm-roberta-base",
+    model_type=["dense"],
     languages=XLMR_LANGUAGES,
     open_weights=True,
     revision="e73636d4f797dec63c3081bb6ed5c7b0bb3f2089",
@@ -118,7 +119,13 @@ xlmr_base = ModelMeta(
     max_tokens=512,
     reference="https://huggingface.co/FacebookAI/xlm-roberta-base",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "ONNX",
+        "safetensors",
+    ],
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
@@ -150,6 +157,7 @@ xlmr_base = ModelMeta(
 xlmr_large = ModelMeta(
     loader=sentence_transformers_loader,  # type: ignore[arg-type]
     name="FacebookAI/xlm-roberta-large",
+    model_type=["dense"],
     languages=XLMR_LANGUAGES,
     open_weights=True,
     revision="c23d21b0620b635a76227c604d44e43a9f0ee389",
@@ -161,7 +169,13 @@ xlmr_large = ModelMeta(
     max_tokens=512,
     reference="https://huggingface.co/FacebookAI/xlm-roberta-large",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "ONNX",
+        "safetensors",
+    ],
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,

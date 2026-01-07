@@ -181,8 +181,9 @@ llm2clip_training_sets = set(
 )
 
 llm2clip_openai_l_14_336 = ModelMeta(
-    loader=llm2clip_loader,  # type: ignore
+    loader=llm2clip_loader,
     name="microsoft/LLM2CLIP-Openai-L-14-336",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="92512331f393a003c3d98404677f991c188162c9",
     release_date="2024-11-07",
@@ -195,7 +196,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/microsoft/LLM2CLIP",
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "safetensors"],
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-336",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
@@ -205,8 +206,9 @@ llm2clip_openai_l_14_336 = ModelMeta(
 
 # NOTE: https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224/discussions/1
 llm2clip_openai_l_14_224 = ModelMeta(
-    loader=llm2clip_loader,  # type: ignore
+    loader=llm2clip_loader,
     name="microsoft/LLM2CLIP-Openai-L-14-224",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="6b8a11a94ff380fa220dfefe73ac9293d2677575",
     release_date="2024-11-07",
@@ -219,7 +221,7 @@ llm2clip_openai_l_14_224 = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/microsoft/LLM2CLIP",
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "safetensors"],
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
@@ -228,8 +230,9 @@ llm2clip_openai_l_14_224 = ModelMeta(
 )
 
 llm2clip_openai_b_16 = ModelMeta(
-    loader=llm2clip_loader,  # type: ignore
+    loader=llm2clip_loader,
     name="microsoft/LLM2CLIP-Openai-B-16",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="ecfb347eb3dcfeb2fbc2a2eae7de6ac5a001aaf8",
     release_date="2024-11-07",
@@ -242,7 +245,7 @@ llm2clip_openai_b_16 = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/microsoft/LLM2CLIP",
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "safetensors"],
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-B-16",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,

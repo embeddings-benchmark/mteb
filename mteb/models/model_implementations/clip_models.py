@@ -115,8 +115,9 @@ CLIP_CITATION = """
 
 
 clip_vit_large_patch14 = ModelMeta(
-    loader=CLIPModel,  # type: ignore
+    loader=CLIPModel,
     name="openai/clip-vit-large-patch14",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="32bd64288804d66eefd0ccbe215aa642df71cc41",
     release_date="2021-02-26",
@@ -129,7 +130,7 @@ clip_vit_large_patch14 = ModelMeta(
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/openai/clip-vit-large-patch14",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -138,8 +139,9 @@ clip_vit_large_patch14 = ModelMeta(
 )
 
 clip_vit_base_patch32 = ModelMeta(
-    loader=CLIPModel,  # type: ignore
+    loader=CLIPModel,
     name="openai/clip-vit-base-patch32",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
     release_date="2021-02-26",
@@ -152,7 +154,7 @@ clip_vit_base_patch32 = ModelMeta(
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
     reference="https://huggingface.co/openai/clip-vit-base-patch32",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -161,8 +163,9 @@ clip_vit_base_patch32 = ModelMeta(
 )
 
 clip_vit_base_patch16 = ModelMeta(
-    loader=CLIPModel,  # type: ignore
+    loader=CLIPModel,
     name="openai/clip-vit-base-patch16",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="57c216476eefef5ab752ec549e440a49ae4ae5f3",
     release_date="2021-02-26",
@@ -175,7 +178,7 @@ clip_vit_base_patch16 = ModelMeta(
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
     reference="https://huggingface.co/openai/clip-vit-base-patch16",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
