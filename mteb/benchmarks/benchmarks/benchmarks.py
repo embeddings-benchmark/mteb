@@ -2728,3 +2728,28 @@ JMTEB_LITE_V1 = Benchmark(
 """,
     contacts=["lsz05"],
 )
+
+KOVIDORE_V2 = Benchmark(
+    name="KoViDoRe(v2)",
+    display_name="KoViDoRe v2",
+    language_view=["kor-Hang"],
+    tasks=get_tasks(
+        tasks=[
+            "KoVidore2CybersecurityRetrieval",
+            "KoVidore2EconomicRetrieval",
+            "KoVidore2EnergyRetrieval",
+            "KoVidore2HrRetrieval",
+        ]
+    ),
+    description="KoViDoRe v2 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents.",
+    reference="https://github.com/whybe-choi/kovidore-data-generator",
+    citation=r"""
+@misc{choi2026kovidorev2,
+  author = {Yongbin Choi},
+  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
+  year = {2026},
+  url = {https://github.com/whybe-choi/kovidore-data-generator},
+  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains}
+}
+""",
+)
