@@ -3,6 +3,8 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RuSciBenchGRNTIClassification(AbsTaskClassification):
+    superseded_by = "RuSciBenchGRNTIClassification.v2"
+
     metadata = TaskMetadata(
         name="RuSciBenchGRNTIClassification",
         dataset={
