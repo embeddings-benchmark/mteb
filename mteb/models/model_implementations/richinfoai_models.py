@@ -9,6 +9,7 @@ from .stella_models import stella_zh_datasets
 ritrieve_zh_v1 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     name="richinfoai/ritrieve_zh_v1",
+    model_type=["dense"],
     languages=["zho-Hans"],
     open_weights=True,
     revision="f8d5a707656c55705027678e311f9202c8ced12c",
@@ -20,7 +21,7 @@ ritrieve_zh_v1 = ModelMeta(
     max_tokens=512,
     reference="https://huggingface.co/richinfoai/ritrieve_zh_v1",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,

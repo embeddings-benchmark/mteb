@@ -121,8 +121,9 @@ class JinaCLIPModel(AbsEncoder):
 
 
 jina_clip_v1 = ModelMeta(
-    loader=JinaCLIPModel,  # type: ignore
+    loader=JinaCLIPModel,
     name="jinaai/jina-clip-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="06150c7c382d7a4faedc7d5a0d8cdb59308968f4",
     release_date="2024-05-30",
@@ -135,7 +136,7 @@ jina_clip_v1 = ModelMeta(
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "ONNX", "safetensors"],
     reference="https://huggingface.co/jinaai/jina-clip-v1",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,

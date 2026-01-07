@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import math
+import warnings
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -261,9 +262,9 @@ def smart_resize(
         w_bar = ceil_by_factor(width * beta, factor)
 
     if max(h_bar, w_bar) / min(h_bar, w_bar) > MAX_RATIO:
-        logger.warning(
-            f"Absolute aspect ratio must be smaller than {MAX_RATIO}, got {max(h_bar, w_bar) / min(h_bar, w_bar)}"
-        )
+        msg = f"Absolute aspect ratio must be smaller than {MAX_RATIO}, got {max(h_bar, w_bar) / min(h_bar, w_bar)}"
+        logger.warning(msg)
+        warnings.warn(msg)
         if h_bar > w_bar:
             h_bar = w_bar * MAX_RATIO
         else:
@@ -346,6 +347,7 @@ training_data = {
 gme_qwen2vl_2b = ModelMeta(
     loader=GmeQwen2VL,
     name="Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+    model_type=["dense"],
     languages=["eng-Latn", "cmn-Hans"],
     open_weights=True,
     revision="ce765ae71b8cdb208203cd8fb64a170b1b84293a",
@@ -358,7 +360,7 @@ gme_qwen2vl_2b = ModelMeta(
     max_tokens=32768,
     reference="https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Sentence Transformers", "safetensors", "Transformers"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
@@ -369,6 +371,7 @@ gme_qwen2vl_2b = ModelMeta(
 gme_qwen2vl_7b = ModelMeta(
     loader=GmeQwen2VL,
     name="Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
+    model_type=["dense"],
     languages=["eng-Latn", "cmn-Hans"],
     open_weights=True,
     revision="477027a6480f8630363be77751f169cc3434b673",
@@ -381,7 +384,7 @@ gme_qwen2vl_7b = ModelMeta(
     max_tokens=32768,
     reference="https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Sentence Transformers", "safetensors", "Transformers"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,

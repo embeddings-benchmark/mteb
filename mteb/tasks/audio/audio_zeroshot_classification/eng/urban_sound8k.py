@@ -14,7 +14,7 @@ class UrbanSound8kZeroshotClassification(AbsTaskZeroShotClassification):
         type="AudioZeroshotClassification",
         category="a2t",
         eval_splits=["train"],
-        eval_langs=["eng-Latn"],
+        eval_langs=["zxx-Zxxx"],
         main_score="accuracy",
         date=("2014-11-01", "2014-11-03"),
         domains=["AudioScene"],
@@ -22,7 +22,7 @@ class UrbanSound8kZeroshotClassification(AbsTaskZeroShotClassification):
         license="cc-by-nc-sa-3.0",
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["audio"],
+        modalities=["audio", "text"],
         sample_creation="found",
         bibtex_citation=r"""
 @article{Salamon2014ADA,

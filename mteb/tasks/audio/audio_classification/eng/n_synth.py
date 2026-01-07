@@ -14,7 +14,7 @@ class NSynth(AbsTaskClassification):
         type="AudioClassification",
         category="a2t",
         eval_splits=["test"],
-        eval_langs=["eng-Latn"],
+        eval_langs=["zxx-Zxxx"],
         main_score="accuracy",
         date=("2025-03-06", "2025-03-06"),
         domains=["Music"],

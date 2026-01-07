@@ -14,9 +14,7 @@ class BirdCLEFClassification(AbsTaskClassification):
         type="AudioClassification",
         category="a2t",
         eval_splits=["train"],
-        eval_langs=[
-            "eng-Latn",
-        ],
+        eval_langs=["zxx-Zxxx"],
         main_score="accuracy",
         date=("2025-01-01", "2025-12-31"),  # Competition year
         domains=["Spoken", "Speech", "Bioacoustics"],

@@ -16,7 +16,8 @@ from typing_extensions import override
 from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.classification_metrics import hamming_score
 from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
-from mteb.models import EncoderProtocol
+from mteb.models import EncoderProtocol, MTEBModels
+from mteb.types import Array
 
 from .classification import AbsTaskClassification
 
@@ -24,14 +25,14 @@ logger = logging.getLogger(__name__)
 
 
 def _evaluate_classifier(
-    embeddings_train: np.ndarray,
+    embeddings_train: Array,
     y_train: np.ndarray,
-    embeddings_test: np.ndarray,
+    embeddings_test: Array,
     classifier: SklearnModelProtocol,
 ) -> tuple[np.ndarray, SklearnModelProtocol]:
-    classifier: SklearnModelProtocol = clone(classifier)
-    classifier.fit(embeddings_train, y_train)
-    return classifier.predict(embeddings_test), classifier
+    classifier_copy: SklearnModelProtocol = clone(classifier)
+    classifier_copy.fit(embeddings_train, y_train)
+    return classifier_copy.predict(embeddings_test), classifier_copy
 
 
 class MultilabelClassificationMetrics(TypedDict):
@@ -69,17 +70,17 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         input_column_name: Name of the column containing the input text.
         label_column_name: Name of the column containing the labels.
         samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
-        evaluator: Classifier to use for evaluation. Must implement the SklearnModelProtocol.
+        evaluator_model: Classifier to use for evaluation. Must implement the SklearnModelProtocol.
     """
 
-    evaluator: SklearnModelProtocol = KNeighborsClassifier(n_neighbors=5)
+    evaluator_model: SklearnModelProtocol = KNeighborsClassifier(n_neighbors=5)
     input_column_name: str = "text"
     label_column_name: str = "label"
 
     @override
-    def _evaluate_subset(
+    def _evaluate_subset(  # type: ignore[override]
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: DatasetDict,
         *,
         encode_kwargs: dict[str, Any],
@@ -88,6 +89,9 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> FullMultilabelClassificationMetrics:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
+
         if isinstance(data_split, DatasetDict):
             data_split = data_split.select_columns(
                 [self.input_column_name, self.label_column_name]
@@ -165,7 +169,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             y_train = train_split.select(sample_indices)[self.label_column_name]
             y_train = binarizer.transform(y_train)
             y_pred, current_classifier = _evaluate_classifier(
-                X_train, y_train, X_test, self.evaluator
+                X_train, y_train, X_test, self.evaluator_model
             )
             if prediction_folder:
                 all_predictions.append(y_pred.tolist())
@@ -185,19 +189,20 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             )
 
         avg_scores: dict[str, Any] = {
-            k: np.mean([s[k] for s in scores]) for k in scores[0].keys()
+            k: np.mean([s[k] for s in scores])  # type: ignore[literal-required]
+            for k in scores[0].keys()
         }
         logger.info("Running multilabel classification - Finished.")
         return FullMultilabelClassificationMetrics(
             scores_per_experiment=scores,
-            **avg_scores,
+            **avg_scores,  # type: ignore[typeddict-item]
         )
 
-    def _calculate_scores(
+    def _calculate_scores(  # type: ignore[override]
         self,
         y_test: np.ndarray,
         y_pred: np.ndarray,
-        x_test_embedding: np.ndarray,
+        x_test_embedding: Array,
         current_classifier: SklearnModelProtocol,
     ) -> MultilabelClassificationMetrics:
         accuracy = current_classifier.score(x_test_embedding, y_test)
@@ -232,10 +237,9 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         """
         sample_indices = []
         if idxs is None:
-            idxs = np.arange(len(y))
+            idxs = list(np.arange(len(y)))
         self.np_rng.shuffle(idxs)
-        idxs = idxs.tolist()
-        label_counter = defaultdict(int)
+        label_counter: dict[int, int] = defaultdict(int)
         for i in idxs:
             if any((label_counter[label] < samples_per_label) for label in y[i]):
                 sample_indices.append(i)

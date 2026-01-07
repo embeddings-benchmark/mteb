@@ -24,6 +24,7 @@ xyz_zh_datasets = {
 
 xyz_embedding = ModelMeta(
     name="fangxq/XYZ-embedding",
+    model_type=["dense"],
     languages=["zho-Hans"],
     loader=sentence_transformers_loader,
     open_weights=True,
