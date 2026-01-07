@@ -49,10 +49,17 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
         "InstructionReranking",
     )
 
-    def __init__(self, model: str, *args, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        model: str,
+        revision: str | None = None,
+        device: str | None = None,
+        *args,
+        **kwargs: Any,
+    ) -> None:
         from transformers import AutoConfig
 
-        super().__init__(model, *args, **kwargs)
+        super().__init__(model, revision=revision, device=device, *args, **kwargs)
         model_config = AutoConfig.from_pretrained(model, trust_remote_code=True)
         self.max_sentences = model_config.transductive_corpus_size
 
@@ -209,6 +216,7 @@ cde_small_v1 = ModelMeta(
         trust_remote_code=True,
     ),
     name="jxm/cde-small-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="e151df18af0d7f1d1c37b074fee58406ececf19f",
@@ -219,7 +227,7 @@ cde_small_v1 = ModelMeta(
     embed_dim=768,
     license="mit",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers"],
+    framework=["Sentence Transformers", "safetensors", "Transformers"],
     reference="https://huggingface.co/jxm/cde-small-v1",
     use_instructions=True,
     adapted_from="nomic-ai/nomic-bert-2048",
@@ -237,6 +245,7 @@ cde_small_v2 = ModelMeta(
         trust_remote_code=True,
     ),
     name="jxm/cde-small-v2",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="4e1d021a6c3fd7ce8aa0a7204057eee5ae61d390",
@@ -247,7 +256,7 @@ cde_small_v2 = ModelMeta(
     embed_dim=768,
     license="mit",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers"],
+    framework=["Sentence Transformers", "safetensors", "Transformers"],
     reference="https://huggingface.co/jxm/cde-small-v1",
     use_instructions=True,
     adapted_from="answerdotai/ModernBERT-base",

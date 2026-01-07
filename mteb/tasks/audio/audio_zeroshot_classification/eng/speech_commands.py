@@ -24,7 +24,7 @@ class SpeechCommandsZeroshotClassificationV01(AbsTaskZeroShotClassification):
         license="cc-by-4.0",  # Replace with appropriate license from allowed list
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["audio"],
+        modalities=["audio", "text"],
         sample_creation="found",
         bibtex_citation=r"""
 @article{DBLP:journals/corr/abs-1804-03209,
@@ -91,7 +91,7 @@ class SpeechCommandsZeroshotClassificationv02(AbsTaskZeroShotClassification):
         license="cc-by-4.0",  # Replace with appropriate license from allowed list
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["audio"],
+        modalities=["audio", "text"],
         sample_creation="found",
         bibtex_citation=r"""
 @article{DBLP:journals/corr/abs-1804-03209,
