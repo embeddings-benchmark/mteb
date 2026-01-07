@@ -44,6 +44,7 @@ LGAI_EMBEDDING_TRAINING_DATA = {
 lgai_embedding_en = ModelMeta(
     loader=sentence_transformers_loader,
     name="annamodels/LGAI-Embedding-Preview",
+    model_type=["dense"],
     languages=[
         "eng-Latn",
     ],
@@ -57,7 +58,7 @@ lgai_embedding_en = ModelMeta(
     max_tokens=32768,
     reference="https://huggingface.co/annamodels/LGAI-Embedding-Preview",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,

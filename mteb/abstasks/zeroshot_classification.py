@@ -7,7 +7,7 @@ from datasets import Dataset
 from sklearn import metrics
 
 from mteb._evaluators import ZeroShotClassificationEvaluator
-from mteb.models import EncoderProtocol
+from mteb.models import EncoderProtocol, MTEBModels
 from mteb.types.statistics import (
     ImageStatistics,
     LabelStatistics,
@@ -111,7 +111,7 @@ class AbsTaskZeroShotClassification(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: Dataset,
         *,
         hf_split: str,
@@ -120,6 +120,9 @@ class AbsTaskZeroShotClassification(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs,
     ) -> ZeroShotClassificationMetrics:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
+
         candidate_labels = self.get_candidate_labels()
         data_split = data_split.select_columns(
             [self.input_column_name, self.label_column_name]

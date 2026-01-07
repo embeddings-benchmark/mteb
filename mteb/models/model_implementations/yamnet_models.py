@@ -72,7 +72,7 @@ def yamnet_loader(*args, **kwargs):
                 audio = audio[..., :max_length]
 
             # Normalize to [-1.0, 1.0]
-            if audio.abs().max() > 1.0:
+            if audio.numel() > 0 and audio.abs().max() > 1.0:
                 audio = audio / audio.abs().max()
 
             # Pad to minimum length

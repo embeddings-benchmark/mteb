@@ -1,6 +1,7 @@
 import logging
 import os
 import time
+import warnings
 from typing import Any
 
 import numpy as np
@@ -246,7 +247,9 @@ class HakimModelWrapper(AbsEncoder):
         task_prompt, task_id = DATASET_TASKS.get(task_name, (None, None))
 
         if not task_prompt:
-            logger.warning(f"Unknown dataset: {task_name}, no preprocessing applied.")
+            msg = f"Unknown dataset: {task_name}, no preprocessing applied."
+            logger.warning(msg)
+            warnings.warn(msg)
             return sample
 
         task_prompt = f"مسئله : {task_prompt}"
@@ -344,6 +347,7 @@ hakim = ModelMeta(
     loader=HakimModelWrapper,
     loader_kwargs=dict(
         api_model_name="hakim",
+        model_type=["dense"],
     ),
     name="MCINext/Hakim",
     languages=["fas-Arab"],
@@ -411,6 +415,7 @@ hakim_small = ModelMeta(
     loader=HakimModelWrapper,
     loader_kwargs=dict(
         api_model_name="hakim-small",
+        model_type=["dense"],
     ),
     name="MCINext/Hakim-small",
     languages=["fas-Arab"],
@@ -477,6 +482,7 @@ hakim_unsup = ModelMeta(
     loader=HakimModelWrapper,
     loader_kwargs=dict(
         api_model_name="hakim-unsup",
+        model_type=["dense"],
     ),
     name="MCINext/Hakim-unsup",
     languages=["fas-Arab"],

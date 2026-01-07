@@ -9,7 +9,7 @@ class MusicCapsA2TRetrieval(AbsTaskRetrieval):
         reference="https://github.com/nateraw/download-musiccaps-dataset",
         dataset={
             "path": "mteb/MusicCaps_a2t",
-            "revision": "fb2fffc9a93f729d1844dfac3f8c16386fbe226bn",
+            "revision": "fb2fffc9a93f729d1844dfac3f8c16386fbe226b",
         },
         type="Any2AnyRetrieval",
         category="a2t",

@@ -45,7 +45,7 @@ class EstonianValenceClassification(AbsTaskClassification):
             "valence", "label"
         )
         # convert label to a numbers
-        labels = self.dataset["train"]["label"]  # type: ignore
+        labels = self.dataset["train"]["label"]
         lab2idx = {lab: idx for idx, lab in enumerate(set(labels))}
         self.dataset = self.dataset.map(
             lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"]

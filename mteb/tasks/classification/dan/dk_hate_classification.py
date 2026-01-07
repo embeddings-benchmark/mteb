@@ -62,7 +62,7 @@ Piperidis, Stelios},
 
     def dataset_transform(self):
         # convert label to a 0/1 label
-        labels = self.dataset["train"]["label"]  # type: ignore
+        labels = self.dataset["train"]["label"]
         lab2idx = {lab: idx for idx, lab in enumerate(set(labels))}
         self.dataset = self.dataset.map(
             lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"]

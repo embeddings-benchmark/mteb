@@ -22,7 +22,7 @@ class UrbanSound8kZeroshotClassification(AbsTaskZeroShotClassification):
         license="cc-by-nc-sa-3.0",
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["audio"],
+        modalities=["audio", "text"],
         sample_creation="found",
         bibtex_citation=r"""
 @article{Salamon2014ADA,

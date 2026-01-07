@@ -1,4 +1,5 @@
 import logging
+import warnings
 from collections.abc import Callable
 from typing import Any, cast
 
@@ -6,7 +7,6 @@ import torch
 from datasets import Dataset, Image
 from torch.utils.data import DataLoader, default_collate
 
-from mteb._log_once import LogOnce
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.types import (
     BatchedInput,
@@ -128,7 +128,7 @@ def _create_text_dataloader_for_queries(
 
 
 def _convert_conv_history_to_query(
-    row: dict[str, list[str] | Conversation],
+    row: dict[str, str | list[str] | Conversation],
 ) -> dict[str, str | Conversation]:
     """Convert a conversation history to a single query string.
 
@@ -141,13 +141,14 @@ def _convert_conv_history_to_query(
     conversation = row["text"]
     # if it's a list of strings, just join them
     if isinstance(conversation, list) and isinstance(conversation[0], str):
-        conversation = cast(list[str], conversation)
-        conv_str = "; ".join(conversation)
+        conversation_ = cast(list[str], conversation)
+        conv_str = "; ".join(conversation_)
         current_conversation = [
-            ConversationTurn(role="user", content=message) for message in conversation
+            ConversationTurn(role="user", content=message) for message in conversation_
         ]
-        LogOnce(logger).warning(
-            "Conversations are a list of strings. Used 'user' role for all turns."
+        warnings.warn(
+            "Conversations are a list of strings. Used 'user' role for all turns.",
+            category=UserWarning,
         )
     # otherwise, it's a list of dictionaries, which we need to convert to strings
     elif isinstance(conversation, list) and isinstance(conversation[0], dict):
@@ -185,7 +186,7 @@ def _convert_conv_history_to_query(
 
     row["text"] = conv_str
     row["conversation"] = current_conversation
-    return row
+    return cast(dict[str, str | list[ConversationTurn]], row)
 
 
 def _create_dataloader_for_queries_conversation(
