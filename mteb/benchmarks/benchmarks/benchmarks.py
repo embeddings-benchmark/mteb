@@ -2758,9 +2758,6 @@ MAEB_AUDIO = Benchmark(
             "AudioCapsMiniReranking",
             "FSDnoisy18kAudioReranking",
             "VocalSoundAudioReranking",
-            # Zeroshot
-            "RavdessZeroshot",
-            "SpeechCommandsZeroshotv0.01",
             # Clustering
             "MusicGenreClustering",
             "VoiceGenderClustering",
@@ -2768,7 +2765,7 @@ MAEB_AUDIO = Benchmark(
             "VoxPopuliAccentClustering",
         ]
     ),
-    description="""MAEB(audio) is a benchmark for evaluating audio embedding models, covering 26 tasks across 5 task types: classification, pair classification, reranking, zero-shot classification, and clustering. Tasks were selected via correlation-based filtering (threshold=0.8) to maximize information diversity while minimizing redundancy.""",
+    description="""MAEB(audio) is a benchmark for evaluating audio embedding models, covering 24 tasks across 4 task types: classification, pair classification, reranking, and clustering. Tasks were selected via correlation-based filtering (threshold=0.8) to maximize information diversity while minimizing redundancy.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
