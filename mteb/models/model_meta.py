@@ -593,9 +593,9 @@ class ModelMeta(BaseModel):
         n_embedding_parameters = None
         try:
             emb = None
-            if hasattr(model, 'auto_model'):  # For SentenceTransformer
+            if hasattr(model, "auto_model"):  # For SentenceTransformer
                 emb = model[0].auto_model.get_input_embeddings()
-            elif hasattr(model, 'model'): # For CrossEncoder
+            elif hasattr(model, "model"):  # For CrossEncoder
                 emb = model.model.get_input_embeddings()
             if emb is not None:
                 n_embedding_parameters = int(np.prod(emb.weight.shape))
@@ -604,14 +604,6 @@ class ModelMeta(BaseModel):
                 f"Could not calculate embedding parameters for {model_name}: {e}"
             )
         return n_embedding_parameters
-
-    def calculate_embedding_parameters(self) -> int | None:
-        """Calculates embedding parameters in the model.
-
-        Returns:
-            Number of embedding parameters in the model.
-        """
-        return self._calculate_embedding_parameters(self.name)
 
     @staticmethod
     def _calculate_memory_usage_mb(
