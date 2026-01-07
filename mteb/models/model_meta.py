@@ -593,9 +593,9 @@ class ModelMeta(BaseModel):
         n_embedding_parameters = None
         try:
             emb = None
-            if hasattr(model, "auto_model"):  # For SentenceTransformer
+            if isinstance(model, SentenceTransformer):
                 emb = model[0].auto_model.get_input_embeddings()
-            elif hasattr(model, "model"):  # For CrossEncoder
+            elif isinstance(model, CrossEncoder):
                 emb = model.model.get_input_embeddings()
             if emb is not None:
                 n_embedding_parameters = int(np.prod(emb.weight.shape))
