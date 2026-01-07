@@ -68,8 +68,9 @@ class SeamlessM4TWrapper(AbsEncoder):
                         orig_freq=sr, new_freq=self.sampling_rate
                     )
                     array = resampler(array)
-                # truncate audio and convert to numpy for processor
-                array = array.squeeze().cpu().detach().numpy()[:max_samples]
+
+                # Squeeze to 1D and truncate
+                array = array.squeeze()[:max_samples]
                 audio_arrays.append(array)
 
             # Process the entire batch at once
