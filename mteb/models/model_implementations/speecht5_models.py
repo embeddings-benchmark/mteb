@@ -31,11 +31,11 @@ class SpeechT5Audio(AbsEncoder):
 
         self.asr_processor = SpeechT5Processor.from_pretrained(
             "microsoft/speecht5_asr",
-            revision="53615c10408485422e09a12cda191a747f4bbe34",
+            revision=revision,
         )
         self.asr_model = SpeechT5ForSpeechToText.from_pretrained(
             "microsoft/speecht5_asr",
-            revision="53615c10408485422e09a12cda191a747f4bbe34",
+            revision=revision,
         ).to(self.device)
         self.asr_model.eval()
 
@@ -147,11 +147,11 @@ class SpeechT5Text(AbsEncoder):
         self.device = device
         self.tts_processor = SpeechT5Processor.from_pretrained(
             "microsoft/speecht5_tts",
-            revision="30fcde30f19b87502b8435427b5f5068e401d5f6",
+            revision=revision,
         )
         self.tts_model = SpeechT5ForTextToSpeech.from_pretrained(
             "microsoft/speecht5_tts",
-            revision="30fcde30f19b87502b8435427b5f5068e401d5f6",
+            revision=revision,
         ).to(self.device)
         self.tts_model.eval()
 
@@ -221,16 +221,19 @@ class SpeechT2Multimodal(AbsEncoder):
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
+        # Revision is combined as "asr_revision-tts_revision"
+        asr_revision, tts_revision = revision.split("-")
+
         self.asr_encoder = SpeechT5Audio(
             model_name=model_name,
-            revision=revision,
+            revision=asr_revision,
             device=device,
             max_audio_length_s=max_audio_length_s,
             **kwargs,
         )
         self.tts_encoder = SpeechT5Text(
             model_name=model_name,
-            revision=revision,
+            revision=tts_revision,
             device=device,
             **kwargs,
         )
@@ -326,13 +329,13 @@ speecht5_tts = ModelMeta(
     modalities=["text"],
 )
 
-# This is model meta is for a multimodal model that combined from asr and tts.
+# This model meta is for a multimodal model that combined from asr and tts.
 speecht5_multimodal = ModelMeta(
     loader=SpeechT2Multimodal,
     name="microsoft/speecht5_multimodal",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="N/A",
+    revision="53615c10408485422e09a12cda191a747f4bbe34-30fcde30f19b87502b8435427b5f5068e401d5f6",
     release_date="2022-05-16",
     max_tokens=None,
     n_parameters=297_911_401,  # Combined ASR + TTS parameters

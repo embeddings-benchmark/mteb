@@ -14,7 +14,7 @@ class GunshotTriangulation(AbsTaskClassification):
         type="AudioClassification",
         category="a2t",
         eval_splits=["train"],
-        eval_langs=["eng-Latn"],
+        eval_langs=["zxx-Zxxx"],
         main_score="accuracy",
         date=("2025-03-07", "2025-03-07"),
         domains=[],  # Replace with appropriate domain from allowed list?? No appropriate domain name is available
