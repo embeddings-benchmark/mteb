@@ -135,8 +135,8 @@ class ModelMeta(BaseModel):
     release_date: StrDate | None
     languages: list[ISOLanguageScript] | None
     n_parameters: int | None
-    _n_active_parameters: int | None
-    n_embedding_parameters: int | None
+    n_active_parameters: int | None = None
+    n_embedding_parameters: int | None = None
     memory_usage_mb: float | None
     max_tokens: float | None
     embed_dim: int | None
@@ -196,12 +196,12 @@ class ModelMeta(BaseModel):
         return "cross-encoder" in self.model_type
 
     @property
-    def n_active_parameters(self):
-        """Number of active parameters. Assumed to be `n_parameters - n_embedding_parameters`. Can be overwritten using `_n_active_parameters` e.g. for MoE models."""
-        if self._n_active_parameters:
-            return self._n_active_parameters
+    def active_parameters(self):
+        """Number of active parameters. Assumed to be `n_parameters - n_embedding_parameters`. Can be overwritten using `active_parameters` e.g. for MoE models."""
+        if self.n_active_parameters is not None:
+            return self.n_active_parameters
 
-        if self.n_parameters and self.n_embedding_parameters:
+        if self.n_parameters is not None and self.n_embedding_parameters is not None:
             return self.n_parameters - self.n_embedding_parameters
         return None
 
@@ -318,8 +318,6 @@ class ModelMeta(BaseModel):
         model_license = None
         reference = None
         n_parameters = None
-        active_parameters = None
-        n_embedding_parameters = None
         memory_usage_mb = None
         release_date = None
         embedding_dim = None
@@ -366,8 +364,6 @@ class ModelMeta(BaseModel):
             training_datasets=None,
             similarity_fn_name=None,
             n_parameters=n_parameters,
-            active_parameters=active_parameters,
-            n_embedding_parameters=n_embedding_parameters,
             memory_usage_mb=memory_usage_mb,
             max_tokens=max_tokens,
             embed_dim=embedding_dim,

@@ -20,7 +20,7 @@ geoembedding = ModelMeta(
     ),
     release_date="2025-04-22",
     n_parameters=7241732096,
-    active_parameters=6_979_588_096,
+    n_active_parameters=6_979_588_096,
     n_embedding_parameters=131_072_000,
     memory_usage_mb=27625,
     embed_dim=4096,
