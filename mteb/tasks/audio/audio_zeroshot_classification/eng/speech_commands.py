@@ -110,6 +110,7 @@ class SpeechCommandsZeroshotClassificationv02(AbsTaskZeroShotClassification):
 """,
     )
 
+    input_column_name: str = "audio"
     label_column_name: str = "label"
 
     def get_candidate_labels(self) -> list[str]:
