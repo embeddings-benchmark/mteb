@@ -125,7 +125,7 @@ def _():
     from typing import Literal
 
     # Configure modality filter: "audio_only", "audio_text", or "any_audio"
-    modality_filter: Literal["audio_only", "audio_text", "any_audio"] = "audio_text"
+    modality_filter: Literal["audio_only", "audio_text", "any_audio"] = "any_audio"
     return (modality_filter,)
 
 

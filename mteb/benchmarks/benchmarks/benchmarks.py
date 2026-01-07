@@ -2732,7 +2732,7 @@ JMTEB_LITE_V1 = Benchmark(
 MAEB_AUDIO = Benchmark(
     name="MAEB(audio)",
     display_name="Audio Embedding",
-    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-music.svg",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
             # Classification
@@ -2774,7 +2774,7 @@ MAEB_AUDIO = Benchmark(
 MAEB_AUDIO_TEXT = Benchmark(
     name="MAEB(audio-text)",
     display_name="Audio-Text",
-    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-music.svg",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
             # Audio-to-Text Retrieval (14 tasks)
@@ -2825,7 +2825,7 @@ MAEB_AUDIO_TEXT = Benchmark(
 MAEB = Benchmark(
     name="MAEB",
     display_name="Audio Embedding (Full)",
-    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-music.svg",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
             # Classification (35)
@@ -2935,6 +2935,118 @@ MAEB = Benchmark(
         ]
     ),
     description="""MAEB is the full Massive Audio Embedding Benchmark (v1), containing 96 tasks with audio modality across 7 task types: classification, clustering, pair classification, reranking, zero-shot classification, audio-to-text retrieval, and text-to-audio retrieval.""",
+    reference=None,
+    citation="",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+)
+
+MAEB_AUDIO_LITE = Benchmark(
+    name="MAEB(audio, lite)",
+    display_name="Audio Embedding Lite",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    tasks=get_tasks(
+        tasks=[
+            # AudioMultilabelClassification (2)
+            "FSD50K",
+            "SIBFLEURS",
+            # AudioClassification (5)
+            "VoxPopuliAccentID",
+            "MInDS14",
+            "VoxPopuliGenderID",
+            "BeijingOpera",
+            "AmbientAcousticContext",
+            # AudioReranking (6)
+            "ESC50AudioReranking",
+            "UrbanSound8KAudioReranking",
+            "AudioCapsMiniReranking",
+            "GTZANAudioReranking",
+            "FSDnoisy18kAudioReranking",
+            "VocalSoundAudioReranking",
+            # AudioClustering (5)
+            "VoiceGenderClustering",
+            "VoxPopuliAccentClustering",
+            "AmbientAcousticContextClustering",
+            "VoxCelebClustering",
+            "VoxPopuliGenderClustering",
+            # AudioPairClassification (1)
+            "VoxPopuliAccentPairClassification",
+        ]
+    ),
+    description="""MAEB(audio, lite) is a lightweight audio-only benchmark with 19 tasks optimized for maximum model coverage (44 models). Tasks span 5 task types: classification, multilabel classification, reranking, clustering, and pair classification. Selected by greedy task addition while maximizing the number of models with complete results.""",
+    reference=None,
+    citation="",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+)
+
+MAEB_AUDIO_EXTENDED = Benchmark(
+    name="MAEB(audio, extended)",
+    display_name="Audio Embedding Extended",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    tasks=get_tasks(
+        tasks=[
+            # AudioMultilabelClassification (4)
+            "FSD50K",
+            "SIBFLEURS",
+            "FSD2019Kaggle",
+            "AudioSetMini",
+            # AudioClassification (28)
+            "VoxPopuliAccentID",
+            "MInDS14",
+            "VoxPopuliGenderID",
+            "BeijingOpera",
+            "AmbientAcousticContext",
+            "CREMA_D",
+            "VoxCelebSA",
+            "TUTAcousticScenes",
+            "NSynth",
+            "VocalSound",
+            "VoxLingua107_Top10",
+            "ESC50",
+            "CommonLanguageAgeDetection",
+            "IEMOCAPEmotion",
+            "CommonLanguageLanguageDetection",
+            "CommonLanguageGenderDetection",
+            "IEMOCAPGender",
+            "SpokeNEnglish",
+            "FSDD",
+            "LibriCount",
+            "GTZANGenre",
+            "BirdCLEF",
+            "VoxPopuliLanguageID",
+            "MridinghamStroke",
+            "GunshotTriangulation",
+            "SpeechCommands",
+            "MridinghamTonic",
+            "BirdSet",
+            # AudioReranking (6)
+            "ESC50AudioReranking",
+            "UrbanSound8KAudioReranking",
+            "AudioCapsMiniReranking",
+            "GTZANAudioReranking",
+            "FSDnoisy18kAudioReranking",
+            "VocalSoundAudioReranking",
+            # AudioClustering (10)
+            "VoiceGenderClustering",
+            "VoxPopuliAccentClustering",
+            "AmbientAcousticContextClustering",
+            "VoxCelebClustering",
+            "VoxPopuliGenderClustering",
+            "VehicleSoundClustering",
+            "MusicGenreClustering",
+            "ESC50Clustering",
+            "CREMA_DClustering",
+            "GTZANGenreClustering",
+            # AudioPairClassification (5)
+            "VoxPopuliAccentPairClassification",
+            "ESC50PairClassification",
+            "NMSQAPairClassification",
+            "VocalSoundPairClassification",
+            "CREMADPairClassification",
+            # Audio2AudioRetrieval (1)
+            "JamAltArtistA2ARetrieval",
+        ]
+    ),
+    description="""MAEB(audio, extended) is an extended audio-only benchmark with 54 tasks supporting 38 models with complete results. Tasks span 6 task types: classification (28), multilabel classification (4), reranking (6), clustering (10), pair classification (5), and audio-to-audio retrieval (1). This benchmark provides broader task diversity while maintaining good model coverage.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],

@@ -75,6 +75,10 @@ models_to_annotate = [
     "voyage-multimodal-3",
     "e5-v",
     "VLM2Vec-Full",
+    "yamnet",
+    "ast-finetuned-audioset-10-10-0.4593",
+    "clap-htsat-fused",
+    "wav2vec2-xls-r-1b",
 ]
 
 
