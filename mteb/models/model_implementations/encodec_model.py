@@ -3,7 +3,6 @@ import warnings
 from typing import Any
 
 import torch
-import torchaudio
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import AutoProcessor, EncodecModel
@@ -46,6 +45,8 @@ class EncodecWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torchaudio
+
         all_embeddings = []
         max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
