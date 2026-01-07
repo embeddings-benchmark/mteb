@@ -397,7 +397,11 @@ class ModelMeta(BaseModel):
             else model.model_card_data.base_model
         )
         meta = cls._from_hub(name, revision, compute_metadata)
-        meta.n_embedding_parameters = cls._calculate_embedding_parameters(model, name)
+        try:
+            emb = model[0].auto_model.get_input_embeddings()
+            meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
+        except Exception as e:
+            logger.warning(f"Could not calculate embedding parameters for {name}: {e}")
         meta.revision = model.model_card_data.base_model_revision or meta.revision
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
@@ -469,9 +473,13 @@ class ModelMeta(BaseModel):
         from mteb.models import CrossEncoderWrapper
 
         meta = cls._from_hub(model.model.name_or_path, revision, compute_metadata)
-        meta.n_embedding_parameters = cls._calculate_embedding_parameters(
-            model, model.model.name_or_path
-        )
+        try:
+            emb = model.model.get_input_embeddings()
+            meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
+        except Exception as e:
+            logger.warning(
+                f"Could not calculate embedding parameters for {model.model.name_or_path}: {e}"
+            )
         meta.revision = model.config._commit_hash or meta.revision
         meta.loader = CrossEncoderWrapper
         meta.embed_dim = None
@@ -583,27 +591,6 @@ class ModelMeta(BaseModel):
             Number of parameters in the model.
         """
         return self._calculate_num_parameters_from_hub(self.name)
-
-    @staticmethod
-    def _calculate_embedding_parameters(
-        model: SentenceTransformer | CrossEncoder, model_name: str | None = None
-    ) -> int | None:
-        if model is None and model_name is None:
-            return None
-        n_embedding_parameters = None
-        try:
-            emb = None
-            if isinstance(model, SentenceTransformer):
-                emb = model[0].auto_model.get_input_embeddings()
-            elif isinstance(model, CrossEncoder):
-                emb = model.model.get_input_embeddings()
-            if emb is not None:
-                n_embedding_parameters = int(np.prod(emb.weight.shape))
-        except Exception as e:
-            logger.warning(
-                f"Could not calculate embedding parameters for {model_name}: {e}"
-            )
-        return n_embedding_parameters
 
     @staticmethod
     def _calculate_memory_usage_mb(
