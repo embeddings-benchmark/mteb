@@ -49,4 +49,3 @@ class FSD50HFMultilingualClassification(AbsTaskMultilabelClassification):
     input_column_name: str = "audio"
     label_column_name: str = "labels"
     samples_per_label: int = 8
-
