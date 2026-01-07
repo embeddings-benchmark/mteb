@@ -66,13 +66,13 @@ class ASTWrapper(AbsEncoder):
                         orig_freq=sr, new_freq=self.sampling_rate
                     )
                     array = resampler(array)
-                
+
                 # Ensure minimum length for AST feature extractor (window size is 400)
                 min_samples = 401  # Just above the window size
                 if len(array) < min_samples:
                     padding = torch.zeros(min_samples - len(array))
                     array = torch.cat([array, padding])
-                
+
                 audio_arrays.append(array.numpy())
 
             features = self.feature_extractor(
