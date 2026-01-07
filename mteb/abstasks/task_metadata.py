@@ -818,7 +818,7 @@ class TaskMetadata(BaseModel):
         if self.category in ["a2a", "at2a", "a2at", "at2at"]:
             dataset_type.append("audio-to-audio")
         if self.category in ["a2t", "t2a", "at2t", "t2at", "at2at", "a2at"]:
-            dataset_type.extend(["audio-to-text", "text-to-audio"])
+            dataset_type.extend(["text-to-audio"])
         return dataset_type
 
     def _hf_languages(self) -> list[str]:
