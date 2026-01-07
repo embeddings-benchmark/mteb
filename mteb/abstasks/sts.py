@@ -18,6 +18,7 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
+    calculate_audio_statistics,
     calculate_image_statistics,
     calculate_score_statistics,
     calculate_text_statistics,
@@ -226,8 +227,8 @@ class AbsTaskSTS(AbsTask):
             image2_statistics = None
 
         if "audio" in self.metadata.modalities:
-            audio1_statistics = calculate_image_statistics(sentence1)
-            audio2_statistics = calculate_image_statistics(sentence2)
+            audio1_statistics = calculate_audio_statistics(sentence1)
+            audio2_statistics = calculate_audio_statistics(sentence2)
         else:
             audio1_statistics = None
             audio2_statistics = None

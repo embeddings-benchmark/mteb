@@ -85,7 +85,7 @@ def calculate_audio_statistics(audios: list[AudioInputItem]) -> AudioStatistics:
         A dictionary containing the descriptive statistics.
     """
     audio_lengths = []
-    sampling_rates = defaultdict(int)
+    sampling_rates: dict[int, int] = defaultdict(int)
     unique_audios = set()
 
     for audio in audios:

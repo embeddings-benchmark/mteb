@@ -12,7 +12,6 @@ class VoxPopuliGenderClustering(AbsTaskClustering):
         dataset={
             "path": "AdnanElAssadi/mini-voxpopuli",
             "revision": "70031eb5affcb0805e448fdf0b2dbbfc05f0aa8f",
-            "trust_remote_code": True,
         },
         type="AudioClustering",
         category="a2a",
