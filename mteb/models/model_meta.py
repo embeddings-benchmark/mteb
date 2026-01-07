@@ -592,6 +592,7 @@ class ModelMeta(BaseModel):
             return None
         n_embedding_parameters = None
         try:
+            emb = None
             if hasattr(model, 'auto_model'):  # For SentenceTransformer
                 emb = model[0].auto_model.get_input_embeddings()
             elif hasattr(model, 'model'): # For CrossEncoder
