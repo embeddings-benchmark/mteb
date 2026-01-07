@@ -20,7 +20,7 @@ class AudioCapsMiniReranking(AbsTaskRetrieval):
         category="a2a",
         modalities=["audio"],
         eval_splits=["test"],  # The mini dataset has only one split
-        eval_langs=["eng-Latn"],
+        eval_langs=["zxx-Zxxx"],
         main_score="map_at_1000",
         date=("2019-04-01", "2019-04-01"),
         domains=["Speech"],

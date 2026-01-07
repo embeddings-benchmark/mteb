@@ -14,7 +14,7 @@ class ESC50ZeroshotClassification(AbsTaskZeroShotClassification):
         type="AudioZeroshotClassification",
         category="a2t",
         eval_splits=["train"],
-        eval_langs=["eng-Latn"],
+        eval_langs=["zxx-Zxxx"],
         main_score="accuracy",
         date=("2023-01-07", "2023-01-07"),
         domains=[
