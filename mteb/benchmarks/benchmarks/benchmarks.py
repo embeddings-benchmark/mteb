@@ -2746,10 +2746,10 @@ KOVIDORE_V2 = Benchmark(
     citation=r"""
 @misc{choi2026kovidorev2,
   author = {Yongbin Choi},
+  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
   title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
-  year = {2026},
   url = {https://github.com/whybe-choi/kovidore-data-generator},
-  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains}
+  year = {2026},
 }
 """,
 )
