@@ -2,7 +2,6 @@ import logging
 import warnings
 from typing import Any
 
-import numpy as np
 import torch
 import torchaudio
 from torch.utils.data import DataLoader
