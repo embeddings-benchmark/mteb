@@ -51,7 +51,7 @@ def test_given_dataset_config_then_it_is_valid():
 
 def test_given_missing_dataset_path_then_it_throws():
     with pytest.raises(ValueError):
-        TaskMetadata(  # type: ignore
+        TaskMetadata(
             name="MyTask",
             description="testing",
             reference=None,

@@ -21,7 +21,7 @@ class ESC50Clustering(AbsTaskClustering):
         type="AudioClustering",
         category="a2a",
         eval_splits=["train"],
-        eval_langs=["eng-Latn"],
+        eval_langs=["zxx-Zxxx"],
         main_score="v_measure",
         date=("2023-01-07", "2023-01-07"),
         domains=["Spoken", "Speech"],

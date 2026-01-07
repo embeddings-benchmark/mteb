@@ -54,7 +54,7 @@ Fishel, Mark},
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.dataset_transform()
         self.data_loaded = True
 
@@ -71,7 +71,7 @@ Fishel, Mark},
         text2id = {}
 
         for split in self.dataset:
-            ds: datasets.Dataset = self.dataset[split]  # type: ignore
+            ds: datasets.Dataset = self.dataset[split]
             ds = ds.shuffle(seed=42)
             max_samples = min(1024, len(ds))
             ds = ds.select(

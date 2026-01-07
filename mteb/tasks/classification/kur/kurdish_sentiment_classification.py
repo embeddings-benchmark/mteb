@@ -25,7 +25,7 @@ class KurdishSentimentClassification(AbsTaskClassification):
         dialect=["Sorani"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{article,
+@article{badawi2024kurdisent,
   author = {Badawi, Soran and Kazemi, Arefeh and Rezaie, Vali},
   doi = {10.1007/s10579-023-09716-6},
   journal = {Language Resources and Evaluation},
@@ -62,7 +62,7 @@ class KurdishSentimentClassificationV2(AbsTaskClassification):
         dialect=["Sorani"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{article,
+@article{badawi2024kurdisent,
   author = {Badawi, Soran and Kazemi, Arefeh and Rezaie, Vali},
   doi = {10.1007/s10579-023-09716-6},
   journal = {Language Resources and Evaluation},

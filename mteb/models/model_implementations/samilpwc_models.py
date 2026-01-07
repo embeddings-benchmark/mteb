@@ -43,6 +43,7 @@ samilpwc_expr = ModelMeta(
         apply_instruction_to_passages=False,
     ),
     name="SamilPwC-AXNode-GenAI/PwC-Embedding_expr",
+    model_type=["dense"],
     languages=[
         "kor-Hang",
     ],
@@ -56,7 +57,7 @@ samilpwc_expr = ModelMeta(
     max_tokens=514,
     reference="https://huggingface.co/SamilPwC-AXNode-GenAI/PwC-Embedding_expr",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
