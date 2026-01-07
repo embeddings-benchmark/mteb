@@ -15,7 +15,7 @@ from .hi_fi_tts import HiFiTTSA2TRetrieval, HiFiTTST2ARetrieval
 from .jl_corpus import JLCorpusA2TRetrieval, JLCorpusT2ARetrieval
 from .libri_tts import LibriTTSA2TRetrieval, LibriTTST2ARetrieval
 from .macs import MACSA2TRetrieval, MACST2ARetrieval
-from .multilingual import *
+from .multilingual import JamAltArtist, JamAltLyricsA2T, JamAltLyricsT2A
 from .music_caps import MusicCapsA2TRetrieval, MusicCapsT2ARetrieval
 from .sound_descs import SoundDescsA2TRetrieval, SoundDescsT2ARetrieval
 from .spoken_s_qu_ad import SpokenSQuADT2ARetrieval
