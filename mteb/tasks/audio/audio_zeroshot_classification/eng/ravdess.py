@@ -22,7 +22,7 @@ class RavdessZeroshotClassification(AbsTaskZeroShotClassification):
         license="cc-by-nc-sa-3.0",
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["audio"],
+        modalities=["audio", "text"],
         sample_creation="found",
         bibtex_citation=r"""
 @article{10.1371/journal.pone.0196391,
