@@ -51,6 +51,16 @@ GP_BENCHMARK_ENTRIES = [
                 ),
             ),
             MenuEntry(
+                "Audio",
+                mteb.get_benchmarks(
+                    [
+                        "MAEB(audio)",
+                        "MAEB(audio-text)",
+                        "MAEB",
+                    ]
+                ),
+            ),
+            MenuEntry(
                 "Domain-Specific ",
                 mteb.get_benchmarks(
                     [

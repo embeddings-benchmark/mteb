@@ -35,17 +35,18 @@ logger = logging.getLogger(__name__)
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 
 
-def _load_results(cache: ResultCache) -> BenchmarkResults:
+def _load_results(
+    cache: ResultCache, skip_cache_file: bool = False
+) -> BenchmarkResults:
     results_cache_path = Path(__file__).parent.joinpath("__cached_results.json")
-    if not results_cache_path.exists():
-        cache.download_from_remote()
+    if skip_cache_file or not results_cache_path.exists():
         all_model_names = [model_meta.name for model_meta in mteb.get_model_metas()]
 
         all_results = cache.load_results(
             models=all_model_names,
             only_main_score=True,
             require_model_meta=False,
-            include_remote=True,
+            include_remote=False,
         )
         return all_results
     else:
@@ -320,10 +321,12 @@ def _cache_update_task_list(
     return benchmark_tasks, tasks_to_keep
 
 
-def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
+def get_leaderboard_app(
+    cache: ResultCache = ResultCache(), skip_cache_file: bool = False
+) -> gr.Blocks:
     """Returns a Gradio Blocks app for the MTEB leaderboard."""
     logger.info("Loading all benchmark results")
-    all_results = _load_results(cache)
+    all_results = _load_results(cache, skip_cache_file=skip_cache_file)
 
     benchmarks = sorted(
         mteb.get_benchmarks(display_on_leaderboard=True), key=lambda x: x.name
@@ -967,7 +970,9 @@ if __name__ == "__main__":
     )  # Warning related to model metadata (fetch_from_hf=False)
     warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
 
-    app = get_leaderboard_app()
+    # Hardcoded local cache path for MAEB results
+    cache = ResultCache(cache_path="/Users/isaac/work/maeb-results")
+    app = get_leaderboard_app(cache=cache, skip_cache_file=True)
 
     head = """
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
