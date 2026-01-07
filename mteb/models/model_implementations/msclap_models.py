@@ -88,9 +88,7 @@ class MSClapWrapper(AbsEncoder):
                         array = resampler(array)
 
                     # Write to temp file - msclap expects file paths
-                    temp_file = tempfile.NamedTemporaryFile(
-                        suffix=".wav", delete=False
-                    )
+                    temp_file = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
                     temp_files.append(temp_file.name)
                     sf.write(temp_file.name, array.numpy(), self.sampling_rate)
 
