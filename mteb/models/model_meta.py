@@ -30,7 +30,7 @@ from huggingface_hub.errors import (
     SafetensorsParsingError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
-from transformers import AutoConfig, AutoModel
+from transformers import AutoConfig
 from typing_extensions import Self
 
 from mteb._helpful_enum import HelpfulStrEnum
@@ -397,7 +397,7 @@ class ModelMeta(BaseModel):
             else model.model_card_data.base_model
         )
         meta = cls._from_hub(name, revision, compute_metadata)
-        meta.n_embedding_parameters = cls._calculate_embedding_parameters(name)
+        meta.n_embedding_parameters = cls._calculate_embedding_parameters(model, name)
         meta.revision = model.model_card_data.base_model_revision or meta.revision
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
@@ -470,7 +470,7 @@ class ModelMeta(BaseModel):
 
         meta = cls._from_hub(model.model.name_or_path, revision, compute_metadata)
         meta.n_embedding_parameters = cls._calculate_embedding_parameters(
-            model.model.name_or_path
+            model, model.model.name_or_path
         )
         meta.revision = model.config._commit_hash or meta.revision
         meta.loader = CrossEncoderWrapper
@@ -585,13 +585,17 @@ class ModelMeta(BaseModel):
         return self._calculate_num_parameters_from_hub(self.name)
 
     @staticmethod
-    def _calculate_embedding_parameters(model_name: str | None = None) -> int | None:
-        if not model_name:
+    def _calculate_embedding_parameters(
+        model: SentenceTransformer | CrossEncoder, model_name: str | None = None
+    ) -> int | None:
+        if model is None and model_name is None:
             return None
         n_embedding_parameters = None
         try:
-            model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
-            emb = model.get_input_embeddings()
+            if hasattr(model, 'auto_model'):  # For SentenceTransformer
+                emb = model[0].auto_model.get_input_embeddings()
+            elif hasattr(model, 'model'): # For CrossEncoder
+                emb = model.model.get_input_embeddings()
             if emb is not None:
                 n_embedding_parameters = int(np.prod(emb.weight.shape))
         except Exception as e:
