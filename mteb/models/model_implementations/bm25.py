@@ -113,7 +113,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
 
         def encode(self, texts: list[str]):
             """Encode input text as term vectors"""
-            return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)  # type: ignore
+            return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
 
     return BM25Search(**kwargs)
 
@@ -121,6 +121,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
 bm25_s = ModelMeta(
     loader=bm25_loader,
     name="bm25s",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="0_1_10",

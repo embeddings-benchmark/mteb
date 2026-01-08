@@ -14,7 +14,7 @@ class MridinghamTonic(AbsTaskClassification):
         type="AudioClassification",
         category="a2t",
         eval_splits=["train"],
-        eval_langs=["eng-Latn"],
+        eval_langs=["zxx-Zxxx"],
         main_score="accuracy",
         date=("2020-01-01", "2020-10-06"),
         domains=["Music"],

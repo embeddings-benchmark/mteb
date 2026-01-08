@@ -15,7 +15,7 @@ class GTZANGenreClustering(AbsTaskClustering):
         type="AudioClustering",
         category="a2a",
         eval_splits=["train"],
-        eval_langs=["eng-Latn"],
+        eval_langs=["zxx-Zxxx"],
         main_score="v_measure",
         date=("2000-01-01", "2001-12-31"),
         domains=["Music"],

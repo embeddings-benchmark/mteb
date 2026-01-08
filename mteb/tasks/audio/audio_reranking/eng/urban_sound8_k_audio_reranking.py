@@ -29,7 +29,7 @@ class UrbanSound8KAudioReranking(AbsTaskRetrieval):
         category="a2a",
         modalities=["audio"],
         eval_splits=["test"],
-        eval_langs=["eng-Latn"],
+        eval_langs=["zxx-Zxxx"],
         main_score="map_at_1000",
         date=("2014-11-01", "2014-11-03"),
         domains=["Spoken"],

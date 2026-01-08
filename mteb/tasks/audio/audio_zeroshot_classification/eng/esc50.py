@@ -14,7 +14,7 @@ class ESC50ZeroshotClassification(AbsTaskZeroShotClassification):
         type="AudioZeroshotClassification",
         category="a2t",
         eval_splits=["train"],
-        eval_langs=["eng-Latn"],
+        eval_langs=["zxx-Zxxx"],
         main_score="accuracy",
         date=("2023-01-07", "2023-01-07"),
         domains=[
@@ -24,7 +24,7 @@ class ESC50ZeroshotClassification(AbsTaskZeroShotClassification):
         license="cc-by-nc-sa-3.0",  # Replace with appropriate license from allowed list
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["audio"],
+        modalities=["audio", "text"],
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{piczak2015dataset,

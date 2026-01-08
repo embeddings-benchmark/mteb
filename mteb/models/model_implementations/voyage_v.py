@@ -40,15 +40,15 @@ def _downsample_image(
         logging.info(
             f"Downsampling image from {width}x{height} to {new_width}x{new_height}"
         )
-        return image.resize(new_size, Image.LANCZOS)  # type: ignore
+        return image.resize(new_size, Image.LANCZOS)
     if width > height:
         if width > 10000:
             logging.error("Processing extremely wide images.")
-            return image.resize((10000, height), Image.LANCZOS)  # type: ignore
+            return image.resize((10000, height), Image.LANCZOS)
     else:
         if height > 10000:
             logging.error("Processing extremely high images.")
-            return image.resize((width, 10000), Image.LANCZOS)  # type: ignore
+            return image.resize((width, 10000), Image.LANCZOS)
     return image
 
 
@@ -202,8 +202,9 @@ def voyage_v_loader(model_name, **kwargs):
 
 
 voyage_v = ModelMeta(
-    loader=voyage_v_loader,  # type: ignore
+    loader=voyage_v_loader,
     name="voyageai/voyage-multimodal-3",
+    model_type=["dense"],
     languages=[],  # Unknown
     revision="1",
     release_date="2024-11-10",

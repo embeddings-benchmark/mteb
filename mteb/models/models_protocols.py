@@ -83,12 +83,19 @@ class EncoderProtocol(Protocol):
     In general the interface is kept aligned with sentence-transformers interface. In cases where exceptions occurs these are handled within MTEB.
     """
 
-    def __init__(self, model_name: str, revision: str | None, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        model_name: str,
+        revision: str | None,
+        device: str | None = None,
+        **kwargs: Any,
+    ) -> None:
         """The initialization function for the encoder. Used when calling it from the mteb run CLI.
 
         Args:
             model_name: Name of the model
             revision: revision of the model
+            device: Device used to load the model
             kwargs: Any additional kwargs
         """
         ...
@@ -181,12 +188,19 @@ class CrossEncoderProtocol(Protocol):
     In general the interface is kept aligned with sentence-transformers interface. In cases where exceptions occurs these are handled within MTEB.
     """
 
-    def __init__(self, model_name: str, revision: str | None, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        model_name: str,
+        revision: str | None,
+        device: str | None = None,
+        **kwargs: Any,
+    ) -> None:
         """The initialization function for the encoder. Used when calling it from the mteb run CLI.
 
         Args:
             model_name: Name of the model
             revision: revision of the model
+            device: Device used to load the model
             kwargs: Any additional kwargs
         """
         ...

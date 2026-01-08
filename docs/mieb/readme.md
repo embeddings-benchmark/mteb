@@ -17,7 +17,11 @@ If you’re already familiar with how MTEB works, then run any benchmark, task, 
 ### Run MIEB in 2 lines via CLI
 First, install the `mieb` dependencies:
 ```sh
+# pip
 pip install mteb[image]
+
+# or uv
+uv add "mteb[image]"
 ```
 
 Then, run the multilingual benchmark with a selected model, e.g. CLIP:
@@ -82,8 +86,8 @@ Here is an example implementing a zero-shot image classification from scratch. L
 To solve this task, we need to encode the `images`, encode the `class label candidates with prompts` (e.g. "this is a dog pic", "this is a cat pic"), and compare them by calculating similarity, and then argmax out the class prediction for each image. We begin by implementing a model wrapper.
 
 #### Model Wrapper
-See the [`AbsEncoder` base class](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/abs_encoder.py) for more details. The model class implements `get_text_embeddings`, `get_image_embeddings`, and `calculate_probs` methods.
-As an example,  [`OpenCLIPWrapper`](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/model_implementations/openclip_models.py) is first implemented, with metadata defined below.
+See the [`EncoderProtocol`](https://embeddings-benchmark.github.io/mteb/api/model/?h=encoder+protocol#mteb.models.EncoderProtocol) for more details. The model class implements `encode()` and `similarity()` methods for text and image embeddings.
+As an example, [`OpenCLIPWrapper`](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/model_implementations/openclip_models.py) is implemented with the required interface.
 ```python
 class OpenCLIPWrapper:
     ...
@@ -91,32 +95,90 @@ class OpenCLIPWrapper:
 See also [adding a model](../contributing/adding_a_model.md) for reference.
 
 #### X Evaluator
-With the model, [ZeroShotClassificationEvaluator](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/_evaluators/zeroshot_classification_evaluator.py) is implemented here. This defines how the model are used to do zero-shot classification and get back results on desired metrics.
+With the model, [ZeroShotClassificationEvaluator](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/_evaluators/zeroshot_classification_evaluator.py) is implemented. This defines how the model is used to do zero-shot classification and get back results on desired metrics.
 ```python
 class ZeroShotClassificationEvaluator(Evaluator):
-    def __init__(self, ...):
+    def __init__(
+        self,
+        dataset: Dataset,
+        input_column_name: str,
+        candidate_labels: list[str],
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        **kwargs,
+    ) -> None:
         ...
+
     def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
         """Get embeddings and calculate scores."""
         ...
 ```
 
 #### AbsTask X
-With the evaluator, [AbsTaskZeroShotClassification](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/abstasks/zeroshot_classification.py) is defined, operating on the dataset, calling the defined Evaluator, and gives out results.
+With the evaluator, [AbsTaskZeroShotClassification](https://embeddings-benchmark.github.io/mteb/api/task/#mteb.abstasks.zeroshot_classification.AbsTaskZeroShotClassification) is defined. In MTEB v2, the dataset is loaded via `self.load_data()` and stored in `self.dataset` with the structure `self.dataset[hf_subset][split]` where `hf_subset` is the language/subset (e.g., "eng") and `split` is "train"/"test"/"validation".
 ```python
 class AbsTaskZeroShotClassification(AbsTask):
+    # Default column names - override if your dataset uses different names
+    input_column_name: str = "image"
+    label_column_name: str = "label"
+
+    def _evaluate_subset(
+        self,
+        model: EncoderProtocol,
+        data_split: Dataset,
+        *,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: dict[str, Any],
+        **kwargs,
+    ) -> ZeroShotClassificationMetrics:
+        # Select relevant columns and pass to evaluator
+        data_split = data_split.select_columns(
+            [self.input_column_name, self.label_column_name]
+        )
+        evaluator = ZeroShotClassificationEvaluator(
+            data_split,
+            self.input_column_name,
+            self.get_candidate_labels(),
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            **kwargs,
+        )
+        probs = evaluator(model, encode_kwargs=encode_kwargs)
+        return self._calculate_scores(
+            data_split[self.label_column_name],
+            torch.tensor(probs).argmax(dim=1).tolist(),
+        )
     ...
 ```
 
 
 #### Dataset class
-With all these, we can then define the dataset. [CIFAR10](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/tasks/zeroshot_classification/eng/cifar.py) is implemented like this, subclassing `AbsTaskZeroShotClassification`, and overwrite the `get_candidate_labels` function, which gives `["a photo of {label_name}"]` to be used in the evaluator.
+With all these, we can then define the dataset. [CIFAR10](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/tasks/zeroshot_classification/eng/cifar.py) is implemented by subclassing `AbsTaskZeroShotClassification` and overriding:
+- `metadata`: TaskMetadata with `modalities=["text", "image"]` and `category="i2t"` (image-to-text)
+- `input_column_name`: Name of the column containing images (default: "image")
+- `get_candidate_labels()`: Returns text prompts for each class label
 ```python
 class CIFAR10ZeroShotClassification(AbsTaskZeroShotClassification):
-    metadata = TaskMetadata(...)
+    metadata = TaskMetadata(
+        name="CIFAR10ZeroShot",
+        type="ZeroShotClassification",
+        category="i2t",  # image-to-text classification
+        modalities=["text", "image"],  # Required for MIEB tasks
+        dataset={"path": "uoft-cs/cifar10", "revision": "..."},
+        ...
+    )
+    input_column_name: str = "img"  # CIFAR10 uses "img" column
 
     def get_candidate_labels(self) -> list[str]:
-        ...
+        # Access labels via self.dataset after load_data() is called
+        # self.label_column_name defaults to "label"
+        return [
+            f"a photo of a {name}."
+            for name in self.dataset["test"].features[self.label_column_name].names
+        ]
 ```
 See also [adding a dataset](../contributing/adding_a_dataset.md) for reference.
 

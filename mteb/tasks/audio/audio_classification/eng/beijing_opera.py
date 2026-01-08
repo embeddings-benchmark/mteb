@@ -14,7 +14,7 @@ class BeijingOpera(AbsTaskClassification):
         type="AudioClassification",
         category="a2t",
         eval_splits=["train"],
-        eval_langs=["eng-Latn"],
+        eval_langs=["zxx-Zxxx"],
         main_score="accuracy",
         date=("2014-01-01", "2014-12-31"),
         domains=["Music"],

@@ -190,6 +190,7 @@ class ConanWrapper(AbsEncoder):
 
 Conan_embedding_v2 = ModelMeta(
     name="TencentBAC/Conan-embedding-v2",
+    model_type=["dense"],
     revision="e5c87c63889630bca87486f6a2645ed97c5ddb17",
     release_date="2025-04-10",
     languages=[
@@ -208,7 +209,7 @@ Conan_embedding_v2 = ModelMeta(
     license="apache-2.0",
     reference="https://huggingface.co/TencentBAC/Conan-embedding-v2",
     similarity_fn_name="cosine",
-    framework=["API"],
+    framework=["API", "Sentence Transformers", "Transformers"],
     use_instructions=True,
     training_datasets=E5_MISTRAL_TRAINING_DATA | bge_full_data | conan_zh_datasets,
     public_training_code=None,

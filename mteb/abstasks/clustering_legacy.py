@@ -8,7 +8,7 @@ from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
 
 from mteb._evaluators import ClusteringEvaluator
-from mteb.models import EncoderProtocol
+from mteb.models import EncoderProtocol, MTEBModels
 from mteb.types import ScoresDict
 from mteb.types.statistics import (
     ImageStatistics,
@@ -80,7 +80,7 @@ class AbsTaskClusteringLegacy(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: Dataset,
         *,
         encode_kwargs: dict[str, Any],
@@ -89,6 +89,12 @@ class AbsTaskClusteringLegacy(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
+
+        data_split = data_split.select_columns(
+            [self.input_column_name, self.label_column_name]
+        )
         # MTEB text clustering requires renaming and eval per subset.
         if self.metadata.modalities == ["text"]:
             all_metrics = []
@@ -136,9 +142,6 @@ class AbsTaskClusteringLegacy(AbsTask):
             }
             return scores
 
-        data_split = data_split.select_columns(
-            [self.input_column_name, self.label_column_name]
-        )
         evaluator = self.evaluator(
             data_split,
             input_column_name=self.input_column_name,
@@ -148,10 +151,10 @@ class AbsTaskClusteringLegacy(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        clusters = evaluator(model, encode_kwargs=encode_kwargs)
+        evaluate_clusters = evaluator(model, encode_kwargs=encode_kwargs)
         if prediction_folder:
             self._save_task_predictions(
-                clusters,
+                evaluate_clusters,
                 model,
                 prediction_folder,
                 hf_subset=hf_subset,
@@ -160,7 +163,7 @@ class AbsTaskClusteringLegacy(AbsTask):
 
         return self._compute_metrics(
             data_split[self.label_column_name],
-            clusters,
+            evaluate_clusters,
         )
 
     def _compute_metrics(
