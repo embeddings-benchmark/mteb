@@ -71,7 +71,6 @@ def _create_dataloader_for_retrieval_corpus(
         dataset: Corpus
         batch_size: Batch size for the dataloader.
 
-
     Returns:
         A dataloader with the corpus.
     """
@@ -101,7 +100,6 @@ def _create_text_dataloader_for_queries(
     Args:
         queries: A list of queries.
         batch_size: Batch size for the dataloader.
-
 
     Returns:
         A dataloader with the queries.
@@ -187,7 +185,6 @@ def _create_dataloader_for_queries_conversation(
     Args:
         queries: A list of queries.
         batch_size: Batch size for the dataloader.
-
 
     Returns:
         A dataloader with the queries.
@@ -301,7 +298,6 @@ def _create_image_dataloader(
         transform: A transformation function to apply to each image (e.g., converting to tensor).
         collate_fn: A custom collate function to handle batching.
 
-
     Returns:
         A DataLoader with the image dataset.
     """
@@ -367,6 +363,8 @@ def _create_document_dataloader(
         input_column: The column to use as input. If None, it will use the first column that matches the modality.
         batch_size: Batch size for the dataloader.
 
+    Returns:
+        A dataloader for the documents.
     """
     document_type = task_metadata.get_modalities(PromptType.document)
     if document_type == ["text"]:  # text only
