@@ -12,7 +12,7 @@ class BeijingOpera(AbsTaskClassification):
             "revision": "fed432f5ad94bc8d76c96d0ba05a38e805254281",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["zxx-Zxxx"],
         main_score="accuracy",

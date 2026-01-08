@@ -226,6 +226,7 @@ TaskCategory = Literal[
     "t2it",
     "it2it",
     "a2a",
+    "a2c",
     "a2t",
     "t2a",
     "at2t",
