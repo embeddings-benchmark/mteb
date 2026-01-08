@@ -21,8 +21,8 @@ sys.path.insert(0, str(MTEB_ROOT))
 # Import benchmarks from mteb
 from mteb.benchmarks import get_benchmark
 
-MAEB_AUDIO = get_benchmark("MAEB(audio)")
-MAEB_AUDIO_TEXT = get_benchmark("MAEB(audio-text)")
+MAEB_AUDIO_LITE = get_benchmark("MAEB(audio, lite)")
+MAEB_AUDIO_TEXT_LITE = get_benchmark("MAEB(audio-text, lite)")
 
 
 def get_task_names_from_benchmark(benchmark) -> list[str]:
@@ -31,8 +31,8 @@ def get_task_names_from_benchmark(benchmark) -> list[str]:
 
 
 # Get task lists from benchmark definitions
-MAEB_AUDIO_TASKS = get_task_names_from_benchmark(MAEB_AUDIO)
-MAEB_AUDIO_TEXT_TASKS = get_task_names_from_benchmark(MAEB_AUDIO_TEXT)
+MAEB_AUDIO_LITE_TASKS = get_task_names_from_benchmark(MAEB_AUDIO_LITE)
+MAEB_AUDIO_TEXT_LITE_TASKS = get_task_names_from_benchmark(MAEB_AUDIO_TEXT_LITE)
 
 
 def build_task_type_map(*benchmarks) -> dict[str, str]:
@@ -54,7 +54,7 @@ def build_task_type_map(*benchmarks) -> dict[str, str]:
 
 
 # Build task type mapping dynamically from benchmarks
-TASK_TYPE_MAP = build_task_type_map(MAEB_AUDIO, MAEB_AUDIO_TEXT)
+TASK_TYPE_MAP = build_task_type_map(MAEB_AUDIO_LITE, MAEB_AUDIO_TEXT_LITE)
 
 # Task type abbreviations for the table
 TASK_TYPE_ABBREV = {
@@ -328,14 +328,15 @@ def generate_latex_table(
     return "\n".join(lines), sorted_types
 
 
-def generate_audio_table(df: pd.DataFrame, top_n: int = 10) -> str:
-    """Generate LaTeX table for MAEB(audio) benchmark."""
-    task_names = MAEB_AUDIO_TASKS
+def generate_audio_table(
+    df: pd.DataFrame, task_names: list[str], benchmark_name: str, top_n: int = 10
+) -> str:
+    """Generate LaTeX table for MAEB audio benchmark."""
     available_tasks = [t for t in task_names if t in df.columns]
     df_filtered = df.dropna(subset=available_tasks, how="all")
 
     if len(df_filtered) == 0:
-        return "% No results for MAEB(audio)\n"
+        return f"% No results for {benchmark_name}\n"
 
     # Compute metrics
     borda_scores = compute_borda_count(df_filtered, task_names)
@@ -345,20 +346,19 @@ def generate_audio_table(df: pd.DataFrame, top_n: int = 10) -> str:
     df_filtered["mean"] = df_filtered[available_tasks].mean(axis=1) * 100
     df_filtered["borda_count"] = borda_scores
 
-    # Task type order for audio: Clf, PC, Rrnk, Zero Clf., Clust (canonical names)
+    # Task type order for audio: Clf, PC, Rrnk, Clust (canonical names)
+    # Always use all 4 types to match the hardcoded table header
     task_type_order = [
         "Classification",
         "PairClassification",
         "Reranking",
-        "ZeroshotClassification",
         "Clustering",
     ]
-    sorted_types = [t for t in task_type_order if t in category_avgs]
 
-    # Weighted mean using canonical categories
+    # Weighted mean using canonical categories (only categories that exist)
     weighted_scores = pd.Series(0.0, index=df_filtered.index)
     valid_cat_counts = pd.Series(0, index=df_filtered.index)
-    for task_type in sorted_types:
+    for task_type in task_type_order:
         if task_type in category_avgs:
             cat_vals = category_avgs[task_type] * 100
             valid_mask = ~cat_vals.isna()
@@ -381,7 +381,7 @@ def generate_audio_table(df: pd.DataFrame, top_n: int = 10) -> str:
         "mean": top_df["mean"].max(),
         "weighted_mean": top_df["weighted_mean"].max(),
     }
-    for task_type in sorted_types:
+    for task_type in task_type_order:
         if task_type in category_avgs:
             top_indices = top_df.index
             cat_series = category_avgs[task_type]
@@ -391,14 +391,17 @@ def generate_audio_table(df: pd.DataFrame, top_n: int = 10) -> str:
 
     lines = []
 
-    # Benchmark header
+    # Benchmark header - always show all 5 categories
     total_tasks = len(available_tasks)
     type_counts = " & ".join(
-        [f"\\textcolor{{gray}}{{({task_type_counts[t]})}}" for t in sorted_types]
+        [
+            f"\\textcolor{{gray}}{{({task_type_counts.get(t, 0)})}}"
+            for t in task_type_order
+        ]
     )
 
     lines.append(
-        f"\\multicolumn{{9}}{{c}}{{\\vspace{{2mm}} \\normalsize \\texttt{{MAEB(audio)}}}} \\\\"
+        f"\\multicolumn{{8}}{{c}}{{\\vspace{{2mm}} \\normalsize \\texttt{{{benchmark_name}}}}} \\\\"
     )
     lines.append(
         f"\\textcolor{{gray}}{{Number of datasets}} & & \\textcolor{{gray}}{{({total_tasks})}} & "
@@ -421,7 +424,7 @@ def generate_audio_table(df: pd.DataFrame, top_n: int = 10) -> str:
         weighted_str = format_score(weighted, best_scores["weighted_mean"])
 
         cat_values = []
-        for task_type in sorted_types:
+        for task_type in task_type_order:
             if task_type in category_avgs:
                 try:
                     val = category_avgs[task_type].loc[idx] * 100
@@ -443,14 +446,15 @@ def generate_audio_table(df: pd.DataFrame, top_n: int = 10) -> str:
     return "\n".join(lines)
 
 
-def generate_audio_text_table(df: pd.DataFrame, top_n: int = 10) -> str:
-    """Generate LaTeX table for MAEB(audio-text) benchmark."""
-    task_names = MAEB_AUDIO_TEXT_TASKS
+def generate_audio_text_table(
+    df: pd.DataFrame, task_names: list[str], benchmark_name: str, top_n: int = 10
+) -> str:
+    """Generate LaTeX table for MAEB audio-text benchmark."""
     available_tasks = [t for t in task_names if t in df.columns]
     df_filtered = df.dropna(subset=available_tasks, how="all")
 
     if len(df_filtered) == 0:
-        return "% No results for MAEB(audio-text)\n"
+        return f"% No results for {benchmark_name}\n"
 
     # Compute metrics
     borda_scores = compute_borda_count(df_filtered, task_names)
@@ -460,13 +464,13 @@ def generate_audio_text_table(df: pd.DataFrame, top_n: int = 10) -> str:
     df_filtered["mean"] = df_filtered[available_tasks].mean(axis=1) * 100
     df_filtered["borda_count"] = borda_scores
 
-    # Task type order for audio-text: Retrieval (combined A2T and T2A)
-    sorted_types = ["Retrieval"]
+    # Task type order for audio-text: Retrieval and ZeroshotClassification
+    task_type_order = ["Retrieval", "ZeroshotClassification"]
 
     # Weighted mean using canonical categories
     weighted_scores = pd.Series(0.0, index=df_filtered.index)
     valid_cat_counts = pd.Series(0, index=df_filtered.index)
-    for task_type in sorted_types:
+    for task_type in task_type_order:
         if task_type in category_avgs:
             cat_vals = category_avgs[task_type] * 100
             valid_mask = ~cat_vals.isna()
@@ -489,7 +493,7 @@ def generate_audio_text_table(df: pd.DataFrame, top_n: int = 10) -> str:
         "mean": top_df["mean"].max(),
         "weighted_mean": top_df["weighted_mean"].max(),
     }
-    for task_type in sorted_types:
+    for task_type in task_type_order:
         if task_type in category_avgs:
             top_indices = top_df.index
             cat_series = category_avgs[task_type]
@@ -499,14 +503,17 @@ def generate_audio_text_table(df: pd.DataFrame, top_n: int = 10) -> str:
 
     lines = []
 
-    # Benchmark header
+    # Benchmark header - 2 category columns
     total_tasks = len(available_tasks)
     type_counts = " & ".join(
-        [f"\\textcolor{{gray}}{{({task_type_counts[t]})}}" for t in sorted_types]
+        [
+            f"\\textcolor{{gray}}{{({task_type_counts.get(t, 0)})}}"
+            for t in task_type_order
+        ]
     )
 
     lines.append(
-        f"\\multicolumn{{5}}{{c}}{{\\vspace{{2mm}} \\normalsize \\texttt{{MAEB(audio-text)}}}} \\\\"
+        f"\\multicolumn{{6}}{{c}}{{\\vspace{{2mm}} \\normalsize \\texttt{{{benchmark_name}}}}} \\\\"
     )
     lines.append(
         f"\\textcolor{{gray}}{{Number of datasets}} & & \\textcolor{{gray}}{{({total_tasks})}} & "
@@ -529,7 +536,7 @@ def generate_audio_text_table(df: pd.DataFrame, top_n: int = 10) -> str:
         weighted_str = format_score(weighted, best_scores["weighted_mean"])
 
         cat_values = []
-        for task_type in sorted_types:
+        for task_type in task_type_order:
             if task_type in category_avgs:
                 try:
                     val = category_avgs[task_type].loc[idx] * 100
@@ -555,38 +562,42 @@ def main():
     results_dir = Path("/Users/isaac/work/maeb-results/results")
 
     # Load all results
-    all_tasks = MAEB_AUDIO_TASKS + MAEB_AUDIO_TEXT_TASKS
+    all_tasks = MAEB_AUDIO_LITE_TASKS + MAEB_AUDIO_TEXT_LITE_TASKS
     print(f"Loading results for {len(all_tasks)} tasks...")
     df = load_results_from_json(results_dir, all_tasks)
     print(f"Loaded results for {len(df)} models")
 
-    print("Processing MAEB(audio)...")
-    audio_section = generate_audio_table(df, top_n=10)
+    print("Processing MAEB(audio, lite)...")
+    audio_lite_section = generate_audio_table(
+        df, MAEB_AUDIO_LITE_TASKS, "MAEB(audio, lite)", top_n=10
+    )
 
-    print("Processing MAEB(audio-text)...")
-    audio_text_section = generate_audio_text_table(df, top_n=10)
+    print("Processing MAEB(audio-text, lite)...")
+    audio_text_section = generate_audio_text_table(
+        df, MAEB_AUDIO_TEXT_LITE_TASKS, "MAEB(audio-text, lite)", top_n=10
+    )
 
     # Build full LaTeX output with two separate tables
     latex_output = []
 
-    # First table: MAEB(audio)
+    # First table: MAEB(audio, lite)
     latex_output.append(r"""\begin{table*}[!th]
     \centering
     \caption{
-    Top 10 models on MAEB benchmarks. Results are ranked using Borda count. We provide averages across all tasks, and per task category. Task categories are abbreviated as: Classification (Clf), Pair Classification (PC), Reranking (Rrnk), Zero-shot Classification (Zero Clf.), Clustering (Clust), Retrieval (Rtrvl). We highlight the best score in \textbf{bold}.
+    Top 10 models on MAEB(audio, lite) benchmark. Results are ranked using Borda count. We provide averages across all tasks, and per task category. Task categories are abbreviated as: Classification (Clf), Pair Classification (PC), Reranking (Rrnk), Clustering (Clust). We highlight the best score in \textbf{bold}.
     }
-    \label{tab:maeb-performance}
-    \resizebox{\textwidth}{!}{
+    \label{tab:maeb-audio-lite-performance}
+    \resizebox{0.9\textwidth}{!}{
     \setlength{\tabcolsep}{4pt}
     {\footnotesize
-    \begin{tabular}{lccc|ccccc}
+    \begin{tabular}{lccc|cccc}
     \toprule
-    & \multicolumn{1}{c}{\textbf{Rank} ($\downarrow$)} & \multicolumn{2}{c}{\textbf{Average}} & \multicolumn{5}{c}{\textbf{Average per Category}} \\
-    \cmidrule(r){2-2} \cmidrule{3-4} \cmidrule(l){5-9}
-    \textbf{Model} & Borda & All & Cat. & Clf & PC & Rrnk & Zero Clf. & Clust \\
+    & \multicolumn{1}{c}{\textbf{Rank} ($\downarrow$)} & \multicolumn{2}{c}{\textbf{Average}} & \multicolumn{4}{c}{\textbf{Average per Category}} \\
+    \cmidrule(r){2-2} \cmidrule{3-4} \cmidrule(l){5-8}
+    \textbf{Model} & Borda & All & Cat. & Clf & PC & Rrnk & Clust \\
     \midrule""")
 
-    latex_output.append(audio_section)
+    latex_output.append(audio_lite_section)
 
     latex_output.append(r"""    \bottomrule
     \end{tabular}
@@ -596,14 +607,18 @@ def main():
 
 \begin{table*}[!th]
     \centering
-    \resizebox{0.5\textwidth}{!}{
+    \caption{
+    Top 10 models on MAEB(audio-text, lite) benchmark. Results are ranked using Borda count. We provide averages across all tasks, and per task category. Task categories are abbreviated as: Retrieval (Rtrvl), Zero-shot Classification (Zero Clf.). We highlight the best score in \textbf{bold}.
+    }
+    \label{tab:maeb-audio-text-lite-performance}
+    \resizebox{0.6\textwidth}{!}{
     \setlength{\tabcolsep}{4pt}
     {\footnotesize
-    \begin{tabular}{lccc|c}
+    \begin{tabular}{lccc|cc}
     \toprule
-    & \multicolumn{1}{c}{\textbf{Rank} ($\downarrow$)} & \multicolumn{2}{c}{\textbf{Average}} & \textbf{Category} \\
-    \cmidrule(r){2-2} \cmidrule{3-4} \cmidrule(l){5-5}
-    \textbf{Model} & Borda & All & Cat. & Rtrvl \\
+    & \multicolumn{1}{c}{\textbf{Rank} ($\downarrow$)} & \multicolumn{2}{c}{\textbf{Average}} & \multicolumn{2}{c}{\textbf{Average per Category}} \\
+    \cmidrule(r){2-2} \cmidrule{3-4} \cmidrule(l){5-6}
+    \textbf{Model} & Borda & All & Cat. & Rtrvl & Zero Clf. \\
     \midrule""")
 
     latex_output.append(audio_text_section)
