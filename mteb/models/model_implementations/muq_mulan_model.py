@@ -98,13 +98,23 @@ class MuQMuLanWrapper(AbsEncoder):
     def get_text_embeddings(
         self,
         inputs: DataLoader[TextInput],
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
         """Get text embeddings using MuQ-MuLan."""
-        texts = [text for batch in inputs for text in batch["text"]]
-        text_embeds = self.model(texts=texts)
+        all_embeddings = []
 
-        return text_embeds.cpu().detach().numpy()
+        for batch in tqdm(
+            inputs,
+            disable=not show_progress_bar,
+            desc="Processing text batches",
+        ):
+            texts = batch["text"]
+            with torch.no_grad():
+                text_embeds = self.model(texts=texts)
+                all_embeddings.append(text_embeds.cpu().detach().numpy())
+
+        return np.vstack(all_embeddings)
 
     def encode(
         self,
@@ -156,7 +166,7 @@ muq_mulan_large = ModelMeta(
     loader=MuQMuLanWrapper,
     name="OpenMuQ/MuQ-MuLan-large",
     languages=["eng-Latn", "zho-Hans"],  # English and Chinese support
-    revision="8a081dbcf84edd47ea7db3c4ecb8fd1ec1ddacfe8a081dbcf84edd47ea7db3c4ecb8fd1ec1ddacfe",
+    revision="8a081dbcf84edd47ea7db3c4ecb8fd1ec1ddacfe",
     release_date="2025-01-01",
     modalities=["audio", "text"],
     n_parameters=630_000_000,

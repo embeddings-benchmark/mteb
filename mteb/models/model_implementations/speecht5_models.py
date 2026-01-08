@@ -31,11 +31,11 @@ class SpeechT5Audio(AbsEncoder):
 
         self.asr_processor = SpeechT5Processor.from_pretrained(
             "microsoft/speecht5_asr",
-            revision="53615c10408485422e09a12cda191a747f4bbe34",
+            revision=revision,
         )
         self.asr_model = SpeechT5ForSpeechToText.from_pretrained(
             "microsoft/speecht5_asr",
-            revision="53615c10408485422e09a12cda191a747f4bbe34",
+            revision=revision,
         ).to(self.device)
         self.asr_model.eval()
 
@@ -88,35 +88,36 @@ class SpeechT5Audio(AbsEncoder):
                 return_attention_mask=True,
             ).to(self.device)
 
-            outputs = self.asr_model.speecht5.encoder(
-                input_values=features.input_values,
-                attention_mask=features.attention_mask,
-            )
-            last_hidden = outputs.last_hidden_state
+            with torch.no_grad():
+                outputs = self.asr_model.speecht5.encoder(
+                    input_values=features.input_values,
+                    attention_mask=features.attention_mask,
+                )
+                last_hidden = outputs.last_hidden_state
 
-            # Apply attention-masked pooling to exclude padding tokens
-            batch_size, hidden_seq_len, hidden_size = last_hidden.shape
-            device = last_hidden.device
+                # Apply attention-masked pooling to exclude padding tokens
+                batch_size, hidden_seq_len, hidden_size = last_hidden.shape
+                device = last_hidden.device
 
-            # Calculate proper hidden lengths based on input attention mask
-            input_lengths = features.attention_mask.sum(dim=1)
-            downsample_ratio = features.input_values.shape[1] / hidden_seq_len
-            hidden_lengths = (input_lengths.float() / downsample_ratio).long()
-            hidden_lengths = torch.clamp(hidden_lengths, min=0, max=hidden_seq_len)
+                # Calculate proper hidden lengths based on input attention mask
+                input_lengths = features.attention_mask.sum(dim=1)
+                downsample_ratio = features.input_values.shape[1] / hidden_seq_len
+                hidden_lengths = (input_lengths.float() / downsample_ratio).long()
+                hidden_lengths = torch.clamp(hidden_lengths, min=0, max=hidden_seq_len)
 
-            # Create attention mask for hidden states
-            seq_range = torch.arange(hidden_seq_len, device=device).unsqueeze(0)
-            hidden_attention_mask = (seq_range < hidden_lengths.unsqueeze(1)).to(
-                last_hidden.dtype
-            )
+                # Create attention mask for hidden states
+                seq_range = torch.arange(hidden_seq_len, device=device).unsqueeze(0)
+                hidden_attention_mask = (seq_range < hidden_lengths.unsqueeze(1)).to(
+                    last_hidden.dtype
+                )
 
-            # Apply masked mean pooling
-            hidden_attention_mask = hidden_attention_mask.unsqueeze(-1)
-            masked_embeddings = last_hidden * hidden_attention_mask
-            valid_tokens = hidden_attention_mask.sum(dim=1)
-            embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
+                # Apply masked mean pooling
+                hidden_attention_mask = hidden_attention_mask.unsqueeze(-1)
+                masked_embeddings = last_hidden * hidden_attention_mask
+                valid_tokens = hidden_attention_mask.sum(dim=1)
+                embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
 
-            all_embeddings.append(embeddings.cpu())
+                all_embeddings.append(embeddings.cpu())
 
         return torch.cat(all_embeddings, dim=0)
 
@@ -146,11 +147,11 @@ class SpeechT5Text(AbsEncoder):
         self.device = device
         self.tts_processor = SpeechT5Processor.from_pretrained(
             "microsoft/speecht5_tts",
-            revision="30fcde30f19b87502b8435427b5f5068e401d5f6",
+            revision=revision,
         )
         self.tts_model = SpeechT5ForTextToSpeech.from_pretrained(
             "microsoft/speecht5_tts",
-            revision="30fcde30f19b87502b8435427b5f5068e401d5f6",
+            revision=revision,
         ).to(self.device)
         self.tts_model.eval()
 
@@ -169,27 +170,28 @@ class SpeechT5Text(AbsEncoder):
             texts = batch["text"]
 
             # Process text through tokenizer
-            inputs = self.tts_processor(
+            tokenized = self.tts_processor(
                 text=texts,
                 return_tensors="pt",
                 padding="longest",
                 truncation=True,
             ).to(self.device)
 
-            outputs = self.tts_model.speecht5.encoder(
-                input_values=inputs["input_ids"],
-                attention_mask=inputs["attention_mask"],
-            )
+            with torch.no_grad():
+                outputs = self.tts_model.speecht5.encoder(
+                    input_values=tokenized["input_ids"],
+                    attention_mask=tokenized["attention_mask"],
+                )
 
-            last_hidden = outputs.last_hidden_state
+                last_hidden = outputs.last_hidden_state
 
-            # Apply attention-masked pooling to exclude padding tokens
-            attention_mask = (
-                inputs["attention_mask"].unsqueeze(-1).to(last_hidden.dtype)
-            )
-            masked_embeddings = last_hidden * attention_mask
-            valid_tokens = attention_mask.sum(dim=1)
-            embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
+                # Apply attention-masked pooling to exclude padding tokens
+                attention_mask = (
+                    tokenized["attention_mask"].unsqueeze(-1).to(last_hidden.dtype)
+                )
+                masked_embeddings = last_hidden * attention_mask
+                valid_tokens = attention_mask.sum(dim=1)
+                embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
 
             all_embeddings.append(embeddings.cpu())
 
@@ -219,16 +221,19 @@ class SpeechT2Multimodal(AbsEncoder):
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
+        # Revision is combined as "asr_revision-tts_revision"
+        asr_revision, tts_revision = revision.split("-")
+
         self.asr_encoder = SpeechT5Audio(
             model_name=model_name,
-            revision=revision,
+            revision=asr_revision,
             device=device,
             max_audio_length_s=max_audio_length_s,
             **kwargs,
         )
         self.tts_encoder = SpeechT5Text(
             model_name=model_name,
-            revision=revision,
+            revision=tts_revision,
             device=device,
             **kwargs,
         )
@@ -324,13 +329,13 @@ speecht5_tts = ModelMeta(
     modalities=["text"],
 )
 
-# This is model meta is for a multimodal model that combined from asr and tts.
+# This model meta is for a multimodal model that combined from asr and tts.
 speecht5_multimodal = ModelMeta(
     loader=SpeechT2Multimodal,
     name="microsoft/speecht5_multimodal",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="N/A",
+    revision="53615c10408485422e09a12cda191a747f4bbe34-30fcde30f19b87502b8435427b5f5068e401d5f6",
     release_date="2022-05-16",
     max_tokens=None,
     n_parameters=297_911_401,  # Combined ASR + TTS parameters

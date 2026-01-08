@@ -4,8 +4,9 @@ from mteb.models.model_implementations.model2vec_models import Model2VecModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 potion_base_8m = ModelMeta(
-    loader=Model2VecModel,  # type: ignore
+    loader=Model2VecModel,
     name="rasgaard/m2v-dfm-large",
+    model_type=["dense"],
     languages=["dan-Latn"],
     open_weights=True,
     revision="387897cfb09992e6d45ea9cd7b28b9fcf119e23a",
@@ -16,7 +17,7 @@ potion_base_8m = ModelMeta(
     embed_dim=256,
     license="mit",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["NumPy", "Sentence Transformers"],
+    framework=["NumPy", "Sentence Transformers", "safetensors"],
     reference="https://huggingface.co/rasgaard/m2v-dfm-large",
     use_instructions=False,
     adapted_from="KennethEnevoldsen/dfm-sentence-encoder-large",

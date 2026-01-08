@@ -1,6 +1,5 @@
 import logging
 from collections import defaultdict
-from collections.abc import Iterable
 from pathlib import Path
 from typing import Any, TypedDict
 
@@ -19,7 +18,7 @@ from sklearn.model_selection import KFold
 from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
 from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import HFSubset, ScoresDict
+from mteb.types import Array, HFSubset, ScoresDict
 from mteb.types.statistics import (
     ImageStatistics,
     LabelStatistics,
@@ -101,9 +100,8 @@ class AbsTaskClassification(AbsTask):
             text: str (for text) or PIL.Image (for image). Column name can be changed via `input_column_name` attribute.
             label: int. Column name can be changed via `label_column_name` attribute.
         evaluator_model: The model to use for evaluation. Can be any sklearn compatible model. Default is `LogisticRegression`.
-            Full details of api in [`SklearnModelProtocol`][mteb._evaluators.sklearn_evaluator.SklearnModelProtocol].
-        samples_per_label: Number of samples per label to use for training the evaluator model. Default is 8.
-        n_experiments: Number of experiments to run. Default is 10.
+       samples_per_label: Number of samples per label to use for training the evaluator model. Default is 8.
+       n_experiments: Number of experiments to run. Default is 10.
         train_split: Name of the split to use for training the evaluator model. Default is "train".
         label_column_name: Name of the column containing the labels. Default is "label".
         input_column_name: Name of the column containing the input data. Default is "text".
@@ -150,6 +148,9 @@ class AbsTaskClassification(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
+        if self.dataset is None:
+            raise RuntimeError("Dataset not loaded.")
+
         if "random_state" in self.evaluator_model.get_params():
             self.evaluator_model = self.evaluator_model.set_params(
                 random_state=self.seed
@@ -186,11 +187,12 @@ class AbsTaskClassification(AbsTask):
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
-        return scores
+
+        return scores  # type: ignore[return-value]
 
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: DatasetDict,
         *,
         encode_kwargs: dict[str, Any],
@@ -199,6 +201,9 @@ class AbsTaskClassification(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
+
         train_split = data_split[self.train_split]
         eval_split = data_split[hf_split]
 
@@ -320,14 +325,14 @@ class AbsTaskClassification(AbsTask):
         train_split: Dataset,
         eval_split: Dataset,
         experiment_num: int,
-        idxs: Iterable[int] | None,
-        test_cache: np.ndarray | None,
+        idxs: list[int] | None,
+        test_cache: Array | None,
         *,
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
-        train_cache: np.ndarray | None = None,
-    ) -> tuple[ClassificationMetrics, list[float], Iterable[int], np.ndarray]:
+        train_cache: Array | None = None,
+    ) -> tuple[ClassificationMetrics, list[float], list[int], Array]:
         train_dataset, idxs, selected_idx = self._undersample_data(
             train_split,
             experiment_num,
@@ -363,7 +368,7 @@ class AbsTaskClassification(AbsTask):
             # ap will be none for non binary classification tasks
             k: (
                 float(np.mean(values))
-                if (values := [s[k] for s in scores if s[k] is not None])
+                if (values := [s[k] for s in scores if s[k] is not None])  # type: ignore[literal-required]
                 else np.nan
             )
             for k in scores[0].keys()
@@ -371,7 +376,7 @@ class AbsTaskClassification(AbsTask):
         logger.info(f"Running {self.metadata.name} - Finished.")
         return FullClassificationMetrics(
             scores_per_experiment=scores,
-            **avg_scores,
+            **avg_scores,  # type: ignore[typeddict-item]
         )
 
     def _calculate_scores(

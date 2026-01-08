@@ -1,3 +1,4 @@
+import logging
 import warnings
 from typing import Any
 
@@ -12,6 +13,8 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 from mteb.types._encoder_io import AudioInput
+
+logger = logging.getLogger(__name__)
 
 COMMON_VOICE_LANGUAGES = [
     "abk-Cyrl",  # Abkhaz
@@ -148,11 +151,11 @@ class MCTCTWrapper(AbsEncoder):
                 outputs = self.model(
                     input_features=feature_inputs.input_features,
                     attention_mask=feature_inputs.attention_mask,
-                    output_hidden_states=True,
+                    output_hidden_states=False,
                     return_dict=True,
                 )
 
-                last_hidden = outputs.hidden_states[-1]
+                last_hidden = outputs.last_hidden_state
 
                 # Apply attention-masked pooling to exclude padding tokens
                 batch_size, hidden_seq_len, hidden_size = last_hidden.shape
@@ -177,6 +180,17 @@ class MCTCTWrapper(AbsEncoder):
                 masked_embeddings = last_hidden * hidden_attention_mask
                 valid_tokens = hidden_attention_mask.sum(dim=1)
                 embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
+
+                # Replace any NaNs with zeros to prevent crashes in downstream classifiers
+                nan_mask = torch.isnan(embeddings)
+                if nan_mask.any():
+                    logger.warning(
+                        f"Found {nan_mask.sum().item()} NaN values in embeddings, replacing with zeros. "
+                        "This may indicate empty or invalid audio samples."
+                    )
+                    embeddings = torch.where(
+                        nan_mask, torch.zeros_like(embeddings), embeddings
+                    )
 
                 all_embeddings.append(embeddings.cpu().detach())
 
