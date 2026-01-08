@@ -225,7 +225,6 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
     if task.metadata.name in (
         "SpeechCommandsZeroshotv0.01",
         "SpeechCommandsZeroshotv0.02",
-        "VoxPopuliGenderClustering",
         "BirdSet",
     ):
         # https://github.com/embeddings-benchmark/mteb/issues/3499
