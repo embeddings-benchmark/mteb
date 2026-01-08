@@ -1,65 +1,6 @@
-from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-
-def _load_data(
-    path: str,
-    splits: str,
-    revision: str | None = None,
-):
-    corpus = {}
-    queries = {}
-    relevant_docs = {}
-
-    for split in splits:
-        query_ds = load_dataset(
-            path,
-            "queries",
-            split=split,
-            revision=revision,
-        )
-        query_ds = query_ds.map(
-            lambda x: {
-                "id": f"query-{split}-{x['query_id']}",
-                "text": x["query"],
-                "modality": "text",
-            },
-            remove_columns=["query_id", "query"],
-        )
-        queries[split] = query_ds
-
-        corpus_ds = load_dataset(
-            path,
-            "corpus",
-            split=split,
-            revision=revision,
-        )
-        corpus_ds = corpus_ds.map(
-            lambda x: {
-                "id": f"corpus-{split}-{x['corpus_id']}",
-                "modality": "image",
-            },
-            remove_columns=["corpus_id"],
-        )
-        corpus[split] = corpus_ds
-
-        qrels_ds = load_dataset(
-            path,
-            "qrels",
-            split=split,
-            revision=revision,
-        )
-        relevant_docs[split] = {}
-        for row in qrels_ds:
-            qid = f"query-{split}-{row['query_id']}"
-            did = f"corpus-{split}-{row['corpus_id']}"
-            if qid not in relevant_docs[split]:
-                relevant_docs[split][qid] = {}
-            relevant_docs[split][qid][did] = int(row["score"])
-
-    return corpus, queries, relevant_docs
 
 
 class KoVidore2CybersecurityRetrieval(AbsTaskRetrieval):
@@ -68,8 +9,8 @@ class KoVidore2CybersecurityRetrieval(AbsTaskRetrieval):
         description="Retrieve associated pages according to questions. This dataset, Cybersecurity, is a corpus of technical reports on cyber threat trends and security incident responses in Korea, intended for complex-document understanding tasks.",
         reference="https://github.com/whybe-choi/kovidore-data-generator",
         dataset={
-            "path": "whybe-choi/kovidore-v2-cybersecurity-beir",
-            "revision": "006dcb0e8f63c9736687cb36e725769c903054b0",
+            "path": "whybe-choi/kovidore-v2-cybersecurity-mteb",
+            "revision": "577d7c45f79d8eb4e7584db3990f91daa7e47956",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -95,15 +36,6 @@ class KoVidore2CybersecurityRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
-
-    def load_data(self) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
 
 
 class KoVidore2EconomicRetrieval(AbsTaskRetrieval):
@@ -112,8 +44,8 @@ class KoVidore2EconomicRetrieval(AbsTaskRetrieval):
         description="Retrieve associated pages according to questions. This dataset, Economic trends, is a corpus of periodic reports on major economic indicators in Korea, intended for complex-document understanding tasks.",
         reference="https://github.com/whybe-choi/kovidore-data-generator",
         dataset={
-            "path": "whybe-choi/kovidore-v2-economic-beir",
-            "revision": "8400656ad1e90e7662d7cda44628eaa2d29ea8d8",
+            "path": "whybe-choi/kovidore-v2-economic-mteb",
+            "revision": "0189c26211290a902cd9d41a0db932808a54c0a8",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -139,15 +71,6 @@ class KoVidore2EconomicRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
-
-    def load_data(self) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
 
 
 class KoVidore2EnergyRetrieval(AbsTaskRetrieval):
@@ -156,8 +79,8 @@ class KoVidore2EnergyRetrieval(AbsTaskRetrieval):
         description="Retrieve associated pages according to questions. This dataset, Energy, is a corpus of reports on energy market trends, policy planning, and industry statistics, intended for complex-document understanding tasks.",
         reference="https://github.com/whybe-choi/kovidore-data-generator",
         dataset={
-            "path": "whybe-choi/kovidore-v2-energy-beir",
-            "revision": "17fea125be86500c0d7891967ca0e4ada14fbe0d",
+            "path": "whybe-choi/kovidore-v2-energy-mteb",
+            "revision": "f967fa70b5cf287d6d39ec16520786cb78e971a4",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -183,15 +106,6 @@ class KoVidore2EnergyRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
-
-    def load_data(self) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
 
 
 class KoVidore2HrRetrieval(AbsTaskRetrieval):
@@ -200,8 +114,8 @@ class KoVidore2HrRetrieval(AbsTaskRetrieval):
         description="Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports on workforce outlook and employment policy in korea, intended for complex-document understanding tasks.",
         reference="https://github.com/whybe-choi/kovidore-data-generator",
         dataset={
-            "path": "whybe-choi/kovidore-v2-hr-beir",
-            "revision": "0641db2d66968538823af3a847257ee6b813c57e",
+            "path": "whybe-choi/kovidore-v2-hr-mteb",
+            "revision": "d9432c782a9a3e2eed064f6fac08b4c967d92b99",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -227,12 +141,3 @@ class KoVidore2HrRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
-
-    def load_data(self) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
