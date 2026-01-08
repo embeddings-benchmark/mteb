@@ -398,7 +398,7 @@ class ModelMeta(BaseModel):
         )
         meta = cls._from_hub(name, revision, compute_metadata)
         try:
-            first_module = model[0] 
+            first_module = model[0]
             if hasattr(first_module, "auto_model"):
                 auto_model = first_module.auto_model
                 if isinstance(auto_model, PreTrainedModel):
