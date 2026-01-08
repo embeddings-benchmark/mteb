@@ -11,11 +11,13 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
 from mteb.abstasks._statistics_calculation import (
+    calculate_audio_statistics,
     calculate_image_statistics,
     calculate_score_statistics,
     calculate_text_statistics,
 )
 from mteb.types.statistics import (
+    AudioStatistics,
     ImageStatistics,
     ScoreStatistics,
     SplitDescriptiveStatistics,
@@ -31,13 +33,14 @@ class RegressionDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for Regression
 
     Attributes:
-      num_samples: number of samples in the dataset.
-      num_texts_in_train: Number of texts in the train split
+        num_samples: number of samples in the dataset.
+        num_texts_in_train: Number of texts in the train split
 
-      text_statistics: Statistics of texts
-      image_statistics: Statistics of images
+        text_statistics: Statistics of texts
+        image_statistics: Statistics of images
+        audio_statistics: Statistics of audio
 
-      values_statistics: Statistics of values
+        values_statistics: Statistics of values
     """
 
     num_samples: int
@@ -45,6 +48,7 @@ class RegressionDescriptiveStatistics(SplitDescriptiveStatistics):
 
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
+    audio_statistics: AudioStatistics | None
     values_statistics: ScoreStatistics
 
 
@@ -188,17 +192,17 @@ class AbsTaskRegression(AbsTaskClassification):
     ) -> RegressionDescriptiveStatistics:
         train_text = []
         if hf_subset:
-            texts = self.dataset[hf_subset][split][self.input_column_name]
+            inputs = self.dataset[hf_subset][split][self.input_column_name]
             values = self.dataset[hf_subset][split][self.label_column_name]
             if split != self.train_split:
                 train_text = self.dataset[hf_subset][self.train_split][
                     self.input_column_name
                 ]
         elif compute_overall:
-            texts = []
+            inputs = []
             values = []
             for lang_subset in self.metadata.eval_langs:
-                texts.extend(self.dataset[lang_subset][split][self.input_column_name])
+                inputs.extend(self.dataset[lang_subset][split][self.input_column_name])
                 values.extend(self.dataset[lang_subset][split][self.label_column_name])
                 if split != "train":
                     train_text.extend(
@@ -207,26 +211,32 @@ class AbsTaskRegression(AbsTaskClassification):
                         ]
                     )
         else:
-            texts = self.dataset[split][self.input_column_name]
+            inputs = self.dataset[split][self.input_column_name]
             values = self.dataset[split][self.label_column_name]
             if split != "train":
                 train_text = self.dataset[self.train_split][self.input_column_name]
 
         text_statistics = None
         image_statistics = None
+        audio_statistics = None
         num_texts_in_train = None
         if self.metadata.modalities == ["text"]:
-            text_statistics = calculate_text_statistics(texts)
+            text_statistics = calculate_text_statistics(inputs)
             num_texts_in_train = (
-                len(set(texts) & set(train_text)) if split != self.train_split else None
+                len(set(inputs) & set(train_text))
+                if split != self.train_split
+                else None
             )
         elif self.metadata.modalities == ["image"]:
-            image_statistics = calculate_image_statistics(texts)
+            image_statistics = calculate_image_statistics(inputs)
+        elif self.metadata.modalities == ["audio"]:
+            audio_statistics = calculate_audio_statistics(inputs)
 
         return RegressionDescriptiveStatistics(
-            num_samples=len(texts),
+            num_samples=len(inputs),
             num_texts_in_train=num_texts_in_train,
             text_statistics=text_statistics,
             image_statistics=image_statistics,
+            audio_statistics=audio_statistics,
             values_statistics=calculate_score_statistics(values),
         )
