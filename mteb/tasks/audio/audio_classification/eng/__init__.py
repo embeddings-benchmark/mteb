@@ -5,6 +5,7 @@ from .common_language_language_classification import (
     CommonLanguageLanguageClassification,
 )
 from .cremad import CREMAD
+from .expresso import ExpressoExpressiveStyleClassification
 from .fsdd import FSDD
 from .iemocap_emotion import IEMOCAPEmotionClassification
 from .iemocap_gender import IEMOCAPGenderClassification
@@ -24,6 +25,7 @@ __all__ = [
     "CommonLanguageAgeDetection",
     "CommonLanguageGenderDetection",
     "CommonLanguageLanguageClassification",
+    "ExpressoExpressiveStyleClassification",
     "IEMOCAPEmotionClassification",
     "IEMOCAPGenderClassification",
     "LibriCount",
