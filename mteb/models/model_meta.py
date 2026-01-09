@@ -30,7 +30,9 @@ from huggingface_hub.errors import (
     SafetensorsParsingError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
-from transformers import AutoConfig, PreTrainedModel
+from sentence_transformers.models import Transformer
+from torch import nn
+from transformers import AutoConfig
 from typing_extensions import Self
 
 from mteb._helpful_enum import HelpfulStrEnum
@@ -398,14 +400,11 @@ class ModelMeta(BaseModel):
         )
         meta = cls._from_hub(name, revision, compute_metadata)
         try:
-            first_module = model[0]
-            if hasattr(first_module, "auto_model"):
-                auto_model = first_module.auto_model
-                if isinstance(auto_model, PreTrainedModel):
-                    emb = auto_model.get_input_embeddings()
-                    if emb is not None and hasattr(emb, "weight"):
-                        weight_shape = emb.weight.shape
-                        meta.n_embedding_parameters = int(np.prod(weight_shape))
+            first = model[0]
+
+            if isinstance(first, Transformer):
+                emb = first.auto_model.get_input_embeddings()
+                meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
         except Exception as e:
             logger.warning(f"Could not calculate embedding parameters for {name}: {e}")
         meta.revision = model.model_card_data.base_model_revision or meta.revision
@@ -480,11 +479,10 @@ class ModelMeta(BaseModel):
 
         meta = cls._from_hub(model.model.name_or_path, revision, compute_metadata)
         try:
-            if isinstance(model.model, PreTrainedModel):
-                emb = model.model.get_input_embeddings()
-                if emb is not None and hasattr(emb, "weight"):
-                    weight_shape = emb.weight.shape
-                    meta.n_embedding_parameters = int(np.prod(weight_shape))
+            emb = model.model.get_input_embeddings()
+
+            if isinstance(emb, nn.Embedding):
+                meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
         except Exception as e:
             logger.warning(
                 f"Could not calculate embedding parameters for {model.model.name_or_path}: {e}"
