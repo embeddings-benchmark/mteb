@@ -303,7 +303,7 @@ class ResultCache:
         Args:
             branch: Branch name to download from (default: "cached-data")
             filename: Name of the cached results file (default: "__cached_results.json.gz")
-            output_path: Where to save the file. If None, uses mteb/leaderboard/__cached_results.json
+            output_path: Where to save the file. If None, uses {cache_path}/leaderboard/__cached_results.json
             remote: Base URL of the results repository
             timeout: Request timeout in seconds (default: 60)
             max_size_mb: Maximum allowed file size in megabytes (default: 500)
@@ -330,10 +330,8 @@ class ResultCache:
             ... )
         """
         if output_path is None:
-            # Default to saving in mteb/leaderboard/__cached_results.json
-            # Get the mteb package directory (parent of this file)
-            mteb_package_dir = Path(__file__).parent
-            output_path = mteb_package_dir / "leaderboard" / "__cached_results.json"
+            # Default to saving in {cache_path}/leaderboard/__cached_results.json
+            output_path = self.cache_path / "leaderboard" / "__cached_results.json"
 
         # Extract repository owner and name from the remote URL
         # e.g., "https://github.com/embeddings-benchmark/results" -> "embeddings-benchmark/results"
@@ -456,10 +454,7 @@ class ResultCache:
         """
         # Default quick cache path
         if quick_cache_path is None:
-            mteb_package_dir = Path(__file__).parent
-            quick_cache_path = (
-                mteb_package_dir / "leaderboard" / "__cached_results.json"
-            )
+            quick_cache_path = self.cache_path / "leaderboard" / "__cached_results.json"
 
         # If rebuild=True, skip directly to full repository rebuild
         if rebuild:

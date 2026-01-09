@@ -34,6 +34,14 @@ Example with all options:
 mteb leaderboard --cache-path results --port 8080 --share --rebuild
 ```
 
+#### Cache Directory Structure
+
+The leaderboard stores data in the cache directory (default: `~/.cache/mteb` or set via `MTEB_CACHE` environment variable):
+
+- `results/` - Your locally run evaluation results
+- `remote/` - Cloned results from the [results repository](https://github.com/embeddings-benchmark/results)
+- `leaderboard/` - Pre-computed leaderboard cache for fast loading
+
 #### Using Make Command
 
 Alternatively, you can use the Makefile:
