@@ -117,7 +117,7 @@ def _load_jam_alt_data(
     return corpus, queries, relevant_docs
 
 
-class JamAltArtist(AbsTaskRetrieval):
+class JamAltArtistA2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JamAltArtistA2ARetrieval",
         description="Given audio clip of a song (query), retrieve all songs from the same artist in the Jam-Alt-Lines dataset",
@@ -127,7 +127,7 @@ class JamAltArtist(AbsTaskRetrieval):
             "revision": "11dc96be3bbefd4eb49a467825d7d3d3808105d7",
             "name": "pure",
         },
-        type="Any2AnyMultilingualRetrieval",
+        type="Any2AnyRetrieval",
         category="a2a",
         modalities=["audio"],
         eval_splits=["test"],
@@ -178,7 +178,7 @@ Music Information Retrieval Conference},
         self.data_loaded = True
 
 
-class JamAltLyricsT2A(AbsTaskRetrieval):
+class JamAltLyricT2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JamAltLyricT2ARetrieval",
         description="From textual lyrics (query), retrieve corresponding audio clips of songs from the Jam-Alt-Lines dataset",
@@ -188,7 +188,7 @@ class JamAltLyricsT2A(AbsTaskRetrieval):
             "revision": "11dc96be3bbefd4eb49a467825d7d3d3808105d7",
             "name": "pure",
         },
-        type="Any2AnyMultilingualRetrieval",
+        type="Any2AnyRetrieval",
         category="t2a",
         modalities=["text", "audio"],
         eval_splits=["test"],
@@ -236,7 +236,7 @@ Music Information Retrieval Conference},
         self.data_loaded = True
 
 
-class JamAltLyricsA2T(AbsTaskRetrieval):
+class JamAltLyricA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JamAltLyricA2TRetrieval",
         description="From audio clips of songs (query), retrieve corresponding textual lyric from the Jam-Alt-Lines dataset",
@@ -246,7 +246,7 @@ class JamAltLyricsA2T(AbsTaskRetrieval):
             "revision": "11dc96be3bbefd4eb49a467825d7d3d3808105d7",
             "name": "pure",
         },
-        type="Any2AnyMultilingualRetrieval",
+        type="Any2AnyRetrieval",
         category="a2t",
         modalities=["text", "audio"],
         eval_splits=["test"],

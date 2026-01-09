@@ -17,9 +17,9 @@ from .macs import MACSA2TRetrieval, MACST2ARetrieval
 from .multilingual import (
     AudioCapsA2TRetrieval,
     AudioCapsT2ARetrieval,
-    JamAltArtist,
-    JamAltLyricsA2T,
-    JamAltLyricsT2A,
+    JamAltArtistA2ARetrieval,
+    JamAltLyricA2TRetrieval,
+    JamAltLyricT2ARetrieval,
 )
 from .spoken_s_qu_ad import SpokenSQuADT2ARetrieval
 from .zxx import (
@@ -54,9 +54,9 @@ __all__ = [
     "HiFiTTST2ARetrieval",
     "JLCorpusA2TRetrieval",
     "JLCorpusT2ARetrieval",
-    "JamAltArtist",
-    "JamAltLyricsA2T",
-    "JamAltLyricsT2A",
+    "JamAltArtistA2ARetrieval",
+    "JamAltLyricA2TRetrieval",
+    "JamAltLyricT2ARetrieval",
     "LibriTTSA2TRetrieval",
     "LibriTTST2ARetrieval",
     "MACSA2TRetrieval",

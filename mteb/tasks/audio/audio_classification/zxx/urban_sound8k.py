@@ -2,7 +2,7 @@ from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class UrbanSound8kZeroshotClassification(AbsTaskClassification):
+class UrbanSound8kClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="UrbanSound8k",
         description="Environmental Sound Classification Dataset.",
