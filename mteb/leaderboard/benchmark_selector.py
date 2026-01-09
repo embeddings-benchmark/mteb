@@ -57,6 +57,7 @@ GP_BENCHMARK_ENTRIES = [
                         "MAEB(audio, lite)",
                         "MAEB(audio, extended)",
                         "MAEB(audio-text, lite)",
+                        "MAEB(audio-text, extended)",
                         "MAEB",
                     ]
                 ),

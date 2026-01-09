@@ -2962,6 +2962,40 @@ MAEB_AUDIO_TEXT_LITE = Benchmark(
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
+            # Any2AnyRetrieval - Text to Audio (13)
+            "AudioCapsT2ARetrieval",
+            "AudioSetStrongT2ARetrieval",
+            "CMUArcticT2ARetrieval",
+            "EmoVDBT2ARetrieval",
+            "GigaSpeechT2ARetrieval",
+            "HiFiTTST2ARetrieval",
+            "JLCorpusT2ARetrieval",
+            "JamAltLyricT2ARetrieval",
+            "LibriTTST2ARetrieval",
+            "MACST2ARetrieval",
+            "MusicCapsT2ARetrieval",
+            "SpokenSQuADT2ARetrieval",
+            "UrbanSound8KT2ARetrieval",
+            # AudioZeroshotClassification (4)
+            "ESC50_Zeroshot",
+            "RavdessZeroshot",
+            "SpeechCommandsZeroshotv0.02",
+            "UrbanSound8kZeroshot",
+        ]
+    ),
+    description="""MAEB(audio-text, lite) is a lightweight benchmark for audio-text cross-modal models with 17 tasks optimized for maximum model coverage (10 models). Tasks span 2 task types: text-to-audio retrieval (13) and zero-shot classification (4). Models include CLAP variants, wav2clip, and speecht5.""",
+    reference=None,
+    citation="",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+)
+
+MAEB_AUDIO_TEXT_EXTENDED = Benchmark(
+    name="MAEB(audio-text, extended)",
+    display_name="Audio-Text, Extended",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    tasks=get_tasks(
+        tasks=[
+            # === From Lite ===
             # Any2AnyRetrieval - Audio to Text (13)
             "AudioCapsA2TRetrieval",
             "AudioSetStrongA2TRetrieval",
@@ -2995,9 +3029,19 @@ MAEB_AUDIO_TEXT_LITE = Benchmark(
             "SpeechCommandsZeroshotv0.01",
             "SpeechCommandsZeroshotv0.02",
             "UrbanSound8kZeroshot",
+            # === Extended additions ===
+            # Audio captioning (2)
+            "ClothoA2TRetrieval",
+            "ClothoT2ARetrieval",
+            # Multilingual - Fleurs (2) - 102 languages
+            "FleursA2TRetrieval",
+            "FleursT2ARetrieval",
+            # Multilingual - CommonVoice 21 (2) - 82+ languages
+            "CommonVoice21A2TRetrieval",
+            "CommonVoice21T2ARetrieval",
         ]
     ),
-    description="""MAEB(audio-text, lite) is a benchmark for audio-text cross-modal models with 30 tasks supporting 10 models with complete results. Tasks span 2 task types: audio-text retrieval (25) and zero-shot classification (5). Models include CLAP variants, wav2clip, and speecht5.""",
+    description="""MAEB(audio-text, extended) is an extended benchmark for audio-text cross-modal models with 36 tasks. Includes all 30 tasks from the lite version plus Clotho (audio captioning), Fleurs (102 languages), and CommonVoice 21 (82+ languages) for comprehensive multilingual coverage. Task types: audio-text retrieval (31) and zero-shot classification (5).""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
