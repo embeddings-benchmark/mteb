@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import cast
 
 import requests
+from pydantic import ValidationError
 
 import mteb
 from mteb.abstasks import AbsTask
@@ -623,6 +624,7 @@ class ResultCache:
         include_remote: bool = True,
         validate_and_filter: bool = False,
         only_main_score: bool = False,
+        fill_missing_scores: bool = False,
     ) -> BenchmarkResults:
         """Loads the results from the cache directory and returns a BenchmarkResults object.
 
@@ -637,6 +639,7 @@ class ResultCache:
             validate_and_filter: If True it will validate that the results object for the task contains the correct splits and filter out
                 splits from the results object that are not default in the task metadata.
             only_main_score: If True, only the main score will be loaded.
+            fill_missing_scores: If True, missing scores will be filled with 0. Will be used only if validate_and_filter is True.
 
         Returns:
             A BenchmarkResults object containing the results for the specified models and tasks.
@@ -684,9 +687,9 @@ class ResultCache:
                 task_instance = task_names[task_result.task_name]
                 try:
                     task_result = task_result.validate_and_filter_scores(
-                        task=task_instance
+                        task=task_instance, fill_missing_scores=fill_missing_scores
                     )
-                except Exception as e:
+                except ValidationError as e:
                     logger.info(
                         f"Validation failed for {task_result.task_name} in {model_name} {revision}: {e}"
                     )
