@@ -42,7 +42,7 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
 """,
     )
 
-    evaluator = MultiOutputClassifier(estimator=LogisticRegression())
+    evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())
     input_column_name: str = "audio"
     label_column_name: str = "labels"
     samples_per_label: int = 21

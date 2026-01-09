@@ -714,6 +714,42 @@ class TaskMetadata(BaseModel):
             "Intent classification": [
                 "intent-classification",
             ],
+            "Accent identification": [],
+            "Environment Sound Classification": [],
+            "Gunshot Audio Classification": [],
+            "Keyword Spotting": [],
+            "Instrument Source Classification": [],
+            "Music Genre Classification": [],
+            "Music Instrument Recognition": [],
+            "Spoken Language Identification": [],
+            "Stroke Classification of Musical Instrument": [],
+            "Tonic Classification of Musical Instrument": [],
+            "Speaker Count Identification": [],
+            "Species Classification": [],
+            "Spoken Digit Classification": [],
+            "Gender Clustering": [],
+            "Vocal Sound Classification": [],
+            "Music Clustering": [],
+            "Accent Clustering": [],
+            "Sentiment Clustering": [],
+            "Emotion Clustering": ["audio-emotion-recognition"],
+            "Sentiment Analysis": [],
+            "Vehicle Clustering": [],
+            "Environment Sound Clustering": [],
+            "Environment Sound Reranking": [],
+            "Emotion Reranking": ["audio-emotion-recognition"],
+            "Music Genre Reranking": [],
+            "Gender Classification": [],
+            "Age Classification": [],
+            "Song Lyrics Retrieval": [],
+            "Natural Sound Retrieval": [],
+            "Music Caption Retrieval": [],
+            "Speech Transcription Retrieval": [],
+            "Emotional Speech Retrieval": ["audio-emotion-recognition"],
+            "Environment Sound Retrieval": [],
+            "Speech Retrieval": [],
+            "Question Answering Retrieval": [],
+            "Reading Comprehension": [],
         }
         subtypes = []
         if self.task_subtypes:
@@ -740,7 +776,6 @@ class TaskMetadata(BaseModel):
             "InstructionReranking": ["text-ranking"],
             # Image
             "Any2AnyMultiChoice": ["visual-question-answering"],
-            "Any2AnyRetrieval": ["visual-document-retrieval"],
             "Any2AnyMultilingualRetrieval": ["visual-document-retrieval"],
             "VisionCentricQA": ["visual-question-answering"],
             "ImageClustering": ["image-feature-extraction"],
@@ -751,11 +786,24 @@ class TaskMetadata(BaseModel):
             "VisualSTS(multi)": ["other"],
             "ZeroShotClassification": ["zero-shot-classification"],
             "Compositionality": ["other"],
+            # audio
+            "AudioClustering": ["audio-classification"],
+            "AudioMultilabelClassification": ["audio-classification"],
+            "AudioReranking": ["other"],
+            "AudioZeroshotClassification": ["other"],
+            "AudioClassification": ["audio-classification"],
+            "AudioCrossFoldClassification": ["audio-classification"],
+            "AudioPairClassification": ["audio-classification"],
         }
         if self.type == "ZeroShotClassification":
             if self.modalities == ["image"]:
                 return ["zero-shot-image-classification"]
             return ["zero-shot-classification"]
+
+        if self.type == "Any2AnyRetrieval":
+            if self.modalities == ["image"]:
+                return ["visual-document-retrieval"]
+            return ["other"]
 
         return mteb_task_type_to_datasets[self.type]
 
@@ -767,6 +815,10 @@ class TaskMetadata(BaseModel):
             dataset_type.extend(["image-to-text", "text-to-image"])
         if self.category in ["it2t", "it2i", "t2it", "i2it", "it2it"]:
             dataset_type.extend(["image-text-to-text"])
+        if self.category in ["a2a", "at2a", "a2at", "at2at"]:
+            dataset_type.append("audio-to-audio")
+        if self.category in ["a2t", "t2a", "at2t", "t2at", "at2at", "a2at"]:
+            dataset_type.extend(["text-to-audio"])
         return dataset_type
 
     def _hf_languages(self) -> list[str]:

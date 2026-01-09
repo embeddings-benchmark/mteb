@@ -49,7 +49,7 @@ Xavier Serra},
 """,
     )
 
-    evaluator = MultiOutputClassifier(estimator=LogisticRegression())
+    evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())
     input_column_name: str = "audio"
     label_column_name: str = "sound"
     samples_per_label: int = 8
