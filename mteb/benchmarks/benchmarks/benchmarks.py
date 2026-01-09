@@ -2732,7 +2732,6 @@ JMTEB_LITE_V1 = Benchmark(
 KOVIDORE_V2 = Benchmark(
     name="KoViDoRe(v2)",
     display_name="KoViDoRe v2",
-    language_view=["kor-Hang"],
     tasks=get_tasks(
         tasks=[
             "KoVidore2CybersecurityRetrieval",
