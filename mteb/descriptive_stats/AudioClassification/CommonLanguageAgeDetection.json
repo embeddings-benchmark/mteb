@@ -1,0 +1,97 @@
+{
+    "test": {
+        "num_samples": 2000,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 8685.4908125,
+            "min_duration_seconds": 0.888,
+            "average_duration_seconds": 4.34274540625,
+            "max_duration_seconds": 10.368,
+            "unique_audios": 2000,
+            "average_sampling_rate": 48000.0,
+            "sampling_rates": {
+                "48000": 2000
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 7,
+            "labels": {
+                "6": {
+                    "count": 839
+                },
+                "4": {
+                    "count": 90
+                },
+                "1": {
+                    "count": 232
+                },
+                "5": {
+                    "count": 737
+                },
+                "0": {
+                    "count": 92
+                },
+                "3": {
+                    "count": 6
+                },
+                "2": {
+                    "count": 4
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 2000,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 9371.2378125,
+            "min_duration_seconds": 0.864,
+            "average_duration_seconds": 4.68561890625,
+            "max_duration_seconds": 10.464,
+            "unique_audios": 2000,
+            "average_sampling_rate": 48000.0,
+            "sampling_rates": {
+                "48000": 2000
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 8,
+            "labels": {
+                "5": {
+                    "count": 184
+                },
+                "7": {
+                    "count": 920
+                },
+                "6": {
+                    "count": 549
+                },
+                "1": {
+                    "count": 193
+                },
+                "4": {
+                    "count": 50
+                },
+                "0": {
+                    "count": 99
+                },
+                "3": {
+                    "count": 4
+                },
+                "2": {
+                    "count": 1
+                }
+            }
+        }
+    }
+}
