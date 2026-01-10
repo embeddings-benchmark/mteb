@@ -432,42 +432,41 @@ class ResultCache:
 
     def load_from_cache(
         self,
-        quick_cache_path: Path | None = None,
+        cache_filename: str = "__cached_results.json",
         rebuild: bool = False,
     ) -> BenchmarkResults:
         """Load benchmark results using the best available strategy.
 
         Args:
-            quick_cache_path: Path to local JSON cache file. If None, uses default location.
+            cache_filename: Name of the cache file. The full path will be constructed as
+                {cache_path}/leaderboard/{cache_filename}.
             rebuild: If True, force a full rebuild from the results repository, bypassing any
                      pre-computed JSON cache.
 
         Strategy:
-            1. If rebuild=False and local cache exists at quick_cache_path → load and return
+            1. If rebuild=False and local cache exists at cache_path → load and return
             2. If rebuild=False, try downloading pre-computed cache from 'cached-data' branch
-               → save to quick_cache_path and return
+               → save to cache_path and return
             3. Fallback (or if rebuild=True): clone the full results repository, build from
-               individual model files, call results.to_disk(quick_cache_path), and return.
+               individual model files, call results.to_disk(cache_path), and return.
 
         Returns:
             BenchmarkResults ready for leaderboard display
         """
-        # Default quick cache path
-        if quick_cache_path is None:
-            quick_cache_path = self.cache_path / "leaderboard" / "__cached_results.json"
+        cache_path = self.cache_path / "leaderboard" / cache_filename
 
         # If rebuild=True, skip directly to full repository rebuild
         if rebuild:
             logger.info(
                 "Rebuild requested, forcing full repository clone and rebuild..."
             )
-            return self._rebuild_from_full_repository(quick_cache_path)
+            return self._rebuild_from_full_repository(cache_path)
 
         # Strategy 1: Try loading from existing local quick cache
-        if quick_cache_path.exists():
-            logger.info(f"Loading existing quick cache from {quick_cache_path}")
+        if cache_path.exists():
+            logger.info(f"Loading existing quick cache from {cache_path}")
             try:
-                return BenchmarkResults.from_disk(quick_cache_path)
+                return BenchmarkResults.from_disk(cache_path)
             except Exception as e:
                 logger.warning(
                     f"Failed to load quick cache: {e}. Trying other strategies..."
@@ -479,7 +478,7 @@ class ResultCache:
                 "Attempting to download pre-computed cache from cached-data branch..."
             )
             downloaded_path = self._download_cached_results_from_branch(
-                output_path=quick_cache_path
+                output_path=cache_path
             )
             logger.info(f"Downloaded cache to {downloaded_path}")
             return BenchmarkResults.from_disk(downloaded_path)
@@ -488,7 +487,7 @@ class ResultCache:
 
         # Strategy 3: Fallback to full repository clone
         logger.info("Falling back to full repository clone and rebuild...")
-        return self._rebuild_from_full_repository(quick_cache_path)
+        return self._rebuild_from_full_repository(cache_path)
 
     def _rebuild_from_full_repository(self, quick_cache_path: Path) -> BenchmarkResults:
         """Clone/pull the full results repository and build BenchmarkResults from individual files.

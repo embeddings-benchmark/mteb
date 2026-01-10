@@ -14,40 +14,44 @@ class TestLoadFromCache:
     def test_rebuild_flag_forces_full_rebuild(self, tmp_path):
         """Test rebuild=True bypasses cache and forces rebuild."""
         cache = ResultCache(cache_path=tmp_path)
-        quick_cache_path = tmp_path / "quick_cache.json"
-        quick_cache_path.write_text('{"test": "should be ignored"}')
+        cache_filename = "test_cache.json"
+        expected_path = tmp_path / "leaderboard" / cache_filename
+        expected_path.parent.mkdir(parents=True, exist_ok=True)
+        expected_path.write_text('{"test": "should be ignored"}')
 
         with patch.object(cache, "_rebuild_from_full_repository") as mock_rebuild:
             mock_result = MagicMock(spec=BenchmarkResults)
             mock_rebuild.return_value = mock_result
-            result = cache.load_from_cache(quick_cache_path, rebuild=True)
-            mock_rebuild.assert_called_once_with(quick_cache_path)
+            result = cache.load_from_cache(cache_filename, rebuild=True)
+            mock_rebuild.assert_called_once_with(expected_path)
             assert result == mock_result
 
     def test_loading_strategies_in_order(self, tmp_path):
         """Test the 3-tier loading strategy: local -> download -> rebuild."""
         cache = ResultCache(cache_path=tmp_path)
-        quick_cache_path = tmp_path / "quick_cache.json"
+        cache_filename = "test_cache.json"
+        expected_path = tmp_path / "leaderboard" / cache_filename
+        expected_path.parent.mkdir(parents=True, exist_ok=True)
         mock_result = MagicMock(spec=BenchmarkResults)
 
         # Test 1: Load from existing local cache
-        quick_cache_path.write_text("{}")
+        expected_path.write_text("{}")
         with patch("mteb.results.BenchmarkResults.from_disk") as mock_from_disk:
             mock_from_disk.return_value = mock_result
-            result = cache.load_from_cache(quick_cache_path, rebuild=False)
-            mock_from_disk.assert_called_once_with(quick_cache_path)
+            result = cache.load_from_cache(cache_filename, rebuild=False)
+            mock_from_disk.assert_called_once_with(expected_path)
             assert result == mock_result
 
         # Test 2: Download from cached-data branch when local doesn't exist
-        quick_cache_path.unlink()  # Remove local file
+        expected_path.unlink()  # Remove local file
         with (
             patch.object(cache, "_download_cached_results_from_branch") as mock_dl,
             patch("mteb.results.BenchmarkResults.from_disk") as mock_from_disk,
         ):
-            mock_dl.return_value = quick_cache_path
+            mock_dl.return_value = expected_path
             mock_from_disk.return_value = mock_result
-            result = cache.load_from_cache(quick_cache_path, rebuild=False)
-            mock_dl.assert_called_once_with(output_path=quick_cache_path)
+            result = cache.load_from_cache(cache_filename, rebuild=False)
+            mock_dl.assert_called_once_with(output_path=expected_path)
             assert result == mock_result
 
         # Test 3: Fallback to full rebuild when download fails
@@ -57,15 +61,17 @@ class TestLoadFromCache:
         ):
             mock_dl.side_effect = Exception("Download failed")
             mock_rebuild.return_value = mock_result
-            result = cache.load_from_cache(quick_cache_path, rebuild=False)
-            mock_rebuild.assert_called_once_with(quick_cache_path)
+            result = cache.load_from_cache(cache_filename, rebuild=False)
+            mock_rebuild.assert_called_once_with(expected_path)
             assert result == mock_result
 
     def test_corrupt_cache_triggers_fallback(self, tmp_path):
         """Test that corrupt cache files trigger next strategy."""
         cache = ResultCache(cache_path=tmp_path)
-        quick_cache_path = tmp_path / "quick_cache.json"
-        quick_cache_path.write_text("invalid json {{{")
+        cache_filename = "test_cache.json"
+        expected_path = tmp_path / "leaderboard" / cache_filename
+        expected_path.parent.mkdir(parents=True, exist_ok=True)
+        expected_path.write_text("invalid json {{{")
 
         with (
             patch("mteb.results.BenchmarkResults.from_disk") as mock_from_disk,
@@ -76,8 +82,8 @@ class TestLoadFromCache:
             mock_dl.side_effect = Exception("Download failed")
             mock_result = MagicMock(spec=BenchmarkResults)
             mock_rebuild.return_value = mock_result
-            result = cache.load_from_cache(quick_cache_path, rebuild=False)
-            mock_rebuild.assert_called_once_with(quick_cache_path)
+            result = cache.load_from_cache(cache_filename, rebuild=False)
+            mock_rebuild.assert_called_once_with(expected_path)
             assert result == mock_result
 
 
