@@ -62,5 +62,4 @@ class ExpressoExpressiveStyleClassification(AbsTaskClassification):
                 example["style_id"] = label2id[example["style"]]
                 return example
 
-            print(f"Converting style labels to numeric IDs for split '{split}'...")
             self.dataset[split] = self.dataset[split].map(add_style_id)
