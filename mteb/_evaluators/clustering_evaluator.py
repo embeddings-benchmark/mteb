@@ -1,5 +1,4 @@
 import logging
-from typing import Any
 
 from datasets import Dataset
 from sklearn import cluster
@@ -7,6 +6,7 @@ from sklearn import cluster
 from mteb._create_dataloaders import create_dataloader
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import EncoderProtocol
+from mteb.types import EncodeKwargs
 
 from .evaluator import Evaluator
 
@@ -38,7 +38,7 @@ class ClusteringEvaluator(Evaluator):
         self,
         model: EncoderProtocol,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> list[int]:
         data_loader = create_dataloader(
             self.dataset,
