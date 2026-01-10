@@ -2,7 +2,10 @@ from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import (
+    CrossEncoderWrapper,
+    sentence_transformers_loader,
+)
 
 mixedbread_training_data = {
     # from correspondence:
@@ -121,4 +124,43 @@ mxbai_embed_xsmall_v1 = ModelMeta(
   year={2024},
   url={https://www.mixedbread.ai/blog/mxbai-embed-xsmall-v1},
 }""",
+)
+
+mxbai_rerank_large_v1 = ModelMeta(
+    loader=CrossEncoderWrapper,
+    loader_kwargs={},
+    name="mixedbread-ai/mxbai-rerank-large-v1",
+    revision="98f655841d5caf0b16eaff79c2b4ca109d920d17",
+    release_date="2024-02-29",
+    languages=["eng-Latn"],
+    n_parameters=435062785,
+    memory_usage_mb=830.0,
+    max_tokens=512.0,
+    embed_dim=1024,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=[
+        "PyTorch",
+        "Sentence Transformers",
+        "Transformers",
+        "ONNX",
+        "safetensors",
+    ],
+    reference="https://huggingface.co/mixedbread-ai/mxbai-rerank-large-v1",
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    adapted_from=None,
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["cross-encoder"],
+    citation="""@online{rerank2024mxbai,
+  title={Boost Your Search With The Crispy Mixedbread Rerank Models},
+  author={Aamir Shakir and Darius Koenig and Julius Lipp and Sean Lee},
+  year={2024},
+  url={https://www.mixedbread.ai/blog/mxbai-rerank-v1},
+}""",
+    contacts=None,
 )
