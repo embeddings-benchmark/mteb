@@ -9,7 +9,7 @@ from sklearn import metrics
 
 from mteb._evaluators import ClusteringEvaluator
 from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import ScoresDict
+from mteb.types import EncodeKwargs, ScoresDict
 from mteb.types.statistics import (
     ImageStatistics,
     LabelStatistics,
@@ -83,7 +83,7 @@ class AbsTaskClusteringLegacy(AbsTask):
         model: MTEBModels,
         data_split: Dataset,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,

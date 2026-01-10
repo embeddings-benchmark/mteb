@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.6.5"
+version = "2.6.7"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -44,8 +44,6 @@ dependencies = [
     "pytrec-eval-terrier>=0.5.6",
     "pydantic>=2.0.0",
     "polars>=0.20.22",
-    "torch<2.9.0; python_full_version < '3.14'",
-    "torch>=2.9.0; python_full_version >= '3.14'",
 ]
 
 
@@ -320,21 +318,18 @@ override-dependencies = [
     "salesforce-lavis", # salesforce-lavis is not valid with sentence transformers >=3.0.0
 ]
 conflicts = [
-    [{ extra = "timm" }, { extra = "blip2" }],
-    [{ extra = "llm2vec" }, { extra = "model2vec" }],
-    [{ extra = "llm2vec" }, { extra = "pylate" }], # conflicting versions of transformers
-    [{ extra = "llm2vec" }, { extra = "llama-embed-nemotron" }], # conflicting versions of transformers
-    [{ extra = "colpali-engine" }, { extra = "pylate" }],
-    [{ extra = "colpali-engine" }, { extra = "llm2vec" }],
-    [{ extra = "colpali-engine" }, { extra = "llama-embed-nemotron" }], # conflicting version of transformers
-    [{ extra = "colqwen3" }, { extra = "pylate" }], # conflicting versions of transformers
-    [{ extra = "colqwen3" }, { extra = "llm2vec" }], # conflicting versions of transformers
-    [{ extra = "colqwen3" }, { extra = "llama-embed-nemotron" }], # conflicting versions of transformers
-    [{ extra = "jina-v4" }, { extra = "llm2vec" }],
-    [{ extra = "jina-v4" }, { extra = "llama-embed-nemotron" }], # conflicting versions of transformers
-    [{ extra = "sauerkrautlm-colpali" }, { extra = "pylate" }],
-    [{ extra = "sauerkrautlm-colpali" }, { extra = "llm2vec" }],
-    [{ extra = "sauerkrautlm-colpali" }, { extra = "llama-embed-nemotron" }],
+    [
+        { extra = "timm" },
+        { extra = "blip2" },
+        { extra = "llm2vec" },
+        { extra = "model2vec" },
+        { extra = "pylate" }, # conflicting versions of transformers
+        { extra = "llama-embed-nemotron" }, # conflicting versions of transformers
+        { extra = "colpali-engine" },
+        { extra = "colqwen3" },
+        { extra = "jina-v4" },
+        { extra = "sauerkrautlm-colpali" },
+    ]
 ]
 
 [tool.uv.extra-build-dependencies]

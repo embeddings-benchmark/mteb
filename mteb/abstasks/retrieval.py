@@ -25,6 +25,7 @@ from mteb.models import (
     SearchProtocol,
 )
 from mteb.types import (
+    EncodeKwargs,
     HFSubset,
     QueryDatasetType,
     RelevantDocumentsType,
@@ -184,17 +185,17 @@ class AbsTaskRetrieval(AbsTask):
             return queries, corpus
 
         if self.metadata.is_multilingual:
-            for subset in self.queries:
-                for split in self.queries[subset]:
-                    queries = self.queries[subset][split]
-                    corpus = self.corpus[subset][split]
+            for subset in self.queries:  # type: ignore[attr-defined]
+                for split in self.queries[subset]:  # type: ignore[attr-defined]
+                    queries = self.queries[subset][split]  # type: ignore[attr-defined]
+                    corpus = self.corpus[subset][split]  # type: ignore[attr-defined]
 
                     (
                         self.dataset[subset][split]["queries"],
                         self.dataset[subset][split]["corpus"],
                     ) = _process_split(queries, corpus)
 
-                    self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
+                    self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[  # type: ignore[attr-defined]
                         subset
                     ][split]
                     if hasattr(self, "instructions"):
@@ -211,15 +212,15 @@ class AbsTaskRetrieval(AbsTask):
                         ][split]
         else:
             subset = "default"
-            for split in self.queries:
-                queries = self.queries[split]
-                corpus = self.corpus[split]
+            for split in self.queries:  # type: ignore[attr-defined]
+                queries = self.queries[split]  # type: ignore[attr-defined]
+                corpus = self.corpus[split]  # type: ignore[attr-defined]
                 (
                     self.dataset[subset][split]["queries"],
                     self.dataset[subset][split]["corpus"],
                 ) = _process_split(queries, corpus)
 
-                self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
+                self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[  # type: ignore[attr-defined]
                     split
                 ].copy()
                 if hasattr(self, "instructions"):
@@ -235,9 +236,9 @@ class AbsTaskRetrieval(AbsTask):
                         split
                     ].copy()
 
-        del self.queries
-        del self.corpus
-        del self.relevant_docs
+        del self.queries  # type: ignore[attr-defined]
+        del self.corpus  # type: ignore[attr-defined]
+        del self.relevant_docs  # type: ignore[attr-defined]
         if hasattr(self, "instructions"):
             del self.instructions
         if hasattr(self, "top_ranked"):
@@ -283,7 +284,7 @@ class AbsTaskRetrieval(AbsTask):
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
@@ -320,7 +321,7 @@ class AbsTaskRetrieval(AbsTask):
         self,
         model: MTEBModels,
         data_split: RetrievalSplitData,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,

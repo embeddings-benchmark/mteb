@@ -17,7 +17,7 @@ from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.classification_metrics import hamming_score
 from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
 from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import Array
+from mteb.types import Array, EncodeKwargs
 
 from .classification import AbsTaskClassification
 
@@ -83,7 +83,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         model: MTEBModels,
         data_split: DatasetDict,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,

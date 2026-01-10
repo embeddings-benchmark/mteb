@@ -14,7 +14,7 @@ from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import EncoderProtocol
 from mteb.similarity_functions import compute_pairwise_similarity
-from mteb.types import PromptType
+from mteb.types import EncodeKwargs, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -85,7 +85,7 @@ class PairClassificationEvaluator(Evaluator):
     def __call__(
         self,
         model: EncoderProtocol,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> PairClassificationDistances:
         logger.info("Running pair classification - Encoding samples (1/2)")
         embeddings1 = model.encode(
