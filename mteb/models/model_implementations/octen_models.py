@@ -163,6 +163,36 @@ _PREDEFINED_PROMPTS = {
     "German1Retrieval": "Given a query, retrieve relevant passages",
 }
 
+Octen_Embedding_0B6 = ModelMeta(
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template=instruction_template,
+        apply_instruction_to_passages=True,
+        prompts_dict=_PREDEFINED_PROMPTS,
+        max_seq_length=18480,
+        model_kwargs={"torch_dtype": "bfloat16"},
+    ),
+    name="bflhc/Octen-Embedding-0.6B",
+    languages=multilingual_langs,
+    open_weights=True,
+    revision="1a00a4e837bd788f6f8d91bc43201a5e52cf8ef8",
+    release_date="2026-01-10",
+    n_parameters=595776512,
+    memory_usage_mb=1136,
+    embed_dim=1024,
+    max_tokens=32768,
+    license="apache-2.0",
+    reference="https://huggingface.co/bflhc/Octen-Embedding-0.6B",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=training_data,
+    citation=OCTEN_CITATION,
+    adapted_from="Qwen/Qwen3-Embedding-0.6B",
+)
+
 Octen_Embedding_4B = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
