@@ -60,12 +60,13 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""@dataset{google_svq_2024,
-  author = {Google},
-  title = {Simple Voice Questions (SVQ): A Multilingual Audio Dataset},
-  year = {2024},
-  publisher = {Hugging Face},
-  url = {https://huggingface.co/datasets/google/svq},
+        bibtex_citation=r"""
+@inproceedings{heigold2025massive,
+  author = {Georg Heigold and Ehsan Variani and Tom Bagby and Cyril Allauzen and Ji Ma and Shankar Kumar and Michael Riley},
+  booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
+  title = {Massive Sound Embedding Benchmark ({MSEB})},
+  url = {https://openreview.net/forum?id=X0juYgFVng},
+  year = {2025},
 }
 """,
     )
@@ -160,12 +161,13 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""@dataset{google_svq_2024,
-  author = {Google},
-  title = {Simple Voice Questions (SVQ): A Multilingual Audio Dataset},
-  year = {2024},
-  publisher = {Hugging Face},
-  url = {https://huggingface.co/datasets/google/svq},
+        bibtex_citation=r"""
+@inproceedings{heigold2025massive,
+  author = {Georg Heigold and Ehsan Variani and Tom Bagby and Cyril Allauzen and Ji Ma and Shankar Kumar and Michael Riley},
+  booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
+  title = {Massive Sound Embedding Benchmark ({MSEB})},
+  url = {https://openreview.net/forum?id=X0juYgFVng},
+  year = {2025},
 }
 """,
     )
