@@ -422,3 +422,12 @@ class TestDownloadCachedResultsFromBranch:
                 max_size_mb=max_size_mb
             )
             assert result_path.exists()
+
+
+def test_result_cache_direct_import() -> None:
+    """Test that ResultCache can be imported directly from mteb module."""
+    # This should work now that ResultCache is exposed in __init__.py
+    cache = mteb.ResultCache(cache_path=test_cache_path)
+    
+    assert isinstance(cache, ResultCache), "Should be able to instantiate ResultCache from mteb.ResultCache"
+    assert cache.cache_path == test_cache_path, "Cache path should be set correctly"
