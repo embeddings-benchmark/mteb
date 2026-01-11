@@ -1,0 +1,553 @@
+model_name,total_params,active_params,input_embedding_params,status
+AITeamVN/Vietnamese_Embedding,567754752,311752704,256002048,success
+Alibaba-NLP/gme-Qwen2-VL-2B-Instruct,2208985600,1975611904,233373696,success
+Alibaba-NLP/gme-Qwen2-VL-7B-Instruct,7746378240,7201380864,544997376,success
+Alibaba-NLP/gte-Qwen1.5-7B-instruct,,,,"skipped, too large"
+Alibaba-NLP/gte-Qwen2-1.5B-instruct,1543268864,1310340608,232928256,success
+Alibaba-NLP/gte-Qwen2-7B-instruct,7069121024,6525621760,543499264,success
+Alibaba-NLP/gte-base-en-v1.5,136776192,113330688,23445504,success
+Alibaba-NLP/gte-modernbert-base,,,,"error: The checkpoint you are trying to load has model type `modernbert` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+Alibaba-NLP/gte-multilingual-base,305368320,113331456,192036864,success
+ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-3B-v1,,,,"error: The checkpoint you are trying to load has model type `qwen2_5_vl` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-7B-v1,,,,"error: The checkpoint you are trying to load has model type `qwen2_5_vl` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+BAAI/bge-base-en,109482240,86041344,23440896,success
+BAAI/bge-base-en-v1.5,109482240,86041344,23440896,success
+BAAI/bge-base-zh,102267648,86041344,16226304,success
+BAAI/bge-base-zh-v1.5,102267648,86041344,16226304,success
+BAAI/bge-en-icl,7110672384,6979588096,131084288,success
+BAAI/bge-large-en,335141888,303887360,31254528,success
+BAAI/bge-large-en-v1.5,335141888,303887360,31254528,success
+BAAI/bge-large-zh,325522432,303887360,21635072,success
+BAAI/bge-large-zh-v1.5,325522432,303887360,21635072,success
+BAAI/bge-m3,567754752,311752704,256002048,success
+BAAI/bge-m3-unsupervised,567754752,311752704,256002048,success
+BAAI/bge-multilingual-gemma2,9241713152,8324201984,917511168,success
+BAAI/bge-reranker-v2-m3,567754752,311752704,256002048,success
+BAAI/bge-small-en,33360000,21639552,11720448,success
+BAAI/bge-small-en-v1.5,33360000,21639552,11720448,success
+BAAI/bge-small-zh,23953920,13136384,10817536,success
+BAAI/bge-small-zh-v1.5,23953920,13136384,10817536,success
+BAAI/bge-visualized-base,,,,"error: BAAI/bge-visualized-base is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`"
+BAAI/bge-visualized-m3,,,,"error: BAAI/bge-visualized-m3 is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`"
+BMRetriever/BMRetriever-1B,908759040,805736448,103022592,success
+BMRetriever/BMRetriever-2B,2506172416,1981884416,524288000,success
+BMRetriever/BMRetriever-410M,353822720,302311424,51511296,success
+BMRetriever/BMRetriever-7B,7110660096,6979588096,131072000,success
+BeastyZ/e5-R-mistral-7b,7110660096,6979588096,131072000,success
+ByteDance-Seed/Seed1.5-Embedding,,,,proprietary
+ByteDance/ListConRanker,,,,"error: Unrecognized configuration class <class 'transformers_modules.ByteDance.ListConRanker.95ae6a5f422a916bc36520f0f3e198e7d91520a0.configuration_listconranker.ListConRankerConfig'> for this kind of AutoModel: AutoModel.
+Model type should be one of AlbertConfig, AlignConfig, AltCLIPConfig, ASTConfig, AutoformerConfig, BarkConfig, BartConfig, BeitConfig, BertConfig, BertGenerationConfig, BigBirdConfig, BigBirdPegasusConfig, BioGptConfig, BitConfig, BlenderbotConfig, BlenderbotSmallConfig, BlipConfig, Blip2Config, BloomConfig, BridgeTowerConfig, BrosConfig, CamembertConfig, CanineConfig, ChameleonConfig, ChineseCLIPConfig, ChineseCLIPVisionConfig, ClapConfig, CLIPConfig, CLIPTextConfig, CLIPVisionConfig, CLIPSegConfig, ClvpConfig, LlamaConfig, CodeGenConfig, CohereConfig, ConditionalDetrConfig, ConvBertConfig, ConvNextConfig, ConvNextV2Config, CpmAntConfig, CTRLConfig, CvtConfig, DacConfig, Data2VecAudioConfig, Data2VecTextConfig, Data2VecVisionConfig, DbrxConfig, DebertaConfig, DebertaV2Config, DecisionTransformerConfig, DeformableDetrConfig, DeiTConfig, DetaConfig, DetrConfig, DinatConfig, Dinov2Config, DistilBertConfig, DonutSwinConfig, DPRConfig, DPTConfig, EfficientFormerConfig, EfficientNetConfig, ElectraConfig, EncodecConfig, ErnieConfig, ErnieMConfig, EsmConfig, FalconConfig, FalconMambaConfig, FastSpeech2ConformerConfig, FlaubertConfig, FlavaConfig, FNetConfig, FocalNetConfig, FSMTConfig, FunnelConfig, GemmaConfig, Gemma2Config, GitConfig, GlmConfig, GLPNConfig, GPT2Config, GPT2Config, GPTBigCodeConfig, GPTNeoConfig, GPTNeoXConfig, GPTNeoXJapaneseConfig, GPTJConfig, GPTSanJapaneseConfig, GraniteConfig, GraniteMoeConfig, GraphormerConfig, GroundingDinoConfig, GroupViTConfig, HieraConfig, HubertConfig, IBertConfig, IdeficsConfig, Idefics2Config, Idefics3Config, IJepaConfig, ImageGPTConfig, InformerConfig, JambaConfig, JetMoeConfig, JukeboxConfig, Kosmos2Config, LayoutLMConfig, LayoutLMv2Config, LayoutLMv3Config, LEDConfig, LevitConfig, LiltConfig, LlamaConfig, LongformerConfig, LongT5Config, LukeConfig, LxmertConfig, M2M100Config, MambaConfig, Mamba2Config, MarianConfig, MarkupLMConfig, Mask2FormerConfig, MaskFormerConfig, MaskFormerSwinConfig, MBartConfig, MCTCTConfig, MegaConfig, MegatronBertConfig, MgpstrConfig, MimiConfig, MistralConfig, MixtralConfig, MobileBertConfig, MobileNetV1Config, MobileNetV2Config, MobileViTConfig, MobileViTV2Config, MoshiConfig, MPNetConfig, MptConfig, MraConfig, MT5Config, MusicgenConfig, MusicgenMelodyConfig, MvpConfig, NatConfig, NemotronConfig, NezhaConfig, NllbMoeConfig, NystromformerConfig, OlmoConfig, Olmo2Config, OlmoeConfig, OmDetTurboConfig, OneFormerConfig, OpenLlamaConfig, OpenAIGPTConfig, OPTConfig, Owlv2Config, OwlViTConfig, PatchTSMixerConfig, PatchTSTConfig, PegasusConfig, PegasusXConfig, PerceiverConfig, PersimmonConfig, PhiConfig, Phi3Config, PhimoeConfig, PixtralVisionConfig, PLBartConfig, PoolFormerConfig, ProphetNetConfig, PvtConfig, PvtV2Config, QDQBertConfig, Qwen2Config, Qwen2AudioEncoderConfig, Qwen2MoeConfig, Qwen2VLConfig, RecurrentGemmaConfig, ReformerConfig, RegNetConfig, RemBertConfig, ResNetConfig, RetriBertConfig, RobertaConfig, RobertaPreLayerNormConfig, RoCBertConfig, RoFormerConfig, RTDetrConfig, RwkvConfig, SamConfig, SeamlessM4TConfig, SeamlessM4Tv2Config, SegformerConfig, SegGptConfig, SEWConfig, SEWDConfig, SiglipConfig, SiglipVisionConfig, Speech2TextConfig, SpeechT5Config, SplinterConfig, SqueezeBertConfig, StableLmConfig, Starcoder2Config, SwiftFormerConfig, SwinConfig, Swin2SRConfig, Swinv2Config, SwitchTransformersConfig, T5Config, TableTransformerConfig, TapasConfig, TimeSeriesTransformerConfig, TimesformerConfig, TimmBackboneConfig, TrajectoryTransformerConfig, TransfoXLConfig, TvltConfig, TvpConfig, UdopConfig, UMT5Config, UniSpeechConfig, UniSpeechSatConfig, UnivNetConfig, VanConfig, VideoMAEConfig, ViltConfig, VisionTextDualEncoderConfig, VisualBertConfig, ViTConfig, ViTHybridConfig, ViTMAEConfig, ViTMSNConfig, VitDetConfig, VitsConfig, VivitConfig, Wav2Vec2Config, Wav2Vec2BertConfig, Wav2Vec2ConformerConfig, WavLMConfig, WhisperConfig, XCLIPConfig, XGLMConfig, XLMConfig, XLMProphetNetConfig, XLMRobertaConfig, XLMRobertaXLConfig, XLNetConfig, XmodConfig, YolosConfig, YosoConfig, ZambaConfig."
+Bytedance/Seed1.6-embedding,,,,proprietary
+Bytedance/Seed1.6-embedding-1215,,,,proprietary
+Classical/Yinka,325522432,303887360,21635072,success
+Cohere/Cohere-embed-english-light-v3.0,,,,proprietary
+Cohere/Cohere-embed-english-v3.0,,,,proprietary
+Cohere/Cohere-embed-multilingual-light-v3.0,,,,proprietary
+Cohere/Cohere-embed-multilingual-v3.0,,,,proprietary
+Cohere/Cohere-embed-v4.0,,,,proprietary
+Cohere/Cohere-embed-v4.0 (output_dtype=binary),,,,proprietary
+Cohere/Cohere-embed-v4.0 (output_dtype=int8),,,,proprietary
+DMetaSoul/Dmeta-embedding-zh-small,74309376,58083072,16226304,success
+DMetaSoul/sbert-chinese-general-v1,102267648,86041344,16226304,success
+DeepPavlov/distilrubert-small-cased-conversational,106382592,14570496,91812096,success
+DeepPavlov/rubert-base-cased,177853440,86041344,91812096,success
+DeepPavlov/rubert-base-cased-sentence,177853440,86041344,91812096,success
+FacebookAI/xlm-roberta-base,278043648,86042112,192001536,success
+FacebookAI/xlm-roberta-large,559890432,303888384,256002048,success
+Gameselo/STS-multilingual-mpnet-base-v2,278043648,86042112,192001536,success
+GeoGPT-Research-Project/GeoEmbedding,7110660096,6979588096,131072000,success
+GreenNode/GreenNode-Embedding-Large-VN-Mixed-V1,567754752,311752704,256002048,success
+GreenNode/GreenNode-Embedding-Large-VN-V1,567754752,311752704,256002048,success
+GritLM/GritLM-7B,7110660096,6979588096,131072000,success
+GritLM/GritLM-8x7B,,,,skipped: too large from safetensors (~46.70B params)
+HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1,494032768,357898112,136134656,success
+HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1.5,494032768,357898112,136134656,success
+HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2,494032768,357898112,136134656,success
+HIT-TMG/KaLM-embedding-multilingual-mini-v1,494032768,357898112,136134656,success
+Haon-Chen/speed-embedding-7b-instruct,,,,skipped: too large from safetensors (~7.11B params)
+HooshvareLab/bert-base-parsbert-uncased,162841344,86041344,76800000,success
+Hum-Works/lodestone-base-4096-v1,,,,error: The model class you are passing has a `config_class` attribute that is not consistent with the config class you passed (model has <class 'transformers.models.bert.configuration_bert.BertConfig'> and you passed <class 'transformers_modules.Hum-Works.lodestone-base-4096-v1.9bbc2d0b57dd2198aea029404b0f976712a7d966.configuration_bert.BertConfig'>. Fix one of those so they match!
+Human,,,,skipped
+IEITYuan/Yuan-embedding-2.0-en,,,,"error: The checkpoint you are trying to load has model type `qwen3` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+IEITYuan/Yuan-embedding-2.0-zh,325522432,303887360,21635072,success
+Jaume/gemma-2b-embeddings,,,,skipped: too large from safetensors (~2.51B params)
+KBLab/sentence-bert-swedish-cased,124690944,86041344,38649600,success
+KFST/XLMRoberta-en-da-sv-nb,278043648,86042112,192001536,success
+KaLM-Embedding/KaLM-embedding-multilingual-mini-instruct-v2.5,494032768,357898112,136134656,success
+KennethEnevoldsen/dfm-sentence-encoder-large,355087360,303887360,51200000,success
+KennethEnevoldsen/dfm-sentence-encoder-medium,124445952,86042112,38403840,success
+Kingsoft-LLM/QZhou-Embedding,,,,skipped: too large from safetensors (~7.07B params)
+Kingsoft-LLM/QZhou-Embedding-Zh,,,,skipped: too large from safetensors (~7.57B params)
+Kowshik24/bangla-sentence-transformer-ft-matryoshka-paraphrase-multilingual-mpnet-base-v2,278043648,86042112,192001536,success
+Lajavaness/bilingual-embedding-base,278043648,86042112,192001536,success
+Lajavaness/bilingual-embedding-large,559890432,303888384,256002048,success
+Lajavaness/bilingual-embedding-small,117653760,21639552,96014208,success
+Linq-AI-Research/Linq-Embed-Mistral,,,,skipped: too large from safetensors (~7.11B params)
+MCINext/Hakim,,,,proprietary
+MCINext/Hakim-small,,,,proprietary
+MCINext/Hakim-unsup,,,,proprietary
+McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-supervised,,,,"error: You are trying to access a gated repo.
+Make sure to have access to it at https://huggingface.co/meta-llama/Llama-2-7b-chat-hf.
+401 Client Error. (Request ID: Root=1-6958e844-385c7cb47e397348194c9600;5546997d-a8ca-40df-8132-ca06cd4005bf)
+
+Cannot access gated repo for url https://huggingface.co/meta-llama/Llama-2-7b-chat-hf/resolve/main/config.json.
+Access to model meta-llama/Llama-2-7b-chat-hf is restricted. You must have access to it and be authenticated to access it. Please log in."
+McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-unsup-simcse,,,,"error: You are trying to access a gated repo.
+Make sure to have access to it at https://huggingface.co/meta-llama/Llama-2-7b-chat-hf.
+401 Client Error. (Request ID: Root=1-6958e845-639c2de2088a678e677f2d5e;dc751fa9-3993-41d7-8e09-d92657ebcbf3)
+
+Cannot access gated repo for url https://huggingface.co/meta-llama/Llama-2-7b-chat-hf/resolve/main/config.json.
+Access to model meta-llama/Llama-2-7b-chat-hf is restricted. You must have access to it and be authenticated to access it. Please log in."
+McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-supervised,,,,"error: You are trying to access a gated repo.
+Make sure to have access to it at https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct.
+401 Client Error. (Request ID: Root=1-6958e845-6443ae462466d393706b2702;8fc08a57-044e-4547-bb85-c03eb314d1ee)
+
+Cannot access gated repo for url https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct/resolve/main/config.json.
+Access to model meta-llama/Meta-Llama-3-8B-Instruct is restricted. You must have access to it and be authenticated to access it. Please log in."
+McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-unsup-simcse,,,,"error: You are trying to access a gated repo.
+Make sure to have access to it at https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct.
+401 Client Error. (Request ID: Root=1-6958e846-593383e527d2087f2dce05f4;0667774a-238b-4c89-87d2-31a1cca5c291)
+
+Cannot access gated repo for url https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct/resolve/main/config.json.
+Access to model meta-llama/Meta-Llama-3-8B-Instruct is restricted. You must have access to it and be authenticated to access it. Please log in."
+McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-supervised,7152603136,7021531136,131072000,success
+McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-unsup-simcse,7152603136,7021531136,131072000,success
+McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-supervised,1294878720,1229342720,65536000,success
+McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-unsup-simcse,1294878720,1229342720,65536000,success
+Mihaiii/Bulbasaur,17389824,5669376,11720448,success
+Mihaiii/Ivysaur,22713216,10992768,11720448,success
+Mihaiii/Squirtle,15615360,3894912,11720448,success
+Mihaiii/Venusaur,15615360,3894912,11720448,success
+Mihaiii/Wartortle,17389824,5669376,11720448,success
+Mihaiii/gte-micro,17389824,5669376,11720448,success
+Mihaiii/gte-micro-v4,19164288,7443840,11720448,success
+Mira190/Euler-Legal-Embedding-V1,,,,skipped: too large from safetensors (~8.19B params)
+MongoDB/mdbr-leaf-ir,22713216,10992768,11720448,success
+MongoDB/mdbr-leaf-mt,22713216,10992768,11720448,success
+NbAiLab/nb-bert-base,177853440,86041344,91812096,success
+NbAiLab/nb-bert-large,355087360,303887360,51200000,success
+NbAiLab/nb-sbert-base,177853440,86041344,91812096,success
+NeuML/pubmedbert-base-embeddings-100K,,,,"error: The checkpoint you are trying to load has model type `model2vec` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+NeuML/pubmedbert-base-embeddings-1M,,,,"error: The checkpoint you are trying to load has model type `model2vec` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+NeuML/pubmedbert-base-embeddings-2M,,,,"error: The checkpoint you are trying to load has model type `model2vec` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+NeuML/pubmedbert-base-embeddings-500K,,,,"error: The checkpoint you are trying to load has model type `model2vec` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+NeuML/pubmedbert-base-embeddings-8M,,,,"error: The checkpoint you are trying to load has model type `model2vec` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+NovaSearch/jasper_en_vision_language_v1,1564914432,1331981568,232932864,success
+NovaSearch/stella_en_1.5B_v5,1543268864,1310340608,232928256,success
+NovaSearch/stella_en_400M_v5,,,,error: please install xformers
+Omartificial-Intelligence-Space/Arabert-all-nli-triplet-Matryoshka,135193344,86041344,49152000,success
+Omartificial-Intelligence-Space/Arabic-MiniLM-L12-v2-all-nli-triplet,117653760,21639552,96014208,success
+Omartificial-Intelligence-Space/Arabic-Triplet-Matryoshka-V2,135193344,86041344,49152000,success
+Omartificial-Intelligence-Space/Arabic-all-nli-triplet-Matryoshka,278043648,86042112,192001536,success
+Omartificial-Intelligence-Space/Arabic-labse-Matryoshka,470926848,86041344,384885504,success
+Omartificial-Intelligence-Space/Arabic-mpnet-base-all-nli-triplet,109486464,86041728,23444736,success
+Omartificial-Intelligence-Space/Marbert-all-nli-triplet-Matryoshka,162841344,86041344,76800000,success
+OpenSearch-AI/Ops-MoA-Conan-embedding-v1,325522432,303887360,21635072,success
+OpenSearch-AI/Ops-MoA-Yuan-embedding-1.0,325522432,303887360,21635072,success
+OrdalieTech/Solon-embeddings-large-0.1,559890432,303888384,256002048,success
+OrdalieTech/Solon-embeddings-mini-beta-1.1,,,,error: cannot import name 'ALL_ATTENTION_FUNCTIONS' from 'transformers.modeling_utils' (/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py)
+OrlikB/KartonBERT-USE-base-v1,,,,proprietary
+OrlikB/st-polish-kartonberta-base-alpha-v1,,,,proprietary
+PartAI/Tooka-SBERT,353039360,303887360,49152000,success
+PartAI/Tooka-SBERT-V2-Large,353039360,303887360,49152000,success
+PartAI/Tooka-SBERT-V2-Small,122905344,86041344,36864000,success
+PartAI/TookaBERT-Base,122905344,86041344,36864000,success
+Qodo/Qodo-Embed-1-1.5B,1543268864,1310340608,232928256,success
+Qodo/Qodo-Embed-1-7B,,,,skipped: too large from safetensors (~7.07B params)
+QuanSun/EVA02-CLIP-B-16,,,,"error: QuanSun/EVA02-CLIP-B-16 is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`"
+QuanSun/EVA02-CLIP-L-14,,,,"error: QuanSun/EVA02-CLIP-L-14 is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`"
+QuanSun/EVA02-CLIP-bigE-14,,,,"error: QuanSun/EVA02-CLIP-bigE-14 is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`"
+QuanSun/EVA02-CLIP-bigE-14-plus,,,,"error: QuanSun/EVA02-CLIP-bigE-14-plus is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`"
+Qwen/Qwen3-Embedding-0.6B,,,,"error: The checkpoint you are trying to load has model type `qwen3` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+Qwen/Qwen3-Embedding-4B,,,,skipped: too large from safetensors (~4.02B params)
+Qwen/Qwen3-Embedding-8B,,,,skipped: too large from safetensors (~7.57B params)
+ReasonIR/ReasonIR-8B,,,,skipped: too large from safetensors (~7.50B params)
+Sailesh97/Hinvec,,,,error: This modeling file requires the following packages that were not found in your environment: loguru. Run `pip install loguru`
+Salesforce/SFR-Embedding-2_R,,,,skipped: too large from safetensors (~7.11B params)
+Salesforce/SFR-Embedding-Code-2B_R,,,,skipped: too large from safetensors (~2.61B params)
+Salesforce/SFR-Embedding-Mistral,,,,skipped: too large from safetensors (~7.11B params)
+Salesforce/blip-image-captioning-base,224726017,201283585,23442432,success
+Salesforce/blip-image-captioning-large,447175937,423733505,23442432,success
+Salesforce/blip-itm-base-coco,224726017,201283585,23442432,success
+Salesforce/blip-itm-base-flickr,224726017,201283585,23442432,success
+Salesforce/blip-itm-large-coco,447175937,423733505,23442432,success
+Salesforce/blip-itm-large-flickr,447175937,423733505,23442432,success
+Salesforce/blip-vqa-base,224726017,201283585,23442432,success
+Salesforce/blip-vqa-capfilt-large,224726017,201283585,23442432,success
+Salesforce/blip2-opt-2.7b,,,,skipped: too large from safetensors (~3.74B params)
+Salesforce/blip2-opt-6.7b-coco,,,,skipped: too large from safetensors (~7.75B params)
+SamilPwC-AXNode-GenAI/PwC-Embedding_expr,559890432,303888384,256002048,success
+Shuu12121/CodeSearch-ModernBERT-Crow-Plus,,,,"error: The checkpoint you are trying to load has model type `modernbert` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+Snowflake/snowflake-arctic-embed-l,335141888,303887360,31254528,success
+Snowflake/snowflake-arctic-embed-l-v2.0,567754752,311752704,256002048,success
+Snowflake/snowflake-arctic-embed-m,109482240,86041344,23440896,success
+Snowflake/snowflake-arctic-embed-m-long,,,,error: Model name Snowflake/snowflake-arctic-embed-m-long was not found.
+Snowflake/snowflake-arctic-embed-m-v1.5,109482240,86041344,23440896,success
+Snowflake/snowflake-arctic-embed-m-v2.0,,,,error: please install xformers
+Snowflake/snowflake-arctic-embed-s,33360000,21639552,11720448,success
+Snowflake/snowflake-arctic-embed-xs,22713216,10992768,11720448,success
+TIGER-Lab/VLM2Vec-Full,,,,skipped: too large from safetensors (~4.15B params)
+TIGER-Lab/VLM2Vec-LoRA,,,,"error: Unrecognized configuration class <class 'transformers_modules.microsoft.Phi-3.5-vision-instruct.12b77fb40b63a2c73c68243d3f767aab688a1b2a.configuration_phi3_v.Phi3VConfig'> for this kind of AutoModel: AutoModel.
+Model type should be one of AlbertConfig, AlignConfig, AltCLIPConfig, ASTConfig, AutoformerConfig, BarkConfig, BartConfig, BeitConfig, BertConfig, BertGenerationConfig, BigBirdConfig, BigBirdPegasusConfig, BioGptConfig, BitConfig, BlenderbotConfig, BlenderbotSmallConfig, BlipConfig, Blip2Config, BloomConfig, BridgeTowerConfig, BrosConfig, CamembertConfig, CanineConfig, ChameleonConfig, ChineseCLIPConfig, ChineseCLIPVisionConfig, ClapConfig, CLIPConfig, CLIPTextConfig, CLIPVisionConfig, CLIPSegConfig, ClvpConfig, LlamaConfig, CodeGenConfig, CohereConfig, ConditionalDetrConfig, ConvBertConfig, ConvNextConfig, ConvNextV2Config, CpmAntConfig, CTRLConfig, CvtConfig, DacConfig, Data2VecAudioConfig, Data2VecTextConfig, Data2VecVisionConfig, DbrxConfig, DebertaConfig, DebertaV2Config, DecisionTransformerConfig, DeformableDetrConfig, DeiTConfig, DetaConfig, DetrConfig, DinatConfig, Dinov2Config, DistilBertConfig, DonutSwinConfig, DPRConfig, DPTConfig, EfficientFormerConfig, EfficientNetConfig, ElectraConfig, EncodecConfig, ErnieConfig, ErnieMConfig, EsmConfig, FalconConfig, FalconMambaConfig, FastSpeech2ConformerConfig, FlaubertConfig, FlavaConfig, FNetConfig, FocalNetConfig, FSMTConfig, FunnelConfig, GemmaConfig, Gemma2Config, GitConfig, GlmConfig, GLPNConfig, GPT2Config, GPT2Config, GPTBigCodeConfig, GPTNeoConfig, GPTNeoXConfig, GPTNeoXJapaneseConfig, GPTJConfig, GPTSanJapaneseConfig, GraniteConfig, GraniteMoeConfig, GraphormerConfig, GroundingDinoConfig, GroupViTConfig, HieraConfig, HubertConfig, IBertConfig, IdeficsConfig, Idefics2Config, Idefics3Config, IJepaConfig, ImageGPTConfig, InformerConfig, JambaConfig, JetMoeConfig, JukeboxConfig, Kosmos2Config, LayoutLMConfig, LayoutLMv2Config, LayoutLMv3Config, LEDConfig, LevitConfig, LiltConfig, LlamaConfig, LongformerConfig, LongT5Config, LukeConfig, LxmertConfig, M2M100Config, MambaConfig, Mamba2Config, MarianConfig, MarkupLMConfig, Mask2FormerConfig, MaskFormerConfig, MaskFormerSwinConfig, MBartConfig, MCTCTConfig, MegaConfig, MegatronBertConfig, MgpstrConfig, MimiConfig, MistralConfig, MixtralConfig, MobileBertConfig, MobileNetV1Config, MobileNetV2Config, MobileViTConfig, MobileViTV2Config, MoshiConfig, MPNetConfig, MptConfig, MraConfig, MT5Config, MusicgenConfig, MusicgenMelodyConfig, MvpConfig, NatConfig, NemotronConfig, NezhaConfig, NllbMoeConfig, NystromformerConfig, OlmoConfig, Olmo2Config, OlmoeConfig, OmDetTurboConfig, OneFormerConfig, OpenLlamaConfig, OpenAIGPTConfig, OPTConfig, Owlv2Config, OwlViTConfig, PatchTSMixerConfig, PatchTSTConfig, PegasusConfig, PegasusXConfig, PerceiverConfig, PersimmonConfig, PhiConfig, Phi3Config, PhimoeConfig, PixtralVisionConfig, PLBartConfig, PoolFormerConfig, ProphetNetConfig, PvtConfig, PvtV2Config, QDQBertConfig, Qwen2Config, Qwen2AudioEncoderConfig, Qwen2MoeConfig, Qwen2VLConfig, RecurrentGemmaConfig, ReformerConfig, RegNetConfig, RemBertConfig, ResNetConfig, RetriBertConfig, RobertaConfig, RobertaPreLayerNormConfig, RoCBertConfig, RoFormerConfig, RTDetrConfig, RwkvConfig, SamConfig, SeamlessM4TConfig, SeamlessM4Tv2Config, SegformerConfig, SegGptConfig, SEWConfig, SEWDConfig, SiglipConfig, SiglipVisionConfig, Speech2TextConfig, SpeechT5Config, SplinterConfig, SqueezeBertConfig, StableLmConfig, Starcoder2Config, SwiftFormerConfig, SwinConfig, Swin2SRConfig, Swinv2Config, SwitchTransformersConfig, T5Config, TableTransformerConfig, TapasConfig, TimeSeriesTransformerConfig, TimesformerConfig, TimmBackboneConfig, TrajectoryTransformerConfig, TransfoXLConfig, TvltConfig, TvpConfig, UdopConfig, UMT5Config, UniSpeechConfig, UniSpeechSatConfig, UnivNetConfig, VanConfig, VideoMAEConfig, ViltConfig, VisionTextDualEncoderConfig, VisualBertConfig, ViTConfig, ViTHybridConfig, ViTMAEConfig, ViTMSNConfig, VitDetConfig, VitsConfig, VivitConfig, Wav2Vec2Config, Wav2Vec2BertConfig, Wav2Vec2ConformerConfig, WavLMConfig, WhisperConfig, XCLIPConfig, XGLMConfig, XLMConfig, XLMProphetNetConfig, XLMRobertaConfig, XLMRobertaXLConfig, XLNetConfig, XmodConfig, YolosConfig, YosoConfig, ZambaConfig, Qwen2Config, BilingualConfig, BilingualConfig, JasperVLConfig, NewConfig, NomicBertConfig, GteConfig."
+Tarka-AIR/Tarka-Embedding-150M-V1,,,,"error: The checkpoint you are trying to load has model type `gemma3_text` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+Tarka-AIR/Tarka-Embedding-350M-V1,,,,error: This modeling file requires the following packages that were not found in your environment: causal_conv1d. Run `pip install causal_conv1d`
+TencentBAC/Conan-embedding-v1,325522432,303887360,21635072,success
+TencentBAC/Conan-embedding-v2,,,,"error: Unrecognized model in TencentBAC/Conan-embedding-v2. Should have a `model_type` key in its config.json, or contain one of the following strings in its name: albert, align, altclip, audio-spectrogram-transformer, autoformer, bark, bart, beit, bert, bert-generation, big_bird, bigbird_pegasus, biogpt, bit, blenderbot, blenderbot-small, blip, blip-2, bloom, bridgetower, bros, camembert, canine, chameleon, chinese_clip, chinese_clip_vision_model, clap, clip, clip_text_model, clip_vision_model, clipseg, clvp, code_llama, codegen, cohere, conditional_detr, convbert, convnext, convnextv2, cpmant, ctrl, cvt, dac, data2vec-audio, data2vec-text, data2vec-vision, dbrx, deberta, deberta-v2, decision_transformer, deformable_detr, deit, depth_anything, deta, detr, dinat, dinov2, distilbert, donut-swin, dpr, dpt, efficientformer, efficientnet, electra, encodec, encoder-decoder, ernie, ernie_m, esm, falcon, falcon_mamba, fastspeech2_conformer, flaubert, flava, fnet, focalnet, fsmt, funnel, fuyu, gemma, gemma2, git, glm, glpn, gpt-sw3, gpt2, gpt_bigcode, gpt_neo, gpt_neox, gpt_neox_japanese, gptj, gptsan-japanese, granite, granitemoe, graphormer, grounding-dino, groupvit, hiera, hubert, ibert, idefics, idefics2, idefics3, ijepa, imagegpt, informer, instructblip, instructblipvideo, jamba, jetmoe, jukebox, kosmos-2, layoutlm, layoutlmv2, layoutlmv3, led, levit, lilt, llama, llava, llava_next, llava_next_video, llava_onevision, longformer, longt5, luke, lxmert, m2m_100, mamba, mamba2, marian, markuplm, mask2former, maskformer, maskformer-swin, mbart, mctct, mega, megatron-bert, mgp-str, mimi, mistral, mixtral, mllama, mobilebert, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, moshi, mpnet, mpt, mra, mt5, musicgen, musicgen_melody, mvp, nat, nemotron, nezha, nllb-moe, nougat, nystromformer, olmo, olmo2, olmoe, omdet-turbo, oneformer, open-llama, openai-gpt, opt, owlv2, owlvit, paligemma, patchtsmixer, patchtst, pegasus, pegasus_x, perceiver, persimmon, phi, phi3, phimoe, pix2struct, pixtral, plbart, poolformer, pop2piano, prophetnet, pvt, pvt_v2, qdqbert, qwen2, qwen2_audio, qwen2_audio_encoder, qwen2_moe, qwen2_vl, rag, realm, recurrent_gemma, reformer, regnet, rembert, resnet, retribert, roberta, roberta-prelayernorm, roc_bert, roformer, rt_detr, rt_detr_resnet, rwkv, sam, seamless_m4t, seamless_m4t_v2, segformer, seggpt, sew, sew-d, siglip, siglip_vision_model, speech-encoder-decoder, speech_to_text, speech_to_text_2, speecht5, splinter, squeezebert, stablelm, starcoder2, superpoint, swiftformer, swin, swin2sr, swinv2, switch_transformers, t5, table-transformer, tapas, time_series_transformer, timesformer, timm_backbone, trajectory_transformer, transfo-xl, trocr, tvlt, tvp, udop, umt5, unispeech, unispeech-sat, univnet, upernet, van, video_llava, videomae, vilt, vipllava, vision-encoder-decoder, vision-text-dual-encoder, visual_bert, vit, vit_hybrid, vit_mae, vit_msn, vitdet, vitmatte, vits, vivit, wav2vec2, wav2vec2-bert, wav2vec2-conformer, wavlm, whisper, xclip, xglm, xlm, xlm-prophetnet, xlm-roberta, xlm-roberta-xl, xlnet, xmod, yolos, yoso, zamba, zoedepth, bidir_mistral"
+TomoroAI/tomoro-colqwen3-embed-4b,,,,skipped: too large from safetensors (~4.44B params)
+TomoroAI/tomoro-colqwen3-embed-8b,,,,skipped: too large from safetensors (~8.77B params)
+VPLabs/SearchMap_Preview,,,,error: please install xformers
+VoVanPhuc/sup-SimCSE-VietNamese-phobert-base,134998272,85845504,49152768,success
+WhereIsAI/UAE-Large-V1,335141888,303887360,31254528,success
+aari1995/German_Semantic_STS_V2,335735808,303887360,31848448,success
+abhinand/MedEmbed-small-v0.1,33360000,21639552,11720448,success
+ai-forever/FRIDA,1729483776,1585635840,143847936,success
+ai-forever/ru-en-RoSBERTa,404757504,303888384,100869120,success
+ai-forever/sbert_large_mt_nlu_ru,426908672,303887360,123021312,success
+ai-forever/sbert_large_nlu_ru,426908672,303887360,123021312,success
+ai-sage/Giga-Embeddings-instruct,,,,error: cannot import name 'ALL_ATTENTION_FUNCTIONS' from 'transformers.modeling_utils' (/usr/local/lib/python3.10/dist-packages/transformers/modeling_utils.py)
+amazon/Titan-text-embeddings-v2,,,,proprietary
+andersborges/model2vecdk,,,,proprietary
+andersborges/model2vecdk-stem,,,,proprietary
+annamodels/LGAI-Embedding-Preview,7110672384,6979588096,131084288,success
+avsolatorio/GIST-Embedding-v0,109482240,86041344,23440896,success
+avsolatorio/GIST-all-MiniLM-L6-v2,22713216,10992768,11720448,success
+avsolatorio/GIST-large-Embedding-v0,335141888,303887360,31254528,success
+avsolatorio/GIST-small-Embedding-v0,33360000,21639552,11720448,success
+avsolatorio/NoInstruct-small-Embedding-v0,33360000,21639552,11720448,success
+baseline/random-cross-encoder-baseline,,,,proprietary
+baseline/random-encoder-baseline,,,,proprietary
+bedrock/amazon-titan-embed-text-v1,,,,proprietary
+bedrock/amazon-titan-embed-text-v2,,,,proprietary
+bedrock/cohere-embed-english-v3,,,,proprietary
+bedrock/cohere-embed-multilingual-v3,,,,proprietary
+bflhc/MoD-Embedding,,,,"error: The checkpoint you are trying to load has model type `qwen3` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+bflhc/Octen-Embedding-4B,,,,"error: The checkpoint you are trying to load has model type `qwen3` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+bflhc/Octen-Embedding-8B,,,,"error: The checkpoint you are trying to load has model type `qwen3` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+bigscience/sgpt-bloom-7b1-msmarco,7068205056,6041411584,1026793472,success
+bisectgroup/BiCA-base,109482240,86041344,23440896,success
+bkai-foundation-models/vietnamese-bi-encoder,134998272,85845504,49152768,success
+bm25s,,,,"error: bm25s is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`"
+brahmairesearch/slx-v0.1,22713216,10992768,11720448,success
+castorini/monobert-large-msmarco,335141888,303887360,31254528,success
+castorini/monot5-3b-msmarco-10k,2851598336,2818699264,32899072,success
+castorini/monot5-base-msmarco-10k,222903552,198229248,24674304,success
+castorini/monot5-large-msmarco-10k,737668096,704769024,32899072,success
+castorini/monot5-small-msmarco-10k,60506624,44057088,16449536,success
+castorini/repllama-v1-7b-lora-passage,6607343616,6476271616,131072000,success
+cl-nagoya/ruri-base,111207168,86041344,25165824,success
+cl-nagoya/ruri-base-v2,111207168,86041344,25165824,success
+cl-nagoya/ruri-large,337441792,303887360,33554432,success
+cl-nagoya/ruri-large-v2,337441792,303887360,33554432,success
+cl-nagoya/ruri-small,68087808,42921984,25165824,success
+cl-nagoya/ruri-small-v2,68087808,42921984,25165824,success
+cl-nagoya/ruri-v3-130m,,,,"error: The checkpoint you are trying to load has model type `modernbert` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+cl-nagoya/ruri-v3-30m,,,,"error: The checkpoint you are trying to load has model type `modernbert` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+cl-nagoya/ruri-v3-310m,,,,"error: The checkpoint you are trying to load has model type `modernbert` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+cl-nagoya/ruri-v3-70m,,,,"error: The checkpoint you are trying to load has model type `modernbert` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+clips/e5-base-trm-nl,124443648,86042112,38401536,success
+clips/e5-large-trm-nl,355090432,303888384,51202048,success
+clips/e5-small-trm-nl,40840320,21639552,19200768,success
+codefuse-ai/C2LLM-0.5B,,,,error: This modeling file requires the following packages that were not found in your environment: deepspeed. Run `pip install deepspeed`
+codefuse-ai/C2LLM-7B,,,,error: This modeling file requires the following packages that were not found in your environment: deepspeed. Run `pip install deepspeed`
+codefuse-ai/F2LLM-0.6B,,,,"error: The checkpoint you are trying to load has model type `qwen3` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+codefuse-ai/F2LLM-1.7B,,,,"error: The checkpoint you are trying to load has model type `qwen3` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+codefuse-ai/F2LLM-4B,,,,"error: The checkpoint you are trying to load has model type `qwen3` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+codesage/codesage-base-v2,354742272,304408576,50333696,success
+codesage/codesage-large-v2,1313464320,1212796928,100667392,success
+codesage/codesage-small-v2,128010240,77676544,50333696,success
+cohere/embed-english-v3.0,,,,proprietary
+cohere/embed-multilingual-v3.0,,,,proprietary
+cointegrated/LaBSE-en-ru,128345088,86041344,42303744,success
+cointegrated/rubert-tiny,11784168,2560200,9223968,success
+cointegrated/rubert-tiny2,29193768,3039432,26154336,success
+colbert-ir/colbertv2.0,109482240,86041344,23440896,success
+consciousAI/cai-lunaris-text-embeddings,335141888,303887360,31254528,success
+consciousAI/cai-stellaris-text-embeddings,,,,"error: Unable to load weights from pytorch checkpoint file for '/root/.cache/huggingface/hub/models--consciousAI--cai-stellaris-text-embeddings/snapshots/c000ec4b29588daf0f4a0b2ad4e72ee807d8efc0/pytorch_model.bin' at '/root/.cache/huggingface/hub/models--consciousAI--cai-stellaris-text-embeddings/snapshots/c000ec4b29588daf0f4a0b2ad4e72ee807d8efc0/pytorch_model.bin'. If you tried to load a PyTorch model from a TF 2.0 checkpoint, please set from_tf=True."
+deepfile/embedder-100p,278043648,86042112,192001536,success
+deepvk/USER-base,124043520,85440000,38603520,success
+deepvk/USER-bge-m3,359026688,311752704,47273984,success
+deepvk/USER2-base,,,,"error: The checkpoint you are trying to load has model type `modernbert` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+deepvk/USER2-small,,,,"error: The checkpoint you are trying to load has model type `modernbert` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+deepvk/deberta-v1-base,124043520,85440000,38603520,success
+dmedhi/PawanEmbd-68M,67816704,67816704,,success
+dunzhang/stella-large-zh-v3-1792d,325522432,303887360,21635072,success
+dunzhang/stella-mrl-large-zh-v3.5-1792d,325522432,303887360,21635072,success
+dwzhu/e5-base-4k,112234752,88793856,23440896,success
+eagerworks/eager-embed-v1,,,,"error: The checkpoint you are trying to load has model type `qwen3_vl` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+emillykkejensen/EmbeddingGemma-Scandi-300m,,,,"error: The checkpoint you are trying to load has model type `gemma3_text` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+emillykkejensen/Qwen3-Embedding-Scandi-0.6B,,,,"error: The checkpoint you are trying to load has model type `qwen3` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+emillykkejensen/mmBERTscandi-base-embedding,,,,"error: The checkpoint you are trying to load has model type `modernbert` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+facebook/SONAR,,,,"error: Unrecognized model in facebook/SONAR. Should have a `model_type` key in its config.json, or contain one of the following strings in its name: albert, align, altclip, audio-spectrogram-transformer, autoformer, bark, bart, beit, bert, bert-generation, big_bird, bigbird_pegasus, biogpt, bit, blenderbot, blenderbot-small, blip, blip-2, bloom, bridgetower, bros, camembert, canine, chameleon, chinese_clip, chinese_clip_vision_model, clap, clip, clip_text_model, clip_vision_model, clipseg, clvp, code_llama, codegen, cohere, conditional_detr, convbert, convnext, convnextv2, cpmant, ctrl, cvt, dac, data2vec-audio, data2vec-text, data2vec-vision, dbrx, deberta, deberta-v2, decision_transformer, deformable_detr, deit, depth_anything, deta, detr, dinat, dinov2, distilbert, donut-swin, dpr, dpt, efficientformer, efficientnet, electra, encodec, encoder-decoder, ernie, ernie_m, esm, falcon, falcon_mamba, fastspeech2_conformer, flaubert, flava, fnet, focalnet, fsmt, funnel, fuyu, gemma, gemma2, git, glm, glpn, gpt-sw3, gpt2, gpt_bigcode, gpt_neo, gpt_neox, gpt_neox_japanese, gptj, gptsan-japanese, granite, granitemoe, graphormer, grounding-dino, groupvit, hiera, hubert, ibert, idefics, idefics2, idefics3, ijepa, imagegpt, informer, instructblip, instructblipvideo, jamba, jetmoe, jukebox, kosmos-2, layoutlm, layoutlmv2, layoutlmv3, led, levit, lilt, llama, llava, llava_next, llava_next_video, llava_onevision, longformer, longt5, luke, lxmert, m2m_100, mamba, mamba2, marian, markuplm, mask2former, maskformer, maskformer-swin, mbart, mctct, mega, megatron-bert, mgp-str, mimi, mistral, mixtral, mllama, mobilebert, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, moshi, mpnet, mpt, mra, mt5, musicgen, musicgen_melody, mvp, nat, nemotron, nezha, nllb-moe, nougat, nystromformer, olmo, olmo2, olmoe, omdet-turbo, oneformer, open-llama, openai-gpt, opt, owlv2, owlvit, paligemma, patchtsmixer, patchtst, pegasus, pegasus_x, perceiver, persimmon, phi, phi3, phimoe, pix2struct, pixtral, plbart, poolformer, pop2piano, prophetnet, pvt, pvt_v2, qdqbert, qwen2, qwen2_audio, qwen2_audio_encoder, qwen2_moe, qwen2_vl, rag, realm, recurrent_gemma, reformer, regnet, rembert, resnet, retribert, roberta, roberta-prelayernorm, roc_bert, roformer, rt_detr, rt_detr_resnet, rwkv, sam, seamless_m4t, seamless_m4t_v2, segformer, seggpt, sew, sew-d, siglip, siglip_vision_model, speech-encoder-decoder, speech_to_text, speech_to_text_2, speecht5, splinter, squeezebert, stablelm, starcoder2, superpoint, swiftformer, swin, swin2sr, swinv2, switch_transformers, t5, table-transformer, tapas, time_series_transformer, timesformer, timm_backbone, trajectory_transformer, transfo-xl, trocr, tvlt, tvp, udop, umt5, unispeech, unispeech-sat, univnet, upernet, van, video_llava, videomae, vilt, vipllava, vision-encoder-decoder, vision-text-dual-encoder, visual_bert, vit, vit_hybrid, vit_mae, vit_msn, vitdet, vitmatte, vits, vivit, wav2vec2, wav2vec2-bert, wav2vec2-conformer, wavlm, whisper, xclip, xglm, xlm, xlm-prophetnet, xlm-roberta, xlm-roberta-xl, xlnet, xmod, yolos, yoso, zamba, zoedepth"
+facebook/contriever-msmarco,109482240,86041344,23440896,success
+facebook/dinov2-base,86580480,86580480,,success
+facebook/dinov2-giant,1136480768,1136480768,,success
+facebook/dinov2-large,304368640,304368640,,success
+facebook/dinov2-small,22056576,22056576,,success
+facebook/webssl-dino1b-full2b-224,1134771200,1134771200,,success
+facebook/webssl-dino2b-full2b-224,2084237568,2084237568,,success
+facebook/webssl-dino2b-heavy2b-224,2084237568,2084237568,,success
+facebook/webssl-dino2b-light2b-224,2084237568,2084237568,,success
+facebook/webssl-dino300m-full2b-224,303655168,303655168,,success
+facebook/webssl-dino3b-full2b-224,2948317184,2948317184,,success
+facebook/webssl-dino3b-heavy2b-224,2948317184,2948317184,,success
+facebook/webssl-dino3b-light2b-224,2948317184,2948317184,,success
+facebook/webssl-dino5b-full2b-224,4938338816,4938338816,,success
+facebook/webssl-dino7b-full8b-224,6450170880,6450170880,,success
+facebook/webssl-dino7b-full8b-378,6452108288,6452108288,,success
+facebook/webssl-dino7b-full8b-518,6454729728,6454729728,,success
+facebook/webssl-mae1b-full2b-224,1136925696,1136925696,,success
+facebook/webssl-mae300m-full2b-224,304351232,304351232,,success
+facebook/webssl-mae700m-full2b-224,632404480,632404480,,success
+fangxq/XYZ-embedding,325522432,303887360,21635072,success
+fyaronskiy/english_code_retriever,,,,"error: The checkpoint you are trying to load has model type `modernbert` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+google/embeddinggemma-300m,"307,581,696","106,255,104","201,326,592",success
+google/flan-t5-base,222903552,198229248,24674304,success
+google/flan-t5-large,750251008,717351936,32899072,success
+google/flan-t5-xl,2783959040,2718160896,65798144,success
+google/flan-t5-xxl,11003736064,10872139776,131596288,success
+google/gemini-embedding-001,,,,proprietary
+google/siglip-base-patch16-224,203155970,203155970,,success
+google/siglip-base-patch16-256,203202050,203202050,,success
+google/siglip-base-patch16-256-multilingual,370626050,370626050,,success
+google/siglip-base-patch16-384,203447810,203447810,,success
+google/siglip-base-patch16-512,203791874,203791874,,success
+google/siglip-large-patch16-256,652150786,652150786,,success
+google/siglip-large-patch16-384,652478466,652478466,,success
+google/siglip-so400m-patch14-224,877360306,877360306,,success
+google/siglip-so400m-patch14-384,877960498,877960498,,success
+google/siglip-so400m-patch16-256-i18n,1128758962,1128758962,,success
+google/text-embedding-004,,,,proprietary
+google/text-embedding-005,,,,proprietary
+google/text-multilingual-embedding-002,,,,proprietary
+hiieu/halong_embedding,278043648,86042112,192001536,success
+iampanda/zpoint_large_embedding_zh,325522432,303887360,21635072,success
+ibm-granite/granite-embedding-107m-multilingual,106994304,10993536,96000768,success
+ibm-granite/granite-embedding-125m-english,124645632,86042112,38603520,success
+ibm-granite/granite-embedding-278m-multilingual,278043648,86042112,192001536,success
+ibm-granite/granite-embedding-30m-english,30295296,10993536,19301760,success
+ibm-granite/granite-embedding-english-r2,,,,"error: The checkpoint you are trying to load has model type `modernbert` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+ibm-granite/granite-embedding-small-english-r2,,,,"error: The checkpoint you are trying to load has model type `modernbert` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+ibm-granite/granite-vision-3.3-2b-embedding,,,,"error: Error(s) in loading state_dict for GraniteVisionEmb:
+	size mismatch for model.multi_modal_projector.linear_1.weight: copying a param with shape torch.Size([2048, 4608]) from checkpoint, the shape in current model is torch.Size([2048, 1152]).
+	You may consider adding `ignore_mismatched_sizes=True` in the model `from_pretrained` method."
+infgrad/Jasper-Token-Compression-600M,,,,"error: The checkpoint you are trying to load has model type `qwen3` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+infgrad/stella-base-en-v2,109482240,86041344,23440896,success
+infgrad/stella-base-zh-v3-1792d,102660864,86434560,16226304,success
+infly/inf-retriever-v1,7069121024,,,skipped: too large for BF16 (~7.07B > 6.5B)
+infly/inf-retriever-v1-1.5b,1543268864,1310340608,232928256,success
+intfloat/e5-base,109482240,86041344,23440896,success
+intfloat/e5-base-v2,109482240,86041344,23440896,success
+intfloat/e5-large,335141888,303887360,31254528,success
+intfloat/e5-large-v2,335141888,303887360,31254528,success
+intfloat/e5-mistral-7b-instruct,7110660096,6979588096,131072000,success
+intfloat/e5-small,33360000,21639552,11720448,success
+intfloat/e5-small-v2,33360000,21639552,11720448,success
+intfloat/mmE5-mllama-11b-instruct,10642941475,,,skipped: too large for BF16 (~10.64B > 6.5B)
+intfloat/multilingual-e5-base,278043648,86042112,192001536,success
+intfloat/multilingual-e5-large,559890432,303888384,256002048,success
+intfloat/multilingual-e5-large-instruct,559890432,303888384,256002048,success
+intfloat/multilingual-e5-small,117653760,21639552,96014208,success
+izhx/udever-bloom-1b1,1065314304,679962624,385351680,success
+izhx/udever-bloom-3b,3002557440,2360304640,642252800,success
+izhx/udever-bloom-560m,559214592,302313472,256901120,success
+izhx/udever-bloom-7b1,7069016064,6041411584,1027604480,success
+jhu-clsp/FollowIR-7B,7241732096,,,skipped: too large for BF16 (~7.24B > 6.5B)
+jinaai/jina-clip-v1,222647041,222647041,,success
+jinaai/jina-colbert-v2,559366144,559366144,,success
+jinaai/jina-embedding-b-en-v1,109628544,84954240,24674304,success
+jinaai/jina-embedding-s-en-v1,35330816,18881280,16449536,success
+jinaai/jina-embeddings-v2-base-en,137368320,113922816,23445504,success
+jinaai/jina-embeddings-v2-small-en,32690688,17060352,15630336,success
+jinaai/jina-embeddings-v3,12946300,12946300,,success
+jinaai/jina-embeddings-v4,,,,error: No module named 'transformers.models.qwen2_5_vl'
+jinaai/jina-reranker-v2-base-multilingual,278436864,278436864,,success
+jinaai/jina-reranker-v3,,,,"error: The checkpoint you are trying to load has model type `qwen3` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+jxm/cde-small-v1,281140992,281140992,,success
+jxm/cde-small-v2,,,,"error: The checkpoint you are trying to load has model type `modernbert` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+kakaobrain/align-base,172117841,172117841,,success
+keeeeenw/MicroLlama-text-embedding,271869952,239100928,32769024,success
+laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K,,,,"error: Unrecognized model in laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K. Should have a `model_type` key in its config.json, or contain one of the following strings in its name: albert, align, altclip, audio-spectrogram-transformer, autoformer, bark, bart, beit, bert, bert-generation, big_bird, bigbird_pegasus, biogpt, bit, blenderbot, blenderbot-small, blip, blip-2, bloom, bridgetower, bros, camembert, canine, chameleon, chinese_clip, chinese_clip_vision_model, clap, clip, clip_text_model, clip_vision_model, clipseg, clvp, code_llama, codegen, cohere, conditional_detr, convbert, convnext, convnextv2, cpmant, ctrl, cvt, dac, data2vec-audio, data2vec-text, data2vec-vision, dbrx, deberta, deberta-v2, decision_transformer, deformable_detr, deit, depth_anything, deta, detr, dinat, dinov2, distilbert, donut-swin, dpr, dpt, efficientformer, efficientnet, electra, encodec, encoder-decoder, ernie, ernie_m, esm, falcon, falcon_mamba, fastspeech2_conformer, flaubert, flava, fnet, focalnet, fsmt, funnel, fuyu, gemma, gemma2, git, glm, glpn, gpt-sw3, gpt2, gpt_bigcode, gpt_neo, gpt_neox, gpt_neox_japanese, gptj, gptsan-japanese, granite, granitemoe, graphormer, grounding-dino, groupvit, hiera, hubert, ibert, idefics, idefics2, idefics3, ijepa, imagegpt, informer, instructblip, instructblipvideo, jamba, jetmoe, jukebox, kosmos-2, layoutlm, layoutlmv2, layoutlmv3, led, levit, lilt, llama, llava, llava_next, llava_next_video, llava_onevision, longformer, longt5, luke, lxmert, m2m_100, mamba, mamba2, marian, markuplm, mask2former, maskformer, maskformer-swin, mbart, mctct, mega, megatron-bert, mgp-str, mimi, mistral, mixtral, mllama, mobilebert, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, moshi, mpnet, mpt, mra, mt5, musicgen, musicgen_melody, mvp, nat, nemotron, nezha, nllb-moe, nougat, nystromformer, olmo, olmo2, olmoe, omdet-turbo, oneformer, open-llama, openai-gpt, opt, owlv2, owlvit, paligemma, patchtsmixer, patchtst, pegasus, pegasus_x, perceiver, persimmon, phi, phi3, phimoe, pix2struct, pixtral, plbart, poolformer, pop2piano, prophetnet, pvt, pvt_v2, qdqbert, qwen2, qwen2_audio, qwen2_audio_encoder, qwen2_moe, qwen2_vl, rag, realm, recurrent_gemma, reformer, regnet, rembert, resnet, retribert, roberta, roberta-prelayernorm, roc_bert, roformer, rt_detr, rt_detr_resnet, rwkv, sam, seamless_m4t, seamless_m4t_v2, segformer, seggpt, sew, sew-d, siglip, siglip_vision_model, speech-encoder-decoder, speech_to_text, speech_to_text_2, speecht5, splinter, squeezebert, stablelm, starcoder2, superpoint, swiftformer, swin, swin2sr, swinv2, switch_transformers, t5, table-transformer, tapas, time_series_transformer, timesformer, timm_backbone, trajectory_transformer, transfo-xl, trocr, tvlt, tvp, udop, umt5, unispeech, unispeech-sat, univnet, upernet, van, video_llava, videomae, vilt, vipllava, vision-encoder-decoder, vision-text-dual-encoder, visual_bert, vit, vit_hybrid, vit_mae, vit_msn, vitdet, vitmatte, vits, vivit, wav2vec2, wav2vec2-bert, wav2vec2-conformer, wavlm, whisper, xclip, xglm, xlm, xlm-prophetnet, xlm-roberta, xlm-roberta-xl, xlnet, xmod, yolos, yoso, zamba, zoedepth"
+laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K,,,,"error: Unrecognized model in laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K. Should have a `model_type` key in its config.json, or contain one of the following strings in its name: albert, align, altclip, audio-spectrogram-transformer, autoformer, bark, bart, beit, bert, bert-generation, big_bird, bigbird_pegasus, biogpt, bit, blenderbot, blenderbot-small, blip, blip-2, bloom, bridgetower, bros, camembert, canine, chameleon, chinese_clip, chinese_clip_vision_model, clap, clip, clip_text_model, clip_vision_model, clipseg, clvp, code_llama, codegen, cohere, conditional_detr, convbert, convnext, convnextv2, cpmant, ctrl, cvt, dac, data2vec-audio, data2vec-text, data2vec-vision, dbrx, deberta, deberta-v2, decision_transformer, deformable_detr, deit, depth_anything, deta, detr, dinat, dinov2, distilbert, donut-swin, dpr, dpt, efficientformer, efficientnet, electra, encodec, encoder-decoder, ernie, ernie_m, esm, falcon, falcon_mamba, fastspeech2_conformer, flaubert, flava, fnet, focalnet, fsmt, funnel, fuyu, gemma, gemma2, git, glm, glpn, gpt-sw3, gpt2, gpt_bigcode, gpt_neo, gpt_neox, gpt_neox_japanese, gptj, gptsan-japanese, granite, granitemoe, graphormer, grounding-dino, groupvit, hiera, hubert, ibert, idefics, idefics2, idefics3, ijepa, imagegpt, informer, instructblip, instructblipvideo, jamba, jetmoe, jukebox, kosmos-2, layoutlm, layoutlmv2, layoutlmv3, led, levit, lilt, llama, llava, llava_next, llava_next_video, llava_onevision, longformer, longt5, luke, lxmert, m2m_100, mamba, mamba2, marian, markuplm, mask2former, maskformer, maskformer-swin, mbart, mctct, mega, megatron-bert, mgp-str, mimi, mistral, mixtral, mllama, mobilebert, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, moshi, mpnet, mpt, mra, mt5, musicgen, musicgen_melody, mvp, nat, nemotron, nezha, nllb-moe, nougat, nystromformer, olmo, olmo2, olmoe, omdet-turbo, oneformer, open-llama, openai-gpt, opt, owlv2, owlvit, paligemma, patchtsmixer, patchtst, pegasus, pegasus_x, perceiver, persimmon, phi, phi3, phimoe, pix2struct, pixtral, plbart, poolformer, pop2piano, prophetnet, pvt, pvt_v2, qdqbert, qwen2, qwen2_audio, qwen2_audio_encoder, qwen2_moe, qwen2_vl, rag, realm, recurrent_gemma, reformer, regnet, rembert, resnet, retribert, roberta, roberta-prelayernorm, roc_bert, roformer, rt_detr, rt_detr_resnet, rwkv, sam, seamless_m4t, seamless_m4t_v2, segformer, seggpt, sew, sew-d, siglip, siglip_vision_model, speech-encoder-decoder, speech_to_text, speech_to_text_2, speecht5, splinter, squeezebert, stablelm, starcoder2, superpoint, swiftformer, swin, swin2sr, swinv2, switch_transformers, t5, table-transformer, tapas, time_series_transformer, timesformer, timm_backbone, trajectory_transformer, transfo-xl, trocr, tvlt, tvp, udop, umt5, unispeech, unispeech-sat, univnet, upernet, van, video_llava, videomae, vilt, vipllava, vision-encoder-decoder, vision-text-dual-encoder, visual_bert, vit, vit_hybrid, vit_mae, vit_msn, vitdet, vitmatte, vits, vivit, wav2vec2, wav2vec2-bert, wav2vec2-conformer, wavlm, whisper, xclip, xglm, xlm, xlm-prophetnet, xlm-roberta, xlm-roberta-xl, xlnet, xmod, yolos, yoso, zamba, zoedepth"
+laion/CLIP-ViT-B-32-laion2B-s34B-b79K,151277313,151277313,,success
+laion/CLIP-ViT-H-14-laion2B-s32B-b79K,986109441,986109441,,success
+laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K,427616513,427616513,,success
+laion/CLIP-ViT-L-14-laion2B-s32B-b82K,427616513,427616513,,success
+laion/CLIP-ViT-bigG-14-laion2B-39B-b160k,2539567105,2539567105,,success
+laion/CLIP-ViT-g-14-laion2B-s34B-b88K,,,,"error: Unrecognized model in laion/CLIP-ViT-g-14-laion2B-s34B-b88K. Should have a `model_type` key in its config.json, or contain one of the following strings in its name: albert, align, altclip, audio-spectrogram-transformer, autoformer, bark, bart, beit, bert, bert-generation, big_bird, bigbird_pegasus, biogpt, bit, blenderbot, blenderbot-small, blip, blip-2, bloom, bridgetower, bros, camembert, canine, chameleon, chinese_clip, chinese_clip_vision_model, clap, clip, clip_text_model, clip_vision_model, clipseg, clvp, code_llama, codegen, cohere, conditional_detr, convbert, convnext, convnextv2, cpmant, ctrl, cvt, dac, data2vec-audio, data2vec-text, data2vec-vision, dbrx, deberta, deberta-v2, decision_transformer, deformable_detr, deit, depth_anything, deta, detr, dinat, dinov2, distilbert, donut-swin, dpr, dpt, efficientformer, efficientnet, electra, encodec, encoder-decoder, ernie, ernie_m, esm, falcon, falcon_mamba, fastspeech2_conformer, flaubert, flava, fnet, focalnet, fsmt, funnel, fuyu, gemma, gemma2, git, glm, glpn, gpt-sw3, gpt2, gpt_bigcode, gpt_neo, gpt_neox, gpt_neox_japanese, gptj, gptsan-japanese, granite, granitemoe, graphormer, grounding-dino, groupvit, hiera, hubert, ibert, idefics, idefics2, idefics3, ijepa, imagegpt, informer, instructblip, instructblipvideo, jamba, jetmoe, jukebox, kosmos-2, layoutlm, layoutlmv2, layoutlmv3, led, levit, lilt, llama, llava, llava_next, llava_next_video, llava_onevision, longformer, longt5, luke, lxmert, m2m_100, mamba, mamba2, marian, markuplm, mask2former, maskformer, maskformer-swin, mbart, mctct, mega, megatron-bert, mgp-str, mimi, mistral, mixtral, mllama, mobilebert, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, moshi, mpnet, mpt, mra, mt5, musicgen, musicgen_melody, mvp, nat, nemotron, nezha, nllb-moe, nougat, nystromformer, olmo, olmo2, olmoe, omdet-turbo, oneformer, open-llama, openai-gpt, opt, owlv2, owlvit, paligemma, patchtsmixer, patchtst, pegasus, pegasus_x, perceiver, persimmon, phi, phi3, phimoe, pix2struct, pixtral, plbart, poolformer, pop2piano, prophetnet, pvt, pvt_v2, qdqbert, qwen2, qwen2_audio, qwen2_audio_encoder, qwen2_moe, qwen2_vl, rag, realm, recurrent_gemma, reformer, regnet, rembert, resnet, retribert, roberta, roberta-prelayernorm, roc_bert, roformer, rt_detr, rt_detr_resnet, rwkv, sam, seamless_m4t, seamless_m4t_v2, segformer, seggpt, sew, sew-d, siglip, siglip_vision_model, speech-encoder-decoder, speech_to_text, speech_to_text_2, speecht5, splinter, squeezebert, stablelm, starcoder2, superpoint, swiftformer, swin, swin2sr, swinv2, switch_transformers, t5, table-transformer, tapas, time_series_transformer, timesformer, timm_backbone, trajectory_transformer, transfo-xl, trocr, tvlt, tvp, udop, umt5, unispeech, unispeech-sat, univnet, upernet, van, video_llava, videomae, vilt, vipllava, vision-encoder-decoder, vision-text-dual-encoder, visual_bert, vit, vit_hybrid, vit_mae, vit_msn, vitdet, vitmatte, vits, vivit, wav2vec2, wav2vec2-bert, wav2vec2-conformer, wavlm, whisper, xclip, xglm, xlm, xlm-prophetnet, xlm-roberta, xlm-roberta-xl, xlnet, xmod, yolos, yoso, zamba, zoedepth"
+lier007/xiaobu-embedding,325522432,303887360,21635072,success
+lier007/xiaobu-embedding-v2,325522432,303887360,21635072,success
+lightonai/GTE-ModernColBERT-v1,,,,"error: The checkpoint you are trying to load has model type `modernbert` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+llamaindex/vdr-2b-multi-v1,1543714304,1310340608,233373696,success
+llmrails/ember-v1,335141888,303887360,31254528,success
+m3hrdadfi/bert-zwnj-wnli-mean-tokens,118297344,86041344,32256000,success
+m3hrdadfi/roberta-zwnj-wnli-mean-tokens,118298112,86042112,32256000,success
+malenia1/ternary-weight-embedding,,,,error: This modeling file requires the following packages that were not found in your environment: bitblas. Run `pip install bitblas`
+manu/bge-m3-custom-fr,567754752,311752704,256002048,success
+manu/sentence_croissant_alpha_v0.2,1279887360,1214351360,65536000,success
+manu/sentence_croissant_alpha_v0.3,1279887360,1214351360,65536000,success
+manu/sentence_croissant_alpha_v0.4,1279887360,1214351360,65536000,success
+manveertamber/cadet-embed-base-v1,109482240,86041344,23440896,success
+meta-llama/Llama-2-7b-chat-hf,6738415616,6607343616,131072000,success
+meta-llama/Llama-2-7b-hf,6738415616,6607343616,131072000,success
+microsoft/LLM2CLIP-Openai-B-16,360552193,360552193,,success
+microsoft/LLM2CLIP-Openai-L-14-224,,,,error: This modeling file requires the following packages that were not found in your environment: configuration_clip. Run `pip install configuration_clip`
+microsoft/LLM2CLIP-Openai-L-14-336,578587905,578587905,,success
+minishlab/M2V_base_glove,,,,"error: The checkpoint you are trying to load has model type `model2vec` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+minishlab/M2V_base_glove_subword,,,,"error: The checkpoint you are trying to load has model type `model2vec` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+minishlab/M2V_base_output,,,,"error: The checkpoint you are trying to load has model type `model2vec` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+minishlab/M2V_multilingual_output,,,,"error: The checkpoint you are trying to load has model type `model2vec` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+minishlab/potion-base-2M,,,,"error: The checkpoint you are trying to load has model type `model2vec` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+minishlab/potion-base-4M,,,,"error: The checkpoint you are trying to load has model type `model2vec` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+minishlab/potion-base-8M,,,,"error: The checkpoint you are trying to load has model type `model2vec` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+minishlab/potion-multilingual-128M,,,,"error: The checkpoint you are trying to load has model type `model2vec` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+mistralai/Mistral-7B-Instruct-v0.2,7241732096,,,skipped: too large for BF16 (~7.24B > 6.5B)
+mixedbread-ai/mxbai-embed-2d-large-v1,335141888,303887360,31254528,success
+mixedbread-ai/mxbai-embed-large-v1,335141888,303887360,31254528,success
+mixedbread-ai/mxbai-embed-xsmall-v1,24089472,12369024,11720448,success
+moka-ai/m3e-base,102267648,86041344,16226304,success
+moka-ai/m3e-large,325522432,303887360,21635072,success
+moka-ai/m3e-small,23953920,13136384,10817536,success
+myrkur/sentence-transformer-parsbert-fa,162841344,86041344,76800000,success
+nomic-ai/colnomic-embed-multimodal-3b,,,,"error: The checkpoint you are trying to load has model type `qwen2_5_vl` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+nomic-ai/colnomic-embed-multimodal-7b,,,,"error: The checkpoint you are trying to load has model type `qwen2_5_vl` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+nomic-ai/modernbert-embed-base,,,,"error: The checkpoint you are trying to load has model type `modernbert` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+nomic-ai/nomic-embed-text-v1,136731648,136731648,,success
+nomic-ai/nomic-embed-text-v1-ablated,136731648,136731648,,success
+nomic-ai/nomic-embed-text-v1-unsupervised,136731648,136731648,,success
+nomic-ai/nomic-embed-text-v1.5,136731648,136731648,,success
+nomic-ai/nomic-embed-text-v2-moe,475292928,475292928,,success
+nomic-ai/nomic-embed-vision-v1.5,92946688,92946688,,success
+nvidia/NV-Embed-v1,,,,skipped: too large for F16 (~7.24B > 6.5B)
+nvidia/NV-Embed-v2,7851016192,,,skipped: too large for F16 (~7.85B > 6.5B)
+nvidia/llama-embed-nemotron-8b,7504924672,,,skipped: too large for BF16 (~7.50B > 6.5B)
+nvidia/llama-nemoretriever-colembed-1b-v1,,,,error: This modeling file requires the following packages that were not found in your environment: flash_attn. Run `pip install flash_attn`
+nvidia/llama-nemoretriever-colembed-3b-v1,,,,error: This modeling file requires the following packages that were not found in your environment: flash_attn. Run `pip install flash_attn`
+nyu-visionx/moco-v3-vit-b,,,,error: 'NoneType' object has no attribute 'get'
+nyu-visionx/moco-v3-vit-l,,,,error: 'NoneType' object has no attribute 'get'
+omarelshehy/arabic-english-sts-matryoshka,559890432,303888384,256002048,success
+openai/clip-vit-base-patch16,149620737,149620737,,success
+openai/clip-vit-base-patch32,151277313,151277313,,success
+openai/clip-vit-large-patch14,427616513,427616513,,success
+openai/text-embedding-3-large,,,,proprietary
+openai/text-embedding-3-large (embed_dim=512),,,,proprietary
+openai/text-embedding-3-small,,,,proprietary
+openai/text-embedding-3-small (embed_dim=512),,,,proprietary
+openai/text-embedding-ada-002,,,,proprietary
+openbmb/MiniCPM-Embedding,2724880896,2442057984,282822912,success
+opensearch-project/opensearch-neural-sparse-encoding-doc-v1,109482240,86041344,23440896,success
+opensearch-project/opensearch-neural-sparse-encoding-doc-v2-distill,66362880,42921984,23440896,success
+opensearch-project/opensearch-neural-sparse-encoding-doc-v2-mini,22713216,10992768,11720448,success
+opensearch-project/opensearch-neural-sparse-encoding-doc-v3-distill,66362880,42921984,23440896,success
+opensearch-project/opensearch-neural-sparse-encoding-doc-v3-gte,136771584,113330688,23440896,success
+panalexeu/xlm-roberta-ua-distilled,278043648,86042112,192001536,success
+prdev/mini-gte,66362880,42921984,23440896,success
+rasgaard/m2v-dfm-large,,,,"error: The checkpoint you are trying to load has model type `model2vec` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+richinfoai/ritrieve_zh_v1,325522432,303887360,21635072,success
+royokong/e5-v,8355276800,,,skipped: too large for F16 (~8.36B > 6.5B)
+samaya-ai/RepLLaMA-reproduced,,,,"error: You are trying to access a gated repo.
+Make sure to have access to it at https://huggingface.co/meta-llama/Llama-2-7b-hf.
+401 Client Error. (Request ID: Root=1-695923b3-6ff464996a86ffd17737583c;0fe96f94-8d3b-4d41-b296-8c91adb6e126)
+
+Cannot access gated repo for url https://huggingface.co/meta-llama/Llama-2-7b-hf/resolve/main/config.json.
+Access to model meta-llama/Llama-2-7b-hf is restricted. You must have access to it and be authenticated to access it. Please log in."
+samaya-ai/promptriever-llama2-7b-v1,,,,"error: You are trying to access a gated repo.
+Make sure to have access to it at https://huggingface.co/meta-llama/Llama-2-7b-hf.
+401 Client Error. (Request ID: Root=1-695923b4-7de4120b71750a7410e7c344;ca8c0bf2-a6e1-4815-9bde-ec1fcdcff34c)
+
+Cannot access gated repo for url https://huggingface.co/meta-llama/Llama-2-7b-hf/resolve/main/config.json.
+Access to model meta-llama/Llama-2-7b-hf is restricted. You must have access to it and be authenticated to access it. Please log in."
+samaya-ai/promptriever-llama3.1-8b-instruct-v1,,,,"error: You are trying to access a gated repo.
+Make sure to have access to it at https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct.
+401 Client Error. (Request ID: Root=1-695923b5-1afc93511483b2467dea9e74;95df41cb-b551-4251-a0b9-c1b5da7327e7)
+
+Cannot access gated repo for url https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct/resolve/main/config.json.
+Access to model meta-llama/Llama-3.1-8B-Instruct is restricted. You must have access to it and be authenticated to access it. Please log in."
+samaya-ai/promptriever-llama3.1-8b-v1,,,,"error: You are trying to access a gated repo.
+Make sure to have access to it at https://huggingface.co/meta-llama/Meta-Llama-3.1-8B.
+401 Client Error. (Request ID: Root=1-695923b5-0c786a7b22f605937b1071d6;4d7189af-647e-4c3e-9957-56cc5d6e5105)
+
+Cannot access gated repo for url https://huggingface.co/meta-llama/Meta-Llama-3.1-8B/resolve/main/config.json.
+Access to model meta-llama/Llama-3.1-8B is restricted. You must have access to it and be authenticated to access it. Please log in."
+samaya-ai/promptriever-mistral-v0.1-7b-v1,7194546176,7063474176,131072000,success
+sbintuitions/sarashina-embedding-v1-1b,1224038144,1040537344,183500800,success
+sbintuitions/sarashina-embedding-v2-1b,1224038144,1040537344,183500800,success
+sbunlp/fabert,124441344,86041344,38400000,success
+sdadas/mmlw-e5-base,278043648,86042112,192001536,success
+sdadas/mmlw-e5-large,559890432,303888384,256002048,success
+sdadas/mmlw-e5-small,117653760,21639552,96014208,success
+sdadas/mmlw-roberta-base,124442880,86042112,38400768,success
+sdadas/mmlw-roberta-large,434961408,303888384,131073024,success
+sensenova/piccolo-base-zh,102267648,86041344,16226304,success
+sensenova/piccolo-large-zh-v2,,,,"error: sensenova/piccolo-large-zh-v2 does not appear to have a file named pytorch_model.bin, model.safetensors, tf_model.h5, model.ckpt or flax_model.msgpack."
+sentence-transformers/LaBSE,470926848,86041344,384885504,success
+sentence-transformers/all-MiniLM-L12-v2,33360000,21639552,11720448,success
+sentence-transformers/all-MiniLM-L6-v2,22713216,10992768,11720448,success
+sentence-transformers/all-mpnet-base-v2,109486464,86041728,23444736,success
+sentence-transformers/gtr-t5-base,222903552,198229248,24674304,success
+sentence-transformers/gtr-t5-large,737668096,704769024,32899072,success
+sentence-transformers/gtr-t5-xl,2851598336,2818699264,32899072,success
+sentence-transformers/gtr-t5-xxl,,,,skipped: model name contains 'xxl'
+sentence-transformers/multi-qa-MiniLM-L6-cos-v1,22713216,10992768,11720448,success
+sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,117653760,21639552,96014208,success
+sentence-transformers/paraphrase-multilingual-mpnet-base-v2,278043648,86042112,192001536,success
+sentence-transformers/sentence-t5-base,222903552,198229248,24674304,success
+sentence-transformers/sentence-t5-large,737668096,704769024,32899072,success
+sentence-transformers/sentence-t5-xl,2851598336,2818699264,32899072,success
+sentence-transformers/sentence-t5-xxl,,,,skipped: model name contains 'xxl'
+sentence-transformers/static-similarity-mrl-multilingual-v1,,,,"error: Unrecognized model in sentence-transformers/static-similarity-mrl-multilingual-v1. Should have a `model_type` key in its config.json, or contain one of the following strings in its name: albert, align, altclip, audio-spectrogram-transformer, autoformer, bark, bart, beit, bert, bert-generation, big_bird, bigbird_pegasus, biogpt, bit, blenderbot, blenderbot-small, blip, blip-2, bloom, bridgetower, bros, camembert, canine, chameleon, chinese_clip, chinese_clip_vision_model, clap, clip, clip_text_model, clip_vision_model, clipseg, clvp, code_llama, codegen, cohere, conditional_detr, convbert, convnext, convnextv2, cpmant, ctrl, cvt, dac, data2vec-audio, data2vec-text, data2vec-vision, dbrx, deberta, deberta-v2, decision_transformer, deformable_detr, deit, depth_anything, deta, detr, dinat, dinov2, distilbert, donut-swin, dpr, dpt, efficientformer, efficientnet, electra, encodec, encoder-decoder, ernie, ernie_m, esm, falcon, falcon_mamba, fastspeech2_conformer, flaubert, flava, fnet, focalnet, fsmt, funnel, fuyu, gemma, gemma2, git, glm, glpn, gpt-sw3, gpt2, gpt_bigcode, gpt_neo, gpt_neox, gpt_neox_japanese, gptj, gptsan-japanese, granite, granitemoe, graphormer, grounding-dino, groupvit, hiera, hubert, ibert, idefics, idefics2, idefics3, ijepa, imagegpt, informer, instructblip, instructblipvideo, jamba, jetmoe, jukebox, kosmos-2, layoutlm, layoutlmv2, layoutlmv3, led, levit, lilt, llama, llava, llava_next, llava_next_video, llava_onevision, longformer, longt5, luke, lxmert, m2m_100, mamba, mamba2, marian, markuplm, mask2former, maskformer, maskformer-swin, mbart, mctct, mega, megatron-bert, mgp-str, mimi, mistral, mixtral, mllama, mobilebert, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, moshi, mpnet, mpt, mra, mt5, musicgen, musicgen_melody, mvp, nat, nemotron, nezha, nllb-moe, nougat, nystromformer, olmo, olmo2, olmoe, omdet-turbo, oneformer, open-llama, openai-gpt, opt, owlv2, owlvit, paligemma, patchtsmixer, patchtst, pegasus, pegasus_x, perceiver, persimmon, phi, phi3, phimoe, pix2struct, pixtral, plbart, poolformer, pop2piano, prophetnet, pvt, pvt_v2, qdqbert, qwen2, qwen2_audio, qwen2_audio_encoder, qwen2_moe, qwen2_vl, rag, realm, recurrent_gemma, reformer, regnet, rembert, resnet, retribert, roberta, roberta-prelayernorm, roc_bert, roformer, rt_detr, rt_detr_resnet, rwkv, sam, seamless_m4t, seamless_m4t_v2, segformer, seggpt, sew, sew-d, siglip, siglip_vision_model, speech-encoder-decoder, speech_to_text, speech_to_text_2, speecht5, splinter, squeezebert, stablelm, starcoder2, superpoint, swiftformer, swin, swin2sr, swinv2, switch_transformers, t5, table-transformer, tapas, time_series_transformer, timesformer, timm_backbone, trajectory_transformer, transfo-xl, trocr, tvlt, tvp, udop, umt5, unispeech, unispeech-sat, univnet, upernet, van, video_llava, videomae, vilt, vipllava, vision-encoder-decoder, vision-text-dual-encoder, visual_bert, vit, vit_hybrid, vit_mae, vit_msn, vitdet, vitmatte, vits, vivit, wav2vec2, wav2vec2-bert, wav2vec2-conformer, wavlm, whisper, xclip, xglm, xlm, xlm-prophetnet, xlm-roberta, xlm-roberta-xl, xlnet, xmod, yolos, yoso, zamba, zoedepth"
+sergeyzh/BERTA,128345088,86041344,42303744,success
+sergeyzh/LaBSE-ru-turbo,128345088,86041344,42303744,success
+sergeyzh/rubert-mini-frida,32262504,6108168,26154336,success
+sergeyzh/rubert-tiny-turbo,29193768,3039432,26154336,success
+shibing624/text2vec-base-chinese,102267648,86041344,16226304,success
+shibing624/text2vec-base-chinese-paraphrase,117944832,87224832,30720000,success
+shibing624/text2vec-base-multilingual,117653760,21639552,96014208,success
+silma-ai/silma-embeddding-matryoshka-v0.1,135193344,86041344,49152000,success
+spartan8806/atles-champion-embedding,109486464,86041728,23444736,success
+tencent/KaLM-Embedding-Gemma3-12B-2511,11766034176,,,skipped: too large for BF16 (~11.77B > 6.5B)
+tencent/Youtu-Embedding,,,,error: cannot import name 'dynamic_rope_update' from 'transformers.modeling_rope_utils' (/usr/local/lib/python3.10/dist-packages/transformers/modeling_rope_utils.py)
+thenlper/gte-base,109482240,86041344,23440896,success
+thenlper/gte-base-zh,102267648,86041344,16226304,success
+thenlper/gte-large,335141888,303887360,31254528,success
+thenlper/gte-large-zh,325522432,303887360,21635072,success
+thenlper/gte-small,33360000,21639552,11720448,success
+thenlper/gte-small-zh,30258688,19441152,10817536,success
+unicamp-dl/mt5-13b-mmarco-100k,11896598528,10872139776,1024458752,success
+unicamp-dl/mt5-base-mmarco-v2,390315264,198229248,192086016,success
+vidore/colSmol-256M,,,,error: Target modules (.*(model.text_model).*(down_proj|gate_proj|up_proj|k_proj|q_proj|v_proj|o_proj).*$|.*(custom_text_proj).*$) not found in the base model. Please check the target modules and try again.
+vidore/colSmol-500M,,,,error: Target modules (.*(model.text_model).*(down_proj|gate_proj|up_proj|k_proj|q_proj|v_proj|o_proj).*$|.*(custom_text_proj).*$) not found in the base model. Please check the target modules and try again.
+vidore/colpali-v1.1,,,,"error: Unrecognized configuration class <class 'transformers.models.paligemma.configuration_paligemma.PaliGemmaConfig'> for this kind of AutoModel: AutoModel.
+Model type should be one of AlbertConfig, AlignConfig, AltCLIPConfig, ASTConfig, AutoformerConfig, BarkConfig, BartConfig, BeitConfig, BertConfig, BertGenerationConfig, BigBirdConfig, BigBirdPegasusConfig, BioGptConfig, BitConfig, BlenderbotConfig, BlenderbotSmallConfig, BlipConfig, Blip2Config, BloomConfig, BridgeTowerConfig, BrosConfig, CamembertConfig, CanineConfig, ChameleonConfig, ChineseCLIPConfig, ChineseCLIPVisionConfig, ClapConfig, CLIPConfig, CLIPTextConfig, CLIPVisionConfig, CLIPSegConfig, ClvpConfig, LlamaConfig, CodeGenConfig, CohereConfig, ConditionalDetrConfig, ConvBertConfig, ConvNextConfig, ConvNextV2Config, CpmAntConfig, CTRLConfig, CvtConfig, DacConfig, Data2VecAudioConfig, Data2VecTextConfig, Data2VecVisionConfig, DbrxConfig, DebertaConfig, DebertaV2Config, DecisionTransformerConfig, DeformableDetrConfig, DeiTConfig, DetaConfig, DetrConfig, DinatConfig, Dinov2Config, DistilBertConfig, DonutSwinConfig, DPRConfig, DPTConfig, EfficientFormerConfig, EfficientNetConfig, ElectraConfig, EncodecConfig, ErnieConfig, ErnieMConfig, EsmConfig, FalconConfig, FalconMambaConfig, FastSpeech2ConformerConfig, FlaubertConfig, FlavaConfig, FNetConfig, FocalNetConfig, FSMTConfig, FunnelConfig, GemmaConfig, Gemma2Config, GitConfig, GlmConfig, GLPNConfig, GPT2Config, GPT2Config, GPTBigCodeConfig, GPTNeoConfig, GPTNeoXConfig, GPTNeoXJapaneseConfig, GPTJConfig, GPTSanJapaneseConfig, GraniteConfig, GraniteMoeConfig, GraphormerConfig, GroundingDinoConfig, GroupViTConfig, HieraConfig, HubertConfig, IBertConfig, IdeficsConfig, Idefics2Config, Idefics3Config, IJepaConfig, ImageGPTConfig, InformerConfig, JambaConfig, JetMoeConfig, JukeboxConfig, Kosmos2Config, LayoutLMConfig, LayoutLMv2Config, LayoutLMv3Config, LEDConfig, LevitConfig, LiltConfig, LlamaConfig, LongformerConfig, LongT5Config, LukeConfig, LxmertConfig, M2M100Config, MambaConfig, Mamba2Config, MarianConfig, MarkupLMConfig, Mask2FormerConfig, MaskFormerConfig, MaskFormerSwinConfig, MBartConfig, MCTCTConfig, MegaConfig, MegatronBertConfig, MgpstrConfig, MimiConfig, MistralConfig, MixtralConfig, MobileBertConfig, MobileNetV1Config, MobileNetV2Config, MobileViTConfig, MobileViTV2Config, MoshiConfig, MPNetConfig, MptConfig, MraConfig, MT5Config, MusicgenConfig, MusicgenMelodyConfig, MvpConfig, NatConfig, NemotronConfig, NezhaConfig, NllbMoeConfig, NystromformerConfig, OlmoConfig, Olmo2Config, OlmoeConfig, OmDetTurboConfig, OneFormerConfig, OpenLlamaConfig, OpenAIGPTConfig, OPTConfig, Owlv2Config, OwlViTConfig, PatchTSMixerConfig, PatchTSTConfig, PegasusConfig, PegasusXConfig, PerceiverConfig, PersimmonConfig, PhiConfig, Phi3Config, PhimoeConfig, PixtralVisionConfig, PLBartConfig, PoolFormerConfig, ProphetNetConfig, PvtConfig, PvtV2Config, QDQBertConfig, Qwen2Config, Qwen2AudioEncoderConfig, Qwen2MoeConfig, Qwen2VLConfig, RecurrentGemmaConfig, ReformerConfig, RegNetConfig, RemBertConfig, ResNetConfig, RetriBertConfig, RobertaConfig, RobertaPreLayerNormConfig, RoCBertConfig, RoFormerConfig, RTDetrConfig, RwkvConfig, SamConfig, SeamlessM4TConfig, SeamlessM4Tv2Config, SegformerConfig, SegGptConfig, SEWConfig, SEWDConfig, SiglipConfig, SiglipVisionConfig, Speech2TextConfig, SpeechT5Config, SplinterConfig, SqueezeBertConfig, StableLmConfig, Starcoder2Config, SwiftFormerConfig, SwinConfig, Swin2SRConfig, Swinv2Config, SwitchTransformersConfig, T5Config, TableTransformerConfig, TapasConfig, TimeSeriesTransformerConfig, TimesformerConfig, TimmBackboneConfig, TrajectoryTransformerConfig, TransfoXLConfig, TvltConfig, TvpConfig, UdopConfig, UMT5Config, UniSpeechConfig, UniSpeechSatConfig, UnivNetConfig, VanConfig, VideoMAEConfig, ViltConfig, VisionTextDualEncoderConfig, VisualBertConfig, ViTConfig, ViTHybridConfig, ViTMAEConfig, ViTMSNConfig, VitDetConfig, VitsConfig, VivitConfig, Wav2Vec2Config, Wav2Vec2BertConfig, Wav2Vec2ConformerConfig, WavLMConfig, WhisperConfig, XCLIPConfig, XGLMConfig, XLMConfig, XLMProphetNetConfig, XLMRobertaConfig, XLMRobertaXLConfig, XLNetConfig, XmodConfig, YolosConfig, YosoConfig, ZambaConfig."
+vidore/colpali-v1.2,,,,"error: Unrecognized configuration class <class 'transformers.models.paligemma.configuration_paligemma.PaliGemmaConfig'> for this kind of AutoModel: AutoModel.
+Model type should be one of AlbertConfig, AlignConfig, AltCLIPConfig, ASTConfig, AutoformerConfig, BarkConfig, BartConfig, BeitConfig, BertConfig, BertGenerationConfig, BigBirdConfig, BigBirdPegasusConfig, BioGptConfig, BitConfig, BlenderbotConfig, BlenderbotSmallConfig, BlipConfig, Blip2Config, BloomConfig, BridgeTowerConfig, BrosConfig, CamembertConfig, CanineConfig, ChameleonConfig, ChineseCLIPConfig, ChineseCLIPVisionConfig, ClapConfig, CLIPConfig, CLIPTextConfig, CLIPVisionConfig, CLIPSegConfig, ClvpConfig, LlamaConfig, CodeGenConfig, CohereConfig, ConditionalDetrConfig, ConvBertConfig, ConvNextConfig, ConvNextV2Config, CpmAntConfig, CTRLConfig, CvtConfig, DacConfig, Data2VecAudioConfig, Data2VecTextConfig, Data2VecVisionConfig, DbrxConfig, DebertaConfig, DebertaV2Config, DecisionTransformerConfig, DeformableDetrConfig, DeiTConfig, DetaConfig, DetrConfig, DinatConfig, Dinov2Config, DistilBertConfig, DonutSwinConfig, DPRConfig, DPTConfig, EfficientFormerConfig, EfficientNetConfig, ElectraConfig, EncodecConfig, ErnieConfig, ErnieMConfig, EsmConfig, FalconConfig, FalconMambaConfig, FastSpeech2ConformerConfig, FlaubertConfig, FlavaConfig, FNetConfig, FocalNetConfig, FSMTConfig, FunnelConfig, GemmaConfig, Gemma2Config, GitConfig, GlmConfig, GLPNConfig, GPT2Config, GPT2Config, GPTBigCodeConfig, GPTNeoConfig, GPTNeoXConfig, GPTNeoXJapaneseConfig, GPTJConfig, GPTSanJapaneseConfig, GraniteConfig, GraniteMoeConfig, GraphormerConfig, GroundingDinoConfig, GroupViTConfig, HieraConfig, HubertConfig, IBertConfig, IdeficsConfig, Idefics2Config, Idefics3Config, IJepaConfig, ImageGPTConfig, InformerConfig, JambaConfig, JetMoeConfig, JukeboxConfig, Kosmos2Config, LayoutLMConfig, LayoutLMv2Config, LayoutLMv3Config, LEDConfig, LevitConfig, LiltConfig, LlamaConfig, LongformerConfig, LongT5Config, LukeConfig, LxmertConfig, M2M100Config, MambaConfig, Mamba2Config, MarianConfig, MarkupLMConfig, Mask2FormerConfig, MaskFormerConfig, MaskFormerSwinConfig, MBartConfig, MCTCTConfig, MegaConfig, MegatronBertConfig, MgpstrConfig, MimiConfig, MistralConfig, MixtralConfig, MobileBertConfig, MobileNetV1Config, MobileNetV2Config, MobileViTConfig, MobileViTV2Config, MoshiConfig, MPNetConfig, MptConfig, MraConfig, MT5Config, MusicgenConfig, MusicgenMelodyConfig, MvpConfig, NatConfig, NemotronConfig, NezhaConfig, NllbMoeConfig, NystromformerConfig, OlmoConfig, Olmo2Config, OlmoeConfig, OmDetTurboConfig, OneFormerConfig, OpenLlamaConfig, OpenAIGPTConfig, OPTConfig, Owlv2Config, OwlViTConfig, PatchTSMixerConfig, PatchTSTConfig, PegasusConfig, PegasusXConfig, PerceiverConfig, PersimmonConfig, PhiConfig, Phi3Config, PhimoeConfig, PixtralVisionConfig, PLBartConfig, PoolFormerConfig, ProphetNetConfig, PvtConfig, PvtV2Config, QDQBertConfig, Qwen2Config, Qwen2AudioEncoderConfig, Qwen2MoeConfig, Qwen2VLConfig, RecurrentGemmaConfig, ReformerConfig, RegNetConfig, RemBertConfig, ResNetConfig, RetriBertConfig, RobertaConfig, RobertaPreLayerNormConfig, RoCBertConfig, RoFormerConfig, RTDetrConfig, RwkvConfig, SamConfig, SeamlessM4TConfig, SeamlessM4Tv2Config, SegformerConfig, SegGptConfig, SEWConfig, SEWDConfig, SiglipConfig, SiglipVisionConfig, Speech2TextConfig, SpeechT5Config, SplinterConfig, SqueezeBertConfig, StableLmConfig, Starcoder2Config, SwiftFormerConfig, SwinConfig, Swin2SRConfig, Swinv2Config, SwitchTransformersConfig, T5Config, TableTransformerConfig, TapasConfig, TimeSeriesTransformerConfig, TimesformerConfig, TimmBackboneConfig, TrajectoryTransformerConfig, TransfoXLConfig, TvltConfig, TvpConfig, UdopConfig, UMT5Config, UniSpeechConfig, UniSpeechSatConfig, UnivNetConfig, VanConfig, VideoMAEConfig, ViltConfig, VisionTextDualEncoderConfig, VisualBertConfig, ViTConfig, ViTHybridConfig, ViTMAEConfig, ViTMSNConfig, VitDetConfig, VitsConfig, VivitConfig, Wav2Vec2Config, Wav2Vec2BertConfig, Wav2Vec2ConformerConfig, WavLMConfig, WhisperConfig, XCLIPConfig, XGLMConfig, XLMConfig, XLMProphetNetConfig, XLMRobertaConfig, XLMRobertaXLConfig, XLNetConfig, XmodConfig, YolosConfig, YosoConfig, ZambaConfig."
+vidore/colpali-v1.3,,,,"error: Unrecognized configuration class <class 'transformers.models.paligemma.configuration_paligemma.PaliGemmaConfig'> for this kind of AutoModel: AutoModel.
+Model type should be one of AlbertConfig, AlignConfig, AltCLIPConfig, ASTConfig, AutoformerConfig, BarkConfig, BartConfig, BeitConfig, BertConfig, BertGenerationConfig, BigBirdConfig, BigBirdPegasusConfig, BioGptConfig, BitConfig, BlenderbotConfig, BlenderbotSmallConfig, BlipConfig, Blip2Config, BloomConfig, BridgeTowerConfig, BrosConfig, CamembertConfig, CanineConfig, ChameleonConfig, ChineseCLIPConfig, ChineseCLIPVisionConfig, ClapConfig, CLIPConfig, CLIPTextConfig, CLIPVisionConfig, CLIPSegConfig, ClvpConfig, LlamaConfig, CodeGenConfig, CohereConfig, ConditionalDetrConfig, ConvBertConfig, ConvNextConfig, ConvNextV2Config, CpmAntConfig, CTRLConfig, CvtConfig, DacConfig, Data2VecAudioConfig, Data2VecTextConfig, Data2VecVisionConfig, DbrxConfig, DebertaConfig, DebertaV2Config, DecisionTransformerConfig, DeformableDetrConfig, DeiTConfig, DetaConfig, DetrConfig, DinatConfig, Dinov2Config, DistilBertConfig, DonutSwinConfig, DPRConfig, DPTConfig, EfficientFormerConfig, EfficientNetConfig, ElectraConfig, EncodecConfig, ErnieConfig, ErnieMConfig, EsmConfig, FalconConfig, FalconMambaConfig, FastSpeech2ConformerConfig, FlaubertConfig, FlavaConfig, FNetConfig, FocalNetConfig, FSMTConfig, FunnelConfig, GemmaConfig, Gemma2Config, GitConfig, GlmConfig, GLPNConfig, GPT2Config, GPT2Config, GPTBigCodeConfig, GPTNeoConfig, GPTNeoXConfig, GPTNeoXJapaneseConfig, GPTJConfig, GPTSanJapaneseConfig, GraniteConfig, GraniteMoeConfig, GraphormerConfig, GroundingDinoConfig, GroupViTConfig, HieraConfig, HubertConfig, IBertConfig, IdeficsConfig, Idefics2Config, Idefics3Config, IJepaConfig, ImageGPTConfig, InformerConfig, JambaConfig, JetMoeConfig, JukeboxConfig, Kosmos2Config, LayoutLMConfig, LayoutLMv2Config, LayoutLMv3Config, LEDConfig, LevitConfig, LiltConfig, LlamaConfig, LongformerConfig, LongT5Config, LukeConfig, LxmertConfig, M2M100Config, MambaConfig, Mamba2Config, MarianConfig, MarkupLMConfig, Mask2FormerConfig, MaskFormerConfig, MaskFormerSwinConfig, MBartConfig, MCTCTConfig, MegaConfig, MegatronBertConfig, MgpstrConfig, MimiConfig, MistralConfig, MixtralConfig, MobileBertConfig, MobileNetV1Config, MobileNetV2Config, MobileViTConfig, MobileViTV2Config, MoshiConfig, MPNetConfig, MptConfig, MraConfig, MT5Config, MusicgenConfig, MusicgenMelodyConfig, MvpConfig, NatConfig, NemotronConfig, NezhaConfig, NllbMoeConfig, NystromformerConfig, OlmoConfig, Olmo2Config, OlmoeConfig, OmDetTurboConfig, OneFormerConfig, OpenLlamaConfig, OpenAIGPTConfig, OPTConfig, Owlv2Config, OwlViTConfig, PatchTSMixerConfig, PatchTSTConfig, PegasusConfig, PegasusXConfig, PerceiverConfig, PersimmonConfig, PhiConfig, Phi3Config, PhimoeConfig, PixtralVisionConfig, PLBartConfig, PoolFormerConfig, ProphetNetConfig, PvtConfig, PvtV2Config, QDQBertConfig, Qwen2Config, Qwen2AudioEncoderConfig, Qwen2MoeConfig, Qwen2VLConfig, RecurrentGemmaConfig, ReformerConfig, RegNetConfig, RemBertConfig, ResNetConfig, RetriBertConfig, RobertaConfig, RobertaPreLayerNormConfig, RoCBertConfig, RoFormerConfig, RTDetrConfig, RwkvConfig, SamConfig, SeamlessM4TConfig, SeamlessM4Tv2Config, SegformerConfig, SegGptConfig, SEWConfig, SEWDConfig, SiglipConfig, SiglipVisionConfig, Speech2TextConfig, SpeechT5Config, SplinterConfig, SqueezeBertConfig, StableLmConfig, Starcoder2Config, SwiftFormerConfig, SwinConfig, Swin2SRConfig, Swinv2Config, SwitchTransformersConfig, T5Config, TableTransformerConfig, TapasConfig, TimeSeriesTransformerConfig, TimesformerConfig, TimmBackboneConfig, TrajectoryTransformerConfig, TransfoXLConfig, TvltConfig, TvpConfig, UdopConfig, UMT5Config, UniSpeechConfig, UniSpeechSatConfig, UnivNetConfig, VanConfig, VideoMAEConfig, ViltConfig, VisionTextDualEncoderConfig, VisualBertConfig, ViTConfig, ViTHybridConfig, ViTMAEConfig, ViTMSNConfig, VitDetConfig, VitsConfig, VivitConfig, Wav2Vec2Config, Wav2Vec2BertConfig, Wav2Vec2ConformerConfig, WavLMConfig, WhisperConfig, XCLIPConfig, XGLMConfig, XLMConfig, XLMProphetNetConfig, XLMRobertaConfig, XLMRobertaXLConfig, XLNetConfig, XmodConfig, YolosConfig, YosoConfig, ZambaConfig."
+vidore/colqwen2-v1.0,,,,error: Target modules (.*(model).*(down_proj|gate_proj|up_proj|k_proj|q_proj|v_proj|o_proj).*$|.*(custom_text_proj).*$) not found in the base model. Please check the target modules and try again.
+vidore/colqwen2.5-v0.2,,,,"error: The checkpoint you are trying to load has model type `qwen2_5_vl` but Transformers does not recognize this architecture. This could be because of an issue with the checkpoint, or because your version of Transformers is out of date."
+voyageai/voyage-2,,,,proprietary
+voyageai/voyage-3,,,,proprietary
+voyageai/voyage-3-large,,,,proprietary
+voyageai/voyage-3-lite,,,,proprietary
+voyageai/voyage-3-m-exp,,,,proprietary
+voyageai/voyage-3.5,,,,proprietary
+voyageai/voyage-3.5 (output_dtype=binary),,,,proprietary
+voyageai/voyage-3.5 (output_dtype=int8),,,,proprietary
+voyageai/voyage-code-2,,,,proprietary
+voyageai/voyage-code-3,,,,proprietary
+voyageai/voyage-finance-2,,,,proprietary
+voyageai/voyage-large-2,,,,proprietary
+voyageai/voyage-large-2-instruct,,,,proprietary
+voyageai/voyage-law-2,,,,proprietary
+voyageai/voyage-multilingual-2,,,,proprietary
+voyageai/voyage-multimodal-3,,,,proprietary
+w601sxs/b1ade-embed,335141888,303887360,31254528,success
+yibinlei/LENS-d4000,7110672384,6979588096,131084288,success
+yibinlei/LENS-d8000,7110672384,6979588096,131084288,success
+zeta-alpha-ai/Zeta-Alpha-E5-Mistral,7110660096,,,skipped: too large for BF16 (~7.11B > 6.5B)

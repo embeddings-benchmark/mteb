@@ -10,6 +10,7 @@ from functools import partial
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
+import numpy as np
 from huggingface_hub import (
     GitCommitInfo,
     ModelCard,
@@ -29,6 +30,8 @@ from huggingface_hub.errors import (
     SafetensorsParsingError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
+from sentence_transformers.models import Transformer
+from torch import nn
 from transformers import AutoConfig
 from typing_extensions import Self
 
@@ -94,8 +97,8 @@ class ModelMeta(BaseModel):
         loader: The function that loads the model. If None it assumes that the model is not implemented.
         loader_kwargs: The keyword arguments to pass to the loader function.
         name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
-        n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
-            if the loader returns a SentenceTransformer model from which it can be derived.
+        n_parameters: The total number of parameters in the model, e.g. `7_000_000` for a 7M parameter model. Can be none in case the number of parameters is unknown.
+        n_embedding_parameters: The number of parameters used for the embedding layer. Can be None if the number of embedding parameters is not known (e.g. for proprietary models).
         memory_usage_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
@@ -134,6 +137,8 @@ class ModelMeta(BaseModel):
     release_date: StrDate | None
     languages: list[ISOLanguageScript] | None
     n_parameters: int | None
+    n_active_parameters: int | None = None
+    n_embedding_parameters: int | None = None
     memory_usage_mb: float | None
     max_tokens: float | None
     embed_dim: int | None
@@ -191,6 +196,16 @@ class ModelMeta(BaseModel):
         Derived from model_type field. A model is considered a cross-encoder if "cross-encoder" is in its model_type list.
         """
         return "cross-encoder" in self.model_type
+
+    @property
+    def active_parameters(self):
+        """Number of active parameters. Assumed to be `n_parameters - n_embedding_parameters`. Can be overwritten using `active_parameters` e.g. for MoE models."""
+        if self.n_active_parameters is not None:
+            return self.n_active_parameters
+
+        if self.n_parameters is not None and self.n_embedding_parameters is not None:
+            return self.n_parameters - self.n_embedding_parameters
+        return None
 
     @field_validator("similarity_fn_name", mode="before")
     @classmethod
@@ -384,6 +399,14 @@ class ModelMeta(BaseModel):
             else model.model_card_data.base_model
         )
         meta = cls._from_hub(name, revision, compute_metadata)
+        try:
+            first = model[0]
+
+            if isinstance(first, Transformer):
+                emb = first.auto_model.get_input_embeddings()
+                meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
+        except Exception as e:
+            logger.warning(f"Could not calculate embedding parameters for {name}: {e}")
         meta.revision = model.model_card_data.base_model_revision or meta.revision
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
@@ -455,6 +478,15 @@ class ModelMeta(BaseModel):
         from mteb.models import CrossEncoderWrapper
 
         meta = cls._from_hub(model.model.name_or_path, revision, compute_metadata)
+        try:
+            emb = model.model.get_input_embeddings()
+
+            if isinstance(emb, nn.Embedding):
+                meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
+        except Exception as e:
+            logger.warning(
+                f"Could not calculate embedding parameters for {model.model.name_or_path}: {e}"
+            )
         meta.revision = model.config._commit_hash or meta.revision
         meta.loader = CrossEncoderWrapper
         meta.embed_dim = None
