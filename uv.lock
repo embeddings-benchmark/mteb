@@ -4048,7 +4048,7 @@ wheels = [
 
 [[package]]
 name = "mteb"
-version = "2.6.5"
+version = "2.6.8"
 source = { editable = "." }
 dependencies = [
     { name = "datasets" },
