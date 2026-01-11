@@ -17,6 +17,8 @@ from .macs import MACSA2TRetrieval, MACST2ARetrieval
 from .multilingual import (
     AudioCapsA2TRetrieval,
     AudioCapsT2ARetrieval,
+    GoogleSVQA2TRetrieval,
+    GoogleSVQT2ARetrieval,
     JamAltArtistA2ARetrieval,
     JamAltLyricA2TRetrieval,
     JamAltLyricT2ARetrieval,
@@ -50,6 +52,8 @@ __all__ = [
     "FleursT2ARetrieval",
     "GigaSpeechA2TRetrieval",
     "GigaSpeechT2ARetrieval",
+    "GoogleSVQA2TRetrieval",
+    "GoogleSVQT2ARetrieval",
     "HiFiTTSA2TRetrieval",
     "HiFiTTST2ARetrieval",
     "JLCorpusA2TRetrieval",

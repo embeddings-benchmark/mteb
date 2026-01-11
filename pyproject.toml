@@ -410,6 +410,7 @@ extend-exclude = [
     "*.json",
     "*.jsonl",
     "*.cff",
+    "*.tex",  # latex files with language codes
     "*.txt",  # zero shot labels
     "docs/mmteb",
     "scripts/",
