@@ -422,3 +422,14 @@ class TestDownloadCachedResultsFromBranch:
                 max_size_mb=max_size_mb
             )
             assert result_path.exists()
+
+
+def test_result_cache_direct_import() -> None:
+    """Test that ResultCache can be imported directly from mteb module."""
+    # Verify that mteb.ResultCache references the same class as ResultCache from mteb.cache
+    assert mteb.ResultCache is ResultCache, "mteb.ResultCache should reference the same class as ResultCache from mteb.cache"
+    
+    # Verify we can instantiate it
+    cache = mteb.ResultCache(cache_path=test_cache_path)
+    assert isinstance(cache, ResultCache), "Should be able to instantiate ResultCache from mteb.ResultCache"
+    assert cache.cache_path == test_cache_path, "Cache path should be set correctly"
