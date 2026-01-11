@@ -3,6 +3,7 @@ from importlib.metadata import version
 from mteb import types
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.cache import ResultCache
 from mteb.deprecated_evaluator import MTEB
 from mteb.evaluate import evaluate
 from mteb.filter_tasks import filter_tasks
@@ -33,6 +34,7 @@ __all__ = [
     "CrossEncoderProtocol",
     "EncoderProtocol",
     "IndexEncoderSearchProtocol",
+    "ResultCache",
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
     "TaskMetadata",

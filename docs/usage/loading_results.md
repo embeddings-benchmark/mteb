@@ -7,12 +7,11 @@ For instance, if you are selecting the best model for semantic text similarity (
 
 ```python
 import mteb
-from mteb.cache import ResultCache
 
 tasks = mteb.get_tasks(tasks=["STS12"])
 model_names = ["intfloat/multilingual-e5-large"]
 
-cache = ResultCache("~/.cache/mteb")
+cache = mteb.ResultCache("~/.cache/mteb")
 results = cache.load_results(models=model_names, tasks=tasks)
 ```
 
@@ -36,16 +35,16 @@ All previously submitted results are available results [repository](https://gith
 You can download this using:
 
 ```python
-from mteb.cache import ResultCache
+import mteb
 
-cache = ResultCache()
+cache = mteb.ResultCache()
 cache.download_from_remote() # download results from the remote repository
 ```
 
 From here, you can work with the cache as usual. For instance, if you are selecting the best model for your French and English retrieval task on legal documents, you could fetch the relevant tasks and create a dataframe of the results using the following code:
 
 ```python
-from mteb.cache import ResultCache
+import mteb
 
 # select your tasks
 tasks = mteb.get_tasks(task_types=["Retrieval"], languages=["eng", "fra"], domains=["Legal"])
@@ -56,7 +55,7 @@ model_names = [
 ]
 
 
-cache = ResultCache()
+cache = mteb.ResultCache()
 cache.download_from_remote() # download results from the remote repository. Might take a while the first time.
 
 results = cache.load_results(
@@ -88,11 +87,10 @@ If you loaded results for a specific benchmark, you can get the aggregated bench
 
 ```python
 import mteb
-from mteb.cache import ResultCache
 
 # Load results for a specific benchmark
 benchmark = mteb.get_benchmark("MTEB(eng, v2)")
-cache = ResultCache()
+cache = mteb.ResultCache()
 cache.download_from_remote()  # download results from the remote repository
 results = cache.load_results(
     models=["intfloat/e5-small", "intfloat/multilingual-e5-small"],
