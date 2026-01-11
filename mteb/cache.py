@@ -508,14 +508,16 @@ class ResultCache:
         self.download_from_remote()
 
         # Load all results from individual model files
-        all_model_names = [
-            model_meta.name
+        # Pass ModelMeta objects (not strings) so filtering uses both name AND revision,
+        # avoiding no_revision_available folders when a proper revision exists
+        all_model_metas = [
+            model_meta
             for model_meta in mteb.get_model_metas()
             if model_meta.name is not None
         ]
 
         all_results = self.load_results(
-            models=all_model_names,
+            models=all_model_metas,
             only_main_score=True,
             require_model_meta=False,
             include_remote=True,
