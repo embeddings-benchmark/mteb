@@ -19,14 +19,24 @@ from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
-NV_RETRIEVER_CITATION = """@misc{moreira2025nvretrieverimprovingtextembedding,
-      title={NV-Retriever: Improving text embedding models with effective hard-negative mining},
-      author={Gabriel de Souza P. Moreira and Radek Osmulski and Mengyao Xu and Ronay Ak and Benedikt Schifferer and Even Oldridge},
+NV_RETRIEVER_CITATION = """@misc{lee2025nvembedimprovedtechniquestraining,
+      title={NV-Embed: Improved Techniques for Training LLMs as Generalist Embedding Models}, 
+      author={Chankyu Lee and Rajarshi Roy and Mengyao Xu and Jonathan Raiman and Mohammad Shoeybi and Bryan Catanzaro and Wei Ping},
       year={2025},
-      eprint={2407.15831},
+      eprint={2405.17428},
       archivePrefix={arXiv},
-      primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2407.15831}
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2405.17428}, 
+}"""
+
+LlamaEmbedNemotron_CITATION = """@misc{babakhin2025llamaembednemotron8buniversaltextembedding,
+      title={Llama-Embed-Nemotron-8B: A Universal Text Embedding Model for Multilingual and Cross-Lingual Tasks}, 
+      author={Yauhen Babakhin and Radek Osmulski and Ronay Ak and Gabriel Moreira and Mengyao Xu and Benedikt Schifferer and Bo Liu and Even Oldridge},
+      year={2025},
+      eprint={2511.07025},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2511.07025}, 
 }"""
 
 
@@ -614,8 +624,8 @@ llama_embed_nemotron_8b = ModelMeta(
     framework=["PyTorch", "Sentence Transformers", "safetensors", "Transformers"],
     use_instructions=True,
     training_datasets=llama_embed_nemotron_training_datasets,
-    public_training_code=None,  # Will be released later
-    public_training_data=None,  # Will be released later
+    public_training_code="https://github.com/NVIDIA-NeMo/Automodel/tree/main/examples/biencoder/llama_embed_nemotron_8b",
+    public_training_data="https://huggingface.co/datasets/nvidia/embed-nemotron-dataset-v1",
     contacts=["ybabakhin"],
-    citation=NV_RETRIEVER_CITATION,
+    citation=LlamaEmbedNemotron_CITATION,
 )
