@@ -264,6 +264,7 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         "BirdSet",
         "GoogleSVQT2ARetrieval",
         "GoogleSVQA2TRetrieval",
+        "AudioSet",
     ):
         pytest.skip("Skipping audio tasks for now, see issue #3498")
 
