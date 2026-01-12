@@ -30,6 +30,7 @@ class E5VModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
+        device: str | None = None,
         composed_prompt=None,
         **kwargs: Any,
     ):
@@ -47,8 +48,7 @@ class E5VModel(AbsEncoder):
         self.processor = LlavaNextProcessor.from_pretrained(
             model_name, revision=revision
         )
-        if "device" in kwargs:
-            self.device = kwargs.pop("device")
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.model = LlavaNextForConditionalGeneration.from_pretrained(
             model_name, revision=revision, **kwargs
         )
@@ -87,7 +87,7 @@ class E5VModel(AbsEncoder):
                     ],
                     return_tensors="pt",
                     padding=True,
-                ).to("cuda")
+                ).to(self.device)
                 text_outputs = self.model(
                     **text_inputs, output_hidden_states=True, return_dict=True
                 ).hidden_states[-1][:, -1, :]
@@ -111,7 +111,7 @@ class E5VModel(AbsEncoder):
                     batch["image"],
                     return_tensors="pt",
                     padding=True,
-                ).to("cuda")
+                ).to(self.device)
                 image_outputs = self.model(
                     **img_inputs, output_hidden_states=True, return_dict=True
                 ).hidden_states[-1][:, -1, :]
@@ -141,7 +141,7 @@ class E5VModel(AbsEncoder):
                     ]
                     inputs = self.processor(
                         prompts, batch["image"], return_tensors="pt", padding=True
-                    ).to("cuda")
+                    ).to(self.device)
                     outputs = self.model(
                         **inputs, output_hidden_states=True, return_dict=True
                     ).hidden_states[-1][:, -1, :]
@@ -173,7 +173,7 @@ e5_v = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/kongds/E5-V",
     public_training_data="https://huggingface.co/datasets/princeton-nlp/datasets-for-simcse",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/royokong/e5-v",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,

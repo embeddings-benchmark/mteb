@@ -226,7 +226,7 @@ class ThuNewsClusteringFastS2S(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@software{THUCTC,
+@software{sun2016thuctc,
   author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
   note = {THU Chinese Text Classification Toolkit},
   publisher = {THU Natural Language Processing Lab},
@@ -285,7 +285,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@software{THUCTC,
+@software{sun2016thuctc,
   author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
   note = {THU Chinese Text Classification Toolkit},
   publisher = {THU Natural Language Processing Lab},

@@ -27,17 +27,18 @@ SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
 
 
 def sentence_transformers_loader(
-    model_name: str, revision: str | None = None, **kwargs
+    model_name: str, revision: str | None = None, device: str | None = None, **kwargs
 ) -> SentenceTransformerEncoderWrapper:
     """Loads a SentenceTransformer model and wraps it in a SentenceTransformerEncoderWrapper.
 
     Args:
         model_name: The name of the SentenceTransformer model to load.
         revision: The revision of the model to load.
+        device: The device used to load the model.
         kwargs: Additional arguments to pass to the SentenceTransformer model.
     """
     return SentenceTransformerEncoderWrapper(
-        model=model_name, revision=revision, **kwargs
+        model=model_name, revision=revision, device=device, **kwargs
     )
 
 
@@ -50,6 +51,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         self,
         model: str | SentenceTransformer,
         revision: str | None = None,
+        device: str | None = None,
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
@@ -58,6 +60,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         Args:
             model: The SentenceTransformer model to use. Can be a string (model name), a SentenceTransformer model, or a CrossEncoder model.
             revision: The revision of the model to use.
+            device: The device used to load the model.
             model_prompts: A dictionary mapping task names to prompt names.
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
@@ -67,7 +70,9 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         from sentence_transformers import SentenceTransformer
 
         if isinstance(model, str):
-            self.model = SentenceTransformer(model, revision=revision, **kwargs)
+            self.model = SentenceTransformer(
+                model, revision=revision, device=device, **kwargs
+            )
         else:
             self.model = model
 
@@ -267,6 +272,7 @@ class CrossEncoderWrapper:
         self,
         model: CrossEncoder | str,
         revision: str | None = None,
+        device: str | None = None,
         **kwargs,
     ) -> None:
         from sentence_transformers import CrossEncoder
@@ -274,7 +280,7 @@ class CrossEncoderWrapper:
         if isinstance(model, CrossEncoder):
             self.model = model
         elif isinstance(model, str):
-            self.model = CrossEncoder(model, revision=revision, **kwargs)
+            self.model = CrossEncoder(model, revision=revision, device=device, **kwargs)
 
         self.mteb_model_meta = ModelMeta.from_cross_encoder(self.model)
 

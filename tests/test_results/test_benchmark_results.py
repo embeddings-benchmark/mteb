@@ -9,6 +9,7 @@ import pytest
 import mteb
 from mteb import Benchmark
 from mteb.cache import ResultCache
+from mteb.cli.generate_model_card import generate_model_card
 from mteb.results import BenchmarkResults, ModelResult
 
 
@@ -187,3 +188,107 @@ def test_benchmark_results(cache_path: Path) -> None:
     assert "Retrieval" in df.columns
     assert df.shape[0] == 2
     assert df.at[0, "Mean (Task)"] == pytest.approx(0.616616)
+
+
+def test_generate_model_card_with_table_and_benchmarks(
+    cache_path: Path, tmp_path: Path
+) -> None:
+    """Test generating model card with results table for multiple benchmarks and models."""
+    test_folder = Path(__file__).parent.parent
+    golden_files_path = test_folder / "create_meta"
+    output_path = tmp_path / "model_card_benchmark.md"
+    golden_file = golden_files_path / "model_card_benchmark_gold.md"
+
+    # Create benchmarks
+    benchmarks = [
+        Benchmark(
+            name="STS_Benchmark",
+            tasks=mteb.get_tasks(["STS12", "STS13"]),
+        ),
+        Benchmark(
+            name="Classification_Benchmark",
+            tasks=mteb.get_tasks(["Banking77Classification"]),
+        ),
+    ]
+
+    generate_model_card(
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        benchmarks=benchmarks,
+        results_cache=ResultCache(cache_path),
+        output_path=output_path,
+        add_table_to_model_card=True,
+        models_to_compare=["baseline/random-encoder-baseline"],
+    )
+
+    assert output_path.exists(), "Model card file not created"
+    assert output_path.stat().st_size > 0, "Model card file is empty"
+
+    with output_path.open("r") as f:
+        output_content = f.read()
+
+    assert golden_file.exists(), f"Golden file not found: {golden_file}"
+    with golden_file.open("r") as f:
+        golden_content = f.read()
+
+    def extract_table(content: str) -> list[str]:
+        """Extract markdown table rows from content."""
+        lines = content.split("\n")
+        table_rows = []
+        in_table = False
+
+        for line in lines:
+            if "# MTEB Results" in line or "# MTEB results" in line:
+                in_table = True
+                continue
+
+            if in_table:
+                # Table rows contain pipes
+                if "|" in line:
+                    # Normalize whitespace in table rows
+                    normalized = "|".join(cell.strip() for cell in line.split("|"))
+                    table_rows.append(normalized)
+                elif line.strip() == "":
+                    # Empty line might signal end of table
+                    if table_rows:
+                        break
+
+        return table_rows
+
+    output_table = extract_table(output_content)
+    golden_table = extract_table(golden_content)
+
+    # Validate table exists
+    assert len(output_table) > 0, "Output table not found"
+    assert len(golden_table) > 0, "Golden table not found"
+
+    # Compare table structure (header and separator)
+    assert len(output_table) >= 2, (
+        "Output table should have at least header and separator"
+    )
+    assert len(golden_table) >= 2, (
+        "Golden table should have at least header and separator"
+    )
+
+    # Compare headers
+    assert output_table[0] == golden_table[0], (
+        f"Table headers don't match.\n"
+        f"Expected: {golden_table[0]}\n"
+        f"Got: {output_table[0]}"
+    )
+
+    # Compare data rows (skip header and separator)
+    output_data_rows = output_table[2:]
+    golden_data_rows = golden_table[2:]
+
+    assert len(output_data_rows) == len(golden_data_rows), (
+        f"Number of data rows doesn't match.\n"
+        f"Expected {len(golden_data_rows)} rows, got {len(output_data_rows)}"
+    )
+
+    # Compare each data row
+    for i, (output_row, golden_row) in enumerate(
+        zip(output_data_rows, golden_data_rows)
+    ):
+        assert output_row == golden_row, (
+            f"Row {i} doesn't match.\nExpected: {golden_row}\nGot: {output_row}"
+        )

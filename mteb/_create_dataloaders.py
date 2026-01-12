@@ -384,6 +384,9 @@ def _create_document_dataloader(
         input_column: The column to use as input. If None, it will use the first column that matches the modality.
         batch_size: Batch size for the dataloader.
         num_proc: Number of processes to use.
+
+    Returns:
+        A dataloader for the documents.
     """
     document_type = task_metadata.get_modalities(PromptType.document)
     if document_type == ["text"]:  # text only

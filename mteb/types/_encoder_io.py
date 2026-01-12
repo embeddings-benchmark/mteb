@@ -19,12 +19,10 @@ class EncodeKwargs(TypedDict):
     Attributes:
         batch_size: The batch size to use for encoding.
         show_progress_bar: Whether to show a progress bar during encoding.
-        num_proc: The number of processes to use for dataset processing.
     """
 
     batch_size: NotRequired[int]
     show_progress_bar: NotRequired[bool]
-    num_proc: NotRequired[int]
 
 
 # --- Output types ---

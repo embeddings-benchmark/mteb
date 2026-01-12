@@ -24,5 +24,19 @@ class ZacLegalTextRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",  # TODO: Add bibtex citation when the paper is published
+        bibtex_citation=r"""
+@inproceedings{10.1007/978-981-95-1746-6_17,
+  address = {Singapore},
+  author = {Pham, Bao Loc
+and Hoang, Quoc Viet
+and Luu, Quy Tung
+and Vo, Trong Thu},
+  booktitle = {Proceedings of the Fifth International Conference on Intelligent Systems and Networks},
+  isbn = {978-981-95-1746-6},
+  pages = {153--163},
+  publisher = {Springer Nature Singapore},
+  title = {GN-TRVN: A Benchmark for Vietnamese Table Markdown Retrieval Task},
+  year = {2026},
+}
+""",
     )
