@@ -79,7 +79,7 @@ class KoVidore2EnergyRetrieval(AbsTaskRetrieval):
         reference="https://github.com/whybe-choi/kovidore-data-generator",
         dataset={
             "path": "whybe-choi/kovidore-v2-energy-mteb",
-            "revision": "f967fa70b5cf287d6d39ec16520786cb78e971a4",
+            "revision": "8c09a3d22b1fa3a7f5e815e9521da9b048754211",
         },
         type="DocumentUnderstanding",
         category="t2i",
