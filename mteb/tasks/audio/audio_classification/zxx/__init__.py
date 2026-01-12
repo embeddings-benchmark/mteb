@@ -1,3 +1,4 @@
+from .ambient_acoustic_context import AmbientAcousticContextClassification
 from .beijing_opera import BeijingOpera
 from .bird_clef import BirdCLEFClassification
 from .esc50 import ESC50Classification
@@ -10,6 +11,7 @@ from .tut_acoustic_scenes import TUTAcousticScenesClassification
 from .urban_sound8k import UrbanSound8kZeroshotClassification
 
 __all__ = [
+    "AmbientAcousticContextClassification",
     "BeijingOpera",
     "BirdCLEFClassification",
     "ESC50Classification",
