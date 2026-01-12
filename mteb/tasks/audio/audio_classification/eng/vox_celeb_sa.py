@@ -12,7 +12,7 @@ class VoxCelebSA(AbsTaskClassification):
             "revision": "17fb326752c26b58491de360f0a6a152c9bfe19d",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

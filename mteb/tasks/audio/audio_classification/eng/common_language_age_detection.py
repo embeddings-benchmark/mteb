@@ -12,7 +12,7 @@ class CommonLanguageAgeDetection(AbsTaskClassification):
             "revision": "a9c585af68d65a29c4ad12121f83853fa1cdda92",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

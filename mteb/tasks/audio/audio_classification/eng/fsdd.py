@@ -12,7 +12,7 @@ class FSDD(AbsTaskClassification):
             "revision": "c34455c99604d35cb8d27328c267be1478efc903",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

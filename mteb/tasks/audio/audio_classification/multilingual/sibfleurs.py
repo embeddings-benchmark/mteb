@@ -117,7 +117,7 @@ class SIBFLEURSMultilingualClassification(AbsTaskClassification):
             "revision": "186b61175fbd77059f769b6bf1110d449a2ff311",
         },
         type="AudioMultilabelClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=EVAL_LANGS_MAP,
         main_score="accuracy",

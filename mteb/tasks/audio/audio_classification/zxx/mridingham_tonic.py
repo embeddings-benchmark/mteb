@@ -12,7 +12,7 @@ class MridinghamTonic(AbsTaskClassification):
             "revision": "9304553355441e3d2bf2432691b6209ff9a9339c",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["zxx-Zxxx"],
         main_score="accuracy",

@@ -12,7 +12,7 @@ class ESC50Classification(AbsTaskClassification):
             "revision": "0877d3708afd4deba0b89a2b54eb528e7f24ec6c",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["zxx-Zxxx"],
         main_score="accuracy",

@@ -10,6 +10,7 @@ class RavdessZeroshotClassification(AbsTaskZeroShotClassification):
         dataset={
             "path": "narad/ravdess",
             "revision": "2894394c52a8621bf8bb2e4d7c3b9cf77f6fa80e",
+            "trust_remote_code": True,
         },
         type="AudioZeroshotClassification",
         category="a2t",

@@ -12,7 +12,7 @@ class SpokenQAForIC(AbsTaskClassification):
             "revision": "97eb2287a0c881538cee9f5db415e80111d96a31",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

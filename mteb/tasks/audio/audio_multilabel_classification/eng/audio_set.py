@@ -12,7 +12,7 @@ class AudioSetMultilingualClassification(AbsTaskMultilabelClassification):
         reference="https://huggingface.co/datasets/agkphysics/AudioSet",
         dataset={
             "path": "agkphysics/AudioSet",
-            "revision": "5a2fa42a1506470d275a47ff8e1fdac5b364e6ef",
+            "revision": "0c609e8302cf139307f639c57652032af0a88041",
         },
         type="AudioMultilabelClassification",
         category="a2t",

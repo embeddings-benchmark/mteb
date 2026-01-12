@@ -12,7 +12,7 @@ class MridinghamStroke(AbsTaskClassification):
             "revision": "2b6d06ff3da6da9609f078b6bc92c248016a5112",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["zxx-Zxxx"],
         main_score="accuracy",

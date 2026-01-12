@@ -12,7 +12,7 @@ class NSynth(AbsTaskClassification):
             "revision": "e32dfe9b65e121e64229a821fe1ff177e8962635",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["test"],
         eval_langs=["zxx-Zxxx"],
         main_score="accuracy",

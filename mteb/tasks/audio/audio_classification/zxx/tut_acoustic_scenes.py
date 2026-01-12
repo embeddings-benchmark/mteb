@@ -12,7 +12,7 @@ class TUTAcousticScenesClassification(AbsTaskClassification):
             "revision": "fe74de34b726995a39971faeb83491480ca1886e",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["zxx-Zxxx"],
         main_score="accuracy",

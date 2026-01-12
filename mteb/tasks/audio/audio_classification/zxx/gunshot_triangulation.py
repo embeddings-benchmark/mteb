@@ -12,7 +12,7 @@ class GunshotTriangulation(AbsTaskClassification):
             "revision": "d5caa98a10a41dd8890a343a631fdbaacc747108",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["zxx-Zxxx"],
         main_score="accuracy",

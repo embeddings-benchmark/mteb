@@ -27,7 +27,7 @@ class MInDS14Classification(AbsTaskClassification):
             "revision": "58d73d2cddefab7df4bc0b814aa5c53c5fd4928e",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=EVAL_LANGS_MAP,
         main_score="accuracy",

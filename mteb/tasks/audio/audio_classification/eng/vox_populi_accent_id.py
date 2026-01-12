@@ -12,7 +12,7 @@ class VoxPopuliAccentID(AbsTaskClassification):
             "revision": "5ea6ce48d0de6db179cb7debf0d6813faa495a33",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

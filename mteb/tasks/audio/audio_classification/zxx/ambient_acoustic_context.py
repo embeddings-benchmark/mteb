@@ -12,9 +12,9 @@ class AmbientAcousticContextClassification(AbsTaskClassification):
             "revision": "8f4de158d4162de768ebb4dc0594429d785077da",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["test"],
-        eval_langs=["eng-Latn"],
+        eval_langs=["zxx-Zxxx"],
         main_score="accuracy",
         date=("2020-01-01", "2020-12-31"),  # Paper publication date
         domains=["Spoken", "Speech"],

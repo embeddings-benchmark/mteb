@@ -12,7 +12,7 @@ class CommonLanguageGenderDetection(AbsTaskClassification):
             "revision": "65cdf4a4565f09b1747cd8fb37d18cd9aa1f6dd9",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

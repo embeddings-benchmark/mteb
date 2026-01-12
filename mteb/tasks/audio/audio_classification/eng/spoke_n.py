@@ -12,7 +12,7 @@ class SpokeNEnglishClassification(AbsTaskClassification):
             "revision": "afbff14d927de14412d8124502313ea6d9d140e0",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
