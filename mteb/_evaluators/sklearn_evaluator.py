@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
-    from mteb.types import Array, BatchedInput
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +54,7 @@ class SklearnEvaluator(Evaluator):
         self.evaluator_model = evaluator_model
 
     def create_dataloaders(
-        self, encode_kwargs: dict[str, Any]
+        self, encode_kwargs: EncodeKwargs
     ) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
         dataloader_train = create_dataloader(
             self.train_dataset,
@@ -74,7 +74,7 @@ class SklearnEvaluator(Evaluator):
         self,
         model: EncoderProtocol,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         test_cache: Array | None = None,
     ) -> tuple[np.ndarray, Array]:
         """Classification evaluation by training a sklearn classifier on the embeddings of the training set and evaluating on the embeddings of the test set.

@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from datasets import Dataset, DatasetDict
 
     from mteb.models.models_protocols import MTEBModels
-    from mteb.types import HFSubset, ScoresDict
+    from mteb.types import EncodeKwargs, HFSubset, ScoresDict
     from mteb.types.statistics import DescriptiveStatistics
 
     from .aggregate_task_metadata import AggregateTaskMetadata
@@ -134,7 +134,7 @@ class AbsTaskAggregate(AbsTask):
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
@@ -148,7 +148,7 @@ class AbsTaskAggregate(AbsTask):
         self,
         model: MTEBModels,
         data_split: DatasetDict | Dataset,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(

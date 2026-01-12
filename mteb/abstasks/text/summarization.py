@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import numpy as np
 
@@ -23,6 +23,7 @@ if TYPE_CHECKING:
 
     from mteb._evaluators.text.summarization_evaluator import SummarizationMetrics
     from mteb.models import MTEBModels
+    from mteb.types import EncodeKwargs
     from mteb.types.statistics import (
         ScoreStatistics,
         TextStatistics,
@@ -91,7 +92,7 @@ class AbsTaskSummarization(AbsTask):
         *,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         **kwargs,
     ) -> SummarizationMetrics:

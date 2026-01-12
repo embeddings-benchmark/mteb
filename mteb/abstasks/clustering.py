@@ -13,7 +13,7 @@ from sklearn.metrics.cluster import v_measure_score
 
 from mteb._create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
-from mteb.types import HFSubset
+from mteb.types import Array, HFSubset
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
@@ -29,7 +29,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
-    from mteb.types import Array, ScoresDict
+    from mteb.types import Array, EncodeKwargs, ScoresDict
     from mteb.types.statistics import (
         ImageStatistics,
         LabelStatistics,
@@ -165,7 +165,7 @@ class AbsTaskClustering(AbsTask):
         model: MTEBModels,
         data_split: Dataset,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,

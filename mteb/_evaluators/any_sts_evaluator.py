@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, TypedDict
+from typing import TYPE_CHECKING, TypedDict
 
 from sklearn.metrics.pairwise import (
     paired_cosine_distances,
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
-    from mteb.types import PromptType
+    from mteb.types import EncodeKwargs, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +62,10 @@ class AnySTSEvaluator(Evaluator):
         self.input2_prompt_type = input2_prompt_type
 
     def __call__(
-        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
+        self,
+        model: EncoderProtocol,
+        *,
+        encode_kwargs: EncodeKwargs,
     ) -> STSEvaluatorScores:
         logger.info("Running semantic similarity - Encoding samples (1/2)")
         embeddings1 = model.encode(

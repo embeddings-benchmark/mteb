@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 
     from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
     from mteb.models import MTEBModels
-    from mteb.types import Array
+    from mteb.types import Array, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +89,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         model: MTEBModels,
         data_split: DatasetDict,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,

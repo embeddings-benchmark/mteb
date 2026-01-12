@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, TypedDict
+from typing import TYPE_CHECKING, TypedDict
 
 import torch
 from datasets import Dataset
@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
+    from mteb.types import EncodeKwargs
     from mteb.types.statistics import (
         ImageStatistics,
         LabelStatistics,
@@ -124,7 +125,7 @@ class AbsTaskZeroShotClassification(AbsTask):
         *,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         **kwargs,
     ) -> ZeroShotClassificationMetrics:

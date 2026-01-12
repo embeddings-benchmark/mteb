@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from datasets import Dataset
 
     from mteb.models.models_protocols import MTEBModels
+    from mteb.types import EncodeKwargs
     from mteb.types.statistics import (
         ImageStatistics,
         TextStatistics,
@@ -129,7 +130,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         model: MTEBModels,
         data_split: Dataset,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,

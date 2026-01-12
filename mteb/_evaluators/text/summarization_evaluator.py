@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import sys
-from typing import TYPE_CHECKING, Any, TypedDict
+from typing import TYPE_CHECKING, TypedDict
 
 import numpy as np
 import torch
@@ -16,6 +16,7 @@ from mteb.similarity_functions import cos_sim, dot_score
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
+    from mteb.types import EncodeKwargs
 
 # if later than python 3.13 use typing module
 if sys.version_info >= (3, 13):
@@ -98,7 +99,7 @@ class SummarizationEvaluator(Evaluator):
         self,
         model: EncoderProtocol,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> SummarizationDistances:
         # Get the human & machine summaries for the text in one go for all
         human_lens = [len(human_summaries) for human_summaries in self.human_summaries]

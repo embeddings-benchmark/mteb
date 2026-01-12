@@ -5,10 +5,10 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 import torch.nn.functional as F
-from datasets import Dataset
 from torch.utils.data import DataLoader
 
 from mteb._create_dataloaders import (
+    _create_dataloader_from_texts,
     _transform_image_to_rgb,
 )
 from mteb._evaluators.evaluator import Evaluator
@@ -21,6 +21,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import EncoderProtocol
+    from mteb.types import EncodeKwargs
 
 
 logger = logging.getLogger(__name__)
@@ -86,7 +87,10 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         self.hf_subset = hf_subset
 
     def __call__(  # type: ignore[override]
-        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
+        self,
+        model: EncoderProtocol,
+        *,
+        encode_kwargs: EncodeKwargs,
     ) -> list[torch.Tensor]:
         images = []
         if isinstance(self.images_column_names, str):
@@ -107,8 +111,8 @@ class ImageTextPairClassificationEvaluator(Evaluator):
                     texts.append(row[col])
 
         text_embeddings = model.encode(
-            DataLoader(
-                Dataset.from_dict({"text": texts}),
+            _create_dataloader_from_texts(
+                texts,
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
@@ -129,7 +133,6 @@ class ImageTextPairClassificationEvaluator(Evaluator):
             DataLoader(
                 CustomImageDataset(images),
                 collate_fn=lambda x: {"image": [item["image"] for item in x]},
-                **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,

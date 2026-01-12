@@ -17,6 +17,8 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -24,18 +26,28 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-NV_RETRIEVER_CITATION = """@misc{moreira2025nvretrieverimprovingtextembedding,
-      title={NV-Retriever: Improving text embedding models with effective hard-negative mining},
-      author={Gabriel de Souza P. Moreira and Radek Osmulski and Mengyao Xu and Ronay Ak and Benedikt Schifferer and Even Oldridge},
+NV_RETRIEVER_CITATION = """@misc{lee2025nvembedimprovedtechniquestraining,
+      title={NV-Embed: Improved Techniques for Training LLMs as Generalist Embedding Models},
+      author={Chankyu Lee and Rajarshi Roy and Mengyao Xu and Jonathan Raiman and Mohammad Shoeybi and Bryan Catanzaro and Wei Ping},
       year={2025},
-      eprint={2407.15831},
+      eprint={2405.17428},
       archivePrefix={arXiv},
-      primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2407.15831}
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2405.17428},
+}"""
+
+LlamaEmbedNemotron_CITATION = """@misc{babakhin2025llamaembednemotron8buniversaltextembedding,
+      title={Llama-Embed-Nemotron-8B: A Universal Text Embedding Model for Multilingual and Cross-Lingual Tasks},
+      author={Yauhen Babakhin and Radek Osmulski and Ronay Ak and Gabriel Moreira and Mengyao Xu and Benedikt Schifferer and Bo Liu and Even Oldridge},
+      year={2025},
+      eprint={2511.07025},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2511.07025},
 }"""
 
 
-def instruction_template(
+def _instruction_template(
     instruction: str, prompt_type: PromptType | None = None
 ) -> str:
     return f"Instruct: {instruction}\nQuery: " if instruction else ""
@@ -106,10 +118,77 @@ nvidia_training_datasets = {
     "MrTidyRetrieval",
 }
 
+
+class _NVEmbedWrapper(InstructSentenceTransformerModel):
+    """Inherited, because nvembed requires `sbert==2`, but it doesn't have tokenizers kwargs"""
+
+    def __init__(
+        self,
+        model_name: str,
+        revision: str,
+        instruction_template: str
+        | Callable[[str, PromptType | None], str]
+        | None = None,
+        max_seq_length: int | None = None,
+        apply_instruction_to_passages: bool = True,
+        padding_side: str | None = None,
+        add_eos_token: bool = False,
+        prompts_dict: dict[str, str] | None = None,
+        **kwargs: Any,
+    ):
+        from sentence_transformers import __version__ as sbert_version
+
+        required_transformers_version = "4.42.4"
+        required_sbert_version = "2.7.0"
+
+        if Version(transformers_version) != Version(required_transformers_version):
+            raise RuntimeError(
+                f"transformers version {transformers_version} is not match with required "
+                f"install version {required_transformers_version} to run `nvidia/NV-Embed-v2`"
+            )
+
+        if Version(sbert_version) != Version(required_sbert_version):
+            raise RuntimeError(
+                f"sbert version {sbert_version} is not match with required "
+                f"install version {required_sbert_version} to run `nvidia/NV-Embed-v2`"
+            )
+
+        requires_package(
+            self, "flash_attn", model_name, "pip install 'mteb[flash_attention]'"
+        )
+
+        from sentence_transformers import SentenceTransformer
+
+        if (
+            isinstance(instruction_template, str)
+            and "{instruction}" not in instruction_template
+        ):
+            raise ValueError(
+                "Instruction template must contain the string '{instruction}'."
+            )
+        if instruction_template is None:
+            logger.warning(
+                "No instruction template provided. Instructions will be used as-is."
+            )
+
+        self.instruction_template = instruction_template
+
+        self.model_name = model_name
+        self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
+        self.model.tokenizer.padding_side = padding_side
+        self.model.tokenizer.add_eos_token = add_eos_token
+
+        if max_seq_length:
+            # https://github.com/huggingface/sentence-transformers/issues/3575
+            self.model.max_seq_length = max_seq_length
+        self.apply_instruction_to_passages = apply_instruction_to_passages
+        self.prompts_dict = prompts_dict
+
+
 NV_embed_v2 = ModelMeta(
-    loader=InstructSentenceTransformerModel,
+    loader=_NVEmbedWrapper,
     loader_kwargs=dict(
-        instruction_template=instruction_template,
+        instruction_template=_instruction_template,
         trust_remote_code=True,
         max_seq_length=32768,
         padding_side="right",
@@ -138,9 +217,9 @@ NV_embed_v2 = ModelMeta(
 )
 
 NV_embed_v1 = ModelMeta(
-    loader=InstructSentenceTransformerModel,
+    loader=_NVEmbedWrapper,
     loader_kwargs=dict(
-        instruction_template=instruction_template,
+        instruction_template=_instruction_template,
         trust_remote_code=True,
         max_seq_length=32768,
         padding_side="right",
@@ -552,8 +631,8 @@ llama_embed_nemotron_8b = ModelMeta(
     framework=["PyTorch", "Sentence Transformers", "safetensors", "Transformers"],
     use_instructions=True,
     training_datasets=llama_embed_nemotron_training_datasets,
-    public_training_code=None,  # Will be released later
-    public_training_data=None,  # Will be released later
+    public_training_code="https://github.com/NVIDIA-NeMo/Automodel/tree/main/examples/biencoder/llama_embed_nemotron_8b",
+    public_training_data="https://huggingface.co/datasets/nvidia/embed-nemotron-dataset-v1",
     contacts=["ybabakhin"],
-    citation=NV_RETRIEVER_CITATION,
+    citation=LlamaEmbedNemotron_CITATION,
 )

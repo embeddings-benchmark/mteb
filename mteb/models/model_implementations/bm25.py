@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from mteb._create_dataloaders import _create_text_queries_dataloader
 from mteb._requires_package import requires_package
@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import SearchProtocol
     from mteb.types import (
         CorpusDatasetType,
+        EncodeKwargs,
         InstructionDatasetType,
         QueryDatasetType,
         RetrievalOutputType,
@@ -53,7 +54,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
             task_metadata: TaskMetadata,
             hf_split: str,
             hf_subset: str,
-            encode_kwargs: dict[str, Any],
+            encode_kwargs: EncodeKwargs,
         ) -> None:
             logger.info("Encoding Corpus...")
             corpus_texts = [
@@ -78,7 +79,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
             hf_split: str,
             hf_subset: str,
             top_k: int,
-            encode_kwargs: dict[str, Any],
+            encode_kwargs: EncodeKwargs,
             instructions: InstructionDatasetType | None = None,
             top_ranked: TopRankedDocumentsType | None = None,
         ) -> RetrievalOutputType:

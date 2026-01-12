@@ -1,23 +1,22 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Any, Protocol, Unpack, runtime_checkable
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.model_meta import ModelMeta
     from mteb.types import (
         Array,
         BatchedInput,
         CorpusDatasetType,
+        EncodeKwargs,
         PromptType,
         QueryDatasetType,
         RetrievalOutputType,
         TopRankedDocumentsType,
     )
-
-if TYPE_CHECKING:
-    from mteb.models.model_meta import ModelMeta
 
 
 @runtime_checkable
@@ -31,7 +30,7 @@ class SearchProtocol(Protocol):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -52,7 +51,7 @@ class SearchProtocol(Protocol):
         hf_split: str,
         hf_subset: str,
         top_k: int,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
     ) -> RetrievalOutputType:
         """Search the corpus using the given queries.
@@ -111,7 +110,7 @@ class EncoderProtocol(Protocol):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Encodes the given sentences using the encoder.
 
@@ -217,7 +216,7 @@ class CrossEncoderProtocol(Protocol):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Predicts relevance scores for pairs of inputs. Note that, unlike the encoder, the cross-encoder can compare across inputs.
 

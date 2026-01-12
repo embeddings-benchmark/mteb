@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from .evaluator import Evaluator
 from .retrieval_metrics import (
@@ -15,12 +15,14 @@ if TYPE_CHECKING:
     from mteb.models import SearchProtocol
     from mteb.types import (
         CorpusDatasetType,
+        EncodeKwargs,
         QueryDatasetType,
         RelevantDocumentsType,
         RetrievalEvaluationResult,
         RetrievalOutputType,
         TopRankedDocumentsType,
     )
+
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +54,7 @@ class RetrievalEvaluator(Evaluator):
     def __call__(  # type: ignore[override]
         self,
         search_model: SearchProtocol,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> RetrievalOutputType:
         logger.info("Running retrieval task - Indexing corpus...")
         search_model.index(

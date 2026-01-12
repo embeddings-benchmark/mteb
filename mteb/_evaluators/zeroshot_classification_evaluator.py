@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
+
+from datasets import Dataset
 
 from mteb._create_dataloaders import (
     _create_dataloader_from_texts,
@@ -16,7 +18,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
-    from mteb.types import Array
+    from mteb.types import Array, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +44,10 @@ class ZeroShotClassificationEvaluator(Evaluator):
         self.hf_subset = hf_subset
 
     def __call__(
-        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
+        self,
+        model: EncoderProtocol,
+        *,
+        encode_kwargs: EncodeKwargs,
     ) -> Array:
         dataloader = create_dataloader(
             self.dataset,

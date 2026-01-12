@@ -100,7 +100,7 @@ def instruct_wrapper(
             logger.info(
                 f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
             )
-            embeddings = super().encode(  # type: ignore[safe-super]
+            embeddings = super().encode(  # type: ignore[safe-super,call-arg]
                 _inputs,  # type: ignore[arg-type]
                 instruction=instruction,
                 *args,

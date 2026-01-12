@@ -29,12 +29,13 @@ if TYPE_CHECKING:
         PairClassificationDistances,
     )
     from mteb.models.models_protocols import MTEBModels
-    from mteb.types import PromptType
+    from mteb.types import EncodeKwargs, PromptType
     from mteb.types.statistics import (
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
     )
+
 
 logger = logging.getLogger(__name__)
 
@@ -93,7 +94,7 @@ class AbsTaskPairClassification(AbsTask):
         *,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, str],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         **kwargs,
     ) -> dict[str, float]:

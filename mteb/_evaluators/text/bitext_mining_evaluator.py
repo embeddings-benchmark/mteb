@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import torch
 from datasets import Dataset
@@ -13,7 +13,7 @@ from mteb._evaluators.evaluator import Evaluator
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
-    from mteb.types import Array
+    from mteb.types import Array, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +37,10 @@ class BitextMiningEvaluator(Evaluator):
         self.task_metadata = task_metadata
 
     def __call__(
-        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
+        self,
+        model: EncoderProtocol,
+        *,
+        encode_kwargs: EncodeKwargs,
     ) -> dict[str, list[dict[str, float]]]:
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):

@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 def _create_dataloader_from_texts(
     text: list[str],
     batch_size: int = 32,
-    **kwargs: dict[str, Any],
+    **kwargs: Any,
 ) -> DataLoader[TextInput]:
     """Create a dataloader from a list of text.
 
@@ -198,7 +198,8 @@ def _create_dataloader_for_queries_conversation(
     """
     return DataLoader(
         queries.map(
-            _convert_conv_history_to_query, desc="Converting conversations to queries"
+            _convert_conv_history_to_query,
+            desc="Converting conversations to queries",
         ),
         collate_fn=_custom_collate_fn,
         batch_size=batch_size,
@@ -368,6 +369,9 @@ def _create_document_dataloader(
         task_metadata: Metadata of the task to determine the document type.
         input_column: The column to use as input. If None, it will use the first column that matches the modality.
         batch_size: Batch size for the dataloader.
+
+    Returns:
+        A dataloader for the documents.
     """
     document_type = task_metadata.get_modalities(PromptType.document)
     if document_type == ["text"]:  # text only
@@ -390,7 +394,7 @@ def create_dataloader(
     prompt_type: PromptType | None = None,
     input_column: str | None = None,
     batch_size: int = 32,
-    **kwargs: dict[str, Any],
+    **kwargs: Any,
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a dataset.
 

@@ -25,10 +25,12 @@ if TYPE_CHECKING:
         Array,
         BatchedInput,
         CorpusDatasetType,
+        EncodeKwargs,
         QueryDatasetType,
         RetrievalOutputType,
         TopRankedDocumentsType,
     )
+
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +52,7 @@ class PylateSearchEncoder:
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -83,7 +85,7 @@ class PylateSearchEncoder:
         hf_split: str,
         hf_subset: str,
         top_k: int,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
     ) -> RetrievalOutputType:
         queries_dataloader = create_dataloader(
@@ -141,7 +143,7 @@ class PylateSearchEncoder:
         hf_subset: str,
         hf_split: str,
         top_k: int,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> dict[str, list[tuple[float, str]]]:
         from pylate import indexes, retrieve
 
@@ -205,7 +207,7 @@ class PylateSearchEncoder:
         task_metadata: TaskMetadata,
         hf_subset: str,
         hf_split: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> dict[str, list[tuple[float, str]]]:
         """Rerank with PyLate's rank.rerank using per-query candidates.
 
