@@ -160,6 +160,7 @@ class AbsTaskClustering(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> ScoresDict:
         if not isinstance(model, EncoderProtocol):
@@ -204,6 +205,7 @@ class AbsTaskClustering(AbsTask):
                 downsampled_dataset,
                 self.metadata,
                 input_column=self.input_column_name,
+                num_proc=num_proc,
                 **encode_kwargs,
             ),
             task_metadata=self.metadata,

@@ -89,6 +89,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         model: EncoderProtocol,
         *,
         encode_kwargs: EncodeKwargs,
+        num_proc: int = 1,
     ) -> list[torch.Tensor]:
         images = []
         if isinstance(self.images_column_names, str):
@@ -111,6 +112,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         text_embeddings = model.encode(
             _create_dataloader_from_texts(
                 texts,
+                num_proc=num_proc,
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
@@ -131,6 +133,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
             DataLoader(
                 CustomImageDataset(images),
                 collate_fn=lambda x: {"image": [item["image"] for item in x]},
+                num_workers=num_proc,
             ),
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,

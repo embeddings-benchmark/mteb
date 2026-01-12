@@ -248,7 +248,7 @@ def test_run_task_raise_error():
     """Test that the error is not caught unintentionally"""
     task = MockRetrievalTask()
 
-    def load_error():
+    def load_error(num_proc: int):
         raise RuntimeError("Test error")
 
     task.load_data = load_error

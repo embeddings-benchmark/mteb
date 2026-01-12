@@ -86,6 +86,7 @@ class AbsTaskPairClassification(AbsTask):
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs,
     ) -> dict[str, float]:
         if not isinstance(model, EncoderProtocol):
@@ -105,7 +106,11 @@ class AbsTaskPairClassification(AbsTask):
             input2_prompt_type=self.input2_prompt_type,
             **kwargs,
         )
-        similarity_scores = evaluator(model, encode_kwargs=encode_kwargs)
+        similarity_scores = evaluator(
+            model,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
 
         if prediction_folder:
             self._save_task_predictions(

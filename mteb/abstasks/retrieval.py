@@ -290,6 +290,7 @@ class AbsTaskRetrieval(AbsTask):
         *,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluate the model on the retrieval task.
@@ -301,16 +302,16 @@ class AbsTaskRetrieval(AbsTask):
             subsets_to_run: Optional list of subsets to evaluate on
             encode_kwargs: Keyword arguments passed to the encoder
             prediction_folder: Folder to save model predictions
+            num_proc: Number of processes to use
             **kwargs: Additional keyword arguments passed to the evaluator
-
 
         Returns:
             Dictionary mapping subsets to their evaluation scores
         """
         if not self.data_loaded:
-            self.load_data()
+            self.load_data(num_proc=num_proc)
         # TODO: convert all tasks directly https://github.com/embeddings-benchmark/mteb/issues/2030
-        self.convert_v1_dataset_format_to_v2(kwargs.get("num_proc", 1))
+        self.convert_v1_dataset_format_to_v2(num_proc=num_proc)
 
         return super().evaluate(
             model,
@@ -318,6 +319,7 @@ class AbsTaskRetrieval(AbsTask):
             subsets_to_run,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
+            num_proc=num_proc,
             **kwargs,
         )
 
@@ -329,6 +331,7 @@ class AbsTaskRetrieval(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
@@ -340,6 +343,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_split: Split to evaluate on
             hf_subset: Subset to evaluate on
             prediction_folder: Folder with results prediction
+            num_proc: Number of processes to use
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
@@ -379,6 +383,7 @@ class AbsTaskRetrieval(AbsTask):
         results = retriever(
             search_model,
             encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
         )
         end_time = time()
         logger.debug(

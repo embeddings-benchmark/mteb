@@ -96,6 +96,7 @@ class SummarizationEvaluator(Evaluator):
         model: EncoderProtocol,
         *,
         encode_kwargs: EncodeKwargs,
+        num_proc: int = 1,
     ) -> SummarizationDistances:
         # Get the human & machine summaries for the text in one go for all
         human_lens = [len(human_summaries) for human_summaries in self.human_summaries]
@@ -111,6 +112,7 @@ class SummarizationEvaluator(Evaluator):
                     for human_summaries in self.human_summaries
                     for summary in human_summaries
                 ],
+                num_proc=num_proc,
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,

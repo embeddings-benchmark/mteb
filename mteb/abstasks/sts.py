@@ -109,6 +109,7 @@ class AbsTaskSTS(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> STSMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -127,7 +128,11 @@ class AbsTaskSTS(AbsTask):
             input2_prompt_type=self.input2_prompt_type,
             **kwargs,
         )
-        scores = evaluator(model, encode_kwargs=encode_kwargs)
+        scores = evaluator(
+            model,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
 
         if prediction_folder:
             self._save_task_predictions(

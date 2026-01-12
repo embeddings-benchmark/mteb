@@ -119,6 +119,7 @@ class AbsTaskZeroShotClassification(AbsTask):
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs,
     ) -> ZeroShotClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -137,7 +138,11 @@ class AbsTaskZeroShotClassification(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        probs = evaluator(model, encode_kwargs=encode_kwargs)
+        probs = evaluator(
+            model,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
 
         if prediction_folder:
             self._save_task_predictions(

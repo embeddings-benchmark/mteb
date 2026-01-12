@@ -75,6 +75,7 @@ class AbsTaskBitextMining(AbsTask):
         *,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Added load for "parallel" datasets"""
@@ -82,7 +83,7 @@ class AbsTaskBitextMining(AbsTask):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
 
         if not self.data_loaded:
-            self.load_data()
+            self.load_data(num_proc=num_proc)
 
         hf_subsets = self.hf_subsets
 
@@ -105,6 +106,7 @@ class AbsTaskBitextMining(AbsTask):
                 hf_subset="parallel",
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
+                num_proc=num_proc,
                 **kwargs,
             )
         else:
@@ -124,6 +126,7 @@ class AbsTaskBitextMining(AbsTask):
                     hf_subset=hf_subset,
                     encode_kwargs=encode_kwargs,
                     prediction_folder=prediction_folder,
+                    num_proc=num_proc,
                     **kwargs,
                 )
 
@@ -145,6 +148,7 @@ class AbsTaskBitextMining(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         parallel: bool = False,
+        num_proc: int = 1,
         **kwargs,
     ) -> BitextMiningMetrics | dict[str, BitextMiningMetrics]:
         pairs = self._get_pairs(parallel)
@@ -164,7 +168,7 @@ class AbsTaskBitextMining(AbsTask):
             else data_split["gold"]
         )
 
-        neighbours = evaluator(model, encode_kwargs=encode_kwargs)
+        neighbours = evaluator(model, encode_kwargs=encode_kwargs, num_proc=num_proc)
 
         if prediction_folder:
             self._save_task_predictions(

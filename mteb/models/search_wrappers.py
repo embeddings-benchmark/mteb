@@ -52,6 +52,7 @@ class SearchEncoderWrapper:
         hf_split: str,
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
+        num_proc: int = 1,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -61,6 +62,7 @@ class SearchEncoderWrapper:
             hf_split: Split of current task, allows to know some additional information about current split.
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for dataloading.
         """
         # Always retain corpus for potential reranking or fallback flows
         self.task_corpus = corpus
@@ -70,6 +72,7 @@ class SearchEncoderWrapper:
                     corpus,
                     task_metadata,
                     prompt_type=PromptType.document,
+                    num_proc=num_proc,
                     **encode_kwargs,
                 ),
                 task_metadata=task_metadata,
@@ -91,6 +94,7 @@ class SearchEncoderWrapper:
         top_k: int,
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
+        num_proc: int = 1,
     ) -> RetrievalOutputType:
         """Search the corpus for the given queries.
 
@@ -103,6 +107,7 @@ class SearchEncoderWrapper:
                 Passed only from Reranking tasks.
             top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for dataloading.
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
@@ -114,6 +119,7 @@ class SearchEncoderWrapper:
             queries,
             task_metadata,
             prompt_type=PromptType.query,
+            num_proc=num_proc,
             **encode_kwargs,
         )
 
@@ -472,6 +478,7 @@ class SearchCrossEncoderWrapper:
         hf_split: str,
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
+        num_proc: int = 1,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -481,6 +488,7 @@ class SearchCrossEncoderWrapper:
             hf_split: Split of current task, allows to know some additional information about current split.
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use.
         """
         self.task_corpus = corpus
 
@@ -494,6 +502,7 @@ class SearchCrossEncoderWrapper:
         top_k: int,
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
+        num_proc: int = 1,
     ) -> RetrievalOutputType:
         """Search the corpus using the given queries.
 
@@ -506,6 +515,7 @@ class SearchCrossEncoderWrapper:
                 Passed only from Reranking tasks.
             top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use.
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
@@ -539,12 +549,14 @@ class SearchCrossEncoderWrapper:
             Dataset.from_list(total_queries),
             task_metadata,
             prompt_type=PromptType.document,
+            num_proc=num_proc,
             **encode_kwargs,
         )
         corpus_loader = create_dataloader(
             Dataset.from_list(total_docs),
             task_metadata,
             prompt_type=PromptType.document,
+            num_proc=num_proc,
             **encode_kwargs,
         )
         predictions = self.model.predict(
