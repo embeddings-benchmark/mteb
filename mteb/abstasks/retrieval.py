@@ -299,7 +299,6 @@ class AbsTaskRetrieval(AbsTask):
             prediction_folder: Folder to save model predictions
             **kwargs: Additional keyword arguments passed to the evaluator
 
-
         Returns:
             Dictionary mapping subsets to their evaluation scores
         """
