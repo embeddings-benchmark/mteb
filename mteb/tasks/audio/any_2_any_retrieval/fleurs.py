@@ -121,6 +121,7 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "google/fleurs",
             "revision": "d7c758a6dceecd54a98cac43404d3d576e721f07",  # specify revision if needed
+            "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
         category="a2t",
@@ -165,6 +166,7 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
                 self.metadata.dataset["path"],
                 lang,
                 revision=self.metadata.dataset.get("revision"),
+                trust_remote_code=True,
             )
 
             for split in self.metadata.eval_splits:
@@ -209,6 +211,7 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
         dataset={
             "path": "google/fleurs",
             "revision": "d7c758a6dceecd54a98cac43404d3d576e721f07",
+            "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
         category="t2a",
@@ -253,6 +256,7 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
                 self.metadata.dataset["path"],
                 lang,
                 revision=self.metadata.dataset.get("revision"),
+                trust_remote_code=True,
             )
 
             for split in self.metadata.eval_splits:
