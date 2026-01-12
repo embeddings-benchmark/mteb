@@ -262,6 +262,8 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         "UrbanSound8kZeroshot",
         "FSD2019Kaggle",
         "BirdSet",
+        "GoogleSVQT2ARetrieval",
+        "GoogleSVQA2TRetrieval",
     ):
         pytest.skip("Skipping audio tasks for now, see issue #3498")
 
