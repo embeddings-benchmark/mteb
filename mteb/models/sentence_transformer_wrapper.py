@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import warnings
-from typing import TYPE_CHECKING, Any, Unpack
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
@@ -17,6 +17,7 @@ from .abs_encoder import AbsEncoder
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder, SentenceTransformer
     from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs
