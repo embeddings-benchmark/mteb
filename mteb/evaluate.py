@@ -162,6 +162,7 @@ def _evaluate_task(
             subsets_to_run=hf_subsets,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
+            num_proc=num_proc,
         )
         tock = time()
 
@@ -279,6 +280,7 @@ def evaluate(
     prediction_folder: Path | str | None = None,
     show_progress_bar: bool = True,
     public_only: bool | None = None,
+    num_proc: int = 1,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -303,6 +305,7 @@ def evaluate(
         show_progress_bar: Whether to show a progress bar when running the evaluation. Default is True. Setting this to False will also set the
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
         public_only: Run only public tasks. If None, it will attempt to run the private task.
+        num_proc: Number of processes to use during data loading and transformation. Defaults to 1.
 
     Returns:
         The results of the evaluation.
@@ -337,14 +340,6 @@ def evaluate(
         logger.info(
             "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`. Explicitly set the batch size to silence this message."
         )
-    num_proc = 1
-    if "num_proc" not in encode_kwargs:
-        encode_kwargs["num_proc"] = 1
-        logger.info(
-            "No num_proc defined in encode_kwargs. Setting `encode_kwargs['num_proc'] = 1`. Explicitly set the num_proc to silence this message."
-        )
-    else:
-        num_proc = encode_kwargs["num_proc"]
 
     model, meta, model_name, model_revision = _sanitize_model(model)
     _check_model_modalities(meta, tasks)
@@ -363,6 +358,7 @@ def evaluate(
             prediction_folder=prediction_folder,
             show_progress_bar=show_progress_bar,
             public_only=public_only,
+            num_proc=num_proc,
         )
         combined_results = aggregated_task.combine_task_results(results.task_results)
         return ModelResult(
@@ -395,6 +391,7 @@ def evaluate(
                 prediction_folder=prediction_folder,
                 show_progress_bar=False,
                 public_only=public_only,
+                num_proc=num_proc,
             )
             evaluate_results.extend(_res.task_results)
             if _res.exceptions:

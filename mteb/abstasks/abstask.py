@@ -127,6 +127,7 @@ class AbsTask(ABC):
         *,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluates an MTEB compatible model on the task.
@@ -137,6 +138,7 @@ class AbsTask(ABC):
             subsets_to_run: List of huggingface subsets (HFSubsets) to evaluate. If None, all subsets are evaluated.
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             prediction_folder: Folder to save model predictions
+            num_proc: Number of processes to use for loading the dataset or processing.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
 
         Returns:
@@ -192,6 +194,7 @@ class AbsTask(ABC):
                 hf_subset=hf_subset,
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
+                num_proc=num_proc,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
@@ -207,6 +210,7 @@ class AbsTask(ABC):
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(

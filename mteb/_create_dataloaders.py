@@ -77,7 +77,9 @@ def _create_dataloader_for_retrieval_corpus(
         A dataloader with the corpus.
     """
     new_ds = dataset.map(
-        _corpus_to_dict, desc="Converting corpus dict", num_proc=num_proc
+        _corpus_to_dict,
+        desc="Converting corpus dict",
+        num_proc=num_proc,
     )
     return torch.utils.data.DataLoader(
         new_ds,
@@ -316,7 +318,10 @@ def _create_image_dataloader(
         A DataLoader with the image dataset.
     """
     dataset = _prepare_image_dataset(
-        dataset, image_column_name, transform, num_proc=num_proc
+        dataset,
+        image_column_name,
+        transform,
+        num_proc=num_proc,
     ).select_columns(["image"])
     return DataLoader(
         dataset,
