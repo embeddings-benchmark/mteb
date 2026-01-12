@@ -221,7 +221,7 @@ def test_run_private_task_warning(caplog):
     """Test that a warning is correctly logged in an attempt run a private dataset is made"""
     task = mteb.get_task("Code1Retrieval")
 
-    def load_data_dataset_not_found():
+    def load_data_dataset_not_found(num_proc: int):
         raise DatasetNotFoundError
 
     task.load_data = load_data_dataset_not_found
