@@ -1687,6 +1687,7 @@ CHEMTEB = Benchmark(
             "PubChemWikiPairClassification",
             "ChemNQRetrieval",
             "ChemHotpotQARetrieval",
+            "ChemRxivRetrieval",
         ],
     ),
     description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
