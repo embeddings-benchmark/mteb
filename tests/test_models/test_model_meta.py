@@ -127,6 +127,15 @@ def test_check_training_datasets_can_be_derived(model_meta: ModelMeta):
     model_meta.get_training_datasets()
 
 
+@pytest.mark.parametrize("model_type", ["dense", "cross-encoder", "late-interaction"])
+def test_get_model_metas_each_model_type(model_type):
+    """Test filtering by each individual model type."""
+    models = mteb.get_model_metas(model_types=[model_type])
+
+    for model in models:
+        assert model_type in model.model_type
+
+
 def test_loader_kwargs_persisted_in_metadata():
     model = mteb.get_model(
         "baseline/random-encoder-baseline",
@@ -158,7 +167,7 @@ def test_model_to_python():
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
-    framework=['Sentence Transformers', 'PyTorch'],
+    framework=['Sentence Transformers', 'PyTorch', 'ONNX', 'safetensors', 'Transformers'],
     reference='https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2',
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -171,3 +180,9 @@ def test_model_to_python():
     contacts=None,
 )"""
     )
+
+
+def test_model_meta_local_path():
+    meta = ModelMeta.from_hub("/path/to/local/model")
+    assert meta.name == "/path/to/local/model"
+    assert meta.revision == "no_revision_available"

@@ -19,6 +19,7 @@ from mteb.types import (
     Array,
     BatchedInput,
     CorpusDatasetType,
+    EncodeKwargs,
     PromptType,
     QueryDatasetType,
     RetrievalOutputType,
@@ -29,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 
 class PylateSearchEncoder:
-    """Mixin class to add PyLate-based indexing and search to an encoder. Implements :class:`SearchProtocol`"""
+    """Mixin class to add PyLate-based indexing and search to an encoder. Implements [SearchProtocol][mteb.models.SearchProtocol]"""
 
     base_index_dir: Path | None = None
     _index_dir: Path | None = None
@@ -45,7 +46,7 @@ class PylateSearchEncoder:
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -78,7 +79,7 @@ class PylateSearchEncoder:
         hf_split: str,
         hf_subset: str,
         top_k: int,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
     ) -> RetrievalOutputType:
         queries_dataloader = create_dataloader(
@@ -136,7 +137,7 @@ class PylateSearchEncoder:
         hf_subset: str,
         hf_split: str,
         top_k: int,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> dict[str, list[tuple[float, str]]]:
         from pylate import indexes, retrieve
 
@@ -200,7 +201,7 @@ class PylateSearchEncoder:
         task_metadata: TaskMetadata,
         hf_subset: str,
         hf_split: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> dict[str, list[tuple[float, str]]]:
         """Rerank with PyLate's rank.rerank using per-query candidates.
 
@@ -350,7 +351,7 @@ colbert_v2 = ModelMeta(
     embed_dim=None,
     license="mit",
     similarity_fn_name=ScoringFunction.MAX_SIM,
-    framework=["PyLate", "ColBERT"],
+    framework=["PyLate", "ColBERT", "Transformers", "ONNX", "safetensors"],
     reference="https://huggingface.co/colbert-ir/colbertv2.0",
     use_instructions=False,
     adapted_from=None,
@@ -406,7 +407,7 @@ jina_colbert_v2 = ModelMeta(
     embed_dim=None,
     license="cc-by-nc-4.0",
     similarity_fn_name=ScoringFunction.MAX_SIM,
-    framework=["PyLate", "ColBERT"],
+    framework=["PyLate", "ColBERT", "ONNX", "safetensors"],
     reference="https://huggingface.co/jinaai/jina-colbert-v2",
     use_instructions=False,
     adapted_from=None,
@@ -439,7 +440,7 @@ jina_colbert_v2 = ModelMeta(
     url = "https://aclanthology.org/2024.mrl-1.11/",
     doi = "10.18653/v1/2024.mrl-1.11",
     pages = "159--166",
-    abstract = "Multi-vector dense models, such as ColBERT, have proven highly effective in information retrieval. ColBERT`s late interaction scoring approximates the joint query-document attention seen in cross-encoders while maintaining inference efficiency closer to traditional dense retrieval models, thanks to its bi-encoder architecture and recent optimizations in indexing and search. In this paper, we introduce a novel architecture and a training framework to support long context window and multilingual retrieval. Leveraging Matryoshka Representation Loss, we further demonstrate that the reducing the embedding dimensionality from 128 to 64 has insignificant impact on the model`s retrieval performance and cut storage requirements by up to 50{\%}. Our new model, Jina-ColBERT-v2, demonstrates strong performance across a range of English and multilingual retrieval tasks,"
+    abstract = "Multi-vector dense models, such as ColBERT, have proven highly effective in information retrieval. ColBERT`s late interaction scoring approximates the joint query-document attention seen in cross-encoders while maintaining inference efficiency closer to traditional dense retrieval models, thanks to its bi-encoder architecture and recent optimizations in indexing and search. In this paper, we introduce a novel architecture and a training framework to support long context window and multilingual retrieval. Leveraging Matryoshka Representation Loss, we further demonstrate that the reducing the embedding dimensionality from 128 to 64 has insignificant impact on the model`s retrieval performance and cut storage requirements by up to 50{\\%}. Our new model, Jina-ColBERT-v2, demonstrates strong performance across a range of English and multilingual retrieval tasks,"
 }""",
 )
 
@@ -462,7 +463,7 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
     embed_dim=None,
     license="apache-2.0",
     similarity_fn_name="MaxSim",
-    framework=["PyLate", "ColBERT"],
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
     reference="https://huggingface.co/lightonai/GTE-ModernColBERT-v1",
     use_instructions=False,
     adapted_from="Alibaba-NLP/gte-modernbert-base",

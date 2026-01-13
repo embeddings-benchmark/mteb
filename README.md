@@ -34,10 +34,15 @@
 
 ## Installation
 
-You can install mteb simply using pip. For more on installation please see the [documentation](https://embeddings-benchmark.github.io/mteb/installation/).
+You can install mteb simply using pip or uv. For more on installation please see the [documentation](https://embeddings-benchmark.github.io/mteb/installation/).
 
 ```bash
 pip install mteb
+```
+
+For faster installation, you can also use [uv](https://docs.astral.sh/uv/):
+```bash
+uv add mteb
 ```
 
 

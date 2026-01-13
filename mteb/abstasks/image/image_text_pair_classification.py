@@ -13,6 +13,7 @@ from mteb.abstasks._statistics_calculation import (
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.models_protocols import EncoderProtocol, MTEBModels
+from mteb.types import EncodeKwargs
 from mteb.types.statistics import (
     ImageStatistics,
     SplitDescriptiveStatistics,
@@ -119,7 +120,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         model: MTEBModels,
         data_split: Dataset,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,

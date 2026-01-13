@@ -17,7 +17,7 @@ from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.classification_metrics import hamming_score
 from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
 from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import Array
+from mteb.types import Array, EncodeKwargs
 
 from .classification import AbsTaskClassification
 
@@ -70,10 +70,10 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         input_column_name: Name of the column containing the input text.
         label_column_name: Name of the column containing the labels.
         samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
-        evaluator: Classifier to use for evaluation. Must implement the SklearnModelProtocol.
+        evaluator_model: Classifier to use for evaluation. Must implement the SklearnModelProtocol.
     """
 
-    evaluator: SklearnModelProtocol = KNeighborsClassifier(n_neighbors=5)  # type: ignore[assignment]
+    evaluator_model: SklearnModelProtocol = KNeighborsClassifier(n_neighbors=5)
     input_column_name: str = "text"
     label_column_name: str = "label"
 
@@ -83,7 +83,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         model: MTEBModels,
         data_split: DatasetDict,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
@@ -169,7 +169,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             y_train = train_split.select(sample_indices)[self.label_column_name]
             y_train = binarizer.transform(y_train)
             y_pred, current_classifier = _evaluate_classifier(
-                X_train, y_train, X_test, self.evaluator
+                X_train, y_train, X_test, self.evaluator_model
             )
             if prediction_folder:
                 all_predictions.append(y_pred.tolist())

@@ -50,7 +50,7 @@ gritlm7b = ModelMeta(
     max_tokens=32768,
     reference="https://huggingface.co/GritLM/GritLM-7B",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["GritLM", "PyTorch"],
+    framework=["GritLM", "PyTorch", "Transformers", "safetensors"],
     use_instructions=True,
     training_datasets=GRIT_LM_TRAINING_DATA,
     # section 3.1 "We finetune our final models from Mistral 7B [68] and Mixtral 8x7B [69] using adaptations of E5 [160] and the Tülu 2 data
@@ -79,7 +79,7 @@ gritlm8x7b = ModelMeta(
     max_tokens=32768,
     reference="https://huggingface.co/GritLM/GritLM-8x7B",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["GritLM", "PyTorch"],
+    framework=["GritLM", "PyTorch", "Transformers", "safetensors"],
     use_instructions=True,
     training_datasets=GRIT_LM_TRAINING_DATA,
     citation=GRITLM_CITATION,

@@ -5,7 +5,7 @@ import warnings
 from collections.abc import Iterable
 from pathlib import Path
 from time import time
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, cast
 
 from datasets.exceptions import DatasetNotFoundError
 from tqdm.auto import tqdm
@@ -27,6 +27,7 @@ from mteb.models.sentence_transformer_wrapper import (
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
 from mteb.types import HFSubset, PromptType, SplitName
+from mteb.types._encoder_io import EncodeKwargs
 from mteb.types._metadata import ModelName, Revision
 
 if TYPE_CHECKING:
@@ -85,9 +86,10 @@ def _evaluate_task(
     *,
     splits: dict[SplitName, list[HFSubset]],
     co2_tracker: bool | None,
-    encode_kwargs: dict[str, Any],
+    encode_kwargs: EncodeKwargs,
     prediction_folder: Path | None,
     public_only: bool | None,
+    num_proc: int = 1,
 ) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
 
@@ -270,7 +272,7 @@ def evaluate(
     *,
     co2_tracker: bool | None = None,
     raise_error: bool = True,
-    encode_kwargs: dict[str, Any] | None = None,
+    encode_kwargs: EncodeKwargs | None = None,
     cache: ResultCache | None = ResultCache(),
     overwrite_strategy: str | OverwriteStrategy = "only-missing",
     prediction_folder: Path | str | None = None,

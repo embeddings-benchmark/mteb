@@ -25,6 +25,7 @@ class BMRetrieverWrapper(InstructSentenceTransformerModel):
         self,
         model_name: str,
         revision: str,
+        device: str | None = None,
         instruction_template: str
         | Callable[[str, PromptType | None], str]
         | None = None,
@@ -52,6 +53,7 @@ class BMRetrieverWrapper(InstructSentenceTransformerModel):
 
         transformer = Transformer(
             model_name,
+            device=device,
             **kwargs,
         )
         pooling = Pooling(
@@ -102,7 +104,7 @@ BMRetriever_410M = ModelMeta(
     license="mit",
     reference="https://huggingface.co/BMRetriever/BMRetriever-410M",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
@@ -132,7 +134,7 @@ BMRetriever_1B = ModelMeta(
     license="mit",
     reference="https://huggingface.co/BMRetriever/BMRetriever-1B",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
@@ -162,7 +164,7 @@ BMRetriever_2B = ModelMeta(
     license="mit",
     reference="https://huggingface.co/BMRetriever/BMRetriever-2B",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
@@ -192,7 +194,7 @@ BMRetriever_7B = ModelMeta(
     license="mit",
     reference="https://huggingface.co/BMRetriever/BMRetriever-7B",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
