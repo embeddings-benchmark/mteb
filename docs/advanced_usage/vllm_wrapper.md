@@ -114,7 +114,7 @@ Sentence Transformers suffers a noticeable drop in speed when handling requests 
 For models using bidirectional attention, such as BERT, VLLM offers a range of performance optimizations:
 
 - Optimized CUDA kernels, including FlashAttention and FlashInfer integration
-- CUDA Graphs and torch.compile support to reduce overhead and accelerate execution
+- CUDA Graphs and `torch.compile` support to reduce overhead and accelerate execution
 - Support for tensor, pipeline, data, and expert parallelism for distributed inference
 - Multiple quantization schemes—GPTQ, AWQ, AutoRound, INT4, INT8, and FP8—for efficient deployment
 - Continuous batching of incoming requests to maximize throughput
