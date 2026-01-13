@@ -654,7 +654,7 @@ nemotron_rerank_1b_v2 = ModelMeta(
         trust_remote_code=True,
         query_prefix="question:",
         passage_prefix=" \n \n passage:",
-        model_kwargs={"torch_dtype": torch.bfloat16},
+        model_kwargs={"torch_dtype": torch.float32},
     ),
     name="nvidia/llama-nemotron-rerank-1b-v2",
     revision="78efcfdc23b53a753f6c73f2d78b18132a34ac4d",
@@ -678,7 +678,7 @@ nemotron_rerank_1b_v2 = ModelMeta(
     adapted_from="meta-llama/Llama-3.2-1B",
     superseded_by=None,
     modalities=["text"],
-    is_cross_encoder=True,
+    model_type=["cross-encoder"],
     citation=None,
     contacts=None,
 )

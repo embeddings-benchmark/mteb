@@ -271,6 +271,7 @@ class CrossEncoderWrapper:
     Args:
         model: The CrossEncoder model to use. Can be a string (model name) or a CrossEncoder model.
         revision: The revision of the model to use.
+        device: The device used to load the model.
         query_prefix: A prefix to add to all queries.
         passage_prefix: A prefix to add to all passages.
         **kwargs: Additional arguments to pass to the CrossEncoder model.
