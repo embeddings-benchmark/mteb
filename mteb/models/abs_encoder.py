@@ -5,6 +5,7 @@ from collections.abc import Callable, Sequence
 from typing import Any, Literal, cast, get_args, overload
 
 from torch.utils.data import DataLoader
+from typing_extensions import Unpack
 
 import mteb
 from mteb.abstasks.task_metadata import TaskMetadata, TaskType
@@ -19,6 +20,7 @@ from mteb.similarity_functions import (
 from mteb.types import (
     Array,
     BatchedInput,
+    EncodeKwargs,
     PromptType,
 )
 
@@ -370,7 +372,7 @@ class AbsEncoder(ABC):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Encodes the given sentences using the encoder.
 

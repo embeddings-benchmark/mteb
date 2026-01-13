@@ -4,6 +4,7 @@ from typing import Any
 
 from mteb.abstasks.abstask import _set_seed
 from mteb.models import EncoderProtocol
+from mteb.types import EncodeKwargs
 
 
 class Evaluator(ABC):
@@ -18,7 +19,7 @@ class Evaluator(ABC):
 
     @abstractmethod
     def __call__(
-        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
+        self, model: EncoderProtocol, *, encode_kwargs: EncodeKwargs
     ) -> Mapping[str, float] | Iterable[Any]:
         """This is called during training to evaluate the model.
 

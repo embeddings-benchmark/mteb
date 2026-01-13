@@ -1,5 +1,4 @@
 import logging
-from typing import Any
 
 from datasets import Dataset
 
@@ -10,7 +9,7 @@ from mteb._create_dataloaders import (
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import EncoderProtocol
 from mteb.similarity_functions import similarity
-from mteb.types import Array
+from mteb.types import Array, EncodeKwargs
 
 from .evaluator import Evaluator
 
@@ -38,7 +37,10 @@ class ZeroShotClassificationEvaluator(Evaluator):
         self.hf_subset = hf_subset
 
     def __call__(
-        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
+        self,
+        model: EncoderProtocol,
+        *,
+        encode_kwargs: EncodeKwargs,
     ) -> Array:
         dataloader = create_dataloader(
             self.dataset,
