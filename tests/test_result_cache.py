@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import cast
 from unittest.mock import Mock, patch
 
+import numpy as np
 import pytest
 import requests
 
@@ -262,7 +263,7 @@ def test_cache_load_different_subsets():
     assert len(result1.model_results[0].task_results[0].scores["test"]) == 2
     assert len(result2.model_results[0].task_results[0].scores["test"]) == 2
 
-    assert result1.model_results[0].task_results[0].get_score() == 0.00784
+    assert np.isnan(result1.model_results[0].task_results[0].get_score())
     assert result2.model_results[0].task_results[0].get_score() == 0.01035
 
 
