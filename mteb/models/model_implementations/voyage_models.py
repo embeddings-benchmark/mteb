@@ -25,6 +25,9 @@ VOYAGE_DTYPE_TRANSLATION = {
 
 # Total token limits per model based on VoyageAI documentation
 VOYAGE_TOTAL_TOKEN_LIMITS = {
+    "voyage-4-large": 120_000,
+    "voyage-4": 320_000,
+    "voyage-4-lite": 1_000_000,
     "voyage-3.5-lite": 1_000_000,
     "voyage-3.5": 320_000,
     "voyage-2": 320_000,
