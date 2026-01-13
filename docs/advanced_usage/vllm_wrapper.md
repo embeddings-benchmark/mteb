@@ -56,7 +56,7 @@ For other architectures, please refer to the [vllm installation guide](https://d
         print(results)
     ```
 
-## vLLM is fast with
+## Why is vLLM fast?
 
 ### Half-Precision Inference
 
