@@ -668,7 +668,7 @@ class TaskResult(BaseModel):
                         new_scores[split].append(
                             {
                                 "hf_subset": missing_subset,
-                                "main_score": 0.0,
+                                "main_score": np.nan,
                                 "languages": task.metadata.hf_subsets_to_langscripts.get(
                                     missing_subset, []
                                 ),
@@ -686,7 +686,7 @@ class TaskResult(BaseModel):
                         new_scores[missing_split].append(
                             {
                                 "hf_subset": missing_subset,
-                                "main_score": 0.0,
+                                "main_score": np.nan,
                                 "languages": task.metadata.hf_subsets_to_langscripts.get(
                                     missing_subset, []
                                 ),
