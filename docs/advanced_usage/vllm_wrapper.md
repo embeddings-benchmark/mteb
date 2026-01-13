@@ -130,7 +130,6 @@ vLLM’s optimizations are primarily designed for and most effective with causal
 
 ## API Reference
 
-vLLM has a large number of parameters; here are some commonly used ones:
 
 :::mteb.models.vllm_wrapper.VllmWrapperBase
 
