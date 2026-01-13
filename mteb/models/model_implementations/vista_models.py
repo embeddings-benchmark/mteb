@@ -253,7 +253,6 @@ visualized_bge_base = ModelMeta(
     release_date="2024-06-06",
     modalities=["image", "text"],
     n_parameters=196_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=1631,
     max_tokens=512,
@@ -283,7 +282,6 @@ visualized_bge_m3 = ModelMeta(
     release_date="2024-06-06",
     modalities=["image", "text"],
     n_parameters=872_909_505,
-
     n_embedding_parameters=None,
     memory_usage_mb=4263,
     max_tokens=8192,

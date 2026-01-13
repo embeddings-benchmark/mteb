@@ -172,7 +172,6 @@ granite_vision_embedding = ModelMeta(
     release_date="2025-06-11",
     modalities=["image", "text"],
     n_parameters=2_980_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=11351,
     max_tokens=128000,

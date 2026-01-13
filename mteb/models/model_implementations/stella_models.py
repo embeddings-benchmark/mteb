@@ -66,7 +66,6 @@ stella_en_400m = ModelMeta(
     revision="1bb50bc7bb726810eac2140e62155b88b0df198f",
     release_date="2024-07-12",
     n_parameters=435_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=1660,
     max_tokens=8192,

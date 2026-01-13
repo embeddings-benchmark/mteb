@@ -17,7 +17,6 @@ mme5_mllama = ModelMeta(
     release_date="2025-02-12",
     languages=["eng-Latn"],
     n_parameters=10_600_000_000,
-
     n_embedding_parameters=None,  # 10.6B
     memory_usage_mb=20300,
     max_tokens=128_000,

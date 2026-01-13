@@ -27,7 +27,6 @@ searchmap_preview = ModelMeta(
     use_instructions=True,
     release_date="2025-03-05",
     n_parameters=435_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=1660,
     embed_dim=4096,

@@ -216,7 +216,6 @@ llm2clip_openai_l_14_224 = ModelMeta(
     release_date="2024-11-07",
     modalities=["image", "text"],
     n_parameters=578_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,

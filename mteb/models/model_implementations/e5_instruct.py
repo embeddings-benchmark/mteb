@@ -149,7 +149,6 @@ zeta_alpha_ai__zeta_alpha_e5_mistral = ModelMeta(
     release_date="2024-08-30",
     languages=["eng-Latn"],
     n_parameters=7110660096,
-
     n_embedding_parameters=None,
     memory_usage_mb=13563,
     max_tokens=32768.0,

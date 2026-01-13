@@ -18,7 +18,6 @@ Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
     release_date="2024-10-31",
     languages=["eng-Latn"],
     n_parameters=7110660096,
-
     n_embedding_parameters=None,
     memory_usage_mb=13563,
     max_tokens=32768.0,
@@ -152,7 +151,6 @@ Hum_Works__lodestone_base_4096_v1 = ModelMeta(
     languages=["eng-Latn"],
     loader=sentence_transformers_loader,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
@@ -221,7 +219,6 @@ Jaume__gemma_2b_embeddings = ModelMeta(
     languages=[],
     loader=sentence_transformers_loader,
     n_parameters=2506172416,
-
     n_embedding_parameters=None,
     memory_usage_mb=9560,
     max_tokens=8192.0,
@@ -841,7 +838,6 @@ consciousai__cai_stellaris_text_embeddings = ModelMeta(
     languages=None,
     loader=sentence_transformers_loader,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=514.0,
@@ -1044,7 +1040,6 @@ OrlikB__KartonBERT_USE_base_v1 = ModelMeta(
     languages=["pol-Latn"],
     loader=sentence_transformers_loader,
     n_parameters=103705344,
-
     n_embedding_parameters=None,
     memory_usage_mb=396,
     max_tokens=512.0,
@@ -1069,7 +1064,6 @@ OrlikB__st_polish_kartonberta_base_alpha_v1 = ModelMeta(
     languages=["pol-Latn"],
     loader=sentence_transformers_loader,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=514.0,
@@ -1874,7 +1868,6 @@ malenia1__ternary_weight_embedding = ModelMeta(
     languages=None,
     loader=sentence_transformers_loader,
     n_parameters=98688000,
-
     n_embedding_parameters=None,
     memory_usage_mb=158,
     max_tokens=512.0,

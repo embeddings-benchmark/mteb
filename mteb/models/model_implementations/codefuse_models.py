@@ -236,7 +236,6 @@ F2LLM_0B6 = ModelMeta(
     revision="36416618b83d4bd84a8ca30c2ee01ed518f9f2e7",
     release_date="2025-09-18",
     n_parameters=595_776_512,
-
     n_embedding_parameters=None,
     memory_usage_mb=1137,
     embed_dim=1024,
@@ -268,7 +267,6 @@ F2LLM_1B7 = ModelMeta(
     revision="fdce0e09655f42cea26f7f66f5a70cd4507ea45c",
     release_date="2025-09-18",
     n_parameters=1_720_574_976,
-
     n_embedding_parameters=None,
     memory_usage_mb=3282,
     embed_dim=2560,
@@ -300,7 +298,6 @@ F2LLM_4B = ModelMeta(
     revision="9fe95901ed2b6b59dd7673d6e93c9d76766a1e25",
     release_date="2025-09-18",
     n_parameters=4_021_774_336,
-
     n_embedding_parameters=None,
     memory_usage_mb=7672,
     embed_dim=2560,
@@ -324,7 +321,6 @@ C2LLM_0B5 = ModelMeta(
     release_date="2025-12-22",
     languages=c2llm_languages,
     n_parameters=497252096,
-
     n_embedding_parameters=None,
     memory_usage_mb=948.0,
     max_tokens=32768,
@@ -354,7 +350,6 @@ C2LLM_7B = ModelMeta(
     release_date="2025-12-22",
     languages=c2llm_languages,
     n_parameters=7667028992,
-
     n_embedding_parameters=None,
     memory_usage_mb=14624.0,
     max_tokens=32768,

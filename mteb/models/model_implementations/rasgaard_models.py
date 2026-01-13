@@ -12,7 +12,6 @@ potion_base_8m = ModelMeta(
     revision="387897cfb09992e6d45ea9cd7b28b9fcf119e23a",
     release_date="2025-10-08",
     n_parameters=22893312,
-
     n_embedding_parameters=22893312,
     memory_usage_mb=87,
     max_tokens=np.inf,

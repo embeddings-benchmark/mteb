@@ -386,7 +386,6 @@ cohere_mult_3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
@@ -414,7 +413,6 @@ cohere_eng_3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=512,
@@ -441,7 +439,6 @@ cohere_mult_light_3 = ModelMeta(
     reference="https://cohere.com/blog/introducing-embed-v3",
     release_date="2023-11-02",
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=512,
@@ -468,7 +465,6 @@ cohere_eng_light_3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=512,

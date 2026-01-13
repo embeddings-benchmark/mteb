@@ -231,7 +231,6 @@ arctic_embed_m_long = ModelMeta(
     open_weights=True,
     framework=["Sentence Transformers", "PyTorch", "ONNX", "safetensors"],
     n_parameters=137_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=522,
     max_tokens=2048,
@@ -318,7 +317,6 @@ arctic_embed_m_v2_0 = ModelMeta(
     open_weights=True,
     framework=["Sentence Transformers", "PyTorch", "ONNX", "safetensors"],
     n_parameters=305_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=1165,
     max_tokens=8192,

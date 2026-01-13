@@ -233,7 +233,6 @@ granite_english_r2 = ModelMeta(
     revision="6e7b8ce0e76270394ac4669ba4bbd7133b60b7f9",
     release_date="2025-08-15",
     n_parameters=149_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=284,
     embed_dim=768,
@@ -260,7 +259,6 @@ granite_small_english_r2 = ModelMeta(
     revision="54a8d2616a0844355a5164432d3f6dafb37b17a3",
     release_date="2025-08-15",
     n_parameters=47_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=91,
     embed_dim=384,

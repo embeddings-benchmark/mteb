@@ -449,7 +449,6 @@ static_similarity_mrl_multilingual_v1 = ModelMeta(
     revision="7264ea07c5365a11d7e6d87dbb6195889a13054f",
     release_date="2025-01-15",
     n_parameters=108_420_096,
-
     n_embedding_parameters=None,
     memory_usage_mb=413,
     embed_dim=1024,
@@ -639,7 +638,6 @@ sentence_t5_xxl = ModelMeta(
     revision="4d122282ba80e807e9e6eb8c358269e92796365d",
     release_date="2024-03-27",
     n_parameters=11_000_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=9279,
     embed_dim=768,
@@ -747,7 +745,6 @@ gtr_t5_xxl = ModelMeta(
     revision="73f2a9156a3dcc2194dfdb2bf201cd7d17e17884",
     release_date="2022-02-09",
     n_parameters=4_860_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=9279,
     embed_dim=768,

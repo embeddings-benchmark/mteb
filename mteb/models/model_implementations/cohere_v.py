@@ -386,7 +386,6 @@ cohere_mult_3 = ModelMeta(
     revision="1",
     release_date="2024-10-24",
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
@@ -412,7 +411,6 @@ cohere_eng_3 = ModelMeta(
     revision="1",
     release_date="2024-10-24",
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
@@ -438,7 +436,6 @@ cohere_embed_v4_multimodal = ModelMeta(
     revision="1",
     release_date="2024-12-01",
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=128000,
@@ -464,7 +461,6 @@ cohere_embed_v4_multimodal_binary = ModelMeta(
     revision="1",
     release_date="2024-12-01",
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=128000,
@@ -491,7 +487,6 @@ cohere_embed_v4_multimodal_int8 = ModelMeta(
     revision="1",
     release_date="2024-12-01",
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=128000,

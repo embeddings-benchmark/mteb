@@ -61,7 +61,6 @@ Qodo_Embed_1_7B = ModelMeta(
     revision="f9edd9bf7f687c0e832424058e265120f603cd81",
     release_date="2025-02-24",
     n_parameters=7_613_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=29040,
     embed_dim=3584,

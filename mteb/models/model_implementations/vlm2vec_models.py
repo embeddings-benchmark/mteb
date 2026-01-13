@@ -275,7 +275,6 @@ vlm2vec_lora = ModelMeta(
     release_date="2024-10-08",
     modalities=["image", "text"],
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=131072,
@@ -301,7 +300,6 @@ vlm2vec_full = ModelMeta(
     release_date="2024-10-08",
     modalities=["image", "text"],
     n_parameters=4_150_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=7909,
     max_tokens=131072,

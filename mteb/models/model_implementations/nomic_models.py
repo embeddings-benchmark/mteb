@@ -342,7 +342,6 @@ nomic_modern_bert_embed = ModelMeta(
     revision="5960f1566fb7cb1adf1eb6e816639cf4646d9b12",
     release_date="2024-12-29",
     n_parameters=149_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=568,
     max_tokens=8192,

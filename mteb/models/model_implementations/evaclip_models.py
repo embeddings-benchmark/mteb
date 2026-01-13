@@ -144,7 +144,6 @@ EVA02_CLIP_B_16 = ModelMeta(
     release_date="2023-04-26",
     modalities=["image", "text"],
     n_parameters=149_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=568,
     max_tokens=77,
@@ -170,7 +169,6 @@ EVA02_CLIP_L_14 = ModelMeta(
     release_date="2023-04-26",
     modalities=["image", "text"],
     n_parameters=428_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=1633,
     max_tokens=77,
@@ -196,7 +194,6 @@ EVA02_CLIP_bigE_14 = ModelMeta(
     release_date="2023-04-26",
     modalities=["image", "text"],
     n_parameters=4_700_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=17929,
     max_tokens=77,
@@ -223,7 +220,6 @@ EVA02_CLIP_bigE_14_plus = ModelMeta(
     release_date="2023-04-26",
     modalities=["image", "text"],
     n_parameters=5_000_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=19073,
     max_tokens=77,

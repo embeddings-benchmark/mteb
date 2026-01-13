@@ -724,7 +724,6 @@ mistral_7b = ModelMeta(
     revision="3ad372fc79158a2148299e3318516c786aeded6c",
     release_date="2023-12-11",
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
@@ -762,7 +761,6 @@ followir_7b = ModelMeta(
         # "jhu-clsp/FollowIR-train"
     ),
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=13813,
     max_tokens=None,

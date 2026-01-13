@@ -200,7 +200,7 @@ class ModelMeta(BaseModel):
 
     @property
     def n_active_parameters(self):
-        """Number of active parameters. Assumed to be `n_parameters - n_embedding_parameters`. Can be overwritten using `active_parameters` e.g. for MoE models."""
+        """Number of active parameters. Assumed to be `n_parameters - n_embedding_parameters`. Can be overwritten using `n_active_parameters_override` e.g. for MoE models."""
         if self.n_active_parameters_override is not None:
             return self.n_active_parameters_override
 

@@ -950,7 +950,6 @@ giga_embeddings = ModelMeta(
     revision="0ad5b29bfecd806cecc9d66b927d828a736594dc",
     release_date="2025-09-23",
     n_parameters=3_227_176_961,
-
     n_embedding_parameters=None,
     memory_usage_mb=12865,
     embed_dim=2048,
@@ -1061,7 +1060,6 @@ user2_small = ModelMeta(
     use_instructions=True,
     reference="https://huggingface.co/collections/deepvk/user2-6802650d7210f222ec60e05f",
     n_parameters=34_400_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=131,
     max_tokens=8192,
@@ -1096,7 +1094,6 @@ user2_base = ModelMeta(
     use_instructions=True,
     reference="https://huggingface.co/collections/deepvk/user2-6802650d7210f222ec60e05f",
     n_parameters=149_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=568,
     max_tokens=8192,

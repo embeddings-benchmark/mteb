@@ -169,7 +169,6 @@ amazon_titan_embed_text_v1 = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
@@ -198,7 +197,6 @@ amazon_titan_embed_text_v2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
@@ -229,7 +227,6 @@ cohere_embed_english_v3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
@@ -259,7 +256,6 @@ cohere_embed_multilingual_v3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,

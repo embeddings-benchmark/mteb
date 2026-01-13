@@ -10,7 +10,6 @@ embedding_gemma_300m_scandi = ModelMeta(
     revision="9f3307b9f601db564a9190cb475324d128dcfe86",
     release_date="2025-10-17",
     n_parameters=307_581_696,
-
     n_embedding_parameters=None,
     embed_dim=768,
     max_tokens=2048,
@@ -45,7 +44,6 @@ qwen_scandi = ModelMeta(
     revision="cf1e7ba36ebd3d605549d8f02930a18e17b54513",
     release_date="2025-10-17",
     n_parameters=595776512,
-
     n_embedding_parameters=None,
     memory_usage_mb=2272,
     embed_dim=1024,
@@ -71,7 +69,6 @@ mmbert_scandi = ModelMeta(
     revision="82d74c7a5d8e1ddf31b132865df2d16b2b0294ee",
     release_date="2025-10-17",
     n_parameters=306939648,
-
     n_embedding_parameters=None,
     memory_usage_mb=1171,
     embed_dim=768,

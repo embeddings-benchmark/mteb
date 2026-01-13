@@ -140,7 +140,6 @@ Qwen3_Embedding_0B6 = ModelMeta(
     revision="b22da495047858cce924d27d76261e96be6febc0",  # Commit of @tomaarsen
     release_date="2025-06-05",
     n_parameters=595776512,
-
     n_embedding_parameters=None,
     memory_usage_mb=1136,
     embed_dim=1024,
@@ -165,7 +164,6 @@ Qwen3_Embedding_4B = ModelMeta(
     revision="636cd9bf47d976946cdbb2b0c3ca0cb2f8eea5ff",  # Commit of @tomaarsen
     release_date="2025-06-05",
     n_parameters=4021774336,
-
     n_embedding_parameters=None,
     memory_usage_mb=7671,
     embed_dim=2560,
@@ -190,7 +188,6 @@ Qwen3_Embedding_8B = ModelMeta(
     revision="4e423935c619ae4df87b646a3ce949610c66241c",  # Commit of @tomaarsen
     release_date="2025-06-05",
     n_parameters=7567295488,
-
     n_embedding_parameters=None,
     memory_usage_mb=14433,
     embed_dim=4096,

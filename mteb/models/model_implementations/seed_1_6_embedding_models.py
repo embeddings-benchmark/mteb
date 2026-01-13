@@ -429,7 +429,6 @@ seed_embedding = ModelMeta(
     embed_dim=2048,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,

@@ -147,7 +147,6 @@ Eager_Embed_V1 = ModelMeta(
     release_date="2025-11-20",
     modalities=["image", "text"],
     n_parameters=4_000_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=16929,
     max_tokens=262144,

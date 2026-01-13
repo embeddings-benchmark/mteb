@@ -82,7 +82,6 @@ gte_qwen1_5_7b_instruct = ModelMeta(
     revision="07d27e5226328010336563bc1b564a5e3436a298",
     release_date="2024-04-20",  # initial commit of hf model.
     n_parameters=7_720_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=29449,
     embed_dim=4096,
@@ -373,7 +372,6 @@ gte_modernbert_base = ModelMeta(
     revision="7ca8b4ca700621b67618669f5378fe5f5820b8e4",
     release_date="2025-01-21",  # initial commit of hf model.
     n_parameters=int(149 * 1e6),
-
     n_embedding_parameters=None,
     memory_usage_mb=284,
     embed_dim=768,

@@ -125,7 +125,6 @@ mocov3_vit_base = ModelMeta(
     release_date="2024-06-03",
     modalities=["image"],
     n_parameters=86_600_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=330,
     max_tokens=None,
@@ -151,7 +150,6 @@ mocov3_vit_large = ModelMeta(
     release_date="2024-06-03",
     modalities=["image"],
     n_parameters=304_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=1161,
     max_tokens=None,

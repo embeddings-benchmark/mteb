@@ -38,7 +38,6 @@ cl_nagoya_ruri_v3_30m = ModelMeta(
     revision="24899e5de370b56d179604a007c0d727bf144504",
     release_date="2025-04-07",
     n_parameters=36_705_536,
-
     n_embedding_parameters=None,
     memory_usage_mb=140,
     embed_dim=256,
@@ -71,7 +70,6 @@ cl_nagoya_ruri_v3_70m = ModelMeta(
     revision="07a8b0aba47d29d2ca21f89b915c1efe2c23d1cc",
     release_date="2025-04-09",
     n_parameters=36_705_536,
-
     n_embedding_parameters=None,
     memory_usage_mb=140,
     embed_dim=256,
@@ -102,7 +100,6 @@ cl_nagoya_ruri_v3_130m = ModelMeta(
     revision="e3114c6ee10dbab8b4b235fbc6dcf9dd4d5ac1a6",
     release_date="2025-04-09",
     n_parameters=132_140_544,
-
     n_embedding_parameters=None,
     memory_usage_mb=504,
     embed_dim=512,
@@ -133,7 +130,6 @@ cl_nagoya_ruri_v3_310m = ModelMeta(
     revision="18b60fb8c2b9df296fb4212bb7d23ef94e579cd3",
     release_date="2025-04-09",
     n_parameters=314_611_968,
-
     n_embedding_parameters=None,
     memory_usage_mb=1200,
     embed_dim=768,

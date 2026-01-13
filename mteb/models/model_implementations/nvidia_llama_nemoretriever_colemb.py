@@ -152,7 +152,6 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     release_date="2025-06-27",
     modalities=["image", "text"],
     n_parameters=2_418_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=4610,
     max_tokens=8192,
@@ -181,7 +180,6 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     release_date="2025-06-27",
     modalities=["image", "text"],
     n_parameters=4_407_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=8403,
     max_tokens=8192,

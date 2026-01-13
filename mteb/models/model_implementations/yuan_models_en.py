@@ -43,7 +43,6 @@ yuan_embedding_2_en = ModelMeta(
     revision="b2fd15da3bcae3473c8529593825c15068f09fce",
     release_date="2025-11-27",
     n_parameters=595776512,
-
     n_embedding_parameters=None,
     memory_usage_mb=2272,
     embed_dim=1024,

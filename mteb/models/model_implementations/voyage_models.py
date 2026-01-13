@@ -221,7 +221,6 @@ voyage_3_large = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -250,7 +249,6 @@ voyage_3_5 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -278,7 +276,6 @@ voyage_3_5_int8 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -307,7 +304,6 @@ voyage_3_5_binary = ModelMeta(
     embed_dim=1024,  # Same as original after unpacking from bits
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -336,7 +332,6 @@ voyage_large_2_instruct = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -364,7 +359,6 @@ voyage_finance_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -392,7 +386,6 @@ voyage_law_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -420,7 +413,6 @@ voyage_code_2 = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -448,7 +440,6 @@ voyage_code_3 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -477,7 +468,6 @@ voyage_large_2 = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -505,7 +495,6 @@ voyage_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -532,7 +521,6 @@ voyage_multilingual_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -560,7 +548,6 @@ voyage_3 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -588,7 +575,6 @@ voyage_3_lite = ModelMeta(
     embed_dim=512,
     open_weights=False,
     n_parameters=None,
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -617,7 +603,6 @@ voyage_3_exp = ModelMeta(
     open_weights=False,
     # from their card https://huggingface.co/voyageai/voyage-3-m-exp#model-information
     n_parameters=int(6918 * 1e6),
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,

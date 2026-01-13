@@ -341,7 +341,6 @@ Jasper_Token_Compression_600M = ModelMeta(
     revision="06a100f753a5a96d9e583b3af79c6fcdfacc4719",
     release_date="2025-11-14",
     n_parameters=595776512,
-
     n_embedding_parameters=None,
     memory_usage_mb=2272,
     embed_dim=2048,

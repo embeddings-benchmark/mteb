@@ -728,7 +728,6 @@ jina_reranker_v3 = ModelMeta(
     release_date="2025-09-18",  # official release date
     modalities=["text"],
     n_parameters=int(0.6 * 1e9),
-
     n_embedding_parameters=None,
     memory_usage_mb=1138,
     max_tokens=131072,
@@ -773,7 +772,6 @@ jina_embeddings_v4 = ModelMeta(
     release_date="2025-06-24",  # official release date
     modalities=["image", "text"],
     n_parameters=int(3.8 * 1e9),
-
     n_embedding_parameters=None,
     memory_usage_mb=7500,
     max_tokens=32768,

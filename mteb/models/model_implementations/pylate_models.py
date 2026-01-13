@@ -462,7 +462,6 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/lightonai/ms-marco-en-bge-gemma",
     release_date="2025-04-30",
     n_parameters=int(149 * 1e6),
-
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=8192,

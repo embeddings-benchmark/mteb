@@ -52,7 +52,6 @@ SFR_Embedding_2_R = ModelMeta(
     revision="91762139d94ed4371a9fa31db5551272e0b83818",
     release_date="2024-06-14",  # initial commit of hf model.
     n_parameters=7_110_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=13563,
     embed_dim=4096,
@@ -92,7 +91,6 @@ SFR_Embedding_Code_2B_R = ModelMeta(
     revision="c73d8631a005876ed5abde34db514b1fb6566973",
     release_date="2025-01-17",  # initial commit of hf model.
     n_parameters=2_610_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=4986,
     embed_dim=2304,
@@ -132,7 +130,6 @@ SFR_Embedding_Mistral = ModelMeta(
     revision="938c560d1c236aa563b2dbdf084f28ab28bccb11",
     release_date="2024-01-24",  # initial commit of hf model.
     n_parameters=7_110_000_000,
-
     n_embedding_parameters=None,
     memory_usage_mb=13563,
     embed_dim=4096,
