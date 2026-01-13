@@ -559,7 +559,7 @@ def _nemotron_rerank_model(model: str, revision: str, **kwargs) -> CrossEncoderW
     if Version(transformers_version) != Version(required_transformers_version):
         raise RuntimeError(
             f"transformers version {transformers_version} is not match with required "
-            f"install version {required_transformers_version} to run `nvidia/NV-Embed-v2`"
+            f"install version {required_transformers_version} to run `nvidia/llama-nemotron-rerank-1b-v2`"
         )
 
     return CrossEncoderWrapper(
