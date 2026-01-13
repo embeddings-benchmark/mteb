@@ -16,7 +16,7 @@ If you're using cuda you can run
     uv pip install "mteb[vllm]"
     ```
 
-For other architectures, please refer to the [vllm installation guide](https://docs.vllm.ai/en/latest/installation/).
+For other architectures, please refer to the [vllm installation guide](https://docs.vllm.ai/en/latest/getting_started/installation/).
 ## Usage
 
 === "Embedding models"
