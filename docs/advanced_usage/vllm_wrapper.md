@@ -37,7 +37,7 @@ To use vLLM with MTEB you have to wrap the model with its respective wrapper.
         llm = vllm.LLM(...)
     ```
 
-    See more https://docs.vllm.ai/en/latest/usage/troubleshooting/#python-multiprocessing
+    See more [troubleshooting](https://docs.vllm.ai/en/latest/usage/troubleshooting/#python-multiprocessing)
 
 === "Embedding models"
     ```python
