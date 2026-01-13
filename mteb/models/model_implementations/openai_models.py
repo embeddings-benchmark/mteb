@@ -180,7 +180,7 @@ text_embedding_3_small = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -210,7 +210,7 @@ text_embedding_3_large = ModelMeta(
     framework=["API"],
     use_instructions=False,
     n_parameters=None,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
@@ -237,7 +237,7 @@ text_embedding_ada_002 = ModelMeta(
     framework=["API"],
     use_instructions=False,
     n_parameters=None,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
@@ -263,7 +263,7 @@ text_embedding_3_small_512 = ModelMeta(
     embed_dim=512,
     open_weights=False,
     n_parameters=None,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
@@ -295,7 +295,7 @@ text_embedding_3_large_512 = ModelMeta(
     framework=["API"],
     use_instructions=False,
     n_parameters=None,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,

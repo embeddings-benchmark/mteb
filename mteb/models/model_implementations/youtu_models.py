@@ -121,7 +121,7 @@ Youtu_Embedding_V1 = ModelMeta(
     release_date="2025-09-28",
     open_weights=True,
     n_parameters=2672957440,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=None,
     embed_dim=2048,

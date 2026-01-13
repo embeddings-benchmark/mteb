@@ -81,7 +81,7 @@ promptriever_llama2 = ModelMeta(
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-30b14e3813c0fa45facfd01a594580c3fe5ecf23",  # base-peft revision
     release_date="2024-09-15",
     n_parameters=7_000_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=26703,
     max_tokens=4096,
@@ -119,7 +119,7 @@ promptriever_llama3 = ModelMeta(
     },
     release_date="2024-09-15",
     n_parameters=8_000_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=30518,
     max_tokens=8192,
@@ -150,7 +150,7 @@ promptriever_llama3_instruct = ModelMeta(
     revision="5206a32e0bd3067aef1ce90f5528ade7d866253f-8b677258615625122c2eb7329292b8c402612c21",  # base-peft revision
     release_date="2024-09-15",
     n_parameters=8_000_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=30518,
     max_tokens=8192,
@@ -185,7 +185,7 @@ promptriever_mistral_v1 = ModelMeta(
     revision="7231864981174d9bee8c7687c24c8344414eae6b-876d63e49b6115ecb6839893a56298fadee7e8f5",  # base-peft revision
     release_date="2024-09-15",
     n_parameters=7_000_000_000,
-    n_active_parameters=7_063_474_176,
+    n_active_parameters_override=7_063_474_176,
     n_embedding_parameters=131_072_000,
     memory_usage_mb=26703,
     training_datasets={

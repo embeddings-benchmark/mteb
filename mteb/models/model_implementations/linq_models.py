@@ -38,7 +38,7 @@ Linq_Embed_Mistral = ModelMeta(
     revision="0c1a0b0589177079acc552433cad51d7c9132379",
     release_date="2024-05-29",  # initial commit of hf model.
     n_parameters=7_110_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=13563,
     embed_dim=4096,

@@ -219,7 +219,7 @@ colqwen2 = ModelMeta(
     release_date="2025-11-03",
     modalities=["image", "text"],
     n_parameters=2_210_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=7200,
     max_tokens=32768,
@@ -248,7 +248,7 @@ colqwen2_5 = ModelMeta(
     release_date="2025-01-31",
     modalities=["image", "text"],
     n_parameters=3_000_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=7200,
     max_tokens=128000,
@@ -294,7 +294,7 @@ colqwen3_8b = ModelMeta(
     release_date="2025-11-26",
     modalities=["image", "text"],
     n_parameters=8_000_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=16724,
     max_tokens=262144,
@@ -320,7 +320,7 @@ colqwen3_4b = ModelMeta(
     release_date="2025-11-26",
     modalities=["image", "text"],
     n_parameters=4_000_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=8466,
     max_tokens=262144,
@@ -349,7 +349,7 @@ colnomic_7b = ModelMeta(
     release_date="2025-03-31",
     modalities=["image", "text"],
     n_parameters=7_000_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=14400,
     max_tokens=128000,
@@ -396,7 +396,7 @@ colnomic_3b = ModelMeta(
     release_date="2025-03-31",
     modalities=["image", "text"],
     n_parameters=3_000_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=7200,
     max_tokens=128000,
@@ -463,7 +463,7 @@ evoqwen25_vl_retriever_3b_v1 = ModelMeta(
     release_date="2025-11-04",
     modalities=["image", "text"],
     n_parameters=3_000_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=7200,
     max_tokens=128000,
@@ -491,7 +491,7 @@ evoqwen25_vl_retriever_7b_v1 = ModelMeta(
     release_date="2025-11-04",
     modalities=["image", "text"],
     n_parameters=7_000_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=14400,
     max_tokens=128000,

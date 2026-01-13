@@ -156,7 +156,7 @@ google_text_emb_004 = ModelMeta(
     revision="1",  # revision is intended for implementation
     release_date="2024-05-14",
     n_parameters=None,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=2048,
@@ -183,7 +183,7 @@ google_text_emb_005 = ModelMeta(
     revision="1",  # revision is intended for implementation
     release_date="2024-11-18",
     n_parameters=None,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=2048,
@@ -210,7 +210,7 @@ google_text_multilingual_emb_002 = ModelMeta(
     revision="1",
     release_date="2024-05-14",
     n_parameters=None,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=2048,
@@ -237,7 +237,7 @@ google_gemini_embedding_001 = ModelMeta(
     revision="1",
     release_date="2025-03-07",
     n_parameters=None,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=2048,
@@ -274,7 +274,7 @@ embedding_gemma_300m = ModelMeta(
     revision="64614b0b8b64f0c6c1e52b07e4e9a4e8fe4d2da2",
     release_date="2025-09-04",
     n_parameters=307_581_696,
-    n_active_parameters=106_255_104,
+    n_active_parameters_override=106_255_104,
     n_embedding_parameters=201_326_592,
     embed_dim=768,
     max_tokens=2048,

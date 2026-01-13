@@ -172,7 +172,7 @@ repllama_llama2_original = ModelMeta(
         "mMARCO-NL",  # translation not trained on
     },
     n_parameters=7_000_000,
-    n_active_parameters=6_476_271_616,
+    n_active_parameters_override=6_476_271_616,
     n_embedding_parameters=131_072_000,
     memory_usage_mb=27,
     max_tokens=4096,
@@ -203,7 +203,7 @@ repllama_llama2_reproduced = ModelMeta(
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-ad5c1d0938a1e02954bcafb4d811ba2f34052e71",  # base-peft revision
     release_date="2024-09-15",
     n_parameters=7_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=27,
     max_tokens=4096,

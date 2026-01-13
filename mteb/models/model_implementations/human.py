@@ -9,7 +9,7 @@ human = ModelMeta(
     revision="2025_09_25",
     release_date=None,
     n_parameters=None,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=None,
     embed_dim=None,

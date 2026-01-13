@@ -60,7 +60,7 @@ colsmol_256m = ModelMeta(
     release_date="2025-01-22",
     modalities=["image", "text"],
     n_parameters=256_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=800,
     max_tokens=8192,
@@ -89,7 +89,7 @@ colsmol_500m = ModelMeta(
     release_date="2025-01-22",
     modalities=["image", "text"],
     n_parameters=500_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=1200,
     max_tokens=8192,

@@ -56,7 +56,7 @@ inf_retriever_v1 = ModelMeta(
     revision="cb70ca7c31dfa866b2eff2dad229c144d8ddfd91",
     release_date="2024-12-24",  # initial commit of hf model.
     n_parameters=7_069_121_024,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=13483,
     embed_dim=3584,
@@ -85,7 +85,7 @@ inf_retriever_v1_1_5b = ModelMeta(
     revision="c9c05c2dd50707a486966ba81703021ae2094a06",
     release_date="2025-02-08",  # initial commit of hf model.
     n_parameters=1_543_268_864,
-    n_active_parameters=1_310_340_608,
+    n_active_parameters_override=1_310_340_608,
     n_embedding_parameters=232_928_256,
     memory_usage_mb=2944,
     embed_dim=1536,

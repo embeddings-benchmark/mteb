@@ -18,7 +18,7 @@ english_code_retriever = ModelMeta(
     revision="be653fab7d27a7348a0c2c3d16b9f92a7f10cb0c",
     release_date="2025-07-10",
     n_parameters=149_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=568,
     embed_dim=768,

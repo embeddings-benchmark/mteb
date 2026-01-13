@@ -12,7 +12,7 @@ model2vecdk = ModelMeta(
     revision="cb576c78dcc1b729e4612645f61db59929d69e61",
     release_date="2025-11-21",
     n_parameters=48042496,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=183,
     max_tokens=np.inf,
@@ -45,7 +45,7 @@ model2vecdk_stem = ModelMeta(
     revision="cb576c78dcc1b729e4612645f61db59929d69e61",
     release_date="2025-11-21",
     n_parameters=48578560,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=185,
     max_tokens=np.inf,

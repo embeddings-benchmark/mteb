@@ -292,7 +292,7 @@ jasper_en_v1 = ModelMeta(
     revision="d6330ce98f8a0d741e781df845904c9484f00efa",
     release_date="2024-12-11",  # first commit
     n_parameters=1_999_000_000,
-    n_active_parameters=1_331_981_568,
+    n_active_parameters_override=1_331_981_568,
     n_embedding_parameters=232_932_864,
     memory_usage_mb=3802,
     max_tokens=131072,
@@ -341,7 +341,7 @@ Jasper_Token_Compression_600M = ModelMeta(
     revision="06a100f753a5a96d9e583b3af79c6fcdfacc4719",
     release_date="2025-11-14",
     n_parameters=595776512,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=2272,
     embed_dim=2048,

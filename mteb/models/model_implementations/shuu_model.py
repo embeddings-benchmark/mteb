@@ -10,7 +10,7 @@ codemodernbert_crow_meta = ModelMeta(
     revision="044a7a4b552f86e284817234c336bccf16f895ce",
     release_date="2025-04-21",
     n_parameters=151668480,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=607,
     embed_dim=768,

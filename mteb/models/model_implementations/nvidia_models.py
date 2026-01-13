@@ -20,23 +20,23 @@ from mteb.types import Array, BatchedInput, PromptType
 logger = logging.getLogger(__name__)
 
 NV_RETRIEVER_CITATION = """@misc{lee2025nvembedimprovedtechniquestraining,
-      title={NV-Embed: Improved Techniques for Training LLMs as Generalist Embedding Models}, 
+      title={NV-Embed: Improved Techniques for Training LLMs as Generalist Embedding Models},
       author={Chankyu Lee and Rajarshi Roy and Mengyao Xu and Jonathan Raiman and Mohammad Shoeybi and Bryan Catanzaro and Wei Ping},
       year={2025},
       eprint={2405.17428},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2405.17428}, 
+      url={https://arxiv.org/abs/2405.17428},
 }"""
 
 LlamaEmbedNemotron_CITATION = """@misc{babakhin2025llamaembednemotron8buniversaltextembedding,
-      title={Llama-Embed-Nemotron-8B: A Universal Text Embedding Model for Multilingual and Cross-Lingual Tasks}, 
+      title={Llama-Embed-Nemotron-8B: A Universal Text Embedding Model for Multilingual and Cross-Lingual Tasks},
       author={Yauhen Babakhin and Radek Osmulski and Ronay Ak and Gabriel Moreira and Mengyao Xu and Benedikt Schifferer and Bo Liu and Even Oldridge},
       year={2025},
       eprint={2511.07025},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2511.07025}, 
+      url={https://arxiv.org/abs/2511.07025},
 }"""
 
 
@@ -195,7 +195,7 @@ NV_embed_v2 = ModelMeta(
     revision="7604d305b621f14095a1aa23d351674c2859553a",
     release_date="2024-09-09",  # initial commit of hf model.
     n_parameters=7_850_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=14975,
     embed_dim=4096,
@@ -228,7 +228,7 @@ NV_embed_v1 = ModelMeta(
     revision="570834afd5fef5bf3a3c2311a2b6e0a66f6f4f2c",
     release_date="2024-09-13",  # initial commit of hf model.
     n_parameters=7_850_000_000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=14975,
     embed_dim=4096,
@@ -619,7 +619,7 @@ llama_embed_nemotron_8b = ModelMeta(
     revision="84a375593d27d3528beb4e104822515659e093b4",
     release_date="2025-10-23",
     n_parameters=7_504_924_672,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=28629,
     embed_dim=4096,

@@ -99,6 +99,7 @@ class ModelMeta(BaseModel):
         name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
         n_parameters: The total number of parameters in the model, e.g. `7_000_000` for a 7M parameter model. Can be none in case the number of parameters is unknown.
         n_embedding_parameters: The number of parameters used for the embedding layer. Can be None if the number of embedding parameters is not known (e.g. for proprietary models).
+        n_active_parameters_override: The number of active parameters used bu model. Should be used **only** for Mixture of Experts models.
         memory_usage_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
@@ -137,7 +138,7 @@ class ModelMeta(BaseModel):
     release_date: StrDate | None
     languages: list[ISOLanguageScript] | None
     n_parameters: int | None
-    n_active_parameters: int | None = None
+    n_active_parameters_override: int | None = None
     n_embedding_parameters: int | None = None
     memory_usage_mb: float | None
     max_tokens: float | None
@@ -198,10 +199,10 @@ class ModelMeta(BaseModel):
         return "cross-encoder" in self.model_type
 
     @property
-    def active_parameters(self):
+    def n_active_parameters(self):
         """Number of active parameters. Assumed to be `n_parameters - n_embedding_parameters`. Can be overwritten using `active_parameters` e.g. for MoE models."""
-        if self.n_active_parameters is not None:
-            return self.n_active_parameters
+        if self.n_active_parameters_override is not None:
+            return self.n_active_parameters_override
 
         if self.n_parameters is not None and self.n_embedding_parameters is not None:
             return self.n_parameters - self.n_embedding_parameters

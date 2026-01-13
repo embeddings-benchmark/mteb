@@ -355,7 +355,7 @@ hakim = ModelMeta(
     revision="1",
     release_date="2025-05-10",
     n_parameters=124_441_344,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=475,
     embed_dim=768,
@@ -425,7 +425,7 @@ hakim_small = ModelMeta(
     revision="1",
     release_date="2025-05-10",
     n_parameters=38_736_384,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=148,
     embed_dim=512,
@@ -494,7 +494,7 @@ hakim_unsup = ModelMeta(
     revision="1",
     release_date="2025-05-10",
     n_parameters=124_441_344,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=475,
     embed_dim=768,

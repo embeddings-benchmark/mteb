@@ -9,7 +9,7 @@ Euler_Legal_Embedding_V1 = ModelMeta(
     release_date="2025-11-06",
     languages=["eng-Latn"],
     n_parameters=8000000000,
-    n_active_parameters=None,
+
     n_embedding_parameters=None,
     memory_usage_mb=15618,
     max_tokens=1536,
