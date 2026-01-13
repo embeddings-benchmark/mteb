@@ -3,7 +3,8 @@
 from pathlib import Path
 from typing import cast
 
-from utils import pretty_long_list, slugify_anchor
+from prettify_list import pretty_long_list
+from slugify import slugify_anchor
 
 import mteb
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
