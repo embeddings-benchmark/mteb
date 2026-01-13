@@ -1704,7 +1704,7 @@ CHEMTEB = Benchmark(
 
 CHEMTEB_V1_1 = Benchmark(
     name="ChemTEB(v1.1)",
-    aliases=["ChemTEB-latest"],
+    aliases=["ChemTEB(latest)"],
     display_name="Chemical",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-purge.svg",
     tasks=get_tasks(
