@@ -1,4 +1,4 @@
-## vLLM Wrapper
+## vLLM
 
 !!! note
     vLLM currently supports only a limited number of models, and many implementations have subtle differences compared to the default implementations in mteb (see the [overview issue](add me) for more information). For the full list of supported models, refer to the [vllm documentation](https://docs.vllm.ai/en/stable/models/supported_models/#pooling-models).
@@ -96,7 +96,7 @@ The curve lower right is better ↘
 
 ### Unpadding
 
-By default, Sentence Transformers pads all inputs in a batch to the length of the longest one, which is undoubtedly very inefficient. VLLM avoids the use of padding entirely during inference.
+By default, Sentence Transformers (st) pads all inputs in a batch to the length of the longest one, which is undoubtedly very inefficient. VLLM avoids padding entirely during inference.
 
 <figure markdown="span">
     ![](../images/visualizations/unpadding.png)
@@ -107,7 +107,7 @@ The curve lower right is better ↘
 </figure>
 
 
-Sentence Transformers suffers a noticeable drop in speed when handling requests with varied input lengths, whereas vLLM does not.
+Sentence Transformers (st) suffers a noticeable drop in speed when handling requests with varied input lengths, whereas vLLM does not.
 
 ### Others
 
@@ -134,7 +134,8 @@ vLLM has a large number of parameters; here are some commonly used ones:
 
 :::mteb.models.vllm_wrapper.VllmWrapperBase
 
-For all vLLM parameters, please refer to https://docs.vllm.ai/en/latest/configuration/engine_args/.
+!!! info
+    For all vLLM parameters, please refer to https://docs.vllm.ai/en/latest/configuration/engine_args/.
 
 :::mteb.models.vllm_wrapper.VllmEncoderWrapper
 
