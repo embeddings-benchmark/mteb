@@ -282,6 +282,7 @@ voyage_3_large = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    superseded_by="voyageai/voyage-4-large",
 )
 
 
@@ -623,6 +624,7 @@ voyage_3_lite = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    superseded_by="voyageai/voyage-4-lite",
 )
 
 voyage_3_exp = ModelMeta(
