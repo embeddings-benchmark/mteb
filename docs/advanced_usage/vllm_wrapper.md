@@ -125,7 +125,7 @@ For causal attention models, such as the Qwen3 reranker, the following optimizat
 - Chunked prefill for improved memory handling during long-context processing
 - Prefix caching to accelerate repeated prompt processing
 
-VLLM’s optimizations are primarily designed for and most effective with causal language models (generative models). For full list of features you can refer to [vllm documentation](https://docs.vllm.ai/en/latest/features/).
+vLLM’s optimizations are primarily designed for and most effective with causal language models (generative models). For the full list of features, refer to the [vllm documentation](https://docs.vllm.ai/en/latest/features/).
 
 
 ## API Reference
