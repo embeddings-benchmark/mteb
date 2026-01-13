@@ -23,6 +23,7 @@ from mteb.models import (
     SearchProtocol,
 )
 from mteb.types import HFSubset, Modalities, ScoresDict
+from mteb.types._encoder_io import EncodeKwargs
 from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
 
 logger = logging.getLogger(__name__)
@@ -121,7 +122,7 @@ class AbsTask(ABC):
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
@@ -201,7 +202,7 @@ class AbsTask(ABC):
         *,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
