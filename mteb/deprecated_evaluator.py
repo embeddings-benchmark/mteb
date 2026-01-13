@@ -28,7 +28,7 @@ from mteb.models import (
     SentenceTransformerEncoderWrapper,
 )
 from mteb.results import TaskResult
-from mteb.types import ScoresDict
+from mteb.types import EncodeKwargs, ScoresDict
 
 if sys.version_info >= (3, 13):
     from warnings import deprecated
@@ -174,7 +174,7 @@ class MTEB:
         split: str,
         subsets_to_run: list[str] | None = None,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         **kwargs: Any,
     ):
         tick = time()
@@ -263,7 +263,7 @@ class MTEB:
         overwrite_results: bool = False,
         raise_error: bool = True,
         co2_tracker: bool = False,
-        encode_kwargs: dict[str, Any] | None = None,
+        encode_kwargs: EncodeKwargs | None = None,
         **kwargs,
     ) -> list[TaskResult]:
         """Run the evaluation pipeline on the selected tasks.

@@ -1,6 +1,5 @@
 import logging
 from pathlib import Path
-from typing import Any
 
 import numpy as np
 from datasets import Dataset
@@ -13,6 +12,7 @@ from mteb.abstasks._statistics_calculation import (
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models import EncoderProtocol, MTEBModels
+from mteb.types import EncodeKwargs
 from mteb.types.statistics import (
     ScoreStatistics,
     SplitDescriptiveStatistics,
@@ -82,7 +82,7 @@ class AbsTaskSummarization(AbsTask):
         *,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         **kwargs,
     ) -> SummarizationMetrics:

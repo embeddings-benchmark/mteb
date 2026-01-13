@@ -19,6 +19,7 @@ from mteb.types import (
     Array,
     BatchedInput,
     CorpusDatasetType,
+    EncodeKwargs,
     PromptType,
     QueryDatasetType,
     RetrievalOutputType,
@@ -45,7 +46,7 @@ class PylateSearchEncoder:
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -78,7 +79,7 @@ class PylateSearchEncoder:
         hf_split: str,
         hf_subset: str,
         top_k: int,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
     ) -> RetrievalOutputType:
         queries_dataloader = create_dataloader(
@@ -136,7 +137,7 @@ class PylateSearchEncoder:
         hf_subset: str,
         hf_split: str,
         top_k: int,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> dict[str, list[tuple[float, str]]]:
         from pylate import indexes, retrieve
 
@@ -200,7 +201,7 @@ class PylateSearchEncoder:
         task_metadata: TaskMetadata,
         hf_subset: str,
         hf_split: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> dict[str, list[tuple[float, str]]]:
         """Rerank with PyLate's rank.rerank using per-query candidates.
 
@@ -350,7 +351,7 @@ colbert_v2 = ModelMeta(
     embed_dim=None,
     license="mit",
     similarity_fn_name=ScoringFunction.MAX_SIM,
-    framework=["PyLate", "ColBERT"],
+    framework=["PyLate", "ColBERT", "Transformers", "ONNX", "safetensors"],
     reference="https://huggingface.co/colbert-ir/colbertv2.0",
     use_instructions=False,
     adapted_from=None,
@@ -406,7 +407,7 @@ jina_colbert_v2 = ModelMeta(
     embed_dim=None,
     license="cc-by-nc-4.0",
     similarity_fn_name=ScoringFunction.MAX_SIM,
-    framework=["PyLate", "ColBERT"],
+    framework=["PyLate", "ColBERT", "ONNX", "safetensors"],
     reference="https://huggingface.co/jinaai/jina-colbert-v2",
     use_instructions=False,
     adapted_from=None,
@@ -462,7 +463,7 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
     embed_dim=None,
     license="apache-2.0",
     similarity_fn_name="MaxSim",
-    framework=["PyLate", "ColBERT"],
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
     reference="https://huggingface.co/lightonai/GTE-ModernColBERT-v1",
     use_instructions=False,
     adapted_from="Alibaba-NLP/gte-modernbert-base",
