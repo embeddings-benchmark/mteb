@@ -19,6 +19,26 @@ If you're using cuda you can run
 For other architectures, please refer to the [vllm installation guide](https://docs.vllm.ai/en/latest/getting_started/installation/).
 ## Usage
 
+To use vLLM with MTEB you have to wrap the model with its respective wrapper.
+
+!!! note
+    you must update your Python code to guard usage of vllm behind a if __name__ == '__main__': block. For example, instead of this:
+    
+    ```python
+    import vllm
+    
+    llm = vllm.LLM(...)
+    ```
+    try this instead:
+    ```python
+    if __name__ == '__main__':
+        import vllm
+    
+        llm = vllm.LLM(...)
+    ```
+
+    See more https://docs.vllm.ai/en/latest/usage/troubleshooting/#python-multiprocessing
+
 === "Embedding models"
     ```python
     import mteb
@@ -31,7 +51,6 @@ For other architectures, please refer to the [vllm installation guide](https://d
             encoder,
             mteb.get_task("STS12"),
         )
-
 
     if __name__ == "__main__":
         results = run_vllm_encoder()
@@ -65,7 +84,8 @@ By default, vLLM uses Flash Attention, which only supports float16 and bfloat16 
 <figure markdown="span">
     ![](../images/visualizations/half_precision_inference.png)
     <figcaption>The throughput using float16 is approximately four times that of float32.
-
+ST: using sentence transformers backend
+vLLM: using vLLM backend
 X-axis: Throughput (request/s)
 Y-axis: Latency, Time needed for one step (ms) <- logarithmic scale
 The curve lower right is better ↘
@@ -101,6 +121,8 @@ By default, Sentence Transformers (st) pads all inputs in a batch to the length 
 <figure markdown="span">
     ![](../images/visualizations/unpadding.png)
     <figcaption>X-axis: Throughput (request/s)
+ST: using sentence transformers
+vLLM: using vLLM
 Y-axis: Latency, Time needed for one step (ms) <- logarithmic scale
 The curve lower right is better ↘
 </figcaption>
