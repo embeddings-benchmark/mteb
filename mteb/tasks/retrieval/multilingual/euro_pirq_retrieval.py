@@ -1,54 +1,11 @@
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-_HF_LANG_MAP = {
-    "en": "english",
-    "fi": "finnish",
-    "pt": "portuguese",
-}
 
 _LANGUAGES = {
     "en": ["eng-Latn"],
     "fi": ["fin-Latn"],
     "pt": ["por-Latn"],
 }
-
-
-def _load_data_retrieval(
-    path: str, langs: list, splits: list, revision: str | None = None
-):
-    corpus = {lang: {split: {} for split in splits} for lang in langs}
-    queries = {lang: {split: {} for split in splits} for lang in langs}
-    relevant_docs = {lang: {split: {} for split in splits} for lang in langs}
-
-    for lang in langs:
-        hf_lang = _HF_LANG_MAP[lang]
-
-        query_data = datasets.load_dataset(
-            path, f"{hf_lang}_queries", revision=revision
-        )["queries"]
-
-        for row in query_data:
-            q_id = str(row["id"])
-            doc_id = str(row["chunk_id"])
-
-            queries[lang]["test"][q_id] = row["query"]
-
-            if q_id not in relevant_docs[lang]["test"]:
-                relevant_docs[lang]["test"][q_id] = {}
-            relevant_docs[lang]["test"][q_id][doc_id] = 1
-
-        corpus_data = datasets.load_dataset(
-            path, f"{hf_lang}_corpus", revision=revision
-        )["corpus"]
-
-        for row in corpus_data:
-            d_id = str(row["id"])
-            corpus[lang]["test"][d_id] = {"title": "", "text": row["content"]}
-
-    return corpus, queries, relevant_docs
 
 
 class EuroPIRQRetrieval(AbsTaskRetrieval):
@@ -58,7 +15,7 @@ class EuroPIRQRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/eherra/EuroPIRQ-retrieval",
         dataset={
             "path": "eherra/EuroPIRQ-retrieval",
-            "revision": "28acf331e325acc6f2002c658a8a748c2a499c23",
+            "revision": "59225ed25fbcea2185e1acbc8c3c80f1a8cd8341",
         },
         type="Retrieval",
         category="t2t",
@@ -76,7 +33,7 @@ class EuroPIRQRetrieval(AbsTaskRetrieval):
         is_public=True,
         bibtex_citation=r"""
 @misc{eherra_2025_europirq,
-  author = { {Elias H.} },
+  author = { {Elias Herranen} },
   publisher = { Hugging Face },
   title = { EuroPIRQ: European Parallel Information Retrieval Queries },
   url = { https://huggingface.co/datasets/eherra/EuroPIRQ-retrieval },
@@ -84,16 +41,3 @@ class EuroPIRQRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data_retrieval(
-            path=self.metadata.dataset["path"],
-            langs=self.hf_subsets,
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
