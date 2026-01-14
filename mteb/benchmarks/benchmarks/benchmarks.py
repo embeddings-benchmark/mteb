@@ -2800,7 +2800,9 @@ MAEB = Benchmark(
             "SpeechCommandsZeroshotv0.01",
             "SpeechCommandsZeroshotv0.02",
             "UrbanSound8kZeroshot",
-            # Audio-to-Text Retrieval (18)
+            # Audio-to-Audio Retrieval (1)
+            "JamAltArtistA2ARetrieval",
+            # Audio-to-Text Retrieval (19)
             "AudioCapsA2TRetrieval",
             "AudioSetStrongA2TRetrieval",
             "ClothoA2TRetrieval",
@@ -2810,8 +2812,8 @@ MAEB = Benchmark(
             "EmoVDBA2TRetrieval",
             "FleursA2TRetrieval",
             "GigaSpeechA2TRetrieval",
+            "GoogleSVQA2TRetrieval",
             "HiFiTTSA2TRetrieval",
-            "JamAltArtistA2ARetrieval",
             "JamAltLyricA2TRetrieval",
             "JLCorpusA2TRetrieval",
             "LibriTTSA2TRetrieval",
@@ -2819,7 +2821,7 @@ MAEB = Benchmark(
             "MusicCapsA2TRetrieval",
             "SoundDescsA2TRetrieval",
             "UrbanSound8KA2TRetrieval",
-            # Text-to-Audio Retrieval (17)
+            # Text-to-Audio Retrieval (18)
             "AudioCapsT2ARetrieval",
             "AudioSetStrongT2ARetrieval",
             "ClothoT2ARetrieval",
@@ -2829,6 +2831,7 @@ MAEB = Benchmark(
             "EmoVDBT2ARetrieval",
             "FleursT2ARetrieval",
             "GigaSpeechT2ARetrieval",
+            "GoogleSVQT2ARetrieval",
             "HiFiTTST2ARetrieval",
             "JamAltLyricT2ARetrieval",
             "JLCorpusT2ARetrieval",
@@ -2840,7 +2843,7 @@ MAEB = Benchmark(
             "UrbanSound8KT2ARetrieval",
         ]
     ),
-    description="""MAEB is the full Massive Audio Embedding Benchmark (v1), containing 95 tasks with audio modality across 7 task types: classification, clustering, pair classification, reranking, zero-shot classification, audio-to-text retrieval, and text-to-audio retrieval.""",
+    description="""MAEB is the full Massive Audio Embedding Benchmark (v1), containing 98 tasks with audio modality across 6 task types: classification, clustering, pair classification, reranking, zero-shot classification, and retrieval.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -3039,9 +3042,12 @@ MAEB_AUDIO_TEXT_EXTENDED = Benchmark(
             # Multilingual - CommonVoice 21 (2) - 82+ languages
             "CommonVoice21A2TRetrieval",
             "CommonVoice21T2ARetrieval",
+            # Multilingual - Google SVQ (2) - 26 locales
+            "GoogleSVQA2TRetrieval",
+            "GoogleSVQT2ARetrieval",
         ]
     ),
-    description="""MAEB(audio-text, extended) is an extended benchmark for audio-text cross-modal models with 36 tasks. Includes all 30 tasks from the lite version plus Clotho (audio captioning), Fleurs (102 languages), and CommonVoice 21 (82+ languages) for comprehensive multilingual coverage. Task types: audio-text retrieval (31) and zero-shot classification (5).""",
+    description="""MAEB(audio-text, extended) is an extended benchmark for audio-text cross-modal models with 38 tasks. Includes all 30 tasks from the lite version plus Clotho (audio captioning), Fleurs (102 languages), CommonVoice 21 (82+ languages), and Google SVQ (26 locales) for comprehensive multilingual coverage. Task types: audio-text retrieval (33) and zero-shot classification (5).""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
