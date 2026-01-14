@@ -14,6 +14,7 @@ from mteb.types import (
     Array,
     BatchedInput,
     CorpusDatasetType,
+    EncodeKwargs,
     PromptType,
     QueryDatasetType,
     RetrievalOutputType,
@@ -50,7 +51,7 @@ class SearchEncoderWrapper:
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -88,7 +89,7 @@ class SearchEncoderWrapper:
         hf_split: str,
         hf_subset: str,
         top_k: int,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
     ) -> RetrievalOutputType:
         """Search the corpus for the given queries.
@@ -215,7 +216,7 @@ class SearchEncoderWrapper:
         hf_subset: str,
         hf_split: str,
         top_k: int,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> dict[str, list[tuple[float, str]]]:
         logger.info("Encoding Corpus in batches (this might take a while)...")
         if self.task_corpus is None:
@@ -318,7 +319,7 @@ class SearchEncoderWrapper:
         task_metadata: TaskMetadata,
         hf_subset: str,
         hf_split: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> dict[str, list[tuple[float, str]]]:
         """Rerank documents based on pre-ranked documents.
 
@@ -470,7 +471,7 @@ class SearchCrossEncoderWrapper:
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -491,7 +492,7 @@ class SearchCrossEncoderWrapper:
         hf_split: str,
         hf_subset: str,
         top_k: int,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
     ) -> RetrievalOutputType:
         """Search the corpus using the given queries.

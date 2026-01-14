@@ -25,7 +25,7 @@ class CUB200I2I(AbsTaskRetrieval):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{article,
+@article{welinder2010caltech,
   author = {Welinder, Peter and Branson, Steve and Mita, Takeshi and Wah, Catherine and Schroff, Florian and Belongie, Serge and Perona, Pietro},
   month = {09},
   pages = {},

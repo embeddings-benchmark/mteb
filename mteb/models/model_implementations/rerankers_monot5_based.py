@@ -330,7 +330,7 @@ monot5_small = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -372,7 +372,7 @@ monot5_base = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
 )
 
 monot5_large = ModelMeta(
@@ -396,7 +396,7 @@ monot5_large = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -429,7 +429,7 @@ monot5_3b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -484,7 +484,7 @@ flant5_base = ModelMeta(
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
 )
 
 flant5_large = ModelMeta(
@@ -530,7 +530,7 @@ flant5_large = ModelMeta(
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
 )
 
 flant5_xl = ModelMeta(
@@ -576,7 +576,7 @@ flant5_xl = ModelMeta(
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
 )
 
 flant5_xxl = ModelMeta(
@@ -622,7 +622,7 @@ flant5_xxl = ModelMeta(
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
 )
 
 
@@ -647,7 +647,7 @@ llama2_7b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     citation="""@misc{touvron2023llama2openfoundation,
       title={Llama 2: Open Foundation and Fine-Tuned Chat Models},
       author={Hugo Touvron and Louis Martin and Kevin Stone and Peter Albert and Amjad Almahairi and Yasmine Babaei and Nikolay Bashlykov and Soumya Batra and Prajjwal Bhargava and Shruti Bhosale and Dan Bikel and Lukas Blecher and Cristian Canton Ferrer and Moya Chen and Guillem Cucurull and David Esiobu and Jude Fernandes and Jeremy Fu and Wenyin Fu and Brian Fuller and Cynthia Gao and Vedanuj Goswami and Naman Goyal and Anthony Hartshorn and Saghar Hosseini and Rui Hou and Hakan Inan and Marcin Kardas and Viktor Kerkez and Madian Khabsa and Isabel Kloumann and Artem Korenev and Punit Singh Koura and Marie-Anne Lachaux and Thibaut Lavril and Jenya Lee and Diana Liskovich and Yinghai Lu and Yuning Mao and Xavier Martinet and Todor Mihaylov and Pushkar Mishra and Igor Molybog and Yixin Nie and Andrew Poulton and Jeremy Reizenstein and Rashi Rungta and Kalyan Saladi and Alan Schelten and Ruan Silva and Eric Michael Smith and Ranjan Subramanian and Xiaoqing Ellen Tan and Binh Tang and Ross Taylor and Adina Williams and Jian Xiang Kuan and Puxin Xu and Zheng Yan and Iliyan Zarov and Yuchen Zhang and Angela Fan and Melanie Kambadur and Sharan Narang and Aurelien Rodriguez and Robert Stojnic and Sergey Edunov and Thomas Scialom},
@@ -689,7 +689,7 @@ llama2_7b_chat = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
 )
 
 mistral_7b = ModelMeta(
@@ -713,7 +713,7 @@ mistral_7b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     citation="""@misc{jiang2023mistral7b,
       title={Mistral 7B},
       author={Albert Q. Jiang and Alexandre Sablayrolles and Arthur Mensch and Chris Bamford and Devendra Singh Chaplot and Diego de las Casas and Florian Bressand and Gianna Lengyel and Guillaume Lample and Lucile Saulnier and Lélio Renard Lavaud and Marie-Anne Lachaux and Pierre Stock and Teven Le Scao and Thibaut Lavril and Thomas Wang and Timothée Lacroix and William El Sayed},
@@ -748,7 +748,7 @@ followir_7b = ModelMeta(
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     citation="""
     @misc{weller2024followir,
       title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
@@ -898,7 +898,7 @@ mt5_base_mmarco_v2 = ModelMeta(
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
 )
 
 mt5_13b_mmarco_100k = ModelMeta(
@@ -922,5 +922,5 @@ mt5_13b_mmarco_100k = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
 )

@@ -25,7 +25,7 @@ class HUMEWikiCitiesClustering(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@online{wikidump,
+@online{wikidump2024,
   author = {Wikimedia Foundation},
   title = {Wikimedia Downloads},
   url = {https://dumps.wikimedia.org},

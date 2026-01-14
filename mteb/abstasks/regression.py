@@ -84,7 +84,7 @@ class AbsTaskRegression(AbsTaskClassification):
         n_samples: Number of samples to use for training the regression model. If the dataset has fewer samples than n_samples, all samples are used.
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
         evaluator_model: The model to use for evaluation. Can be any sklearn compatible model. Default is `LinearRegression`.
-            Full details of api in [`SklearnModelProtocol`][mteb._evaluators.sklearn_evaluator.SklearnModelProtocol].
+
     """
 
     evaluator: type[SklearnEvaluator] = SklearnEvaluator

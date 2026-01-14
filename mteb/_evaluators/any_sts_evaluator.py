@@ -1,5 +1,5 @@
 import logging
-from typing import Any, TypedDict
+from typing import TypedDict
 
 from datasets import Dataset
 from sklearn.metrics.pairwise import (
@@ -12,7 +12,7 @@ from mteb._create_dataloaders import create_dataloader
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import EncoderProtocol
 from mteb.similarity_functions import compute_pairwise_similarity
-from mteb.types import PromptType
+from mteb.types import EncodeKwargs, PromptType
 
 from .evaluator import Evaluator
 
@@ -57,7 +57,10 @@ class AnySTSEvaluator(Evaluator):
         self.input2_prompt_type = input2_prompt_type
 
     def __call__(
-        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
+        self,
+        model: EncoderProtocol,
+        *,
+        encode_kwargs: EncodeKwargs,
     ) -> STSEvaluatorScores:
         logger.info("Running semantic similarity - Encoding samples (1/2)")
         embeddings1 = model.encode(

@@ -30,13 +30,13 @@ class NoInstructModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
+        device: str | None = None,
         model_prompts: dict[str, str] | None = None,
         **kwargs: Any,
     ):
         from transformers import AutoModel, AutoTokenizer
 
         self.model_name = model_name
-        device = kwargs.pop("device", None)
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.model = AutoModel.from_pretrained(
             model_name, revision=revision, **kwargs
@@ -109,7 +109,7 @@ no_instruct_small_v0 = ModelMeta(
     license="mit",
     reference="https://huggingface.co/avsolatorio/NoInstruct-small-Embedding-v0",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Sentence Transformers", "safetensors", "Transformers"],
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,

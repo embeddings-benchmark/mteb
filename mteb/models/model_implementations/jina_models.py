@@ -257,6 +257,7 @@ class JinaRerankerV3Wrapper(CrossEncoderWrapper):
         self,
         model: CrossEncoder | str,
         revision: str | None = None,
+        device: str | None = None,
         trust_remote_code: bool = True,
         **kwargs: Any,
     ) -> None:
@@ -267,10 +268,7 @@ class JinaRerankerV3Wrapper(CrossEncoderWrapper):
             model, trust_remote_code=trust_remote_code, dtype="auto"
         )
 
-        device = kwargs.get("device", None)
-        if device is None:
-            device = get_device_name()
-            logger.info(f"Use pytorch device: {device}")
+        device = device or get_device_name()
 
         self.model.to(device)
         self.model.eval()
@@ -320,6 +318,7 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
         self,
         model: str,
         revision: str,
+        device: str | None = None,
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
@@ -339,7 +338,9 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
         )
         import flash_attn  # noqa: F401
 
-        super().__init__(model, revision, model_prompts, **kwargs)
+        super().__init__(
+            model, revision, device=device, model_prompts=model_prompts, **kwargs
+        )
 
     def encode(
         self,
@@ -732,7 +733,7 @@ jina_reranker_v3 = ModelMeta(
     embed_dim=None,
     license="cc-by-nc-4.0",
     similarity_fn_name=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     use_instructions=None,
     reference="https://huggingface.co/jinaai/jina-reranker-v3",
     public_training_code=None,
@@ -775,7 +776,7 @@ jina_embeddings_v4 = ModelMeta(
     embed_dim=2048,
     license="cc-by-nc-4.0",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     use_instructions=True,
     reference="https://huggingface.co/jinaai/jina-embeddings-v4",
     public_training_code=None,
@@ -823,7 +824,13 @@ jina_embeddings_v3 = ModelMeta(
     embed_dim=1024,
     license="cc-by-nc-4.0",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "ONNX",
+        "safetensors",
+    ],
     use_instructions=True,
     reference="https://huggingface.co/jinaai/jina-embeddings-v3",
     public_training_code=None,
@@ -878,7 +885,7 @@ jina_embeddings_v2_base_en = ModelMeta(
     max_tokens=8192,
     reference="https://huggingface.co/jinaai/jina-embeddings-v2-base-en",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "ONNX", "safetensors"],
     use_instructions=False,
     superseded_by=None,
     adapted_from="jina-bert-base-en-v1",  # pretrained on C4 with Alibi to support longer context.
@@ -942,7 +949,7 @@ jina_embeddings_v2_small_en = ModelMeta(
     max_tokens=8192,
     reference="https://huggingface.co/jinaai/jina-embeddings-v2-small-en",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "ONNX", "safetensors"],
     use_instructions=False,
     superseded_by=None,
     adapted_from="jina-bert-smalll-en-v1",  # pretrained on C4 with Alibi to support longer context

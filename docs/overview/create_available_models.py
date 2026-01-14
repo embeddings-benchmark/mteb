@@ -2,6 +2,8 @@
 
 from pathlib import Path
 
+from prettify_list import pretty_long_list
+
 import mteb
 from mteb.models import ModelMeta
 
@@ -60,12 +62,6 @@ def human_readable_number(num: int) -> str:
             return f"{num:.1f}{unit}" if unit else str(int(num))
         num /= 1000
     return f"{num:.2f}P"
-
-
-def pretty_long_list(items: list[str], max_items: int = 5) -> str:
-    if len(items) <= max_items:
-        return ", ".join(items)
-    return ", ".join(items[:max_items]) + f", ... ({len(items)})"
 
 
 def modality_to_string(modality: tuple[str, ...]) -> str:
