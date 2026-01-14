@@ -84,6 +84,8 @@ _BIBTEX_CITATION = r"""
 
 
 class BrightBiologyRetrieval(AbsTaskRetrieval):
+    filter_queries_without_positives = False
+
     metadata = TaskMetadata(
         name="BrightBiologyRetrieval",
         dataset={
@@ -128,6 +130,8 @@ class BrightBiologyRetrieval(AbsTaskRetrieval):
 
 
 class BrightEarthScienceRetrieval(AbsTaskRetrieval):
+    filter_queries_without_positives = False
+
     metadata = TaskMetadata(
         name="BrightEarthScienceRetrieval",
         dataset={
@@ -172,6 +176,8 @@ class BrightEarthScienceRetrieval(AbsTaskRetrieval):
 
 
 class BrightEconomicsRetrieval(AbsTaskRetrieval):
+    filter_queries_without_positives = False
+
     metadata = TaskMetadata(
         name="BrightEconomicsRetrieval",
         dataset={
@@ -216,6 +222,8 @@ class BrightEconomicsRetrieval(AbsTaskRetrieval):
 
 
 class BrightPsychologyRetrieval(AbsTaskRetrieval):
+    filter_queries_without_positives = False
+
     metadata = TaskMetadata(
         name="BrightPsychologyRetrieval",
         dataset={
@@ -260,6 +268,8 @@ class BrightPsychologyRetrieval(AbsTaskRetrieval):
 
 
 class BrightRoboticsRetrieval(AbsTaskRetrieval):
+    filter_queries_without_positives = False
+
     metadata = TaskMetadata(
         name="BrightRoboticsRetrieval",
         dataset={
@@ -304,6 +314,8 @@ class BrightRoboticsRetrieval(AbsTaskRetrieval):
 
 
 class BrightStackoverflowRetrieval(AbsTaskRetrieval):
+    filter_queries_without_positives = False
+
     metadata = TaskMetadata(
         name="BrightStackoverflowRetrieval",
         dataset={
@@ -348,6 +360,8 @@ class BrightStackoverflowRetrieval(AbsTaskRetrieval):
 
 
 class BrightSustainableLivingRetrieval(AbsTaskRetrieval):
+    filter_queries_without_positives = False
+
     metadata = TaskMetadata(
         name="BrightSustainableLivingRetrieval",
         dataset={
@@ -392,6 +406,8 @@ class BrightSustainableLivingRetrieval(AbsTaskRetrieval):
 
 
 class BrightPonyRetrieval(AbsTaskRetrieval):
+    filter_queries_without_positives = False
+
     metadata = TaskMetadata(
         name="BrightPonyRetrieval",
         dataset={
@@ -436,6 +452,8 @@ class BrightPonyRetrieval(AbsTaskRetrieval):
 
 
 class BrightLeetcodeRetrieval(AbsTaskRetrieval):
+    filter_queries_without_positives = False
+
     metadata = TaskMetadata(
         name="BrightLeetcodeRetrieval",
         dataset={
@@ -480,6 +498,8 @@ class BrightLeetcodeRetrieval(AbsTaskRetrieval):
 
 
 class BrightAopsRetrieval(AbsTaskRetrieval):
+    filter_queries_without_positives = False
+
     metadata = TaskMetadata(
         name="BrightAopsRetrieval",
         dataset={
@@ -524,6 +544,8 @@ class BrightAopsRetrieval(AbsTaskRetrieval):
 
 
 class BrightTheoremQATheoremsRetrieval(AbsTaskRetrieval):
+    filter_queries_without_positives = False
+
     metadata = TaskMetadata(
         name="BrightTheoremQATheoremsRetrieval",
         dataset={
@@ -568,6 +590,8 @@ class BrightTheoremQATheoremsRetrieval(AbsTaskRetrieval):
 
 
 class BrightTheoremQAQuestionsRetrieval(AbsTaskRetrieval):
+    filter_queries_without_positives = False
+
     metadata = TaskMetadata(
         name="BrightTheoremQAQuestionsRetrieval",
         dataset={
