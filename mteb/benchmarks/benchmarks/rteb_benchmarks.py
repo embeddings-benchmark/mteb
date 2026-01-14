@@ -10,7 +10,7 @@ RTEB_CITATION = r"""@article{rteb2025,
   year = {2025},
 }"""
 
-removal_note = "\n\nNote: We have temporarily removed the 'Private' column to read more about this decision out the [announcement](https://github.com/embeddings-benchmark/mteb/issues/XXXX)."
+removal_note = "\n\nNote: We have temporarily removed the 'Private' column to read more about this decision out the [announcement](https://github.com/embeddings-benchmark/mteb/issues/3934)."
 
 RTEB_MAIN = RtebBenchmark(
     name="RTEB(beta)",
