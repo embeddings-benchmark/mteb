@@ -45,6 +45,7 @@ def load_bright_data(
 
     # Get all document IDs
     all_doc_ids = [e["id"] for e in domain_corpus]
+    have_excluded_ids = False
 
     for e in examples:
         qid = e["id"]
@@ -59,6 +60,7 @@ def load_bright_data(
             top_ranked[eval_split][qid] = [
                 doc_id for doc_id in all_doc_ids if doc_id not in excluded_set
             ]
+            have_excluded_ids = True
         else:
             # No exclusions, use all documents
             top_ranked[eval_split][qid] = all_doc_ids
@@ -66,7 +68,10 @@ def load_bright_data(
     corpus = datasets.DatasetDict(corpus)
     queries = datasets.DatasetDict(queries)
     relevant_docs = datasets.DatasetDict(relevant_docs)
-    top_ranked = datasets.DatasetDict(top_ranked)
+    if have_excluded_ids:
+        top_ranked = datasets.DatasetDict(top_ranked)
+    else:
+        top_ranked = None
     return corpus, queries, relevant_docs, top_ranked
 
 

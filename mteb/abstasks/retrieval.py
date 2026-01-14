@@ -231,7 +231,7 @@ class AbsTaskRetrieval(AbsTask):
                             instructions,
                         )
                     )
-                if hasattr(self, "top_ranked"):
+                if hasattr(self, "top_ranked") and self.top_ranked:
                     self.dataset[subset][split]["top_ranked"] = self.top_ranked[
                         split
                     ].copy()
