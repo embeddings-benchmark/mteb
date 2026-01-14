@@ -25,6 +25,9 @@ VOYAGE_DTYPE_TRANSLATION = {
 
 # Total token limits per model based on VoyageAI documentation
 VOYAGE_TOTAL_TOKEN_LIMITS = {
+    "voyage-4-large": 120_000,
+    "voyage-4": 320_000,
+    "voyage-4-lite": 1_000_000,
     "voyage-3.5-lite": 1_000_000,
     "voyage-3.5": 320_000,
     "voyage-2": 320_000,
@@ -206,6 +209,32 @@ model_prompts = {
     PromptType.document.value: "document",
 }
 
+voyage_4 = ModelMeta(
+    name="voyageai/voyage-4",
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-01-15",
+    languages=None,  # supported languages not specified
+    loader=VoyageModel,
+    loader_kwargs=dict(
+        max_tokens=32000,
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2026/01/15/voyage-4/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+)
+
 voyage_4_lite = ModelMeta(
     name="voyageai/voyage-4-lite",
     model_type=["dense"],
@@ -310,6 +339,7 @@ voyage_3_5 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    superseded_by="voyageai/voyage-4",
 )
 
 voyage_3_5_int8 = ModelMeta(
