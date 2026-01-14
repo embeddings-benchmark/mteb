@@ -111,7 +111,6 @@ class AbsTaskRetrieval(AbsTask):
         k_values: A sequence of integers representing the k values for evaluation metrics.
         skip_first_result: If True, the first result is skipped during evaluation
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
-        filter_queries_without_positives: If True, queries without any positive relevant documents are filtered out before evaluation.
     """
 
     ignore_identical_ids: bool = False
@@ -123,7 +122,6 @@ class AbsTaskRetrieval(AbsTask):
     _support_search: bool = True
     _previous_results_model_meta: dict[str, Any] | None = None
     skip_first_result: bool = False
-    filter_queries_without_positives: bool = True
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -343,13 +341,12 @@ class AbsTaskRetrieval(AbsTask):
         Returns:
             Dictionary of evaluation scores
         """
-        if self.filter_queries_without_positives:
-            # ensure queries format (see #3030)
-            data_split["relevant_docs"], data_split["queries"] = (
-                _filter_queries_without_positives(
-                    data_split["relevant_docs"], data_split["queries"]
-                )
+        # ensure queries format (see #3030)
+        data_split["relevant_docs"], data_split["queries"] = (
+            _filter_queries_without_positives(
+                data_split["relevant_docs"], data_split["queries"]
             )
+        )
         retriever = RetrievalEvaluator(
             corpus=data_split["corpus"],
             queries=data_split["queries"],

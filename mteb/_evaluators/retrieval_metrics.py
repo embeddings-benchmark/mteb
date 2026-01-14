@@ -556,9 +556,9 @@ def calculate_retrieval_scores(
     ) = parse_metrics_from_scores(scores, k_values)
     mrr_scores = mrr(qrels, results, k_values)
 
-    naucs = evaluate_abstention(
-        results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
-    )
+    # naucs = evaluate_abstention(
+    #     results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
+    # )
     naucs_mrr = evaluate_abstention(results, mrr_scores)
     cv_recall = calculate_cv_recall(results, qrels, k_values, skip_first_result)
 
@@ -569,7 +569,7 @@ def calculate_retrieval_scores(
         map=_map,
         recall=recall,
         precision=precision,
-        naucs=naucs,
+        naucs={},
         mrr=avg_mrr,
         naucs_mrr=naucs_mrr,
         cv_recall=cv_recall,

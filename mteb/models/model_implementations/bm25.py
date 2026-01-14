@@ -8,7 +8,6 @@ from mteb.models.models_protocols import SearchProtocol
 from mteb.types import (
     CorpusDatasetType,
     EncodeKwargs,
-    InstructionDatasetType,
     QueryDatasetType,
     RetrievalOutputType,
     TopRankedDocumentsType,
@@ -75,7 +74,6 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
             hf_subset: str,
             top_k: int,
             encode_kwargs: EncodeKwargs,
-            instructions: InstructionDatasetType | None = None,
             top_ranked: TopRankedDocumentsType | None = None,
         ) -> RetrievalOutputType:
             logger.info("Encoding Queries...")
@@ -98,13 +96,17 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
                 query_results = queries_results[qi]
                 scores = queries_scores[qi]
                 doc_id_to_score = {}
+                query_documents = (
+                    top_ranked[qid] if top_ranked and qid in top_ranked else None
+                )
 
                 # Iterate over results
-                for ri in range(len(query_results)):
-                    doc_idx = query_results[ri]
-                    score = scores[ri]
+                for doc_idx, score in zip(query_results, scores):
                     doc_id = self.corpus_idx_to_id[doc_idx]
 
+                    # handle reranking with a filtered set of documents
+                    if query_documents is not None and doc_id not in query_documents:
+                        continue
                     doc_id_to_score[doc_id] = float(score)
 
                 results[qid] = doc_id_to_score
