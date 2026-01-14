@@ -1656,6 +1656,7 @@ FA_MTEB_2 = Benchmark(
 
 CHEMTEB = Benchmark(
     name="ChemTEB",
+    aliases=["ChemTEB(v1)"],
     display_name="Chemical",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-purge.svg",
     tasks=get_tasks(
@@ -1697,6 +1698,62 @@ CHEMTEB = Benchmark(
   journal = {arXiv preprint arXiv:2412.00532},
   title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
   year = {2024},
+}
+""",
+)
+
+CHEMTEB_V1_1 = Benchmark(
+    name="ChemTEB(v1.1)",
+    aliases=["ChemTEB(latest)"],
+    display_name="Chemical",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-purge.svg",
+    tasks=get_tasks(
+        tasks=[
+            "PubChemSMILESBitextMining",
+            "SDSEyeProtectionClassification",
+            "SDSGlovesClassification",
+            "WikipediaBioMetChemClassification",
+            "WikipediaGreenhouseEnantiopureClassification",
+            "WikipediaSolidStateColloidalClassification",
+            "WikipediaOrganicInorganicClassification",
+            "WikipediaCryobiologySeparationClassification",
+            "WikipediaChemistryTopicsClassification",
+            "WikipediaTheoreticalAppliedClassification",
+            "WikipediaChemFieldsClassification",
+            "WikipediaLuminescenceClassification",
+            "WikipediaIsotopesFissionClassification",
+            "WikipediaSaltsSemiconductorsClassification",
+            "WikipediaBiolumNeurochemClassification",
+            "WikipediaCrystallographyAnalyticalClassification",
+            "WikipediaCompChemSpectroscopyClassification",
+            "WikipediaChemEngSpecialtiesClassification",
+            "WikipediaChemistryTopicsClustering",
+            "WikipediaSpecialtiesInChemistryClustering",
+            "PubChemAISentenceParaphrasePC",
+            "PubChemSMILESPC",
+            "PubChemSynonymPC",
+            "PubChemWikiParagraphsPC",
+            "PubChemWikiPairClassification",
+            "ChemNQRetrieval",
+            "ChemHotpotQARetrieval",
+            "ChemRxivRetrieval",
+        ],
+    ),
+    description="ChemTEB evaluates the performance of text embedding models on chemical domain data. This version adds the ChemRxivRetrieval task.",
+    reference="https://arxiv.org/abs/2412.00532",
+    citation=r"""
+@article{kasmaee2024chemteb,
+  author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
+  journal = {arXiv preprint arXiv:2412.00532},
+  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
+  year = {2024},
+}
+
+@article{kasmaee2025chembed,
+  author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Astaraki, Mahdi and Saloot, Mohammad Arshi and Sherck, Nicholas and Mahyar, Hamidreza and Samiee, Soheila},
+  journal = {arXiv preprint arXiv:2508.01643},
+  title = {Chembed: Enhancing chemical literature search through domain-specific text embeddings},
+  year = {2025},
 }
 """,
 )
@@ -2727,4 +2784,28 @@ JMTEB_LITE_V1 = Benchmark(
 }
 """,
     contacts=["lsz05"],
+)
+
+KOVIDORE_V2 = Benchmark(
+    name="KoViDoRe(v2)",
+    display_name="KoViDoRe v2",
+    tasks=get_tasks(
+        tasks=[
+            "KoVidore2CybersecurityRetrieval",
+            "KoVidore2EconomicRetrieval",
+            "KoVidore2EnergyRetrieval",
+            "KoVidore2HrRetrieval",
+        ]
+    ),
+    description="KoViDoRe v2 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents.",
+    reference="https://github.com/whybe-choi/kovidore-data-generator",
+    citation=r"""
+@misc{choi2026kovidorev2,
+  author = {Yongbin Choi},
+  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
+  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
+  url = {https://github.com/whybe-choi/kovidore-data-generator},
+  year = {2026},
+}
+""",
 )
