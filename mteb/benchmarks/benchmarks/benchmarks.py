@@ -2410,10 +2410,10 @@ VIDORE_V3 = VidoreBenchmark(
     reference="https://arxiv.org/abs/2601.08620",
     citation=r"""
 @article{loison2026vidorev3comprehensiveevaluation,
-  archivePrefix = {arXiv},
+  archiveprefix = {arXiv},
   author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
   eprint = {2601.08620},
-  primaryClass = {cs.AI},
+  primaryclass = {cs.AI},
   title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
   url = {https://arxiv.org/abs/2601.08620},
   year = {2026},
