@@ -5,7 +5,10 @@ from .common_language_language_classification import (
     CommonLanguageLanguageClassification,
 )
 from .cremad import CREMAD
-from .expresso import ExpressoExpressiveStyleClassification
+from .expresso import (
+    ExpressoConvEmotionClassification,
+    ExpressoReadEmotionClassification,
+)
 from .fsdd import FSDD
 from .globe_v2_age_classification import GlobeV2AgeClassification
 from .globe_v2_gender_classification import GlobeV2GenderClassification
@@ -27,7 +30,8 @@ __all__ = [
     "CommonLanguageAgeDetection",
     "CommonLanguageGenderDetection",
     "CommonLanguageLanguageClassification",
-    "ExpressoExpressiveStyleClassification",
+    "ExpressoConvEmotionClassification",
+    "ExpressoReadEmotionClassification",
     "GlobeV2AgeClassification",
     "GlobeV2GenderClassification",
     "IEMOCAPEmotionClassification",

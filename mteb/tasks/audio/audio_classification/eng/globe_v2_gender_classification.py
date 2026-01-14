@@ -8,15 +8,15 @@ class GlobeV2GenderClassification(AbsTaskClassification):
         description="Gender classification from the GLOBE v2 dataset (sampled and enhanced from CommonVoice dataset)",
         reference="https://huggingface.co/datasets/MushanW/GLOBE_V2",
         dataset={
-            "path": "diffunity/GLOBE_V2_test",
-            "revision": "cc164ef46a8aa7ade377a2753260c3b9071d04eb",
+            "path": "mteb/globe-v2-gender-mini",
+            "revision": "0907be05c04d6d811cc780e76b15eedd707601b2",
         },
         type="AudioClassification",
         category="a2t",
-        eval_splits=["train"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2025-01-09", "2025-01-09"),
+        date=("2025-01-13", "2025-01-13"),
         domains=["Spoken", "Speech"],
         task_subtypes=["Gender Classification"],
         license="cc0-1.0",
@@ -38,4 +38,4 @@ class GlobeV2GenderClassification(AbsTaskClassification):
     input_column_name: str = "audio"
     label_column_name: str = "gender"
 
-    is_cross_validation: bool = True
+    is_cross_validation: bool = False
