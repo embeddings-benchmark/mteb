@@ -124,6 +124,10 @@ class RtebBenchmark(Benchmark):
         )
 
         joint_table = _create_summary_table_mean_public_private(benchmark_results)
+        # issue 3902: temporary remove the private column from RTEB summary table
+        if "Private" in joint_table.columns:
+            joint_table = joint_table.drop(columns=["Private"])
+
         # For RTEB: all tasks are Retrieval type, so Retrieval column = Mean (Task)
         joint_table = joint_table.rename(columns={"Retrieval": "Mean (Task)"})
         return joint_table
