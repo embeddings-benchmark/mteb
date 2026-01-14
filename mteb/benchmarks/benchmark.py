@@ -134,8 +134,6 @@ class RtebBenchmark(Benchmark):
             joint_table = joint_table.drop(columns=["Mean (Task)"])
         joint_table = joint_table.rename(columns={"Mean (Public)": "Mean (Task)"})
 
-        
-
         return joint_table
 
 
