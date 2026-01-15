@@ -123,7 +123,9 @@ class RtebBenchmark(Benchmark):
             _create_summary_table_mean_public_private,
         )
 
-        joint_table = _create_summary_table_mean_public_private(benchmark_results)
+        joint_table = _create_summary_table_mean_public_private(
+            benchmark_results, exclude_private_from_borda=True
+        )
         # issue 3902: temporary remove the private column from RTEB summary table
         if "Mean (Private)" in joint_table.columns:
             joint_table = joint_table.drop(columns=["Mean (Private)"])
