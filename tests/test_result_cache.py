@@ -250,7 +250,6 @@ def test_cache_load_different_subsets():
         ],
         tasks=[task],
         validate_and_filter=True,
-        fill_missing_scores=True,
     )
     result2 = cache.load_results(
         models=[
@@ -258,7 +257,6 @@ def test_cache_load_different_subsets():
         ],
         tasks=[task],
         validate_and_filter=True,
-        fill_missing_scores=True,
     )
     assert len(result1.model_results[0].task_results[0].scores["test"]) == 2
     assert len(result2.model_results[0].task_results[0].scores["test"]) == 2
