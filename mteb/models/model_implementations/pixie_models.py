@@ -1,14 +1,13 @@
-from mteb.models.model_meta import (
-    ModelMeta, 
-    ScoringFunction,
-)
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
-
 from mteb.models.model_implementations.arctic_models import (
     ARCTIC_V2_CITATION,
     LANGUAGES_V2_0,
     arctic_v2_training_datasets,
 )
+from mteb.models.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+)
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 PIXIE_RUNE_V1_CITATION = """@misc{TelePIX-PIXIE-Rune-v1.0,
   title        = {PIXIE-Rune-v1.0},
@@ -55,4 +54,3 @@ pixie_rune_v1_0 = ModelMeta(
     training_datasets=pixie_rune_v1_training_datasets,
     citation=PIXIE_RUNE_V1_CITATION + "\n\n" + ARCTIC_V2_CITATION,
 )
-
