@@ -31,7 +31,6 @@ mini_gte = ModelMeta(
     revision="7fbe6f9b4cc42615e0747299f837ad7769025492",
     release_date="2025-01-28",
     n_parameters=int(66.3 * 1e6),
-    n_active_parameters_override=42_921_984,
     n_embedding_parameters=23_440_896,
     memory_usage_mb=253,
     embed_dim=768,

@@ -31,7 +31,6 @@ xyz_embedding = ModelMeta(
     revision="4004120220b99baea764a1d3508427248ac3bccf",
     release_date="2024-09-13",
     n_parameters=326000000,
-    n_active_parameters_override=303_887_360,
     n_embedding_parameters=21_635_072,
     memory_usage_mb=1242,
     max_tokens=512,

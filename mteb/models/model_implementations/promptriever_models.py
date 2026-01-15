@@ -182,7 +182,6 @@ promptriever_mistral_v1 = ModelMeta(
     revision="7231864981174d9bee8c7687c24c8344414eae6b-876d63e49b6115ecb6839893a56298fadee7e8f5",  # base-peft revision
     release_date="2024-09-15",
     n_parameters=7_000_000_000,
-    n_active_parameters_override=7_063_474_176,
     n_embedding_parameters=131_072_000,
     memory_usage_mb=26703,
     training_datasets={

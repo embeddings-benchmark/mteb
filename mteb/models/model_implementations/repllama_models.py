@@ -172,7 +172,6 @@ repllama_llama2_original = ModelMeta(
         "mMARCO-NL",  # translation not trained on
     },
     n_parameters=7_000_000,
-    n_active_parameters_override=6_476_271_616,
     n_embedding_parameters=131_072_000,
     memory_usage_mb=27,
     max_tokens=4096,

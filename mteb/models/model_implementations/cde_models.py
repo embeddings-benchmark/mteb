@@ -222,7 +222,6 @@ cde_small_v1 = ModelMeta(
     revision="e151df18af0d7f1d1c37b074fee58406ececf19f",
     release_date="2024-09-24",
     n_parameters=int(281 * 1e6),
-    n_active_parameters_override=281_140_992,
     n_embedding_parameters=None,
     memory_usage_mb=1072,  # Though the second-stage model is only 140M
     max_tokens=512,

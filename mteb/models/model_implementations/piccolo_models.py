@@ -12,7 +12,6 @@ piccolo_base_zh = ModelMeta(
     revision="47c0a63b8f667c3482e05b2fd45577bb19252196",
     release_date="2023-09-04",  # first commit
     n_parameters=None,
-    n_active_parameters_override=86_041_344,
     n_embedding_parameters=16_226_304,
     memory_usage_mb=None,  # can't see on model card
     embed_dim=768,

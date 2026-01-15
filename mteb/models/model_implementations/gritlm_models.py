@@ -44,7 +44,6 @@ gritlm7b = ModelMeta(
     revision="13f00a0e36500c80ce12870ea513846a066004af",
     release_date="2024-02-15",
     n_parameters=7_240_000_000,
-    n_active_parameters_override=6_979_588_096,
     n_embedding_parameters=131_072_000,
     memory_usage_mb=13813,
     embed_dim=4096,

@@ -52,7 +52,6 @@ lgai_embedding_en = ModelMeta(
     revision="5e0b2316acc8c2e2941ded6b9cb200b1cb313e65",
     release_date="2025-06-11",
     n_parameters=7_110_000_000,
-    n_active_parameters_override=6_979_588_096,
     n_embedding_parameters=131_084_288,
     memory_usage_mb=27125,
     embed_dim=4096,

@@ -270,7 +270,6 @@ embedding_gemma_300m = ModelMeta(
     revision="64614b0b8b64f0c6c1e52b07e4e9a4e8fe4d2da2",
     release_date="2025-09-04",
     n_parameters=307_581_696,
-    n_active_parameters_override=106_255_104,
     n_embedding_parameters=201_326_592,
     embed_dim=768,
     max_tokens=2048,
