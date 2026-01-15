@@ -205,3 +205,30 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     training_datasets=TRAINING_DATA,
     citation=LLAMA_NEMORETRIEVER_CITATION,
 )
+
+llama_nemotron_colembed_3b_v2 = ModelMeta(
+    loader=LlamaNemoretrieverColembed,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+    ),
+    name="nvidia/llama-nemotron-colembed-3b-v2",
+    model_type=["late-interaction"],
+    languages=["eng-Latn"],
+    revision="6fa6bc45985c857bc2b653b17bf0098db5054f55",
+    release_date="2026-01-21",
+    modalities=["image", "text"],
+    n_parameters=4_407_000_000,
+    memory_usage_mb=8403,
+    max_tokens=8192,
+    embed_dim=3072,
+    license="https://huggingface.co/nvidia/llama-nemotron-colembed-3b-v2/blob/main/LICENSE",
+    open_weights=True,
+    public_training_code="Proprietary Code",
+    public_training_data="https://huggingface.co/nvidia/llama-nemotron-colembed-3b-v2#training-dataset",
+    framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/nvidia/llama-nemotron-colembed-3b-v2",
+    similarity_fn_name="MaxSim",
+    use_instructions=True,
+    training_datasets=TRAINING_DATA,
+    citation=LLAMA_NEMORETRIEVER_CITATION,
+)
