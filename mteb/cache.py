@@ -28,8 +28,8 @@ class ResultCache:
     """Class to handle the local cache of MTEB results.
 
     Examples:
-        >>> from mteb.cache import ResultCache
-        >>> cache = ResultCache(cache_path="~/.cache/mteb") # default
+        >>> import mteb
+        >>> cache = mteb.ResultCache(cache_path="~/.cache/mteb") # default
         >>> cache.download_from_remote() # download the latest results from the remote repository
         >>> result = cache.load_results("task_name", "model_name")
     """
@@ -321,8 +321,8 @@ class ResultCache:
             OSError: On other file system errors
 
         Examples:
-            >>> from mteb.cache import ResultCache
-            >>> cache = ResultCache()
+            >>> import mteb
+            >>> cache = mteb.ResultCache()
             >>> # Download optimized cached results
             >>> cache_file = cache._download_cached_results_from_branch()
             >>> # Use custom output path
@@ -461,8 +461,8 @@ class ResultCache:
             A list of paths in the cache directory.
 
         Examples:
-            >>> from mteb.cache import ResultCache
-            >>> cache = ResultCache()
+            >>> import mteb
+            >>> cache = mteb.ResultCache()
             >>>
             >>> # Get all cache paths
             >>> paths = cache.get_cache_paths()
@@ -643,8 +643,8 @@ class ResultCache:
             A BenchmarkResults object containing the results for the specified models and tasks.
 
         Examples:
-            >>> from mteb.cache import ResultCache
-            >>> cache = ResultCache()
+            >>> import mteb
+            >>> cache = mteb.ResultCache()
             >>>
             >>> # Load results for specific models and tasks
             >>> results = cache.load_results(
