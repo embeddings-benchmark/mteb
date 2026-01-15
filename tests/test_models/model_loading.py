@@ -10,6 +10,8 @@ from mteb.models.get_model_meta import MODEL_REGISTRY
 
 logging.basicConfig(level=logging.INFO)
 
+logger = logging.getLogger(__name__)
+
 
 def teardown_function(revision: str):
     """Teardown function to delete the model revision from the cache."""
@@ -32,7 +34,7 @@ def get_model_below_n_param_threshold(model_name: str, threshold: float = 2e9) -
                     del m
                     return "None"
             except Exception as e:
-                logging.warning(f"Failed to load model {model_name} with error {e}")
+                logger.warning(f"Failed to load model {model_name} with error {e}")
                 return e.__str__()
         try:
             m = get_model(model_name)
@@ -42,7 +44,7 @@ def get_model_below_n_param_threshold(model_name: str, threshold: float = 2e9) -
                 del m
                 return "None"
         except Exception as e:
-            logging.warning(f"Failed to load model {model_name} with error {e}")
+            logger.warning(f"Failed to load model {model_name} with error {e}")
             return e.__str__()
 
 
@@ -97,7 +99,7 @@ if __name__ == "__main__":
             with model_name_file.open() as f:
                 all_model_names = f.read().strip().split()
         else:
-            logging.warning(
+            logger.warning(
                 f"Model name file {args.model_name_file} does not exist. Exiting."
             )
             exit(1)

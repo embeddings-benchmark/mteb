@@ -3,7 +3,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import torch
+from packaging.version import Version
 from torch.utils.data import DataLoader
+from transformers import __version__ as transformers_version
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
@@ -34,6 +36,14 @@ class LlamaNemoretrieverColembed(AbsEncoder):
         attn_implementation="flash_attention_2",
         **kwargs,
     ):
+        required_transformers_version = "4.49.0"
+
+        if Version(transformers_version) != Version(required_transformers_version):
+            raise RuntimeError(
+                f"transformers version {transformers_version} is not match with required "
+                f"install version {required_transformers_version} to run `nvidia/llama-nemoretriever-colembed`"
+            )
+
         from transformers import AutoModel
 
         self.model = AutoModel.from_pretrained(

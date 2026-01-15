@@ -18,6 +18,8 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
 
+logger = logging.getLogger(__name__)
+
 
 def _downsample_image(
     image: Image.Image, max_pixels: int = 16000000, target_longest_side: int = 4000
@@ -41,17 +43,17 @@ def _downsample_image(
             new_width = int(width * (target_longest_side / height))
 
         new_size = (new_width, new_height)
-        logging.info(
+        logger.info(
             f"Downsampling image from {width}x{height} to {new_width}x{new_height}"
         )
         return image.resize(new_size, Resampling.LANCZOS)
     if width > height:
         if width > 10000:
-            logging.error("Processing extremely wide images.")
+            logger.error("Processing extremely wide images.")
             return image.resize((10000, height), Resampling.LANCZOS)
     else:
         if height > 10000:
-            logging.error("Processing extremely high images.")
+            logger.error("Processing extremely high images.")
             return image.resize((width, 10000), Resampling.LANCZOS)
     return image
 
