@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import cast
 
 import requests
+from pydantic import ValidationError
 
 import mteb
 from mteb.abstasks import AbsTask
@@ -686,7 +687,7 @@ class ResultCache:
                     task_result = task_result.validate_and_filter_scores(
                         task=task_instance
                     )
-                except Exception as e:
+                except ValidationError as e:
                     logger.info(
                         f"Validation failed for {task_result.task_name} in {model_name} {revision}: {e}"
                     )
