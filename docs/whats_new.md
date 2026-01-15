@@ -3,7 +3,7 @@ This section goes through new features added in v2. Below we give an overview of
 
 **Overview of changes:**
 
-- [New in v2.0 🎉](#new-in-v20-)
+- [New in v2.0 🎉](#new-in-v20)
     - [Easier evaluation](#easier-evaluation)
     - [Better local and online caching](#better-local-and-online-caching)
     - [Multimodal Input format](#multimodal-input-format)

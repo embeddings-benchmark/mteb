@@ -10,8 +10,9 @@ from tqdm import tqdm
 from transformers import AutoModel, AutoTokenizer
 from transformers import __version__ as transformers_version
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_package
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models import CrossEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -19,14 +20,24 @@ from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
-NV_RETRIEVER_CITATION = """@misc{moreira2025nvretrieverimprovingtextembedding,
-      title={NV-Retriever: Improving text embedding models with effective hard-negative mining},
-      author={Gabriel de Souza P. Moreira and Radek Osmulski and Mengyao Xu and Ronay Ak and Benedikt Schifferer and Even Oldridge},
+NV_RETRIEVER_CITATION = """@misc{lee2025nvembedimprovedtechniquestraining,
+      title={NV-Embed: Improved Techniques for Training LLMs as Generalist Embedding Models},
+      author={Chankyu Lee and Rajarshi Roy and Mengyao Xu and Jonathan Raiman and Mohammad Shoeybi and Bryan Catanzaro and Wei Ping},
       year={2025},
-      eprint={2407.15831},
+      eprint={2405.17428},
       archivePrefix={arXiv},
-      primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2407.15831}
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2405.17428},
+}"""
+
+LlamaEmbedNemotron_CITATION = """@misc{babakhin2025llamaembednemotron8buniversaltextembedding,
+      title={Llama-Embed-Nemotron-8B: A Universal Text Embedding Model for Multilingual and Cross-Lingual Tasks},
+      author={Yauhen Babakhin and Radek Osmulski and Ronay Ak and Gabriel Moreira and Mengyao Xu and Benedikt Schifferer and Bo Liu and Even Oldridge},
+      year={2025},
+      eprint={2511.07025},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2511.07025},
 }"""
 
 
@@ -614,8 +625,60 @@ llama_embed_nemotron_8b = ModelMeta(
     framework=["PyTorch", "Sentence Transformers", "safetensors", "Transformers"],
     use_instructions=True,
     training_datasets=llama_embed_nemotron_training_datasets,
-    public_training_code=None,  # Will be released later
-    public_training_data=None,  # Will be released later
+    public_training_code="https://github.com/NVIDIA-NeMo/Automodel/tree/main/examples/biencoder/llama_embed_nemotron_8b",
+    public_training_data="https://huggingface.co/datasets/nvidia/embed-nemotron-dataset-v1",
     contacts=["ybabakhin"],
-    citation=NV_RETRIEVER_CITATION,
+    citation=LlamaEmbedNemotron_CITATION,
+)
+
+
+def _nemotron_rerank_model(model: str, revision: str, **kwargs) -> CrossEncoderWrapper:
+    required_transformers_version = "4.47.1"
+
+    if Version(transformers_version) != Version(required_transformers_version):
+        raise RuntimeError(
+            f"transformers version {transformers_version} is not match with required "
+            f"install version {required_transformers_version} to run `nvidia/llama-nemotron-rerank-1b-v2`"
+        )
+
+    return CrossEncoderWrapper(
+        model=model,
+        revision=revision,
+        **kwargs,
+    )
+
+
+nemotron_rerank_1b_v2 = ModelMeta(
+    loader=_nemotron_rerank_model,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        query_prefix="question:",
+        passage_prefix=" \n \n passage:",
+        model_kwargs={"torch_dtype": torch.float32},
+    ),
+    name="nvidia/llama-nemotron-rerank-1b-v2",
+    revision="78efcfdc23b53a753f6c73f2d78b18132a34ac4d",
+    release_date="2025-10-16",
+    languages=["eng-Latn"],
+    n_parameters=1235816448,
+    memory_usage_mb=2357.0,
+    max_tokens=4096,
+    embed_dim=2048,
+    license="https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/nvidia/llama-nemotron-rerank-1b-v2",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=None,
+    training_datasets=set(
+        # private
+    ),
+    adapted_from="meta-llama/Llama-3.2-1B",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["cross-encoder"],
+    citation=None,
+    contacts=None,
 )
