@@ -23,8 +23,6 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
 
-else:
-    PoolerConfig = dict[str, Any]
 
 logger = logging.getLogger(__name__)
 
