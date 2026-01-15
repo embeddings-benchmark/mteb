@@ -5,6 +5,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from prettify_list import pretty_long_list
+
 import mteb
 
 if TYPE_CHECKING:
@@ -65,12 +67,6 @@ def human_readable_number(num: int) -> str:
             return f"{num:.1f}{unit}" if unit else str(int(num))
         num /= 1000
     return f"{num:.2f}P"
-
-
-def pretty_long_list(items: list[str], max_items: int = 5) -> str:
-    if len(items) <= max_items:
-        return ", ".join(items)
-    return ", ".join(items[:max_items]) + f", ... ({len(items)})"
 
 
 def modality_to_string(modality: tuple[str, ...]) -> str:

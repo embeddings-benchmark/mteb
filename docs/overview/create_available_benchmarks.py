@@ -3,6 +3,9 @@
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
+from prettify_list import pretty_long_list
+from slugify import slugify_anchor
+
 import mteb
 
 if TYPE_CHECKING:
@@ -34,12 +37,6 @@ citation_chunk = """
 """
 
 
-def pretty_long_list(items: list[str], max_items: int = 5) -> str:
-    if len(items) <= max_items:
-        return ", ".join(items)
-    return ", ".join(items[:max_items]) + f", ... ({len(items)})"
-
-
 def create_table(benchmark: mteb.Benchmark) -> str:
     """Create a markdown table of tasks in the benchmark."""
     tasks = benchmark.tasks
@@ -49,7 +46,10 @@ def create_table(benchmark: mteb.Benchmark) -> str:
     # add links to task names:
     # format: http://127.0.0.1:8000/overview/available_tasks/retrieval/#treccovid
     df["name"] = df.apply(
-        lambda row: f"[{row['name']}](./available_tasks/{row['type'].lower()}.md#{row['name'].lower()})",
+        lambda row: (
+            f"[{row['name']}](./available_tasks/{row['type'].lower()}.md"
+            f"#{slugify_anchor(row['name'])})"
+        ),
         axis=1,
     )
     df["modalities"] = df["modalities"].apply(lambda x: pretty_long_list(x))
