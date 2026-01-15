@@ -129,10 +129,14 @@ class ImageTextPairClassificationEvaluator(Evaluator):
             dim=-1,
         ).view(len(self.dataset), self.num_texts_per_sample, -1)
 
+        def _image_collate_fn(batch):
+            """Collate function for image batches."""
+            return {"image": [item["image"] for item in batch]}
+
         image_embeddings = model.encode(
             DataLoader(
                 CustomImageDataset(images),
-                collate_fn=lambda x: {"image": [item["image"] for item in x]},
+                collate_fn=_image_collate_fn,
                 num_workers=num_proc,
             ),
             task_metadata=self.task_metadata,
