@@ -347,7 +347,7 @@ class ModelMeta(BaseModel):
                 revision = revisions[0].commit_id if revisions else None
 
             release_date = cls.fetch_release_date(model_name)
-            model_license = card_data.license
+            model_license = card_data.license if card_data.license != "other" else None
             n_parameters = cls._calculate_num_parameters_from_hub(model_name)
             memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
             if model_config and hasattr(model_config, "hidden_size"):

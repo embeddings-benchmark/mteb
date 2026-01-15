@@ -1656,6 +1656,7 @@ FA_MTEB_2 = Benchmark(
 
 CHEMTEB = Benchmark(
     name="ChemTEB",
+    aliases=["ChemTEB(v1)"],
     display_name="Chemical",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-purge.svg",
     tasks=get_tasks(
@@ -1697,6 +1698,62 @@ CHEMTEB = Benchmark(
   journal = {arXiv preprint arXiv:2412.00532},
   title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
   year = {2024},
+}
+""",
+)
+
+CHEMTEB_V1_1 = Benchmark(
+    name="ChemTEB(v1.1)",
+    aliases=["ChemTEB(latest)"],
+    display_name="Chemical",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-purge.svg",
+    tasks=get_tasks(
+        tasks=[
+            "PubChemSMILESBitextMining",
+            "SDSEyeProtectionClassification",
+            "SDSGlovesClassification",
+            "WikipediaBioMetChemClassification",
+            "WikipediaGreenhouseEnantiopureClassification",
+            "WikipediaSolidStateColloidalClassification",
+            "WikipediaOrganicInorganicClassification",
+            "WikipediaCryobiologySeparationClassification",
+            "WikipediaChemistryTopicsClassification",
+            "WikipediaTheoreticalAppliedClassification",
+            "WikipediaChemFieldsClassification",
+            "WikipediaLuminescenceClassification",
+            "WikipediaIsotopesFissionClassification",
+            "WikipediaSaltsSemiconductorsClassification",
+            "WikipediaBiolumNeurochemClassification",
+            "WikipediaCrystallographyAnalyticalClassification",
+            "WikipediaCompChemSpectroscopyClassification",
+            "WikipediaChemEngSpecialtiesClassification",
+            "WikipediaChemistryTopicsClustering",
+            "WikipediaSpecialtiesInChemistryClustering",
+            "PubChemAISentenceParaphrasePC",
+            "PubChemSMILESPC",
+            "PubChemSynonymPC",
+            "PubChemWikiParagraphsPC",
+            "PubChemWikiPairClassification",
+            "ChemNQRetrieval",
+            "ChemHotpotQARetrieval",
+            "ChemRxivRetrieval",
+        ],
+    ),
+    description="ChemTEB evaluates the performance of text embedding models on chemical domain data. This version adds the ChemRxivRetrieval task.",
+    reference="https://arxiv.org/abs/2412.00532",
+    citation=r"""
+@article{kasmaee2024chemteb,
+  author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
+  journal = {arXiv preprint arXiv:2412.00532},
+  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
+  year = {2024},
+}
+
+@article{kasmaee2025chembed,
+  author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Astaraki, Mahdi and Saloot, Mohammad Arshi and Sherck, Nicholas and Mahyar, Hamidreza and Samiee, Soheila},
+  journal = {arXiv preprint arXiv:2508.01643},
+  title = {Chembed: Enhancing chemical literature search through domain-specific text embeddings},
+  year = {2025},
 }
 """,
 )
@@ -2350,17 +2407,16 @@ VIDORE_V3 = VidoreBenchmark(
         ]
     ),
     description="ViDoRe V3 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents. The benchmark includes both open and closed datasets: to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
-    reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
+    reference="https://arxiv.org/abs/2601.08620",
     citation=r"""
-@misc{mace2025vidorev3,
-  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
-  day = {5},
-  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
-  journal = {Hugging Face Blog},
-  month = {November},
-  publisher = {Hugging Face},
-  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
-  year = {2025},
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
 }
 """,
 )
