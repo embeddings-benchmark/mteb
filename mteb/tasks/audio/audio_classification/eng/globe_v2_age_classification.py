@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class GlobeV2AgeClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="GLOBEV2Age",
-        description="Age classification from the GLOBE v2 dataset (sampled and enhanced from CommonVoice dataset)",
+        description="Age classification from the GLOBE v2 dataset (sampled and enhanced from CommonVoice dataset for TTS purpose). This dataset is a stratified and downsampled version of the original dataset, containing about 535 hours of speech data across 164 accents. We use the age column as the target label for audio classification.",
         reference="https://huggingface.co/datasets/MushanW/GLOBE_V2",
         dataset={
             "path": "mteb/globe-v2-age-mini",
@@ -37,5 +37,3 @@ class GlobeV2AgeClassification(AbsTaskClassification):
 
     input_column_name: str = "audio"
     label_column_name: str = "age"
-
-    is_cross_validation: bool = False

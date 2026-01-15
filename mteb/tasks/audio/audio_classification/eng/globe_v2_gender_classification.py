@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class GlobeV2GenderClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="GLOBEV2Gender",
-        description="Gender classification from the GLOBE v2 dataset (sampled and enhanced from CommonVoice dataset)",
+        description="Gender classification from the GLOBE v2 dataset (sampled and enhanced from CommonVoice dataset for TTS purpose). This dataset is a stratified and downsampled version of the original dataset, containing about 535 hours of speech data across 164 accents. We use the gender column as the target label for audio classification.",
         reference="https://huggingface.co/datasets/MushanW/GLOBE_V2",
         dataset={
             "path": "mteb/globe-v2-gender-mini",
@@ -37,5 +37,3 @@ class GlobeV2GenderClassification(AbsTaskClassification):
 
     input_column_name: str = "audio"
     label_column_name: str = "gender"
-
-    is_cross_validation: bool = False

@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class ExpressoReadEmotionClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ExpressoRead",
-        description="Multiclass expressive speech style classification",
+        description="Multiclass expressive speech style classification. This is a stratfied and downsampled version of the original dataset that contains 40 hours of speech. The original dataset has two subsets - read speech and conversational speech, each having their own set of style labels. This task only includes the read speech subset.",
         reference="https://speechbot.github.io/expresso/",
         dataset={
             "path": "mteb/expresso-read-mini",
@@ -38,13 +38,11 @@ class ExpressoReadEmotionClassification(AbsTaskClassification):
     input_column_name: str = "audio"
     label_column_name: str = "style"
 
-    is_cross_validation: bool = False
-
 
 class ExpressoConvEmotionClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ExpressoConv",
-        description="Multiclass expressive speech style classification",
+        description="Multiclass expressive speech style classification. This is a stratfied and downsampled version of the original dataset that contains 40 hours of speech. The original dataset has two subsets - read speech and conversational speech, each having their own set of style labels. This task only includes the conversational speech subset.",
         reference="https://speechbot.github.io/expresso/",
         dataset={
             "path": "mteb/expresso-conv-mini",
@@ -76,5 +74,3 @@ class ExpressoConvEmotionClassification(AbsTaskClassification):
 
     input_column_name: str = "audio"
     label_column_name: str = "style"
-
-    is_cross_validation: bool = False
