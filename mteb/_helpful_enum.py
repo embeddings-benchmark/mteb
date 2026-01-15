@@ -1,6 +1,10 @@
-from enum import Enum
+from __future__ import annotations
 
-from typing_extensions import Self
+from enum import Enum
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
 
 
 class HelpfulStrEnum(str, Enum):

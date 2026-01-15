@@ -1,22 +1,28 @@
-import logging
-from collections.abc import Sequence
+from __future__ import annotations
 
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import SearchProtocol
-from mteb.types import (
-    CorpusDatasetType,
-    EncodeKwargs,
-    QueryDatasetType,
-    RelevantDocumentsType,
-    RetrievalEvaluationResult,
-    RetrievalOutputType,
-    TopRankedDocumentsType,
-)
+import logging
+from typing import TYPE_CHECKING
 
 from .evaluator import Evaluator
 from .retrieval_metrics import (
     calculate_retrieval_scores,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import SearchProtocol
+    from mteb.types import (
+        CorpusDatasetType,
+        EncodeKwargs,
+        QueryDatasetType,
+        RelevantDocumentsType,
+        RetrievalEvaluationResult,
+        RetrievalOutputType,
+        TopRankedDocumentsType,
+    )
+
 
 logger = logging.getLogger(__name__)
 

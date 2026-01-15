@@ -1,7 +1,12 @@
-import numpy as np
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
+
+if TYPE_CHECKING:
+    from mteb.types import Array
 
 
 class OPSWrapper(AbsEncoder):
@@ -15,7 +20,7 @@ class OPSWrapper(AbsEncoder):
         )
         self.output_dim = 1536
 
-    def encode(self, sentences: list[str], **kwargs) -> np.ndarray:
+    def encode(self, sentences: list[str], **kwargs) -> Array:
         embeddings = self.model.encode(sentences, **kwargs)
         return embeddings[:, : self.output_dim]
 

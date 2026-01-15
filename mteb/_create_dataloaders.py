@@ -1,21 +1,28 @@
+from __future__ import annotations
+
 import logging
 import warnings
-from collections.abc import Callable
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import torch
 from datasets import Dataset, Image
 from torch.utils.data import DataLoader, default_collate
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.types import (
-    BatchedInput,
-    Conversation,
     ConversationTurn,
     PromptType,
-    QueryDatasetType,
 )
-from mteb.types._encoder_io import CorpusInput, ImageInput, QueryInput, TextInput
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import (
+        BatchedInput,
+        Conversation,
+        QueryDatasetType,
+    )
+    from mteb.types._encoder_io import CorpusInput, ImageInput, QueryInput, TextInput
 
 logger = logging.getLogger(__name__)
 
@@ -128,7 +135,7 @@ def _convert_conv_history_to_query(
     conversation = row["text"]
     # if it's a list of strings, just join them
     if isinstance(conversation, list) and isinstance(conversation[0], str):
-        conversation_ = cast(list[str], conversation)
+        conversation_ = cast("list[str]", conversation)
         conv_str = "; ".join(conversation_)
         current_conversation = [
             ConversationTurn(role="user", content=message) for message in conversation_
@@ -173,7 +180,7 @@ def _convert_conv_history_to_query(
 
     row["text"] = conv_str
     row["conversation"] = current_conversation
-    return cast(dict[str, str | list[ConversationTurn]], row)
+    return cast("dict[str, str | list[ConversationTurn]]", row)
 
 
 def _create_dataloader_for_queries_conversation(

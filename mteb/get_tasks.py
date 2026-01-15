@@ -1,20 +1,25 @@
 """This script contains functions that are used to get an overview of the MTEB benchmark."""
 
+from __future__ import annotations
+
 import difflib
 import logging
 import warnings
 from collections import Counter, defaultdict
-from collections.abc import Iterable, Sequence
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pandas as pd
 
 from mteb.abstasks import (
     AbsTask,
 )
-from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
 from mteb.filter_tasks import filter_tasks
-from mteb.types import Modalities
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
+
+    from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
+    from mteb.types import Modalities
 
 logger = logging.getLogger(__name__)
 

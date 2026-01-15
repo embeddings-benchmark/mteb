@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import gradio as gr
 import matplotlib.pyplot as plt
 import numpy as np
@@ -5,8 +9,9 @@ import pandas as pd
 from matplotlib.colors import LinearSegmentedColormap
 from pandas.api.types import is_numeric_dtype
 
-from mteb.benchmarks.benchmark import Benchmark
-from mteb.results.benchmark_results import BenchmarkResults
+if TYPE_CHECKING:
+    from mteb.benchmarks.benchmark import Benchmark
+    from mteb.results.benchmark_results import BenchmarkResults
 
 
 def _borda_count(scores: pd.Series) -> pd.Series:

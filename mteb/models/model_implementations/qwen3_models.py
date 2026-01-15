@@ -1,6 +1,13 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import EncoderProtocol, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from mteb.models.models_protocols import EncoderProtocol
 
 
 def instruction_template(

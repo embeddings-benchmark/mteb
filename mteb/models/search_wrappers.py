@@ -1,28 +1,35 @@
+from __future__ import annotations
+
 import heapq
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
 from datasets import Dataset
-from torch.utils.data import DataLoader
 
 from mteb._create_dataloaders import (
     create_dataloader,
 )
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.types import (
-    Array,
-    BatchedInput,
-    CorpusDatasetType,
-    EncodeKwargs,
     PromptType,
-    QueryDatasetType,
-    RetrievalOutputType,
-    TopRankedDocumentsType,
 )
 
-from .models_protocols import CrossEncoderProtocol, EncoderProtocol
-from .search_encoder_index.search_backend_protocol import IndexEncoderSearchProtocol
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import (
+        Array,
+        BatchedInput,
+        CorpusDatasetType,
+        EncodeKwargs,
+        QueryDatasetType,
+        RetrievalOutputType,
+        TopRankedDocumentsType,
+    )
+
+    from .models_protocols import CrossEncoderProtocol, EncoderProtocol
+    from .search_encoder_index.search_backend_protocol import IndexEncoderSearchProtocol
 
 logger = logging.getLogger(__name__)
 

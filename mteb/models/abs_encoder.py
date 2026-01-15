@@ -1,14 +1,12 @@
+from __future__ import annotations
+
 import logging
 import warnings
 from abc import ABC, abstractmethod
-from collections.abc import Callable, Sequence
-from typing import Any, Literal, cast, get_args, overload
-
-from torch.utils.data import DataLoader
-from typing_extensions import Unpack
+from typing import TYPE_CHECKING, Any, Literal, cast, get_args, overload
 
 import mteb
-from mteb.abstasks.task_metadata import TaskMetadata, TaskType
+from mteb.abstasks.task_metadata import TaskType
 from mteb.similarity_functions import (
     cos_sim,
     dot_score,
@@ -18,13 +16,25 @@ from mteb.similarity_functions import (
     pairwise_max_sim,
 )
 from mteb.types import (
-    Array,
-    BatchedInput,
-    EncodeKwargs,
     PromptType,
 )
 
-from .model_meta import ModelMeta, ScoringFunction
+from .model_meta import ScoringFunction
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Sequence
+
+    from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import (
+        Array,
+        BatchedInput,
+        EncodeKwargs,
+    )
+
+    from .model_meta import ModelMeta
 
 logger = logging.getLogger(__name__)
 
@@ -314,7 +324,7 @@ class AbsEncoder(ABC):
             ):
                 arr = self.model.similarity(embeddings1, embeddings2)
                 # We assume that the model returns an Array-like object:
-                arr = cast(Array, arr)
+                arr = cast("Array", arr)
                 return arr
             return cos_sim(embeddings1, embeddings2)
         if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
@@ -352,7 +362,7 @@ class AbsEncoder(ABC):
             ):
                 arr = self.model.similarity_pairwise(embeddings1, embeddings2)
                 # We assume that the model returns an Array-like object:
-                arr = cast(Array, arr)
+                arr = cast("Array", arr)
                 return arr
             return pairwise_cos_sim(embeddings1, embeddings2)
         if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:

@@ -1,17 +1,21 @@
-import logging
-from typing import Any, Protocol, cast
+from __future__ import annotations
 
-import numpy as np
-from datasets import Dataset
-from torch.utils.data import DataLoader
-from typing_extensions import Self
+import logging
+from typing import TYPE_CHECKING, Any, Protocol, cast
 
 from mteb._create_dataloaders import create_dataloader
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import EncoderProtocol
-from mteb.types import Array, BatchedInput, EncodeKwargs
 
 from .evaluator import Evaluator
+
+if TYPE_CHECKING:
+    import numpy as np
+    from datasets import Dataset
+    from torch.utils.data import DataLoader
+    from typing_extensions import Self
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import EncoderProtocol
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -104,7 +108,7 @@ class SklearnEvaluator(Evaluator):
                 hf_subset=self.hf_subset,
                 **encode_kwargs,
             )
-            test_cache = cast(Array, test_cache)
+            test_cache = cast("Array", test_cache)
 
         logger.info("Running - Fitting classifier...")
         y_train = self.train_dataset[self.label_column_name]

@@ -1,16 +1,15 @@
+from __future__ import annotations
+
 import hashlib
 import logging
 from collections import defaultdict
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
 from datasets import Dataset
 from sklearn.metrics import average_precision_score
 
 from mteb._evaluators import PairClassificationEvaluator
-from mteb._evaluators.pair_classification_evaluator import (
-    PairClassificationDistances,
-)
 from mteb.abstasks._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,
@@ -18,14 +17,25 @@ from mteb.abstasks._statistics_calculation import (
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ScoringFunction
-from mteb.models.models_protocols import EncoderProtocol, MTEBModels
-from mteb.types import EncodeKwargs, PromptType
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types.statistics import (
-    ImageStatistics,
-    LabelStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from mteb._evaluators.pair_classification_evaluator import (
+        PairClassificationDistances,
+    )
+    from mteb.models.models_protocols import MTEBModels
+    from mteb.types import EncodeKwargs, PromptType
+    from mteb.types.statistics import (
+        ImageStatistics,
+        LabelStatistics,
+        TextStatistics,
+    )
+
 
 logger = logging.getLogger(__name__)
 

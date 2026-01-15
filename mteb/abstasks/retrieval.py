@@ -1,13 +1,13 @@
+from __future__ import annotations
+
 import json
 import logging
 from collections import defaultdict
-from collections.abc import Callable, Mapping, Sequence
 from pathlib import Path
 from time import time
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
-from typing_extensions import Self
 
 from mteb._create_dataloaders import (
     _combine_queries_with_instruction_text,
@@ -19,25 +19,12 @@ from mteb._evaluators.retrieval_metrics import make_score_dict
 from mteb.models import (
     CrossEncoderProtocol,
     EncoderProtocol,
-    MTEBModels,
     SearchCrossEncoderWrapper,
     SearchEncoderWrapper,
     SearchProtocol,
 )
-from mteb.types import (
-    EncodeKwargs,
-    HFSubset,
-    QueryDatasetType,
-    RelevantDocumentsType,
-    RetrievalOutputType,
-    ScoresDict,
-)
 from mteb.types.statistics import (
-    ImageStatistics,
-    RelevantDocsStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
-    TopRankedStatistics,
 )
 
 from ._statistics_calculation import (
@@ -52,6 +39,30 @@ from .retrieval_dataset_loaders import (
     RetrievalSplitData,
     _combine_queries_with_instructions_datasets,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Mapping, Sequence
+
+    from typing_extensions import Self
+
+    from mteb.models import (
+        MTEBModels,
+    )
+    from mteb.types import (
+        EncodeKwargs,
+        HFSubset,
+        QueryDatasetType,
+        RelevantDocumentsType,
+        RetrievalOutputType,
+        ScoresDict,
+    )
+    from mteb.types.statistics import (
+        ImageStatistics,
+        RelevantDocsStatistics,
+        TextStatistics,
+        TopRankedStatistics,
+    )
+
 
 logger = logging.getLogger(__name__)
 
