@@ -41,7 +41,7 @@ def _create_dataloader_from_texts(
     return DataLoader(
         dataset,
         batch_size=batch_size,
-        num_workers=num_proc,
+        num_workers=num_proc if num_proc > 1 else 0,
     )
 
 
@@ -87,7 +87,7 @@ def _create_dataloader_for_retrieval_corpus(
     return DataLoader(
         new_ds,
         batch_size=batch_size,
-        num_workers=num_proc,
+        num_workers=num_proc if num_proc > 1 else 0,
     )
 
 
@@ -124,7 +124,7 @@ def _create_text_dataloader_for_queries(
     return DataLoader(
         queries,
         batch_size=batch_size,
-        num_workers=num_proc,
+        num_workers=num_proc if num_proc > 1 else 0,
     )
 
 
@@ -213,7 +213,7 @@ def _create_dataloader_for_queries_conversation(
         ),
         collate_fn=_custom_collate_fn,
         batch_size=batch_size,
-        num_workers=num_proc,
+        num_workers=num_proc if num_proc > 1 else 0,
     )
 
 
@@ -334,7 +334,7 @@ def _create_image_dataloader(
         batch_size=batch_size,
         collate_fn=collate_fn,
         shuffle=False,
-        num_workers=num_proc,
+        num_workers=num_proc if num_proc > 1 else 0,
     )
 
 
@@ -475,5 +475,5 @@ def create_dataloader(
     return DataLoader(
         dataset,
         batch_size=batch_size,
-        num_workers=num_proc,
+        num_workers=num_proc if num_proc > 1 else 0,
     )
