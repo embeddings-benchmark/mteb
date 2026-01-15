@@ -104,7 +104,7 @@ Summarization},
         adapted_from=["BigPatentClustering"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         for split in self.metadata.eval_splits:
             _check_label_distribution(self.dataset[split])
         self.dataset = self.stratified_subsampling(

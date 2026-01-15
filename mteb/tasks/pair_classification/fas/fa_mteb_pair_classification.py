@@ -39,7 +39,7 @@ class CExaPPC(AbsTaskPairClassification):
 """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         _dataset = {}
         self.dataset = self.dataset.map(
             lambda example: {"label": 1 if example["label"] == "paraphrase" else 0}
@@ -80,7 +80,7 @@ class SynPerChatbotRAGFAQPC(AbsTaskPairClassification):
         bibtex_citation=""" """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         _dataset = {}
         for split in self.metadata.eval_splits:
             _dataset[split] = [
@@ -118,7 +118,7 @@ class FarsiParaphraseDetection(AbsTaskPairClassification):
         bibtex_citation=""" """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         _dataset = {}
         for split in self.metadata.eval_splits:
             _dataset[split] = [
@@ -156,7 +156,7 @@ class SynPerTextKeywordsPC(AbsTaskPairClassification):
         bibtex_citation=""" """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         _dataset = {}
         for split in self.metadata.eval_splits:
             _dataset[split] = [
@@ -194,7 +194,7 @@ class SynPerQAPC(AbsTaskPairClassification):
         bibtex_citation=""" """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         _dataset = {}
         for split in self.metadata.eval_splits:
             _dataset[split] = [

@@ -35,7 +35,7 @@ class OdiaNewsClassification(AbsTaskClassification):
         superseded_by="OdiaNewsClassification.v2",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_columns({"headings": "text"})
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
 
@@ -73,5 +73,5 @@ class OdiaNewsClassificationV2(AbsTaskClassification):
         adapted_from=["OdiaNewsClassification"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)

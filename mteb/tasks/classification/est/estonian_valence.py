@@ -40,7 +40,7 @@ class EstonianValenceClassification(AbsTaskClassification):
         superseded_by="EstonianValenceClassification.v2",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_column("paragraph", "text").rename_column(
             "valence", "label"
         )

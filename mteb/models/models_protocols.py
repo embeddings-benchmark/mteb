@@ -31,6 +31,7 @@ class SearchProtocol(Protocol):
         hf_split: str,
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
+        num_proc: int,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -40,6 +41,7 @@ class SearchProtocol(Protocol):
             hf_split: Split of current task, allows to know some additional information about current split.
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for dataloading.
         """
         ...
 
@@ -53,6 +55,7 @@ class SearchProtocol(Protocol):
         top_k: int,
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
+        num_proc: int,
     ) -> RetrievalOutputType:
         """Search the corpus using the given queries.
 
@@ -65,6 +68,7 @@ class SearchProtocol(Protocol):
                 Passed only from Reranking tasks.
             top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for dataloading.
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.

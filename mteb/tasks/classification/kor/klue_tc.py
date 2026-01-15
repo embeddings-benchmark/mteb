@@ -38,7 +38,7 @@ class KlueTC(AbsTaskClassification):
         superseded_by="KLUE-TC.v2",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         def id2str(example):
             return {"label": label_feature.int2str(example["label_id"])}
 
@@ -90,7 +90,7 @@ class KlueTCV2(AbsTaskClassification):
         adapted_from=["KlueTC"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["validation"]
         )

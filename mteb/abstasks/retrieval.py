@@ -137,7 +137,7 @@ class AbsTaskRetrieval(AbsTask):
             )
         )
 
-    def convert_v1_dataset_format_to_v2(self):
+    def convert_v1_dataset_format_to_v2(self, num_proc: int) -> None:
         """Convert dataset from v1 (from `self.queries`, `self.document`) format to v2 format (`self.dotaset`)."""
         # check if dataset is `v1` version
         if not hasattr(self, "queries"):
@@ -204,6 +204,7 @@ class AbsTaskRetrieval(AbsTask):
                             _combine_queries_with_instructions_datasets(
                                 self.dataset[subset][split]["queries"],
                                 instructions,
+                                num_proc,
                             )
                         )
                     if hasattr(self, "top_ranked"):
@@ -229,6 +230,7 @@ class AbsTaskRetrieval(AbsTask):
                         _combine_queries_with_instructions_datasets(
                             self.dataset[subset][split]["queries"],
                             instructions,
+                            num_proc,
                         )
                     )
                 if hasattr(self, "top_ranked"):
@@ -244,7 +246,7 @@ class AbsTaskRetrieval(AbsTask):
         if hasattr(self, "top_ranked"):
             del self.top_ranked
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1) -> None:
         """Load the dataset for the retrieval task."""
         if self.data_loaded:
             return
@@ -266,7 +268,9 @@ class AbsTaskRetrieval(AbsTask):
                 trust_remote_code=trust_remote_code,
                 split=split,
                 config=hf_subset,
-            ).load()
+            ).load(
+                num_proc=num_proc,
+            )
 
         if self.metadata.is_multilingual:
             for lang in self.metadata.eval_langs:
@@ -275,7 +279,7 @@ class AbsTaskRetrieval(AbsTask):
         else:
             for split in eval_splits:
                 _process_data(split)
-        self.dataset_transform()
+        self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
     def evaluate(
@@ -286,6 +290,7 @@ class AbsTaskRetrieval(AbsTask):
         *,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluate the model on the retrieval task.
@@ -297,16 +302,16 @@ class AbsTaskRetrieval(AbsTask):
             subsets_to_run: Optional list of subsets to evaluate on
             encode_kwargs: Keyword arguments passed to the encoder
             prediction_folder: Folder to save model predictions
+            num_proc: Number of processes to use
             **kwargs: Additional keyword arguments passed to the evaluator
-
 
         Returns:
             Dictionary mapping subsets to their evaluation scores
         """
         if not self.data_loaded:
-            self.load_data()
+            self.load_data(num_proc=num_proc)
         # TODO: convert all tasks directly https://github.com/embeddings-benchmark/mteb/issues/2030
-        self.convert_v1_dataset_format_to_v2()
+        self.convert_v1_dataset_format_to_v2(num_proc=num_proc)
 
         return super().evaluate(
             model,
@@ -314,6 +319,7 @@ class AbsTaskRetrieval(AbsTask):
             subsets_to_run,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
+            num_proc=num_proc,
             **kwargs,
         )
 
@@ -325,6 +331,7 @@ class AbsTaskRetrieval(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
@@ -336,6 +343,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_split: Split to evaluate on
             hf_subset: Subset to evaluate on
             prediction_folder: Folder with results prediction
+            num_proc: Number of processes to use
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
@@ -375,6 +383,7 @@ class AbsTaskRetrieval(AbsTask):
         results = retriever(
             search_model,
             encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
         )
         end_time = time()
         logger.debug(
@@ -449,9 +458,13 @@ class AbsTaskRetrieval(AbsTask):
         return {}
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int = 1,
     ) -> RetrievalDescriptiveStatistics:
-        self.convert_v1_dataset_format_to_v2()
+        self.convert_v1_dataset_format_to_v2(num_proc)
         if hf_subset and hf_subset in self.dataset:
             split_data = self.dataset[hf_subset][split]
             queries = split_data["queries"]
@@ -556,8 +569,8 @@ class AbsTaskRetrieval(AbsTask):
             top_ranked_statistics=top_ranked_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
-        self.convert_v1_dataset_format_to_v2()
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+        self.convert_v1_dataset_format_to_v2(num_proc)
 
         def _push_section(
             data: dict[str, RetrievalSplitData],
@@ -597,6 +610,7 @@ class AbsTaskRetrieval(AbsTask):
                     repo_name,
                     hf_subset_name,
                     commit_message=f"Add {hf_subset_name}-{subset_item}",
+                    num_proc=num_proc,
                 )
 
         for subset in self.dataset:
@@ -630,6 +644,7 @@ class AbsTaskRetrieval(AbsTask):
                 repo_name,
                 f"{subset}-qrels" if subset != "default" else "qrels",
                 commit_message=f"Add {subset}-qrels",
+                num_proc=num_proc,
             )
 
             _push_section(

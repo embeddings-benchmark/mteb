@@ -39,11 +39,13 @@ class ClusteringEvaluator(Evaluator):
         model: EncoderProtocol,
         *,
         encode_kwargs: EncodeKwargs,
+        num_proc: int = 1,
     ) -> list[int]:
         data_loader = create_dataloader(
             self.dataset,
             self.task_metadata,
             input_column=self.input_column_name,
+            num_proc=num_proc,
             **encode_kwargs,
         )
 

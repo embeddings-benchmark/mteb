@@ -50,7 +50,7 @@ Fishel, Mark},
         },
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return

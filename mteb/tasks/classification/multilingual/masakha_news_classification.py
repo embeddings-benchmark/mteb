@@ -55,7 +55,7 @@ class MasakhaNEWSClassification(AbsTaskClassification):
 """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         for lang in self.dataset.keys():
             self.dataset[lang] = self.dataset[lang].rename_columns(
                 {"category": "label"}

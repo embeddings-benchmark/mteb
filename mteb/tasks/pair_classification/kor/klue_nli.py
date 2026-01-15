@@ -37,7 +37,7 @@ class KlueNLI(AbsTaskPairClassification):
 """,  # 3000 - neutral samples
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         _dataset = {}
         for split in self.metadata.eval_splits:
             # keep labels 0=entailment and 2=contradiction, and map them as 1 and 0 for binary classification

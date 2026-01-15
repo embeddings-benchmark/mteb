@@ -38,7 +38,7 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClustering):
         bibtex_citation="",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         ds = {}
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
@@ -78,7 +78,7 @@ class ArXivHierarchicalClusteringS2S(AbsTaskClustering):
         bibtex_citation="",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         ds = {}
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))

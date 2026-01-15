@@ -47,6 +47,7 @@ class PylateSearchEncoder:
         hf_split: str,
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
+        num_proc: int,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -56,6 +57,7 @@ class PylateSearchEncoder:
             hf_split: Split of current task, allows to know some additional information about current split.
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for indexing.
         """
         self.task_corpus = corpus
 
@@ -81,12 +83,14 @@ class PylateSearchEncoder:
         top_k: int,
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
+        num_proc: int,
     ) -> RetrievalOutputType:
         queries_dataloader = create_dataloader(
             queries,
             task_metadata,
             prompt_type=PromptType.query,
             batch_size=encode_kwargs.get("batch_size", 32),
+            num_proc=num_proc,
         )
 
         query_embeddings = self.encode(
@@ -110,6 +114,7 @@ class PylateSearchEncoder:
                 hf_subset=hf_subset,
                 hf_split=hf_split,
                 encode_kwargs=encode_kwargs,
+                num_proc=num_proc,
             )
         else:
             result_heaps = self._pylate_full_corpus_search(
@@ -120,6 +125,7 @@ class PylateSearchEncoder:
                 hf_subset=hf_subset,
                 hf_split=hf_split,
                 encode_kwargs=encode_kwargs,
+                num_proc=num_proc,
             )
 
         results = {qid: {} for qid in query_idx_to_id.values()}
@@ -138,6 +144,7 @@ class PylateSearchEncoder:
         hf_split: str,
         top_k: int,
         encode_kwargs: EncodeKwargs,
+        num_proc: int,
     ) -> dict[str, list[tuple[float, str]]]:
         from pylate import indexes, retrieve
 
@@ -164,6 +171,7 @@ class PylateSearchEncoder:
             task_metadata,
             prompt_type=PromptType.document,
             batch_size=encode_kwargs.get("batch_size", 32),
+            num_proc=num_proc,
         )
         documents_embeddings = self.encode(
             documents_loader,
@@ -202,6 +210,7 @@ class PylateSearchEncoder:
         hf_subset: str,
         hf_split: str,
         encode_kwargs: EncodeKwargs,
+        num_proc: int = 1,
     ) -> dict[str, list[tuple[float, str]]]:
         """Rerank with PyLate's rank.rerank using per-query candidates.
 
@@ -224,6 +233,7 @@ class PylateSearchEncoder:
                 task_metadata,
                 prompt_type=PromptType.document,
                 batch_size=encode_kwargs.get("batch_size", 32),
+                num_proc=num_proc,
             ),
             task_metadata=task_metadata,
             hf_split=hf_split,
