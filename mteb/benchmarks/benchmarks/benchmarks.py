@@ -2880,7 +2880,7 @@ MAEB_AUDIO = Benchmark(
             "VoxPopuliAccentPairClassification",
         ]
     ),
-    description="""MAEB(audio-only) is a lightweight audio-only benchmark with 18 tasks optimized for maximum model coverage (44 models). Tasks span 5 task types: classification, multilabel classification, reranking, clustering, and pair classification. Selected by greedy task addition while maximizing the number of models with complete results.""",
+    description="""MAEB(audio-only) is a lightweight audio-only benchmark with 18 tasks spanning 5 task types: classification, multilabel classification, reranking, clustering, and pair classification.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -2953,7 +2953,7 @@ MAEB_AUDIO_EXTENDED = Benchmark(
             "JamAltArtistA2ARetrieval",
         ]
     ),
-    description="""MAEB(audio, extended) is an extended audio-only benchmark with 53 tasks supporting 38 models with complete results. Tasks span 6 task types: classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), and audio-to-audio retrieval (1). This benchmark provides broader task diversity while maintaining good model coverage.""",
+    description="""MAEB(audio, extended) is an extended audio-only benchmark with 53 tasks spanning 6 task types: classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), and audio-to-audio retrieval (1). This benchmark provides broader task diversity for audio-only evaluation.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -2965,6 +2965,29 @@ MAEB = Benchmark(
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
+            # AudioMultilabelClassification (2)
+            "FSD50K",
+            "SIBFLEURS",
+            # AudioClassification (5)
+            "VoxPopuliAccentID",
+            "MInDS14",
+            "VoxPopuliGenderID",
+            "BeijingOpera",
+            "AmbientAcousticContext",
+            # AudioReranking (5)
+            "ESC50AudioReranking",
+            "UrbanSound8KAudioReranking",
+            "GTZANAudioReranking",
+            "FSDnoisy18kAudioReranking",
+            "VocalSoundAudioReranking",
+            # AudioClustering (5)
+            "VoiceGenderClustering",
+            "VoxPopuliAccentClustering",
+            "AmbientAcousticContextClustering",
+            "VoxCelebClustering",
+            "VoxPopuliGenderClustering",
+            # AudioPairClassification (1)
+            "VoxPopuliAccentPairClassification",
             # Any2AnyRetrieval - Text to Audio (13)
             "AudioCapsT2ARetrieval",
             "AudioSetStrongT2ARetrieval",
@@ -2986,7 +3009,7 @@ MAEB = Benchmark(
             "UrbanSound8kZeroshot",
         ]
     ),
-    description="""MAEB is a benchmark for audio-text cross-modal models with 17 tasks optimized for maximum model coverage (10 models). Tasks span 2 task types: text-to-audio retrieval (13) and zero-shot classification (4). Models include CLAP variants, wav2clip, and speecht5.""",
+    description="""MAEB is a comprehensive audio benchmark with 35 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: multilabel classification (2), classification (5), reranking (5), clustering (5), pair classification (1), text-to-audio retrieval (13), and zero-shot classification (4).""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
