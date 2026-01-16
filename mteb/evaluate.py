@@ -132,8 +132,8 @@ def _evaluate_task(
 
     task.check_if_dataset_is_superseded()
 
-    data_loaded = task.data_loaded
-    if not data_loaded:
+    data_preloaded = task.data_loaded
+    if not data_preloaded:
         try:
             task.load_data()
         except DatasetNotFoundError as e:
@@ -176,7 +176,7 @@ def _evaluate_task(
         kg_co2_emissions=None,
     )
 
-    if data_loaded:  # only unload if we loaded the data
+    if not data_preloaded:  # only unload if we loaded the data
         task.unload_data()
 
     return result
