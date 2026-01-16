@@ -5,6 +5,8 @@ from .common_language_language_classification import (
     CommonLanguageLanguageClassification,
 )
 from .cremad import CREMAD
+from .cstr_vctk_accent_id import CSTRVCTKAccentID
+from .cstr_vctk_gender_classification import CSTRVCTKGenderClassification
 from .fsdd import FSDD
 from .iemocap_emotion import IEMOCAPEmotionClassification
 from .iemocap_gender import IEMOCAPGenderClassification
@@ -21,6 +23,8 @@ __all__ = [
     "CREMAD",
     "FSDD",
     "AmbientAcousticContextClassification",
+    "CSTRVCTKAccentID",
+    "CSTRVCTKGenderClassification",
     "CommonLanguageAgeDetection",
     "CommonLanguageGenderDetection",
     "CommonLanguageLanguageClassification",

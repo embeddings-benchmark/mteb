@@ -12,6 +12,7 @@ from .fleurs import FleursA2TRetrieval, FleursT2ARetrieval
 from .giga_speech import GigaSpeechA2TRetrieval, GigaSpeechT2ARetrieval
 from .hi_fi_tts import HiFiTTSA2TRetrieval, HiFiTTST2ARetrieval
 from .jl_corpus import JLCorpusA2TRetrieval, JLCorpusT2ARetrieval
+from .lass import LASSA2TRetrieval, LASST2ARetrieval
 from .libri_tts import LibriTTSA2TRetrieval, LibriTTST2ARetrieval
 from .macs import MACSA2TRetrieval, MACST2ARetrieval
 from .multilingual import (
@@ -61,6 +62,8 @@ __all__ = [
     "JamAltArtist",
     "JamAltLyricsA2T",
     "JamAltLyricsT2A",
+    "LASSA2TRetrieval",
+    "LASST2ARetrieval",
     "LibriTTSA2TRetrieval",
     "LibriTTST2ARetrieval",
     "MACSA2TRetrieval",
