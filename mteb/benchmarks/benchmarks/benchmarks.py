@@ -2849,9 +2849,9 @@ MAEB_PLUS = Benchmark(
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
-MAEB_AUDIO_LITE = Benchmark(
-    name="MAEB(audio, lite)",
-    display_name="Audio, Lite",
+MAEB_AUDIO = Benchmark(
+    name="MAEB(audio-only)",
+    display_name="Audio-Only",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
@@ -2880,7 +2880,7 @@ MAEB_AUDIO_LITE = Benchmark(
             "VoxPopuliAccentPairClassification",
         ]
     ),
-    description="""MAEB(audio, lite) is a lightweight audio-only benchmark with 18 tasks optimized for maximum model coverage (44 models). Tasks span 5 task types: classification, multilabel classification, reranking, clustering, and pair classification. Selected by greedy task addition while maximizing the number of models with complete results.""",
+    description="""MAEB(audio-only) is a lightweight audio-only benchmark with 18 tasks optimized for maximum model coverage (44 models). Tasks span 5 task types: classification, multilabel classification, reranking, clustering, and pair classification. Selected by greedy task addition while maximizing the number of models with complete results.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -2959,9 +2959,9 @@ MAEB_AUDIO_EXTENDED = Benchmark(
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
-MAEB_AUDIO_TEXT_LITE = Benchmark(
-    name="MAEB(audio-text, lite)",
-    display_name="Audio-Text, Lite",
+MAEB = Benchmark(
+    name="MAEB",
+    display_name="MAEB",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
@@ -2986,7 +2986,7 @@ MAEB_AUDIO_TEXT_LITE = Benchmark(
             "UrbanSound8kZeroshot",
         ]
     ),
-    description="""MAEB(audio-text, lite) is a lightweight benchmark for audio-text cross-modal models with 17 tasks optimized for maximum model coverage (10 models). Tasks span 2 task types: text-to-audio retrieval (13) and zero-shot classification (4). Models include CLAP variants, wav2clip, and speecht5.""",
+    description="""MAEB is a benchmark for audio-text cross-modal models with 17 tasks optimized for maximum model coverage (10 models). Tasks span 2 task types: text-to-audio retrieval (13) and zero-shot classification (4). Models include CLAP variants, wav2clip, and speecht5.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],

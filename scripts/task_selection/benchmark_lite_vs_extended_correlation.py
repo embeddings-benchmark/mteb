@@ -5,8 +5,8 @@ This script computes the correlation between lite and extended benchmark variant
 to validate that lite benchmarks preserve model rankings while reducing evaluation time.
 
 We analyze two benchmark pairs:
-1. Audio-only: MAEB(audio, lite) vs MAEB(audio, extended)
-2. Audio-text: MAEB(audio-text, lite) vs MAEB(audio-text, extended)
+1. Audio-only: MAEB(audio-only) vs MAEB(audio, extended)
+2. Audio-text: MAEB vs MAEB(audio-text, extended)
 """
 
 from __future__ import annotations
@@ -27,9 +27,9 @@ def main():
     print(f"MTEB version: {mteb.__version__}")
 
     # Get benchmarks by name
-    audio_lite = get_benchmark("MAEB(audio, lite)")
+    audio_lite = get_benchmark("MAEB(audio-only)")
     audio_extended = get_benchmark("MAEB(audio, extended)")
-    audio_text_lite = get_benchmark("MAEB(audio-text, lite)")
+    audio_text_lite = get_benchmark("MAEB")
     audio_text_extended = get_benchmark("MAEB(audio-text, extended)")
 
     # Get task names from each benchmark

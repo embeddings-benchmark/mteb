@@ -22,9 +22,9 @@ def _():
 def _(Path):
     RESULTS_DIR = Path("/Users/isaac/work/maeb-results/results")
     BENCHMARK_NAMES = [
-        "MAEB(audio, lite)",
+        "MAEB(audio-only)",
         "MAEB(audio, extended)",
-        "MAEB(audio-text, lite)",
+        "MAEB",
     ]
     return BENCHMARK_NAMES, RESULTS_DIR
 
@@ -181,9 +181,9 @@ def _(BENCHMARK_NAMES, df_with_size):
 
 @app.cell
 def _(top_models_per_benchmark):
-    # Find common models between MAEB_AUDIO_LITE and MAEB_AUDIO_EXTENDED only
-    _audio_benchmarks = ["MAEB(audio, lite)", "MAEB(audio, extended)"]
-    _audio_text_benchmark = "MAEB(audio-text, lite)"
+    # Find common models between MAEB_AUDIO and MAEB_AUDIO_EXTENDED only
+    _audio_benchmarks = ["MAEB(audio-only)", "MAEB(audio, extended)"]
+    _audio_text_benchmark = "MAEB"
 
     # Get sets for audio benchmarks
     _largest_sets = [
@@ -242,7 +242,7 @@ def _(top_models_per_benchmark):
 @app.cell
 def _(df_with_size, pd, selected_audio_large, selected_audio_small):
     # Build summary table for AUDIO benchmarks (common models)
-    _audio_benchmarks = ["MAEB(audio, lite)", "MAEB(audio, extended)"]
+    _audio_benchmarks = ["MAEB(audio-only)", "MAEB(audio, extended)"]
 
     def _build_audio_row(_mname, _rec, _cat):
         _row = {
@@ -289,7 +289,7 @@ def _(df_with_size, pd, selected_audio_large, selected_audio_small):
 @app.cell
 def _(df_with_size, pd, selected_audio_text_large, selected_audio_text_small):
     # Build summary table for AUDIO-TEXT benchmark (separate)
-    _audio_text_benchmark = "MAEB(audio-text, lite)"
+    _audio_text_benchmark = "MAEB"
 
     def _build_audio_text_row(_mname, _rec, _cat):
         _row = {

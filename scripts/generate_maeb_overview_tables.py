@@ -118,9 +118,9 @@ def load_benchmark_tasks() -> Tuple[Dict, List]:
     # Load benchmark definitions
     benchmarks = {
         "maeb": get_benchmark("MAEB+"),
-        "audio_lite": get_benchmark("MAEB(audio, lite)"),
+        "audio_lite": get_benchmark("MAEB(audio-only)"),
         "audio_extended": get_benchmark("MAEB(audio, extended)"),
-        "audio_text_lite": get_benchmark("MAEB(audio-text, lite)"),
+        "audio_text_lite": get_benchmark("MAEB"),
         "audio_text_extended": get_benchmark("MAEB(audio-text, extended)"),
     }
 

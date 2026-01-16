@@ -21,8 +21,8 @@ sys.path.insert(0, str(MTEB_ROOT))
 # Import benchmarks from mteb
 from mteb.benchmarks import get_benchmark
 
-MAEB_AUDIO_LITE = get_benchmark("MAEB(audio, lite)")
-MAEB_AUDIO_TEXT_LITE = get_benchmark("MAEB(audio-text, lite)")
+MAEB_AUDIO = get_benchmark("MAEB(audio-only)")
+MAEB_AUDIO_TEXT_LITE = get_benchmark("MAEB")
 
 
 def get_task_names_from_benchmark(benchmark) -> list[str]:
@@ -31,7 +31,7 @@ def get_task_names_from_benchmark(benchmark) -> list[str]:
 
 
 # Get task lists from benchmark definitions
-MAEB_AUDIO_LITE_TASKS = get_task_names_from_benchmark(MAEB_AUDIO_LITE)
+MAEB_AUDIO_TASKS = get_task_names_from_benchmark(MAEB_AUDIO)
 MAEB_AUDIO_TEXT_LITE_TASKS = get_task_names_from_benchmark(MAEB_AUDIO_TEXT_LITE)
 
 
@@ -54,7 +54,7 @@ def build_task_type_map(*benchmarks) -> dict[str, str]:
 
 
 # Build task type mapping dynamically from benchmarks
-TASK_TYPE_MAP = build_task_type_map(MAEB_AUDIO_LITE, MAEB_AUDIO_TEXT_LITE)
+TASK_TYPE_MAP = build_task_type_map(MAEB_AUDIO, MAEB_AUDIO_TEXT_LITE)
 
 # Task type abbreviations for the table
 TASK_TYPE_ABBREV = {
@@ -562,29 +562,29 @@ def main():
     results_dir = Path("/Users/isaac/work/maeb-results/results")
 
     # Load all results
-    all_tasks = MAEB_AUDIO_LITE_TASKS + MAEB_AUDIO_TEXT_LITE_TASKS
+    all_tasks = MAEB_AUDIO_TASKS + MAEB_AUDIO_TEXT_LITE_TASKS
     print(f"Loading results for {len(all_tasks)} tasks...")
     df = load_results_from_json(results_dir, all_tasks)
     print(f"Loaded results for {len(df)} models")
 
-    print("Processing MAEB(audio, lite)...")
+    print("Processing MAEB(audio-only)...")
     audio_lite_section = generate_audio_table(
-        df, MAEB_AUDIO_LITE_TASKS, "MAEB(audio, lite)", top_n=10
+        df, MAEB_AUDIO_TASKS, "MAEB(audio-only)", top_n=10
     )
 
-    print("Processing MAEB(audio-text, lite)...")
+    print("Processing MAEB...")
     audio_text_section = generate_audio_text_table(
-        df, MAEB_AUDIO_TEXT_LITE_TASKS, "MAEB(audio-text, lite)", top_n=10
+        df, MAEB_AUDIO_TEXT_LITE_TASKS, "MAEB", top_n=10
     )
 
     # Build full LaTeX output with two separate tables
     latex_output = []
 
-    # First table: MAEB(audio, lite)
+    # First table: MAEB(audio-only)
     latex_output.append(r"""\begin{table*}[!th]
     \centering
     \caption{
-    Top 10 models on MAEB(audio, lite) benchmark. Results are ranked using Borda count. We provide averages across all tasks, and per task category. Task categories are abbreviated as: Classification (Clf), Pair Classification (PC), Reranking (Rrnk), Clustering (Clust). We highlight the best score in \textbf{bold}.
+    Top 10 models on MAEB(audio-only) benchmark. Results are ranked using Borda count. We provide averages across all tasks, and per task category. Task categories are abbreviated as: Classification (Clf), Pair Classification (PC), Reranking (Rrnk), Clustering (Clust). We highlight the best score in \textbf{bold}.
     }
     \label{tab:maeb-audio-lite-performance}
     \resizebox{0.9\textwidth}{!}{
@@ -608,7 +608,7 @@ def main():
 \begin{table*}[!th]
     \centering
     \caption{
-    Top 10 models on MAEB(audio-text, lite) benchmark. Results are ranked using Borda count. We provide averages across all tasks, and per task category. Task categories are abbreviated as: Retrieval (Rtrvl), Zero-shot Classification (Zero Clf.). We highlight the best score in \textbf{bold}.
+    Top 10 models on MAEB benchmark. Results are ranked using Borda count. We provide averages across all tasks, and per task category. Task categories are abbreviated as: Retrieval (Rtrvl), Zero-shot Classification (Zero Clf.). We highlight the best score in \textbf{bold}.
     }
     \label{tab:maeb-audio-text-lite-performance}
     \resizebox{0.6\textwidth}{!}{
