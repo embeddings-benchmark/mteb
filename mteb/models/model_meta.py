@@ -122,6 +122,7 @@ class ModelMeta(BaseModel):
         model_type: A list of strings representing the type of model.
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
+        embedding_types: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float embeddings.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -152,6 +153,7 @@ class ModelMeta(BaseModel):
     model_type: list[MODEL_TYPES] = ["dense"]
     citation: str | None = None
     contacts: list[str] | None = None
+    embedding_types: list[str] | None = None
 
     @model_validator(mode="before")
     @classmethod

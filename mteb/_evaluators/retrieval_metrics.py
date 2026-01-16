@@ -270,7 +270,7 @@ def nauc(
     conf_scores: np.ndarray,
     metrics: np.ndarray,
     abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
-) -> float:
+) -> float | None:
     """Computes normalized Area Under the Curve (nAUC) on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
 
     1. Computes the raw abstention curve, i.e., the average evaluation metric at different abstention rates determined by the confidence scores
@@ -325,7 +325,7 @@ def nauc(
     flat_auc = or_curve[0] * (abstention_rates[-1] - abstention_rates[0])
 
     if or_auc == flat_auc:
-        abst_nauc = np.nan
+        abst_nauc = None
     else:
         abst_nauc = (abst_auc - flat_auc) / (or_auc - flat_auc)
 

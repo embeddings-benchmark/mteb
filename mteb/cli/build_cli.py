@@ -52,6 +52,7 @@ def run(args: argparse.Namespace) -> None:
         device = args.device
 
     model = mteb.get_model(args.model, args.model_revision, device=device)
+    quantize = args.quantization
 
     if args.benchmarks:
         benchmarks = mteb.get_benchmarks(names=args.benchmarks)
@@ -93,6 +94,7 @@ def run(args: argparse.Namespace) -> None:
         overwrite_strategy=overwrite_strategy,
         encode_kwargs=encode_kwargs,
         prediction_folder=prediction_folder,
+        quantize=quantize,
     )
 
 
@@ -266,6 +268,12 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
         type=str,
         default=None,
         help="Folder to save the model predictions in. If None, predictions will not be saved.",
+    )
+    parser.add_argument(
+        "--quantization",
+        type=bool,
+        default=False,
+        help="Whether to compute retrieval performance on quantized embeddings in addition to full-precision. Ignored for non-retrieval tasks.",
     )
 
     parser.set_defaults(func=run)
