@@ -41,6 +41,7 @@ cadet_embed = ModelMeta(
     open_weights=True,
     release_date="2025-05-11",
     n_parameters=109_000_000,
+    n_embedding_parameters=23_440_896,
     memory_usage_mb=418,
     embed_dim=768,
     license="apache-2.0",

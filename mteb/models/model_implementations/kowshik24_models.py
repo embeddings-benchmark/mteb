@@ -9,6 +9,7 @@ kowshik24_bangla_embedding_model = ModelMeta(
     revision="6689c21e69be5950596bad084457cbaa138728d8",
     release_date="2025-11-10",
     n_parameters=278_000_000,
+    n_embedding_parameters=192_001_536,
     memory_usage_mb=1061,
     embed_dim=768,
     license="apache-2.0",

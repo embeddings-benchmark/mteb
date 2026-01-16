@@ -9,6 +9,7 @@ bica_base = ModelMeta(
     revision="31237a836e5ae908c308a256573e5f0986498574",
     release_date="2025-11-14",
     n_parameters=110_000_000,
+    n_embedding_parameters=23_440_896,
     memory_usage_mb=418,
     embed_dim=768,
     license="mit",

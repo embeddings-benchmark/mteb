@@ -10,6 +10,7 @@ xlmr_scandi = ModelMeta(
     revision="d40c10ca7b1e68b5a8372f2d112dac9eb3279df1",
     release_date="2022-02-22",
     n_parameters=278043648,
+    n_embedding_parameters=192_001_536,
     memory_usage_mb=1061,
     embed_dim=768,
     license="not specified",

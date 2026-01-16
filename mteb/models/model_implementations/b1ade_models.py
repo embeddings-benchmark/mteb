@@ -16,6 +16,7 @@ b1ade_embed = ModelMeta(
     open_weights=True,
     release_date="2025-03-10",
     n_parameters=335_000_000,
+    n_embedding_parameters=31_254_528,
     memory_usage_mb=1278,
     embed_dim=1024,
     license="mit",
