@@ -127,9 +127,9 @@ class RetrievalDatasetLoader:
         )
 
     def _load_corpus(self) -> CorpusDatasetType:
-        logger.info("Loading Corpus...")
-
         config = f"{self.config}-corpus" if self.config is not None else "corpus"
+        logger.info("Loading corpus subset: %s", config)
+
         corpus_ds = self._load_dataset_split(config)
         if "_id" in corpus_ds.column_names:
             corpus_ds = corpus_ds.cast_column("_id", Value("string")).rename_column(
@@ -140,9 +140,9 @@ class RetrievalDatasetLoader:
         return corpus_ds
 
     def _load_queries(self) -> QueryDatasetType:
-        logger.info("Loading Queries...")
-
         config = f"{self.config}-queries" if self.config is not None else "queries"
+        logger.info("Loading queries subset: %s", config)
+
         if "query" in self.dataset_configs:
             config = "query"
         queries_ds = self._load_dataset_split(config)
@@ -157,9 +157,9 @@ class RetrievalDatasetLoader:
         return queries_ds
 
     def _load_qrels(self) -> RelevantDocumentsType:
-        logger.info("Loading qrels...")
-
         config = f"{self.config}-qrels" if self.config is not None else "default"
+
+        logger.info("Loading qrels subset: %s", config)
         if config == "default" and config not in self.dataset_configs:
             if "qrels" in self.dataset_configs:
                 config = "qrels"
@@ -192,11 +192,10 @@ class RetrievalDatasetLoader:
         return qrels_dict
 
     def _load_top_ranked(self) -> TopRankedDocumentsType:
-        logger.info("Loading Top Ranked")
-
         config = (
             f"{self.config}-top_ranked" if self.config is not None else "top_ranked"
         )
+        logger.info("Loading top ranked subset: %s", config)
         top_ranked_ds = self._load_dataset_split(config)
         top_ranked_ds = top_ranked_ds.cast(
             Features(
@@ -216,11 +215,10 @@ class RetrievalDatasetLoader:
         return top_ranked_dict
 
     def _load_instructions(self) -> InstructionDatasetType:
-        logger.info("Loading Instructions")
-
         config = (
             f"{self.config}-instruction" if self.config is not None else "instruction"
         )
+        logger.info("Loading instruction subset: %s", config)
         instructions_ds = self._load_dataset_split(config)
         instructions_ds = instructions_ds.cast(
             Features(
