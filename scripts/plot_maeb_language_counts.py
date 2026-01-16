@@ -13,7 +13,7 @@ def get_language_counts():
     """Extract and count languages from all MAEB+ tasks."""
     # Load the main MAEB benchmark
     print("Loading MAEB+ benchmark...")
-    maeb_benchmark = get_benchmark("MAEB")
+    maeb_benchmark = get_benchmark("MAEB+")
 
     # Extract all languages from all tasks
     all_languages = []

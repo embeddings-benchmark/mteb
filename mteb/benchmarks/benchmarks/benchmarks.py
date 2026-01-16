@@ -2729,9 +2729,9 @@ JMTEB_LITE_V1 = Benchmark(
     contacts=["lsz05"],
 )
 
-MAEB = Benchmark(
-    name="MAEB",
-    display_name="MAEB, Full",
+MAEB_PLUS = Benchmark(
+    name="MAEB+",
+    display_name="MAEB+",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
