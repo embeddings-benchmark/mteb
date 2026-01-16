@@ -1,12 +1,11 @@
 """
-MAEB Lite vs Extended Benchmark Correlation Analysis
+MAEB vs MAEB(extended) Benchmark Correlation Analysis
 
-This script computes the correlation between lite and extended benchmark variants
-to validate that lite benchmarks preserve model rankings while reducing evaluation time.
+This script computes the correlation between MAEB (lite) and MAEB(extended) benchmark variants
+to validate that the lite benchmark preserves model rankings while reducing evaluation time.
 
-We analyze two benchmark pairs:
-1. Audio-only: MAEB(audio-only) vs MAEB(audio, extended)
-2. Audio-text: MAEB vs MAEB(audio-text, extended)
+MAEB is the main benchmark (35 tasks) while MAEB(extended) is an intermediate filtering step
+containing 91 tasks that combines audio-only and audio-text evaluation.
 """
 
 from __future__ import annotations
@@ -27,21 +26,15 @@ def main():
     print(f"MTEB version: {mteb.__version__}")
 
     # Get benchmarks by name
-    audio_lite = get_benchmark("MAEB(audio-only)")
-    audio_extended = get_benchmark("MAEB(audio, extended)")
-    audio_text_lite = get_benchmark("MAEB")
-    audio_text_extended = get_benchmark("MAEB(audio-text, extended)")
+    maeb_lite = get_benchmark("MAEB")
+    maeb_extended = get_benchmark("MAEB(extended)")
 
     # Get task names from each benchmark
-    audio_lite_tasks = [t.metadata.name for t in audio_lite.tasks]
-    audio_extended_tasks = [t.metadata.name for t in audio_extended.tasks]
-    audio_text_lite_tasks = [t.metadata.name for t in audio_text_lite.tasks]
-    audio_text_extended_tasks = [t.metadata.name for t in audio_text_extended.tasks]
+    lite_tasks = [t.metadata.name for t in maeb_lite.tasks]
+    extended_tasks = [t.metadata.name for t in maeb_extended.tasks]
 
-    print(f"\nAudio-only lite tasks: {len(audio_lite_tasks)}")
-    print(f"Audio-only extended tasks: {len(audio_extended_tasks)}")
-    print(f"Audio-text lite tasks: {len(audio_text_lite_tasks)}")
-    print(f"Audio-text extended tasks: {len(audio_text_extended_tasks)}")
+    print(f"\nMAEB (lite) tasks: {len(lite_tasks)}")
+    print(f"MAEB (extended) tasks: {len(extended_tasks)}")
 
     # Load model names from results directory
     results_dir = Path("/Users/isaac/work/maeb-results/results")
@@ -63,12 +56,7 @@ def main():
             model.revision = encoder.model_card_data.base_model_revision  # type: ignore
 
     # Combine all tasks for loading
-    all_task_names = list(
-        set(audio_lite_tasks)
-        | set(audio_extended_tasks)
-        | set(audio_text_lite_tasks)
-        | set(audio_text_extended_tasks)
-    )
+    all_task_names = list(set(lite_tasks) | set(extended_tasks))
     all_tasks = mteb.get_tasks(tasks=all_task_names)
 
     # Load results
@@ -82,89 +70,37 @@ def main():
     results_df = mteb_results.to_dataframe().set_index("task_name").T
     print(f"Results DataFrame shape: {results_df.shape}")
 
-    # === Audio-Only Benchmark Correlation ===
+    # === MAEB vs MAEB(extended) Benchmark Correlation ===
     print("\n" + "=" * 50)
-    print("Audio-Only Benchmark Correlation")
+    print("MAEB vs MAEB(extended) Benchmark Correlation")
     print("=" * 50)
 
     # Filter tasks to those present in results
-    audio_lite_available = [t for t in audio_lite_tasks if t in results_df.columns]
-    audio_extended_available = [
-        t for t in audio_extended_tasks if t in results_df.columns
-    ]
+    lite_available = [t for t in lite_tasks if t in results_df.columns]
+    extended_available = [t for t in extended_tasks if t in results_df.columns]
 
+    print(f"MAEB (lite) tasks available: {len(lite_available)}/{len(lite_tasks)}")
     print(
-        f"Audio lite tasks available: {len(audio_lite_available)}/{len(audio_lite_tasks)}"
-    )
-    print(
-        f"Audio extended tasks available: {len(audio_extended_available)}/{len(audio_extended_tasks)}"
+        f"MAEB (extended) tasks available: {len(extended_available)}/{len(extended_tasks)}"
     )
 
     # Filter to models with complete results on BOTH benchmarks
-    audio_complete_mask = results_df[audio_lite_available].notna().all(
-        axis=1
-    ) & results_df[audio_extended_available].notna().all(axis=1)
-    audio_filtered_df = results_df[audio_complete_mask]
-    print(f"Models with complete audio results: {len(audio_filtered_df)}")
+    complete_mask = results_df[lite_available].notna().all(axis=1) & results_df[
+        extended_available
+    ].notna().all(axis=1)
+    filtered_df = results_df[complete_mask]
+    print(f"Models with complete results on both benchmarks: {len(filtered_df)}")
 
     # Compute average scores
-    audio_avg_lite = audio_filtered_df[audio_lite_available].mean(axis=1)
-    audio_avg_extended = audio_filtered_df[audio_extended_available].mean(axis=1)
+    avg_lite = filtered_df[lite_available].mean(axis=1)
+    avg_extended = filtered_df[extended_available].mean(axis=1)
 
     # Compute correlations
-    audio_spearman, audio_spearman_p = spearmanr(audio_avg_lite, audio_avg_extended)
-    audio_pearson, audio_pearson_p = pearsonr(audio_avg_lite, audio_avg_extended)
+    spearman_corr, spearman_p = spearmanr(avg_lite, avg_extended)
+    pearson_corr, pearson_p = pearsonr(avg_lite, avg_extended)
 
-    print(f"\nSpearman correlation: {audio_spearman:.4f} (p={audio_spearman_p:.2e})")
-    print(f"Pearson correlation: {audio_pearson:.4f} (p={audio_pearson_p:.2e})")
-
-    # === Audio-Text Benchmark Correlation ===
-    print("\n" + "=" * 50)
-    print("Audio-Text Benchmark Correlation")
-    print("=" * 50)
-
-    # Filter tasks to those present in results
-    audio_text_lite_available = [
-        t for t in audio_text_lite_tasks if t in results_df.columns
-    ]
-    audio_text_extended_available = [
-        t for t in audio_text_extended_tasks if t in results_df.columns
-    ]
-
-    print(
-        f"Audio-text lite tasks available: {len(audio_text_lite_available)}/{len(audio_text_lite_tasks)}"
-    )
-    print(
-        f"Audio-text extended tasks available: {len(audio_text_extended_available)}/{len(audio_text_extended_tasks)}"
-    )
-
-    # Filter to models with complete results on BOTH benchmarks
-    audio_text_complete_mask = results_df[audio_text_lite_available].notna().all(
-        axis=1
-    ) & results_df[audio_text_extended_available].notna().all(axis=1)
-    audio_text_filtered_df = results_df[audio_text_complete_mask]
-    print(f"Models with complete audio-text results: {len(audio_text_filtered_df)}")
-
-    # Compute average scores
-    audio_text_avg_lite = audio_text_filtered_df[audio_text_lite_available].mean(axis=1)
-    audio_text_avg_extended = audio_text_filtered_df[
-        audio_text_extended_available
-    ].mean(axis=1)
-
-    # Compute correlations
-    audio_text_spearman, audio_text_spearman_p = spearmanr(
-        audio_text_avg_lite, audio_text_avg_extended
-    )
-    audio_text_pearson, audio_text_pearson_p = pearsonr(
-        audio_text_avg_lite, audio_text_avg_extended
-    )
-
-    print(
-        f"\nSpearman correlation: {audio_text_spearman:.4f} (p={audio_text_spearman_p:.2e})"
-    )
-    print(
-        f"Pearson correlation: {audio_text_pearson:.4f} (p={audio_text_pearson_p:.2e})"
-    )
+    print(f"\nSpearman correlation: {spearman_corr:.4f} (p={spearman_p:.2e})")
+    print(f"Pearson correlation: {pearson_corr:.4f} (p={pearson_p:.2e})")
 
     # === Summary ===
     print("\n" + "=" * 50)
@@ -172,57 +108,35 @@ def main():
     print("=" * 50)
 
     summary_data = {
-        "Benchmark": ["Audio-only", "Audio-text"],
-        "Models": [len(audio_filtered_df), len(audio_text_filtered_df)],
-        "Spearman": [audio_spearman, audio_text_spearman],
-        "Pearson": [audio_pearson, audio_text_pearson],
+        "Benchmark Pair": ["MAEB vs MAEB(extended)"],
+        "Models": [len(filtered_df)],
+        "Spearman": [spearman_corr],
+        "Pearson": [pearson_corr],
     }
     summary_df = pd.DataFrame(summary_data)
     print(summary_df.to_string(index=False))
 
-    print("\n=== For exp.tex ===")
-    print(
-        f"Spearman rho={audio_spearman:.2f} for audio-only and rho={audio_text_spearman:.2f} for audio-text"
-    )
+    print("\n=== For method.tex ===")
+    print(f"Spearman rho={spearman_corr:.2f} for MAEB vs MAEB(extended)")
 
-    # === Create scatter plots ===
-    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+    # === Create scatter plot ===
+    fig, ax = plt.subplots(figsize=(8, 6))
 
-    # Audio-only plot
-    ax1 = axes[0]
-    ax1.scatter(audio_avg_lite, audio_avg_extended, alpha=0.7, s=60)
-    z1 = np.polyfit(audio_avg_lite, audio_avg_extended, 1)
-    p1 = np.poly1d(z1)
-    x_line1 = np.linspace(audio_avg_lite.min(), audio_avg_lite.max(), 100)
-    ax1.plot(x_line1, p1(x_line1), "r--", alpha=0.8, label="Linear fit")
-    min_val1 = min(audio_avg_lite.min(), audio_avg_extended.min())
-    max_val1 = max(audio_avg_lite.max(), audio_avg_extended.max())
-    ax1.plot([min_val1, max_val1], [min_val1, max_val1], "k:", alpha=0.5, label="y=x")
-    ax1.set_xlabel("Average Score (Lite)", fontsize=12)
-    ax1.set_ylabel("Average Score (Extended)", fontsize=12)
-    ax1.set_title(
-        f"Audio-Only: Lite vs Extended\nSpearman={audio_spearman:.3f}, Pearson={audio_pearson:.3f}",
+    ax.scatter(avg_lite, avg_extended, alpha=0.7, s=60)
+    z = np.polyfit(avg_lite, avg_extended, 1)
+    p = np.poly1d(z)
+    x_line = np.linspace(avg_lite.min(), avg_lite.max(), 100)
+    ax.plot(x_line, p(x_line), "r--", alpha=0.8, label="Linear fit")
+    min_val = min(avg_lite.min(), avg_extended.min())
+    max_val = max(avg_lite.max(), avg_extended.max())
+    ax.plot([min_val, max_val], [min_val, max_val], "k:", alpha=0.5, label="y=x")
+    ax.set_xlabel("Average Score (MAEB)", fontsize=12)
+    ax.set_ylabel("Average Score (MAEB Extended)", fontsize=12)
+    ax.set_title(
+        f"MAEB vs MAEB(extended)\nSpearman={spearman_corr:.3f}, Pearson={pearson_corr:.3f}",
         fontsize=14,
     )
-    ax1.legend()
-
-    # Audio-text plot
-    ax2 = axes[1]
-    ax2.scatter(audio_text_avg_lite, audio_text_avg_extended, alpha=0.7, s=60)
-    z2 = np.polyfit(audio_text_avg_lite, audio_text_avg_extended, 1)
-    p2 = np.poly1d(z2)
-    x_line2 = np.linspace(audio_text_avg_lite.min(), audio_text_avg_lite.max(), 100)
-    ax2.plot(x_line2, p2(x_line2), "r--", alpha=0.8, label="Linear fit")
-    min_val2 = min(audio_text_avg_lite.min(), audio_text_avg_extended.min())
-    max_val2 = max(audio_text_avg_lite.max(), audio_text_avg_extended.max())
-    ax2.plot([min_val2, max_val2], [min_val2, max_val2], "k:", alpha=0.5, label="y=x")
-    ax2.set_xlabel("Average Score (Lite)", fontsize=12)
-    ax2.set_ylabel("Average Score (Extended)", fontsize=12)
-    ax2.set_title(
-        f"Audio-Text: Lite vs Extended\nSpearman={audio_text_spearman:.3f}, Pearson={audio_text_pearson:.3f}",
-        fontsize=14,
-    )
-    ax2.legend()
+    ax.legend()
 
     plt.tight_layout()
     plt.savefig("benchmark_lite_vs_extended_correlation.png", dpi=150)

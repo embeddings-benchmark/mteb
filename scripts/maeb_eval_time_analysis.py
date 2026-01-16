@@ -23,8 +23,8 @@ def _(Path):
     RESULTS_DIR = Path("/Users/isaac/work/maeb-results/results")
     BENCHMARK_NAMES = [
         "MAEB(audio-only)",
-        "MAEB(audio, extended)",
         "MAEB",
+        "MAEB(extended)",
     ]
     return BENCHMARK_NAMES, RESULTS_DIR
 
@@ -181,9 +181,9 @@ def _(BENCHMARK_NAMES, df_with_size):
 
 @app.cell
 def _(top_models_per_benchmark):
-    # Find common models between MAEB_AUDIO and MAEB_AUDIO_EXTENDED only
-    _audio_benchmarks = ["MAEB(audio-only)", "MAEB(audio, extended)"]
-    _audio_text_benchmark = "MAEB"
+    # Find common models between MAEB_AUDIO and MAEB
+    _audio_benchmarks = ["MAEB(audio-only)", "MAEB"]
+    _extended_benchmark = "MAEB(extended)"
 
     # Get sets for audio benchmarks
     _largest_sets = [
@@ -197,7 +197,7 @@ def _(top_models_per_benchmark):
         if b in top_models_per_benchmark
     ]
 
-    # Find common models between audio lite and audio extended
+    # Find common models between MAEB(audio-only) and MAEB
     common_audio_largest = (
         set.intersection(*_largest_sets) if len(_largest_sets) == 2 else set()
     )
@@ -205,8 +205,8 @@ def _(top_models_per_benchmark):
         set.intersection(*_smallest_sets) if len(_smallest_sets) == 2 else set()
     )
 
-    print(f"Common large models (audio lite & extended): {common_audio_largest}")
-    print(f"Common small models (audio lite & extended): {common_audio_smallest}")
+    print(f"Common large models (MAEB audio-only & MAEB): {common_audio_largest}")
+    print(f"Common small models (MAEB audio-only & MAEB): {common_audio_smallest}")
 
     # Select one from each for audio benchmarks
     selected_audio_large = (
@@ -219,30 +219,30 @@ def _(top_models_per_benchmark):
     print(f"\nSelected audio large model: {selected_audio_large}")
     print(f"Selected audio small model: {selected_audio_small}")
 
-    # For audio-text, just pick top 1 largest and smallest (no comparison needed)
-    if _audio_text_benchmark in top_models_per_benchmark:
-        _at_largest = list(top_models_per_benchmark[_audio_text_benchmark]["largest"])
-        _at_smallest = list(top_models_per_benchmark[_audio_text_benchmark]["smallest"])
-        selected_audio_text_large = _at_largest[0] if _at_largest else None
-        selected_audio_text_small = _at_smallest[0] if _at_smallest else None
+    # For extended benchmark, just pick top 1 largest and smallest (no comparison needed)
+    if _extended_benchmark in top_models_per_benchmark:
+        _ext_largest = list(top_models_per_benchmark[_extended_benchmark]["largest"])
+        _ext_smallest = list(top_models_per_benchmark[_extended_benchmark]["smallest"])
+        selected_extended_large = _ext_largest[0] if _ext_largest else None
+        selected_extended_small = _ext_smallest[0] if _ext_smallest else None
     else:
-        selected_audio_text_large = None
-        selected_audio_text_small = None
+        selected_extended_large = None
+        selected_extended_small = None
 
-    print(f"\nSelected audio-text large model: {selected_audio_text_large}")
-    print(f"Selected audio-text small model: {selected_audio_text_small}")
+    print(f"\nSelected extended large model: {selected_extended_large}")
+    print(f"Selected extended small model: {selected_extended_small}")
     return (
         selected_audio_large,
         selected_audio_small,
-        selected_audio_text_large,
-        selected_audio_text_small,
+        selected_extended_large,
+        selected_extended_small,
     )
 
 
 @app.cell
 def _(df_with_size, pd, selected_audio_large, selected_audio_small):
-    # Build summary table for AUDIO benchmarks (common models)
-    _audio_benchmarks = ["MAEB(audio-only)", "MAEB(audio, extended)"]
+    # Build summary table for MAEB benchmarks (common models)
+    _benchmarks = ["MAEB(audio-only)", "MAEB"]
 
     def _build_audio_row(_mname, _rec, _cat):
         _row = {
@@ -255,7 +255,7 @@ def _(df_with_size, pd, selected_audio_large, selected_audio_small):
             if pd.notna(_rec["n_parameters"])
             else "N/A",
         }
-        for _b in _audio_benchmarks:
+        for _b in _benchmarks:
             _tcol = f"{_b}_eval_time"
             _ccol = f"{_b}_task_count"
             _etime = _rec.get(_tcol)
@@ -281,17 +281,17 @@ def _(df_with_size, pd, selected_audio_large, selected_audio_small):
             _audio_rows.append(_build_audio_row(_mname, _recs.iloc[0], _cat))
 
     audio_summary_df = pd.DataFrame(_audio_rows) if _audio_rows else pd.DataFrame()
-    print("=== Audio Benchmarks Summary (common models) ===")
+    print("=== MAEB Benchmarks Summary (common models) ===")
     audio_summary_df
     return
 
 
 @app.cell
-def _(df_with_size, pd, selected_audio_text_large, selected_audio_text_small):
-    # Build summary table for AUDIO-TEXT benchmark (separate)
-    _audio_text_benchmark = "MAEB"
+def _(df_with_size, pd, selected_extended_large, selected_extended_small):
+    # Build summary table for MAEB(extended) benchmark
+    _extended_benchmark = "MAEB(extended)"
 
-    def _build_audio_text_row(_mname, _rec, _cat):
+    def _build_extended_row(_mname, _rec, _cat):
         _row = {
             "Size": _cat,
             "Model": _mname.split("/")[-1] if "/" in _mname else _mname,
@@ -302,8 +302,8 @@ def _(df_with_size, pd, selected_audio_text_large, selected_audio_text_small):
             if pd.notna(_rec["n_parameters"])
             else "N/A",
         }
-        _tcol = f"{_audio_text_benchmark}_eval_time"
-        _ccol = f"{_audio_text_benchmark}_task_count"
+        _tcol = f"{_extended_benchmark}_eval_time"
+        _ccol = f"{_extended_benchmark}_task_count"
         _etime = _rec.get(_tcol)
         _tc = _rec.get(_ccol, 0)
         # Convert to hours with 3 decimal places
@@ -315,20 +315,20 @@ def _(df_with_size, pd, selected_audio_text_large, selected_audio_text_small):
             _row["Tasks"] = 0
         return _row
 
-    _at_rows = []
+    _ext_rows = []
     for _mname, _cat in [
-        (selected_audio_text_large, "Large"),
-        (selected_audio_text_small, "Small"),
+        (selected_extended_large, "Large"),
+        (selected_extended_small, "Small"),
     ]:
         if _mname is None:
             continue
         _recs = df_with_size[df_with_size["model_name"] == _mname]
         if len(_recs) > 0:
-            _at_rows.append(_build_audio_text_row(_mname, _recs.iloc[0], _cat))
+            _ext_rows.append(_build_extended_row(_mname, _recs.iloc[0], _cat))
 
-    audio_text_summary_df = pd.DataFrame(_at_rows) if _at_rows else pd.DataFrame()
-    print("=== Audio-Text Benchmark Summary ===")
-    audio_text_summary_df
+    extended_summary_df = pd.DataFrame(_ext_rows) if _ext_rows else pd.DataFrame()
+    print("=== MAEB(extended) Benchmark Summary ===")
+    extended_summary_df
     return
 
 

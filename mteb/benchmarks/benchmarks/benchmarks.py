@@ -2886,12 +2886,13 @@ MAEB_AUDIO = Benchmark(
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
-MAEB_AUDIO_EXTENDED = Benchmark(
-    name="MAEB(audio, extended)",
-    display_name="Audio, Extended",
+MAEB_EXTENDED = Benchmark(
+    name="MAEB(extended)",
+    display_name="Extended",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
+            # === Audio-only tasks (53) ===
             # AudioMultilabelClassification (4)
             "FSD50K",
             "SIBFLEURS",
@@ -2951,9 +2952,52 @@ MAEB_AUDIO_EXTENDED = Benchmark(
             "CREMADPairClassification",
             # Audio2AudioRetrieval (1)
             "JamAltArtistA2ARetrieval",
+            # === Audio-text tasks (38) ===
+            # Any2AnyRetrieval - Audio to Text (13)
+            "AudioCapsA2TRetrieval",
+            "AudioSetStrongA2TRetrieval",
+            "CMUArcticA2TRetrieval",
+            "EmoVDBA2TRetrieval",
+            "GigaSpeechA2TRetrieval",
+            "HiFiTTSA2TRetrieval",
+            "JLCorpusA2TRetrieval",
+            "JamAltLyricA2TRetrieval",
+            "LibriTTSA2TRetrieval",
+            "MACSA2TRetrieval",
+            "MusicCapsA2TRetrieval",
+            "SpokenSQuADT2ARetrieval",
+            "UrbanSound8KA2TRetrieval",
+            # Any2AnyRetrieval - Text to Audio (12)
+            "AudioCapsT2ARetrieval",
+            "AudioSetStrongT2ARetrieval",
+            "CMUArcticT2ARetrieval",
+            "EmoVDBT2ARetrieval",
+            "GigaSpeechT2ARetrieval",
+            "HiFiTTST2ARetrieval",
+            "JLCorpusT2ARetrieval",
+            "JamAltLyricT2ARetrieval",
+            "LibriTTST2ARetrieval",
+            "MACST2ARetrieval",
+            "MusicCapsT2ARetrieval",
+            "UrbanSound8KT2ARetrieval",
+            # AudioZeroshotClassification (5)
+            "ESC50_Zeroshot",
+            "RavdessZeroshot",
+            "SpeechCommandsZeroshotv0.01",
+            "SpeechCommandsZeroshotv0.02",
+            "UrbanSound8kZeroshot",
+            # Audio captioning (2)
+            "ClothoA2TRetrieval",
+            "ClothoT2ARetrieval",
+            # Multilingual - Fleurs (2) - 102 languages
+            "FleursA2TRetrieval",
+            "FleursT2ARetrieval",
+            # Multilingual - CommonVoice 21 (2) - 82+ languages
+            "CommonVoice21A2TRetrieval",
+            "CommonVoice21T2ARetrieval",
         ]
     ),
-    description="""MAEB(audio, extended) is an extended audio-only benchmark with 53 tasks spanning 6 task types: classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), and audio-to-audio retrieval (1). This benchmark provides broader task diversity for audio-only evaluation.""",
+    description="""MAEB(extended) is an intermediate benchmark used during task selection, containing 89 tasks that combine audio-only and audio-text evaluation before filtering to MAEB. Audio-only (53 tasks): classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), audio-to-audio retrieval (1). Audio-text (36 tasks): audio-text retrieval (31), zero-shot classification (5).""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -3010,67 +3054,6 @@ MAEB = Benchmark(
         ]
     ),
     description="""MAEB is a comprehensive audio benchmark with 35 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: multilabel classification (2), classification (5), reranking (5), clustering (5), pair classification (1), text-to-audio retrieval (13), and zero-shot classification (4).""",
-    reference=None,
-    citation="",
-    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
-)
-
-MAEB_AUDIO_TEXT_EXTENDED = Benchmark(
-    name="MAEB(audio-text, extended)",
-    display_name="Audio-Text, Extended",
-    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
-    tasks=get_tasks(
-        tasks=[
-            # === From Lite ===
-            # Any2AnyRetrieval - Audio to Text (13)
-            "AudioCapsA2TRetrieval",
-            "AudioSetStrongA2TRetrieval",
-            "CMUArcticA2TRetrieval",
-            "EmoVDBA2TRetrieval",
-            "GigaSpeechA2TRetrieval",
-            "HiFiTTSA2TRetrieval",
-            "JLCorpusA2TRetrieval",
-            "JamAltLyricA2TRetrieval",
-            "LibriTTSA2TRetrieval",
-            "MACSA2TRetrieval",
-            "MusicCapsA2TRetrieval",
-            "SpokenSQuADT2ARetrieval",
-            "UrbanSound8KA2TRetrieval",
-            # Any2AnyRetrieval - Text to Audio (12)
-            "AudioCapsT2ARetrieval",
-            "AudioSetStrongT2ARetrieval",
-            "CMUArcticT2ARetrieval",
-            "EmoVDBT2ARetrieval",
-            "GigaSpeechT2ARetrieval",
-            "HiFiTTST2ARetrieval",
-            "JLCorpusT2ARetrieval",
-            "JamAltLyricT2ARetrieval",
-            "LibriTTST2ARetrieval",
-            "MACST2ARetrieval",
-            "MusicCapsT2ARetrieval",
-            "UrbanSound8KT2ARetrieval",
-            # AudioZeroshotClassification (5)
-            "ESC50_Zeroshot",
-            "RavdessZeroshot",
-            "SpeechCommandsZeroshotv0.01",
-            "SpeechCommandsZeroshotv0.02",
-            "UrbanSound8kZeroshot",
-            # === Extended additions ===
-            # Audio captioning (2)
-            "ClothoA2TRetrieval",
-            "ClothoT2ARetrieval",
-            # Multilingual - Fleurs (2) - 102 languages
-            "FleursA2TRetrieval",
-            "FleursT2ARetrieval",
-            # Multilingual - CommonVoice 21 (2) - 82+ languages
-            "CommonVoice21A2TRetrieval",
-            "CommonVoice21T2ARetrieval",
-            # Multilingual - Google SVQ (2) - 26 locales
-            "GoogleSVQA2TRetrieval",
-            "GoogleSVQT2ARetrieval",
-        ]
-    ),
-    description="""MAEB(audio-text, extended) is an extended benchmark for audio-text cross-modal models with 38 tasks. Includes all 30 tasks from the lite version plus Clotho (audio captioning), Fleurs (102 languages), CommonVoice 21 (82+ languages), and Google SVQ (26 locales) for comprehensive multilingual coverage. Task types: audio-text retrieval (33) and zero-shot classification (5).""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
