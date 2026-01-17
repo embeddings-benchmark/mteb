@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 
 from mteb._requires_package import requires_package
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.model_meta import ModelMeta
 from mteb.types import Array, BatchedInput, PromptType
 
 from .bge_models import bge_m3_training_data
@@ -504,13 +504,13 @@ qwen3_reranker_0_6b = ModelMeta(
     public_training_data=None,
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/Qwen/Qwen3-Reranker-0.6B",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name=None,
     use_instructions=True,
     training_datasets=qwen3_reranker_training_data,
     adapted_from=None,
     superseded_by=None,
     modalities=["text"],
-    model_type=["dense"],
+    model_type=["cross-encoder"],
     citation="""@article{qwen3embedding,
   title={Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models},
   author={Zhang, Yanzhao and Li, Mingxin and Long, Dingkun and Zhang, Xin and Lin, Huan and Yang, Baosong and Xie, Pengjun and Yang, An and Liu, Dayiheng and Lin, Junyang and Huang, Fei and Zhou, Jingren},
@@ -540,13 +540,13 @@ qwen3_reranker_4b = ModelMeta(
     public_training_data=None,
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/Qwen/Qwen3-Reranker-4B",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name=None,
     use_instructions=True,
     training_datasets=qwen3_reranker_training_data,
     adapted_from=None,
     superseded_by=None,
     modalities=["text"],
-    model_type=["dense"],
+    model_type=["cross-encoder"],
     citation="""@article{qwen3embedding,
   title={Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models},
   author={Zhang, Yanzhao and Li, Mingxin and Long, Dingkun and Zhang, Xin and Lin, Huan and Yang, Baosong and Xie, Pengjun and Yang, An and Liu, Dayiheng and Lin, Junyang and Huang, Fei and Zhou, Jingren},
@@ -576,13 +576,13 @@ qwen3_reranker_8b = ModelMeta(
     public_training_data=None,
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/Qwen/Qwen3-Reranker-8B",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name=None,
     use_instructions=True,
     training_datasets=qwen3_reranker_training_data,
     adapted_from=None,
     superseded_by=None,
     modalities=["text"],
-    model_type=["dense"],
+    model_type=["cross-encoder"],
     citation="""@article{qwen3embedding,
   title={Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models},
   author={Zhang, Yanzhao and Li, Mingxin and Long, Dingkun and Zhang, Xin and Lin, Huan and Yang, Baosong and Xie, Pengjun and Yang, An and Liu, Dayiheng and Lin, Junyang and Huang, Fei and Zhou, Jingren},
