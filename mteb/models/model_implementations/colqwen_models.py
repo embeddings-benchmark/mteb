@@ -378,7 +378,7 @@ colnomic_3b = ModelMeta(
 colnomic_7b = ModelMeta(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16, attn_implementation="flash_attention_2"
+        torch_dtype=torch.float16,
     ),
     name="nomic-ai/colnomic-embed-multimodal-7b",
     model_type=["late-interaction"],
