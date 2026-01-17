@@ -223,13 +223,13 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     citation=LLAMA_NEMORETRIEVER_CITATION,
 )
 
-llama_nemotron_colembed_3b_v2 = ModelMeta(
+llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
     loader=LlamaNemoretrieverColembed,
     loader_kwargs=dict(
         trust_remote_code=True,
         transformers_version_constraint="==4.49.0",
     ),
-    name="nvidia/llama-nemotron-colembed-3b-v2",
+    name="nvidia/llama-nemotron-colembed-vl-3b-v2",
     model_type=["late-interaction"],
     languages=["eng-Latn"],
     revision="6fa6bc45985c857bc2b653b17bf0098db5054f55",
@@ -239,12 +239,12 @@ llama_nemotron_colembed_3b_v2 = ModelMeta(
     memory_usage_mb=8403,
     max_tokens=8192,
     embed_dim=3072,
-    license="https://huggingface.co/nvidia/llama-nemotron-colembed-3b-v2/blob/main/LICENSE",
+    license="https://huggingface.co/nvidia/llama-nemotron-colembed-vl-3b-v2/blob/main/LICENSE",
     open_weights=True,
     public_training_code="Proprietary Code",
-    public_training_data="https://huggingface.co/nvidia/llama-nemotron-colembed-3b-v2#training-dataset",
+    public_training_data="https://huggingface.co/nvidia/llama-nemotron-colembed-vl-3b-v2#training-dataset",
     framework=["PyTorch", "Transformers", "safetensors"],
-    reference="https://huggingface.co/nvidia/llama-nemotron-colembed-3b-v2",
+    reference="https://huggingface.co/nvidia/llama-nemotron-colembed-vl-3b-v2",
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=TRAINING_DATA,
@@ -257,8 +257,7 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
         trust_remote_code=True,
         transformers_version_constraint="==5.0.0rc0",
     ),
-    name="nvidia/nemotron-colembed-vl-4b-v2",
-    model_type=["late-interaction"],
+    name="nvidia/nemotron-colembed-vl-4b-v2",    
     revision="5f1cf3dd7767a700e9753db598e4578b0d5496e7",
     languages=["eng-Latn"],
     release_date="2026-01-07",
@@ -279,20 +278,20 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
     citation=LLAMA_NEMORETRIEVER_CITATION,
 )
 
+
 nemotron_colembed_vl_8b_v2 = ModelMeta(
     loader=LlamaNemoretrieverColembed,
     loader_kwargs=dict(
         trust_remote_code=True,
         transformers_version_constraint="==5.0.0rc0",
     ),
-    name="nvidia/nemotron-colembed-vl-8b-v2",
-    model_type=["late-interaction"],
+    name="nvidia/nemotron-colembed-vl-8b-v2",    
     revision="59096bce05d70aeefac933c48f4f21baeb7d9ace",
     languages=["eng-Latn"],
     release_date="2026-01-07",
     modalities=["image", "text"],
     n_parameters=8_700_000_000,
-    memory_usage_mb=16722,
+    memory_usage_mb= 16722,
     max_tokens=262144,
     embed_dim=4096,
     license="https://huggingface.co/nvidia/nemotron-colembed-vl-8b-v2/blob/main/LICENSE",
