@@ -16,7 +16,7 @@ class CSTRVCTKGenderClassification(AbsTaskClassification):
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2025-11-15", "2025-11-15"),
+        date=("2026-01-15", "2026-01-15"),
         domains=["Spoken", "Speech"],
         task_subtypes=["Gender Classification"],
         license="cc-by-4.0",
@@ -26,10 +26,10 @@ class CSTRVCTKGenderClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{Yamagishi2019CSTRVC,
-  title = {CSTR VCTK Corpus: English Multi-speaker Corpus for CSTR Voice Cloning Toolkit (version 0.92)},
   author = {Junichi Yamagishi and Christophe Veaux and Kirsten MacDonald},
+  title = {CSTR VCTK Corpus: English Multi-speaker Corpus for CSTR Voice Cloning Toolkit (version 0.92)},
+  url = {https://api.semanticscholar.org/CorpusID:213060286},
   year = {2019},
-  url = {https://api.semanticscholar.org/CorpusID:213060286}
 }
 """,
     )
