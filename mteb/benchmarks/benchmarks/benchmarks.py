@@ -3009,53 +3009,45 @@ MAEB = Benchmark(
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
-            # AudioMultilabelClassification (2)
-            "FSD50K",
-            "SIBFLEURS",
-            # AudioClassification (6)
-            "VoxPopuliAccentID",
-            "MInDS14",
-            "VoxPopuliGenderID",
-            "BeijingOpera",
-            "AmbientAcousticContext",
-            "BirdCLEF",
-            # AudioReranking (5)
-            "ESC50AudioReranking",
-            "UrbanSound8KAudioReranking",
-            "GTZANAudioReranking",
-            "FSDnoisy18kAudioReranking",
-            "VocalSoundAudioReranking",
-            # AudioClustering (6)
-            "VoiceGenderClustering",
-            "VoxPopuliAccentClustering",
-            "AmbientAcousticContextClustering",
-            "VoxCelebClustering",
-            "VoxPopuliGenderClustering",
-            "VehicleSoundClustering",
-            # AudioPairClassification (1)
-            "VoxPopuliAccentPairClassification",
-            # Any2AnyRetrieval - Text to Audio (13)
-            "AudioCapsT2ARetrieval",
-            "AudioSetStrongT2ARetrieval",
-            "CMUArcticT2ARetrieval",
-            "EmoVDBT2ARetrieval",
+            # Any2AnyRetrieval (13)
+            "ClothoT2ARetrieval",
+            "CommonVoice21T2ARetrieval",
+            "FleursA2TRetrieval",
+            "FleursT2ARetrieval",
+            "GigaSpeechA2TRetrieval",
             "GigaSpeechT2ARetrieval",
-            "HiFiTTST2ARetrieval",
-            "JLCorpusT2ARetrieval",
+            "HiFiTTSA2TRetrieval",
+            "JamAltLyricA2TRetrieval",
             "JamAltLyricT2ARetrieval",
+            "LibriTTSA2TRetrieval",
             "LibriTTST2ARetrieval",
-            "MACST2ARetrieval",
             "MusicCapsT2ARetrieval",
             "SpokenSQuADT2ARetrieval",
-            "UrbanSound8KT2ARetrieval",
-            # AudioZeroshotClassification (4)
-            "ESC50_Zeroshot",
+            # AudioClassification (4)
+            "BirdCLEF",
+            "CommonLanguageAgeDetection",
+            "CommonLanguageGenderDetection",
+            "IEMOCAPGender",
+            # AudioClustering (2)
+            "VehicleSoundClustering",
+            "VoxPopuliGenderClustering",
+            # AudioMultilabelClassification (3)
+            "FSD2019Kaggle",
+            "FSD50K",
+            "SIBFLEURS",
+            # AudioPairClassification (2)
+            "CREMADPairClassification",
+            "VocalSoundPairClassification",
+            # AudioReranking (3)
+            "FSDnoisy18kAudioReranking",
+            "GTZANAudioReranking",
+            "UrbanSound8KAudioReranking",
+            # AudioZeroshotClassification (2)
             "RavdessZeroshot",
             "SpeechCommandsZeroshotv0.02",
-            "UrbanSound8kZeroshot",
         ]
     ),
-    description="""MAEB is a comprehensive audio benchmark with 37 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: multilabel classification (2), classification (6), reranking (5), clustering (6), pair classification (1), text-to-audio retrieval (13), and zero-shot classification (4).""",
+    description="""MAEB is a comprehensive audio benchmark with 29 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (13), classification (4), clustering (2), multilabel classification (3), pair classification (2), reranking (3), and zero-shot classification (2).""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
