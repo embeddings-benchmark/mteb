@@ -2855,32 +2855,30 @@ MAEB_AUDIO = Benchmark(
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
-            # AudioMultilabelClassification (2)
+            # AudioClassification (6)
+            "BeijingOpera",
+            "BirdCLEF",
+            "CommonLanguageAgeDetection",
+            "CommonLanguageGenderDetection",
+            "IEMOCAPGender",
+            "MInDS14",
+            # AudioClustering (2)
+            "VehicleSoundClustering",
+            "VoxPopuliGenderClustering",
+            # AudioMultilabelClassification (3)
+            "FSD2019Kaggle",
             "FSD50K",
             "SIBFLEURS",
-            # AudioClassification (5)
-            "VoxPopuliAccentID",
-            "MInDS14",
-            "VoxPopuliGenderID",
-            "BeijingOpera",
-            "AmbientAcousticContext",
-            # AudioReranking (5)
-            "ESC50AudioReranking",
-            "UrbanSound8KAudioReranking",
-            "GTZANAudioReranking",
+            # AudioPairClassification (2)
+            "CREMADPairClassification",
+            "VocalSoundPairClassification",
+            # AudioReranking (3)
             "FSDnoisy18kAudioReranking",
-            "VocalSoundAudioReranking",
-            # AudioClustering (5)
-            "VoiceGenderClustering",
-            "VoxPopuliAccentClustering",
-            "AmbientAcousticContextClustering",
-            "VoxCelebClustering",
-            "VoxPopuliGenderClustering",
-            # AudioPairClassification (1)
-            "VoxPopuliAccentPairClassification",
+            "GTZANAudioReranking",
+            "UrbanSound8KAudioReranking",
         ]
     ),
-    description="""MAEB(audio-only) is a lightweight audio-only benchmark with 18 tasks spanning 5 task types: classification, multilabel classification, reranking, clustering, and pair classification.""",
+    description="""MAEB(audio-only) is a lightweight audio-only benchmark with 16 tasks spanning 5 task types: classification (6), multilabel classification (3), clustering (2), pair classification (2), and reranking (3).""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -3009,25 +3007,23 @@ MAEB = Benchmark(
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
-            # Any2AnyRetrieval (13)
+            # Any2AnyRetrieval (9)
             "ClothoT2ARetrieval",
             "CommonVoice21T2ARetrieval",
-            "FleursA2TRetrieval",
             "FleursT2ARetrieval",
-            "GigaSpeechA2TRetrieval",
             "GigaSpeechT2ARetrieval",
-            "HiFiTTSA2TRetrieval",
-            "JamAltLyricA2TRetrieval",
+            "HiFiTTST2ARetrieval",
             "JamAltLyricT2ARetrieval",
-            "LibriTTSA2TRetrieval",
             "LibriTTST2ARetrieval",
             "MusicCapsT2ARetrieval",
             "SpokenSQuADT2ARetrieval",
-            # AudioClassification (4)
+            # AudioClassification (6)
+            "BeijingOpera",
             "BirdCLEF",
             "CommonLanguageAgeDetection",
             "CommonLanguageGenderDetection",
             "IEMOCAPGender",
+            "MInDS14",
             # AudioClustering (2)
             "VehicleSoundClustering",
             "VoxPopuliGenderClustering",
@@ -3047,7 +3043,7 @@ MAEB = Benchmark(
             "SpeechCommandsZeroshotv0.02",
         ]
     ),
-    description="""MAEB is a comprehensive audio benchmark with 29 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (13), classification (4), clustering (2), multilabel classification (3), pair classification (2), reranking (3), and zero-shot classification (2).""",
+    description="""MAEB is a comprehensive audio benchmark with 27 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (6), clustering (2), multilabel classification (3), pair classification (2), reranking (3), and zero-shot classification (2).""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],

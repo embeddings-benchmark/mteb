@@ -45,6 +45,98 @@ TASKS_TO_EXCLUDE = [
     "BirdSet",  # Redundant with BirdCLEF (same Bioacoustics domain)
 ]
 
+# Retrieval task families - for each family, prefer T2A over A2T
+# If both A2TRetrieval and T2ARetrieval exist, remove A2T
+RETRIEVAL_FAMILIES = [
+    "Fleurs",
+    "GigaSpeech",
+    "HiFiTTS",
+    "LibriTTS",
+    "JamAltLyric",
+    "AudioCaps",
+    "AudioSetStrong",
+    "CMUArctic",
+    "Clotho",
+    "CommonVoice17",
+    "CommonVoice21",
+    "EmoVDB",
+    "JLCorpus",
+    "MACS",
+    "MusicCaps",
+    "SoundDescs",
+    "UrbanSound8K",
+    "GoogleSVQ",
+]
+
+
+def deduplicate_retrieval_directions(
+    task_names: list[str],
+) -> tuple[list[str], list[tuple[str, str]]]:
+    """Remove A2T retrieval tasks when T2A exists for the same family.
+
+    For retrieval tasks, T2A (text-to-audio) is generally preferred over A2T
+    (audio-to-text) as it represents a more common use case.
+
+    Args:
+        task_names: List of task names
+
+    Returns:
+        Tuple of (filtered task names, list of (removed_task, reason) tuples)
+    """
+    removed = []
+    remaining = []
+
+    # Build sets of A2T and T2A tasks by family
+    a2t_tasks = {}  # family -> task name
+    t2a_tasks = {}  # family -> task name
+
+    for task in task_names:
+        for family in RETRIEVAL_FAMILIES:
+            if task.startswith(family):
+                if "A2TRetrieval" in task:
+                    a2t_tasks[family] = task
+                elif "T2ARetrieval" in task:
+                    t2a_tasks[family] = task
+                break
+
+    # Remove A2T if T2A exists for same family
+    tasks_to_remove = set()
+    for family, a2t_task in a2t_tasks.items():
+        if family in t2a_tasks:
+            tasks_to_remove.add(a2t_task)
+            removed.append(
+                (
+                    a2t_task,
+                    f"Prefer T2A over A2T for {family} family (keeping {t2a_tasks[family]})",
+                )
+            )
+
+    for task in task_names:
+        if task not in tasks_to_remove:
+            remaining.append(task)
+
+    return remaining, removed
+
+
+def enforce_retrieval_direction_preference(
+    task_names: list[str],
+) -> tuple[list[str], list[tuple[str, str, float]]]:
+    """Post-processing step: Remove A2T retrieval tasks when T2A exists for the same family.
+
+    This is applied after correlation-based selection to ensure we never keep
+    both A2T and T2A for the same retrieval family.
+
+    Args:
+        task_names: List of selected task names
+
+    Returns:
+        Tuple of (filtered task names, list of (removed_task, reason, 0.0) tuples)
+    """
+    remaining, removed_pairs = deduplicate_retrieval_directions(task_names)
+    # Convert to the expected format with correlation value
+    removed = [(task, reason, 0.0) for task, reason in removed_pairs]
+    return remaining, removed
+
 
 def load_eval_times(
     results_dir: Path,
@@ -732,7 +824,26 @@ def iterative_task_selection(
             def removal_priority(task_name: str, meta: pd.Series) -> float:
                 score = 0
 
-                # Prefer removing a2t over t2a for retrieval
+                # RULE: For retrieval families, strongly prefer removing A2T when T2A exists
+                # And strongly protect T2A when A2T exists (so we keep T2A, not A2T)
+                if "A2TRetrieval" in task_name:
+                    for family in RETRIEVAL_FAMILIES:
+                        if task_name.startswith(family):
+                            # Check if T2A exists for this family in current tasks
+                            t2a_task = f"{family}T2ARetrieval"
+                            if t2a_task in current_tasks:
+                                score += 100  # Very high priority to remove A2T when T2A exists
+                            break
+                elif "T2ARetrieval" in task_name:
+                    for family in RETRIEVAL_FAMILIES:
+                        if task_name.startswith(family):
+                            # Check if A2T exists for this family in current tasks
+                            a2t_task = f"{family}A2TRetrieval"
+                            if a2t_task in current_tasks:
+                                score -= 100  # Strongly protect T2A when A2T exists
+                            break
+
+                # Prefer removing a2t over t2a for retrieval (general preference)
                 if meta["category"] == "a2t":
                     score += 2
                 elif meta["category"] == "t2a":
@@ -1018,11 +1129,22 @@ def main():
             output_lines.append(
                 f"- **Excluded tasks**: {excluded_count} ({', '.join(TASKS_TO_EXCLUDE)})"
             )
-            output_lines.append(
-                f"- **Working pool**: {len(filtered_source_tasks)} tasks"
-            )
+        output_lines.append(f"- **Working pool**: {len(filtered_source_tasks)} tasks")
         output_lines.append(
             f"- **Goal**: Select non-redundant tasks while preserving coverage"
+        )
+        output_lines.append("")
+
+        output_lines.append("## Selection Rules")
+        output_lines.append("")
+        output_lines.append(
+            "1. **Retrieval direction preference**: For task families with both A2T and T2A, prefer T2A (text-to-audio)"
+        )
+        output_lines.append(
+            "2. **Correlation-based redundancy**: Remove tasks with Spearman ρ > threshold to a retained task"
+        )
+        output_lines.append(
+            "3. **Coverage preservation**: Protect tasks with unique language/domain/type coverage"
         )
         output_lines.append("")
 
@@ -1075,7 +1197,7 @@ def main():
 
         # Run selection at different thresholds
         results_by_threshold = {}
-        for threshold in [0.95, 0.9, 0.85, 0.8]:
+        for threshold in [0.95, 0.94, 0.93, 0.9, 0.8]:
             remaining, removed = iterative_task_selection(
                 results_df,
                 filtered_source_tasks,
@@ -1084,11 +1206,16 @@ def main():
                 protected_tasks=protected,
                 prefer_remove_same_source=True,
             )
+            # Post-processing: enforce retrieval direction preference (T2A over A2T)
+            remaining, direction_removed = enforce_retrieval_direction_preference(
+                remaining
+            )
+            removed = removed + direction_removed
             results_by_threshold[threshold] = (remaining, removed)
 
         # Compute correlations for each threshold (compare against full source, not filtered)
         correlations_by_threshold = {}
-        for threshold in [0.95, 0.9, 0.85, 0.8]:
+        for threshold in [0.95, 0.94, 0.93, 0.9, 0.8]:
             remaining, _ = results_by_threshold[threshold]
             spearman, pearson = compute_benchmark_correlation(
                 results_df, source_task_names, remaining
@@ -1167,7 +1294,7 @@ def main():
 
         # Compute eval times for each threshold (for all models)
         eval_times_by_threshold = {}
-        for threshold in [0.95, 0.9, 0.85, 0.8]:
+        for threshold in [0.95, 0.94, 0.93, 0.9, 0.8]:
             remaining, _ = results_by_threshold[threshold]
             threshold_times = {}
             for short_name in model_short_names:
@@ -1180,7 +1307,7 @@ def main():
                     threshold_times[short_name] = None
             eval_times_by_threshold[threshold] = threshold_times
 
-        for threshold in [0.95, 0.9, 0.85, 0.8]:
+        for threshold in [0.95, 0.94, 0.93, 0.9, 0.8]:
             remaining, removed = results_by_threshold[threshold]
             coverage = get_coverage_analysis(remaining)
             spearman, pearson = correlations_by_threshold[threshold]
@@ -1227,7 +1354,7 @@ def main():
         output_lines.append("")
 
         # Detailed results for each threshold
-        for threshold in [0.95, 0.9, 0.85, 0.8]:
+        for threshold in [0.95, 0.94, 0.93, 0.9, 0.8]:
             remaining, removed = results_by_threshold[threshold]
             coverage = get_coverage_analysis(remaining)
 
@@ -1269,7 +1396,7 @@ def main():
             output_lines.append("")
 
         # Recommended task list (threshold 0.9)
-        recommended_threshold = 0.9
+        recommended_threshold = 0.93
         remaining, removed = results_by_threshold[recommended_threshold]
 
         output_lines.append(
@@ -1342,7 +1469,7 @@ def main():
         print(
             f"  {'-' * 7} {'-' * 6} {'-' * 5} {'-' * 4} {'-' * 4} {'-' * 4} {'-' * 5} {'-' * 4} {'-' * 3} {'-' * 9} {'-' * 8}"
         )
-        for threshold in [0.95, 0.9, 0.85, 0.8]:
+        for threshold in [0.95, 0.94, 0.93, 0.9, 0.8]:
             remaining, removed = results_by_threshold[threshold]
             coverage = get_coverage_analysis(remaining)
             type_counts = coverage.get("type_counts", {})

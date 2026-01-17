@@ -242,11 +242,11 @@ def generate_audio_tasks_table(df: pd.DataFrame) -> str:
         "% Audio-Only Tasks Table",
         "\\begin{table*}[t]",
         "    \\centering",
-        "    \\caption{MAEB+ Audio-Only Tasks Overview. Tasks are grouped by type and show benchmark membership (Lite/Ext.), language coverage, domains, and main evaluation metric.}",
+        "    \\caption{MAEB+ Audio-Only Tasks Overview. Tasks are grouped by type and show MAEB benchmark membership, language coverage, domains, and main evaluation metric.}",
         "    \\resizebox{\\linewidth}{!}{",
-        "    \\begin{tabular}{llccclc}",
+        "    \\begin{tabular}{llcclc}",
         "    \\toprule",
-        "    \\textbf{Dataset} & \\textbf{Citation} & \\textbf{Lite} & \\textbf{Ext.} & "
+        "    \\textbf{Dataset} & \\textbf{Citation} & \\textbf{MAEB} & "
         + "\\textbf{N. Langs} & \\textbf{Domains} & \\textbf{Main Metric} \\\\",
         "    \\midrule",
     ]
@@ -269,7 +269,7 @@ def generate_audio_tasks_table(df: pd.DataFrame) -> str:
             if not first_section:
                 latex_lines.append("    \\hline")
             latex_lines.append(
-                f"    \\multicolumn{{7}}{{l}}{{\\textit{{{type_header}}}}} \\\\"
+                f"    \\multicolumn{{6}}{{l}}{{\\textit{{{type_header}}}}} \\\\"
             )
             latex_lines.append("    \\hline")
             first_section = False
@@ -279,7 +279,7 @@ def generate_audio_tasks_table(df: pd.DataFrame) -> str:
 
         # Build row
         row_str = (
-            f"    {task_name} & {row['citation']} & {row['lite']} & {row['extended']} & "
+            f"    {task_name} & {row['citation']} & {row['lite']} & "
             + f"{row['languages']} & {row['domains']} & {row['main_metric']} \\\\"
         )
         latex_lines.append(row_str)
@@ -329,9 +329,9 @@ def generate_audio_text_tasks_table(df: pd.DataFrame) -> str:
         "    \\centering",
         "    \\caption{MAEB+ Audio-Text Cross-Modal Tasks Overview. Tasks include zero-shot classification and bidirectional retrieval between audio and text modalities.}",
         "    \\resizebox{\\linewidth}{!}{",
-        "    \\begin{tabular}{llcccllc}",
+        "    \\begin{tabular}{llccllc}",
         "    \\toprule",
-        "    \\textbf{Dataset} & \\textbf{Citation} & \\textbf{Lite} & \\textbf{Ext.} & "
+        "    \\textbf{Dataset} & \\textbf{Citation} & \\textbf{MAEB} & "
         + "\\textbf{N. Langs} & \\textbf{Modality} & \\textbf{Domains} & \\textbf{Main Metric} \\\\",
         "    \\midrule",
     ]
@@ -359,7 +359,7 @@ def generate_audio_text_tasks_table(df: pd.DataFrame) -> str:
             if not first_section:
                 latex_lines.append("    \\hline")
             latex_lines.append(
-                f"    \\multicolumn{{8}}{{l}}{{\\textit{{{type_header}}}}} \\\\"
+                f"    \\multicolumn{{7}}{{l}}{{\\textit{{{type_header}}}}} \\\\"
             )
             latex_lines.append("    \\hline")
             first_section = False
@@ -369,7 +369,7 @@ def generate_audio_text_tasks_table(df: pd.DataFrame) -> str:
 
         # Build row
         row_str = (
-            f"    {task_name} & {row['citation']} & {row['lite']} & {row['extended']} & "
+            f"    {task_name} & {row['citation']} & {row['lite']} & "
             + f"{row['languages']} & {row['modality']} & "
             + f"{row['domains']} & {row['main_metric']} \\\\"
         )
@@ -451,8 +451,7 @@ def main():
     # Print summary statistics
     print("\nSummary:")
     print(f"  Total tasks: {len(df)}")
-    print(f"  Tasks in lite benchmarks: {len(df[df['lite'] != ''])}")
-    print(f"  Tasks in extended benchmarks: {len(df[df['extended'] != ''])}")
+    print(f"  Tasks in MAEB: {len(df[df['lite'] != ''])}")
 
     # Count by task type
     print("\nTasks by type:")
