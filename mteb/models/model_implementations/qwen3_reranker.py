@@ -18,26 +18,26 @@ class Qwen3RerankerWrapper:
     def __init__(
         self,
         model_name_or_path: str,
-        torch_dtype=torch.float32,
+        device: str | None = None,
         attn_implementation: str | None = None,
-        batch_size: int = 32,
-        max_length: int = 8192,
         **kwargs,
     ):
         self.model_name_or_path = model_name_or_path
-        self.batch_size = batch_size
-        self.max_length = max_length
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-        model_kwargs = {"torch_dtype": torch_dtype}
+        self.device = torch.device(
+            device
+            if device is not None
+            else ("cuda" if torch.cuda.is_available() else "cpu")
+        )
+        self.batch_size = kwargs.get("batch_size", 8)
         if attn_implementation:
-            model_kwargs["attn_implementation"] = attn_implementation
+            attn_implementation = attn_implementation
 
         self.tokenizer = AutoTokenizer.from_pretrained(
             model_name_or_path, padding_side="left"
         )
+        self.max_length = self.tokenizer.model_max_length
         self.model = AutoModelForCausalLM.from_pretrained(
-            model_name_or_path, **model_kwargs
+            model_name_or_path, attn_implementation=attn_implementation, **kwargs
         )
         self.model.to(self.device)
         self.model.eval()
