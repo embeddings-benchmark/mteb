@@ -8,6 +8,7 @@ This described the is the command line interface for `mteb`.
 - [`mteb available_tasks`](#listing-available-tasks): Lists the available tasks within MTEB
 - [`mteb available_benchmarks`](#listing-available-benchmarks): Lists the available benchmarks
 - [`mteb create_meta`](#creating-model-metadata): Creates the metadata for a model card from a folder of results
+- [`mteb leaderboard`](#running-the-leaderboard): Runs the MTEB leaderboard locally
 
 In the following we outline some sample use cases, but if you want to learn more about the arguments for each command you can run:
 
@@ -67,6 +68,29 @@ An example frontmatter for a model card is shown below:
 
 ```yaml
 ---
+
+## Running the Leaderboard
+
+To run the MTEB leaderboard locally, use the `mteb leaderboard` command. For example:
+
+```bash
+mteb leaderboard
+```
+
+You can specify a custom cache path and other options:
+
+```bash
+mteb leaderboard --cache-path results --port 8080 --share
+```
+
+Available options:
+- `--cache-path PATH`: Custom path for model results cache
+- `--host HOST`: Host to run the server on (default: 0.0.0.0)
+- `--port PORT`: Port to run the server on (default: 7860)
+- `--share`: Create a public URL for the leaderboard
+- `--rebuild`: Force rebuild from full results repository, bypassing cached JSON
+
+For more details on running the leaderboard, see the [leaderboard documentation](leaderboard.md).
 tags:
 - mteb
 model-index:
