@@ -6,11 +6,11 @@ class VoiceGenderClustering(AbsTaskClustering):
     label_column_name: str = "label"
     metadata = TaskMetadata(
         name="VoiceGenderClustering",
-        description="Clustering audio recordings based on gender (male vs female).",
-        reference="https://huggingface.co/datasets/mmn3690/voice-gender-clustering",
+        description="Clustering audio recordings based on gender (male vs female). Subsampled to 2048 samples.",
+        reference="https://huggingface.co/datasets/mteb/VoiceGenderClusteringMini",
         dataset={
-            "path": "mmn3690/voice-gender-clustering",
-            "revision": "1b202ea7bcd0abd5283e628248803e1569257c80",
+            "path": "mteb/VoiceGenderClusteringMini",
+            "revision": "b8b71dcd75537262a586c3c8e0272cddfec45012",
         },
         type="AudioClustering",
         category="a2a",
@@ -36,14 +36,3 @@ class VoiceGenderClustering(AbsTaskClustering):
     )
     max_fraction_of_documents_to_embed = None
     input_column_name: str = "audio"
-
-    def dataset_transform(self):
-        # Filter out samples with empty audio arrays
-        for split in self.dataset:
-            self.dataset[split] = self.dataset[split].filter(
-                lambda x: len(x["audio"]["array"]) > 0,
-                desc="Filtering empty audio samples",
-            )
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"], label=self.label_column_name
-        )
