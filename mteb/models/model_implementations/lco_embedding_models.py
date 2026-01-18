@@ -3,7 +3,6 @@ from typing import Any
 
 import torch
 import torchaudio
-from qwen_omni_utils import process_mm_info
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import (
@@ -28,6 +27,7 @@ class LCOEmbedding(AbsEncoder):
         **kwargs: Any,
     ):
         requires_audio_dependencies()
+       
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = 10
@@ -52,6 +52,15 @@ class LCOEmbedding(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+
+        try:
+            from qwen_omni_utils import process_mm_info
+        except ImportError:
+            raise ImportError(
+                "The 'qwen_omni_utils' package is required for this model. "
+                "Please install it or ensure it is in your python path."
+            )
+        
         # Pre-calculate max samples once
         max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
         
