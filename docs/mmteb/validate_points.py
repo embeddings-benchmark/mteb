@@ -4,6 +4,8 @@ from pathlib import Path
 from jsonlines import Reader
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, conint, constr
 
+logger = logging.getLogger(__name__)
+
 commit_exceptions = {
     "scores_from_old_system",
     # <100 points: from before max points were enforced
@@ -54,7 +56,7 @@ def validate_jsonl_files(folder_path):
                 try:
                     # Validate JSON object against schema
                     x = JsonObject(**line)
-                    logging.debug(x)
+                    logger.debug(x)
                     check_max_points(x, commit_n)
 
                 except ValidationError as e:

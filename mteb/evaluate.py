@@ -298,7 +298,7 @@ def evaluate(
                 changed.
             - "only-cache": Only load the results from the cache folder and do not run the task. Useful if you just want to load the results from the
                 cache.
-        prediction_folder: Optional folder in which to save model predictions for the task. Predictions of the tasks will be sabed in `prediction_folder/{task_name}_predictions.json`
+        prediction_folder: Optional folder in which to save model predictions for the task. Predictions of the tasks will be saved in `prediction_folder/{task_name}_predictions.json`
         show_progress_bar: Whether to show a progress bar when running the evaluation. Default is True. Setting this to False will also set the
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
         public_only: Run only public tasks. If None, it will attempt to run the private task.
