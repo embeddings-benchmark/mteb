@@ -16,7 +16,7 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
             "revision": "b0c14a03571a7d73d56b12c4b1db81952c4f7e64",
             "trust_remote_code": True,
         },
-        type="AudioClassification",
+        type="AudioMultilabelClassification",
         category="a2t",
         eval_splits=["test_5s", "test"],
         eval_langs=["zxx-Zxxx"],
