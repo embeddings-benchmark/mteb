@@ -222,15 +222,6 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
             f"Metadata for {task.metadata.name} is not filled"
         )
 
-    if task.metadata.name in (
-        "SpeechCommandsZeroshotv0.01",
-        "SpeechCommandsZeroshotv0.02",
-        "BirdSet",
-    ):
-        # https://github.com/embeddings-benchmark/mteb/issues/3499
-        assert task.metadata.dataset.get("trust_remote_code", False) is True
-        pytest.skip("Skipping known failing dataset for now, see issue #3499")
-
     # --- Check that no dataset trusts remote code ---
     assert task.metadata.dataset.get("trust_remote_code", False) is False, (
         f"Dataset {task.metadata.name} should not trust remote code"
