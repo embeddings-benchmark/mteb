@@ -9,14 +9,14 @@ class CSTRVCTKGenderClassification(AbsTaskClassification):
         reference="https://datashare.ed.ac.uk/handle/10283/3443",
         dataset={
             "path": "mteb/cstr-vctk-gender-mini",
-            "revision": "fe8fbc6d596d805316883bb0bce0b534da008123",
+            "revision": "8c7429cbb5c01d9327cff77dad5cbf813ecddc13",
         },
         type="AudioClassification",
         category="a2t",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2026-01-15", "2026-01-15"),
+        date=("2019-11-13", "2019-11-13"),
         domains=["Spoken", "Speech"],
         task_subtypes=["Gender Classification"],
         license="cc-by-4.0",
@@ -36,16 +36,3 @@ class CSTRVCTKGenderClassification(AbsTaskClassification):
 
     input_column_name: str = "audio"
     label_column_name: str = "gender_id"
-
-    def dataset_transform(self):
-        # Define label mapping
-        label2id = {"F": 0, "M": 1}
-
-        # Apply transformation to all dataset splits
-        for split in self.dataset:
-            # Define transform function to add numeric labels
-            def add_gender_id(example):
-                example["gender_id"] = label2id[example["gender"]]
-                return example
-
-            self.dataset[split] = self.dataset[split].map(add_gender_id)

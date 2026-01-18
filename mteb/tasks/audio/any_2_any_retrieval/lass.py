@@ -22,7 +22,7 @@ class LASSA2TRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cv_recall_at_5",
-        date=("2026-01-16", "2026-01-16"),
+        date=("2024-03-27", "2024-03-27"),
         domains=["AudioScene"],
         task_subtypes=["Environment Sound Retrieval"],
         license="mit",

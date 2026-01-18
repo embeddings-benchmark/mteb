@@ -16,7 +16,7 @@ class CSTRVCTKAccentID(AbsTaskClassification):
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2026-01-15", "2026-01-15"),
+        date=("2019-11-13", "2019-11-13"),
         domains=["Spoken", "Speech"],
         task_subtypes=["Accent identification"],
         license="cc-by-4.0",
