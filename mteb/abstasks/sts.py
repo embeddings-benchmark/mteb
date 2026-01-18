@@ -7,9 +7,10 @@ from scipy.stats import pearsonr, spearmanr
 
 from mteb._evaluators import AnySTSEvaluator
 from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
-from mteb.models import EncoderProtocol
+from mteb.models import EncoderProtocol, MTEBModels
 from mteb.types import PromptType
 from mteb.types.statistics import (
+    AudioStatistics,
     ImageStatistics,
     ScoreStatistics,
     SplitDescriptiveStatistics,
@@ -17,6 +18,7 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
+    calculate_audio_statistics,
     calculate_image_statistics,
     calculate_score_statistics,
     calculate_text_statistics,
@@ -40,6 +42,9 @@ class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
         image1_statistics: Statistics for image1
         image2_statistics: Statistics for image2
 
+        audio1_statistics: Statistics for audio1
+        audio2_statistics: Statistics for audio2
+
         label_statistics: Statistics for labels
     """
 
@@ -52,6 +57,9 @@ class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
 
     image1_statistics: ImageStatistics | None
     image2_statistics: ImageStatistics | None
+
+    audio1_statistics: AudioStatistics | None
+    audio2_statistics: AudioStatistics | None
 
     label_statistics: ScoreStatistics
 
@@ -103,7 +111,7 @@ class AbsTaskSTS(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: Dataset,
         encode_kwargs: dict[str, Any],
         hf_split: str,
@@ -111,6 +119,9 @@ class AbsTaskSTS(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> STSMetrics:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
+
         normalized_scores = list(map(self._normalize, data_split["score"]))
         data_split = data_split.select_columns(list(self.column_names))
 
@@ -142,7 +153,7 @@ class AbsTaskSTS(AbsTask):
     ) -> STSMetrics:
         def compute_corr(x: list[float], y: list[float]) -> tuple[float, float]:
             """Return (pearson, spearman) correlations between x and y."""
-            return pearsonr(x, y)[0], spearmanr(x, y)[0]
+            return float(pearsonr(x, y)[0]), float(spearmanr(x, y)[0])
 
         cosine_pearson, cosine_spearman = compute_corr(
             normalized_scores, scores["cosine_scores"]
@@ -215,6 +226,13 @@ class AbsTaskSTS(AbsTask):
             image1_statistics = None
             image2_statistics = None
 
+        if "audio" in self.metadata.modalities:
+            audio1_statistics = calculate_audio_statistics(sentence1)
+            audio2_statistics = calculate_audio_statistics(sentence2)
+        else:
+            audio1_statistics = None
+            audio2_statistics = None
+
         labels_statistics = calculate_score_statistics(score)
 
         return AnySTSDescriptiveStatistics(
@@ -230,6 +248,8 @@ class AbsTaskSTS(AbsTask):
             text2_statistics=text2_statistics,
             image1_statistics=image1_statistics,
             image2_statistics=image2_statistics,
+            audio1_statistics=audio1_statistics,
+            audio2_statistics=audio2_statistics,
             label_statistics=labels_statistics,
         )
 

@@ -47,7 +47,7 @@ class AudioSetMultilingualClassification(AbsTaskMultilabelClassification):
         superseded_by="AudioSetMini",
     )
 
-    evaluator = MultiOutputClassifier(estimator=LogisticRegression())
+    evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())
     input_column_name: str = "audio"
     label_column_name: str = "human_labels"
 
@@ -94,6 +94,6 @@ class AudioSetMiniMultilingualClassification(AbsTaskMultilabelClassification):
 """,
     )
 
-    evaluator = MultiOutputClassifier(estimator=LogisticRegression())
+    evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())
     input_column_name: str = "audio"
     label_column_name: str = "human_labels"

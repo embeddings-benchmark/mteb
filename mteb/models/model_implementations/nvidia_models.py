@@ -111,6 +111,7 @@ NV_embed_v2 = ModelMeta(
         add_eos_token=True,
     ),
     name="nvidia/NV-Embed-v2",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="7604d305b621f14095a1aa23d351674c2859553a",
@@ -122,7 +123,7 @@ NV_embed_v2 = ModelMeta(
     max_tokens=32768,
     reference="https://huggingface.co/nvidia/NV-Embed-v2",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     use_instructions=True,
     training_datasets=nvidia_training_datasets,
     public_training_code=None,
@@ -141,6 +142,7 @@ NV_embed_v1 = ModelMeta(
         add_eos_token=True,
     ),
     name="nvidia/NV-Embed-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="570834afd5fef5bf3a3c2311a2b6e0a66f6f4f2c",
@@ -152,7 +154,7 @@ NV_embed_v1 = ModelMeta(
     max_tokens=32768,
     reference="https://huggingface.co/nvidia/NV-Embed-v1",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     training_datasets=nvidia_training_datasets,
     public_training_code=None,
@@ -335,6 +337,7 @@ class LlamaEmbedNemotron(AbsEncoder):
         self,
         model_name: str,
         revision: str,
+        device: str | None = None,
     ) -> None:
         required_transformers_version = "4.51.0"
         if Version(transformers_version) != Version(required_transformers_version):
@@ -353,7 +356,7 @@ class LlamaEmbedNemotron(AbsEncoder):
         self.attn_implementation = (
             "flash_attention_2" if torch.cuda.is_available() else "eager"
         )
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.task_prompts = TASK_PROMPTS
         self.instruction_template = self._instruction_template
 
@@ -528,6 +531,7 @@ class LlamaEmbedNemotron(AbsEncoder):
 llama_embed_nemotron_8b = ModelMeta(
     loader=LlamaEmbedNemotron,
     name="nvidia/llama-embed-nemotron-8b",
+    model_type=["dense"],
     languages=llama_embed_nemotron_evaluated_languages,
     open_weights=True,
     revision="84a375593d27d3528beb4e104822515659e093b4",
@@ -539,7 +543,7 @@ llama_embed_nemotron_8b = ModelMeta(
     max_tokens=32768,
     reference="https://huggingface.co/nvidia/llama-embed-nemotron-8b",
     similarity_fn_name="cosine",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Sentence Transformers", "safetensors", "Transformers"],
     use_instructions=True,
     training_datasets=llama_embed_nemotron_training_datasets,
     public_training_code=None,  # Will be released later

@@ -168,7 +168,7 @@ MOCK_MIEB_TASK_REGISTRY = {
     task.metadata.name: type(task) for task in MOCK_MIEB_TASK_GRID
 }
 
-ALL_TASK_TEST_GRID = MOCK_TASK_TEST_GRID + MOCK_MIEB_TASK_GRID
+ALL_TASK_TEST_GRID = MOCK_TASK_TEST_GRID + MOCK_MIEB_TASK_GRID + MOCK_MAEB_TASK_GRID
 
 ALL_TASK_TEST_GRID_AS_STRING = [
     t.metadata.name if isinstance(t, AbsTask) else t for t in ALL_TASK_TEST_GRID

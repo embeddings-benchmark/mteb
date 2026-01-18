@@ -1,27 +1,23 @@
 from .ambient_acoustic_context import AmbientAcousticContextClassification
-from .beijing_opera import BeijingOpera
-from .bird_clef import BirdCLEFClassification
 from .common_language_age_detection import CommonLanguageAgeDetection
 from .common_language_gender_detection import CommonLanguageGenderDetection
 from .common_language_language_classification import (
     CommonLanguageLanguageClassification,
 )
 from .cremad import CREMAD
-from .esc50 import ESC50Classification
+from .expresso import (
+    ExpressoConvEmotionClassification,
+    ExpressoReadEmotionClassification,
+)
 from .fsdd import FSDD
-from .gtzan_genre import GTZANGenre
-from .gunshot_triangulation import GunshotTriangulation
+from .globe_v2_age_classification import GlobeV2AgeClassification
+from .globe_v2_gender_classification import GlobeV2GenderClassification
 from .iemocap_emotion import IEMOCAPEmotionClassification
 from .iemocap_gender import IEMOCAPGenderClassification
 from .libri_count import LibriCount
-from .mridingham_stroke import MridinghamStroke
-from .mridingham_tonic import MridinghamTonic
-from .n_synth import NSynth
 from .speech_commands import SpeechCommandsClassification
 from .spoke_n import SpokeNEnglishClassification
 from .spoken_q_afor_ic import SpokenQAForIC
-from .tut_acoustic_scenes import TUTAcousticScenesClassification
-from .urban_sound8k import UrbanSound8kZeroshotClassification
 from .vocal_sound import VocalSoundClassification
 from .vox_celeb_sa import VoxCelebSA
 from .vox_lingua107_top10 import VoxLingua107Top10
@@ -31,25 +27,19 @@ __all__ = [
     "CREMAD",
     "FSDD",
     "AmbientAcousticContextClassification",
-    "BeijingOpera",
-    "BirdCLEFClassification",
     "CommonLanguageAgeDetection",
     "CommonLanguageGenderDetection",
     "CommonLanguageLanguageClassification",
-    "ESC50Classification",
-    "GTZANGenre",
-    "GunshotTriangulation",
+    "ExpressoConvEmotionClassification",
+    "ExpressoReadEmotionClassification",
+    "GlobeV2AgeClassification",
+    "GlobeV2GenderClassification",
     "IEMOCAPEmotionClassification",
     "IEMOCAPGenderClassification",
     "LibriCount",
-    "MridinghamStroke",
-    "MridinghamTonic",
-    "NSynth",
     "SpeechCommandsClassification",
     "SpokeNEnglishClassification",
     "SpokenQAForIC",
-    "TUTAcousticScenesClassification",
-    "UrbanSound8kZeroshotClassification",
     "VocalSoundClassification",
     "VoxCelebSA",
     "VoxLingua107Top10",

@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import hashlib
-from collections import Counter
-from typing import TYPE_CHECKING
+from collections import Counter, defaultdict
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, cast
 
 from mteb.types import TopRankedDocumentsType
+from mteb.types._encoder_io import AudioInputItem
 from mteb.types.statistics import (
+    AudioStatistics,
     ImageStatistics,
     LabelStatistics,
     RelevantDocsStatistics,
@@ -52,7 +55,7 @@ def calculate_image_statistics(images: list[Image.Image]) -> ImageStatistics:
     seen_hashes: set[str] = set()
 
     for img in images:
-        width, height = img.size  # type: ignore
+        width, height = img.size
         img_heights.append(height)
         img_widths.append(width)
 
@@ -72,6 +75,43 @@ def calculate_image_statistics(images: list[Image.Image]) -> ImageStatistics:
     )
 
 
+def calculate_audio_statistics(audios: list[AudioInputItem]) -> AudioStatistics:
+    """Calculate descriptive statistics for a list of audio clips.
+
+    Args:
+        audios: List of audio clips to analyze. Each audio clip should be a dictionary with 'array' and 'sampling_rate' keys.
+
+    Returns:
+        A dictionary containing the descriptive statistics.
+    """
+    audio_lengths = []
+    sampling_rates: dict[int, int] = defaultdict(int)
+    unique_audios = set()
+
+    for audio in audios:
+        array = audio["array"]
+        sampling_rate = audio["sampling_rate"]
+        length_in_seconds = len(array) / sampling_rate
+        audio_lengths.append(length_in_seconds)
+        sampling_rates[sampling_rate] += 1
+
+        audio_bytes = array.tobytes()
+        audio_hash = hashlib.md5(audio_bytes).hexdigest()
+        unique_audios.add(audio_hash)
+
+    return AudioStatistics(
+        total_duration_seconds=sum(audio_lengths),
+        min_duration_seconds=min(audio_lengths),
+        average_duration_seconds=sum(audio_lengths) / len(audio_lengths),
+        max_duration_seconds=max(audio_lengths),
+        unique_audios=len(unique_audios),
+        average_sampling_rate=(
+            sum(rate * count for rate, count in sampling_rates.items()) / len(audios)
+        ),
+        sampling_rates=dict(sampling_rates),
+    )
+
+
 def calculate_label_statistics(labels: list[int | list[int]]) -> LabelStatistics:
     """Calculate descriptive statistics for a list of labels.
 
@@ -82,17 +122,24 @@ def calculate_label_statistics(labels: list[int | list[int]]) -> LabelStatistics
         LabelStatistics: A dictionary containing the descriptive statistics.
 
     """
+    total_labels: list[int | None] = []
+
     if not isinstance(labels[0], list):
-        label_len = [1] * len(labels)
-        total_label_len = len(labels)
-        total_labels = labels
+        # single label classification
+        single_label = cast(list[int], labels)
+        label_len = [1] * len(single_label)
+        total_label_len = len(single_label)
+        total_labels.extend(single_label)
     elif isinstance(labels[0], list):
         # multilabel classification
-        label_len = [len(l) for l in labels]
+        multilabel_labels = cast(list[list[int]], labels)
+        label_len = [len(l) for l in multilabel_labels]
         total_label_len = sum(label_len)
-        total_labels = []
-        for l in labels:
-            total_labels.extend(l if len(l) > 0 else [None])
+        for l in multilabel_labels:
+            if l and len(l) > 0:
+                total_labels.extend(l)
+            else:
+                total_labels.append(None)
     else:
         raise ValueError(
             "Labels must be a list of integers or a list of lists of integers."
@@ -159,7 +206,7 @@ def calculate_top_ranked_statistics(
 
 
 def calculate_relevant_docs_statistics(
-    relevant_docs: dict[str, dict[str, float]],
+    relevant_docs: Mapping[str, Mapping[str, int]],
 ) -> RelevantDocsStatistics:
     qrels_lengths = [len(relevant_docs[qid]) for qid in relevant_docs]
     unique_qrels = len({doc for qid in relevant_docs for doc in relevant_docs[qid]})

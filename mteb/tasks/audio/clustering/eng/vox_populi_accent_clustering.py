@@ -3,7 +3,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class VoxPopuliAccentClustering(AbsTaskClustering):
-    label_column_name: str = "accent_id"
+    label_column_name: str = "accent"
 
     metadata = TaskMetadata(
         name="VoxPopuliAccentClustering",
@@ -51,3 +51,11 @@ Dupoux, Emmanuel},
     )
     max_fraction_of_documents_to_embed = None
     input_column_name: str = "audio"
+
+    def dataset_transform(self) -> None:
+        """Filter out samples with empty audio arrays."""
+        for split in self.dataset:
+            self.dataset[split] = self.dataset[split].filter(
+                lambda x: len(x["audio"]["array"]) > 0,
+                desc="Filtering empty audio samples",
+            )
