@@ -265,6 +265,13 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         "GoogleSVQT2ARetrieval",
         "GoogleSVQA2TRetrieval",
         "AudioSet",
+        "JamAltArtistA2ARetrieval",
+        "JamAltLyricA2TRetrieval",
+        "JamAltLyricT2ARetrieval",
+        "ExpressoConv",
+        "GLOBEV2Age",
+        "ExpressoRead",
+        "GLOBEV2Gender",
     ):
         pytest.skip("Skipping audio tasks for now, see issue #3498")
 
