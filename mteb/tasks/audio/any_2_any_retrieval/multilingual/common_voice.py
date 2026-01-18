@@ -183,9 +183,9 @@ _EVAL_LANGS_CV21 = {
 }
 
 
-class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
+class MiniCommonVoice17A2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="CommonVoice17A2TRetrieval",
+        name="MiniCommonVoice17A2TRetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
         reference="https://commonvoice.mozilla.org/",
         dataset={
@@ -277,9 +277,9 @@ class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
                 del lang_dataset
 
 
-class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
+class MiniCommonVoice17T2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="CommonVoice17T2ARetrieval",
+        name="MiniCommonVoice17T2ARetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
         reference="https://commonvoice.mozilla.org/",
         dataset={
@@ -371,9 +371,9 @@ class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
                 del lang_dataset
 
 
-class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
+class MiniCommonVoice21A2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="CommonVoice21A2TRetrieval",
+        name="MiniCommonVoice21A2TRetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
         reference="https://commonvoice.mozilla.org/",
         dataset={
@@ -465,9 +465,9 @@ class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
                 del lang_dataset
 
 
-class CommonVoice21T2ARetrieval(AbsTaskRetrieval):
+class MiniCommonVoice21T2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="CommonVoice21T2ARetrieval",
+        name="MiniCommonVoice21T2ARetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
         reference="https://commonvoice.mozilla.org/",
         dataset={
