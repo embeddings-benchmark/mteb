@@ -1331,7 +1331,7 @@ This is the long version of the benchmark, which only filter longer documents.
 )
 
 BRIGHT_V1_1 = Benchmark(
-    name="BRIGHT(v1.1, short)",
+    name="BRIGHT(v1.1)",
     display_name="Reasoning Retrieval",
     tasks=get_tasks(
         tasks=[
@@ -1347,6 +1347,14 @@ BRIGHT_V1_1 = Benchmark(
             "BrightAopsRetrieval",
             "BrightTheoremQATheoremsRetrieval",
             "BrightTheoremQAQuestionsRetrieval",
+            "BrightBiologyLongRetrieval",
+            "BrightEarthScienceLongRetrieval",
+            "BrightEconomicsLongRetrieval",
+            "BrightPsychologyLongRetrieval",
+            "BrightRoboticsLongRetrieval",
+            "BrightStackoverflowLongRetrieval",
+            "BrightSustainableLivingLongRetrieval",
+            "BrightPonyLongRetrieval",
         ],
     ),
     description="v1.1 refactors the BRIGHT into a different tasks and added prompt to individual tasks.",
@@ -1361,32 +1369,6 @@ BRIGHT_V1_1 = Benchmark(
 """,
 )
 
-BRIGHT_V1_1_LONG = Benchmark(
-    name="BRIGHT(v1.1, long)",
-    display_name="Reasoning Retrieval",
-    tasks=get_tasks(
-        tasks=[
-            "BrightBiologyLongRetrieval",
-            "BrightEarthScienceLongRetrieval",
-            "BrightEconomicsLongRetrieval",
-            "BrightPsychologyLongRetrieval",
-            "BrightRoboticsLongRetrieval",
-            "BrightStackoverflowLongRetrieval",
-            "BrightSustainableLivingLongRetrieval",
-            "BrightPonyLongRetrieval",
-        ],
-    ),
-    description="v1.1 refactors the BRIGHT(long) into a different tasks and added prompt to individual tasks.",
-    reference="https://brightbenchmark.github.io/",
-    citation=r"""
-@article{su2024bright,
-  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
-  journal = {arXiv preprint arXiv:2407.12883},
-  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
-  year = {2024},
-}
-""",
-)
 
 CODE_RAG = Benchmark(
     name="CodeRAG",

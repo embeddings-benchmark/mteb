@@ -1,3 +1,4 @@
+import warnings
 from collections import defaultdict
 
 import datasets
@@ -86,6 +87,12 @@ def load_data(self) -> None:
     if self.data_loaded:
         return
 
+    warnings.warn(
+        "This task contains wrong prompts in the metadata. "
+        "Please use BRIGHT(v1.1) benchmark instead.",
+        category=DeprecationWarning,
+    )
+
     self.corpus, self.queries, self.relevant_docs = self.load_bright_data(
         path=self.metadata.dataset["path"],
         domains=list(self.metadata.eval_langs.keys()),
@@ -129,6 +136,7 @@ class BrightRetrieval(AbsTaskRetrieval):
   year = {2024},
 }
 """,
+        superseded_by="BrightBiologyRetrieval",
     )
     load_bright_data = load_bright_data
     load_data = load_data
