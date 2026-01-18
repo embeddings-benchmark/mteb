@@ -1295,7 +1295,7 @@ def main():
 
         # Run selection at different thresholds
         results_by_threshold = {}
-        for threshold in [0.95, 0.94, 0.93, 0.9, 0.8]:
+        for threshold in [0.95, 0.93, 0.9, 0.8, 0.7, 0.6]:
             remaining, removed = iterative_task_selection(
                 results_df,
                 filtered_source_tasks,
@@ -1319,7 +1319,7 @@ def main():
 
         # Compute correlations for each threshold (compare against full source, not filtered)
         correlations_by_threshold = {}
-        for threshold in [0.95, 0.94, 0.93, 0.9, 0.8]:
+        for threshold in [0.95, 0.93, 0.9, 0.8, 0.7, 0.6]:
             remaining, _ = results_by_threshold[threshold]
             spearman, pearson = compute_benchmark_correlation(
                 results_df, source_task_names, remaining
@@ -1398,7 +1398,7 @@ def main():
 
         # Compute eval times for each threshold (for all models)
         eval_times_by_threshold = {}
-        for threshold in [0.95, 0.94, 0.93, 0.9, 0.8]:
+        for threshold in [0.95, 0.93, 0.9, 0.8, 0.7, 0.6]:
             remaining, _ = results_by_threshold[threshold]
             threshold_times = {}
             for short_name in model_short_names:
@@ -1411,7 +1411,7 @@ def main():
                     threshold_times[short_name] = None
             eval_times_by_threshold[threshold] = threshold_times
 
-        for threshold in [0.95, 0.94, 0.93, 0.9, 0.8]:
+        for threshold in [0.95, 0.93, 0.9, 0.8, 0.7, 0.6]:
             remaining, removed = results_by_threshold[threshold]
             coverage = get_coverage_analysis(remaining)
             spearman, pearson = correlations_by_threshold[threshold]
@@ -1458,7 +1458,7 @@ def main():
         output_lines.append("")
 
         # Detailed results for each threshold
-        for threshold in [0.95, 0.94, 0.93, 0.9, 0.8]:
+        for threshold in [0.95, 0.93, 0.9, 0.8, 0.7, 0.6]:
             remaining, removed = results_by_threshold[threshold]
             coverage = get_coverage_analysis(remaining)
 
@@ -1500,7 +1500,7 @@ def main():
             output_lines.append("")
 
         # Recommended task list (threshold 0.9)
-        recommended_threshold = 0.93
+        recommended_threshold = 0.8
         remaining, removed = results_by_threshold[recommended_threshold]
 
         output_lines.append(
@@ -1573,7 +1573,7 @@ def main():
         print(
             f"  {'-' * 7} {'-' * 6} {'-' * 5} {'-' * 4} {'-' * 4} {'-' * 4} {'-' * 5} {'-' * 4} {'-' * 3} {'-' * 9} {'-' * 8}"
         )
-        for threshold in [0.95, 0.94, 0.93, 0.9, 0.8]:
+        for threshold in [0.95, 0.93, 0.9, 0.8, 0.7, 0.6]:
             remaining, removed = results_by_threshold[threshold]
             coverage = get_coverage_analysis(remaining)
             type_counts = coverage.get("type_counts", {})

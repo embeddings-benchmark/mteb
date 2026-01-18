@@ -2855,28 +2855,32 @@ MAEB_AUDIO = Benchmark(
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
-            # AudioClassification (5)
+            # AudioClassification (7)
             "BeijingOpera",
             "BirdCLEF",
             "CommonLanguageAgeDetection",
             "IEMOCAPGender",
             "MInDS14",
-            # AudioClustering (2)
+            "MridinghamTonic",
+            "VoxPopuliAccentID",
+            # AudioClustering (5)
+            "CREMA_DClustering",
+            "GTZANGenreClustering",
             "VehicleSoundClustering",
+            "VoiceGenderClustering",
             "VoxPopuliGenderClustering",
             # AudioMultilabelClassification (2)
             "FSD50K",
             "SIBFLEURS",
             # AudioPairClassification (2)
             "CREMADPairClassification",
-            "VocalSoundPairClassification",
-            # AudioReranking (3)
-            "FSDnoisy18kAudioReranking",
+            "VoxPopuliAccentPairClassification",
+            # AudioReranking (2)
             "GTZANAudioReranking",
-            "UrbanSound8KAudioReranking",
+            "VocalSoundAudioReranking",
         ]
     ),
-    description="""MAEB(audio-only) is a lightweight audio-only benchmark with 14 tasks spanning 5 task types: classification (5), multilabel classification (2), clustering (2), pair classification (2), and reranking (3).""",
+    description="""MAEB(audio-only) is a lightweight audio-only benchmark with 18 tasks spanning 5 task types: classification (7), clustering (5), multilabel classification (2), pair classification (2), and reranking (2).""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -3005,41 +3009,43 @@ MAEB = Benchmark(
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
-            # Any2AnyRetrieval (9)
+            # Any2AnyRetrieval (8)
+            "AudioCapsT2ARetrieval",
+            "AudioSetStrongT2ARetrieval",
             "ClothoT2ARetrieval",
             "CommonVoice21T2ARetrieval",
             "FleursT2ARetrieval",
             "GigaSpeechT2ARetrieval",
-            "HiFiTTST2ARetrieval",
-            "JamAltLyricT2ARetrieval",
-            "LibriTTST2ARetrieval",
-            "MusicCapsT2ARetrieval",
+            "JamAltLyricA2TRetrieval",
             "SpokenSQuADT2ARetrieval",
-            # AudioClassification (5)
+            # AudioClassification (7)
             "BeijingOpera",
             "BirdCLEF",
             "CommonLanguageAgeDetection",
             "IEMOCAPGender",
             "MInDS14",
-            # AudioClustering (2)
+            "MridinghamTonic",
+            "VoxPopuliAccentID",
+            # AudioClustering (5)
+            "CREMA_DClustering",
+            "GTZANGenreClustering",
             "VehicleSoundClustering",
+            "VoiceGenderClustering",
             "VoxPopuliGenderClustering",
             # AudioMultilabelClassification (2)
             "FSD50K",
             "SIBFLEURS",
             # AudioPairClassification (2)
             "CREMADPairClassification",
-            "VocalSoundPairClassification",
-            # AudioReranking (3)
-            "FSDnoisy18kAudioReranking",
+            "VoxPopuliAccentPairClassification",
+            # AudioReranking (2)
             "GTZANAudioReranking",
-            "UrbanSound8KAudioReranking",
-            # AudioZeroshotClassification (2)
-            "RavdessZeroshot",
+            "VocalSoundAudioReranking",
+            # AudioZeroshotClassification (1)
             "SpeechCommandsZeroshotv0.02",
         ]
     ),
-    description="""MAEB is a comprehensive audio benchmark with 25 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (5), clustering (2), multilabel classification (2), pair classification (2), reranking (3), and zero-shot classification (2).""",
+    description="""MAEB is a comprehensive audio benchmark with 27 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (8), classification (7), clustering (5), multilabel classification (2), pair classification (2), reranking (2), and zero-shot classification (1).""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
