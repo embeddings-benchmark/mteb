@@ -119,8 +119,8 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
         description="Speech recordings with corresponding text transcriptions from the FLEURS dataset.",
         reference="https://github.com/google-research-datasets/fleurs",
         dataset={
-            "path": "google/fleurs",
-            "revision": "d7c758a6dceecd54a98cac43404d3d576e721f07",  # specify revision if needed
+            "path": "mteb/fleurs",
+            "revision": "720cfffb024c8a4691f26a2b79d471b1f99a49a0",
         },
         type="Any2AnyRetrieval",
         category="a2t",
@@ -207,8 +207,8 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
         description="Speech recordings with corresponding text transcriptions from the FLEURS dataset.",
         reference="https://github.com/google-research-datasets/fleurs",
         dataset={
-            "path": "google/fleurs",
-            "revision": "d7c758a6dceecd54a98cac43404d3d576e721f07",
+            "path": "mteb/fleurs",
+            "revision": "720cfffb024c8a4691f26a2b79d471b1f99a49a0",
         },
         type="Any2AnyRetrieval",
         category="t2a",

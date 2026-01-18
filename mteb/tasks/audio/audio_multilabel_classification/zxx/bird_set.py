@@ -11,10 +11,9 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
         description="BirdSet: A Large-Scale Dataset for Audio Classification in Avian Bioacoustics",
         reference="https://huggingface.co/datasets/DBD-research-group/BirdSet",
         dataset={
-            "path": "DBD-research-group/BirdSet",
+            "path": "mteb/BirdSet",
             "name": "HSN",
-            "revision": "b0c14a03571a7d73d56b12c4b1db81952c4f7e64",
-            "trust_remote_code": True,
+            "revision": "bdaa5020a8dc594a9a1d3b344e6ca9dbfaa33c74",
         },
         type="AudioClassification",
         category="a2t",
