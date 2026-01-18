@@ -2855,18 +2855,16 @@ MAEB_AUDIO = Benchmark(
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
-            # AudioClassification (6)
+            # AudioClassification (5)
             "BeijingOpera",
             "BirdCLEF",
             "CommonLanguageAgeDetection",
-            "CommonLanguageGenderDetection",
             "IEMOCAPGender",
             "MInDS14",
             # AudioClustering (2)
             "VehicleSoundClustering",
             "VoxPopuliGenderClustering",
-            # AudioMultilabelClassification (3)
-            "FSD2019Kaggle",
+            # AudioMultilabelClassification (2)
             "FSD50K",
             "SIBFLEURS",
             # AudioPairClassification (2)
@@ -2878,7 +2876,7 @@ MAEB_AUDIO = Benchmark(
             "UrbanSound8KAudioReranking",
         ]
     ),
-    description="""MAEB(audio-only) is a lightweight audio-only benchmark with 16 tasks spanning 5 task types: classification (6), multilabel classification (3), clustering (2), pair classification (2), and reranking (3).""",
+    description="""MAEB(audio-only) is a lightweight audio-only benchmark with 14 tasks spanning 5 task types: classification (5), multilabel classification (2), clustering (2), pair classification (2), and reranking (3).""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -3017,18 +3015,16 @@ MAEB = Benchmark(
             "LibriTTST2ARetrieval",
             "MusicCapsT2ARetrieval",
             "SpokenSQuADT2ARetrieval",
-            # AudioClassification (6)
+            # AudioClassification (5)
             "BeijingOpera",
             "BirdCLEF",
             "CommonLanguageAgeDetection",
-            "CommonLanguageGenderDetection",
             "IEMOCAPGender",
             "MInDS14",
             # AudioClustering (2)
             "VehicleSoundClustering",
             "VoxPopuliGenderClustering",
-            # AudioMultilabelClassification (3)
-            "FSD2019Kaggle",
+            # AudioMultilabelClassification (2)
             "FSD50K",
             "SIBFLEURS",
             # AudioPairClassification (2)
@@ -3043,7 +3039,7 @@ MAEB = Benchmark(
             "SpeechCommandsZeroshotv0.02",
         ]
     ),
-    description="""MAEB is a comprehensive audio benchmark with 27 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (6), clustering (2), multilabel classification (3), pair classification (2), reranking (3), and zero-shot classification (2).""",
+    description="""MAEB is a comprehensive audio benchmark with 25 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (5), clustering (2), multilabel classification (2), pair classification (2), reranking (3), and zero-shot classification (2).""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],

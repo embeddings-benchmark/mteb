@@ -68,6 +68,20 @@ RETRIEVAL_FAMILIES = [
     "GoogleSVQ",
 ]
 
+# Same-source families for deduplication
+# Tasks from the same family and same task type are considered redundant
+SAME_SOURCE_FAMILIES = [
+    "CommonLanguage",  # Age, Gender, Language detection
+    "FSD",  # FSD2019Kaggle, FSD50K, FSDnoisy18k
+    "IEMOCAP",  # Emotion, Gender
+    "VoxPopuli",  # Various ID and clustering tasks
+    "ESC50",  # Multiple task types
+    "GTZAN",  # Genre classification, clustering, reranking
+    "UrbanSound8K",  # Multiple task types (but different types OK)
+    "CREMA",  # Multiple task types
+    "VocalSound",  # Multiple task types
+]
+
 
 def deduplicate_retrieval_directions(
     task_names: list[str],
@@ -135,6 +149,90 @@ def enforce_retrieval_direction_preference(
     remaining, removed_pairs = deduplicate_retrieval_directions(task_names)
     # Convert to the expected format with correlation value
     removed = [(task, reason, 0.0) for task, reason in removed_pairs]
+    return remaining, removed
+
+
+def deduplicate_same_source_families(
+    task_names: list[str],
+    results_df: pd.DataFrame,
+    metadata_df: pd.DataFrame,
+) -> tuple[list[str], list[tuple[str, str, float]]]:
+    """Remove same-type tasks from the same source family, keeping the one with lowest correlation.
+
+    For each family with multiple tasks of the same type, keeps only one task
+    (the one with lowest average correlation to other retained tasks).
+
+    Args:
+        task_names: List of selected task names
+        results_df: Model results DataFrame for correlation calculation
+        metadata_df: Task metadata DataFrame
+
+    Returns:
+        Tuple of (filtered task names, list of (removed_task, reason, 0.0) tuples)
+    """
+    remaining = task_names.copy()
+    removed = []
+
+    # Build task -> (family, type) mapping
+    task_to_family = {}
+    for task in task_names:
+        for family in SAME_SOURCE_FAMILIES:
+            if task.startswith(family) or family.lower() in task.lower():
+                task_rows = metadata_df[metadata_df["name"] == task]
+                if len(task_rows) > 0:
+                    task_meta = task_rows.iloc[0]
+                    task_to_family[task] = (family, task_meta["type"])
+                break
+
+    # Group tasks by (family, type)
+    family_type_groups = defaultdict(list)
+    for task, (family, task_type) in task_to_family.items():
+        family_type_groups[(family, task_type)].append(task)
+
+    # For groups with >1 task, keep only the one with lowest avg correlation
+    for (family, task_type), tasks in family_type_groups.items():
+        if len(tasks) <= 1:
+            continue
+
+        # Compute average correlation for each task with all other retained tasks
+        best_task = None
+        best_avg_corr = float("inf")
+
+        for candidate in tasks:
+            if candidate not in results_df.columns:
+                continue
+
+            other_tasks = [
+                t for t in remaining if t != candidate and t in results_df.columns
+            ]
+            if not other_tasks:
+                continue
+
+            correlations = []
+            for other in other_tasks:
+                corr = results_df[[candidate, other]].corr(method="spearman").iloc[0, 1]
+                if not np.isnan(corr):
+                    correlations.append(abs(corr))
+
+            if correlations:
+                avg_corr = np.mean(correlations)
+                if avg_corr < best_avg_corr:
+                    best_avg_corr = avg_corr
+                    best_task = candidate
+
+        # Remove all but the best task
+        if best_task:
+            for task in tasks:
+                if task != best_task and task in remaining:
+                    remaining.remove(task)
+                    removed.append(
+                        (
+                            task,
+                            f"Same-family ({family}) same-type ({task_type}) redundancy, keeping {best_task}",
+                            0.0,
+                        )
+                    )
+
     return remaining, removed
 
 
@@ -1211,6 +1309,12 @@ def main():
                 remaining
             )
             removed = removed + direction_removed
+
+            # Post-processing: deduplicate same-source families
+            remaining, family_removed = deduplicate_same_source_families(
+                remaining, results_df, metadata_df
+            )
+            removed = removed + family_removed
             results_by_threshold[threshold] = (remaining, removed)
 
         # Compute correlations for each threshold (compare against full source, not filtered)
