@@ -65,6 +65,10 @@ class MSClapWrapper(AbsEncoder):
 
         all_embeddings = []
 
+        # Cache resampler to avoid recreating for each sample
+        resampler = None
+        cached_sr = None
+
         for batch in tqdm(
             inputs,
             disable=not show_progress_bar,
@@ -81,10 +85,22 @@ class MSClapWrapper(AbsEncoder):
                         )
                         sr = self.sampling_rate
 
-                    if sr != self.sampling_rate:
-                        resampler = torchaudio.transforms.Resample(
-                            orig_freq=sr, new_freq=self.sampling_rate
+                    # Handle empty audio arrays
+                    if array.numel() == 0:
+                        logger.warning(
+                            "Encountered empty audio array. Using a zero-filled array as placeholder."
                         )
+                        # Create a minimal silent audio (0.1 seconds)
+                        array = torch.zeros(
+                            int(self.sampling_rate * 0.1), dtype=torch.float32
+                        )
+                    elif sr != self.sampling_rate:
+                        # Only create new resampler if sample rate changed
+                        if resampler is None or cached_sr != sr:
+                            resampler = torchaudio.transforms.Resample(
+                                orig_freq=sr, new_freq=self.sampling_rate
+                            )
+                            cached_sr = sr
                         array = resampler(array)
 
                     # Write to temp file - msclap expects file paths
