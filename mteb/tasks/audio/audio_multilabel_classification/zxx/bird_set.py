@@ -15,7 +15,7 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
             "name": "HSN",
             "revision": "bdaa5020a8dc594a9a1d3b344e6ca9dbfaa33c74",
         },
-        type="AudioClassification",
+        type="AudioMultilabelClassification",
         category="a2t",
         eval_splits=["test_5s", "test"],
         eval_langs=["zxx-Zxxx"],
