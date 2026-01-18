@@ -189,3 +189,5 @@ have columns `query-id`, `corpus-ids`."""
 
 RetrievalOutputType = dict[str, dict[str, float]]
 """Retrieval output, containing the scores for each query-document pair."""
+RetrievalCompressionOutputType = dict[str, dict[str, dict[str, float]]]
+"""Retrieval output, containing the scores for each query-document pair per compression level."""

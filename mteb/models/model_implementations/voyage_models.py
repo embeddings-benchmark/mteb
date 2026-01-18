@@ -233,6 +233,7 @@ voyage_4 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 voyage_4_lite = ModelMeta(
@@ -259,6 +260,7 @@ voyage_4_lite = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 voyage_4_large = ModelMeta(
@@ -285,6 +287,7 @@ voyage_4_large = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 voyage_3_large = ModelMeta(
@@ -312,6 +315,7 @@ voyage_3_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     superseded_by="voyageai/voyage-4-large",
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 
@@ -340,6 +344,7 @@ voyage_3_5 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     superseded_by="voyageai/voyage-4",
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 voyage_3_5_int8 = ModelMeta(
@@ -367,6 +372,7 @@ voyage_3_5_int8 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     adapted_from="voyageai/voyage-3.5",
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 voyage_3_5_binary = ModelMeta(
@@ -394,6 +400,7 @@ voyage_3_5_binary = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     adapted_from="voyageai/voyage-3.5",
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 voyage_large_2_instruct = ModelMeta(
@@ -420,6 +427,7 @@ voyage_large_2_instruct = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 voyage_finance_2 = ModelMeta(
@@ -446,6 +454,7 @@ voyage_finance_2 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 voyage_law_2 = ModelMeta(
@@ -472,6 +481,7 @@ voyage_law_2 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 voyage_code_2 = ModelMeta(
@@ -498,6 +508,7 @@ voyage_code_2 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 voyage_code_3 = ModelMeta(
@@ -524,6 +535,7 @@ voyage_code_3 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,  # src: private communication with Voyage
     public_training_code=None,
     public_training_data=None,
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 
@@ -551,6 +563,7 @@ voyage_large_2 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 voyage_2 = ModelMeta(
@@ -577,7 +590,9 @@ voyage_2 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
+
 voyage_multilingual_2 = ModelMeta(
     name="voyageai/voyage-multilingual-2",
     model_type=["dense"],
@@ -602,6 +617,7 @@ voyage_multilingual_2 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 voyage_3 = ModelMeta(
@@ -628,6 +644,7 @@ voyage_3 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 voyage_3_lite = ModelMeta(
@@ -655,6 +672,7 @@ voyage_3_lite = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     superseded_by="voyageai/voyage-4-lite",
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )
 
 voyage_3_exp = ModelMeta(
@@ -743,4 +761,5 @@ voyage_3_exp = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
+    embedding_types=VOYAGE_DTYPE_TRANSLATION.keys(),
 )

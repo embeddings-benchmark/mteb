@@ -17,6 +17,7 @@ from mteb.types import (
     EncodeKwargs,
     PromptType,
     QueryDatasetType,
+    RetrievalCompressionOutputType,
     RetrievalOutputType,
     TopRankedDocumentsType,
 )
@@ -37,12 +38,26 @@ class SearchEncoderWrapper:
         model: EncoderProtocol,
         corpus_chunk_size: int = 50_000,
         index_backend: IndexEncoderSearchProtocol | None = None,
+        quantize: bool = False,
     ) -> None:
         self.model = model
         self.task_corpus = None
         self.mteb_model_meta = model.mteb_model_meta
         self.corpus_chunk_size = corpus_chunk_size
         self.index_backend = index_backend
+        self.quantize = quantize
+        self.min_quantize_chunk_size = 10_000
+        self.quantization_levels = (
+            ["full", "float8", "int8", "int4", "binary"] if quantize else ["full"]
+        )
+        # Remove quantization levels the model natively supports
+        embed_types = None
+        if model.mteb_model_meta:
+            embed_types = model.mteb_model_meta.embedding_types
+        if embed_types:
+            for embed_type in embed_types:
+                if embed_type in self.quantization_levels:
+                    self.quantization_levels.remove(embed_type)
 
     def index(
         self,
@@ -91,7 +106,7 @@ class SearchEncoderWrapper:
         top_k: int,
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
-    ) -> RetrievalOutputType:
+    ) -> RetrievalCompressionOutputType:
         """Search the corpus for the given queries.
 
         Args:
@@ -141,6 +156,7 @@ class SearchEncoderWrapper:
                     encode_kwargs=encode_kwargs,
                 )
             else:
+                # TODO: handle Faiss index with compression
                 cos_scores_top_k_values, cos_scores_top_k_idx = (
                     self.index_backend.search(
                         query_embeddings,
@@ -201,10 +217,19 @@ class SearchEncoderWrapper:
         # Reset the task corpus dataloader to None to free up memory
         self.task_corpus = None
 
-        results: RetrievalOutputType = {qid: {} for qid in query_idx_to_id.values()}
-        for qid in result_heaps:
-            for score, corpus_id in result_heaps[qid]:
-                results[qid][corpus_id] = score
+        results = {
+            level: {qid: {} for qid in query_idx_to_id.values()}
+            for level in self.quantization_levels
+        }
+        if len(result_heaps) == len(query_idx_to_id):
+            for qid in result_heaps:
+                for score, corpus_id in result_heaps[qid]:
+                    results["full"][qid][corpus_id] = score
+        else:
+            for compression_level in result_heaps:
+                for qid in result_heaps[compression_level]:
+                    for score, corpus_id in result_heaps[compression_level][qid]:
+                        results[compression_level][qid][corpus_id] = score
 
         return results
 
@@ -217,16 +242,23 @@ class SearchEncoderWrapper:
         hf_split: str,
         top_k: int,
         encode_kwargs: EncodeKwargs,
-    ) -> dict[str, list[tuple[float, str]]]:
+    ) -> dict[str, dict[str, list[tuple[float, str]]]]:
         logger.info("Encoding Corpus in batches (this might take a while)...")
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
 
         itr = range(0, len(self.task_corpus), self.corpus_chunk_size)
+        if self.quantize and self.corpus_chunk_size < self.min_quantize_chunk_size:
+            logger.warning(
+                f"Applying quantization on small batches can lead to unstable threshold estimation. "
+                f"Consider increasing the batch size to {self.min_quantize_chunk_size}."
+            )
 
-        result_heaps: dict[str, list[tuple[float, str]]] = {
-            qid: [] for qid in query_idx_to_id.values()
+        result_heaps = {
+            level: {qid: [] for qid in query_idx_to_id.values()}
+            for level in self.quantization_levels
         }
+
         for batch_num, corpus_start_idx in enumerate(itr):
             logger.info(f"Encoding Batch {batch_num + 1}/{len(itr)}...")
             corpus_end_idx = min(
@@ -253,30 +285,13 @@ class SearchEncoderWrapper:
 
             # Compute similarities using either cosine-similarity or dot product
             logger.info("Computing Similarities...")
-            scores = self.model.similarity(query_embeddings, sub_corpus_embeddings)
-
-            # get top-k values
-            cos_scores_top_k_values_tensor, cos_scores_top_k_idx_tensor = torch.topk(
-                torch.as_tensor(scores),
-                min(
-                    top_k + 1,
-                    len(scores[1]) if len(scores) > 1 else len(scores[-1]),
-                ),
-                dim=1,
-                largest=True,
-            )
-            cos_scores_top_k_idx = cos_scores_top_k_idx_tensor.cpu().tolist()
-            cos_scores_top_k_values = cos_scores_top_k_values_tensor.cpu().tolist()
-
-            sub_corpus_ids = list(sub_corpus_ids)
-            result_heaps = self._sort_full_corpus_results(
-                result_heaps=result_heaps,
-                query_idx_to_id=query_idx_to_id,
-                query_embeddings=query_embeddings,
-                cos_scores_top_k_idx=cos_scores_top_k_idx,
-                cos_scores_top_k_values=cos_scores_top_k_values,
-                sub_corpus_ids=sub_corpus_ids,
-                top_k=top_k,
+            result_heaps = self._get_topk(
+                query_idx_to_id,
+                sub_corpus_ids,
+                result_heaps,
+                query_embeddings,
+                sub_corpus_embeddings,
+                top_k,
             )
         return result_heaps
 
@@ -309,6 +324,89 @@ class SearchEncoderWrapper:
                     # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
                     heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
         return result_heaps
+
+    def _get_topk(
+            self,
+            query_idx_to_id: dict[int, str],
+            sub_corpus_ids: list[str],
+            result_heaps: dict[str, dict[str, list]],
+            query_embeddings: Array,
+            sub_corpus_embeddings: Array,
+            top_k: int,
+    ) -> dict[str, dict[str, list[tuple[float, str]]]]:
+        # Compute similarities using either cosine-similarity or dot product
+        for level in self.quantization_levels:
+            if level == "full":
+                logger.info("Computing Similarities...")
+                scores = self.model.similarity(query_embeddings, sub_corpus_embeddings)
+            else:
+                # TODO: better use hamming distance for binary embeddings?
+                logger.info(f"Compressing embeddings to {level}...")
+                q_embeds, c_embeds = self._quantize_embeddings(
+                    torch.tensor(query_embeddings),
+                    torch.tensor(sub_corpus_embeddings),
+                    level,
+                )
+                scores = self.model.similarity(q_embeds, c_embeds)
+
+            # get top-k values
+            cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
+                torch.as_tensor(scores),
+                min(
+                    top_k + 1,
+                    len(scores[1]) if len(scores) > 1 else len(scores[-1]),
+                ),
+                dim=1,
+                largest=True,
+            )
+            cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
+            cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
+
+            sub_corpus_ids = list(sub_corpus_ids)
+            result_heaps[level] = self._sort_full_corpus_results(
+                result_heaps=result_heaps[level],
+                query_idx_to_id=query_idx_to_id,
+                query_embeddings=query_embeddings,
+                cos_scores_top_k_idx=cos_scores_top_k_idx,
+                cos_scores_top_k_values=cos_scores_top_k_values,
+                sub_corpus_ids=sub_corpus_ids,
+                top_k=top_k,
+            )
+        return result_heaps
+
+    def _quantize_embeddings(
+            self,
+            query_embeddings: torch.tensor,
+            sub_corpus_embeddings: torch.tensor,
+            compression_level: str,
+    ) -> tuple[torch.tensor, torch.tensor]:
+        quantiles = torch.tensor([0.025, 0.975])
+        if compression_level == "float8":
+            # Cast to float8, then back to float16 using PyTorch as numpy doesn't support float8
+            q_embeds = query_embeddings.type(torch.float8_e4m3fn).type(torch.float16)
+            c_embeds = sub_corpus_embeddings.type(torch.float8_e4m3fn).type(
+                torch.float16
+            )
+        elif compression_level == "int8" or compression_level == "int4":
+            num_bits = 8 if compression_level == "int8" else 4
+            cutoffs = torch.quantile(sub_corpus_embeddings, quantiles, dim=0)
+            c_embeds = torch.clip(sub_corpus_embeddings, cutoffs[0], cutoffs[1])
+            q_embeds = torch.clip(query_embeddings, cutoffs[0], cutoffs[1])
+            mins, maxs = (
+                torch.min(c_embeds, dim=0).values,
+                torch.max(c_embeds, dim=0).values,
+            )
+            steps = (maxs - mins) / (2 ** num_bits - 1)
+            c_embeds = torch.floor((c_embeds - mins) / steps) - int(2 ** num_bits * 0.5)
+            q_embeds = torch.floor((q_embeds - mins) / steps) - int(2 ** num_bits * 0.5)
+        elif compression_level == "binary":
+            q_embeds = torch.where(query_embeddings > 0, 1.0, 0.0)
+            c_embeds = torch.where(sub_corpus_embeddings > 0, 1.0, 0.0)
+        else:
+            raise ValueError(
+                f"Quantization method {compression_level} is not supported!"
+            )
+        return q_embeds, c_embeds
 
     def _rerank_documents(
         self,

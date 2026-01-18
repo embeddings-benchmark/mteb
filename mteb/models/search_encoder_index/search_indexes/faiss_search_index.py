@@ -47,7 +47,7 @@ class FaissSearchIndex:
         else:
             raise ValueError(
                 f"FAISS backend does not support similarity function {model.mteb_model_meta.similarity_fn_name}. "
-                f"Available: {ScoringFunction.DOT_PRODUCT}, {ScoringFunction.COSINE}."
+                f"Available: {ScoringFunction.DOT_PRODUCT}, {ScoringFunction.COSINE}, {ScoringFunction.EUCLIDEAN}."
             )
 
         self.idxs: list[str] = []
