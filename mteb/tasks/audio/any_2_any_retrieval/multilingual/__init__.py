@@ -7,7 +7,11 @@ from .common_voice import (
 )
 from .fleurs import FleursA2TRetrieval, FleursT2ARetrieval
 from .google_svq import GoogleSVQA2TRetrieval, GoogleSVQT2ARetrieval
-from .jam_alt import JamAltArtist, JamAltLyricsA2T, JamAltLyricsT2A
+from .jam_alt import (
+    JamAltArtistA2ARetrieval,
+    JamAltLyricA2TRetrieval,
+    JamAltLyricT2ARetrieval,
+)
 
 __all__ = [
     "AudioCapsA2TRetrieval",
@@ -20,7 +24,7 @@ __all__ = [
     "FleursT2ARetrieval",
     "GoogleSVQA2TRetrieval",
     "GoogleSVQT2ARetrieval",
-    "JamAltArtist",
-    "JamAltLyricsA2T",
-    "JamAltLyricsT2A",
+    "JamAltArtistA2ARetrieval",
+    "JamAltLyricA2TRetrieval",
+    "JamAltLyricT2ARetrieval",
 ]

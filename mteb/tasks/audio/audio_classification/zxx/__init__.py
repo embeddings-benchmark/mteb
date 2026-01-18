@@ -7,7 +7,7 @@ from .mridingham_stroke import MridinghamStroke
 from .mridingham_tonic import MridinghamTonic
 from .n_synth import NSynth
 from .tut_acoustic_scenes import TUTAcousticScenesClassification
-from .urban_sound8k import UrbanSound8kZeroshotClassification
+from .urban_sound8k import UrbanSound8kClassification
 
 __all__ = [
     "BeijingOpera",
@@ -19,5 +19,5 @@ __all__ = [
     "MridinghamTonic",
     "NSynth",
     "TUTAcousticScenesClassification",
-    "UrbanSound8kZeroshotClassification",
+    "UrbanSound8kClassification",
 ]
