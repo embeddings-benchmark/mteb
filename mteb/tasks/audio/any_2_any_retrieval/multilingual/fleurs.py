@@ -227,7 +227,7 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
         self, id_col="path", text_col="transcription", audio_col="audio"
     ):
         """T2A: Query = text, Corpus = audio."""
-        for lang, _ in self.metadata.eval_langs.items():
+        for lang in self.metadata.eval_langs:
             lang_dataset = datasets.load_dataset(
                 self.metadata.dataset["path"],
                 lang,

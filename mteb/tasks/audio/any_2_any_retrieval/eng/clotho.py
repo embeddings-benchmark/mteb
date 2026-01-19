@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from datasets import Dataset, DatasetDict, load_dataset
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
