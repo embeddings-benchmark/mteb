@@ -32,7 +32,7 @@ class RomaTalesBitextMining(AbsTaskBitextMining):
         bibtex_citation="",
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return
@@ -44,7 +44,7 @@ class RomaTalesBitextMining(AbsTaskBitextMining):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         for lang in self.hf_subsets:
             self.dataset[lang] = self.dataset[lang].rename_columns(
                 {"romani": "sentence1", "hungarian": "sentence2"}

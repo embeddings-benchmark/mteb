@@ -91,6 +91,7 @@ class PairClassificationEvaluator(Evaluator):
         self,
         model: EncoderProtocol,
         encode_kwargs: EncodeKwargs,
+        num_proc: int = 1,
     ) -> PairClassificationDistances:
         logger.info("Running pair classification - Encoding samples (1/2)")
         embeddings1 = model.encode(
@@ -98,6 +99,7 @@ class PairClassificationEvaluator(Evaluator):
                 self.dataset,
                 task_metadata=self.task_metadata,
                 input_column=self.input1_column_name,
+                num_proc=num_proc,
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
@@ -112,6 +114,7 @@ class PairClassificationEvaluator(Evaluator):
                 self.dataset,
                 task_metadata=self.task_metadata,
                 input_column=self.input2_column_name,
+                num_proc=num_proc,
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,

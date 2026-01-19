@@ -54,6 +54,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
             hf_split: str,
             hf_subset: str,
             encode_kwargs: EncodeKwargs,
+            num_proc: int = 1,
         ) -> None:
             logger.info("Encoding Corpus...")
             corpus_texts = [
@@ -80,6 +81,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
             top_k: int,
             encode_kwargs: EncodeKwargs,
             top_ranked: TopRankedDocumentsType | None = None,
+            num_proc: int = 1,
         ) -> RetrievalOutputType:
             logger.info("Encoding Queries...")
             query_ids = list(queries["id"])

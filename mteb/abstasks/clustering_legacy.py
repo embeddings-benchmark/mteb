@@ -95,6 +95,7 @@ class AbsTaskClusteringLegacy(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> ScoresDict:
         if not isinstance(model, EncoderProtocol):
@@ -159,7 +160,11 @@ class AbsTaskClusteringLegacy(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        evaluate_clusters = evaluator(model, encode_kwargs=encode_kwargs)
+        evaluate_clusters = evaluator(
+            model,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
         if prediction_folder:
             self._save_task_predictions(
                 evaluate_clusters,
@@ -238,11 +243,12 @@ class AbsTaskClusteringLegacy(AbsTask):
             label_statistics=label_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         self._upload_dataset_to_hub(
             repo_name,
             [
                 self.input_column_name,
                 self.label_column_name,
             ],
+            num_proc=num_proc,
         )

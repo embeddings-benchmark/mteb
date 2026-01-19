@@ -51,7 +51,7 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
         **common_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -108,7 +108,7 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
         **common_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -168,7 +168,7 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
         **common_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -225,7 +225,7 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         **common_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return

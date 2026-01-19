@@ -125,6 +125,7 @@ def _evaluate_task(
                 co2_tracker=False,
                 prediction_folder=prediction_folder,
                 public_only=public_only,
+                num_proc=num_proc,
             )
         if isinstance(result, TaskResult):
             result.kg_co2_emissions = tracker.final_emissions
@@ -137,7 +138,7 @@ def _evaluate_task(
     data_preloaded = task.data_loaded
     if not data_preloaded:
         try:
-            task.load_data()
+            task.load_data(num_proc=num_proc)
         except DatasetNotFoundError as e:
             if not task.metadata.is_public and public_only is None:
                 msg = (
@@ -163,6 +164,7 @@ def _evaluate_task(
             subsets_to_run=hf_subsets,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
+            num_proc=num_proc,
         )
         tock = time()
 
@@ -280,6 +282,7 @@ def evaluate(
     prediction_folder: Path | str | None = None,
     show_progress_bar: bool = True,
     public_only: bool | None = None,
+    num_proc: int = 1,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -288,7 +291,7 @@ def evaluate(
         tasks: A task to run.
         co2_tracker: If True, track the CO₂ emissions of the evaluation, required codecarbon to be installed, which can be installed using
             `pip install mteb[codecarbon]`. If none is passed co2 tracking will only be run if codecarbon is installed.
-        encode_kwargs: Additional keyword arguments passed to the models `encode` method.
+        encode_kwargs: Additional keyword arguments passed to the models `encode` and `load_data` methods;
         raise_error: If True, raise an error if the task fails. If False, return an empty list.
         cache: The cache to use for loading the results. If None, then no cache will be used. The default cache saved the cache in the
             `~/.cache/mteb` directory. It can be overridden by setting the `MTEB_CACHE` environment variable to a different directory or by directly
@@ -304,6 +307,7 @@ def evaluate(
         show_progress_bar: Whether to show a progress bar when running the evaluation. Default is True. Setting this to False will also set the
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
         public_only: Run only public tasks. If None, it will attempt to run the private task.
+        num_proc: Number of processes to use during data loading and transformation. Defaults to 1.
 
     Returns:
         The results of the evaluation.
@@ -356,6 +360,7 @@ def evaluate(
             prediction_folder=prediction_folder,
             show_progress_bar=show_progress_bar,
             public_only=public_only,
+            num_proc=num_proc,
         )
         combined_results = aggregated_task.combine_task_results(results.task_results)
         return ModelResult(
@@ -388,6 +393,7 @@ def evaluate(
                 prediction_folder=prediction_folder,
                 show_progress_bar=False,
                 public_only=public_only,
+                num_proc=num_proc,
             )
             evaluate_results.extend(_res.task_results)
             if _res.exceptions:
@@ -467,6 +473,7 @@ def evaluate(
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 public_only=public_only,
+                num_proc=num_proc,
             )
         except Exception as e:
             logger.error(
@@ -482,6 +489,7 @@ def evaluate(
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             public_only=public_only,
+            num_proc=num_proc,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 

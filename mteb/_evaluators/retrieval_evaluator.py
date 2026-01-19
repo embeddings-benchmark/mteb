@@ -55,6 +55,7 @@ class RetrievalEvaluator(Evaluator):
         self,
         search_model: SearchProtocol,
         encode_kwargs: EncodeKwargs,
+        num_proc: int = 1,
     ) -> RetrievalOutputType:
         logger.info("Running retrieval task - Indexing corpus...")
         search_model.index(
@@ -63,6 +64,7 @@ class RetrievalEvaluator(Evaluator):
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
             encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
         )
         logger.info("Running retrieval task - Searching queries...")
         return search_model.search(
@@ -73,6 +75,7 @@ class RetrievalEvaluator(Evaluator):
             hf_subset=self.hf_subset,
             encode_kwargs=encode_kwargs,
             top_ranked=self.top_ranked,
+            num_proc=num_proc,
         )
 
     def evaluate(
