@@ -40,6 +40,7 @@ from .built_bench_retrieval import BuiltBenchRetrieval
 from .chat_doctor_retrieval import ChatDoctorRetrieval
 from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval
 from .chem_nq_retrieval import ChemNQRetrieval
+from .chemrxiv import ChemRxivRetrieval
 from .cirr_it2i_retrieval import CIRRIT2IRetrieval
 from .climate_fever_retrieval import (
     ClimateFEVER,
@@ -296,6 +297,7 @@ __all__ = [
     "ChatDoctorRetrieval",
     "ChemHotpotQARetrieval",
     "ChemNQRetrieval",
+    "ChemRxivRetrieval",
     "ClimateFEVER",
     "ClimateFEVERHardNegatives",
     "ClimateFEVERHardNegativesV2",

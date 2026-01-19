@@ -1,8 +1,14 @@
-from collections.abc import Iterable, Sequence
+from __future__ import annotations
 
-from mteb.abstasks import AbsTask
-from mteb.benchmarks import Benchmark
+from typing import TYPE_CHECKING
+
 from mteb.get_tasks import MTEBTasks
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
+
+    from mteb.abstasks import AbsTask
+    from mteb.benchmarks import Benchmark
 
 
 def _display_benchmarks(benchmarks: Sequence[Benchmark]) -> None:

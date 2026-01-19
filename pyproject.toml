@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.7.0"
+version = "2.7.2"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -238,7 +238,9 @@ select = [
     "PTH",     # use pathlib
     "TID",     # tidy-imports
     "D",       # pydocstyle
-    "PGH",  # pygrep-hooks Use specific rule codes when ignoring type issues
+    "PGH",     # pygrep-hooks Use specific rule codes when ignoring type issues
+    "LOG",     # logging
+    "TC",      # type-checking
 ]
 
 ignore = [
@@ -251,14 +253,29 @@ ignore = [
     "D415",     # First line should end with a period
     "C408",     # don't use unecc. collection call, e.g. dict over {}
 ]
+future-annotations = true  # For TC rules
+typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
+
 
 [tool.ruff.lint.per-file-ignores]
 "scripts/*" = ["ALL"]
-"docs/*" = ["D", "DOC"]
-"tests/*" = ["RUF012", "D", "DOC"]
+"docs/*" = [
+    "D",
+    "DOC",
+]
+"tests/*" = [
+    "RUF012",
+    "D",
+    "DOC",
+    "TC",
+]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = ["D", "DOC"]
 "mteb/models/model_implementations/*" = ["D", "DOC"]
+"mteb/benchmarks/benchmark.py" = [
+    # pydantic would try to validate fields in Benchmark class
+    "TC",
+]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false
@@ -276,6 +293,13 @@ convention = "google"
 [tool.ruff.lint.flake8-annotations]
 mypy-init-return = true
 suppress-none-returning = true
+
+[tool.ruff.lint.flake8-type-checking]
+strict = true
+runtime-evaluated-base-classes = [
+    "pydantic.BaseModel",
+    "mteb.abstasks.task_metadata.TaskMetadata",  # https://github.com/astral-sh/ruff/issues/7866
+]
 
 [tool.semantic_release]
 branch = "main"

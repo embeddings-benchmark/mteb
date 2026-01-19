@@ -1,15 +1,20 @@
+from __future__ import annotations
+
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_image_dependencies
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 EVA_CLIP_CITATION = """@article{EVA-CLIP,
       title={EVA-CLIP: Improved Training Techniques for CLIP at Scale},

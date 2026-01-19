@@ -1,5 +1,7 @@
 from mteb.models.model_implementations.arctic_models import arctic_v1_training_datasets
-from mteb.models.model_implementations.mxbai_models import mixedbread_training_data
+from mteb.models.model_implementations.mixedbread_ai_models import (
+    mixedbread_training_data,
+)
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 

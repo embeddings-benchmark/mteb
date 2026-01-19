@@ -1,16 +1,22 @@
+from __future__ import annotations
+
 import time
 from functools import wraps
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
 
 VOYAGE_TRAINING_DATA = set(
     # Self-reported (message from VoyageAI member)
@@ -25,6 +31,9 @@ VOYAGE_DTYPE_TRANSLATION = {
 
 # Total token limits per model based on VoyageAI documentation
 VOYAGE_TOTAL_TOKEN_LIMITS = {
+    "voyage-4-large": 120_000,
+    "voyage-4": 320_000,
+    "voyage-4-lite": 1_000_000,
     "voyage-3.5-lite": 1_000_000,
     "voyage-3.5": 320_000,
     "voyage-2": 320_000,
@@ -206,6 +215,32 @@ model_prompts = {
     PromptType.document.value: "document",
 }
 
+voyage_4 = ModelMeta(
+    name="voyageai/voyage-4",
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-01-15",
+    languages=None,  # supported languages not specified
+    loader=VoyageModel,
+    loader_kwargs=dict(
+        max_tokens=32000,
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2026/01/15/voyage-4/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+)
+
 voyage_4_lite = ModelMeta(
     name="voyageai/voyage-4-lite",
     model_type=["dense"],
@@ -310,6 +345,7 @@ voyage_3_5 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    superseded_by="voyageai/voyage-4",
 )
 
 voyage_3_5_int8 = ModelMeta(

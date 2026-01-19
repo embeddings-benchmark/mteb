@@ -1,7 +1,7 @@
 ## vLLM
 
 !!! note
-    vLLM currently supports only a limited number of models, and many implementations have subtle differences compared to the default implementations in mteb (see the [overview issue](add me) for more information). For the full list of supported models, refer to the [vllm documentation](https://docs.vllm.ai/en/stable/models/supported_models/#pooling-models).
+    vLLM currently supports only a limited number of models, and many implementations have subtle differences compared to the default implementations in mteb. For the full list of supported models, refer to the [vllm documentation](https://docs.vllm.ai/en/stable/models/supported_models/#pooling-models).
 
 
 ## Installation
@@ -23,17 +23,17 @@ To use vLLM with MTEB you have to wrap the model with its respective wrapper.
 
 !!! note
     you must update your Python code to guard usage of vllm behind a if __name__ == '__main__': block. For example, instead of this:
-    
+
     ```python
     import vllm
-    
+
     llm = vllm.LLM(...)
     ```
     try this instead:
     ```python
     if __name__ == '__main__':
         import vllm
-    
+
         llm = vllm.LLM(...)
     ```
 
