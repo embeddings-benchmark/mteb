@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import logging
+from typing import TYPE_CHECKING
 
 from datasets import Dataset
 
@@ -6,12 +9,16 @@ from mteb._create_dataloaders import (
     _create_dataloader_from_texts,
     create_dataloader,
 )
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import EncoderProtocol
 from mteb.similarity_functions import similarity
-from mteb.types import Array, EncodeKwargs
 
 from .evaluator import Evaluator
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import EncoderProtocol
+    from mteb.types import Array, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 

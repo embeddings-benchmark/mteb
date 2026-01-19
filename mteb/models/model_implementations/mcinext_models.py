@@ -1,16 +1,19 @@
+from __future__ import annotations
+
 import logging
 import os
 import time
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import requests
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
-from mteb.types import PromptType
 
+if TYPE_CHECKING:
+    from mteb.types import PromptType
 logger = logging.getLogger(__name__)
 
 HAKIM_CITATION = """@article{sarmadi2025hakim,

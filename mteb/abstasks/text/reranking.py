@@ -100,7 +100,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
         if self.metadata.name not in OLD_FORMAT_RERANKING_TASKS:
             return
 
-        logging.info(
+        logger.info(
             f"Transforming old format to standard format for {self.metadata.name}"
         )
 

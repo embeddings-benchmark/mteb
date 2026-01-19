@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 import logging
 from collections import defaultdict
-from pathlib import Path
-from typing import Any, ClassVar, TypedDict, cast
+from typing import TYPE_CHECKING, Any, ClassVar, TypedDict, cast
 
 from datasets import Dataset, DatasetDict
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
@@ -9,9 +10,15 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 from mteb._evaluators import BitextMiningEvaluator
 from mteb.abstasks._statistics_calculation import calculate_text_statistics
 from mteb.abstasks.abstask import AbsTask
-from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import EncodeKwargs, HFSubset, ScoresDict
-from mteb.types.statistics import SplitDescriptiveStatistics, TextStatistics
+from mteb.models import EncoderProtocol
+from mteb.types.statistics import SplitDescriptiveStatistics
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from mteb.models import MTEBModels
+    from mteb.types import EncodeKwargs, HFSubset, ScoresDict
+    from mteb.types.statistics import TextStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -91,7 +98,7 @@ class AbsTaskBitextMining(AbsTask):
         if subsets_to_run is not None:
             hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
-        encoder_model = cast(EncoderProtocol, model)
+        encoder_model = cast("EncoderProtocol", model)
 
         if self.dataset is None:
             raise ValueError("Dataset is not loaded.")
@@ -130,7 +137,7 @@ class AbsTaskBitextMining(AbsTask):
                     **kwargs,
                 )
 
-        return cast(dict[HFSubset, ScoresDict], scores)
+        return cast("dict[HFSubset, ScoresDict]", scores)
 
     def _get_pairs(self, parallel: bool) -> list[tuple[str, str]]:
         pairs = self._DEFAULT_PAIR

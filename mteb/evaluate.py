@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import warnings
-from collections.abc import Iterable
 from pathlib import Path
 from time import time
 from typing import TYPE_CHECKING, cast
@@ -17,21 +16,24 @@ from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import (
-    MTEBModels,
-)
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
-from mteb.types import HFSubset, PromptType, SplitName
-from mteb.types._encoder_io import EncodeKwargs
-from mteb.types._metadata import ModelName, Revision
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from sentence_transformers import CrossEncoder, SentenceTransformer
+
+    from mteb.models.models_protocols import (
+        MTEBModels,
+    )
+    from mteb.types import EncodeKwargs, HFSubset, SplitName
+    from mteb.types._metadata import ModelName, Revision
 
 logger = logging.getLogger(__name__)
 
@@ -69,13 +71,13 @@ def _sanitize_model(
         meta = getattr(model, "mteb_model_meta")
         if not isinstance(meta, ModelMeta):
             meta = ModelMeta._from_hub(None)
-        wrapped_model = cast(MTEBModels | ModelMeta, model)
+        wrapped_model = cast("MTEBModels | ModelMeta", model)
     else:
         meta = ModelMeta._from_hub(None) if not isinstance(model, ModelMeta) else model
         wrapped_model = meta
 
-    model_name = cast(str, meta.name)
-    model_revision = cast(str, meta.revision)
+    model_name = cast("str", meta.name)
+    model_revision = cast("str", meta.revision)
 
     return wrapped_model, meta, model_name, model_revision
 
@@ -133,8 +135,8 @@ def _evaluate_task(
 
     task.check_if_dataset_is_superseded()
 
-    data_loaded = task.data_loaded
-    if not data_loaded:
+    data_preloaded = task.data_loaded
+    if not data_preloaded:
         try:
             task.load_data(num_proc=num_proc)
         except DatasetNotFoundError as e:
@@ -178,7 +180,7 @@ def _evaluate_task(
         kg_co2_emissions=None,
     )
 
-    if data_loaded:  # only unload if we loaded the data
+    if not data_preloaded:  # only unload if we loaded the data
         task.unload_data()
 
     return result
@@ -204,10 +206,10 @@ def _check_model_modalities(
     if isinstance(tasks, AbsTask):
         check_tasks = [tasks]
     elif isinstance(tasks, Benchmark):
-        benchmark = cast(Benchmark, tasks)
+        benchmark = cast("Benchmark", tasks)
         check_tasks = benchmark.tasks
     else:
-        check_tasks = cast(Iterable[AbsTask], tasks)
+        check_tasks = cast("Iterable[AbsTask]", tasks)
 
     warnings, errors = [], []
 
@@ -301,7 +303,7 @@ def evaluate(
                 changed.
             - "only-cache": Only load the results from the cache folder and do not run the task. Useful if you just want to load the results from the
                 cache.
-        prediction_folder: Optional folder in which to save model predictions for the task. Predictions of the tasks will be sabed in `prediction_folder/{task_name}_predictions.json`
+        prediction_folder: Optional folder in which to save model predictions for the task. Predictions of the tasks will be saved in `prediction_folder/{task_name}_predictions.json`
         show_progress_bar: Whether to show a progress bar when running the evaluation. Default is True. Setting this to False will also set the
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
         public_only: Run only public tasks. If None, it will attempt to run the private task.
@@ -346,7 +348,7 @@ def evaluate(
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
-        aggregated_task = cast(AbsTaskAggregate, tasks)
+        aggregated_task = cast("AbsTaskAggregate", tasks)
         results = evaluate(
             model,
             aggregated_task.metadata.tasks,
@@ -370,7 +372,7 @@ def evaluate(
     if isinstance(tasks, AbsTask):
         task = tasks
     else:
-        tasks = cast(Iterable[AbsTask], tasks)
+        tasks = cast("Iterable[AbsTask]", tasks)
         evaluate_results = []
         exceptions = []
         tasks_tqdm = tqdm(

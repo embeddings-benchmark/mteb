@@ -9,7 +9,7 @@ from tqdm.auto import tqdm
 from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import PromptType
+from mteb.types import PromptType
 
 from .bge_models import bge_chinese_training_data
 from .nvidia_models import nvidia_training_datasets

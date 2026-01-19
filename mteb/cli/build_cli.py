@@ -3,17 +3,20 @@ import logging
 import os
 import warnings
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import torch
 from rich.logging import RichHandler
 
 import mteb
-from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
-from mteb.types._encoder_io import EncodeKwargs
+
+if TYPE_CHECKING:
+    from mteb.abstasks.abstask import AbsTask
+    from mteb.types import EncodeKwargs
 
 logger = logging.getLogger(__name__)
 

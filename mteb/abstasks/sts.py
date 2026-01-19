@@ -1,19 +1,14 @@
-import logging
-from pathlib import Path
-from typing import Any, TypedDict, cast
+from __future__ import annotations
 
-from datasets import Dataset
+import logging
+from typing import TYPE_CHECKING, Any, TypedDict, cast
+
 from scipy.stats import pearsonr, spearmanr
 
 from mteb._evaluators import AnySTSEvaluator
-from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
-from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import EncodeKwargs, PromptType
+from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
-    ImageStatistics,
-    ScoreStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
 
 from ._statistics_calculation import (
@@ -22,6 +17,20 @@ from ._statistics_calculation import (
     calculate_text_statistics,
 )
 from .abstask import AbsTask
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from datasets import Dataset
+
+    from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
+    from mteb.models import MTEBModels
+    from mteb.types import EncodeKwargs, PromptType
+    from mteb.types.statistics import (
+        ImageStatistics,
+        ScoreStatistics,
+        TextStatistics,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -187,7 +196,7 @@ class AbsTaskSTS(AbsTask):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> AnySTSDescriptiveStatistics:
         first_column, second_column = self.column_names
-        self.dataset = cast(dict[str, dict[str, Dataset]], self.dataset)
+        self.dataset = cast("dict[str, dict[str, Dataset]]", self.dataset)
 
         if hf_subset:
             sentence1 = self.dataset[hf_subset][split][first_column]

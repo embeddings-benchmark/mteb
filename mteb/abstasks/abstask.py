@@ -1,30 +1,38 @@
+from __future__ import annotations
+
 import json
 import logging
 import warnings
 from abc import ABC, abstractmethod
-from collections.abc import Mapping, Sequence
+from collections.abc import Sequence
 from copy import copy
 from pathlib import Path
-from typing import Any, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
 from datasets import ClassLabel, Dataset, DatasetDict, load_dataset
 from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm.auto import tqdm
-from typing_extensions import Self
 
 from mteb._set_seed import _set_seed
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models import (
     CrossEncoderProtocol,
     EncoderProtocol,
-    MTEBModels,
     SearchProtocol,
 )
-from mteb.types import HFSubset, Modalities, ScoresDict
-from mteb.types._encoder_io import EncodeKwargs
-from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+    from typing_extensions import Self
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import (
+        MTEBModels,
+    )
+    from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict
+    from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -168,7 +176,7 @@ class AbsTask(ABC):
         if not self.data_loaded:
             self.load_data()
 
-        self.dataset = cast(dict[HFSubset, DatasetDict], self.dataset)
+        self.dataset = cast("dict[HFSubset, DatasetDict]", self.dataset)
 
         scores = {}
         if self.hf_subsets is None:

@@ -1,10 +1,15 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from collections.abc import Iterable, Mapping
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from mteb.abstasks.abstask import _set_seed
-from mteb.models import EncoderProtocol
-from mteb.types import EncodeKwargs
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Mapping
+
+    from mteb.models import EncoderProtocol
+    from mteb.types import EncodeKwargs
 
 
 class Evaluator(ABC):

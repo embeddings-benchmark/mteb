@@ -1,12 +1,17 @@
+from __future__ import annotations
+
 import random
-from collections.abc import Iterable
 from itertools import islice
-from typing import TypeVar
+from typing import TYPE_CHECKING, TypeVar
 
 import datasets
 
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
 
 T = TypeVar("T")
 

@@ -1,16 +1,18 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING, Any
 
 import torch
+from packaging.version import Version
 from torch.utils.data import DataLoader
+from transformers import __version__ as transformers_version
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
 
 if TYPE_CHECKING:
-    pass
-
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperforming,
       title={Llama Nemoretriever Colembed: Top-Performing Text-Image Retrieval Model},
@@ -34,6 +36,14 @@ class LlamaNemoretrieverColembed(AbsEncoder):
         attn_implementation="flash_attention_2",
         **kwargs,
     ):
+        required_transformers_version = "4.49.0"
+
+        if Version(transformers_version) != Version(required_transformers_version):
+            raise RuntimeError(
+                f"transformers version {transformers_version} is not match with required "
+                f"install version {required_transformers_version} to run `nvidia/llama-nemoretriever-colembed`"
+            )
+
         from transformers import AutoModel
 
         self.model = AutoModel.from_pretrained(
@@ -148,7 +158,7 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     name="nvidia/llama-nemoretriever-colembed-1b-v1",
     model_type=["late-interaction"],
     languages=["eng-Latn"],
-    revision="1f0fdea7f5b19532a750be109b19072d719b8177",
+    revision="6eade800103413033f260bb55b49fe039fd28a6e",
     release_date="2025-06-27",
     modalities=["image", "text"],
     n_parameters=2_418_000_000,
@@ -175,7 +185,7 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     name="nvidia/llama-nemoretriever-colembed-3b-v1",
     model_type=["late-interaction"],
     languages=["eng-Latn"],
-    revision="50c36f4d5271c6851aa08bd26d69f6e7ca8b870c",
+    revision="4194bdd2cd2871f220ddba6273ce173ef1217a1e",
     release_date="2025-06-27",
     modalities=["image", "text"],
     n_parameters=4_407_000_000,
