@@ -1,8 +1,7 @@
 from collections import defaultdict
 
 import datasets
-from datasets import Dataset, DatasetDict
-from tqdm import tqdm
+from datasets import DatasetDict
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -231,10 +230,6 @@ class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
         """
         for lang in self.metadata.eval_langs:
             for split in self.metadata.eval_splits:
-                queries_ = {"id": [], "modality": [], "audio": []}
-                corpus_ = {"id": [], "modality": [], "text": []}
-                relevant_docs_ = {}
-
                 # Only load the specific split we need to save memory
                 lang_dataset = datasets.load_dataset(
                     self.metadata.dataset["path"],
@@ -243,38 +238,27 @@ class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
                     revision=self.metadata.dataset.get("revision"),
                 )
 
-                qid = set()
-                did = set()
-                for row in tqdm(
-                    lang_dataset, total=len(lang_dataset), desc=f"{lang}-{split}"
-                ):
-                    query_id = str(row[id_col])
-                    doc_id = str(row[id_col])
-                    text = row[text_col]
-                    audio = row[audio_col]
+                # Create datasets directly without intermediate lists
+                queries_ds = (
+                    lang_dataset.select_columns([id_col, audio_col])
+                    .rename_column(id_col, "id")
+                    .rename_column(audio_col, "audio")
+                )
 
-                    if query_id not in qid:
-                        qid.add(query_id)
-                        queries_["id"].append(query_id)
-                        queries_["audio"].append(audio)
-                        queries_["modality"].append("audio")
+                corpus_ds = (
+                    lang_dataset.select_columns([id_col, text_col])
+                    .rename_column(id_col, "id")
+                    .rename_column(text_col, "text")
+                )
 
-                    if doc_id not in did:
-                        did.add(doc_id)
-                        corpus_["id"].append(doc_id)
-                        corpus_["text"].append(text)
-                        corpus_["modality"].append("text")
+                # Create relevant_docs mapping
+                relevant_docs_ = {
+                    str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
+                }
 
-                    if query_id not in relevant_docs_:
-                        relevant_docs_[query_id] = {}
-                    relevant_docs_[query_id][doc_id] = 1
-
-                self.corpus[lang][split] = Dataset.from_dict(corpus_)
-                self.queries[lang][split] = Dataset.from_dict(queries_)
+                self.corpus[lang][split] = corpus_ds
+                self.queries[lang][split] = queries_ds
                 self.relevant_docs[lang][split] = relevant_docs_
-
-                # Free memory immediately
-                del lang_dataset
 
 
 class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
@@ -325,11 +309,6 @@ class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
         """
         for lang in self.metadata.eval_langs:
             for split in self.metadata.eval_splits:
-                queries_ = {"id": [], "modality": [], "text": []}
-                corpus_ = {"id": [], "modality": [], "audio": []}
-                relevant_docs_ = {}
-
-                # Only load the specific split we need to save memory
                 lang_dataset = datasets.load_dataset(
                     self.metadata.dataset["path"],
                     lang,
@@ -337,38 +316,25 @@ class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
                     revision=self.metadata.dataset.get("revision"),
                 )
 
-                qid = set()
-                did = set()
-                for row in tqdm(
-                    lang_dataset, total=len(lang_dataset), desc=f"{lang}-{split}"
-                ):
-                    query_id = str(row[id_col])
-                    doc_id = str(row[id_col])
-                    text = row[text_col]
-                    audio = row[audio_col]
+                queries_ds = (
+                    lang_dataset.select_columns([id_col, text_col])
+                    .rename_column(id_col, "id")
+                    .rename_column(text_col, "text")
+                )
 
-                    if query_id not in qid:
-                        qid.add(query_id)
-                        queries_["id"].append(query_id)
-                        queries_["text"].append(text)
-                        queries_["modality"].append("text")
+                corpus_ds = (
+                    lang_dataset.select_columns([id_col, audio_col])
+                    .rename_column(id_col, "id")
+                    .rename_column(audio_col, "audio")
+                )
 
-                    if doc_id not in did:
-                        did.add(doc_id)
-                        corpus_["id"].append(doc_id)
-                        corpus_["audio"].append(audio)
-                        corpus_["modality"].append("audio")
+                relevant_docs_ = {
+                    str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
+                }
 
-                    if query_id not in relevant_docs_:
-                        relevant_docs_[query_id] = {}
-                    relevant_docs_[query_id][doc_id] = 1
-
-                self.corpus[lang][split] = Dataset.from_dict(corpus_)
-                self.queries[lang][split] = Dataset.from_dict(queries_)
+                self.corpus[lang][split] = corpus_ds
+                self.queries[lang][split] = queries_ds
                 self.relevant_docs[lang][split] = relevant_docs_
-
-                # Free memory immediately
-                del lang_dataset
 
 
 class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
@@ -419,10 +385,6 @@ class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
         """
         for lang in self.metadata.eval_langs:
             for split in self.metadata.eval_splits:
-                queries_ = {"id": [], "modality": [], "audio": []}
-                corpus_ = {"id": [], "modality": [], "text": []}
-                relevant_docs_ = {}
-
                 # Only load the specific split we need to save memory
                 lang_dataset = datasets.load_dataset(
                     self.metadata.dataset["path"],
@@ -431,38 +393,27 @@ class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
                     revision=self.metadata.dataset.get("revision"),
                 )
 
-                qid = set()
-                did = set()
-                for row in tqdm(
-                    lang_dataset, total=len(lang_dataset), desc=f"{lang}-{split}"
-                ):
-                    query_id = str(row[id_col])
-                    doc_id = str(row[id_col])
-                    text = row[text_col]
-                    audio = row[audio_col]
+                # Create datasets directly without intermediate lists
+                queries_ds = (
+                    lang_dataset.select_columns([id_col, audio_col])
+                    .rename_column(id_col, "id")
+                    .rename_column(audio_col, "audio")
+                )
 
-                    if query_id not in qid:
-                        qid.add(query_id)
-                        queries_["id"].append(query_id)
-                        queries_["audio"].append(audio)
-                        queries_["modality"].append("audio")
+                corpus_ds = (
+                    lang_dataset.select_columns([id_col, text_col])
+                    .rename_column(id_col, "id")
+                    .rename_column(text_col, "text")
+                )
 
-                    if doc_id not in did:
-                        did.add(doc_id)
-                        corpus_["id"].append(doc_id)
-                        corpus_["text"].append(text)
-                        corpus_["modality"].append("text")
+                # Create relevant_docs mapping
+                relevant_docs_ = {
+                    str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
+                }
 
-                    if query_id not in relevant_docs_:
-                        relevant_docs_[query_id] = {}
-                    relevant_docs_[query_id][doc_id] = 1
-
-                self.corpus[lang][split] = Dataset.from_dict(corpus_)
-                self.queries[lang][split] = Dataset.from_dict(queries_)
+                self.corpus[lang][split] = corpus_ds
+                self.queries[lang][split] = queries_ds
                 self.relevant_docs[lang][split] = relevant_docs_
-
-                # Free memory immediately
-                del lang_dataset
 
 
 class CommonVoice21T2ARetrieval(AbsTaskRetrieval):
@@ -513,11 +464,6 @@ class CommonVoice21T2ARetrieval(AbsTaskRetrieval):
         """
         for lang in self.metadata.eval_langs:
             for split in self.metadata.eval_splits:
-                queries_ = {"id": [], "modality": [], "text": []}
-                corpus_ = {"id": [], "modality": [], "audio": []}
-                relevant_docs_ = {}
-
-                # Only load the specific split we need to save memory
                 lang_dataset = datasets.load_dataset(
                     self.metadata.dataset["path"],
                     lang,
@@ -525,35 +471,22 @@ class CommonVoice21T2ARetrieval(AbsTaskRetrieval):
                     revision=self.metadata.dataset.get("revision"),
                 )
 
-                qid = set()
-                did = set()
-                for row in tqdm(
-                    lang_dataset, total=len(lang_dataset), desc=f"{lang}-{split}"
-                ):
-                    query_id = str(row[id_col])
-                    doc_id = str(row[id_col])
-                    text = row[text_col]
-                    audio = row[audio_col]
+                queries_ds = (
+                    lang_dataset.select_columns([id_col, text_col])
+                    .rename_column(id_col, "id")
+                    .rename_column(text_col, "text")
+                )
 
-                    if query_id not in qid:
-                        qid.add(query_id)
-                        queries_["id"].append(query_id)
-                        queries_["text"].append(text)
-                        queries_["modality"].append("text")
+                corpus_ds = (
+                    lang_dataset.select_columns([id_col, audio_col])
+                    .rename_column(id_col, "id")
+                    .rename_column(audio_col, "audio")
+                )
 
-                    if doc_id not in did:
-                        did.add(doc_id)
-                        corpus_["id"].append(doc_id)
-                        corpus_["audio"].append(audio)
-                        corpus_["modality"].append("audio")
+                relevant_docs_ = {
+                    str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
+                }
 
-                    if query_id not in relevant_docs_:
-                        relevant_docs_[query_id] = {}
-                    relevant_docs_[query_id][doc_id] = 1
-
-                self.corpus[lang][split] = Dataset.from_dict(corpus_)
-                self.queries[lang][split] = Dataset.from_dict(queries_)
+                self.corpus[lang][split] = corpus_ds
+                self.queries[lang][split] = queries_ds
                 self.relevant_docs[lang][split] = relevant_docs_
-
-                # Free memory immediately
-                del lang_dataset
