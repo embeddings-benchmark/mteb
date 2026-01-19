@@ -33,7 +33,7 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         bibtex_citation="",
     )
 
-    def load_data(self, num_proc: int = 1) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         if self.data_loaded:
             return
 

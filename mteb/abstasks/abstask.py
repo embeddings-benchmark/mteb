@@ -315,7 +315,7 @@ class AbsTask(ABC):
             )  # only take the specified test split.
         return dataset_dict
 
-    def load_data(self, num_proc: int = 1) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs: Any) -> None:
         """Loads dataset from HuggingFace hub
 
         This is the main loading function for Task. Do not overwrite this, instead we recommend using `dataset_transform`, which is called after the
@@ -323,6 +323,7 @@ class AbsTask(ABC):
 
         Args:
             num_proc: Number of processes to use for loading the dataset.
+            kwargs: Additional keyword arguments passed to the load_dataset function. Keep for forward compatibility.
         """
         if self.data_loaded:
             return
@@ -363,12 +364,13 @@ class AbsTask(ABC):
             self.dataset[lang] = DatasetDict(subset)
 
     def calculate_descriptive_statistics(
-        self, overwrite_results: bool = False
+        self, overwrite_results: bool = False, num_proc: int = 1
     ) -> dict[str, DescriptiveStatistics]:
         """Calculates descriptive statistics from the dataset.
 
         Args:
             overwrite_results: Whether to overwrite existing results. If False and results already exist, the existing results will be loaded from cache.
+            num_proc: Number of processes to use for loading the dataset.
 
         Returns:
             A dictionary containing descriptive statistics for each split.
@@ -382,7 +384,7 @@ class AbsTask(ABC):
             return existing_stats
 
         if not self.data_loaded:
-            self.load_data()
+            self.load_data(num_proc=num_proc)
 
         descriptive_stats: dict[str, DescriptiveStatistics] = {}
         hf_subset_stat: Literal["hf_subset_descriptive_stats"] = (

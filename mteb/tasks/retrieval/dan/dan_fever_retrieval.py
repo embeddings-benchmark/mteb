@@ -47,7 +47,7 @@ Derczynski, Leon},
         task_subtypes=["Claim verification"],
     )
 
-    def load_data(self, num_proc: int = 1) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return

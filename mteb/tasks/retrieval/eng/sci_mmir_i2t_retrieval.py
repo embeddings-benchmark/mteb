@@ -88,7 +88,7 @@ class SciMMIRI2TRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int = 1) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = _load_data(

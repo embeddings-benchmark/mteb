@@ -246,7 +246,7 @@ class AbsTaskRetrieval(AbsTask):
         if hasattr(self, "top_ranked"):
             del self.top_ranked
 
-    def load_data(self, num_proc: int = 1) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         """Load the dataset for the retrieval task."""
         if self.data_loaded:
             return
