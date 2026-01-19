@@ -103,11 +103,9 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
                     .rename_column(audio_col, "audio")
                 )
 
-                corpus_ds = (
-                    lang_dataset.select_columns([id_col, text_col])
-                    .rename_column(id_col, "id")
-                    .rename_column(text_col, "text")
-                )
+                corpus_ds = lang_dataset.select_columns(
+                    [id_col, text_col]
+                ).rename_column(id_col, "id")
 
                 # Create relevant_docs mapping
                 relevant_docs_ = {
@@ -177,11 +175,9 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
             for locale in self.metadata.eval_langs:
                 lang_dataset = full_dataset.filter(lambda x: x["locale"] == locale)
 
-                queries_ds = (
-                    lang_dataset.select_columns([id_col, text_col])
-                    .rename_column(id_col, "id")
-                    .rename_column(text_col, "text")
-                )
+                queries_ds = lang_dataset.select_columns(
+                    [id_col, text_col]
+                ).rename_column(id_col, "id")
                 corpus_ds = (
                     lang_dataset.select_columns([id_col, audio_col])
                     .rename_column(id_col, "id")
