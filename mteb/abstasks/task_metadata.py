@@ -249,13 +249,14 @@ TaskCategory = Literal[
 10. t2it: text to image+text
 11. it2it: image+text to image+text
 12. a2a: audio to audio
-13. a2t: audio to text
-14. t2a: text to audio
-15. at2t: audio+text to text
-16. at2a: audio+text to audio
-17. a2at: audio to audio+text
-18. t2at: text to audio+text
-19. at2at: audio+text to audio+text
+13. a2c: audio to category
+14. a2t: audio to text
+15. t2a: text to audio
+16. at2t: audio+text to text
+17. at2a: audio+text to audio
+18. a2at: audio to audio+text
+19. t2at: text to audio+text
+20. at2at: audio+text to audio+text
 """
 
 AnnotatorType = Literal[
