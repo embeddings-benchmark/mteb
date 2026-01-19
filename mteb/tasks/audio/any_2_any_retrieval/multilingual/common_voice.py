@@ -386,7 +386,7 @@ class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
                     self.metadata.dataset["path"],
                     lang,
                     split=split,
-                    revision=self.metadata.dataset.get("revision"),
+                    revision=self.metadata.dataset["revision"],
                 )
 
                 # Create datasets directly without intermediate lists
@@ -462,7 +462,7 @@ class CommonVoice21T2ARetrieval(AbsTaskRetrieval):
                     self.metadata.dataset["path"],
                     lang,
                     split=split,
-                    revision=self.metadata.dataset.get("revision"),
+                    revision=self.metadata.dataset["revision"],
                 )
 
                 queries_ds = (

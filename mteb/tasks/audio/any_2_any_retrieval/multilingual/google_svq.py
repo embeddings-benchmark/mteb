@@ -2,6 +2,7 @@ from collections import defaultdict
 
 import datasets
 from datasets import Audio, DatasetDict
+from tqdm.auto import tqdm
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -89,14 +90,26 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
                 revision=self.metadata.dataset.get("revision"),
             )
 
-            # Cast once before filtering to avoid multiple castings
+            # Cast once before filtering
             full_dataset = full_dataset.cast_column(audio_col, Audio(decode=True))
 
-            for locale in self.metadata.eval_langs:
-                # Filter by locale
-                lang_dataset = full_dataset.filter(lambda x: x["locale"] == locale)
+            # Group indices by locale in a single pass
+            locale_indices = {locale: [] for locale in self.metadata.eval_langs}
 
-                # Create datasets directly without intermediate lists
+            for idx, row in enumerate(tqdm(full_dataset, desc="Filtering")):
+                locale = row["locale"]
+                if locale in locale_indices:
+                    locale_indices[locale].append(idx)
+
+            # Use select with indices to avoid recreating dataset
+            for locale, indices in tqdm(
+                locale_indices.items(), total=len(locale_indices)
+            ):
+                if not indices:
+                    continue
+
+                lang_dataset = full_dataset.select(indices)
+
                 queries_ds = (
                     lang_dataset.select_columns([id_col, audio_col])
                     .rename_column(id_col, "id")
@@ -107,7 +120,6 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
                     [id_col, text_col]
                 ).rename_column(id_col, "id")
 
-                # Create relevant_docs mapping
                 relevant_docs_ = {
                     str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
                 }
@@ -172,12 +184,26 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
 
             full_dataset = full_dataset.cast_column(audio_col, Audio(decode=True))
 
-            for locale in self.metadata.eval_langs:
-                lang_dataset = full_dataset.filter(lambda x: x["locale"] == locale)
+            locale_indices = {locale: [] for locale in self.metadata.eval_langs}
+
+            for idx, row in enumerate(tqdm(full_dataset, desc="Filtering")):
+                locale = row["locale"]
+                if locale in locale_indices:
+                    locale_indices[locale].append(idx)
+
+            # Use select with indices to avoid recreating dataset
+            for locale, indices in tqdm(
+                locale_indices.items(), total=len(locale_indices)
+            ):
+                if not indices:
+                    continue
+
+                lang_dataset = full_dataset.select(indices)
 
                 queries_ds = lang_dataset.select_columns(
                     [id_col, text_col]
                 ).rename_column(id_col, "id")
+
                 corpus_ds = (
                     lang_dataset.select_columns([id_col, audio_col])
                     .rename_column(id_col, "id")
