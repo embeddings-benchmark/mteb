@@ -182,6 +182,7 @@ class VoyageModel(AbsEncoder):
                     model=self._model_name,
                     input_type=input_type,
                     output_dtype=output_dtype,
+                    output_dimension=self.mteb_model_meta.embed_dim,
                 ).embeddings
             )
             pbar.update(len(batch))
@@ -214,6 +215,32 @@ model_prompts = {
     PromptType.query.value: "query",
     PromptType.document.value: "document",
 }
+
+voyage_4_large_2048d = ModelMeta(
+    name="voyageai/voyage-4-large (2048d)",
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-01-15",
+    languages=None,  # supported languages not specified
+    loader=VoyageModel,
+    loader_kwargs=dict(
+        max_tokens=32000,
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=2048,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2026/01/15/voyage-4/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+)
 
 voyage_4 = ModelMeta(
     name="voyageai/voyage-4",
