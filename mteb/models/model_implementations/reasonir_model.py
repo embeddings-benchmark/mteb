@@ -114,6 +114,7 @@ ReasonIR_8B = ModelMeta(
     revision="c3d0690370ff4a8c3d3882d8dfa85c43650034fa",
     release_date="2025-04-29",
     n_parameters=7_500_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     embed_dim=4096,
     license="cc-by-nc-4.0",

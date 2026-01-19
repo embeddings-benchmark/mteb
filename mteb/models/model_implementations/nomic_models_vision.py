@@ -175,6 +175,7 @@ nomic_embed_vision_v1_5 = ModelMeta(
     release_date="2024-06-08",
     modalities=["image", "text"],
     n_parameters=92_900_000,
+    n_embedding_parameters=None,
     memory_usage_mb=355,
     max_tokens=2048,
     embed_dim=768,
