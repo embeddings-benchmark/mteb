@@ -14,7 +14,7 @@ class LASSA2TRetrieval(AbsTaskRetrieval):
         reference="https://dcase.community/challenge2024/task-language-queried-audio-source-separation",
         dataset={
             "path": "mteb/lass-synth-a2t",
-            "revision": "8bb471ab5f4268d41fb2970af17eaaae88cc85ef",
+            "revision": "5d9ebcefcd94542a8e29038eb859f9c0f8cadcb5",
         },
         type="Any2AnyRetrieval",
         category="a2t",
@@ -54,7 +54,7 @@ class LASST2ARetrieval(AbsTaskRetrieval):
         reference="https://dcase.community/challenge2024/task-language-queried-audio-source-separation",
         dataset={
             "path": "mteb/lass-synth-t2a",
-            "revision": "c211f7b3d3da571e9d9fda44bd2fdcc6b55f50d0",
+            "revision": "407d9bb97b6a1990b38c02175f5dc6c2886f2796",
         },
         type="Any2AnyRetrieval",
         category="t2a",
@@ -62,7 +62,7 @@ class LASST2ARetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cv_recall_at_5",
-        date=("2026-01-16", "2026-01-16"),
+        date=("2024-03-27", "2024-03-27"),
         domains=["AudioScene"],
         task_subtypes=["Environment Sound Retrieval"],
         license="mit",
