@@ -92,7 +92,7 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
             # Cast once before filtering to avoid multiple castings
             full_dataset = full_dataset.cast_column(audio_col, Audio(decode=True))
 
-            for locale, _ in self.metadata.eval_langs.items():
+            for locale in self.metadata.eval_langs:
                 # Filter by locale
                 lang_dataset = full_dataset.filter(lambda x: x["locale"] == locale)
 
@@ -174,7 +174,7 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
 
             full_dataset = full_dataset.cast_column(audio_col, Audio(decode=True))
 
-            for locale, _ in self.metadata.eval_langs.items():
+            for locale in self.metadata.eval_langs:
                 lang_dataset = full_dataset.filter(lambda x: x["locale"] == locale)
 
                 queries_ds = (
