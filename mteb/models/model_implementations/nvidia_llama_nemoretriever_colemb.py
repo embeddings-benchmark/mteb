@@ -1,14 +1,18 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
 from packaging.version import Version
 from torch.utils.data import DataLoader
 from transformers import __version__ as transformers_version
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperforming,
       title={Llama Nemoretriever Colembed: Top-Performing Text-Image Retrieval Model},

@@ -150,7 +150,7 @@ def test_filter_with_modelmeta():
 
     model_name = model_meta.model_name_as_path()
     model_revision_1 = model_meta.revision
-    model_revision_1 = cast(str, model_revision_1)
+    model_revision_1 = cast("str", model_revision_1)
     sample_paths = [
         base / model_name / model_revision_1 / "task1.json",
         base / model_name / model_revision_1 / "task2.json",
@@ -178,7 +178,7 @@ def test_filter_with_string_models():
 
     model_name = model_meta.model_name_as_path()
     model_revision_1 = model_meta.revision
-    model_revision_1 = cast(str, model_revision_1)
+    model_revision_1 = cast("str", model_revision_1)
     sample_paths = [
         base / model_name / model_revision_1 / "task1.json",
         base / model_name / model_revision_1 / "task2.json",

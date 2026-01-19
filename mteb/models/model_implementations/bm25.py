@@ -1,18 +1,23 @@
+from __future__ import annotations
+
 import logging
+from typing import TYPE_CHECKING
 
 from mteb._create_dataloaders import _create_text_queries_dataloader
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import SearchProtocol
-from mteb.types import (
-    CorpusDatasetType,
-    EncodeKwargs,
-    InstructionDatasetType,
-    QueryDatasetType,
-    RetrievalOutputType,
-    TopRankedDocumentsType,
-)
+
+if TYPE_CHECKING:
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import SearchProtocol
+    from mteb.types import (
+        CorpusDatasetType,
+        EncodeKwargs,
+        InstructionDatasetType,
+        QueryDatasetType,
+        RetrievalOutputType,
+        TopRankedDocumentsType,
+    )
 
 logger = logging.getLogger(__name__)
 

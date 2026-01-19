@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import warnings
-from collections.abc import Iterable
 from pathlib import Path
 from time import time
 from typing import TYPE_CHECKING, cast
@@ -17,21 +16,24 @@ from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import (
-    MTEBModels,
-)
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
-from mteb.types import HFSubset, PromptType, SplitName
-from mteb.types._encoder_io import EncodeKwargs
-from mteb.types._metadata import ModelName, Revision
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from sentence_transformers import CrossEncoder, SentenceTransformer
+
+    from mteb.models.models_protocols import (
+        MTEBModels,
+    )
+    from mteb.types import EncodeKwargs, HFSubset, SplitName
+    from mteb.types._metadata import ModelName, Revision
 
 logger = logging.getLogger(__name__)
 
@@ -69,13 +71,13 @@ def _sanitize_model(
         meta = getattr(model, "mteb_model_meta")
         if not isinstance(meta, ModelMeta):
             meta = ModelMeta._from_hub(None)
-        wrapped_model = cast(MTEBModels | ModelMeta, model)
+        wrapped_model = cast("MTEBModels | ModelMeta", model)
     else:
         meta = ModelMeta._from_hub(None) if not isinstance(model, ModelMeta) else model
         wrapped_model = meta
 
-    model_name = cast(str, meta.name)
-    model_revision = cast(str, meta.revision)
+    model_name = cast("str", meta.name)
+    model_revision = cast("str", meta.revision)
 
     return wrapped_model, meta, model_name, model_revision
 
@@ -202,10 +204,10 @@ def _check_model_modalities(
     if isinstance(tasks, AbsTask):
         check_tasks = [tasks]
     elif isinstance(tasks, Benchmark):
-        benchmark = cast(Benchmark, tasks)
+        benchmark = cast("Benchmark", tasks)
         check_tasks = benchmark.tasks
     else:
-        check_tasks = cast(Iterable[AbsTask], tasks)
+        check_tasks = cast("Iterable[AbsTask]", tasks)
 
     warnings, errors = [], []
 
@@ -342,7 +344,7 @@ def evaluate(
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
-        aggregated_task = cast(AbsTaskAggregate, tasks)
+        aggregated_task = cast("AbsTaskAggregate", tasks)
         results = evaluate(
             model,
             aggregated_task.metadata.tasks,
@@ -365,7 +367,7 @@ def evaluate(
     if isinstance(tasks, AbsTask):
         task = tasks
     else:
-        tasks = cast(Iterable[AbsTask], tasks)
+        tasks = cast("Iterable[AbsTask]", tasks)
         evaluate_results = []
         exceptions = []
         tasks_tqdm = tqdm(
