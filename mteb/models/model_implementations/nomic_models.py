@@ -485,6 +485,7 @@ nomic_embed_text_v2_moe = ModelMeta(
     release_date="2025-02-07",
     n_parameters=475292928,
     n_embedding_parameters=None,
+    n_active_parameters_override=305000000,
     memory_usage_mb=1813,
     max_tokens=512,
     embed_dim=768,
