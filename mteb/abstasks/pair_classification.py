@@ -96,6 +96,7 @@ class AbsTaskPairClassification(AbsTask):
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs,
     ) -> dict[str, float]:
         if not isinstance(model, EncoderProtocol):
@@ -115,7 +116,11 @@ class AbsTaskPairClassification(AbsTask):
             input2_prompt_type=self.input2_prompt_type,
             **kwargs,
         )
-        similarity_scores = evaluator(model, encode_kwargs=encode_kwargs)
+        similarity_scores = evaluator(
+            model,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
 
         if prediction_folder:
             self._save_task_predictions(
@@ -248,7 +253,7 @@ class AbsTaskPairClassification(AbsTask):
             labels_statistics=calculate_label_statistics(labels),
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         # previously pair classification datasets were stored in a single row
         if self.dataset is None:
             # overall this shouldn't happen as we check for dataset before pushing to hub
@@ -272,6 +277,7 @@ class AbsTaskPairClassification(AbsTask):
                 self.input2_column_name,
                 self.label_column_name,
             ],
+            num_proc=num_proc,
         )
 
     def _compute_metrics_values(

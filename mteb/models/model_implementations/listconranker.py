@@ -123,6 +123,7 @@ listconranker = ModelMeta(
     revision="95ae6a5f422a916bc36520f0f3e198e7d91520a0",
     release_date="2024-12-11",
     n_parameters=401_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=1242,
     similarity_fn_name="cosine",
     training_datasets=listconranker_training_datasets,

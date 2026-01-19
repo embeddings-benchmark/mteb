@@ -54,18 +54,20 @@ class SklearnEvaluator(Evaluator):
         self.evaluator_model = evaluator_model
 
     def create_dataloaders(
-        self, encode_kwargs: EncodeKwargs
+        self, encode_kwargs: EncodeKwargs, num_proc: int
     ) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
         dataloader_train = create_dataloader(
             self.train_dataset,
             self.task_metadata,
             input_column=self.values_column_name,
+            num_proc=num_proc,
             **encode_kwargs,
         )
         dataloader_test = create_dataloader(
             self.eval_dataset,
             self.task_metadata,
             input_column=self.values_column_name,
+            num_proc=num_proc,
             **encode_kwargs,
         )
         return dataloader_train, dataloader_test
@@ -76,6 +78,7 @@ class SklearnEvaluator(Evaluator):
         *,
         encode_kwargs: EncodeKwargs,
         test_cache: Array | None = None,
+        num_proc: int = 1,
     ) -> tuple[np.ndarray, Array]:
         """Classification evaluation by training a sklearn classifier on the embeddings of the training set and evaluating on the embeddings of the test set.
 
@@ -83,6 +86,7 @@ class SklearnEvaluator(Evaluator):
             model: Encoder
             encode_kwargs: encode kwargs
             test_cache: embeddings of the test set, if already computed
+            num_proc: number of processes to use
 
         Returns:
             Tuple of test predictions and embeddings
@@ -90,6 +94,7 @@ class SklearnEvaluator(Evaluator):
         """
         dataloader_train, dataloader_test = self.create_dataloaders(
             encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
         )
 
         logger.info("Running - Encoding samples...")

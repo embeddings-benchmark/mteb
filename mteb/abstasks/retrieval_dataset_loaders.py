@@ -76,28 +76,36 @@ class RetrievalDatasetLoader:
         self.config = config if config != "default" else None
         self.dataset_configs = get_dataset_config_names(self.hf_repo, self.revision)
 
-    def load(self) -> RetrievalSplitData:
+    def load(
+        self,
+        num_proc: int = 1,
+    ) -> RetrievalSplitData:
         """Loads the dataset split for the specified configuration.
+
+        Args:
+            num_proc: The number of processes to use.
 
         Returns:
             A dictionary containing the corpus, queries, relevant documents, instructions (if applicable), and top-ranked documents (if applicable).
         """
         top_ranked = None
 
-        qrels = self._load_qrels()
-        corpus = self._load_corpus()
-        queries = self._load_queries()
+        qrels = self._load_qrels(num_proc)
+        corpus = self._load_corpus(num_proc)
+        queries = self._load_queries(num_proc)
 
         queries = queries.filter(
             lambda x: x["id"] in qrels.keys(), desc="Filtering queries by qrels"
         )
 
         if any(c.endswith("top_ranked") for c in self.dataset_configs):
-            top_ranked = self._load_top_ranked()
+            top_ranked = self._load_top_ranked(num_proc)
 
         if any(c.endswith("instruction") for c in self.dataset_configs):
-            instructions = self._load_instructions()
-            queries = _combine_queries_with_instructions_datasets(queries, instructions)
+            instructions = self._load_instructions(num_proc)
+            queries = _combine_queries_with_instructions_datasets(
+                queries, instructions, num_proc
+            )
 
         return RetrievalSplitData(
             corpus=corpus,
@@ -120,20 +128,21 @@ class RetrievalDatasetLoader:
             f"Split {self.split} not found in {splits}. Please specify a valid split."
         )
 
-    def _load_dataset_split(self, config: str) -> Dataset:
+    def _load_dataset_split(self, config: str, num_proc: int) -> Dataset:
         return load_dataset(
             self.hf_repo,
             config,
             split=self._get_split(config),
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
+            num_proc=num_proc,
         )
 
-    def _load_corpus(self) -> CorpusDatasetType:
+    def _load_corpus(self, num_proc: int) -> CorpusDatasetType:
         config = f"{self.config}-corpus" if self.config is not None else "corpus"
         logger.info("Loading corpus subset: %s", config)
 
-        corpus_ds = self._load_dataset_split(config)
+        corpus_ds = self._load_dataset_split(config, num_proc)
         if "_id" in corpus_ds.column_names:
             corpus_ds = corpus_ds.cast_column("_id", Value("string")).rename_column(
                 "_id", "id"
@@ -142,13 +151,13 @@ class RetrievalDatasetLoader:
         logger.debug("Doc Example: %s", corpus_ds[0])
         return corpus_ds
 
-    def _load_queries(self) -> QueryDatasetType:
+    def _load_queries(self, num_proc: int) -> QueryDatasetType:
         config = f"{self.config}-queries" if self.config is not None else "queries"
         logger.info("Loading queries subset: %s", config)
 
         if "query" in self.dataset_configs:
             config = "query"
-        queries_ds = self._load_dataset_split(config)
+        queries_ds = self._load_dataset_split(config, num_proc)
         if "_id" in queries_ds.column_names:
             queries_ds = queries_ds.cast_column("_id", Value("string")).rename_column(
                 "_id", "id"
@@ -159,7 +168,7 @@ class RetrievalDatasetLoader:
 
         return queries_ds
 
-    def _load_qrels(self) -> RelevantDocumentsType:
+    def _load_qrels(self, num_proc: int) -> RelevantDocumentsType:
         config = f"{self.config}-qrels" if self.config is not None else "default"
 
         logger.info("Loading qrels subset: %s", config)
@@ -171,7 +180,7 @@ class RetrievalDatasetLoader:
                     "No qrels or default config found. Please specify a valid config or ensure the dataset has qrels."
                 )
 
-        qrels_ds = self._load_dataset_split(config)
+        qrels_ds = self._load_dataset_split(config, num_proc)
         qrels_ds = qrels_ds.select_columns(["query-id", "corpus-id", "score"])
 
         qrels_ds = qrels_ds.cast(
@@ -194,12 +203,12 @@ class RetrievalDatasetLoader:
         logger.info("Loaded %d %s qrels.", len(qrels_dict), self.split.upper())
         return qrels_dict
 
-    def _load_top_ranked(self) -> TopRankedDocumentsType:
+    def _load_top_ranked(self, num_proc: int) -> TopRankedDocumentsType:
         config = (
             f"{self.config}-top_ranked" if self.config is not None else "top_ranked"
         )
         logger.info("Loading top ranked subset: %s", config)
-        top_ranked_ds = self._load_dataset_split(config)
+        top_ranked_ds = self._load_dataset_split(config, num_proc)
         top_ranked_ds = top_ranked_ds.cast(
             Features(
                 {
@@ -217,12 +226,12 @@ class RetrievalDatasetLoader:
         logger.info(f"Top ranked loaded: {len(top_ranked_ds)}")
         return top_ranked_dict
 
-    def _load_instructions(self) -> InstructionDatasetType:
+    def _load_instructions(self, num_proc: int) -> InstructionDatasetType:
         config = (
             f"{self.config}-instruction" if self.config is not None else "instruction"
         )
         logger.info("Loading instruction subset: %s", config)
-        instructions_ds = self._load_dataset_split(config)
+        instructions_ds = self._load_dataset_split(config, num_proc)
         instructions_ds = instructions_ds.cast(
             Features(
                 {
@@ -237,6 +246,7 @@ class RetrievalDatasetLoader:
 def _combine_queries_with_instructions_datasets(
     queries_dataset: QueryDatasetType,
     instruction_dataset: InstructionDatasetType | dict[str, str],
+    num_proc: int,
 ) -> Dataset:
     if isinstance(instruction_dataset, Dataset):
         instruction_to_query_idx = {
@@ -249,4 +259,4 @@ def _combine_queries_with_instructions_datasets(
         row["instruction"] = instruction_to_query_idx[row["id"]]
         return row
 
-    return queries_dataset.map(_add_instruction_to_query)
+    return queries_dataset.map(_add_instruction_to_query, num_proc=num_proc)

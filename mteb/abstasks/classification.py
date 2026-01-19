@@ -136,6 +136,7 @@ class AbsTaskClassification(AbsTask):
         *,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluate a model on the classification task.
@@ -149,7 +150,7 @@ class AbsTaskClassification(AbsTask):
             )
 
         if not self.data_loaded:
-            self.load_data()
+            self.load_data(num_proc=num_proc)
 
         if self.dataset is None:
             raise RuntimeError("Dataset not loaded.")
@@ -182,6 +183,7 @@ class AbsTaskClassification(AbsTask):
                 hf_subset=hf_subset,
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
+                num_proc=num_proc,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
@@ -197,6 +199,7 @@ class AbsTaskClassification(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -230,7 +233,10 @@ class AbsTaskClassification(AbsTask):
                 evaluator_model=self.evaluator_model,
             )
             y_pred, test_cache = evaluator(
-                model, encode_kwargs=encode_kwargs, test_cache=test_cache
+                model,
+                encode_kwargs=encode_kwargs,
+                test_cache=test_cache,
+                num_proc=num_proc,
             )
             if prediction_folder:
                 all_predictions.append(y_pred.tolist())
@@ -372,11 +378,12 @@ class AbsTaskClassification(AbsTask):
             label_statistics=label_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         self._upload_dataset_to_hub(
             repo_name,
             [
                 self.input_column_name,
                 self.label_column_name,
             ],
+            num_proc=num_proc,
         )

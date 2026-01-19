@@ -211,6 +211,7 @@ Conan_embedding_v2 = ModelMeta(
     embed_dim=3584,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license="apache-2.0",
     reference="https://huggingface.co/TencentBAC/Conan-embedding-v2",

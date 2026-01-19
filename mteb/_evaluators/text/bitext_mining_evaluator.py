@@ -41,6 +41,7 @@ class BitextMiningEvaluator(Evaluator):
         model: EncoderProtocol,
         *,
         encode_kwargs: EncodeKwargs,
+        num_proc: int = 1,
     ) -> dict[str, list[dict[str, float]]]:
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
@@ -55,6 +56,7 @@ class BitextMiningEvaluator(Evaluator):
         for sub in tqdm(subsets):
             dataloader = _create_dataloader_from_texts(
                 self.sentences[sub],
+                num_proc=num_proc,
                 **encode_kwargs,
             )
             embeddings[sub] = model.encode(

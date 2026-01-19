@@ -66,6 +66,7 @@ class AnySTSEvaluator(Evaluator):
         model: EncoderProtocol,
         *,
         encode_kwargs: EncodeKwargs,
+        num_proc: int = 1,
     ) -> STSEvaluatorScores:
         logger.info("Running semantic similarity - Encoding samples (1/2)")
         embeddings1 = model.encode(
@@ -73,6 +74,7 @@ class AnySTSEvaluator(Evaluator):
                 self.dataset,
                 self.task_metadata,
                 input_column=self.input_columns[0],
+                num_proc=num_proc,
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
