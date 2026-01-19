@@ -217,7 +217,7 @@ model_prompts = {
 }
 
 voyage_4_large_2048d = ModelMeta(
-    name="voyageai/voyage-4-large 2048d",
+    name="voyageai/voyage-4-large (embed_dim=2048)",
     model_type=["dense"],
     revision="1",
     release_date="2026-01-15",
