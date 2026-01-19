@@ -1,7 +1,12 @@
-from collections.abc import Sequence
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 _CITATION = """
 @misc{weller2025theoreticallimit,

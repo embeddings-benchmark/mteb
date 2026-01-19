@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import gzip
 import io
 import json
@@ -7,18 +9,22 @@ import shutil
 import subprocess
 import warnings
 from collections import defaultdict
-from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 import requests
+from pydantic import ValidationError
 
 import mteb
 from mteb.abstasks import AbsTask
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
-from mteb.types import ModelName, Revision
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
+
+    from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
 
@@ -27,8 +33,8 @@ class ResultCache:
     """Class to handle the local cache of MTEB results.
 
     Examples:
-        >>> from mteb.cache import ResultCache
-        >>> cache = ResultCache(cache_path="~/.cache/mteb") # default
+        >>> import mteb
+        >>> cache = mteb.ResultCache(cache_path="~/.cache/mteb") # default
         >>> cache.download_from_remote() # download the latest results from the remote repository
         >>> result = cache.load_results("task_name", "model_name")
     """
@@ -320,8 +326,8 @@ class ResultCache:
             OSError: On other file system errors
 
         Examples:
-            >>> from mteb.cache import ResultCache
-            >>> cache = ResultCache()
+            >>> import mteb
+            >>> cache = mteb.ResultCache()
             >>> # Download optimized cached results
             >>> cache_file = cache._download_cached_results_from_branch()
             >>> # Use custom output path
@@ -460,8 +466,8 @@ class ResultCache:
             A list of paths in the cache directory.
 
         Examples:
-            >>> from mteb.cache import ResultCache
-            >>> cache = ResultCache()
+            >>> import mteb
+            >>> cache = mteb.ResultCache()
             >>>
             >>> # Get all cache paths
             >>> paths = cache.get_cache_paths()
@@ -583,7 +589,7 @@ class ResultCache:
 
         first_model = next(iter(models))
         if isinstance(first_model, ModelMeta):
-            models = cast(Iterable[ModelMeta], models)
+            models = cast("Iterable[ModelMeta]", models)
             name_and_revision = {
                 (m.model_name_as_path(), m.revision or "no_revision_available")
                 for m in models
@@ -594,7 +600,7 @@ class ResultCache:
                 if (p.parent.parent.name, p.parent.name) in name_and_revision
             ]
 
-        str_models = cast(Sequence[str], models)
+        str_models = cast("Sequence[str]", models)
         model_names = {m.replace("/", "__").replace(" ", "_") for m in str_models}
         return [p for p in paths if p.parent.parent.name in model_names]
 
@@ -642,8 +648,8 @@ class ResultCache:
             A BenchmarkResults object containing the results for the specified models and tasks.
 
         Examples:
-            >>> from mteb.cache import ResultCache
-            >>> cache = ResultCache()
+            >>> import mteb
+            >>> cache = mteb.ResultCache()
             >>>
             >>> # Load results for specific models and tasks
             >>> results = cache.load_results(
@@ -686,7 +692,7 @@ class ResultCache:
                     task_result = task_result.validate_and_filter_scores(
                         task=task_instance
                     )
-                except Exception as e:
+                except ValidationError as e:
                     logger.info(
                         f"Validation failed for {task_result.task_name} in {model_name} {revision}: {e}"
                     )

@@ -1,18 +1,23 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import (
     requires_image_dependencies,
     requires_package,
 )
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 from .colpali_models import (
     COLPALI_CITATION,
@@ -333,33 +338,6 @@ colqwen3_4b = ModelMeta(
     citation=TOMORO_CITATION,
 )
 
-colnomic_7b = ModelMeta(
-    loader=ColQwen2_5Wrapper,
-    loader_kwargs=dict(
-        torch_dtype=torch.float16,
-    ),
-    name="nomic-ai/colnomic-embed-multimodal-7b",
-    model_type=["late-interaction"],
-    languages=["eng-Latn"],
-    revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
-    release_date="2025-03-31",
-    modalities=["image", "text"],
-    n_parameters=7_000_000_000,
-    n_embedding_parameters=None,
-    memory_usage_mb=14400,
-    max_tokens=128000,
-    embed_dim=128,
-    license="apache-2.0",
-    open_weights=True,
-    public_training_code="https://github.com/nomic-ai/colpali",
-    public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
-    framework=["ColPali", "safetensors"],
-    reference="https://huggingface.co/nomic-ai/colnomic-embed-multimodal-7b",
-    similarity_fn_name="MaxSim",
-    use_instructions=True,
-    training_datasets=COLPALI_TRAINING_DATA,
-    citation=COLPALI_CITATION,
-)
 
 COLNOMIC_CITATION = """
 @misc{nomicembedmultimodal2025,
@@ -408,7 +386,7 @@ colnomic_3b = ModelMeta(
 )
 
 colnomic_7b = ModelMeta(
-    loader=ColQwen2Wrapper,
+    loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,
     ),

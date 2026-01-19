@@ -1,11 +1,17 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from mteb.models.instruct_wrapper import (
     InstructSentenceTransformerModel,
     instruct_wrapper,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
+
+if TYPE_CHECKING:
+    from mteb.types import PromptType
 
 
 def instruction_template(

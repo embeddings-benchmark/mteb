@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import warnings
-from collections.abc import Callable, Sequence
+from collections.abc import Callable
 from dataclasses import field
 from enum import Enum
 from functools import partial
@@ -12,9 +12,7 @@ from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
 from huggingface_hub import (
-    GitCommitInfo,
     ModelCard,
-    ModelCardData,
     get_safetensors_metadata,
     hf_hub_download,
     list_repo_commits,
@@ -33,17 +31,24 @@ from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 from sentence_transformers.models import Transformer
 from torch import nn
 from transformers import AutoConfig
-from typing_extensions import Self
 
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.languages import check_language_code
-from mteb.models.models_protocols import EncoderProtocol, MTEBModels
+from mteb.models.models_protocols import MTEBModels
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from huggingface_hub import (
+        GitCommitInfo,
+        ModelCardData,
+    )
     from sentence_transformers import CrossEncoder, SentenceTransformer
+    from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
+    from mteb.models.models_protocols import EncoderProtocol
 
 
 logger = logging.getLogger(__name__)
@@ -512,7 +517,7 @@ class ModelMeta(BaseModel):
         if isinstance(tasks[0], str):
             benchmark_datasets = set(tasks)
         else:
-            tasks = cast(Sequence["AbsTask"], tasks)
+            tasks = cast("Sequence[AbsTask]", tasks)
             benchmark_datasets = set()
             for task in tasks:
                 benchmark_datasets.add(task.metadata.name)
@@ -567,7 +572,7 @@ class ModelMeta(BaseModel):
         if isinstance(tasks[0], str):
             benchmark_datasets = set(tasks)
         else:
-            tasks = cast(Sequence["AbsTask"], tasks)
+            tasks = cast("Sequence[AbsTask]", tasks)
             benchmark_datasets = {task.metadata.name for task in tasks}
         overlap = training_datasets & benchmark_datasets
         perc_overlap = 100 * (len(overlap) / len(benchmark_datasets))

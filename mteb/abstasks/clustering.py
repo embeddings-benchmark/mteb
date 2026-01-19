@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import itertools
 import logging
 import random
 from collections import defaultdict
-from pathlib import Path
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 from datasets import Dataset, DatasetDict
@@ -11,13 +12,10 @@ from sklearn.cluster import MiniBatchKMeans
 from sklearn.metrics.cluster import v_measure_score
 
 from mteb._create_dataloaders import create_dataloader
-from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import Array, EncodeKwargs, HFSubset, ScoresDict
+from mteb.models import EncoderProtocol
+from mteb.types import Array, HFSubset
 from mteb.types.statistics import (
-    ImageStatistics,
-    LabelStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
 
 from ._statistics_calculation import (
@@ -26,6 +24,17 @@ from ._statistics_calculation import (
     calculate_text_statistics,
 )
 from .abstask import AbsTask
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from mteb.models import MTEBModels
+    from mteb.types import Array, EncodeKwargs, ScoresDict
+    from mteb.types.statistics import (
+        ImageStatistics,
+        LabelStatistics,
+        TextStatistics,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -186,7 +195,7 @@ class AbsTaskClustering(AbsTask):
                     self.max_fraction_of_documents_to_embed * len(data_split)
                 )
             else:
-                max_documents_to_embed = cast(int, self.max_document_to_embed)
+                max_documents_to_embed = cast("int", self.max_document_to_embed)
 
             max_documents_to_embed = min(len(data_split), max_documents_to_embed)
             example_indices = self.rng_state.sample(

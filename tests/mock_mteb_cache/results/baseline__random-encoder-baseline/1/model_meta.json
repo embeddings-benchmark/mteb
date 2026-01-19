@@ -23,8 +23,11 @@
         "text",
         "image"
     ],
-    "is_cross_encoder": null,
+    "model_type": [
+        "dense"
+    ],
     "citation": null,
     "contacts": null,
-    "loader": "RandomEncoderBaseline"
+    "loader": "RandomEncoderBaseline",
+    "is_cross_encoder": false
 }

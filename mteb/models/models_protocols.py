@@ -1,22 +1,23 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
-from torch.utils.data import DataLoader
-from typing_extensions import Unpack
-
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.types import (
-    Array,
-    BatchedInput,
-    CorpusDatasetType,
-    EncodeKwargs,
-    PromptType,
-    QueryDatasetType,
-    RetrievalOutputType,
-    TopRankedDocumentsType,
-)
-
 if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
+
+    from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.model_meta import ModelMeta
+    from mteb.types import (
+        Array,
+        BatchedInput,
+        CorpusDatasetType,
+        EncodeKwargs,
+        PromptType,
+        QueryDatasetType,
+        RetrievalOutputType,
+        TopRankedDocumentsType,
+    )
 
 
 @runtime_checkable
@@ -72,7 +73,7 @@ class SearchProtocol(Protocol):
         ...
 
     @property
-    def mteb_model_meta(self) -> "ModelMeta":
+    def mteb_model_meta(self) -> ModelMeta:
         """Metadata of the model"""
         ...
 
@@ -177,7 +178,7 @@ class EncoderProtocol(Protocol):
         ...
 
     @property
-    def mteb_model_meta(self) -> "ModelMeta":
+    def mteb_model_meta(self) -> ModelMeta:
         """Metadata of the model"""
         ...
 
@@ -236,7 +237,7 @@ class CrossEncoderProtocol(Protocol):
         ...
 
     @property
-    def mteb_model_meta(self) -> "ModelMeta":
+    def mteb_model_meta(self) -> ModelMeta:
         """Metadata of the model"""
         ...
 
