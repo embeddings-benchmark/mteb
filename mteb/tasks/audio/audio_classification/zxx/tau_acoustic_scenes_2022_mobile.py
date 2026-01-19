@@ -12,7 +12,7 @@ class TAUAcousticScenes2022Mobile(AbsTaskClassification):
             "revision": "d0da0ed80d22944c7a5690c4b570683d45c4dfaf",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["test"],
         eval_langs=["zxx-Zxxx"],
         main_score="accuracy",
