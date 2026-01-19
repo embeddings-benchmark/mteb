@@ -239,11 +239,9 @@ class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
                 )
 
                 # Create datasets directly without intermediate lists
-                queries_ds = (
-                    lang_dataset.select_columns([id_col, audio_col])
-                    .rename_column(id_col, "id")
-                    .rename_column(audio_col, "audio")
-                )
+                queries_ds = lang_dataset.select_columns(
+                    [id_col, audio_col]
+                ).rename_column(id_col, "id")
 
                 corpus_ds = (
                     lang_dataset.select_columns([id_col, text_col])
@@ -322,11 +320,9 @@ class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
                     .rename_column(text_col, "text")
                 )
 
-                corpus_ds = (
-                    lang_dataset.select_columns([id_col, audio_col])
-                    .rename_column(id_col, "id")
-                    .rename_column(audio_col, "audio")
-                )
+                corpus_ds = lang_dataset.select_columns(
+                    [id_col, audio_col]
+                ).rename_column(id_col, "id")
 
                 relevant_docs_ = {
                     str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
@@ -394,11 +390,9 @@ class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
                 )
 
                 # Create datasets directly without intermediate lists
-                queries_ds = (
-                    lang_dataset.select_columns([id_col, audio_col])
-                    .rename_column(id_col, "id")
-                    .rename_column(audio_col, "audio")
-                )
+                queries_ds = lang_dataset.select_columns(
+                    [id_col, audio_col]
+                ).rename_column(id_col, "id")
 
                 corpus_ds = (
                     lang_dataset.select_columns([id_col, text_col])
@@ -477,11 +471,9 @@ class CommonVoice21T2ARetrieval(AbsTaskRetrieval):
                     .rename_column(text_col, "text")
                 )
 
-                corpus_ds = (
-                    lang_dataset.select_columns([id_col, audio_col])
-                    .rename_column(id_col, "id")
-                    .rename_column(audio_col, "audio")
-                )
+                corpus_ds = lang_dataset.select_columns(
+                    [id_col, audio_col]
+                ).rename_column(id_col, "id")
 
                 relevant_docs_ = {
                     str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
