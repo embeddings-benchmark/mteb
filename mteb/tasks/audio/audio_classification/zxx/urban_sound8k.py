@@ -12,7 +12,7 @@ class UrbanSound8kClassification(AbsTaskClassification):
             "revision": "8aa9177a0c5a6949ee4ee4b7fcabb01dfd4ae466",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["zxx-Zxxx"],
         main_score="accuracy",

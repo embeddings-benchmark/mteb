@@ -429,6 +429,7 @@ extend-exclude = [
     "mteb/tasks/pair_classification/nld/",
     "mteb/tasks/sts/nld/",
     "mteb/tasks/retrieval/nld/",
+    "mteb/descriptive_stats/",
 ]
 
 [tool.typos.type.py]
@@ -461,3 +462,5 @@ Ono = "Ono"
 Yau = "Yau"
 Altas = "Altas"
 matche = "matche"
+expresso = "expresso"
+Expresso = "Expresso"

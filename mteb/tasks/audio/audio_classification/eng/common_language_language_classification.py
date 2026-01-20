@@ -12,7 +12,7 @@ class CommonLanguageLanguageClassification(AbsTaskClassification):
             "revision": "445bd662ffd3883ac662e2f1df18724c10688304",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

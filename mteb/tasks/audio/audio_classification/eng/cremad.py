@@ -12,7 +12,7 @@ class CREMAD(AbsTaskClassification):
             "revision": "a9d0821955c418752248b8310438854e56a1cf34",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

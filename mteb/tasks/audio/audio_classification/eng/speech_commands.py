@@ -12,7 +12,7 @@ class SpeechCommandsClassification(AbsTaskClassification):
             "revision": "3ac713aa0829eeadda73182f38bbbd788d21254b",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

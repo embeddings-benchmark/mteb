@@ -38,6 +38,12 @@ class VoiceGenderClustering(AbsTaskClustering):
     input_column_name: str = "audio"
 
     def dataset_transform(self):
+        # Filter out samples with empty audio arrays
+        for split in self.dataset:
+            self.dataset[split] = self.dataset[split].filter(
+                lambda x: len(x["audio"]["array"]) > 0,
+                desc="Filtering empty audio samples",
+            )
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"], label=self.label_column_name
         )
