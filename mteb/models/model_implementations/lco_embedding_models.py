@@ -18,6 +18,7 @@ from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
+
 class LCOEmbedding(AbsEncoder):
     def __init__(
         self,
@@ -27,15 +28,19 @@ class LCOEmbedding(AbsEncoder):
         **kwargs: Any,
     ):
         requires_audio_dependencies()
-       
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = 10
 
-        self.processor = Qwen2_5OmniProcessor.from_pretrained(model_name, revision=revision)
+        self.processor = Qwen2_5OmniProcessor.from_pretrained(
+            model_name, revision=revision
+        )
         self.processor.tokenizer.padding_side = "left"
-        
-        self.model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained(model_name, torch_dtype=torch.bfloat16, **kwargs).to(self.device)
+
+        self.model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained(
+            model_name, torch_dtype=torch.bfloat16, **kwargs
+        ).to(self.device)
         self.model.eval()
 
         # Audio sampling rate target
@@ -52,7 +57,6 @@ class LCOEmbedding(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-
         try:
             from qwen_omni_utils import process_mm_info
         except ImportError:
@@ -60,11 +64,10 @@ class LCOEmbedding(AbsEncoder):
                 "The 'qwen_omni_utils' package is required for this model. "
                 "Please install it or ensure it is in your python path."
             )
-        
+
         # Pre-calculate max samples once
         max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
-        
-        
+
         all_embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):
@@ -75,9 +78,8 @@ class LCOEmbedding(AbsEncoder):
 
             for i in range(batch_size):
                 content = []
-                
-                audio_row = audio_list[i] if i < len(audio_list) else None
 
+                audio_row = audio_list[i] if i < len(audio_list) else None
 
                 if audio_row is not None:
                     array = torch.tensor(audio_row["array"], dtype=torch.float32)
@@ -85,13 +87,19 @@ class LCOEmbedding(AbsEncoder):
 
                     # --- Handle empty audio if there's any ---
                     if array.numel() == 0:
-                        logger.warning(f"Encountered empty audio in {hf_subset}. Using 0.1s silence placeholder.")
+                        logger.warning(
+                            f"Encountered empty audio in {hf_subset}. Using 0.1s silence placeholder."
+                        )
                         # Create minimal silent audio (0.1 seconds) to prevent pooling crash
-                        array = torch.zeros(int(self.sampling_rate * 0.1), dtype=torch.float32)
+                        array = torch.zeros(
+                            int(self.sampling_rate * 0.1), dtype=torch.float32
+                        )
                     # --------------------------------
 
                     if sr != self.sampling_rate:
-                        resampler = torchaudio.transforms.Resample(orig_freq=sr, new_freq=self.sampling_rate)
+                        resampler = torchaudio.transforms.Resample(
+                            orig_freq=sr, new_freq=self.sampling_rate
+                        )
                         array = resampler(array)
                     if len(array) > max_samples:
                         array = array[:max_samples]
@@ -102,7 +110,11 @@ class LCOEmbedding(AbsEncoder):
                     content.append({"type": "text", "text": text_row})
 
                 # Append the training prompt
-                prompt_suffix = "\nSummarize the above audio in one word:" if audio_row else "\nSummarize the above text in one word:"
+                prompt_suffix = (
+                    "\nSummarize the above audio in one word:"
+                    if audio_row
+                    else "\nSummarize the above text in one word:"
+                )
                 content.append({"type": "text", "text": prompt_suffix})
 
                 messages_batch.append([{"role": "user", "content": content}])
@@ -110,8 +122,10 @@ class LCOEmbedding(AbsEncoder):
             text_prompts = self.processor.apply_chat_template(
                 messages_batch, tokenize=False, add_generation_prompt=True
             )
-            
-            audio_inputs, _, _ = process_mm_info(messages_batch, use_audio_in_video=False)
+
+            audio_inputs, _, _ = process_mm_info(
+                messages_batch, use_audio_in_video=False
+            )
 
             processor_inputs = self.processor(
                 text=text_prompts,
@@ -122,9 +136,7 @@ class LCOEmbedding(AbsEncoder):
 
             with torch.no_grad():
                 outputs = self.model(
-                    **processor_inputs,
-                    output_hidden_states=True,
-                    return_dict=True
+                    **processor_inputs, output_hidden_states=True, return_dict=True
                 )
 
                 embeddings = outputs.hidden_states[-1][:, -1, :]
@@ -132,6 +144,7 @@ class LCOEmbedding(AbsEncoder):
                 all_embeddings.append(embeddings.cpu().to(torch.float32))
 
         return torch.cat(all_embeddings, dim=0).numpy()
+
 
 lco_3b = ModelMeta(
     loader=LCOEmbedding,
