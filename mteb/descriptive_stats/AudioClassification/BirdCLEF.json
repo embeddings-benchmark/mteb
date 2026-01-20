@@ -1,0 +1,177 @@
+{
+    "train": {
+        "num_samples": 1000,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 33601.95621875,
+            "min_duration_seconds": 1.04490625,
+            "average_duration_seconds": 33.60195621875,
+            "max_duration_seconds": 491.25878125,
+            "unique_audios": 1000,
+            "average_sampling_rate": 32000.0,
+            "sampling_rates": {
+                "32000": 1000
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 50,
+            "labels": {
+                "amekes": {
+                    "count": 20
+                },
+                "banana": {
+                    "count": 20
+                },
+                "bbwduc": {
+                    "count": 20
+                },
+                "bkmtou1": {
+                    "count": 20
+                },
+                "blbgra1": {
+                    "count": 20
+                },
+                "blhpar1": {
+                    "count": 20
+                },
+                "bobfly1": {
+                    "count": 20
+                },
+                "bubwre1": {
+                    "count": 20
+                },
+                "bugtan": {
+                    "count": 20
+                },
+                "butsal1": {
+                    "count": 20
+                },
+                "chbant1": {
+                    "count": 20
+                },
+                "compau": {
+                    "count": 20
+                },
+                "compot1": {
+                    "count": 20
+                },
+                "cotfly1": {
+                    "count": 20
+                },
+                "creoro1": {
+                    "count": 20
+                },
+                "greegr": {
+                    "count": 20
+                },
+                "grekis": {
+                    "count": 20
+                },
+                "gycwor1": {
+                    "count": 20
+                },
+                "laufal1": {
+                    "count": 20
+                },
+                "linwoo1": {
+                    "count": 20
+                },
+                "littin1": {
+                    "count": 20
+                },
+                "orcpar": {
+                    "count": 20
+                },
+                "paltan1": {
+                    "count": 20
+                },
+                "pirfly1": {
+                    "count": 20
+                },
+                "rinkin1": {
+                    "count": 20
+                },
+                "roahaw": {
+                    "count": 20
+                },
+                "rumfly1": {
+                    "count": 20
+                },
+                "rutjac1": {
+                    "count": 20
+                },
+                "saffin": {
+                    "count": 20
+                },
+                "smbani": {
+                    "count": 20
+                },
+                "sobtyr1": {
+                    "count": 20
+                },
+                "socfly1": {
+                    "count": 20
+                },
+                "solsan": {
+                    "count": 20
+                },
+                "soulap1": {
+                    "count": 20
+                },
+                "speowl1": {
+                    "count": 20
+                },
+                "stbwoo2": {
+                    "count": 20
+                },
+                "strcuc1": {
+                    "count": 20
+                },
+                "strfly1": {
+                    "count": 20
+                },
+                "trokin": {
+                    "count": 20
+                },
+                "tropar": {
+                    "count": 20
+                },
+                "trsowl": {
+                    "count": 20
+                },
+                "wbwwre1": {
+                    "count": 20
+                },
+                "whbman1": {
+                    "count": 20
+                },
+                "whtdov": {
+                    "count": 20
+                },
+                "yebela1": {
+                    "count": 20
+                },
+                "yebfly1": {
+                    "count": 20
+                },
+                "yecspi2": {
+                    "count": 20
+                },
+                "yehcar1": {
+                    "count": 20
+                },
+                "yeofly1": {
+                    "count": 20
+                },
+                "yercac1": {
+                    "count": 20
+                }
+            }
+        }
+    }
+}

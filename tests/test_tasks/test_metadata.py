@@ -226,6 +226,9 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         "SpeechCommandsZeroshotv0.01",
         "SpeechCommandsZeroshotv0.02",
         "BirdSet",
+        "RavdessZeroshot",
+        "FleursA2TRetrieval",
+        "FleursT2ARetrieval",
     ):
         # https://github.com/embeddings-benchmark/mteb/issues/3499
         assert task.metadata.dataset.get("trust_remote_code", False) is True
@@ -240,12 +243,16 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
     if task.is_aggregate:  # aggregate tasks do not have descriptive stats
         return
 
-    # TODO https://github.com/embeddings-benchmark/mteb/issues/3279
-    if task.metadata.name in ["MIRACLVisionRetrieval", "VDRMultilingualRetrieval"]:
-        return
-
     # TODO https://github.com/embeddings-benchmark/mteb/issues/3498
-    if "audio" in task.metadata.modalities:
+    if task.metadata.name in (
+        "FleursA2TRetrieval",
+        "FleursT2ARetrieval",
+        "SoundDescsA2TRetrieval",
+        "SoundDescsT2ARetrieval",
+        "BirdSet",
+        "AudioSet",
+    ):
+        assert task.metadata.descriptive_stats is None
         pytest.skip("Skipping audio tasks for now, see issue #3498")
 
     assert task.metadata.descriptive_stats is not None, (
