@@ -245,34 +245,14 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
 
     # TODO https://github.com/embeddings-benchmark/mteb/issues/3498
     if task.metadata.name in (
-        "ClothoA2TRetrieval",
-        "ClothoT2ARetrieval",
-        "CommonVoice17A2TRetrieval",
-        "CommonVoice17T2ARetrieval",
-        "CommonVoice21A2TRetrieval",
-        "CommonVoice21T2ARetrieval",
-        "VocalSound",
-        "SIBFLEURS",
         "FleursA2TRetrieval",
         "FleursT2ARetrieval",
-        "RavdessZeroshot",
-        "VoiceGenderClustering",
         "SoundDescsA2TRetrieval",
         "SoundDescsT2ARetrieval",
-        "UrbanSound8kZeroshot",
-        "FSD2019Kaggle",
         "BirdSet",
-        "GoogleSVQT2ARetrieval",
-        "GoogleSVQA2TRetrieval",
         "AudioSet",
-        "JamAltArtistA2ARetrieval",
-        "JamAltLyricA2TRetrieval",
-        "JamAltLyricT2ARetrieval",
-        "ExpressoConv",
-        "GLOBEV2Age",
-        "ExpressoRead",
-        "GLOBEV2Gender",
     ):
+        assert task.metadata.descriptive_stats is None
         pytest.skip("Skipping audio tasks for now, see issue #3498")
 
     assert task.metadata.descriptive_stats is not None, (
