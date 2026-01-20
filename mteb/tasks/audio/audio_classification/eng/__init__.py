@@ -1,4 +1,3 @@
-from .ambient_acoustic_context import AmbientAcousticContextClassification
 from .common_language_age_detection import CommonLanguageAgeDetection
 from .common_language_gender_detection import CommonLanguageGenderDetection
 from .common_language_language_classification import (
@@ -28,7 +27,6 @@ from .vox_populi_accent_id import VoxPopuliAccentID
 __all__ = [
     "CREMAD",
     "FSDD",
-    "AmbientAcousticContextClassification",
     "CSTRVCTKAccentID",
     "CSTRVCTKGenderClassification",
     "CommonLanguageAgeDetection",

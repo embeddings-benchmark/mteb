@@ -12,7 +12,7 @@ class BirdCLEFClassification(AbsTaskClassification):
             "revision": "582215665b247604b555da7ff4e071f82d3617db",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["zxx-Zxxx"],
         main_score="accuracy",

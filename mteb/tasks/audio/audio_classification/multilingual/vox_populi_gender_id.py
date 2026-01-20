@@ -12,7 +12,7 @@ class VoxPopuliGenderID(AbsTaskClassification):
             "revision": "d5fb9661054ba250e2c03adeb9a702ad55e73f27",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=[
             "eng-Latn",  # English
