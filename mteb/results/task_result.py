@@ -650,7 +650,6 @@ class TaskResult(BaseModel):
                 ]
                 seen_subsets = {"default"}
             else:
-                # Use list comprehension for better performance
                 new_scores[split] = [
                     _scores
                     for _scores in self.scores[split]
