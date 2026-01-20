@@ -12,7 +12,7 @@ class VoxLingua107Top10(AbsTaskClassification):
             "revision": "d934546d059e16c9a4669adbd518e0fa86a69ff0",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

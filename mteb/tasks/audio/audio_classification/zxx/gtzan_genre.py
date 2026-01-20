@@ -12,7 +12,7 @@ class GTZANGenre(AbsTaskClassification):
             "revision": "53efa094d18619a4e2bf36123192ec7a01a7d1bf",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["zxx-Zxxx"],
         main_score="accuracy",
