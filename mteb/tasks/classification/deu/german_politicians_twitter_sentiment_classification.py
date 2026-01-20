@@ -49,7 +49,7 @@ Zesch, Torsten},
         superseded_by="GermanPoliticiansTwitterSentimentClassification.v2",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_column("majority_sentiment", "label")
 
 

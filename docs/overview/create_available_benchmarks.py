@@ -1,13 +1,15 @@
 """Updates the available benchmarks markdown file."""
 
 from pathlib import Path
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 from prettify_list import pretty_long_list
 from slugify import slugify_anchor
 
 import mteb
-from mteb.get_tasks import MTEBTasks
+
+if TYPE_CHECKING:
+    from mteb.get_tasks import MTEBTasks
 
 benchmark_entry = """
 ####  {benchmark_name}
@@ -38,7 +40,7 @@ citation_chunk = """
 def create_table(benchmark: mteb.Benchmark) -> str:
     """Create a markdown table of tasks in the benchmark."""
     tasks = benchmark.tasks
-    tasks = cast(MTEBTasks, tasks)
+    tasks = cast("MTEBTasks", tasks)
     df = tasks.to_dataframe(["name", "type", "modalities", "languages"])
 
     # add links to task names:

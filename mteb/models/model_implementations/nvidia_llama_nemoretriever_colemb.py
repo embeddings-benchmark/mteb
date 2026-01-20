@@ -1,14 +1,18 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
 from packaging.version import Version
 from torch.utils.data import DataLoader
 from transformers import __version__ as transformers_version
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperforming,
       title={Llama Nemoretriever Colembed: Top-Performing Text-Image Retrieval Model},
@@ -158,6 +162,7 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     release_date="2025-06-27",
     modalities=["image", "text"],
     n_parameters=2_418_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=4610,
     max_tokens=8192,
     embed_dim=2048,
@@ -185,6 +190,7 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     release_date="2025-06-27",
     modalities=["image", "text"],
     n_parameters=4_407_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=8403,
     max_tokens=8192,
     embed_dim=3072,

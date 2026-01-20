@@ -1,13 +1,17 @@
+from __future__ import annotations
+
 import re
 from collections import defaultdict
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 import numpy as np
 import pandas as pd
 
 import mteb
 from mteb.get_tasks import get_task, get_tasks
-from mteb.results.benchmark_results import BenchmarkResults
+
+if TYPE_CHECKING:
+    from mteb.results.benchmark_results import BenchmarkResults
 
 
 def _borda_count(scores: pd.Series) -> pd.Series:

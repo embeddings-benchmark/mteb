@@ -5,18 +5,19 @@ from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
 from mteb.similarity_functions import (
     select_pairwise_similarity,
     select_similarity,
 )
-from mteb.types._encoder_io import Array, BatchedInput, PromptType
 
 if TYPE_CHECKING:
     from PIL import Image
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types._encoder_io import Array, BatchedInput, PromptType
 
 
 def _string_to_vector(text: str | None, size: int) -> np.ndarray:

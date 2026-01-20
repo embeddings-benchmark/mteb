@@ -3,17 +3,16 @@ from __future__ import annotations
 import json
 import logging
 import warnings
-from collections.abc import Callable, Sequence
+from collections.abc import Callable
 from dataclasses import field
 from enum import Enum
 from functools import partial
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
+import numpy as np
 from huggingface_hub import (
-    GitCommitInfo,
     ModelCard,
-    ModelCardData,
     get_safetensors_metadata,
     hf_hub_download,
     list_repo_commits,
@@ -29,18 +28,27 @@ from huggingface_hub.errors import (
     SafetensorsParsingError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
+from sentence_transformers.models import Transformer
+from torch import nn
 from transformers import AutoConfig
-from typing_extensions import Self
 
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.languages import check_language_code
-from mteb.models.models_protocols import EncoderProtocol, MTEBModels
+from mteb.models.models_protocols import MTEBModels
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from huggingface_hub import (
+        GitCommitInfo,
+        ModelCardData,
+    )
     from sentence_transformers import CrossEncoder, SentenceTransformer
+    from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
+    from mteb.models.models_protocols import EncoderProtocol
 
 
 logger = logging.getLogger(__name__)
@@ -94,8 +102,9 @@ class ModelMeta(BaseModel):
         loader: The function that loads the model. If None it assumes that the model is not implemented.
         loader_kwargs: The keyword arguments to pass to the loader function.
         name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
-        n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
-            if the loader returns a SentenceTransformer model from which it can be derived.
+        n_parameters: The total number of parameters in the model, e.g. `7_000_000` for a 7M parameter model. Can be none in case the number of parameters is unknown.
+        n_embedding_parameters: The number of parameters used for the embedding layer. Can be None if the number of embedding parameters is not known (e.g. for proprietary models).
+        n_active_parameters_override: The number of active parameters used bu model. Should be used **only** for Mixture of Experts models.
         memory_usage_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
@@ -134,6 +143,8 @@ class ModelMeta(BaseModel):
     release_date: StrDate | None
     languages: list[ISOLanguageScript] | None
     n_parameters: int | None
+    n_active_parameters_override: int | None = None
+    n_embedding_parameters: int | None = None
     memory_usage_mb: float | None
     max_tokens: float | None
     embed_dim: int | None
@@ -191,6 +202,16 @@ class ModelMeta(BaseModel):
         Derived from model_type field. A model is considered a cross-encoder if "cross-encoder" is in its model_type list.
         """
         return "cross-encoder" in self.model_type
+
+    @property
+    def n_active_parameters(self):
+        """Number of active parameters. Assumed to be `n_parameters - n_embedding_parameters`. Can be overwritten using `n_active_parameters_override` e.g. for MoE models."""
+        if self.n_active_parameters_override is not None:
+            return self.n_active_parameters_override
+
+        if self.n_parameters is not None and self.n_embedding_parameters is not None:
+            return self.n_parameters - self.n_embedding_parameters
+        return None
 
     @field_validator("similarity_fn_name", mode="before")
     @classmethod
@@ -384,6 +405,14 @@ class ModelMeta(BaseModel):
             else model.model_card_data.base_model
         )
         meta = cls._from_hub(name, revision, compute_metadata)
+        try:
+            first = model[0]
+
+            if isinstance(first, Transformer):
+                emb = first.auto_model.get_input_embeddings()
+                meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
+        except Exception as e:
+            logger.warning(f"Could not calculate embedding parameters for {name}: {e}")
         meta.revision = model.model_card_data.base_model_revision or meta.revision
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
@@ -455,6 +484,15 @@ class ModelMeta(BaseModel):
         from mteb.models import CrossEncoderWrapper
 
         meta = cls._from_hub(model.model.name_or_path, revision, compute_metadata)
+        try:
+            emb = model.model.get_input_embeddings()
+
+            if isinstance(emb, nn.Embedding):
+                meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
+        except Exception as e:
+            logger.warning(
+                f"Could not calculate embedding parameters for {model.model.name_or_path}: {e}"
+            )
         meta.revision = model.config._commit_hash or meta.revision
         meta.loader = CrossEncoderWrapper
         meta.embed_dim = None
@@ -479,7 +517,7 @@ class ModelMeta(BaseModel):
         if isinstance(tasks[0], str):
             benchmark_datasets = set(tasks)
         else:
-            tasks = cast(Sequence["AbsTask"], tasks)
+            tasks = cast("Sequence[AbsTask]", tasks)
             benchmark_datasets = set()
             for task in tasks:
                 benchmark_datasets.add(task.metadata.name)
@@ -534,7 +572,7 @@ class ModelMeta(BaseModel):
         if isinstance(tasks[0], str):
             benchmark_datasets = set(tasks)
         else:
-            tasks = cast(Sequence["AbsTask"], tasks)
+            tasks = cast("Sequence[AbsTask]", tasks)
             benchmark_datasets = {task.metadata.name for task in tasks}
         overlap = training_datasets & benchmark_datasets
         perc_overlap = 100 * (len(overlap) / len(benchmark_datasets))

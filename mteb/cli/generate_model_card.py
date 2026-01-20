@@ -1,13 +1,20 @@
+from __future__ import annotations
+
 import logging
 import warnings
-from collections.abc import Sequence
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from huggingface_hub import ModelCard, ModelCardData, repo_exists
 
 from mteb.abstasks.abstask import AbsTask
-from mteb.benchmarks.benchmark import Benchmark
 from mteb.cache import ResultCache
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from mteb.abstasks.abstask import AbsTask
+    from mteb.benchmarks.benchmark import Benchmark
 
 logger = logging.getLogger(__name__)
 

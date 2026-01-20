@@ -1,6 +1,13 @@
-from typing_extensions import NotRequired, TypedDict
+from __future__ import annotations
 
-from mteb.types import HFSubset
+from typing import TYPE_CHECKING
+
+from typing_extensions import TypedDict
+
+if TYPE_CHECKING:
+    from typing_extensions import NotRequired
+
+    from mteb.types import HFSubset
 
 
 class SplitDescriptiveStatistics(TypedDict):

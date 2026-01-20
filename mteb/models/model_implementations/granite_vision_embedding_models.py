@@ -4,20 +4,21 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import (
     requires_image_dependencies,
 )
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
-
-logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from PIL import Image
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+
+logger = logging.getLogger(__name__)
 
 
 class GraniteVisionEmbeddingWrapper:
@@ -172,6 +173,7 @@ granite_vision_embedding = ModelMeta(
     release_date="2025-06-11",
     modalities=["image", "text"],
     n_parameters=2_980_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=11351,
     max_tokens=128000,
     embed_dim=128,

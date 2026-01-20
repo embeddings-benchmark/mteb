@@ -6,16 +6,18 @@ import warnings
 from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.autonotebook import tqdm
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from PIL import Image
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -354,6 +356,7 @@ gme_qwen2vl_2b = ModelMeta(
     release_date="2024-12-24",
     modalities=["image", "text"],
     n_parameters=2_210_000_000,
+    n_embedding_parameters=233_373_696,
     memory_usage_mb=8427,
     embed_dim=1536,
     license="apache-2.0",
@@ -378,6 +381,7 @@ gme_qwen2vl_7b = ModelMeta(
     release_date="2024-12-24",
     modalities=["image", "text"],
     n_parameters=8_290_000_000,
+    n_embedding_parameters=544_997_376,
     memory_usage_mb=31629,
     embed_dim=3584,
     license="apache-2.0",

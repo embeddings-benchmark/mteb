@@ -1,13 +1,19 @@
+from __future__ import annotations
+
 import json
 import logging
 import sys
-from collections.abc import Iterable, Sequence
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ModelMeta
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
-from mteb.types import ModelName, Revision
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
+    from pathlib import Path
+
+    from mteb.types import ModelName, Revision
 
 if sys.version_info >= (3, 13):
     from warnings import deprecated

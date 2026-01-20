@@ -1,18 +1,24 @@
+from __future__ import annotations
+
 import logging
 import time
 from functools import wraps
-from typing import Any, Literal, get_args
+from typing import TYPE_CHECKING, Any, Literal, get_args
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -386,6 +392,7 @@ cohere_mult_3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=512,
@@ -412,6 +419,7 @@ cohere_eng_3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=512,
     embed_dim=1024,
@@ -437,6 +445,7 @@ cohere_mult_light_3 = ModelMeta(
     reference="https://cohere.com/blog/introducing-embed-v3",
     release_date="2023-11-02",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=512,
     embed_dim=384,
@@ -462,6 +471,7 @@ cohere_eng_light_3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=512,
     embed_dim=384,
