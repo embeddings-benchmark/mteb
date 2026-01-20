@@ -12,7 +12,7 @@ class VocalSoundClassification(AbsTaskClassification):
             "revision": "426c4f4779901e731f0ba7157de727750325a68b",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

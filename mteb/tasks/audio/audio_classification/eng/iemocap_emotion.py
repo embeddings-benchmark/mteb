@@ -12,7 +12,7 @@ class IEMOCAPEmotionClassification(AbsTaskClassification):
             "revision": "6d4225271da423e791e16770d335cfa351cdf88e",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
