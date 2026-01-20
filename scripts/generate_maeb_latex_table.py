@@ -77,7 +77,53 @@ TASK_TYPE_CANONICAL = {
     "AudioZeroshotClassification": "ZeroshotClassification",
     "A2TRetrieval": "Retrieval",
     "T2ARetrieval": "Retrieval",
+    "Any2AnyRetrieval": "Retrieval",
 }
+
+# Model category mapping for grouping in the table
+MODEL_CATEGORY = {
+    # Large audio-language models
+    "Qwen2-Audio-7B": "Large audio-language models",
+    "LCO-Embedding-Omni-7B": "Large audio-language models",
+    "LCO-Embedding-Omni-3B": "Large audio-language models",
+    # Contrastive Alignment Models
+    "larger_clap_general": "Contrastive Alignment Models",
+    "larger_clap_music_and_speech": "Contrastive Alignment Models",
+    "clap-htsat-unfused": "Contrastive Alignment Models",
+    "clap-htsat-fused": "Contrastive Alignment Models",
+    "msclap-2023": "Contrastive Alignment Models",
+    "msclap-2022": "Contrastive Alignment Models",
+    "wav2clip": "Contrastive Alignment Models",
+    # Sequence-to-sequence Models
+    "whisper-medium": "Sequence-to-sequence Models",
+    "whisper-base": "Sequence-to-sequence Models",
+    "whisper-tiny": "Sequence-to-sequence Models",
+    "whisper-small": "Sequence-to-sequence Models",
+    "whisper-large-v3": "Sequence-to-sequence Models",
+    "mms-1b-l1107": "Sequence-to-sequence Models",
+    "mms-1b-all": "Sequence-to-sequence Models",
+    "speecht5_multimodal": "Sequence-to-sequence Models",
+    # Audio Encoders
+    "ast-finetuned-audioset-10-10-0.4593": "Audio Encoders",
+    "vggish": "Audio Encoders",
+    "yamnet": "Audio Encoders",
+    "wavlm-large": "Audio Encoders",
+    "hubert-base-ls960": "Audio Encoders",
+    "wav2vec2-xls-r-300m-phoneme": "Audio Encoders",
+    "cnn14-esc50": "Audio Encoders",
+    "wav2vec2-lv-60-espeak-cv-ft": "Audio Encoders",
+    "wav2vec2-xls-r-2b": "Audio Encoders",
+    "wav2vec2-base": "Audio Encoders",
+    "wavlm-base-plus": "Audio Encoders",
+    "wavlm-base-plus-sv": "Audio Encoders",
+}
+
+MODEL_CATEGORY_ORDER = [
+    "Large audio-language models",
+    "Contrastive Alignment Models",
+    "Sequence-to-sequence Models",
+    "Audio Encoders",
+]
 
 
 def load_results_from_json(results_dir: Path, task_names: list[str]) -> pd.DataFrame:
@@ -190,15 +236,25 @@ def find_best_scores(
     return best
 
 
-def format_score(value: float, best_value: float, is_best: bool = None) -> str:
-    """Format a score, bolding if it's the best."""
+def format_score(
+    value: float,
+    best_value: float,
+    is_global_best: bool = None,
+    is_category_best: bool = False,
+) -> str:
+    """Format a score, bolding if it's the global best and highlighting if category best."""
     if pd.isna(value):
         return "-"
-    if is_best is None:
-        is_best = abs(value - best_value) < 0.001
-    if is_best:
-        return f"\\textbf{{{value:.1f}}}"
-    return f"{value:.1f}"
+    if is_global_best is None:
+        is_global_best = abs(value - best_value) < 0.05
+
+    cell_prefix = ""
+    if is_category_best:
+        cell_prefix = "\\cellcolor{gray!20}"
+
+    if is_global_best:
+        return f"{cell_prefix}\\textbf{{{value:.1f}}}"
+    return f"{cell_prefix}{value:.1f}"
 
 
 def generate_latex_table(
@@ -454,7 +510,7 @@ def generate_maeb_table_with_audio_rank(
     benchmark_name: str,
     top_n: int = 30,
 ) -> str:
-    """Generate LaTeX table for MAEB benchmark with audio-only rank column."""
+    """Generate LaTeX table for MAEB benchmark with audio-only rank column and model categories."""
     available_tasks = [t for t in maeb_tasks if t in df.columns]
     df_filtered = df.dropna(subset=available_tasks, how="all")
 
@@ -476,6 +532,10 @@ def generate_maeb_table_with_audio_rank(
     # Create rank mapping for audio-only
     audio_rankings = audio_borda.sort_values(ascending=False)
     audio_rank_map = {idx: rank for rank, idx in enumerate(audio_rankings.index, 1)}
+
+    # Create MAEB rank mapping
+    maeb_rankings = df_filtered.sort_values("borda_count", ascending=False)
+    maeb_rank_map = {idx: rank for rank, idx in enumerate(maeb_rankings.index, 1)}
 
     # Task type order for MAEB
     task_type_order = [
@@ -507,12 +567,20 @@ def generate_maeb_table_with_audio_rank(
         canonical_type = TASK_TYPE_CANONICAL.get(raw_type, raw_type)
         task_type_counts[canonical_type] += 1
 
-    # Find best scores among top N
+    # Find global best scores among top N
     top_df = df_filtered.head(top_n)
     best_scores = {
         "mean": top_df["mean"].max(),
         "weighted_mean": top_df["weighted_mean"].max(),
+        "maeb_rank": top_df["borda_count"].max(),  # Best MAEB rank (lowest number = 1)
     }
+    # Best audio rank among models in top_n
+    audio_ranks_in_top = [
+        audio_rank_map.get(idx) for idx in top_df.index if idx in audio_rank_map
+    ]
+    if audio_ranks_in_top:
+        best_scores["audio_rank"] = min(audio_ranks_in_top)
+
     for task_type in task_type_order:
         if task_type in category_avgs:
             top_indices = top_df.index
@@ -520,6 +588,56 @@ def generate_maeb_table_with_audio_rank(
             valid_vals = cat_series.loc[cat_series.index.intersection(top_indices)]
             if len(valid_vals) > 0:
                 best_scores[task_type] = valid_vals.max() * 100
+
+    # Group models by category
+    top_models = df_filtered.head(top_n)
+
+    # Add model category to dataframe
+    def get_model_category(row):
+        model_name = row["model"]
+        display_name = model_name.split("/")[-1] if "/" in model_name else model_name
+        return MODEL_CATEGORY.get(display_name, "Other")
+
+    top_models = top_models.copy()
+    top_models["model_category"] = top_models.apply(get_model_category, axis=1)
+
+    # Group by category
+    models_by_category = {}
+    for category in MODEL_CATEGORY_ORDER:
+        category_models = top_models[top_models["model_category"] == category]
+        if len(category_models) > 0:
+            models_by_category[category] = category_models
+
+    # Compute best scores within each category
+    category_best_scores = {}
+    for category, cat_models in models_by_category.items():
+        cat_best = {
+            "mean": cat_models["mean"].max(),
+            "weighted_mean": cat_models["weighted_mean"].max(),
+        }
+        # Best MAEB rank within category (lowest number)
+        cat_maeb_ranks = [
+            maeb_rank_map.get(idx) for idx in cat_models.index if idx in maeb_rank_map
+        ]
+        if cat_maeb_ranks:
+            cat_best["maeb_rank"] = min(cat_maeb_ranks)
+        # Best audio rank within category (lowest number)
+        cat_audio_ranks = [
+            audio_rank_map.get(idx) for idx in cat_models.index if idx in audio_rank_map
+        ]
+        if cat_audio_ranks:
+            cat_best["audio_rank"] = min(cat_audio_ranks)
+
+        for task_type in task_type_order:
+            if task_type in category_avgs:
+                cat_indices = cat_models.index
+                cat_series = category_avgs[task_type]
+                valid_vals = cat_series.loc[cat_series.index.intersection(cat_indices)]
+                valid_vals = valid_vals.dropna()
+                if len(valid_vals) > 0:
+                    cat_best[task_type] = valid_vals.max() * 100
+
+        category_best_scores[category] = cat_best
 
     lines = []
 
@@ -541,46 +659,119 @@ def generate_maeb_table_with_audio_rank(
     )
     lines.append("\\midrule")
 
-    # Model rows
-    for rank, (idx, row) in enumerate(top_df.iterrows(), 1):
-        model_name = row["model"]
-        display_name = model_name.split("/")[-1] if "/" in model_name else model_name
-        if len(display_name) > 35:
-            display_name = display_name[:32] + "..."
+    # Output models grouped by category
+    for category in MODEL_CATEGORY_ORDER:
+        if category not in models_by_category:
+            continue
 
-        borda = int(row["borda_count"])
-        mean = row["mean"]
-        weighted = row["weighted_mean"]
+        cat_models = models_by_category[category]
+        cat_best = category_best_scores[category]
 
-        # Get audio-only rank for this model
-        audio_rank = audio_rank_map.get(idx, "-")
-        if audio_rank != "-":
-            audio_rank_str = str(audio_rank)
-        else:
-            audio_rank_str = "-"
+        # Category header
+        lines.append(f"\\textbf{{{category}}}\\\\")
+        lines.append("\\midrule")
 
-        mean_str = format_score(mean, best_scores["mean"])
-        weighted_str = format_score(weighted, best_scores["weighted_mean"])
+        # Model rows within this category
+        for idx, row in cat_models.iterrows():
+            model_name = row["model"]
+            display_name = (
+                model_name.split("/")[-1] if "/" in model_name else model_name
+            )
+            if len(display_name) > 35:
+                display_name = display_name[:32] + "..."
 
-        cat_values = []
-        for task_type in task_type_order:
-            if task_type in category_avgs:
-                try:
-                    val = category_avgs[task_type].loc[idx] * 100
-                    cat_values.append(
-                        format_score(val, best_scores.get(task_type, val))
-                    )
-                except (KeyError, TypeError):
-                    cat_values.append("-")
+            mean = row["mean"]
+            weighted = row["weighted_mean"]
+
+            # Get ranks for this model
+            maeb_rank = maeb_rank_map.get(idx, "-")
+            audio_rank = audio_rank_map.get(idx, "-")
+
+            # Check if this model has category-best ranks
+            is_cat_best_maeb = maeb_rank != "-" and maeb_rank == cat_best.get(
+                "maeb_rank"
+            )
+            is_cat_best_audio = audio_rank != "-" and audio_rank == cat_best.get(
+                "audio_rank"
+            )
+
+            # Format rank strings with category highlighting
+            if maeb_rank != "-":
+                maeb_prefix = "\\cellcolor{gray!20}" if is_cat_best_maeb else ""
+                maeb_rank_str = f"{maeb_prefix}{maeb_rank}"
             else:
-                cat_values.append("-")
+                maeb_rank_str = "-"
 
-        cat_str = " & ".join(cat_values)
-        display_name = display_name.replace("_", "\\_")
+            if audio_rank != "-":
+                audio_prefix = "\\cellcolor{gray!20}" if is_cat_best_audio else ""
+                audio_rank_str = f"{audio_prefix}{audio_rank}"
+            else:
+                audio_rank_str = "-"
 
-        lines.append(
-            f"{display_name} & {rank} & {audio_rank_str} & {mean_str} & {weighted_str} & {cat_str} \\\\"
-        )
+            # Format scores (use 0.05 tolerance to handle floating point comparison for values rounded to 1 decimal)
+            is_cat_best_mean = (
+                not pd.isna(mean)
+                and abs(mean - cat_best.get("mean", float("-inf"))) < 0.05
+            )
+            is_global_best_mean = (
+                not pd.isna(mean) and abs(mean - best_scores["mean"]) < 0.05
+            )
+            mean_str = format_score(
+                mean, best_scores["mean"], is_global_best_mean, is_cat_best_mean
+            )
+
+            is_cat_best_weighted = (
+                not pd.isna(weighted)
+                and abs(weighted - cat_best.get("weighted_mean", float("-inf"))) < 0.05
+            )
+            is_global_best_weighted = (
+                not pd.isna(weighted)
+                and abs(weighted - best_scores["weighted_mean"]) < 0.05
+            )
+            weighted_str = format_score(
+                weighted,
+                best_scores["weighted_mean"],
+                is_global_best_weighted,
+                is_cat_best_weighted,
+            )
+
+            cat_values = []
+            for task_type in task_type_order:
+                if task_type in category_avgs:
+                    try:
+                        val = category_avgs[task_type].loc[idx] * 100
+                        is_cat_best_task = (
+                            not pd.isna(val)
+                            and abs(val - cat_best.get(task_type, float("-inf"))) < 0.05
+                        )
+                        is_global_best_task = (
+                            not pd.isna(val)
+                            and abs(val - best_scores.get(task_type, float("-inf")))
+                            < 0.05
+                        )
+                        cat_values.append(
+                            format_score(
+                                val,
+                                best_scores.get(task_type, val),
+                                is_global_best_task,
+                                is_cat_best_task,
+                            )
+                        )
+                    except (KeyError, TypeError):
+                        cat_values.append("-")
+                else:
+                    cat_values.append("-")
+
+            cat_str = " & ".join(cat_values)
+            display_name = display_name.replace("_", "\\_")
+
+            lines.append(
+                f"{display_name} & {maeb_rank_str} & {audio_rank_str} & {mean_str} & {weighted_str} & {cat_str} \\\\"
+            )
+
+        # Add midrule after each category (except the last one)
+        if category != MODEL_CATEGORY_ORDER[-1]:
+            lines.append("\\midrule")
 
     return "\n".join(lines)
 
@@ -609,7 +800,7 @@ def main():
     latex_output.append(r"""\begin{table*}[!th]
     \centering
     \caption{
-    Top 30 models on the MAEB benchmark (27 tasks spanning audio-only and audio-text evaluation). Results are ranked using Borda count. The ``Audio'' column shows the model's rank on MAEB(audio-only) for reference. We provide averages across all tasks, and per task category. Task categories are abbreviated as: Classification (Clf), Pair Classification (PC), Reranking (Rrnk), Clustering (Clust), Retrieval (Rtrvl), Zero-shot Classification (Zero Clf.). We highlight the best score in \textbf{bold}.
+    Top 30 models on the MAEB benchmark (32 tasks spanning audio-only and audio-text evaluation). Results are ranked using Borda count. The ``Audio'' column shows the model's rank on MAEB(audio-only) for reference. We provide averages across all tasks, and per task category. Task categories are abbreviated as: Classification (Clf), Pair Classification (PC), Reranking (Rrnk), Clustering (Clust), Retrieval (Rtrvl), Zero-shot Classification (Zero Clf.). We highlight the best score in \textbf{bold} and the best score with each model category using a grey cell.
     }
     \label{tab:maeb-performance}
     \resizebox{\textwidth}{!}{
