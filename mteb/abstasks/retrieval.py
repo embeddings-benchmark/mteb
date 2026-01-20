@@ -263,7 +263,7 @@ class AbsTaskRetrieval(AbsTask):
             return
 
         dataset_path = self.metadata.dataset["path"]
-        eval_splits = self.metadata.eval_splits
+        eval_splits = self.eval_splits
         trust_remote_code = self.metadata.dataset.get("trust_remote_code", False)
         revision = self.metadata.dataset["revision"]
 
@@ -284,7 +284,7 @@ class AbsTaskRetrieval(AbsTask):
             )
 
         if self.metadata.is_multilingual:
-            for lang in self.metadata.eval_langs:
+            for lang in self.hf_subsets:
                 for split in eval_splits:
                     _process_data(split, lang)
         else:
