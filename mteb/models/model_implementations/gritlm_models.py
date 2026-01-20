@@ -75,6 +75,7 @@ gritlm8x7b = ModelMeta(
     release_date="2024-02-15",
     n_parameters=57_920_000_000,
     n_embedding_parameters=None,
+    n_active_parameters_override=13_000_000_000,
     memory_usage_mb=89079,
     embed_dim=32768,
     license="apache-2.0",
