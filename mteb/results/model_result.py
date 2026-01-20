@@ -420,7 +420,7 @@ class ModelResult(BaseModel):
             mods = self.default_modalities
         return list(set(mods))
 
-    def to_disk(self, path: Path | str) -> None:
+    def to_disk(self, path: Path) -> None:
         """Save ModelResult to disk as JSON.
 
         Args:
@@ -433,7 +433,7 @@ class ModelResult(BaseModel):
             f.write(self.model_dump_json(indent=2))
 
     @classmethod
-    def from_disk(cls, path: Path | str) -> ModelResult:
+    def from_disk(cls, path: Path) -> ModelResult:
         """Load ModelResult from disk.
 
         Args:
