@@ -183,9 +183,9 @@ _EVAL_LANGS_CV21 = {
 }
 
 
-class MiniCommonVoice17A2TRetrieval(AbsTaskRetrieval):
+class CommonVoiceMini17A2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MiniCommonVoice17A2TRetrieval",
+        name="CommonVoiceMini17A2TRetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
         reference="https://commonvoice.mozilla.org/",
         dataset={
@@ -277,9 +277,9 @@ class MiniCommonVoice17A2TRetrieval(AbsTaskRetrieval):
                 del lang_dataset
 
 
-class MiniCommonVoice17T2ARetrieval(AbsTaskRetrieval):
+class CommonVoiceMini17T2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MiniCommonVoice17T2ARetrieval",
+        name="CommonVoiceMini17T2ARetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
         reference="https://commonvoice.mozilla.org/",
         dataset={
@@ -371,9 +371,9 @@ class MiniCommonVoice17T2ARetrieval(AbsTaskRetrieval):
                 del lang_dataset
 
 
-class MiniCommonVoice21A2TRetrieval(AbsTaskRetrieval):
+class CommonVoiceMini21A2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MiniCommonVoice21A2TRetrieval",
+        name="CommonVoiceMini21A2TRetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
         reference="https://commonvoice.mozilla.org/",
         dataset={
@@ -465,9 +465,9 @@ class MiniCommonVoice21A2TRetrieval(AbsTaskRetrieval):
                 del lang_dataset
 
 
-class MiniCommonVoice21T2ARetrieval(AbsTaskRetrieval):
+class CommonVoiceMini21T2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MiniCommonVoice21T2ARetrieval",
+        name="CommonVoiceMini21T2ARetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
         reference="https://commonvoice.mozilla.org/",
         dataset={
