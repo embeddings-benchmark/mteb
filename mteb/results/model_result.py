@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import warnings
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
@@ -18,7 +19,6 @@ from .task_result import TaskError, TaskResult
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable
-    from pathlib import Path
 
     from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import (
@@ -426,8 +426,6 @@ class ModelResult(BaseModel):
         Args:
             path: The path to the file to save.
         """
-        from pathlib import Path
-
         path = Path(path)
         with path.open("w") as f:
             f.write(self.model_dump_json(indent=2))
@@ -442,8 +440,6 @@ class ModelResult(BaseModel):
         Returns:
             The loaded ModelResult object.
         """
-        from pathlib import Path
-
         path = Path(path)
         with path.open("r", encoding="utf-8") as f:
             data = json.load(f)
