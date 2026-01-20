@@ -12,7 +12,7 @@ class LibriCount(AbsTaskClassification):
             "revision": "cc851c56e30dc5dde80c1823de96d52ca3cb2607",
         },
         type="AudioClassification",
-        category="a2t",
+        category="a2c",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

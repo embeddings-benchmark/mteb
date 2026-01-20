@@ -231,12 +231,16 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
     if task.is_aggregate:  # aggregate tasks do not have descriptive stats
         return
 
-    # TODO https://github.com/embeddings-benchmark/mteb/issues/3279
-    if task.metadata.name in ["MIRACLVisionRetrieval", "VDRMultilingualRetrieval"]:
-        return
-
     # TODO https://github.com/embeddings-benchmark/mteb/issues/3498
-    if "audio" in task.metadata.modalities:
+    if task.metadata.name in (
+        "FleursA2TRetrieval",
+        "FleursT2ARetrieval",
+        "SoundDescsA2TRetrieval",
+        "SoundDescsT2ARetrieval",
+        "BirdSet",
+        "AudioSet",
+    ):
+        assert task.metadata.descriptive_stats is None
         pytest.skip("Skipping audio tasks for now, see issue #3498")
 
     assert task.metadata.descriptive_stats is not None, (
