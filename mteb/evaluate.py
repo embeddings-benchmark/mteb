@@ -363,6 +363,9 @@ def evaluate(
             num_proc=num_proc,
         )
         combined_results = aggregated_task.combine_task_results(results.task_results)
+        if cache:
+            cache.save_to_cache(combined_results, meta)
+
         return ModelResult(
             model_name=results.model_name,
             model_revision=results.model_revision,
