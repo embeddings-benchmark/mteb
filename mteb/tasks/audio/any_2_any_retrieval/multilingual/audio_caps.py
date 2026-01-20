@@ -1,5 +1,3 @@
-from datasets import Audio
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -11,7 +9,7 @@ class AudioCapsA2TRetrieval(AbsTaskRetrieval):
         reference="https://audiocaps.github.io/",
         dataset={
             "path": "mteb/audiocaps_a2t",
-            "revision": "9633a2d50398d042b79904bde006c1e23d7063d7",
+            "revision": "acfbf827c27f81787800129443780c072dc8ae62",
         },
         type="Any2AnyRetrieval",
         category="a2t",
@@ -38,19 +36,6 @@ class AudioCapsA2TRetrieval(AbsTaskRetrieval):
         # prompt={"query": "Retrieve the answer to the question."},
     )
 
-    def dataset_transform(self):
-        for subset in self.dataset:
-            for split in self.dataset[subset]:
-                sampling_rate = self.dataset[subset][split]["queries"][0]["audio"][
-                    "sampling_rate"
-                ]
-                self.dataset[subset][split]["queries"] = self.dataset[subset][split][
-                    "queries"
-                ].cast_column(
-                    "audio",
-                    Audio(sampling_rate=sampling_rate),
-                )
-
 
 class AudioCapsT2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -59,7 +44,7 @@ class AudioCapsT2ARetrieval(AbsTaskRetrieval):
         reference="https://audiocaps.github.io/",
         dataset={
             "path": "mteb/audiocaps_t2a",
-            "revision": "54610ade1c109ff008cd59f0f86578c3d6b9e330",
+            "revision": "cb63d82bd4b2868f5e6410bf771d1c91bfc50203",
         },
         type="Any2AnyRetrieval",
         category="t2a",
@@ -84,16 +69,3 @@ class AudioCapsT2ARetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def dataset_transform(self):
-        for subset in self.dataset:
-            for split in self.dataset[subset]:
-                sampling_rate = self.dataset[subset][split]["corpus"][0]["audio"][
-                    "sampling_rate"
-                ]
-                self.dataset[subset][split]["corpus"] = self.dataset[subset][split][
-                    "corpus"
-                ].cast_column(
-                    "audio",
-                    Audio(sampling_rate=sampling_rate),
-                )
