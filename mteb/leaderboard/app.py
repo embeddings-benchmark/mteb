@@ -550,7 +550,10 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
 
     logger.info("Step 7/7: Building Gradio interface and callbacks...")
     interface_start = time.time()
-    with gr.Blocks(fill_width=True) as demo:
+    with gr.Blocks(
+        title="MTEB Leaderboard",
+        fill_width=True,
+    ) as demo:
         with gr.Sidebar(
             position="left",
             label="Benchmark Selection and Customization",

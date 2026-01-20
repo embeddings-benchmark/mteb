@@ -647,16 +647,26 @@ class TaskResult(BaseModel):
             if split not in splits:
                 continue
             seen_subsets = set()
-            # Use list comprehension for better performance
-            new_scores[split] = [
-                _scores
-                for _scores in self.scores[split]
-                if _scores["hf_subset"] in hf_subsets
-            ]
+            if task.is_aggregate:
+                # aggregate tasks only have the default subset, but in metadata can be multiple
+                new_scores[split] = [
+                    _scores
+                    for _scores in self.scores[split]
+                    if _scores["hf_subset"] == "default"
+                ]
+                seen_subsets = {"default"}
+            else:
+                new_scores[split] = [
+                    _scores
+                    for _scores in self.scores[split]
+                    if _scores["hf_subset"] in hf_subsets
+                ]
             for _scores in new_scores[split]:
                 seen_subsets.add(_scores["hf_subset"])
 
-            if seen_subsets != hf_subsets:
+            if seen_subsets != hf_subsets and not (
+                task.is_aggregate and "default" in seen_subsets
+            ):
                 missing_subsets = hf_subsets - seen_subsets
                 if len(missing_subsets) > 2:
                     subset1, subset2 = list(missing_subsets)[:2]
