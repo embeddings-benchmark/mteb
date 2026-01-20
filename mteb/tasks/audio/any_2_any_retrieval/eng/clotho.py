@@ -13,8 +13,8 @@ class ClothoA2TRetrieval(AbsTaskRetrieval):
         description="An audio captioning datasetst containing audio clips and their corresponding captions.",
         reference="https://github.com/audio-captioning/clotho-dataset",
         dataset={
-            "path": "CLAPv2/Clotho",
-            "revision": "b491ad6569dba180ca60a0e2d17a1d6a0d5d9f4a",
+            "path": "mteb/Clotho",
+            "revision": "c44521cd4067f134e5f5bace4290b59ed773b451",
         },
         type="Any2AnyRetrieval",
         category="a2t",
@@ -48,11 +48,7 @@ class ClothoA2TRetrieval(AbsTaskRetrieval):
 
         ds = load_dataset(**self.metadata.dataset, split="test", keep_in_memory=False)
 
-        queries_ds = (
-            ds.select_columns(["index", "audio"])
-            .rename_column("index", "id")
-            .map(lambda x: {"id": f"q-{x['id']}"}, batched=False)
-        )
+        queries_ds = ds.select_columns(["index", "audio"]).rename_column("index", "id")
 
         # Corpus: need to split captions, so we build this
         corpus_data = {"id": [], "text": []}
@@ -60,13 +56,12 @@ class ClothoA2TRetrieval(AbsTaskRetrieval):
 
         for row in tqdm(ds, total=len(ds), desc="Loading Clotho AT2 Retrieval Data"):
             index = row["index"]
-            query_id = f"q-{index}"
 
             for i, text in enumerate(row["text"].split(".")):
                 doc_id = f"d-{index}-{i}"
                 corpus_data["id"].append(doc_id)
                 corpus_data["text"].append(text)
-                qrels_dict[query_id][doc_id] = 1
+                qrels_dict[index][doc_id] = 1
 
         self.corpus = DatasetDict({"test": Dataset.from_dict(corpus_data)})
         self.queries = DatasetDict({"test": queries_ds})
@@ -80,8 +75,8 @@ class ClothoT2ARetrieval(AbsTaskRetrieval):
         description="An audio captioning datasetst containing audio clips from the Freesound platform and their corresponding captions.",
         reference="https://github.com/audio-captioning/clotho-dataset",
         dataset={
-            "path": "CLAPv2/Clotho",
-            "revision": "b491ad6569dba180ca60a0e2d17a1d6a0d5d9f4a",
+            "path": "mteb/Clotho",
+            "revision": "c44521cd4067f134e5f5bace4290b59ed773b451",
         },
         type="Any2AnyRetrieval",
         category="t2a",
@@ -116,24 +111,19 @@ class ClothoT2ARetrieval(AbsTaskRetrieval):
         ds = load_dataset(**self.metadata.dataset, split="test", keep_in_memory=False)
 
         # Corpus: reuse dataset with column operations (no copy for audio)
-        corpus_ds = (
-            ds.select_columns(["index", "audio"])
-            .rename_column("index", "id")
-            .map(lambda x: {"id": f"d-{x['id']}"}, batched=False)
-        )
+        corpus_ds = ds.select_columns(["index", "audio"]).rename_column("index", "id")
 
         queries_data = {"id": [], "text": []}
         qrels_dict = defaultdict(dict)
 
         for row in ds:
             index = row["index"]
-            doc_id = f"d-{index}"
 
             for i, text in enumerate(row["text"].split(".")):
                 query_id = f"q-{index}-{i}"
                 queries_data["id"].append(query_id)
                 queries_data["text"].append(text)
-                qrels_dict[query_id][doc_id] = 1
+                qrels_dict[query_id][index] = 1
 
         self.corpus = DatasetDict({"test": corpus_ds})
         self.queries = DatasetDict({"test": Dataset.from_dict(queries_data)})
