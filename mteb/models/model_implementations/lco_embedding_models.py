@@ -2,7 +2,6 @@ import logging
 from typing import Any
 
 import torch
-import torchaudio
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import (
@@ -57,6 +56,8 @@ class LCOEmbedding(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torchaudio
+
         try:
             from qwen_omni_utils import process_mm_info
         except ImportError:
