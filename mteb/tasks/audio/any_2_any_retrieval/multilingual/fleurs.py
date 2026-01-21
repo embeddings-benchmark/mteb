@@ -1,8 +1,8 @@
 from collections import defaultdict
 
 import datasets
-from datasets import Dataset, DatasetDict
-from tqdm import tqdm
+from datasets import DatasetDict
+from tqdm.auto import tqdm
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -156,48 +156,32 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
         self, id_col="path", text_col="transcription", audio_col="audio"
     ):
         """A2T: Query = audio, Corpus = text."""
-        for lang, _ in self.metadata.eval_langs.items():
-            queries_ = {"id": [], "modality": [], "audio": []}
-            corpus_ = {"id": [], "modality": [], "text": []}
-            relevant_docs_ = {}
-
+        for lang in tqdm(self.hf_subsets, desc="Loading FleursA2TRetrieval subsets"):
             lang_dataset = datasets.load_dataset(
                 self.metadata.dataset["path"],
                 lang,
-                revision=self.metadata.dataset.get("revision"),
+                revision=self.metadata.dataset["revision"],
             )
 
             for split in self.metadata.eval_splits:
-                qid = set()
-                did = set()
-                for row in tqdm(
-                    lang_dataset[split],
-                    total=len(lang_dataset[split]),
-                    desc=f"{lang}-{split}",
-                ):
-                    query_id = str(row[id_col])
-                    doc_id = str(row[id_col])
-                    text = row[text_col]
-                    audio = row[audio_col]
+                split_dataset = lang_dataset[split]
 
-                    if query_id not in qid:
-                        qid.add(query_id)
-                        queries_["id"].append(query_id)
-                        queries_["audio"].append(audio)
-                        queries_["modality"].append("audio")
+                queries_ds = split_dataset.select_columns(
+                    [id_col, audio_col]
+                ).rename_column(id_col, "id")
 
-                    if doc_id not in did:
-                        did.add(doc_id)
-                        corpus_["id"].append(doc_id)
-                        corpus_["text"].append(text)
-                        corpus_["modality"].append("text")
+                corpus_ds = (
+                    split_dataset.select_columns([id_col, text_col])
+                    .rename_column(id_col, "id")
+                    .rename_column(text_col, "text")
+                )
 
-                    if query_id not in relevant_docs_:
-                        relevant_docs_[query_id] = {}
-                    relevant_docs_[query_id][doc_id] = 1
+                relevant_docs_ = {
+                    str(row[id_col]): {str(row[id_col]): 1} for row in split_dataset
+                }
 
-                self.corpus[lang][split] = Dataset.from_dict(corpus_)
-                self.queries[lang][split] = Dataset.from_dict(queries_)
+                self.corpus[lang][split] = corpus_ds
+                self.queries[lang][split] = queries_ds
                 self.relevant_docs[lang][split] = relevant_docs_
 
 
@@ -244,46 +228,32 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
         self, id_col="path", text_col="transcription", audio_col="audio"
     ):
         """T2A: Query = text, Corpus = audio."""
-        for lang, _ in self.metadata.eval_langs.items():
-            queries_ = {"id": [], "modality": [], "text": []}
-            corpus_ = {"id": [], "modality": [], "audio": []}
-            relevant_docs_ = {}
-
+        for lang in tqdm(self.hf_subsets, desc="Loading FleursT2ARetrieval subsets"):
             lang_dataset = datasets.load_dataset(
                 self.metadata.dataset["path"],
                 lang,
-                revision=self.metadata.dataset.get("revision"),
+                revision=self.metadata.dataset["revision"],
             )
 
             for split in self.metadata.eval_splits:
-                qid = set()
-                did = set()
-                for row in tqdm(
-                    lang_dataset[split],
-                    total=len(lang_dataset[split]),
-                    desc=f"{lang}-{split}",
-                ):
-                    query_id = str(row[id_col])
-                    doc_id = str(row[id_col])
-                    text = row[text_col]
-                    audio = row[audio_col]
+                split_dataset = lang_dataset[split]
 
-                    if query_id not in qid:
-                        qid.add(query_id)
-                        queries_["id"].append(query_id)
-                        queries_["text"].append(text)
-                        queries_["modality"].append("text")
+                # Create datasets directly without intermediate lists
+                queries_ds = (
+                    split_dataset.select_columns([id_col, text_col])
+                    .rename_column(id_col, "id")
+                    .rename_column(text_col, "text")
+                )
 
-                    if doc_id not in did:
-                        did.add(doc_id)
-                        corpus_["id"].append(doc_id)
-                        corpus_["audio"].append(audio)
-                        corpus_["modality"].append("audio")
+                corpus_ds = split_dataset.select_columns(
+                    [id_col, audio_col]
+                ).rename_column(id_col, "id")
 
-                    if query_id not in relevant_docs_:
-                        relevant_docs_[query_id] = {}
-                    relevant_docs_[query_id][doc_id] = 1
+                # Create relevant_docs mapping
+                relevant_docs_ = {
+                    str(row[id_col]): {str(row[id_col]): 1} for row in split_dataset
+                }
 
-                self.corpus[lang][split] = Dataset.from_dict(corpus_)
-                self.queries[lang][split] = Dataset.from_dict(queries_)
+                self.corpus[lang][split] = corpus_ds
+                self.queries[lang][split] = queries_ds
                 self.relevant_docs[lang][split] = relevant_docs_
