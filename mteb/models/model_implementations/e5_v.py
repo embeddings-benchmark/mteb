@@ -1,14 +1,19 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
 from packaging import version
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 E5_V_TRANSFORMERS_VERSION = (
     "4.44.2"  # Issue 1647: Only works with transformers==4.44.2.
@@ -166,6 +171,7 @@ e5_v = ModelMeta(
     release_date="2024-07-17",
     modalities=["image", "text"],
     n_parameters=8_360_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=15936,
     max_tokens=8192,
     embed_dim=4096,

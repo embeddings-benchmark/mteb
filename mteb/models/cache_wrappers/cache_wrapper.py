@@ -1,21 +1,26 @@
+from __future__ import annotations
+
 import logging
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
 from datasets import Dataset
-from torch.utils.data import DataLoader
 
 from mteb._create_dataloaders import create_dataloader
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.cache_wrappers.cache_backend_protocol import (
-    CacheBackendProtocol,
-)
 from mteb.models.cache_wrappers.cache_backends.numpy_cache import NumpyCache
-from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import EncoderProtocol
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.cache_wrappers.cache_backend_protocol import (
+        CacheBackendProtocol,
+    )
+    from mteb.models.model_meta import ModelMeta
+    from mteb.models.models_protocols import EncoderProtocol
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 

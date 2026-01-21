@@ -20,6 +20,7 @@ yuan_embedding_2_zh = ModelMeta(
     revision="b5ebcace6f4fc6e5a4d1852557eb2dc2d1040cee",
     release_date="2025-11-24",
     n_parameters=326000000,
+    n_embedding_parameters=21_635_072,
     memory_usage_mb=1242,
     embed_dim=1792,
     license="apache-2.0",

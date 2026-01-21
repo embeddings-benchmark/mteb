@@ -2,10 +2,8 @@ from __future__ import annotations
 
 import hashlib
 from collections import Counter
-from collections.abc import Mapping
 from typing import TYPE_CHECKING, cast
 
-from mteb.types import TopRankedDocumentsType
 from mteb.types.statistics import (
     ImageStatistics,
     LabelStatistics,
@@ -16,7 +14,11 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+
     from PIL import Image
+
+    from mteb.types import TopRankedDocumentsType
 
 
 def calculate_text_statistics(texts: list[str]) -> TextStatistics:
@@ -87,13 +89,13 @@ def calculate_label_statistics(labels: list[int | list[int]]) -> LabelStatistics
 
     if not isinstance(labels[0], list):
         # single label classification
-        single_label = cast(list[int], labels)
+        single_label = cast("list[int]", labels)
         label_len = [1] * len(single_label)
         total_label_len = len(single_label)
         total_labels.extend(single_label)
     elif isinstance(labels[0], list):
         # multilabel classification
-        multilabel_labels = cast(list[list[int]], labels)
+        multilabel_labels = cast("list[list[int]]", labels)
         label_len = [len(l) for l in multilabel_labels]
         total_label_len = sum(label_len)
         for l in multilabel_labels:

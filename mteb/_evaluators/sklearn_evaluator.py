@@ -1,17 +1,21 @@
-import logging
-from typing import Any, Protocol, cast
+from __future__ import annotations
 
-import numpy as np
-from datasets import Dataset
-from torch.utils.data import DataLoader
-from typing_extensions import Self
+import logging
+from typing import TYPE_CHECKING, Any, Protocol, cast
 
 from mteb._create_dataloaders import create_dataloader
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import EncoderProtocol
-from mteb.types import Array, BatchedInput, EncodeKwargs
 
 from .evaluator import Evaluator
+
+if TYPE_CHECKING:
+    import numpy as np
+    from datasets import Dataset
+    from torch.utils.data import DataLoader
+    from typing_extensions import Self
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import EncoderProtocol
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -50,18 +54,20 @@ class SklearnEvaluator(Evaluator):
         self.evaluator_model = evaluator_model
 
     def create_dataloaders(
-        self, encode_kwargs: EncodeKwargs
+        self, encode_kwargs: EncodeKwargs, num_proc: int
     ) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
         dataloader_train = create_dataloader(
             self.train_dataset,
             self.task_metadata,
             input_column=self.values_column_name,
+            num_proc=num_proc,
             **encode_kwargs,
         )
         dataloader_test = create_dataloader(
             self.eval_dataset,
             self.task_metadata,
             input_column=self.values_column_name,
+            num_proc=num_proc,
             **encode_kwargs,
         )
         return dataloader_train, dataloader_test
@@ -72,6 +78,7 @@ class SklearnEvaluator(Evaluator):
         *,
         encode_kwargs: EncodeKwargs,
         test_cache: Array | None = None,
+        num_proc: int = 1,
     ) -> tuple[np.ndarray, Array]:
         """Classification evaluation by training a sklearn classifier on the embeddings of the training set and evaluating on the embeddings of the test set.
 
@@ -79,6 +86,7 @@ class SklearnEvaluator(Evaluator):
             model: Encoder
             encode_kwargs: encode kwargs
             test_cache: embeddings of the test set, if already computed
+            num_proc: number of processes to use
 
         Returns:
             Tuple of test predictions and embeddings
@@ -86,6 +94,7 @@ class SklearnEvaluator(Evaluator):
         """
         dataloader_train, dataloader_test = self.create_dataloaders(
             encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
         )
 
         logger.info("Running - Encoding samples...")
@@ -104,7 +113,7 @@ class SklearnEvaluator(Evaluator):
                 hf_subset=self.hf_subset,
                 **encode_kwargs,
             )
-            test_cache = cast(Array, test_cache)
+            test_cache = cast("Array", test_cache)
 
         logger.info("Running - Fitting classifier...")
         y_train = self.train_dataset[self.label_column_name]

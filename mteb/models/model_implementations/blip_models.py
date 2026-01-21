@@ -1,14 +1,19 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
 from torch.nn.functional import normalize
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 BLIP_CITATION = """@misc{https://doi.org/10.48550/arxiv.2201.12086,
     doi = {10.48550/ARXIV.2201.12086},
@@ -136,6 +141,7 @@ blip_image_captioning_large = ModelMeta(
     release_date="2023-12-07",
     modalities=["image", "text"],
     n_parameters=470_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=1792,
     max_tokens=512,
     embed_dim=768,
@@ -164,6 +170,7 @@ blip_image_captioning_base = ModelMeta(
     release_date="2023-08-01",
     modalities=["image", "text"],
     n_parameters=247_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=942,
     max_tokens=512,
     embed_dim=768,
@@ -193,6 +200,7 @@ blip_vqa_base = ModelMeta(
     release_date="2023-12-07",
     modalities=["image", "text"],
     n_parameters=247_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=1467,
     max_tokens=512,
     embed_dim=768,
@@ -220,6 +228,7 @@ blip_vqa_capfilt_large = ModelMeta(
     release_date="2023-01-22",
     modalities=["image", "text"],
     n_parameters=247_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=942,
     max_tokens=512,
     embed_dim=768,
@@ -247,6 +256,7 @@ blip_itm_base_coco = ModelMeta(
     release_date="2023-08-01",
     modalities=["image", "text"],
     n_parameters=247_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=942,
     max_tokens=512,
     embed_dim=768,
@@ -274,6 +284,7 @@ blip_itm_large_coco = ModelMeta(
     release_date="2023-08-01",
     modalities=["image", "text"],
     n_parameters=470_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=1793,
     max_tokens=512,
     embed_dim=768,
@@ -302,6 +313,7 @@ blip_itm_base_flickr = ModelMeta(
     release_date="2023-08-01",
     modalities=["image", "text"],
     n_parameters=247_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=942,
     max_tokens=512,
     embed_dim=768,
@@ -330,6 +342,7 @@ blip_itm_large_flickr = ModelMeta(
     release_date="2023-08-01",
     modalities=["image", "text"],
     n_parameters=470_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=1793,
     max_tokens=512,
     embed_dim=768,

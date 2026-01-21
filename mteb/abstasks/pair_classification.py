@@ -1,16 +1,15 @@
+from __future__ import annotations
+
 import hashlib
 import logging
 from collections import defaultdict
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
 from datasets import Dataset
 from sklearn.metrics import average_precision_score
 
 from mteb._evaluators import PairClassificationEvaluator
-from mteb._evaluators.pair_classification_evaluator import (
-    PairClassificationDistances,
-)
 from mteb.abstasks._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,
@@ -18,14 +17,25 @@ from mteb.abstasks._statistics_calculation import (
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ScoringFunction
-from mteb.models.models_protocols import EncoderProtocol, MTEBModels
-from mteb.types import EncodeKwargs, PromptType
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types.statistics import (
-    ImageStatistics,
-    LabelStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from mteb._evaluators.pair_classification_evaluator import (
+        PairClassificationDistances,
+    )
+    from mteb.models.models_protocols import MTEBModels
+    from mteb.types import EncodeKwargs, PromptType
+    from mteb.types.statistics import (
+        ImageStatistics,
+        LabelStatistics,
+        TextStatistics,
+    )
+
 
 logger = logging.getLogger(__name__)
 
@@ -86,6 +96,7 @@ class AbsTaskPairClassification(AbsTask):
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs,
     ) -> dict[str, float]:
         if not isinstance(model, EncoderProtocol):
@@ -105,7 +116,11 @@ class AbsTaskPairClassification(AbsTask):
             input2_prompt_type=self.input2_prompt_type,
             **kwargs,
         )
-        similarity_scores = evaluator(model, encode_kwargs=encode_kwargs)
+        similarity_scores = evaluator(
+            model,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
 
         if prediction_folder:
             self._save_task_predictions(
@@ -238,7 +253,7 @@ class AbsTaskPairClassification(AbsTask):
             labels_statistics=calculate_label_statistics(labels),
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         # previously pair classification datasets were stored in a single row
         if self.dataset is None:
             # overall this shouldn't happen as we check for dataset before pushing to hub
@@ -262,6 +277,7 @@ class AbsTaskPairClassification(AbsTask):
                 self.input2_column_name,
                 self.label_column_name,
             ],
+            num_proc=num_proc,
         )
 
     def _compute_metrics_values(

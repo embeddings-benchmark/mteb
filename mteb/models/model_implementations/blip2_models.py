@@ -1,14 +1,19 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 BLIP2_CITATION = """@inproceedings{li2023blip2,
     title={{BLIP-2:} Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models},
@@ -172,6 +177,7 @@ blip2_opt_2_7b = ModelMeta(
     release_date="2024-03-22",
     modalities=["image", "text"],
     n_parameters=3_740_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=14285,
     max_tokens=None,
     embed_dim=768,
@@ -196,6 +202,7 @@ blip2_opt_6_7b_coco = ModelMeta(
     release_date="2024-03-31",
     modalities=["image", "text"],
     n_parameters=7_750_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=29577,
     max_tokens=None,
     embed_dim=768,

@@ -1,30 +1,36 @@
+from __future__ import annotations
+
 import heapq
 import logging
 import shutil
 import tempfile
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 
 from mteb._create_dataloaders import (
     create_dataloader,
 )
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import (
-    Array,
-    BatchedInput,
-    CorpusDatasetType,
-    EncodeKwargs,
-    PromptType,
-    QueryDatasetType,
-    RetrievalOutputType,
-    TopRankedDocumentsType,
-)
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import (
+        Array,
+        BatchedInput,
+        CorpusDatasetType,
+        EncodeKwargs,
+        QueryDatasetType,
+        RetrievalOutputType,
+        TopRankedDocumentsType,
+    )
+
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +53,7 @@ class PylateSearchEncoder:
         hf_split: str,
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
+        num_proc: int,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -56,6 +63,7 @@ class PylateSearchEncoder:
             hf_split: Split of current task, allows to know some additional information about current split.
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for indexing.
         """
         self.task_corpus = corpus
 
@@ -81,12 +89,14 @@ class PylateSearchEncoder:
         top_k: int,
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
+        num_proc: int,
     ) -> RetrievalOutputType:
         queries_dataloader = create_dataloader(
             queries,
             task_metadata,
             prompt_type=PromptType.query,
             batch_size=encode_kwargs.get("batch_size", 32),
+            num_proc=num_proc,
         )
 
         query_embeddings = self.encode(
@@ -110,6 +120,7 @@ class PylateSearchEncoder:
                 hf_subset=hf_subset,
                 hf_split=hf_split,
                 encode_kwargs=encode_kwargs,
+                num_proc=num_proc,
             )
         else:
             result_heaps = self._pylate_full_corpus_search(
@@ -120,6 +131,7 @@ class PylateSearchEncoder:
                 hf_subset=hf_subset,
                 hf_split=hf_split,
                 encode_kwargs=encode_kwargs,
+                num_proc=num_proc,
             )
 
         results = {qid: {} for qid in query_idx_to_id.values()}
@@ -138,6 +150,7 @@ class PylateSearchEncoder:
         hf_split: str,
         top_k: int,
         encode_kwargs: EncodeKwargs,
+        num_proc: int,
     ) -> dict[str, list[tuple[float, str]]]:
         from pylate import indexes, retrieve
 
@@ -164,6 +177,7 @@ class PylateSearchEncoder:
             task_metadata,
             prompt_type=PromptType.document,
             batch_size=encode_kwargs.get("batch_size", 32),
+            num_proc=num_proc,
         )
         documents_embeddings = self.encode(
             documents_loader,
@@ -202,6 +216,7 @@ class PylateSearchEncoder:
         hf_subset: str,
         hf_split: str,
         encode_kwargs: EncodeKwargs,
+        num_proc: int = 1,
     ) -> dict[str, list[tuple[float, str]]]:
         """Rerank with PyLate's rank.rerank using per-query candidates.
 
@@ -224,6 +239,7 @@ class PylateSearchEncoder:
                 task_metadata,
                 prompt_type=PromptType.document,
                 batch_size=encode_kwargs.get("batch_size", 32),
+                num_proc=num_proc,
             ),
             task_metadata=task_metadata,
             hf_split=hf_split,
@@ -346,6 +362,7 @@ colbert_v2 = ModelMeta(
     public_training_data=None,
     release_date="2024-09-21",
     n_parameters=int(110 * 1e6),
+    n_embedding_parameters=23_440_896,
     memory_usage_mb=418,
     max_tokens=180,
     embed_dim=None,
@@ -402,6 +419,7 @@ jina_colbert_v2 = ModelMeta(
     public_training_data=None,
     release_date="2024-08-16",
     n_parameters=int(559 * 1e6),
+    n_embedding_parameters=None,
     memory_usage_mb=1067,
     max_tokens=8192,
     embed_dim=None,
@@ -458,6 +476,7 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/lightonai/ms-marco-en-bge-gemma",
     release_date="2025-04-30",
     n_parameters=int(149 * 1e6),
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=8192,
     embed_dim=None,

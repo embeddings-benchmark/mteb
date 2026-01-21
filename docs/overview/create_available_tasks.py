@@ -83,7 +83,7 @@ def task_category_to_string(category: str) -> str:
 
 
 def create_aggregate_table(task: AbsTaskAggregate) -> str:
-    tasks = cast(MTEBTasks, MTEBTasks(task.metadata.tasks))
+    tasks = cast("MTEBTasks", MTEBTasks(task.metadata.tasks))
     df = tasks.to_dataframe(["name", "type", "modalities", "languages"])
     df["name"] = df.apply(
         lambda row: (

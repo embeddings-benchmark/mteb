@@ -6,7 +6,29 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 
-model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
+model_prompts = {
+    "query": "Represent this sentence for searching relevant passages: ",
+    "BrightBiologyRetrieval-query": "Represent this biology post for searching relevant passages: ",
+    "BrightEarthScienceRetrieval-query": "Represent this earth_science post for searching relevant passages: ",
+    "BrightEconomicsRetrieval-query": "Represent this economics post for searching relevant passages: ",
+    "BrightPsychologyRetrieval-query": "Represent this psychology post for searching relevant passages: ",
+    "BrightRoboticsRetrieval-query": "Represent this robotics post for searching relevant passages: ",
+    "BrightStackoverflowRetrieval-query": "Represent this stackoverflow post for searching relevant passages: ",
+    "BrightSustainableLivingRetrieval-query": "Represent this sustainable_living post for searching relevant passages: ",
+    "BrightPonyRetrieval-query": "Represent this Pony question for searching relevant passages: ",
+    "BrightLeetcodeRetrieval-query": "Represent this Coding problem for searching relevant examples: ",
+    "BrightAopsRetrieval-query": "Represent this Math problem for searching relevant examples: ",
+    "BrightTheoremQATheoremsRetrieval-query": "Represent this Math problem for searching relevant theorems: ",
+    "BrightTheoremQAQuestionsRetrieval-query": "Represent this Math problem for searching relevant examples: ",
+    "BrightBiologyLongRetrieval-query": "Represent this biology post for searching relevant documents: ",
+    "BrightEarthScienceLongRetrieval-query": "Represent this earth_science post for searching relevant documents: ",
+    "BrightEconomicsLongRetrieval-query": "Represent this economics post for searching relevant documents: ",
+    "BrightPsychologyLongRetrieval-query": "Represent this psychology post for searching relevant documents: ",
+    "BrightRoboticsLongRetrieval-query": "Represent this robotics post for searching relevant document: ",
+    "BrightStackoverflowLongRetrieval-query": "Represent this stackoverflow post for searching relevant document: ",
+    "BrightSustainableLivingLongRetrieval-query": "Represent this sustainable_living post for searching relevant documents: ",
+    "BrightPonyLongRetrieval-query": "Represent this Pony question for searching relevant documents: ",
+}
 BGE_15_CITATION = """@misc{bge_embedding,
       title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
       author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
@@ -325,6 +347,7 @@ bge_small_en_v1_5 = ModelMeta(
     revision="5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
     release_date="2023-09-12",  # initial commit of hf model.
     n_parameters=33_400_000,
+    n_embedding_parameters=11_720_448,
     memory_usage_mb=127,
     embed_dim=512,
     license="mit",
@@ -357,6 +380,7 @@ bge_base_en_v1_5 = ModelMeta(
     revision="a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",
     release_date="2023-09-11",  # initial commit of hf model.
     n_parameters=109_000_000,
+    n_embedding_parameters=23_440_896,
     memory_usage_mb=390,
     embed_dim=768,
     license="mit",
@@ -389,6 +413,7 @@ bge_large_en_v1_5 = ModelMeta(
     revision="d4aa6901d3a41ba39fb536a557fa166f842b0e09",
     release_date="2023-09-12",  # initial commit of hf model.
     n_parameters=335_000_000,
+    n_embedding_parameters=31_254_528,
     memory_usage_mb=1242,
     embed_dim=1024,
     license="mit",
@@ -421,6 +446,7 @@ bge_small_zh = ModelMeta(
     revision="1d2363c5de6ce9ba9c890c8e23a4c72dce540ca8",
     release_date="2023-08-05",  # initial commit of hf model.
     n_parameters=33_400_000,
+    n_embedding_parameters=10_817_536,
     memory_usage_mb=127,
     embed_dim=512,
     license="mit",
@@ -448,6 +474,7 @@ bge_base_zh = ModelMeta(
     revision="0e5f83d4895db7955e4cb9ed37ab73f7ded339b6",
     release_date="2023-08-05",  # initial commit of hf model.
     n_parameters=109_000_000,
+    n_embedding_parameters=16_226_304,
     memory_usage_mb=390,
     embed_dim=768,
     license="mit",
@@ -475,6 +502,7 @@ bge_large_zh = ModelMeta(
     revision="b5d9f5c027e87b6f0b6fa4b614f8f9cdc45ce0e8",
     release_date="2023-08-02",  # initial commit of hf model.
     n_parameters=335_000_000,
+    n_embedding_parameters=21_635_072,
     memory_usage_mb=1242,
     embed_dim=1024,
     license="mit",
@@ -502,6 +530,7 @@ bge_small_en = ModelMeta(
     revision="4778d71a06863076696b03fd2777eb118712cad8",
     release_date="2023-08-05",  # initial commit of hf model.
     n_parameters=33_400_000,
+    n_embedding_parameters=11_720_448,
     memory_usage_mb=127,
     embed_dim=512,
     license="mit",
@@ -529,6 +558,7 @@ bge_base_en = ModelMeta(
     revision="b737bf5dcc6ee8bdc530531266b4804a5d77b5d8",
     release_date="2023-08-05",  # initial commit of hf model.
     n_parameters=109_000_000,
+    n_embedding_parameters=23_440_896,
     memory_usage_mb=390,
     embed_dim=768,
     license="mit",
@@ -562,6 +592,7 @@ bge_large_en = ModelMeta(
     revision="abe7d9d814b775ca171121fb03f394dc42974275",
     release_date="2023-08-05",  # initial commit of hf model.
     n_parameters=335_000_000,
+    n_embedding_parameters=31_254_528,
     memory_usage_mb=1242,
     embed_dim=1024,
     license="mit",
@@ -590,6 +621,7 @@ bge_small_zh_v1_5 = ModelMeta(
     revision="7999e1d3359715c523056ef9478215996d62a620",
     release_date="2023-09-12",  # initial commit of hf model.
     n_parameters=33_400_000,
+    n_embedding_parameters=10_817_536,
     memory_usage_mb=91,
     embed_dim=512,
     license="mit",
@@ -616,6 +648,7 @@ bge_base_zh_v1_5 = ModelMeta(
     revision="f03589ceff5aac7111bd60cfc7d497ca17ecac65",
     release_date="2023-09-11",  # initial commit of hf model.
     n_parameters=109_000_000,
+    n_embedding_parameters=16_226_304,
     memory_usage_mb=416,
     embed_dim=768,
     license="mit",
@@ -642,6 +675,7 @@ bge_large_zh_v1_5 = ModelMeta(
     revision="79e7739b6ab944e86d6171e44d24c997fc1e0116",
     release_date="2023-09-12",  # initial commit of hf model.
     n_parameters=335_000_000,
+    n_embedding_parameters=21_635_072,
     memory_usage_mb=1278,
     embed_dim=1024,
     license="mit",
@@ -665,6 +699,7 @@ bge_m3 = ModelMeta(
     revision="5617a9f61b028005a4858fdac845db406aefb181",
     release_date="2024-06-28",
     n_parameters=568_000_000,
+    n_embedding_parameters=256_002_048,
     memory_usage_mb=2167,
     embed_dim=1024,
     license="mit",
@@ -761,6 +796,7 @@ bge_multilingual_gemma2 = ModelMeta(
     revision="992e13d8984fde2c31ef8a3cb2c038aeec513b8a",
     release_date="2024-07-25",  # initial commit of hf model.
     n_parameters=int(9.24 * 1e9),
+    n_embedding_parameters=917_511_168,
     memory_usage_mb=35254,
     embed_dim=3584,  # from old C-MTEB leaderboard
     license="https://ai.google.dev/gemma/terms",
@@ -808,6 +844,7 @@ bge_en_icl = ModelMeta(
     revision="971c7e1445cc86656ca0bd85ed770b8675a40bb5",
     release_date="2024-07-25",  # initial commit of hf model.
     n_parameters=int(7.11 * 1e9),
+    n_embedding_parameters=131_084_288,
     memory_usage_mb=27125,
     embed_dim=4096,
     license="apache-2.0",
@@ -842,6 +879,7 @@ bge_m3_unsupervised = ModelMeta(
     revision="46f03bc86361cf88102b0b517b36c8259f2946b1",
     release_date="2024-01-30",  # January 30, 2024 - BGE-M3 release date
     n_parameters=568_000_000,
+    n_embedding_parameters=256_002_048,
     memory_usage_mb=2167,
     embed_dim=1024,
     license="mit",
@@ -871,6 +909,7 @@ manu__bge_m3_custom_fr = ModelMeta(
     languages=None,
     loader=sentence_transformers_loader,
     n_parameters=567754752,
+    n_embedding_parameters=256_002_048,
     memory_usage_mb=2166,
     max_tokens=8194.0,
     embed_dim=1024,

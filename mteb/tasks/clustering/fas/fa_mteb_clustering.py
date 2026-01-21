@@ -33,7 +33,7 @@ class BeytooteClustering(AbsTaskClustering):
         bibtex_citation=""" """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.stratified_subsampling(
             self.dataset,
             seed=self.seed,
@@ -93,7 +93,7 @@ class HamshahriClustring(AbsTaskClustering):
         bibtex_citation=""" """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.map(
             lambda x: {"sentences": f"{x['title']}\n: {x['summary']}"}
         )
@@ -151,7 +151,7 @@ class NLPTwitterAnalysisClustering(AbsTaskClustering):
         bibtex_citation=""" """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_column("tweet", "sentences")
         self.dataset = self.dataset.rename_column("label", "labels")
         self.dataset = self.stratified_subsampling(
@@ -187,7 +187,7 @@ class SIDClustring(AbsTaskClustering):
         bibtex_citation=""" """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.stratified_subsampling(
             self.dataset,
             seed=self.seed,

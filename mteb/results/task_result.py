@@ -4,33 +4,39 @@ import json
 import logging
 import warnings
 from collections import defaultdict
-from collections.abc import Callable, Iterable, Mapping
 from functools import cached_property
 from importlib.metadata import version
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 from huggingface_hub import EvalResult
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
-from typing_extensions import Self
 
 from mteb import TaskMetadata
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.abstask import AbsTask
-from mteb.abstasks.task_metadata import TaskDomain
 from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
 from mteb.types import (
-    HFSubset,
-    ISOLanguage,
-    ISOLanguageScript,
-    Score,
     ScoresDict,
     SplitName,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable, Mapping
+    from pathlib import Path
+
+    from typing_extensions import Self
+
+    from mteb.abstasks.task_metadata import TaskDomain
+    from mteb.types import (
+        HFSubset,
+        ISOLanguage,
+        ISOLanguageScript,
+        Score,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -641,16 +647,26 @@ class TaskResult(BaseModel):
             if split not in splits:
                 continue
             seen_subsets = set()
-            # Use list comprehension for better performance
-            new_scores[split] = [
-                _scores
-                for _scores in self.scores[split]
-                if _scores["hf_subset"] in hf_subsets
-            ]
+            if task.is_aggregate:
+                # aggregate tasks only have the default subset, but in metadata can be multiple
+                new_scores[split] = [
+                    _scores
+                    for _scores in self.scores[split]
+                    if _scores["hf_subset"] == "default"
+                ]
+                seen_subsets = {"default"}
+            else:
+                new_scores[split] = [
+                    _scores
+                    for _scores in self.scores[split]
+                    if _scores["hf_subset"] in hf_subsets
+                ]
             for _scores in new_scores[split]:
                 seen_subsets.add(_scores["hf_subset"])
 
-            if seen_subsets != hf_subsets:
+            if seen_subsets != hf_subsets and not (
+                task.is_aggregate and "default" in seen_subsets
+            ):
                 missing_subsets = hf_subsets - seen_subsets
                 if len(missing_subsets) > 2:
                     subset1, subset2 = list(missing_subsets)[:2]
