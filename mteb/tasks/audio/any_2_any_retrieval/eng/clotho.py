@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from datasets import Dataset, DatasetDict, load_dataset
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -13,8 +13,8 @@ class ClothoA2TRetrieval(AbsTaskRetrieval):
         description="An audio captioning datasetst containing audio clips and their corresponding captions.",
         reference="https://github.com/audio-captioning/clotho-dataset",
         dataset={
-            "path": "CLAPv2/Clotho",
-            "revision": "b491ad6569dba180ca60a0e2d17a1d6a0d5d9f4a",
+            "path": "mteb/Clotho",
+            "revision": "c44521cd4067f134e5f5bace4290b59ed773b451",
         },
         type="Any2AnyRetrieval",
         category="a2t",
@@ -48,57 +48,24 @@ class ClothoA2TRetrieval(AbsTaskRetrieval):
 
         ds = load_dataset(**self.metadata.dataset, split="test", keep_in_memory=False)
 
-        queries_ = {"id": [], "modality": [], "audio": []}
-        corpus_ = {"id": [], "modality": [], "text": []}
-        relevant_docs_ = {"query-id": [], "corpus-id": [], "score": []}
+        queries_ds = ds.select_columns(["index", "audio"]).rename_column("index", "id")
 
-        qid = {}
-        did = {}
-
-        for row in tqdm(ds, total=len(ds), desc="Loading Clotho AT2 Retrieval Data"):
-            audio = row["audio"]
-            texts = row["text"]
-            index = row["index"]
-
-            ## a2t
-            query_id = f"q-{index}"
-            if query_id not in qid:
-                qid[query_id] = query_id
-                queries_["id"].append(query_id)
-                queries_["audio"].append(audio)
-                queries_["modality"].append("audio")
-
-            for i, text in enumerate(texts.split(".")):
-                doc_id = f"d-{index}-{i}"
-                if doc_id not in did:
-                    did[doc_id] = doc_id
-                    corpus_["id"].append(doc_id)
-                    corpus_["text"].append(text)
-                    corpus_["modality"].append("text")
-
-                relevant_docs_["query-id"].append(query_id)
-                relevant_docs_["corpus-id"].append(doc_id)
-                relevant_docs_["score"].append(1)
-
-        corpus = Dataset.from_dict(corpus_)
-        queries = Dataset.from_dict(queries_)
-        relevant_docs = Dataset.from_dict(relevant_docs_)
-
+        # Corpus: need to split captions, so we build this
+        corpus_data = {"id": [], "text": []}
         qrels_dict = defaultdict(dict)
 
-        df = relevant_docs.to_pandas()
-        query_ids = df["query-id"].to_numpy()
-        corpus_ids = df["corpus-id"].to_numpy()
-        scores = df["score"].to_numpy()
+        for row in tqdm(ds, total=len(ds), desc="Loading Clotho AT2 Retrieval Data"):
+            index = row["index"]
 
-        for q, c, s in zip(query_ids, corpus_ids, scores):
-            qrels_dict[q][c] = int(s)
+            for i, text in enumerate(row["text"].split(".")):
+                doc_id = f"d-{index}-{i}"
+                corpus_data["id"].append(doc_id)
+                corpus_data["text"].append(text)
+                qrels_dict[index][doc_id] = 1
 
-        self.corpus = DatasetDict({"test": corpus})
-        self.queries = DatasetDict({"test": queries})
-        self.relevant_docs = {}
-        self.relevant_docs["test"] = qrels_dict
-
+        self.corpus = DatasetDict({"test": Dataset.from_dict(corpus_data)})
+        self.queries = DatasetDict({"test": queries_ds})
+        self.relevant_docs = {"test": qrels_dict}
         self.data_loaded = True
 
 
@@ -108,8 +75,8 @@ class ClothoT2ARetrieval(AbsTaskRetrieval):
         description="An audio captioning datasetst containing audio clips from the Freesound platform and their corresponding captions.",
         reference="https://github.com/audio-captioning/clotho-dataset",
         dataset={
-            "path": "CLAPv2/Clotho",
-            "revision": "b491ad6569dba180ca60a0e2d17a1d6a0d5d9f4a",
+            "path": "mteb/Clotho",
+            "revision": "c44521cd4067f134e5f5bace4290b59ed773b451",
         },
         type="Any2AnyRetrieval",
         category="t2a",
@@ -143,54 +110,22 @@ class ClothoT2ARetrieval(AbsTaskRetrieval):
 
         ds = load_dataset(**self.metadata.dataset, split="test", keep_in_memory=False)
 
-        queries_ = {"id": [], "modality": [], "text": []}
-        corpus_ = {"id": [], "modality": [], "audio": []}
-        relevant_docs_ = {"query-id": [], "corpus-id": [], "score": []}
+        # Corpus: reuse dataset with column operations (no copy for audio)
+        corpus_ds = ds.select_columns(["index", "audio"]).rename_column("index", "id")
 
-        qid = {}
-        did = {}
-
-        for row in tqdm(ds, total=len(ds), desc="Loading Clotho T2A Retrieval Data"):
-            audio = row["audio"]
-            texts = row["text"]
-            index = row["index"]
-
-            ## t2a
-            doc_id = f"d-{index}"
-            did[doc_id] = doc_id
-            corpus_["id"].append(doc_id)
-            corpus_["audio"].append(audio)
-            corpus_["modality"].append("audio")
-
-            for i, text in enumerate(texts.split(".")):
-                query_id = f"q-{index}-{i}"
-                if query_id not in qid:
-                    qid[query_id] = query_id
-                    queries_["id"].append(query_id)
-                    queries_["text"].append(text)
-                    queries_["modality"].append("text")
-
-                relevant_docs_["query-id"].append(query_id)
-                relevant_docs_["corpus-id"].append(doc_id)
-                relevant_docs_["score"].append(1)
-
-        corpus = Dataset.from_dict(corpus_)
-        queries = Dataset.from_dict(queries_)
-        relevant_docs = Dataset.from_dict(relevant_docs_)
-
+        queries_data = {"id": [], "text": []}
         qrels_dict = defaultdict(dict)
 
-        df = relevant_docs.to_pandas()
-        query_ids = df["query-id"].to_numpy()
-        corpus_ids = df["corpus-id"].to_numpy()
-        scores = df["score"].to_numpy()
+        for row in ds:
+            index = row["index"]
 
-        for q, c, s in zip(query_ids, corpus_ids, scores):
-            qrels_dict[q][c] = int(s)
+            for i, text in enumerate(row["text"].split(".")):
+                query_id = f"q-{index}-{i}"
+                queries_data["id"].append(query_id)
+                queries_data["text"].append(text)
+                qrels_dict[query_id][index] = 1
 
-        self.corpus = DatasetDict({"test": corpus})
-        self.queries = DatasetDict({"test": queries})
-        self.relevant_docs = {}
-        self.relevant_docs["test"] = qrels_dict
-
+        self.corpus = DatasetDict({"test": corpus_ds})
+        self.queries = DatasetDict({"test": Dataset.from_dict(queries_data)})
+        self.relevant_docs = {"test": qrels_dict}
         self.data_loaded = True
