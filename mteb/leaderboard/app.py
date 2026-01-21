@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import itertools
 import json
 import logging
@@ -417,10 +418,66 @@ def _cache_update_task_list(
     return benchmark_tasks, tasks_to_keep
 
 
-def on_page_load(session_id):
-    """Log page view"""
-    if not session_id:
-        session_id = secrets.token_hex(16)
+def _generate_fingerprint_session_id(request: gr.Request) -> str:
+    """Generate a fallback session ID based on request fingerprint.
+
+    This is used when browser storage is unavailable (degraded mode). The fingerprint
+    is generated from IP address and browser characteristics to ensure the same user
+    gets a consistent session ID across page refreshes even without browser storage.
+
+    Args:
+        request: Gradio request object containing client info and headers
+
+    Returns:
+        A fingerprint-based session ID with 'fingerprint_' prefix
+    """
+    try:
+        # Collect browser fingerprint factors including IP
+        factors = [
+            request.client.host if request.client else "unknown",  # IP address
+            request.headers.get("user-agent", "unknown"),  # Browser info
+            request.headers.get("accept-language", "unknown"),  # Language preference
+        ]
+
+        # Create a hash of the fingerprint
+        fingerprint = "|".join(factors)
+        hash_value = hashlib.sha256(fingerprint.encode()).hexdigest()[:16]
+
+        return f"fingerprint_{hash_value}"
+    except Exception as e:
+        # If fingerprint generation fails, generate a temporary random ID
+        logger.warning(f"Failed to generate fingerprint session ID: {e}")
+        return f"temp_{secrets.token_hex(8)}"
+
+
+def on_page_load(session_id, request: gr.Request):
+    """Log page view with session tracking.
+
+    Handles two modes:
+    - Normal mode (BrowserState available): Uses random token, persisted in browser
+    - Degraded mode (BrowserState unavailable): Uses fingerprint, regenerated but consistent
+
+    Args:
+        session_id: Current session ID (empty on first load, or "FALLBACK_MODE" in degraded mode)
+        request: Gradio request object for fingerprint generation
+
+    Returns:
+        The session ID (existing or newly generated)
+    """
+    # Check if we're in degraded mode (browser storage blocked)
+    if session_id == "FALLBACK_MODE":
+        # Degraded mode: Generate fingerprint-based session ID for consistency
+        session_id = _generate_fingerprint_session_id(request)
+        logger.debug(
+            f"Degraded mode - generated fingerprint session ID: {session_id[:20]}..."
+        )
+    elif not session_id:
+        # Normal mode: Generate random token that will be persisted by BrowserState
+        session_id = f"browser_{secrets.token_hex(16)}"
+        logger.debug(
+            f"Normal mode - generated browser session ID: {session_id[:20]}..."
+        )
+
     event_logger.log_page_view(
         session_id=session_id,
         benchmark=None,  # Can be None if not available yet
@@ -568,7 +625,22 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         title="MTEB Leaderboard",
         fill_width=True,
     ) as demo:
-        session_id = gr.BrowserState("")
+        # Try to use BrowserState for persistent session tracking
+        # If browser storage is blocked, fall back to a hidden textbox with fingerprint
+        try:
+            session_id = gr.BrowserState("")
+            logger.info("Using BrowserState for session tracking (normal mode)")
+        except Exception as e:
+            logger.warning(
+                f"BrowserState unavailable (browser storage blocked): {e}. "
+                f"Falling back to fingerprint-based session tracking (degraded mode)."
+            )
+            # Fallback: Use a hidden textbox with special marker value
+            # The marker "FALLBACK_MODE" tells on_page_load to use fingerprint generation
+            session_id = gr.Textbox(
+                value="FALLBACK_MODE", visible=False, elem_id="fallback_session"
+            )
+
         demo.load(fn=on_page_load, inputs=[session_id], outputs=[session_id])
 
         with gr.Sidebar(
@@ -1056,7 +1128,6 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 zero_shot,
                 model_type_select,
                 session_id,
-
             ],
             outputs=[models],
         )
