@@ -2,6 +2,7 @@ from collections import defaultdict
 
 import datasets
 from datasets import DatasetDict
+from tqdm.auto import tqdm
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -155,7 +156,7 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
         self, id_col="path", text_col="transcription", audio_col="audio"
     ):
         """A2T: Query = audio, Corpus = text."""
-        for lang in self.hf_subsets:
+        for lang in tqdm(self.hf_subsets, desc="Loading FleursA2TRetrieval subsets"):
             lang_dataset = datasets.load_dataset(
                 self.metadata.dataset["path"],
                 lang,
@@ -227,7 +228,7 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
         self, id_col="path", text_col="transcription", audio_col="audio"
     ):
         """T2A: Query = text, Corpus = audio."""
-        for lang in self.hf_subsets:
+        for lang in tqdm(self.hf_subsets, desc="Loading FleursT2ARetrieval subsets"):
             lang_dataset = datasets.load_dataset(
                 self.metadata.dataset["path"],
                 lang,
