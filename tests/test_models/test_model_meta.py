@@ -127,6 +127,37 @@ def test_check_training_datasets_can_be_derived(model_meta: ModelMeta):
     model_meta.get_training_datasets()
 
 
+@pytest.mark.parametrize("model_type", ["dense", "cross-encoder", "late-interaction"])
+def test_get_model_metas_each_model_type(model_type):
+    """Test filtering by each individual model type."""
+    models = mteb.get_model_metas(model_types=[model_type])
+
+    for model in models:
+        assert model_type in model.model_type
+
+
+def test_loader_kwargs_persisted_in_metadata():
+    model = mteb.get_model(
+        "baseline/random-encoder-baseline",
+        not_existing_param=123,
+    )
+
+    assert hasattr(model, "mteb_model_meta")
+    meta = model.mteb_model_meta
+
+    assert "not_existing_param" in meta.loader_kwargs
+    assert meta.loader_kwargs["not_existing_param"] == 123
+
+
+def test_compute_missing_parameter():
+    """Test that compute_missing parameter fetches missing metadata from HuggingFace Hub"""
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
+    meta_with_compute = mteb.get_model_meta(model_name, fill_missing=True)
+
+    assert meta_with_compute.n_parameters is not None
+    assert meta_with_compute.memory_usage_mb is not None
+
+
 def test_model_to_python():
     meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
     assert meta.to_python() == (
@@ -138,6 +169,8 @@ def test_model_to_python():
     release_date='2021-08-30',
     languages=['eng-Latn'],
     n_parameters=22700000,
+    n_active_parameters_override=None,
+    n_embedding_parameters=11720448,
     memory_usage_mb=87.0,
     max_tokens=256.0,
     embed_dim=384,
@@ -145,7 +178,7 @@ def test_model_to_python():
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
-    framework=['Sentence Transformers', 'PyTorch'],
+    framework=['Sentence Transformers', 'PyTorch', 'ONNX', 'safetensors', 'Transformers'],
     reference='https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2',
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -153,8 +186,14 @@ def test_model_to_python():
     adapted_from=None,
     superseded_by=None,
     modalities=['text'],
-    is_cross_encoder=None,
+    model_type=['dense'],
     citation=\'@inproceedings{reimers-2019-sentence-bert,\\n    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",\\n    author = "Reimers, Nils and Gurevych, Iryna",\\n    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",\\n    month = "11",\\n    year = "2019",\\n    publisher = "Association for Computational Linguistics",\\n    url = "http://arxiv.org/abs/1908.10084",\\n}\\n\',
     contacts=None,
 )"""
     )
+
+
+def test_model_meta_local_path():
+    meta = ModelMeta.from_hub("/path/to/local/model")
+    assert meta.name == "/path/to/local/model"
+    assert meta.revision == "no_revision_available"

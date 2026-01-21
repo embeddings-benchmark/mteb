@@ -1,6 +1,6 @@
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import EncoderProtocol, PromptType
+from mteb.types import PromptType
 
 
 def instruction_template(
@@ -114,7 +114,7 @@ training_data = {
 }
 
 # Predefined prompts for various RTEB tasks
-PREDEFINED_PROMPTS = {
+_PREDEFINED_PROMPTS = {
     # ========== Open Datasets ==========
     # Legal domain
     "AILACasedocs": "Given a legal case scenario, retrieve the most relevant case documents",
@@ -137,7 +137,7 @@ PREDEFINED_PROMPTS = {
     # SQL domain
     "WikiSQLRetrieval": "Given a natural language query, retrieve relevant SQL examples",
     # Multilingual
-    "MIRACLRetrievalHardNegatives": "Given a query, retrieve relevant passages",
+    "MIRACLRetrievalHardNegatives": "Given a question, retrieve Wikipedia passages that answer the question",
     # ========== Private/Closed Datasets ==========
     # Code domain (Private)
     "Code1Retrieval": "Given a code problem description, retrieve relevant code examples",
@@ -160,41 +160,29 @@ PREDEFINED_PROMPTS = {
 }
 
 
-def mod_instruct_loader(
-    model_name_or_path: str, revision: str, **kwargs
-) -> EncoderProtocol:
-    # Set default prompts_dict if not provided
-
-    model = InstructSentenceTransformerModel(
-        model_name_or_path,
-        revision=revision,
+MoD_Embedding = ModelMeta(
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
-        prompt_dicts=PREDEFINED_PROMPTS,
-        **kwargs,
-    )
-    encoder = model.model._first_module()
-    if encoder.auto_model.config._attn_implementation == "flash_attention_2":
-        # The Qwen3 code only use left padding in flash_attention_2 mode.
-        encoder.tokenizer.padding_side = "left"
-    return model
-
-
-MoD_Embedding = ModelMeta(
-    loader=mod_instruct_loader,
+        prompts_dict=_PREDEFINED_PROMPTS,
+        max_seq_length=18480,
+        model_kwargs={"torch_dtype": "bfloat16"},
+    ),
     name="bflhc/MoD-Embedding",
     languages=multilingual_langs,
     open_weights=True,
     revision="acbb5b70fdab262226a6af2bc62001de8021b05c",
     release_date="2025-12-14",
     n_parameters=4021774336,
+    n_embedding_parameters=None,
     memory_usage_mb=7671,
     embed_dim=2560,
     max_tokens=32768,
     license="apache-2.0",
     reference="https://huggingface.co/bflhc/MoD-Embedding",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,

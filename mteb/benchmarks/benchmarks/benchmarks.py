@@ -18,6 +18,7 @@ MMTEB_CITATION = r"""@article{enevoldsen2025mmtebmassivemultilingualtext,
 
 MTEB_EN = Benchmark(
     name="MTEB(eng, v2)",
+    aliases=["MTEB(eng)"],
     display_name="English",
     icon="https://github.com/lipis/flag-icons/raw/refs/heads/main/flags/4x3/us.svg",
     tasks=MTEBTasks(
@@ -89,6 +90,7 @@ The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb
 
 MTEB_ENG_CLASSIC = Benchmark(
     name="MTEB(eng, v1)",
+    aliases=["MTEB(eng, classic)", "MTEB"],
     display_name="English Legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/gb.svg",
     tasks=MTEBTasks(
@@ -185,6 +187,7 @@ We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benc
 
 MTEB_MAIN_RU = Benchmark(
     name="MTEB(rus, v1)",
+    aliases=["MTEB(rus)"],
     display_name="Russian legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ru.svg",
     tasks=MTEBTasks(
@@ -344,6 +347,7 @@ RU_SCI_BENCH = Benchmark(
 
 MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
     name="FollowIR",
+    aliases=["MTEB(Retrieval w/Instructions)"],
     display_name="Instruction Following",
     tasks=get_tasks(
         tasks=[
@@ -394,7 +398,9 @@ MTEB_RETRIEVAL_WITH_DOMAIN_INSTRUCTIONS = Benchmark(
 )
 
 MTEB_RETRIEVAL_LAW = Benchmark(
-    name="MTEB(Law, v1)",  # This benchmark is likely in the need of an update
+    # This benchmark is likely in the need of an update
+    name="MTEB(Law, v1)",
+    aliases=["MTEB(law)"],
     display_name="Legal",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-library.svg",
     tasks=get_tasks(
@@ -416,6 +422,7 @@ MTEB_RETRIEVAL_LAW = Benchmark(
 
 MTEB_RETRIEVAL_MEDICAL = Benchmark(
     name="MTEB(Medical, v1)",
+    aliases=["MTEB(Medical)"],
     display_name="Medical",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-hospital.svg",
     tasks=get_tasks(
@@ -435,7 +442,7 @@ MTEB_RETRIEVAL_MEDICAL = Benchmark(
         ],
     ),
     description="A curated set of MTEB tasks designed to evaluate systems in the context of medical information retrieval.",
-    reference="",
+    reference=None,
     citation=None,
 )
 
@@ -469,6 +476,7 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
 
 SEB = Benchmark(
     name="MTEB(Scandinavian, v1)",
+    aliases=["MTEB(Scandinavian)", "SEB"],
     display_name="Scandinavian",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/dk.svg",
     language_view=["dan-Latn", "swe-Latn", "nno-Latn", "nob-Latn"],
@@ -595,6 +603,7 @@ RAR_b = Benchmark(
 
 MTEB_FRA = Benchmark(
     name="MTEB(fra, v1)",
+    aliases=["MTEB(fra)"],
     display_name="French",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/fr.svg",
     tasks=MTEBTasks(
@@ -653,6 +662,7 @@ MTEB_FRA = Benchmark(
 
 MTEB_DEU = Benchmark(
     name="MTEB(deu, v1)",
+    aliases=["MTEB(deu)"],
     display_name="German",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/de.svg",
     tasks=get_tasks(
@@ -704,6 +714,7 @@ MTEB_DEU = Benchmark(
 
 MTEB_KOR = Benchmark(
     name="MTEB(kor, v1)",
+    aliases=["MTEB(kor)"],
     display_name="Korean",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
     tasks=get_tasks(
@@ -728,6 +739,7 @@ MTEB_KOR = Benchmark(
 
 MTEB_POL = Benchmark(
     name="MTEB(pol, v1)",
+    aliases=["MTEB(pol)"],
     display_name="Polish",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/pl.svg",
     tasks=MTEBTasks(
@@ -777,6 +789,7 @@ two novel clustering tasks.""",  # Rephrased from the abstract
 
 MTEB_code = Benchmark(
     name="MTEB(Code, v1)",
+    aliases=["MTEB(code)"],
     display_name="Code",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
     tasks=get_tasks(
@@ -953,6 +966,7 @@ MTEB_multilingual_v1 = Benchmark(
 
 MTEB_multilingual_v2 = Benchmark(
     name="MTEB(Multilingual, v2)",
+    aliases=["MTEB(Multilingual)", "MMTEB"],
     display_name="Multilingual",
     language_view=[
         "eng-Latn",  # English
@@ -986,6 +1000,7 @@ MTEB_multilingual_v2 = Benchmark(
 
 MTEB_JPN = Benchmark(
     name="MTEB(jpn, v1)",
+    aliases=["MTEB(jpn)"],
     display_name="Japanese Legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
     tasks=get_tasks(
@@ -1056,6 +1071,7 @@ indic_languages = [
 
 MTEB_INDIC = Benchmark(
     name="MTEB(Indic, v1)",
+    aliases=["MTEB(Indic)"],
     display_name="Indic",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/in.svg",
     tasks=MTEBTasks(
@@ -1146,6 +1162,7 @@ eu_languages = [
 
 MTEB_EU = Benchmark(
     name="MTEB(Europe, v1)",
+    aliases=["MTEB(Europe)"],
     display_name="European",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/eu.svg",
     tasks=get_tasks(
@@ -1285,6 +1302,7 @@ BRIGHT = Benchmark(
 
 BRIGHT_LONG = Benchmark(
     name="BRIGHT (long)",
+    aliases=["BRIGHT(long)"],
     tasks=MTEBTasks(
         (
             get_task(
@@ -1311,6 +1329,46 @@ This is the long version of the benchmark, which only filter longer documents.
 }
 """,
 )
+
+BRIGHT_V1_1 = Benchmark(
+    name="BRIGHT(v1.1)",
+    display_name="Reasoning Retrieval",
+    tasks=get_tasks(
+        tasks=[
+            "BrightBiologyRetrieval",
+            "BrightEarthScienceRetrieval",
+            "BrightEconomicsRetrieval",
+            "BrightPsychologyRetrieval",
+            "BrightRoboticsRetrieval",
+            "BrightStackoverflowRetrieval",
+            "BrightSustainableLivingRetrieval",
+            "BrightPonyRetrieval",
+            "BrightLeetcodeRetrieval",
+            "BrightAopsRetrieval",
+            "BrightTheoremQATheoremsRetrieval",
+            "BrightTheoremQAQuestionsRetrieval",
+            "BrightBiologyLongRetrieval",
+            "BrightEarthScienceLongRetrieval",
+            "BrightEconomicsLongRetrieval",
+            "BrightPsychologyLongRetrieval",
+            "BrightRoboticsLongRetrieval",
+            "BrightStackoverflowLongRetrieval",
+            "BrightSustainableLivingLongRetrieval",
+            "BrightPonyLongRetrieval",
+        ],
+    ),
+    description="v1.1 refactors the BRIGHT into a different tasks and added prompt to individual tasks.",
+    reference="https://brightbenchmark.github.io/",
+    citation=r"""
+@article{su2024bright,
+  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal = {arXiv preprint arXiv:2407.12883},
+  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  year = {2024},
+}
+""",
+)
+
 
 CODE_RAG = Benchmark(
     name="CodeRAG",
@@ -1400,6 +1458,7 @@ NANOBEIR = Benchmark(
 
 C_MTEB = Benchmark(
     name="MTEB(cmn, v1)",
+    aliases=["MTEB(Chinese)", "CMTEB"],
     display_name="Chinese",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/cn.svg",
     tasks=MTEBTasks(
@@ -1466,6 +1525,7 @@ C_MTEB = Benchmark(
 
 FA_MTEB = Benchmark(
     name="MTEB(fas, v1)",
+    aliases=["FaMTEB(fas, beta)"],
     display_name="Farsi Legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
     tasks=get_tasks(
@@ -1636,6 +1696,7 @@ FA_MTEB_2 = Benchmark(
 
 CHEMTEB = Benchmark(
     name="ChemTEB",
+    aliases=["ChemTEB(v1)"],
     display_name="Chemical",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-purge.svg",
     tasks=get_tasks(
@@ -1681,6 +1742,62 @@ CHEMTEB = Benchmark(
 """,
 )
 
+CHEMTEB_V1_1 = Benchmark(
+    name="ChemTEB(v1.1)",
+    aliases=["ChemTEB(latest)"],
+    display_name="Chemical",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-purge.svg",
+    tasks=get_tasks(
+        tasks=[
+            "PubChemSMILESBitextMining",
+            "SDSEyeProtectionClassification",
+            "SDSGlovesClassification",
+            "WikipediaBioMetChemClassification",
+            "WikipediaGreenhouseEnantiopureClassification",
+            "WikipediaSolidStateColloidalClassification",
+            "WikipediaOrganicInorganicClassification",
+            "WikipediaCryobiologySeparationClassification",
+            "WikipediaChemistryTopicsClassification",
+            "WikipediaTheoreticalAppliedClassification",
+            "WikipediaChemFieldsClassification",
+            "WikipediaLuminescenceClassification",
+            "WikipediaIsotopesFissionClassification",
+            "WikipediaSaltsSemiconductorsClassification",
+            "WikipediaBiolumNeurochemClassification",
+            "WikipediaCrystallographyAnalyticalClassification",
+            "WikipediaCompChemSpectroscopyClassification",
+            "WikipediaChemEngSpecialtiesClassification",
+            "WikipediaChemistryTopicsClustering",
+            "WikipediaSpecialtiesInChemistryClustering",
+            "PubChemAISentenceParaphrasePC",
+            "PubChemSMILESPC",
+            "PubChemSynonymPC",
+            "PubChemWikiParagraphsPC",
+            "PubChemWikiPairClassification",
+            "ChemNQRetrieval",
+            "ChemHotpotQARetrieval",
+            "ChemRxivRetrieval",
+        ],
+    ),
+    description="ChemTEB evaluates the performance of text embedding models on chemical domain data. This version adds the ChemRxivRetrieval task.",
+    reference="https://arxiv.org/abs/2412.00532",
+    citation=r"""
+@article{kasmaee2024chemteb,
+  author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
+  journal = {arXiv preprint arXiv:2412.00532},
+  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
+  year = {2024},
+}
+
+@article{kasmaee2025chembed,
+  author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Astaraki, Mahdi and Saloot, Mohammad Arshi and Sherck, Nicholas and Mahyar, Hamidreza and Samiee, Soheila},
+  journal = {arXiv preprint arXiv:2508.01643},
+  title = {Chembed: Enhancing chemical literature search through domain-specific text embeddings},
+  year = {2025},
+}
+""",
+)
+
 BEIR_NL = Benchmark(
     name="BEIR-NL",
     display_name="BEIR-NL",
@@ -1704,8 +1821,7 @@ BEIR_NL = Benchmark(
             "TRECCOVID-NL",
         ],
     ),
-    description="BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created through automated "
-    "translation.",
+    description="BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created through automated translation.",
     reference="https://arxiv.org/abs/2412.08329",
     contacts=["nikolay-banar"],
     citation=r"""
@@ -2330,23 +2446,23 @@ VIDORE_V3 = VidoreBenchmark(
         ]
     ),
     description="ViDoRe V3 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents. The benchmark includes both open and closed datasets: to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
-    reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
+    reference="https://arxiv.org/abs/2601.08620",
     citation=r"""
-@misc{mace2025vidorev3,
-  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
-  day = {5},
-  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
-  journal = {Hugging Face Blog},
-  month = {November},
-  publisher = {Hugging Face},
-  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
-  year = {2025},
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
 }
 """,
 )
 
 VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
     name="ViDoRe(v1&v2)",
+    aliases=["VisualDocumentRetrieval"],
     display_name="ViDoRe (V1&V2)",
     tasks=get_tasks(
         tasks=[
@@ -2589,7 +2705,7 @@ HUME = HUMEBenchmark(
         ],
     ),
     description="The HUME benchmark is designed to evaluate the performance of text embedding models and humans on a comparable set of tasks. This captures areas where models perform better than human annotators and the reverse. In the paper, we go further into the analysis and what conclusions can be drawn.",
-    reference="Coming soon (in review)",
+    reference=None,
     citation=None,
     contacts=["AdnanElAssadi56", "KennethEnevoldsen", "isaac-chung", "Samoed"],
 )
@@ -2706,4 +2822,28 @@ JMTEB_LITE_V1 = Benchmark(
 }
 """,
     contacts=["lsz05"],
+)
+
+KOVIDORE_V2 = Benchmark(
+    name="KoViDoRe(v2)",
+    display_name="KoViDoRe v2",
+    tasks=get_tasks(
+        tasks=[
+            "KoVidore2CybersecurityRetrieval",
+            "KoVidore2EconomicRetrieval",
+            "KoVidore2EnergyRetrieval",
+            "KoVidore2HrRetrieval",
+        ]
+    ),
+    description="KoViDoRe v2 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents.",
+    reference="https://github.com/whybe-choi/kovidore-data-generator",
+    citation=r"""
+@misc{choi2026kovidorev2,
+  author = {Yongbin Choi},
+  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
+  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
+  url = {https://github.com/whybe-choi/kovidore-data-generator},
+  year = {2026},
+}
+""",
 )

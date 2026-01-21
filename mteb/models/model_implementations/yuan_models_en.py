@@ -1,6 +1,6 @@
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import PromptType
+from mteb.types import PromptType
 
 
 def instruction_template(
@@ -37,18 +37,20 @@ yuan_embedding_2_en = ModelMeta(
         apply_instruction_to_passages=False,
     ),
     name="IEITYuan/Yuan-embedding-2.0-en",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="b2fd15da3bcae3473c8529593825c15068f09fce",
     release_date="2025-11-27",
     n_parameters=595776512,
+    n_embedding_parameters=None,
     memory_usage_mb=2272,
     embed_dim=1024,
     max_tokens=2048,
     license="apache-2.0",
     reference="https://huggingface.co/IEITYuan/Yuan-embedding-2.0-en",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,

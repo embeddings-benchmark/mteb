@@ -281,10 +281,10 @@ def _split_quality(
 ) -> list[str]:
     errors = []
 
-    num_samples = split_stats["num_samples"]  # type: ignore
+    num_samples = split_stats["num_samples"]
     text_stats = split_stats.get("text_statistics", None)
     if text_stats:
-        text_stats = cast(TextStatistics, text_stats)
+        text_stats = cast("TextStatistics", text_stats)
         unique_texts = text_stats["unique_texts"]
 
         # Note: there could be cases where a dataset

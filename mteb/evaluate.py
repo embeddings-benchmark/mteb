@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Iterable
+import warnings
 from pathlib import Path
 from time import time
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, cast
 
 from datasets.exceptions import DatasetNotFoundError
 from tqdm.auto import tqdm
@@ -13,24 +13,27 @@ from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import (
-    CrossEncoderProtocol,
-    EncoderProtocol,
-    MTEBModels,
-)
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
-from mteb.types import HFSubset, PromptType, SplitName
-from mteb.types._metadata import ModelName, Revision
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from sentence_transformers import CrossEncoder, SentenceTransformer
+
+    from mteb.models.models_protocols import (
+        MTEBModels,
+    )
+    from mteb.types import EncodeKwargs, HFSubset, SplitName
+    from mteb.types._metadata import ModelName, Revision
 
 logger = logging.getLogger(__name__)
 
@@ -57,27 +60,26 @@ def _sanitize_model(
 ) -> tuple[MTEBModels | ModelMeta, ModelMeta, ModelName, Revision]:
     from sentence_transformers import CrossEncoder, SentenceTransformer
 
+    wrapped_model: MTEBModels | ModelMeta
     if isinstance(model, SentenceTransformer):
-        _mdl = SentenceTransformerEncoderWrapper(model)
-        meta = _mdl.mteb_model_meta
-        _mdl = cast(EncoderProtocol, _mdl)
-        model = _mdl
+        wrapped_model = SentenceTransformerEncoderWrapper(model)
+        meta = wrapped_model.mteb_model_meta
     elif isinstance(model, CrossEncoder):
-        _mdl = CrossEncoderWrapper(model)
-        _mdl = cast(CrossEncoderProtocol, _mdl)
-        meta = _mdl.mteb_model_meta
-        model = _mdl
+        wrapped_model = CrossEncoderWrapper(model)
+        meta = wrapped_model.mteb_model_meta
     elif hasattr(model, "mteb_model_meta"):
-        meta = model.mteb_model_meta  # type: ignore[attr-defined]
+        meta = getattr(model, "mteb_model_meta")
         if not isinstance(meta, ModelMeta):
-            meta = ModelMeta.from_hub(None)
+            meta = ModelMeta._from_hub(None)
+        wrapped_model = cast("MTEBModels | ModelMeta", model)
     else:
-        meta = ModelMeta.from_hub(None) if not isinstance(model, ModelMeta) else model
+        meta = ModelMeta._from_hub(None) if not isinstance(model, ModelMeta) else model
+        wrapped_model = meta
 
-    model_name = cast(str, meta.name)
-    model_revision = cast(str, meta.revision)
+    model_name = cast("str", meta.name)
+    model_revision = cast("str", meta.revision)
 
-    return model, meta, model_name, model_revision
+    return wrapped_model, meta, model_name, model_revision
 
 
 def _evaluate_task(
@@ -86,9 +88,10 @@ def _evaluate_task(
     *,
     splits: dict[SplitName, list[HFSubset]],
     co2_tracker: bool | None,
-    encode_kwargs: dict[str, Any],
+    encode_kwargs: EncodeKwargs,
     prediction_folder: Path | None,
     public_only: bool | None,
+    num_proc: int = 1,
 ) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
 
@@ -122,24 +125,28 @@ def _evaluate_task(
                 co2_tracker=False,
                 prediction_folder=prediction_folder,
                 public_only=public_only,
+                num_proc=num_proc,
             )
-        result.kg_co2_emissions = tracker.final_emissions
+        if isinstance(result, TaskResult):
+            result.kg_co2_emissions = tracker.final_emissions
         return result
 
     task_results = {}
 
     task.check_if_dataset_is_superseded()
 
-    data_loaded = task.data_loaded
-    if not data_loaded:
+    data_preloaded = task.data_loaded
+    if not data_preloaded:
         try:
-            task.load_data()
+            task.load_data(num_proc=num_proc)
         except DatasetNotFoundError as e:
             if not task.metadata.is_public and public_only is None:
-                logger.warning(
+                msg = (
                     f"Dataset for private task '{task.metadata.name}' not found. "
                     "Make sure you have access to the dataset and that you have set up the authentication correctly. To disable this warning set `public_only=False`"
                 )
+                logger.warning(msg)
+                warnings.warn(msg)
                 return TaskError(
                     task_name=task.metadata.name,
                     exception=str(e),
@@ -147,7 +154,7 @@ def _evaluate_task(
             if public_only is False:
                 raise e
 
-    evaluation_time = 0
+    evaluation_time = 0.0
 
     for split, hf_subsets in splits.items():
         tick = time()
@@ -157,6 +164,7 @@ def _evaluate_task(
             subsets_to_run=hf_subsets,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
+            num_proc=num_proc,
         )
         tock = time()
 
@@ -172,7 +180,7 @@ def _evaluate_task(
         kg_co2_emissions=None,
     )
 
-    if data_loaded:  # only unload if we loaded the data
+    if not data_preloaded:  # only unload if we loaded the data
         task.unload_data()
 
     return result
@@ -194,12 +202,18 @@ def _check_model_modalities(
         return
 
     model_modalities = set(model.modalities)
+    check_tasks: Iterable[AbsTask] = []
     if isinstance(tasks, AbsTask):
-        tasks = [tasks]
+        check_tasks = [tasks]
+    elif isinstance(tasks, Benchmark):
+        benchmark = cast("Benchmark", tasks)
+        check_tasks = benchmark.tasks
+    else:
+        check_tasks = cast("Iterable[AbsTask]", tasks)
 
     warnings, errors = [], []
 
-    for task in tasks:
+    for task in check_tasks:
         # only retrieval tasks have different modalities for query and document and can be run with partial overlaps
         if isinstance(task, AbsTaskRetrieval):
             query_mods = set(task.metadata.get_modalities(PromptType.query))
@@ -262,12 +276,13 @@ def evaluate(
     *,
     co2_tracker: bool | None = None,
     raise_error: bool = True,
-    encode_kwargs: dict[str, Any] | None = None,
+    encode_kwargs: EncodeKwargs | None = None,
     cache: ResultCache | None = ResultCache(),
     overwrite_strategy: str | OverwriteStrategy = "only-missing",
     prediction_folder: Path | str | None = None,
     show_progress_bar: bool = True,
     public_only: bool | None = None,
+    num_proc: int = 1,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -276,7 +291,7 @@ def evaluate(
         tasks: A task to run.
         co2_tracker: If True, track the CO₂ emissions of the evaluation, required codecarbon to be installed, which can be installed using
             `pip install mteb[codecarbon]`. If none is passed co2 tracking will only be run if codecarbon is installed.
-        encode_kwargs: Additional keyword arguments passed to the models `encode` method.
+        encode_kwargs: Additional keyword arguments passed to the models `encode` and `load_data` methods;
         raise_error: If True, raise an error if the task fails. If False, return an empty list.
         cache: The cache to use for loading the results. If None, then no cache will be used. The default cache saved the cache in the
             `~/.cache/mteb` directory. It can be overridden by setting the `MTEB_CACHE` environment variable to a different directory or by directly
@@ -288,10 +303,11 @@ def evaluate(
                 changed.
             - "only-cache": Only load the results from the cache folder and do not run the task. Useful if you just want to load the results from the
                 cache.
-        prediction_folder: Optional folder in which to save model predictions for the task. Predictions of the tasks will be sabed in `prediction_folder/{task_name}_predictions.json`
+        prediction_folder: Optional folder in which to save model predictions for the task. Predictions of the tasks will be saved in `prediction_folder/{task_name}_predictions.json`
         show_progress_bar: Whether to show a progress bar when running the evaluation. Default is True. Setting this to False will also set the
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
         public_only: Run only public tasks. If None, it will attempt to run the private task.
+        num_proc: Number of processes to use during data loading and transformation. Defaults to 1.
 
     Returns:
         The results of the evaluation.
@@ -332,10 +348,10 @@ def evaluate(
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
-        task = cast(AbsTaskAggregate, tasks)
+        aggregated_task = cast("AbsTaskAggregate", tasks)
         results = evaluate(
             model,
-            task.metadata.tasks,
+            aggregated_task.metadata.tasks,
             co2_tracker=co2_tracker,
             raise_error=raise_error,
             encode_kwargs=encode_kwargs,
@@ -344,18 +360,23 @@ def evaluate(
             prediction_folder=prediction_folder,
             show_progress_bar=show_progress_bar,
             public_only=public_only,
+            num_proc=num_proc,
         )
-        result = task.combine_task_results(results.task_results)
+        combined_results = aggregated_task.combine_task_results(results.task_results)
+        if cache:
+            cache.save_to_cache(combined_results, meta)
+
         return ModelResult(
             model_name=results.model_name,
             model_revision=results.model_revision,
-            task_results=[result],
+            task_results=[combined_results],
         )
 
     if isinstance(tasks, AbsTask):
         task = tasks
     else:
-        results = []
+        tasks = cast("Iterable[AbsTask]", tasks)
+        evaluate_results = []
         exceptions = []
         tasks_tqdm = tqdm(
             tasks,
@@ -375,24 +396,25 @@ def evaluate(
                 prediction_folder=prediction_folder,
                 show_progress_bar=False,
                 public_only=public_only,
+                num_proc=num_proc,
             )
-            results.extend(_res.task_results)
+            evaluate_results.extend(_res.task_results)
             if _res.exceptions:
                 exceptions.extend(_res.exceptions)
         return ModelResult(
             model_name=_res.model_name,
             model_revision=_res.model_revision,
-            task_results=results,
+            task_results=evaluate_results,
             exceptions=exceptions,
         )
 
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
 
-    existing_results = None
+    existing_results: TaskResult | None = None
     if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
-        results = cache.load_task_result(task.metadata.name, meta)
-        if results:
-            existing_results = results
+        cache_results = cache.load_task_result(task.metadata.name, meta)
+        if cache_results:
+            existing_results = cache_results
 
     if (
         existing_results
@@ -454,6 +476,7 @@ def evaluate(
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 public_only=public_only,
+                num_proc=num_proc,
             )
         except Exception as e:
             logger.error(
@@ -469,6 +492,7 @@ def evaluate(
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             public_only=public_only,
+            num_proc=num_proc,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 

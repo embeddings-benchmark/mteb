@@ -4,17 +4,21 @@ import logging
 from typing import TYPE_CHECKING, Any, Literal
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_image_dependencies, requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from PIL import Image
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
+
+logger = logging.getLogger(__name__)
 
 
 def _downsample_image(
@@ -25,6 +29,8 @@ def _downsample_image(
     Returns:
         The downsampled image.
     """
+    from PIL.Image import Resampling
+
     width, height = image.size
     pixels = width * height
 
@@ -37,18 +43,18 @@ def _downsample_image(
             new_width = int(width * (target_longest_side / height))
 
         new_size = (new_width, new_height)
-        logging.info(
+        logger.info(
             f"Downsampling image from {width}x{height} to {new_width}x{new_height}"
         )
-        return image.resize(new_size, Image.LANCZOS)  # type: ignore
+        return image.resize(new_size, Resampling.LANCZOS)
     if width > height:
         if width > 10000:
-            logging.error("Processing extremely wide images.")
-            return image.resize((10000, height), Image.LANCZOS)  # type: ignore
+            logger.error("Processing extremely wide images.")
+            return image.resize((10000, height), Resampling.LANCZOS)
     else:
         if height > 10000:
-            logging.error("Processing extremely high images.")
-            return image.resize((width, 10000), Image.LANCZOS)  # type: ignore
+            logger.error("Processing extremely high images.")
+            return image.resize((width, 10000), Resampling.LANCZOS)
     return image
 
 
@@ -202,12 +208,14 @@ def voyage_v_loader(model_name, **kwargs):
 
 
 voyage_v = ModelMeta(
-    loader=voyage_v_loader,  # type: ignore
+    loader=voyage_v_loader,
     name="voyageai/voyage-multimodal-3",
+    model_type=["dense"],
     languages=[],  # Unknown
     revision="1",
     release_date="2024-11-10",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=32768,
     embed_dim=1024,

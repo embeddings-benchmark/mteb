@@ -4,20 +4,21 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import (
     requires_image_dependencies,
     requires_package,
 )
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
 
 if TYPE_CHECKING:
     from PIL import Image
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -213,11 +214,13 @@ colpali_v1_1 = ModelMeta(
         torch_dtype=torch.float16,
     ),
     name="vidore/colpali-v1.1",
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
     revision="a0f15e3bcf97110e7ac1bb4be4bcd30eeb31992a",
     release_date="2024-08-21",
     modalities=["image", "text"],
     n_parameters=2_920_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=4700,
     max_tokens=16384,
     embed_dim=128,
@@ -225,7 +228,7 @@ colpali_v1_1 = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/illuin-tech/colpali",
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
-    framework=["ColPali"],
+    framework=["ColPali", "safetensors"],
     reference="https://huggingface.co/vidore/colpali-v1.1",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
@@ -239,11 +242,13 @@ colpali_v1_2 = ModelMeta(
         torch_dtype=torch.float16,
     ),
     name="vidore/colpali-v1.2",
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
     revision="6b89bc63c16809af4d111bfe412e2ac6bc3c9451",
     release_date="2024-08-26",
     modalities=["image", "text"],
     n_parameters=2_920_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=4700,
     max_tokens=16384,
     embed_dim=128,
@@ -251,7 +256,7 @@ colpali_v1_2 = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/illuin-tech/colpali",
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
-    framework=["ColPali"],
+    framework=["ColPali", "safetensors"],
     reference="https://huggingface.co/vidore/colpali-v1.2",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
@@ -265,11 +270,13 @@ colpali_v1_3 = ModelMeta(
         torch_dtype=torch.float16,
     ),
     name="vidore/colpali-v1.3",
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
     revision="1b5c8929330df1a66de441a9b5409a878f0de5b0",
     release_date="2024-11-01",
     modalities=["image", "text"],
     n_parameters=2_920_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=4700,
     max_tokens=16384,
     embed_dim=128,
@@ -277,7 +284,7 @@ colpali_v1_3 = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/illuin-tech/colpali",
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
-    framework=["ColPali"],
+    framework=["ColPali", "safetensors"],
     reference="https://huggingface.co/vidore/colpali-v1.3",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,

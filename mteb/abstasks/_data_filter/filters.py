@@ -1,12 +1,18 @@
 """Simplified version of https://gist.github.com/AlexeyVatolin/ea3adc21aa7a767603ff393b22085adc from https://github.com/embeddings-benchmark/mteb/pull/2900"""
 
+from __future__ import annotations
+
 import logging
+from typing import TYPE_CHECKING
 
 import datasets
 import pandas as pd
-from datasets import Dataset, DatasetDict
+from datasets import DatasetDict
 
-from mteb import TaskMetadata
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb import TaskMetadata
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +67,7 @@ def filter_unclear_label(
         for text, label in zip(ds[input_column], ds[label_column]):
             key = text.strip().lower()
             normalized.setdefault(key, set()).add(
-                label if isinstance(label, (str, int, float)) else tuple(label)
+                label if isinstance(label, (str, int, float)) else tuple(label)  # type: ignore[arg-type]
             )
 
     bad_texts = {t for t, labels in normalized.items() if len(labels) > 1}

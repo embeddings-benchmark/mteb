@@ -1,11 +1,10 @@
+from __future__ import annotations
+
 import logging
-from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_implementations.bge_models import (
@@ -17,7 +16,15 @@ from mteb.models.model_implementations.e5_instruct import E5_MISTRAL_TRAINING_DA
 from mteb.models.model_implementations.nvidia_models import nvidia_training_datasets
 from mteb.models.model_implementations.qzhou_models import qzhou_training_data
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -286,18 +293,20 @@ jasper_en_v1 = ModelMeta(
         instruction_template="Instruct: {instruction}\nQuery: ",
     ),
     name="NovaSearch/jasper_en_vision_language_v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="d6330ce98f8a0d741e781df845904c9484f00efa",
     release_date="2024-12-11",  # first commit
     n_parameters=1_999_000_000,
+    n_embedding_parameters=232_932_864,
     memory_usage_mb=3802,
     max_tokens=131072,
     embed_dim=8960,
     license="apache-2.0",
     reference="https://huggingface.co/infgrad/jasper_en_vision_language_v1",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
@@ -332,18 +341,20 @@ Jasper_Token_Compression_600M = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=jasper_token_compression_600m_loader_kwargs,
     name="infgrad/Jasper-Token-Compression-600M",
+    model_type=["dense"],
     languages=["eng-Latn", "zho-Hans"],
     open_weights=True,
     revision="06a100f753a5a96d9e583b3af79c6fcdfacc4719",
     release_date="2025-11-14",
     n_parameters=595776512,
+    n_embedding_parameters=None,
     memory_usage_mb=2272,
     embed_dim=2048,
     license="mit",
     max_tokens=32768,
     reference="https://huggingface.co/infgrad/Jasper-Token-Compression-600M",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     public_training_code="https://github.com/DunZhang/Jasper-Token-Compression-Training",
     # public_training_data: unsupervised data for distillation

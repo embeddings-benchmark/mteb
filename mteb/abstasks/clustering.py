@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import itertools
 import logging
 import random
 from collections import defaultdict
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 from datasets import Dataset, DatasetDict
@@ -12,12 +13,9 @@ from sklearn.metrics.cluster import v_measure_score
 
 from mteb._create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
-from mteb.types import HFSubset, ScoresDict
+from mteb.types import Array, HFSubset
 from mteb.types.statistics import (
-    ImageStatistics,
-    LabelStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
 
 from ._statistics_calculation import (
@@ -27,6 +25,17 @@ from ._statistics_calculation import (
 )
 from .abstask import AbsTask
 
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from mteb.models import MTEBModels
+    from mteb.types import Array, EncodeKwargs, ScoresDict
+    from mteb.types.statistics import (
+        ImageStatistics,
+        LabelStatistics,
+        TextStatistics,
+    )
+
 logger = logging.getLogger(__name__)
 
 
@@ -34,7 +43,7 @@ MultilingualDataset = dict[HFSubset, DatasetDict]
 
 
 def _evaluate_clustering_bootstrapped(
-    embeddings: np.ndarray,
+    embeddings: Array,
     labels: list[list[str]],
     n_clusters: int,
     cluster_size: int,
@@ -61,21 +70,21 @@ def _evaluate_clustering_bootstrapped(
         max_depth = max(map(len, labels))
     # Evaluate on each level til max depth
     for i_level in range(max_depth):
-        level_labels = []
+        level_labels: list[str | int] = []
         # Assign -1 to gold label if the level is not there
         for label in labels:
             if len(label) > i_level:
                 level_labels.append(label[i_level])
             else:
                 level_labels.append(-1)
-        level_labels = np.array(level_labels)
+        np_level_labels = np.array(level_labels)
         valid_idx = np.array(
-            [level_label != -1 for level_label in level_labels]
+            [level_label != -1 for level_label in np_level_labels]
         )  # Could be level_labels != -1 but fails with FutureWarning: elementwise comparison failed
-        level_labels = level_labels[valid_idx]
+        np_level_labels = np_level_labels[valid_idx]
         level_embeddings = embeddings[valid_idx]
         clustering_model = MiniBatchKMeans(
-            n_clusters=np.unique(level_labels).size,
+            n_clusters=np.unique(np_level_labels).size,
             batch_size=kmean_batch_size,
             init="k-means++",
             n_init=1,  # default when kmeans++ is used
@@ -87,7 +96,7 @@ def _evaluate_clustering_bootstrapped(
             cluster_indices = rng_state.choices(range(n_embeddings), k=cluster_size)
 
             _embeddings = level_embeddings[cluster_indices]
-            _labels = level_labels[cluster_indices]
+            _labels = np_level_labels[cluster_indices]
             cluster_assignment = clustering_model.fit_predict(_embeddings)
             v_measure = v_measure_score(_labels, cluster_assignment)
             v_measures[f"Level {i_level}"].append(v_measure)
@@ -153,15 +162,20 @@ class AbsTaskClustering(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: Dataset,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> ScoresDict:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError(
+                "Expected encoder model to be an instance of EncoderProtocol."
+            )
         if (
             self.max_document_to_embed is not None
             and self.max_fraction_of_documents_to_embed is not None
@@ -182,13 +196,13 @@ class AbsTaskClustering(AbsTask):
                     self.max_fraction_of_documents_to_embed * len(data_split)
                 )
             else:
-                max_documents_to_embed = self.max_document_to_embed
+                max_documents_to_embed = cast("int", self.max_document_to_embed)
 
-            max_documents_to_embed = min(len(data_split), max_documents_to_embed)  # type: ignore
+            max_documents_to_embed = min(len(data_split), max_documents_to_embed)
             example_indices = self.rng_state.sample(
                 range(len(data_split)), k=max_documents_to_embed
             )
-            downsampled_dataset = data_split.select(example_indices)  # type: ignore
+            downsampled_dataset = data_split.select(example_indices)
 
         downsampled_dataset = downsampled_dataset.select_columns(
             [self.input_column_name, self.label_column_name]
@@ -200,6 +214,7 @@ class AbsTaskClustering(AbsTask):
                 downsampled_dataset,
                 self.metadata,
                 input_column=self.input_column_name,
+                num_proc=num_proc,
                 **encode_kwargs,
             ),
             task_metadata=self.metadata,
@@ -283,9 +298,11 @@ class AbsTaskClustering(AbsTask):
             labels_statistics=label_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         self._upload_dataset_to_hub(
-            repo_name, [self.input_column_name, self.label_column_name]
+            repo_name,
+            [self.input_column_name, self.label_column_name],
+            num_proc=num_proc,
         )
 
 

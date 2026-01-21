@@ -24,12 +24,14 @@ xyz_zh_datasets = {
 
 xyz_embedding = ModelMeta(
     name="fangxq/XYZ-embedding",
+    model_type=["dense"],
     languages=["zho-Hans"],
     loader=sentence_transformers_loader,
     open_weights=True,
     revision="4004120220b99baea764a1d3508427248ac3bccf",
     release_date="2024-09-13",
     n_parameters=326000000,
+    n_embedding_parameters=21_635_072,
     memory_usage_mb=1242,
     max_tokens=512,
     embed_dim=768,

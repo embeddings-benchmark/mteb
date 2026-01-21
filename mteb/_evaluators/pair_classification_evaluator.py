@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 import logging
-from typing import Any, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
-from datasets import Dataset
 from sklearn.metrics.pairwise import (
     paired_cosine_distances,
     paired_euclidean_distances,
@@ -11,10 +12,14 @@ from sklearn.metrics.pairwise import (
 
 from mteb._create_dataloaders import _create_dataloader_from_texts, create_dataloader
 from mteb._evaluators.evaluator import Evaluator
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import EncoderProtocol
 from mteb.similarity_functions import compute_pairwise_similarity
-from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import EncoderProtocol
+    from mteb.types import EncodeKwargs, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -85,7 +90,8 @@ class PairClassificationEvaluator(Evaluator):
     def __call__(
         self,
         model: EncoderProtocol,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
+        num_proc: int = 1,
     ) -> PairClassificationDistances:
         logger.info("Running pair classification - Encoding samples (1/2)")
         embeddings1 = model.encode(
@@ -93,6 +99,7 @@ class PairClassificationEvaluator(Evaluator):
                 self.dataset,
                 task_metadata=self.task_metadata,
                 input_column=self.input1_column_name,
+                num_proc=num_proc,
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
@@ -107,6 +114,7 @@ class PairClassificationEvaluator(Evaluator):
                 self.dataset,
                 task_metadata=self.task_metadata,
                 input_column=self.input2_column_name,
+                num_proc=num_proc,
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
@@ -148,7 +156,9 @@ class PairClassificationEvaluator(Evaluator):
         hf_subset: str,
         **encode_kwargs: Any,
     ) -> np.ndarray:
-        index_map, all_unique_texts, all_texts_indexes = {}, [], []
+        index_map = {}
+        all_unique_texts: list[str] = []
+        all_texts_indexes = []
         for text in all_texts:
             text_hash = hash(text)
             if text_hash not in index_map:

@@ -1,15 +1,21 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
 import torch.nn.functional as F
 from packaging.version import Version
-from torch.utils.data import DataLoader
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +29,7 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
         self,
         model_name: str,
         revision: str,
+        device: str | None = None,
         model_prompts: dict[str, str] | None = None,
         **kwargs: Any,
     ):
@@ -37,7 +44,9 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
                 f"Current transformers version is {transformers.__version__} is lower than the required version"
                 f" {MODERN_BERT_TRANSFORMERS_MIN_VERSION}"
             )
-        super().__init__(model_name, revision, model_prompts, **kwargs)
+        super().__init__(
+            model_name, revision, device=device, model_prompts=model_prompts, **kwargs
+        )
 
     def to(self, device: torch.device) -> None:
         self.model.to(device)
@@ -193,25 +202,33 @@ NOMIC_CITATION = """
 """
 
 nomic_embed_v1_5 = ModelMeta(
-    loader=NomicWrapper,  # type: ignore
+    loader=NomicWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v1.5",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="b0753ae76394dd36bcfb912a46018088bca48be0",
     release_date="2024-02-10",  # first commit
     citation=NOMIC_CITATION,
     n_parameters=137_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=522,
     max_tokens=8192,
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1.5",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "ONNX",
+        "safetensors",
+        "Transformers",
+    ],
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
@@ -221,24 +238,32 @@ nomic_embed_v1_5 = ModelMeta(
 )
 
 nomic_embed_v1 = ModelMeta(
-    loader=NomicWrapper,  # type: ignore
+    loader=NomicWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="0759316f275aa0cb93a5b830973843ca66babcf5",
     release_date="2024-01-31",  # first commit
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=522,
     max_tokens=8192,
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "ONNX",
+        "safetensors",
+        "Transformers",
+    ],
     use_instructions=True,
     citation=NOMIC_CITATION,
     adapted_from=None,
@@ -249,24 +274,26 @@ nomic_embed_v1 = ModelMeta(
 )
 
 nomic_embed_v1_ablated = ModelMeta(
-    loader=NomicWrapper,  # type: ignore
+    loader=NomicWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v1-ablated",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="7d948905c5d5d3874fa55a925d68e49dbf411e5f",
     release_date="2024-01-15",  # first commit
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=8192,
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1-ablated",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "ONNX"],
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
@@ -276,24 +303,26 @@ nomic_embed_v1_ablated = ModelMeta(
 )
 
 nomic_embed_v1_unsupervised = ModelMeta(
-    loader=NomicWrapper,  # type: ignore
+    loader=NomicWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v1-unsupervised",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="b53d557b15ae63852847c222d336c1609eced93c",
     release_date="2024-01-15",  # first commit
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=8192,
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1-unsupervised",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "ONNX", "Transformers"],
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
@@ -309,18 +338,20 @@ nomic_modern_bert_embed = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="nomic-ai/modernbert-embed-base",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="5960f1566fb7cb1adf1eb6e816639cf4646d9b12",
     release_date="2024-12-29",
     n_parameters=149_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=568,
     max_tokens=8192,
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/modernbert-embed-base",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "ONNX", "safetensors"],
     use_instructions=True,
     adapted_from="answerdotai/ModernBERT-base",
     public_training_code="https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/configs/train/contrastive_pretrain_modernbert.yaml",
@@ -328,6 +359,14 @@ nomic_modern_bert_embed = ModelMeta(
     superseded_by=None,
     training_datasets=nomic_training_data,
     public_training_data=None,
+    citation="""@misc{nussbaum2024nomic,
+      title={Nomic Embed: Training a Reproducible Long Context Text Embedder},
+      author={Zach Nussbaum and John X. Morris and Brandon Duderstadt and Andriy Mulyar},
+      year={2024},
+      eprint={2402.01613},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
 )
 
 
@@ -433,24 +472,27 @@ m_languages = [
 ]
 
 nomic_embed_text_v2_moe = ModelMeta(
-    loader=NomicWrapper,  # type: ignore
+    loader=NomicWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v2-moe",
+    model_type=["dense"],
     languages=m_languages,
     open_weights=True,
     revision="1066b6599d099fbb93dfcb64f9c37a7c9e503e85",
     release_date="2025-02-07",
     n_parameters=475292928,
+    n_embedding_parameters=192036864,
+    n_active_parameters_override=141628032,
     memory_usage_mb=1813,
     max_tokens=512,
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v2-moe",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     adapted_from="nomic-ai/nomic-xlm-2048",
     public_training_data="https://github.com/nomic-ai/contrastors?tab=readme-ov-file#data-access",
@@ -458,12 +500,12 @@ nomic_embed_text_v2_moe = ModelMeta(
     training_datasets=None,  # did not look into this further
     superseded_by=None,
     citation="""@misc{nussbaum2025trainingsparsemixtureexperts,
-      title={Training Sparse Mixture Of Experts Text Embedding Models}, 
+      title={Training Sparse Mixture Of Experts Text Embedding Models},
       author={Zach Nussbaum and Brandon Duderstadt},
       year={2025},
       eprint={2502.07972},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2502.07972}, 
+      url={https://arxiv.org/abs/2502.07972},
 }""",
 )

@@ -1,15 +1,22 @@
-from collections.abc import Generator
+from __future__ import annotations
+
 from itertools import islice
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
+
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
 
 
 # https://docs.python.org/3/library/itertools.html#itertools.batched
@@ -30,13 +37,13 @@ class NoInstructModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
+        device: str | None = None,
         model_prompts: dict[str, str] | None = None,
         **kwargs: Any,
     ):
         from transformers import AutoModel, AutoTokenizer
 
         self.model_name = model_name
-        device = kwargs.pop("device", None)
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.model = AutoModel.from_pretrained(
             model_name, revision=revision, **kwargs
@@ -97,18 +104,20 @@ class NoInstructModel(AbsEncoder):
 no_instruct_small_v0 = ModelMeta(
     loader=NoInstructModel,
     name="avsolatorio/NoInstruct-small-Embedding-v0",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="b38747000553d8268915c95a55fc87e707c9aadd",
     release_date="2024-05-01",  # first commit
     n_parameters=33_400_000,
+    n_embedding_parameters=11_720_448,
     memory_usage_mb=127,
     max_tokens=512,
     embed_dim=384,
     license="mit",
     reference="https://huggingface.co/avsolatorio/NoInstruct-small-Embedding-v0",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Sentence Transformers", "safetensors", "Transformers"],
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,

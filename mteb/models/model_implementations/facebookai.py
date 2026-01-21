@@ -107,41 +107,101 @@ XLMR_LANGUAGES = [
 xlmr_base = ModelMeta(
     loader=sentence_transformers_loader,  # type: ignore[arg-type]
     name="FacebookAI/xlm-roberta-base",
+    model_type=["dense"],
     languages=XLMR_LANGUAGES,
     open_weights=True,
     revision="e73636d4f797dec63c3081bb6ed5c7b0bb3f2089",
     release_date="2019-11-05",  # arxiv paper release
     n_parameters=278043648,
+    n_embedding_parameters=192_001_536,
     memory_usage_mb=1064,
     embed_dim=768,
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/FacebookAI/xlm-roberta-base",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "ONNX",
+        "safetensors",
+    ],
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
     training_datasets=set(),
+    citation="""@article{DBLP:journals/corr/abs-1911-02116,
+  author    = {Alexis Conneau and
+               Kartikay Khandelwal and
+               Naman Goyal and
+               Vishrav Chaudhary and
+               Guillaume Wenzek and
+               Francisco Guzm{\'{a}}n and
+               Edouard Grave and
+               Myle Ott and
+               Luke Zettlemoyer and
+               Veselin Stoyanov},
+  title     = {Unsupervised Cross-lingual Representation Learning at Scale},
+  journal   = {CoRR},
+  volume    = {abs/1911.02116},
+  year      = {2019},
+  url       = {http://arxiv.org/abs/1911.02116},
+  eprinttype = {arXiv},
+  eprint    = {1911.02116},
+  timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
+  biburl    = {https://dblp.org/rec/journals/corr/abs-1911-02116.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}""",
 )
 
 xlmr_large = ModelMeta(
     loader=sentence_transformers_loader,  # type: ignore[arg-type]
     name="FacebookAI/xlm-roberta-large",
+    model_type=["dense"],
     languages=XLMR_LANGUAGES,
     open_weights=True,
     revision="c23d21b0620b635a76227c604d44e43a9f0ee389",
     release_date="2019-11-05",  # arxiv paper release
     n_parameters=559890432,
+    n_embedding_parameters=256_002_048,
     memory_usage_mb=2141,
     embed_dim=1024,
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/FacebookAI/xlm-roberta-large",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "ONNX",
+        "safetensors",
+    ],
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
     training_datasets=set(),
+    citation="""@article{DBLP:journals/corr/abs-1911-02116,
+  author    = {Alexis Conneau and
+               Kartikay Khandelwal and
+               Naman Goyal and
+               Vishrav Chaudhary and
+               Guillaume Wenzek and
+               Francisco Guzm{\'{a}}n and
+               Edouard Grave and
+               Myle Ott and
+               Luke Zettlemoyer and
+               Veselin Stoyanov},
+  title     = {Unsupervised Cross-lingual Representation Learning at Scale},
+  journal   = {CoRR},
+  volume    = {abs/1911.02116},
+  year      = {2019},
+  url       = {http://arxiv.org/abs/1911.02116},
+  eprinttype = {arXiv},
+  eprint    = {1911.02116},
+  timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
+  biburl    = {https://dblp.org/rec/journals/corr/abs-1911-02116.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}""",
 )

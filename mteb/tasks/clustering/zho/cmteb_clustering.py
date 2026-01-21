@@ -51,7 +51,7 @@ class CLSClusteringFastS2S(AbsTaskClustering):
         adapted_from=["CLSClusteringS2S"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         ds = {}
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
@@ -110,7 +110,7 @@ class CLSClusteringFastP2P(AbsTaskClustering):
         adapted_from=["CLSClusteringP2P"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         ds = {}
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
@@ -226,7 +226,7 @@ class ThuNewsClusteringFastS2S(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@software{THUCTC,
+@software{sun2016thuctc,
   author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
   note = {THU Chinese Text Classification Toolkit},
   publisher = {THU Natural Language Processing Lab},
@@ -239,7 +239,7 @@ class ThuNewsClusteringFastS2S(AbsTaskClustering):
         adapted_from=["ThuNewsClusteringS2S"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         ds = {}
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
@@ -285,7 +285,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@software{THUCTC,
+@software{sun2016thuctc,
   author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
   note = {THU Chinese Text Classification Toolkit},
   publisher = {THU Natural Language Processing Lab},
@@ -298,7 +298,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClustering):
         adapted_from=["ThuNewsClusteringP2P"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         ds = {}
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))

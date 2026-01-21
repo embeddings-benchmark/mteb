@@ -51,7 +51,7 @@ class MLSUMClusteringP2P(AbsTaskClusteringLegacy):
         superseded_by="MLSUMClusteringP2P.v2",
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return
@@ -124,7 +124,7 @@ class MLSUMClusteringP2PFast(AbsTaskClustering):
         adapted_from=["MLSUMClusteringP2P"],
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return

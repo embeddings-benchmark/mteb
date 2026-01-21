@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.4.1"
+version = "2.7.8"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -44,6 +44,8 @@ dependencies = [
     "pytrec-eval-terrier>=0.5.6",
     "pydantic>=2.0.0",
     "polars>=0.20.22",
+    "torch; python_full_version < '3.14'",
+    "torch>=2.9.0; python_full_version >= '3.14'",
 ]
 
 
@@ -78,7 +80,7 @@ jina-v4 = ["peft>=0.15.2", "transformers>=4.52.0", "torchvision>=0.22.1"]
 flash_attention = ["flash-attn>=2.6.3"]
 openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
 model2vec = ["model2vec>=0.3.0"]
-pylate = ["pylate>=1.3.1; python_version < '3.13'"]  # Required for sentence-transformers 5.0.0 compatibility (otherwise 1.1.6), pylate requires voyager, which in turn requires <=3.12
+pylate = ["pylate>=1.3.1; python_full_version < '3.13'"]  # Required for sentence-transformers 5.0.0 compatibility (otherwise 1.1.6), pylate requires voyager, which in turn requires <=3.12
 bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
 gritlm = ["gritlm>=1.0.2"]
 xformers = ["xformers>=0.0.29"]
@@ -92,13 +94,15 @@ timm = ["timm>=1.0.15,<1.1.0"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
 nomic = ["einops>=0.8.1"]
 ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
-colpali_engine = ["colpali_engine>=0.3.12"]
+colpali_engine = ["colpali_engine>=0.3.12; python_full_version < '3.14'"]
 colqwen3 = ["transformers>=4.57", "torchvision>=0.22.1"]
+sauerkrautlm-colpali = ["sauerkrautlm-colpali>=0.1.0; python_full_version < '3.14'"]
 xet = ["huggingface_hub>=0.32.0"]
 youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lkeap>=3.0.1451"]
 llama-embed-nemotron = ["transformers==4.51.0"]
 faiss-cpu = ["faiss-cpu>=1.12.0"]
 eager_embed = ["qwen_vl_utils>=0.0.14"]
+vllm = ["vllm>=0.11.1"]
 
 [dependency-groups]
 lint = [
@@ -114,6 +118,7 @@ test = [
     "pytest-rerunfailures>=15.0,<16.0",
     "iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
     "GitPython>=3.0.0",
+    "tabulate>=0.9.0",
 ]
 docs = [
     "mkdocs>=1.6.1",
@@ -125,7 +130,7 @@ docs = [
     "tabulate>=0.9.0",
 ]
 typing = [
-    "mypy>=1.18.1",
+    "mypy==1.19.1",
     "types-cachetools>=6.2.0.20250827",
     "types-pysocks>=1.7.1.20250828",
     "types-pyyaml>=6.0.12.20250822",
@@ -133,14 +138,28 @@ typing = [
     "types-simplejson>=3.20.0.20250822",
     "types-tqdm>=4.67.0.20250809",
     "types-tensorflow>=2.18.0.20250809",
-    # stubs require python >=3.10
-    # "pandas-stubs>=2.3.2.250827",
-    # "scipy-stubs>=1.15.3.0",
+    "types-pygments>=2.19.0.20251121",
+    "types-colorama>=0.4.15.20250801",
+    "types-gevent>=25.9.0.20251102",
+    "types-networkx>=3.6.1.20251220",
+    "types-openpyxl>=3.1.5.20250919",
+    "types-psutil>=7.1.3.20251211",
+    "types-python-dateutil>=2.9.0.20251115",
+    "types-pywin32>=311.0.0.20251008",
+    "types-regex>=2025.11.3.20251106",
+    "types-setuptools>=80.9.0.20251221",
+    "types-tabulate>=0.9.0.20241207",
+    "types-xlrd>=2.0.0.20251020",
+    "pandas-stubs>=2.3.2.250926",
+    "scipy-stubs>=1.15.3.0",
+    "types-defusedxml>=0.7.0.20250822",
+    "pillow>=12.0.0",
 ]
 dev = [
     {include-group = "lint"},
     {include-group = "test"},
     {include-group = "typing"},
+    {include-group = "docs"},
 ]
 
 
@@ -220,6 +239,9 @@ select = [
     "PTH",     # use pathlib
     "TID",     # tidy-imports
     "D",       # pydocstyle
+    "PGH",     # pygrep-hooks Use specific rule codes when ignoring type issues
+    "LOG",     # logging
+    "TC",      # type-checking
 ]
 
 ignore = [
@@ -232,14 +254,29 @@ ignore = [
     "D415",     # First line should end with a period
     "C408",     # don't use unecc. collection call, e.g. dict over {}
 ]
+future-annotations = true  # For TC rules
+typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
+
 
 [tool.ruff.lint.per-file-ignores]
 "scripts/*" = ["ALL"]
-"docs/*" = ["D", "DOC"]
-"tests/*" = ["RUF012", "D", "DOC"]
+"docs/*" = [
+    "D",
+    "DOC",
+]
+"tests/*" = [
+    "RUF012",
+    "D",
+    "DOC",
+    "TC",
+]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = ["D", "DOC"]
 "mteb/models/model_implementations/*" = ["D", "DOC"]
+"mteb/benchmarks/benchmark.py" = [
+    # pydantic would try to validate fields in Benchmark class
+    "TC",
+]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false
@@ -257,6 +294,13 @@ convention = "google"
 [tool.ruff.lint.flake8-annotations]
 mypy-init-return = true
 suppress-none-returning = true
+
+[tool.ruff.lint.flake8-type-checking]
+strict = true
+runtime-evaluated-base-classes = [
+    "pydantic.BaseModel",
+    "mteb.abstasks.task_metadata.TaskMetadata",  # https://github.com/astral-sh/ruff/issues/7866
+]
 
 [tool.semantic_release]
 branch = "main"
@@ -302,18 +346,19 @@ override-dependencies = [
     "salesforce-lavis", # salesforce-lavis is not valid with sentence transformers >=3.0.0
 ]
 conflicts = [
-    [{ extra = "timm" }, { extra = "blip2" }],
-    [{ extra = "llm2vec" }, { extra = "model2vec" }],
-    [{ extra = "llm2vec" }, { extra = "pylate" }], # conflicting versions of transformers
-    [{ extra = "llm2vec" }, { extra = "llama-embed-nemotron" }], # conflicting versions of transformers
-    [{ extra = "colpali-engine" }, { extra = "pylate" }],
-    [{ extra = "colpali-engine" }, { extra = "llm2vec" }],
-    [{ extra = "colpali-engine" }, { extra = "llama-embed-nemotron" }], # conflicting version of transformers
-    [{ extra = "colqwen3" }, { extra = "pylate" }], # conflicting versions of transformers
-    [{ extra = "colqwen3" }, { extra = "llm2vec" }], # conflicting versions of transformers
-    [{ extra = "colqwen3" }, { extra = "llama-embed-nemotron" }], # conflicting versions of transformers
-    [{ extra = "jina-v4" }, { extra = "llm2vec" }],
-    [{ extra = "jina-v4" }, { extra = "llama-embed-nemotron" }], # conflicting versions of transformers
+    [
+        { extra = "timm" },
+        { extra = "blip2" },
+        { extra = "llm2vec" },
+        { extra = "model2vec" },
+        { extra = "pylate" }, # conflicting versions of transformers
+        { extra = "llama-embed-nemotron" }, # conflicting versions of transformers
+        { extra = "colpali-engine" },
+        { extra = "colqwen3" },
+        { extra = "jina-v4" },
+        { extra = "sauerkrautlm-colpali" },
+        { extra = "vllm" },
+    ]
 ]
 
 [tool.uv.extra-build-dependencies]
@@ -326,8 +371,11 @@ plugins = ['pydantic.mypy']
 # these modules not typed and don't have stubs
 module = [
     "datasets",
+    "datasets.exceptions",
     "sklearn",
     "sklearn.*",
+    "faiss",
+    "vllm",
 ]
 ignore_missing_imports = true
 

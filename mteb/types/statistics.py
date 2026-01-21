@@ -1,6 +1,13 @@
-from typing_extensions import NotRequired, TypedDict
+from __future__ import annotations
 
-from mteb.types import HFSubset
+from typing import TYPE_CHECKING
+
+from typing_extensions import TypedDict
+
+if TYPE_CHECKING:
+    from typing_extensions import NotRequired
+
+    from mteb.types import HFSubset
 
 
 class SplitDescriptiveStatistics(TypedDict):
@@ -10,8 +17,14 @@ class SplitDescriptiveStatistics(TypedDict):
 
 
 class DescriptiveStatistics(TypedDict, SplitDescriptiveStatistics):
-    """Class for descriptive statistics for the full task."""
+    """Class for descriptive statistics for the full task.
 
+    Attributes:
+        num_samples: Total number of samples
+        hf_subset_descriptive_stats: HFSubset descriptive statistics (only for multilingual datasets)
+    """
+
+    num_samples: int
     hf_subset_descriptive_stats: NotRequired[dict[HFSubset, SplitDescriptiveStatistics]]
 
 
@@ -88,9 +101,9 @@ class ScoreStatistics(TypedDict):
         max_score: Maximum score
     """
 
-    min_score: int
+    min_score: int | float
     avg_score: float
-    max_score: int
+    max_score: int | float
 
 
 class TopRankedStatistics(TypedDict):

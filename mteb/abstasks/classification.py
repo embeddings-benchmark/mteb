@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 import logging
 from collections import defaultdict
-from pathlib import Path
-from typing import Any, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
 from datasets import Dataset, DatasetDict
@@ -16,12 +17,8 @@ from sklearn.metrics import (
 
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
 from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
-    ImageStatistics,
-    LabelStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
 
 from ._statistics_calculation import (
@@ -30,6 +27,18 @@ from ._statistics_calculation import (
     calculate_text_statistics,
 )
 from .abstask import AbsTask
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
+    from mteb.models import MTEBModels
+    from mteb.types import EncodeKwargs, HFSubset, ScoresDict
+    from mteb.types.statistics import (
+        ImageStatistics,
+        LabelStatistics,
+        TextStatistics,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -98,9 +107,8 @@ class AbsTaskClassification(AbsTask):
             text: str (for text) or PIL.Image (for image). Column name can be changed via `input_column_name` attribute.
             label: int. Column name can be changed via `label_column_name` attribute.
         evaluator_model: The model to use for evaluation. Can be any sklearn compatible model. Default is `LogisticRegression`.
-            Full details of api in [`SklearnModelProtocol`][mteb._evaluators.sklearn_evaluator.SklearnModelProtocol].
-        samples_per_label: Number of samples per label to use for training the evaluator model. Default is 8.
-        n_experiments: Number of experiments to run. Default is 10.
+       samples_per_label: Number of samples per label to use for training the evaluator model. Default is 8.
+       n_experiments: Number of experiments to run. Default is 10.
         train_split: Name of the split to use for training the evaluator model. Default is "train".
         label_column_name: Name of the column containing the labels. Default is "label".
         input_column_name: Name of the column containing the input data. Default is "text".
@@ -126,8 +134,9 @@ class AbsTaskClassification(AbsTask):
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluate a model on the classification task.
@@ -141,7 +150,10 @@ class AbsTaskClassification(AbsTask):
             )
 
         if not self.data_loaded:
-            self.load_data()
+            self.load_data(num_proc=num_proc)
+
+        if self.dataset is None:
+            raise RuntimeError("Dataset not loaded.")
 
         if "random_state" in self.evaluator_model.get_params():
             self.evaluator_model = self.evaluator_model.set_params(
@@ -171,23 +183,28 @@ class AbsTaskClassification(AbsTask):
                 hf_subset=hf_subset,
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
+                num_proc=num_proc,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
 
-        return scores
+        return scores  # type: ignore[return-value]
 
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: DatasetDict,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
+
         train_split = data_split[self.train_split]
         eval_split = data_split[hf_split]
 
@@ -216,7 +233,10 @@ class AbsTaskClassification(AbsTask):
                 evaluator_model=self.evaluator_model,
             )
             y_pred, test_cache = evaluator(
-                model, encode_kwargs=encode_kwargs, test_cache=test_cache
+                model,
+                encode_kwargs=encode_kwargs,
+                test_cache=test_cache,
+                num_proc=num_proc,
             )
             if prediction_folder:
                 all_predictions.append(y_pred.tolist())
@@ -237,7 +257,7 @@ class AbsTaskClassification(AbsTask):
             # ap will be none for non binary classification tasks
             k: (
                 float(np.mean(values))
-                if (values := [s[k] for s in scores if s[k] is not None])
+                if (values := [s[k] for s in scores if s[k] is not None])  # type: ignore[literal-required]
                 else np.nan
             )
             for k in scores[0].keys()
@@ -245,7 +265,7 @@ class AbsTaskClassification(AbsTask):
         logger.info(f"Running {self.metadata.name} - Finished.")
         return FullClassificationMetrics(
             scores_per_experiment=scores,
-            **avg_scores,
+            **avg_scores,  # type: ignore[typeddict-item]
         )
 
     def _calculate_scores(
@@ -358,11 +378,12 @@ class AbsTaskClassification(AbsTask):
             label_statistics=label_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         self._upload_dataset_to_hub(
             repo_name,
             [
                 self.input_column_name,
                 self.label_column_name,
             ],
+            num_proc=num_proc,
         )

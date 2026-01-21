@@ -1,13 +1,18 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -61,17 +66,25 @@ uae_large_v1 = ModelMeta(
         },
     ),
     name="WhereIsAI/UAE-Large-V1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="369c368f70f16a613f19f5598d4f12d9f44235d4",
     release_date="2023-12-04",  # initial commit of hf model.
     n_parameters=int(335 * 1e6),
+    n_embedding_parameters=31_254_528,
     memory_usage_mb=1278,
     max_tokens=512,
     embed_dim=1024,
     license="mit",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "ONNX",
+        "safetensors",
+        "Transformers",
+    ],
     reference="https://huggingface.co/WhereIsAI/UAE-Large-V1",
     use_instructions=True,
     citation="""

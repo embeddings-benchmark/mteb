@@ -1,14 +1,19 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_image_dependencies, requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 MOCOV3_CITATION = """@Article{chen2021mocov3,
     author  = {Xinlei Chen* and Saining Xie* and Kaiming He},
@@ -117,13 +122,15 @@ mocov3_training_datasets = set(
 )
 
 mocov3_vit_base = ModelMeta(
-    loader=mocov3_loader,  # type: ignore
+    loader=mocov3_loader,
     name="nyu-visionx/moco-v3-vit-b",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
     release_date="2024-06-03",
     modalities=["image"],
     n_parameters=86_600_000,
+    n_embedding_parameters=None,
     memory_usage_mb=330,
     max_tokens=None,
     embed_dim=768,
@@ -131,7 +138,7 @@ mocov3_vit_base = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/facebookresearch/moco-v3",
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://github.com/facebookresearch/moco-v3",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -140,13 +147,15 @@ mocov3_vit_base = ModelMeta(
 )
 
 mocov3_vit_large = ModelMeta(
-    loader=mocov3_loader,  # type: ignore
+    loader=mocov3_loader,
     name="nyu-visionx/moco-v3-vit-l",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="7bf75358d616f39b9716148bf4e3425f3bd35b47",
     release_date="2024-06-03",
     modalities=["image"],
     n_parameters=304_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=1161,
     max_tokens=None,
     embed_dim=1024,
@@ -154,7 +163,7 @@ mocov3_vit_large = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/facebookresearch/moco-v3",
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://github.com/facebookresearch/moco-v3",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,

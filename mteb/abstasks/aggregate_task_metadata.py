@@ -1,28 +1,38 @@
+from __future__ import annotations
+
 import logging
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from pydantic import ConfigDict, Field, model_validator
-from typing_extensions import Self
 
 from mteb.types import (
-    HFSubset,
-    ISOLanguageScript,
     Languages,
-    Licenses,
-    Modalities,
-    StrDate,
 )
 
 from .abstask import AbsTask
 from .task_metadata import (
-    AnnotatorType,
     MetadataDatasetDict,
-    SampleCreationMethod,
-    TaskDomain,
     TaskMetadata,
-    TaskSubtype,
     TaskType,
 )
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
+
+    from mteb.types import (
+        ISOLanguageScript,
+        Licenses,
+        Modalities,
+        StrDate,
+    )
+
+    from .task_metadata import (
+        AnnotatorType,
+        SampleCreationMethod,
+        TaskDomain,
+        TaskSubtype,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -60,14 +70,7 @@ class AggregateTaskMetadata(TaskMetadata):
     reference: str | None = None
     bibtex_citation: str | None = None
 
-    @property
-    def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISOLanguageScript]]:
-        """Return a dictionary mapping huggingface subsets to languages."""
-        if isinstance(self.eval_langs, dict):
-            return self.eval_langs
-        return {"default": self.eval_langs}  # type: ignore
-
-    @model_validator(mode="after")  # type: ignore
+    @model_validator(mode="after")
     def _compute_unfilled_cases(self) -> Self:
         if not self.eval_langs:
             self.eval_langs = self._compute_eval_langs()

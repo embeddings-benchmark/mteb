@@ -1,22 +1,16 @@
-from collections.abc import Iterable, Sequence
+from __future__ import annotations
+
+from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Literal
 
 import pandas as pd
 
-from mteb.benchmarks._create_table import (
-    _create_per_language_table_from_benchmark_results,
-    _create_per_task_table_from_benchmark_results,
-    _create_summary_table_from_benchmark_results,
-    _create_summary_table_mean_public_private,
-    _create_summary_table_mean_subset,
-    _create_summary_table_mean_task_type,
-)
-from mteb.results import BenchmarkResults
+from mteb.abstasks.abstask import AbsTask
 from mteb.types import StrURL
 
 if TYPE_CHECKING:
-    from mteb.abstasks import AbsTask
+    from mteb.results import BenchmarkResults
 
 
 @dataclass
@@ -25,6 +19,7 @@ class Benchmark:
 
     Args:
         name: The name of the benchmark
+        aliases: Alternative names for the benchmark
         tasks: The tasks within the benchmark.
         description: A description of the benchmark, should include its intended goal and potentially a description of its construction
         reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
@@ -43,7 +38,8 @@ class Benchmark:
     """
 
     name: str
-    tasks: Sequence["AbsTask"]
+    tasks: Sequence[AbsTask]
+    aliases: Sequence[str] = field(default_factory=tuple)
     description: str | None = None
     reference: StrURL | None = None
     citation: str | None = None
@@ -53,13 +49,13 @@ class Benchmark:
     display_name: str | None = None
     language_view: list[str] | Literal["all"] = field(default_factory=list)
 
-    def __iter__(self) -> Iterable["AbsTask"]:
+    def __iter__(self) -> Iterator[AbsTask]:
         return iter(self.tasks)
 
     def __len__(self) -> int:
         return len(self.tasks)
 
-    def __getitem__(self, index: int) -> "AbsTask":
+    def __getitem__(self, index: int) -> AbsTask:
         return self.tasks[index]
 
     def _create_summary_table(
@@ -70,6 +66,10 @@ class Benchmark:
         Returns:
             A pandas DataFrame representing the summary results.
         """
+        from mteb.benchmarks._create_table import (
+            _create_summary_table_from_benchmark_results,
+        )
+
         return _create_summary_table_from_benchmark_results(benchmark_results)
 
     def _create_per_task_table(
@@ -80,6 +80,10 @@ class Benchmark:
         Returns:
             A pandas DataFrame representing the per-task results.
         """
+        from mteb.benchmarks._create_table import (
+            _create_per_task_table_from_benchmark_results,
+        )
+
         return _create_per_task_table_from_benchmark_results(benchmark_results)
 
     def _create_per_language_table(
@@ -90,6 +94,10 @@ class Benchmark:
         Returns:
             A pandas DataFrame representing the per-language results.
         """
+        from mteb.benchmarks._create_table import (
+            _create_per_language_table_from_benchmark_results,
+        )
+
         if self.language_view == "all" or len(self.language_view) > 0:
             return _create_per_language_table_from_benchmark_results(
                 benchmark_results, self.language_view
@@ -111,9 +119,23 @@ class RtebBenchmark(Benchmark):
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        joint_table = _create_summary_table_mean_public_private(benchmark_results)
+        from mteb.benchmarks._create_table import (
+            _create_summary_table_mean_public_private,
+        )
+
+        joint_table = _create_summary_table_mean_public_private(
+            benchmark_results, exclude_private_from_borda=True
+        )
+        # issue 3902: temporary remove the private column from RTEB summary table
+        if "Mean (Private)" in joint_table.columns:
+            joint_table = joint_table.drop(columns=["Mean (Private)"])
         # For RTEB: all tasks are Retrieval type, so Retrieval column = Mean (Task)
+        # but due to 3902, if Private column existed, Mean (Task) was the mean of Public and Private so instead we drop Mean (Task) and rename Mean (Public) to Mean (Task)
         joint_table = joint_table.rename(columns={"Retrieval": "Mean (Task)"})
+        if "Mean (Task)" in joint_table.columns:
+            joint_table = joint_table.drop(columns=["Mean (Task)"])
+        joint_table = joint_table.rename(columns={"Mean (Public)": "Mean (Task)"})
+
         return joint_table
 
 
@@ -123,6 +145,8 @@ class HUMEBenchmark(Benchmark):
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
+        from mteb.benchmarks._create_table import _create_summary_table_mean_subset
+
         return _create_summary_table_mean_subset(benchmark_results)
 
 
@@ -132,6 +156,8 @@ class MIEBBenchmark(Benchmark):
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
+        from mteb.benchmarks._create_table import _create_summary_table_mean_task_type
+
         return _create_summary_table_mean_task_type(benchmark_results)
 
 
@@ -141,6 +167,10 @@ class VidoreBenchmark(Benchmark):
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
+        from mteb.benchmarks._create_table import (
+            _create_summary_table_mean_public_private,
+        )
+
         joint_table = _create_summary_table_mean_public_private(benchmark_results)
         # For ViDoRe (V1, V2, V3): all tasks are Document Understanding type, so Document Understanding column = Mean (Task)
         joint_table = joint_table.rename(

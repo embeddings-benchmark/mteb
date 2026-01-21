@@ -1,14 +1,19 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 BLIP2_CITATION = """@inproceedings{li2023blip2,
     title={{BLIP-2:} Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models},
@@ -166,11 +171,13 @@ blip2_training_datasets = set(
 blip2_opt_2_7b = ModelMeta(
     loader=blip2_loader,
     name="Salesforce/blip2-opt-2.7b",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="51572668da0eb669e01a189dc22abe6088589a24",
     release_date="2024-03-22",
     modalities=["image", "text"],
     n_parameters=3_740_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=14285,
     max_tokens=None,
     embed_dim=768,
@@ -178,7 +185,7 @@ blip2_opt_2_7b = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/salesforce/LAVIS/tree/main/projects/blip2",
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/Salesforce/blip2-opt-2.7b",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -189,11 +196,13 @@ blip2_opt_2_7b = ModelMeta(
 blip2_opt_6_7b_coco = ModelMeta(
     loader=blip2_loader,
     name="Salesforce/blip2-opt-6.7b-coco",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="0d580de59320a25a4d2c386387bcef310d5f286e",
     release_date="2024-03-31",
     modalities=["image", "text"],
     n_parameters=7_750_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=29577,
     max_tokens=None,
     embed_dim=768,
@@ -201,7 +210,7 @@ blip2_opt_6_7b_coco = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/salesforce/LAVIS/tree/main/projects/blip2",
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/Salesforce/blip2-opt-6.7b-coco",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,

@@ -1,20 +1,30 @@
+from __future__ import annotations
+
 import json
 import logging
 import re
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
 
-from .cohere_models import model_prompts as cohere_model_prompts
-from .cohere_models import supported_languages as cohere_supported_languages
+from .cohere_models import (
+    model_prompts as cohere_model_prompts,
+)
+from .cohere_models import (
+    supported_languages as cohere_supported_languages,
+)
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+
 
 logger = logging.getLogger(__name__)
 
@@ -155,6 +165,7 @@ class BedrockModel(AbsEncoder):
 
 amazon_titan_embed_text_v1 = ModelMeta(
     name="bedrock/amazon-titan-embed-text-v1",
+    model_type=["dense"],
     revision="1",
     release_date="2023-09-27",
     languages=None,  # not specified
@@ -168,6 +179,7 @@ amazon_titan_embed_text_v1 = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
@@ -181,6 +193,7 @@ amazon_titan_embed_text_v1 = ModelMeta(
 
 amazon_titan_embed_text_v2 = ModelMeta(
     name="bedrock/amazon-titan-embed-text-v2",
+    model_type=["dense"],
     revision="1",
     release_date="2024-04-30",
     languages=None,  # not specified
@@ -194,6 +207,7 @@ amazon_titan_embed_text_v2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
@@ -216,12 +230,14 @@ cohere_embed_english_v3 = ModelMeta(
         model_prompts=cohere_model_prompts,
     ),
     name="bedrock/cohere-embed-english-v3",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=False,
     reference="https://cohere.com/blog/introducing-embed-v3",
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
@@ -243,12 +259,14 @@ cohere_embed_multilingual_v3 = ModelMeta(
         model_prompts=cohere_model_prompts,
     ),
     name="bedrock/cohere-embed-multilingual-v3",
+    model_type=["dense"],
     languages=cohere_supported_languages,
     open_weights=False,
     reference="https://cohere.com/blog/introducing-embed-v3",
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed

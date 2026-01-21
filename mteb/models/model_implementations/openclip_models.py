@@ -1,14 +1,19 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_image_dependencies, requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 OPENCLIP_CITATION = """@inproceedings{cherti2023reproducible,
     title={Reproducible scaling laws for contrastive language-image learning},
@@ -120,13 +125,15 @@ def openclip_loader(model_name, **kwargs):
 
 
 CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(
-    loader=openclip_loader,  # type: ignore
+    loader=openclip_loader,
     name="laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="84c9828e63dc9a9351d1fe637c346d4c1c4db341",
     release_date="2023-04-26",
     modalities=["image", "text"],
     n_parameters=428_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=1633,
     max_tokens=77,
     embed_dim=768,
@@ -145,13 +152,15 @@ CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(
 )
 
 CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
-    loader=openclip_loader,  # type: ignore
+    loader=openclip_loader,
     name="laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="f0e2ffa09cbadab3db6a261ec1ec56407ce42912",
     release_date="2023-04-26",
     modalities=["image", "text"],
     n_parameters=151_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=576,
     max_tokens=77,
     embed_dim=512,
@@ -159,7 +168,7 @@ CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/mlfoundations/open_clip",
     public_training_data="https://huggingface.co/datasets/mlfoundations/datacomp_1b",
-    framework=["PyTorch"],
+    framework=["PyTorch", "safetensors"],
     reference="https://huggingface.co/laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -170,13 +179,15 @@ CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
 )
 
 CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
-    loader=openclip_loader,  # type: ignore
+    loader=openclip_loader,
     name="laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="d110532e8d4ff91c574ee60a342323f28468b287",
     release_date="2023-04-26",
     modalities=["image", "text"],
     n_parameters=150_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=572,
     max_tokens=77,
     embed_dim=512,
@@ -195,13 +206,15 @@ CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
 )
 
 CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
-    loader=openclip_loader,  # type: ignore
+    loader=openclip_loader,
     name="laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="bc7788f151930d91b58474715fdce5524ad9a189",
     release_date="2023-01-23",
     modalities=["image", "text"],
     n_parameters=2_540_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=9689,
     max_tokens=77,
     embed_dim=1280,
@@ -209,7 +222,7 @@ CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/mlfoundations/open_clip",
     public_training_data="https://laion.ai/blog/laion-5b/",
-    framework=["PyTorch"],
+    framework=["PyTorch", "safetensors"],
     reference="https://huggingface.co/laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -220,13 +233,15 @@ CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
 )
 
 CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
-    loader=openclip_loader,  # type: ignore
+    loader=openclip_loader,
     name="laion/CLIP-ViT-g-14-laion2B-s34B-b88K",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="15efd0f6ac0c40c0f9da7becca03c974d7012604",
     release_date="2023-03-06",
     modalities=["image", "text"],
     n_parameters=1_367_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=5215,
     max_tokens=77,
     embed_dim=1024,
@@ -234,7 +249,7 @@ CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/mlfoundations/open_clip",
     public_training_data="https://laion.ai/blog/laion-5b/",
-    framework=["PyTorch"],
+    framework=["PyTorch", "safetensors"],
     reference="https://huggingface.co/laion/CLIP-ViT-g-14-laion2B-s34B-b88K",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -245,13 +260,15 @@ CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
 )
 
 CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
-    loader=openclip_loader,  # type: ignore
+    loader=openclip_loader,
     name="laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="de081ac0a0ca8dc9d1533eed1ae884bb8ae1404b",
     release_date="2022-09-15",
     modalities=["image", "text"],
     n_parameters=986_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=3762,
     max_tokens=77,
     embed_dim=1024,
@@ -259,7 +276,7 @@ CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/mlfoundations/open_clip",
     public_training_data="https://laion.ai/blog/laion-5b/",
-    framework=["PyTorch"],
+    framework=["PyTorch", "safetensors"],
     reference="https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -270,13 +287,15 @@ CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
 )
 
 CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
-    loader=openclip_loader,  # type: ignore
+    loader=openclip_loader,
     name="laion/CLIP-ViT-L-14-laion2B-s32B-b82K",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="1627032197142fbe2a7cfec626f4ced3ae60d07a",
     release_date="2022-09-15",
     modalities=["image", "text"],
     n_parameters=428_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=1631,
     max_tokens=77,
     embed_dim=768,
@@ -284,7 +303,7 @@ CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/mlfoundations/open_clip",
     public_training_data="https://laion.ai/blog/laion-5b/",
-    framework=["PyTorch"],
+    framework=["PyTorch", "safetensors"],
     reference="https://huggingface.co/laion/CLIP-ViT-L-14-laion2B-s32B-b82K",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -297,11 +316,13 @@ CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
 CLIP_ViT_B_32_laion2B_s34B_b79K = ModelMeta(
     loader=openclip_loader,
     name="laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="08f73555f1b2fb7c82058aebbd492887a94968ef",
     release_date="2022-09-15",
     modalities=["image", "text"],
     n_parameters=151_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=577,
     max_tokens=77,
     embed_dim=512,
@@ -309,7 +330,7 @@ CLIP_ViT_B_32_laion2B_s34B_b79K = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/mlfoundations/open_clip",
     public_training_data="https://laion.ai/blog/laion-5b/",
-    framework=["PyTorch"],
+    framework=["PyTorch", "safetensors"],
     reference="https://huggingface.co/laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,

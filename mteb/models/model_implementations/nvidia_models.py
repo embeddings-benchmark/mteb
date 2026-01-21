@@ -1,35 +1,55 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
 import torch.nn.functional as F
 from packaging.version import Version
-from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel, AutoTokenizer
 from transformers import __version__ as transformers_version
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_package
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models import CrossEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
-NV_RETRIEVER_CITATION = """@misc{moreira2025nvretrieverimprovingtextembedding,
-      title={NV-Retriever: Improving text embedding models with effective hard-negative mining},
-      author={Gabriel de Souza P. Moreira and Radek Osmulski and Mengyao Xu and Ronay Ak and Benedikt Schifferer and Even Oldridge},
+NV_RETRIEVER_CITATION = """@misc{lee2025nvembedimprovedtechniquestraining,
+      title={NV-Embed: Improved Techniques for Training LLMs as Generalist Embedding Models},
+      author={Chankyu Lee and Rajarshi Roy and Mengyao Xu and Jonathan Raiman and Mohammad Shoeybi and Bryan Catanzaro and Wei Ping},
       year={2025},
-      eprint={2407.15831},
+      eprint={2405.17428},
       archivePrefix={arXiv},
-      primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2407.15831}
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2405.17428},
+}"""
+
+LlamaEmbedNemotron_CITATION = """@misc{babakhin2025llamaembednemotron8buniversaltextembedding,
+      title={Llama-Embed-Nemotron-8B: A Universal Text Embedding Model for Multilingual and Cross-Lingual Tasks},
+      author={Yauhen Babakhin and Radek Osmulski and Ronay Ak and Gabriel Moreira and Mengyao Xu and Benedikt Schifferer and Bo Liu and Even Oldridge},
+      year={2025},
+      eprint={2511.07025},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2511.07025},
 }"""
 
 
-def instruction_template(
+def _instruction_template(
     instruction: str, prompt_type: PromptType | None = None
 ) -> str:
     return f"Instruct: {instruction}\nQuery: " if instruction else ""
@@ -100,10 +120,77 @@ nvidia_training_datasets = {
     "MrTidyRetrieval",
 }
 
+
+class _NVEmbedWrapper(InstructSentenceTransformerModel):
+    """Inherited, because nvembed requires `sbert==2`, but it doesn't have tokenizers kwargs"""
+
+    def __init__(
+        self,
+        model_name: str,
+        revision: str,
+        instruction_template: str
+        | Callable[[str, PromptType | None], str]
+        | None = None,
+        max_seq_length: int | None = None,
+        apply_instruction_to_passages: bool = True,
+        padding_side: str | None = None,
+        add_eos_token: bool = False,
+        prompts_dict: dict[str, str] | None = None,
+        **kwargs: Any,
+    ):
+        from sentence_transformers import __version__ as sbert_version
+
+        required_transformers_version = "4.42.4"
+        required_sbert_version = "2.7.0"
+
+        if Version(transformers_version) != Version(required_transformers_version):
+            raise RuntimeError(
+                f"transformers version {transformers_version} is not match with required "
+                f"install version {required_transformers_version} to run `nvidia/NV-Embed-v2`"
+            )
+
+        if Version(sbert_version) != Version(required_sbert_version):
+            raise RuntimeError(
+                f"sbert version {sbert_version} is not match with required "
+                f"install version {required_sbert_version} to run `nvidia/NV-Embed-v2`"
+            )
+
+        requires_package(
+            self, "flash_attn", model_name, "pip install 'mteb[flash_attention]'"
+        )
+
+        from sentence_transformers import SentenceTransformer
+
+        if (
+            isinstance(instruction_template, str)
+            and "{instruction}" not in instruction_template
+        ):
+            raise ValueError(
+                "Instruction template must contain the string '{instruction}'."
+            )
+        if instruction_template is None:
+            logger.warning(
+                "No instruction template provided. Instructions will be used as-is."
+            )
+
+        self.instruction_template = instruction_template
+
+        self.model_name = model_name
+        self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
+        self.model.tokenizer.padding_side = padding_side
+        self.model.tokenizer.add_eos_token = add_eos_token
+
+        if max_seq_length:
+            # https://github.com/huggingface/sentence-transformers/issues/3575
+            self.model.max_seq_length = max_seq_length
+        self.apply_instruction_to_passages = apply_instruction_to_passages
+        self.prompts_dict = prompts_dict
+
+
 NV_embed_v2 = ModelMeta(
-    loader=InstructSentenceTransformerModel,
+    loader=_NVEmbedWrapper,
     loader_kwargs=dict(
-        instruction_template=instruction_template,
+        instruction_template=_instruction_template,
         trust_remote_code=True,
         max_seq_length=32768,
         padding_side="right",
@@ -111,18 +198,20 @@ NV_embed_v2 = ModelMeta(
         add_eos_token=True,
     ),
     name="nvidia/NV-Embed-v2",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="7604d305b621f14095a1aa23d351674c2859553a",
     release_date="2024-09-09",  # initial commit of hf model.
     n_parameters=7_850_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=14975,
     embed_dim=4096,
     license="cc-by-nc-4.0",
     max_tokens=32768,
     reference="https://huggingface.co/nvidia/NV-Embed-v2",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     use_instructions=True,
     training_datasets=nvidia_training_datasets,
     public_training_code=None,
@@ -131,9 +220,9 @@ NV_embed_v2 = ModelMeta(
 )
 
 NV_embed_v1 = ModelMeta(
-    loader=InstructSentenceTransformerModel,
+    loader=_NVEmbedWrapper,
     loader_kwargs=dict(
-        instruction_template=instruction_template,
+        instruction_template=_instruction_template,
         trust_remote_code=True,
         max_seq_length=32768,
         padding_side="right",
@@ -141,18 +230,20 @@ NV_embed_v1 = ModelMeta(
         add_eos_token=True,
     ),
     name="nvidia/NV-Embed-v1",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="570834afd5fef5bf3a3c2311a2b6e0a66f6f4f2c",
     release_date="2024-09-13",  # initial commit of hf model.
     n_parameters=7_850_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=14975,
     embed_dim=4096,
     license="cc-by-nc-4.0",
     max_tokens=32768,
     reference="https://huggingface.co/nvidia/NV-Embed-v1",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     training_datasets=nvidia_training_datasets,
     public_training_code=None,
@@ -335,6 +426,7 @@ class LlamaEmbedNemotron(AbsEncoder):
         self,
         model_name: str,
         revision: str,
+        device: str | None = None,
     ) -> None:
         required_transformers_version = "4.51.0"
         if Version(transformers_version) != Version(required_transformers_version):
@@ -353,7 +445,7 @@ class LlamaEmbedNemotron(AbsEncoder):
         self.attn_implementation = (
             "flash_attention_2" if torch.cuda.is_available() else "eager"
         )
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.task_prompts = TASK_PROMPTS
         self.instruction_template = self._instruction_template
 
@@ -528,22 +620,76 @@ class LlamaEmbedNemotron(AbsEncoder):
 llama_embed_nemotron_8b = ModelMeta(
     loader=LlamaEmbedNemotron,
     name="nvidia/llama-embed-nemotron-8b",
+    model_type=["dense"],
     languages=llama_embed_nemotron_evaluated_languages,
     open_weights=True,
     revision="84a375593d27d3528beb4e104822515659e093b4",
     release_date="2025-10-23",
     n_parameters=7_504_924_672,
+    n_embedding_parameters=None,
     memory_usage_mb=28629,
     embed_dim=4096,
     license="https://huggingface.co/nvidia/llama-embed-nemotron-8b/blob/main/LICENSE",
     max_tokens=32768,
     reference="https://huggingface.co/nvidia/llama-embed-nemotron-8b",
     similarity_fn_name="cosine",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Sentence Transformers", "safetensors", "Transformers"],
     use_instructions=True,
     training_datasets=llama_embed_nemotron_training_datasets,
-    public_training_code=None,  # Will be released later
-    public_training_data=None,  # Will be released later
+    public_training_code="https://github.com/NVIDIA-NeMo/Automodel/tree/main/examples/biencoder/llama_embed_nemotron_8b",
+    public_training_data="https://huggingface.co/datasets/nvidia/embed-nemotron-dataset-v1",
     contacts=["ybabakhin"],
-    citation=NV_RETRIEVER_CITATION,
+    citation=LlamaEmbedNemotron_CITATION,
+)
+
+
+def _nemotron_rerank_model(model: str, revision: str, **kwargs) -> CrossEncoderWrapper:
+    required_transformers_version = "4.47.1"
+
+    if Version(transformers_version) != Version(required_transformers_version):
+        raise RuntimeError(
+            f"transformers version {transformers_version} is not match with required "
+            f"install version {required_transformers_version} to run `nvidia/llama-nemotron-rerank-1b-v2`"
+        )
+
+    return CrossEncoderWrapper(
+        model=model,
+        revision=revision,
+        **kwargs,
+    )
+
+
+nemotron_rerank_1b_v2 = ModelMeta(
+    loader=_nemotron_rerank_model,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        query_prefix="question:",
+        passage_prefix=" \n \n passage:",
+        model_kwargs={"torch_dtype": torch.float32},
+    ),
+    name="nvidia/llama-nemotron-rerank-1b-v2",
+    revision="78efcfdc23b53a753f6c73f2d78b18132a34ac4d",
+    release_date="2025-10-16",
+    languages=["eng-Latn"],
+    n_parameters=1235816448,
+    memory_usage_mb=2357.0,
+    max_tokens=4096,
+    embed_dim=2048,
+    license="https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/nvidia/llama-nemotron-rerank-1b-v2",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=None,
+    training_datasets=set(
+        # private
+    ),
+    adapted_from="meta-llama/Llama-3.2-1B",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["cross-encoder"],
+    citation=None,
+    contacts=None,
 )

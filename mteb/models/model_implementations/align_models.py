@@ -1,13 +1,18 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 
 class ALIGNModel(AbsEncoder):
@@ -105,11 +110,13 @@ class ALIGNModel(AbsEncoder):
 align_base = ModelMeta(
     loader=ALIGNModel,
     name="kakaobrain/align-base",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="e96a37facc7b1f59090ece82293226b817afd6ba",
     release_date="2023-02-24",
     modalities=["image", "text"],
     n_parameters=176_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=671,
     max_tokens=64,
     embed_dim=768,
@@ -117,7 +124,7 @@ align_base = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/kakaobrain/coyo-align",
     public_training_data=True,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
     reference="https://huggingface.co/kakaobrain/align-base",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,

@@ -1,14 +1,19 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
 from torch.nn.functional import normalize
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 BLIP_CITATION = """@misc{https://doi.org/10.48550/arxiv.2201.12086,
     doi = {10.48550/ARXIV.2201.12086},
@@ -128,13 +133,15 @@ class BLIPModel(AbsEncoder):
 
 # in descending order of usage (downloads from huggingface)
 blip_image_captioning_large = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-image-captioning-large",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="2227ac38c9f16105cb0412e7cab4759978a8fd90",
     release_date="2023-12-07",
     modalities=["image", "text"],
     n_parameters=470_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=1792,
     max_tokens=512,
     embed_dim=768,
@@ -142,7 +149,7 @@ blip_image_captioning_large = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/salesforce/BLIP",
     public_training_data="https://github.com/salesforce/BLIP",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/Salesforce/blip-image-captioning-large",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -155,13 +162,15 @@ blip_image_captioning_large = ModelMeta(
 )
 
 blip_image_captioning_base = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-image-captioning-base",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="89b09ea1789f7addf2f6d6f0dfc4ce10ab58ef84",
     release_date="2023-08-01",
     modalities=["image", "text"],
     n_parameters=247_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=942,
     max_tokens=512,
     embed_dim=768,
@@ -169,7 +178,7 @@ blip_image_captioning_base = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/salesforce/BLIP",
     public_training_data="https://github.com/salesforce/BLIP",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
     reference="https://huggingface.co/Salesforce/blip-image-captioning-base",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -183,13 +192,15 @@ blip_image_captioning_base = ModelMeta(
 
 
 blip_vqa_base = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-vqa-base",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="c7df8e7cd7aa2ee9af18f56e2b29e59a92651b64",
     release_date="2023-12-07",
     modalities=["image", "text"],
     n_parameters=247_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=1467,
     max_tokens=512,
     embed_dim=768,
@@ -197,7 +208,7 @@ blip_vqa_base = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/salesforce/BLIP",
     public_training_data="https://github.com/salesforce/BLIP",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/Salesforce/blip-vqa-base",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -209,13 +220,15 @@ blip_vqa_base = ModelMeta(
 )
 
 blip_vqa_capfilt_large = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-vqa-capfilt-large",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="e53f95265aeab69013fabb5380500ab984adbbb4",
     release_date="2023-01-22",
     modalities=["image", "text"],
     n_parameters=247_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=942,
     max_tokens=512,
     embed_dim=768,
@@ -223,7 +236,7 @@ blip_vqa_capfilt_large = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/salesforce/BLIP",
     public_training_data="https://github.com/salesforce/BLIP",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
     reference="https://huggingface.co/Salesforce/blip-vqa-capfilt-large",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -235,13 +248,15 @@ blip_vqa_capfilt_large = ModelMeta(
 )
 
 blip_itm_base_coco = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-base-coco",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="7eaa90c11850c0b17fc38c6a11e7d88bd6ac231f",
     release_date="2023-08-01",
     modalities=["image", "text"],
     n_parameters=247_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=942,
     max_tokens=512,
     embed_dim=768,
@@ -249,7 +264,7 @@ blip_itm_base_coco = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/salesforce/BLIP",
     public_training_data="https://github.com/salesforce/BLIP",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
     reference="https://huggingface.co/Salesforce/blip-itm-base-coco",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -261,13 +276,15 @@ blip_itm_base_coco = ModelMeta(
 )
 
 blip_itm_large_coco = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-large-coco",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="fef05cafc05298067cbbca00b125749394a77a6f",
     release_date="2023-08-01",
     modalities=["image", "text"],
     n_parameters=470_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=1793,
     max_tokens=512,
     embed_dim=768,
@@ -275,7 +292,7 @@ blip_itm_large_coco = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/salesforce/BLIP",
     public_training_data="https://github.com/salesforce/BLIP",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
     reference="https://huggingface.co/Salesforce/blip-itm-large-coco",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -288,13 +305,15 @@ blip_itm_large_coco = ModelMeta(
 )
 
 blip_itm_base_flickr = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-base-flickr",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="1de29e660d91ae1786c1876212ea805a22eab251",
     release_date="2023-08-01",
     modalities=["image", "text"],
     n_parameters=247_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=942,
     max_tokens=512,
     embed_dim=768,
@@ -302,7 +321,7 @@ blip_itm_base_flickr = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/salesforce/BLIP",
     public_training_data="https://github.com/salesforce/BLIP",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
     reference="https://huggingface.co/Salesforce/blip-itm-base-flickr",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
@@ -315,13 +334,15 @@ blip_itm_base_flickr = ModelMeta(
 )
 
 blip_itm_large_flickr = ModelMeta(
-    loader=BLIPModel,  # type: ignore
+    loader=BLIPModel,
     name="Salesforce/blip-itm-large-flickr",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="bda12e6506758f54261b5ab174b2c55a3ba143fb",
     release_date="2023-08-01",
     modalities=["image", "text"],
     n_parameters=470_000_000,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=1793,
     max_tokens=512,
     embed_dim=768,
@@ -329,7 +350,7 @@ blip_itm_large_flickr = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/salesforce/BLIP",
     public_training_data="https://github.com/salesforce/BLIP",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
     reference="https://huggingface.co/Salesforce/blip-itm-large-flickr",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,

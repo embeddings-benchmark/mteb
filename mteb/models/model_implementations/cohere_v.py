@@ -1,15 +1,15 @@
+from __future__ import annotations
+
 import base64
 import io
 import os
 import time
-from typing import Any, Literal, get_args
+from typing import TYPE_CHECKING, Any, Literal, get_args
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_image_dependencies, requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.cohere_models import (
@@ -18,7 +18,12 @@ from mteb.models.model_implementations.cohere_models import (
     retry_with_rate_limit,
 )
 from mteb.models.model_meta import ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 
 def _post_process_embeddings(
@@ -378,13 +383,15 @@ def cohere_v_loader(model_name, **kwargs):
 
 
 cohere_mult_3 = ModelMeta(
-    loader=cohere_v_loader,  # type: ignore
+    loader=cohere_v_loader,
     loader_kwargs={"model_name": "embed-multilingual-v3.0"},
     name="cohere/embed-multilingual-v3.0",
+    model_type=["dense"],
     languages=[],  # Unknown, but support >100 languages
     revision="1",
     release_date="2024-10-24",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=1024,
@@ -401,13 +408,15 @@ cohere_mult_3 = ModelMeta(
 )
 
 cohere_eng_3 = ModelMeta(
-    loader=cohere_v_loader,  # type: ignore
+    loader=cohere_v_loader,
     loader_kwargs={"model_name": "embed-english-v3.0"},
     name="cohere/embed-english-v3.0",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="1",
     release_date="2024-10-24",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=1024,
@@ -426,11 +435,13 @@ cohere_eng_3 = ModelMeta(
 cohere_embed_v4_multimodal = ModelMeta(
     loader=cohere_v_loader,
     loader_kwargs=dict(model_name="embed-v4.0"),
+    model_type=["dense"],
     name="Cohere/Cohere-embed-v4.0",
     languages=all_languages,
     revision="1",
     release_date="2024-12-01",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=128000,
     embed_dim=1536,
@@ -450,10 +461,12 @@ cohere_embed_v4_multimodal_binary = ModelMeta(
     loader=cohere_v_loader,
     loader_kwargs=dict(embedding_type="binary"),
     name="Cohere/Cohere-embed-v4.0 (output_dtype=binary)",
+    model_type=["dense"],
     languages=all_languages,
     revision="1",
     release_date="2024-12-01",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=128000,
     embed_dim=1536,
@@ -474,10 +487,12 @@ cohere_embed_v4_multimodal_int8 = ModelMeta(
     loader=cohere_v_loader,
     loader_kwargs=dict(embedding_type="int8"),
     name="Cohere/Cohere-embed-v4.0 (output_dtype=int8)",
+    model_type=["dense"],
     languages=all_languages,
     revision="1",
     release_date="2024-12-01",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=128000,
     embed_dim=1536,

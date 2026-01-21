@@ -1,7 +1,12 @@
-import numpy as np
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
+
+if TYPE_CHECKING:
+    from mteb.types import Array
 
 
 class OPSWrapper(AbsEncoder):
@@ -15,18 +20,20 @@ class OPSWrapper(AbsEncoder):
         )
         self.output_dim = 1536
 
-    def encode(self, sentences: list[str], **kwargs) -> np.ndarray:
+    def encode(self, sentences: list[str], **kwargs) -> Array:
         embeddings = self.model.encode(sentences, **kwargs)
         return embeddings[:, : self.output_dim]
 
 
 ops_moa_conan_embedding = ModelMeta(
     name="OpenSearch-AI/Ops-MoA-Conan-embedding-v1",
+    model_type=["dense"],
     revision="46dcd58753f3daa920c66f89e47086a534089350",
     release_date="2025-03-26",
     languages=["zho-Hans"],
     loader=OPSWrapper,
     n_parameters=int(343 * 1e6),
+    n_embedding_parameters=21_635_072,
     memory_usage_mb=1308,
     max_tokens=512,
     embed_dim=1536,
@@ -53,11 +60,13 @@ ops_moa_conan_embedding = ModelMeta(
 
 ops_moa_yuan_embedding = ModelMeta(
     name="OpenSearch-AI/Ops-MoA-Yuan-embedding-1.0",
+    model_type=["dense"],
     revision="23712d0766417b0eb88a2513c6e212a58b543268",
     release_date="2025-03-26",
     languages=["zho-Hans"],
     loader=OPSWrapper,
     n_parameters=int(343 * 1e6),
+    n_embedding_parameters=21_635_072,
     memory_usage_mb=1242,
     max_tokens=512,
     embed_dim=1536,
@@ -65,7 +74,7 @@ ops_moa_yuan_embedding = ModelMeta(
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
-    framework=["PyTorch", "Sentence Transformers"],
+    framework=["PyTorch", "Sentence Transformers", "safetensors"],
     reference="https://huggingface.co/OpenSearch-AI/Ops-MoA-Yuan-embedding-1.0",
     similarity_fn_name="cosine",
     use_instructions=False,

@@ -54,10 +54,10 @@ Fishel, Mark},
 
     samples_per_label = 32
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         for lang in self.dataset.keys():
             # convert label to a 0/1 label
-            labels = self.dataset[lang]["train"]["label"]  # type: ignore
+            labels = self.dataset[lang]["train"]["label"]
             lab2idx = {lab: idx for idx, lab in enumerate(set(labels))}
             self.dataset[lang] = self.dataset[lang].map(
                 lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"]

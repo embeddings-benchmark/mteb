@@ -1,13 +1,21 @@
+from __future__ import annotations
+
 import json
 import logging
+import warnings
 from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
 from mteb._requires_package import requires_package
-from mteb.types import BatchedInput
 
 from ._hash_utils import _hash_item
+
+if TYPE_CHECKING:
+    import faiss
+
+    from mteb.types import BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +30,6 @@ class FaissCache:
             "FAISS-based vector cache",
             install_instruction="pip install mteb[faiss-cpu]",
         )
-        import faiss
 
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)
@@ -36,7 +43,7 @@ class FaissCache:
         logger.info(f"Initialized FAISS VectorCacheMap in {self.directory}")
         self.load()
 
-    def add(self, items: list[BatchedInput], vectors: np.ndarray) -> None:
+    def add(self, items: list[dict[str, Any]], vectors: np.ndarray) -> None:
         """Add vector to FAISS index."""
         import faiss
 
@@ -71,7 +78,9 @@ class FaissCache:
         try:
             return self.index.reconstruct(idx)
         except Exception:
-            logger.warning(f"Vector id {idx} missing for hash {item_hash}")
+            msg = f"Vector id {idx} missing for hash {item_hash}"
+            logger.warning(msg)
+            warnings.warn(msg)
             return None
 
     def save(self) -> None:

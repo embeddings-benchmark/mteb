@@ -1,15 +1,21 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
 
 from .bge_models import bge_m3_training_data
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+
 
 logger = logging.getLogger(__name__)
 
@@ -214,16 +220,18 @@ class JinaReranker(RerankerWrapper):
 
 
 monobert_large = ModelMeta(
-    loader=MonoBERTReranker,  # type: ignore
+    loader=MonoBERTReranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
     name="castorini/monobert-large-msmarco",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="0a97706f3827389da43b83348d5d18c9d53876fa",
     release_date="2020-05-28",
     n_parameters=None,
+    n_embedding_parameters=31_254_528,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -233,22 +241,23 @@ monobert_large = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["Sentence Transformers", "PyTorch"],
-    is_cross_encoder=True,
+    framework=["Sentence Transformers", "PyTorch", "Transformers"],
 )
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
 jina_reranker_multilingual = ModelMeta(
-    loader=JinaReranker,  # type: ignore
+    loader=JinaReranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
     name="jinaai/jina-reranker-v2-base-multilingual",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="126747772a932960028d9f4dc93bd5d9c4869be4",
     release_date="2024-09-26",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=531,
     max_tokens=None,
     embed_dim=None,
@@ -258,16 +267,22 @@ jina_reranker_multilingual = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["Sentence Transformers", "PyTorch"],
-    is_cross_encoder=True,
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "ONNX",
+        "safetensors",
+    ],
 )
 
 bge_reranker_v2_m3 = ModelMeta(
-    loader=BGEReranker,  # type: ignore
+    loader=BGEReranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
     name="BAAI/bge-reranker-v2-m3",
+    model_type=["cross-encoder"],
     languages=[
         "eng-Latn",
         "ara-Arab",
@@ -306,6 +321,7 @@ bge_reranker_v2_m3 = ModelMeta(
     revision="953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
     release_date="2024-06-24",
     n_parameters=None,
+    n_embedding_parameters=256_002_048,
     memory_usage_mb=2166,
     max_tokens=None,
     embed_dim=None,
@@ -315,8 +331,7 @@ bge_reranker_v2_m3 = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=bge_m3_training_data,
-    framework=["Sentence Transformers", "PyTorch"],
-    is_cross_encoder=True,
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     citation="""
     @misc{li2023making,
       title={Making Large Language Models A Better Foundation For Dense Retrieval},

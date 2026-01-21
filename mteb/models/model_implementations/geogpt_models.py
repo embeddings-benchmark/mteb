@@ -7,6 +7,7 @@ from mteb.models.model_meta import ModelMeta
 
 geoembedding = ModelMeta(
     name="GeoGPT-Research-Project/GeoEmbedding",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="29803c28ea7ef6871194a8ebc85ad7bfe174928e",
@@ -19,13 +20,14 @@ geoembedding = ModelMeta(
     ),
     release_date="2025-04-22",
     n_parameters=7241732096,
+    n_embedding_parameters=131_072_000,
     memory_usage_mb=27625,
     embed_dim=4096,
     license="apache-2.0",
     max_tokens=32768,
     reference="https://huggingface.co/GeoGPT-Research-Project/GeoEmbedding",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,

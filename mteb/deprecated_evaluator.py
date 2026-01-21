@@ -5,37 +5,42 @@ import logging
 import os
 import sys
 import traceback
-from collections.abc import Iterable
+import warnings
 from copy import deepcopy
 from datetime import datetime
 from itertools import chain
 from pathlib import Path
 from time import time
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import datasets
 
 import mteb
 from mteb.abstasks import AbsTask
-from mteb.abstasks.task_metadata import TaskCategory, TaskType
 from mteb.benchmarks import Benchmark
 from mteb.models import (
     CrossEncoderWrapper,
-    EncoderProtocol,
     ModelMeta,
-    MTEBModels,
     SentenceTransformerEncoderWrapper,
 )
 from mteb.results import TaskResult
-from mteb.types import ScoresDict
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
+
+    from sentence_transformers import CrossEncoder, SentenceTransformer
+
+    from mteb.abstasks.aggregated_task import AbsTaskAggregate
+    from mteb.abstasks.task_metadata import TaskCategory, TaskType
+    from mteb.models import (
+        MTEBModels,
+    )
+    from mteb.types import EncodeKwargs, ScoresDict
 
 if sys.version_info >= (3, 13):
     from warnings import deprecated
 else:
     from typing_extensions import deprecated
-
-if TYPE_CHECKING:
-    from sentence_transformers import CrossEncoder, SentenceTransformer
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +57,7 @@ class MTEB:
     )
     def __init__(
         self,
-        tasks: Iterable[AbsTask | Benchmark],
+        tasks: Iterable[AbsTask] | Iterable[Benchmark],
         *,
         err_logs_path: str = "error_logs.txt",
     ) -> None:
@@ -63,15 +68,14 @@ class MTEB:
                 `mteb.get_tasks(["task1","task2"]) or `mteb.get_benchmark("MTEB(eng, classic)").
             err_logs_path: Path to save error logs.
         """
-        from mteb.benchmarks import Benchmark
-
-        self.tasks = list(tasks)
-        if len(self.tasks) > 0 and isinstance(self.tasks[0], Benchmark):
+        if isinstance(next(iter(tasks)), Benchmark):
             self.benchmarks = tasks
-            self.tasks = list(chain.from_iterable(self.tasks))
+            self.tasks = list(chain.from_iterable(cast("Iterable[Benchmark]", tasks)))
+        elif isinstance(next(iter(tasks)), AbsTask):
+            self.tasks = list(cast("Iterable[AbsTask]", tasks))
 
         self.err_logs_path = Path(err_logs_path)
-        self.last_evaluated_splits = {}
+        self._last_evaluated_splits: dict[str, list[str]] = {}
 
     @property
     def available_tasks(self) -> list[str]:
@@ -84,7 +88,7 @@ class MTEB:
         return sorted({x.metadata.type for x in self.tasks})
 
     @property
-    def available_task_categories(self) -> set[TaskCategory]:
+    def available_task_categories(self) -> set[TaskCategory | None]:
         """Set of available task categories."""
         return {x.metadata.category for x in self.tasks}
 
@@ -174,7 +178,7 @@ class MTEB:
         split: str,
         subsets_to_run: list[str] | None = None,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         **kwargs: Any,
     ):
         tick = time()
@@ -231,13 +235,14 @@ class MTEB:
         merged_kg_co2_emissions = None
         if existing_kg_co2_emissions and new_kg_co2_emissions:
             merged_kg_co2_emissions = existing_kg_co2_emissions + new_kg_co2_emissions
+        existing_evaluation_time = existing_results.evaluation_time or 0
+        new_evaluation_time = new_results.evaluation_time or 0
         merged_results = TaskResult(
             dataset_revision=new_results.dataset_revision,
             task_name=new_results.task_name,
             mteb_version=new_results.mteb_version,
             scores=merged_scores,
-            evaluation_time=existing_results.evaluation_time
-            + new_results.evaluation_time,
+            evaluation_time=existing_evaluation_time + new_evaluation_time,
             kg_co2_emissions=merged_kg_co2_emissions,
         )
 
@@ -262,7 +267,7 @@ class MTEB:
         overwrite_results: bool = False,
         raise_error: bool = True,
         co2_tracker: bool = False,
-        encode_kwargs: dict[str, Any] | None = None,
+        encode_kwargs: EncodeKwargs | None = None,
         **kwargs,
     ) -> list[TaskResult]:
         """Run the evaluation pipeline on the selected tasks.
@@ -306,13 +311,16 @@ class MTEB:
         elif verbosity == 3:
             datasets.logging.set_verbosity(logging.DEBUG)
 
-        meta = self.create_model_meta(model)
-        output_path = self._create_output_folder(meta, output_folder)
-
+        mteb_model: MTEBModels
         if isinstance(model, SentenceTransformer):
-            model = SentenceTransformerEncoderWrapper(model)
+            mteb_model = SentenceTransformerEncoderWrapper(model)
         elif isinstance(model, CrossEncoder):
-            model = CrossEncoderWrapper(model)
+            mteb_model = CrossEncoderWrapper(model)
+        else:
+            mteb_model = cast("MTEBModels", model)
+
+        meta = self.create_model_meta(mteb_model)
+        output_path = self._create_output_folder(meta, output_folder)
 
         # Disable co2_tracker for API models
         if "API" in meta.framework:
@@ -333,7 +341,7 @@ class MTEB:
         )  # save them in case we re-use the object (e.g. for reranking)
 
         # To evaluate missing splits, we keep track of the task name and the corresponding splits.
-        self.last_evaluated_splits = {}
+        self._last_evaluated_splits = {}
 
         while len(self.tasks) > 0:
             task = self.tasks[0]
@@ -342,9 +350,10 @@ class MTEB:
             )
 
             if task.is_aggregate:
-                self_ = MTEB(tasks=task.metadata.tasks)
-                task_results = self_.run(
-                    model,
+                aggregated_task = cast("AbsTaskAggregate", task)
+                self_ = MTEB(tasks=aggregated_task.metadata.tasks)
+                aggregated_task_results = self_.run(
+                    mteb_model,
                     verbosity=verbosity - 1,
                     output_folder=output_folder,
                     eval_splits=eval_splits,
@@ -355,12 +364,15 @@ class MTEB:
                     encode_kwargs=encode_kwargs,
                     **kwargs,
                 )
-                new_results = task.combine_task_results(task_results)
+                new_results = aggregated_task.combine_task_results(
+                    aggregated_task_results
+                )
                 evaluation_results.append(new_results)
 
                 if output_path:
-                    save_path = output_path / f"{task.metadata.name}.json"
-                    new_results.to_disk(save_path)
+                    new_results.to_disk(
+                        output_path / f"{aggregated_task.metadata.name}.json"
+                    )
                 del self.tasks[0]
                 continue
 
@@ -382,7 +394,7 @@ class MTEB:
             task_subsets = task.hf_subsets
 
             existing_results = None
-            save_path = None
+            save_path: Path | None = None
             final_splits_to_run = task_eval_splits
             missing_evaluations = self._get_missing_evaluations(
                 existing_results,
@@ -432,7 +444,7 @@ class MTEB:
                     logger.info(
                         f"No splits to evaluate for {task.metadata.name}. Skipping evaluation."
                     )
-                self.last_evaluated_splits[task.metadata.name] = []
+                self._last_evaluated_splits[task.metadata.name] = []
                 del self.tasks[0]
                 continue
 
@@ -440,11 +452,11 @@ class MTEB:
                 task.check_if_dataset_is_superseded()
                 task.load_data()
 
-                task_results = {}
+                task_results: dict[str, dict[str, dict[str, Any]]] = {}
                 evaluation_time = 0
                 kg_co2_emissions: int | None = 0 if co2_tracker else None
 
-                self.last_evaluated_splits[task.metadata.name] = []
+                self._last_evaluated_splits[task.metadata.name] = []
 
                 for split in final_splits_to_run:
                     info = missing_evaluations[split]
@@ -465,14 +477,16 @@ class MTEB:
 
                     if co2_tracker:
                         try:
-                            from codecarbon import EmissionsTracker
+                            from codecarbon import (  # type: ignore[import-not-found,import-untyped]
+                                EmissionsTracker,
+                            )
                         except ImportError:
                             raise ImportError(
                                 "codecarbon is not installed. Please install it using `pip install 'mteb[codecarbon]'` to track CO₂ emissions."
                             )
-                        logger.warning(
-                            "Evaluating multiple MTEB runs simultaneously will produce incorrect CO₂ results"
-                        )
+                        msg = "Evaluating multiple MTEB runs simultaneously will produce incorrect CO₂ results"
+                        logger.warning(msg)
+                        warnings.warn(msg)
                         with EmissionsTracker(
                             save_to_file=False,
                             save_to_api=False,
@@ -481,7 +495,7 @@ class MTEB:
                         ) as tracker:
                             results, tick, tock = self._run_eval(
                                 task,
-                                model,
+                                mteb_model,
                                 split,
                                 encode_kwargs=encode_kwargs,
                                 subsets_to_run=subsets_to_run,
@@ -494,7 +508,7 @@ class MTEB:
                     else:
                         results, tick, tock = self._run_eval(
                             task,
-                            model,
+                            mteb_model,
                             split,
                             subsets_to_run=subsets_to_run,
                             encode_kwargs=encode_kwargs,
@@ -510,25 +524,25 @@ class MTEB:
                     if verbosity >= 1:
                         logger.info(f"Scores: {task_results[split]}")
 
-                    self.last_evaluated_splits[task.metadata.name].append(split)
+                    self._last_evaluated_splits[task.metadata.name].append(split)
 
                 # Create new TaskResult
                 new_results = TaskResult.from_task_results(
                     task,
-                    task_results,
+                    task_results,  # type: ignore[arg-type]
                     evaluation_time=evaluation_time,
                     kg_co2_emissions=kg_co2_emissions,
                 )
 
                 # Merge with existing if needed
-                if output_path and save_path.exists():
+                if output_path and save_path and save_path.exists():
                     existing_results = TaskResult.from_disk(save_path)
                 if existing_results:
                     merged_results = self._merge_results(existing_results, new_results)
                 else:
                     merged_results = new_results
 
-                if output_path:
+                if output_path and save_path:
                     merged_results.to_disk(save_path)
 
                 evaluation_results.append(merged_results)
@@ -555,7 +569,7 @@ class MTEB:
     def create_model_meta(model: MTEBModels) -> ModelMeta:
         """Create a ModelMeta object for the given model."""
         if hasattr(model, "mteb_model_meta") and model.mteb_model_meta is not None:
-            meta = model.mteb_model_meta  # type: ignore
+            meta = model.mteb_model_meta
         else:
             meta = MTEB._get_model_meta(model)
 
@@ -581,7 +595,11 @@ class MTEB:
         if output_folder is None:
             return None
 
-        model_revision: str = model_meta.revision  # type: ignore
+        model_revision: str = (
+            model_meta.revision
+            if model_meta.revision is not None
+            else "no_revision_available"
+        )
         model_path_name = model_meta.model_name_as_path()
 
         output_path = Path(output_folder) / model_path_name / model_revision
@@ -603,15 +621,15 @@ class MTEB:
              Tasks with empty lists indicate that results already existed and no splits were evaluated.
         """
         return deepcopy(
-            {task: list(splits) for task, splits in self.last_evaluated_splits.items()}
+            {task: list(splits) for task, splits in self._last_evaluated_splits.items()}
         )
 
     @staticmethod
     def _get_missing_evaluations(
         existing_results: TaskResult | None,
-        task_eval_splits: list[str],
-        task_eval_langs: list[str],
-        eval_subsets: list[str] | None,
+        task_eval_splits: Sequence[str],
+        task_eval_langs: Sequence[str],
+        eval_subsets: Sequence[str] | None,
     ) -> dict[str, dict[str, Any]]:
         """Return a dictionary for each split, indicating if the whole split is missing and which subsets are missing."""
         missing_evaluations = {
@@ -660,7 +678,7 @@ class MTEB:
         return missing_evaluations
 
     @staticmethod
-    def _get_model_meta(model: EncoderProtocol) -> ModelMeta:
+    def _get_model_meta(model: MTEBModels) -> ModelMeta:
         from sentence_transformers import CrossEncoder, SentenceTransformer
 
         if isinstance(model, CrossEncoder):
