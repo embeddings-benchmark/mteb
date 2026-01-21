@@ -44,6 +44,14 @@ def _format_n_parameters(n_parameters) -> float | None:
     return None
 
 
+def _format_n_active_parameters(n_active_parameters) -> float | None:
+    """Format n_active_parameters to be in billions with decimals down to 1 million. I.e. 7M -> 0.007B, 1.5B -> 1.5B, None -> None"""
+    if n_active_parameters:
+        n_active_parameters = float(n_active_parameters)
+        return round(n_active_parameters / 1e9, 3)
+    return None
+
+
 def _format_max_tokens(max_tokens: float | None) -> float | None:
     if max_tokens is None or max_tokens == np.inf:
         return None
@@ -148,10 +156,8 @@ def _create_summary_table_from_benchmark_results(
     )
     joint_table.insert(
         1,
-        "Memory Usage (MB)",
-        model_metas.map(
-            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
-        ),
+        "Number of Active Parameters (B)",
+        model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
     )
 
     # Add zero-shot percentage
@@ -391,10 +397,8 @@ def _create_summary_table_mean_public_private(
     )
     joint_table.insert(
         1,
-        "Memory Usage (MB)",
-        model_metas.map(
-            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
-        ),
+        "Number of Active Parameters (B)",
+        model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
     )
 
     # Clean up model names (remove HF organization)
@@ -512,12 +516,9 @@ def _create_summary_table_mean_subset(
     )
     joint_table.insert(
         1,
-        "Memory Usage (MB)",
-        model_metas.map(
-            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
-        ),
+        "Number of Active Parameters (B)",
+        model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
     )
-
     # Add zero-shot percentage
     tasks = get_tasks(tasks=list(data["task_name"].unique()))
     joint_table.insert(
@@ -629,10 +630,8 @@ def _create_summary_table_mean_task_type(
     )
     joint_table.insert(
         1,
-        "Memory Usage (MB)",
-        model_metas.map(
-            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
-        ),
+        "Number of Active Parameters (B)",
+        model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
     )
 
     # Add zero-shot percentage
