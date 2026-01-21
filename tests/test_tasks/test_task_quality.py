@@ -271,9 +271,6 @@ KNOWN_ISSUES = {
     "SwedishPatentCPCSubclassClassification",
     "RuSciBenchCitedCountRegression",
     "RuSciBenchYearPublRegression",
-    # Audio datasets with zero-length clips in descriptive stats.
-    "VoiceGenderClustering",
-    "VoxPopuliAccentPairClassification",
     # Add new datasets below with an explanation of why it is added
     # "name" # explanation
 }
