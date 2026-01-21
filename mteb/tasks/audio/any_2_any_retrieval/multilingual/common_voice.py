@@ -182,9 +182,9 @@ _EVAL_LANGS_CV21 = {
 }
 
 
-class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
+class CommonVoiceMini17A2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="CommonVoice17A2TRetrieval",
+        name="CommonVoiceMini17A2TRetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
         reference="https://commonvoice.mozilla.org/",
         dataset={
@@ -259,9 +259,9 @@ class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
                 self.relevant_docs[lang][split] = relevant_docs_
 
 
-class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
+class CommonVoiceMini17T2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="CommonVoice17T2ARetrieval",
+        name="CommonVoiceMini17T2ARetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
         reference="https://commonvoice.mozilla.org/",
         dataset={
@@ -333,9 +333,9 @@ class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
                 self.relevant_docs[lang][split] = relevant_docs_
 
 
-class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
+class CommonVoiceMini21A2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="CommonVoice21A2TRetrieval",
+        name="CommonVoiceMini21A2TRetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
         reference="https://commonvoice.mozilla.org/",
         dataset={
@@ -410,9 +410,9 @@ class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
                 self.relevant_docs[lang][split] = relevant_docs_
 
 
-class CommonVoice21T2ARetrieval(AbsTaskRetrieval):
+class CommonVoiceMini21T2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="CommonVoice21T2ARetrieval",
+        name="CommonVoiceMini21T2ARetrieval",
         description="Speech recordings with corresponding text transcriptions from CommonVoice dataset.",
         reference="https://commonvoice.mozilla.org/",
         dataset={
