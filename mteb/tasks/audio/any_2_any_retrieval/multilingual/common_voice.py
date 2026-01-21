@@ -228,7 +228,7 @@ class CommonVoice17A2TRetrieval(AbsTaskRetrieval):
         """Transform Common Voice dataset to MTEB a2t retrieval format.
         Process each language separately to avoid memory accumulation.
         """
-        for lang in self.metadata.eval_langs:
+        for lang in self.hf_subsets:
             for split in self.metadata.eval_splits:
                 # Only load the specific split we need to save memory
                 lang_dataset = datasets.load_dataset(
@@ -305,7 +305,7 @@ class CommonVoice17T2ARetrieval(AbsTaskRetrieval):
         """For T2A: query=text, corpus=audio.
         Process each language separately to avoid memory accumulation.
         """
-        for lang in self.metadata.eval_langs:
+        for lang in self.hf_subsets:
             for split in self.metadata.eval_splits:
                 lang_dataset = datasets.load_dataset(
                     self.metadata.dataset["path"],
@@ -379,7 +379,7 @@ class CommonVoice21A2TRetrieval(AbsTaskRetrieval):
         """Transform Common Voice dataset to MTEB a2t retrieval format.
         Process each language separately to avoid memory accumulation.
         """
-        for lang in self.metadata.eval_langs:
+        for lang in self.hf_subsets:
             for split in self.metadata.eval_splits:
                 # Only load the specific split we need to save memory
                 lang_dataset = datasets.load_dataset(
@@ -456,7 +456,7 @@ class CommonVoice21T2ARetrieval(AbsTaskRetrieval):
         """For T2A: query=text, corpus=audio.
         Process each language separately to avoid memory accumulation.
         """
-        for lang in self.metadata.eval_langs:
+        for lang in self.hf_subsets:
             for split in self.metadata.eval_splits:
                 lang_dataset = datasets.load_dataset(
                     self.metadata.dataset["path"],

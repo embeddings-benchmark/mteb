@@ -156,7 +156,7 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
         self, id_col="path", text_col="transcription", audio_col="audio"
     ):
         """A2T: Query = audio, Corpus = text."""
-        for lang, _ in self.metadata.eval_langs.items():
+        for lang in self.hf_subsets:
             lang_dataset = datasets.load_dataset(
                 self.metadata.dataset["path"],
                 lang,
@@ -230,7 +230,7 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
         self, id_col="path", text_col="transcription", audio_col="audio"
     ):
         """T2A: Query = text, Corpus = audio."""
-        for lang in self.metadata.eval_langs:
+        for lang in self.hf_subsets:
             lang_dataset = datasets.load_dataset(
                 self.metadata.dataset["path"],
                 lang,
