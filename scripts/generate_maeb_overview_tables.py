@@ -333,7 +333,7 @@ def generate_audio_tasks_table(df: pd.DataFrame) -> str:
         "    \\begin{tabular}{llcccclc}",
         "    \\toprule",
         "    \\textbf{Dataset} & \\textbf{Citation} & \\textbf{MAEB} & "
-        + "\\textbf{N. Samples} & \\textbf{Total Secs} & "
+        + "\\textbf{N. Samples} & \\textbf{Total Duration(s)} & "
         + "\\textbf{N. Langs} & "
         + "\\textbf{Domains} & \\textbf{Main Metric} \\\\",
         "    \\midrule",
