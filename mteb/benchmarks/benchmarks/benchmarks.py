@@ -2843,7 +2843,7 @@ MAEB_PLUS = Benchmark(
             "UrbanSound8KT2ARetrieval",
         ]
     ),
-    description="""MAEB is the full Massive Audio Embedding Benchmark (v1), containing 98 tasks with audio modality across 6 task types: classification, clustering, pair classification, reranking, zero-shot classification, and retrieval.""",
+    description="""MAEB+ is the full Massive Audio Embedding Benchmark (v1), containing 98 tasks with audio modality across 6 task types: classification, clustering, pair classification, reranking, zero-shot classification, and retrieval.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
