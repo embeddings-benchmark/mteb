@@ -98,6 +98,80 @@ def format_domains(domains: List[str]) -> str:
         return ", ".join(domains[:3]) + "..."
 
 
+def format_count(value: int) -> str:
+    """Format large counts for table display."""
+    if value >= 1_000_000:
+        formatted = f"{value / 1_000_000:.1f}".rstrip("0").rstrip(".")
+        return f"{formatted}M"
+    if value >= 1_000:
+        formatted = f"{value / 1_000:.1f}".rstrip("0").rstrip(".")
+        return f"{formatted}k"
+    return str(value)
+
+
+def format_num_samples(n_samples: Dict[str, int] | None, eval_splits: List[str]) -> str:
+    """Format number of samples for display."""
+    if not n_samples:
+        return ""
+
+    total = sum(n_samples.get(split, 0) for split in eval_splits)
+    if total == 0:
+        total = sum(n_samples.values())
+
+    return format_count(total)
+
+
+def format_seconds(total_seconds: float) -> str:
+    """Format total seconds for display."""
+    return str(int(round(total_seconds)))
+
+
+def format_total_audio_seconds(stats: Dict | None, eval_splits: List[str]) -> str:
+    """Format total audio duration in seconds for display."""
+    if not stats:
+        return ""
+
+    duration_keys = [
+        "audio_statistics",
+        "documents_audio_statistics",
+        "queries_audio_statistics",
+    ]
+    total_seconds = 0.0
+    found = False
+
+    for split in eval_splits:
+        split_stats = stats.get(split)
+        if not split_stats:
+            continue
+        split_seconds = 0.0
+        for key in duration_keys:
+            audio_stats = split_stats.get(key)
+            if audio_stats and audio_stats.get("total_duration_seconds") is not None:
+                split_seconds += audio_stats["total_duration_seconds"]
+                found = True
+        total_seconds += split_seconds
+
+    if not found:
+        for split_name, split_stats in stats.items():
+            if split_name == "hf_subset_descriptive_stats":
+                continue
+            split_seconds = 0.0
+            for key in duration_keys:
+                audio_stats = split_stats.get(key)
+                if (
+                    audio_stats
+                    and audio_stats.get("total_duration_seconds") is not None
+                ):
+                    split_seconds += audio_stats["total_duration_seconds"]
+                    found = True
+            total_seconds += split_seconds
+
+    if not found:
+        return ""
+
+    return format_seconds(total_seconds)
+
+
 def get_benchmark_membership(task_name: str, benchmarks: Dict) -> Dict[str, bool]:
     """Check if task is in lite/extended benchmarks."""
     membership = {"lite": False, "extended": False}
@@ -161,6 +235,14 @@ def extract_task_metadata(tasks: List, benchmarks: Dict) -> pd.DataFrame:
         # Format domains
         domain_str = format_domains(metadata.domains)
 
+        # Format number of samples (from descriptive statistics, if available)
+        n_samples_str = format_num_samples(metadata.n_samples, metadata.eval_splits)
+
+        # Format total audio duration in seconds (from descriptive statistics)
+        total_seconds = format_total_audio_seconds(
+            metadata.descriptive_stats, metadata.eval_splits
+        )
+
         # Get main metric
         main_metric = metadata.main_score if metadata.main_score else "accuracy"
         # Clean up metric name (remove 'test.' prefix if present)
@@ -197,6 +279,8 @@ def extract_task_metadata(tasks: List, benchmarks: Dict) -> pd.DataFrame:
                 "display_type": display_type,
                 "modality": metadata.category,
                 "domains": domain_str,
+                "n_samples": n_samples_str,
+                "total_seconds": total_seconds,
                 "main_metric": main_metric,
             }
         )
@@ -242,12 +326,14 @@ def generate_audio_tasks_table(df: pd.DataFrame) -> str:
         "% Audio-Only Tasks Table",
         "\\begin{table*}[t]",
         "    \\centering",
-        "    \\caption{MAEB+ Audio-Only Tasks Overview. Tasks are grouped by type and show MAEB benchmark membership, language coverage, domains, and main evaluation metric.}",
+        "    \\caption{MAEB+ Audio-Only Tasks Overview. Tasks are grouped by type and show MAEB benchmark membership, dataset size, total audio duration, language coverage, domains, and main evaluation metric.}",
         "    \\resizebox{\\linewidth}{!}{",
-        "    \\begin{tabular}{llcclc}",
+        "    \\begin{tabular}{llcccclc}",
         "    \\toprule",
         "    \\textbf{Dataset} & \\textbf{Citation} & \\textbf{MAEB} & "
-        + "\\textbf{N. Langs} & \\textbf{Domains} & \\textbf{Main Metric} \\\\",
+        + "\\textbf{N. Samples} & \\textbf{Total Secs} & "
+        + "\\textbf{N. Langs} & "
+        + "\\textbf{Domains} & \\textbf{Main Metric} \\\\",
         "    \\midrule",
     ]
 
@@ -269,7 +355,7 @@ def generate_audio_tasks_table(df: pd.DataFrame) -> str:
             if not first_section:
                 latex_lines.append("    \\hline")
             latex_lines.append(
-                f"    \\multicolumn{{6}}{{l}}{{\\textit{{{type_header}}}}} \\\\"
+                f"    \\multicolumn{{8}}{{l}}{{\\textit{{{type_header}}}}} \\\\"
             )
             latex_lines.append("    \\hline")
             first_section = False
@@ -280,6 +366,7 @@ def generate_audio_tasks_table(df: pd.DataFrame) -> str:
         # Build row
         row_str = (
             f"    {task_name} & {row['citation']} & {row['lite']} & "
+            + f"{row['n_samples']} & {row['total_seconds']} & "
             + f"{row['languages']} & {row['domains']} & {row['main_metric']} \\\\"
         )
         latex_lines.append(row_str)
@@ -327,12 +414,14 @@ def generate_audio_text_tasks_table(df: pd.DataFrame) -> str:
         "% Audio-Text Cross-Modal Tasks Table",
         "\\begin{table*}[t]",
         "    \\centering",
-        "    \\caption{MAEB+ Audio-Text Cross-Modal Tasks Overview. Tasks include zero-shot classification and bidirectional retrieval between audio and text modalities.}",
+        "    \\caption{MAEB+ Audio-Text Cross-Modal Tasks Overview. Tasks include zero-shot classification and bidirectional retrieval between audio and text modalities, with dataset size, total audio duration, and main evaluation metric.}",
         "    \\resizebox{\\linewidth}{!}{",
-        "    \\begin{tabular}{llccllc}",
+        "    \\begin{tabular}{llccccllc}",
         "    \\toprule",
         "    \\textbf{Dataset} & \\textbf{Citation} & \\textbf{MAEB} & "
-        + "\\textbf{N. Langs} & \\textbf{Modality} & \\textbf{Domains} & \\textbf{Main Metric} \\\\",
+        + "\\textbf{N. Samples} & \\textbf{Total Secs} & "
+        + "\\textbf{N. Langs} & "
+        + "\\textbf{Modality} & \\textbf{Domains} & \\textbf{Main Metric} \\\\",
         "    \\midrule",
     ]
 
@@ -359,7 +448,7 @@ def generate_audio_text_tasks_table(df: pd.DataFrame) -> str:
             if not first_section:
                 latex_lines.append("    \\hline")
             latex_lines.append(
-                f"    \\multicolumn{{7}}{{l}}{{\\textit{{{type_header}}}}} \\\\"
+                f"    \\multicolumn{{9}}{{l}}{{\\textit{{{type_header}}}}} \\\\"
             )
             latex_lines.append("    \\hline")
             first_section = False
@@ -370,8 +459,8 @@ def generate_audio_text_tasks_table(df: pd.DataFrame) -> str:
         # Build row
         row_str = (
             f"    {task_name} & {row['citation']} & {row['lite']} & "
-            + f"{row['languages']} & {row['modality']} & "
-            + f"{row['domains']} & {row['main_metric']} \\\\"
+            + f"{row['n_samples']} & {row['total_seconds']} & {row['languages']} & "
+            + f"{row['modality']} & {row['domains']} & {row['main_metric']} \\\\"
         )
         latex_lines.append(row_str)
 
