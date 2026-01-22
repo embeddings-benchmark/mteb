@@ -4,11 +4,11 @@
         "text_statistics": null,
         "image_statistics": null,
         "audio_statistics": {
-            "total_duration_seconds": 12226.816,
-            "min_duration_seconds": 0.0,
-            "average_duration_seconds": 5.970125,
+            "total_duration_seconds": 14559.296,
+            "min_duration_seconds": 3.968,
+            "average_duration_seconds": 7.10903125,
             "max_duration_seconds": 58.304,
-            "unique_audios": 1730,
+            "unique_audios": 2048,
             "average_sampling_rate": 16000.0,
             "sampling_rates": {
                 "16000": 2048
@@ -21,10 +21,10 @@
             "unique_labels": 2,
             "labels": {
                 "0": {
-                    "count": 1024
+                    "count": 1207
                 },
                 "1": {
-                    "count": 1024
+                    "count": 841
                 }
             }
         }
