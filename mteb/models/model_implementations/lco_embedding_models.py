@@ -167,6 +167,16 @@ lco_3b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio", "text"],
+    citation="""
+@misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
+  title={Scaling Language-Centric Omnimodal Representation Learning},
+  author={Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
+  year={2025},
+  eprint={2510.11693},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2510.11693},
+}""",
 )
 
 lco_7b = ModelMeta(
@@ -189,4 +199,14 @@ lco_7b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio", "text"],
+    citation="""
+@misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
+  title={Scaling Language-Centric Omnimodal Representation Learning},
+  author={Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
+  year={2025},
+  eprint={2510.11693},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2510.11693},
+}""",
 )

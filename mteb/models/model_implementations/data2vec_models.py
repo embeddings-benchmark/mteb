@@ -150,6 +150,16 @@ data2vec_audio_base = ModelMeta(
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
     training_datasets=set(),  # "LibriSpeech": ["train"]},
     modalities=["audio"],
+    citation="""
+@misc{baevski2022data2vecgeneralframeworkselfsupervised,
+    title={data2vec: A General Framework for Self-supervised Learning in Speech, Vision and Language},
+    author={Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
+    year={2022},
+    eprint={2202.03555},
+    archivePrefix={arXiv},
+    primaryClass={cs.LG},
+    url={https://arxiv.org/abs/2202.03555},
+}""",
 )
 
 data2vec_audio_large = ModelMeta(
@@ -172,4 +182,14 @@ data2vec_audio_large = ModelMeta(
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
     training_datasets=set(),  # "LibriSpeech": ["train"]},
     modalities=["audio"],
+    citation="""
+@misc{baevski2022data2vecgeneralframeworkselfsupervised,
+    title={data2vec: A General Framework for Self-supervised Learning in Speech, Vision and Language},
+    author={Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
+    year={2022},
+    eprint={2202.03555},
+    archivePrefix={arXiv},
+    primaryClass={cs.LG},
+    url={https://arxiv.org/abs/2202.03555},
+}""",
 )

@@ -171,4 +171,14 @@ encodec_24khz = ModelMeta(
     public_training_data=None,
     training_datasets=None,  # ["AudioSet", "VCTK", "DNS-Challenge"],
     modalities=["audio"],
+    citation="""
+@misc{défossez2022highfidelityneuralaudio,
+      title={High Fidelity Neural Audio Compression},
+      author={Alexandre Défossez and Jade Copet and Gabriel Synnaeve and Yossi Adi},
+      year={2022},
+      eprint={2210.13438},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      url={https://arxiv.org/abs/2210.13438},
+}""",
 )

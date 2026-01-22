@@ -141,4 +141,15 @@ qwen2_audio_meta = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio", "text"],
+    citation="""
+@misc{chu2024qwen2audiotechnicalreport,
+      title={Qwen2-Audio Technical Report},
+      author={Yunfei Chu and Jin Xu and Qian Yang and Haojie Wei and Xipin Wei and Zhifang Guo and Yichong Leng and Yuanjun Lv and Jinzheng He and Junyang Lin and Chang Zhou and Jingren Zhou},
+      year={2024},
+      eprint={2407.10759},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      url={https://arxiv.org/abs/2407.10759},
+}
+""",
 )

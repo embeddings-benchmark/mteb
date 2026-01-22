@@ -150,6 +150,20 @@ wavlm_base = ModelMeta(
     public_training_data=None,
     training_datasets={"Librispeech"},
     modalities=["audio"],
+    citation="""
+@article{Chen_2022,
+   title={WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing},
+   volume={16},
+   ISSN={1941-0484},
+   url={http://dx.doi.org/10.1109/JSTSP.2022.3188113},
+   DOI={10.1109/jstsp.2022.3188113},
+   number={6},
+   journal={IEEE Journal of Selected Topics in Signal Processing},
+   publisher={Institute of Electrical and Electronics Engineers (IEEE)},
+   author={Chen, Sanyuan and Wang, Chengyi and Chen, Zhengyang and Wu, Yu and Liu, Shujie and Chen, Zhuo and Li, Jinyu and Kanda, Naoyuki and Yoshioka, Takuya and Xiao, Xiong and Wu, Jian and Zhou, Long and Ren, Shuo and Qian, Yanmin and Qian, Yao and Wu, Jian and Zeng, Michael and Yu, Xiangzhan and Wei, Furu},
+   year={2022},
+   month=oct, pages={1505–1518} }
+""",
 )
 
 wavlm_base_sd = ModelMeta(
@@ -172,6 +186,20 @@ wavlm_base_sd = ModelMeta(
     public_training_data=None,
     training_datasets={"Librispeech", "LibriMix"},
     modalities=["audio"],
+    citation="""
+@article{Chen_2022,
+   title={WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing},
+   volume={16},
+   ISSN={1941-0484},
+   url={http://dx.doi.org/10.1109/JSTSP.2022.3188113},
+   DOI={10.1109/jstsp.2022.3188113},
+   number={6},
+   journal={IEEE Journal of Selected Topics in Signal Processing},
+   publisher={Institute of Electrical and Electronics Engineers (IEEE)},
+   author={Chen, Sanyuan and Wang, Chengyi and Chen, Zhengyang and Wu, Yu and Liu, Shujie and Chen, Zhuo and Li, Jinyu and Kanda, Naoyuki and Yoshioka, Takuya and Xiao, Xiong and Wu, Jian and Zhou, Long and Ren, Shuo and Qian, Yanmin and Qian, Yao and Wu, Jian and Zeng, Michael and Yu, Xiangzhan and Wei, Furu},
+   year={2022},
+   month=oct, pages={1505–1518} }
+""",
 )
 
 wavlm_base_plus = ModelMeta(
@@ -198,6 +226,20 @@ wavlm_base_plus = ModelMeta(
         "VoxPopuli",
     },
     modalities=["audio"],
+    citation="""
+@article{Chen_2022,
+   title={WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing},
+   volume={16},
+   ISSN={1941-0484},
+   url={http://dx.doi.org/10.1109/JSTSP.2022.3188113},
+   DOI={10.1109/jstsp.2022.3188113},
+   number={6},
+   journal={IEEE Journal of Selected Topics in Signal Processing},
+   publisher={Institute of Electrical and Electronics Engineers (IEEE)},
+   author={Chen, Sanyuan and Wang, Chengyi and Chen, Zhengyang and Wu, Yu and Liu, Shujie and Chen, Zhuo and Li, Jinyu and Kanda, Naoyuki and Yoshioka, Takuya and Xiao, Xiong and Wu, Jian and Zhou, Long and Ren, Shuo and Qian, Yanmin and Qian, Yao and Wu, Jian and Zeng, Michael and Yu, Xiangzhan and Wei, Furu},
+   year={2022},
+   month=oct, pages={1505–1518} }
+""",
 )
 
 wavlm_base_plus_sv = ModelMeta(
@@ -225,6 +267,20 @@ wavlm_base_plus_sv = ModelMeta(
         "VoxCeleb1",
     },
     modalities=["audio"],
+    citation="""
+@article{Chen_2022,
+   title={WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing},
+   volume={16},
+   ISSN={1941-0484},
+   url={http://dx.doi.org/10.1109/JSTSP.2022.3188113},
+   DOI={10.1109/jstsp.2022.3188113},
+   number={6},
+   journal={IEEE Journal of Selected Topics in Signal Processing},
+   publisher={Institute of Electrical and Electronics Engineers (IEEE)},
+   author={Chen, Sanyuan and Wang, Chengyi and Chen, Zhengyang and Wu, Yu and Liu, Shujie and Chen, Zhuo and Li, Jinyu and Kanda, Naoyuki and Yoshioka, Takuya and Xiao, Xiong and Wu, Jian and Zhou, Long and Ren, Shuo and Qian, Yanmin and Qian, Yao and Wu, Jian and Zeng, Michael and Yu, Xiangzhan and Wei, Furu},
+   year={2022},
+   month=oct, pages={1505–1518} }
+""",
 )
 
 wavlm_base_plus_sd = ModelMeta(
@@ -252,6 +308,20 @@ wavlm_base_plus_sd = ModelMeta(
         "LibriMix",
     },
     modalities=["audio"],
+    citation="""
+@article{Chen_2022,
+   title={WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing},
+   volume={16},
+   ISSN={1941-0484},
+   url={http://dx.doi.org/10.1109/JSTSP.2022.3188113},
+   DOI={10.1109/jstsp.2022.3188113},
+   number={6},
+   journal={IEEE Journal of Selected Topics in Signal Processing},
+   publisher={Institute of Electrical and Electronics Engineers (IEEE)},
+   author={Chen, Sanyuan and Wang, Chengyi and Chen, Zhengyang and Wu, Yu and Liu, Shujie and Chen, Zhuo and Li, Jinyu and Kanda, Naoyuki and Yoshioka, Takuya and Xiao, Xiong and Wu, Jian and Zhou, Long and Ren, Shuo and Qian, Yanmin and Qian, Yao and Wu, Jian and Zeng, Michael and Yu, Xiangzhan and Wei, Furu},
+   year={2022},
+   month=oct, pages={1505–1518} }
+""",
 )
 
 wavlm_base_sv = ModelMeta(
@@ -274,6 +344,20 @@ wavlm_base_sv = ModelMeta(
     public_training_data=None,
     training_datasets={"Librispeech", "VoxCeleb1"},
     modalities=["audio"],
+    citation="""
+@article{Chen_2022,
+   title={WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing},
+   volume={16},
+   ISSN={1941-0484},
+   url={http://dx.doi.org/10.1109/JSTSP.2022.3188113},
+   DOI={10.1109/jstsp.2022.3188113},
+   number={6},
+   journal={IEEE Journal of Selected Topics in Signal Processing},
+   publisher={Institute of Electrical and Electronics Engineers (IEEE)},
+   author={Chen, Sanyuan and Wang, Chengyi and Chen, Zhengyang and Wu, Yu and Liu, Shujie and Chen, Zhuo and Li, Jinyu and Kanda, Naoyuki and Yoshioka, Takuya and Xiao, Xiong and Wu, Jian and Zhou, Long and Ren, Shuo and Qian, Yanmin and Qian, Yao and Wu, Jian and Zeng, Michael and Yu, Xiangzhan and Wei, Furu},
+   year={2022},
+   month=oct, pages={1505–1518} }
+""",
 )
 
 wavlm_large = ModelMeta(
@@ -300,4 +384,18 @@ wavlm_large = ModelMeta(
         "VoxPopuli",
     },
     modalities=["audio"],
+    citation="""
+@article{Chen_2022,
+   title={WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing},
+   volume={16},
+   ISSN={1941-0484},
+   url={http://dx.doi.org/10.1109/JSTSP.2022.3188113},
+   DOI={10.1109/jstsp.2022.3188113},
+   number={6},
+   journal={IEEE Journal of Selected Topics in Signal Processing},
+   publisher={Institute of Electrical and Electronics Engineers (IEEE)},
+   author={Chen, Sanyuan and Wang, Chengyi and Chen, Zhengyang and Wu, Yu and Liu, Shujie and Chen, Zhuo and Li, Jinyu and Kanda, Naoyuki and Yoshioka, Takuya and Xiao, Xiong and Wu, Jian and Zhou, Long and Ren, Shuo and Qian, Yanmin and Qian, Yao and Wu, Jian and Zeng, Michael and Yu, Xiangzhan and Wei, Furu},
+   year={2022},
+   month=oct, pages={1505–1518} }
+""",
 )

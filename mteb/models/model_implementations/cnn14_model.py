@@ -145,4 +145,12 @@ cnn14_esc50 = ModelMeta(
     public_training_data=None,
     training_datasets=None,  # ["ESC-50", "VGGSound"],
     modalities=["audio"],
+    citation="""
+@inproceedings{wang2022CRL,
+    title={Learning Representations for New Sound Classes With Continual Self-Supervised Learning},
+    author={Zhepei Wang, Cem Subakan, Xilin Jiang, Junkai Wu, Efthymios Tzinis, Mirco Ravanelli, Paris Smaragdis},
+    year={2022},
+    booktitle={Accepted to IEEE Signal Processing Letters}
+}
+""",
 )

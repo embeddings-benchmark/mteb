@@ -183,4 +183,14 @@ muq_mulan_large = ModelMeta(
     similarity_fn_name="dot",
     use_instructions=False,
     training_datasets=set(),
+    citation="""
+@misc{zhu2025muqselfsupervisedmusicrepresentation,
+  title={MuQ: Self-Supervised Music Representation Learning with Mel Residual Vector Quantization},
+  author={Haina Zhu and Yizhi Zhou and Hangting Chen and Jianwei Yu and Ziyang Ma and Rongzhi Gu and Yi Luo and Wei Tan and Xie Chen},
+  year={2025},
+  eprint={2501.01108},
+  archivePrefix={arXiv},
+  primaryClass={cs.SD},
+  url={https://arxiv.org/abs/2501.01108},
+}""",
 )

@@ -231,4 +231,14 @@ mctct_large = ModelMeta(
     public_training_data="https://github.com/speechbrain/speechbrain",
     training_datasets={"Common Voice", "VoxPopuli"},
     modalities=["audio"],
+    citation="""
+@misc{lugosch2022pseudolabelingmassivelymultilingualspeech,
+      title={Pseudo-Labeling for Massively Multilingual Speech Recognition},
+      author={Loren Lugosch and Tatiana Likhomanenko and Gabriel Synnaeve and Ronan Collobert},
+      year={2022},
+      eprint={2111.00161},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2111.00161},
+}""",
 )

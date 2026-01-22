@@ -180,4 +180,14 @@ seamless_m4t_v2_large = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
+    citation="""
+@misc{communication2023seamlessmultilingualexpressivestreaming,
+      title={Seamless: Multilingual Expressive and Streaming Speech Translation},
+      author={Seamless Communication and Loïc Barrault and Yu-An Chung and Mariano Coria Meglioli and David Dale and Ning Dong and Mark Duppenthaler and Paul-Ambroise Duquenne and Brian Ellis and Hady Elsahar and Justin Haaheim and John Hoffman and Min-Jae Hwang and Hirofumi Inaguma and Christopher Klaiber and Ilia Kulikov and Pengwei Li and Daniel Licht and Jean Maillard and Ruslan Mavlyutov and Alice Rakotoarison and Kaushik Ram Sadagopan and Abinesh Ramakrishnan and Tuan Tran and Guillaume Wenzek and Yilin Yang and Ethan Ye and Ivan Evtimov and Pierre Fernandez and Cynthia Gao and Prangthip Hansanti and Elahe Kalbassi and Amanda Kallet and Artyom Kozhevnikov and Gabriel Mejia Gonzalez and Robin San Roman and Christophe Touret and Corinne Wong and Carleigh Wood and Bokai Yu and Pierre Andrews and Can Balioglu and Peng-Jen Chen and Marta R. Costa-jussà and Maha Elbayad and Hongyu Gong and Francisco Guzmán and Kevin Heffernan and Somya Jain and Justine Kao and Ann Lee and Xutai Ma and Alex Mourachko and Benjamin Peloquin and Juan Pino and Sravya Popuri and Christophe Ropers and Safiyyah Saleem and Holger Schwenk and Anna Sun and Paden Tomasello and Changhan Wang and Jeff Wang and Skyler Wang and Mary Williamson},
+      year={2023},
+      eprint={2312.05187},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2312.05187},
+}""",
 )
