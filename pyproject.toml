@@ -331,22 +331,20 @@ override-dependencies = [
     "salesforce-lavis", # salesforce-lavis is not valid with sentence transformers >=3.0.0
 ]
 conflicts = [
-   [
-        { extra = "timm" },
-        { extra = "blip2" },
-        { extra = "llm2vec" },
-        { extra = "model2vec" },
-        { extra = "pylate" },
-        { extra = "llama-embed-nemotron" },
-        { extra = "colpali-engine" },
-        { extra = "colqwen3" },
-        { extra = "jina-v4" },
-        { extra = "sauerkrautlm-colpali" },
-    ],
-    [
-        { extra = "msclap" },
-        { extra = "audio" },
-    ],
+    [{ extra = "timm" }, { extra = "blip2" }],
+    [{ extra = "llm2vec" }, { extra = "model2vec" }],
+    [{ extra = "llm2vec" }, { extra = "llama-embed-nemotron" }],
+    [{ extra = "llm2vec" }, { extra = "colpali-engine" }],
+    [{ extra = "llm2vec" }, { extra = "colqwen3" }],
+    [{ extra = "llm2vec" }, { extra = "jina-v4" }],
+    [{ extra = "llm2vec" }, { extra = "sauerkrautlm-colpali" }],
+    [{ extra = "llama-embed-nemotron" }, { extra = "colpali-engine" }],
+    [{ extra = "llama-embed-nemotron" }, { extra = "colqwen3" }],
+    [{ extra = "llama-embed-nemotron" }, { extra = "jina-v4" }],
+    [{ extra = "llama-embed-nemotron" }, { extra = "sauerkrautlm-colpali" }],
+    [{ extra = "pylate" }, { extra = "colqwen3" }],
+    [{ extra = "pylate" }, { extra = "sauerkrautlm-colpali" }],
+    [{ extra = "msclap" }, { extra = "audio" }],
 ]
 
 [tool.uv.extra-build-dependencies]
