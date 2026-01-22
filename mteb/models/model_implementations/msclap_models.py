@@ -211,6 +211,16 @@ ms_clap_2022 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(),
+    citation="""
+@inproceedings{CLAP2022,
+  title={Clap learning audio concepts from natural language supervision},
+  author={Elizalde, Benjamin and Deshmukh, Soham and Al Ismail, Mahmoud and Wang, Huaming},
+  booktitle={ICASSP 2023-2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  pages={1--5},
+  year={2023},
+  organization={IEEE}
+}
+""",
 )
 
 ms_clap_2023 = ModelMeta(
@@ -233,4 +243,15 @@ ms_clap_2023 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(),
+    citation="""
+@misc{CLAP2023,
+      title={Natural Language Supervision for General-Purpose Audio Representations},
+      author={Benjamin Elizalde and Soham Deshmukh and Huaming Wang},
+      year={2023},
+      eprint={2309.05767},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD},
+      url={https://arxiv.org/abs/2309.05767}
+}
+""",
 )

@@ -141,4 +141,19 @@ qwen2_audio_meta = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio", "text"],
+    citation="""
+@article{Qwen2-Audio,
+  title={Qwen2-Audio Technical Report},
+  author={Chu, Yunfei and Xu, Jin and Yang, Qian and Wei, Haojie and Wei, Xipin and Guo,  Zhifang and Leng, Yichong and Lv, Yuanjun and He, Jinzheng and Lin, Junyang and Zhou, Chang and Zhou, Jingren},
+  journal={arXiv preprint arXiv:2407.10759},
+  year={2024}
+}
+
+@article{Qwen-Audio,
+  title={Qwen-Audio: Advancing Universal Audio Understanding via Unified Large-Scale Audio-Language Models},
+  author={Chu, Yunfei and Xu, Jin and Zhou, Xiaohuan and Yang, Qian and Zhang, Shiliang and Yan, Zhijie  and Zhou, Chang and Zhou, Jingren},
+  journal={arXiv preprint arXiv:2311.07919},
+  year={2023}
+}
+""",
 )

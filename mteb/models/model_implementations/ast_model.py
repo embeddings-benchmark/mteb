@@ -126,4 +126,14 @@ ast_audioset = ModelMeta(
     public_training_data="https://research.google.com/audioset/dataset/index.html",
     training_datasets=set(),  # "AudioSet": ["train"]},
     modalities=["audio"],
+    citation="""
+@misc{gong2021astaudiospectrogramtransformer,
+      title={AST: Audio Spectrogram Transformer},
+      author={Yuan Gong and Yu-An Chung and James Glass},
+      year={2021},
+      eprint={2104.01778},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD},
+      url={https://arxiv.org/abs/2104.01778},
+}""",
 )

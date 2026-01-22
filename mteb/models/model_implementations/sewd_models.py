@@ -156,6 +156,16 @@ sewd_base = ModelMeta(
     public_training_data=None,
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
+    citation="""
+@misc{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
+      title={Performance-Efficiency Trade-offs in Unsupervised Pre-training for Speech Recognition},
+      author={Felix Wu and Kwangyoun Kim and Jing Pan and Kyu Han and Kilian Q. Weinberger and Yoav Artzi},
+      year={2021},
+      eprint={2109.06870},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2109.06870},
+}""",
 )
 
 sewd_tiny = ModelMeta(
@@ -178,6 +188,16 @@ sewd_tiny = ModelMeta(
     public_training_data=None,
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
+    citation="""
+@misc{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
+      title={Performance-Efficiency Trade-offs in Unsupervised Pre-training for Speech Recognition},
+      author={Felix Wu and Kwangyoun Kim and Jing Pan and Kyu Han and Kilian Q. Weinberger and Yoav Artzi},
+      year={2021},
+      eprint={2109.06870},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2109.06870},
+}""",
 )
 
 sewd_mid = ModelMeta(
@@ -200,4 +220,14 @@ sewd_mid = ModelMeta(
     public_training_data=None,
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
+    citation="""
+@misc{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
+      title={Performance-Efficiency Trade-offs in Unsupervised Pre-training for Speech Recognition},
+      author={Felix Wu and Kwangyoun Kim and Jing Pan and Kyu Han and Kilian Q. Weinberger and Yoav Artzi},
+      year={2021},
+      eprint={2109.06870},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2109.06870},
+}""",
 )

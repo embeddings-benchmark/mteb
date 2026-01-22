@@ -304,6 +304,16 @@ speecht5_asr = ModelMeta(
     public_training_data="https://www.openslr.org/12",
     training_datasets=set(),  # {"LibriSpeech": ["train"]},
     modalities=["audio"],
+    citation="""
+@misc{ao2022speecht5unifiedmodalencoderdecoderpretraining,
+      title={SpeechT5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing},
+      author={Junyi Ao and Rui Wang and Long Zhou and Chengyi Wang and Shuo Ren and Yu Wu and Shujie Liu and Tom Ko and Qing Li and Yu Zhang and Zhihua Wei and Yao Qian and Jinyu Li and Furu Wei},
+      year={2022},
+      eprint={2110.07205},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      url={https://arxiv.org/abs/2110.07205},
+}""",
 )
 
 # TTS model - Optimized for Text-to-Speech tasks
@@ -327,6 +337,16 @@ speecht5_tts = ModelMeta(
     public_training_data="https://www.openslr.org/12",
     training_datasets=set(),  # {"LibriTTS": ["train"]},
     modalities=["text"],
+    citation="""
+@misc{ao2022speecht5unifiedmodalencoderdecoderpretraining,
+      title={SpeechT5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing},
+      author={Junyi Ao and Rui Wang and Long Zhou and Chengyi Wang and Shuo Ren and Yu Wu and Shujie Liu and Tom Ko and Qing Li and Yu Zhang and Zhihua Wei and Yao Qian and Jinyu Li and Furu Wei},
+      year={2022},
+      eprint={2110.07205},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      url={https://arxiv.org/abs/2110.07205},
+}""",
 )
 
 # This model meta is for a multimodal model that combined from asr and tts.
@@ -350,4 +370,14 @@ speecht5_multimodal = ModelMeta(
     public_training_data="http://www.festvox.org/cmu_arctic/",
     training_datasets=set(),
     modalities=["audio", "text"],
+    citation="""
+@misc{ao2022speecht5unifiedmodalencoderdecoderpretraining,
+      title={SpeechT5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing},
+      author={Junyi Ao and Rui Wang and Long Zhou and Chengyi Wang and Shuo Ren and Yu Wu and Shujie Liu and Tom Ko and Qing Li and Yu Zhang and Zhihua Wei and Yao Qian and Jinyu Li and Furu Wei},
+      year={2022},
+      eprint={2110.07205},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      url={https://arxiv.org/abs/2110.07205},
+}""",
 )

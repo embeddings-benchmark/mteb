@@ -269,6 +269,16 @@ wav2vec2_xlsr_300m = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(),
+    citation="""
+@misc{babu2021xlsrselfsupervisedcrosslingualspeech,
+  title={XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale},
+  author={Arun Babu and Changhan Wang and Andros Tjandra and Kushal Lakhotia and Qiantong Xu and Naman Goyal and Kritika Singh and Patrick von Platen and Yatharth Saraf and Juan Pino and Alexei Baevski and Alexis Conneau and Michael Auli},
+  year={2021},
+  eprint={2111.09296},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2111.09296},
+}""",
 )
 
 wav2vec2_xlsr_300m_phoneme = ModelMeta(
@@ -291,7 +301,18 @@ wav2vec2_xlsr_300m_phoneme = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=None,
+    citation="""
+@misc{babu2021xlsrselfsupervisedcrosslingualspeech,
+      title={XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale},
+      author={Arun Babu and Changhan Wang and Andros Tjandra and Kushal Lakhotia and Qiantong Xu and Naman Goyal and Kritika Singh and Patrick von Platen and Yatharth Saraf and Juan Pino and Alexei Baevski and Alexis Conneau and Michael Auli},
+      year={2021},
+      eprint={2111.09296},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2111.09296},
+}""",
 )
+
 wav2vec2_xlsr_1b = ModelMeta(
     loader=Wav2Vec2AudioWrapper,
     name="facebook/wav2vec2-xls-r-1b",
@@ -312,6 +333,16 @@ wav2vec2_xlsr_1b = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=None,
+    citation="""
+@misc{babu2021xlsrselfsupervisedcrosslingualspeech,
+      title={XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale},
+      author={Arun Babu and Changhan Wang and Andros Tjandra and Kushal Lakhotia and Qiantong Xu and Naman Goyal and Kritika Singh and Patrick von Platen and Yatharth Saraf and Juan Pino and Alexei Baevski and Alexis Conneau and Michael Auli},
+      year={2021},
+      eprint={2111.09296},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2111.09296},
+}""",
 )
 
 wav2vec2_xlsr_2b = ModelMeta(
@@ -334,6 +365,16 @@ wav2vec2_xlsr_2b = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=None,
+    citation="""
+@misc{babu2021xlsrselfsupervisedcrosslingualspeech,
+      title={XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale},
+      author={Arun Babu and Changhan Wang and Andros Tjandra and Kushal Lakhotia and Qiantong Xu and Naman Goyal and Kritika Singh and Patrick von Platen and Yatharth Saraf and Juan Pino and Alexei Baevski and Alexis Conneau and Michael Auli},
+      year={2021},
+      eprint={2111.09296},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2111.09296},
+}""",
 )
 
 wav2vec2_xlsr_2b_translation = ModelMeta(
@@ -356,6 +397,16 @@ wav2vec2_xlsr_2b_translation = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=None,
+    citation="""
+@misc{babu2021xlsrselfsupervisedcrosslingualspeech,
+      title={XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale},
+      author={Arun Babu and Changhan Wang and Andros Tjandra and Kushal Lakhotia and Qiantong Xu and Naman Goyal and Kritika Singh and Patrick von Platen and Yatharth Saraf and Juan Pino and Alexei Baevski and Alexis Conneau and Michael Auli},
+      year={2021},
+      eprint={2111.09296},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2111.09296},
+}""",
 )
 
 
@@ -379,6 +430,16 @@ wav2vec2_base = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
+    citation="""
+@misc{babu2021xlsrselfsupervisedcrosslingualspeech,
+      title={XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale},
+      author={Arun Babu and Changhan Wang and Andros Tjandra and Kushal Lakhotia and Qiantong Xu and Naman Goyal and Kritika Singh and Patrick von Platen and Yatharth Saraf and Juan Pino and Alexei Baevski and Alexis Conneau and Michael Auli},
+      year={2021},
+      eprint={2111.09296},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2111.09296},
+}""",
 )
 
 
@@ -402,6 +463,16 @@ wav2vec2_base_960h = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
+    citation="""
+@misc{babu2021xlsrselfsupervisedcrosslingualspeech,
+      title={XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale},
+      author={Arun Babu and Changhan Wang and Andros Tjandra and Kushal Lakhotia and Qiantong Xu and Naman Goyal and Kritika Singh and Patrick von Platen and Yatharth Saraf and Juan Pino and Alexei Baevski and Alexis Conneau and Michael Auli},
+      year={2021},
+      eprint={2111.09296},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2111.09296},
+}""",
 )
 
 
@@ -425,6 +496,16 @@ wav2vec2_large = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
+    citation="""
+@misc{babu2021xlsrselfsupervisedcrosslingualspeech,
+      title={XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale},
+      author={Arun Babu and Changhan Wang and Andros Tjandra and Kushal Lakhotia and Qiantong Xu and Naman Goyal and Kritika Singh and Patrick von Platen and Yatharth Saraf and Juan Pino and Alexei Baevski and Alexis Conneau and Michael Auli},
+      year={2021},
+      eprint={2111.09296},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2111.09296},
+}""",
 )
 
 
@@ -448,6 +529,16 @@ wav2vec2_large_xlsr_53 = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
+    citation="""
+@misc{babu2021xlsrselfsupervisedcrosslingualspeech,
+      title={XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale},
+      author={Arun Babu and Changhan Wang and Andros Tjandra and Kushal Lakhotia and Qiantong Xu and Naman Goyal and Kritika Singh and Patrick von Platen and Yatharth Saraf and Juan Pino and Alexei Baevski and Alexis Conneau and Michael Auli},
+      year={2021},
+      eprint={2111.09296},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2111.09296},
+}""",
 )
 
 
@@ -471,4 +562,14 @@ wav2vec2_lv_60_espeak_cv_ft = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
+    citation="""
+@misc{babu2021xlsrselfsupervisedcrosslingualspeech,
+      title={XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale},
+      author={Arun Babu and Changhan Wang and Andros Tjandra and Kushal Lakhotia and Qiantong Xu and Naman Goyal and Kritika Singh and Patrick von Platen and Yatharth Saraf and Juan Pino and Alexei Baevski and Alexis Conneau and Michael Auli},
+      year={2021},
+      eprint={2111.09296},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2111.09296},
+}""",
 )

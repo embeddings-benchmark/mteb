@@ -184,4 +184,14 @@ wav2clip_zero = ModelMeta(
         # "FreeSound": ["https://freesound.org/"],
         # "BBC Sound Effects": ["https://sound-effects.bbcrewind.co.uk/"],
     ),
+    citation="""
+@misc{wu2022wav2cliplearningrobustaudio,
+  title={Wav2CLIP: Learning Robust Audio Representations From CLIP},
+  author={Ho-Hsiang Wu and Prem Seetharaman and Kundan Kumar and Juan Pablo Bello},
+  year={2022},
+  eprint={2110.11499},
+  archivePrefix={arXiv},
+  primaryClass={cs.SD},
+  url={https://arxiv.org/abs/2110.11499},
+}""",
 )

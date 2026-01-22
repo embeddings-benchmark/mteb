@@ -152,4 +152,14 @@ unispeech_base = ModelMeta(
     public_training_data=None,
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
+    citation="""
+@misc{chen2021unispeechsatuniversalspeechrepresentation,
+      title={UniSpeech-SAT: Universal Speech Representation Learning with Speaker Aware Pre-Training},
+      author={Sanyuan Chen and Yu Wu and Chengyi Wang and Zhengyang Chen and Zhuo Chen and Shujie Liu and Jian Wu and Yao Qian and Furu Wei and Jinyu Li and Xiangzhan Yu},
+      year={2021},
+      eprint={2110.05752},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2110.05752},
+}""",
 )
