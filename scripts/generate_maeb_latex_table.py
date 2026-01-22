@@ -609,6 +609,13 @@ def generate_maeb_table_with_audio_rank(
     else:
         df_filtered["multilingual_mean"] = np.nan
 
+    # Compute Audio-only average
+    audio_available = [t for t in audio_only_tasks if t in df.columns]
+    if audio_available:
+        df_filtered["audio_mean"] = df_filtered[audio_available].mean(axis=1) * 100
+    else:
+        df_filtered["audio_mean"] = np.nan
+
     df_filtered = df_filtered.sort_values("borda_count", ascending=False)
 
     # Task type counts using canonical categories
@@ -625,6 +632,7 @@ def generate_maeb_table_with_audio_rank(
         "weighted_mean": top_df["weighted_mean"].max(),
         "english_mean": top_df["english_mean"].max(),
         "multilingual_mean": top_df["multilingual_mean"].max(),
+        "audio_mean": top_df["audio_mean"].max(),
         "maeb_rank": top_df["borda_count"].max(),  # Best MAEB rank (lowest number = 1)
     }
     # Best audio rank among models in top_n
@@ -669,6 +677,7 @@ def generate_maeb_table_with_audio_rank(
             "weighted_mean": cat_models["weighted_mean"].max(),
             "english_mean": cat_models["english_mean"].max(),
             "multilingual_mean": cat_models["multilingual_mean"].max(),
+            "audio_mean": cat_models["audio_mean"].max(),
         }
         # Best MAEB rank within category (lowest number)
         cat_maeb_ranks = [
@@ -705,16 +714,17 @@ def generate_maeb_table_with_audio_rank(
         ]
     )
 
-    # Count English-only and multilingual tasks
+    # Count English-only, multilingual, and audio-only tasks
     english_count = len(english_available)
     multilingual_count = len(multilingual_available)
+    audio_count = len(audio_available)
 
     lines.append(
-        f"\\multicolumn{{13}}{{c}}{{\\vspace{{2mm}} \\normalsize \\texttt{{{benchmark_name}}}}} \\\\"
+        f"\\multicolumn{{14}}{{c}}{{\\vspace{{2mm}} \\normalsize \\texttt{{{benchmark_name}}}}} \\\\"
     )
     lines.append(
         f"\\textcolor{{gray}}{{Number of datasets}} & & & \\textcolor{{gray}}{{({total_tasks})}} & "
-        f"\\textcolor{{gray}}{{({total_tasks})}} & \\textcolor{{gray}}{{({english_count})}} & \\textcolor{{gray}}{{({multilingual_count})}} & {type_counts} \\\\"
+        f"\\textcolor{{gray}}{{({total_tasks})}} & \\textcolor{{gray}}{{({english_count})}} & \\textcolor{{gray}}{{({multilingual_count})}} & \\textcolor{{gray}}{{({audio_count})}} & {type_counts} \\\\"
     )
     lines.append("\\midrule")
 
@@ -743,6 +753,7 @@ def generate_maeb_table_with_audio_rank(
             weighted = row["weighted_mean"]
             english_avg = row["english_mean"]
             multilingual_avg = row["multilingual_mean"]
+            audio_avg = row["audio_mean"]
 
             # Get ranks for this model
             maeb_rank = maeb_rank_map.get(idx, "-")
@@ -832,6 +843,22 @@ def generate_maeb_table_with_audio_rank(
                 is_cat_best_multilingual,
             )
 
+            # Format Audio-only average
+            is_cat_best_audio = (
+                not pd.isna(audio_avg)
+                and abs(audio_avg - cat_best.get("audio_mean", float("-inf"))) < 0.05
+            )
+            is_global_best_audio = (
+                not pd.isna(audio_avg)
+                and abs(audio_avg - best_scores["audio_mean"]) < 0.05
+            )
+            audio_str = format_score(
+                audio_avg,
+                best_scores["audio_mean"],
+                is_global_best_audio,
+                is_cat_best_audio,
+            )
+
             cat_values = []
             for task_type in task_type_order:
                 if task_type in category_avgs:
@@ -863,7 +890,7 @@ def generate_maeb_table_with_audio_rank(
             display_name = display_name.replace("_", "\\_")
 
             lines.append(
-                f"{display_name} & {maeb_rank_str} & {audio_rank_str} & {mean_str} & {weighted_str} & {english_str} & {multilingual_str} & {cat_str} \\\\"
+                f"{display_name} & {maeb_rank_str} & {audio_rank_str} & {mean_str} & {weighted_str} & {english_str} & {multilingual_str} & {audio_str} & {cat_str} \\\\"
             )
 
         # Add midrule after each category (except the last one)
@@ -899,17 +926,17 @@ def main():
     latex_output.append(r"""\begin{table*}[!th]
     \centering
     \caption{
-    Top 30 models on the MAEB benchmark (32 tasks spanning audio-only and audio-text evaluation). Results are ranked using Borda count. The ``Audio'' column shows the model's rank on MAEB(audio-only) for reference. We provide averages across all tasks, and per task category. ``Eng.'' shows the average for English-only tasks and ``Multi.'' shows the average excluding tasks with no linguistic content (zxx). Task categories are abbreviated as: Classification (Clf), Pair Classification (PC), Reranking (Rrnk), Clustering (Clust), Retrieval (Rtrvl), Zero-shot Classification (Zero Clf.). We highlight the best score in \textbf{bold} and the best score with each model category using a grey cell.
+    Top 30 models on the MAEB benchmark (32 tasks spanning audio-only and audio-text evaluation). Results are ranked using Borda count. The ``Audio'' column shows the model's rank on MAEB(audio-only) for reference. We provide averages across all tasks, and per task category. ``Eng.'' shows the average for English-only tasks, ``Multi.'' shows the average excluding tasks with no linguistic content (zxx), and ``Aud.'' shows the average for audio-only tasks. Task categories are abbreviated as: Classification (Clf), Pair Classification (PC), Reranking (Rrnk), Clustering (Clust), Retrieval (Rtrvl), Zero-shot Classification (Zero Clf.). We highlight the best score in \textbf{bold} and the best score with each model category using a grey cell.
     }
     \label{tab:maeb-performance}
     \resizebox{\textwidth}{!}{
     \setlength{\tabcolsep}{4pt}
     {\footnotesize
-    \begin{tabular}{lcc|cccc|cccccc}
+    \begin{tabular}{lcc|ccccc|cccccc}
     \toprule
-    & \multicolumn{2}{c}{\textbf{Rank} ($\downarrow$)} & \multicolumn{4}{c}{\textbf{Average}} & \multicolumn{6}{c}{\textbf{Average per Category}} \\
-    \cmidrule(r){2-3} \cmidrule{4-7} \cmidrule(l){8-13}
-    \textbf{Model} & MAEB & Audio & All & Cat. & Eng. & Multi. & Clf & PC & Rrnk & Clust & Rtrvl & Zero Clf. \\
+    & \multicolumn{2}{c}{\textbf{Rank} ($\downarrow$)} & \multicolumn{5}{c}{\textbf{Average}} & \multicolumn{6}{c}{\textbf{Average per Category}} \\
+    \cmidrule(r){2-3} \cmidrule{4-8} \cmidrule(l){9-14}
+    \textbf{Model} & MAEB & Audio & All & Cat. & Eng. & Multi. & Aud. & Clf & PC & Rrnk & Clust & Rtrvl & Zero Clf. \\
     \midrule""")
 
     latex_output.append(maeb_section)
