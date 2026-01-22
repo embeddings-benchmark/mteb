@@ -151,12 +151,12 @@ def _create_summary_table_from_benchmark_results(
     )
     joint_table.insert(
         1,
-        "Number of Parameters (B)",
+        "Total Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(
         1,
-        "Number of Active Parameters (B)",
+        "Active Parameters (B)",
         model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
     )
 
@@ -392,12 +392,12 @@ def _create_summary_table_mean_public_private(
     )
     joint_table.insert(
         1,
-        "Number of Parameters (B)",
+        "Total Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(
         1,
-        "Number of Active Parameters (B)",
+        "Active Parameters (B)",
         model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
     )
 
@@ -511,12 +511,12 @@ def _create_summary_table_mean_subset(
     )
     joint_table.insert(
         1,
-        "Number of Parameters (B)",
+        "Total Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(
         1,
-        "Number of Active Parameters (B)",
+        "Active Parameters (B)",
         model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
     )
     # Add zero-shot percentage
@@ -625,12 +625,12 @@ def _create_summary_table_mean_task_type(
     )
     joint_table.insert(
         1,
-        "Number of Parameters (B)",
+        "Total Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(
         1,
-        "Number of Active Parameters (B)",
+        "Active Parameters (B)",
         model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
     )
 

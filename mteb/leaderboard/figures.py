@@ -110,9 +110,7 @@ def _add_size_guide(fig: go.Figure):
 @_failsafe_plot
 def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df = df.copy()
-    df["Number of Active Parameters"] = df["Number of Active Parameters (B)"].map(
-        _parse_n_params
-    )
+    df["Number of Active Parameters"] = df["Active Parameters (B)"].map(_parse_n_params)
     df["Model"] = df["Model"].map(_parse_model_name)
     df["model_text"] = df["Model"].where(df["Model"].isin(models_to_annotate), "")
     df["Embedding Dimensions"] = df["Embedding Dimensions"].map(_parse_float)
