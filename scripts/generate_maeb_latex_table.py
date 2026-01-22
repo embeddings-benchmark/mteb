@@ -1,4 +1,4 @@
-"""Generate LaTeX table for MAEB benchmarks showing top 10 models.
+"""Generate LaTeX table for MAEB benchmarks showing top 30 models.
 
 This script reads results directly from JSON files to avoid environment issues.
 """
@@ -22,7 +22,7 @@ sys.path.insert(0, str(MTEB_ROOT))
 from mteb.benchmarks import get_benchmark
 
 MAEB_AUDIO = get_benchmark("MAEB(audio-only)")
-MAEB_AUDIO_TEXT_LITE = get_benchmark("MAEB")
+MAEB = get_benchmark("MAEB")
 
 
 def get_task_names_from_benchmark(benchmark) -> list[str]:
@@ -30,9 +30,42 @@ def get_task_names_from_benchmark(benchmark) -> list[str]:
     return [task.metadata.name for task in benchmark.tasks]
 
 
+def filter_tasks_by_language(
+    benchmark, english_only=False, exclude_zxx=False
+) -> list[str]:
+    """Filter task names by language criteria.
+
+    Args:
+        benchmark: A Benchmark object containing tasks
+        english_only: If True, return only tasks with exclusively English (eng)
+        exclude_zxx: If True, exclude tasks with zxx (no linguistic content)
+
+    Returns:
+        List of task names matching the criteria
+    """
+    filtered = []
+    for task in benchmark.tasks:
+        langs = task.metadata.languages  # List of ISO 639-3 codes like ['eng']
+        if english_only:
+            # Only tasks with exclusively English
+            if langs == ["eng"]:
+                filtered.append(task.metadata.name)
+        elif exclude_zxx:
+            # All tasks except those with zxx (no linguistic content)
+            if "zxx" not in langs:
+                filtered.append(task.metadata.name)
+        else:
+            filtered.append(task.metadata.name)
+    return filtered
+
+
 # Get task lists from benchmark definitions
 MAEB_AUDIO_TASKS = get_task_names_from_benchmark(MAEB_AUDIO)
-MAEB_AUDIO_TEXT_LITE_TASKS = get_task_names_from_benchmark(MAEB_AUDIO_TEXT_LITE)
+MAEB_TASKS = get_task_names_from_benchmark(MAEB)
+
+# Language-filtered task lists for MAEB
+ENGLISH_ONLY_TASKS = filter_tasks_by_language(MAEB, english_only=True)
+MULTILINGUAL_TASKS = filter_tasks_by_language(MAEB, exclude_zxx=True)
 
 
 def build_task_type_map(*benchmarks) -> dict[str, str]:
@@ -54,7 +87,7 @@ def build_task_type_map(*benchmarks) -> dict[str, str]:
 
 
 # Build task type mapping dynamically from benchmarks
-TASK_TYPE_MAP = build_task_type_map(MAEB_AUDIO, MAEB_AUDIO_TEXT_LITE)
+TASK_TYPE_MAP = build_task_type_map(MAEB_AUDIO, MAEB)
 
 # Task type abbreviations for the table
 TASK_TYPE_ABBREV = {
@@ -507,6 +540,8 @@ def generate_maeb_table_with_audio_rank(
     df: pd.DataFrame,
     maeb_tasks: list[str],
     audio_only_tasks: list[str],
+    english_only_tasks: list[str],
+    multilingual_tasks: list[str],
     benchmark_name: str,
     top_n: int = 30,
 ) -> str:
@@ -558,6 +593,22 @@ def generate_maeb_table_with_audio_rank(
             valid_cat_counts[valid_mask] += 1
     df_filtered["weighted_mean"] = weighted_scores / valid_cat_counts.replace(0, np.nan)
 
+    # Compute English-only average
+    english_available = [t for t in english_only_tasks if t in df.columns]
+    if english_available:
+        df_filtered["english_mean"] = df_filtered[english_available].mean(axis=1) * 100
+    else:
+        df_filtered["english_mean"] = np.nan
+
+    # Compute Multilingual average (all tasks except zxx)
+    multilingual_available = [t for t in multilingual_tasks if t in df.columns]
+    if multilingual_available:
+        df_filtered["multilingual_mean"] = (
+            df_filtered[multilingual_available].mean(axis=1) * 100
+        )
+    else:
+        df_filtered["multilingual_mean"] = np.nan
+
     df_filtered = df_filtered.sort_values("borda_count", ascending=False)
 
     # Task type counts using canonical categories
@@ -572,6 +623,8 @@ def generate_maeb_table_with_audio_rank(
     best_scores = {
         "mean": top_df["mean"].max(),
         "weighted_mean": top_df["weighted_mean"].max(),
+        "english_mean": top_df["english_mean"].max(),
+        "multilingual_mean": top_df["multilingual_mean"].max(),
         "maeb_rank": top_df["borda_count"].max(),  # Best MAEB rank (lowest number = 1)
     }
     # Best audio rank among models in top_n
@@ -614,6 +667,8 @@ def generate_maeb_table_with_audio_rank(
         cat_best = {
             "mean": cat_models["mean"].max(),
             "weighted_mean": cat_models["weighted_mean"].max(),
+            "english_mean": cat_models["english_mean"].max(),
+            "multilingual_mean": cat_models["multilingual_mean"].max(),
         }
         # Best MAEB rank within category (lowest number)
         cat_maeb_ranks = [
@@ -650,12 +705,16 @@ def generate_maeb_table_with_audio_rank(
         ]
     )
 
+    # Count English-only and multilingual tasks
+    english_count = len(english_available)
+    multilingual_count = len(multilingual_available)
+
     lines.append(
-        f"\\multicolumn{{11}}{{c}}{{\\vspace{{2mm}} \\normalsize \\texttt{{{benchmark_name}}}}} \\\\"
+        f"\\multicolumn{{13}}{{c}}{{\\vspace{{2mm}} \\normalsize \\texttt{{{benchmark_name}}}}} \\\\"
     )
     lines.append(
         f"\\textcolor{{gray}}{{Number of datasets}} & & & \\textcolor{{gray}}{{({total_tasks})}} & "
-        f"\\textcolor{{gray}}{{({total_tasks})}} & {type_counts} \\\\"
+        f"\\textcolor{{gray}}{{({total_tasks})}} & \\textcolor{{gray}}{{({english_count})}} & \\textcolor{{gray}}{{({multilingual_count})}} & {type_counts} \\\\"
     )
     lines.append("\\midrule")
 
@@ -682,6 +741,8 @@ def generate_maeb_table_with_audio_rank(
 
             mean = row["mean"]
             weighted = row["weighted_mean"]
+            english_avg = row["english_mean"]
+            multilingual_avg = row["multilingual_mean"]
 
             # Get ranks for this model
             maeb_rank = maeb_rank_map.get(idx, "-")
@@ -735,6 +796,42 @@ def generate_maeb_table_with_audio_rank(
                 is_cat_best_weighted,
             )
 
+            # Format English-only average
+            is_cat_best_english = (
+                not pd.isna(english_avg)
+                and abs(english_avg - cat_best.get("english_mean", float("-inf")))
+                < 0.05
+            )
+            is_global_best_english = (
+                not pd.isna(english_avg)
+                and abs(english_avg - best_scores["english_mean"]) < 0.05
+            )
+            english_str = format_score(
+                english_avg,
+                best_scores["english_mean"],
+                is_global_best_english,
+                is_cat_best_english,
+            )
+
+            # Format Multilingual average
+            is_cat_best_multilingual = (
+                not pd.isna(multilingual_avg)
+                and abs(
+                    multilingual_avg - cat_best.get("multilingual_mean", float("-inf"))
+                )
+                < 0.05
+            )
+            is_global_best_multilingual = (
+                not pd.isna(multilingual_avg)
+                and abs(multilingual_avg - best_scores["multilingual_mean"]) < 0.05
+            )
+            multilingual_str = format_score(
+                multilingual_avg,
+                best_scores["multilingual_mean"],
+                is_global_best_multilingual,
+                is_cat_best_multilingual,
+            )
+
             cat_values = []
             for task_type in task_type_order:
                 if task_type in category_avgs:
@@ -766,7 +863,7 @@ def generate_maeb_table_with_audio_rank(
             display_name = display_name.replace("_", "\\_")
 
             lines.append(
-                f"{display_name} & {maeb_rank_str} & {audio_rank_str} & {mean_str} & {weighted_str} & {cat_str} \\\\"
+                f"{display_name} & {maeb_rank_str} & {audio_rank_str} & {mean_str} & {weighted_str} & {english_str} & {multilingual_str} & {cat_str} \\\\"
             )
 
         # Add midrule after each category (except the last one)
@@ -780,7 +877,7 @@ def main():
     results_dir = Path("/Users/isaac/work/maeb-results/results")
 
     # Load all results
-    all_tasks = MAEB_AUDIO_TASKS + MAEB_AUDIO_TEXT_LITE_TASKS
+    all_tasks = MAEB_AUDIO_TASKS + MAEB_TASKS
     print(f"Loading results for {len(all_tasks)} tasks...")
     df = load_results_from_json(results_dir, all_tasks)
     print(f"Loaded results for {len(df)} models")
@@ -788,8 +885,10 @@ def main():
     print("Processing MAEB (top 30) with audio-only rank...")
     maeb_section = generate_maeb_table_with_audio_rank(
         df,
-        maeb_tasks=MAEB_AUDIO_TEXT_LITE_TASKS,
+        maeb_tasks=MAEB_TASKS,
         audio_only_tasks=MAEB_AUDIO_TASKS,
+        english_only_tasks=ENGLISH_ONLY_TASKS,
+        multilingual_tasks=MULTILINGUAL_TASKS,
         benchmark_name="MAEB",
         top_n=30,
     )
@@ -800,17 +899,17 @@ def main():
     latex_output.append(r"""\begin{table*}[!th]
     \centering
     \caption{
-    Top 30 models on the MAEB benchmark (32 tasks spanning audio-only and audio-text evaluation). Results are ranked using Borda count. The ``Audio'' column shows the model's rank on MAEB(audio-only) for reference. We provide averages across all tasks, and per task category. Task categories are abbreviated as: Classification (Clf), Pair Classification (PC), Reranking (Rrnk), Clustering (Clust), Retrieval (Rtrvl), Zero-shot Classification (Zero Clf.). We highlight the best score in \textbf{bold} and the best score with each model category using a grey cell.
+    Top 30 models on the MAEB benchmark (32 tasks spanning audio-only and audio-text evaluation). Results are ranked using Borda count. The ``Audio'' column shows the model's rank on MAEB(audio-only) for reference. We provide averages across all tasks, and per task category. ``Eng.'' shows the average for English-only tasks and ``Multi.'' shows the average excluding tasks with no linguistic content (zxx). Task categories are abbreviated as: Classification (Clf), Pair Classification (PC), Reranking (Rrnk), Clustering (Clust), Retrieval (Rtrvl), Zero-shot Classification (Zero Clf.). We highlight the best score in \textbf{bold} and the best score with each model category using a grey cell.
     }
     \label{tab:maeb-performance}
     \resizebox{\textwidth}{!}{
     \setlength{\tabcolsep}{4pt}
     {\footnotesize
-    \begin{tabular}{lcc|cc|cccccc}
+    \begin{tabular}{lcc|cccc|cccccc}
     \toprule
-    & \multicolumn{2}{c}{\textbf{Rank} ($\downarrow$)} & \multicolumn{2}{c}{\textbf{Average}} & \multicolumn{6}{c}{\textbf{Average per Category}} \\
-    \cmidrule(r){2-3} \cmidrule{4-5} \cmidrule(l){6-11}
-    \textbf{Model} & MAEB & Audio & All & Cat. & Clf & PC & Rrnk & Clust & Rtrvl & Zero Clf. \\
+    & \multicolumn{2}{c}{\textbf{Rank} ($\downarrow$)} & \multicolumn{4}{c}{\textbf{Average}} & \multicolumn{6}{c}{\textbf{Average per Category}} \\
+    \cmidrule(r){2-3} \cmidrule{4-7} \cmidrule(l){8-13}
+    \textbf{Model} & MAEB & Audio & All & Cat. & Eng. & Multi. & Clf & PC & Rrnk & Clust & Rtrvl & Zero Clf. \\
     \midrule""")
 
     latex_output.append(maeb_section)
