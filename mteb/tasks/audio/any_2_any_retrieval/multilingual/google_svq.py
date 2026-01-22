@@ -1,8 +1,8 @@
 from collections import defaultdict
 
 import datasets
-from datasets import Audio, Dataset, DatasetDict
-from tqdm import tqdm
+from datasets import Audio, DatasetDict
+from tqdm.auto import tqdm
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -90,48 +90,39 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
                 revision=self.metadata.dataset.get("revision"),
             )
 
-            for locale, _ in self.metadata.eval_langs.items():
-                queries_ = {"id": [], "modality": [], "audio": []}
-                corpus_ = {"id": [], "modality": [], "text": []}
-                relevant_docs_ = {}
+            # Cast once before filtering
+            full_dataset = full_dataset.cast_column(audio_col, Audio(decode=True))
 
-                # Filter BEFORE casting to Audio to avoid audio decoding during filter
-                lang_dataset = full_dataset.filter(lambda x: x["locale"] == locale)
-                # Cast waveform column to Audio type for proper decoding
-                lang_dataset = lang_dataset.cast_column(audio_col, Audio(decode=True))
+            # Group indices by locale in a single pass
+            locale_indices = {locale: [] for locale in self.metadata.eval_langs}
 
-                qid = set()
-                did = set()
-                for row in tqdm(
-                    lang_dataset,
-                    total=len(lang_dataset),
-                    desc=f"{locale}-{split}",
-                ):
-                    query_id = str(row[id_col])
-                    doc_id = str(row[id_col])
-                    text = row[text_col]
-                    audio = row[audio_col]
+            for idx, row in enumerate(tqdm(full_dataset, desc="Filtering")):
+                locale = row["locale"]
+                if locale in locale_indices:
+                    locale_indices[locale].append(idx)
 
-                    if query_id not in qid:
-                        qid.add(query_id)
-                        queries_["id"].append(query_id)
-                        queries_["audio"].append(audio)
-                        queries_["modality"].append("audio")
+            # Use select with indices to avoid recreating dataset
+            for locale, indices in tqdm(
+                locale_indices.items(), total=len(locale_indices)
+            ):
+                if not indices:
+                    continue
 
-                    if doc_id not in did:
-                        did.add(doc_id)
-                        corpus_["id"].append(doc_id)
-                        corpus_["text"].append(text)
-                        corpus_["modality"].append("text")
+                lang_dataset = full_dataset.select(indices)
 
-                    if query_id not in relevant_docs_:
-                        relevant_docs_[query_id] = {}
-                    relevant_docs_[query_id][doc_id] = 1
+                queries_ds = (
+                    lang_dataset.select_columns([id_col, audio_col])
+                    .rename_column(id_col, "id")
+                    .rename_column(audio_col, "audio")
+                )
 
-                corpus_ds = Dataset.from_dict(corpus_)
-                queries_ds = Dataset.from_dict(queries_)
-                # Cast the audio column to Audio type for proper encoding
-                queries_ds = queries_ds.cast_column("audio", Audio(decode=True))
+                corpus_ds = lang_dataset.select_columns(
+                    [id_col, text_col]
+                ).rename_column(id_col, "id")
+
+                relevant_docs_ = {
+                    str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
+                }
 
                 self.corpus[locale][split] = corpus_ds
                 self.queries[locale][split] = queries_ds
@@ -191,48 +182,37 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
                 revision=self.metadata.dataset.get("revision"),
             )
 
-            for locale, _ in self.metadata.eval_langs.items():
-                queries_ = {"id": [], "modality": [], "text": []}
-                corpus_ = {"id": [], "modality": [], "audio": []}
-                relevant_docs_ = {}
+            full_dataset = full_dataset.cast_column(audio_col, Audio(decode=True))
 
-                # Filter BEFORE casting to Audio to avoid audio decoding during filter
-                lang_dataset = full_dataset.filter(lambda x: x["locale"] == locale)
-                # Cast waveform column to Audio type for proper decoding
-                lang_dataset = lang_dataset.cast_column(audio_col, Audio(decode=True))
+            locale_indices = {locale: [] for locale in self.metadata.eval_langs}
 
-                qid = set()
-                did = set()
-                for row in tqdm(
-                    lang_dataset,
-                    total=len(lang_dataset),
-                    desc=f"{locale}-{split}",
-                ):
-                    query_id = str(row[id_col])
-                    doc_id = str(row[id_col])
-                    text = row[text_col]
-                    audio = row[audio_col]
+            for idx, row in enumerate(tqdm(full_dataset, desc="Filtering")):
+                locale = row["locale"]
+                if locale in locale_indices:
+                    locale_indices[locale].append(idx)
 
-                    if query_id not in qid:
-                        qid.add(query_id)
-                        queries_["id"].append(query_id)
-                        queries_["text"].append(text)
-                        queries_["modality"].append("text")
+            # Use select with indices to avoid recreating dataset
+            for locale, indices in tqdm(
+                locale_indices.items(), total=len(locale_indices)
+            ):
+                if not indices:
+                    continue
 
-                    if doc_id not in did:
-                        did.add(doc_id)
-                        corpus_["id"].append(doc_id)
-                        corpus_["audio"].append(audio)
-                        corpus_["modality"].append("audio")
+                lang_dataset = full_dataset.select(indices)
 
-                    if query_id not in relevant_docs_:
-                        relevant_docs_[query_id] = {}
-                    relevant_docs_[query_id][doc_id] = 1
+                queries_ds = lang_dataset.select_columns(
+                    [id_col, text_col]
+                ).rename_column(id_col, "id")
 
-                queries_ds = Dataset.from_dict(queries_)
-                corpus_ds = Dataset.from_dict(corpus_)
-                # Cast the audio column to Audio type for proper encoding
-                corpus_ds = corpus_ds.cast_column("audio", Audio(decode=True))
+                corpus_ds = (
+                    lang_dataset.select_columns([id_col, audio_col])
+                    .rename_column(id_col, "id")
+                    .rename_column(audio_col, "audio")
+                )
+
+                relevant_docs_ = {
+                    str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
+                }
 
                 self.corpus[locale][split] = corpus_ds
                 self.queries[locale][split] = queries_ds
