@@ -767,12 +767,13 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 models,
             ],
         )
-        for trigger in [benchmark_select, lang_select, type_select, domain_select]:
+        for trigger in [lang_select, type_select, domain_select]:
             trigger.change(
                 _update_description,
                 inputs=[benchmark_select, lang_select, type_select, domain_select],
                 outputs=[description],
                 preprocess=False,
+                show_progress="hidden",
             )
         task_select.change(
             _update_task_info,
