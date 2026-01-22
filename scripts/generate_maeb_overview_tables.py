@@ -133,6 +133,8 @@ def format_total_audio_seconds(stats: Dict | None, eval_splits: List[str]) -> st
 
     duration_keys = [
         "audio_statistics",
+        "audio1_statistics",
+        "audio2_statistics",
         "documents_audio_statistics",
         "queries_audio_statistics",
     ]
