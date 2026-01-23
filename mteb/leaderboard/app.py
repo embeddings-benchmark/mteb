@@ -450,39 +450,60 @@ def _generate_fingerprint_session_id(request: gr.Request) -> str:
         return f"temp_{secrets.token_hex(8)}"
 
 
-def on_page_load(session_id, request: gr.Request):
+def on_page_load(session_data_json: str, request: gr.Request):
     """Log page view with session tracking.
 
-    Handles two modes:
-    - Normal mode (BrowserState available): Uses random token, persisted in browser
-    - Degraded mode (BrowserState unavailable): Uses fingerprint, regenerated but consistent
+    Handles two modes based on browser storage availability:
+    - Normal mode (localStorage available): Uses random token, persisted in browser
+    - Degraded mode (localStorage blocked): Uses fingerprint, regenerated but consistent
 
     Args:
-        session_id: Current session ID (empty on first load, or "FALLBACK_MODE" in degraded mode)
+        session_data_json: JSON string containing session data (with _storage_available flag)
         request: Gradio request object for fingerprint generation
 
     Returns:
-        The session ID (existing or newly generated)
+        Tuple of (updated JSON string with session data, session_id string)
     """
-    # Check if we're in degraded mode (browser storage blocked)
-    if session_id == "FALLBACK_MODE":
-        # Degraded mode: Generate fingerprint-based session ID for consistency
-        session_id = _generate_fingerprint_session_id(request)
-        logger.debug(
-            f"Degraded mode - generated fingerprint session ID: {session_id[:20]}..."
-        )
-    elif not session_id:
-        # Normal mode: Generate random token that will be persisted by BrowserState
-        session_id = f"browser_{secrets.token_hex(16)}"
-        logger.debug(
-            f"Normal mode - generated browser session ID: {session_id[:20]}..."
-        )
+    # Parse existing session data
+    try:
+        session_data = json.loads(session_data_json) if session_data_json else {}
+    except json.JSONDecodeError:
+        logger.warning(f"Failed to parse session data JSON: {session_data_json}")
+        session_data = {}
 
+    # Check storage availability from JavaScript
+    storage_available = session_data.pop("_storage_available", False)
+
+    # Get or generate session_id based on storage availability
+    session_id = session_data.get("session_id", "")
+
+    if not session_id:
+        if storage_available:
+            # Normal mode: Generate random token that will be persisted
+            session_id = f"browser_{secrets.token_hex(16)}"
+            logger.info(f"Normal mode - generated session: {session_id[:20]}...")
+        else:
+            # Degraded mode: Generate fingerprint-based ID for consistency
+            session_id = _generate_fingerprint_session_id(request)
+            logger.warning(f"Degraded mode - using fingerprint: {session_id[:20]}...")
+
+    # Update session data
+    session_data.update(
+        {
+            "session_id": session_id,
+            "storage_available": storage_available,
+            "last_visit": time.time(),
+        }
+    )
+
+    # Log the page view
     event_logger.log_page_view(
         session_id=session_id,
-        benchmark=None,  # Can be None if not available yet
+        benchmark=None,
     )
-    return session_id
+
+    # Return updated JSON string and extracted session_id
+    return json.dumps(session_data), session_id
 
 
 def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
@@ -625,23 +646,57 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         title="MTEB Leaderboard",
         fill_width=True,
     ) as demo:
-        # Try to use BrowserState for persistent session tracking
-        # If browser storage is blocked, fall back to a hidden textbox with fingerprint
-        try:
-            session_id = gr.BrowserState("")
-            logger.info("Using BrowserState for session tracking (normal mode)")
-        except Exception as e:
-            logger.warning(
-                f"BrowserState unavailable (browser storage blocked): {e}. "
-                f"Falling back to fingerprint-based session tracking (degraded mode)."
-            )
-            # Fallback: Use a hidden textbox with special marker value
-            # The marker "FALLBACK_MODE" tells on_page_load to use fingerprint generation
-            session_id = gr.Textbox(
-                value="FALLBACK_MODE", visible=False, elem_id="fallback_session"
-            )
+        # Session tracking: Use State instead of BrowserState to avoid localStorage errors
+        # JavaScript will manually handle localStorage when available
+        session_data = gr.State("{}")
+        session_id = gr.State("")
 
-        demo.load(fn=on_page_load, inputs=[session_id], outputs=[session_id])
+        # On page load: read from localStorage (if available) and initialize session
+        demo.load(
+            fn=on_page_load,
+            inputs=[session_data],
+            outputs=[session_data, session_id],
+            js="""
+            function(session_data) {
+                const STORAGE_KEY = '__mteb_session_data__';
+                let data = {};
+                
+                // Try to read from localStorage
+                try {
+                    const stored = localStorage.getItem(STORAGE_KEY);
+                    if (stored) {
+                        data = JSON.parse(stored);
+                    }
+                    data._storage_available = true;
+                    window.__mteb_storage_available__ = true;
+                } catch(e) {
+                    console.warn('MTEB: localStorage unavailable, using fingerprint mode');
+                    data._storage_available = false;
+                    window.__mteb_storage_available__ = false;
+                }
+                
+                return [JSON.stringify(data)];
+            }
+            """,
+        )
+
+        # After session is generated, save to localStorage if available
+        session_data.change(
+            fn=None,
+            inputs=[session_data],
+            js="""
+            function(session_data) {
+                if (window.__mteb_storage_available__) {
+                    try {
+                        localStorage.setItem('__mteb_session_data__', session_data);
+                    } catch(e) {
+                        console.warn('MTEB: Failed to save session to localStorage');
+                    }
+                }
+                return session_data;
+            }
+            """,
+        )
 
         with gr.Sidebar(
             position="left",
