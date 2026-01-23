@@ -350,11 +350,7 @@ class ModelMeta(BaseModel):
                 if st_config and st_config.get("model_type") == "SparseEncoder":
                     # It's a SparseEncoder
                     try:
-                        from mteb.models.sentence_transformer_wrapper import (
-                            SparseEncoderWrapper,
-                        )
-
-                        loader = SparseEncoderWrapper
+                        loader = sentence_transformers_loader  # keeping sentence_transformer_loader only for sparseEncoder
                         model_type = "sparse"  # type: ignore[assignment]
                         logger.info(f"Detected SparseEncoder model: {model_name}")
                     except ImportError:
