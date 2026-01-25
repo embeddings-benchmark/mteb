@@ -7,8 +7,6 @@ from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import (
     AutoProcessor,
-    Qwen2_5OmniThinkerForConditionalGeneration,
-    Qwen3OmniMoeThinkerForConditionalGeneration,
 )
 
 from mteb._requires_package import (
@@ -29,7 +27,6 @@ class QwenOmniWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        model_class,
         device: str | None = None,
         max_audio_length_seconds: int = 10,
         **kwargs: Any,
@@ -47,6 +44,15 @@ class QwenOmniWrapper(AbsEncoder):
             else "cpu"
         )
         self.max_audio_length_seconds = max_audio_length_seconds
+
+        if "2.5" in model_name:
+            from transformers import Qwen2_5OmniThinkerForConditionalGeneration
+
+            model_class = Qwen2_5OmniThinkerForConditionalGeneration
+        elif "3" in model_name:
+            from transformers import Qwen3OmniMoeThinkerForConditionalGeneration
+
+            model_class = Qwen3OmniMoeThinkerForConditionalGeneration
 
         self.model = model_class.from_pretrained(
             model_name, revision=revision, **kwargs
@@ -181,9 +187,6 @@ class QwenOmniWrapper(AbsEncoder):
 
 qwen25_omni_7b = ModelMeta(
     loader=QwenOmniWrapper,
-    loader_kwargs=dict(
-        model_class=Qwen2_5OmniThinkerForConditionalGeneration,
-    ),
     name="Qwen/Qwen2.5-Omni-7B",
     revision="ae9e1690543ffd5c0221dc27f79834d0294cba00",
     release_date="2025-03-22",
@@ -223,9 +226,6 @@ qwen25_omni_7b = ModelMeta(
 
 qwen25_omni_3b = ModelMeta(
     loader=QwenOmniWrapper,
-    loader_kwargs=dict(
-        model_class=Qwen2_5OmniThinkerForConditionalGeneration,
-    ),
     name="Qwen/Qwen2.5-Omni-3B",
     revision="f75b40e3da2003cdd6e1829b1f420ca70797c34e",
     release_date="2025-04-30",
@@ -266,9 +266,6 @@ qwen25_omni_3b = ModelMeta(
 
 qwen3_omni_30b_a3b_instruct = ModelMeta(
     loader=QwenOmniWrapper,
-    loader_kwargs=dict(
-        model_class=Qwen3OmniMoeThinkerForConditionalGeneration,
-    ),
     name="Qwen/Qwen3-Omni-30B-A3B-Instruct",
     revision="26291f793822fb6be9555850f06dfe95f2d7e695",
     release_date="2025-09-20",
@@ -308,9 +305,6 @@ qwen3_omni_30b_a3b_instruct = ModelMeta(
 
 qwen3_omni_30b_a3b_thinking = ModelMeta(
     loader=QwenOmniWrapper,
-    loader_kwargs=dict(
-        model_class=Qwen3OmniMoeThinkerForConditionalGeneration,
-    ),
     name="Qwen/Qwen3-Omni-30B-A3B-Thinking",
     revision="2f443cfc4c54b14a815c0e2bb9a9d6cbcd9a748b",
     release_date="2025-09-15",
@@ -351,7 +345,7 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
 qwen3_omni_30b_a3b_captioner = ModelMeta(
     loader=QwenOmniWrapper,
     loader_kwargs=dict(
-        model_class=Qwen3OmniMoeThinkerForConditionalGeneration,
+        model_class="Qwen3OmniMoeThinkerForConditionalGeneration",
     ),
     name="Qwen/Qwen3-Omni-30B-A3B-Captioner",
     revision="a2bd106cbf527db5676e79662674da22b0545ec0",
