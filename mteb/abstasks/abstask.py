@@ -116,7 +116,7 @@ class AbsTask(ABC):
             logger.warning(msg)
             warnings.warn(msg)
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(self, num_proc: int = 1, **kwargs: Any) -> None:
         """A transform operations applied to the dataset after loading.
 
         This method is useful when the dataset from Huggingface is not in an `mteb` compatible format.
@@ -124,6 +124,7 @@ class AbsTask(ABC):
 
         Args:
             num_proc: Number of processes to use for the transformation.
+            kwargs: Additional keyword arguments passed to the load_dataset function. Keep for forward compatibility.
         """
         pass
 
