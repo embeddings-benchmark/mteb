@@ -76,8 +76,10 @@ def build_task_type_map(*benchmarks) -> dict[str, str]:
             task_name = task.metadata.name
             task_type = task.metadata.type
 
-            # For audio-text retrieval, distinguish A2T vs T2A based on task name
-            if "A2TRetrieval" in task_name:
+            # For retrieval tasks, distinguish by modality based on task name
+            if "A2ARetrieval" in task_name:
+                task_type_map[task_name] = "A2ARetrieval"
+            elif "A2TRetrieval" in task_name:
                 task_type_map[task_name] = "A2TRetrieval"
             elif "T2ARetrieval" in task_name:
                 task_type_map[task_name] = "T2ARetrieval"
@@ -108,9 +110,10 @@ TASK_TYPE_CANONICAL = {
     "AudioReranking": "Reranking",
     "AudioClustering": "Clustering",
     "AudioZeroshotClassification": "ZeroshotClassification",
-    "A2TRetrieval": "Retrieval",
-    "T2ARetrieval": "Retrieval",
-    "Any2AnyRetrieval": "Retrieval",
+    "A2ARetrieval": "AudioRetrieval",
+    "A2TRetrieval": "CrossModalRetrieval",
+    "T2ARetrieval": "CrossModalRetrieval",
+    "Any2AnyRetrieval": "AudioRetrieval",
 }
 
 # Model category mapping for grouping in the table
@@ -127,6 +130,7 @@ MODEL_CATEGORY = {
     "msclap-2023": "Contrastive Alignment Models",
     "msclap-2022": "Contrastive Alignment Models",
     "wav2clip": "Contrastive Alignment Models",
+    "MuQ-MuLan-large": "Contrastive Alignment Models",
     # Sequence-to-sequence Models
     "whisper-medium": "Sequence-to-sequence Models",
     "whisper-base": "Sequence-to-sequence Models",
@@ -149,6 +153,7 @@ MODEL_CATEGORY = {
     "wav2vec2-base": "Audio Encoders",
     "wavlm-base-plus": "Audio Encoders",
     "wavlm-base-plus-sv": "Audio Encoders",
+    "m-ctc-t-large": "Audio Encoders",
 }
 
 MODEL_CATEGORY_ORDER = [
@@ -441,7 +446,8 @@ def generate_audio_table(
         "PairClassification",
         "Reranking",
         "Clustering",
-        "Retrieval",
+        "AudioRetrieval",
+        "CrossModalRetrieval",
         "ZeroshotClassification",
     ]
 
@@ -578,7 +584,8 @@ def generate_maeb_table_with_audio_rank(
         "PairClassification",
         "Reranking",
         "Clustering",
-        "Retrieval",
+        "AudioRetrieval",
+        "CrossModalRetrieval",
         "ZeroshotClassification",
     ]
 
@@ -720,7 +727,7 @@ def generate_maeb_table_with_audio_rank(
     audio_count = len(audio_available)
 
     lines.append(
-        f"\\multicolumn{{14}}{{c}}{{\\vspace{{2mm}} \\normalsize \\texttt{{{benchmark_name}}}}} \\\\"
+        f"\\multicolumn{{15}}{{c}}{{\\vspace{{2mm}} \\normalsize \\texttt{{{benchmark_name}}}}} \\\\"
     )
     lines.append(
         f"\\textcolor{{gray}}{{Number of datasets}} & & & \\textcolor{{gray}}{{({total_tasks})}} & "
@@ -926,17 +933,17 @@ def main():
     latex_output.append(r"""\begin{table*}[!th]
     \centering
     \caption{
-    Top 30 models on the MAEB benchmark (32 tasks spanning audio-only and audio-text evaluation). Results are ranked using Borda count. The ``Audio'' column shows the model's rank on MAEB(audio-only) for reference. We provide averages across all tasks, and per task category. ``Eng.'' shows the average for English-only tasks, ``Multi.'' shows the average excluding tasks with no linguistic content (zxx), and ``Aud.'' shows the average for audio-only tasks. Task categories are abbreviated as: Classification (Clf), Pair Classification (PC), Reranking (Rrnk), Clustering (Clust), Retrieval (Rtrvl), Zero-shot Classification (Zero Clf.). We highlight the best score in \textbf{bold} and the best score with each model category using a grey cell.
+    Top 30 models on the MAEB benchmark (30 tasks spanning audio-only and audio-text evaluation). Results are ranked using Borda count. The ``Audio'' column shows the model's rank on MAEB(audio-only) for reference. We provide averages across all tasks, and per task category. ``Eng.'' shows the average for English-only tasks, ``Multi.'' shows the average excluding tasks with no linguistic content (zxx), and ``Aud.'' shows the average for audio-only tasks. Task categories are abbreviated as: Classification (Clf), Pair Classification (PC), Reranking (Rrnk), Clustering (Clust), Audio Retrieval (A. Rtrvl), Cross-modal Retrieval (X. Rtrvl), Zero-shot Classification (Zero Clf.). We highlight the best score in \textbf{bold} and the best score with each model category using a grey cell.
     }
     \label{tab:maeb-performance}
     \resizebox{\textwidth}{!}{
     \setlength{\tabcolsep}{4pt}
     {\footnotesize
-    \begin{tabular}{lcc|ccccc|cccccc}
+    \begin{tabular}{lcc|ccccc|ccccccc}
     \toprule
-    & \multicolumn{2}{c}{\textbf{Rank} ($\downarrow$)} & \multicolumn{5}{c}{\textbf{Average}} & \multicolumn{6}{c}{\textbf{Average per Category}} \\
-    \cmidrule(r){2-3} \cmidrule{4-8} \cmidrule(l){9-14}
-    \textbf{Model} & MAEB & Audio & All & Cat. & Eng. & Multi. & Aud. & Clf & PC & Rrnk & Clust & Rtrvl & Zero Clf. \\
+    & \multicolumn{2}{c}{\textbf{Rank} ($\downarrow$)} & \multicolumn{5}{c}{\textbf{Average}} & \multicolumn{7}{c}{\textbf{Average per Category}} \\
+    \cmidrule(r){2-3} \cmidrule{4-8} \cmidrule(l){9-15}
+    \textbf{Model} & MAEB & Audio & All & Cat. & Eng. & Multi. & Aud. & Clf & PC & Rrnk & Clust & A. Rtrvl & X. Rtrvl & Zero Clf. \\
     \midrule""")
 
     latex_output.append(maeb_section)

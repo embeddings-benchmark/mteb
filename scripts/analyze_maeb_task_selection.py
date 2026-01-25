@@ -1470,12 +1470,23 @@ def main():
             )
             output_lines.append("")
 
-            if removed:
-                output_lines.append("### Removed Tasks")
+            if remaining:
+                output_lines.append("### Remaining Tasks")
                 output_lines.append("")
-                for task, reason, corr in removed:
-                    output_lines.append(f"- {task}: {reason}")
-                output_lines.append("")
+                # Group remaining tasks by type for better organization
+                remaining_tasks = mteb.get_tasks(tasks=remaining)
+                by_type = defaultdict(list)
+                for task in remaining_tasks:
+                    by_type[task.metadata.type].append(task.metadata.name)
+
+                for task_type, tasks in sorted(by_type.items()):
+                    output_lines.append(f"#### {task_type} ({len(tasks)})")
+                    for task_name in sorted(tasks):
+                        task_obj = mteb.get_task(task_name)
+                        meta = task_obj.metadata
+                        domains = ", ".join(meta.domains) if meta.domains else "N/A"
+                        output_lines.append(f"- **{task_name}** - {meta.category}, {domains}")
+                    output_lines.append("")
 
             # VoxPopuli status
             vox_remaining = [t for t in remaining if "VoxPopuli" in t]

@@ -2857,7 +2857,7 @@ MAEB_AUDIO = Benchmark(
         tasks=[
             # Any2AnyRetrieval (1)
             "JamAltArtistA2ARetrieval",
-            # AudioClassification (9)
+            # AudioClassification (10)
             "BeijingOpera",
             "BirdCLEF",
             "CREMA_D",
@@ -2866,24 +2866,23 @@ MAEB_AUDIO = Benchmark(
             "IEMOCAPGender",
             "MInDS14",
             "MridinghamTonic",
-            "VoxPopuliAccentID",
-            # AudioClustering (4)
+            "VoxCelebSA",
+            "VoxPopuliLanguageID",
+            # AudioClustering (3)
             "CREMA_DClustering",
             "VehicleSoundClustering",
-            "VoiceGenderClustering",
             "VoxPopuliGenderClustering",
             # AudioMultilabelClassification (1)
             "SIBFLEURS",
-            # AudioPairClassification (2)
+            # AudioPairClassification (3)
             "CREMADPairClassification",
+            "NMSQAPairClassification",
             "VoxPopuliAccentPairClassification",
-            # AudioReranking (3)
-            "FSDnoisy18kAudioReranking",
+            # AudioReranking (1)
             "GTZANAudioReranking",
-            "VocalSoundAudioReranking",
         ]
     ),
-    description="""MAEB(audio-only) is the audio-only subset of MAEB with 20 tasks spanning 6 task types: classification (9), clustering (4), multilabel classification (1), pair classification (2), reranking (3), and retrieval (1).""",
+    description="""MAEB(audio-only) is the audio-only subset of MAEB with 19 tasks spanning 6 task types: classification (10), clustering (3), multilabel classification (1), pair classification (3), reranking (1), and retrieval (1).""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -3012,8 +3011,7 @@ MAEB = Benchmark(
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
-            # Any2AnyRetrieval (10)
-            "AudioSetStrongT2ARetrieval",
+            # Any2AnyRetrieval (9)
             "ClothoT2ARetrieval",
             "CommonVoiceMini21T2ARetrieval",
             "FleursT2ARetrieval",
@@ -3023,7 +3021,7 @@ MAEB = Benchmark(
             "MACST2ARetrieval",
             "SpokenSQuADT2ARetrieval",
             "UrbanSound8KT2ARetrieval",
-            # AudioClassification (9)
+            # AudioClassification (10)
             "BeijingOpera",
             "BirdCLEF",
             "CREMA_D",
@@ -3032,28 +3030,27 @@ MAEB = Benchmark(
             "IEMOCAPGender",
             "MInDS14",
             "MridinghamTonic",
-            "VoxPopuliAccentID",
-            # AudioClustering (4)
+            "VoxCelebSA",
+            "VoxPopuliLanguageID",
+            # AudioClustering (3)
             "CREMA_DClustering",
             "VehicleSoundClustering",
-            "VoiceGenderClustering",
             "VoxPopuliGenderClustering",
             # AudioMultilabelClassification (2)
-            "FSD50K",
+            "FSD2019Kaggle",
             "SIBFLEURS",
-            # AudioPairClassification (2)
+            # AudioPairClassification (3)
             "CREMADPairClassification",
+            "NMSQAPairClassification",
             "VoxPopuliAccentPairClassification",
-            # AudioReranking (3)
-            "FSDnoisy18kAudioReranking",
+            # AudioReranking (1)
             "GTZANAudioReranking",
-            "VocalSoundAudioReranking",
             # AudioZeroshotClassification (2)
             "RavdessZeroshot",
             "SpeechCommandsZeroshotv0.02",
         ]
     ),
-    description="""MAEB is a comprehensive audio benchmark with 32 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (10), classification (9), clustering (4), multilabel classification (2), pair classification (2), reranking (3), and zero-shot classification (2).""",
+    description="""MAEB is a comprehensive audio benchmark with 30 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (10), clustering (3), multilabel classification (2), pair classification (3), reranking (1), and zero-shot classification (2).""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
