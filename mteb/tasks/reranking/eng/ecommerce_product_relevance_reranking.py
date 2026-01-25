@@ -27,7 +27,7 @@ class ERESSReranking(AbsTaskRetrieval):
         main_score="ndcg_at_5",  # nDCG@5 is primary
         dataset={
             "path": "thebajajra/ERESSReranking",
-            "revision": "cd646a8c27cac261dd52ff02c825146cdb298c82",
+            "revision": "c095d55559370c1e8b0ae933ae26da111ae62966",
         },
         date=("1996-05-01", "2025-12-24"),
         domains=["Web", "E-commerce"],
@@ -37,15 +37,15 @@ class ERESSReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",  # Real-world queries
         prompt="Rerank products by relevance to the e-commerce query",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @article{Bajaj2026RexRerankers,
-  title   = {{RexRerankers}: {SOTA} Rankers for Product Discovery and {AI} Assistants},
-  author  = {Bajaj, Rahul and Garg, Anuj and Nupur, Jaya},
+  author = {Bajaj, Rahul and Garg, Anuj and Nupur, Jaya},
   journal = {Hugging Face Blog (Community Article)},
-  year    = {2026},
-  month   = jan,
-  url     = {https://huggingface.co/blog/thebajajra/rexrerankers},
-  urldate = {2026-01-24}
+  month = jan,
+  title = {{RexRerankers}: {SOTA} Rankers for Product Discovery and {AI} Assistants},
+  url = {https://huggingface.co/blog/thebajajra/rexrerankers},
+  urldate = {2026-01-24},
+  year = {2026},
 }
 """,
     )

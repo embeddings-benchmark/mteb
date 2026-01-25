@@ -81,7 +81,7 @@ TaskSubtype = Literal[
     "Rendered semantic textual similarity",
     "Intent classification",
     "Product Reranking",
-    "Query-Product Relevance"
+    "Query-Product Relevance",
 ]
 """The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". This list can be updated as needed."""
 
