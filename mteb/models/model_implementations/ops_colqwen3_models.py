@@ -256,7 +256,7 @@ ops_colqwen3_4b = ModelMeta(
         dtype=torch.float16, attn_implementation="flash_attention_2"
     ),
     languages=multilingual_langs,
-    revision="785e185e569dc587a1eeb267a8eee14e98948bd4",
+    revision="4894b7d451ff33981650acc693bb482dbef302d3",
     release_date="2026-01-24",
     modalities=["image", "text"],
     n_parameters=4_800_000_000,
