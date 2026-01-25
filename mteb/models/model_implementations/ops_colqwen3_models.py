@@ -141,13 +141,6 @@ class OpsColQwen3Wrapper(AbsEncoder):
     def similarity(self, a: torch.Tensor, b: torch.Tensor) -> torch.Tensor:
         return self.processor.score_multi_vector(a, b, device=self.device)
 
-    def calculate_probs(
-        self, text_embeddings: torch.Tensor, image_embeddings: torch.Tensor
-    ) -> torch.Tensor:
-        scores = self.similarity(text_embeddings, image_embeddings).T
-        return scores.softmax(dim=-1)
-
-
 
 OPS_COLQWEN3_TRAINING_DATA = {
     "VDRMultilingualRetrieval",
@@ -251,9 +244,9 @@ OPS_COLQWEN3_CITATION = """
 
 ops_colqwen3_4b = ModelMeta(
     loader=OpsColQwen3Wrapper,
-    name="/mnt/data/nas/yuyi/Ops-Colqwen3-4B",
+    name="OpenSearch-AI/Ops-Colqwen3-4B",
     loader_kwargs=dict(
-        dtype=torch.float16, attn_implementation="flash_attention_2"
+        dtype=torch.float16, trust_remote_code=True
     ),
     languages=multilingual_langs,
     revision="4894b7d451ff33981650acc693bb482dbef302d3",
