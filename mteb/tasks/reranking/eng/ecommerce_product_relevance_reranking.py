@@ -6,18 +6,15 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class ERESSReranking(AbsTaskRetrieval):
     """ERESS: E-commerce Relevance Evaluation Suite for Reranking
-
-    ERESS is a comprehensive e-commerce reranking dataset designed for holistic
-    evaluation of reranking models. It includes diverse query intents including
-    attribute-rich queries, navigational queries, gift/audience-specific queries,
-    utility queries, and more.
-
     Dataset: https://huggingface.co/datasets/thebajajra/eress
     """
 
     metadata = TaskMetadata(
         name="ERESSReranking",
-        description="E-commerce query-product relevance reranking dataset with graded relevance labels",
+        description="""ERESS is a comprehensive e-commerce reranking dataset designed for holistic
+    evaluation of reranking models. It includes diverse query intents including
+    attribute-rich queries, navigational queries, gift/audience-specific queries,
+    utility queries, and more.""",
         reference="https://huggingface.co/datasets/thebajajra/ERESSReranking",
         type="Reranking",
         category="t2t",
