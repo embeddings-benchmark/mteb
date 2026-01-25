@@ -6,9 +6,8 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import (
-    Qwen2_5OmniProcessor,
+    AutoProcessor,
     Qwen2_5OmniThinkerForConditionalGeneration,
-    Qwen3OmniMoeProcessor,
     Qwen3OmniMoeThinkerForConditionalGeneration,
 )
 
@@ -31,7 +30,6 @@ class QwenOmniWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         model_class,
-        processor_class,
         device: str | None = None,
         max_audio_length_seconds: int = 10,
         **kwargs: Any,
@@ -56,7 +54,7 @@ class QwenOmniWrapper(AbsEncoder):
         self.model.eval()
         self.model.to(self.device)
 
-        self.processor = processor_class.from_pretrained(model_name, revision=revision)
+        self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
     def _prepare_audio(self, audio_row: dict[str, Any]) -> torch.Tensor:
@@ -185,7 +183,6 @@ qwen25_omni_7b = ModelMeta(
     loader=QwenOmniWrapper,
     loader_kwargs=dict(
         model_class=Qwen2_5OmniThinkerForConditionalGeneration,
-        processor_class=Qwen2_5OmniProcessor,
     ),
     name="Qwen/Qwen2.5-Omni-7B",
     revision="ae9e1690543ffd5c0221dc27f79834d0294cba00",
@@ -228,7 +225,6 @@ qwen25_omni_3b = ModelMeta(
     loader=QwenOmniWrapper,
     loader_kwargs=dict(
         model_class=Qwen2_5OmniThinkerForConditionalGeneration,
-        processor_class=Qwen2_5OmniProcessor,
     ),
     name="Qwen/Qwen2.5-Omni-3B",
     revision="f75b40e3da2003cdd6e1829b1f420ca70797c34e",
@@ -272,7 +268,6 @@ qwen3_omni_30b_a3b_instruct = ModelMeta(
     loader=QwenOmniWrapper,
     loader_kwargs=dict(
         model_class=Qwen3OmniMoeThinkerForConditionalGeneration,
-        processor_class=Qwen3OmniMoeProcessor,
     ),
     name="Qwen/Qwen3-Omni-30B-A3B-Instruct",
     revision="26291f793822fb6be9555850f06dfe95f2d7e695",
@@ -315,7 +310,6 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
     loader=QwenOmniWrapper,
     loader_kwargs=dict(
         model_class=Qwen3OmniMoeThinkerForConditionalGeneration,
-        processor_class=Qwen3OmniMoeProcessor,
     ),
     name="Qwen/Qwen3-Omni-30B-A3B-Thinking",
     revision="2f443cfc4c54b14a815c0e2bb9a9d6cbcd9a748b",
@@ -358,7 +352,6 @@ qwen3_omni_30b_a3b_captioner = ModelMeta(
     loader=QwenOmniWrapper,
     loader_kwargs=dict(
         model_class=Qwen3OmniMoeThinkerForConditionalGeneration,
-        processor_class=Qwen3OmniMoeProcessor,
     ),
     name="Qwen/Qwen3-Omni-30B-A3B-Captioner",
     revision="a2bd106cbf527db5676e79662674da22b0545ec0",
