@@ -64,7 +64,7 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
     ) -> Array:
         # default to search_document if input_type and prompt_name are not provided
         prompt_name = (
-            self.get_prompt_name(self.model_prompts, task_metadata, prompt_type)
+            self.get_prompt_name(task_metadata, prompt_type)
             or PromptType.document.value
         )
         sentences = [text for batch in inputs for text in batch["text"]]
