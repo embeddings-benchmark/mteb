@@ -1,20 +1,20 @@
-from typing import Any, List, Optional, Tuple, Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
-from mteb._requires_package import (requires_image_dependencies,
-                                    requires_package)
-from mteb.abstasks.task_metadata import TaskMetadata
+from tqdm.auto import tqdm
+from transformers import AutoModel, AutoProcessor
+
+from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
-from PIL import Image
-from torch import nn
-from torch.utils.data import DataLoader
-from tqdm.auto import tqdm
-from transformers import AutoModel, AutoProcessor, BatchEncoding, BatchFeature
-from transformers.models.qwen2_vl.image_processing_qwen2_vl import smart_resize
-from transformers.models.qwen3_vl import (Qwen3VLConfig, Qwen3VLModel,
-                                          Qwen3VLProcessor)
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 
 class OpsColQwen3Wrapper(AbsEncoder):
@@ -65,7 +65,7 @@ class OpsColQwen3Wrapper(AbsEncoder):
     ) -> Array:
         text_embeddings = None
         image_embeddings = None
-        
+
         if "text" in inputs.dataset.features:
             text_embeddings = self.get_text_embeddings(inputs, **kwargs)
         if "image" in inputs.dataset.features:
@@ -124,10 +124,10 @@ class OpsColQwen3Wrapper(AbsEncoder):
         **kwargs,
     ) -> torch.Tensor:
         all_embeds = []
-        
+
         with torch.no_grad():
             for batch in tqdm(texts, desc="Encoding texts"):
-                batch_texts = [t for t in batch["text"]]
+                batch_texts = batch["text"]
                 inputs = self.processor.process_queries(batch_texts)
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 outs = self.encode_input(inputs)
@@ -154,8 +154,8 @@ OPS_COLQWEN3_TRAINING_DATA = {
     "FEVER",
     "NQ",
     "MIRACL",
-    "WebInstructSub", # MathStackExchange and ScienceStackExchange only
-    "MrTyDi"
+    "WebInstructSub",  # MathStackExchange and ScienceStackExchange only
+    "MrTyDi",
 }
 
 multilingual_langs = [
@@ -245,9 +245,7 @@ OPS_COLQWEN3_CITATION = """
 ops_colqwen3_4b = ModelMeta(
     loader=OpsColQwen3Wrapper,
     name="OpenSearch-AI/Ops-Colqwen3-4B",
-    loader_kwargs=dict(
-        dtype=torch.float16, trust_remote_code=True
-    ),
+    loader_kwargs=dict(dtype=torch.float16, trust_remote_code=True),
     languages=multilingual_langs,
     revision="4894b7d451ff33981650acc693bb482dbef302d3",
     release_date="2026-01-24",
