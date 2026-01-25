@@ -153,7 +153,7 @@ OPS_COLQWEN3_TRAINING_DATA = {
     "HotpotQA",
     "FEVER",
     "NQ",
-    "MIRACL",
+    "MIRACLRetrieval",
     "WebInstructSub",  # MathStackExchange and ScienceStackExchange only
     "MrTyDi",
 }
