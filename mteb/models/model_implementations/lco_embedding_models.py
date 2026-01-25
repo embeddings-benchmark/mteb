@@ -10,7 +10,7 @@ from transformers import (
 )
 
 from mteb import TaskMetadata
-from mteb._requires_package import requires_audio_dependencies
+from mteb._requires_package import requires_audio_dependencies, requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
@@ -27,6 +27,9 @@ class LCOEmbedding(AbsEncoder):
         **kwargs: Any,
     ):
         requires_audio_dependencies()
+        requires_package(
+            self, "qwen_omni_utils", model_name, "pip install mteb[qwen_omni_utils]"
+        )
 
         self.model_name = model_name
         self.device = device
@@ -57,14 +60,7 @@ class LCOEmbedding(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         import torchaudio
-
-        try:
-            from qwen_omni_utils import process_mm_info
-        except ImportError:
-            raise ImportError(
-                "The 'qwen_omni_utils' package is required for this model. "
-                "Please install it or ensure it is in your python path."
-            )
+        from qwen_omni_utils import process_mm_info
 
         # Pre-calculate max samples once
         max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
