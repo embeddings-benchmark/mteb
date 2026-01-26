@@ -32,6 +32,7 @@ logger = logging.getLogger(__name__)
 class BedrockModel(AbsEncoder):
     def __init__(
         self,
+        model_name: str,
         model_id: str,
         provider: str,
         max_tokens: int,

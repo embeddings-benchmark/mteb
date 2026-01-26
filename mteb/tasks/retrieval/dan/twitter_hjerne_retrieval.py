@@ -44,7 +44,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int = 1, **kwargs) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text
