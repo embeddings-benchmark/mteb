@@ -75,6 +75,15 @@ jobs:
         run: |
           FFMPEG_BIN="$(readlink -f "$(which ffmpeg)")"
           FFMPEG_LIB="$(dirname "$FFMPEG_BIN")/../lib"
+          if [ ! -d "$FFMPEG_LIB" ]; then
+            FFMPEG_LIB="$(dirname "$FFMPEG_BIN")/lib"
+          fi
+          if [ ! -d "$FFMPEG_LIB" ]; then
+            FOUND_LIB="$(find "$(dirname "$FFMPEG_BIN")" -maxdepth 6 -type f -name "libavutil.so.*" -print -quit)"
+            if [ -n "$FOUND_LIB" ]; then
+              FFMPEG_LIB="$(dirname "$FOUND_LIB")"
+            fi
+          fi
           echo "LD_LIBRARY_PATH=$FFMPEG_LIB:$LD_LIBRARY_PATH" >> "$GITHUB_ENV"
           echo "FFMPEG_LIB=$FFMPEG_LIB" >> "$GITHUB_ENV"
 
