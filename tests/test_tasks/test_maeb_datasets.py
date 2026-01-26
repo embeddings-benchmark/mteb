@@ -1,5 +1,5 @@
 """test mteb.MTEB's integration with datasets"""
-
+import torchcodec  # noqa
 import logging
 
 import pytest
