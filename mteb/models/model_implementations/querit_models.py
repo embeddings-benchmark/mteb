@@ -4,11 +4,9 @@ import logging
 from typing import Any, TYPE_CHECKING
 
 import torch
-
 from tqdm.auto import tqdm
 
 from .rerankers_custom import RerankerWrapper
-
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
@@ -32,10 +30,7 @@ class QueritWrapper(RerankerWrapper):
         **kwargs: Any,
     ) -> None:
         super().__init__(model_name_or_path, **kwargs)
-        from transformers import (
-            AutoModel,
-            AutoTokenizer,
-        )
+        from transformers import AutoModel, AutoTokenizer
 
         if not self.device:
             self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -118,13 +113,13 @@ class QueritWrapper(RerankerWrapper):
     @torch.inference_mode()
     def predict(
         self,
-        inputs1: "DataLoader[BatchedInput]",
-        inputs2: "DataLoader[BatchedInput]",
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
         *,
-        task_metadata: "TaskMetadata",
+        task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        prompt_type: "PromptType | None" = None,
+        prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> list[float]:
         """
