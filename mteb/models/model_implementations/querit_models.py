@@ -4,16 +4,18 @@ import logging
 from typing import Any, TYPE_CHECKING
 
 import torch
+
 from tqdm.auto import tqdm
-from transformers import AutoTokenizer, AutoModel
 
 from .rerankers_custom import RerankerWrapper
 
+from mteb.models.model_meta import ModelMeta
+
 if TYPE_CHECKING:
-    from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.models.model_meta import ModelMeta
-    from mteb.types import BatchedInput, PromptType
     from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +32,11 @@ class QueritWrapper(RerankerWrapper):
         **kwargs: Any,
     ) -> None:
         super().__init__(model_name_or_path, **kwargs)
+        from transformers import (
+            AutoModel,
+            AutoTokenizer,
+        )
+
         if not self.device:
             self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model_args = {}
