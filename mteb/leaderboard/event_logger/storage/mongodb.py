@@ -3,14 +3,18 @@
 Responsible for persisting event data to MongoDB
 """
 
+from __future__ import annotations
+
 import logging
 import os
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from pymongo import MongoClient
-from pymongo.collection import Collection
-from pymongo.database import Database
 from pymongo.errors import PyMongoError
+
+if TYPE_CHECKING:
+    from pymongo.collection import Collection
+    from pymongo.database import Database
 
 logger = logging.getLogger(__name__)
 

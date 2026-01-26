@@ -3,6 +3,8 @@
 Defines data structures for various business events
 """
 
+from __future__ import annotations
+
 from typing import Any, Literal
 
 from pydantic import Field
@@ -47,7 +49,7 @@ class BenchmarkChangeEvent(BaseEvent):
     @classmethod
     def create(
         cls, session_id: str, old_value: str | None, new_value: str, **kwargs
-    ) -> "BenchmarkChangeEvent":
+    ) -> BenchmarkChangeEvent:
         """Convenience creation method"""
         return cls(
             session_id=session_id,
@@ -82,7 +84,7 @@ class FilterChangeEvent(BaseEvent):
         benchmark: str | None = None,
         filters: dict[str, Any] | None = None,
         **kwargs,
-    ) -> "FilterChangeEvent":
+    ) -> FilterChangeEvent:
         """Convenience creation method"""
         return cls(
             event_name=f"filter_change_{filter_name}",
@@ -117,7 +119,7 @@ class TableSwitchEvent(BaseEvent):
         new_table: str,
         benchmark: str | None = None,
         **kwargs,
-    ) -> "TableSwitchEvent":
+    ) -> TableSwitchEvent:
         """Convenience creation method"""
         return cls(
             session_id=session_id,
@@ -150,7 +152,7 @@ class TableDownloadEvent(BaseEvent):
         format: str = "csv",
         row_count: int | None = None,
         **kwargs,
-    ) -> "TableDownloadEvent":
+    ) -> TableDownloadEvent:
         """Convenience creation method"""
         props = {"format": format}
         if row_count is not None:
