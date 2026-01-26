@@ -6,8 +6,9 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
-from .rerankers_custom import RerankerWrapper
 from mteb.models.model_meta import ModelMeta
+
+from .rerankers_custom import RerankerWrapper
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
