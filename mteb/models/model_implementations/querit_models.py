@@ -16,174 +16,10 @@ from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import (
     AutoTokenizer,
-    DeepseekV3ForCausalLM,
+    AutoModel,
 )
 
-
 logger = logging.getLogger(__name__)
-
-class QueritModel(DeepseekV3ForCausalLM):
-    """Multi-task fine-tuned DeepSeekV3 model with a binary classification head for reranking."""
-
-    def __init__(self, config, use_lm_head: bool = False):
-        super().__init__(config)
-        hidden_size = self.config.hidden_size
-
-        # Binary classification head: relevant (1) vs irrelevant (0)
-        self.head = nn.Linear(hidden_size, 2)
-
-        # Optional language modeling head (usually disabled for reranking tasks)
-        self.lm_head = (
-            nn.Linear(config.hidden_size, config.vocab_size, bias=False)
-            if use_lm_head
-            else None
-        )
-
-    def forward(
-        self,
-        input_ids: torch.Tensor,
-        attention_mask: torch.Tensor,
-        labels: Optional[torch.Tensor] = None,
-        scores: Optional[torch.Tensor] = None,
-        qids: Optional[torch.Tensor] = None,
-    ) -> Dict[str, Any]:
-        """
-        Forward pass for reranking / classification task.
-        Returns loss (if labels and scores provided), ranking scores, predicted labels.
-        """
-        outputs = self.model(
-            input_ids=input_ids,
-            attention_mask=attention_mask,
-        )
-
-        # Use the last token's hidden state as representation (CLS-like pooling)
-        cls_hidden = outputs.last_hidden_state[:, -1, :]   # [bs, hidden_size]
-        logits = self.head(cls_hidden)                     # [bs, 2]
-        probs = torch.softmax(logits, dim=-1)              # [bs, 2]
-        pred_labels = torch.argmax(probs, dim=-1)          # [bs]
-
-        # Ranking score = P(relevant) - P(irrelevant)
-        rank_scores = self._compute_score(probs)
-
-        loss = None
-        if labels is not None and scores is not None:
-            loss = self._pairwise_hinge_loss(rank_scores, scores, qids)
-
-        return {
-            "loss": loss,
-            "qids": qids,
-            "score": rank_scores,
-            "pred_label": pred_labels,
-        }
-
-    def _pairwise_hinge_loss(
-        self,
-        logits: torch.Tensor,
-        labels: torch.Tensor,
-        qids: torch.Tensor,
-        margin_weight: float = 0.8,
-        gamma: float = 1.0,
-        topk: bool = False,
-        pairdiff_mask: Optional[torch.Tensor] = None,
-    ) -> torch.Tensor:
-        """
-        Pairwise logistic hinge loss, focusing on optimizing positive-negative pair ratio.
-
-        Args:
-            logits: Predicted ranking scores [B, 1]
-            labels: Ground-truth relevance labels [B, 1]
-            qids: Query IDs for grouping samples [B]
-            margin_weight: Scaling factor for margin
-            gamma: Logistic steepness factor (currently unused in computation)
-            topk: If True, emphasize top 30% samples within each query group
-            pairdiff_mask: Optional additional margin adjustment matrix [B, B]
-
-        Returns:
-            Scalar loss value (averaged over valid pairs)
-        """
-        # Same-query mask [B, B]
-        qid_mask = (qids.unsqueeze(0) == qids.unsqueeze(1)).float()
-
-        if topk:
-            qid_mask = qid_mask * self._get_topk_mask(qids, logits.squeeze(-1), labels)
-
-        batch_size = logits.shape[0]
-        labels = labels.unsqueeze(1)
-
-        # Broadcast to pairwise matrices
-        score_pos = logits.expand(-1, batch_size)      # score of sample i
-        score_neg = score_pos.transpose(0, 1)          # score of sample j
-        pos = labels.expand(-1, batch_size)
-        neg = pos.transpose(0, 1)
-
-        # Margin for each pair
-        margin = (
-            (pos - neg + pairdiff_mask) * qid_mask * margin_weight
-            if pairdiff_mask is not None
-            else (pos - neg) * qid_mask * margin_weight
-        )
-        pair_mask = (margin > 1e-6).float()
-
-        score_diff = score_pos - score_neg
-        margin_diff = margin + torch.clamp(-score_diff, min=-10.0)
-        loss = torch.relu(margin_diff) * pair_mask
-
-        # Normalize by number of valid pairs
-        return torch.sum(loss) / (torch.sum(pair_mask) + 1e-5)
-
-    def _get_topk_mask(
-        self,
-        qids: torch.Tensor,
-        logits: torch.Tensor,
-        labels: torch.Tensor,
-    ) -> torch.Tensor:
-        """
-        Within each query group, assign weight 2.0 to top 30% samples (by predicted score),
-        1.0 to others. Returns pairwise mask [B, B].
-
-        Args:
-            qids: Query IDs [B]
-            logits: Predicted scores [B]
-            labels: Relevance labels [B]
-
-        Returns:
-            [B, B] float mask for pairwise importance weighting
-        """
-        flatten_qids = qids.view(-1)
-        flatten_logits = logits.view(-1)
-        flatten_labels = labels.view(-1)
-        unique_qids = torch.unique(flatten_qids)
-
-        batch_size = qids.shape[0]
-        position_mask = torch.ones(batch_size, dtype=torch.float32, device=logits.device)
-
-        for uq in unique_qids:
-            mask = (flatten_qids == uq)
-            indices = mask.nonzero(as_tuple=True)[0]
-            if len(indices) == 0:
-                continue
-
-            cur_labels = flatten_labels[indices]
-            valid_count = (cur_labels >= 0).sum().item()
-            if valid_count == 0:
-                continue
-
-            k = math.ceil(valid_count * 0.3)
-            if k == 0:
-                continue
-
-            cur_logits = flatten_logits[indices]
-            topk_idx = indices[cur_logits.argsort(descending=True)[:k]]
-            position_mask[topk_idx] = 2.0
-
-        # Expand to pairwise symmetric mask
-        pos_mask_2d = position_mask.unsqueeze(-1).expand(batch_size, batch_size)
-        return pos_mask_2d.transpose(0, 1)
-
-    def _compute_score(self, probs: torch.Tensor) -> torch.Tensor:
-        """Compute final ranking score: P(relevant) - P(irrelevant)"""
-        weights = torch.tensor([-1.0, 1.0], device=probs.device)
-        return (probs * weights).sum(dim=-1, keepdim=True)
 
 class QueritWrapper(RerankerWrapper):
     """
@@ -202,8 +38,8 @@ class QueritWrapper(RerankerWrapper):
         model_args = {}
         if self.fp_options:
             model_args["torch_dtype"] = self.fp_options
-        self.model = QueritModel.from_pretrained(
-            model_name_or_path, **model_args
+        self.model = AutoModel.from_pretrained(
+            model_name_or_path, trust_remote_code=True, **model_args
         )
         logger.info(f"Using model {model_name_or_path}")
 
@@ -214,7 +50,7 @@ class QueritWrapper(RerankerWrapper):
             self.torch_compile = False
 
         self.model.to(self.device)
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, trust_remote_code=True)
         if "[CLS]" not in self.tokenizer.get_vocab():
             raise ValueError("Tokenizer missing required special token '[CLS]'")
         self.cls_token_id = self.tokenizer.convert_tokens_to_ids("[CLS]")
@@ -335,7 +171,8 @@ class QueritWrapper(RerankerWrapper):
     def format_instruction(instruction: str | None, query: str, doc: str) -> str:
         if instruction is None:
             output = f"Judge whether the Content meets the requirements based on the Query. Query: {query}; Content: {doc}"
-        output = f"<Instruct>: {instruction}\n<Query>: {query}\n<Document>: {doc}"
+        else:
+            output = f"<Instruct>: {instruction}\n<Query>: {query}\n<Document>: {doc}"
         return output
 
     @staticmethod
@@ -376,17 +213,17 @@ class QueritWrapper(RerankerWrapper):
 model_meta = ModelMeta(
     loader=QueritWrapper,
     loader_kwargs={
-        "fp_options": "float16",
+        "fp_options": "bfloat16",
     },
     name="Querit/Querit",
     model_type=["cross-encoder"],
     languages=["eng"],
     open_weights=True,
-    revision="eaa04c1017572116bccf077d418d79d9ffca062d",
+    revision="5ad2649cc4defb7e1361262260e9a781f14b08bc",
     release_date='2026-01-24',
     n_parameters=None,
     n_embedding_parameters=None,
-    memory_usage_mb=None,
+    memory_usage_mb=9383.0,
     max_tokens=None,
     reference="https://huggingface.co/Querit/Querit",
     similarity_fn_name=None,
