@@ -61,6 +61,21 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Install ffmpeg
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          ffmpeg -version
+
+      - name: Install ffmpeg on Windows
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          choco install -y ffmpeg
+          ffmpeg -version
+
       - name: Install dependencies
         shell: bash
         run: |
