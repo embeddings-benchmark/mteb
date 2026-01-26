@@ -24,7 +24,7 @@ lint-check:
 
 test:
 	@echo "--- 🧪 Running tests ---"
-	uv run --no-sync --group test pytest -n auto -m "not (test_datasets or leaderboard_stability)"
+	pytest -n auto -m "not (test_datasets or leaderboard_stability)"
 
 
 test-with-coverage:
