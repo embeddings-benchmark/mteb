@@ -61,38 +61,24 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Setup FFmpeg
-        uses: AnimMouse/setup-ffmpeg@v1
-        with:
-          version: 7.1
+      - name: Install FFmpeg (Ubuntu)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:ubuntuhandbook1/ffmpeg8
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Install FFmpeg (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          choco install -y ffmpeg
 
       - name: Check FFmpeg version
         run: ffmpeg -version
-
-      - name: Expose FFmpeg shared libs
-        if: runner.os != 'Windows'
-        shell: bash
-        run: |
-          FFMPEG_BIN="$(readlink -f "$(which ffmpeg)")"
-          FFMPEG_LIB="$(dirname "$FFMPEG_BIN")/../lib"
-          if [ ! -d "$FFMPEG_LIB" ]; then
-            FFMPEG_LIB="$(dirname "$FFMPEG_BIN")/lib"
-          fi
-          if [ ! -d "$FFMPEG_LIB" ]; then
-            FOUND_LIB="$(find "$(dirname "$FFMPEG_BIN")" -maxdepth 6 -type f -name "libavutil.so.*" -print -quit)"
-            if [ -n "$FOUND_LIB" ]; then
-              FFMPEG_LIB="$(dirname "$FOUND_LIB")"
-            fi
-          fi
-          echo "LD_LIBRARY_PATH=$FFMPEG_LIB:$LD_LIBRARY_PATH" >> "$GITHUB_ENV"
-          echo "FFMPEG_LIB=$FFMPEG_LIB" >> "$GITHUB_ENV"
-
-      - name: Verify FFmpeg shared libs
-        if: runner.os != 'Windows'
-        shell: bash
-        run: |
-          echo "FFMPEG_LIB=$FFMPEG_LIB"
-          ls -la "$FFMPEG_LIB" | head -n 20
 
       - name: Install dependencies
         shell: bash
