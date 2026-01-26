@@ -64,10 +64,11 @@ image = [
     "transformers[torch-vision,vision]",
 ]
 audio = [
-    "torchaudio>=2.6.0,<2.8.0; python_full_version < '3.14'",
-    "datasets<4",  # https://github.com/huggingface/datasets/issues/7707
-    "librosa>=0.11.0",
-    "soundfile>=0.13.1",
+#   "torchaudio>=2.6.0,<2.8.0; python_full_version < '3.14'",
+    # datsaets==4 requires transformers>=5, because of https://github.com/huggingface/transformers/issues/42103
+    "datasets[audio]",
+#    "librosa>=0.11.0",
+#    "soundfile>=0.13.1",
 ]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
@@ -331,20 +332,26 @@ override-dependencies = [
     "salesforce-lavis", # salesforce-lavis is not valid with sentence transformers >=3.0.0
 ]
 conflicts = [
-    [{ extra = "timm" }, { extra = "blip2" }],
-    [{ extra = "llm2vec" }, { extra = "model2vec" }],
-    [{ extra = "llm2vec" }, { extra = "llama-embed-nemotron" }],
-    [{ extra = "llm2vec" }, { extra = "colpali-engine" }],
-    [{ extra = "llm2vec" }, { extra = "colqwen3" }],
-    [{ extra = "llm2vec" }, { extra = "jina-v4" }],
-    [{ extra = "llm2vec" }, { extra = "sauerkrautlm-colpali" }],
-    [{ extra = "llama-embed-nemotron" }, { extra = "colpali-engine" }],
-    [{ extra = "llama-embed-nemotron" }, { extra = "colqwen3" }],
-    [{ extra = "llama-embed-nemotron" }, { extra = "jina-v4" }],
-    [{ extra = "llama-embed-nemotron" }, { extra = "sauerkrautlm-colpali" }],
-    [{ extra = "pylate" }, { extra = "colqwen3" }],
-    [{ extra = "pylate" }, { extra = "sauerkrautlm-colpali" }],
-    [{ extra = "msclap" }, { extra = "audio" }],
+    [
+        { extra = "timm" },
+        { extra = "blip2" },
+        { extra = "llm2vec" },
+        { extra = "model2vec" },
+        { extra = "pylate" }, # conflicting versions of transformers
+        { extra = "llama-embed-nemotron" }, # conflicting versions of transformers
+        { extra = "colpali-engine" },
+        { extra = "colqwen3" },
+        { extra = "jina-v4" },
+        { extra = "sauerkrautlm-colpali" },
+        { extra = "vllm" },
+        { extra = "flagembedding" },
+        { extra = "msclap" },
+        { extra = "muq" },
+    ],
+    [
+        { extra = "audio" },
+        { extra = "msclap" },
+    ],
 ]
 
 [tool.uv.extra-build-dependencies]
