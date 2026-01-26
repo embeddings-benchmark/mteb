@@ -549,5 +549,3 @@ nomic_embed_code = ModelMeta(
       url={https://arxiv.org/abs/2412.01007},
 }""",
 )
-
-
