@@ -1,23 +1,17 @@
-import json
-import math
-import os
 import logging
+from typing import Any, TYPE_CHECKING
 
-from typing import Any, List, Tuple, Dict, Optional, TYPE_CHECKING
-
-import pandas as pd
 import torch
-import torch.nn as nn
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.model_meta import ModelMeta
-from .rerankers_custom import RerankerWrapper
-from mteb.types import Array, BatchedInput, PromptType
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
-from transformers import (
-    AutoTokenizer,
-    AutoModel,
-)
+from transformers import AutoTokenizer, AutoModel
+
+from .rerankers_custom import RerankerWrapper
+
+if TYPE_CHECKING:
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.model_meta import ModelMeta
+    from mteb.types import BatchedInput, PromptType
+    from torch.utils.data import DataLoader
 
 logger = logging.getLogger(__name__)
 
@@ -67,8 +61,8 @@ class QueritWrapper(RerankerWrapper):
 
     def process_inputs(
         self,
-        pairs: List[str],
-    ) -> Dict[str, torch.Tensor]:
+        pairs: list[str],
+    ) -> dict[str, torch.Tensor]:
         """
         Encode a batch of (query, document) pairs:
         - Concatenate prompt + Query + Content
@@ -86,8 +80,8 @@ class QueritWrapper(RerankerWrapper):
             padding=False,
         )
 
-        input_ids_list: List[List[int]] = []
-        attn_mask_list: List[torch.Tensor] = []
+        input_ids_list: list[list[int]] = []
+        attn_mask_list: list[torch.Tensor] = []
 
         for ids in enc["input_ids"]:
             # Append [CLS] token
@@ -115,15 +109,15 @@ class QueritWrapper(RerankerWrapper):
     @torch.inference_mode()
     def predict(
         self,
-        inputs1: DataLoader[BatchedInput],
-        inputs2: DataLoader[BatchedInput],
+        inputs1: "DataLoader[BatchedInput]",
+        inputs2: "DataLoader[BatchedInput]",
         *,
-        task_metadata: TaskMetadata,
+        task_metadata: "TaskMetadata",
         hf_split: str,
         hf_subset: str,
-        prompt_type: Optional[PromptType] = None,
+        prompt_type: "PromptType | None" = None,
         **kwargs: Any,
-    ) -> List[float]:
+    ) -> list[float]:
         """
         Predict relevance scores for query-passage pairs.
         Supports both single-process and multi-process/multi-GPU modes.
@@ -140,7 +134,7 @@ class QueritWrapper(RerankerWrapper):
         num_pairs = len(queries)
         if num_pairs == 0:
             return []
-        final_scores: List[float] = []
+        final_scores: list[float] = []
 
         with tqdm(total=num_pairs, desc="Scoring", ncols=100) as pbar:
             for start in range(0, num_pairs, self.batch_size):
@@ -179,7 +173,7 @@ class QueritWrapper(RerankerWrapper):
         return output
 
     @staticmethod
-    def compute_mask_content_cls(block_types: List[int]) -> torch.Tensor:
+    def compute_mask_content_cls(block_types: list[int]) -> torch.Tensor:
         """
         Create custom attention mask based on token block types:
         - 0: padding   → ignored
