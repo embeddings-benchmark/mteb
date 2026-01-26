@@ -69,6 +69,22 @@ jobs:
       - name: Check FFmpeg version
         run: ffmpeg -version
 
+      - name: Expose FFmpeg shared libs
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          FFMPEG_BIN="$(readlink -f "$(which ffmpeg)")"
+          FFMPEG_LIB="$(dirname "$FFMPEG_BIN")/../lib"
+          echo "LD_LIBRARY_PATH=$FFMPEG_LIB:$LD_LIBRARY_PATH" >> "$GITHUB_ENV"
+          echo "FFMPEG_LIB=$FFMPEG_LIB" >> "$GITHUB_ENV"
+
+      - name: Verify FFmpeg shared libs
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          echo "FFMPEG_LIB=$FFMPEG_LIB"
+          ls -la "$FFMPEG_LIB" | head -n 20
+
       - name: Install dependencies
         shell: bash
         run: |
