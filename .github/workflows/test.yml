@@ -63,6 +63,8 @@ jobs:
 
       - name: Setup FFmpeg
         uses: AnimMouse/setup-ffmpeg@v1
+        with:
+          version: 7.1
 
       - name: Check FFmpeg version
         run: ffmpeg -version
