@@ -21,6 +21,7 @@ from transformers import (
 
 logger = logging.getLogger(__name__)
 
+
 class QueritWrapper(RerankerWrapper):
     """
     Multi-GPU / multi-process reranker wrapper for mteb.mteb evaluation.
@@ -50,13 +51,17 @@ class QueritWrapper(RerankerWrapper):
             self.torch_compile = False
 
         self.model.to(self.device)
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_name_or_path, trust_remote_code=True
+        )
         if "[CLS]" not in self.tokenizer.get_vocab():
             raise ValueError("Tokenizer missing required special token '[CLS]'")
         self.cls_token_id = self.tokenizer.convert_tokens_to_ids("[CLS]")
         self.pad_token_id = self.tokenizer.pad_token_id or 0
 
-        self.max_length = min(kwargs.get("max_length", 4096), self.tokenizer.model_max_length)  # sometimes it's a v large number/max int
+        self.max_length = min(
+            kwargs.get("max_length", 4096), self.tokenizer.model_max_length
+        )  # sometimes it's a v large number/max int
         logger.info(f"Using max_length of {self.max_length}")
         self.model.eval()
 
@@ -144,15 +149,13 @@ class QueritWrapper(RerankerWrapper):
                 batch_d = passages[start:end]
 
                 batch_instructions = (
-                    instructions[start : end]
+                    instructions[start:end]
                     if instructions is not None
                     else [None] * len(batch_q)
                 )
                 pairs = [
                     self.format_instruction(instr, query, doc)
-                    for instr, query, doc in zip(
-                        batch_instructions, batch_q, batch_d
-                    )
+                    for instr, query, doc in zip(batch_instructions, batch_q, batch_d)
                 ]
                 enc = self.process_inputs(pairs)
                 out = self.model(**enc)
@@ -210,6 +213,7 @@ class QueritWrapper(RerankerWrapper):
         type_mask = mask_content | mask_cls
         return type_mask.unsqueeze(0)
 
+
 model_meta = ModelMeta(
     loader=QueritWrapper,
     loader_kwargs={
@@ -220,7 +224,7 @@ model_meta = ModelMeta(
     languages=["eng"],
     open_weights=True,
     revision="5ad2649cc4defb7e1361262260e9a781f14b08bc",
-    release_date='2026-01-24',
+    release_date="2026-01-24",
     n_parameters=None,
     n_embedding_parameters=None,
     memory_usage_mb=9383.0,
