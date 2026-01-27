@@ -44,8 +44,6 @@ dependencies = [
     "pytrec-eval-terrier>=0.5.6",
     "pydantic>=2.0.0",
     "polars>=0.20.22",
-    "torch<2.9.0; python_full_version < '3.14'",
-    "torch>=2.9.0; python_full_version >= '3.14'",
 ]
 
 
