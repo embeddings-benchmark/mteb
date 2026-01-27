@@ -7,7 +7,7 @@ install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
 	#uv sync --no-editable --extra bm25s --extra pylate --extra image --extra audio --extra codecarbon --extra leaderboard --extra faiss-cpu --group dev
-	pip install -U -e ".[image,bm25s,leaderboard,audio]" --group dev
+	pip install -U -e ".[image,bm25s,leaderboard,audio,faiss-cpu]" --group dev
 
 lint:
 	@echo "--- 🧹 Running linters ---"
