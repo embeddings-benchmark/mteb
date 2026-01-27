@@ -71,7 +71,7 @@ FRAMEWORKS = Literal[
     "Transformers",
 ]
 
-MODEL_TYPES = Literal["dense", "cross-encoder", "late-interaction"]
+MODEL_TYPES = Literal["dense", "cross-encoder", "late-interaction", "sparse"]
 
 
 class ScoringFunction(HelpfulStrEnum):
@@ -303,6 +303,96 @@ class ModelMeta(BaseModel):
         return self.name.replace("/", "__").replace(" ", "_")
 
     @classmethod
+    def _detect_sentence_transformer_or_sparse(
+        cls,
+        model_name: str,
+        revision: str | None,
+        sentence_transformers_loader: Callable[..., MTEBModels],
+    ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
+        """Detect if model is SentenceTransformer or SparseEncoder."""
+        st_config = _get_json_from_hub(
+            model_name,
+            "config_sentence_transformers.json",
+            "model",
+            revision=revision,
+        )
+
+        if st_config and st_config.get("model_type") == "SparseEncoder":
+            try:
+                from mteb.models.model_implementations.opensearch_neural_sparse_models import (
+                    SparseEncoderWrapper,
+                )
+
+                return SparseEncoderWrapper, "sparse"
+            except ImportError:
+                logger.warning(
+                    f"Detected SparseEncoder model {model_name} but SparseEncoderWrapper not available. "
+                    "Falling back to SentenceTransformer loader. "
+                    "This may cause issues. Please ensure sentence-transformers >= 5.0.0 is installed."
+                )
+                return sentence_transformers_loader, "dense"
+
+        return sentence_transformers_loader, "dense"
+
+    @classmethod
+    def _detect_cross_encoder_or_dense(
+        cls,
+        model_name: str,
+        revision: str | None,
+        sentence_transformers_loader: Callable[..., MTEBModels],
+        cross_encoder_loader: Callable[..., MTEBModels],
+    ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
+        """Detect if model is CrossEncoder or default to dense."""
+        config = _get_json_from_hub(
+            model_name, "config.json", "model", revision=revision
+        )
+
+        if not config:
+            logger.warning(
+                f"Could not load config.json for {model_name}. "
+                "Defaulting to SentenceTransformer loader."
+            )
+            return sentence_transformers_loader, "dense"
+
+        architectures = config.get("architectures", [])
+
+        is_cross_encoder = any(
+            arch.endswith("ForSequenceClassification") for arch in architectures
+        )
+        if is_cross_encoder:
+            logger.info(f"Detected CrossEncoder model: {model_name}")
+            return cross_encoder_loader, "cross-encoder"
+
+        if cls._is_causal_lm_reranker(architectures, config, model_name):
+            logger.info(f"Detected CausalLM-style reranker: {model_name}")
+            return cross_encoder_loader, "cross-encoder"
+
+        logger.info(
+            f"Model {model_name} does not have modules.json or recognized architecture. "
+            "Defaulting to SentenceTransformer loader."
+        )
+        return sentence_transformers_loader, "dense"
+
+    @staticmethod
+    def _is_causal_lm_reranker(
+        architectures: list[str], config: dict[str, Any], model_name: str
+    ) -> bool:
+        """Check if model is a CausalLM-style reranker."""
+        is_causal_lm = any(arch.endswith("ForCausalLM") for arch in architectures)
+
+        if not is_causal_lm:
+            return False
+
+        num_labels = config.get("num_labels", 0)
+        model_name_lower = model_name.lower()
+
+        return (
+            num_labels > 0
+            or "rerank" in model_name_lower
+            or "cross-encoder" in model_name_lower
+        )
+
+    @classmethod
     def _detect_model_type_and_loader(
         cls,
         model_name: str | None,
@@ -333,103 +423,21 @@ class ModelMeta(BaseModel):
             return loader, model_type
 
         try:
-            # Step 1: Check for modules.json (SentenceTransformer/SparseEncoder models)
             modules_config = _get_json_from_hub(
                 model_name, "modules.json", "model", revision=revision
             )
 
-            if modules_config:
-                # Model has modules.json - it's either SentenceTransformer or SparseEncoder
-                st_config = _get_json_from_hub(
-                    model_name,
-                    "config_sentence_transformers.json",
-                    "model",
-                    revision=revision,
+            if modules_config:  # (SentenceTransformer/SparseEncoder)
+                return cls._detect_sentence_transformer_or_sparse(
+                    model_name, revision, sentence_transformers_loader
                 )
-
-                if st_config and st_config.get("model_type") == "SparseEncoder":
-                    # It's a SparseEncoder
-                    try:
-                        from mteb.models.model_implementations.opensearch_neural_sparse_models import (
-                            SparseEncoderWrapper,
-                        )
-
-                        loader = SparseEncoderWrapper
-                        model_type = "sparse"  # type: ignore[assignment]
-                        logger.info(f"Detected SparseEncoder model: {model_name}")
-                    except ImportError:
-                        logger.warning(
-                            f"Detected SparseEncoder model {model_name} but SparseEncoderWrapper not available. "
-                            "Falling back to SentenceTransformer loader. "
-                            "This may cause issues. Please ensure sentence-transformers >= 5.0.0 is installed."
-                        )
-                        loader = sentence_transformers_loader
-                        model_type = "dense"
-                else:
-                    # It's a regular SentenceTransformer (bi-encoder)
-                    loader = sentence_transformers_loader
-                    model_type = "dense"
-                    logger.info(
-                        f"Detected SentenceTransformer (bi-encoder) model: {model_name}"
-                    )
             else:
-                # Step 2: No modules.json - check if it's a CrossEncoder
-                config = _get_json_from_hub(
-                    model_name, "config.json", "model", revision=revision
+                return cls._detect_cross_encoder_or_dense(
+                    model_name,
+                    revision,
+                    sentence_transformers_loader,
+                    cross_encoder_loader=CrossEncoderWrapper,
                 )
-
-                if config:
-                    architectures = config.get("architectures", [])
-
-                    # Check for ForSequenceClassification architecture (CrossEncoder)
-                    is_cross_encoder = any(
-                        arch.endswith("ForSequenceClassification")
-                        for arch in architectures
-                    )
-
-                    if is_cross_encoder:
-                        loader = CrossEncoderWrapper
-                        model_type = "cross-encoder"
-                        logger.info(f"Detected CrossEncoder model: {model_name}")
-                    else:
-                        # Check for CausalLM-style rerankers (future-proofing)
-                        is_causal_lm = any(
-                            arch.endswith("ForCausalLM") for arch in architectures
-                        )
-
-                        if is_causal_lm:
-                            # Check for reranker indicators in config or model name
-                            num_labels = config.get("num_labels", 0)
-                            model_name_lower = model_name.lower()
-                            is_reranker = (
-                                num_labels > 0
-                                or "rerank" in model_name_lower
-                                or "cross-encoder" in model_name_lower
-                            )
-
-                            if is_reranker:
-                                loader = CrossEncoderWrapper
-                                model_type = "cross-encoder"
-                                logger.info(
-                                    f"Detected CausalLM-style reranker: {model_name}"
-                                )
-                            else:
-                                # Default to SentenceTransformer for CausalLM models
-                                logger.info(
-                                    f"Model {model_name} appears to be a CausalLM but not a reranker. "
-                                    "Loading as SentenceTransformer."
-                                )
-                        else:
-                            # No clear architecture - default to SentenceTransformer
-                            logger.info(
-                                f"Model {model_name} does not have modules.json or recognized architecture. "
-                                "Defaulting to SentenceTransformer loader."
-                            )
-                else:
-                    logger.warning(
-                        f"Could not load config.json for {model_name}. "
-                        "Defaulting to SentenceTransformer loader."
-                    )
 
         except Exception as e:
             logger.warning(
