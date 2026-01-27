@@ -27,10 +27,10 @@ class QueritWrapper(RerankerWrapper):
 
     def __init__(
         self,
-        model_name_or_path: str,
+        model_name: str,
         **kwargs: Any,
     ) -> None:
-        super().__init__(model_name_or_path, **kwargs)
+        super().__init__(model_name, **kwargs)
         from transformers import AutoModel, AutoTokenizer
 
         if not self.device:
@@ -39,29 +39,23 @@ class QueritWrapper(RerankerWrapper):
         if self.fp_options:
             model_args["torch_dtype"] = self.fp_options
         self.model = AutoModel.from_pretrained(
-            model_name_or_path, trust_remote_code=True, **model_args
+            model_name, trust_remote_code=True, **model_args
         )
-        logger.info(f"Using model {model_name_or_path}")
-
-        if kwargs.get("torch_compile"):
-            self.torch_compile = kwargs["torch_compile"]
-            self.model = torch.compile(self.model)
-        else:
-            self.torch_compile = False
+        logger.info(f"Using model {model_name}")
 
         self.model.to(self.device)
         self.tokenizer = AutoTokenizer.from_pretrained(
-            model_name_or_path, trust_remote_code=True
+            model_name, trust_remote_code=True
         )
         if "[CLS]" not in self.tokenizer.get_vocab():
             raise ValueError("Tokenizer missing required special token '[CLS]'")
         self.cls_token_id = self.tokenizer.convert_tokens_to_ids("[CLS]")
         self.pad_token_id = self.tokenizer.pad_token_id or 0
 
-        self.max_length = min(
-            kwargs.get("max_length", 4096), self.tokenizer.model_max_length
+        self.max_length = (
+            min(kwargs.get("max_length", 4096), self.tokenizer.model_max_length) - 1
         )  # sometimes it's a v large number/max int
-        logger.info(f"Using max_length of {self.max_length}")
+        logger.info(f"Using max_length of {self.max_length}, 1 token for [CLS]")
         self.model.eval()
 
     def process_inputs(
@@ -75,13 +69,12 @@ class QueritWrapper(RerankerWrapper):
         - Left-pad to max_length
         - Generate custom attention mask based on block types
         """
-        max_length = self.max_length
         # Construct input texts
         enc = self.tokenizer(
             pairs,
             add_special_tokens=False,
             truncation=True,
-            max_length=max_length - 1,
+            max_length=self.max_length,
             padding=False,
         )
 
@@ -94,13 +87,13 @@ class QueritWrapper(RerankerWrapper):
             block_types = [1] * (len(ids) - 1) + [2]  # content + CLS
 
             # Pad or truncate
-            if len(ids) < max_length:
-                pad_len = max_length - len(ids)
+            if len(ids) < self.max_length:
+                pad_len = self.max_length - len(ids)
                 ids = [self.pad_token_id] * pad_len + ids
                 block_types = [0] * pad_len + block_types
             else:
-                ids = ids[-max_length:]
-                block_types = block_types[-max_length:]
+                ids = ids[-self.max_length :]
+                block_types = block_types[-self.max_length :]
 
             attn = self.compute_mask_content_cls(block_types)
             input_ids_list.append(ids)
@@ -130,7 +123,6 @@ class QueritWrapper(RerankerWrapper):
         # Flatten all pairs from mteb.mteb DataLoaders
         queries = [text for batch in inputs1 for text in batch["text"]]
         passages = [text for batch in inputs2 for text in batch["text"]]
-        assert len(queries) == len(passages)
 
         instructions = None
         if "instruction" in inputs2.dataset.features:
@@ -141,9 +133,10 @@ class QueritWrapper(RerankerWrapper):
             return []
         final_scores: list[float] = []
 
+        batch_size = kwargs.get("batch_size", self.batch_size)
         with tqdm(total=num_pairs, desc="Scoring", ncols=100) as pbar:
-            for start in range(0, num_pairs, self.batch_size):
-                end = min(start + self.batch_size, num_pairs)
+            for start in range(0, num_pairs, batch_size):
+                end = min(start + batch_size, num_pairs)
                 batch_q = queries[start:end]
                 batch_d = passages[start:end]
 
@@ -166,7 +159,6 @@ class QueritWrapper(RerankerWrapper):
                 final_scores.extend(scores)
                 pbar.update(len(scores))
 
-        assert len(final_scores) == num_pairs
         return final_scores
 
     @staticmethod
@@ -220,14 +212,14 @@ model_meta = ModelMeta(
     },
     name="Querit/Querit",
     model_type=["cross-encoder"],
-    languages=["eng"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="5ad2649cc4defb7e1361262260e9a781f14b08bc",
     release_date="2026-01-24",
-    n_parameters=None,
-    n_embedding_parameters=None,
+    n_parameters=4919636992,
+    n_embedding_parameters=1024,
     memory_usage_mb=9383.0,
-    max_tokens=None,
+    max_tokens=40960,
     reference="https://huggingface.co/Querit/Querit",
     similarity_fn_name=None,
     training_datasets=set(),
