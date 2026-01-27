@@ -148,7 +148,6 @@ def get_model_meta(
     if model_name in _MODEL_RENAMES:
         new_name = _MODEL_RENAMES[model_name]
         msg = f"The model '{model_name}' has been renamed to '{new_name}'. To prevent this warning use the new name."
-        logger.warning(msg)
         warnings.warn(msg, DeprecationWarning, stacklevel=2)
         model_name = new_name
 
