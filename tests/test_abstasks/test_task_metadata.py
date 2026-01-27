@@ -1,5 +1,5 @@
 """Tests the TaskMetadata class"""
-import torchcodec  # noqa
+
 import pytest
 from pydantic import ValidationError
 
