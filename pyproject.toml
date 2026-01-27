@@ -65,7 +65,6 @@ audio = [
     "torchaudio",
     # datsaets==4 requires transformers>=5, because of https://github.com/huggingface/transformers/issues/42103
     "datasets[audio]",
-    "transformers[torch-speech]",
 ]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
