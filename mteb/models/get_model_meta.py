@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import difflib
 import logging
+import warnings
 from typing import TYPE_CHECKING, Any
 
 from mteb.models import (
@@ -122,6 +123,11 @@ def get_model(
     return model
 
 
+_MODEL_RENAMES: dict[str, str] = {
+    "bm25s": "baseline/bm25s",
+}
+
+
 def get_model_meta(
     model_name: str,
     revision: str | None = None,
@@ -139,6 +145,13 @@ def get_model_meta(
     Returns:
         A model metadata object
     """
+    if model_name in _MODEL_RENAMES:
+        new_name = _MODEL_RENAMES[model_name]
+        msg = f"The model '{model_name}' has been renamed to '{new_name}'.To prevent this warning use the new name."
+        logger.warning(msg)
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
+        model_name = new_name
+
     if model_name in MODEL_REGISTRY:
         model_meta = MODEL_REGISTRY[model_name]
 
