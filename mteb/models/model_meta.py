@@ -360,11 +360,9 @@ class ModelMeta(BaseModel):
             arch.endswith("ForSequenceClassification") for arch in architectures
         )
         if is_cross_encoder:
-            logger.info(f"Detected CrossEncoder model: {model_name}")
             return cross_encoder_loader, "cross-encoder"
 
         if cls._is_causal_lm_reranker(architectures, config, model_name):
-            logger.info(f"Detected CausalLM-style reranker: {model_name}")
             return cross_encoder_loader, "cross-encoder"
 
         logger.info(
