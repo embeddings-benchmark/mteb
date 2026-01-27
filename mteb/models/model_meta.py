@@ -71,7 +71,7 @@ FRAMEWORKS = Literal[
     "Transformers",
 ]
 
-MODEL_TYPES = Literal["dense", "cross-encoder", "late-interaction"]
+MODEL_TYPES = Literal["dense", "cross-encoder", "late-interaction", "sparse"]
 
 
 class ScoringFunction(HelpfulStrEnum):
@@ -303,6 +303,149 @@ class ModelMeta(BaseModel):
         return self.name.replace("/", "__").replace(" ", "_")
 
     @classmethod
+    def _detect_sentence_transformer_or_sparse(
+        cls,
+        model_name: str,
+        revision: str | None,
+        sentence_transformers_loader: Callable[..., MTEBModels],
+    ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
+        """Detect if model is SentenceTransformer or SparseEncoder."""
+        st_config = _get_json_from_hub(
+            model_name,
+            "config_sentence_transformers.json",
+            "model",
+            revision=revision,
+        )
+
+        if st_config and st_config.get("model_type") == "SparseEncoder":
+            try:
+                from mteb.models.model_implementations.opensearch_neural_sparse_models import (
+                    SparseEncoderWrapper,
+                )
+
+                return SparseEncoderWrapper, "sparse"
+            except ImportError:
+                logger.warning(
+                    f"Detected SparseEncoder model {model_name} but SparseEncoderWrapper not available. "
+                    "Falling back to SentenceTransformer loader. "
+                    "This may cause issues. Please ensure sentence-transformers >= 5.0.0 is installed."
+                )
+                return sentence_transformers_loader, "dense"
+
+        return sentence_transformers_loader, "dense"
+
+    @classmethod
+    def _detect_cross_encoder_or_dense(
+        cls,
+        model_name: str,
+        revision: str | None,
+        sentence_transformers_loader: Callable[..., MTEBModels],
+        cross_encoder_loader: Callable[..., MTEBModels],
+    ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
+        """Detect if model is CrossEncoder or default to dense."""
+        config = _get_json_from_hub(
+            model_name, "config.json", "model", revision=revision
+        )
+
+        if not config:
+            logger.warning(
+                f"Could not load config.json for {model_name}. "
+                "Defaulting to SentenceTransformer loader."
+            )
+            return sentence_transformers_loader, "dense"
+
+        architectures = config.get("architectures", [])
+
+        is_cross_encoder = any(
+            arch.endswith("ForSequenceClassification") for arch in architectures
+        )
+        if is_cross_encoder:
+            return cross_encoder_loader, "cross-encoder"
+
+        if cls._is_causal_lm_reranker(architectures, config, model_name):
+            return cross_encoder_loader, "cross-encoder"
+
+        logger.info(
+            f"Model {model_name} does not have modules.json or recognized architecture. "
+            "Defaulting to SentenceTransformer loader."
+        )
+        return sentence_transformers_loader, "dense"
+
+    @staticmethod
+    def _is_causal_lm_reranker(
+        architectures: list[str], config: dict[str, Any], model_name: str
+    ) -> bool:
+        """Check if model is a CausalLM-style reranker."""
+        is_causal_lm = any(arch.endswith("ForCausalLM") for arch in architectures)
+
+        if not is_causal_lm:
+            return False
+
+        num_labels = config.get("num_labels", 0)
+        model_name_lower = model_name.lower()
+
+        return (
+            num_labels > 0
+            or "rerank" in model_name_lower
+            or "cross-encoder" in model_name_lower
+        )
+
+    @classmethod
+    def _detect_model_type_and_loader(
+        cls,
+        model_name: str | None,
+        revision: str | None = None,
+    ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
+        """Detect the model type and appropriate loader based on HuggingFace Hub configuration files.
+
+        This follows the Sentence Transformers architecture detection logic:
+        1. Check for modules.json (SentenceTransformer/SparseEncoder)
+        2. If modules.json exists, check config_sentence_transformers.json for model_type
+        3. If no modules.json, check config.json for CrossEncoder (ForSequenceClassification)
+        4. Default to dense (SentenceTransformer) if uncertain
+
+        Args:
+            model_name: The HuggingFace model name (can be None)
+            revision: The model revision
+
+        Returns:
+            A tuple of (loader_function, model_type) where loader_function is a callable
+            that returns MTEBModels and model_type is one of "dense", "cross-encoder", or "late-interaction"
+        """
+        from mteb.models import CrossEncoderWrapper, sentence_transformers_loader
+
+        loader: Callable[..., MTEBModels] | None = sentence_transformers_loader
+        model_type: MODEL_TYPES = "dense"
+
+        if not model_name or not _repo_exists(model_name):
+            return loader, model_type
+
+        try:
+            modules_config = _get_json_from_hub(
+                model_name, "modules.json", "model", revision=revision
+            )
+
+            if modules_config:  # (SentenceTransformer/SparseEncoder)
+                return cls._detect_sentence_transformer_or_sparse(
+                    model_name, revision, sentence_transformers_loader
+                )
+            else:
+                return cls._detect_cross_encoder_or_dense(
+                    model_name,
+                    revision,
+                    sentence_transformers_loader,
+                    cross_encoder_loader=CrossEncoderWrapper,
+                )
+
+        except Exception as e:
+            logger.warning(
+                f"Error detecting model type for {model_name}: {e}. "
+                "Defaulting to SentenceTransformer loader."
+            )
+
+        return loader, model_type
+
+    @classmethod
     def _from_hub(
         cls,
         model_name: str | None,
@@ -319,9 +462,11 @@ class ModelMeta(BaseModel):
         Returns:
             The generated ModelMeta.
         """
-        from mteb.models import sentence_transformers_loader
+        loader: Callable[..., MTEBModels] | None
+        model_type: MODEL_TYPES
 
-        loader = sentence_transformers_loader
+        loader, model_type = cls._detect_model_type_and_loader(model_name, revision)
+
         frameworks: list[FRAMEWORKS] = ["PyTorch"]
         model_license = None
         reference = None
@@ -363,6 +508,7 @@ class ModelMeta(BaseModel):
         return cls(
             loader=loader,
             name=model_name or "no_model_name/available",
+            model_type=[model_type],
             revision=revision or "no_revision_available",
             reference=reference,
             release_date=release_date,
