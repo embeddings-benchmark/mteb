@@ -1485,7 +1485,9 @@ def main():
                         task_obj = mteb.get_task(task_name)
                         meta = task_obj.metadata
                         domains = ", ".join(meta.domains) if meta.domains else "N/A"
-                        output_lines.append(f"- **{task_name}** - {meta.category}, {domains}")
+                        output_lines.append(
+                            f"- **{task_name}** - {meta.category}, {domains}"
+                        )
                     output_lines.append("")
 
             # VoxPopuli status

@@ -56,11 +56,11 @@ def plot_language_distribution(
     bars = ax.bar(range(len(df)), df["Count"].values, color="skyblue")
 
     # Customize the plot
-    ax.set_xlabel("Language Code", fontsize=12, fontweight="bold")
-    ax.set_ylabel("Number of Tasks", fontsize=12, fontweight="bold")
-    ax.set_title(
-        "Language Distribution in MAEB+ Collection", fontsize=14, fontweight="bold"
-    )
+    ax.set_xlabel("Language Code", fontsize=24, fontweight="bold")
+    ax.set_ylabel("Number of Tasks", fontsize=24, fontweight="bold")
+    # ax.set_title(
+    #     "Language Distribution in MAEB+ Collection", fontsize=28, fontweight="bold"
+    # )
 
     # Set x-axis labels with 90 degree rotation
     ax.set_xticks(range(len(df)))
@@ -87,7 +87,7 @@ def plot_language_distribution(
         bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.8),
         verticalalignment="top",
         horizontalalignment="right",
-        fontsize=10,
+        fontsize=20,
     )
 
     # Adjust layout to prevent label cutoff
