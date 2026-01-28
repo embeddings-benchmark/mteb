@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import json
 import logging
 import warnings
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
@@ -417,3 +419,28 @@ class ModelResult(BaseModel):
         if not mods:
             mods = self.default_modalities
         return list(set(mods))
+
+    def to_disk(self, path: Path) -> None:
+        """Save ModelResult to disk as JSON.
+
+        Args:
+            path: The path to the file to save.
+        """
+        path = Path(path)
+        with path.open("w") as f:
+            f.write(self.model_dump_json(indent=2))
+
+    @classmethod
+    def from_disk(cls, path: Path) -> ModelResult:
+        """Load ModelResult from disk.
+
+        Args:
+            path: The path to the JSON file to load.
+
+        Returns:
+            The loaded ModelResult object.
+        """
+        path = Path(path)
+        with path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        return cls.model_validate(data)
