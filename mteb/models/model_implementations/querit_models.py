@@ -166,7 +166,7 @@ class QueritWrapper(RerankerWrapper):
         if instruction is None:
             output = f"Judge whether the Content meets the requirements based on the Query. Query: {query}; Content: {doc}"
         else:
-            output = f"<Instruct>: {instruction}\n<Query>: {query}\n<Document>: {doc}"
+            output = f"{instruction} Query: {query}; Content: {doc}"
         return output
 
     @staticmethod
