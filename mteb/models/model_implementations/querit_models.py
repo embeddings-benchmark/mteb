@@ -213,8 +213,8 @@ querit_reranker_training_data = {
     "MindSmallReranking",  # https://huggingface.co/datasets/mteb/MindSmallReranking
     "MSMARCO",  # https://huggingface.co/datasets/mteb/msmarco
     "CQADupStack",  # https://huggingface.co/datasets/mteb/cqadupstack-*
-    "AskUbuntu",  # https://huggingface.co/datasets/mteb/AskUbuntuDupQuestions
-    "T2Reranking",  # https://huggingface.co/datasets/mteb/T2Reranking
+    "AskUbuntu",
+    "T2Reranking",
 }
 
 model_meta = ModelMeta(
