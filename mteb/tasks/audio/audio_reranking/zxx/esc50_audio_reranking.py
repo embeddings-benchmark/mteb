@@ -38,12 +38,17 @@ class ESC50AudioReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{piczak2015esc,
-  author = {Piczak, Karol J},
-  booktitle = {Proceedings of the 23rd ACM international conference on Multimedia},
+@inproceedings{piczak2015dataset,
+  author = {Piczak, Karol J.},
+  booktitle = {Proceedings of the 23rd {Annual ACM Conference} on {Multimedia}},
+  date = {2015-10-13},
+  doi = {10.1145/2733373.2806390},
+  isbn = {978-1-4503-3459-4},
+  location = {{Brisbane, Australia}},
   pages = {1015--1018},
-  title = {ESC: Dataset for Environmental Sound Classification},
-  year = {2015},
+  publisher = {{ACM Press}},
+  title = {{ESC}: {Dataset} for {Environmental Sound Classification}},
+  url = {http://dl.acm.org/citation.cfm?doid=2733373.2806390},
 }
 """,
     )
