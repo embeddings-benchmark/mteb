@@ -78,7 +78,7 @@ leaderboard-test-all:
 
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
-	uv run --extra leaderboard python -m mteb.leaderboard.app
+	uv run --no-sync --extra leaderboard python -m mteb.leaderboard.app
 
 format-citations:
 	@echo "--- 🧹 Formatting citations ---"
