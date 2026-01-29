@@ -202,7 +202,6 @@ vggish = ModelMeta(
     publisher = {IEEE Press},
     url = {https://doi.org/10.1109/ICASSP.2017.7952132},
     doi = {10.1109/ICASSP.2017.7952132},
-    abstract = {Convolutional Neural Networks (CNNs) have proven very effective in image classification and show promise for audio. We use various CNN architectures to classify the soundtracks of a dataset of 70M training videos (5.24 million hours) with 30,871 video-level labels. We examine fully connected Deep Neural Networks (DNNs), AlexNet [1], VGG [2], Inception [3], and ResNet [4]. We investigate varying the size of both training set and label vocabulary, finding that analogs of the CNNs used in image classification do well on our audio classification task, and larger training and label sets help up to a point. A model using embeddings from these classifiers does much better than raw features on the Audio Set [5] Acoustic Event Detection (AED) classification task.},
     booktitle = {2017 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
     pages = {131–135},
     numpages = {5},

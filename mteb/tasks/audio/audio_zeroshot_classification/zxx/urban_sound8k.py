@@ -25,11 +25,12 @@ class UrbanSound8kZeroshotClassification(AbsTaskZeroShotClassification):
         modalities=["audio", "text"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{Salamon2014ADA,
-  author = {Justin Salamon and Christopher Jacoby and Juan Pablo Bello},
-  journal = {Proceedings of the 22nd ACM international conference on Multimedia},
+@inproceedings{Salamon:UrbanSound:ACMMM:14,
+  author = {Salamon, Justin and Jacoby, Christopher and Bello, Juan Pablo},
+  booktitle = {Proceedings of the 22nd ACM international conference on Multimedia},
+  organization = {ACM},
+  pages = {1041--1044},
   title = {A Dataset and Taxonomy for Urban Sound Research},
-  url = {https://api.semanticscholar.org/CorpusID:207217115},
   year = {2014},
 }
 """,
