@@ -29,20 +29,35 @@ openai_models = [meta for meta in model_metas if "openai" in meta.name]
 
 ## Using a Sentence Transformer Model
 
-MTEB is made to be compatible with sentence transformers and thus you can readily evaluate any model that can be loaded via. [sentence transformers](https://www.sbert.net/)
+MTEB is made to be compatible with sentence transformers and thus you can readily evaluate any model that can be loaded via. [sentence transformers](https://www.sbert.net/).
 on `MTEB`:
 
-```python
-model = mteb.get_model("sentence-transformers/LaBSE")
+=== "SentenceTransformers"
 
-# select the desired tasks and evaluate
-tasks = mteb.get_tasks(tasks=["Banking77Classification"])
-results = mteb.evaluate(model, tasks=tasks)
-```
+    ```python
+    import 
+    model = SentenceTransformers("sentence-transformers/LaBSE")
+
+    # select the desired tasks and evaluate
+    tasks = mteb.get_tasks(tasks=["Banking77Classification"])
+    results = mteb.evaluate(model, tasks=tasks)
+    ```
+
+=== "CrossEncoder"
+
+    ```python
+    import 
+    model = CrossEncoder("sentence-transformers/LaBSE")
+
+    # select a reranking task and evaluate
+    tasks = mteb.get_tasks(tasks=["AskUbuntuDupQuestions"])
+    results = mteb.evaluate(model, tasks=tasks)
+    ```
+
 
 
 !!! note
-    `mteb.get_model` will by default load the model using the implementation in `mteb` if there is one, otherwise it will use `SentenceTransformers` or `CrossEncoder` from [sentence transfomers](https://www.sbert.net/) if appropriate. You can also use these directly, however, we do recommend using the `mteb` implementation of the model since some models (e.g. the [multilingual e5 models](https://huggingface.co/collections/intfloat/multilingual-e5-text-embeddings-67b2b8bb9bff40dec9fb3534)) require a prompt or similar hyperparameters and not specifying these may reduce performance.
+    We do recommend using `mteb.get_model` which will by default load the model using the implementation in `mteb` if there is one, otherwise it will use `SentenceTransformers` or `CrossEncoder` from [sentence transfomers](https://www.sbert.net/) if appropriate. The `mteb` implementation typically differ due models requiring specific prompts or similar hyperparameters and not specifying these may reduce performance (e.g. the [multilingual e5 models](https://huggingface.co/collections/intfloat/multilingual-e5-text-embeddings-67b2b8bb9bff40dec9fb3534) require specific prompts).
 
 ## Using a Custom Model
 

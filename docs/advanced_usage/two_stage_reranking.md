@@ -26,6 +26,9 @@ res = mteb.evaluate(
     prediction_folder=prediction_folder,
 )
 
+# convert task to retrieval
+task = task.convert_to_reranking(prediction_folder, top_k=100)
+
 # stage 2: reranking
 cross_enc_results = mteb.evaluate(cross_encoder, task)
 
