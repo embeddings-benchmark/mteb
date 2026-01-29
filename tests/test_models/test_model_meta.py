@@ -197,3 +197,21 @@ def test_model_meta_local_path():
     meta = ModelMeta.from_hub("/path/to/local/model")
     assert meta.name == "/path/to/local/model"
     assert meta.revision == "no_revision_available"
+
+
+def test_load_cross_encoder_via_get_model_meta():
+    """Test loading cross-encoder via get_model_meta() with automatic detection."""
+    model_meta = mteb.get_model_meta("cross-encoder/ms-marco-TinyBERT-L-2-v2")
+
+    assert model_meta.model_type == ["cross-encoder"]
+    assert model_meta.is_cross_encoder
+    assert model_meta.loader.__name__ == "CrossEncoderWrapper"
+
+
+def test_load_sentence_transformer_via_get_model_meta():
+    """Test loading sentence transformer via get_model_meta()."""
+    model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+
+    assert model_meta.model_type == ["dense"]
+    assert not model_meta.is_cross_encoder
+    assert model_meta.loader.__name__ == "sentence_transformers_loader"
