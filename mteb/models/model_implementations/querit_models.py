@@ -207,13 +207,13 @@ class QueritWrapper(RerankerWrapper):
 
 querit_reranker_training_data = {
     "MIRACLRanking",  # https://huggingface.co/datasets/mteb/MIRACLReranking
-    "mrtidy",  # https://huggingface.co/datasets/mteb/mrtidy
+    "MrTidyRetrieval",  # https://huggingface.co/datasets/mteb/mrtidy
     "ruri-v3-dataset-reranker",  # https://huggingface.co/datasets/cl-nagoya/ruri-v3-dataset-reranker
-    "MLDR",  # https://huggingface.co/datasets/Shitao/MLDR
+    "MultiLongDocReranking",  # https://huggingface.co/datasets/Shitao/MLDR
     "MindSmallReranking",  # https://huggingface.co/datasets/mteb/MindSmallReranking
     "MSMARCO",  # https://huggingface.co/datasets/mteb/msmarco
     "CQADupStack",  # https://huggingface.co/datasets/mteb/cqadupstack-*
-    "AskUbuntu",  # https://github.com/taolei87/askubuntu & The corpus and queries that overlap with mteb/askubuntudupquestions-reranking have been removed.
+    "AskUbuntuDupQuestions",  # https://github.com/taolei87/askubuntu & The corpus and queries that overlap with mteb/askubuntudupquestions-reranking have been removed.
     "T2Reranking",  # https://huggingface.co/datasets/THUIR/T2Ranking & The corpus and queries that overlap with mteb/T2Reranking have been removed.
 }
 
@@ -229,6 +229,7 @@ model_meta = ModelMeta(
     revision="5ad2649cc4defb7e1361262260e9a781f14b08bc",
     release_date="2026-01-24",
     n_parameters=4919636992,
+    n_embedding_parameters=131907584,
     embed_dim=1024,
     memory_usage_mb=9383.0,
     max_tokens=4096,
