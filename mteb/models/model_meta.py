@@ -303,38 +303,6 @@ class ModelMeta(BaseModel):
         return self.name.replace("/", "__").replace(" ", "_")
 
     @classmethod
-    def _detect_sentence_transformer_or_sparse(
-        cls,
-        model_name: str,
-        revision: str | None,
-        sentence_transformers_loader: Callable[..., MTEBModels],
-    ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
-        """Detect if model is SentenceTransformer or SparseEncoder."""
-        st_config = _get_json_from_hub(
-            model_name,
-            "config_sentence_transformers.json",
-            "model",
-            revision=revision,
-        )
-
-        if st_config and st_config.get("model_type") == "SparseEncoder":
-            try:
-                from mteb.models.model_implementations.opensearch_neural_sparse_models import (
-                    SparseEncoderWrapper,
-                )
-
-                return SparseEncoderWrapper, "sparse"
-            except ImportError:
-                logger.warning(
-                    f"Detected SparseEncoder model {model_name} but SparseEncoderWrapper not available. "
-                    "Falling back to SentenceTransformer loader. "
-                    "This may cause issues. Please ensure sentence-transformers >= 5.0.0 is installed."
-                )
-                return sentence_transformers_loader, "dense"
-
-        return sentence_transformers_loader, "dense"
-
-    @classmethod
     def _detect_cross_encoder_or_dense(
         cls,
         model_name: str,
@@ -414,21 +382,18 @@ class ModelMeta(BaseModel):
         """
         from mteb.models import CrossEncoderWrapper, sentence_transformers_loader
 
-        loader: Callable[..., MTEBModels] | None = sentence_transformers_loader
-        model_type: MODEL_TYPES = "dense"
-
         if not model_name or not _repo_exists(model_name):
-            return loader, model_type
+            return sentence_transformers_loader, "dense"
 
         try:
             modules_config = _get_json_from_hub(
                 model_name, "modules.json", "model", revision=revision
             )
 
-            if modules_config:  # (SentenceTransformer/SparseEncoder)
-                return cls._detect_sentence_transformer_or_sparse(
-                    model_name, revision, sentence_transformers_loader
-                )
+            if (
+                modules_config
+            ):  # SentenceTransformer/SparseEncoder (Not support for now)
+                return sentence_transformers_loader, "dense"
             else:
                 return cls._detect_cross_encoder_or_dense(
                     model_name,
@@ -443,7 +408,7 @@ class ModelMeta(BaseModel):
                 "Defaulting to SentenceTransformer loader."
             )
 
-        return loader, model_type
+        return sentence_transformers_loader, "dense"
 
     @classmethod
     def _from_hub(
