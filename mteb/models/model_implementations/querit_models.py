@@ -213,8 +213,8 @@ querit_reranker_training_data = {
     "MindSmallReranking",  # https://huggingface.co/datasets/mteb/MindSmallReranking
     "MSMARCO",  # https://huggingface.co/datasets/mteb/msmarco
     "CQADupStack",  # https://huggingface.co/datasets/mteb/cqadupstack-*
-    "AskUbuntu",
-    "T2Reranking",
+    "AskUbuntu",  # https://github.com/taolei87/askubuntu & The corpus and queries that overlap with mteb/askubuntudupquestions-reranking have been removed.
+    "T2Reranking",  # https://huggingface.co/datasets/THUIR/T2Ranking & The corpus and queries that overlap with mteb/T2Reranking have been removed.
 }
 
 model_meta = ModelMeta(
