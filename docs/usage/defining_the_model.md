@@ -43,6 +43,25 @@ However, we do recommend checking if mteb includes an implementation of the mode
 !!! note
     If you want to evaluate a cross encoder for reranking, see the section on [running cross encoders for reranking](../advanced_usage/two_stage_reranking.md).
 
+## Using Cross-Encoders for Reranking
+
+MTEB now automatically detects and loads cross-encoder models for reranking tasks using `mteb.get_model()`:
+
+```python
+import mteb
+
+# Automatically detects and loads as a cross-encoder
+model = mteb.get_model("cross-encoder/ms-marco-TinyBERT-L-2-v2")
+
+# Verify it's a cross-encoder
+print(model.mteb_model_meta.model_type)  # ['cross-encoder']
+print(model.mteb_model_meta.is_cross_encoder)  # True
+
+# Evaluate on a reranking task
+task = mteb.get_task("AskUbuntuDupQuestions")
+results = mteb.evaluate(model, task)
+```
+
 ## Using a Custom Model
 
 It is also possible to implement your own custom model in MTEB as long as it adheres to the [EncoderProtocol][mteb.models.EncoderProtocol].
