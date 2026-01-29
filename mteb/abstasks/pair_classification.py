@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from datasets import Dataset
-from numpy.typing import NDArray
 from sklearn.metrics import average_precision_score
 
 from mteb._evaluators import PairClassificationEvaluator
@@ -26,6 +25,8 @@ from mteb.types.statistics import (
 if TYPE_CHECKING:
     from pathlib import Path
 
+    from numpy.typing import NDArray
+
     from mteb._evaluators.pair_classification_evaluator import (
         PairClassificationDistances,
     )
@@ -36,7 +37,6 @@ if TYPE_CHECKING:
         LabelStatistics,
         TextStatistics,
     )
-
 
 logger = logging.getLogger(__name__)
 
