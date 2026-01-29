@@ -6,11 +6,13 @@ MTEB comes with an implementation of many popular models and APIs. These can be 
 
 ```python
 model_name = "intfloat/multilingual-e5-small"
-meta = mteb.get_model_meta(model_name)
+meta = mteb.get_model_meta(model_name) # (1)
 model = meta.load_model()
 # or directly using
 model = mteb.get_model(model_name)
 ```
+
+1.  Using `mteb.get_model_meta` allows us to work with the model without loading it. E.g. you can pass it to `mteb.evaluate`, which only loads the model if the results doesn't already exist. 
 
 You can get an overview of the models available in `mteb` as follows:
 
@@ -27,40 +29,20 @@ openai_models = [meta for meta in model_metas if "openai" in meta.name]
 
 ## Using a Sentence Transformer Model
 
-MTEB is made to be compatible with sentence transformers and thus you can readily evaluate any model that can be loaded via. sentence transformers
+MTEB is made to be compatible with sentence transformers and thus you can readily evaluate any model that can be loaded via. [sentence transformers](https://www.sbert.net/)
 on `MTEB`:
 
 ```python
-model = SentenceTransformers("sentence-transformers/LaBSE")
+model = mteb.get_model("sentence-transformers/LaBSE")
 
 # select the desired tasks and evaluate
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
 results = mteb.evaluate(model, tasks=tasks)
 ```
 
-However, we do recommend checking if mteb includes an implementation of the model before using sentence transformers since some models (e.g. the [multilingual e5 models](https://huggingface.co/collections/intfloat/multilingual-e5-text-embeddings-67b2b8bb9bff40dec9fb3534)) require a prompt and not specifying it may reduce performance.
 
 !!! note
-    If you want to evaluate a cross encoder for reranking, see the section on [running cross encoders for reranking](../advanced_usage/two_stage_reranking.md).
-
-## Using Cross-Encoders for Reranking
-
-MTEB now automatically detects and loads cross-encoder models for reranking tasks using `mteb.get_model()`:
-
-```python
-import mteb
-
-# Automatically detects and loads as a cross-encoder
-model = mteb.get_model("cross-encoder/ms-marco-TinyBERT-L-2-v2")
-
-# Verify it's a cross-encoder
-print(model.mteb_model_meta.model_type)  # ['cross-encoder']
-print(model.mteb_model_meta.is_cross_encoder)  # True
-
-# Evaluate on a reranking task
-task = mteb.get_task("AskUbuntuDupQuestions")
-results = mteb.evaluate(model, task)
-```
+    `mteb.get_model` will by default load the model using the implementation in `mteb` if there is one, otherwise it will use `SentenceTransformers` or `CrossEncoder` from [sentence transfomers](https://www.sbert.net/) if appropriate. You can also use these directly, however, we do recommend using the `mteb` implementation of the model since some models (e.g. the [multilingual e5 models](https://huggingface.co/collections/intfloat/multilingual-e5-text-embeddings-67b2b8bb9bff40dec9fb3534)) require a prompt or similar hyperparameters and not specifying these may reduce performance.
 
 ## Using a Custom Model
 
