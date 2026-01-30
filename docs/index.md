@@ -48,7 +48,7 @@ To see more check out the [installation guide](./installation.md).
     results = mteb.evaluate(model, tasks=tasks)
     ```
 
-    1. If the model is not implemented in MTEB it will be eq. it will load it with `SentenceTransformer(model_name)` or `CrossEncoder(model_name)` if applicable.
+    1. If the model is not implemented in MTEB, it will be loaded with `SentenceTransformer(model_name)` or `CrossEncoder(model_name)` if applicable.
 
 
     To see more check out the [usage documentation](./usage/get_started.md)
