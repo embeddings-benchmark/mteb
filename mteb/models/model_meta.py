@@ -367,18 +367,25 @@ class ModelMeta(BaseModel):
         """Detect the model type and appropriate loader based on HuggingFace Hub configuration files.
 
         This follows the Sentence Transformers architecture detection logic:
-        1. Check for modules.json (SentenceTransformer/SparseEncoder)
-        2. If modules.json exists, check config_sentence_transformers.json for model_type
-        3. If no modules.json, check config.json for CrossEncoder (ForSequenceClassification)
-        4. Default to dense (SentenceTransformer) if uncertain
+        1. Check for modules.json - If present, model is a SentenceTransformer (dense encoder)
+        2. If no modules.json, check config.json for architecture:
+            - ForSequenceClassification → CrossEncoder
+            - CausalLM with reranking indicators → CrossEncoder
+        3. Default to dense (SentenceTransformer) if no clear indicators are found
+
+        Detection for CausalLM-style rerankers:
+        - Model has ForCausalLM architecture AND
+        - Has num_labels > 0 in config, OR
+        - Model name contains "rerank" or "cross-encoder"
 
         Args:
             model_name: The HuggingFace model name (can be None)
             revision: The model revision
 
         Returns:
-            A tuple of (loader_function, model_type) where loader_function is a callable
-            that returns MTEBModels and model_type is one of "dense", "cross-encoder", or "late-interaction"
+            A tuple of (loader_function, model_type) where:
+            - loader_function: A callable that returns MTEBModels, or None if model doesn't exist
+            - model_type: One of "dense", "cross-encoder", or "late-interaction"
         """
         from mteb.models import CrossEncoderWrapper, sentence_transformers_loader
 

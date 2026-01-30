@@ -12,7 +12,7 @@ model = meta.load_model()
 model = mteb.get_model(model_name)
 ```
 
-1.  Using `mteb.get_model_meta` allows us to work with the model without loading it. E.g. you can pass it to `mteb.evaluate`, which only loads the model if the results doesn't already exist. 
+1.  Using `mteb.get_model_meta` allows us to work with the model without loading it. E.g. you can pass it to `mteb.evaluate`, which only loads the model if the results doesn't already exist.
 
 You can get an overview of the models available in `mteb` as follows:
 
@@ -35,7 +35,8 @@ on `MTEB`:
 === "SentenceTransformers"
 
     ```python
-    import 
+    import mteb
+    from sentence_transformers import SentenceTransformer
     model = SentenceTransformers("sentence-transformers/LaBSE")
 
     # select the desired tasks and evaluate
@@ -46,7 +47,8 @@ on `MTEB`:
 === "CrossEncoder"
 
     ```python
-    import 
+    import mteb
+    from sentence_transformers import CrossEncoder
     model = CrossEncoder("sentence-transformers/LaBSE")
 
     # select a reranking task and evaluate
