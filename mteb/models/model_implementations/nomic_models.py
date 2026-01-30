@@ -7,6 +7,7 @@ import torch
 import torch.nn.functional as F
 from packaging.version import Version
 
+from mteb.models import sentence_transformers_loader
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
@@ -64,7 +65,7 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
     ) -> Array:
         # default to search_document if input_type and prompt_name are not provided
         prompt_name = (
-            self.get_prompt_name(self.model_prompts, task_metadata, prompt_type)
+            self.get_prompt_name(task_metadata, prompt_type)
             or PromptType.document.value
         )
         sentences = [text for batch in inputs for text in batch["text"]]
@@ -507,5 +508,44 @@ nomic_embed_text_v2_moe = ModelMeta(
       archivePrefix={arXiv},
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2502.07972},
+}""",
+)
+
+nomic_embed_code = ModelMeta(
+    loader=sentence_transformers_loader,
+    loader_kwargs={
+        "trust_remote_code": True,
+        "model_prompts": model_prompts,
+    },
+    name="nomic-ai/nomic-embed-code",
+    revision="11114029805cee545ef111d5144b623787462a52",
+    release_date="2025-03-24",
+    languages=["eng-Latn"],
+    n_parameters=7_070_619_136,
+    n_embedding_parameters=None,
+    memory_usage_mb=26972.0,
+    max_tokens=32768,
+    embed_dim=3584,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/gangiswag/cornstack/",
+    public_training_data="https://huggingface.co/collections/nomic-ai/cornstack",
+    framework=["PyTorch", "Sentence Transformers", "safetensors"],
+    reference="https://huggingface.co/nomic-ai/nomic-embed-code",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    training_datasets={"CoRNStack"},
+    adapted_from=None,
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["dense"],
+    citation="""@misc{suresh2025cornstackhighqualitycontrastivedata,
+      title={CoRNStack: High-Quality Contrastive Data for Better Code Retrieval and Reranking},
+      author={Tarun Suresh and Revanth Gangi Reddy and Yifei Xu and Zach Nussbaum and Andriy Mulyar and Brandon Duderstadt and Heng Ji},
+      year={2025},
+      eprint={2412.01007},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2412.01007},
 }""",
 )
