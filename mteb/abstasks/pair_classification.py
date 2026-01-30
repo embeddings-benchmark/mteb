@@ -25,6 +25,8 @@ from mteb.types.statistics import (
 if TYPE_CHECKING:
     from pathlib import Path
 
+    from numpy.typing import NDArray
+
     from mteb._evaluators.pair_classification_evaluator import (
         PairClassificationDistances,
     )
@@ -35,7 +37,6 @@ if TYPE_CHECKING:
         LabelStatistics,
         TextStatistics,
     )
-
 
 logger = logging.getLogger(__name__)
 
@@ -138,7 +139,7 @@ class AbsTaskPairClassification(AbsTask):
         self, similarity_scores: PairClassificationDistances, labels: list[int]
     ) -> dict[str, float]:
         logger.info("Computing metrics...")
-        np_labels = np.asarray(labels)
+        np_labels: NDArray[np.int64] = np.asarray(labels, dtype=np.int64)
         output_scores = {}
         max_scores = defaultdict(list)
         for short_name, scores, reverse in [
@@ -281,7 +282,10 @@ class AbsTaskPairClassification(AbsTask):
         )
 
     def _compute_metrics_values(
-        self, scores: list[float], labels: np.ndarray, high_score_more_similar: bool
+        self,
+        scores: list[float],
+        labels: NDArray[np.int64],
+        high_score_more_similar: bool,
     ) -> dict[str, float]:
         """Compute the metrics for the given scores and labels.
 
@@ -315,7 +319,10 @@ class AbsTaskPairClassification(AbsTask):
         )
 
     def _find_best_acc_and_threshold(
-        self, scores: list[float], labels: np.ndarray, high_score_more_similar: bool
+        self,
+        scores: list[float],
+        labels: NDArray[np.int64],
+        high_score_more_similar: bool,
     ) -> tuple[float, float]:
         rows = list(zip(scores, labels))
         rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
@@ -323,7 +330,7 @@ class AbsTaskPairClassification(AbsTask):
         max_acc = 0
         best_threshold = -1.0
         positive_so_far = 0
-        remaining_negatives = sum(np.array(labels) == 0)
+        remaining_negatives = sum(labels == 0)
 
         for i in range(len(rows) - 1):
             score, label = rows[i]
@@ -339,10 +346,9 @@ class AbsTaskPairClassification(AbsTask):
         return max_acc, best_threshold
 
     def _find_best_f1_and_threshold(
-        self, scores, labels, high_score_more_similar: bool
+        self, scores, labels: NDArray[np.int64], high_score_more_similar: bool
     ) -> tuple[float, float, float, float]:
         scores = np.asarray(scores)
-        labels = np.asarray(labels)
 
         rows = list(zip(scores, labels))
 
