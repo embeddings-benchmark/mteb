@@ -105,7 +105,7 @@ TASK_TYPE_ABBREV = {
 # Map task types to canonical categories for grouping
 TASK_TYPE_CANONICAL = {
     "AudioClassification": "Classification",
-    "AudioMultilabelClassification": "Classification",
+    "AudioMultilabelClassification": "MultilabelClassification",
     "AudioPairClassification": "PairClassification",
     "AudioReranking": "Reranking",
     "AudioClustering": "Clustering",
@@ -443,6 +443,7 @@ def generate_audio_table(
     # Task type order - unified across all benchmarks for combined table
     task_type_order = [
         "Classification",
+        "MultilabelClassification",
         "PairClassification",
         "Reranking",
         "Clustering",
@@ -581,6 +582,7 @@ def generate_maeb_table_with_audio_rank(
     # Task type order for MAEB
     task_type_order = [
         "Classification",
+        "MultilabelClassification",
         "PairClassification",
         "Reranking",
         "Clustering",
@@ -727,7 +729,7 @@ def generate_maeb_table_with_audio_rank(
     audio_count = len(audio_available)
 
     lines.append(
-        f"\\multicolumn{{15}}{{c}}{{\\vspace{{2mm}} \\normalsize \\texttt{{{benchmark_name}}}}} \\\\"
+        f"\\multicolumn{{16}}{{c}}{{\\vspace{{2mm}} \\normalsize \\texttt{{{benchmark_name}}}}} \\\\"
     )
     lines.append(
         f"\\textcolor{{gray}}{{Number of datasets}} & & & \\textcolor{{gray}}{{({total_tasks})}} & "
@@ -933,17 +935,17 @@ def main():
     latex_output.append(r"""\begin{table*}[!th]
     \centering
     \caption{
-    Top 30 models on the MAEB benchmark (30 tasks spanning audio-only and audio-text evaluation). Results are ranked using Borda count. The ``Audio'' column shows the model's rank on MAEB(audio-only) for reference. We provide averages across all tasks, and per task category. ``Eng.'' shows the average for English-only tasks, ``Multi.'' shows the average excluding tasks with no linguistic content (zxx), and ``Aud.'' shows the average for audio-only tasks. Task categories are abbreviated as: Classification (Clf), Pair Classification (PC), Reranking (Rrnk), Clustering (Clust), Audio Retrieval (A. Rtrvl), Cross-modal Retrieval (X. Rtrvl), Zero-shot Classification (Zero Clf.). We highlight the best score in \textbf{bold} and the best score with each model category using a grey cell.
+    Top 30 models on the MAEB benchmark (30 tasks spanning audio-only and audio-text evaluation). Results are ranked using Borda count. The ``Audio'' column shows the model's rank on MAEB(audio-only) for reference. We provide averages across all tasks, and per task category. ``Eng.'' shows the average for English-only tasks, ``Multi.'' shows the average excluding tasks with no linguistic content (zxx), and ``Aud.'' shows the average for audio-only tasks. Task categories are abbreviated as: Classification (Clf), Multilabel Classification (M.Clf), Pair Classification (PC), Reranking (Rrnk), Clustering (Clust), Audio Retrieval (A. Rtrvl), Cross-modal Retrieval (X. Rtrvl), Zero-shot Classification (Zero Clf.). We highlight the best score in \textbf{bold} and the best score with each model category using a grey cell.
     }
     \label{tab:maeb-performance}
     \resizebox{\textwidth}{!}{
     \setlength{\tabcolsep}{4pt}
     {\footnotesize
-    \begin{tabular}{lcc|ccccc|ccccccc}
+    \begin{tabular}{lcc|ccccc|cccccccc}
     \toprule
-    & \multicolumn{2}{c}{\textbf{Rank} ($\downarrow$)} & \multicolumn{5}{c}{\textbf{Average}} & \multicolumn{7}{c}{\textbf{Average per Category}} \\
-    \cmidrule(r){2-3} \cmidrule{4-8} \cmidrule(l){9-15}
-    \textbf{Model} & MAEB & Audio & All & Cat. & Eng. & Multi. & Aud. & Clf & PC & Rrnk & Clust & A. Rtrvl & X. Rtrvl & Zero Clf. \\
+    & \multicolumn{2}{c}{\textbf{Rank} ($\downarrow$)} & \multicolumn{5}{c}{\textbf{Average}} & \multicolumn{8}{c}{\textbf{Average per Category}} \\
+    \cmidrule(r){2-3} \cmidrule{4-8} \cmidrule(l){9-16}
+    \textbf{Model} & MAEB & Audio & All & Cat. & Eng. & Multi. & Aud. & Clf & M.Clf & PC & Rrnk & Clust & A. Rtrvl & X. Rtrvl & Zero Clf. \\
     \midrule""")
 
     latex_output.append(maeb_section)
