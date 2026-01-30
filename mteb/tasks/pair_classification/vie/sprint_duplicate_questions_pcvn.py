@@ -37,6 +37,6 @@ class SprintDuplicateQuestionsPCVN(AbsTaskPairClassification):
         adapted_from=["SprintDuplicateQuestions"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_column("sent1", "sentence1")
         self.dataset = self.dataset.rename_column("sent2", "sentence2")

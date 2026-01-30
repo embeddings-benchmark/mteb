@@ -6,6 +6,7 @@ from .cross_lingual_semantic_discrimination_wmt21 import (
     CrossLingualSemanticDiscriminationWMT21,
 )
 from .cur_ev1_retrieval import CUREv1Retrieval
+from .euro_pirq_retrieval import EuroPIRQRetrieval
 from .indic_qa_retrieval import IndicQARetrieval
 from .jina_vdr_bench_retrieval import (
     JinaVDRAirbnbSyntheticRetrieval,
@@ -107,6 +108,7 @@ __all__ = [
     "CUREv1Retrieval",
     "CrossLingualSemanticDiscriminationWMT19",
     "CrossLingualSemanticDiscriminationWMT21",
+    "EuroPIRQRetrieval",
     "IndicQARetrieval",
     "JinaVDRAirbnbSyntheticRetrieval",
     "JinaVDRArabicChartQARetrieval",

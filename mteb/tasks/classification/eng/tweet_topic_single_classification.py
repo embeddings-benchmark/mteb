@@ -43,7 +43,7 @@ Barbieri, Francesco},
         superseded_by="TweetTopicSingleClassification.v2",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset["train"] = self.dataset["train_2021"]
 
 

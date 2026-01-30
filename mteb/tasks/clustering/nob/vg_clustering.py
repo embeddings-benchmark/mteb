@@ -1,12 +1,17 @@
+from __future__ import annotations
+
 import random
-from collections.abc import Iterable
 from itertools import islice
-from typing import TypeVar
+from typing import TYPE_CHECKING, TypeVar
 
 import datasets
 
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
 
 T = TypeVar("T")
 
@@ -53,7 +58,7 @@ class VGClustering(AbsTaskClusteringLegacy):
         superseded_by="VGHierarchicalClusteringP2P",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         splits = self.metadata.eval_splits
 
         documents: list = []

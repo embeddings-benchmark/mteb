@@ -1,10 +1,11 @@
+from __future__ import annotations
+
 import logging
 from collections.abc import Sequence
-from pathlib import Path
-from typing import Any, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 
 import torch
-from datasets import Dataset, concatenate_datasets
+from datasets import concatenate_datasets
 
 from mteb._evaluators import ImageTextPairClassificationEvaluator
 from mteb.abstasks._statistics_calculation import (
@@ -12,12 +13,22 @@ from mteb.abstasks._statistics_calculation import (
     calculate_text_statistics,
 )
 from mteb.abstasks.abstask import AbsTask
-from mteb.models.models_protocols import EncoderProtocol, MTEBModels
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types.statistics import (
-    ImageStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from datasets import Dataset
+
+    from mteb.models.models_protocols import MTEBModels
+    from mteb.types import EncodeKwargs
+    from mteb.types.statistics import (
+        ImageStatistics,
+        TextStatistics,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -119,10 +130,11 @@ class AbsTaskImageTextPairClassification(AbsTask):
         model: MTEBModels,
         data_split: Dataset,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> ImageTextPairClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -156,7 +168,9 @@ class AbsTaskImageTextPairClassification(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        scores: list[torch.Tensor] = evaluator(model, encode_kwargs=encode_kwargs)  # type: ignore[assignment]
+        scores: list[torch.Tensor] = evaluator(
+            model, encode_kwargs=encode_kwargs, num_proc=num_proc
+        )  # type: ignore[assignment]
         if prediction_folder:
             self._save_task_predictions(
                 [score.tolist() for score in scores],
@@ -204,7 +218,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
             accuracy=torch.Tensor(all_correct_scores).float().mean().item(),
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         text_columns = (
             [self.texts_column_names]
             if isinstance(self.texts_column_names, str)
@@ -219,4 +233,5 @@ class AbsTaskImageTextPairClassification(AbsTask):
         self._upload_dataset_to_hub(
             repo_name,
             [*text_columns, *image_columns],
+            num_proc=num_proc,
         )

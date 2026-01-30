@@ -7,10 +7,22 @@ from typing import TYPE_CHECKING, TypedDict
 import numpy as np
 import torch
 from datasets import Dataset
-from typing_extensions import NotRequired
 
 if TYPE_CHECKING:
     from PIL import Image
+    from typing_extensions import NotRequired
+
+
+class EncodeKwargs(TypedDict):
+    """Keyword arguments for encoding methods.
+
+    Attributes:
+        batch_size: The batch size to use for encoding.
+        show_progress_bar: Whether to show a progress bar during encoding.
+    """
+
+    batch_size: NotRequired[int]
+    show_progress_bar: NotRequired[bool]
 
 
 # --- Output types ---

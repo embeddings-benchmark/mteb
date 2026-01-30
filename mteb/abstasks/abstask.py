@@ -1,29 +1,38 @@
+from __future__ import annotations
+
 import json
 import logging
 import warnings
 from abc import ABC, abstractmethod
-from collections.abc import Mapping, Sequence
+from collections.abc import Sequence
 from copy import copy
 from pathlib import Path
-from typing import Any, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
 from datasets import ClassLabel, Dataset, DatasetDict, load_dataset
 from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm.auto import tqdm
-from typing_extensions import Self
 
 from mteb._set_seed import _set_seed
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models import (
     CrossEncoderProtocol,
     EncoderProtocol,
-    MTEBModels,
     SearchProtocol,
 )
-from mteb.types import HFSubset, Modalities, ScoresDict
-from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+    from typing_extensions import Self
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import (
+        MTEBModels,
+    )
+    from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict
+    from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -107,11 +116,15 @@ class AbsTask(ABC):
             logger.warning(msg)
             warnings.warn(msg)
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1, **kwargs: Any) -> None:
         """A transform operations applied to the dataset after loading.
 
         This method is useful when the dataset from Huggingface is not in an `mteb` compatible format.
         Override this method if your dataset requires additional transformation.
+
+        Args:
+            num_proc: Number of processes to use for the transformation.
+            kwargs: Additional keyword arguments passed to the load_dataset function. Keep for forward compatibility.
         """
         pass
 
@@ -121,8 +134,9 @@ class AbsTask(ABC):
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluates an MTEB compatible model on the task.
@@ -133,6 +147,7 @@ class AbsTask(ABC):
             subsets_to_run: List of huggingface subsets (HFSubsets) to evaluate. If None, all subsets are evaluated.
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             prediction_folder: Folder to save model predictions
+            num_proc: Number of processes to use for loading the dataset or processing.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
 
         Returns:
@@ -162,7 +177,7 @@ class AbsTask(ABC):
         if not self.data_loaded:
             self.load_data()
 
-        self.dataset = cast(dict[HFSubset, DatasetDict], self.dataset)
+        self.dataset = cast("dict[HFSubset, DatasetDict]", self.dataset)
 
         scores = {}
         if self.hf_subsets is None:
@@ -188,6 +203,7 @@ class AbsTask(ABC):
                 hf_subset=hf_subset,
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
+                num_proc=num_proc,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
@@ -201,8 +217,9 @@ class AbsTask(ABC):
         *,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(
@@ -307,11 +324,15 @@ class AbsTask(ABC):
             )  # only take the specified test split.
         return dataset_dict
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs: Any) -> None:
         """Loads dataset from HuggingFace hub
 
         This is the main loading function for Task. Do not overwrite this, instead we recommend using `dataset_transform`, which is called after the
         dataset is loaded using `datasets.load_dataset`.
+
+        Args:
+            num_proc: Number of processes to use for loading the dataset.
+            kwargs: Additional keyword arguments passed to the load_dataset function. Keep for forward compatibility.
         """
         if self.data_loaded:
             return
@@ -324,11 +345,12 @@ class AbsTask(ABC):
                     self.dataset[hf_subset] = load_dataset(
                         name=hf_subset,
                         **self.metadata.dataset,
+                        num_proc=num_proc,
                     )
         else:
             # some of monolingual datasets explicitly adding the split name to the dataset name
-            self.dataset = load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
+            self.dataset = load_dataset(**self.metadata.dataset, num_proc=num_proc)
+        self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
     def fast_load(self) -> None:
@@ -351,12 +373,13 @@ class AbsTask(ABC):
             self.dataset[lang] = DatasetDict(subset)
 
     def calculate_descriptive_statistics(
-        self, overwrite_results: bool = False
+        self, overwrite_results: bool = False, num_proc: int = 1
     ) -> dict[str, DescriptiveStatistics]:
         """Calculates descriptive statistics from the dataset.
 
         Args:
             overwrite_results: Whether to overwrite existing results. If False and results already exist, the existing results will be loaded from cache.
+            num_proc: Number of processes to use for loading the dataset.
 
         Returns:
             A dictionary containing descriptive statistics for each split.
@@ -370,7 +393,7 @@ class AbsTask(ABC):
             return existing_stats
 
         if not self.data_loaded:
-            self.load_data()
+            self.load_data(num_proc=num_proc)
 
         descriptive_stats: dict[str, DescriptiveStatistics] = {}
         hf_subset_stat: Literal["hf_subset_descriptive_stats"] = (
@@ -508,7 +531,7 @@ class AbsTask(ABC):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _upload_dataset_to_hub(
-        self, repo_name: str, fields: list[str] | dict[str, str]
+        self, repo_name: str, fields: list[str] | dict[str, str], num_proc: int = 1
     ) -> None:
         if self.dataset is None:
             raise ValueError("Dataset not loaded")
@@ -533,7 +556,10 @@ class AbsTask(ABC):
                         )
                 sentences = DatasetDict(sentences)
                 sentences.push_to_hub(
-                    repo_name, config, commit_message=f"Add {config} dataset"
+                    repo_name,
+                    config,
+                    commit_message=f"Add {config} dataset",
+                    num_proc=num_proc,
                 )
         else:
             sentences = {}
@@ -550,16 +576,19 @@ class AbsTask(ABC):
                         {field: self.dataset[split][field] for field in fields}
                     )
             sentences = DatasetDict(sentences)
-            sentences.push_to_hub(repo_name, commit_message="Add dataset")
+            sentences.push_to_hub(
+                repo_name, commit_message="Add dataset", num_proc=num_proc
+            )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         raise NotImplementedError
 
-    def push_dataset_to_hub(self, repo_name: str) -> None:
+    def push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         """Push the dataset to the HuggingFace Hub.
 
         Args:
             repo_name: The name of the repository to push the dataset to.
+            num_proc: Number of processes to use for loading the dataset.
 
         Examples:
             >>> import mteb
@@ -571,7 +600,7 @@ class AbsTask(ABC):
         if not self.data_loaded:
             self.load_data()
 
-        self._push_dataset_to_hub(repo_name)
+        self._push_dataset_to_hub(repo_name, num_proc)
         # dataset repo not creating when pushing card
         self.metadata.push_dataset_card_to_hub(repo_name)
 

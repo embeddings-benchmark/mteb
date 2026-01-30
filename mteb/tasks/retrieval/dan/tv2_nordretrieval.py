@@ -60,7 +60,7 @@ Piperidis, Stelios},
         task_subtypes=["Article retrieval"],
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -68,7 +68,7 @@ Piperidis, Stelios},
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int = 1, **kwargs) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text

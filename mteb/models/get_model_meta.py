@@ -1,14 +1,22 @@
+from __future__ import annotations
+
 import difflib
 import logging
-from collections.abc import Iterable
-from typing import Any
+import warnings
+from typing import TYPE_CHECKING, Any
 
-from mteb.abstasks import AbsTask
 from mteb.models import (
     ModelMeta,
-    MTEBModels,
 )
 from mteb.models.model_implementations import MODEL_REGISTRY
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+    from mteb.abstasks import AbsTask
+    from mteb.models import (
+        MTEBModels,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -115,8 +123,16 @@ def get_model(
     return model
 
 
+_MODEL_RENAMES: dict[str, str] = {
+    "bm25s": "baseline/bm25s",
+}
+
+
 def get_model_meta(
-    model_name: str, revision: str | None = None, fetch_from_hf: bool = True
+    model_name: str,
+    revision: str | None = None,
+    fetch_from_hf: bool = True,
+    fill_missing: bool = False,
 ) -> ModelMeta:
     """A function to fetch a model metadata object by name.
 
@@ -124,10 +140,17 @@ def get_model_meta(
         model_name: Name of the model to fetch
         revision: Revision of the model to fetch
         fetch_from_hf: Whether to fetch the model from HuggingFace Hub if not found in the registry
+        fill_missing: Computes missing attributes from the metadata including number of parameters and memory usage.
 
     Returns:
         A model metadata object
     """
+    if model_name in _MODEL_RENAMES:
+        new_name = _MODEL_RENAMES[model_name]
+        msg = f"The model '{model_name}' has been renamed to '{new_name}'. To prevent this warning use the new name."
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
+        model_name = new_name
+
     if model_name in MODEL_REGISTRY:
         model_meta = MODEL_REGISTRY[model_name]
 
@@ -135,10 +158,25 @@ def get_model_meta(
             raise ValueError(
                 f"Model revision {revision} not found for model {model_name}. Expected {model_meta.revision}."
             )
+
+        if fill_missing and fetch_from_hf:
+            original_meta_dict = model_meta.model_dump()
+            new_meta = ModelMeta.from_hub(model_name)
+            new_meta_dict = new_meta.model_dump(exclude_none=True)
+
+            updates = {
+                k: v
+                for k, v in new_meta_dict.items()
+                if original_meta_dict.get(k) is None
+            }
+
+            if updates:
+                return model_meta.model_copy(update=updates)
         return model_meta
+
     if fetch_from_hf:
         logger.info(
-            "Model not found in model registry. Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
+            f"Model not found in model registry. Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
         )
         meta = ModelMeta.from_hub(model_name, revision)
         return meta

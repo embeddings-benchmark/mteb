@@ -206,16 +206,22 @@ This can be done in multiple ways, e.g.:
 # by name
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
 # by type
-tasks = mteb.get_tasks(task_types=["Clustering", "Retrieval"]) # Only select clustering and retrieval tasks
+tasks = mteb.get_tasks(task_types=["Clustering", "Retrieval"]) # (1)
 # by language
-tasks = mteb.get_tasks(languages=["eng", "deu"]) # Only select datasets which contain "eng" or "deu" (iso 639-3 codes)
+tasks = mteb.get_tasks(languages=["eng", "deu"]) # (2)
 # by domain
 tasks = get_tasks(domains=["Legal"])
 # by modality
-tasks = mteb.get_tasks(modalities=["text", "image"]) # Only select tasks with text or image modalities
+tasks = mteb.get_tasks(modalities=["text", "image"]) # (3)
 # or using multiple
 tasks = get_tasks(languages=["eng", "deu"], script=["Latn"], domains=["Legal"])
 ```
+
+1.  Only select clustering and retrieval tasks
+
+2.  Only select datasets which contain "eng" or "deu" (iso 639-3 codes)
+
+3.  Only select tasks with text or image modalities
 
 ### Selecting Evaluation Split or Subsets
 A task in `mteb` mirrors the structure of a dataset on Huggingface. It includes a splits (i.e. "test") and a subset.
