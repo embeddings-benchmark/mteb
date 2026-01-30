@@ -57,7 +57,7 @@ on `MTEB`:
 
 
 !!! note
-    We do recommend using `mteb.get_model` which will by default load the model using the implementation in `mteb` if there is one, otherwise it will use `SentenceTransformers` or `CrossEncoder` from [sentence transformers](https://www.sbert.net/) if appropriate. The `mteb` implementation typically differ due models requiring specific prompts or similar hyperparameters and not specifying these may reduce performance (e.g. the [multilingual e5 models](https://huggingface.co/collections/intfloat/multilingual-e5-text-embeddings-67b2b8bb9bff40dec9fb3534) require specific prompts).
+    We do recommend using `mteb.get_model` which will by default load the model using the implementation in `mteb` if there is one, otherwise it will use `SentenceTransformers` or `CrossEncoder` from [sentence transformers](https://www.sbert.net/) if appropriate. The `mteb` implementations typically differ due to models requiring specific prompts or similar hyperparameters, and not specifying these may reduce performance (e.g. the [multilingual e5 models](https://huggingface.co/collections/intfloat/multilingual-e5-text-embeddings-67b2b8bb9bff40dec9fb3534) require specific prompts).
 
 ## Using a Custom Model
 
