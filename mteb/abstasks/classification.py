@@ -31,6 +31,8 @@ from .abstask import AbsTask
 if TYPE_CHECKING:
     from pathlib import Path
 
+    from numpy.typing import NDArray
+
     from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
     from mteb.models import MTEBModels
     from mteb.types import EncodeKwargs, HFSubset, ScoresDict
@@ -270,8 +272,8 @@ class AbsTaskClassification(AbsTask):
 
     def _calculate_scores(
         self,
-        y_test: np.ndarray | list[int],
-        y_pred: np.ndarray,
+        y_test: NDArray[np.integer] | list[int],
+        y_pred: NDArray[np.integer] | list[int],
     ) -> ClassificationMetrics:
         scores = ClassificationMetrics(
             accuracy=accuracy_score(y_test, y_pred),

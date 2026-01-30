@@ -25,6 +25,8 @@ from mteb.types.statistics import (
 if TYPE_CHECKING:
     from pathlib import Path
 
+    from numpy.typing import NDArray
+
     from mteb._evaluators.pair_classification_evaluator import (
         PairClassificationDistances,
     )
@@ -281,7 +283,10 @@ class AbsTaskPairClassification(AbsTask):
         )
 
     def _compute_metrics_values(
-        self, scores: list[float], labels: np.ndarray, high_score_more_similar: bool
+        self,
+        scores: list[float],
+        labels: NDArray[np.integer],
+        high_score_more_similar: bool,
     ) -> dict[str, float]:
         """Compute the metrics for the given scores and labels.
 
@@ -315,7 +320,10 @@ class AbsTaskPairClassification(AbsTask):
         )
 
     def _find_best_acc_and_threshold(
-        self, scores: list[float], labels: np.ndarray, high_score_more_similar: bool
+        self,
+        scores: list[float],
+        labels: NDArray[np.integer],
+        high_score_more_similar: bool,
     ) -> tuple[float, float]:
         rows = list(zip(scores, labels))
         rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)

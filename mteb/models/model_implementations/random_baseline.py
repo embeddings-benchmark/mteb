@@ -13,6 +13,7 @@ from mteb.similarity_functions import (
 )
 
 if TYPE_CHECKING:
+    from numpy.typing import NDArray
     from PIL import Image
     from torch.utils.data import DataLoader
 
@@ -20,7 +21,7 @@ if TYPE_CHECKING:
     from mteb.types._encoder_io import Array, BatchedInput, PromptType
 
 
-def _string_to_vector(text: str | None, size: int) -> np.ndarray:
+def _string_to_vector(text: str | None, size: int) -> NDArray[np.floating]:
     """Generate a deterministic random vector based on a string.
 
     Args:
@@ -39,7 +40,7 @@ def _string_to_vector(text: str | None, size: int) -> np.ndarray:
     return rng.random(size, dtype=np.float32)
 
 
-def _image_to_vector(image: Image.Image, size: int) -> np.ndarray:
+def _image_to_vector(image: Image.Image, size: int) -> NDArray[np.floating]:
     """Generate a deterministic random vector based on image content.
 
     Args:
@@ -80,7 +81,7 @@ _common_mock_metadata = dict(
 
 def _batch_to_embeddings(
     inputs: DataLoader[BatchedInput], embedding_dim: int
-) -> np.ndarray:
+) -> NDArray[np.floating]:
     """Convert batched text/image inputs into embeddings.
 
     Args:

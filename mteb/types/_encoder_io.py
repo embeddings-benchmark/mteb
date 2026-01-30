@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, TypedDict
 import numpy as np
 import torch
 from datasets import Dataset
+from numpy.typing import NDArray
 
 if TYPE_CHECKING:
     from PIL import Image
@@ -26,7 +27,7 @@ class EncodeKwargs(TypedDict):
 
 
 # --- Output types ---
-Array = np.ndarray | torch.Tensor
+Array = NDArray[np.floating] | torch.Tensor
 """General array type, can be a numpy array or a torch tensor."""
 
 

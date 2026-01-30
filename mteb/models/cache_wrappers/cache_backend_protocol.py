@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     import numpy as np
+    from numpy.typing import NDArray
 
 
 @runtime_checkable
@@ -26,7 +27,7 @@ class CacheBackendProtocol(Protocol):
             **kwargs: Additional backend-specific arguments.
         """
 
-    def add(self, item: list[dict[str, Any]], vectors: np.ndarray) -> None:
+    def add(self, item: list[dict[str, Any]], vectors: NDArray[np.floating]) -> None:
         """Add a vector to the cache.
 
         Args:
@@ -34,7 +35,7 @@ class CacheBackendProtocol(Protocol):
             vectors: Embedding vector of shape (dim,) or (1, dim).
         """
 
-    def get_vector(self, item: dict[str, Any]) -> np.ndarray | None:
+    def get_vector(self, item: dict[str, Any]) -> NDArray[np.floating] | None:
         """Retrieve the cached vector for the given item.
 
         Args:
