@@ -337,7 +337,7 @@ class TaskResult(BaseModel):
             The loaded TaskResult object.
         """
         with path.open("r", encoding="utf-8") as f:
-            json_str = json.load(f)
+            json_str = f.read()
 
         if not load_historic_data:
             try:
