@@ -2,7 +2,7 @@ from mteb.models import ModelMeta
 
 human = ModelMeta(
     loader=None,
-    name="Human",
+    name="baseline/Human",
     model_type=["dense"],
     languages=["eng-Latn", "ara-Arab", "rus-Cyrl", "dan-Latn", "nob-Latn"],
     open_weights=True,
