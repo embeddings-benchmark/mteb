@@ -373,6 +373,12 @@ conflicts = [
         { extra = "msclap" },
         { extra = "audio" },
     ],
+    [
+        # <3.14
+        { extra = "speechbrain" },
+        { extra = "audio" },
+        { extra = "vllm" },
+    ],
 ]
 
 [tool.uv.extra-build-dependencies]

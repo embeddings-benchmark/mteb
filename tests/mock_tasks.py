@@ -126,6 +126,25 @@ def create_mock_images(np_rng: np.random.Generator, n: int = 2) -> list[Image]:
     return [Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images]
 
 
+def create_mock_audio(
+    np_rng: np.random.Generator,
+    n: int = 2,
+    duration_s: float = 1.0,
+    sampling_rate: int = 16_000,
+) -> list[np.ndarray]:
+    audio_samples = []
+    num_samples = int(duration_s * sampling_rate)
+    for _ in range(n):
+        audio = np_rng.uniform(-1.0, 1.0, num_samples).astype(np.float32)
+        audio_samples.append(
+            {
+                "array": audio,
+                "sampling_rate": sampling_rate,
+            }
+        )
+    return audio_samples
+
+
 class MockClassificationTask(AbsTaskClassification):
     classifier = LogisticRegression(n_jobs=1, max_iter=10)
 
@@ -4343,13 +4362,7 @@ class MockAudioClusteringTask(AbsTaskClustering):
     metadata.modalities = ["audio"]
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(3)
-        ]
+        mock_audio = create_mock_audio(self.np_rng, n=3)
 
         labels = [0, 1, 2]
 
@@ -4425,13 +4438,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
     input_column_name = "audio"
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s audio
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
         labels = [[0], [1]]
 
         self.dataset = DatasetDict(
@@ -4491,14 +4498,7 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
     metadata.modalities = ["audio"]
 
     def load_data(self, **kwargs):
-        # Create mock audio data as numpy arrays
-        mock_audio = [
-            {
-                "array": np.random.rand(16000).astype(np.float32),  # 1s audio
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
         labels = np.array([0, 1])  # Convert labels to numpy array
 
         self.dataset = DatasetDict(
@@ -4564,13 +4564,7 @@ class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         self.queries = DatasetDict(
             {
@@ -4654,13 +4648,7 @@ class MockAny2AnyRetrievalA2TTask(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         self.queries = DatasetDict(
             {
@@ -4745,13 +4733,7 @@ class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         self.queries = DatasetDict(
             {
@@ -4841,13 +4823,7 @@ class MockAudioReranking(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         queries = Dataset.from_dict(
             {
@@ -4945,7 +4921,7 @@ class MockAudioClassification(AbsTaskClassification):
         sampling_rates = [16000, 8000]
         mock_audio = [
             {
-                "array": np.random.rand(16000),  # 1s
+                "array": self.np_rng.random(16000),  # 1s
                 "sampling_rate": sampling_rates[i],
             }
             for i in range(2)
@@ -5023,13 +4999,7 @@ class MockAudioPairClassification(AbsTaskPairClassification):
     label_column_name = "label"
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         self.dataset = DatasetDict(
             {
@@ -5084,13 +5054,7 @@ class MockAudioClassificationCrossVal(AbsTaskClassification):
     }
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         self.dataset = DatasetDict(
             {

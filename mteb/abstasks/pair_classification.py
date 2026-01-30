@@ -34,6 +34,7 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import MTEBModels
     from mteb.types import EncodeKwargs, PromptType
     from mteb.types.statistics import (
+        AudioStatistics,
         ImageStatistics,
         LabelStatistics,
         TextStatistics,

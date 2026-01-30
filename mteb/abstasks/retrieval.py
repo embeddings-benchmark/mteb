@@ -58,6 +58,7 @@ if TYPE_CHECKING:
         ScoresDict,
     )
     from mteb.types.statistics import (
+        AudioStatistics,
         ImageStatistics,
         RelevantDocsStatistics,
         TextStatistics,

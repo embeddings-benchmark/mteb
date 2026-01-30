@@ -449,7 +449,7 @@ def _create_audio_dataloader(
     task_metadata: TaskMetadata,
     input_column: str | None = None,
     batch_size: int = 32,
-    num_workers: int = 1,
+    num_proc: int = 1,
 ) -> DataLoader[AudioInput]:
     """Create a dataloader for audio.
 
@@ -458,7 +458,7 @@ def _create_audio_dataloader(
         task_metadata: Metadata of the task to determine the audio type.
         input_column: The column to use as input. If None, it will use the first column that matches the audio.
         batch_size: Batch size for the dataloader.
-        num_workers: The number of workers for the dataloader.
+        num_proc: The number of workers for the dataloader.
 
     Returns:
         A DataLoader with the audio dataset.
@@ -474,7 +474,7 @@ def _create_audio_dataloader(
         dataset,
         batch_size=batch_size,
         collate_fn=_custom_collate_fn,
-        num_workers=num_workers,
+        num_workers=num_proc if num_proc > 1 else 0,
         shuffle=False,
     )
 
@@ -535,7 +535,7 @@ def create_dataloader(
             task_metadata,
             input_column=input_column,
             batch_size=batch_size,
-            num_workers=num_workers,
+            num_proc=num_proc,
         )
     if "text" in task_metadata.modalities and input_column is not None:
         return _create_dataloader_from_texts(

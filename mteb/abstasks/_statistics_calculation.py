@@ -4,7 +4,6 @@ import hashlib
 from collections import Counter, defaultdict
 from typing import TYPE_CHECKING, cast
 
-from mteb.types._encoder_io import AudioInputItem
 from mteb.types.statistics import (
     AudioStatistics,
     ImageStatistics,
@@ -21,6 +20,7 @@ if TYPE_CHECKING:
     from PIL import Image
 
     from mteb.types import TopRankedDocumentsType
+    from mteb.types._encoder_io import AudioInputItem
 
 
 def calculate_text_statistics(texts: list[str]) -> TextStatistics:

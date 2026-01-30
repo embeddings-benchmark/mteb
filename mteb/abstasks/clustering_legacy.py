@@ -9,11 +9,8 @@ from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
 
 from mteb._evaluators import ClusteringEvaluator
-from mteb.models import EncoderProtocol, MTEBModels
+from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
-    AudioStatistics,
-    ImageStatistics,
-    LabelStatistics,
     SplitDescriptiveStatistics,
 )
 
@@ -31,6 +28,7 @@ if TYPE_CHECKING:
     from mteb.models import MTEBModels
     from mteb.types import EncodeKwargs, ScoresDict
     from mteb.types.statistics import (
+        AudioStatistics,
         ImageStatistics,
         LabelStatistics,
         TextStatistics,

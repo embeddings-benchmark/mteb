@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types._encoder_io import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import Array, AudioInputItem, BatchedInput, PromptType
 
 
 def _string_to_vector(text: str | None, size: int) -> np.ndarray:

@@ -15,9 +15,6 @@ from mteb._create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
 from mteb.types import Array, HFSubset
 from mteb.types.statistics import (
-    AudioStatistics,
-    ImageStatistics,
-    LabelStatistics,
     SplitDescriptiveStatistics,
 )
 
@@ -35,6 +32,7 @@ if TYPE_CHECKING:
     from mteb.models import MTEBModels
     from mteb.types import Array, EncodeKwargs, ScoresDict
     from mteb.types.statistics import (
+        AudioStatistics,
         ImageStatistics,
         LabelStatistics,
         TextStatistics,

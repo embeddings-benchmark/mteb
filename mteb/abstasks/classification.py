@@ -17,13 +17,9 @@ from sklearn.metrics import (
 from sklearn.model_selection import KFold
 
 from mteb._create_dataloaders import create_dataloader
-from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
-from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import Array, HFSubset, ScoresDict
+from mteb._evaluators.sklearn_evaluator import SklearnEvaluator
+from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
-    AudioStatistics,
-    ImageStatistics,
-    LabelStatistics,
     SplitDescriptiveStatistics,
 )
 
@@ -40,8 +36,9 @@ if TYPE_CHECKING:
 
     from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
     from mteb.models import MTEBModels
-    from mteb.types import EncodeKwargs, HFSubset, ScoresDict
+    from mteb.types import Array, EncodeKwargs, HFSubset, ScoresDict
     from mteb.types.statistics import (
+        AudioStatistics,
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
