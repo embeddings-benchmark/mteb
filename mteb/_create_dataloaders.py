@@ -18,12 +18,17 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import (
-        AudioInput,
         BatchedInput,
         Conversation,
         QueryDatasetType,
     )
-    from mteb.types._encoder_io import CorpusInput, ImageInput, QueryInput, TextInput
+    from mteb.types._encoder_io import (
+        AudioInput,
+        CorpusInput,
+        ImageInput,
+        QueryInput,
+        TextInput,
+    )
 
 logger = logging.getLogger(__name__)
 

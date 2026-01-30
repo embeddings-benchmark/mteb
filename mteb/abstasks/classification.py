@@ -263,10 +263,11 @@ class AbsTaskClassification(AbsTask):
         model: EncoderProtocol,
         data_split: DatasetDict,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         if self.train_split != hf_split:
@@ -290,6 +291,7 @@ class AbsTaskClassification(AbsTask):
             ds,
             self.metadata,
             input_column=self.input_column_name,
+            num_proc=num_proc,
             **encode_kwargs,
         )
         logger.info("Running cross-validation - Encoding samples...")
@@ -320,6 +322,7 @@ class AbsTaskClassification(AbsTask):
                 hf_subset=hf_subset,
                 test_cache=test_cache,
                 train_cache=train_cache,
+                num_proc=num_proc,
             )
 
             if prediction_folder:
@@ -345,10 +348,11 @@ class AbsTaskClassification(AbsTask):
         idxs: list[int] | None,
         test_cache: Array | None,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         train_cache: Array | None = None,
+        num_proc: int = 1,
     ) -> tuple[ClassificationMetrics, list[float], list[int], Array]:
         train_dataset, idxs, selected_idx = self._undersample_data(
             train_split,
@@ -374,6 +378,7 @@ class AbsTaskClassification(AbsTask):
             encode_kwargs=encode_kwargs,
             test_cache=test_cache,
             train_cache=sub_train_cache,
+            num_proc=num_proc,
         )
         y_test = eval_split[self.label_column_name]
         return self._calculate_scores(y_test, y_pred), y_pred.tolist(), idxs, test_cache
