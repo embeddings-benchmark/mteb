@@ -337,16 +337,16 @@ class TaskResult(BaseModel):
             The loaded TaskResult object.
         """
         with path.open("r", encoding="utf-8") as f:
-            data = json.load(f)
+            json_str = json.load(f)
 
         if not load_historic_data:
             try:
-                return cls.model_validate(data)
+                return cls.model_validate_json(json_str)
             except Exception as e:
                 raise ValueError(
                     f"Error loading TaskResult from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
                 )
-
+        data = json.loads(json_str)
         pre_1_11_load = (
             (
                 "mteb_version" in data
@@ -357,7 +357,7 @@ class TaskResult(BaseModel):
         )  # assume it is before 1.11.0 if the version is not present
 
         try:
-            obj: TaskResult = cls.model_validate(data)
+            obj: TaskResult = cls.model_validate_json(json_str)
         except Exception as e:
             if not pre_1_11_load:
                 raise e

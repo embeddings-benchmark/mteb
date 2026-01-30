@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import logging
 import warnings
 from pathlib import Path
@@ -442,5 +441,4 @@ class ModelResult(BaseModel):
         """
         path = Path(path)
         with path.open("r", encoding="utf-8") as f:
-            data = json.load(f)
-        return cls.model_validate(data)
+            return cls.model_validate_json(f.read())
