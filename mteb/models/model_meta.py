@@ -266,7 +266,7 @@ class ModelMeta(BaseModel):
     @field_validator("name")
     @classmethod
     def _check_name(cls, v: str | None) -> str | None:
-        if v is None or v == "Human":
+        if v is None:
             return v
         if "/" not in v:
             raise ValueError(
