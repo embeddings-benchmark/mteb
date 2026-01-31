@@ -69,6 +69,7 @@ boom_4b_v1 = ModelMeta(
     model_type=["dense"],
     languages=multilingual_langs,
     open_weights=True,
+    adapted_from="Qwen/Qwen3-4B", 
     revision="33fb345468120e37c81eed2369aefe08b8f8222b",
     release_date="2026-01-31",
     n_parameters=4021774336,
