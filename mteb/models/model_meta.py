@@ -516,7 +516,7 @@ class ModelMeta(BaseModel):
         cls,
         model: SentenceTransformer,
         revision: str | None = None,
-        fill_missing: bool = True,
+        fill_missing: bool = False,
     ) -> Self:
         """Generates a ModelMeta from a SentenceTransformer model.
 
@@ -533,7 +533,7 @@ class ModelMeta(BaseModel):
             if model.model_card_data.model_name
             else model.model_card_data.base_model
         )
-        meta = cls._from_hub(name, revision, fill_missing)
+        meta = cls._from_hub(name, revision, fill_missing=fill_missing)
         try:
             first = model[0]
 
@@ -566,7 +566,7 @@ class ModelMeta(BaseModel):
         Returns:
             The generated ModelMeta.
         """
-        meta = cls._from_hub(model, revision, fill_missing)
+        meta = cls._from_hub(model, revision, fill_missing=fill_missing)
         meta.modalities = ["text"]
 
         if model and fill_missing and _repo_exists(model):
@@ -598,7 +598,7 @@ class ModelMeta(BaseModel):
         cls,
         model: CrossEncoder,
         revision: str | None = None,
-        fill_missing: bool = True,
+        fill_missing: bool = False,
     ) -> Self:
         """Generates a ModelMeta from a CrossEncoder.
 
@@ -612,7 +612,9 @@ class ModelMeta(BaseModel):
         """
         from mteb.models import CrossEncoderWrapper
 
-        meta = cls._from_hub(model.model.name_or_path, revision, fill_missing)
+        meta = cls._from_hub(
+            model.model.name_or_path, revision, fill_missing=fill_missing
+        )
         try:
             emb = model.model.get_input_embeddings()
 
