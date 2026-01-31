@@ -550,7 +550,9 @@ class ModelMeta(BaseModel):
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
         meta.similarity_fn_name = ScoringFunction.from_str(model.similarity_fn_name)
-        meta.modalities = ["text"]
+        meta.modalities = ["text"]  # best guess
+        if "Sentence Transformers" not in meta.framework:
+            meta.framework.append("Sentence Transformers")
         return meta
 
     @classmethod
@@ -642,6 +644,8 @@ class ModelMeta(BaseModel):
         meta.embed_dim = None
         meta.modalities = ["text"]
         meta.model_type = ["cross-encoder"]
+        if "Sentence Transformers" not in meta.framework:
+            meta.framework.append("Sentence Transformers")
         return meta
 
     def is_zero_shot_on(self, tasks: Sequence[AbsTask] | Sequence[str]) -> bool | None:
