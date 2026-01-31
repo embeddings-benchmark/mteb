@@ -408,10 +408,11 @@ extend-exclude = [
     "*.json",
     "*.jsonl",
     "*.cff",
+    "*.tex",  # latex files with language codes
+    "*.bib",  # bibliography files with author names and journal abbreviations
     "*.txt",  # zero shot labels
     "docs/mmteb",
     "scripts/",
-    "docs/references.bib",
     "mteb/models/model_implementations/gme_v_models.py",  # video_grid_thw `thw`
     "mteb/models/model_implementations/vista_models.py",  # self.normlized: in visual bge
     "tests/mock_tasks.py",  #  "denne her matche ikke den ovenstående",
