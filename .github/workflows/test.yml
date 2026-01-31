@@ -61,6 +61,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      # required for evaluation the audio subset
       - name: Install FFmpeg (Ubuntu)
         if: runner.os != 'Windows'
         shell: bash
