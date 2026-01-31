@@ -428,7 +428,7 @@ monot5_3b = ModelMeta(
     open_weights=True,
     revision="bc0c419a438c81f592f878ce32430a1823f5db6c",
     release_date="2022-03-28",
-    n_parameters=None,
+    n_parameters=783150080,
     n_embedding_parameters=32_899_072,
     memory_usage_mb=None,
     max_tokens=None,
@@ -440,6 +440,7 @@ monot5_3b = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch", "Transformers"],
+    reference="https://huggingface.co/castorini/monot5-3b-msmarco-10k",
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -496,6 +497,7 @@ flant5_base = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/google/flan-t5-base",
 )
 
 flant5_large = ModelMeta(
@@ -543,6 +545,7 @@ flant5_large = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/google/flan-t5-large",
 )
 
 flant5_xl = ModelMeta(
@@ -767,6 +770,7 @@ followir_7b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/jhu-clsp/FollowIR-7B",
     citation="""
     @misc{weller2024followir,
       title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
