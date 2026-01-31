@@ -42,7 +42,9 @@ LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.lang
 MODEL_TYPE_CHOICES = list(get_args(MODEL_TYPES))
 
 
-def _load_results(cache: ResultCache) -> BenchmarkResults:
+def _load_results(
+    cache: ResultCache, skip_cache_file: bool = False
+) -> BenchmarkResults:
     """Load benchmark results using an optimized caching strategy.
 
     This function implements a two-tier caching strategy for faster leaderboard startup:
@@ -62,6 +64,8 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
 
     Args:
         cache: ResultCache instance used for both optimized and fallback operations
+        skip_cache_file: If True, skip loading from cached file and load directly
+            from the local cache path. Useful for development with local results.
 
     Returns:
         BenchmarkResults: Complete benchmark results ready for leaderboard display
@@ -72,6 +76,22 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
     """
     start_time = time.time()
     results_cache_path = Path(__file__).parent.joinpath("__cached_results.json")
+
+    # If skip_cache_file is True, load directly from local cache
+    if skip_cache_file:
+        logger.info(
+            "Skipping cached file, loading results directly from local cache..."
+        )
+        all_model_names = [model_meta.name for model_meta in mteb.get_model_metas()]
+        all_results = cache.load_results(
+            models=all_model_names,
+            only_main_score=True,
+            require_model_meta=False,
+            include_remote=False,
+        )
+        load_time = time.time() - start_time
+        logger.info(f"Loaded results from local cache in {load_time:.2f}s")
+        return all_results
 
     if not results_cache_path.exists():
         # First try to download the cached results file from the cached-data branch
@@ -183,11 +203,16 @@ def _update_citation(benchmark_name: str) -> str:
     return citation
 
 
-def _update_description(
-    benchmark_name: str, languages: list[str], task_types: list[str], domains: list[str]
-) -> str:
+def _update_description(benchmark_name: str) -> str:
     benchmark = mteb.get_benchmark(benchmark_name)
     description = f"{benchmark.description}\n"
+    # Get counts from the benchmark itself (not from filter selections)
+    # This avoids race conditions with filter component values during benchmark switches
+    languages = {lang for task in benchmark.tasks for lang in (task.languages or [])}
+    task_types = {task.metadata.type for task in benchmark.tasks if task.metadata.type}
+    domains = {
+        domain for task in benchmark.tasks for domain in (task.metadata.domains or [])
+    }
     n_languages = len(languages)
     n_task_types = len(task_types)
     n_tasks = len(benchmark.tasks)
@@ -414,14 +439,16 @@ def _cache_update_task_list(
     return benchmark_tasks, tasks_to_keep
 
 
-def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
+def get_leaderboard_app(
+    cache: ResultCache = ResultCache(), skip_cache_file: bool = False
+) -> gr.Blocks:
     """Returns a Gradio Blocks app for the MTEB leaderboard."""
     app_start = time.time()
     logger.info("=== Starting leaderboard app initialization ===")
 
     logger.info("Step 1/7: Loading all benchmark results...")
     load_start = time.time()
-    all_results = _load_results(cache)
+    all_results = _load_results(cache, skip_cache_file=skip_cache_file)
     load_time = time.time() - load_start
     logger.info(f"Step 1/7 complete: Loaded results in {load_time:.2f}s")
 
@@ -582,7 +609,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             with gr.Column(scale=1):
                 description = gr.Markdown(  # noqa: F841
                     _update_description,
-                    inputs=[benchmark_select, lang_select, type_select, domain_select],
+                    inputs=[benchmark_select],
                 )
 
             with gr.Column(scale=1):
@@ -749,21 +776,6 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 initial_models,
             )
 
-        benchmark_select.change(
-            on_benchmark_select,
-            inputs=[benchmark_select],
-            outputs=[
-                lang_select,
-                domain_select,
-                type_select,
-                modality_select,
-                task_select,
-                scores,
-                zero_shot,
-                models,
-            ],
-        )
-
         @cachetools.cached(
             cache={},
             key=lambda benchmark_name, languages: hash(
@@ -780,12 +792,6 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             logger.debug(f"update_scores callback: {elapsed}s")
             return scores
 
-        lang_select.input(
-            update_scores_on_lang_change,
-            inputs=[benchmark_select, lang_select],
-            outputs=[scores],
-        )
-
         def update_task_list(
             benchmark_name, type_select, domain_select, lang_select, modality_select
         ):
@@ -794,7 +800,14 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             )
             return gr.update(choices=benchmark_tasks, value=tasks_to_keep)
 
-        type_select.input(
+        # Store references to filter event listeners so we can cancel them
+        # when benchmark changes (prevents race conditions with stale values)
+        lang_scores_event = lang_select.input(
+            update_scores_on_lang_change,
+            inputs=[benchmark_select, lang_select],
+            outputs=[scores],
+        )
+        type_task_event = type_select.input(
             update_task_list,
             inputs=[
                 benchmark_select,
@@ -805,7 +818,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             ],
             outputs=[task_select],
         )
-        domain_select.input(
+        domain_task_event = domain_select.input(
             update_task_list,
             inputs=[
                 benchmark_select,
@@ -816,7 +829,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             ],
             outputs=[task_select],
         )
-        lang_select.input(
+        lang_task_event = lang_select.input(
             update_task_list,
             inputs=[
                 benchmark_select,
@@ -827,7 +840,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             ],
             outputs=[task_select],
         )
-        modality_select.input(
+        modality_task_event = modality_select.input(
             update_task_list,
             inputs=[
                 benchmark_select,
@@ -837,6 +850,30 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 modality_select,
             ],
             outputs=[task_select],
+        )
+
+        # Cancel pending filter events when benchmark changes to prevent
+        # race conditions where stale filter values don't match new choices
+        benchmark_select.change(
+            on_benchmark_select,
+            inputs=[benchmark_select],
+            outputs=[
+                lang_select,
+                domain_select,
+                type_select,
+                modality_select,
+                task_select,
+                scores,
+                zero_shot,
+                models,
+            ],
+            cancels=[
+                lang_scores_event,
+                type_task_event,
+                domain_task_event,
+                lang_task_event,
+                modality_task_event,
+            ],
         )
 
         @cachetools.cached(
@@ -1105,6 +1142,8 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
     logger.info("Starting prerun on all benchmarks to populate caches...")
     prerun_start = time.time()
     # Prerun on all benchmarks, so that results of callbacks get cached
+    # Note: We call the underlying cached functions directly (not the wrapper
+    # functions that return gr.update() objects) to get raw values for caching
     for benchmark in benchmarks:
         (
             bench_languages,
@@ -1113,13 +1152,13 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             bench_modalities,
             bench_tasks,
             bench_scores,
-            zero_shot,
+            _show_zero_shot,
             bench_initial_models,
-        ) = on_benchmark_select(benchmark.name)
+        ) = _cache_on_benchmark_select(benchmark.name, all_benchmark_results)
         # Call update_tables to populate cache (simulating models.change trigger)
         update_tables(bench_scores, bench_tasks, bench_initial_models, benchmark.name)
         # Also cache the filtered tasks scenario
-        filtered_tasks = update_task_list(
+        _benchmark_tasks, filtered_tasks = _cache_update_task_list(
             benchmark.name,
             bench_types,
             bench_domains,
@@ -1169,7 +1208,9 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore", message=".*: Missing subsets .* for split .*")
     warnings.filterwarnings("ignore", message=".*: Missing splits .*")
 
-    app = get_leaderboard_app()
+    # Hardcoded local cache path for MAEB results
+    cache = ResultCache(cache_path="/Users/isaac/work/maeb-results")
+    app = get_leaderboard_app(cache=cache, skip_cache_file=True)
 
     head = """
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
