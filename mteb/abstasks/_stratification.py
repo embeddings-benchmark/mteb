@@ -53,7 +53,7 @@ if TYPE_CHECKING:
 
 
 def _iterative_train_test_split(
-    X: NDArray[np.integer],  # noqa: N803
+    X: NDArray[np.integer],
     y: NDArray[np.integer],
     test_size: float,
     random_state: int | None = None,
@@ -306,7 +306,7 @@ class IterativeStratification(_BaseKFold):
             self.desired_samples_per_fold[fold_selected] -= 1
             folds[fold_selected].append(row)
 
-    def _iter_test_indices(self, X, y=None, groups=None):  # noqa: N803
+    def _iter_test_indices(self, X, y=None, groups=None):
         """Internal method for providing scikit-learn's split with folds
 
         Args:
