@@ -25,19 +25,42 @@ def instruction_template(
 
 # Multilingual language codes
 multilingual_langs = [
-    "deu-Latn", "ita-Latn", "ara-Arab", "fas-Arab", "fra-Latn", 
-    "hin-Deva", "spa-Latn", "zho-Hans", "ben-Beng", "eng-Latn", 
-    "fin-Latn", "ind-Latn", "jpn-Jpan", "kor-Hang", "rus-Cyrl", 
-    "swh-Latn", "tel-Telu", "tha-Thai"
+    "deu-Latn",
+    "ita-Latn",
+    "ara-Arab",
+    "fas-Arab",
+    "fra-Latn",
+    "hin-Deva",
+    "spa-Latn",
+    "zho-Hans",
+    "ben-Beng",
+    "eng-Latn",
+    "fin-Latn",
+    "ind-Latn",
+    "jpn-Jpan",
+    "kor-Hang",
+    "rus-Cyrl",
+    "swh-Latn",
+    "tel-Telu",
+    "tha-Thai",
 ]
 
 # Training datasets
 training_data = [
-    "FEVER", "DuRetrieval", "HotpotQA", "MSMARCO", "T2Retrieval", 
-    "NQ", "MIRACLRetrieval", "MrTidyRetrieval", 
-    "AmazonCounterfactualClassification", "Banking77Classification", 
-    "ImdbClassification", "MTOPDomainClassification", 
-    "ToxicConversationsClassification", "TweetSentimentExtractionClassification"
+    "FEVER",
+    "DuRetrieval",
+    "HotpotQA",
+    "MSMARCO",
+    "T2Retrieval",
+    "NQ",
+    "MIRACLRetrieval",
+    "MrTidyRetrieval",
+    "AmazonCounterfactualClassification",
+    "Banking77Classification",
+    "ImdbClassification",
+    "MTOPDomainClassification",
+    "ToxicConversationsClassification",
+    "TweetSentimentExtractionClassification",
 ]
 
 boom_4b_v1 = ModelMeta(
