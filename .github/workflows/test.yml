@@ -99,17 +99,35 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
+          $ErrorActionPreference = "Continue"
           $core = "D:\a\mteb\mteb\.venv\Lib\site-packages\torchcodec\libtorchcodec_core8.dll"
           "TorchCodec core DLL exists: " + (Test-Path $core)
           if (Test-Path $core) { Get-Item $core | Format-List * }
           "TorchCodec DLLs in site-packages:"
           Get-ChildItem "D:\a\mteb\mteb\.venv\Lib\site-packages\torchcodec" -Filter "*.dll" | Select-Object FullName
+          "FFmpeg on PATH:"
+          Get-Command ffmpeg | Select-Object -ExpandProperty Source
           "FFmpeg DLLs on PATH (first match):"
-          where.exe avcodec*.dll
-          where.exe avformat*.dll
-          where.exe avutil*.dll
-          "FFmpeg DLLs in choco bin:"
-          Get-ChildItem "C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin" -Filter "*.dll" | Select-Object FullName
+          cmd /c "where avcodec*.dll" || echo "avcodec*.dll not found on PATH"
+          cmd /c "where avformat*.dll" || echo "avformat*.dll not found on PATH"
+          cmd /c "where avutil*.dll" || echo "avutil*.dll not found on PATH"
+          "FFmpeg DLLs next to ffmpeg.exe:"
+          $ffmpegPath = (Get-Command ffmpeg).Source
+          if ($ffmpegPath) { Get-ChildItem (Split-Path $ffmpegPath) -Filter "*.dll" | Select-Object FullName }
+
+      - name: List TorchCodec DLL dependencies (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          uv pip install --quiet pefile
+          uv run python - <<'PY'
+          import pefile
+          path = r"D:\a\mteb\mteb\.venv\Lib\site-packages\torchcodec\libtorchcodec_core8.dll"
+          pe = pefile.PE(path)
+          print("Imports for", path)
+          for entry in pe.DIRECTORY_ENTRY_IMPORT:
+            print(entry.dll.decode("utf-8", "ignore"))
+          PY
 
       - name: Run tests
         if: runner.os != 'Windows'
