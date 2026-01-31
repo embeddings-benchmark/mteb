@@ -103,68 +103,6 @@ class BGEReranker(RerankerWrapper):
         return scores
 
 
-class MonoBERTReranker(RerankerWrapper):
-    name: str = "MonoBERT"
-
-    def __init__(
-        self,
-        model_name_or_path="castorini/monobert-large-msmarco",
-        torch_compile=False,
-        **kwargs,
-    ):
-        from transformers import AutoModelForSequenceClassification, AutoTokenizer
-
-        super().__init__(model_name_or_path, **kwargs)
-        if not self.device:
-            self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        model_args = {}
-        if self.fp_options:
-            model_args["torch_dtype"] = self.fp_options
-        self.model = AutoModelForSequenceClassification.from_pretrained(
-            model_name_or_path,
-            **model_args,
-        )
-        self.model.to(self.device)
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
-        self.max_length = self.tokenizer.model_max_length
-        logger.info(f"Using max_length of {self.max_length}")
-
-        self.model.eval()
-
-    @torch.inference_mode()
-    def predict(
-        self,
-        inputs1: DataLoader[BatchedInput],
-        inputs2: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["query"]]
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
-
-        if instructions is not None and instructions[0] is not None:
-            queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
-
-        tokens = self.tokenizer(
-            queries,
-            passages,
-            padding=True,
-            truncation="only_second",
-            return_tensors="pt",
-            max_length=self.max_length,
-        ).to(self.device)
-        output = self.model(**tokens)[0]
-        batch_scores = torch.nn.functional.log_softmax(output, dim=1)
-        return batch_scores[:, 1].exp()
-
-
 class JinaReranker(RerankerWrapper):
     name = "Jina"
 
@@ -218,31 +156,6 @@ class JinaReranker(RerankerWrapper):
         scores = self.model.predict(sentence_pairs, convert_to_tensor=True)
         return scores
 
-
-monobert_large = ModelMeta(
-    loader=MonoBERTReranker,
-    loader_kwargs=dict(
-        fp_options="float16",
-    ),
-    name="castorini/monobert-large-msmarco",
-    model_type=["cross-encoder"],
-    languages=["eng-Latn"],
-    open_weights=True,
-    revision="0a97706f3827389da43b83348d5d18c9d53876fa",
-    release_date="2020-05-28",
-    n_parameters=None,
-    n_embedding_parameters=31_254_528,
-    memory_usage_mb=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    public_training_code=None,
-    public_training_data=None,
-    similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
-    framework=["Sentence Transformers", "PyTorch", "Transformers"],
-)
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
 jina_reranker_multilingual = ModelMeta(

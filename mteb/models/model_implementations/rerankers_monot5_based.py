@@ -34,7 +34,6 @@ prediction_tokens = {
     "unicamp-dl/mt5-base-en-msmarco": ["▁no", "▁yes"],
     "unicamp-dl/mt5-base-mmarco-v2": ["▁no", "▁yes"],
     "unicamp-dl/mt5-base-mmarco-v1": ["▁no", "▁yes"],
-    "unicamp-dl/mt5-13b-mmarco-100k": ["▁", "▁true"],
 }
 
 
@@ -917,30 +916,5 @@ mt5_base_mmarco_v2 = ModelMeta(
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    framework=["PyTorch", "Transformers"],
-)
-
-mt5_13b_mmarco_100k = ModelMeta(
-    loader=MonoT5Reranker,
-    loader_kwargs=dict(
-        fp_options="float16",
-    ),
-    name="unicamp-dl/mt5-13b-mmarco-100k",
-    model_type=["cross-encoder"],
-    languages=mt5_languages,
-    open_weights=True,
-    revision="e1a4317e102a525ea9e16745ad21394a4f1bffbc",
-    release_date="2022-11-04",
-    n_parameters=None,
-    n_embedding_parameters=1_024_458_752,
-    memory_usage_mb=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    public_training_code=None,
-    public_training_data=None,
-    similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
     framework=["PyTorch", "Transformers"],
 )
