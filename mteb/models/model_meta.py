@@ -442,7 +442,7 @@ class ModelMeta(BaseModel):
         if compute_missing is not None:
             warnings.warn(
                 "The compute_missing parameter is deprecated and will be removed in a future version. "
-                "Use fill_missing instead.",
+                f"Use fill_missing instead. Setting `fill_missing={compute_missing}`.",
                 DeprecationWarning,
                 stacklevel=2,
             )
@@ -517,6 +517,7 @@ class ModelMeta(BaseModel):
         model: SentenceTransformer,
         revision: str | None = None,
         fill_missing: bool = False,
+        compute_missing: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta from a SentenceTransformer model.
 
@@ -524,6 +525,7 @@ class ModelMeta(BaseModel):
             model: SentenceTransformer model.
             revision: Revision of the model
             fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            compute_missing: Deprecated. Use fill_missing instead.
 
         Returns:
             The generated ModelMeta.
@@ -533,7 +535,9 @@ class ModelMeta(BaseModel):
             if model.model_card_data.model_name
             else model.model_card_data.base_model
         )
-        meta = cls._from_hub(name, revision, fill_missing=fill_missing)
+        meta = cls._from_hub(
+            name, revision, fill_missing=fill_missing, compute_missing=compute_missing
+        )
         try:
             first = model[0]
 
@@ -555,6 +559,7 @@ class ModelMeta(BaseModel):
         model: str,
         revision: str | None = None,
         fill_missing: bool = True,
+        compute_missing: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta for model from HuggingFace hub.
 
@@ -562,11 +567,14 @@ class ModelMeta(BaseModel):
             model: Name of the model from HuggingFace hub. For example, `intfloat/multilingual-e5-large`
             revision: Revision of the model
             fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            compute_missing: Deprecated. Use fill_missing instead.
 
         Returns:
             The generated ModelMeta.
         """
-        meta = cls._from_hub(model, revision, fill_missing=fill_missing)
+        meta = cls._from_hub(
+            model, revision, fill_missing=fill_missing, compute_missing=compute_missing
+        )
         meta.modalities = ["text"]
 
         if model and fill_missing and _repo_exists(model):
@@ -599,6 +607,7 @@ class ModelMeta(BaseModel):
         model: CrossEncoder,
         revision: str | None = None,
         fill_missing: bool = False,
+        compute_missing: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta from a CrossEncoder.
 
@@ -606,6 +615,7 @@ class ModelMeta(BaseModel):
             model: The CrossEncoder model
             revision: Revision of the model
             fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            compute_missing: Deprecated. Use fill_missing instead.
 
         Returns:
             The generated ModelMeta
@@ -613,7 +623,10 @@ class ModelMeta(BaseModel):
         from mteb.models import CrossEncoderWrapper
 
         meta = cls._from_hub(
-            model.model.name_or_path, revision, fill_missing=fill_missing
+            model.model.name_or_path,
+            revision,
+            fill_missing=fill_missing,
+            compute_missing=compute_missing,
         )
         try:
             emb = model.model.get_input_embeddings()
