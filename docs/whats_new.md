@@ -3,7 +3,7 @@ This section goes through new features added in v2. Below we give an overview of
 
 **Overview of changes:**
 
-- [New in v2.0 🎉](#new-in-v20-🎉)
+- [New in v2.0 🎉](#new-in-v20)
     - [Easier evaluation](#easier-evaluation)
     - [Better local and online caching](#better-local-and-online-caching)
     - [Multimodal Input format](#multimodal-input-format)
@@ -37,12 +37,12 @@ results = mteb.evaluate(model, tasks)
 ### Better local and online caching
 The new [`mteb.ResultCache`][mteb.cache.ResultCache] makes managing the cache notably easier:
 ```py
-from mteb.cache import ResultCache
+import mteb
 
 model = ...
 tasks = ...
 
-cache = ResultCache(cache_path="~/.cache/mteb")  # default
+cache = mteb.ResultCache(cache_path="~/.cache/mteb")  # default
 
 # simple evaluate with cache
 results = mteb.evaluate(model, tasks, cache=cache)  # only runs if results not in cache
@@ -169,9 +169,9 @@ We've added a lot of new documentation to make it easier to get started with MTE
 The new `ResultCache` also makes it easier to load, inspect and compare both local and online results:
 
 ```py
-from mteb.cache import ResultCache
+import mteb
 
-cache = ResultCache(cache_path="~/.cache/mteb") # default
+cache = mteb.ResultCache(cache_path="~/.cache/mteb") # default
 cache.download_from_remote() # download the latest results from the remote repository
 
 # load both local and online results

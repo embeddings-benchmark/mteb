@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - "mteb/models/**.py"
+      - "pyproject.toml"
+      - "uv.lock"
 
 jobs:
   extract-and-run:

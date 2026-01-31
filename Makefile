@@ -10,16 +10,16 @@ install-for-tests:
 
 lint:
 	@echo "--- 🧹 Running linters ---"
-	uv run --group lint ruff format . 			# running ruff formatting
-	uv run --group lint ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
-	uv run --group lint typos
+	uv run --no-sync ruff format . 			# running ruff formatting
+	uv run --no-sync ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
+	uv run --no-sync typos
 
 lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
 	# Required for CI to work, otherwise it will just pass
-	uv run --group lint ruff format . --check
-	uv run --group lint ruff check .
-	uv run --group lint typos --diff
+	uv run --no-sync ruff format . --check
+	uv run --no-sync ruff check .
+	uv run --no-sync typos --diff
 
 test:
 	@echo "--- 🧪 Running tests ---"
@@ -55,7 +55,7 @@ serve-docs:
 
 model-load-test:
 	@echo "--- 🚀 Running model load test ---"
-	uv sync --extra pylate --extra gritlm --extra model2vec --group dev
+	uv sync --extra pylate --group dev
 	uv run --no-sync python scripts/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
 	uv run --no-sync python tests/test_models/model_loading.py --model_name_file scripts/model_names.txt
 
@@ -94,4 +94,4 @@ check: ## Run code quality tools.
 .PHONY: typecheck
 typecheck:
 	@echo "--- 🔍 Running type checks ---"
-	uv run --group typing --extra leaderboard mypy mteb
+	uv run --no-sync mypy mteb

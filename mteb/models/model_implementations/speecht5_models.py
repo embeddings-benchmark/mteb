@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import (
     SpeechT5ForSpeechToText,
@@ -10,11 +11,15 @@ from transformers import (
     SpeechT5Processor,
 )
 
-from mteb import TaskMetadata
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, PromptType
-from mteb.types._encoder_io import AudioInput, BatchedInput, TextInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput, TextInput
 
 
 class SpeechT5Audio(AbsEncoder):

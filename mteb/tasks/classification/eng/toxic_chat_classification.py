@@ -40,7 +40,7 @@ class ToxicChatClassification(AbsTaskClassification):
         superseded_by="ToxicChatClassification.v2",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         keep_cols = ["user_input", "toxicity"]
         rename_dict = dict(zip(keep_cols, ["text", "label"]))
         remove_cols = [
@@ -93,7 +93,7 @@ class ToxicChatClassificationV2(AbsTaskClassification):
         adapted_from=["ToxicChatClassification"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )

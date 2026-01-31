@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 import logging
-from pathlib import Path
-from typing import Any, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
 from datasets import Dataset
@@ -8,14 +9,9 @@ from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
 
 from mteb._evaluators import ClusteringEvaluator
-from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import ScoresDict
+from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
-    AudioStatistics,
-    ImageStatistics,
-    LabelStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
 
 from ._statistics_calculation import (
@@ -25,6 +21,18 @@ from ._statistics_calculation import (
     calculate_text_statistics,
 )
 from .abstask import AbsTask
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from mteb.models import MTEBModels
+    from mteb.types import EncodeKwargs, ScoresDict
+    from mteb.types.statistics import (
+        AudioStatistics,
+        ImageStatistics,
+        LabelStatistics,
+        TextStatistics,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -87,10 +95,11 @@ class AbsTaskClusteringLegacy(AbsTask):
         model: MTEBModels,
         data_split: Dataset,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> ScoresDict:
         if not isinstance(model, EncoderProtocol):
@@ -155,7 +164,11 @@ class AbsTaskClusteringLegacy(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        evaluate_clusters = evaluator(model, encode_kwargs=encode_kwargs)
+        evaluate_clusters = evaluator(
+            model,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
         if prediction_folder:
             self._save_task_predictions(
                 evaluate_clusters,
@@ -238,11 +251,12 @@ class AbsTaskClusteringLegacy(AbsTask):
             label_statistics=label_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         self._upload_dataset_to_hub(
             repo_name,
             [
                 self.input_column_name,
                 self.label_column_name,
             ],
+            num_proc=num_proc,
         )

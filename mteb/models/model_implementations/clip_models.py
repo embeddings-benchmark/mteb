@@ -1,13 +1,18 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 
 class CLIPModel(AbsEncoder):
@@ -123,6 +128,7 @@ clip_vit_large_patch14 = ModelMeta(
     release_date="2021-02-26",
     modalities=["image", "text"],
     n_parameters=428_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=1631,
     max_tokens=77,
     embed_dim=768,
@@ -147,6 +153,7 @@ clip_vit_base_patch32 = ModelMeta(
     release_date="2021-02-26",
     modalities=["image", "text"],
     n_parameters=151_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=576,
     max_tokens=77,
     embed_dim=512,
@@ -171,6 +178,7 @@ clip_vit_base_patch16 = ModelMeta(
     release_date="2021-02-26",
     modalities=["image", "text"],
     n_parameters=151_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=576,
     max_tokens=77,
     embed_dim=512,

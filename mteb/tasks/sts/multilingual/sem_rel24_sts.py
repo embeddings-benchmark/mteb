@@ -66,6 +66,6 @@ Seid Muhie Yimam and Saif M. Mohammad},
     min_score = 0
     max_score = 1
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int = 1, **kwargs) -> None:
         for lang, subset in self.dataset.items():
             self.dataset[lang] = subset.rename_column("label", "score")

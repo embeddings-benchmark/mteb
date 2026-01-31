@@ -7,18 +7,20 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 import torch
 from packaging.version import Version
-from torch.utils.data import DataLoader
 
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder
 
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder, SentenceTransformer
+    from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -122,7 +124,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Encodes the given sentences using the encoder.
 
@@ -201,7 +203,7 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Encodes the given sentences using the encoder.
 
@@ -265,13 +267,24 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
 
 
 class CrossEncoderWrapper:
-    """Wrapper for CrossEncoder models."""
+    """Wrapper for CrossEncoder models.
+
+    Args:
+        model: The CrossEncoder model to use. Can be a string (model name) or a CrossEncoder model.
+        revision: The revision of the model to use.
+        device: The device used to load the model.
+        query_prefix: A prefix to add to all queries.
+        passage_prefix: A prefix to add to all passages.
+        **kwargs: Additional arguments to pass to the CrossEncoder model.
+    """
 
     def __init__(
         self,
         model: CrossEncoder | str,
         revision: str | None = None,
         device: str | None = None,
+        query_prefix: str = "",
+        passage_prefix: str = "",
         **kwargs,
     ) -> None:
         from sentence_transformers import CrossEncoder
@@ -282,6 +295,8 @@ class CrossEncoderWrapper:
             self.model = CrossEncoder(model, revision=revision, device=device, **kwargs)
 
         self.mteb_model_meta = ModelMeta.from_cross_encoder(self.model)
+        self.query_prefix = query_prefix
+        self.passage_prefix = passage_prefix
 
     def predict(
         self,
@@ -292,7 +307,7 @@ class CrossEncoderWrapper:
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Predicts relevance scores for pairs of inputs. Note that, unlike the encoder, the cross-encoder can compare across inputs.
 
@@ -310,10 +325,10 @@ class CrossEncoderWrapper:
             The predicted relevance scores for each inputs pair.
         """
         all_queries_with_instructions = [
-            text for batch in inputs1 for text in batch["text"]
+            self.query_prefix + text for batch in inputs1 for text in batch["text"]
         ]
         all_corpus_with_instructions = [
-            text for batch in inputs2 for text in batch["text"]
+            self.passage_prefix + text for batch in inputs2 for text in batch["text"]
         ]
 
         return self.model.predict(

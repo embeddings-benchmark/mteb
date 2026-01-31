@@ -1,27 +1,31 @@
+from __future__ import annotations
+
 import logging
-from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
 
 import mteb
 from mteb._create_dataloaders import _corpus_to_dict
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.models_protocols import PromptType
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import Array, BatchedInput
+from mteb.types import PromptType
 
 from .bge_models import bge_full_data
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from torch.utils.data import DataLoader
+
     from mteb.abstasks import (
         AbsTaskClassification,
         AbsTaskRetrieval,
         AbsTaskSummarization,
     )
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
 logger = logging.getLogger(__name__)
 
 CDE_CITATION = """@misc{morris2024contextualdocumentembeddings,
@@ -222,6 +226,7 @@ cde_small_v1 = ModelMeta(
     revision="e151df18af0d7f1d1c37b074fee58406ececf19f",
     release_date="2024-09-24",
     n_parameters=int(281 * 1e6),
+    n_embedding_parameters=None,
     memory_usage_mb=1072,  # Though the second-stage model is only 140M
     max_tokens=512,
     embed_dim=768,
@@ -251,6 +256,7 @@ cde_small_v2 = ModelMeta(
     revision="4e1d021a6c3fd7ce8aa0a7204057eee5ae61d390",
     release_date="2025-01-13",
     n_parameters=int(306 * 1e6),
+    n_embedding_parameters=None,
     memory_usage_mb=1166,  # Though the second-stage model is only 140M
     max_tokens=512,
     embed_dim=768,
