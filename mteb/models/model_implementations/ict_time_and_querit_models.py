@@ -1,7 +1,3 @@
-"""
-Models from the ICT-TIME and Querit organizations.
-"""
-
 from __future__ import annotations
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
@@ -23,7 +19,6 @@ def instruction_template(
     return f"Instruct: {instruction}\nQuery:"
 
 
-# Multilingual language codes
 multilingual_langs = [
     "deu-Latn", "ita-Latn", "ara-Arab", "fas-Arab", "fra-Latn", 
     "hin-Deva", "spa-Latn", "zho-Hans", "ben-Beng", "eng-Latn", 
@@ -31,7 +26,6 @@ multilingual_langs = [
     "swh-Latn", "tel-Telu", "tha-Thai"
 ]
 
-# Training datasets
 training_data = [
     "FEVER", "DuRetrieval", "HotpotQA", "MSMARCO", "T2Retrieval", 
     "NQ", "MIRACLRetrieval", "MrTidyRetrieval", 
@@ -52,7 +46,7 @@ boom_4b_v1 = ModelMeta(
     open_weights=True,
     revision="33fb345468120e37c81eed2369aefe08b8f8222b",
     release_date="2026-01-31",
-    n_parameters=4_021_774_336,
+    n_parameters=4021774336,
     n_embedding_parameters=None,
     memory_usage_mb=7671,
     embed_dim=2560,
