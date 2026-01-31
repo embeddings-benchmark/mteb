@@ -77,7 +77,15 @@ jobs:
         shell: pwsh
         run: |
           choco install -y ffmpeg --params "/full /shared"
-          "C:\\ProgramData\\chocolatey\\lib\\ffmpeg\\tools\\ffmpeg\\bin" | Out-File -FilePath "$env:GITHUB_PATH" -Append
+
+      - name: Setup FFmpeg PATH (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ffmpegPath = "C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin"
+          echo "$ffmpegPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          $env:PATH = "$ffmpegPath;$env:PATH"
+          echo "PATH=$env:PATH" >> $env:GITHUB_ENV
 
       - name: Check FFmpeg version
         run: ffmpeg -version
@@ -86,6 +94,22 @@ jobs:
         shell: bash
         run: |
           make install-for-tests
+
+      - name: Diagnose TorchCodec DLLs (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $core = "D:\a\mteb\mteb\.venv\Lib\site-packages\torchcodec\libtorchcodec_core8.dll"
+          "TorchCodec core DLL exists: " + (Test-Path $core)
+          if (Test-Path $core) { Get-Item $core | Format-List * }
+          "TorchCodec DLLs in site-packages:"
+          Get-ChildItem "D:\a\mteb\mteb\.venv\Lib\site-packages\torchcodec" -Filter "*.dll" | Select-Object FullName
+          "FFmpeg DLLs on PATH (first match):"
+          where.exe avcodec*.dll
+          where.exe avformat*.dll
+          where.exe avutil*.dll
+          "FFmpeg DLLs in choco bin:"
+          Get-ChildItem "C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin" -Filter "*.dll" | Select-Object FullName
 
       - name: Run tests
         if: runner.os != 'Windows'
@@ -98,9 +122,18 @@ jobs:
         # this step will run the workflow twice since we have experienced
         # failures when running on windows when loading the datasets
         if: runner.os == 'Windows'
-        shell: bash
+        shell: pwsh
         run: |
+          # Ensure FFmpeg is in PATH
+          $ffmpegPath = "C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin"
+          $env:PATH = "$ffmpegPath;$env:PATH"
+
           # run the test once and if it fails, run it again
           # if it fails again, the workflow will fail.
           # If it passes the first time the test will not run again
-          make test || make test
+          try {
+            make test
+          } catch {
+            Write-Host "First test run failed, retrying..."
+            make test
+          }
