@@ -371,7 +371,6 @@ conflicts = [
         { extra = "vllm" },
         { extra = "muq" },
         { extra = "mctct" },
-        { extra = "audio" },
     ],
 ]
 
