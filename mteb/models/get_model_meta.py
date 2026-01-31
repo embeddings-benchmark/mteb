@@ -140,7 +140,7 @@ def get_model_meta(
         model_name: Name of the model to fetch
         revision: Revision of the model to fetch
         fetch_from_hf: Whether to fetch the model from HuggingFace Hub if not found in the registry
-        fill_missing: Computes missing attributes from the metadata including number of parameters and memory usage.
+        fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
 
     Returns:
         A model metadata object
@@ -161,7 +161,7 @@ def get_model_meta(
 
         if fill_missing and fetch_from_hf:
             original_meta_dict = model_meta.model_dump()
-            new_meta = ModelMeta.from_hub(model_name)
+            new_meta = ModelMeta.from_hub(model_name, fill_missing=fill_missing)
             new_meta_dict = new_meta.model_dump(exclude_none=True)
 
             updates = {
