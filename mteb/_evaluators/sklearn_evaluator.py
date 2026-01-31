@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, Protocol, cast
+from typing import TYPE_CHECKING, Any, Protocol, TypeVar, cast
+
+import numpy as np
 
 from mteb._create_dataloaders import create_dataloader
 
 from .evaluator import Evaluator
 
 if TYPE_CHECKING:
-    import numpy as np
     from datasets import Dataset
     from numpy.typing import NDArray
     from torch.utils.data import DataLoader
@@ -20,13 +21,15 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+LabelType = TypeVar("LabelType", np.integer, np.floating)
+
 
 class SklearnModelProtocol(Protocol):
-    def fit(self, X: Array, y: NDArray[np.integer] | list[int]) -> None: ...  # noqa: N803
-    def predict(self, X: Array) -> NDArray[np.integer]: ...  # noqa: N803
+    def fit(self, X: Array, y: NDArray[LabelType] | list[int | float]) -> None: ...  # noqa: N803
+    def predict(self, X: Array) -> NDArray[LabelType]: ...  # noqa: N803
     def get_params(self) -> dict[str, Any]: ...
     def set_params(self, random_state: int, **kwargs: dict[str, Any]) -> Self: ...
-    def score(self, X: Array, y: NDArray[np.integer] | list[int]) -> float: ...  # noqa: N803
+    def score(self, X: Array, y: NDArray[LabelType] | list[int | float]) -> float: ...  # noqa: N803
 
 
 class SklearnEvaluator(Evaluator):
@@ -80,7 +83,7 @@ class SklearnEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         test_cache: Array | None = None,
         num_proc: int = 1,
-    ) -> tuple[NDArray[np.integer], Array]:
+    ) -> tuple[NDArray[np.floating], Array]:
         """Classification evaluation by training a sklearn classifier on the embeddings of the training set and evaluating on the embeddings of the test set.
 
         Args:

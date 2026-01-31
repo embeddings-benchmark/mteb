@@ -124,8 +124,8 @@ class AbsTaskRegression(AbsTaskClassification):
 
     def _calculate_scores(  # type: ignore[override]
         self,
-        y_test: NDArray[np.floating] | list[int],
-        y_pred: NDArray[np.floating] | list[int],
+        y_test: NDArray[np.floating] | list[float],
+        y_pred: NDArray[np.floating] | list[float],
     ) -> RegressionMetrics:
         mse = mean_squared_error(y_test, y_pred)
         return RegressionMetrics(
