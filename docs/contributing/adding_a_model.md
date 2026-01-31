@@ -106,7 +106,7 @@ If you need to use a custom implementation, you can specify the `loader` paramet
 
 ??? example "Custom Model Implementation"
     ```python
-    from mteb.types import PromptType
+    from mteb.types import PromptType, Array
     import numpy as np
 
     class CustomModel:
@@ -122,7 +122,7 @@ If you need to use a custom implementation, you can specify the `loader` paramet
             hf_subset: str,
             prompt_type: PromptType | None = None,
             **kwargs,
-        ) -> np.ndarray:
+        ) -> Array:
 
             arrays = []
             for batch in inputs:

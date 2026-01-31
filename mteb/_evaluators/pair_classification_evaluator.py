@@ -16,6 +16,7 @@ from mteb.similarity_functions import compute_pairwise_similarity
 
 if TYPE_CHECKING:
     from datasets import Dataset
+    from numpy.typing import NDArray
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
@@ -155,7 +156,7 @@ class PairClassificationEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         **encode_kwargs: Any,
-    ) -> np.ndarray:
+    ) -> NDArray[np.floating]:
         index_map = {}
         all_unique_texts: list[str] = []
         all_texts_indexes = []

@@ -150,7 +150,7 @@ class VoyageModel(AbsEncoder):
         sentences: list[str],
         batch_size: int,
         input_type: Literal["query", "document"],
-    ) -> np.ndarray:
+    ) -> Array:
         embeddings, index = [], 0
 
         output_dtype = VOYAGE_DTYPE_TRANSLATION.get(

@@ -1,13 +1,17 @@
+from __future__ import annotations
+
 import json
 import logging
 import warnings
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
 from ._hash_utils import _hash_item
 
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
 logger = logging.getLogger(__name__)
 
 
@@ -27,7 +31,7 @@ class NumpyCache:
         logger.info(f"Initialized VectorCacheMap in directory: {self.directory}")
         self._initialize_vectors_file()
 
-    def add(self, items: list[dict[str, Any]], vectors: np.ndarray) -> None:
+    def add(self, items: list[dict[str, Any]], vectors: NDArray[np.floating]) -> None:
         """Add a vector to the cache."""
         try:
             if self.vector_dim is None:
@@ -178,7 +182,7 @@ class NumpyCache:
             logger.error(f"Error loading VectorCacheMap: {str(e)}")
             raise
 
-    def get_vector(self, item: dict[str, Any]) -> np.ndarray | None:
+    def get_vector(self, item: dict[str, Any]) -> NDArray[np.floating] | None:
         """Retrieve vector from index by hash."""
         if self.vectors is None:
             return None

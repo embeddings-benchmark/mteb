@@ -38,21 +38,26 @@ Bibtex:
     }
 """
 
+from __future__ import annotations
+
 import itertools
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import scipy.sparse as sp
 from sklearn.model_selection._split import _BaseKFold
 from sklearn.utils import check_random_state
 
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
+
 
 def _iterative_train_test_split(
-    X: np.ndarray,  # noqa: N803
-    y: np.ndarray,
+    X: NDArray[np.integer],
+    y: NDArray[np.integer],
     test_size: float,
     random_state: int | None = None,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> tuple[NDArray[np.integer], NDArray[np.integer]]:
     """Iteratively stratified train/test split
 
     Slighltly modified from:
@@ -79,8 +84,8 @@ def _iterative_train_test_split(
 
 
 def _fold_tie_break(
-    desired_samples_per_fold: np.ndarray,
-    M: np.ndarray,  # noqa: N803
+    desired_samples_per_fold: NDArray[np.floating],
+    M: NDArray[np.integer],  # noqa: N803
     random_state: np.random.RandomState,
 ):
     """Helper function to split a tie between folds with same desirability of a given sample
@@ -179,7 +184,7 @@ class IterativeStratification(_BaseKFold):
             ]
 
     def _prepare_stratification(
-        self, y: np.ndarray
+        self, y: NDArray[np.integer]
     ) -> tuple[
         list[list[int]],
         dict[int, bool],
@@ -301,7 +306,7 @@ class IterativeStratification(_BaseKFold):
             self.desired_samples_per_fold[fold_selected] -= 1
             folds[fold_selected].append(row)
 
-    def _iter_test_indices(self, X, y=None, groups=None):  # noqa: N803
+    def _iter_test_indices(self, X, y=None, groups=None):
         """Internal method for providing scikit-learn's split with folds
 
         Args:
