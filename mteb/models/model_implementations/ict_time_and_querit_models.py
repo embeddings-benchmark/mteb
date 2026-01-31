@@ -69,19 +69,6 @@ training_data = [
 ]
 
 
-# def boom_4b_v1_loader(
-#     model_name_or_path: str, revision: str, **kwargs
-# ) -> EncoderProtocol:
-#     """Loader function for BOOM_4B_v1 model."""
-#     return InstructSentenceTransformerModel(
-#         model_name_or_path,
-#         revision=revision,
-#         instruction_template=instruction_template,
-#         apply_instruction_to_passages=False,
-#         **kwargs,
-#     )
-
-
 boom_4b_v1 = ModelMeta(
     loader=InstructSentenceTransformerModel,   
     loader_kwargs=dict(  
