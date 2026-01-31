@@ -1,5 +1,5 @@
 import mteb
-from mteb import EncoderProtocol
+from mteb.models.models_protocols import EncoderProtocol
 
 
 def test_abs_model_is_encoder():

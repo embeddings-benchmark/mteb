@@ -130,6 +130,7 @@
     "jinaai/jina-embeddings-v2-small-en": "None",
     "jinaai/jina-embeddings-v3": "None",
     "jinaai/jina-reranker-v2-base-multilingual": "None",
+    "kakaobrain/align-base": "None",
     "keeeeenw/MicroLlama-text-embedding": "None",
     "malenia1/ternary-weight-embedding": "None",
     "manu/bge-m3-custom-fr": "None",

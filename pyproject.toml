@@ -63,6 +63,12 @@ image = [
     "torchvision>0.2.1",
     "transformers[torch-vision,vision]",
 ]
+audio = [
+    "torchaudio>=2.6.0,<2.8.0; python_full_version < '3.14'",
+    "datasets<4",  # https://github.com/huggingface/datasets/issues/7707
+    "librosa>=0.11.0",
+    "soundfile>=0.13.1",
+]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
     "gradio==6.0.1",
@@ -80,6 +86,7 @@ flash_attention = ["flash-attn>=2.6.3"]
 openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
 model2vec = ["model2vec>=0.3.0"]
 pylate = ["pylate>=1.3.1; python_full_version < '3.13'"]  # Required for sentence-transformers 5.0.0 compatibility (otherwise 1.1.6), pylate requires voyager, which in turn requires <=3.12
+msclap = ["msclap>=1.3.4"]
 bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
 gritlm = ["gritlm>=1.0.2"]
 xformers = ["xformers>=0.0.29"]
@@ -101,6 +108,10 @@ youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lk
 llama-embed-nemotron = ["transformers==4.51.0"]
 faiss-cpu = ["faiss-cpu>=1.12.0"]
 eager_embed = ["qwen_vl_utils>=0.0.14"]
+speechbrain = ["speechbrain>=0.5.12", "torchaudio>=2.6.0,<2.8; python_full_version < '3.14'"]
+muq = ["muq==0.1.0"]
+wav2clip = ["wav2clip==0.1.0"]
+torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
 
 [dependency-groups]
@@ -357,7 +368,17 @@ conflicts = [
         { extra = "jina-v4" },
         { extra = "sauerkrautlm-colpali" },
         { extra = "vllm" },
-    ]
+    ],
+    [
+        { extra = "msclap" },
+        { extra = "audio" },
+    ],
+    [
+        # <3.14
+        { extra = "speechbrain" },
+        { extra = "audio" },
+        { extra = "vllm" },
+    ],
 ]
 
 [tool.uv.extra-build-dependencies]
@@ -422,10 +443,11 @@ extend-exclude = [
     "*.json",
     "*.jsonl",
     "*.cff",
+    "*.tex",  # latex files with language codes
+    "*.bib",  # bibliography files with author names and journal abbreviations
     "*.txt",  # zero shot labels
     "docs/mmteb",
     "scripts/",
-    "docs/references.bib",
     "mteb/models/model_implementations/gme_v_models.py",  # video_grid_thw `thw`
     "mteb/models/model_implementations/vista_models.py",  # self.normlized: in visual bge
     "mteb/models/model_implementations/salesforce_models.py", # multiligual in paper title
@@ -441,6 +463,7 @@ extend-exclude = [
     "mteb/tasks/pair_classification/nld/",
     "mteb/tasks/sts/nld/",
     "mteb/tasks/retrieval/nld/",
+    "mteb/descriptive_stats/",
 ]
 
 [tool.typos.type.py]
@@ -462,6 +485,9 @@ yor = "yor"
 Beng = "Beng"
 als = "als"
 tha = "tha"
+tham = "tham"
+thi = "thi"
+bre = "bre"
 mak = "mak"
 Maka = "Maka"
 Mape = "Mape"
@@ -470,3 +496,5 @@ Ono = "Ono"
 Yau = "Yau"
 Altas = "Altas"
 matche = "matche"
+expresso = "expresso"
+Expresso = "Expresso"
