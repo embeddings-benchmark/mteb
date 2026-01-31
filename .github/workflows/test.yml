@@ -95,25 +95,25 @@ jobs:
         run: |
           make install-for-tests
 
-      - name: Diagnose TorchCodec DLLs (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          $ErrorActionPreference = "Continue"
-          $core = "D:\a\mteb\mteb\.venv\Lib\site-packages\torchcodec\libtorchcodec_core8.dll"
-          "TorchCodec core DLL exists: " + (Test-Path $core)
-          if (Test-Path $core) { Get-Item $core | Format-List * }
-          "TorchCodec DLLs in site-packages:"
-          Get-ChildItem "D:\a\mteb\mteb\.venv\Lib\site-packages\torchcodec" -Filter "*.dll" | Select-Object FullName
-          "FFmpeg on PATH:"
-          Get-Command ffmpeg | Select-Object -ExpandProperty Source
-          "FFmpeg DLLs on PATH (first match):"
-          cmd /c "where avcodec*.dll" || echo "avcodec*.dll not found on PATH"
-          cmd /c "where avformat*.dll" || echo "avformat*.dll not found on PATH"
-          cmd /c "where avutil*.dll" || echo "avutil*.dll not found on PATH"
-          "FFmpeg DLLs next to ffmpeg.exe:"
-          $ffmpegPath = (Get-Command ffmpeg).Source
-          if ($ffmpegPath) { Get-ChildItem (Split-Path $ffmpegPath) -Filter "*.dll" | Select-Object FullName }
+#      - name: Diagnose TorchCodec DLLs (Windows)
+#        if: runner.os == 'Windows'
+#        shell: pwsh
+#        run: |
+#          $ErrorActionPreference = "Continue"
+#          $core = "D:\a\mteb\mteb\.venv\Lib\site-packages\torchcodec\libtorchcodec_core8.dll"
+#          "TorchCodec core DLL exists: " + (Test-Path $core)
+#          if (Test-Path $core) { Get-Item $core | Format-List * }
+#          "TorchCodec DLLs in site-packages:"
+#          Get-ChildItem "D:\a\mteb\mteb\.venv\Lib\site-packages\torchcodec" -Filter "*.dll" | Select-Object FullName
+#          "FFmpeg on PATH:"
+#          Get-Command ffmpeg | Select-Object -ExpandProperty Source
+#          "FFmpeg DLLs on PATH (first match):"
+#          cmd /c "where avcodec*.dll" || echo "avcodec*.dll not found on PATH"
+#          cmd /c "where avformat*.dll" || echo "avformat*.dll not found on PATH"
+#          cmd /c "where avutil*.dll" || echo "avutil*.dll not found on PATH"
+#          "FFmpeg DLLs next to ffmpeg.exe:"
+#          $ffmpegPath = (Get-Command ffmpeg).Source
+#          if ($ffmpegPath) { Get-ChildItem (Split-Path $ffmpegPath) -Filter "*.dll" | Select-Object FullName }
 
       - name: List TorchCodec DLL dependencies (Windows)
         if: runner.os == 'Windows'
