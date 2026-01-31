@@ -1,13 +1,18 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 SIGLIP_CITATION = """@misc{zhai2023sigmoid,
       title={Sigmoid Loss for Language Image Pre-Training},
@@ -131,6 +136,7 @@ siglip_so400m_patch14_224 = ModelMeta(
     release_date="2024-01-08",
     modalities=["image", "text"],
     n_parameters=877_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=3347,
     max_tokens=16,
     embed_dim=1152,
@@ -155,6 +161,7 @@ siglip_so400m_patch14_384 = ModelMeta(
     release_date="2024-01-08",
     modalities=["image", "text"],
     n_parameters=878_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=3349,
     max_tokens=64,
     embed_dim=1152,
@@ -179,6 +186,7 @@ siglip_so400m_patch16_256_i18n = ModelMeta(
     release_date="2024-01-08",
     modalities=["image", "text"],
     n_parameters=1_130_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=4306,
     max_tokens=64,
     embed_dim=1152,
@@ -203,6 +211,7 @@ siglip_base_patch16_256_multilingual = ModelMeta(
     release_date="2024-01-08",
     modalities=["image", "text"],
     n_parameters=371_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=1414,
     max_tokens=64,
     embed_dim=768,
@@ -227,6 +236,7 @@ siglip_base_patch16_256 = ModelMeta(
     release_date="2024-01-08",
     modalities=["image", "text"],
     n_parameters=203_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=775,
     max_tokens=64,
     embed_dim=768,
@@ -251,6 +261,7 @@ siglip_base_patch16_512 = ModelMeta(
     release_date="2024-01-08",
     modalities=["image", "text"],
     n_parameters=204_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=777,
     max_tokens=64,
     embed_dim=768,
@@ -275,6 +286,7 @@ siglip_base_patch16_384 = ModelMeta(
     release_date="2024-01-08",
     modalities=["image", "text"],
     n_parameters=203_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=776,
     max_tokens=64,
     embed_dim=768,
@@ -299,6 +311,7 @@ siglip_base_patch16_224 = ModelMeta(
     release_date="2024-01-08",
     modalities=["image", "text"],
     n_parameters=203_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=775,
     max_tokens=64,
     embed_dim=768,
@@ -323,6 +336,7 @@ siglip_large_patch16_256 = ModelMeta(
     release_date="2024-01-08",
     modalities=["image", "text"],
     n_parameters=652_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=2488,
     max_tokens=64,
     embed_dim=1024,
@@ -347,6 +361,7 @@ siglip_large_patch16_384 = ModelMeta(
     release_date="2024-01-08",
     modalities=["image", "text"],
     n_parameters=652_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=2489,
     max_tokens=64,
     embed_dim=1024,

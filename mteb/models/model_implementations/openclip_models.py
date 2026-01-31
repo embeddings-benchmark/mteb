@@ -1,14 +1,19 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_image_dependencies, requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 OPENCLIP_CITATION = """@inproceedings{cherti2023reproducible,
     title={Reproducible scaling laws for contrastive language-image learning},
@@ -128,6 +133,7 @@ CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(
     release_date="2023-04-26",
     modalities=["image", "text"],
     n_parameters=428_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=1633,
     max_tokens=77,
     embed_dim=768,
@@ -154,6 +160,7 @@ CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
     release_date="2023-04-26",
     modalities=["image", "text"],
     n_parameters=151_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=576,
     max_tokens=77,
     embed_dim=512,
@@ -180,6 +187,7 @@ CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
     release_date="2023-04-26",
     modalities=["image", "text"],
     n_parameters=150_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=572,
     max_tokens=77,
     embed_dim=512,
@@ -206,6 +214,7 @@ CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
     release_date="2023-01-23",
     modalities=["image", "text"],
     n_parameters=2_540_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=9689,
     max_tokens=77,
     embed_dim=1280,
@@ -232,6 +241,7 @@ CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
     release_date="2023-03-06",
     modalities=["image", "text"],
     n_parameters=1_367_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=5215,
     max_tokens=77,
     embed_dim=1024,
@@ -258,6 +268,7 @@ CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
     release_date="2022-09-15",
     modalities=["image", "text"],
     n_parameters=986_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=3762,
     max_tokens=77,
     embed_dim=1024,
@@ -284,6 +295,7 @@ CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
     release_date="2022-09-15",
     modalities=["image", "text"],
     n_parameters=428_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=1631,
     max_tokens=77,
     embed_dim=768,
@@ -310,6 +322,7 @@ CLIP_ViT_B_32_laion2B_s34B_b79K = ModelMeta(
     release_date="2022-09-15",
     modalities=["image", "text"],
     n_parameters=151_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=577,
     max_tokens=77,
     embed_dim=512,

@@ -1,17 +1,23 @@
+from __future__ import annotations
+
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2ForCTC, Wav2Vec2Model
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput
+
 
 # ISO 639-3 codes for languages supported by wav2vec2 models
 WAV2VEC2_LANGUAGES = [

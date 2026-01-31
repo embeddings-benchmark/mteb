@@ -1,5 +1,7 @@
 """Implementation of Sentence Transformers model validated in MTEB."""
 
+import numpy as np
+
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
@@ -119,6 +121,7 @@ all_minilm_l6_v2 = ModelMeta(
     revision="8b3219a92973c328a8e22fadcfa821b5dc75636a",
     release_date="2021-08-30",
     n_parameters=22_700_000,
+    n_embedding_parameters=11_720_448,
     memory_usage_mb=87,
     embed_dim=384,
     license="apache-2.0",
@@ -150,6 +153,7 @@ all_minilm_l12_v2 = ModelMeta(
     revision="364dd28d28dcd3359b537f3cf1f5348ba679da62",
     release_date="2021-08-30",
     n_parameters=33_400_000,
+    n_embedding_parameters=11_720_448,
     memory_usage_mb=127,
     embed_dim=384,
     license="apache-2.0",
@@ -181,6 +185,7 @@ paraphrase_multilingual_minilm_l12_v2 = ModelMeta(
     revision="bf3bf13ab40c3157080a7ab344c831b9ad18b5eb",
     release_date="2019-11-01",  # release date of paper
     n_parameters=118_000_000,
+    n_embedding_parameters=96_014_208,
     memory_usage_mb=449,
     embed_dim=768,
     license="apache-2.0",
@@ -212,6 +217,7 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     revision="79f2382ceacceacdf38563d7c5d16b9ff8d725d6",
     release_date="2019-11-01",  # release date of paper
     n_parameters=278_000_000,
+    n_embedding_parameters=192_001_536,
     memory_usage_mb=1061,
     embed_dim=768,
     license="apache-2.0",
@@ -254,6 +260,7 @@ labse = ModelMeta(
     revision="e34fab64a3011d2176c99545a93d5cbddc9a91b7",
     release_date="2019-11-01",  # release date of paper
     n_parameters=471_000_000,
+    n_embedding_parameters=384_885_504,
     memory_usage_mb=1796,
     embed_dim=768,
     license="apache-2.0",
@@ -292,6 +299,7 @@ multi_qa_minilm_l6_cos_v1 = ModelMeta(
     revision="b207367332321f8e44f96e224ef15bc607f4dbf0",
     release_date="2021-08-30",
     n_parameters=22_700_000,
+    n_embedding_parameters=11_720_448,
     memory_usage_mb=87,
     embed_dim=384,
     license="apache-2.0",
@@ -323,6 +331,7 @@ all_mpnet_base_v2 = ModelMeta(
     revision="9a3225965996d404b775526de6dbfe85d3368642",
     release_date="2021-08-30",
     n_parameters=109_000_000,
+    n_embedding_parameters=23_444_736,
     memory_usage_mb=418,
     embed_dim=768,
     license="apache-2.0",
@@ -433,6 +442,7 @@ static_similarity_mrl_multilingual_v1 = ModelMeta(
     revision="7264ea07c5365a11d7e6d87dbb6195889a13054f",
     release_date="2025-01-15",
     n_parameters=108_420_096,
+    n_embedding_parameters=None,
     memory_usage_mb=413,
     embed_dim=1024,
     license="apache-2.0",
@@ -466,6 +476,7 @@ contriever = ModelMeta(
     revision="abe8c1493371369031bcb1e02acb754cf4e162fa",
     release_date="2022-06-25",  # release date of model on HF
     n_parameters=150_000_000,
+    n_embedding_parameters=23_440_896,
     memory_usage_mb=572,
     embed_dim=768,
     license=None,
@@ -496,6 +507,7 @@ microllama_text_embedding = ModelMeta(
     revision="98f70f14cdf12d7ea217ed2fd4e808b0195f1e7e",
     release_date="2024-11-10",
     n_parameters=272_000_000,
+    n_embedding_parameters=32_769_024,
     memory_usage_mb=1037,
     embed_dim=1024,
     license="apache-2.0",
@@ -542,6 +554,7 @@ sentence_t5_base = ModelMeta(
     revision="50c53e206f8b01c9621484a3c0aafce4e55efebf",
     release_date="2022-02-09",
     n_parameters=110_000_000,
+    n_embedding_parameters=24_674_304,
     memory_usage_mb=209,
     embed_dim=768,
     license="apache-2.0",
@@ -565,6 +578,7 @@ sentence_t5_large = ModelMeta(
     revision="1fc08ea477205aa54a3e5b13f0971ae16b86410a",
     release_date="2022-02-09",
     n_parameters=335_000_000,
+    n_embedding_parameters=32_899_072,
     memory_usage_mb=639,
     embed_dim=768,
     license="apache-2.0",
@@ -588,6 +602,7 @@ sentence_t5_xl = ModelMeta(
     revision="2965d31b368fb14117688e0bde77cbd720e91f53",
     release_date="2024-03-27",
     n_parameters=3_000_000_000,
+    n_embedding_parameters=32_899_072,
     memory_usage_mb=2367,
     embed_dim=768,
     license="apache-2.0",
@@ -611,6 +626,7 @@ sentence_t5_xxl = ModelMeta(
     revision="4d122282ba80e807e9e6eb8c358269e92796365d",
     release_date="2024-03-27",
     n_parameters=11_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=9279,
     embed_dim=768,
     license="apache-2.0",
@@ -644,6 +660,7 @@ gtr_t5_large = ModelMeta(
     revision="a2c8ac47f998531948d4cbe32a0b577a7037a5e3",
     release_date="2022-02-09",
     n_parameters=335_000_000,
+    n_embedding_parameters=32_899_072,
     memory_usage_mb=639,
     embed_dim=768,
     license="apache-2.0",
@@ -679,6 +696,7 @@ gtr_t5_xl = ModelMeta(
     revision="23a8d667a1ad2578af181ce762867003c498d1bf",
     release_date="2022-02-09",
     n_parameters=1_240_000_000,
+    n_embedding_parameters=32_899_072,
     memory_usage_mb=2367,
     embed_dim=768,
     license="apache-2.0",
@@ -713,6 +731,7 @@ gtr_t5_xxl = ModelMeta(
     revision="73f2a9156a3dcc2194dfdb2bf201cd7d17e17884",
     release_date="2022-02-09",
     n_parameters=4_860_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=9279,
     embed_dim=768,
     license="apache-2.0",
@@ -748,6 +767,7 @@ gtr_t5_base = ModelMeta(
     revision="7027e9594267928589816394bdd295273ddc0739",
     release_date="2022-02-09",
     n_parameters=110_000_000,
+    n_embedding_parameters=24_674_304,
     memory_usage_mb=209,
     embed_dim=768,
     license="apache-2.0",
@@ -772,4 +792,68 @@ gtr_t5_base = ModelMeta(
         "Community QA",
     },
     citation=GTR_CITATION,
+)
+
+static_retrieval_mrl_en_v1 = ModelMeta(
+    loader=sentence_transformers_loader,
+    name="sentence-transformers/static-retrieval-mrl-en-v1",
+    revision="f60985c706f192d45d218078e49e5a8b6f15283a",
+    release_date="2024-10-24",
+    languages=["eng-Latn"],
+    n_parameters=3_125_4528,
+    memory_usage_mb=119,
+    max_tokens=np.inf,
+    embed_dim=1024,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://huggingface.co/sentence-transformers/static-retrieval-mrl-en-v1/blob/main/train.py",
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/sentence-transformers/static-retrieval-mrl-en-v1",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets={
+        "MSMARCO",
+        # gooaq
+        # s2orc
+        # allnli
+        # paq
+        # trivia-qa
+        # swim-ir-monolingual
+        # PubMedQA
+        # swim
+        "MIRACLRetrieval",
+        "MultiLongDocRetrieval",
+        "MrTidyRetrieval",
+    },
+    modalities=["text"],
+    model_type=["dense"],
+)
+
+multi_qa_mpnet_base_dot_v1 = ModelMeta(
+    loader=sentence_transformers_loader,
+    name="sentence-transformers/multi-qa-mpnet-base-dot-v1",
+    revision="3af7c6da5b3e1bea796ef6c97fe237538cbe6e7f",
+    release_date="2021-08-23",
+    languages=["eng-Latn"],
+    n_parameters=109486978,
+    memory_usage_mb=418.0,
+    max_tokens=512,
+    embed_dim=768,
+    license=None,
+    open_weights=True,
+    public_training_code="https://huggingface.co/sentence-transformers/multi-qa-mpnet-base-dot-v1/blob/main/train_script.py",
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/sentence-transformers/multi-qa-mpnet-base-dot-v1",
+    similarity_fn_name=ScoringFunction.DOT_PRODUCT,
+    use_instructions=False,
+    training_datasets={
+        "MSMARCO",
+        "YahooAnswersTopicsClassification",
+        "NQ",
+    },
+    adapted_from="microsoft/mpnet-base",
+    modalities=["text"],
+    model_type=["dense"],
 )

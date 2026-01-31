@@ -6,7 +6,6 @@ import os
 import sys
 import traceback
 import warnings
-from collections.abc import Iterable, Sequence
 from copy import deepcopy
 from datetime import datetime
 from itertools import chain
@@ -18,25 +17,30 @@ import datasets
 
 import mteb
 from mteb.abstasks import AbsTask
-from mteb.abstasks.aggregated_task import AbsTaskAggregate
-from mteb.abstasks.task_metadata import TaskCategory, TaskType
 from mteb.benchmarks import Benchmark
 from mteb.models import (
     CrossEncoderWrapper,
     ModelMeta,
-    MTEBModels,
     SentenceTransformerEncoderWrapper,
 )
 from mteb.results import TaskResult
-from mteb.types import ScoresDict
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
+
+    from sentence_transformers import CrossEncoder, SentenceTransformer
+
+    from mteb.abstasks.aggregated_task import AbsTaskAggregate
+    from mteb.abstasks.task_metadata import TaskCategory, TaskType
+    from mteb.models import (
+        MTEBModels,
+    )
+    from mteb.types import EncodeKwargs, ScoresDict
 
 if sys.version_info >= (3, 13):
     from warnings import deprecated
 else:
     from typing_extensions import deprecated
-
-if TYPE_CHECKING:
-    from sentence_transformers import CrossEncoder, SentenceTransformer
 
 logger = logging.getLogger(__name__)
 
@@ -66,9 +70,9 @@ class MTEB:
         """
         if isinstance(next(iter(tasks)), Benchmark):
             self.benchmarks = tasks
-            self.tasks = list(chain.from_iterable(cast(Iterable[Benchmark], tasks)))
+            self.tasks = list(chain.from_iterable(cast("Iterable[Benchmark]", tasks)))
         elif isinstance(next(iter(tasks)), AbsTask):
-            self.tasks = list(cast(Iterable[AbsTask], tasks))
+            self.tasks = list(cast("Iterable[AbsTask]", tasks))
 
         self.err_logs_path = Path(err_logs_path)
         self._last_evaluated_splits: dict[str, list[str]] = {}
@@ -174,7 +178,7 @@ class MTEB:
         split: str,
         subsets_to_run: list[str] | None = None,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         **kwargs: Any,
     ):
         tick = time()
@@ -263,7 +267,7 @@ class MTEB:
         overwrite_results: bool = False,
         raise_error: bool = True,
         co2_tracker: bool = False,
-        encode_kwargs: dict[str, Any] | None = None,
+        encode_kwargs: EncodeKwargs | None = None,
         **kwargs,
     ) -> list[TaskResult]:
         """Run the evaluation pipeline on the selected tasks.
@@ -313,7 +317,7 @@ class MTEB:
         elif isinstance(model, CrossEncoder):
             mteb_model = CrossEncoderWrapper(model)
         else:
-            mteb_model = cast(MTEBModels, model)
+            mteb_model = cast("MTEBModels", model)
 
         meta = self.create_model_meta(mteb_model)
         output_path = self._create_output_folder(meta, output_folder)
@@ -346,7 +350,7 @@ class MTEB:
             )
 
             if task.is_aggregate:
-                aggregated_task = cast(AbsTaskAggregate, task)
+                aggregated_task = cast("AbsTaskAggregate", task)
                 self_ = MTEB(tasks=aggregated_task.metadata.tasks)
                 aggregated_task_results = self_.run(
                     mteb_model,

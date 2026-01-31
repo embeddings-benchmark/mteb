@@ -36,7 +36,7 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
         superseded_by="TurkishMovieSentimentClassification.v2",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )
@@ -76,7 +76,7 @@ class TurkishMovieSentimentClassificationV2(AbsTaskClassification):
         adapted_from=["TurkishMovieSentimentClassification"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )

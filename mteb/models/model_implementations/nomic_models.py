@@ -1,15 +1,22 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
 import torch.nn.functional as F
 from packaging.version import Version
-from torch.utils.data import DataLoader
 
-from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models import sentence_transformers_loader
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +65,7 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
     ) -> Array:
         # default to search_document if input_type and prompt_name are not provided
         prompt_name = (
-            self.get_prompt_name(self.model_prompts, task_metadata, prompt_type)
+            self.get_prompt_name(task_metadata, prompt_type)
             or PromptType.document.value
         )
         sentences = [text for batch in inputs for text in batch["text"]]
@@ -209,6 +216,7 @@ nomic_embed_v1_5 = ModelMeta(
     release_date="2024-02-10",  # first commit
     citation=NOMIC_CITATION,
     n_parameters=137_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=522,
     max_tokens=8192,
     embed_dim=768,
@@ -243,6 +251,7 @@ nomic_embed_v1 = ModelMeta(
     revision="0759316f275aa0cb93a5b830973843ca66babcf5",
     release_date="2024-01-31",  # first commit
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=522,
     max_tokens=8192,
     embed_dim=768,
@@ -278,6 +287,7 @@ nomic_embed_v1_ablated = ModelMeta(
     revision="7d948905c5d5d3874fa55a925d68e49dbf411e5f",
     release_date="2024-01-15",  # first commit
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=8192,
     embed_dim=768,
@@ -306,6 +316,7 @@ nomic_embed_v1_unsupervised = ModelMeta(
     revision="b53d557b15ae63852847c222d336c1609eced93c",
     release_date="2024-01-15",  # first commit
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=8192,
     embed_dim=768,
@@ -334,6 +345,7 @@ nomic_modern_bert_embed = ModelMeta(
     revision="5960f1566fb7cb1adf1eb6e816639cf4646d9b12",
     release_date="2024-12-29",
     n_parameters=149_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=568,
     max_tokens=8192,
     embed_dim=768,
@@ -473,6 +485,8 @@ nomic_embed_text_v2_moe = ModelMeta(
     revision="1066b6599d099fbb93dfcb64f9c37a7c9e503e85",
     release_date="2025-02-07",
     n_parameters=475292928,
+    n_embedding_parameters=192036864,
+    n_active_parameters_override=141628032,
     memory_usage_mb=1813,
     max_tokens=512,
     embed_dim=768,
@@ -494,5 +508,44 @@ nomic_embed_text_v2_moe = ModelMeta(
       archivePrefix={arXiv},
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2502.07972},
+}""",
+)
+
+nomic_embed_code = ModelMeta(
+    loader=sentence_transformers_loader,
+    loader_kwargs={
+        "trust_remote_code": True,
+        "model_prompts": model_prompts,
+    },
+    name="nomic-ai/nomic-embed-code",
+    revision="11114029805cee545ef111d5144b623787462a52",
+    release_date="2025-03-24",
+    languages=["eng-Latn"],
+    n_parameters=7_070_619_136,
+    n_embedding_parameters=None,
+    memory_usage_mb=26972.0,
+    max_tokens=32768,
+    embed_dim=3584,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/gangiswag/cornstack/",
+    public_training_data="https://huggingface.co/collections/nomic-ai/cornstack",
+    framework=["PyTorch", "Sentence Transformers", "safetensors"],
+    reference="https://huggingface.co/nomic-ai/nomic-embed-code",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    training_datasets={"CoRNStack"},
+    adapted_from=None,
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["dense"],
+    citation="""@misc{suresh2025cornstackhighqualitycontrastivedata,
+      title={CoRNStack: High-Quality Contrastive Data for Better Code Retrieval and Reranking},
+      author={Tarun Suresh and Revanth Gangi Reddy and Yifei Xu and Zach Nussbaum and Andriy Mulyar and Brandon Duderstadt and Heng Ji},
+      year={2025},
+      eprint={2412.01007},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2412.01007},
 }""",
 )

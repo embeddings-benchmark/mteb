@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import (
@@ -10,10 +11,14 @@ from mteb._requires_package import (
     requires_package,
     suggest_package,
 )
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -275,6 +280,7 @@ vlm2vec_lora = ModelMeta(
     release_date="2024-10-08",
     modalities=["image", "text"],
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=131072,
     embed_dim=3072,
@@ -299,6 +305,7 @@ vlm2vec_full = ModelMeta(
     release_date="2024-10-08",
     modalities=["image", "text"],
     n_parameters=4_150_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=7909,
     max_tokens=131072,
     embed_dim=3072,

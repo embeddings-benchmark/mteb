@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 import logging
 from collections import defaultdict
-from pathlib import Path
-from typing import Any, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
 from datasets import Dataset, DatasetDict
@@ -16,15 +17,10 @@ from sklearn.metrics import (
 from sklearn.model_selection import KFold
 
 from mteb._create_dataloaders import create_dataloader
-from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
-from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import Array, HFSubset, ScoresDict
+from mteb._evaluators.sklearn_evaluator import SklearnEvaluator
+from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
-    AudioStatistics,
-    ImageStatistics,
-    LabelStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
 
 from ._statistics_calculation import (
@@ -34,6 +30,19 @@ from ._statistics_calculation import (
     calculate_text_statistics,
 )
 from .abstask import AbsTask
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
+    from mteb.models import MTEBModels
+    from mteb.types import Array, EncodeKwargs, HFSubset, ScoresDict
+    from mteb.types.statistics import (
+        AudioStatistics,
+        ImageStatistics,
+        LabelStatistics,
+        TextStatistics,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -135,8 +144,9 @@ class AbsTaskClassification(AbsTask):
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluate a model on the classification task.
@@ -150,7 +160,7 @@ class AbsTaskClassification(AbsTask):
             )
 
         if not self.data_loaded:
-            self.load_data()
+            self.load_data(num_proc=num_proc)
 
         if self.dataset is None:
             raise RuntimeError("Dataset not loaded.")
@@ -188,6 +198,7 @@ class AbsTaskClassification(AbsTask):
                 hf_subset=hf_subset,
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
+                num_proc=num_proc,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
@@ -199,10 +210,11 @@ class AbsTaskClassification(AbsTask):
         model: MTEBModels,
         data_split: DatasetDict,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -228,6 +240,7 @@ class AbsTaskClassification(AbsTask):
                 encode_kwargs=encode_kwargs,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
+                num_proc=num_proc,
             )
 
             if prediction_folder:
@@ -250,10 +263,11 @@ class AbsTaskClassification(AbsTask):
         model: EncoderProtocol,
         data_split: DatasetDict,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         if self.train_split != hf_split:
@@ -277,6 +291,7 @@ class AbsTaskClassification(AbsTask):
             ds,
             self.metadata,
             input_column=self.input_column_name,
+            num_proc=num_proc,
             **encode_kwargs,
         )
         logger.info("Running cross-validation - Encoding samples...")
@@ -307,6 +322,7 @@ class AbsTaskClassification(AbsTask):
                 hf_subset=hf_subset,
                 test_cache=test_cache,
                 train_cache=train_cache,
+                num_proc=num_proc,
             )
 
             if prediction_folder:
@@ -332,10 +348,11 @@ class AbsTaskClassification(AbsTask):
         idxs: list[int] | None,
         test_cache: Array | None,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         train_cache: Array | None = None,
+        num_proc: int = 1,
     ) -> tuple[ClassificationMetrics, list[float], list[int], Array]:
         train_dataset, idxs, selected_idx = self._undersample_data(
             train_split,
@@ -361,6 +378,7 @@ class AbsTaskClassification(AbsTask):
             encode_kwargs=encode_kwargs,
             test_cache=test_cache,
             train_cache=sub_train_cache,
+            num_proc=num_proc,
         )
         y_test = eval_split[self.label_column_name]
         return self._calculate_scores(y_test, y_pred), y_pred.tolist(), idxs, test_cache
@@ -499,11 +517,12 @@ class AbsTaskClassification(AbsTask):
             label_statistics=label_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         self._upload_dataset_to_hub(
             repo_name,
             [
                 self.input_column_name,
                 self.label_column_name,
             ],
+            num_proc=num_proc,
         )

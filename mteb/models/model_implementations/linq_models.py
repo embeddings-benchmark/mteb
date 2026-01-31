@@ -1,11 +1,16 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import torch
 
 from mteb.models.instruct_wrapper import instruct_wrapper
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 
+if TYPE_CHECKING:
+    from mteb.types import PromptType
 LINQ_EMBED_MISTRAL_CITATION = """@misc{LinqAIResearch2024,
   title={Linq-Embed-Mistral:Elevating Text Retrieval with Improved GPT Data Through Task-Specific Control and Quality Refinement},
   author={Junseong Kim and Seolhwa Lee and Jihoon Kwon and Sangmo Gu and Yejin Kim and Minkyung Cho and Jy-yong Sohn and Chanyeol Choi},
@@ -38,6 +43,7 @@ Linq_Embed_Mistral = ModelMeta(
     revision="0c1a0b0589177079acc552433cad51d7c9132379",
     release_date="2024-05-29",  # initial commit of hf model.
     n_parameters=7_110_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=13563,
     embed_dim=4096,
     license="cc-by-nc-4.0",

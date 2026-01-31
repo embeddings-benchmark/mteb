@@ -1,15 +1,23 @@
+from __future__ import annotations
+
 import logging
-from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
+
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +100,7 @@ def instruct_wrapper(
             logger.info(
                 f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
             )
-            embeddings = super().encode(  # type: ignore[safe-super]
+            embeddings = super().encode(  # type: ignore[safe-super,call-arg]
                 _inputs,  # type: ignore[arg-type]
                 instruction=instruction,
                 *args,

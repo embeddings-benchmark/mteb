@@ -126,6 +126,25 @@ def create_mock_images(np_rng: np.random.Generator, n: int = 2) -> list[Image]:
     return [Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images]
 
 
+def create_mock_audio(
+    np_rng: np.random.Generator,
+    n: int = 2,
+    duration_s: float = 1.0,
+    sampling_rate: int = 16_000,
+) -> list[np.ndarray]:
+    audio_samples = []
+    num_samples = int(duration_s * sampling_rate)
+    for _ in range(n):
+        audio = np_rng.uniform(-1.0, 1.0, num_samples).astype(np.float32)
+        audio_samples.append(
+            {
+                "array": audio,
+                "sampling_rate": sampling_rate,
+            }
+        )
+    return audio_samples
+
+
 class MockClassificationTask(AbsTaskClassification):
     classifier = LogisticRegression(n_jobs=1, max_iter=10)
 
@@ -179,7 +198,7 @@ class MockClassificationTask(AbsTaskClassification):
         **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"]
         test_texts = ["This is a test sentence", "This is another test sentence"]
 
@@ -342,7 +361,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"]
         test_texts = ["This is a test sentence", "This is another test sentence"]
         labels = [0, 1]
@@ -400,7 +419,7 @@ class MockBitextMiningTask(AbsTaskBitextMining):
         **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -491,7 +510,7 @@ class MockMultilingualBitextMiningTask(AbsTaskBitextMining):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -589,7 +608,7 @@ class MockMultilingualParallelBitextMiningTask(AbsTaskBitextMining):
         "fra_Latn-eng_Latn": ["eng-Latn", "fra-Latn"],
     }
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -639,7 +658,7 @@ class MockClusteringTask(AbsTaskClusteringLegacy):
         **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         sentences = [
             [
                 "This is a test sentence",
@@ -741,7 +760,7 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         sentences = [
             [
                 "This is a test sentence",
@@ -802,7 +821,7 @@ class MockClusteringFastTask(AbsTaskClustering):
         **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         sentences = [
             "This is a test sentence",
             "This is another test sentence",
@@ -905,7 +924,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClustering):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         sentences = [
             "This is a test sentence",
             "This is another test sentence",
@@ -971,7 +990,7 @@ class MockPairClassificationTask(AbsTaskPairClassification):
         **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -1097,7 +1116,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -1173,7 +1192,7 @@ class MockPairImageClassificationTask(AbsTaskPairClassification):
     input1_column_name = "image1"
     input2_column_name = "image2"
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         images1 = create_mock_images(self.np_rng)
         images2 = create_mock_images(self.np_rng)
 
@@ -1228,7 +1247,7 @@ class MockSTSTask(AbsTaskSTS):
         **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -1347,7 +1366,7 @@ class MockMultilingualSTSTask(AbsTaskSTS):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -1411,7 +1430,7 @@ class MockSummarizationTask(AbsTaskSummarization):
         **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         texts = ["This is a test sentence", "This is another test sentence"]
         human_summaries = [
             ["This is a summary", "This is another summary"],
@@ -1541,7 +1560,7 @@ class MockMultilingualSummarizationTask(AbsTaskSummarization):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         texts = ["This is a test sentence", "This is another test sentence"]
         human_summaries = [
             ["This is a summary", "This is another summary"],
@@ -1620,7 +1639,7 @@ class MockRerankingTask(AbsTaskRetrieval):
         **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         self.dataset = {"default": {"test": base_datasplit}}
@@ -1746,7 +1765,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         base_datasplit = base_retrieval_datasplit()
         self.dataset = {
             "eng": {"test": base_datasplit},
@@ -1827,7 +1846,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
         **dict(general_args | {"eval_splits": ["val", "test"]}),
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         base_datasplit["top_ranked"] = None
@@ -1907,7 +1926,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
         **dict(general_args | {"eval_splits": ["val", "test"]}),
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         base_datasplit["top_ranked"] = None
@@ -2129,7 +2148,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         base_datasplit["top_ranked"] = None
@@ -2191,7 +2210,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
         **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"] * 3
         test_texts = ["This is a test sentence", "This is another test sentence"] * 3
         labels = [[0, 1], [1, 0]] * 3
@@ -2351,7 +2370,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"] * 3
         test_texts = ["This is a test sentence", "This is another test sentence"] * 3
         labels = [[0, 1], [1, 0]] * 3
@@ -2421,7 +2440,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
         **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         base_datasplit = instruction_retrieval_datasplit()
         base_datasplit["top_ranked"] = None
 
@@ -2475,7 +2494,7 @@ class MockInstructionReranking(AbsTaskRetrieval):
         **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         base_datasplit = instruction_retrieval_datasplit()
         self.dataset = {"default": {"test": base_datasplit}}
         self.data_loaded = True
@@ -2585,7 +2604,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         base_datasplit = instruction_retrieval_datasplit()
         base_datasplit["top_ranked"] = None
         self.dataset = {
@@ -2714,7 +2733,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         base_datasplit = instruction_retrieval_datasplit()
         self.dataset = {
             "eng": {"test": base_datasplit, "val": base_datasplit},
@@ -2794,7 +2813,7 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
     metadata.modalities = ["image", "text"]
     metadata.category = "it2i"
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         images = create_mock_images(self.np_rng)
         retrieval_split_data = RetrievalSplitData(
             queries=Dataset.from_dict(
@@ -2977,7 +2996,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
     metadata.modalities = ["image", "text"]
     metadata.category = "it2i"
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         images = create_mock_images(self.np_rng)
 
         split_data = RetrievalSplitData(
@@ -3063,7 +3082,7 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         images = create_mock_images(self.np_rng)
 
         retrieval_split_data = RetrievalSplitData(
@@ -3137,7 +3156,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
     metadata.modalities = ["image", "text"]
     metadata.category = "t2i"
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         images = create_mock_images(self.np_rng)
 
         retrieval_split_data = RetrievalSplitData(
@@ -3226,7 +3245,7 @@ class MockImageClassificationTask(AbsTaskClassification):
     samples_per_label = 5
     input_column_name = "image"
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         images = create_mock_images(self.np_rng)
         labels = [1, 0]
 
@@ -3402,7 +3421,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
     metadata.eval_langs = multilingual_eval_langs
     input_column_name = "image"
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         images = create_mock_images(self.np_rng)
         labels = [1, 0]
         data = {
@@ -3464,7 +3483,7 @@ class MockImageClusteringTask(AbsTaskClusteringLegacy):
     input_column_name = "image"
     label_column_name = "label"
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         images = create_mock_images(self.np_rng)
         labels = [1, 0]
 
@@ -3518,7 +3537,7 @@ class MockImageClusteringFastTask(AbsTaskClustering):
     max_fraction_of_documents_to_embed = None
     max_document_to_embed = 2
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         images = create_mock_images(self.np_rng)
         labels = [1, 0]
 
@@ -3605,7 +3624,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
     samples_per_label = 3
     input_column_name = "image"
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         images = create_mock_images(self.np_rng)
         labels = [["0", "3"], ["1", "2"]]
 
@@ -3811,7 +3830,7 @@ class MockMultilingualImageMultilabelClassificationTask(
 
     input_column_name = "image"
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         images = create_mock_images(self.np_rng)
         labels = [["0", "3"], ["1", "2"]]
 
@@ -3871,7 +3890,7 @@ class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         images = create_mock_images(self.np_rng)
         texts = ["This is a test sentence", "This is another test sentence"]
 
@@ -3964,7 +3983,7 @@ class MockMultilingualImageTextPairClassificationTask(
 
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         images = create_mock_images(self.np_rng)
         texts = ["This is a test sentence", "This is another test sentence"]
         data = {
@@ -4026,7 +4045,7 @@ class MockVisualSTSTask(AbsTaskSTS):
     metadata.modalities = ["image"]
     metadata.category = "i2i"
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         images = create_mock_images(self.np_rng)
         scores = [0.5, 0.5]
 
@@ -4088,7 +4107,7 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         images = create_mock_images(self.np_rng)
         labels = ["label1", "label2"]
 
@@ -4149,7 +4168,7 @@ class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
     metadata.category = "t2t"
     input_column_name = "text"
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         texts = ["This is a test sentence", "This is another test sentence"]
         labels = ["label1", "label2"]
 
@@ -4343,13 +4362,7 @@ class MockAudioClusteringTask(AbsTaskClustering):
     metadata.modalities = ["audio"]
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(3)
-        ]
+        mock_audio = create_mock_audio(self.np_rng, n=3)
 
         labels = [0, 1, 2]
 
@@ -4425,13 +4438,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
     input_column_name = "audio"
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s audio
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
         labels = [[0], [1]]
 
         self.dataset = DatasetDict(
@@ -4491,14 +4498,7 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
     metadata.modalities = ["audio"]
 
     def load_data(self, **kwargs):
-        # Create mock audio data as numpy arrays
-        mock_audio = [
-            {
-                "array": np.random.rand(16000).astype(np.float32),  # 1s audio
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
         labels = np.array([0, 1])  # Convert labels to numpy array
 
         self.dataset = DatasetDict(
@@ -4564,13 +4564,7 @@ class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         self.queries = DatasetDict(
             {
@@ -4654,13 +4648,7 @@ class MockAny2AnyRetrievalA2TTask(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         self.queries = DatasetDict(
             {
@@ -4745,13 +4733,7 @@ class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         self.queries = DatasetDict(
             {
@@ -4841,13 +4823,7 @@ class MockAudioReranking(AbsTaskRetrieval):
     }
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         queries = Dataset.from_dict(
             {
@@ -4945,7 +4921,7 @@ class MockAudioClassification(AbsTaskClassification):
         sampling_rates = [16000, 8000]
         mock_audio = [
             {
-                "array": np.random.rand(16000),  # 1s
+                "array": self.np_rng.random(16000),  # 1s
                 "sampling_rate": sampling_rates[i],
             }
             for i in range(2)
@@ -5023,13 +4999,7 @@ class MockAudioPairClassification(AbsTaskPairClassification):
     label_column_name = "label"
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         self.dataset = DatasetDict(
             {
@@ -5084,13 +5054,7 @@ class MockAudioClassificationCrossVal(AbsTaskClassification):
     }
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         self.dataset = DatasetDict(
             {

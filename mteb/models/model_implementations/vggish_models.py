@@ -1,18 +1,23 @@
+from __future__ import annotations
+
 import logging
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies, requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput
 
 logger = logging.getLogger(__name__)
 
@@ -202,7 +207,6 @@ vggish = ModelMeta(
     publisher = {IEEE Press},
     url = {https://doi.org/10.1109/ICASSP.2017.7952132},
     doi = {10.1109/ICASSP.2017.7952132},
-    abstract = {Convolutional Neural Networks (CNNs) have proven very effective in image classification and show promise for audio. We use various CNN architectures to classify the soundtracks of a dataset of 70M training videos (5.24 million hours) with 30,871 video-level labels. We examine fully connected Deep Neural Networks (DNNs), AlexNet [1], VGG [2], Inception [3], and ResNet [4]. We investigate varying the size of both training set and label vocabulary, finding that analogs of the CNNs used in image classification do well on our audio classification task, and larger training and label sets help up to a point. A model using embeddings from these classifiers does much better than raw features on the Audio Set [5] Acoustic Event Detection (AED) classification task.},
     booktitle = {2017 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
     pages = {131–135},
     numpages = {5},

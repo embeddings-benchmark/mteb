@@ -30,7 +30,7 @@ class SickFrSTS(AbsTaskSTS):
     min_score = 0
     max_score = 5
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_columns(
             {
                 "sentence_A": "sentence1",

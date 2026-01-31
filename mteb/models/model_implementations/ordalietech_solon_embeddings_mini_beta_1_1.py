@@ -4,6 +4,7 @@ solon_embeddings_1_1 = ModelMeta(
     name="OrdalieTech/Solon-embeddings-mini-beta-1.1",
     languages=["fra-Latn"],
     n_parameters=210_000_000,
+    n_embedding_parameters=None,
     public_training_code=None,
     memory_usage_mb=808.0,
     open_weights=True,

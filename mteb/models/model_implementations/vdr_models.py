@@ -1,6 +1,12 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from mteb.types import PromptType
 
 
 def instruction_template(
@@ -32,6 +38,7 @@ vdr_2b_multi_v1 = ModelMeta(
     release_date="2024-01-08",
     modalities=["text"],  # TODO: integrate with image
     n_parameters=2_000_000_000,
+    n_embedding_parameters=233_373_696,
     memory_usage_mb=4213,
     max_tokens=32768,
     embed_dim=1536,

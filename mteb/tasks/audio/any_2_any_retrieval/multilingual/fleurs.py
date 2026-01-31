@@ -135,9 +135,13 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{conneau2023fleurs,
-  author = {Conneau, Alexis and Kocmi, Tom and Ruder, Sebastian and Sainz, Oscar and Chaudhary, Vishrav and Guzmán, Francisco and Joulin, Armand and Khandelwal, Kartikay and Kumar, Shubham and Moehs, Florian and Pino, Juan and Poncelas, Alberto and Seedat, Saadia and Stojanovski, Daan and Wang, Jingfei and Wang, Mona and Wenzek, Guillaume and Wrona, Piotr and Zhou, Wei},
-  booktitle = {Proceedings of the 23rd Annual Conference of the International Speech Communication Association (INTERSPEECH 2023)},
+        bibtex_citation=r"""
+@inproceedings{conneau2023fleurs,
+  author = {Conneau, Alexis and Ma, Min and Khanuja, Simran and Zhang, Yu and Axelrod, Vera and Dalmia, Siddharth and Riesa, Jason and Rivera, Clara and Bapna, Ankur},
+  booktitle = {2022 IEEE Spoken Language Technology Workshop (SLT)},
+  organization = {IEEE},
+  pages = {798--805},
+  title = {Fleurs: Few-shot learning evaluation of universal representations of speech},
   year = {2023},
 }
 """,
@@ -207,9 +211,13 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{conneau2023fleurs,
-  author = {Conneau, Alexis and Kocmi, Tom and Ruder, Sebastian and Sainz, Oscar and Chaudhary, Vishrav and Guzmán, Francisco and Joulin, Armand and Khandelwal, Kartikay and Kumar, Shubham and Moehs, Florian and Pino, Juan and Poncelas, Alberto and Seedat, Saadia and Stojanovski, Daan and Wang, Jingfei and Wang, Mona and Wenzek, Guillaume and Wrona, Piotr and Zhou, Wei},
-  booktitle = {Proceedings of the 23rd Annual Conference of the International Speech Communication Association (INTERSPEECH 2023)},
+        bibtex_citation=r"""
+@inproceedings{conneau2023fleurs,
+  author = {Conneau, Alexis and Ma, Min and Khanuja, Simran and Zhang, Yu and Axelrod, Vera and Dalmia, Siddharth and Riesa, Jason and Rivera, Clara and Bapna, Ankur},
+  booktitle = {2022 IEEE Spoken Language Technology Workshop (SLT)},
+  organization = {IEEE},
+  pages = {798--805},
+  title = {Fleurs: Few-shot learning evaluation of universal representations of speech},
   year = {2023},
 }
 """,

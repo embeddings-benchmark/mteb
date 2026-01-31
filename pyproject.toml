@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.6.5"
+version = "2.7.13"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -44,6 +44,8 @@ dependencies = [
     "pytrec-eval-terrier>=0.5.6",
     "pydantic>=2.0.0",
     "polars>=0.20.22",
+    # "torch; python_full_version < '3.14'",
+    # "torch>=2.9.0; python_full_version >= '3.14'",
 ]
 
 
@@ -109,6 +111,7 @@ speechbrain = ["speechbrain>=0.5.12"]
 muq = ["muq==0.1.0"]
 wav2clip = ["wav2clip==0.1.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
+vllm = ["vllm>=0.11.1"]
 
 [dependency-groups]
 lint = [
@@ -245,7 +248,9 @@ select = [
     "PTH",     # use pathlib
     "TID",     # tidy-imports
     "D",       # pydocstyle
-    "PGH",  # pygrep-hooks Use specific rule codes when ignoring type issues
+    "PGH",     # pygrep-hooks Use specific rule codes when ignoring type issues
+    "LOG",     # logging
+    "TC",      # type-checking
 ]
 
 ignore = [
@@ -258,14 +263,29 @@ ignore = [
     "D415",     # First line should end with a period
     "C408",     # don't use unecc. collection call, e.g. dict over {}
 ]
+future-annotations = true  # For TC rules
+typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
+
 
 [tool.ruff.lint.per-file-ignores]
 "scripts/*" = ["ALL"]
-"docs/*" = ["D", "DOC"]
-"tests/*" = ["RUF012", "D", "DOC", "NPY"]
+"docs/*" = [
+    "D",
+    "DOC",
+]
+"tests/*" = [
+    "RUF012",
+    "D",
+    "DOC",
+    "TC",
+]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = ["D", "DOC"]
 "mteb/models/model_implementations/*" = ["D", "DOC"]
+"mteb/benchmarks/benchmark.py" = [
+    # pydantic would try to validate fields in Benchmark class
+    "TC",
+]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false
@@ -283,6 +303,13 @@ convention = "google"
 [tool.ruff.lint.flake8-annotations]
 mypy-init-return = true
 suppress-none-returning = true
+
+[tool.ruff.lint.flake8-type-checking]
+strict = true
+runtime-evaluated-base-classes = [
+    "pydantic.BaseModel",
+    "mteb.abstasks.task_metadata.TaskMetadata",  # https://github.com/astral-sh/ruff/issues/7866
+]
 
 [tool.semantic_release]
 branch = "main"
@@ -342,6 +369,7 @@ conflicts = [
         { extra = "vllm" },
         { extra = "flagembedding" },
         { extra = "msclap" },
+        { extra = "vllm" },
         { extra = "muq" },
     ],
     [
@@ -364,6 +392,7 @@ module = [
     "sklearn",
     "sklearn.*",
     "faiss",
+    "vllm",
 ]
 ignore_missing_imports = true
 
@@ -411,12 +440,14 @@ extend-exclude = [
     "*.json",
     "*.jsonl",
     "*.cff",
+    "*.tex",  # latex files with language codes
+    "*.bib",  # bibliography files with author names and journal abbreviations
     "*.txt",  # zero shot labels
     "docs/mmteb",
     "scripts/",
-    "docs/references.bib",
     "mteb/models/model_implementations/gme_v_models.py",  # video_grid_thw `thw`
     "mteb/models/model_implementations/vista_models.py",  # self.normlized: in visual bge
+    "mteb/models/model_implementations/salesforce_models.py", # multiligual in paper title
     "tests/mock_tasks.py",  #  "denne her matche ikke den ovenstående",
     "mteb/models/model_implementations/kalm_models.py",  # prompt:  classify ist topic",
     "mteb/tasks/reranking/eng/built_bench_reranking.py",  # prompt:   descriptions from buit asset

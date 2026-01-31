@@ -1,20 +1,31 @@
 """Updates the available tasks markdown files."""
 
 from pathlib import Path
+from typing import cast
+
+from prettify_list import pretty_long_list
+from slugify import slugify_anchor
 
 import mteb
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
+from mteb.get_tasks import MTEBTasks
 
 task_entry = """
 #### {task_name}
 
 {description}
 
-**Dataset:** [`{dataset_name}`](https://huggingface.co/datasets/{dataset_name}) • **License:** {license} • [Learn more →]({reference})
+{dataset_line}
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | {task_category_string} ({task_category}) | {main_score} | {languages} | {domains} | {annotation_creators} | {sample_creation} |
 
+"""
+aggregated_tasks_section = """
+??? info "Tasks"
+
+{task_table}
 """
 
 task_type_section = """
@@ -41,12 +52,6 @@ citation_chunk = """
 {bibtex_citation}
 ```
 """
-
-
-def pretty_long_list(items: list[str], max_items: int = 5) -> str:
-    if len(items) <= max_items:
-        return ", ".join(items)
-    return ", ".join(items[:max_items]) + f", ... ({len(items)})"
 
 
 def task_category_to_string(category: str) -> str:
@@ -77,16 +82,34 @@ def task_category_to_string(category: str) -> str:
     return f"{', '.join(input_strings)} to {', '.join(output_strings)}"
 
 
+def create_aggregate_table(task: AbsTaskAggregate) -> str:
+    tasks = cast("MTEBTasks", MTEBTasks(task.metadata.tasks))
+    df = tasks.to_dataframe(["name", "type", "modalities", "languages"])
+    df["name"] = df.apply(
+        lambda row: (
+            f"[{row['name']}](./{row['type'].lower()}.md#{slugify_anchor(row['name'])})"
+        ),
+        axis=1,
+    )
+    df["modalities"] = df["modalities"].apply(lambda x: pretty_long_list(x))
+    df["languages"] = df["languages"].apply(lambda x: pretty_long_list(x))
+    return df.to_markdown(index=False)
+
+
 def format_task_entry(task: mteb.AbsTask) -> str:
     description = task.metadata.description
-    dataset_name = task.metadata.dataset["path"]
     license = task.metadata.license or "not specified"
-    reference = (
-        task.metadata.reference or f"https://huggingface.co/datasets/{dataset_name}"
-    )
+    reference = task.metadata.reference
+    dataset_name = task.metadata.dataset["path"]
+    if not reference and not isinstance(task, AbsTaskAggregate):
+        reference = f"https://huggingface.co/datasets/{dataset_name}"
     main_score = task.metadata.main_score
-    task_category = task.metadata.category
-    task_category_string = task_category_to_string(task_category)
+    task_category = task.metadata.category or "not specified"
+    task_category_string = (
+        task_category_to_string(task_category)
+        if task.metadata.category
+        else "not specified"
+    )
     languages = pretty_long_list(task.metadata.languages)
     domains = (
         pretty_long_list(sorted(task.metadata.domains))
@@ -96,12 +119,23 @@ def format_task_entry(task: mteb.AbsTask) -> str:
     annotation_creators = task.metadata.annotations_creators or "not specified"
     sample_creation = task.metadata.sample_creation or "not specified"
 
+    if reference:
+        learn_more = f"[Learn more →]({reference})"
+    else:
+        learn_more = "Learn more → not specified"
+
+    if not isinstance(task, AbsTaskAggregate):
+        dataset_line = (
+            f"**Dataset:** [`{dataset_name}`](https://huggingface.co/datasets/{dataset_name}) "
+            f"• **License:** {license} • {learn_more}"
+        )
+    else:
+        dataset_line = f"**License:** {license} • {learn_more}"
+
     entry = task_entry.format(
         task_name=task.metadata.name,
         description=description,
-        dataset_name=dataset_name,
-        license=license,
-        reference=reference,
+        dataset_line=dataset_line,
         main_score=main_score,
         task_category=task_category,
         task_category_string=task_category_string,
@@ -115,13 +149,22 @@ def format_task_entry(task: mteb.AbsTask) -> str:
         citation = "\n".join([f"    {line}" for line in citation.split("\n")])  # indent
         entry += citation_admonition.format(citation_chunk=citation)
 
+    if isinstance(task, AbsTaskAggregate):
+        task_table = create_aggregate_table(task)
+        task_table = "\n".join([f"    {line}" for line in task_table.split("\n")])
+        entry += aggregated_tasks_section.format(task_table=task_table)
+
     return entry
 
 
 def main(folder: Path) -> None:
     folder.mkdir(exist_ok=True)
 
-    tasks = mteb.get_tasks(exclude_superseded=False, exclude_aggregate=True)
+    tasks = mteb.get_tasks(
+        exclude_superseded=False,
+        exclude_aggregate=False,
+        exclude_private=False,
+    )
     task_types = sorted({task.metadata.type for task in tasks})
 
     task_types2tasks = {task_type: [] for task_type in task_types}

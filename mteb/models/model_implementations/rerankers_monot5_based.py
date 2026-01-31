@@ -1,14 +1,20 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
 
 from .rerankers_custom import RerankerWrapper
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+
 
 logger = logging.getLogger(__name__)
 
@@ -321,6 +327,7 @@ monot5_small = ModelMeta(
     revision="77f8e3f7b1eb1afe353aa21a7c3a2fc8feca702e",
     release_date="2022-03-28",
     n_parameters=None,
+    n_embedding_parameters=16_449_536,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -363,6 +370,7 @@ monot5_base = ModelMeta(
       url={https://arxiv.org/abs/2206.02873},
     }""",
     n_parameters=None,
+    n_embedding_parameters=24_674_304,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -387,6 +395,7 @@ monot5_large = ModelMeta(
     revision="48cfad1d8dd587670393f27ee8ec41fde63e3d98",
     release_date="2022-03-28",
     n_parameters=None,
+    n_embedding_parameters=32_899_072,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -420,6 +429,7 @@ monot5_3b = ModelMeta(
     revision="bc0c419a438c81f592f878ce32430a1823f5db6c",
     release_date="2022-03-28",
     n_parameters=None,
+    n_embedding_parameters=32_899_072,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -476,6 +486,7 @@ flant5_base = ModelMeta(
         # "qed": ["train"],
     ),
     n_parameters=None,
+    n_embedding_parameters=24_674_304,
     memory_usage_mb=944,
     max_tokens=None,
     embed_dim=None,
@@ -522,6 +533,7 @@ flant5_large = ModelMeta(
         # "qed": ["train"],
     ),
     n_parameters=None,
+    n_embedding_parameters=32_899_072,
     memory_usage_mb=2987,
     max_tokens=None,
     embed_dim=None,
@@ -568,6 +580,7 @@ flant5_xl = ModelMeta(
         # "qed": ["train"],
     ),
     n_parameters=None,
+    n_embedding_parameters=65_798_144,
     memory_usage_mb=10871,
     max_tokens=None,
     embed_dim=None,
@@ -614,6 +627,7 @@ flant5_xxl = ModelMeta(
         # "qed": ["train"],
     ),
     n_parameters=None,
+    n_embedding_parameters=131_596_288,
     memory_usage_mb=42980,
     max_tokens=None,
     embed_dim=None,
@@ -638,6 +652,7 @@ llama2_7b = ModelMeta(
     revision="01c7f73d771dfac7d292323805ebc428287df4f9",
     release_date="2023-07-18",
     n_parameters=None,
+    n_embedding_parameters=131_072_000,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -680,6 +695,7 @@ llama2_7b_chat = ModelMeta(
       url={https://arxiv.org/abs/2307.09288},
     }""",
     n_parameters=None,
+    n_embedding_parameters=131_072_000,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -704,6 +720,7 @@ mistral_7b = ModelMeta(
     revision="3ad372fc79158a2148299e3318516c786aeded6c",
     release_date="2023-12-11",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -740,6 +757,7 @@ followir_7b = ModelMeta(
         # "jhu-clsp/FollowIR-train"
     ),
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=13813,
     max_tokens=None,
     embed_dim=None,
@@ -890,6 +908,7 @@ mt5_base_mmarco_v2 = ModelMeta(
     """,
     training_datasets={"MSMARCO"},
     n_parameters=None,
+    n_embedding_parameters=192_086_016,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -913,6 +932,7 @@ mt5_13b_mmarco_100k = ModelMeta(
     revision="e1a4317e102a525ea9e16745ad21394a4f1bffbc",
     release_date="2022-11-04",
     n_parameters=None,
+    n_embedding_parameters=1_024_458_752,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,

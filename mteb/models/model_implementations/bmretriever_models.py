@@ -1,5 +1,6 @@
-from collections.abc import Callable
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
 from sentence_transformers import SentenceTransformer
@@ -8,6 +9,9 @@ from sentence_transformers.models import Pooling, Transformer
 from mteb.models import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def instruction_template(
@@ -99,6 +103,7 @@ BMRetriever_410M = ModelMeta(
     release_date="2024-04-29",
     embed_dim=1024,
     n_parameters=353_822_720,
+    n_embedding_parameters=51_511_296,
     memory_usage_mb=1349,
     max_tokens=2048,
     license="mit",
@@ -129,6 +134,7 @@ BMRetriever_1B = ModelMeta(
     release_date="2024-04-29",
     embed_dim=2048,
     n_parameters=908_759_040,
+    n_embedding_parameters=103_022_592,
     memory_usage_mb=3466,
     max_tokens=2048,
     license="mit",
@@ -159,6 +165,7 @@ BMRetriever_2B = ModelMeta(
     release_date="2024-04-29",
     embed_dim=2048,
     n_parameters=2_506_172_416,
+    n_embedding_parameters=524_288_000,
     memory_usage_mb=9560,
     max_tokens=8192,
     license="mit",
@@ -189,6 +196,7 @@ BMRetriever_7B = ModelMeta(
     release_date="2024-04-29",
     embed_dim=4096,
     n_parameters=7_110_660_096,
+    n_embedding_parameters=131_072_000,
     memory_usage_mb=27124,
     max_tokens=32768,
     license="mit",

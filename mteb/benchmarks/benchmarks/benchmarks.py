@@ -1330,6 +1330,46 @@ This is the long version of the benchmark, which only filter longer documents.
 """,
 )
 
+BRIGHT_V1_1 = Benchmark(
+    name="BRIGHT(v1.1)",
+    display_name="Reasoning Retrieval",
+    tasks=get_tasks(
+        tasks=[
+            "BrightBiologyRetrieval",
+            "BrightEarthScienceRetrieval",
+            "BrightEconomicsRetrieval",
+            "BrightPsychologyRetrieval",
+            "BrightRoboticsRetrieval",
+            "BrightStackoverflowRetrieval",
+            "BrightSustainableLivingRetrieval",
+            "BrightPonyRetrieval",
+            "BrightLeetcodeRetrieval",
+            "BrightAopsRetrieval",
+            "BrightTheoremQATheoremsRetrieval",
+            "BrightTheoremQAQuestionsRetrieval",
+            "BrightBiologyLongRetrieval",
+            "BrightEarthScienceLongRetrieval",
+            "BrightEconomicsLongRetrieval",
+            "BrightPsychologyLongRetrieval",
+            "BrightRoboticsLongRetrieval",
+            "BrightStackoverflowLongRetrieval",
+            "BrightSustainableLivingLongRetrieval",
+            "BrightPonyLongRetrieval",
+        ],
+    ),
+    description="v1.1 refactors the BRIGHT into a different tasks and added prompt to individual tasks.",
+    reference="https://brightbenchmark.github.io/",
+    citation=r"""
+@article{su2024bright,
+  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal = {arXiv preprint arXiv:2407.12883},
+  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  year = {2024},
+}
+""",
+)
+
+
 CODE_RAG = Benchmark(
     name="CodeRAG",
     tasks=get_tasks(
@@ -1656,6 +1696,7 @@ FA_MTEB_2 = Benchmark(
 
 CHEMTEB = Benchmark(
     name="ChemTEB",
+    aliases=["ChemTEB(v1)"],
     display_name="Chemical",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-purge.svg",
     tasks=get_tasks(
@@ -1701,6 +1742,62 @@ CHEMTEB = Benchmark(
 """,
 )
 
+CHEMTEB_V1_1 = Benchmark(
+    name="ChemTEB(v1.1)",
+    aliases=["ChemTEB(latest)"],
+    display_name="Chemical",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-purge.svg",
+    tasks=get_tasks(
+        tasks=[
+            "PubChemSMILESBitextMining",
+            "SDSEyeProtectionClassification",
+            "SDSGlovesClassification",
+            "WikipediaBioMetChemClassification",
+            "WikipediaGreenhouseEnantiopureClassification",
+            "WikipediaSolidStateColloidalClassification",
+            "WikipediaOrganicInorganicClassification",
+            "WikipediaCryobiologySeparationClassification",
+            "WikipediaChemistryTopicsClassification",
+            "WikipediaTheoreticalAppliedClassification",
+            "WikipediaChemFieldsClassification",
+            "WikipediaLuminescenceClassification",
+            "WikipediaIsotopesFissionClassification",
+            "WikipediaSaltsSemiconductorsClassification",
+            "WikipediaBiolumNeurochemClassification",
+            "WikipediaCrystallographyAnalyticalClassification",
+            "WikipediaCompChemSpectroscopyClassification",
+            "WikipediaChemEngSpecialtiesClassification",
+            "WikipediaChemistryTopicsClustering",
+            "WikipediaSpecialtiesInChemistryClustering",
+            "PubChemAISentenceParaphrasePC",
+            "PubChemSMILESPC",
+            "PubChemSynonymPC",
+            "PubChemWikiParagraphsPC",
+            "PubChemWikiPairClassification",
+            "ChemNQRetrieval",
+            "ChemHotpotQARetrieval",
+            "ChemRxivRetrieval",
+        ],
+    ),
+    description="ChemTEB evaluates the performance of text embedding models on chemical domain data. This version adds the ChemRxivRetrieval task.",
+    reference="https://arxiv.org/abs/2412.00532",
+    citation=r"""
+@article{kasmaee2024chemteb,
+  author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
+  journal = {arXiv preprint arXiv:2412.00532},
+  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
+  year = {2024},
+}
+
+@article{kasmaee2025chembed,
+  author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Astaraki, Mahdi and Saloot, Mohammad Arshi and Sherck, Nicholas and Mahyar, Hamidreza and Samiee, Soheila},
+  journal = {arXiv preprint arXiv:2508.01643},
+  title = {Chembed: Enhancing chemical literature search through domain-specific text embeddings},
+  year = {2025},
+}
+""",
+)
+
 BEIR_NL = Benchmark(
     name="BEIR-NL",
     display_name="BEIR-NL",
@@ -1724,8 +1821,7 @@ BEIR_NL = Benchmark(
             "TRECCOVID-NL",
         ],
     ),
-    description="BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created through automated "
-    "translation.",
+    description="BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created through automated translation.",
     reference="https://arxiv.org/abs/2412.08329",
     contacts=["nikolay-banar"],
     citation=r"""
@@ -2350,17 +2446,16 @@ VIDORE_V3 = VidoreBenchmark(
         ]
     ),
     description="ViDoRe V3 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents. The benchmark includes both open and closed datasets: to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
-    reference="https://huggingface.co/blog/QuentinJG/introducing-vidore-v3",
+    reference="https://arxiv.org/abs/2601.08620",
     citation=r"""
-@misc{mace2025vidorev3,
-  author = {Macé, Quentin and Loison, Antonio and EDY, Antoine and Xing, Victor and Viaud, Gautier},
-  day = {5},
-  howpublished = {\url{https://huggingface.co/blog/QuentinJG/introducing-vidore-v3}},
-  journal = {Hugging Face Blog},
-  month = {November},
-  publisher = {Hugging Face},
-  title = {ViDoRe V3: a comprehensive evaluation of retrieval for enterprise use-cases},
-  year = {2025},
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
 }
 """,
 )
@@ -2727,4 +2822,355 @@ JMTEB_LITE_V1 = Benchmark(
 }
 """,
     contacts=["lsz05"],
+)
+
+KOVIDORE_V2 = Benchmark(
+    name="KoViDoRe(v2)",
+    display_name="KoViDoRe v2",
+    tasks=get_tasks(
+        tasks=[
+            "KoVidore2CybersecurityRetrieval",
+            "KoVidore2EconomicRetrieval",
+            "KoVidore2EnergyRetrieval",
+            "KoVidore2HrRetrieval",
+        ]
+    ),
+    description="KoViDoRe v2 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents.",
+    reference="https://github.com/whybe-choi/kovidore-data-generator",
+    citation=r"""
+@misc{choi2026kovidorev2,
+  author = {Yongbin Choi},
+  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
+  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
+  url = {https://github.com/whybe-choi/kovidore-data-generator},
+  year = {2026},
+}
+""",
+)
+
+MAEB_PLUS = Benchmark(
+    name="MAEB+",
+    display_name="MAEB+",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Classification (35)
+            "AmbientAcousticContext",
+            "AudioSet",
+            "AudioSetMini",
+            "BeijingOpera",
+            "BirdCLEF",
+            "BirdSet",
+            "CommonLanguageAgeDetection",
+            "CommonLanguageGenderDetection",
+            "CommonLanguageLanguageDetection",
+            "CREMA_D",
+            "ESC50",
+            "FSD2019Kaggle",
+            "FSD50K",
+            "FSDD",
+            "GTZANGenre",
+            "GunshotTriangulation",
+            "IEMOCAPEmotion",
+            "IEMOCAPGender",
+            "LibriCount",
+            "MInDS14",
+            "MridinghamStroke",
+            "MridinghamTonic",
+            "NSynth",
+            "SIBFLEURS",
+            "SpeechCommands",
+            "SpokeNEnglish",
+            "SpokenQAForIC",
+            "TUTAcousticScenes",
+            "UrbanSound8k",
+            "VocalSound",
+            "VoxCelebSA",
+            "VoxLingua107_Top10",
+            "VoxPopuliAccentID",
+            "VoxPopuliGenderID",
+            "VoxPopuliLanguageID",
+            # Clustering (10)
+            "AmbientAcousticContextClustering",
+            "CREMA_DClustering",
+            "ESC50Clustering",
+            "GTZANGenreClustering",
+            "MusicGenreClustering",
+            "VehicleSoundClustering",
+            "VoiceGenderClustering",
+            "VoxCelebClustering",
+            "VoxPopuliAccentClustering",
+            "VoxPopuliGenderClustering",
+            # PairClassification (5)
+            "CREMADPairClassification",
+            "ESC50PairClassification",
+            "NMSQAPairClassification",
+            "VocalSoundPairClassification",
+            "VoxPopuliAccentPairClassification",
+            # Reranking (5)
+            "ESC50AudioReranking",
+            "FSDnoisy18kAudioReranking",
+            "GTZANAudioReranking",
+            "UrbanSound8KAudioReranking",
+            "VocalSoundAudioReranking",
+            # Zeroshot Classification (5)
+            "ESC50_Zeroshot",
+            "RavdessZeroshot",
+            "SpeechCommandsZeroshotv0.01",
+            "SpeechCommandsZeroshotv0.02",
+            "UrbanSound8kZeroshot",
+            # Audio-to-Audio Retrieval (1)
+            "JamAltArtistA2ARetrieval",
+            # Audio-to-Text Retrieval (19)
+            "AudioCapsA2TRetrieval",
+            "AudioSetStrongA2TRetrieval",
+            "ClothoA2TRetrieval",
+            "CMUArcticA2TRetrieval",
+            "CommonVoiceMini17A2TRetrieval",
+            "CommonVoiceMini21A2TRetrieval",
+            "EmoVDBA2TRetrieval",
+            "FleursA2TRetrieval",
+            "GigaSpeechA2TRetrieval",
+            "GoogleSVQA2TRetrieval",
+            "HiFiTTSA2TRetrieval",
+            "JamAltLyricA2TRetrieval",
+            "JLCorpusA2TRetrieval",
+            "LibriTTSA2TRetrieval",
+            "MACSA2TRetrieval",
+            "MusicCapsA2TRetrieval",
+            "SoundDescsA2TRetrieval",
+            "UrbanSound8KA2TRetrieval",
+            # Text-to-Audio Retrieval (18)
+            "AudioCapsT2ARetrieval",
+            "AudioSetStrongT2ARetrieval",
+            "ClothoT2ARetrieval",
+            "CMUArcticT2ARetrieval",
+            "CommonVoiceMini17T2ARetrieval",
+            "CommonVoiceMini21T2ARetrieval",
+            "EmoVDBT2ARetrieval",
+            "FleursT2ARetrieval",
+            "GigaSpeechT2ARetrieval",
+            "GoogleSVQT2ARetrieval",
+            "HiFiTTST2ARetrieval",
+            "JamAltLyricT2ARetrieval",
+            "JLCorpusT2ARetrieval",
+            "LibriTTST2ARetrieval",
+            "MACST2ARetrieval",
+            "MusicCapsT2ARetrieval",
+            "SoundDescsT2ARetrieval",
+            "SpokenSQuADT2ARetrieval",
+            "UrbanSound8KT2ARetrieval",
+        ]
+    ),
+    description="""MAEB+ is the full Massive Audio Embedding Benchmark (v1), containing 98 tasks with audio modality across 6 task types: classification, clustering, pair classification, reranking, zero-shot classification, and retrieval.""",
+    reference=None,
+    citation="",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+)
+
+MAEB_AUDIO = Benchmark(
+    name="MAEB(audio-only)",
+    display_name="Audio-Only",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Any2AnyRetrieval (1)
+            "JamAltArtistA2ARetrieval",
+            # AudioClassification (10)
+            "BeijingOpera",
+            "BirdCLEF",
+            "CREMA_D",
+            "CommonLanguageAgeDetection",
+            "GTZANGenre",
+            "IEMOCAPGender",
+            "MInDS14",
+            "MridinghamTonic",
+            "VoxCelebSA",
+            "VoxPopuliLanguageID",
+            # AudioClustering (3)
+            "CREMA_DClustering",
+            "VehicleSoundClustering",
+            "VoxPopuliGenderClustering",
+            # AudioMultilabelClassification (1)
+            "SIBFLEURS",
+            # AudioPairClassification (3)
+            "CREMADPairClassification",
+            "NMSQAPairClassification",
+            "VoxPopuliAccentPairClassification",
+            # AudioReranking (1)
+            "GTZANAudioReranking",
+        ]
+    ),
+    description="""MAEB(audio-only) is the audio-only subset of MAEB with 19 tasks spanning 6 task types: classification (10), clustering (3), multilabel classification (1), pair classification (3), reranking (1), and retrieval (1).""",
+    reference=None,
+    citation="",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+)
+
+MAEB_EXTENDED = Benchmark(
+    name="MAEB(extended)",
+    display_name="Extended",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    tasks=get_tasks(
+        tasks=[
+            # === Audio-only tasks (53) ===
+            # AudioMultilabelClassification (4)
+            "FSD50K",
+            "SIBFLEURS",
+            "FSD2019Kaggle",
+            "AudioSetMini",
+            # AudioClassification (28)
+            "VoxPopuliAccentID",
+            "MInDS14",
+            "VoxPopuliGenderID",
+            "BeijingOpera",
+            "AmbientAcousticContext",
+            "CREMA_D",
+            "VoxCelebSA",
+            "TUTAcousticScenes",
+            "NSynth",
+            "VocalSound",
+            "VoxLingua107_Top10",
+            "ESC50",
+            "CommonLanguageAgeDetection",
+            "IEMOCAPEmotion",
+            "CommonLanguageLanguageDetection",
+            "CommonLanguageGenderDetection",
+            "IEMOCAPGender",
+            "SpokeNEnglish",
+            "FSDD",
+            "LibriCount",
+            "GTZANGenre",
+            "BirdCLEF",
+            "VoxPopuliLanguageID",
+            "MridinghamStroke",
+            "GunshotTriangulation",
+            "SpeechCommands",
+            "MridinghamTonic",
+            "BirdSet",
+            # AudioReranking (5)
+            "ESC50AudioReranking",
+            "UrbanSound8KAudioReranking",
+            "GTZANAudioReranking",
+            "FSDnoisy18kAudioReranking",
+            "VocalSoundAudioReranking",
+            # AudioClustering (10)
+            "VoiceGenderClustering",
+            "VoxPopuliAccentClustering",
+            "AmbientAcousticContextClustering",
+            "VoxCelebClustering",
+            "VoxPopuliGenderClustering",
+            "VehicleSoundClustering",
+            "MusicGenreClustering",
+            "ESC50Clustering",
+            "CREMA_DClustering",
+            "GTZANGenreClustering",
+            # AudioPairClassification (5)
+            "VoxPopuliAccentPairClassification",
+            "ESC50PairClassification",
+            "NMSQAPairClassification",
+            "VocalSoundPairClassification",
+            "CREMADPairClassification",
+            # Audio2AudioRetrieval (1)
+            "JamAltArtistA2ARetrieval",
+            # === Audio-text tasks (38) ===
+            # Any2AnyRetrieval - Audio to Text (13)
+            "AudioCapsA2TRetrieval",
+            "AudioSetStrongA2TRetrieval",
+            "CMUArcticA2TRetrieval",
+            "EmoVDBA2TRetrieval",
+            "GigaSpeechA2TRetrieval",
+            "HiFiTTSA2TRetrieval",
+            "JLCorpusA2TRetrieval",
+            "JamAltLyricA2TRetrieval",
+            "LibriTTSA2TRetrieval",
+            "MACSA2TRetrieval",
+            "MusicCapsA2TRetrieval",
+            "SpokenSQuADT2ARetrieval",
+            "UrbanSound8KA2TRetrieval",
+            # Any2AnyRetrieval - Text to Audio (12)
+            "AudioCapsT2ARetrieval",
+            "AudioSetStrongT2ARetrieval",
+            "CMUArcticT2ARetrieval",
+            "EmoVDBT2ARetrieval",
+            "GigaSpeechT2ARetrieval",
+            "HiFiTTST2ARetrieval",
+            "JLCorpusT2ARetrieval",
+            "JamAltLyricT2ARetrieval",
+            "LibriTTST2ARetrieval",
+            "MACST2ARetrieval",
+            "MusicCapsT2ARetrieval",
+            "UrbanSound8KT2ARetrieval",
+            # AudioZeroshotClassification (5)
+            "ESC50_Zeroshot",
+            "RavdessZeroshot",
+            "SpeechCommandsZeroshotv0.01",
+            "SpeechCommandsZeroshotv0.02",
+            "UrbanSound8kZeroshot",
+            # Audio captioning (2)
+            "ClothoA2TRetrieval",
+            "ClothoT2ARetrieval",
+            # Multilingual - Fleurs (2) - 102 languages
+            "FleursA2TRetrieval",
+            "FleursT2ARetrieval",
+            # Multilingual - CommonVoice 21 (2) - 82+ languages
+            "CommonVoiceMini21A2TRetrieval",
+            "CommonVoiceMini21T2ARetrieval",
+        ]
+    ),
+    description="""MAEB(extended) is an intermediate benchmark used during task selection, containing 89 tasks that combine audio-only and audio-text evaluation before filtering to MAEB. Audio-only (53 tasks): classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), audio-to-audio retrieval (1). Audio-text (36 tasks): audio-text retrieval (31), zero-shot classification (5).""",
+    reference=None,
+    citation="",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+)
+
+MAEB = Benchmark(
+    name="MAEB",
+    display_name="MAEB",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Any2AnyRetrieval (9)
+            "ClothoT2ARetrieval",
+            "CommonVoiceMini21T2ARetrieval",
+            "FleursT2ARetrieval",
+            "GigaSpeechT2ARetrieval",
+            "JamAltArtistA2ARetrieval",
+            "JamAltLyricA2TRetrieval",
+            "MACST2ARetrieval",
+            "SpokenSQuADT2ARetrieval",
+            "UrbanSound8KT2ARetrieval",
+            # AudioClassification (10)
+            "BeijingOpera",
+            "BirdCLEF",
+            "CREMA_D",
+            "CommonLanguageAgeDetection",
+            "GTZANGenre",
+            "IEMOCAPGender",
+            "MInDS14",
+            "MridinghamTonic",
+            "VoxCelebSA",
+            "VoxPopuliLanguageID",
+            # AudioClustering (3)
+            "CREMA_DClustering",
+            "VehicleSoundClustering",
+            "VoxPopuliGenderClustering",
+            # AudioMultilabelClassification (2)
+            "FSD2019Kaggle",
+            "SIBFLEURS",
+            # AudioPairClassification (3)
+            "CREMADPairClassification",
+            "NMSQAPairClassification",
+            "VoxPopuliAccentPairClassification",
+            # AudioReranking (1)
+            "GTZANAudioReranking",
+            # AudioZeroshotClassification (2)
+            "RavdessZeroshot",
+            "SpeechCommandsZeroshotv0.02",
+        ]
+    ),
+    description="""MAEB is a comprehensive audio benchmark with 30 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (10), clustering (3), multilabel classification (2), pair classification (3), reranking (1), and zero-shot classification (2).""",
+    reference=None,
+    citation="",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )

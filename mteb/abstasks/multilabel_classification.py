@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 import itertools
 import logging
 from collections import defaultdict
-from pathlib import Path
-from typing import Any, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
 from datasets import DatasetDict
@@ -15,11 +16,16 @@ from typing_extensions import override
 
 from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.classification_metrics import hamming_score
-from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
-from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import Array
+from mteb.models import EncoderProtocol
 
 from .classification import AbsTaskClassification
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
+    from mteb.models import MTEBModels
+    from mteb.types import Array, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -83,10 +89,11 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         model: MTEBModels,
         data_split: DatasetDict,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int = 1,
         **kwargs: Any,
     ) -> FullMultilabelClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -119,6 +126,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             unique_train_dataset,
             self.metadata,
             input_column=self.input_column_name,
+            num_proc=num_proc,
             **encode_kwargs,
         )
 
