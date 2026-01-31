@@ -83,7 +83,7 @@ class SklearnEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         test_cache: Array | None = None,
         num_proc: int = 1,
-    ) -> tuple[NDArray[np.floating], Array]:
+    ) -> tuple[NDArray[LabelType], Array]:
         """Classification evaluation by training a sklearn classifier on the embeddings of the training set and evaluating on the embeddings of the test set.
 
         Args:
