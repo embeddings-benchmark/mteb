@@ -112,6 +112,7 @@ muq = ["muq==0.1.0"]
 wav2clip = ["wav2clip==0.1.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
+mctct = ["transformers<5"]  # mctct was removed in transformers 5
 
 [dependency-groups]
 lint = [
@@ -371,10 +372,12 @@ conflicts = [
         { extra = "msclap" },
         { extra = "vllm" },
         { extra = "muq" },
+        { extra = "mctct" },
     ],
     [
         { extra = "audio" },
         { extra = "msclap" },
+        { extra = "mctct" },
     ],
 ]
 
