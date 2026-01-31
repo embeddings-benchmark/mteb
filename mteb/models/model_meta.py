@@ -575,7 +575,10 @@ class ModelMeta(BaseModel):
             The generated ModelMeta.
         """
         meta = cls._from_hub(
-            model, revision, fill_missing=fill_missing, compute_metadata=compute_metadata
+            model,
+            revision,
+            fill_missing=fill_missing,
+            compute_metadata=compute_metadata,
         )
         meta.modalities = ["text"]
 
