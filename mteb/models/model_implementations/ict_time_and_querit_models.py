@@ -40,10 +40,6 @@ training_data = [
     "ToxicConversationsClassification", "TweetSentimentExtractionClassification"
 ]
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 70f80e22526cf5883cdb30099c5d178b3e988935
 boom_4b_v1 = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
