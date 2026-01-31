@@ -21,7 +21,7 @@ class ERESSReranking(AbsTaskRetrieval):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_5",  # nDCG@5 is primary
+        main_score="ndcg_at_5",
         dataset={
             "path": "thebajajra/ERESSReranking",
             "revision": "c095d55559370c1e8b0ae933ae26da111ae62966",
