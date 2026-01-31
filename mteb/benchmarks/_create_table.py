@@ -46,7 +46,7 @@ def _format_n_parameters(n_parameters) -> float | None:
 
 def _format_n_active_parameters(n_active_parameters) -> float | None:
     """Format n_active_parameters to be in billions with decimals down to 1 million. I.e. 7M -> 0.007B, 1.5B -> 1.5B, None -> None"""
-    if n_active_parameters:
+    if n_active_parameters is not None:
         n_active_parameters = float(n_active_parameters)
         return round(n_active_parameters / 1e9, 3)
     return None
