@@ -74,9 +74,10 @@ jobs:
 
       - name: Install FFmpeg (Windows)
         if: runner.os == 'Windows'
-        shell: bash
+        shell: pwsh
         run: |
-          choco install -y ffmpeg
+          choco install -y ffmpeg --params "/full /shared"
+          "C:\\ProgramData\\chocolatey\\lib\\ffmpeg\\tools\\ffmpeg\\bin" | Out-File -FilePath "$env:GITHUB_PATH" -Append
 
       - name: Check FFmpeg version
         run: ffmpeg -version
