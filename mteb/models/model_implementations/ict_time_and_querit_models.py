@@ -4,14 +4,9 @@ Models from the ICT-TIME and Querit organizations.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
 from mteb.types import PromptType
-
-if TYPE_CHECKING:
-    from mteb.models.models_protocols import EncoderProtocol
 
 
 def instruction_template(
@@ -45,9 +40,13 @@ training_data = [
     "ToxicConversationsClassification", "TweetSentimentExtractionClassification"
 ]
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 70f80e22526cf5883cdb30099c5d178b3e988935
 boom_4b_v1 = ModelMeta(
-    loader=InstructSentenceTransformerModel,   
-    loader_kwargs=dict(  
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
     ),
