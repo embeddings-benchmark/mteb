@@ -43,7 +43,7 @@ class AfriSentiLangClassification(AbsTaskClassification):
 
     samples_per_label = 32
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_column("tweet", "text")
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]

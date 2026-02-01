@@ -1,27 +1,38 @@
+from __future__ import annotations
+
 import logging
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from pydantic import ConfigDict, Field, model_validator
-from typing_extensions import Self
 
 from mteb.types import (
-    ISOLanguageScript,
     Languages,
-    Licenses,
-    Modalities,
-    StrDate,
 )
 
 from .abstask import AbsTask
 from .task_metadata import (
-    AnnotatorType,
     MetadataDatasetDict,
-    SampleCreationMethod,
-    TaskDomain,
     TaskMetadata,
-    TaskSubtype,
     TaskType,
 )
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
+
+    from mteb.types import (
+        ISOLanguageScript,
+        Licenses,
+        Modalities,
+        StrDate,
+    )
+
+    from .task_metadata import (
+        AnnotatorType,
+        SampleCreationMethod,
+        TaskDomain,
+        TaskSubtype,
+    )
 
 logger = logging.getLogger(__name__)
 

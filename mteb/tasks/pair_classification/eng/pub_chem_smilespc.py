@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 
 from mteb.abstasks.pair_classification import AbsTaskPairClassification
@@ -74,8 +76,7 @@ class PubChemSMILESPC(AbsTaskPairClassification):
 """,
     )
 
-    def load_data(self):
-        """Load dataset from HuggingFace hub"""
+    def load_data(self, num_proc: int = 1, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -106,7 +107,7 @@ class PubChemSMILESPC(AbsTaskPairClassification):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.stratified_subsampling(
             self.dataset,
             seed=self.seed,

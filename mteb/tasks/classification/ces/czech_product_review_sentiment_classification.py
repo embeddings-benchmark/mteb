@@ -46,7 +46,7 @@ Montoyo, Andres},
     )
     samples_per_label = 16
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int = 1, **kwargs) -> None:
         self.dataset = self.dataset.rename_columns(
             {"comment": "text", "rating_str": "label"}
         )
@@ -99,7 +99,7 @@ Montoyo, Andres},
     )
     samples_per_label = 16
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int = 1, **kwargs) -> None:
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )

@@ -149,6 +149,15 @@ def test_loader_kwargs_persisted_in_metadata():
     assert meta.loader_kwargs["not_existing_param"] == 123
 
 
+def test_fill_missing_parameter():
+    """Test that fill_missing parameter fetches missing metadata from HuggingFace Hub"""
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
+    meta_with_compute = mteb.get_model_meta(model_name, fill_missing=True)
+
+    assert meta_with_compute.n_parameters is not None
+    assert meta_with_compute.memory_usage_mb is not None
+
+
 def test_model_to_python():
     meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
     assert meta.to_python() == (
@@ -160,6 +169,8 @@ def test_model_to_python():
     release_date='2021-08-30',
     languages=['eng-Latn'],
     n_parameters=22700000,
+    n_active_parameters_override=None,
+    n_embedding_parameters=11720448,
     memory_usage_mb=87.0,
     max_tokens=256.0,
     embed_dim=384,
@@ -186,3 +197,21 @@ def test_model_meta_local_path():
     meta = ModelMeta.from_hub("/path/to/local/model")
     assert meta.name == "/path/to/local/model"
     assert meta.revision == "no_revision_available"
+
+
+def test_load_cross_encoder_via_get_model_meta():
+    """Test loading cross-encoder via get_model_meta() with automatic detection."""
+    model_meta = mteb.get_model_meta("cross-encoder/ms-marco-TinyBERT-L-2-v2")
+
+    assert model_meta.model_type == ["cross-encoder"]
+    assert model_meta.is_cross_encoder
+    assert model_meta.loader.__name__ == "CrossEncoderWrapper"
+
+
+def test_load_sentence_transformer_via_get_model_meta():
+    """Test loading sentence transformer via get_model_meta()."""
+    model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+
+    assert model_meta.model_type == ["dense"]
+    assert not model_meta.is_cross_encoder
+    assert model_meta.loader.__name__ == "sentence_transformers_loader"

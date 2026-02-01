@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import itertools
 import logging
 import tempfile
@@ -8,7 +10,7 @@ from urllib.parse import urlencode
 
 import cachetools
 import gradio as gr
-import pandas as pd
+import pandas as pd  # noqa: TC002 # gradio tries to validate typehints
 
 import mteb
 from mteb.benchmarks.benchmark import RtebBenchmark
@@ -454,7 +456,10 @@ def get_leaderboard_app(
 
     logger.info("Step 7/7: Building Gradio interface and callbacks...")
     interface_start = time.time()
-    with gr.Blocks(fill_width=True) as demo:
+    with gr.Blocks(
+        title="MTEB Leaderboard",
+        fill_width=True,
+    ) as demo:
         with gr.Sidebar(
             position="left",
             label="Benchmark Selection and Customization",

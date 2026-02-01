@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import gzip
 import io
 import json
@@ -7,9 +9,8 @@ import shutil
 import subprocess
 import warnings
 from collections import defaultdict
-from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 import requests
 from pydantic import ValidationError
@@ -19,7 +20,11 @@ from mteb.abstasks import AbsTask
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
-from mteb.types import ModelName, Revision
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
+
+    from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
 
@@ -681,7 +686,7 @@ class ResultCache:
 
         first_model = next(iter(models))
         if isinstance(first_model, ModelMeta):
-            models = cast(Iterable[ModelMeta], models)
+            models = cast("Iterable[ModelMeta]", models)
             name_and_revision = {
                 (m.model_name_as_path(), m.revision or "no_revision_available")
                 for m in models
@@ -692,7 +697,7 @@ class ResultCache:
                 if (p.parent.parent.name, p.parent.name) in name_and_revision
             ]
 
-        str_models = cast(Sequence[str], models)
+        str_models = cast("Sequence[str]", models)
         model_names = {m.replace("/", "__").replace(" ", "_") for m in str_models}
         return [p for p in paths if p.parent.parent.name in model_names]
 

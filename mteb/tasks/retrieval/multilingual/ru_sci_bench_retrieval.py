@@ -30,15 +30,15 @@ def load_ruscibench_data(
 
     for lang in langs:
         lang_corpus = cast(
-            datasets.Dataset,
+            "datasets.Dataset",
             datasets.load_dataset(path, f"corpus-{lang}", revision=revision),
         )["corpus"]
         lang_queries = cast(
-            datasets.Dataset,
+            "datasets.Dataset",
             datasets.load_dataset(path, f"queries-{lang}", revision=revision),
         )["queries"]
         lang_qrels = cast(
-            datasets.Dataset,
+            "datasets.Dataset",
             datasets.load_dataset(path, f"{lang}", revision=revision),
         )["test"]
         corpus[lang] = {
@@ -103,7 +103,7 @@ class RuSciBenchCiteRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         if self.data_loaded:
             return
 
@@ -161,7 +161,7 @@ class RuSciBenchCociteRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int = 1, **kwargs) -> None:
         if self.data_loaded:
             return
 

@@ -1,18 +1,23 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import (
     requires_image_dependencies,
     requires_package,
 )
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 from .colpali_models import (
     COLPALI_CITATION,
@@ -219,6 +224,7 @@ colqwen2 = ModelMeta(
     release_date="2025-11-03",
     modalities=["image", "text"],
     n_parameters=2_210_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=7200,
     max_tokens=32768,
     embed_dim=128,
@@ -246,6 +252,7 @@ colqwen2_5 = ModelMeta(
     release_date="2025-01-31",
     modalities=["image", "text"],
     n_parameters=3_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=7200,
     max_tokens=128000,
     embed_dim=128,
@@ -290,6 +297,7 @@ colqwen3_8b = ModelMeta(
     release_date="2025-11-26",
     modalities=["image", "text"],
     n_parameters=8_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=16724,
     max_tokens=262144,
     embed_dim=320,
@@ -314,6 +322,7 @@ colqwen3_4b = ModelMeta(
     release_date="2025-11-26",
     modalities=["image", "text"],
     n_parameters=4_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=8466,
     max_tokens=262144,
     embed_dim=320,
@@ -360,6 +369,7 @@ colnomic_3b = ModelMeta(
     release_date="2025-03-31",
     modalities=["image", "text"],
     n_parameters=3_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=7200,
     max_tokens=128000,
     embed_dim=128,
@@ -425,6 +435,7 @@ evoqwen25_vl_retriever_3b_v1 = ModelMeta(
     release_date="2025-11-04",
     modalities=["image", "text"],
     n_parameters=3_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=7200,
     max_tokens=128000,
     embed_dim=128,
@@ -451,6 +462,7 @@ evoqwen25_vl_retriever_7b_v1 = ModelMeta(
     release_date="2025-11-04",
     modalities=["image", "text"],
     n_parameters=7_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=14400,
     max_tokens=128000,
     embed_dim=128,

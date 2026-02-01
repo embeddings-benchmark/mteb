@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -14,12 +13,15 @@ from mteb._create_dataloaders import (
 )
 from mteb._evaluators.evaluator import Evaluator
 from mteb._requires_package import requires_image_dependencies
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.models_protocols import EncoderProtocol
-from mteb.types import EncodeKwargs
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from PIL.Image import Image
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
+    from mteb.types import EncodeKwargs
 
 
 logger = logging.getLogger(__name__)
@@ -89,6 +91,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         model: EncoderProtocol,
         *,
         encode_kwargs: EncodeKwargs,
+        num_proc: int = 1,
     ) -> list[torch.Tensor]:
         images = []
         if isinstance(self.images_column_names, str):
@@ -111,6 +114,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         text_embeddings = model.encode(
             _create_dataloader_from_texts(
                 texts,
+                num_proc=num_proc,
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
@@ -127,10 +131,15 @@ class ImageTextPairClassificationEvaluator(Evaluator):
             dim=-1,
         ).view(len(self.dataset), self.num_texts_per_sample, -1)
 
+        def _image_collate_fn(batch):
+            """Collate function for image batches."""
+            return {"image": [item["image"] for item in batch]}
+
         image_embeddings = model.encode(
             DataLoader(
                 CustomImageDataset(images),
-                collate_fn=lambda x: {"image": [item["image"] for item in x]},
+                collate_fn=_image_collate_fn,
+                num_workers=num_proc if num_proc > 1 else 0,
             ),
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,

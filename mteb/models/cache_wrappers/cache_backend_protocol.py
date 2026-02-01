@@ -1,9 +1,11 @@
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Any, Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
-import numpy as np
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    import numpy as np
 
 
 @runtime_checkable

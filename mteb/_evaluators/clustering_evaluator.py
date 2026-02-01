@@ -1,14 +1,20 @@
-import logging
+from __future__ import annotations
 
-from datasets import Dataset
+import logging
+from typing import TYPE_CHECKING
+
 from sklearn import cluster
 
 from mteb._create_dataloaders import create_dataloader
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import EncoderProtocol
-from mteb.types import EncodeKwargs
 
 from .evaluator import Evaluator
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import EncoderProtocol
+    from mteb.types import EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -39,11 +45,13 @@ class ClusteringEvaluator(Evaluator):
         model: EncoderProtocol,
         *,
         encode_kwargs: EncodeKwargs,
+        num_proc: int = 1,
     ) -> list[int]:
         data_loader = create_dataloader(
             self.dataset,
             self.task_metadata,
             input_column=self.input_column_name,
+            num_proc=num_proc,
             **encode_kwargs,
         )
 

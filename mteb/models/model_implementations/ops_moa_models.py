@@ -1,7 +1,12 @@
-import numpy as np
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
+
+if TYPE_CHECKING:
+    from mteb.types import Array
 
 
 class OPSWrapper(AbsEncoder):
@@ -15,7 +20,7 @@ class OPSWrapper(AbsEncoder):
         )
         self.output_dim = 1536
 
-    def encode(self, sentences: list[str], **kwargs) -> np.ndarray:
+    def encode(self, sentences: list[str], **kwargs) -> Array:
         embeddings = self.model.encode(sentences, **kwargs)
         return embeddings[:, : self.output_dim]
 
@@ -28,6 +33,7 @@ ops_moa_conan_embedding = ModelMeta(
     languages=["zho-Hans"],
     loader=OPSWrapper,
     n_parameters=int(343 * 1e6),
+    n_embedding_parameters=21_635_072,
     memory_usage_mb=1308,
     max_tokens=512,
     embed_dim=1536,
@@ -60,6 +66,7 @@ ops_moa_yuan_embedding = ModelMeta(
     languages=["zho-Hans"],
     loader=OPSWrapper,
     n_parameters=int(343 * 1e6),
+    n_embedding_parameters=21_635_072,
     memory_usage_mb=1242,
     max_tokens=512,
     embed_dim=1536,
