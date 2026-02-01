@@ -37,7 +37,7 @@ def test_descriptive_statistics_mock_mieb_tasks(task):
 
 @pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)
 def test_descriptive_statistics_mock_maeb_tasks(task):
-    # pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
+    pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
     check_descriptive_stats(task)
 
 
