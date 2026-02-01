@@ -68,7 +68,6 @@ def _process_max_tokens(x):
 
 models_to_annotate = [
     "all-MiniLM-L6-v2",
-    "ast-finetuned-audioset-10-10-0.4593",
     "clap-htsat-fused",
     "e5-v",
     "EVA02-CLIP-bigE-14-plus",
