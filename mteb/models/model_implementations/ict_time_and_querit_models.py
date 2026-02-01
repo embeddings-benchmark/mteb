@@ -1,3 +1,4 @@
+
 from __future__ import annotations
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
@@ -18,20 +19,42 @@ def instruction_template(
             instruction = instruction.get(prompt_type, next(iter(instruction.values())))
     return f"Instruct: {instruction}\nQuery:"
 
-
 multilingual_langs = [
-    "deu-Latn", "ita-Latn", "ara-Arab", "fas-Arab", "fra-Latn", 
-    "hin-Deva", "spa-Latn", "zho-Hans", "ben-Beng", "eng-Latn", 
-    "fin-Latn", "ind-Latn", "jpn-Jpan", "kor-Hang", "rus-Cyrl", 
-    "swh-Latn", "tel-Telu", "tha-Thai"
+    "deu-Latn",
+    "ita-Latn",
+    "ara-Arab",
+    "fas-Arab",
+    "fra-Latn",
+    "hin-Deva",
+    "spa-Latn",
+    "zho-Hans",
+    "ben-Beng",
+    "eng-Latn",
+    "fin-Latn",
+    "ind-Latn",
+    "jpn-Jpan",
+    "kor-Hang",
+    "rus-Cyrl",
+    "swh-Latn",
+    "tel-Telu",
+    "tha-Thai",
 ]
 
 training_data = [
-    "FEVER", "DuRetrieval", "HotpotQA", "MSMARCO", "T2Retrieval", 
-    "NQ", "MIRACLRetrieval", "MrTidyRetrieval", 
-    "AmazonCounterfactualClassification", "Banking77Classification", 
-    "ImdbClassification", "MTOPDomainClassification", 
-    "ToxicConversationsClassification", "TweetSentimentExtractionClassification"
+    "FEVER",
+    "DuRetrieval",
+    "HotpotQA",
+    "MSMARCO",
+    "T2Retrieval",
+    "NQ",
+    "MIRACLRetrieval",
+    "MrTidyRetrieval",
+    "AmazonCounterfactualClassification",
+    "Banking77Classification",
+    "ImdbClassification",
+    "MTOPDomainClassification",
+    "ToxicConversationsClassification",
+    "TweetSentimentExtractionClassification",
 ]
 
 boom_4b_v1 = ModelMeta(
@@ -44,6 +67,7 @@ boom_4b_v1 = ModelMeta(
     model_type=["dense"],
     languages=multilingual_langs,
     open_weights=True,
+    adapted_from="Qwen/Qwen3-4B", 
     revision="33fb345468120e37c81eed2369aefe08b8f8222b",
     release_date="2026-01-31",
     n_parameters=4021774336,
