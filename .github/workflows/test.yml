@@ -72,20 +72,34 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ffmpeg
 
+      - name: Setup Miniconda (Windows)
+        if: runner.os == 'Windows'
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          miniconda-version: "latest"
+          activate-environment: ffmpeg
+
       - name: Install FFmpeg (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          choco install -y ffmpeg --params "/full /shared"
+          conda install -y "ffmpeg=8.0.1" -c conda-forge
 
       - name: Setup FFmpeg PATH (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $ffmpegPath = "C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin"
+          $ffmpegPath = "$env:CONDA_PREFIX\Library\bin"
           echo "$ffmpegPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           $env:PATH = "$ffmpegPath;$env:PATH"
           echo "PATH=$env:PATH" >> $env:GITHUB_ENV
+          $torchLib = "D:\a\mteb\mteb\.venv\Lib\site-packages\torch\lib"
+          if (Test-Path $torchLib) {
+            echo "$torchLib" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+            $env:PATH = "$torchLib;$env:PATH"
+            echo "PATH=$env:PATH" >> $env:GITHUB_ENV
+          }
 
       - name: Check FFmpeg version
         run: ffmpeg -version
