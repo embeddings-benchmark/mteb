@@ -273,7 +273,7 @@ class AbsTaskClassification(AbsTask):
     def _calculate_scores(
         self,
         y_test: NDArray[np.integer] | list[int],
-        y_pred: NDArray[np.integer] | list[int],
+        y_pred: NDArray[np.integer | np.floating] | list[int],
     ) -> ClassificationMetrics:
         scores = ClassificationMetrics(
             accuracy=accuracy_score(y_test, y_pred),

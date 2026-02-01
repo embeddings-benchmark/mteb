@@ -8,7 +8,9 @@ if TYPE_CHECKING:
     from numpy.typing import NDArray
 
 
-def hamming_score(y_true: NDArray[np.integer], y_pred: NDArray[np.integer]) -> float:
+def hamming_score(
+    y_true: NDArray[np.integer], y_pred: NDArray[np.integer | np.floating]
+) -> float:
     """Compute the Hamming score (a.k.a. label-based accuracy) for multilabel classification.
 
     The Hamming score is the fraction of labels that are correctly predicted for each sample,

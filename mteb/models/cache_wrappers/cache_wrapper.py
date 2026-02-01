@@ -12,7 +12,6 @@ from mteb._create_dataloaders import create_dataloader
 from mteb.models.cache_wrappers.cache_backends.numpy_cache import NumpyCache
 
 if TYPE_CHECKING:
-    from numpy.typing import NDArray
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -99,7 +98,7 @@ class CachedEmbeddingWrapper:
             uncached_items: list[dict[str, Any]] = []
             uncached_indices: list[int] = []
             all_items: Dataset = inputs.dataset
-            cached_vectors: dict[int, NDArray[np.floating]] = {}
+            cached_vectors: dict[int, Array] = {}
 
             for i, item in enumerate(all_items):
                 vector = cache.get_vector(item)
@@ -109,7 +108,7 @@ class CachedEmbeddingWrapper:
                     uncached_items.append(item)
                     uncached_indices.append(i)
 
-            newly_encoded: dict[int, NDArray[np.floating]] = {}
+            newly_encoded: dict[int, Array] = {}
             if uncached_items:
                 logger.info(f"Encoding {len(uncached_items)} new items")
                 # Build a simple DataLoader with only uncached items

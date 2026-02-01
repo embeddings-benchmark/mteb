@@ -37,7 +37,7 @@ def _evaluate_classifier(
     y_train: NDArray[np.integer],
     embeddings_test: Array,
     classifier: SklearnModelProtocol,
-) -> tuple[NDArray[np.integer], SklearnModelProtocol]:
+) -> tuple[NDArray[np.integer | np.floating], SklearnModelProtocol]:
     classifier_copy: SklearnModelProtocol = clone(classifier)
     classifier_copy.fit(embeddings_train, y_train)
     return classifier_copy.predict(embeddings_test), classifier_copy
@@ -211,7 +211,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
     def _calculate_scores(  # type: ignore[override]
         self,
         y_test: NDArray[np.integer],
-        y_pred: NDArray[np.integer],
+        y_pred: NDArray[np.integer | np.floating],
         x_test_embedding: Array,
         current_classifier: SklearnModelProtocol,
     ) -> MultilabelClassificationMetrics:

@@ -14,9 +14,8 @@ from ._hash_utils import _hash_item
 
 if TYPE_CHECKING:
     import faiss
-    from numpy.typing import NDArray
 
-    from mteb.types import BatchedInput
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +43,7 @@ class FaissCache:
         logger.info(f"Initialized FAISS VectorCacheMap in {self.directory}")
         self.load()
 
-    def add(self, items: list[dict[str, Any]], vectors: NDArray[np.floating]) -> None:
+    def add(self, items: list[dict[str, Any]], vectors: Array) -> None:
         """Add vector to FAISS index."""
         import faiss
 
@@ -68,7 +67,7 @@ class FaissCache:
             vectors_array = np.vstack(vectors_to_add).astype(np.float32)
             self.index.add(vectors_array)
 
-    def get_vector(self, item: BatchedInput) -> NDArray[np.floating] | None:
+    def get_vector(self, item: dict[str, Any]) -> Array | None:
         """Retrieve vector from index by hash."""
         if self.index is None:
             return None
