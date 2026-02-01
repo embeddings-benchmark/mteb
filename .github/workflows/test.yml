@@ -127,49 +127,49 @@ jobs:
 #          $ffmpegPath = (Get-Command ffmpeg).Source
 #          if ($ffmpegPath) { Get-ChildItem (Split-Path $ffmpegPath) -Filter "*.dll" | Select-Object FullName }
 
-      - name: List TorchCodec DLL dependencies (Windows)
-        if: runner.os == 'Windows'
-        shell: bash
-        run: |
-          uv pip install --quiet pefile
-          uv run python - <<'PY'
-          import pefile
-          path = r"D:\a\mteb\mteb\.venv\Lib\site-packages\torchcodec\libtorchcodec_core8.dll"
-          pe = pefile.PE(path)
-          print("Imports for", path)
-          for entry in pe.DIRECTORY_ENTRY_IMPORT:
-            print(entry.dll.decode("utf-8", "ignore"))
-          PY
-
-      - name: List DLLs with where (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          $ErrorActionPreference = "Continue"
-          "DLLs on PATH (where *.dll):"
-          cmd /c "where *.dll" || echo "no DLLs found by where on PATH"
-          "FFmpeg DLLs on PATH:"
-          cmd /c "where avcodec*.dll" || echo "avcodec*.dll not found on PATH"
-          cmd /c "where avformat*.dll" || echo "avformat*.dll not found on PATH"
-          cmd /c "where avutil*.dll" || echo "avutil*.dll not found on PATH"
-          cmd /c "where avfilter*.dll" || echo "avfilter*.dll not found on PATH"
-          cmd /c "where swscale*.dll" || echo "swscale*.dll not found on PATH"
-          cmd /c "where swresample*.dll" || echo "swresample*.dll not found on PATH"
-          "TorchCodec dependency DLLs on PATH:"
-          cmd /c "where c10.dll" || echo "c10.dll not found on PATH"
-          cmd /c "where torch_cpu.dll" || echo "torch_cpu.dll not found on PATH"
-          cmd /c "where MSVCP140.dll" || echo "MSVCP140.dll not found on PATH"
-          cmd /c "where VCRUNTIME140.dll" || echo "VCRUNTIME140.dll not found on PATH"
-          cmd /c "where VCRUNTIME140_1.dll" || echo "VCRUNTIME140_1.dll not found on PATH"
-          cmd /c "where api-ms-win-crt-runtime-l1-1-0.dll" || echo "api-ms-win-crt-runtime-l1-1-0.dll not found on PATH"
-          cmd /c "where api-ms-win-crt-heap-l1-1-0.dll" || echo "api-ms-win-crt-heap-l1-1-0.dll not found on PATH"
-          cmd /c "where api-ms-win-crt-math-l1-1-0.dll" || echo "api-ms-win-crt-math-l1-1-0.dll not found on PATH"
-          cmd /c "where api-ms-win-crt-environment-l1-1-0.dll" || echo "api-ms-win-crt-environment-l1-1-0.dll not found on PATH"
-          cmd /c "where api-ms-win-crt-stdio-l1-1-0.dll" || echo "api-ms-win-crt-stdio-l1-1-0.dll not found on PATH"
-          cmd /c "where api-ms-win-crt-convert-l1-1-0.dll" || echo "api-ms-win-crt-convert-l1-1-0.dll not found on PATH"
-          cmd /c "where KERNEL32.dll" || echo "KERNEL32.dll not found on PATH"
-          "DLLs under choco ffmpeg bin (where /r):"
-          cmd /c "where /r C:\\ProgramData\\chocolatey\\lib\\ffmpeg\\tools\\ffmpeg\\bin *.dll" || echo "no DLLs found under choco ffmpeg bin"
+#      - name: List TorchCodec DLL dependencies (Windows)
+#        if: runner.os == 'Windows'
+#        shell: bash
+#        run: |
+#          uv pip install --quiet pefile
+#          uv run python - <<'PY'
+#          import pefile
+#          path = r"D:\a\mteb\mteb\.venv\Lib\site-packages\torchcodec\libtorchcodec_core8.dll"
+#          pe = pefile.PE(path)
+#          print("Imports for", path)
+#          for entry in pe.DIRECTORY_ENTRY_IMPORT:
+#            print(entry.dll.decode("utf-8", "ignore"))
+#          PY
+#
+#      - name: List DLLs with where (Windows)
+#        if: runner.os == 'Windows'
+#        shell: pwsh
+#        run: |
+#          $ErrorActionPreference = "Continue"
+#          "DLLs on PATH (where *.dll):"
+#          cmd /c "where *.dll" || echo "no DLLs found by where on PATH"
+#          "FFmpeg DLLs on PATH:"
+#          cmd /c "where avcodec*.dll" || echo "avcodec*.dll not found on PATH"
+#          cmd /c "where avformat*.dll" || echo "avformat*.dll not found on PATH"
+#          cmd /c "where avutil*.dll" || echo "avutil*.dll not found on PATH"
+#          cmd /c "where avfilter*.dll" || echo "avfilter*.dll not found on PATH"
+#          cmd /c "where swscale*.dll" || echo "swscale*.dll not found on PATH"
+#          cmd /c "where swresample*.dll" || echo "swresample*.dll not found on PATH"
+#          "TorchCodec dependency DLLs on PATH:"
+#          cmd /c "where c10.dll" || echo "c10.dll not found on PATH"
+#          cmd /c "where torch_cpu.dll" || echo "torch_cpu.dll not found on PATH"
+#          cmd /c "where MSVCP140.dll" || echo "MSVCP140.dll not found on PATH"
+#          cmd /c "where VCRUNTIME140.dll" || echo "VCRUNTIME140.dll not found on PATH"
+#          cmd /c "where VCRUNTIME140_1.dll" || echo "VCRUNTIME140_1.dll not found on PATH"
+#          cmd /c "where api-ms-win-crt-runtime-l1-1-0.dll" || echo "api-ms-win-crt-runtime-l1-1-0.dll not found on PATH"
+#          cmd /c "where api-ms-win-crt-heap-l1-1-0.dll" || echo "api-ms-win-crt-heap-l1-1-0.dll not found on PATH"
+#          cmd /c "where api-ms-win-crt-math-l1-1-0.dll" || echo "api-ms-win-crt-math-l1-1-0.dll not found on PATH"
+#          cmd /c "where api-ms-win-crt-environment-l1-1-0.dll" || echo "api-ms-win-crt-environment-l1-1-0.dll not found on PATH"
+#          cmd /c "where api-ms-win-crt-stdio-l1-1-0.dll" || echo "api-ms-win-crt-stdio-l1-1-0.dll not found on PATH"
+#          cmd /c "where api-ms-win-crt-convert-l1-1-0.dll" || echo "api-ms-win-crt-convert-l1-1-0.dll not found on PATH"
+#          cmd /c "where KERNEL32.dll" || echo "KERNEL32.dll not found on PATH"
+#          "DLLs under choco ffmpeg bin (where /r):"
+#          cmd /c "where /r C:\\ProgramData\\chocolatey\\lib\\ffmpeg\\tools\\ffmpeg\\bin *.dll" || echo "no DLLs found under choco ffmpeg bin"
 
       - name: Run tests
         if: runner.os != 'Windows'
