@@ -31,13 +31,13 @@ def test_descriptive_statistics_mock_tasks(task):
 
 @pytest.mark.parametrize("task", MOCK_MIEB_TASK_GRID)
 def test_descriptive_statistics_mock_mieb_tasks(task):
-    pytest.importorskip("PIL")
+    pytest.importorskip("PIL", reason="Image dependencies are not installed")
     check_descriptive_stats(task)
 
 
 @pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)
 def test_descriptive_statistics_mock_maeb_tasks(task):
-    pytest.importorskip("torchaudio")
+    pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
     check_descriptive_stats(task)
 
 

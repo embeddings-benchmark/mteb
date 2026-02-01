@@ -366,7 +366,6 @@ conflicts = [
         { extra = "jina-v4" },
         { extra = "sauerkrautlm-colpali" },
         { extra = "vllm" },
-        { extra = "flagembedding" },
         { extra = "msclap" },
         { extra = "vllm" },
         { extra = "muq" },
