@@ -15,4 +15,5 @@ logging.basicConfig(level=logging.INFO)
 @pytest.mark.parametrize("model", [mteb.get_model("baseline/random-encoder-baseline")])
 def test_benchmark_audio_encoder(task: str | AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and run"""
+    pytest.importorskip("torchaudio")
     mteb.evaluate(model, task, cache=None)
