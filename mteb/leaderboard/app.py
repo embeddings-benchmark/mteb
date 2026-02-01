@@ -1208,8 +1208,7 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore", message=".*: Missing subsets .* for split .*")
     warnings.filterwarnings("ignore", message=".*: Missing splits .*")
 
-    # Hardcoded local cache path for MAEB results
-    cache = ResultCache(cache_path="/Users/isaac/work/maeb-results")
+    cache = ResultCache()
     app = get_leaderboard_app(cache=cache, skip_cache_file=True)
 
     head = """
