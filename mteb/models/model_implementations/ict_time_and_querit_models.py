@@ -10,9 +10,7 @@ def instruction_template(
 ) -> str:
     """Format instruction for the model."""
     if isinstance(instruction, dict):
-        instruction = instruction.get(
-            prompt_type.value if prompt_type else "", ""
-        )
+        instruction = instruction.get(prompt_type.value if prompt_type else "", "")
     elif prompt_type == PromptType.document:
         return ""
 
