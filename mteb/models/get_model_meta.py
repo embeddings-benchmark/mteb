@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import difflib
 import logging
+import warnings
 from typing import TYPE_CHECKING, Any
 
 from mteb.models import (
@@ -122,6 +123,11 @@ def get_model(
     return model
 
 
+_MODEL_RENAMES: dict[str, str] = {
+    "bm25s": "baseline/bm25s",
+}
+
+
 def get_model_meta(
     model_name: str,
     revision: str | None = None,
@@ -134,11 +140,17 @@ def get_model_meta(
         model_name: Name of the model to fetch
         revision: Revision of the model to fetch
         fetch_from_hf: Whether to fetch the model from HuggingFace Hub if not found in the registry
-        fill_missing: Computes missing attributes from the metadata including number of parameters and memory usage.
+        fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
 
     Returns:
         A model metadata object
     """
+    if model_name in _MODEL_RENAMES:
+        new_name = _MODEL_RENAMES[model_name]
+        msg = f"The model '{model_name}' has been renamed to '{new_name}'. To prevent this warning use the new name."
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
+        model_name = new_name
+
     if model_name in MODEL_REGISTRY:
         model_meta = MODEL_REGISTRY[model_name]
 
@@ -149,7 +161,7 @@ def get_model_meta(
 
         if fill_missing and fetch_from_hf:
             original_meta_dict = model_meta.model_dump()
-            new_meta = ModelMeta.from_hub(model_name)
+            new_meta = ModelMeta.from_hub(model_name, fill_missing=fill_missing)
             new_meta_dict = new_meta.model_dump(exclude_none=True)
 
             updates = {
