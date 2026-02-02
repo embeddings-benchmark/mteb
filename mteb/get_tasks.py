@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import difflib
 import logging
+import re
 import warnings
 from collections import Counter, defaultdict
+from itertools import combinations
 from typing import TYPE_CHECKING, Any
 
 import pandas as pd
@@ -62,6 +64,98 @@ def _create_similar_tasks(tasks: Iterable[type[AbsTask]]) -> dict[str, list[str]
         if task.metadata.superseded_by:
             similar_tasks[task.metadata.superseded_by].append(task.metadata.name)
     return similar_tasks
+
+
+def _parse_bibtex_entries(bibtex_str: str) -> list[tuple[str, str]]:
+    # pull out (citation_id, title) from each @type{key, ...} block
+    if not bibtex_str or not bibtex_str.strip():
+        return []
+    entries: list[tuple[str, str]] = []
+    # match @article{key or @inproceedings{key — key is first token in braces
+    block_pattern = re.compile(r"@\w+\s*\{([^,]+)", re.IGNORECASE)
+    for key_match in block_pattern.finditer(bibtex_str):
+        citation_id = key_match.group(1).strip()
+        block_start = key_match.start()
+        # slice from this @ to the next @ (or end) = one bibtex block
+        next_at = bibtex_str.find("@", key_match.end())
+        block = bibtex_str[block_start : next_at if next_at != -1 else None]
+        # find title = { ... }; content can have nested { } so count depth
+        title_match = re.search(r"title\s*=\s*\{", block, re.IGNORECASE)
+        if not title_match:
+            continue
+        start = title_match.end()
+        depth = 1
+        i = start
+        while i < len(block) and depth > 0:
+            if block[i] == "{":
+                depth += 1
+            elif block[i] == "}":
+                depth -= 1
+            i += 1
+        if depth == 0:
+            title = block[start : i - 1].replace("\n", " ").strip()
+            title = " ".join(title.split())
+            if title:
+                entries.append((citation_id, title))
+    return entries
+
+
+def _normalize_title_for_comparison(title: str) -> str:
+    # lowercase + collapse spaces so "CREMA-D" and "Crema-d" match
+    return " ".join(title.lower().strip().split())
+
+
+# titles that are just venue names (e.g. "Proceedings of LREC") — skip so we don't flag different papers from same conf
+_VENUE_ONLY_TITLE_PREFIXES = (
+    "proceedings of ",
+    "proceedings of the ",
+    "findings of ",
+    "findings of the ",
+    "ceur workshop proceedings",
+)
+
+
+def _is_venue_only_title(normalized_title: str) -> bool:
+    # short or empty = not a real paper title; prefix check catches "Proceedings of ..." etc.
+    if not normalized_title or len(normalized_title) < 20:
+        return True
+    lower = normalized_title.lower()
+    return any(lower.startswith(p) for p in _VENUE_ONLY_TITLE_PREFIXES) or lower in (
+        "acl",
+        "trec",
+    )
+
+
+def get_duplicate_citations() -> list[tuple[str, str, str, str, str]]:
+    """Same paper under different bibtex ids -> (task, id1, id2, raw_title_1, raw_title_2)."""
+    # 1. group all citations by normalized title — same paper => same key
+    by_title: dict[str, list[tuple[str, str, str]]] = defaultdict(list)
+    for task_cls in _gather_tasks():
+        bibtex = getattr(task_cls.metadata, "bibtex_citation", None) or ""
+        if isinstance(bibtex, str):
+            for cid, title in _parse_bibtex_entries(bibtex):
+                norm = _normalize_title_for_comparison(title)
+                by_title[norm].append((task_cls.metadata.name, cid, title))
+
+    # 2. for each title group: skip venue-only, then if 2+ distinct ids => report each pair
+    duplicates: list[tuple[str, str, str, str, str]] = []
+    for norm_title, items in by_title.items():
+        if _is_venue_only_title(norm_title):
+            continue
+        id_to_raw = {cid: raw for _, cid, raw in items}
+        if len(id_to_raw) < 2:
+            continue
+        unique_ids = sorted(id_to_raw)
+        task_name = items[0][0]
+        for id1, id2 in combinations(unique_ids, 2):
+            duplicates.append((
+                task_name,
+                id1,
+                id2,
+                id_to_raw[id1],
+                id_to_raw[id2],
+            ))
+    return duplicates
 
 
 TASK_LIST = _gather_tasks()
@@ -140,12 +234,10 @@ class MTEBTasks(tuple[AbsTask]):
         markdown_table += _head_sep
         for task in self:
             markdown_table += f"| {task.metadata.name} "
-            markdown_table += "".join(
-                [
-                    f"| {_limit_entries_in_cell_inner(self._extract_property_from_task(task, p))} "
-                    for p in properties
-                ]
-            )
+            markdown_table += "".join([
+                f"| {_limit_entries_in_cell_inner(self._extract_property_from_task(task, p))} "
+                for p in properties
+            ])
             markdown_table += " |\n"
         return markdown_table
 
@@ -163,9 +255,9 @@ class MTEBTasks(tuple[AbsTask]):
         """
         data = []
         for task in self:
-            data.append(
-                {p: self._extract_property_from_task(task, p) for p in properties}
-            )
+            data.append({
+                p: self._extract_property_from_task(task, p) for p in properties
+            })
         return pd.DataFrame(data)
 
     @staticmethod
@@ -304,12 +396,10 @@ def get_tasks(
         exclude_aggregate=exclude_aggregate,
         exclude_private=exclude_private,
     )
-    return MTEBTasks(
-        [
-            cls().filter_languages(languages, script).filter_eval_splits(eval_splits)
-            for cls in tasks_
-        ]
-    )
+    return MTEBTasks([
+        cls().filter_languages(languages, script).filter_eval_splits(eval_splits)
+        for cls in tasks_
+    ])
 
 
 _TASK_RENAMES = {"PersianTextTone": "SynPerTextToneClassification"}

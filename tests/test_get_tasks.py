@@ -4,7 +4,7 @@ import mteb
 from mteb import get_task, get_tasks
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskType
-from mteb.get_tasks import MTEBTasks
+from mteb.get_tasks import MTEBTasks, get_duplicate_citations
 from mteb.types import Modalities
 
 
@@ -98,3 +98,19 @@ def test_get_tasks_privacy_filtering():
         assert (
             task.metadata.is_public is not False
         )  # None or True are both considered public
+
+
+def test_no_duplicate_citations_with_different_ids():
+    """Ensure no task citations refer to the same paper under different BibTeX IDs.
+    """
+    duplicates = get_duplicate_citations()
+    assert not duplicates, (
+        "Found duplicate citations (same paper, different BibTeX IDs). "
+        "Unify citation keys or titles so each paper is cited once.\n\n"
+        + "\n\n".join(
+            f"--- Duplicate {i}: {task_name} ---\n"
+            f"  id1 = {id1!r}\n      title: {title1}\n"
+            f"  id2 = {id2!r}\n      title: {title2}"
+            for i, (task_name, id1, id2, title1, title2) in enumerate(duplicates, 1)
+        )
+    )
