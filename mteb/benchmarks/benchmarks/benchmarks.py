@@ -1512,13 +1512,14 @@ C_MTEB = Benchmark(
     description="The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchmark for Chinese text embeddings covering 6 tasks and 35 datasets.",
     reference="https://github.com/FlagOpen/FlagEmbedding/tree/master/research/C_MTEB",
     citation=r"""
-@misc{c-pack,
+@misc{xiao2024cpackpackagedresourcesadvance,
   archiveprefix = {arXiv},
-  author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
+  author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
   eprint = {2309.07597},
   primaryclass = {cs.CL},
   title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
-  year = {2023},
+  url = {https://arxiv.org/abs/2309.07597},
+  year = {2024},
 }
 """,
 )
