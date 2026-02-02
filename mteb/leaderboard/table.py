@@ -156,6 +156,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
     """
     excluded_columns = [
         "Rank (Borda)",
+        "Rank (Mean Task)",
         "Rank",
         "Model",
         "Number of Parameters (B)",
@@ -183,10 +184,17 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(_format_zero_shot)
     joint_table[score_columns] = joint_table[score_columns].map(_format_scores)
 
+    if "Rank (Borda)" in joint_table.columns:
+        rank_column = "Rank (Borda)"
+    elif "Rank (Mean Task)" in joint_table.columns:
+        rank_column = "Rank (Mean Task)"
+    else:
+        raise ValueError("No rank column found in the result table.")
+
     joint_table_style = joint_table.style.format(
         {
             **dict.fromkeys(score_columns, "{:.2f}"),
-            "Rank (Borda)": "{:.0f}",
+            rank_column: "{:.0f}",
             "Memory Usage (MB)": "{:.0f}",
             "Embedding Dimensions": "{:.0f}",
             "Max Tokens": "{:.0f}",
@@ -195,7 +203,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         na_rep="",
     )
     joint_table_style = joint_table_style.highlight_min(
-        "Rank (Borda)", props="font-weight: bold"
+        rank_column, props="font-weight: bold"
     ).highlight_max(subset=score_columns, props="font-weight: bold")
 
     # Apply background gradients for each selected column
