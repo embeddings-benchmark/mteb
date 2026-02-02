@@ -285,7 +285,7 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
     loader_kwargs=dict(
         extra_name="nemotron-colembed-vl-v2",
         trust_remote_code=True,
-        transformers_version_constraint=">=5.0.0m",
+        transformers_version_constraint=">=5.0.0",
     ),
     name="nvidia/nemotron-colembed-vl-4b-v2",
     revision="df61c25b416c1ef27cd0d7039596f752c262c5ae",
