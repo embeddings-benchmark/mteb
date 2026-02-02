@@ -33,7 +33,7 @@ LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperfo
 # currently requires transformers==4.49.0, even though it's a "v2" model by name.
 _TRANSFORMERS_CONSTRAINTS: dict[str, str] = {
     "nemotron-colembed-vl": "==4.49.0",  # llama-nemoretriever-colembed-*-v1, llama-nemotron-colembed-vl-3b-v2
-    "nemotron-colembed-vl-v2": ">=5.0.0",  # nemotron-colembed-vl-4b-v2, nemotron-colembed-vl-8b-v2
+    "nemotron-colembed-vl-v2": "==5.0.0rc0",  # nemotron-colembed-vl-4b-v2, nemotron-colembed-vl-8b-v2
 }
 
 
@@ -284,7 +284,7 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
         trust_remote_code=True,
     ),
     name="nvidia/nemotron-colembed-vl-4b-v2",
-    revision="df61c25b416c1ef27cd0d7039596f752c262c5ae",
+    revision="823b1625c15fe3da73fa094205e538a7a2301a2a",
     languages=["eng-Latn"],
     release_date="2026-01-07",
     modalities=["image", "text"],
@@ -312,7 +312,7 @@ nemotron_colembed_vl_8b_v2 = ModelMeta(
         trust_remote_code=True,
     ),
     name="nvidia/nemotron-colembed-vl-8b-v2",
-    revision="b6db318a581be528d8a24c25f0857d7d833d5263",
+    revision="6cbe43579dda6237768fc373768ad372cc5cdfec",
     languages=["eng-Latn"],
     release_date="2026-01-07",
     modalities=["image", "text"],
