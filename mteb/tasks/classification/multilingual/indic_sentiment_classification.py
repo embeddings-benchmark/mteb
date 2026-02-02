@@ -52,7 +52,7 @@ class IndicSentimentClassification(AbsTaskClassification):
 """,
     )
 
-    def dataset_transform(self, num_proc: int = 1, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         label_map = {"Negative": 0, "Positive": 1}
         # Convert to standard format
         for lang in self.hf_subsets:

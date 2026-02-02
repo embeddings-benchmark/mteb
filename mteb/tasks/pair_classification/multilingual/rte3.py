@@ -52,7 +52,7 @@ Dolan, Bill},
         # sum of 4 languages after neutral filtering
     )
 
-    def load_data(self, num_proc: int = 1, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
