@@ -59,7 +59,7 @@ class SearchEncoderWrapper:
         hf_split: str,
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
-        num_proc: int = 1,
+        num_proc: int | None = None,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -101,7 +101,7 @@ class SearchEncoderWrapper:
         top_k: int,
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
     ) -> RetrievalOutputType:
         """Search the corpus for the given queries.
 
@@ -485,7 +485,7 @@ class SearchCrossEncoderWrapper:
         hf_split: str,
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
-        num_proc: int = 1,
+        num_proc: int | None = None,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -509,7 +509,7 @@ class SearchCrossEncoderWrapper:
         top_k: int,
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
     ) -> RetrievalOutputType:
         """Search the corpus using the given queries.
 

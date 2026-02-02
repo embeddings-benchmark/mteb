@@ -17,6 +17,7 @@ from .task_result import TaskError, TaskResult
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable
+    from pathlib import Path
 
     from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import (
@@ -417,3 +418,25 @@ class ModelResult(BaseModel):
         if not mods:
             mods = self.default_modalities
         return list(set(mods))
+
+    def to_disk(self, path: Path) -> None:
+        """Save ModelResult to disk as JSON.
+
+        Args:
+            path: The path to the file to save.
+        """
+        with path.open("w") as f:
+            f.write(self.model_dump_json(indent=2))
+
+    @classmethod
+    def from_disk(cls, path: Path) -> ModelResult:
+        """Load ModelResult from disk.
+
+        Args:
+            path: The path to the JSON file to load.
+
+        Returns:
+            The loaded ModelResult object.
+        """
+        with path.open("r", encoding="utf-8") as f:
+            return cls.model_validate_json(f.read())

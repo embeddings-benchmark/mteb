@@ -23,6 +23,8 @@ from .classification import AbsTaskClassification
 if TYPE_CHECKING:
     from pathlib import Path
 
+    from numpy.typing import NDArray
+
     from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
     from mteb.models import MTEBModels
     from mteb.types import Array, EncodeKwargs
@@ -32,10 +34,10 @@ logger = logging.getLogger(__name__)
 
 def _evaluate_classifier(
     embeddings_train: Array,
-    y_train: np.ndarray,
+    y_train: NDArray[np.integer],
     embeddings_test: Array,
     classifier: SklearnModelProtocol,
-) -> tuple[np.ndarray, SklearnModelProtocol]:
+) -> tuple[NDArray[np.integer | np.floating], SklearnModelProtocol]:
     classifier_copy: SklearnModelProtocol = clone(classifier)
     classifier_copy.fit(embeddings_train, y_train)
     return classifier_copy.predict(embeddings_test), classifier_copy
@@ -93,7 +95,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> FullMultilabelClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -208,8 +210,8 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
 
     def _calculate_scores(  # type: ignore[override]
         self,
-        y_test: np.ndarray,
-        y_pred: np.ndarray,
+        y_test: NDArray[np.integer],
+        y_pred: NDArray[np.integer | np.floating],
         x_test_embedding: Array,
         current_classifier: SklearnModelProtocol,
     ) -> MultilabelClassificationMetrics:

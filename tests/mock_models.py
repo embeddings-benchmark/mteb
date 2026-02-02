@@ -18,6 +18,8 @@ from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderW
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from numpy.typing import NDArray
+
     from mteb.types import Array, BatchedInput
 
 empty_metadata_kwargs = dict(
@@ -106,7 +108,7 @@ class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
         device: str | None = None,
         normalize_embeddings: bool = False,
         **kwargs,
-    ) -> list[Tensor] | np.ndarray | Tensor:
+    ) -> list[Tensor] | NDArray[np.floating] | Tensor:
         return torch.randn(len(sentences), 10, dtype=torch.bfloat16)
 
 

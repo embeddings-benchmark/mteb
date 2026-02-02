@@ -43,7 +43,7 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int = 1, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
 
