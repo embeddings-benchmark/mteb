@@ -195,6 +195,7 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     loader_kwargs=dict(
         extra_name="nemotron-colembed-vl",
         trust_remote_code=True,
+        transformers_version_constraint="==4.49.0",
     ),
     name="nvidia/llama-nemoretriever-colembed-1b-v1",
     model_type=["late-interaction"],
@@ -224,6 +225,7 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     loader_kwargs=dict(
         extra_name="nemotron-colembed-vl",
         trust_remote_code=True,
+        transformers_version_constraint="==4.49.0",
     ),
     name="nvidia/llama-nemoretriever-colembed-3b-v1",
     model_type=["late-interaction"],
@@ -253,6 +255,7 @@ llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
     loader_kwargs=dict(
         extra_name="nemotron-colembed-vl",
         trust_remote_code=True,
+        transformers_version_constraint="==4.49.0",
     ),
     name="nvidia/llama-nemotron-colembed-vl-3b-v2",
     model_type=["late-interaction"],
@@ -282,6 +285,7 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
     loader_kwargs=dict(
         extra_name="nemotron-colembed-vl-v2",
         trust_remote_code=True,
+        transformers_version_constraint=">=5.0.0m",
     ),
     name="nvidia/nemotron-colembed-vl-4b-v2",
     revision="df61c25b416c1ef27cd0d7039596f752c262c5ae",
@@ -310,6 +314,7 @@ nemotron_colembed_vl_8b_v2 = ModelMeta(
     loader_kwargs=dict(
         extra_name="nemotron-colembed-vl-v2",
         trust_remote_code=True,
+        transformers_version_constraint=">=5.0.0",
     ),
     name="nvidia/nemotron-colembed-vl-8b-v2",
     revision="b6db318a581be528d8a24c25f0857d7d833d5263",
