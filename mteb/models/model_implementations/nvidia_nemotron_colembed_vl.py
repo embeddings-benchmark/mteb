@@ -276,7 +276,7 @@ llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=TRAINING_DATA,
-    citation=LLAMA_NEMORETRIEVER_CITATION,
+    citation=None,
 )
 
 
