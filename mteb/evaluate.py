@@ -91,7 +91,7 @@ def _evaluate_task(
     encode_kwargs: EncodeKwargs,
     prediction_folder: Path | None,
     public_only: bool | None,
-    num_proc: int = 1,
+    num_proc: int | None = None,
 ) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
 
@@ -282,7 +282,7 @@ def evaluate(
     prediction_folder: Path | str | None = None,
     show_progress_bar: bool = True,
     public_only: bool | None = None,
-    num_proc: int = 1,
+    num_proc: int | None = None,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 

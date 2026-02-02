@@ -136,7 +136,7 @@ class AbsTaskClassification(AbsTask):
         *,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluate a model on the classification task.
@@ -199,7 +199,7 @@ class AbsTaskClassification(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         if not isinstance(model, EncoderProtocol):

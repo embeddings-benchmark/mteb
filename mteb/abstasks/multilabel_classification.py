@@ -93,7 +93,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> FullMultilabelClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
