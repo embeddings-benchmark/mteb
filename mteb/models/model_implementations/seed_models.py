@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import logging
 import time
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
@@ -13,6 +15,9 @@ from mteb.types import PromptType
 
 from .bge_models import bge_chinese_training_data
 from .nvidia_models import nvidia_training_datasets
+
+if TYPE_CHECKING:
+    from mteb.types import Array
 
 logger = logging.getLogger(__name__)
 
@@ -110,7 +115,7 @@ class SeedTextEmbeddingModel(AbsEncoder):
         prompt_type: PromptType | None = None,
         retries: int = 5,
         **kwargs: Any,
-    ) -> np.ndarray:
+    ) -> Array:
         trimmed_sentences = []
         for sentence in sentences:
             encoded_sentence = self._encoding.encode(sentence)

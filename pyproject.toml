@@ -283,6 +283,7 @@ allow-multiline = false
 [tool.ruff.lint.pep8-naming]
 ignore-names = [
     "F",  # torch.nn.functional
+    "X",
     "X_train",
     "X_test",
 ]
