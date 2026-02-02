@@ -114,7 +114,7 @@ def _parse_bibtex_entries(bibtex_str: str) -> list[tuple[str, str]]:
         block_start = key_match.start()
         next_at = bibtex_str.find("@", key_match.end())
         block = bibtex_str[block_start : next_at if next_at != -1 else None]
-        title_match = re.search(r"title\s*=\s*\{", block, re.IGNORECASE)
+        title_match = re.search(r"\btitle\s*=\s*\{", block, re.IGNORECASE)
         if not title_match:
             continue
         start = title_match.end()
@@ -138,54 +138,33 @@ def _normalize_title_for_comparison(title: str) -> str:
     return " ".join(title.lower().strip().split())
 
 
-# Skip these — venue/proceedings names, not paper titles (avoids false dupes from same conf)
-_VENUE_ONLY_TITLE_PREFIXES = (
-    "proceedings of ",
-    "proceedings of the ",
-    "findings of ",
-    "findings of the ",
-    "ceur workshop proceedings",
-)
-
-
-def _is_venue_only_title(normalized_title: str) -> bool:
-    if not normalized_title or len(normalized_title) < 20:
-        return True
-    lower = normalized_title.lower()
-    return any(lower.startswith(p) for p in _VENUE_ONLY_TITLE_PREFIXES) or lower in (
-        "acl",
-        "trec",
-    )
-
-
 def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:
     """Same paper under different bibtex ids -> (task1, task2, id1, id2, raw_title_1, raw_title_2)."""
     by_title: dict[str, list[tuple[str, str, str]]] = defaultdict(list)
     for task_cls in _gather_tasks():
-        bibtex = getattr(task_cls.metadata, "bibtex_citation", None) or ""
-        if isinstance(bibtex, str):
-            for cid, title in _parse_bibtex_entries(bibtex):
+        if task_cls.metadata.bibtex_citation is not None:
+            for cid, title in _parse_bibtex_entries(task_cls.metadata.bibtex_citation):
                 norm = _normalize_title_for_comparison(title)
                 by_title[norm].append((task_cls.metadata.name, cid, title))
 
     duplicates: list[tuple[str, str, str, str, str, str]] = []
     for norm_title, items in by_title.items():
-        if _is_venue_only_title(norm_title):
-            continue
         id_to_raw = {cid: raw for _, cid, raw in items}
         id_to_task = {cid: task for task, cid, raw in items}
         if len(id_to_raw) < 2:
             continue
         unique_ids = sorted(id_to_raw)
         for id1, id2 in combinations(unique_ids, 2):
-            duplicates.append((
-                id_to_task[id1],
-                id_to_task[id2],
-                id1,
-                id2,
-                id_to_raw[id1],
-                id_to_raw[id2],
-            ))
+            duplicates.append(
+                (
+                    id_to_task[id1],
+                    id_to_task[id2],
+                    id1,
+                    id2,
+                    id_to_raw[id1],
+                    id_to_raw[id2],
+                )
+            )
     return duplicates
 
 
