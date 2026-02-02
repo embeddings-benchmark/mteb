@@ -77,13 +77,14 @@ class PpcPC(AbsTaskPairClassification):
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="max_ap",
-        date=None,
+        date=("2022-01-01", "2022-12-31"),  # publication year
         domains=[
             "Fiction",
             "Non-fiction",
             "Web",
             "Written",
             "Spoken",
+            ""
             # likely:
             "Social",
             "News",
@@ -125,7 +126,7 @@ class CdscePC(AbsTaskPairClassification):
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="max_ap",
-        date=None,
+        date=("2017-01-01", "2017-12-31"),  # publication year
         domains=["Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",

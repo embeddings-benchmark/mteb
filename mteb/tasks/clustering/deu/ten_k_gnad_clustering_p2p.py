@@ -18,14 +18,17 @@ class TenKGnadClusteringP2P(AbsTaskClusteringLegacy):
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="v_measure",
-        date=None,
+        date=(
+            "2000-01-01",
+            "2020-12-31",
+        ),  # since it is news it is guessed that it is from 2000 to 2020
         domains=["Web", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="",  # none found
         superseded_by="TenKGnadClusteringP2P.v2",
     )
 

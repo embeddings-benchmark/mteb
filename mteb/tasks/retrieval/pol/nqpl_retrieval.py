@@ -56,8 +56,8 @@ class NQPLHardNegatives(AbsTaskRetrieval):
         date=("2019-01-01", "2019-12-31"),  # original publication year
         domains=["Written", "Encyclopaedic"],
         task_subtypes=["Question answering"],
-        license="cc-by-nc-sa-3.0", # original license
-        annotations_creators="human-annotated", # original annotation method
+        license="cc-by-nc-sa-3.0",  # original license
+        annotations_creators="human-annotated",  # original annotation method
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""

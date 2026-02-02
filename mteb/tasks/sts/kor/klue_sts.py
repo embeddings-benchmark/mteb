@@ -20,7 +20,7 @@ class KlueSTS(AbsTaskSTS):
         main_score="cosine_spearman",
         date=("2011-01-01", "2021-11-02"),  # rough estimate,
         domains=["Reviews", "News", "Spoken", "Written", "Spoken"],
-        task_subtypes=None,
+        task_subtypes=[],
         license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
