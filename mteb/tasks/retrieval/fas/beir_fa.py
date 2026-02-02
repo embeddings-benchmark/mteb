@@ -573,7 +573,7 @@ class NFCorpusFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["NFCorpus"],
     )
 
@@ -600,7 +600,7 @@ class NQFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["NQ"],
     )
 
@@ -629,7 +629,7 @@ class QuoraRetrievalFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["QuoraRetrieval"],
         superseded_by="QuoraRetrieval-Fa.v2",
     )
@@ -659,7 +659,7 @@ class QuoraRetrievalFaV2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["QuoraRetrieval"],
     )
 
@@ -686,7 +686,7 @@ class SCIDOCSFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["SCIDOCS"],
         superseded_by="SCIDOCS-Fa.v2",
     )
@@ -714,7 +714,7 @@ class SCIDOCSFaV2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["SCIDOCS"],
     )
 
@@ -741,7 +741,7 @@ class SciFactFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["SciFact"],
         superseded_by="SciFact-Fa.v2",
     )
@@ -769,7 +769,7 @@ class SciFactFaV2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["SciFact"],
     )
 
@@ -796,7 +796,7 @@ class TRECCOVIDFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["TRECCOVID"],
         superseded_by="TRECCOVID-Fa.v2",
     )
@@ -824,7 +824,7 @@ class TRECCOVIDFaV2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["TRECCOVID"],
     )
 
@@ -851,7 +851,7 @@ class Touche2020Fa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["Touche2020"],
         superseded_by="Touche2020-Fa.v2",
     )
@@ -879,7 +879,7 @@ class Touche2020FaV2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["Touche2020"],
     )
 
@@ -906,7 +906,7 @@ class HotpotQAFaHardNegatives(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["HotpotQA"],
     )
 
@@ -935,7 +935,7 @@ class MSMARCOFaHardNegatives(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["MSMARCO"],
     )
 
@@ -962,7 +962,7 @@ class NQFaHardNegatives(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["NQ"],
     )
 
@@ -991,6 +991,6 @@ class FEVERFaHardNegatives(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation="",
         adapted_from=["FEVER"],
     )
