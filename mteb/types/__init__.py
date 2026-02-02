@@ -9,7 +9,6 @@ from ._encoder_io import (
     PromptType,
     QueryDatasetType,
     RelevantDocumentsType,
-    RetrievalCompressionOutputType,
     RetrievalOutputType,
     TopRankedDocumentsType,
 )
@@ -45,7 +44,6 @@ __all__ = [
     "PromptType",
     "QueryDatasetType",
     "RelevantDocumentsType",
-    "RetrievalCompressionOutputType",
     "RetrievalEvaluationResult",
     "RetrievalOutputType",
     "Revision",

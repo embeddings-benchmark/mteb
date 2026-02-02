@@ -60,11 +60,11 @@ def test_retrieval_backends(
 
     with task._predictions_path(python_backend_predictions).open() as f:
         full_python_predictions = json.load(f)
-        python_predictions = full_python_predictions["default"]["test"]["full"]
+        python_predictions = full_python_predictions["default"]["test"]
 
     with task._predictions_path(faiss_backend_predictions).open() as f:
         full_faiss_predictions = json.load(f)
-        faiss_predictions = full_faiss_predictions["default"]["test"]["full"]
+        faiss_predictions = full_faiss_predictions["default"]["test"]
 
     for python_pred_key, faiss_pred_key in zip(
         sorted(python_predictions.keys()), sorted(faiss_predictions.keys())

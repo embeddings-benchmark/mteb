@@ -130,7 +130,4 @@ def test_predictions(tmp_path: Path, task, expected):
         full_predictions = json.load(f)
 
     predictions = full_predictions["default"]["test"]
-    if "full" in predictions:
-        predictions = predictions["full"]
-
     assert predictions == expected

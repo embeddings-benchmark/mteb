@@ -243,7 +243,7 @@ class AbsTaskClassification(AbsTask):
             k: (
                 float(np.mean(values))
                 if (values := [s[k] for s in scores if s[k] is not None])  # type: ignore[literal-required]
-                else np.nan
+                else None
             )
             for k in scores[0].keys()
         }

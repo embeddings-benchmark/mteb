@@ -122,7 +122,6 @@ class AbsTaskRetrieval(AbsTask):
     _support_search: bool = True
     _previous_results_model_meta: dict[str, Any] | None = None
     skip_first_result: bool = False
-    _quantize: bool = False
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -318,6 +317,21 @@ class AbsTaskRetrieval(AbsTask):
             **kwargs,
         )
 
+    @staticmethod
+    def _get_search_model(
+        model: EncoderProtocol, wrapper_model: Any
+    ) -> SearchProtocol | SearchEncoderWrapper | SearchCrossEncoderWrapper:
+        if isinstance(model, EncoderProtocol) and not isinstance(model, SearchProtocol):
+            return SearchEncoderWrapper(wrapper_model)
+        elif isinstance(model, CrossEncoderProtocol):
+            return SearchCrossEncoderWrapper(wrapper_model)
+        elif isinstance(model, SearchProtocol):
+            return wrapper_model
+        else:
+            raise TypeError(
+                f"RetrievalEvaluator expects a SearchInterface, Encoder, or CrossEncoder, got {type(model)}"
+            )
+
     def _evaluate_subset(
         self,
         model: MTEBModels,
@@ -361,16 +375,14 @@ class AbsTaskRetrieval(AbsTask):
 
         search_model: SearchProtocol
 
-        if isinstance(model, EncoderProtocol) and not isinstance(model, SearchProtocol):
-            search_model = SearchEncoderWrapper(model, quantize=self._quantize)
-        elif isinstance(model, CrossEncoderProtocol):
-            search_model = SearchCrossEncoderWrapper(model)
-        elif isinstance(model, SearchProtocol):
-            search_model = model
+        from mteb.models import CachedEmbeddingWrapper, CompressionWrapper
+
+        if isinstance(model, CompressionWrapper):
+            search_model = self._get_search_model(model.model, model)
+        elif isinstance(model, CachedEmbeddingWrapper):
+            search_model = self._get_search_model(model._model, model)
         else:
-            raise TypeError(
-                f"RetrievalEvaluator expects a SearchInterface, Encoder, or CrossEncoder, got {type(model)}"
-            )
+            search_model = self._get_search_model(model, model)
 
         start_time = time()
         results = retriever(
@@ -392,38 +404,6 @@ class AbsTaskRetrieval(AbsTask):
             )
 
         logger.info("Running retrieval task - Evaluating retrieval scores...")
-        if isinstance(search_model, SearchEncoderWrapper):
-            if "full" not in results:
-                raise ValueError(
-                    "Retrieval results must contain full-precision scores!"
-                )
-            score_dict = self._create_score_dict(
-                results["full"], retriever, data_split, hf_split, hf_subset
-            )
-            for compression_level in results:
-                if compression_level != "full":
-                    score_dict[compression_level] = self._create_score_dict(
-                        results[compression_level],
-                        retriever,
-                        data_split,
-                        hf_split,
-                        hf_subset,
-                    )
-        else:
-            score_dict = self._create_score_dict(
-                results, retriever, data_split, hf_split, hf_subset
-            )
-        logger.info("Running retrieval task - Finished.")
-        return score_dict
-
-    def _create_score_dict(
-            self,
-            results: RetrievalOutputType,
-            retriever: RetrievalEvaluator,
-            data_split: RetrievalSplitData,
-            hf_split: str,
-            hf_subset: str,
-    ):
         (
             all_scores,
             ndcg,
@@ -448,6 +428,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_split=hf_split,
             hf_subset=hf_subset,
         )
+        logger.info("Running retrieval task - Finished.")
         return make_score_dict(
             ndcg,
             _map,
@@ -713,8 +694,6 @@ class AbsTaskRetrieval(AbsTask):
                 top_ranked: RetrievalOutputType = previous_results[subset][split]
                 if not isinstance(top_ranked, dict):
                     raise ValueError("Previous top ranked results is not a dictionary.")
-                if "full" in top_ranked:
-                    top_ranked = top_ranked["full"]
 
                 top_k_sorted = defaultdict(list)
                 for query_id, values in top_ranked.items():
@@ -724,13 +703,6 @@ class AbsTaskRetrieval(AbsTask):
                 self.dataset[subset][split]["top_ranked"] = top_k_sorted
         return self
 
-    def set_quantization(self, quantize: bool):
-        """Setter for boolean quantization parameter. If set to 'True', retrieval performance is evaluated on quantized embeddings in addition to standard evaluation.
-
-        Args:
-            quantize: Whether to apply quantization or not.
-        """
-        self._quantize = quantize
 
 def _process_relevant_docs(
     collection: Mapping[str, Mapping[str, int]],

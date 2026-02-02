@@ -13,6 +13,7 @@ from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
+from mteb.models.compression_wrappers import CompressionWrapper
 from mteb.types._encoder_io import EncodeKwargs
 
 logger = logging.getLogger(__name__)
@@ -52,7 +53,6 @@ def run(args: argparse.Namespace) -> None:
         device = args.device
 
     model = mteb.get_model(args.model, args.model_revision, device=device)
-    quantize = args.quantization
 
     if args.benchmarks:
         benchmarks = mteb.get_benchmarks(names=args.benchmarks)
@@ -78,6 +78,13 @@ def run(args: argparse.Namespace) -> None:
         )
         overwrite_strategy = OverwriteStrategy.ALWAYS.value
 
+    quantization_level = args.quantization
+    if quantization_level != "full":
+        model = CompressionWrapper(
+            model=model,
+            quantization_level=quantization_level,
+        )
+
     prediction_folder = args.prediction_folder
     if args.save_predictions:
         warnings.warn(
@@ -94,7 +101,6 @@ def run(args: argparse.Namespace) -> None:
         overwrite_strategy=overwrite_strategy,
         encode_kwargs=encode_kwargs,
         prediction_folder=prediction_folder,
-        quantize=quantize,
     )
 
 
@@ -271,9 +277,10 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
     )
     parser.add_argument(
         "--quantization",
-        type=bool,
-        default=False,
-        help="Whether to compute retrieval performance on quantized embeddings in addition to full-precision. Ignored for non-retrieval tasks.",
+        type=str,
+        default="full",
+        choices=["full", "float8", "int8", "int4", "binary"],
+        help="Copmute performance on quantized embeddings instead of full precision.",
     )
 
     parser.set_defaults(func=run)

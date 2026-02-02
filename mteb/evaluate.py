@@ -90,7 +90,6 @@ def _evaluate_task(
     prediction_folder: Path | None,
     public_only: bool | None,
     num_proc: int = 1,
-    quantize: bool,
 ) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
 
@@ -124,7 +123,6 @@ def _evaluate_task(
                 co2_tracker=False,
                 prediction_folder=prediction_folder,
                 public_only=public_only,
-                quantize=quantize,
             )
         if isinstance(result, TaskResult):
             result.kg_co2_emissions = tracker.final_emissions
@@ -154,8 +152,6 @@ def _evaluate_task(
                 raise e
 
     evaluation_time = 0.0
-    if isinstance(task, AbsTaskRetrieval):
-        task.set_quantization(quantize)
 
     for split, hf_subsets in splits.items():
         tick = time()
@@ -282,7 +278,6 @@ def evaluate(
     prediction_folder: Path | str | None = None,
     show_progress_bar: bool = True,
     public_only: bool | None = None,
-    quantize: bool = False,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -303,11 +298,10 @@ def evaluate(
                 changed.
             - "only-cache": Only load the results from the cache folder and do not run the task. Useful if you just want to load the results from the
                 cache.
-        prediction_folder: Optional folder in which to save model predictions for the task. Predictions of the tasks will be sabed in `prediction_folder/{task_name}_predictions.json`
+        prediction_folder: Optional folder in which to save model predictions for the task. Predictions of the tasks will be saved in `prediction_folder/{task_name}_predictions.json`
         show_progress_bar: Whether to show a progress bar when running the evaluation. Default is True. Setting this to False will also set the
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
         public_only: Run only public tasks. If None, it will attempt to run the private task.
-        quantize: Whether to compute retrieval performance on quantized embeddings in addition to full-precision. Will be ignored for non-retrieval tasks.
 
     Returns:
         The results of the evaluation.
@@ -360,7 +354,6 @@ def evaluate(
             prediction_folder=prediction_folder,
             show_progress_bar=show_progress_bar,
             public_only=public_only,
-            quantize=quantize,
         )
         combined_results = aggregated_task.combine_task_results(results.task_results)
         return ModelResult(
@@ -393,7 +386,6 @@ def evaluate(
                 prediction_folder=prediction_folder,
                 show_progress_bar=False,
                 public_only=public_only,
-                quantize=quantize,
             )
             evaluate_results.extend(_res.task_results)
             if _res.exceptions:
@@ -473,7 +465,6 @@ def evaluate(
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 public_only=public_only,
-                quantize=quantize,
             )
         except Exception as e:
             logger.error(
@@ -489,7 +480,6 @@ def evaluate(
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             public_only=public_only,
-            quantize=quantize,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 
