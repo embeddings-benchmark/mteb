@@ -276,7 +276,7 @@ llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=TRAINING_DATA,
-    citation=None,
+    citation=LLAMA_NEMORETRIEVER_CITATION,
 )
 
 
@@ -305,7 +305,7 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=TRAINING_DATA_v2,
-    citation=None,
+    citation=LLAMA_NEMORETRIEVER_CITATION,
 )
 
 
@@ -334,5 +334,5 @@ nemotron_colembed_vl_8b_v2 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=TRAINING_DATA_v2,
-    citation=None,
+    citation=LLAMA_NEMORETRIEVER_CITATION,
 )
