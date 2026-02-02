@@ -13,7 +13,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
-    from mteb.types import PromptType
+    from mteb.types import Array, PromptType
 logger = logging.getLogger(__name__)
 
 HAKIM_CITATION = """@article{sarmadi2025hakim,
@@ -302,7 +302,7 @@ class HakimModelWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
         **kwargs: Any,
-    ) -> np.ndarray:
+    ) -> Array:
         """Encodes sentences using the API.
 
         Returns:
