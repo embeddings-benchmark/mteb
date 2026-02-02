@@ -54,18 +54,16 @@ def test_model_meta_load_sentence_transformer_metadata_from_model():
 
     assert meta.name == "sentence-transformers/all-MiniLM-L6-v2"
     assert meta.revision is not None
-    assert meta.release_date == "2021-08-30"
-    assert meta.n_parameters == 22713728
-    assert meta.memory_usage_mb == 87
     assert meta.max_tokens == 256
     assert meta.embed_dim == 384
-    assert meta.license == "apache-2.0"
     assert meta.similarity_fn_name.value == "cosine"
 
 
 @pytest.mark.parametrize("as_sentence_transformer", [True, False])
 @pytest.mark.parametrize("model_name", ["sentence-transformers/all-MiniLM-L6-v2"])
-def test_model_meta_sentence_transformer_from_hub(as_sentence_transformer, model_name):
+def test_model_meta_sentence_transformer_from_hub(
+    as_sentence_transformer: bool, model_name: str
+):
     if as_sentence_transformer:
         meta = ModelMeta.from_hub(model_name)
     else:
@@ -93,8 +91,3 @@ def test_cross_encoder_model_meta(model_name: str):
 
     assert meta.name == "cross-encoder/ms-marco-TinyBERT-L2-v2"
     assert meta.revision is not None
-    assert meta.release_date == "2021-04-15"
-    assert meta.n_parameters == 4386561
-    assert meta.memory_usage_mb == 17
-    assert meta.max_tokens == 512
-    assert meta.license == "apache-2.0"

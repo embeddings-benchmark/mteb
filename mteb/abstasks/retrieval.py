@@ -155,7 +155,10 @@ class AbsTaskRetrieval(AbsTask):
             )
         )
 
-    def convert_v1_dataset_format_to_v2(self, num_proc: int) -> None:
+    def convert_v1_dataset_format_to_v2(
+        self,
+        num_proc: int | None,
+    ) -> None:
         """Convert dataset from v1 (from `self.queries`, `self.document`) format to v2 format (`self.dotaset`)."""
         # check if dataset is `v1` version
         if not hasattr(self, "queries"):
@@ -264,7 +267,7 @@ class AbsTaskRetrieval(AbsTask):
         if hasattr(self, "top_ranked"):
             del self.top_ranked
 
-    def load_data(self, num_proc: int = 1, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         """Load the dataset for the retrieval task."""
         if self.data_loaded:
             return
@@ -308,7 +311,7 @@ class AbsTaskRetrieval(AbsTask):
         *,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluate the model on the retrieval task.
@@ -349,7 +352,7 @@ class AbsTaskRetrieval(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
@@ -480,7 +483,7 @@ class AbsTaskRetrieval(AbsTask):
         split: str,
         hf_subset: str | None = None,
         compute_overall: bool = False,
-        num_proc: int = 1,
+        num_proc: int | None = None,
     ) -> RetrievalDescriptiveStatistics:
         self.convert_v1_dataset_format_to_v2(num_proc)
         if hf_subset and hf_subset in self.dataset:

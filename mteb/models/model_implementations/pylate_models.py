@@ -53,7 +53,7 @@ class PylateSearchEncoder:
         hf_split: str,
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
-        num_proc: int,
+        num_proc: int | None,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -89,7 +89,7 @@ class PylateSearchEncoder:
         top_k: int,
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
-        num_proc: int,
+        num_proc: int | None,
     ) -> RetrievalOutputType:
         queries_dataloader = create_dataloader(
             queries,
@@ -150,7 +150,7 @@ class PylateSearchEncoder:
         hf_split: str,
         top_k: int,
         encode_kwargs: EncodeKwargs,
-        num_proc: int,
+        num_proc: int | None,
     ) -> dict[str, list[tuple[float, str]]]:
         from pylate import indexes, retrieve
 
@@ -216,7 +216,7 @@ class PylateSearchEncoder:
         hf_subset: str,
         hf_split: str,
         encode_kwargs: EncodeKwargs,
-        num_proc: int = 1,
+        num_proc: int | None = None,
     ) -> dict[str, list[tuple[float, str]]]:
         """Rerank with PyLate's rank.rerank using per-query candidates.
 

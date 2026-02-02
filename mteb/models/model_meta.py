@@ -422,20 +422,31 @@ class ModelMeta(BaseModel):
         cls,
         model_name: str | None,
         revision: str | None = None,
-        compute_metadata: bool = True,
+        fill_missing: bool = True,
+        compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta from a HuggingFace model name.
 
         Args:
             model_name: The HuggingFace model name.
             revision: Revision of the model
-            compute_metadata: Add metadata based on model card
+            fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
             The generated ModelMeta.
         """
         loader: Callable[..., MTEBModels] | None
         model_type: MODEL_TYPES
+
+        if compute_metadata is not None:
+            warnings.warn(
+                "The compute_metadata parameter is deprecated and will be removed in a future version. "
+                f"Use fill_missing instead. Setting `fill_missing={compute_metadata}`.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            fill_missing = compute_metadata
 
         loader, model_type = cls._detect_model_type_and_loader(model_name, revision)
 
@@ -448,7 +459,7 @@ class ModelMeta(BaseModel):
         embedding_dim = None
         max_tokens = None
 
-        if model_name and compute_metadata and _repo_exists(model_name):
+        if model_name and fill_missing and _repo_exists(model_name):
             reference = "https://huggingface.co/" + model_name
             card = ModelCard.load(model_name)
             card_data: ModelCardData = card.data
@@ -505,14 +516,16 @@ class ModelMeta(BaseModel):
         cls,
         model: SentenceTransformer,
         revision: str | None = None,
-        compute_metadata: bool = True,
+        fill_missing: bool = False,
+        compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta from a SentenceTransformer model.
 
         Args:
             model: SentenceTransformer model.
             revision: Revision of the model
-            compute_metadata: Add metadata based on model card
+            fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
             The generated ModelMeta.
@@ -522,7 +535,9 @@ class ModelMeta(BaseModel):
             if model.model_card_data.model_name
             else model.model_card_data.base_model
         )
-        meta = cls._from_hub(name, revision, compute_metadata)
+        meta = cls._from_hub(
+            name, revision, fill_missing=fill_missing, compute_metadata=compute_metadata
+        )
         try:
             first = model[0]
 
@@ -535,7 +550,9 @@ class ModelMeta(BaseModel):
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
         meta.similarity_fn_name = ScoringFunction.from_str(model.similarity_fn_name)
-        meta.modalities = ["text"]
+        meta.modalities = ["text"]  # best guess
+        if "Sentence Transformers" not in meta.framework:
+            meta.framework.append("Sentence Transformers")
         return meta
 
     @classmethod
@@ -543,22 +560,29 @@ class ModelMeta(BaseModel):
         cls,
         model: str,
         revision: str | None = None,
-        compute_metadata: bool = True,
+        fill_missing: bool = True,
+        compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta for model from HuggingFace hub.
 
         Args:
             model: Name of the model from HuggingFace hub. For example, `intfloat/multilingual-e5-large`
             revision: Revision of the model
-            compute_metadata: Add metadata based on model card
+            fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
             The generated ModelMeta.
         """
-        meta = cls._from_hub(model, revision, compute_metadata)
+        meta = cls._from_hub(
+            model,
+            revision,
+            fill_missing=fill_missing,
+            compute_metadata=compute_metadata,
+        )
         meta.modalities = ["text"]
 
-        if model and compute_metadata and _repo_exists(model):
+        if model and fill_missing and _repo_exists(model):
             # have max_seq_length field
             sbert_config = _get_json_from_hub(
                 model, "sentence_bert_config.json", "model", revision=revision
@@ -587,21 +611,28 @@ class ModelMeta(BaseModel):
         cls,
         model: CrossEncoder,
         revision: str | None = None,
-        compute_metadata: bool = True,
+        fill_missing: bool = False,
+        compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta from a CrossEncoder.
 
         Args:
             model: The CrossEncoder model
             revision: Revision of the model
-            compute_metadata: Add metadata based on model card
+            fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
             The generated ModelMeta
         """
         from mteb.models import CrossEncoderWrapper
 
-        meta = cls._from_hub(model.model.name_or_path, revision, compute_metadata)
+        meta = cls._from_hub(
+            model.model.name_or_path,
+            revision,
+            fill_missing=fill_missing,
+            compute_metadata=compute_metadata,
+        )
         try:
             emb = model.model.get_input_embeddings()
 
@@ -616,6 +647,8 @@ class ModelMeta(BaseModel):
         meta.embed_dim = None
         meta.modalities = ["text"]
         meta.model_type = ["cross-encoder"]
+        if "Sentence Transformers" not in meta.framework:
+            meta.framework.append("Sentence Transformers")
         return meta
 
     def is_zero_shot_on(self, tasks: Sequence[AbsTask] | Sequence[str]) -> bool | None:

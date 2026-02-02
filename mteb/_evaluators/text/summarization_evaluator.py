@@ -100,7 +100,7 @@ class SummarizationEvaluator(Evaluator):
         model: EncoderProtocol,
         *,
         encode_kwargs: EncodeKwargs,
-        num_proc: int = 1,
+        num_proc: int | None = None,
     ) -> SummarizationDistances:
         # Get the human & machine summaries for the text in one go for all
         human_lens = [len(human_summaries) for human_summaries in self.human_summaries]

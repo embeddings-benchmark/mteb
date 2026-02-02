@@ -107,7 +107,7 @@ class AbsTaskPairClassification(AbsTask):
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs,
     ) -> dict[str, float]:
         if not isinstance(model, EncoderProtocol):

@@ -25,6 +25,7 @@ from .classification import AbsTaskClassification
 
 if TYPE_CHECKING:
     from datasets import Dataset
+    from numpy.typing import NDArray
 
     from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
     from mteb.types.statistics import (
@@ -127,8 +128,8 @@ class AbsTaskRegression(AbsTaskClassification):
 
     def _calculate_scores(  # type: ignore[override]
         self,
-        y_test: np.ndarray | list[int],
-        y_pred: np.ndarray,
+        y_test: NDArray[np.floating] | list[float],
+        y_pred: NDArray[np.floating] | list[float],
     ) -> RegressionMetrics:
         mse = mean_squared_error(y_test, y_pred)
         return RegressionMetrics(

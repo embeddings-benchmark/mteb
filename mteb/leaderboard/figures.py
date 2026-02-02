@@ -137,6 +137,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     min_score, max_score = df["Mean (Task)"].min(), df["Mean (Task)"].max()
     df["sqrt(dim)"] = np.sqrt(df["Embedding Dimensions"])
     df["Max Tokens"] = df["Max Tokens"].apply(lambda x: _process_max_tokens(x))
+    rank_column = "Rank (Borda)" if "Rank (Borda)" in df.columns else "Rank (Mean Task)"
     fig = px.scatter(
         df,
         x="Number of Parameters",
@@ -153,7 +154,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
             "Embedding Dimensions": True,
             "Number of Parameters": True,
             "Mean (Task)": True,
-            "Rank (Borda)": True,
+            rank_column: True,
             "Log(Tokens)": False,
             "sqrt(dim)": False,
             "model_text": False,

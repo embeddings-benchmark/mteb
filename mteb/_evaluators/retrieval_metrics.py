@@ -15,6 +15,8 @@ from mteb.types import RetrievalEvaluationResult
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
+    from numpy.typing import NDArray
+
     from mteb.types import RelevantDocumentsType
 
 logger = logging.getLogger(__name__)
@@ -273,9 +275,9 @@ def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
 
 
 def nauc(
-    conf_scores: np.ndarray,
-    metrics: np.ndarray,
-    abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
+    conf_scores: NDArray[np.floating],
+    metrics: NDArray[np.floating],
+    abstention_rates: NDArray[np.floating] = np.linspace(0, 1, 11)[:-1],
 ) -> float:
     """Computes normalized Area Under the Curve (nAUC) on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
 
@@ -295,10 +297,10 @@ def nauc(
     """
 
     def abstention_curve(
-        conf_scores: np.ndarray,
-        metrics: np.ndarray,
-        abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
-    ) -> np.ndarray:
+        conf_scores: NDArray[np.floating],
+        metrics: NDArray[np.floating],
+        abstention_rates: NDArray[np.floating] = np.linspace(0, 1, 11)[:-1],
+    ) -> NDArray[np.floating]:
         """Computes the raw abstention curve for a given set of evaluated instances and corresponding confidence scores
 
         Args:

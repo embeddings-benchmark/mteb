@@ -55,7 +55,7 @@ class RetrievalEvaluator(Evaluator):
         self,
         search_model: SearchProtocol,
         encode_kwargs: EncodeKwargs,
-        num_proc: int = 1,
+        num_proc: int | None = None,
     ) -> RetrievalOutputType:
         logger.info("Running retrieval task - Indexing corpus...")
         search_model.index(
