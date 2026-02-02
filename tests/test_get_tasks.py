@@ -101,8 +101,7 @@ def test_get_tasks_privacy_filtering():
 
 
 def test_no_duplicate_citations_with_different_ids():
-    """Ensure no task citations refer to the same paper under different BibTeX IDs.
-    """
+    """Ensure no task citations refer to the same paper under different BibTeX IDs."""
     duplicates = get_duplicate_citations()
     assert not duplicates, (
         "Found duplicate citations (same paper, different BibTeX IDs). "

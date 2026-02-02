@@ -148,13 +148,15 @@ def get_duplicate_citations() -> list[tuple[str, str, str, str, str]]:
         unique_ids = sorted(id_to_raw)
         task_name = items[0][0]
         for id1, id2 in combinations(unique_ids, 2):
-            duplicates.append((
-                task_name,
-                id1,
-                id2,
-                id_to_raw[id1],
-                id_to_raw[id2],
-            ))
+            duplicates.append(
+                (
+                    task_name,
+                    id1,
+                    id2,
+                    id_to_raw[id1],
+                    id_to_raw[id2],
+                )
+            )
     return duplicates
 
 
@@ -234,10 +236,12 @@ class MTEBTasks(tuple[AbsTask]):
         markdown_table += _head_sep
         for task in self:
             markdown_table += f"| {task.metadata.name} "
-            markdown_table += "".join([
-                f"| {_limit_entries_in_cell_inner(self._extract_property_from_task(task, p))} "
-                for p in properties
-            ])
+            markdown_table += "".join(
+                [
+                    f"| {_limit_entries_in_cell_inner(self._extract_property_from_task(task, p))} "
+                    for p in properties
+                ]
+            )
             markdown_table += " |\n"
         return markdown_table
 
@@ -255,9 +259,9 @@ class MTEBTasks(tuple[AbsTask]):
         """
         data = []
         for task in self:
-            data.append({
-                p: self._extract_property_from_task(task, p) for p in properties
-            })
+            data.append(
+                {p: self._extract_property_from_task(task, p) for p in properties}
+            )
         return pd.DataFrame(data)
 
     @staticmethod
@@ -396,10 +400,12 @@ def get_tasks(
         exclude_aggregate=exclude_aggregate,
         exclude_private=exclude_private,
     )
-    return MTEBTasks([
-        cls().filter_languages(languages, script).filter_eval_splits(eval_splits)
-        for cls in tasks_
-    ])
+    return MTEBTasks(
+        [
+            cls().filter_languages(languages, script).filter_eval_splits(eval_splits)
+            for cls in tasks_
+        ]
+    )
 
 
 _TASK_RENAMES = {"PersianTextTone": "SynPerTextToneClassification"}
