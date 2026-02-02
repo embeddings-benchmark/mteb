@@ -1,10 +1,14 @@
+import re
+from collections import defaultdict
+from itertools import combinations
+
 import pytest
 
 import mteb
 from mteb import get_task, get_tasks
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskType
-from mteb.get_tasks import MTEBTasks, get_duplicate_citations
+from mteb.get_tasks import MTEBTasks, _gather_tasks
 from mteb.types import Modalities
 
 
@@ -100,16 +104,101 @@ def test_get_tasks_privacy_filtering():
         )  # None or True are both considered public
 
 
+def _parse_bibtex_entries(bibtex_str: str) -> list[tuple[str, str]]:
+    if not bibtex_str or not bibtex_str.strip():
+        return []
+    entries: list[tuple[str, str]] = []
+    block_pattern = re.compile(r"@\w+\s*\{([^,]+)", re.IGNORECASE)
+    for key_match in block_pattern.finditer(bibtex_str):
+        citation_id = key_match.group(1).strip()
+        block_start = key_match.start()
+        next_at = bibtex_str.find("@", key_match.end())
+        block = bibtex_str[block_start : next_at if next_at != -1 else None]
+        title_match = re.search(r"title\s*=\s*\{", block, re.IGNORECASE)
+        if not title_match:
+            continue
+        start = title_match.end()
+        depth = 1
+        i = start
+        while i < len(block) and depth > 0:
+            if block[i] == "{":
+                depth += 1
+            elif block[i] == "}":
+                depth -= 1
+            i += 1
+        if depth == 0:
+            title = block[start : i - 1].replace("\n", " ").strip()
+            title = " ".join(title.split())
+            if title:
+                entries.append((citation_id, title))
+    return entries
+
+
+def _normalize_title_for_comparison(title: str) -> str:
+    return " ".join(title.lower().strip().split())
+
+
+# Skip these — venue/proceedings names, not paper titles (avoids false dupes from same conf)
+_VENUE_ONLY_TITLE_PREFIXES = (
+    "proceedings of ",
+    "proceedings of the ",
+    "findings of ",
+    "findings of the ",
+    "ceur workshop proceedings",
+)
+
+
+def _is_venue_only_title(normalized_title: str) -> bool:
+    if not normalized_title or len(normalized_title) < 20:
+        return True
+    lower = normalized_title.lower()
+    return any(lower.startswith(p) for p in _VENUE_ONLY_TITLE_PREFIXES) or lower in (
+        "acl",
+        "trec",
+    )
+
+
+def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:
+    """Same paper under different bibtex ids -> (task1, task2, id1, id2, raw_title_1, raw_title_2)."""
+    by_title: dict[str, list[tuple[str, str, str]]] = defaultdict(list)
+    for task_cls in _gather_tasks():
+        bibtex = getattr(task_cls.metadata, "bibtex_citation", None) or ""
+        if isinstance(bibtex, str):
+            for cid, title in _parse_bibtex_entries(bibtex):
+                norm = _normalize_title_for_comparison(title)
+                by_title[norm].append((task_cls.metadata.name, cid, title))
+
+    duplicates: list[tuple[str, str, str, str, str, str]] = []
+    for norm_title, items in by_title.items():
+        if _is_venue_only_title(norm_title):
+            continue
+        id_to_raw = {cid: raw for _, cid, raw in items}
+        id_to_task = {cid: task for task, cid, raw in items}
+        if len(id_to_raw) < 2:
+            continue
+        unique_ids = sorted(id_to_raw)
+        for id1, id2 in combinations(unique_ids, 2):
+            duplicates.append((
+                id_to_task[id1],
+                id_to_task[id2],
+                id1,
+                id2,
+                id_to_raw[id1],
+                id_to_raw[id2],
+            ))
+    return duplicates
+
+
 def test_no_duplicate_citations_with_different_ids():
     """Ensure no task citations refer to the same paper under different BibTeX IDs."""
-    duplicates = get_duplicate_citations()
+    duplicates = _get_duplicate_citations()
     assert not duplicates, (
         "Found duplicate citations (same paper, different BibTeX IDs). "
         "Unify citation keys or titles so each paper is cited once.\n\n"
         + "\n\n".join(
-            f"--- Duplicate {i}: {task_name} ---\n"
-            f"  id1 = {id1!r}\n      title: {title1}\n"
-            f"  id2 = {id2!r}\n      title: {title2}"
-            for i, (task_name, id1, id2, title1, title2) in enumerate(duplicates, 1)
+            f"--- Duplicate {i}: {task1} / {task2} ---\n"
+            f"  id1 = {id1!r} (task: {task1})\n      title: {title1}\n"
+            f"  id2 = {id2!r} (task: {task2})\n      title: {title2}"
+            for i, (task1, task2, id1, id2, title1, title2) in enumerate(duplicates, 1)
         )
     )
