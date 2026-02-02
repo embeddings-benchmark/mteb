@@ -29,10 +29,10 @@ LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperfo
 # Keep in sync with pyproject.toml [project.optional-dependencies]
 #
 # Note: The extra name reflects the transformers version requirement, not the model version.
-# For example, llama-nemotron-colembed-vl-3b-v2 uses "nemotron-colembed-vl" because it
-# currently requires transformers==4.49.0, even though it's a "v2" model by name.
+# For example, llama-nemotron-colembed-vl-3b-v2 uses "llama-nemotron-colembed-vl" because it
+# requires transformers==4.49.0, even though it's a "v2" model by name.
 _TRANSFORMERS_CONSTRAINTS: dict[str, str] = {
-    "nemotron-colembed-vl": "==4.49.0",  # llama-nemoretriever-colembed-*-v1, llama-nemotron-colembed-vl-3b-v2
+    "llama-nemotron-colembed-vl": "==4.49.0",  # llama-nemoretriever-colembed-*
     "nemotron-colembed-vl-v2": "==5.0.0rc0",  # nemotron-colembed-vl-4b-v2, nemotron-colembed-vl-8b-v2
 }
 
@@ -45,7 +45,7 @@ class NemotronColEmbedVL(AbsEncoder):
         model_name_or_path: str,
         revision: str,
         trust_remote_code: bool,
-        extra_name: str = "nemotron-colembed-vl",
+        extra_name: str = "llama-nemotron-colembed-vl",
         device_map="cuda",
         torch_dtype=torch.bfloat16,
         attn_implementation="flash_attention_2",
@@ -193,7 +193,7 @@ TRAINING_DATA_v2 = {
 llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     loader=NemotronColEmbedVL,
     loader_kwargs=dict(
-        extra_name="nemotron-colembed-vl",
+        extra_name="llama-nemotron-colembed-vl",
         trust_remote_code=True,
     ),
     name="nvidia/llama-nemoretriever-colembed-1b-v1",
@@ -222,7 +222,7 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
 llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     loader=NemotronColEmbedVL,
     loader_kwargs=dict(
-        extra_name="nemotron-colembed-vl",
+        extra_name="llama-nemotron-colembed-vl",
         trust_remote_code=True,
     ),
     name="nvidia/llama-nemoretriever-colembed-3b-v1",
@@ -251,7 +251,7 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
 llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
     loader=NemotronColEmbedVL,
     loader_kwargs=dict(
-        extra_name="nemotron-colembed-vl",
+        extra_name="llama-nemotron-colembed-vl",
         trust_remote_code=True,
     ),
     name="nvidia/llama-nemotron-colembed-vl-3b-v2",
