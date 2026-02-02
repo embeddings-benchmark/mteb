@@ -46,6 +46,22 @@ class LlamaNemoretrieverColembed(AbsEncoder):
                     f"Run: pip install 'transformers{transformers_version_constraint}'"
                 )
 
+        # Check if required packages are installed
+        requires_package(
+            self,
+            "torchvision",
+            model_name_or_path,
+            "pip install 'mteb[nemotron-colembed-vl-v2]'",
+        )
+        requires_package(
+            self,
+            "flash_attn",
+            model_name_or_path,
+            "pip install 'mteb[nemotron-colembed-vl-v2]'",
+        )
+        import flash_attn  # noqa: F401
+        import torchvision  # noqa: F401
+
         from transformers import AutoModel
 
         self.model = AutoModel.from_pretrained(

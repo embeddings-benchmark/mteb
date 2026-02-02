@@ -37,8 +37,6 @@ class NemotronColEmbedVLV2(AbsEncoder):
                     f"Run: pip install 'transformers{transformers_version_constraint}'"
                 )
 
-        from transformers import AutoModel
-
         # Check if required packages are installed
         requires_package(
             self,
@@ -54,6 +52,8 @@ class NemotronColEmbedVLV2(AbsEncoder):
         )
         import flash_attn  # noqa: F401
         import torchvision  # noqa: F401
+
+        from transformers import AutoModel
 
         self.model = AutoModel.from_pretrained(
             model_name_or_path,
