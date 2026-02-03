@@ -352,9 +352,6 @@ def test_n_embedding_parameters(model_meta: ModelMeta):
     """
     if model_meta.name in _HISTORIC_MODELS:
         assert model_meta.n_embedding_parameters is None
-        pytest.skip(
-            f"Historic model '{model_meta.name}' is allowed to have n_embedding_parameters=None"
-        )
 
     # Fail if new model has n_embedding_parameters=None
     assert model_meta.n_embedding_parameters is not None, (
