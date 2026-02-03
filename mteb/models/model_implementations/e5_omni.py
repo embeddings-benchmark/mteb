@@ -1,0 +1,219 @@
+from __future__ import annotations
+
+import logging
+from typing import TYPE_CHECKING, Any
+
+import torch
+from tqdm.auto import tqdm
+
+from mteb._requires_package import (
+    requires_image_dependencies,
+    requires_package,
+)
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_meta import ModelMeta, ScoringFunction
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+
+logger = logging.getLogger(__name__)
+
+
+class E5OmniWrapper(AbsEncoder):
+    """Wrapper for E5-Omni models."""
+
+    def __init__(
+        self,
+        model_name: str,
+        processor_path: str | None = None,
+        revision: str | None = None,
+        device: str | None = None,
+        torch_dtype: torch.dtype | str | None = torch.bfloat16,
+        **kwargs: Any,
+    ):
+        requires_image_dependencies()
+        requires_package(self, "transformers", model_name, "pip install mteb[e5-omni]")
+        requires_package(self, "qwen_vl_utils", model_name, "pip install mteb[e5-omni]")
+        from transformers import (
+            AutoProcessor,
+            Qwen2_5OmniThinkerForConditionalGeneration,
+        )
+
+        self.device = device or (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
+        )
+
+        if processor_path is None:
+            if "7B" in model_name:
+                processor_path = "Qwen/Qwen2.5-Omni-7B"
+            elif "3B" in model_name:
+                processor_path = "Qwen/Qwen2.5-Omni-3B"
+            else:
+                processor_path = model_name
+
+        self.processor = AutoProcessor.from_pretrained(
+            processor_path,
+            trust_remote_code=True,
+        )
+
+        self.model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained(
+            model_name,
+            revision=revision,
+            torch_dtype=torch_dtype,
+            trust_remote_code=True,
+            **kwargs,
+        ).to(self.device)
+        self.model.eval()
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        all_embeddings = []
+
+        with torch.no_grad():
+            for batch in tqdm(inputs, desc="Encoding"):
+                batch_texts = batch.get("text", [])
+                batch_images = batch.get("image", [])
+
+                if not batch_texts and not batch_images:
+                    raise ValueError("No text or image features found in batch.")
+
+                messages = []
+                max_len = max(len(batch_texts), len(batch_images))
+                for i in range(max_len):
+                    content = []
+                    if batch_texts:
+                        content.append({"type": "text", "text": batch_texts[i]})
+                    if batch_images:
+                        content.append({"type": "image", "image": batch_images[i]})
+                    messages.append([{"role": "user", "content": content}])
+
+                texts = [
+                    self.processor.apply_chat_template(
+                        msg, tokenize=False, add_generation_prompt=False
+                    )
+                    for msg in messages
+                ]
+
+                image_inputs = None
+                video_inputs = None
+                if batch_images:
+                    from qwen_vl_utils import process_vision_info
+
+                    image_inputs, video_inputs = process_vision_info(messages)
+
+                model_inputs = self.processor(
+                    text=texts,
+                    images=image_inputs,
+                    videos=video_inputs,
+                    padding=True,
+                    return_tensors="pt",
+                ).to(self.device)
+
+                outputs = self.model(**model_inputs, output_hidden_states=True)
+
+                # For E5-Omni, we use the last hidden state of the last token
+                # as is common for decoder-only LLM-based embedding models.
+                last_hidden_state = outputs.hidden_states[-1]
+
+                # Find the last non-padding token
+                attention_mask = model_inputs.get("attention_mask")
+                if attention_mask is not None:
+                    # Qwen2.5-Omni uses right padding by default in many setups
+                    # but we should handle it robustly.
+                    sequence_lengths = attention_mask.sum(dim=1) - 1
+                    embeddings = last_hidden_state[
+                        torch.arange(last_hidden_state.size(0)), sequence_lengths
+                    ]
+                else:
+                    embeddings = last_hidden_state[:, -1, :]
+
+                all_embeddings.append(embeddings.cpu().to(torch.float32))
+
+        return torch.cat(all_embeddings, dim=0).numpy()
+
+
+E5_OMNI_CITATION = """@misc{chen2026e5omniexplicitcrossmodalalignment,
+      title={e5-omni: Explicit Cross-modal Alignment for Omni-modal Embeddings}, 
+      author={Haonan Chen and Sicheng Gao and Radu Timofte and Tetsuya Sakai and Zhicheng Dou},
+      year={2026},
+      eprint={2601.03666},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2601.03666}, 
+}"""
+
+E5_OMNI_TRAINING_DATASETS = {
+    "BGE-m3",
+    "MMEB-V1",
+    "MMEB-V2",
+    "PixMo-Docs",
+    "MSR-VTT",
+    "AudioCaps",
+}
+
+e5_omni_3b = ModelMeta(
+    loader=E5OmniWrapper,
+    name="Haon-Chen/e5-omni-3B",
+    languages=["mul"],
+    revision="d2765489f361965142c069c2dc18291220a3819a",
+    release_date="2026-01-07",
+    modalities=[
+        "text",
+        "image",
+    ],  # audio/video encoding is not yet wired despite model capability
+    n_parameters=5_000_000_000,
+    memory_usage_mb=None,
+    max_tokens=512,  # They use 512 in the training, despite the underlying model can handle more
+    embed_dim=2048,
+    license="mit",
+    open_weights=True,
+    framework=["PyTorch", "Transformers"],
+    reference="https://arxiv.org/abs/2601.03666",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    training_datasets=E5_OMNI_TRAINING_DATASETS,
+    public_training_code=None,
+    public_training_data=None,
+    citation=E5_OMNI_CITATION,
+)
+
+e5_omni_7b = ModelMeta(
+    loader=E5OmniWrapper,
+    name="Haon-Chen/e5-omni-7B",
+    languages=["mul"],
+    revision="bbf5f87c0899abf7890bca98c307113f3c813041",
+    release_date="2026-01-07",
+    modalities=[
+        "text",
+        "image",
+    ],  # audio/video encoding is not yet wired despite model capability
+    n_parameters=9_000_000_000,
+    memory_usage_mb=None,
+    max_tokens=512,  # They use 512 in the training, despite the underlying model can handle more
+    embed_dim=3584,
+    license="mit",
+    open_weights=True,
+    framework=["PyTorch", "Transformers"],
+    reference="https://arxiv.org/abs/2601.03666",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    training_datasets=E5_OMNI_TRAINING_DATASETS,
+    public_training_code=None,
+    public_training_data=None,
+    citation=E5_OMNI_CITATION,
+)
