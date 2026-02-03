@@ -158,6 +158,23 @@ def test_fill_missing_parameter():
     assert meta_with_compute.memory_usage_mb is not None
 
 
+def test_n_embedding_parameters_coverage():
+    """
+    Test that tracks models with n_embedding_parameters=None.
+    If any models are missing this field, the test is skipped with a warning message listing the no. of models with None value for n_embedding_parameters.
+    """
+    models_with_none = []
+    for model_meta in mteb.get_model_metas():
+        if model_meta.n_embedding_parameters is None:
+            models_with_none.append(model_meta.name)
+
+    if models_with_none:
+        skip_message = (
+            f"Models missing n_embedding_parameters ({len(models_with_none)}):\n"
+        )
+        pytest.skip(skip_message)
+
+
 def test_model_to_python():
     meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
     assert meta.to_python() == (
