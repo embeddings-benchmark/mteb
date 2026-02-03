@@ -1,7 +1,6 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
 	uv sync --extra image --group dev
-	uv run --no-sync pre-commit install
 
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"

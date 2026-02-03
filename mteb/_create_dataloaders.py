@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 def _create_dataloader_from_texts(
     text: list[str],
     batch_size: int = 32,
-    num_proc: int = 1,
+    num_proc: int | None = None,
     **kwargs: Any,
 ) -> DataLoader[TextInput]:
     """Create a dataloader from a list of text.
@@ -48,7 +48,7 @@ def _create_dataloader_from_texts(
     return DataLoader(
         dataset,
         batch_size=batch_size,
-        num_workers=num_proc if num_proc > 1 else 0,
+        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
     )
 
 
@@ -74,7 +74,7 @@ def _corpus_to_dict(
 def _create_dataloader_for_retrieval_corpus(
     dataset: Dataset,
     batch_size: int = 32,
-    num_proc: int = 1,
+    num_proc: int | None = None,
 ) -> DataLoader[CorpusInput]:
     """Create a dataloader from a corpus.
 
@@ -94,7 +94,7 @@ def _create_dataloader_for_retrieval_corpus(
     return DataLoader(
         new_ds,
         batch_size=batch_size,
-        num_workers=num_proc if num_proc > 1 else 0,
+        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
     )
 
 
@@ -111,7 +111,7 @@ def _combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str
 def _create_text_dataloader_for_queries(
     queries: QueryDatasetType,
     batch_size: int = 32,
-    num_proc: int = 1,
+    num_proc: int | None = None,
 ) -> DataLoader[QueryInput]:
     """Create a dataloader from a list of queries.
 
@@ -131,7 +131,7 @@ def _create_text_dataloader_for_queries(
     return DataLoader(
         queries,
         batch_size=batch_size,
-        num_workers=num_proc if num_proc > 1 else 0,
+        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
     )
 
 
@@ -200,7 +200,7 @@ def _convert_conv_history_to_query(
 def _create_dataloader_for_queries_conversation(
     queries: QueryDatasetType,
     batch_size: int = 32,
-    num_proc: int = 1,
+    num_proc: int | None = None,
 ) -> DataLoader[QueryInput]:
     """Create a dataloader from a list of queries.
 
@@ -220,7 +220,7 @@ def _create_dataloader_for_queries_conversation(
         ),
         collate_fn=_custom_collate_fn,
         batch_size=batch_size,
-        num_workers=num_proc if num_proc > 1 else 0,
+        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
     )
 
 
@@ -265,7 +265,7 @@ def _prepare_image_dataset(
     dataset: Dataset,
     image_column_name: str | None = None,
     transform: Callable[[Any], Any] | None = None,
-    num_proc: int = 1,
+    num_proc: int | None = None,
 ) -> Dataset:
     """Prepare the image dataset by converting images to RGB and applying transformations."""
     if (
@@ -315,7 +315,7 @@ def _create_image_dataloader(
     batch_size: int = 32,
     transform: Callable[[Any], Any] | None = None,
     collate_fn: Callable[[list[dict[str, Any]]], dict[str, Any]] = _custom_collate_fn,
-    num_proc: int = 1,
+    num_proc: int | None = None,
 ) -> DataLoader[ImageInput]:
     """Creates a DataLoader with the image dataset prepared using the explicit transformation.
 
@@ -341,14 +341,14 @@ def _create_image_dataloader(
         batch_size=batch_size,
         collate_fn=collate_fn,
         shuffle=False,
-        num_workers=num_proc if num_proc > 1 else 0,
+        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
     )
 
 
 def _create_text_queries_dataloader(
     dataset: Dataset,
     batch_size: int = 32,
-    num_proc: int = 1,
+    num_proc: int | None = None,
 ) -> DataLoader[QueryInput]:
     if not isinstance(dataset["text"][0], list):
         return _create_text_dataloader_for_queries(
@@ -368,7 +368,7 @@ def _create_queries_dataloader(
     task_metadata: TaskMetadata,
     input_column: str | None = None,
     batch_size: int = 32,
-    num_proc: int = 1,
+    num_proc: int | None = None,
 ) -> DataLoader[QueryInput | ImageInput]:
     """Create a dataloader for queries."""
     queries_type = task_metadata.get_modalities(PromptType.query)
@@ -393,7 +393,7 @@ def _create_document_dataloader(
     task_metadata: TaskMetadata,
     input_column: str | None = None,
     batch_size: int = 32,
-    num_proc: int = 1,
+    num_proc: int | None = None,
 ) -> DataLoader[CorpusInput | ImageInput]:
     """Create a dataloader for documents.
 
@@ -430,7 +430,7 @@ def create_dataloader(
     prompt_type: PromptType | None = None,
     input_column: str | None = None,
     batch_size: int = 32,
-    num_proc: int = 1,
+    num_proc: int | None = None,
     **kwargs: Any,
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a dataset.
@@ -482,5 +482,5 @@ def create_dataloader(
     return DataLoader(
         dataset,
         batch_size=batch_size,
-        num_workers=num_proc if num_proc > 1 else 0,
+        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
     )

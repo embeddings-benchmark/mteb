@@ -116,7 +116,7 @@ class AbsTask(ABC):
             logger.warning(msg)
             warnings.warn(msg)
 
-    def dataset_transform(self, num_proc: int = 1, **kwargs: Any) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """A transform operations applied to the dataset after loading.
 
         This method is useful when the dataset from Huggingface is not in an `mteb` compatible format.
@@ -136,7 +136,7 @@ class AbsTask(ABC):
         *,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluates an MTEB compatible model on the task.
@@ -219,7 +219,7 @@ class AbsTask(ABC):
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(
@@ -324,7 +324,7 @@ class AbsTask(ABC):
             )  # only take the specified test split.
         return dataset_dict
 
-    def load_data(self, num_proc: int = 1, **kwargs: Any) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Loads dataset from HuggingFace hub
 
         This is the main loading function for Task. Do not overwrite this, instead we recommend using `dataset_transform`, which is called after the

@@ -149,8 +149,8 @@ def test_loader_kwargs_persisted_in_metadata():
     assert meta.loader_kwargs["not_existing_param"] == 123
 
 
-def test_compute_missing_parameter():
-    """Test that compute_missing parameter fetches missing metadata from HuggingFace Hub"""
+def test_fill_missing_parameter():
+    """Test that fill_missing parameter fetches missing metadata from HuggingFace Hub"""
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
     meta_with_compute = mteb.get_model_meta(model_name, fill_missing=True)
 
