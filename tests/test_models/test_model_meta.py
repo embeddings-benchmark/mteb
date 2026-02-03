@@ -352,12 +352,11 @@ def test_n_embedding_parameters(model_meta: ModelMeta):
     """
     if model_meta.name in _HISTORIC_MODELS:
         assert model_meta.n_embedding_parameters is None
-
-    # Fail if new model has n_embedding_parameters=None
-    assert model_meta.n_embedding_parameters is not None, (
-        f"New model '{model_meta.name}' must have n_embedding_parameters defined. "
-        f"If this is a historic model, add it to _HISTORIC_MODELS in test_model_meta.py"
-    )
+    else:
+        assert model_meta.n_embedding_parameters is not None, (
+            f"New model '{model_meta.name}' must have n_embedding_parameters defined. "
+            f"If this is a historic model, add it to _HISTORIC_MODELS in test_model_meta.py"
+        )
 
 
 def test_model_to_python():
