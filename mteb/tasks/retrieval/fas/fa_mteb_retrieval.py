@@ -1,16 +1,12 @@
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-fa_mteb = """@misc{zinvandi2025famtebmassivetextembedding,
-      title={FaMTEB: Massive Text Embedding Benchmark in Persian Language}, 
-      author={Erfan Zinvandi and Morteza Alikhani and Mehran Sarmadi and Zahra Pourbahman and Sepehr Arvin and Reza Kazemi and Arash Amini},
-      year={2025},
-      eprint={2502.11571},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2502.11571}, 
-}
-"""
+fa_mteb = """@article{zinvandi2025famteb,
+  author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
+  journal = {arXiv preprint arXiv:2502.11571},
+  title = {Famteb: Massive text embedding benchmark in persian language},
+  year = {2025},
+}"""
 
 
 class SynPerQARetrieval(AbsTaskRetrieval):
