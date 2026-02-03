@@ -33,7 +33,7 @@ class HALClusteringS2S(AbsTaskClusteringLegacy):
         task_subtypes=["Thematic clustering"],
         license="apache-2.0",
         annotations_creators="human-annotated",
-        dialect=None,
+        dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
 @misc{ciancone2024extending,

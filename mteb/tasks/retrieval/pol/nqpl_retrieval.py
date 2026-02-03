@@ -53,11 +53,11 @@ class NQPLHardNegatives(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="ndcg_at_10",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
+        date=("2019-01-01", "2019-12-31"),  # original publication year
+        domains=["Written", "Encyclopaedic"],
+        task_subtypes=["Question answering"],
+        license="cc-by-nc-sa-3.0",  # original license
+        annotations_creators="human-annotated",  # original annotation method
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
