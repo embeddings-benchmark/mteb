@@ -7,6 +7,7 @@ from packaging.specifiers import SpecifierSet
 from torch.utils.data import DataLoader
 from transformers import __version__ as transformers_version
 
+from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 
@@ -24,27 +25,51 @@ LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperfo
       url={https://arxiv.org/abs/2507.05513}
 }"""
 
+# Transformers version constraints per extra.
+# Keep in sync with pyproject.toml [project.optional-dependencies]
+#
+# Note: The extra name reflects the transformers version requirement, not the model version.
+# For example, llama-nemotron-colembed-vl-3b-v2 uses "llama-nemotron-colembed-vl" because it
+# requires transformers==4.49.0, even though it's a "v2" model by name.
+_TRANSFORMERS_CONSTRAINTS: dict[str, str] = {
+    "llama-nemotron-colembed-vl": "==4.49.0",  # llama-nemoretriever-colembed-*
+    "nemotron-colembed-vl-v2": "==5.0.0rc0",  # nemotron-colembed-vl-4b-v2, nemotron-colembed-vl-8b-v2
+}
 
-class LlamaNemoretrieverColembed(AbsEncoder):
+
+class NemotronColEmbedVL(AbsEncoder):
+    """Encoder for the NemotronColEmbedVL family of models."""
+
     def __init__(
         self,
         model_name_or_path: str,
         revision: str,
         trust_remote_code: bool,
-        transformers_version_constraint: str | None = None,
+        extra_name: str = "llama-nemotron-colembed-vl",
         device_map="cuda",
         torch_dtype=torch.bfloat16,
         attn_implementation="flash_attention_2",
         **kwargs,
     ):
-        if transformers_version_constraint is not None:
-            spec = SpecifierSet(transformers_version_constraint)
-            if transformers_version not in spec:
-                raise RuntimeError(
-                    f"Model `{model_name_or_path}` requires transformers{transformers_version_constraint}, "
-                    f"but {transformers_version} is installed. "
-                    f"Run: pip install 'transformers{transformers_version_constraint}'"
-                )
+        install_hint = f"pip install 'mteb[{extra_name}]'"
+
+        # Check transformers version
+        constraint = _TRANSFORMERS_CONSTRAINTS.get(extra_name)
+        if constraint is None:
+            raise ValueError(
+                f"Unknown extra_name '{extra_name}'. "
+                f"Must be one of: {list(_TRANSFORMERS_CONSTRAINTS.keys())}"
+            )
+        if transformers_version not in SpecifierSet(constraint):
+            raise RuntimeError(
+                f"Model `{model_name_or_path}` requires transformers{constraint}, "
+                f"but {transformers_version} is installed. "
+                f"Run: {install_hint}"
+            )
+
+        # Check required packages
+        for package in ("torchvision", "accelerate", "flash_attn"):
+            requires_package(self, package, model_name_or_path, install_hint)
 
         from transformers import AutoModel
 
@@ -166,10 +191,10 @@ TRAINING_DATA_v2 = {
 }
 
 llama_nemoretriever_colembed_1b_v1 = ModelMeta(
-    loader=LlamaNemoretrieverColembed,
+    loader=NemotronColEmbedVL,
     loader_kwargs=dict(
+        extra_name="llama-nemotron-colembed-vl",
         trust_remote_code=True,
-        transformers_version_constraint="==4.49.0",
     ),
     name="nvidia/llama-nemoretriever-colembed-1b-v1",
     model_type=["late-interaction"],
@@ -195,10 +220,10 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
 )
 
 llama_nemoretriever_colembed_3b_v1 = ModelMeta(
-    loader=LlamaNemoretrieverColembed,
+    loader=NemotronColEmbedVL,
     loader_kwargs=dict(
+        extra_name="llama-nemotron-colembed-vl",
         trust_remote_code=True,
-        transformers_version_constraint="==4.49.0",
     ),
     name="nvidia/llama-nemoretriever-colembed-3b-v1",
     model_type=["late-interaction"],
@@ -224,10 +249,10 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
 )
 
 llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
-    loader=LlamaNemoretrieverColembed,
+    loader=NemotronColEmbedVL,
     loader_kwargs=dict(
+        extra_name="llama-nemotron-colembed-vl",
         trust_remote_code=True,
-        transformers_version_constraint="==4.49.0",
     ),
     name="nvidia/llama-nemotron-colembed-vl-3b-v2",
     model_type=["late-interaction"],
@@ -251,11 +276,12 @@ llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
     citation=LLAMA_NEMORETRIEVER_CITATION,
 )
 
+
 nemotron_colembed_vl_4b_v2 = ModelMeta(
-    loader=LlamaNemoretrieverColembed,
+    loader=NemotronColEmbedVL,
     loader_kwargs=dict(
+        extra_name="nemotron-colembed-vl-v2",
         trust_remote_code=True,
-        transformers_version_constraint="==5.0.0rc0",
     ),
     name="nvidia/nemotron-colembed-vl-4b-v2",
     revision="823b1625c15fe3da73fa094205e538a7a2301a2a",
@@ -280,10 +306,10 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
 
 
 nemotron_colembed_vl_8b_v2 = ModelMeta(
-    loader=LlamaNemoretrieverColembed,
+    loader=NemotronColEmbedVL,
     loader_kwargs=dict(
+        extra_name="nemotron-colembed-vl-v2",
         trust_remote_code=True,
-        transformers_version_constraint="==5.0.0rc0",
     ),
     name="nvidia/nemotron-colembed-vl-8b-v2",
     revision="6cbe43579dda6237768fc373768ad372cc5cdfec",
