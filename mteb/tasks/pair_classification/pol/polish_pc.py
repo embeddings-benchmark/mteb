@@ -84,7 +84,6 @@ class PpcPC(AbsTaskPairClassification):
             "Web",
             "Written",
             "Spoken",
-            ""
             # likely:
             "Social",
             "News",
