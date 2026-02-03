@@ -838,6 +838,7 @@ multi_qa_mpnet_base_dot_v1 = ModelMeta(
     release_date="2021-08-23",
     languages=["eng-Latn"],
     n_parameters=109486978,
+    n_embedding_parameters=23444736,
     memory_usage_mb=418.0,
     max_tokens=512,
     embed_dim=768,
