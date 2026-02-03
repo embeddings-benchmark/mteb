@@ -26,6 +26,7 @@ class OpsColQwen3Wrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         attn_implementation: str | None = None,
+        trust_remote_code: bool = True,
         **kwargs,
     ):
         requires_image_dependencies()
@@ -42,15 +43,15 @@ class OpsColQwen3Wrapper(AbsEncoder):
             model_name,
             device_map=self.device,
             attn_implementation=attn_implementation,
-            trust_remote_code=True,
             revision=revision,
+            trust_remote_code=trust_remote_code,
             **kwargs,
         )
         self.mdl.eval()
 
         self.processor = AutoProcessor.from_pretrained(
             model_name,
-            trust_remote_code=True,
+            trust_remote_code=trust_remote_code,
         )
 
     def encode(
