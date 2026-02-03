@@ -6,7 +6,8 @@ This section is an overview of releases for more information check out the autog
 
 ### Added vLLM support
 
-While you can read more about it [here](./advanced_usage/)
+Added vLLM support. While it is currently not the reference implementation for any models it allows you to run comparisons on performance and throughput
+on a single model. This can inform whether it is worth switching your local setup over to vLLM. While you can read more about it [here](./advanced_usage/vllm_wrapper.md)
 
 ## New in v2.6
 
@@ -139,46 +140,6 @@ MTEB v2.1 introduces a new benchmark for dutch `MTEB(nld, v1)` ([#3464](https://
 
 ## New in v2.0
 This section goes through new features added in v2. Below we give an overview of changes following by detailed examples.
-
-### Overview of changes
-
-- [What's New](#whats-new)
-  - [New in v2.7](#new-in-v27)
-    - [Added vLLM support](#added-vllm-support)
-  - [New in v2.6](#new-in-v26)
-    - [Added leaderboard CLI command](#added-leaderboard-cli-command)
-    - [Improved typing throughout](#improved-typing-throughout)
-  - [New in v2.5](#new-in-v25)
-    - [Work with leaderboard tables locally](#work-with-leaderboard-tables-locally)
-  - [New in v2.4](#new-in-v24)
-    - [Added utilities for autogenerating `ModelMeta`](#added-utilities-for-autogenerating-modelmeta)
-  - [New in v2.3](#new-in-v23)
-    - [Support for custom search backends](#support-for-custom-search-backends)
-  - [New in v2.2](#new-in-v22)
-    - [Support for Assymetric embeddings in STS and `PairClassification`](#support-for-assymetric-embeddings-in-sts-and-pairclassification)
-    - [New Benchmark Vidore v3](#new-benchmark-vidore-v3)
-    - [Added support for python 3.14](#added-support-for-python-314)
-  - [New in v2.1](#new-in-v21)
-    - [New benchmark for Dutch](#new-benchmark-for-dutch)
-  - [New in v2.0](#new-in-v20)
-    - [Overview of changes](#overview-of-changes)
-      - [Easier evaluation](#easier-evaluation)
-      - [Better local and online caching](#better-local-and-online-caching)
-      - [Multimodal Input format](#multimodal-input-format)
-      - [Better support for CrossEncoders](#better-support-for-crossencoders)
-      - [Unified Retrieval, Reranking and instruction variants](#unified-retrieval-reranking-and-instruction-variants)
-      - [Search Interface](#search-interface)
-      - [New Documentation](#new-documentation)
-      - [Better support for loading and comparing results](#better-support-for-loading-and-comparing-results)
-      - [Descriptive Statistics](#descriptive-statistics)
-      - [Saving Predictions](#saving-predictions)
-      - [Support datasets v4](#support-datasets-v4)
-    - [Upgrading from v1](#upgrading-from-v1)
-      - [Replacing `mteb.MTEB`](#replacing-mtebmteb)
-      - [Replacing `mteb.load_results()`](#replacing-mtebload_results)
-      - [Converting model to new format](#converting-model-to-new-format)
-      - [Reuploading datasets](#reuploading-datasets)
-      - [Converting Reranking datasets to new format](#converting-reranking-datasets-to-new-format)
 
 What are the reasons for the changes? Generally the many inconsistencies in the library made it hard to maintain without introducing breaking changes and we do think that there are multiple important areas to expand in, e.g. [adding new benchmark for image embeddings][@mieb_2025], support new model types in general making the library more accessible.
 We have already been able to add many new feature in v2.0, but hope that this new version allow us to keep doing so without breaking backward compatibility. See [upgrading from v1](#upgrading-from-v1) for specific deprecations and how to fix them.
