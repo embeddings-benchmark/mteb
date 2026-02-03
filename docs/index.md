@@ -1,7 +1,7 @@
 # MTEB Documentation
 
 !!! info
-    We recently released `mteb` version 2.0.0, to see what is new check of [what is new](./whats_new.md#new-in-v20) and see [how to upgrade](./whats_new.md#upgrading-from-v1) your existing code.
+    We recently released `mteb` version 2.0.0, to see what is new check of [what is new](./whats_new/2.0.md) and see [how to upgrade](./whats_new/2.0.md#upgrading-from-v1) your existing code.
 
 Welcome documentation of MTEB. `mteb` a package for benchmark and evaluating the quality of embeddings.
 
