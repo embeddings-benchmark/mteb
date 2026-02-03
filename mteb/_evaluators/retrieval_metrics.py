@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 import logging
 from collections import defaultdict
-from collections.abc import Mapping
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pandas as pd
@@ -9,7 +10,14 @@ import pytrec_eval
 from packaging.version import Version
 from sklearn.metrics import auc
 
-from mteb.types import RelevantDocumentsType, RetrievalEvaluationResult
+from mteb.types import RetrievalEvaluationResult
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+    from numpy.typing import NDArray
+
+    from mteb.types import RelevantDocumentsType
 
 logger = logging.getLogger(__name__)
 
@@ -267,10 +275,10 @@ def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
 
 
 def nauc(
-    conf_scores: np.ndarray,
-    metrics: np.ndarray,
-    abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
-) -> float | None:
+    conf_scores: NDArray[np.floating],
+    metrics: NDArray[np.floating],
+    abstention_rates: NDArray[np.floating] = np.linspace(0, 1, 11)[:-1],
+) -> float:
     """Computes normalized Area Under the Curve (nAUC) on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
 
     1. Computes the raw abstention curve, i.e., the average evaluation metric at different abstention rates determined by the confidence scores
@@ -289,10 +297,10 @@ def nauc(
     """
 
     def abstention_curve(
-        conf_scores: np.ndarray,
-        metrics: np.ndarray,
-        abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
-    ) -> np.ndarray:
+        conf_scores: NDArray[np.floating],
+        metrics: NDArray[np.floating],
+        abstention_rates: NDArray[np.floating] = np.linspace(0, 1, 11)[:-1],
+    ) -> NDArray[np.floating]:
         """Computes the raw abstention curve for a given set of evaluated instances and corresponding confidence scores
 
         Args:
@@ -325,7 +333,7 @@ def nauc(
     flat_auc = or_curve[0] * (abstention_rates[-1] - abstention_rates[0])
 
     if or_auc == flat_auc:
-        abst_nauc = None
+        abst_nauc = np.nan
     else:
         abst_nauc = (abst_auc - flat_auc) / (or_auc - flat_auc)
 

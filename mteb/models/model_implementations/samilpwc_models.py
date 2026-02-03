@@ -51,6 +51,7 @@ samilpwc_expr = ModelMeta(
     revision="33358978be40f36491045f9c2a359d38c3f50047",
     release_date="2025-08-12",
     n_parameters=560_000_000,
+    n_embedding_parameters=256_002_048,
     memory_usage_mb=2136,
     embed_dim=1024,
     license="apache-2.0",

@@ -4,20 +4,21 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import (
     requires_image_dependencies,
     requires_package,
 )
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
 
 if TYPE_CHECKING:
     from PIL import Image
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -219,6 +220,7 @@ colpali_v1_1 = ModelMeta(
     release_date="2024-08-21",
     modalities=["image", "text"],
     n_parameters=2_920_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=4700,
     max_tokens=16384,
     embed_dim=128,
@@ -246,6 +248,7 @@ colpali_v1_2 = ModelMeta(
     release_date="2024-08-26",
     modalities=["image", "text"],
     n_parameters=2_920_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=4700,
     max_tokens=16384,
     embed_dim=128,
@@ -273,6 +276,7 @@ colpali_v1_3 = ModelMeta(
     release_date="2024-11-01",
     modalities=["image", "text"],
     n_parameters=2_920_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=4700,
     max_tokens=16384,
     embed_dim=128,

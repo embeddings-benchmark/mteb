@@ -1,15 +1,15 @@
+from __future__ import annotations
+
 import base64
 import io
 import os
 import time
-from typing import Any, Literal, get_args
+from typing import TYPE_CHECKING, Any, Literal, get_args
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_image_dependencies, requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.cohere_models import (
@@ -18,7 +18,12 @@ from mteb.models.model_implementations.cohere_models import (
     retry_with_rate_limit,
 )
 from mteb.models.model_meta import ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 
 def _post_process_embeddings(
@@ -386,6 +391,7 @@ cohere_mult_3 = ModelMeta(
     revision="1",
     release_date="2024-10-24",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=1024,
@@ -411,6 +417,7 @@ cohere_eng_3 = ModelMeta(
     revision="1",
     release_date="2024-10-24",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=1024,
@@ -436,6 +443,7 @@ cohere_embed_v4_multimodal = ModelMeta(
     revision="1",
     release_date="2024-12-01",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=128000,
     embed_dim=1536,
@@ -461,6 +469,7 @@ cohere_embed_v4_multimodal_binary = ModelMeta(
     revision="1",
     release_date="2024-12-01",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=128000,
     embed_dim=1536,
@@ -487,6 +496,7 @@ cohere_embed_v4_multimodal_int8 = ModelMeta(
     revision="1",
     release_date="2024-12-01",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=128000,
     embed_dim=1536,

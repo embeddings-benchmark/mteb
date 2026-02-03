@@ -86,7 +86,7 @@ Talat, Zeerak},
 """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         # for each language perform some transforms
         for lang in self.dataset.keys():
             _dataset = self.dataset[lang]

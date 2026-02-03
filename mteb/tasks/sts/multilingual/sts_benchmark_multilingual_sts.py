@@ -56,6 +56,6 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS):
     min_score = 0
     max_score = 5
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         for lang, subset in self.dataset.items():
             self.dataset[lang] = subset.rename_column("similarity_score", "score")

@@ -1,3 +1,4 @@
+import warnings
 from collections import defaultdict
 
 import datasets
@@ -82,9 +83,15 @@ def load_bright_data(
     return corpus, queries, relevant_docs
 
 
-def load_data(self) -> None:
+def load_data(self, num_proc: int | None = None, **kwargs) -> None:
     if self.data_loaded:
         return
+
+    warnings.warn(
+        "This task contains wrong prompts in the metadata. "
+        "Please use BRIGHT(v1.1) benchmark instead.",
+        category=DeprecationWarning,
+    )
 
     self.corpus, self.queries, self.relevant_docs = self.load_bright_data(
         path=self.metadata.dataset["path"],
@@ -104,7 +111,7 @@ class BrightRetrieval(AbsTaskRetrieval):
             "revision": "a75a0eb483f6a5233a6efc2d63d71540a4443dfb",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
-        description="Bright retrieval dataset.",
+        description="BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval",
         type="Retrieval",
         category="t2t",
         eval_splits=["standard"],
@@ -129,6 +136,7 @@ class BrightRetrieval(AbsTaskRetrieval):
   year = {2024},
 }
 """,
+        superseded_by="BrightBiologyRetrieval",
     )
     load_bright_data = load_bright_data
     load_data = load_data

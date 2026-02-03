@@ -1,20 +1,30 @@
+from __future__ import annotations
+
 import json
 import logging
 import re
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
 
-from .cohere_models import model_prompts as cohere_model_prompts
-from .cohere_models import supported_languages as cohere_supported_languages
+from .cohere_models import (
+    model_prompts as cohere_model_prompts,
+)
+from .cohere_models import (
+    supported_languages as cohere_supported_languages,
+)
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +32,7 @@ logger = logging.getLogger(__name__)
 class BedrockModel(AbsEncoder):
     def __init__(
         self,
+        model_name: str,
         model_id: str,
         provider: str,
         max_tokens: int,
@@ -75,7 +86,7 @@ class BedrockModel(AbsEncoder):
 
     def _encode_amazon(
         self, sentences: list[str], show_progress_bar: bool = False
-    ) -> np.ndarray:
+    ) -> Array:
         from botocore.exceptions import ValidationError
 
         all_embeddings = []
@@ -114,7 +125,7 @@ class BedrockModel(AbsEncoder):
         sentences: list[str],
         cohere_task_type: str,
         show_progress_bar: bool = False,
-    ) -> np.ndarray:
+    ) -> Array:
         batches = [
             sentences[i : i + self._max_batch_size]
             for i in range(0, len(sentences), self._max_batch_size)
@@ -138,7 +149,7 @@ class BedrockModel(AbsEncoder):
 
         return np.array(all_embeddings)
 
-    def _embed_amazon(self, sentence: str) -> np.ndarray:
+    def _embed_amazon(self, sentence: str) -> Array:
         response = self._client.invoke_model(
             body=json.dumps({"inputText": sentence}),
             modelId=self._model_id,
@@ -147,7 +158,7 @@ class BedrockModel(AbsEncoder):
         )
         return self._to_numpy(response)
 
-    def _to_numpy(self, embedding_response) -> np.ndarray:
+    def _to_numpy(self, embedding_response) -> Array:
         response = json.loads(embedding_response.get("body").read())
         key = "embedding" if self._provider == "amazon" else "embeddings"
         return np.array(response[key])
@@ -169,6 +180,7 @@ amazon_titan_embed_text_v1 = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
@@ -196,6 +208,7 @@ amazon_titan_embed_text_v2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
@@ -225,6 +238,7 @@ cohere_embed_english_v3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
@@ -253,6 +267,7 @@ cohere_embed_multilingual_v3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed

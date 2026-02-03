@@ -1,13 +1,18 @@
-from typing import Any, Literal
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any, Literal
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 
 class DINOModel(AbsEncoder):
@@ -112,6 +117,7 @@ dinov2_small = ModelMeta(
     release_date="2023-07-18",
     modalities=["image"],
     n_parameters=22_100_000,
+    n_embedding_parameters=None,
     memory_usage_mb=84,
     max_tokens=None,
     embed_dim=384,
@@ -143,6 +149,7 @@ dinov2_base = ModelMeta(
     release_date="2023-07-18",
     modalities=["image"],
     n_parameters=86_600_000,
+    n_embedding_parameters=None,
     memory_usage_mb=330,
     max_tokens=None,
     embed_dim=768,
@@ -174,6 +181,7 @@ dinov2_large = ModelMeta(
     release_date="2023-07-18",
     modalities=["image"],
     n_parameters=304_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=1161,
     max_tokens=None,
     embed_dim=1024,
@@ -205,6 +213,7 @@ dinov2_giant = ModelMeta(
     release_date="2023-07-18",
     modalities=["image"],
     n_parameters=1_140_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=4335,
     max_tokens=None,
     embed_dim=1536,
@@ -240,6 +249,7 @@ webssl_dino300m_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=304_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=1158,
     max_tokens=None,
     embed_dim=1024,
@@ -271,6 +281,7 @@ webssl_dino1b_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=1_130_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=4329,
     max_tokens=None,
     embed_dim=1536,
@@ -302,6 +313,7 @@ webssl_dino2b_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=2_080_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=7951,
     max_tokens=None,
     embed_dim=2688,
@@ -333,6 +345,7 @@ webssl_dino3b_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=3_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=11247,
     max_tokens=None,
     embed_dim=3072,
@@ -364,6 +377,7 @@ webssl_dino5b_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=5_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=18838,
     max_tokens=None,
     embed_dim=3584,
@@ -395,6 +409,7 @@ webssl_dino7b_full8b_224 = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=7_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=24605,
     max_tokens=None,
     embed_dim=4096,
@@ -426,6 +441,7 @@ webssl_dino7b_full8b_378 = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=7_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=24613,
     max_tokens=None,
     embed_dim=4096,
@@ -457,6 +473,7 @@ webssl_dino7b_full8b_518 = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=7_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=24623,
     max_tokens=None,
     embed_dim=4096,
@@ -489,6 +506,7 @@ webssl_dino2b_light2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=2_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=7951,
     max_tokens=None,
     embed_dim=2688,
@@ -520,6 +538,7 @@ webssl_dino2b_heavy2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=2_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=7951,
     max_tokens=None,
     embed_dim=2688,
@@ -551,6 +570,7 @@ webssl_dino3b_light2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=3_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=11247,
     max_tokens=None,
     embed_dim=3072,
@@ -582,6 +602,7 @@ webssl_dino3b_heavy2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=3_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=11247,
     max_tokens=None,
     embed_dim=3072,
@@ -613,6 +634,7 @@ webssl_mae300m_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=304_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=1161,
     max_tokens=None,
     embed_dim=1024,
@@ -644,6 +666,7 @@ webssl_mae700m_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=700_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=2412,
     max_tokens=None,
     embed_dim=1280,
@@ -675,6 +698,7 @@ webssl_mae1b_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=1_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=4337,
     max_tokens=None,
     embed_dim=1536,

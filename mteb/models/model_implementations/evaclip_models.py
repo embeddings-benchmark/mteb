@@ -1,15 +1,20 @@
+from __future__ import annotations
+
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_image_dependencies
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 EVA_CLIP_CITATION = """@article{EVA-CLIP,
       title={EVA-CLIP: Improved Training Techniques for CLIP at Scale},
@@ -144,6 +149,7 @@ EVA02_CLIP_B_16 = ModelMeta(
     release_date="2023-04-26",
     modalities=["image", "text"],
     n_parameters=149_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=568,
     max_tokens=77,
     embed_dim=512,
@@ -168,6 +174,7 @@ EVA02_CLIP_L_14 = ModelMeta(
     release_date="2023-04-26",
     modalities=["image", "text"],
     n_parameters=428_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=1633,
     max_tokens=77,
     embed_dim=768,
@@ -192,6 +199,7 @@ EVA02_CLIP_bigE_14 = ModelMeta(
     release_date="2023-04-26",
     modalities=["image", "text"],
     n_parameters=4_700_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=17929,
     max_tokens=77,
     embed_dim=1024,
@@ -217,6 +225,7 @@ EVA02_CLIP_bigE_14_plus = ModelMeta(
     release_date="2023-04-26",
     modalities=["image", "text"],
     n_parameters=5_000_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=19073,
     max_tokens=77,
     embed_dim=1024,
