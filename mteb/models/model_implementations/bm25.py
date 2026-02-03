@@ -1,18 +1,22 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING
 
 from mteb._create_dataloaders import _create_text_queries_dataloader
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import SearchProtocol
-from mteb.types import (
-    CorpusDatasetType,
-    InstructionDatasetType,
-    QueryDatasetType,
-    RetrievalOutputType,
-    TopRankedDocumentsType,
-)
+
+if TYPE_CHECKING:
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import SearchProtocol
+    from mteb.types import (
+        CorpusDatasetType,
+        EncodeKwargs,
+        QueryDatasetType,
+        RetrievalOutputType,
+        TopRankedDocumentsType,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +53,8 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
             task_metadata: TaskMetadata,
             hf_split: str,
             hf_subset: str,
-            encode_kwargs: dict[str, Any],
+            encode_kwargs: EncodeKwargs,
+            num_proc: int | None = None,
         ) -> None:
             logger.info("Encoding Corpus...")
             corpus_texts = [
@@ -74,9 +79,9 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
             hf_split: str,
             hf_subset: str,
             top_k: int,
-            encode_kwargs: dict[str, Any],
-            instructions: InstructionDatasetType | None = None,
+            encode_kwargs: EncodeKwargs,
             top_ranked: TopRankedDocumentsType | None = None,
+            num_proc: int | None = None,
         ) -> RetrievalOutputType:
             logger.info("Encoding Queries...")
             query_ids = list(queries["id"])
@@ -98,13 +103,17 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
                 query_results = queries_results[qi]
                 scores = queries_scores[qi]
                 doc_id_to_score = {}
+                query_documents = (
+                    top_ranked[qid] if top_ranked and qid in top_ranked else None
+                )
 
                 # Iterate over results
-                for ri in range(len(query_results)):
-                    doc_idx = query_results[ri]
-                    score = scores[ri]
+                for doc_idx, score in zip(query_results, scores):
                     doc_id = self.corpus_idx_to_id[doc_idx]
 
+                    # handle reranking with a filtered set of documents
+                    if query_documents is not None and doc_id not in query_documents:
+                        continue
                     doc_id_to_score[doc_id] = float(score)
 
                 results[qid] = doc_id_to_score
@@ -120,13 +129,14 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
 
 bm25_s = ModelMeta(
     loader=bm25_loader,
-    name="bm25s",
+    name="baseline/bm25s",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="0_1_10",
     release_date="2024-07-10",  # release of version 0.1.10
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     embed_dim=None,
     license=None,

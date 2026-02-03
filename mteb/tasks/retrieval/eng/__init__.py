@@ -14,10 +14,33 @@ from .birco_whats_that_book_reranking import BIRCOWhatsThatBookReranking
 from .blink_it2i_retrieval import BLINKIT2IRetrieval
 from .blink_it2t_retrieval import BLINKIT2TRetrieval
 from .bright_retrieval import BrightLongRetrieval, BrightRetrieval
+from .bright_v1_1_retrieval import (
+    BrightAopsRetrieval,
+    BrightBiologyLongRetrieval,
+    BrightBiologyRetrieval,
+    BrightEarthScienceLongRetrieval,
+    BrightEarthScienceRetrieval,
+    BrightEconomicsLongRetrieval,
+    BrightEconomicsRetrieval,
+    BrightLeetcodeRetrieval,
+    BrightPonyLongRetrieval,
+    BrightPonyRetrieval,
+    BrightPsychologyLongRetrieval,
+    BrightPsychologyRetrieval,
+    BrightRoboticsLongRetrieval,
+    BrightRoboticsRetrieval,
+    BrightStackoverflowLongRetrieval,
+    BrightStackoverflowRetrieval,
+    BrightSustainableLivingLongRetrieval,
+    BrightSustainableLivingRetrieval,
+    BrightTheoremQAQuestionsRetrieval,
+    BrightTheoremQATheoremsRetrieval,
+)
 from .built_bench_retrieval import BuiltBenchRetrieval
 from .chat_doctor_retrieval import ChatDoctorRetrieval
 from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval
 from .chem_nq_retrieval import ChemNQRetrieval
+from .chemrxiv import ChemRxivRetrieval
 from .cirr_it2i_retrieval import CIRRIT2IRetrieval
 from .climate_fever_retrieval import (
     ClimateFEVER,
@@ -235,8 +258,28 @@ __all__ = [
     "BarExamQARetrieval",
     "BillSumCARetrieval",
     "BillSumUSRetrieval",
+    "BrightAopsRetrieval",
+    "BrightBiologyLongRetrieval",
+    "BrightBiologyRetrieval",
+    "BrightEarthScienceLongRetrieval",
+    "BrightEarthScienceRetrieval",
+    "BrightEconomicsLongRetrieval",
+    "BrightEconomicsRetrieval",
+    "BrightLeetcodeRetrieval",
     "BrightLongRetrieval",
+    "BrightPonyLongRetrieval",
+    "BrightPonyRetrieval",
+    "BrightPsychologyLongRetrieval",
+    "BrightPsychologyRetrieval",
     "BrightRetrieval",
+    "BrightRoboticsLongRetrieval",
+    "BrightRoboticsRetrieval",
+    "BrightStackoverflowLongRetrieval",
+    "BrightStackoverflowRetrieval",
+    "BrightSustainableLivingLongRetrieval",
+    "BrightSustainableLivingRetrieval",
+    "BrightTheoremQAQuestionsRetrieval",
+    "BrightTheoremQATheoremsRetrieval",
     "BuiltBenchRetrieval",
     "CIRRIT2IRetrieval",
     "CQADupstackAndroidRetrieval",
@@ -254,6 +297,7 @@ __all__ = [
     "ChatDoctorRetrieval",
     "ChemHotpotQARetrieval",
     "ChemNQRetrieval",
+    "ChemRxivRetrieval",
     "ClimateFEVER",
     "ClimateFEVERHardNegatives",
     "ClimateFEVERHardNegativesV2",

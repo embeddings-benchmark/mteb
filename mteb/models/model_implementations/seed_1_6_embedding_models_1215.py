@@ -15,15 +15,18 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.bge_models import bge_chinese_training_data
 from mteb.models.model_implementations.nvidia_models import nvidia_training_datasets
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from PIL import Image
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
 
 
 logger = logging.getLogger(__name__)
@@ -613,6 +616,7 @@ seed_embedding = ModelMeta(
     embed_dim=2048,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://console.volcengine.com/ark/region:ark+cn-beijing/model/detail?Id=doubao-embedding-vision",

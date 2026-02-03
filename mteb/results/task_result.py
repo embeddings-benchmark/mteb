@@ -4,33 +4,39 @@ import json
 import logging
 import warnings
 from collections import defaultdict
-from collections.abc import Callable, Iterable, Mapping
 from functools import cached_property
 from importlib.metadata import version
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 from huggingface_hub import EvalResult
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
-from typing_extensions import Self
 
 from mteb import TaskMetadata
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.abstask import AbsTask
-from mteb.abstasks.task_metadata import TaskDomain
 from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
 from mteb.types import (
-    HFSubset,
-    ISOLanguage,
-    ISOLanguageScript,
-    Score,
     ScoresDict,
     SplitName,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable, Mapping
+    from pathlib import Path
+
+    from typing_extensions import Self
+
+    from mteb.abstasks.task_metadata import TaskDomain
+    from mteb.types import (
+        HFSubset,
+        ISOLanguage,
+        ISOLanguageScript,
+        Score,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -331,16 +337,16 @@ class TaskResult(BaseModel):
             The loaded TaskResult object.
         """
         with path.open("r", encoding="utf-8") as f:
-            data = json.load(f)
+            json_str = f.read()
 
         if not load_historic_data:
             try:
-                return cls.model_validate(data)
+                return cls.model_validate_json(json_str)
             except Exception as e:
                 raise ValueError(
                     f"Error loading TaskResult from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
                 )
-
+        data = json.loads(json_str)
         pre_1_11_load = (
             (
                 "mteb_version" in data
@@ -351,7 +357,7 @@ class TaskResult(BaseModel):
         )  # assume it is before 1.11.0 if the version is not present
 
         try:
-            obj: TaskResult = cls.model_validate(data)
+            obj: TaskResult = cls.model_validate_json(json_str)
         except Exception as e:
             if not pre_1_11_load:
                 raise e
@@ -610,7 +616,10 @@ class TaskResult(BaseModel):
         new_res = {**self.to_dict(), "scores": new_scores}
         return TaskResult.from_validated(**new_res)
 
-    def validate_and_filter_scores(self, task: AbsTask | None = None) -> TaskResult:
+    def validate_and_filter_scores(
+        self,
+        task: AbsTask | None = None,
+    ) -> TaskResult:
         """Validate and filter the scores against the task metadata.
 
         This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
@@ -638,16 +647,26 @@ class TaskResult(BaseModel):
             if split not in splits:
                 continue
             seen_subsets = set()
-            # Use list comprehension for better performance
-            new_scores[split] = [
-                _scores
-                for _scores in self.scores[split]
-                if _scores["hf_subset"] in hf_subsets
-            ]
+            if task.is_aggregate:
+                # aggregate tasks only have the default subset, but in metadata can be multiple
+                new_scores[split] = [
+                    _scores
+                    for _scores in self.scores[split]
+                    if _scores["hf_subset"] == "default"
+                ]
+                seen_subsets = {"default"}
+            else:
+                new_scores[split] = [
+                    _scores
+                    for _scores in self.scores[split]
+                    if _scores["hf_subset"] in hf_subsets
+                ]
             for _scores in new_scores[split]:
                 seen_subsets.add(_scores["hf_subset"])
 
-            if seen_subsets != hf_subsets:
+            if seen_subsets != hf_subsets and not (
+                task.is_aggregate and "default" in seen_subsets
+            ):
                 missing_subsets = hf_subsets - seen_subsets
                 if len(missing_subsets) > 2:
                     subset1, subset2 = list(missing_subsets)[:2]
@@ -658,11 +677,33 @@ class TaskResult(BaseModel):
                 msg = f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
                 logger.warning(msg)
                 warnings.warn(msg)
+                for missing_subset in missing_subsets:
+                    new_scores[split].append(
+                        {
+                            "hf_subset": missing_subset,
+                            "main_score": np.nan,
+                            "languages": task.metadata.hf_subsets_to_langscripts.get(
+                                missing_subset, []
+                            ),
+                        }
+                    )
             seen_splits.add(split)
         if seen_splits != set(splits):
             msg = f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
             logger.warning(msg)
             warnings.warn(msg)
+            for missing_split in set(splits) - seen_splits:
+                new_scores[missing_split] = []
+                for missing_subset in hf_subsets:
+                    new_scores[missing_split].append(
+                        {
+                            "hf_subset": missing_subset,
+                            "main_score": np.nan,
+                            "languages": task.metadata.hf_subsets_to_langscripts.get(
+                                missing_subset, []
+                            ),
+                        }
+                    )
         data = self.model_dump()
         data["scores"] = new_scores
         return type(self).model_construct(**data)

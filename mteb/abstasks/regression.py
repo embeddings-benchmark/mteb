@@ -1,28 +1,37 @@
+from __future__ import annotations
+
 import logging
-from typing import TypedDict
+from typing import TYPE_CHECKING, TypedDict
 
 import datasets
 import numpy as np
 import pandas as pd
-from datasets import Dataset
 from scipy.stats import kendalltau
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
+from mteb._evaluators.sklearn_evaluator import SklearnEvaluator
 from mteb.abstasks._statistics_calculation import (
     calculate_image_statistics,
     calculate_score_statistics,
     calculate_text_statistics,
 )
 from mteb.types.statistics import (
-    ImageStatistics,
-    ScoreStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
 
 from .classification import AbsTaskClassification
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+    from numpy.typing import NDArray
+
+    from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
+    from mteb.types.statistics import (
+        ImageStatistics,
+        ScoreStatistics,
+        TextStatistics,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -114,8 +123,8 @@ class AbsTaskRegression(AbsTaskClassification):
 
     def _calculate_scores(  # type: ignore[override]
         self,
-        y_test: np.ndarray | list[int],
-        y_pred: np.ndarray,
+        y_test: NDArray[np.floating] | list[float],
+        y_pred: NDArray[np.floating] | list[float],
     ) -> RegressionMetrics:
         mse = mean_squared_error(y_test, y_pred)
         return RegressionMetrics(

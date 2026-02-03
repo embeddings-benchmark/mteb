@@ -1,15 +1,20 @@
+from __future__ import annotations
+
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_image_dependencies, requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 LLM2CLIP_CITATION = """@misc{huang2024llm2clippowerfullanguagemodel,
   title={LLM2CLIP: Powerful Language Model Unlock Richer Visual Representation},
@@ -189,6 +194,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
     release_date="2024-11-07",
     modalities=["image", "text"],
     n_parameters=579_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=1280,
@@ -214,6 +220,7 @@ llm2clip_openai_l_14_224 = ModelMeta(
     release_date="2024-11-07",
     modalities=["image", "text"],
     n_parameters=578_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=1280,
@@ -238,6 +245,7 @@ llm2clip_openai_b_16 = ModelMeta(
     release_date="2024-11-07",
     modalities=["image", "text"],
     n_parameters=361_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=1280,

@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 import logging
 from collections import defaultdict
-from pathlib import Path
-from typing import Any, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
 from datasets import Dataset, DatasetDict
@@ -16,12 +17,8 @@ from sklearn.metrics import (
 
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
 from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
-    ImageStatistics,
-    LabelStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
 
 from ._statistics_calculation import (
@@ -30,6 +27,20 @@ from ._statistics_calculation import (
     calculate_text_statistics,
 )
 from .abstask import AbsTask
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from numpy.typing import NDArray
+
+    from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
+    from mteb.models import MTEBModels
+    from mteb.types import EncodeKwargs, HFSubset, ScoresDict
+    from mteb.types.statistics import (
+        ImageStatistics,
+        LabelStatistics,
+        TextStatistics,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -125,8 +136,9 @@ class AbsTaskClassification(AbsTask):
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluate a model on the classification task.
@@ -140,7 +152,7 @@ class AbsTaskClassification(AbsTask):
             )
 
         if not self.data_loaded:
-            self.load_data()
+            self.load_data(num_proc=num_proc)
 
         if self.dataset is None:
             raise RuntimeError("Dataset not loaded.")
@@ -173,6 +185,7 @@ class AbsTaskClassification(AbsTask):
                 hf_subset=hf_subset,
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
+                num_proc=num_proc,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
@@ -184,10 +197,11 @@ class AbsTaskClassification(AbsTask):
         model: MTEBModels,
         data_split: DatasetDict,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -221,7 +235,10 @@ class AbsTaskClassification(AbsTask):
                 evaluator_model=self.evaluator_model,
             )
             y_pred, test_cache = evaluator(
-                model, encode_kwargs=encode_kwargs, test_cache=test_cache
+                model,
+                encode_kwargs=encode_kwargs,
+                test_cache=test_cache,
+                num_proc=num_proc,
             )
             if prediction_folder:
                 all_predictions.append(y_pred.tolist())
@@ -255,8 +272,8 @@ class AbsTaskClassification(AbsTask):
 
     def _calculate_scores(
         self,
-        y_test: np.ndarray | list[int],
-        y_pred: np.ndarray,
+        y_test: NDArray[np.integer] | list[int],
+        y_pred: NDArray[np.integer | np.floating] | list[int],
     ) -> ClassificationMetrics:
         scores = ClassificationMetrics(
             accuracy=accuracy_score(y_test, y_pred),
@@ -363,11 +380,12 @@ class AbsTaskClassification(AbsTask):
             label_statistics=label_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         self._upload_dataset_to_hub(
             repo_name,
             [
                 self.input_column_name,
                 self.label_column_name,
             ],
+            num_proc=num_proc,
         )

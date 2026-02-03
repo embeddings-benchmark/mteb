@@ -48,7 +48,7 @@ Mubarak, Hamdy},
         superseded_by="TweetSarcasmClassification.v2",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         # labels: 0 non-sarcastic, 1 sarcastic
         self.dataset = self.dataset.rename_columns(
             {"tweet": "text", "sarcasm": "label"}
