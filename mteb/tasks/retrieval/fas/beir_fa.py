@@ -1,7 +1,6 @@
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-
 fa_mteb = """@misc{zinvandi2025famtebmassivetextembedding,
       title={FaMTEB: Massive Text Embedding Benchmark in Persian Language}, 
       author={Erfan Zinvandi and Morteza Alikhani and Mehran Sarmadi and Zahra Pourbahman and Sepehr Arvin and Reza Kazemi and Arash Amini},
@@ -12,6 +11,7 @@ fa_mteb = """@misc{zinvandi2025famtebmassivetextembedding,
       url={https://arxiv.org/abs/2502.11571}, 
 }
 """
+
 
 class ArguAnaFa(AbsTaskRetrieval):
     ignore_identical_ids = True
