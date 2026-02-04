@@ -104,9 +104,9 @@ class E5OmniWrapper(AbsEncoder):
                 max_len = max(len(batch_texts), len(batch_images))
                 for i in range(max_len):
                     content = []
-                    if batch_texts:
+                    if i < len(batch_texts):
                         content.append({"type": "text", "text": batch_texts[i]})
-                    if batch_images:
+                    if i < len(batch_images):
                         content.append({"type": "image", "image": batch_images[i]})
                     messages.append([{"role": "user", "content": content}])
 
@@ -121,6 +121,7 @@ class E5OmniWrapper(AbsEncoder):
 
                 image_inputs = None
                 video_inputs = None
+                audio_inputs = None
                 if batch_images:
                     from qwen_vl_utils import process_vision_info
 
@@ -130,11 +131,20 @@ class E5OmniWrapper(AbsEncoder):
                     text=texts,
                     images=image_inputs,
                     videos=video_inputs,
+                    audio=audio_inputs,
                     padding=True,
                     return_tensors="pt",
                     truncation=True,
                     max_length=512,
                 ).to(self.device)
+
+                # Prepare inputs for generation to handle cache_position and other requirements for Qwen2.5-Omni
+                cache_position = torch.arange(
+                    0, model_inputs["input_ids"].shape[1], device=self.device
+                )
+                model_inputs = self.model.prepare_inputs_for_generation(
+                    **model_inputs, use_cache=True, cache_position=cache_position
+                )
 
                 outputs = self.model(**model_inputs, output_hidden_states=True)
 
@@ -144,11 +154,13 @@ class E5OmniWrapper(AbsEncoder):
 
                 # Find the last non-padding token
                 attention_mask = model_inputs["attention_mask"]
-                # Qwen2.5-Omni uses right padding by default in many setups
                 sequence_lengths = attention_mask.sum(dim=1) - 1
                 embeddings = last_hidden_state[
                     torch.arange(last_hidden_state.size(0)), sequence_lengths
                 ]
+
+                # Normalize embeddings as recommended by the authors
+                embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
 
                 all_embeddings.append(embeddings.cpu().to(torch.float32))
 
