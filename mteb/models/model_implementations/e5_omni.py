@@ -55,12 +55,7 @@ class E5OmniWrapper(AbsEncoder):
         )
 
         if processor_path is None:
-            if "7B" in model_name:
-                processor_path = "Qwen/Qwen2.5-Omni-7B"
-            elif "3B" in model_name:
-                processor_path = "Qwen/Qwen2.5-Omni-3B"
-            else:
-                processor_path = model_name
+            processor_path = model_name
 
         self.processor = AutoProcessor.from_pretrained(
             processor_path,
