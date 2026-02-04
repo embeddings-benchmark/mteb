@@ -66,7 +66,7 @@ print(benchmark_scores_df)
 
 To make it easier to generate high quality metadata from models we created `.from_hf_hub`, `.from_sentence_transformer_model` and `.from_cross_encoder`.
 
-This does not fill out everything, but it fills out everything that can be automated. 
+This does not fill out everything, but it fills out everything that can be automated.
 ```
 from sentence_transformers import SentenceTransformer
 
@@ -106,7 +106,7 @@ This leads to a slight increase in performance, for example running `minishlab/p
 ### Support for Asymmetric embeddings in STS and `PairClassification`
 MTEB v2.2 adds support for `prompt_type` for `STS` and `PairClassification` thus allowing for asymmetric embeddings.
 
-E.g. for `TERRa`, this allow us to add `TERRa.v2`, 
+E.g. for `TERRa`, this allow us to add `TERRa.v2`,
 ```python
 class TERRaV2(AbsTaskPairClassification):
     input1_prompt_type = PromptType.document
@@ -281,7 +281,7 @@ We've added a lot of new documentation to make it easier to get started with MTE
 
 - You can see api of our models in tasks in [API documentation](./api/index.md).
 - We've added a [getting started guide](./usage/get_started.md) to help you get started with MTEB.
-- You can see implemented [tasks](./overview/available_tasks/retrieval.md) and [models](../overview/available_models/text.md) in MTEB.
+- You can see implemented [tasks](./overview/available_tasks/retrieval.md) and [models](./overview/available_models/text.md) in MTEB.
 
 #### Better support for loading and comparing results
 
