@@ -157,13 +157,13 @@ class E5OmniWrapper(AbsEncoder):
 
 
 E5_OMNI_CITATION = """@misc{chen2026e5omniexplicitcrossmodalalignment,
-      title={e5-omni: Explicit Cross-modal Alignment for Omni-modal Embeddings}, 
+      title={e5-omni: Explicit Cross-modal Alignment for Omni-modal Embeddings},
       author={Haonan Chen and Sicheng Gao and Radu Timofte and Tetsuya Sakai and Zhicheng Dou},
       year={2026},
       eprint={2601.03666},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2601.03666}, 
+      url={https://arxiv.org/abs/2601.03666},
 }"""
 
 E5_OMNI_TRAINING_DATASETS = bge_m3_training_data | {
@@ -184,7 +184,7 @@ e5_omni_3b = ModelMeta(
         "text",
         "image",
     ],  # Wrapper currently supports text/image only.
-    n_parameters=5_000_000_000,
+    n_parameters=4_703_464_448,
     n_embedding_parameters=311_164_928,
     memory_usage_mb=8971,
     max_tokens=512,  # They use 512 in the training, despite the underlying model can handle more
@@ -212,7 +212,7 @@ e5_omni_7b = ModelMeta(
         "text",
         "image",
     ],  # Wrapper currently supports text/image only.
-    n_parameters=9_000_000_000,
+    n_parameters=8_931_813_888,
     n_embedding_parameters=544_997_376,
     memory_usage_mb=17036,
     max_tokens=512,  # They use 512 in the training, despite the underlying model can handle more
