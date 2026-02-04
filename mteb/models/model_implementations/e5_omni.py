@@ -11,11 +11,11 @@ from mteb._requires_package import (
     requires_package,
 )
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.model_implementations.bge_models import (
     bge_m3_training_data,
     bgem3_languages,
 )
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
