@@ -1,5 +1,70 @@
 # CHANGELOG
 
+## v2.7.23 (2026-02-04)
+
+### Fix
+
+* fix: Fill in embedding and total parameters in ModelMeta (#4031)
+
+* Filling Embedding/Total Parameters in ModelMeta
+
+* Add parameter for other models
+
+* Add parameters for more models
+
+* Added exact value for n_parameters
+
+* Fix tests
+
+* set n_embedding_parameters to None
+
+* Add results of some more models
+
+* Add tests
+
+* Add _HISTORIC_MODELS list in test
+
+* Update tests/test_models/test_model_meta.py
+
+Co-authored-by: Roman Solomatin &lt;samoed.roman@gmail.com&gt;
+
+* fix tests
+
+* correct tests
+
+* fix _HISTORIC_MODELS list
+
+---------
+
+Co-authored-by: Roman Solomatin &lt;samoed.roman@gmail.com&gt; ([`bc6e6cb`](https://github.com/embeddings-benchmark/mteb/commit/bc6e6cb3a3dc4992362c4e14437bd4a861197887))
+
+### Unknown
+
+* dataset: Add ERESS reranking task (#3991)
+
+* dataset: Add ERESS reranking task
+
+- Add ERESSReranking task for e-commerce product relevance reranking
+- Dataset: thebajajra/eress with ~72k query-product pairs
+- Supports graded relevance (0-100 integer scale)
+- Main metric: nDCG@5
+- Add E-commerce domain and Product Reranking subtypes to TaskMetadata
+- Include descriptive statistics
+
+* fix: align dataset_transform signature with base class
+
+* fix: dataset reuploaded, custom transformation removed
+
+* fix: rev updated with title + text combination
+
+* description moved away from docstring
+
+* Update mteb/tasks/reranking/eng/ecommerce_product_relevance_reranking.py
+
+---------
+
+Co-authored-by: Kenneth Enevoldsen &lt;kenevoldsen@pm.me&gt; ([`fe67f8e`](https://github.com/embeddings-benchmark/mteb/commit/fe67f8eadbc4d03921c3c77dcb52d9dbc94dff79))
+
 ## v2.7.22 (2026-02-03)
 
 ### Documentation
