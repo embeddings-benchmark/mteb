@@ -59,7 +59,6 @@ class E5OmniWrapper(AbsEncoder):
 
         self.processor = AutoProcessor.from_pretrained(
             processor_path,
-            trust_remote_code=True,
         )
         if hasattr(self.processor, "tokenizer"):
             self.processor.tokenizer.padding_side = "left"
@@ -74,7 +73,6 @@ class E5OmniWrapper(AbsEncoder):
             self.model.padding_side = "left"
         self.model.eval()
 
-    @torch.no_grad()
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -87,77 +85,76 @@ class E5OmniWrapper(AbsEncoder):
     ) -> Array:
         all_embeddings = []
 
-        with torch.no_grad():
-            for batch in tqdm(inputs, desc="Encoding"):
-                batch_texts = batch.get("text", [])
-                batch_images = batch.get("image", [])
+        for batch in tqdm(inputs, desc="Encoding"):
+            batch_texts = batch.get("text", [])
+            batch_images = batch.get("image", [])
 
-                if not batch_texts and not batch_images:
-                    raise ValueError("No text or image features found in batch.")
+            if not batch_texts and not batch_images:
+                raise ValueError("No text or image features found in batch.")
 
-                messages = []
-                max_len = max(len(batch_texts), len(batch_images))
-                for i in range(max_len):
-                    content = []
-                    if i < len(batch_texts):
-                        content.append({"type": "text", "text": batch_texts[i]})
-                    if i < len(batch_images):
-                        content.append({"type": "image", "image": batch_images[i]})
-                    messages.append([{"role": "user", "content": content}])
+            messages = []
+            max_len = max(len(batch_texts), len(batch_images))
+            for i in range(max_len):
+                content = []
+                if i < len(batch_texts):
+                    content.append({"type": "text", "text": batch_texts[i]})
+                if i < len(batch_images):
+                    content.append({"type": "image", "image": batch_images[i]})
+                messages.append([{"role": "user", "content": content}])
 
-                texts = []
-                for msg in messages:
-                    rendered = self.processor.apply_chat_template(
-                        msg, tokenize=False, add_generation_prompt=True
-                    )
-                    if isinstance(rendered, list):
-                        rendered = rendered[0]
-                    texts.append(f"{rendered}<|endoftext|>")
-
-                image_inputs = None
-                video_inputs = None
-                audio_inputs = None
-                if batch_images:
-                    from qwen_vl_utils import process_vision_info
-
-                    image_inputs, video_inputs = process_vision_info(messages)
-
-                model_inputs = self.processor(
-                    text=texts,
-                    images=image_inputs,
-                    videos=video_inputs,
-                    audio=audio_inputs,
-                    padding=True,
-                    return_tensors="pt",
-                    truncation=True,
-                    max_length=512,
-                ).to(self.device)
-
-                # Prepare inputs for generation to handle cache_position and other requirements for Qwen2.5-Omni
-                cache_position = torch.arange(
-                    0, model_inputs["input_ids"].shape[1], device=self.device
+            texts = []
+            for msg in messages:
+                rendered = self.processor.apply_chat_template(
+                    msg, tokenize=False, add_generation_prompt=True
                 )
-                model_inputs = self.model.prepare_inputs_for_generation(
-                    **model_inputs, use_cache=True, cache_position=cache_position
-                )
+                if isinstance(rendered, list):
+                    rendered = rendered[0]
+                texts.append(f"{rendered}<|endoftext|>")
 
-                outputs = self.model(**model_inputs, output_hidden_states=True)
+            image_inputs = None
+            video_inputs = None
+            audio_inputs = None
+            if batch_images:
+                from qwen_vl_utils import process_vision_info
 
-                # For E5-Omni, we use the last hidden state of the last token
-                # as is common for decoder-only LLM-based embedding models.
-                last_hidden_state = outputs.hidden_states[-1]
+                image_inputs, video_inputs = process_vision_info(messages)
 
-                # Find the last non-padding token
-                attention_mask = model_inputs["attention_mask"]
-                sequence_lengths = attention_mask.sum(dim=1) - 1
-                embeddings = last_hidden_state[
-                    torch.arange(last_hidden_state.size(0)), sequence_lengths
-                ]
+            model_inputs = self.processor(
+                text=texts,
+                images=image_inputs,
+                videos=video_inputs,
+                audio=audio_inputs,
+                padding=True,
+                return_tensors="pt",
+                truncation=True,
+                max_length=512,
+            ).to(self.device)
 
-                # Normalize embeddings as recommended by the authors
-                embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
+            # Prepare inputs for generation to handle cache_position and other requirements for Qwen2.5-Omni
+            cache_position = torch.arange(
+                0, model_inputs["input_ids"].shape[1], device=self.device
+            )
+            model_inputs = self.model.prepare_inputs_for_generation(
+                **model_inputs, use_cache=True, cache_position=cache_position
+            )
 
-                all_embeddings.append(embeddings.cpu().to(torch.float32))
+            outputs = self.model(**model_inputs, output_hidden_states=True)
+
+            # For E5-Omni, we use the last hidden state of the last token
+            # as is common for decoder-only LLM-based embedding models.
+            last_hidden_state = outputs.hidden_states[-1]
+
+            # Find the last non-padding token
+            attention_mask = model_inputs["attention_mask"]
+            sequence_lengths = attention_mask.sum(dim=1) - 1
+            embeddings = last_hidden_state[
+                torch.arange(last_hidden_state.size(0)), sequence_lengths
+            ]
+
+            # Normalize embeddings as recommended by the authors
+            embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
+
+            all_embeddings.append(embeddings.cpu().to(torch.float32))
 
         return torch.cat(all_embeddings, dim=0).numpy()
 
