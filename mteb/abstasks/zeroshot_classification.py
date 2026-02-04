@@ -127,7 +127,7 @@ class AbsTaskZeroShotClassification(AbsTask):
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs,
     ) -> ZeroShotClassificationMetrics:
         if not isinstance(model, EncoderProtocol):

@@ -15,12 +15,12 @@ theme:
     - navigation.top
     - search.suggest
     - search.highlight
-    - content.tabs.link
-    - content.code.annotation
-    - content.code.copy
     - content.action.edit
     - content.action.view
+    - content.code.copy
     - content.code.annotate
+    - content.code.annotation
+    - content.tabs.link
     - content.tooltips
     - navigation.footer
     - navigation.indexes
@@ -70,8 +70,8 @@ copyright: This text is freely available under a Creative Commons Attribution 4.
 nav:
   - Get Started:
       - index.md
-      - whats_new.md
       - Installation: installation.md
+      - whats_new.md
       - Usage:
         - Get Started: usage/get_started.md
         - Defining the Model: usage/defining_the_model.md

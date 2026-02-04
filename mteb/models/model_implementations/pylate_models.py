@@ -53,7 +53,7 @@ class PylateSearchEncoder:
         hf_split: str,
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
-        num_proc: int,
+        num_proc: int | None,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -89,7 +89,7 @@ class PylateSearchEncoder:
         top_k: int,
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
-        num_proc: int,
+        num_proc: int | None,
     ) -> RetrievalOutputType:
         queries_dataloader = create_dataloader(
             queries,
@@ -150,7 +150,7 @@ class PylateSearchEncoder:
         hf_split: str,
         top_k: int,
         encode_kwargs: EncodeKwargs,
-        num_proc: int,
+        num_proc: int | None,
     ) -> dict[str, list[tuple[float, str]]]:
         from pylate import indexes, retrieve
 
@@ -216,7 +216,7 @@ class PylateSearchEncoder:
         hf_subset: str,
         hf_split: str,
         encode_kwargs: EncodeKwargs,
-        num_proc: int = 1,
+        num_proc: int | None = None,
     ) -> dict[str, list[tuple[float, str]]]:
         """Rerank with PyLate's rank.rerank using per-query candidates.
 
@@ -361,7 +361,7 @@ colbert_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     release_date="2024-09-21",
-    n_parameters=int(110 * 1e6),
+    n_parameters=109482240,
     n_embedding_parameters=23_440_896,
     memory_usage_mb=418,
     max_tokens=180,
@@ -418,7 +418,7 @@ jina_colbert_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     release_date="2024-08-16",
-    n_parameters=int(559 * 1e6),
+    n_parameters=559366144,
     n_embedding_parameters=None,
     memory_usage_mb=1067,
     max_tokens=8192,

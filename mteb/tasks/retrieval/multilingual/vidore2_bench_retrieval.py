@@ -16,7 +16,7 @@ def _load_data(
     splits: list[str],
     langs: list | None = None,
     revision: str | None = None,
-    num_proc: int = 1,
+    num_proc: int | None = None,
 ):
     if langs is None:
         corpus = {}
@@ -131,7 +131,7 @@ class Vidore2ESGReportsRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int = 1, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
 
@@ -179,7 +179,7 @@ class Vidore2EconomicsReportsRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int = 1, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
 
@@ -227,7 +227,7 @@ class Vidore2BioMedicalLecturesRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int = 1, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
 
@@ -275,7 +275,7 @@ class Vidore2ESGReportsHLRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int = 1, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
 

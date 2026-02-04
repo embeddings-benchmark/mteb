@@ -32,6 +32,7 @@ logger = logging.getLogger(__name__)
 class BedrockModel(AbsEncoder):
     def __init__(
         self,
+        model_name: str,
         model_id: str,
         provider: str,
         max_tokens: int,
@@ -85,7 +86,7 @@ class BedrockModel(AbsEncoder):
 
     def _encode_amazon(
         self, sentences: list[str], show_progress_bar: bool = False
-    ) -> np.ndarray:
+    ) -> Array:
         from botocore.exceptions import ValidationError
 
         all_embeddings = []
@@ -124,7 +125,7 @@ class BedrockModel(AbsEncoder):
         sentences: list[str],
         cohere_task_type: str,
         show_progress_bar: bool = False,
-    ) -> np.ndarray:
+    ) -> Array:
         batches = [
             sentences[i : i + self._max_batch_size]
             for i in range(0, len(sentences), self._max_batch_size)
@@ -148,7 +149,7 @@ class BedrockModel(AbsEncoder):
 
         return np.array(all_embeddings)
 
-    def _embed_amazon(self, sentence: str) -> np.ndarray:
+    def _embed_amazon(self, sentence: str) -> Array:
         response = self._client.invoke_model(
             body=json.dumps({"inputText": sentence}),
             modelId=self._model_id,
@@ -157,7 +158,7 @@ class BedrockModel(AbsEncoder):
         )
         return self._to_numpy(response)
 
-    def _to_numpy(self, embedding_response) -> np.ndarray:
+    def _to_numpy(self, embedding_response) -> Array:
         response = json.loads(embedding_response.get("body").read())
         key = "embedding" if self._provider == "amazon" else "embeddings"
         return np.array(response[key])

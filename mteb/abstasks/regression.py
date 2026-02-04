@@ -24,6 +24,7 @@ from .classification import AbsTaskClassification
 
 if TYPE_CHECKING:
     from datasets import Dataset
+    from numpy.typing import NDArray
 
     from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
     from mteb.types.statistics import (
@@ -92,7 +93,6 @@ class AbsTaskRegression(AbsTaskClassification):
         n_samples: Number of samples to use for training the regression model. If the dataset has fewer samples than n_samples, all samples are used.
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
         evaluator_model: The model to use for evaluation. Can be any sklearn compatible model. Default is `LinearRegression`.
-
     """
 
     evaluator: type[SklearnEvaluator] = SklearnEvaluator
@@ -123,8 +123,8 @@ class AbsTaskRegression(AbsTaskClassification):
 
     def _calculate_scores(  # type: ignore[override]
         self,
-        y_test: np.ndarray | list[int],
-        y_pred: np.ndarray,
+        y_test: NDArray[np.floating] | list[float],
+        y_pred: NDArray[np.floating] | list[float],
     ) -> RegressionMetrics:
         mse = mean_squared_error(y_test, y_pred)
         return RegressionMetrics(

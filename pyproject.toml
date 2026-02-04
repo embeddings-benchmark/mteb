@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.7.8"
+version = "2.7.23"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -44,8 +44,8 @@ dependencies = [
     "pytrec-eval-terrier>=0.5.6",
     "pydantic>=2.0.0",
     "polars>=0.20.22",
-    "torch; python_full_version < '3.14'",
-    "torch>=2.9.0; python_full_version >= '3.14'",
+    # "torch; python_full_version < '3.14'",
+    # "torch>=2.9.0; python_full_version >= '3.14'",
 ]
 
 
@@ -99,6 +99,8 @@ sauerkrautlm-colpali = ["sauerkrautlm-colpali>=0.1.0; python_full_version < '3.1
 xet = ["huggingface_hub>=0.32.0"]
 youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lkeap>=3.0.1451"]
 llama-embed-nemotron = ["transformers==4.51.0"]
+llama-nemotron-colembed-vl = ["transformers[torch]==4.49.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
+nemotron-colembed-vl-v2 = ["transformers[torch]==5.0.0rc0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 faiss-cpu = ["faiss-cpu>=1.12.0"]
 eager_embed = ["qwen_vl_utils>=0.0.14"]
 vllm = ["vllm>=0.11.1"]
@@ -283,6 +285,7 @@ allow-multiline = false
 [tool.ruff.lint.pep8-naming]
 ignore-names = [
     "F",  # torch.nn.functional
+    "X",
     "X_train",
     "X_test",
 ]
@@ -308,7 +311,7 @@ build_command = "python -m pip install build; python -m build"
 tag_format = "{version}"
 
 [tool.semantic_release.commit_parser_options]
-minor_tags = ["minor", "feat"]
+minor_tags = ["minor", "feat", "benchmark"]
 patch_tags = [
     "patch",
     "fix",
@@ -352,6 +355,8 @@ conflicts = [
         { extra = "model2vec" },
         { extra = "pylate" }, # conflicting versions of transformers
         { extra = "llama-embed-nemotron" }, # conflicting versions of transformers
+        { extra = "llama-nemotron-colembed-vl" }, # conflicting versions of transformers
+        { extra = "nemotron-colembed-vl-v2" }, # conflicting versions of transformers
         { extra = "colpali-engine" },
         { extra = "colqwen3" },
         { extra = "jina-v4" },
@@ -428,6 +433,7 @@ extend-exclude = [
     "docs/references.bib",
     "mteb/models/model_implementations/gme_v_models.py",  # video_grid_thw `thw`
     "mteb/models/model_implementations/vista_models.py",  # self.normlized: in visual bge
+    "mteb/models/model_implementations/salesforce_models.py", # multiligual in paper title
     "tests/mock_tasks.py",  #  "denne her matche ikke den ovenstående",
     "mteb/models/model_implementations/kalm_models.py",  # prompt:  classify ist topic",
     "mteb/tasks/reranking/eng/built_bench_reranking.py",  # prompt:   descriptions from buit asset

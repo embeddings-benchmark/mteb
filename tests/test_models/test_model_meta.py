@@ -3,6 +3,189 @@ import pytest
 import mteb
 from mteb.models.model_meta import ModelMeta
 
+# Historic models with n_embedding_parameters=None. Do NOT add new models to this list.
+_HISTORIC_MODELS = [
+    "ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-3B-v1",
+    "ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-7B-v1",
+    "BAAI/bge-visualized-base",
+    "BAAI/bge-visualized-m3",
+    "ByteDance/ListConRanker",
+    "Bytedance/Seed1.6-embedding",
+    "GritLM/GritLM-8x7B",
+    "Kingsoft-LLM/QZhou-Embedding-Zh",
+    "NovaSearch/stella_en_400M_v5",
+    "QuanSun/EVA02-CLIP-B-16",
+    "QuanSun/EVA02-CLIP-L-14",
+    "QuanSun/EVA02-CLIP-bigE-14",
+    "QuanSun/EVA02-CLIP-bigE-14-plus",
+    "Salesforce/SFR-Embedding-Code-2B_R",
+    "Salesforce/blip2-opt-2.7b",
+    "Salesforce/blip2-opt-6.7b-coco",
+    "Snowflake/snowflake-arctic-embed-m-long",
+    "Snowflake/snowflake-arctic-embed-m-v2.0",
+    "TIGER-Lab/VLM2Vec-Full",
+    "TIGER-Lab/VLM2Vec-LoRA",
+    "TencentBAC/Conan-embedding-v2",
+    "TomoroAI/tomoro-colqwen3-embed-4b",
+    "TomoroAI/tomoro-colqwen3-embed-8b",
+    "VPLabs/SearchMap_Preview",
+    "ai-sage/Giga-Embeddings-instruct",
+    "baseline/bm25s",
+    "codefuse-ai/C2LLM-0.5B",
+    "codefuse-ai/C2LLM-7B",
+    "consciousAI/cai-stellaris-text-embeddings",
+    "deepvk/USER2-base",
+    "deepvk/USER2-small",
+    "dmedhi/PawanEmbd-68M",
+    "facebook/SONAR",
+    "facebook/dinov2-base",
+    "facebook/dinov2-giant",
+    "facebook/dinov2-large",
+    "facebook/dinov2-small",
+    "facebook/webssl-dino1b-full2b-224",
+    "facebook/webssl-dino2b-full2b-224",
+    "facebook/webssl-dino2b-heavy2b-224",
+    "facebook/webssl-dino2b-light2b-224",
+    "facebook/webssl-dino300m-full2b-224",
+    "facebook/webssl-dino3b-full2b-224",
+    "facebook/webssl-dino3b-heavy2b-224",
+    "facebook/webssl-dino3b-light2b-224",
+    "facebook/webssl-mae1b-full2b-224",
+    "facebook/webssl-mae300m-full2b-224",
+    "ibm-granite/granite-vision-3.3-2b-embedding",
+    "infly/inf-retriever-v1",
+    "intfloat/mmE5-mllama-11b-instruct",
+    "jinaai/jina-clip-v1",
+    "jinaai/jina-colbert-v2",
+    "jinaai/jina-reranker-v2-base-multilingual",
+    "jxm/cde-small-v1",
+    "jxm/cde-small-v2",
+    "kakaobrain/align-base",
+    "laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K",
+    "laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K",
+    "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+    "laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
+    "laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
+    "laion/CLIP-ViT-L-14-laion2B-s32B-b82K",
+    "laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
+    "laion/CLIP-ViT-g-14-laion2B-s34B-b88K",
+    "lightonai/GTE-ModernColBERT-v1",
+    "malenia1/ternary-weight-embedding",
+    "microsoft/LLM2CLIP-Openai-B-16",
+    "microsoft/LLM2CLIP-Openai-L-14-224",
+    "microsoft/LLM2CLIP-Openai-L-14-336",
+    "mixedbread-ai/mxbai-edge-colbert-v0-17m",
+    "mixedbread-ai/mxbai-edge-colbert-v0-32m",
+    "mixedbread-ai/mxbai-rerank-base-v1",
+    "mixedbread-ai/mxbai-rerank-large-v1",
+    "mixedbread-ai/mxbai-rerank-xsmall-v1",
+    "nomic-ai/colnomic-embed-multimodal-3b",
+    "nomic-ai/colnomic-embed-multimodal-7b",
+    "nomic-ai/nomic-embed-code",
+    "nomic-ai/nomic-embed-text-v1",
+    "nomic-ai/nomic-embed-text-v1-ablated",
+    "nomic-ai/nomic-embed-text-v1-unsupervised",
+    "nomic-ai/nomic-embed-text-v1.5",
+    "nomic-ai/nomic-embed-vision-v1.5",
+    "nvidia/NV-Embed-v1",
+    "nvidia/NV-Embed-v2",
+    "nvidia/llama-nemoretriever-colembed-1b-v1",
+    "nvidia/llama-nemoretriever-colembed-3b-v1",
+    "nyu-visionx/moco-v3-vit-b",
+    "nyu-visionx/moco-v3-vit-l",
+    "openai/clip-vit-base-patch16",
+    "openai/clip-vit-base-patch32",
+    "openai/clip-vit-large-patch14",
+    "samaya-ai/RepLLaMA-reproduced",
+    "samaya-ai/promptriever-llama2-7b-v1",
+    "samaya-ai/promptriever-llama3.1-8b-instruct-v1",
+    "samaya-ai/promptriever-llama3.1-8b-v1",
+    "sensenova/piccolo-large-zh-v2",
+    "tencent/KaLM-Embedding-Gemma3-12B-2511",
+    "tencent/Youtu-Embedding",
+    "vidore/colSmol-256M",
+    "vidore/colSmol-500M",
+    "vidore/colpali-v1.1",
+    "vidore/colpali-v1.2",
+    "vidore/colpali-v1.3",
+    "vidore/colqwen2-v1.0",
+    "vidore/colqwen2.5-v0.2",
+    "voyageai/voyage-multimodal-3",
+    "facebook/webssl-dino5b-full2b-224",
+    "facebook/webssl-dino7b-full8b-224",
+    "facebook/webssl-dino7b-full8b-378",
+    "facebook/webssl-dino7b-full8b-518",
+    "facebook/webssl-mae700m-full2b-224",
+    "OrlikB/KartonBERT-USE-base-v1",
+    "OrlikB/st-polish-kartonberta-base-alpha-v1",
+    "OpenSearch-AI/Ops-Colqwen3-4B",
+    "jinaai/jina-clip-v2",
+    "Bytedance/Seed1.6-embedding-1215",
+    "Cohere/Cohere-embed-v4.0",
+    "Cohere/Cohere-embed-v4.0 (output_dtype=binary)",
+    "Cohere/Cohere-embed-v4.0 (output_dtype=int8)",
+    "cohere/embed-english-v3.0",
+    "cohere/embed-multilingual-v3.0",
+    "jinaai/jina-embeddings-v3",
+    "jinaai/jina-embeddings-v4",
+    "voyageai/voyage-2",
+    "voyageai/voyage-3",
+    "voyageai/voyage-3.5",
+    "voyageai/voyage-3.5 (output_dtype=binary)",
+    "voyageai/voyage-3.5 (output_dtype=int8)",
+    "voyageai/voyage-3-m-exp",
+    "voyageai/voyage-3-large",
+    "voyageai/voyage-3-lite",
+    "voyageai/voyage-4",
+    "voyageai/voyage-4-large",
+    "voyageai/voyage-4-large (embed_dim=2048)",
+    "voyageai/voyage-4-lite",
+    "voyageai/voyage-code-2",
+    "voyageai/voyage-code-3",
+    "voyageai/voyage-finance-2",
+    "voyageai/voyage-large-2",
+    "voyageai/voyage-large-2-instruct",
+    "voyageai/voyage-law-2",
+    "voyageai/voyage-multilingual-2",
+    "bedrock/amazon-titan-embed-text-v1",
+    "bedrock/amazon-titan-embed-text-v2",
+    "bedrock/cohere-embed-english-v3",
+    "bedrock/cohere-embed-multilingual-v3",
+    "Cohere/Cohere-embed-english-v3.0",
+    "Cohere/Cohere-embed-english-light-v3.0",
+    "Cohere/Cohere-embed-multilingual-v3.0",
+    "Cohere/Cohere-embed-multilingual-light-v3.0",
+    "ByteDance-Seed/Seed1.5-Embedding",
+    "Bytedance/Seed1.6-embedding-1215",
+    "baseline/Human",
+    "baseline/random-cross-encoder-baseline",
+    "baseline/random-encoder-baseline",
+    "amazon/Titan-text-embeddings-v2",
+    "openai/text-embedding-3-large",
+    "openai/text-embedding-3-large (embed_dim=512)",
+    "openai/text-embedding-3-small",
+    "openai/text-embedding-3-small (embed_dim=512)",
+    "openai/text-embedding-ada-002",
+    "nvidia/llama-nemotron-rerank-1b-v2",
+    "nvidia/llama-nemotron-colembed-vl-3b-v2",
+    "nvidia/nemotron-colembed-vl-4b-v2",
+    "nvidia/nemotron-colembed-vl-8b-v2",
+    "VAGOsolutions/SauerkrautLM-ColLFM2-450M-v0.1",
+    "VAGOsolutions/SauerkrautLM-ColMinistral3-3b-v0.1",
+    "VAGOsolutions/SauerkrautLM-ColQwen3-1.7b-Turbo-v0.1",
+    "VAGOsolutions/SauerkrautLM-ColQwen3-2b-v0.1",
+    "VAGOsolutions/SauerkrautLM-ColQwen3-4b-v0.1",
+    "VAGOsolutions/SauerkrautLM-ColQwen3-8b-v0.1",
+    "MCINext/Hakim",
+    "MCINext/Hakim-small",
+    "MCINext/Hakim-unsup",
+    "google/gemini-embedding-001",
+    "google/text-embedding-004",
+    "google/text-embedding-005",
+    "google/text-multilingual-embedding-002",
+    "ICT-TIME-and-Querit/BOOM_4B_v1",
+]
+
 
 @pytest.mark.parametrize(
     "training_datasets",
@@ -149,13 +332,29 @@ def test_loader_kwargs_persisted_in_metadata():
     assert meta.loader_kwargs["not_existing_param"] == 123
 
 
-def test_compute_missing_parameter():
-    """Test that compute_missing parameter fetches missing metadata from HuggingFace Hub"""
+def test_fill_missing_parameter():
+    """Test that fill_missing parameter fetches missing metadata from HuggingFace Hub"""
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
     meta_with_compute = mteb.get_model_meta(model_name, fill_missing=True)
 
     assert meta_with_compute.n_parameters is not None
     assert meta_with_compute.memory_usage_mb is not None
+
+
+@pytest.mark.parametrize("model_meta", mteb.get_model_metas())
+def test_n_embedding_parameters(model_meta: ModelMeta):
+    """
+    Test that tracks models with n_embedding_parameters=None.
+    Historic models (in _HISTORIC_MODELS) are allowed to have None values.
+    New models must have n_embedding_parameters defined, otherwise the test fails.
+    """
+    if model_meta.name in _HISTORIC_MODELS:
+        assert model_meta.n_embedding_parameters is None
+    else:
+        assert model_meta.n_embedding_parameters is not None, (
+            f"New model '{model_meta.name}' must have n_embedding_parameters defined. "
+            f"If this is a historic model, add it to _HISTORIC_MODELS in test_model_meta.py"
+        )
 
 
 def test_model_to_python():
@@ -168,7 +367,7 @@ def test_model_to_python():
     revision='8b3219a92973c328a8e22fadcfa821b5dc75636a',
     release_date='2021-08-30',
     languages=['eng-Latn'],
-    n_parameters=22700000,
+    n_parameters=22713216,
     n_active_parameters_override=None,
     n_embedding_parameters=11720448,
     memory_usage_mb=87.0,
@@ -197,3 +396,21 @@ def test_model_meta_local_path():
     meta = ModelMeta.from_hub("/path/to/local/model")
     assert meta.name == "/path/to/local/model"
     assert meta.revision == "no_revision_available"
+
+
+def test_load_cross_encoder_via_get_model_meta():
+    """Test loading cross-encoder via get_model_meta() with automatic detection."""
+    model_meta = mteb.get_model_meta("cross-encoder/ms-marco-TinyBERT-L-2-v2")
+
+    assert model_meta.model_type == ["cross-encoder"]
+    assert model_meta.is_cross_encoder
+    assert model_meta.loader.__name__ == "CrossEncoderWrapper"
+
+
+def test_load_sentence_transformer_via_get_model_meta():
+    """Test loading sentence transformer via get_model_meta()."""
+    model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+
+    assert model_meta.model_type == ["dense"]
+    assert not model_meta.is_cross_encoder
+    assert model_meta.loader.__name__ == "sentence_transformers_loader"
