@@ -40,7 +40,9 @@ class E5OmniWrapper(AbsEncoder):
     ):
         requires_image_dependencies()
         requires_package(self, "transformers", model_name, "pip install mteb[e5-omni]")
-        requires_package(self, "qwen_omni_utils", model_name, "pip install mteb[e5-omni]")
+        requires_package(
+            self, "qwen_omni_utils", model_name, "pip install mteb[e5-omni]"
+        )
         from transformers import (
             AutoProcessor,
             Qwen2_5OmniThinkerForConditionalGeneration,
@@ -61,7 +63,7 @@ class E5OmniWrapper(AbsEncoder):
             "Haon-Chen/e5-omni-7B": "Qwen/Qwen2.5-Omni-7B",
         }
         processor_model = processor_model_map.get(model_name, model_name)
-        
+
         self.processor = AutoProcessor.from_pretrained(
             processor_model,
         )
@@ -78,6 +80,17 @@ class E5OmniWrapper(AbsEncoder):
             self.model.padding_side = "left"
         self.model.eval()
 
+    @staticmethod
+    def _to_text(x: Any) -> str:
+        """Normalize text input: handle dicts (title/text) or return string."""
+        if isinstance(x, dict):
+            title = x.get("title", "") or ""
+            text = x.get("text", "") or x.get("body", "") or ""
+            if title and text:
+                return f"{title}\n{text}"
+            return title or text
+        return "" if x is None else str(x)
+
     @torch.no_grad()
     def encode(
         self,
@@ -92,18 +105,16 @@ class E5OmniWrapper(AbsEncoder):
         all_embeddings = []
 
         for batch in tqdm(inputs, desc="Encoding"):
-            batch_texts = batch.get("text", [])
+            # Normalize text inputs: handle dicts (title/text) from BEIR-style corpora
+            raw_texts = batch.get("text", [])
+            batch_texts = [self._to_text(x) for x in raw_texts]
             batch_images = batch.get("image", [])
 
             if not batch_texts and not batch_images:
                 raise ValueError("No text or image features found in batch.")
 
-            # Add Query/Passage prefixes based on prompt_type as shown in model card
-            # Queries should have "Query: " prefix, documents should have "Passage: " prefix
             if prompt_type == PromptType.query:
                 text_prefix = "Query: "
-            elif prompt_type == PromptType.document:
-                text_prefix = "Passage: "
             else:
                 text_prefix = ""
 
@@ -113,7 +124,11 @@ class E5OmniWrapper(AbsEncoder):
                 content = []
                 if i < len(batch_texts):
                     # Prepend the appropriate prefix to text
-                    prefixed_text = f"{text_prefix}{batch_texts[i]}" if text_prefix else batch_texts[i]
+                    prefixed_text = (
+                        f"{text_prefix}{batch_texts[i]}"
+                        if text_prefix
+                        else batch_texts[i]
+                    )
                     content.append({"type": "text", "text": prefixed_text})
                 if i < len(batch_images):
                     content.append({"type": "image", "image": batch_images[i]})
@@ -128,16 +143,24 @@ class E5OmniWrapper(AbsEncoder):
                     rendered = rendered[0]
                 texts.append(f"{rendered}<|endoftext|>")
 
-            image_inputs = None
-            video_inputs = None
-            audio_inputs = None
-            if batch_images or batch_texts:
-                # Use process_mm_info from qwen_omni_utils as shown in model card
-                from qwen_omni_utils import process_mm_info
+            from qwen_omni_utils import process_mm_info
 
-                audio_inputs, image_inputs, video_inputs = process_mm_info(
-                    messages, use_audio_in_video=True
-                )
+            audios, images, videos = [], [], []
+            for msg in messages:
+                a, im, v = process_mm_info(msg, use_audio_in_video=True)
+                audios.append(a)
+                images.append(im)
+                videos.append(v)
+
+            # Check if we have any actual multimodal content (not all None)
+            # If all are None, pass None to processor instead of a list of Nones
+            has_audio = any(a is not None for a in audios)
+            has_images = any(im is not None for im in images)
+            has_videos = any(v is not None for v in videos)
+
+            audio_inputs = audios if has_audio else None
+            image_inputs = images if has_images else None
+            video_inputs = videos if has_videos else None
 
             model_inputs = self.processor(
                 text=texts,
@@ -150,29 +173,16 @@ class E5OmniWrapper(AbsEncoder):
                 max_length=512,
             ).to(self.device)
 
-            # Prepare inputs for generation to handle cache_position and other requirements for Qwen2.5-Omni
-            # This matches the model card implementation. If retrieval performance is still poor,
-            # you can try the alternative approach without prepare_inputs_for_generation:
-            #   outputs = self.model(**model_inputs, use_cache=False, output_hidden_states=True)
-            cache_position = torch.arange(
-                0, model_inputs["input_ids"].shape[1], device=self.device
+            # Run a plain forward pass and pool exactly as in the model card:
+            # last_hidden_state[:, -1] with left padding.
+            outputs = self.model(
+                **model_inputs,
+                return_dict=True,
+                output_hidden_states=True,
+                use_cache=False,
             )
-            model_inputs = self.model.prepare_inputs_for_generation(
-                **model_inputs, use_cache=True, cache_position=cache_position
-            )
-
-            outputs = self.model(**model_inputs, output_hidden_states=True)
-
-            # For E5-Omni, we use the last hidden state of the last token
-            # as is common for decoder-only LLM-based embedding models.
             last_hidden_state = outputs.hidden_states[-1]
-
-            # Find the last non-padding token
-            attention_mask = model_inputs["attention_mask"]
-            sequence_lengths = attention_mask.sum(dim=1) - 1
-            embeddings = last_hidden_state[
-                torch.arange(last_hidden_state.size(0)), sequence_lengths
-            ]
+            embeddings = last_hidden_state[:, -1]
 
             # Normalize embeddings as recommended by the authors
             embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
