@@ -16,12 +16,13 @@ from mteb.models.model_implementations.bge_models import (
     bgem3_languages,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +40,7 @@ class E5OmniWrapper(AbsEncoder):
     ):
         requires_image_dependencies()
         requires_package(self, "transformers", model_name, "pip install mteb[e5-omni]")
-        requires_package(self, "qwen_vl_utils", model_name, "pip install mteb[e5-omni]")
+        requires_package(self, "qwen_omni_utils", model_name, "pip install mteb[e5-omni]")
         from transformers import (
             AutoProcessor,
             Qwen2_5OmniThinkerForConditionalGeneration,
@@ -53,8 +54,16 @@ class E5OmniWrapper(AbsEncoder):
             else "cpu"
         )
 
+        # Map finetuned model names to their base processor models
+        # The processor should come from the base Qwen model, not the finetuned repo
+        processor_model_map = {
+            "Haon-Chen/e5-omni-3B": "Qwen/Qwen2.5-Omni-3B",
+            "Haon-Chen/e5-omni-7B": "Qwen/Qwen2.5-Omni-7B",
+        }
+        processor_model = processor_model_map.get(model_name, model_name)
+        
         self.processor = AutoProcessor.from_pretrained(
-            model_name,
+            processor_model,
         )
         if hasattr(self.processor, "tokenizer"):
             self.processor.tokenizer.padding_side = "left"
@@ -89,12 +98,23 @@ class E5OmniWrapper(AbsEncoder):
             if not batch_texts and not batch_images:
                 raise ValueError("No text or image features found in batch.")
 
+            # Add Query/Passage prefixes based on prompt_type as shown in model card
+            # Queries should have "Query: " prefix, documents should have "Passage: " prefix
+            if prompt_type == PromptType.query:
+                text_prefix = "Query: "
+            elif prompt_type == PromptType.document:
+                text_prefix = "Passage: "
+            else:
+                text_prefix = ""
+
             messages = []
             max_len = max(len(batch_texts), len(batch_images))
             for i in range(max_len):
                 content = []
                 if i < len(batch_texts):
-                    content.append({"type": "text", "text": batch_texts[i]})
+                    # Prepend the appropriate prefix to text
+                    prefixed_text = f"{text_prefix}{batch_texts[i]}" if text_prefix else batch_texts[i]
+                    content.append({"type": "text", "text": prefixed_text})
                 if i < len(batch_images):
                     content.append({"type": "image", "image": batch_images[i]})
                 messages.append([{"role": "user", "content": content}])
@@ -111,10 +131,13 @@ class E5OmniWrapper(AbsEncoder):
             image_inputs = None
             video_inputs = None
             audio_inputs = None
-            if batch_images:
-                from qwen_vl_utils import process_vision_info
+            if batch_images or batch_texts:
+                # Use process_mm_info from qwen_omni_utils as shown in model card
+                from qwen_omni_utils import process_mm_info
 
-                image_inputs, video_inputs = process_vision_info(messages)
+                audio_inputs, image_inputs, video_inputs = process_mm_info(
+                    messages, use_audio_in_video=True
+                )
 
             model_inputs = self.processor(
                 text=texts,
@@ -128,6 +151,9 @@ class E5OmniWrapper(AbsEncoder):
             ).to(self.device)
 
             # Prepare inputs for generation to handle cache_position and other requirements for Qwen2.5-Omni
+            # This matches the model card implementation. If retrieval performance is still poor,
+            # you can try the alternative approach without prepare_inputs_for_generation:
+            #   outputs = self.model(**model_inputs, use_cache=False, output_hidden_states=True)
             cache_position = torch.arange(
                 0, model_inputs["input_ids"].shape[1], device=self.device
             )
@@ -157,13 +183,13 @@ class E5OmniWrapper(AbsEncoder):
 
 
 E5_OMNI_CITATION = """@misc{chen2026e5omniexplicitcrossmodalalignment,
-      title={e5-omni: Explicit Cross-modal Alignment for Omni-modal Embeddings},
+      title={e5-omni: Explicit Cross-modal Alignment for Omni-modal Embeddings}, 
       author={Haonan Chen and Sicheng Gao and Radu Timofte and Tetsuya Sakai and Zhicheng Dou},
       year={2026},
       eprint={2601.03666},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2601.03666},
+      url={https://arxiv.org/abs/2601.03666}, 
 }"""
 
 E5_OMNI_TRAINING_DATASETS = bge_m3_training_data | {
