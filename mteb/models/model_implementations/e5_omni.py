@@ -80,17 +80,6 @@ class E5OmniWrapper(AbsEncoder):
             self.model.padding_side = "left"
         self.model.eval()
 
-    @staticmethod
-    def _to_text(x: Any) -> str:
-        """Normalize text input: handle dicts (title/text) or return string."""
-        if isinstance(x, dict):
-            title = x.get("title", "") or ""
-            text = x.get("text", "") or x.get("body", "") or ""
-            if title and text:
-                return f"{title}\n{text}"
-            return title or text
-        return "" if x is None else str(x)
-
     @torch.no_grad()
     def encode(
         self,
@@ -105,9 +94,7 @@ class E5OmniWrapper(AbsEncoder):
         all_embeddings = []
 
         for batch in tqdm(inputs, desc="Encoding"):
-            # Normalize text inputs: handle dicts (title/text) from BEIR-style corpora
-            raw_texts = batch.get("text", [])
-            batch_texts = [self._to_text(x) for x in raw_texts]
+            batch_texts = batch.get("text", [])
             batch_images = batch.get("image", [])
 
             if not batch_texts and not batch_images:
