@@ -12,6 +12,10 @@ from mteb._requires_package import (
 )
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.model_implementations.bge_models import (
+    bge_m3_training_data,
+    bgem3_languages,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -62,16 +66,20 @@ class E5OmniWrapper(AbsEncoder):
             processor_path,
             trust_remote_code=True,
         )
+        if hasattr(self.processor, "tokenizer"):
+            self.processor.tokenizer.padding_side = "left"
 
         self.model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained(
             model_name,
             revision=revision,
             torch_dtype=torch_dtype,
-            trust_remote_code=True,
             **kwargs,
         ).to(self.device)
+        if hasattr(self.model, "padding_side"):
+            self.model.padding_side = "left"
         self.model.eval()
 
+    @torch.no_grad()
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -102,12 +110,14 @@ class E5OmniWrapper(AbsEncoder):
                         content.append({"type": "image", "image": batch_images[i]})
                     messages.append([{"role": "user", "content": content}])
 
-                texts = [
-                    self.processor.apply_chat_template(
-                        msg, tokenize=False, add_generation_prompt=False
+                texts = []
+                for msg in messages:
+                    rendered = self.processor.apply_chat_template(
+                        msg, tokenize=False, add_generation_prompt=True
                     )
-                    for msg in messages
-                ]
+                    if isinstance(rendered, list):
+                        rendered = rendered[0]
+                    texts.append(f"{rendered}<|endoftext|>")
 
                 image_inputs = None
                 video_inputs = None
@@ -122,6 +132,8 @@ class E5OmniWrapper(AbsEncoder):
                     videos=video_inputs,
                     padding=True,
                     return_tensors="pt",
+                    truncation=True,
+                    max_length=512,
                 ).to(self.device)
 
                 outputs = self.model(**model_inputs, output_hidden_states=True)
@@ -131,16 +143,12 @@ class E5OmniWrapper(AbsEncoder):
                 last_hidden_state = outputs.hidden_states[-1]
 
                 # Find the last non-padding token
-                attention_mask = model_inputs.get("attention_mask")
-                if attention_mask is not None:
-                    # Qwen2.5-Omni uses right padding by default in many setups
-                    # but we should handle it robustly.
-                    sequence_lengths = attention_mask.sum(dim=1) - 1
-                    embeddings = last_hidden_state[
-                        torch.arange(last_hidden_state.size(0)), sequence_lengths
-                    ]
-                else:
-                    embeddings = last_hidden_state[:, -1, :]
+                attention_mask = model_inputs["attention_mask"]
+                # Qwen2.5-Omni uses right padding by default in many setups
+                sequence_lengths = attention_mask.sum(dim=1) - 1
+                embeddings = last_hidden_state[
+                    torch.arange(last_hidden_state.size(0)), sequence_lengths
+                ]
 
                 all_embeddings.append(embeddings.cpu().to(torch.float32))
 
@@ -157,8 +165,7 @@ E5_OMNI_CITATION = """@misc{chen2026e5omniexplicitcrossmodalalignment,
       url={https://arxiv.org/abs/2601.03666}, 
 }"""
 
-E5_OMNI_TRAINING_DATASETS = {
-    "BGE-m3",
+E5_OMNI_TRAINING_DATASETS = bge_m3_training_data | {
     "MMEB-V1",
     "MMEB-V2",
     "PixMo-Docs",
@@ -169,13 +176,13 @@ E5_OMNI_TRAINING_DATASETS = {
 e5_omni_3b = ModelMeta(
     loader=E5OmniWrapper,
     name="Haon-Chen/e5-omni-3B",
-    languages=["mul"],
+    languages=bgem3_languages,
     revision="d2765489f361965142c069c2dc18291220a3819a",
     release_date="2026-01-07",
     modalities=[
         "text",
         "image",
-    ],  # audio/video encoding is not yet wired despite model capability
+    ],  # Wrapper currently supports text/image only.
     n_parameters=5_000_000_000,
     memory_usage_mb=None,
     max_tokens=512,  # They use 512 in the training, despite the underlying model can handle more
@@ -190,18 +197,19 @@ e5_omni_3b = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=E5_OMNI_CITATION,
+    adapted_from="Qwen/Qwen2.5-Omni-3B",
 )
 
 e5_omni_7b = ModelMeta(
     loader=E5OmniWrapper,
     name="Haon-Chen/e5-omni-7B",
-    languages=["mul"],
+    languages=bgem3_languages,
     revision="bbf5f87c0899abf7890bca98c307113f3c813041",
     release_date="2026-01-07",
     modalities=[
         "text",
         "image",
-    ],  # audio/video encoding is not yet wired despite model capability
+    ],  # Wrapper currently supports text/image only.
     n_parameters=9_000_000_000,
     memory_usage_mb=None,
     max_tokens=512,  # They use 512 in the training, despite the underlying model can handle more
@@ -216,4 +224,5 @@ e5_omni_7b = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=E5_OMNI_CITATION,
+    adapted_from="Qwen/Qwen2.5-Omni-7B",
 )
