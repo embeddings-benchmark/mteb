@@ -184,7 +184,7 @@ e5_omni_3b = ModelMeta(
         "image",
     ],  # Wrapper currently supports text/image only.
     n_parameters=5_000_000_000,
-    memory_usage_mb=None,
+    memory_usage_mb=8971,
     max_tokens=512,  # They use 512 in the training, despite the underlying model can handle more
     embed_dim=2048,
     license="mit",
@@ -211,7 +211,7 @@ e5_omni_7b = ModelMeta(
         "image",
     ],  # Wrapper currently supports text/image only.
     n_parameters=9_000_000_000,
-    memory_usage_mb=None,
+    memory_usage_mb=17036,
     max_tokens=512,  # They use 512 in the training, despite the underlying model can handle more
     embed_dim=3584,
     license="mit",
