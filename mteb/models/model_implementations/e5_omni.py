@@ -32,7 +32,6 @@ class E5OmniWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
-        processor_path: str | None = None,
         revision: str | None = None,
         device: str | None = None,
         torch_dtype: torch.dtype | str | None = torch.bfloat16,
@@ -54,11 +53,8 @@ class E5OmniWrapper(AbsEncoder):
             else "cpu"
         )
 
-        if processor_path is None:
-            processor_path = model_name
-
         self.processor = AutoProcessor.from_pretrained(
-            processor_path,
+            model_name,
         )
         if hasattr(self.processor, "tokenizer"):
             self.processor.tokenizer.padding_side = "left"
@@ -73,6 +69,7 @@ class E5OmniWrapper(AbsEncoder):
             self.model.padding_side = "left"
         self.model.eval()
 
+    @torch.no_grad()
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
