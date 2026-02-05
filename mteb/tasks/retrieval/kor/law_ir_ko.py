@@ -6,7 +6,7 @@ class LawIRKo(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="LawIRKo",
         description="QA evaluation dataset based on Korean legal domain",
-        reference=None,
+        reference="https://huggingface.co/datasets/on-and-on/lawgov_ir-ko",
         dataset={
             "path": "on-and-on/lawgov_ir-ko",
             "revision": "bd5361e486ef4be7052c506adfdf0610d04abbfe",
