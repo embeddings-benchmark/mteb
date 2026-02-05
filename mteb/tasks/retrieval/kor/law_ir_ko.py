@@ -27,8 +27,8 @@ class LawIRKo(AbsTaskRetrieval):
         bibtex_citation=r"""
 @misc{law_ko_ir_on,
   author = {on-and-on},
-  note = {A Benchmark Dataset for Korean Legal Information Retrieval and QA},
   howpublished = {\url{https://www.law.go.kr/LSW/main.html}},
+  note = {A Benchmark Dataset for Korean Legal Information Retrieval and QA},
   year = {2026},
 }
 """,
