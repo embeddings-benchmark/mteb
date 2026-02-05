@@ -21,9 +21,9 @@ class LawIRKo(AbsTaskRetrieval):
         domains=["Legal"],
         task_subtypes=["Question answering"],
         license="mit",
-        annotations_creators="found",
+        annotations_creators="derived",
         dialect=[],
-        sample_creation="curated from National Law Information Center",
+        sample_creation="found",
         bibtex_citation=r"""
 @misc{law_ko_ir_on,
   author = {on-and-on},
