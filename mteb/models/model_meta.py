@@ -454,6 +454,7 @@ class ModelMeta(BaseModel):
         model_license = None
         reference = None
         n_parameters = None
+        n_embedding_parameters = None
         memory_usage_mb = None
         release_date = None
         embedding_dim = None
@@ -482,6 +483,9 @@ class ModelMeta(BaseModel):
             release_date = cls.fetch_release_date(model_name)
             model_license = card_data.license if card_data.license != "other" else None
             n_parameters = cls._calculate_num_parameters_from_hub(model_name)
+            n_embedding_parameters = cls._calculate_embedding_parameters_from_hub(
+                model_name, revision
+            )
             memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
             if model_config and hasattr(model_config, "hidden_size"):
                 embedding_dim = model_config.hidden_size
@@ -501,6 +505,7 @@ class ModelMeta(BaseModel):
             training_datasets=None,
             similarity_fn_name=None,
             n_parameters=n_parameters,
+            n_embedding_parameters=n_embedding_parameters,
             memory_usage_mb=memory_usage_mb,
             max_tokens=max_tokens,
             embed_dim=embedding_dim,
@@ -538,6 +543,7 @@ class ModelMeta(BaseModel):
         meta = cls._from_hub(
             name, revision, fill_missing=fill_missing, compute_metadata=compute_metadata
         )
+        error = None
         try:
             first = model[0]
 
@@ -545,7 +551,16 @@ class ModelMeta(BaseModel):
                 emb = first.auto_model.get_input_embeddings()
                 meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
         except Exception as e:
-            logger.warning(f"Could not calculate embedding parameters for {name}: {e}")
+            error = e
+        if meta.n_embedding_parameters is None:
+            meta.n_embedding_parameters = cls._calculate_embedding_parameters_from_hub(
+                model.model.name_or_path, revision
+            )
+
+        if meta.n_embedding_parameters is None:
+            logger.warning(
+                f"Could not calculate embedding parameters for {name}: {error}"
+            )
         meta.revision = model.model_card_data.base_model_revision or meta.revision
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
@@ -633,14 +648,23 @@ class ModelMeta(BaseModel):
             fill_missing=fill_missing,
             compute_metadata=compute_metadata,
         )
+        error = None
         try:
             emb = model.model.get_input_embeddings()
 
             if isinstance(emb, nn.Embedding):
                 meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
         except Exception as e:
+            error = e
+
+        if meta.n_embedding_parameters is None:
+            meta.n_embedding_parameters = cls._calculate_embedding_parameters_from_hub(
+                model.model.name_or_path, revision
+            )
+
+        if meta.n_embedding_parameters is None:
             logger.warning(
-                f"Could not calculate embedding parameters for {model.model.name_or_path}: {e}"
+                f"Could not calculate embedding parameters for {model.model.name_or_path}: {error}"
             )
         meta.revision = model.config._commit_hash or meta.revision
         meta.loader = CrossEncoderWrapper
@@ -755,6 +779,54 @@ class ModelMeta(BaseModel):
             Number of parameters in the model.
         """
         return self._calculate_num_parameters_from_hub(self.name)
+
+    @staticmethod
+    def _calculate_embedding_parameters_from_hub(
+        model_name: str | None = None, revision: str | None = None
+    ) -> int | None:
+        if not model_name:
+            return None
+
+        try:
+            config = _get_json_from_hub(
+                model_name, "config.json", "model", revision=revision
+            )
+
+            if not config:
+                logger.warning(f"Could not load config.json for {model_name}")
+                return None
+
+            vocab_size = config.get("vocab_size")
+            if vocab_size is None and "llm_config" in config:
+                vocab_size = config["llm_config"].get("vocab_size")
+
+            hidden_size = config.get("hidden_size") or config.get("hidden_dim")
+            if hidden_size is None and "llm_config" in config:
+                hidden_size = config["llm_config"].get("hidden_size") or config[
+                    "llm_config"
+                ].get("hidden_dim")
+
+            if vocab_size is not None and hidden_size is not None:
+                return vocab_size * hidden_size
+
+            logger.warning(
+                f"Could not find vocab_size and/or hidden_size in config for {model_name}"
+            )
+            return None
+
+        except Exception as e:
+            logger.warning(
+                f"Can't calculate embedding parameters for {model_name}. Got error {e}"
+            )
+            return None
+
+    def calculate_embedding_parameters_from_hub(self) -> int | None:
+        """Calculate the number of embedding parameters from the model config (vocab_size * hidden_size).
+
+        Returns:
+            Number of embedding parameters in the model.
+        """
+        return self._calculate_embedding_parameters_from_hub(self.name, self.revision)
 
     @staticmethod
     def _calculate_memory_usage_mb(
