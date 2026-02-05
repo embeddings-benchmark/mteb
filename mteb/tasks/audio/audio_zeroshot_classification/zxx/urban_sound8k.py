@@ -8,8 +8,8 @@ class UrbanSound8kZeroshotClassification(AbsTaskZeroShotClassification):
         description="Environmental Sound Classification Dataset.",
         reference="https://huggingface.co/datasets/danavery/urbansound8K",
         dataset={
-            "path": "danavery/urbansound8K",
-            "revision": "8aa9177a0c5a6949ee4ee4b7fcabb01dfd4ae466",
+            "path": "mteb/urbansound8K",
+            "revision": "5b3867ddd7583a24871acdf6eb5494696ddd4cbc",
         },
         type="AudioZeroshotClassification",
         category="a2t",

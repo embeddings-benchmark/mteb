@@ -10,8 +10,8 @@ class VoxPopuliGenderClustering(AbsTaskClustering):
         description="Subsampled Dataset for clustering speech samples by speaker gender (male/female) from European Parliament recordings.",
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
-            "path": "AdnanElAssadi/mini-voxpopuli",
-            "revision": "70031eb5affcb0805e448fdf0b2dbbfc05f0aa8f",
+            "path": "mteb/mini-voxpopuli",
+            "revision": "310a01e178584866d5d15f89541da9fac235df7d",
         },
         type="AudioClustering",
         category="a2a",

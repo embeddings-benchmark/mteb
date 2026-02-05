@@ -15,8 +15,8 @@ class ESC50Clustering(AbsTaskClustering):
         ),
         reference="https://huggingface.co/datasets/ashraq/esc50",
         dataset={
-            "path": "ashraq/esc50",
-            "revision": "e3e2a63ffff66b9a9735524551e3818e96af03ee",
+            "path": "mteb/esc50",
+            "revision": "31ea534771aaf92c116698355e5cdc2ffda4bb6d",
         },
         type="AudioClustering",
         category="a2a",

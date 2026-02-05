@@ -43,8 +43,8 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
         description="Multilingual audio-to-text retrieval using the Simple Voice Questions (SVQ) dataset. Given an audio query, retrieve the corresponding text transcription.",
         reference="https://huggingface.co/datasets/google/svq",
         dataset={
-            "path": "google/svq",
-            "revision": "177e4fa88e59148dc746471e164b0b46b193f41f",
+            "path": "mteb/svq",
+            "revision": "dd5a15e925767554c71b867f811b7eab53c770a4",
             "name": "audio",
         },
         type="Any2AnyRetrieval",
@@ -135,8 +135,8 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
         description="Multilingual text-to-audio retrieval using the Simple Voice Questions (SVQ) dataset. Given a text query, retrieve the corresponding audio recording.",
         reference="https://huggingface.co/datasets/google/svq",
         dataset={
-            "path": "google/svq",
-            "revision": "177e4fa88e59148dc746471e164b0b46b193f41f",
+            "path": "mteb/svq",
+            "revision": "dd5a15e925767554c71b867f811b7eab53c770a4",
             "name": "audio",
         },
         type="Any2AnyRetrieval",

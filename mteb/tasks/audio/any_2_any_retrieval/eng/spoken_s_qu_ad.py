@@ -8,8 +8,8 @@ class SpokenSQuADT2ARetrieval(AbsTaskRetrieval):
         description="Text-to-audio retrieval task based on SpokenSQuAD dataset. Given a text question, retrieve relevant audio segments that contain the answer. Questions are derived from SQuAD reading comprehension dataset with corresponding spoken passages.",
         reference="https://github.com/chiuwy/Spoken-SQuAD",
         dataset={
-            "path": "arteemg/spoken-squad-t2a",
-            "revision": "63c5c8e4cf762e52e18ecde8baf5733eab114ae9",
+            "path": "mteb/spoken-squad-t2a",
+            "revision": "b311394fa5ab5e003012304799d0d724d64303b3",
         },
         type="Any2AnyRetrieval",
         category="t2a",

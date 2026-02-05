@@ -12,8 +12,8 @@ class FSD2019KaggleMultilingualClassification(AbsTaskMultilabelClassification):
         description="Multilabel Audio Classification.",
         reference="https://huggingface.co/datasets/confit/fsdkaggle2019-parquet",  # "https://huggingface.co/datasets/CLAPv2/FSD50K",
         dataset={
-            "path": "confit/fsdkaggle2019-parquet",
-            "revision": "648a5925c8013e345ae5d36bdda220b1d4b07f24",
+            "path": "mteb/fsdkaggle2019-parquet",
+            "revision": "ff7e6d9e57951b90024fcb6d4aef95d97f4fc64e",
         },  # this is actually used to download the data
         type="AudioMultilabelClassification",
         category="a2t",

@@ -9,8 +9,8 @@ class VoxCelebClustering(AbsTaskClustering):
         description="Clustering task based on the VoxCeleb dataset for sentiment analysis, clustering by positive/negative sentiment.",
         reference="https://huggingface.co/datasets/DynamicSuperb/Sentiment_Analysis_SLUE-VoxCeleb",
         dataset={
-            "path": "DynamicSuperb/Sentiment_Analysis_SLUE-VoxCeleb",
-            "revision": "554ad4367e98b7c6f4d4d9756dc6bbdf345e042e",
+            "path": "mteb/Sentiment_Analysis_SLUE-VoxCeleb",
+            "revision": "3155df63aedc31a112c284097fdd7c0316a24ee8",
         },
         type="AudioClustering",
         category="a2a",
