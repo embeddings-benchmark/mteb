@@ -554,7 +554,7 @@ class ModelMeta(BaseModel):
             error = e
         if meta.n_embedding_parameters is None:
             meta.n_embedding_parameters = cls._calculate_embedding_parameters_from_hub(
-                model.model.name_or_path, revision
+                name, revision
             )
 
         if meta.n_embedding_parameters is None:
