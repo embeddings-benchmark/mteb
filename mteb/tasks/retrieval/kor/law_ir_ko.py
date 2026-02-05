@@ -4,7 +4,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class LawIRKo(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="law_ir-ko",
+        name="LawIRKo",
         description="law_ir-ko",
         reference=None,
         dataset={
