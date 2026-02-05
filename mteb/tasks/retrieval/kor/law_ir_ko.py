@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class LawIRKo(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="LawIRKo",
-        description="law_ir-ko",
+        description="QA evaluation dataset based on Korean legal domain",
         reference=None,
         dataset={
             "path": "on-and-on/lawgov_ir-ko",
