@@ -56,8 +56,6 @@ class E5OmniWrapper(AbsEncoder):
             else "cpu"
         )
 
-        # Map finetuned model names to their base processor models
-        # The processor should come from the base Qwen model, not the finetuned repo
         processor_model_map = {
             "Haon-Chen/e5-omni-3B": "Qwen/Qwen2.5-Omni-3B",
             "Haon-Chen/e5-omni-7B": "Qwen/Qwen2.5-Omni-7B",
@@ -66,9 +64,9 @@ class E5OmniWrapper(AbsEncoder):
 
         self.processor = AutoProcessor.from_pretrained(
             processor_model,
+            use_fast=False,
         )
-        if hasattr(self.processor, "tokenizer"):
-            self.processor.tokenizer.padding_side = "left"
+        self.processor.tokenizer.padding_side = "left"
 
         self.model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained(
             model_name,
@@ -76,8 +74,7 @@ class E5OmniWrapper(AbsEncoder):
             torch_dtype=torch_dtype,
             **kwargs,
         ).to(self.device)
-        if hasattr(self.model, "padding_side"):
-            self.model.padding_side = "left"
+        self.model.padding_side = "left"
         self.model.eval()
 
     @torch.no_grad()
@@ -149,16 +146,24 @@ class E5OmniWrapper(AbsEncoder):
             image_inputs = images if has_images else None
             video_inputs = videos if has_videos else None
 
-            model_inputs = self.processor(
-                text=texts,
-                images=image_inputs,
-                videos=video_inputs,
-                audio=audio_inputs,
-                padding=True,
-                return_tensors="pt",
-                truncation=True,
-                max_length=512,
-            ).to(self.device)
+            is_multimodal = has_audio or has_images or has_videos
+
+            processor_kwargs = {
+                "text": texts,
+                "images": image_inputs,
+                "videos": video_inputs,
+                "audio": audio_inputs,
+                "padding": True,
+                "return_tensors": "pt",
+            }
+
+            if is_multimodal:
+                processor_kwargs["truncation"] = False
+            else:
+                processor_kwargs["truncation"] = True
+                processor_kwargs["max_length"] = 512
+
+            model_inputs = self.processor(**processor_kwargs).to(self.device)
 
             # Run a plain forward pass and pool exactly as in the model card:
             # last_hidden_state[:, -1] with left padding.
