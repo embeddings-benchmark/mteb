@@ -1,17 +1,23 @@
+from __future__ import annotations
+
 import logging
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies, requires_package
-from mteb.models import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_meta import ModelMeta
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +34,7 @@ def vggish_loader(*args, **kwargs):
     from torch_vggish_yamnet import vggish
     from torch_vggish_yamnet.input_proc import WaveformToInput
 
-    class VGGishWrapper:
+    class VGGishWrapper(AbsEncoder):
         def __init__(
             self,
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
@@ -70,7 +76,7 @@ def vggish_loader(*args, **kwargs):
                 audio = audio[..., :max_length]
 
             # Normalize to [-1.0, 1.0]
-            if audio.abs().max() > 1.0:
+            if audio.numel() > 0 and audio.abs().max() > 1.0:
                 audio = audio / audio.abs().max()
 
             # Pad to minimum length
@@ -193,4 +199,18 @@ vggish = ModelMeta(
         "AudioSet",
     },
     modalities=["audio"],
+    citation="""
+@inproceedings{hershey2017cnn,
+    author = {Hershey, Shawn and Chaudhuri, Sourish and Ellis, Daniel P. W. and Gemmeke, Jort F. and Jansen, Aren and Moore, R. Channing and Plakal, Manoj and Platt, Devin and Saurous, Rif A. and Seybold, Bryan and Slaney, Malcolm and Weiss, Ron J. and Wilson, Kevin},
+    title = {CNN architectures for large-scale audio classification},
+    year = {2017},
+    publisher = {IEEE Press},
+    url = {https://doi.org/10.1109/ICASSP.2017.7952132},
+    doi = {10.1109/ICASSP.2017.7952132},
+    booktitle = {2017 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+    pages = {131–135},
+    numpages = {5},
+    location = {New Orleans, LA, USA}
+}
+""",
 )

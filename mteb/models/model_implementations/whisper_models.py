@@ -1,17 +1,22 @@
+from __future__ import annotations
+
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import WhisperModel, WhisperProcessor
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput
 
 
 class WhisperAudioWrapper(AbsEncoder):
@@ -286,6 +291,16 @@ whisper_tiny = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
+    citation="""
+@misc{radford2022robustspeechrecognitionlargescale,
+      title={Robust Speech Recognition via Large-Scale Weak Supervision},
+      author={Alec Radford and Jong Wook Kim and Tao Xu and Greg Brockman and Christine McLeavey and Ilya Sutskever},
+      year={2022},
+      eprint={2212.04356},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      url={https://arxiv.org/abs/2212.04356},
+}""",
 )
 
 whisper_base = ModelMeta(
@@ -308,6 +323,16 @@ whisper_base = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
+    citation="""
+@misc{radford2022robustspeechrecognitionlargescale,
+      title={Robust Speech Recognition via Large-Scale Weak Supervision},
+      author={Alec Radford and Jong Wook Kim and Tao Xu and Greg Brockman and Christine McLeavey and Ilya Sutskever},
+      year={2022},
+      eprint={2212.04356},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      url={https://arxiv.org/abs/2212.04356},
+}""",
 )
 
 whisper_small = ModelMeta(
@@ -330,6 +355,16 @@ whisper_small = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
+    citation="""
+@misc{radford2022robustspeechrecognitionlargescale,
+      title={Robust Speech Recognition via Large-Scale Weak Supervision},
+      author={Alec Radford and Jong Wook Kim and Tao Xu and Greg Brockman and Christine McLeavey and Ilya Sutskever},
+      year={2022},
+      eprint={2212.04356},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      url={https://arxiv.org/abs/2212.04356},
+}""",
 )
 
 whisper_medium = ModelMeta(
@@ -352,6 +387,16 @@ whisper_medium = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
+    citation="""
+@misc{radford2022robustspeechrecognitionlargescale,
+      title={Robust Speech Recognition via Large-Scale Weak Supervision},
+      author={Alec Radford and Jong Wook Kim and Tao Xu and Greg Brockman and Christine McLeavey and Ilya Sutskever},
+      year={2022},
+      eprint={2212.04356},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      url={https://arxiv.org/abs/2212.04356},
+}""",
 )
 
 whisper_large_v3 = ModelMeta(
@@ -374,4 +419,14 @@ whisper_large_v3 = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
+    citation="""
+@misc{radford2022robustspeechrecognitionlargescale,
+      title={Robust Speech Recognition via Large-Scale Weak Supervision},
+      author={Alec Radford and Jong Wook Kim and Tao Xu and Greg Brockman and Christine McLeavey and Ilya Sutskever},
+      year={2022},
+      eprint={2212.04356},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      url={https://arxiv.org/abs/2212.04356},
+}""",
 )

@@ -1,18 +1,24 @@
+from __future__ import annotations
+
 import logging
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies, requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput
+
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +78,7 @@ def yamnet_loader(*args, **kwargs):
                 audio = audio[..., :max_length]
 
             # Normalize to [-1.0, 1.0]
-            if audio.abs().max() > 1.0:
+            if audio.numel() > 0 and audio.abs().max() > 1.0:
                 audio = audio / audio.abs().max()
 
             # Pad to minimum length
@@ -208,4 +214,14 @@ yamnet = ModelMeta(
         "AudioSet",
     },
     modalities=["audio"],
+    citation="""
+@inproceedings{audioset,
+  title={Audio set: An ontology and human-labeled dataset for audio events},
+  author={Gemmeke, Jort F and Ellis, Daniel PW and Freedman, Dylan and Jansen, Aren and Lawrence, Wade and Moore, R Channing and Plakal, Manoj and Ritter, Marvin},
+  booktitle={2017 IEEE international conference on acoustics, speech and signal processing (ICASSP)},
+  pages={776--780},
+  year={2017},
+  organization={IEEE}
+}
+""",
 )

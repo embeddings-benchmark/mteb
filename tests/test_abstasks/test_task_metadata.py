@@ -4,21 +4,41 @@ import pytest
 from pydantic import ValidationError
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from tests.task_grid import ALL_TASK_TEST_GRID
+from tests.task_grid import (
+    MOCK_MAEB_TASK_GRID,
+    MOCK_MIEB_TASK_GRID,
+    MOCK_TASK_TEST_GRID,
+)
 
 
-@pytest.mark.parametrize("task", ALL_TASK_TEST_GRID)
-def test_descriptive_stats(task):
+def check_descriptive_stats(task):
     result_stat = task.calculate_descriptive_statistics()
     # remove descriptive task file
     task.metadata.descriptive_stat_path.unlink()
-    task_stat = task.expected_stats
     print(task.metadata.name)
     print(result_stat)
+    task_stat = task.expected_stats
 
     for key, value in result_stat.items():
         assert key in task_stat
         assert value == task_stat[key]
+
+
+@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
+def test_descriptive_statistics_mock_tasks(task):
+    check_descriptive_stats(task)
+
+
+@pytest.mark.parametrize("task", MOCK_MIEB_TASK_GRID)
+def test_descriptive_statistics_mock_mieb_tasks(task):
+    pytest.importorskip("PIL", reason="Image dependencies are not installed")
+    check_descriptive_stats(task)
+
+
+@pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)
+def test_descriptive_statistics_mock_maeb_tasks(task):
+    pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
+    check_descriptive_stats(task)
 
 
 def test_given_dataset_config_then_it_is_valid():
@@ -51,7 +71,7 @@ def test_given_dataset_config_then_it_is_valid():
 
 def test_given_missing_dataset_path_then_it_throws():
     with pytest.raises(ValueError):
-        TaskMetadata(  # type: ignore
+        TaskMetadata(
             name="MyTask",
             description="testing",
             reference=None,

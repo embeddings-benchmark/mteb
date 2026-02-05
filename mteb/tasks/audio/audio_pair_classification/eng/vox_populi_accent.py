@@ -5,11 +5,11 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class VoxPopuliAccentPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="VoxPopuliAccentPairClassification",
-        description="Classifying same or different regional accent of English",
+        description="Classifying same or different regional accent of English (Empty Audio Samples filtered out)",
         reference="https://aclanthology.org/2021.acl-long.80/",
         dataset={
-            "path": "mteb/VoxPopuliAccentPairClassification",
-            "revision": "cc395e3ab521e1bcd4ddbb05f2810acf807297ec",
+            "path": "mteb/VoxPopuliAccentPairClassificationFiltered",
+            "revision": "ac4587795abbac156982e41775e1428f5933a32e",
         },
         type="AudioPairClassification",
         category="a2a",

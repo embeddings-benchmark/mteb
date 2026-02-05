@@ -37,7 +37,7 @@ class SwahiliNewsClassification(AbsTaskClassification):
         superseded_by="SwahiliNewsClassification.v2",
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         self.dataset = self.dataset.rename_columns(
             {"content": "text", "category": "label"}
         )
@@ -81,7 +81,7 @@ class SwahiliNewsClassificationV2(AbsTaskClassification):
         adapted_from=["SwahiliNewsClassification"],
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"]
         )

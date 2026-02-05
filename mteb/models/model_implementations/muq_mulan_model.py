@@ -1,17 +1,22 @@
+from __future__ import annotations
+
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput, TextInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput, TextInput
 
 
 class MuQMuLanWrapper(AbsEncoder):
@@ -98,13 +103,23 @@ class MuQMuLanWrapper(AbsEncoder):
     def get_text_embeddings(
         self,
         inputs: DataLoader[TextInput],
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
         """Get text embeddings using MuQ-MuLan."""
-        texts = [text for batch in inputs for text in batch["text"]]
-        text_embeds = self.model(texts=texts)
+        all_embeddings = []
 
-        return text_embeds.cpu().detach().numpy()
+        for batch in tqdm(
+            inputs,
+            disable=not show_progress_bar,
+            desc="Processing text batches",
+        ):
+            texts = batch["text"]
+            with torch.no_grad():
+                text_embeds = self.model(texts=texts)
+                all_embeddings.append(text_embeds.cpu().detach().numpy())
+
+        return np.vstack(all_embeddings)
 
     def encode(
         self,
@@ -156,7 +171,7 @@ muq_mulan_large = ModelMeta(
     loader=MuQMuLanWrapper,
     name="OpenMuQ/MuQ-MuLan-large",
     languages=["eng-Latn", "zho-Hans"],  # English and Chinese support
-    revision="8a081dbcf84edd47ea7db3c4ecb8fd1ec1ddacfe8a081dbcf84edd47ea7db3c4ecb8fd1ec1ddacfe",
+    revision="8a081dbcf84edd47ea7db3c4ecb8fd1ec1ddacfe",
     release_date="2025-01-01",
     modalities=["audio", "text"],
     n_parameters=630_000_000,
@@ -173,4 +188,14 @@ muq_mulan_large = ModelMeta(
     similarity_fn_name="dot",
     use_instructions=False,
     training_datasets=set(),
+    citation="""
+@misc{zhu2025muqselfsupervisedmusicrepresentation,
+  title={MuQ: Self-Supervised Music Representation Learning with Mel Residual Vector Quantization},
+  author={Haina Zhu and Yizhi Zhou and Hangting Chen and Jianwei Yu and Ziyang Ma and Rongzhi Gu and Yi Luo and Wei Tan and Xie Chen},
+  year={2025},
+  eprint={2501.01108},
+  archivePrefix={arXiv},
+  primaryClass={cs.SD},
+  url={https://arxiv.org/abs/2501.01108},
+}""",
 )

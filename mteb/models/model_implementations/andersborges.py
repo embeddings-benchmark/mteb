@@ -4,19 +4,21 @@ from mteb.models.model_implementations.model2vec_models import Model2VecModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 model2vecdk = ModelMeta(
-    loader=Model2VecModel,  # type: ignore
+    loader=Model2VecModel,
     name="andersborges/model2vecdk",
+    model_type=["dense"],
     languages=["dan-Latn"],
     open_weights=True,
     revision="cb576c78dcc1b729e4612645f61db59929d69e61",
     release_date="2025-11-21",
     n_parameters=48042496,
+    n_embedding_parameters=None,
     memory_usage_mb=183,
     max_tokens=np.inf,
     embed_dim=256,
     license="mit",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["NumPy", "Sentence Transformers"],
+    framework=["NumPy", "Sentence Transformers", "safetensors"],
     reference="https://huggingface.co/andersborges/model2vecdk",
     use_instructions=False,
     adapted_from="https://huggingface.co/jealk/TTC-L2V-supervised-2",
@@ -34,19 +36,21 @@ model2vecdk = ModelMeta(
 
 
 model2vecdk_stem = ModelMeta(
-    loader=Model2VecModel,  # type: ignore
+    loader=Model2VecModel,
     name="andersborges/model2vecdk-stem",
+    model_type=["dense"],
     languages=["dan-Latn"],
     open_weights=True,
     revision="cb576c78dcc1b729e4612645f61db59929d69e61",
     release_date="2025-11-21",
     n_parameters=48578560,
+    n_embedding_parameters=None,
     memory_usage_mb=185,
     max_tokens=np.inf,
     embed_dim=256,
     license="mit",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["NumPy", "Sentence Transformers"],
+    framework=["NumPy", "Sentence Transformers", "safetensors"],
     reference="https://huggingface.co/andersborges/model2vecdk",
     use_instructions=False,
     adapted_from="https://huggingface.co/jealk/TTC-L2V-supervised-2",

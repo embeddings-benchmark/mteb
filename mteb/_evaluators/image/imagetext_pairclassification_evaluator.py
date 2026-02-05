@@ -5,19 +5,23 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 import torch.nn.functional as F
-from datasets import Dataset
 from torch.utils.data import DataLoader
 
 from mteb._create_dataloaders import (
+    _create_dataloader_from_texts,
     _transform_image_to_rgb,
 )
 from mteb._evaluators.evaluator import Evaluator
 from mteb._requires_package import requires_image_dependencies
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.models_protocols import EncoderProtocol
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from PIL.Image import Image
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
+    from mteb.types import EncodeKwargs
 
 
 logger = logging.getLogger(__name__)
@@ -61,8 +65,8 @@ class ImageTextPairClassificationEvaluator(Evaluator):
     def __init__(
         self,
         dataset,
-        images_column_names: str | list[str],
-        texts_column_names: str | list[str],
+        images_column_names: str | Sequence[str],
+        texts_column_names: str | Sequence[str],
         num_images_per_sample: int,
         num_texts_per_sample: int,
         task_metadata: TaskMetadata,
@@ -82,10 +86,12 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
 
-    def __call__(
+    def __call__(  # type: ignore[override]
         self,
         model: EncoderProtocol,
-        encode_kwargs: dict[str, Any],
+        *,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None = None,
     ) -> list[torch.Tensor]:
         images = []
         if isinstance(self.images_column_names, str):
@@ -106,8 +112,9 @@ class ImageTextPairClassificationEvaluator(Evaluator):
                     texts.append(row[col])
 
         text_embeddings = model.encode(
-            DataLoader(
-                Dataset.from_dict({"text": texts}),
+            _create_dataloader_from_texts(
+                texts,
+                num_proc=num_proc,
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
@@ -124,11 +131,15 @@ class ImageTextPairClassificationEvaluator(Evaluator):
             dim=-1,
         ).view(len(self.dataset), self.num_texts_per_sample, -1)
 
+        def _image_collate_fn(batch):
+            """Collate function for image batches."""
+            return {"image": [item["image"] for item in batch]}
+
         image_embeddings = model.encode(
             DataLoader(
                 CustomImageDataset(images),
-                collate_fn=lambda x: {"image": [item["image"] for item in x]},
-                **encode_kwargs,
+                collate_fn=_image_collate_fn,
+                num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
             ),
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,

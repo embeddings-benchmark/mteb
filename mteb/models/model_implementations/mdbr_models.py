@@ -1,5 +1,7 @@
 from mteb.models.model_implementations.arctic_models import arctic_v1_training_datasets
-from mteb.models.model_implementations.mxbai_models import mixedbread_training_data
+from mteb.models.model_implementations.mixedbread_ai_models import (
+    mixedbread_training_data,
+)
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
@@ -30,12 +32,20 @@ mdbr_leaf_ir = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="MongoDB/mdbr-leaf-ir",
+    model_type=["dense"],
     revision="2e46f5aac796e621d51f678c306a66ede4712ecb",
     release_date="2025-08-27",
     languages=["eng-Latn"],
     open_weights=True,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "ONNX",
+        "safetensors",
+        "Transformers",
+    ],
     n_parameters=22_861_056,
+    n_embedding_parameters=11_720_448,
     memory_usage_mb=86,
     max_tokens=512,
     embed_dim=768,
@@ -57,12 +67,20 @@ mdbr_leaf_mt = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="MongoDB/mdbr-leaf-mt",
+    model_type=["dense"],
     revision="66c47ba6d753efc208d54412b5af6c744a39a4df",
     release_date="2025-08-27",
     languages=["eng-Latn"],
     open_weights=True,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "ONNX",
+        "safetensors",
+        "Transformers",
+    ],
     n_parameters=22_958_592,
+    n_embedding_parameters=11_720_448,
     memory_usage_mb=86,
     max_tokens=512,
     embed_dim=1024,

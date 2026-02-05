@@ -1,20 +1,23 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
-from torch.utils.data import DataLoader
-
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.types import (
-    Array,
-    BatchedInput,
-    CorpusDatasetType,
-    PromptType,
-    QueryDatasetType,
-    RetrievalOutputType,
-    TopRankedDocumentsType,
-)
-
 if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
+
+    from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.model_meta import ModelMeta
+    from mteb.types import (
+        Array,
+        BatchedInput,
+        CorpusDatasetType,
+        EncodeKwargs,
+        PromptType,
+        QueryDatasetType,
+        RetrievalOutputType,
+        TopRankedDocumentsType,
+    )
 
 
 @runtime_checkable
@@ -28,7 +31,8 @@ class SearchProtocol(Protocol):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -38,6 +42,7 @@ class SearchProtocol(Protocol):
             hf_split: Split of current task, allows to know some additional information about current split.
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for dataloading.
         """
         ...
 
@@ -49,8 +54,9 @@ class SearchProtocol(Protocol):
         hf_split: str,
         hf_subset: str,
         top_k: int,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
+        num_proc: int | None,
     ) -> RetrievalOutputType:
         """Search the corpus using the given queries.
 
@@ -63,6 +69,7 @@ class SearchProtocol(Protocol):
                 Passed only from Reranking tasks.
             top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for dataloading.
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
@@ -70,7 +77,7 @@ class SearchProtocol(Protocol):
         ...
 
     @property
-    def mteb_model_meta(self) -> "ModelMeta":
+    def mteb_model_meta(self) -> ModelMeta:
         """Metadata of the model"""
         ...
 
@@ -83,12 +90,19 @@ class EncoderProtocol(Protocol):
     In general the interface is kept aligned with sentence-transformers interface. In cases where exceptions occurs these are handled within MTEB.
     """
 
-    def __init__(self, model_name: str, revision: str | None, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        model_name: str,
+        revision: str | None,
+        device: str | None = None,
+        **kwargs: Any,
+    ) -> None:
         """The initialization function for the encoder. Used when calling it from the mteb run CLI.
 
         Args:
             model_name: Name of the model
             revision: revision of the model
+            device: Device used to load the model
             kwargs: Any additional kwargs
         """
         ...
@@ -101,7 +115,7 @@ class EncoderProtocol(Protocol):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Encodes the given sentences using the encoder.
 
@@ -168,7 +182,7 @@ class EncoderProtocol(Protocol):
         ...
 
     @property
-    def mteb_model_meta(self) -> "ModelMeta":
+    def mteb_model_meta(self) -> ModelMeta:
         """Metadata of the model"""
         ...
 
@@ -181,12 +195,19 @@ class CrossEncoderProtocol(Protocol):
     In general the interface is kept aligned with sentence-transformers interface. In cases where exceptions occurs these are handled within MTEB.
     """
 
-    def __init__(self, model_name: str, revision: str | None, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        model_name: str,
+        revision: str | None,
+        device: str | None = None,
+        **kwargs: Any,
+    ) -> None:
         """The initialization function for the encoder. Used when calling it from the mteb run CLI.
 
         Args:
             model_name: Name of the model
             revision: revision of the model
+            device: Device used to load the model
             kwargs: Any additional kwargs
         """
         ...
@@ -200,7 +221,7 @@ class CrossEncoderProtocol(Protocol):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Predicts relevance scores for pairs of inputs. Note that, unlike the encoder, the cross-encoder can compare across inputs.
 
@@ -220,7 +241,7 @@ class CrossEncoderProtocol(Protocol):
         ...
 
     @property
-    def mteb_model_meta(self) -> "ModelMeta":
+    def mteb_model_meta(self) -> ModelMeta:
         """Metadata of the model"""
         ...
 

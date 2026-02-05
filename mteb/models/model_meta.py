@@ -3,42 +3,52 @@ from __future__ import annotations
 import json
 import logging
 import warnings
-from collections.abc import Callable, Sequence
+from collections.abc import Callable
 from dataclasses import field
 from enum import Enum
 from functools import partial
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
+import numpy as np
 from huggingface_hub import (
-    GitCommitInfo,
     ModelCard,
-    ModelCardData,
     get_safetensors_metadata,
     hf_hub_download,
     list_repo_commits,
+    model_info,
     repo_exists,
 )
 from huggingface_hub.errors import (
     EntryNotFoundError,
     GatedRepoError,
+    HFValidationError,
     NotASafetensorsRepoError,
     RepositoryNotFoundError,
     SafetensorsParsingError,
 )
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator, model_validator
+from sentence_transformers.models import Transformer
+from torch import nn
 from transformers import AutoConfig
-from typing_extensions import Self
 
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.languages import check_language_code
-from mteb.models.models_protocols import EncoderProtocol, MTEBModels
+from mteb.models.models_protocols import MTEBModels
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from huggingface_hub import (
+        GitCommitInfo,
+        ModelCardData,
+    )
     from sentence_transformers import CrossEncoder, SentenceTransformer
+    from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
+    from mteb.models.models_protocols import EncoderProtocol
 
 
 logger = logging.getLogger(__name__)
@@ -55,7 +65,13 @@ FRAMEWORKS = Literal[
     "PyLate",
     "ColBERT",
     "ColPali",
+    "GGUF",
+    "safetensors",
+    "ONNX",
+    "Transformers",
 ]
+
+MODEL_TYPES = Literal["dense", "cross-encoder", "late-interaction", "sparse"]
 
 
 class ScoringFunction(HelpfulStrEnum):
@@ -79,9 +95,6 @@ def _get_loader_name(
     return loader.__name__
 
 
-_SENTENCE_TRANSFORMER_LIB_NAME = "Sentence Transformers"
-
-
 class ModelMeta(BaseModel):
     """The model metadata object.
 
@@ -89,8 +102,9 @@ class ModelMeta(BaseModel):
         loader: The function that loads the model. If None it assumes that the model is not implemented.
         loader_kwargs: The keyword arguments to pass to the loader function.
         name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
-        n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
-            if the loader returns a SentenceTransformer model from which it can be derived.
+        n_parameters: The total number of parameters in the model, e.g. `7_000_000` for a 7M parameter model. Can be none in case the number of parameters is unknown.
+        n_embedding_parameters: The number of parameters used for the embedding layer. Can be None if the number of embedding parameters is not known (e.g. for proprietary models).
+        n_active_parameters_override: The number of active parameters used bu model. Should be used **only** for Mixture of Experts models.
         memory_usage_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
@@ -114,7 +128,7 @@ class ModelMeta(BaseModel):
             a benchmark as well as mark dataset contaminations.
         adapted_from: Name of the model from which this model is adapted. For quantizations, fine-tunes, long doc extensions, etc.
         superseded_by: Name of the model that supersedes this model, e.g., nvidia/NV-Embed-v2 supersedes v1.
-        is_cross_encoder: Whether the model can act as a cross-encoder or not.
+        model_type: A list of strings representing the type of model.
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
     """
@@ -129,6 +143,8 @@ class ModelMeta(BaseModel):
     release_date: StrDate | None
     languages: list[ISOLanguageScript] | None
     n_parameters: int | None
+    n_active_parameters_override: int | None = None
+    n_embedding_parameters: int | None = None
     memory_usage_mb: float | None
     max_tokens: float | None
     embed_dim: int | None
@@ -144,9 +160,58 @@ class ModelMeta(BaseModel):
     adapted_from: str | None = None
     superseded_by: str | None = None
     modalities: list[Modalities] = ["text"]
-    is_cross_encoder: bool | None = None
+    model_type: list[MODEL_TYPES] = ["dense"]
     citation: str | None = None
     contacts: list[str] | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def handle_legacy_is_cross_encoder(cls, data: Any) -> Any:
+        """Handle legacy is_cross_encoder field by converting it to model_type.
+
+        This validator handles backward compatibility for the deprecated is_cross_encoder field.
+        If is_cross_encoder=True is provided, it adds "cross_encoder" to model_type.
+        """
+        if isinstance(data, dict) and "is_cross_encoder" in data:
+            is_cross_encoder_value = data.pop("is_cross_encoder")
+
+            if is_cross_encoder_value is not None:
+                warnings.warn(
+                    "is_cross_encoder is deprecated and will be removed in a future version. "
+                    "Use model_type=['cross-encoder'] instead.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+
+                model_type = data.get("model_type", ["dense"])
+
+                if is_cross_encoder_value:
+                    if "cross-encoder" not in model_type:
+                        data["model_type"] = ["cross-encoder"]
+                else:
+                    if "cross-encoder" in model_type:
+                        model_type = [t for t in model_type if t != "cross-encoder"]
+                        data["model_type"] = model_type if model_type else ["dense"]
+
+        return data
+
+    @property
+    def is_cross_encoder(self) -> bool:
+        """Returns True if the model is a cross-encoder.
+
+        Derived from model_type field. A model is considered a cross-encoder if "cross-encoder" is in its model_type list.
+        """
+        return "cross-encoder" in self.model_type
+
+    @property
+    def n_active_parameters(self):
+        """Number of active parameters. Assumed to be `n_parameters - n_embedding_parameters`. Can be overwritten using `n_active_parameters_override` e.g. for MoE models."""
+        if self.n_active_parameters_override is not None:
+            return self.n_active_parameters_override
+
+        if self.n_parameters is not None and self.n_embedding_parameters is not None:
+            return self.n_parameters - self.n_embedding_parameters
+        return None
 
     @field_validator("similarity_fn_name", mode="before")
     @classmethod
@@ -183,6 +248,7 @@ class ModelMeta(BaseModel):
             else dict_repr["training_datasets"]
         )
         dict_repr["loader"] = _get_loader_name(loader)
+        dict_repr["is_cross_encoder"] = self.is_cross_encoder
         return dict_repr
 
     @field_validator("languages")
@@ -200,7 +266,7 @@ class ModelMeta(BaseModel):
     @field_validator("name")
     @classmethod
     def _check_name(cls, v: str | None) -> str | None:
-        if v is None or v in ("bm25s", "Human"):
+        if v is None:
             return v
         if "/" not in v:
             raise ValueError(
@@ -208,7 +274,7 @@ class ModelMeta(BaseModel):
             )
         return v
 
-    def load_model(self, **kwargs: Any) -> MTEBModels:
+    def load_model(self, device: str | None = None, **kwargs: Any) -> MTEBModels:
         """Loads the model using the specified loader function."""
         if self.loader is None:
             raise NotImplementedError(
@@ -220,11 +286,11 @@ class ModelMeta(BaseModel):
         # Allow overwrites
         _kwargs = self.loader_kwargs.copy()
         _kwargs.update(kwargs)
+        if device is not None:
+            _kwargs["device"] = device
 
-        model: EncoderProtocol = self.loader(
-            self.name, revision=self.revision, **_kwargs
-        )
-        model.mteb_model_meta = self  # type: ignore
+        model: MTEBModels = self.loader(self.name, revision=self.revision, **_kwargs)
+        model.mteb_model_meta = self  # type: ignore[misc]
         return model
 
     def model_name_as_path(self) -> str:
@@ -237,25 +303,153 @@ class ModelMeta(BaseModel):
         return self.name.replace("/", "__").replace(" ", "_")
 
     @classmethod
+    def _detect_cross_encoder_or_dense(
+        cls,
+        model_name: str,
+        revision: str | None,
+        sentence_transformers_loader: Callable[..., MTEBModels],
+        cross_encoder_loader: Callable[..., MTEBModels],
+    ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
+        """Detect if model is CrossEncoder or default to dense."""
+        config = _get_json_from_hub(
+            model_name, "config.json", "model", revision=revision
+        )
+
+        if not config:
+            logger.warning(
+                f"Could not load config.json for {model_name}. "
+                "Defaulting to SentenceTransformer loader."
+            )
+            return sentence_transformers_loader, "dense"
+
+        architectures = config.get("architectures", [])
+
+        is_cross_encoder = any(
+            arch.endswith("ForSequenceClassification") for arch in architectures
+        )
+        if is_cross_encoder:
+            return cross_encoder_loader, "cross-encoder"
+
+        if cls._is_causal_lm_reranker(architectures, config, model_name):
+            return cross_encoder_loader, "cross-encoder"
+
+        logger.info(
+            f"Model {model_name} does not have modules.json or recognized architecture. "
+            "Defaulting to SentenceTransformer loader."
+        )
+        return sentence_transformers_loader, "dense"
+
+    @staticmethod
+    def _is_causal_lm_reranker(
+        architectures: list[str], config: dict[str, Any], model_name: str
+    ) -> bool:
+        """Check if model is a CausalLM-style reranker."""
+        is_causal_lm = any(arch.endswith("ForCausalLM") for arch in architectures)
+
+        if not is_causal_lm:
+            return False
+
+        num_labels = config.get("num_labels", 0)
+        model_name_lower = model_name.lower()
+
+        return (
+            num_labels > 0
+            or "rerank" in model_name_lower
+            or "cross-encoder" in model_name_lower
+        )
+
+    @classmethod
+    def _detect_model_type_and_loader(
+        cls,
+        model_name: str | None,
+        revision: str | None = None,
+    ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
+        """Detect the model type and appropriate loader based on HuggingFace Hub configuration files.
+
+        This follows the Sentence Transformers architecture detection logic:
+        1. Check for modules.json - If present, model is a SentenceTransformer (dense encoder)
+        2. If no modules.json, check config.json for architecture:
+            - ForSequenceClassification → CrossEncoder
+            - CausalLM with reranking indicators → CrossEncoder
+        3. Default to dense (SentenceTransformer) if no clear indicators are found
+
+        Detection for CausalLM-style rerankers:
+        - Model has ForCausalLM architecture AND
+        - Has num_labels > 0 in config, OR
+        - Model name contains "rerank" or "cross-encoder"
+
+        Args:
+            model_name: The HuggingFace model name (can be None)
+            revision: The model revision
+
+        Returns:
+            A tuple of (loader_function, model_type) where:
+            - loader_function: A callable that returns MTEBModels, or None if model doesn't exist
+            - model_type: One of "dense", "cross-encoder", or "late-interaction"
+        """
+        from mteb.models import CrossEncoderWrapper, sentence_transformers_loader
+
+        if not model_name or not _repo_exists(model_name):
+            return sentence_transformers_loader, "dense"
+
+        try:
+            modules_config = _get_json_from_hub(
+                model_name, "modules.json", "model", revision=revision
+            )
+
+            if (
+                modules_config
+            ):  # SentenceTransformer/SparseEncoder (Not support for now)
+                return sentence_transformers_loader, "dense"
+            else:
+                return cls._detect_cross_encoder_or_dense(
+                    model_name,
+                    revision,
+                    sentence_transformers_loader,
+                    cross_encoder_loader=CrossEncoderWrapper,
+                )
+
+        except Exception as e:
+            logger.warning(
+                f"Error detecting model type for {model_name}: {e}. "
+                "Defaulting to SentenceTransformer loader."
+            )
+
+        return sentence_transformers_loader, "dense"
+
+    @classmethod
     def _from_hub(
         cls,
         model_name: str | None,
         revision: str | None = None,
-        compute_metadata: bool = True,
+        fill_missing: bool = True,
+        compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta from a HuggingFace model name.
 
         Args:
             model_name: The HuggingFace model name.
             revision: Revision of the model
-            compute_metadata: Add metadata based on model card
+            fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
             The generated ModelMeta.
         """
-        from mteb.models import sentence_transformers_loader
+        loader: Callable[..., MTEBModels] | None
+        model_type: MODEL_TYPES
 
-        loader = sentence_transformers_loader
+        if compute_metadata is not None:
+            warnings.warn(
+                "The compute_metadata parameter is deprecated and will be removed in a future version. "
+                f"Use fill_missing instead. Setting `fill_missing={compute_metadata}`.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            fill_missing = compute_metadata
+
+        loader, model_type = cls._detect_model_type_and_loader(model_name, revision)
+
         frameworks: list[FRAMEWORKS] = ["PyTorch"]
         model_license = None
         reference = None
@@ -265,7 +459,7 @@ class ModelMeta(BaseModel):
         embedding_dim = None
         max_tokens = None
 
-        if model_name and compute_metadata and repo_exists(model_name):
+        if model_name and fill_missing and _repo_exists(model_name):
             reference = "https://huggingface.co/" + model_name
             card = ModelCard.load(model_name)
             card_data: ModelCardData = card.data
@@ -276,22 +470,17 @@ class ModelMeta(BaseModel):
                 model_config = None
                 logger.warning(f"Can't get configuration for {model_name}. Error: {e}")
 
-            if (
-                card_data.library_name == _SENTENCE_TRANSFORMER_LIB_NAME
-                or _SENTENCE_TRANSFORMER_LIB_NAME in card_data.tags
-            ):
-                frameworks.append(_SENTENCE_TRANSFORMER_LIB_NAME)
-            else:
-                msg = "Model library not recognized, defaulting to Sentence Transformers loader."
-                logger.warning(msg)
-                warnings.warn(msg)
+            hf_frameworks = (
+                cls._get_frameworks_from_hf_tags(model_name) if model_name else []
+            )
+            frameworks.extend(hf_frameworks)
 
             if revision is None:
                 revisions = _get_repo_commits(model_name, "model")
                 revision = revisions[0].commit_id if revisions else None
 
             release_date = cls.fetch_release_date(model_name)
-            model_license = card_data.license
+            model_license = card_data.license if card_data.license != "other" else None
             n_parameters = cls._calculate_num_parameters_from_hub(model_name)
             memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
             if model_config and hasattr(model_config, "hidden_size"):
@@ -302,6 +491,7 @@ class ModelMeta(BaseModel):
         return cls(
             loader=loader,
             name=model_name or "no_model_name/available",
+            model_type=[model_type],
             revision=revision or "no_revision_available",
             reference=reference,
             release_date=release_date,
@@ -326,14 +516,16 @@ class ModelMeta(BaseModel):
         cls,
         model: SentenceTransformer,
         revision: str | None = None,
-        compute_metadata: bool = True,
+        fill_missing: bool = False,
+        compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta from a SentenceTransformer model.
 
         Args:
             model: SentenceTransformer model.
             revision: Revision of the model
-            compute_metadata: Add metadata based on model card
+            fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
             The generated ModelMeta.
@@ -343,14 +535,24 @@ class ModelMeta(BaseModel):
             if model.model_card_data.model_name
             else model.model_card_data.base_model
         )
-        meta = cls._from_hub(name, revision, compute_metadata)
-        if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
-            meta.framework.append("Sentence Transformers")
+        meta = cls._from_hub(
+            name, revision, fill_missing=fill_missing, compute_metadata=compute_metadata
+        )
+        try:
+            first = model[0]
+
+            if isinstance(first, Transformer):
+                emb = first.auto_model.get_input_embeddings()
+                meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
+        except Exception as e:
+            logger.warning(f"Could not calculate embedding parameters for {name}: {e}")
         meta.revision = model.model_card_data.base_model_revision or meta.revision
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
         meta.similarity_fn_name = ScoringFunction.from_str(model.similarity_fn_name)
-        meta.modalities = ["text"]
+        meta.modalities = ["text"]  # best guess
+        if "Sentence Transformers" not in meta.framework:
+            meta.framework.append("Sentence Transformers")
         return meta
 
     @classmethod
@@ -358,24 +560,29 @@ class ModelMeta(BaseModel):
         cls,
         model: str,
         revision: str | None = None,
-        compute_metadata: bool = True,
+        fill_missing: bool = True,
+        compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta for model from HuggingFace hub.
 
         Args:
             model: Name of the model from HuggingFace hub. For example, `intfloat/multilingual-e5-large`
             revision: Revision of the model
-            compute_metadata: Add metadata based on model card
+            fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
             The generated ModelMeta.
         """
-        meta = cls._from_hub(model, revision, compute_metadata)
-        if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
-            meta.framework.append("Sentence Transformers")
+        meta = cls._from_hub(
+            model,
+            revision,
+            fill_missing=fill_missing,
+            compute_metadata=compute_metadata,
+        )
         meta.modalities = ["text"]
 
-        if model and compute_metadata and repo_exists(model):
+        if model and fill_missing and _repo_exists(model):
             # have max_seq_length field
             sbert_config = _get_json_from_hub(
                 model, "sentence_bert_config.json", "model", revision=revision
@@ -393,7 +600,7 @@ class ModelMeta(BaseModel):
                 and config_sbert.get("similarity_fn_name") is not None
             ):
                 meta.similarity_fn_name = ScoringFunction.from_str(
-                    config_sbert.get("similarity_fn_name")
+                    config_sbert["similarity_fn_name"]
                 )
             else:
                 meta.similarity_fn_name = ScoringFunction.COSINE
@@ -404,27 +611,44 @@ class ModelMeta(BaseModel):
         cls,
         model: CrossEncoder,
         revision: str | None = None,
-        compute_metadata: bool = True,
+        fill_missing: bool = False,
+        compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta from a CrossEncoder.
 
         Args:
             model: The CrossEncoder model
             revision: Revision of the model
-            compute_metadata: Add metadata based on model card
+            fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
             The generated ModelMeta
         """
         from mteb.models import CrossEncoderWrapper
 
-        meta = cls._from_hub(model.model.name_or_path, revision, compute_metadata)
-        if _SENTENCE_TRANSFORMER_LIB_NAME not in meta.framework:
-            meta.framework.append("Sentence Transformers")
+        meta = cls._from_hub(
+            model.model.name_or_path,
+            revision,
+            fill_missing=fill_missing,
+            compute_metadata=compute_metadata,
+        )
+        try:
+            emb = model.model.get_input_embeddings()
+
+            if isinstance(emb, nn.Embedding):
+                meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
+        except Exception as e:
+            logger.warning(
+                f"Could not calculate embedding parameters for {model.model.name_or_path}: {e}"
+            )
         meta.revision = model.config._commit_hash or meta.revision
         meta.loader = CrossEncoderWrapper
         meta.embed_dim = None
         meta.modalities = ["text"]
+        meta.model_type = ["cross-encoder"]
+        if "Sentence Transformers" not in meta.framework:
+            meta.framework.append("Sentence Transformers")
         return meta
 
     def is_zero_shot_on(self, tasks: Sequence[AbsTask] | Sequence[str]) -> bool | None:
@@ -444,7 +668,7 @@ class ModelMeta(BaseModel):
         if isinstance(tasks[0], str):
             benchmark_datasets = set(tasks)
         else:
-            tasks = cast(Sequence["AbsTask"], tasks)
+            tasks = cast("Sequence[AbsTask]", tasks)
             benchmark_datasets = set()
             for task in tasks:
                 benchmark_datasets.add(task.metadata.name)
@@ -468,10 +692,12 @@ class ModelMeta(BaseModel):
                 if adapted_training_datasets is not None:
                     training_datasets |= adapted_training_datasets
             except (ValueError, KeyError) as e:
-                logger.warning(f"Could not get source model: {e} in MTEB")
+                msg = f"Could not get source model: {e} in MTEB"
+                logger.warning(msg)
+                warnings.warn(msg)
 
         return_dataset = training_datasets.copy()
-        visited = set()
+        visited: set[str] = set()
 
         for dataset in training_datasets:
             similar_tasks = _collect_similar_tasks(dataset, visited)
@@ -497,7 +723,7 @@ class ModelMeta(BaseModel):
         if isinstance(tasks[0], str):
             benchmark_datasets = set(tasks)
         else:
-            tasks = cast(Sequence["AbsTask"], tasks)
+            tasks = cast("Sequence[AbsTask]", tasks)
             benchmark_datasets = {task.metadata.name for task in tasks}
         overlap = training_datasets & benchmark_datasets
         perc_overlap = 100 * (len(overlap) / len(benchmark_datasets))
@@ -505,6 +731,8 @@ class ModelMeta(BaseModel):
 
     @staticmethod
     def _calculate_num_parameters_from_hub(model_name: str | None = None) -> int | None:
+        if not model_name:
+            return None
         try:
             safetensors_metadata = get_safetensors_metadata(model_name)
             if len(safetensors_metadata.parameter_count) >= 0:
@@ -518,7 +746,7 @@ class ModelMeta(BaseModel):
             logger.warning(
                 f"Can't calculate number of parameters for {model_name}. Got error {e}"
             )
-            return None
+        return None
 
     def calculate_num_parameters_from_hub(self) -> int | None:
         """Calculates the number of parameters in the model.
@@ -581,7 +809,7 @@ class ModelMeta(BaseModel):
         if "API" in self.framework or self.name is None:
             return None
 
-        return self._calculate_memory_usage_mb(self.model_name, self.n_parameters)
+        return self._calculate_memory_usage_mb(self.name, self.n_parameters)
 
     @staticmethod
     def fetch_release_date(model_name: str) -> StrDate | None:
@@ -596,6 +824,43 @@ class ModelMeta(BaseModel):
             release_date = initial_commit.created_at.strftime("%Y-%m-%d")
             return release_date
         return None
+
+    @staticmethod
+    def _get_frameworks_from_hf_tags(model_name: str) -> list[FRAMEWORKS]:
+        """Extract frameworks supported by the model from HuggingFace model tags.
+
+        Args:
+            model_name: HuggingFace model name
+
+        Returns:
+            List of framework names found in tags. Defaults to empty list if no frameworks found.
+        """
+        try:
+            info = model_info(model_name)
+            if not info.tags:
+                return []
+        except Exception as e:
+            logger.warning(
+                f"Failed to fetch frameworks from HuggingFace tags for {model_name}: {e}"
+            )
+            return []
+
+        # Mapping from HuggingFace tags to MTEB framework names
+        tag_to_framework: dict[str, FRAMEWORKS] = {
+            "sentence-transformers": "Sentence Transformers",
+            "transformers": "Transformers",
+            "onnx": "ONNX",
+            "safetensors": "safetensors",
+            "gguf": "GGUF",
+        }
+
+        frameworks: list[FRAMEWORKS] = []
+
+        for framework_tag in tag_to_framework.keys():
+            if framework_tag in info.tags:
+                frameworks.append(tag_to_framework[framework_tag])
+
+        return frameworks
 
     def to_python(self) -> str:
         """Returns a string representation of the model."""
@@ -741,3 +1006,19 @@ def _get_file_on_hub(
     except (GatedRepoError, RepositoryNotFoundError, EntryNotFoundError) as e:
         logger.warning(f"Can't get file {file_name} of {repo_id}: {e}")
         return None
+
+
+def _repo_exists(repo_id: str, repo_type: str | None = None) -> bool:
+    """Checks if a repository exists on HuggingFace Hub.
+
+    Repo exists will raise HFValidationError for invalid local paths
+
+    Args:
+        repo_id: The repository ID.
+        repo_type: The type of repository (e.g., "model", "dataset", "space").
+    """
+    try:
+        return repo_exists(repo_id=repo_id, repo_type=repo_type)
+    except HFValidationError as e:
+        logger.warning(f"Can't check existence of {repo_id}: {e}")
+        return False

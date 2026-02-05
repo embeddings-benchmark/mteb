@@ -1,22 +1,29 @@
+from __future__ import annotations
+
 import logging
-from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
 import torch.nn.functional as F
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.models_protocols import EncoderProtocol
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -154,7 +161,7 @@ REPLLAMA_CITATION = """
 """
 
 repllama_llama2_original = ModelMeta(
-    loader=RepLLaMAModel,  # type: ignore
+    loader=RepLLaMAModel,
     loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         device_map="auto",
@@ -162,6 +169,7 @@ repllama_llama2_original = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="castorini/repllama-v1-7b-lora-passage",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-6097554dfe6e7d93e92f55010b678bcca1e233a8",  # base-peft revision
@@ -171,6 +179,7 @@ repllama_llama2_original = ModelMeta(
         "mMARCO-NL",  # translation not trained on
     },
     n_parameters=7_000_000,
+    n_embedding_parameters=131_072_000,
     memory_usage_mb=27,
     max_tokens=4096,
     embed_dim=4096,
@@ -186,7 +195,7 @@ repllama_llama2_original = ModelMeta(
 
 
 repllama_llama2_reproduced = ModelMeta(
-    loader=RepLLaMAModel,  # type: ignore
+    loader=RepLLaMAModel,
     loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         device_map="auto",
@@ -194,18 +203,20 @@ repllama_llama2_reproduced = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="samaya-ai/RepLLaMA-reproduced",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-ad5c1d0938a1e02954bcafb4d811ba2f34052e71",  # base-peft revision
     release_date="2024-09-15",
     n_parameters=7_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=27,
     max_tokens=4096,
     embed_dim=4096,
     license="apache-2.0",
     reference="https://huggingface.co/samaya-ai/RepLLaMA-reproduced",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["PyTorch", "Tevatron"],
+    framework=["PyTorch", "Tevatron", "safetensors"],
     use_instructions=True,
     citation=REPLLAMA_CITATION,
     public_training_code=None,

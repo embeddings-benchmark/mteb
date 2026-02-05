@@ -1,18 +1,25 @@
+from __future__ import annotations
+
 import logging
+import tempfile
 import warnings
-from typing import Any
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput, TextInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput, TextInput
 
 logger = logging.getLogger(__name__)
 
@@ -58,42 +65,73 @@ class MSClapWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
+        import soundfile as sf
         import torchaudio
 
         all_embeddings = []
+
+        # Cache resampler to avoid recreating for each sample
+        resampler = None
+        cached_sr = None
 
         for batch in tqdm(
             inputs,
             disable=not show_progress_bar,
         ):
-            audio_arrays = []
-            for a in batch["audio"]:
-                array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate", None)
-                if sr is None:
-                    warnings.warn(
-                        f"No sampling_rate provided for an audio sample. "
-                        f"Assuming {self.sampling_rate} Hz (model default)."
+            temp_files = []
+            try:
+                for a in batch["audio"]:
+                    array = torch.tensor(a["array"], dtype=torch.float32)
+                    sr = a.get("sampling_rate", None)
+                    if sr is None:
+                        warnings.warn(
+                            f"No sampling_rate provided for an audio sample. "
+                            f"Assuming {self.sampling_rate} Hz (model default)."
+                        )
+                        sr = self.sampling_rate
+
+                    # Handle empty audio arrays
+                    if array.numel() == 0:
+                        logger.warning(
+                            "Encountered empty audio array. Using a zero-filled array as placeholder."
+                        )
+                        # Create a minimal silent audio (0.1 seconds)
+                        array = torch.zeros(
+                            int(self.sampling_rate * 0.1), dtype=torch.float32
+                        )
+                    elif sr != self.sampling_rate:
+                        # Only create new resampler if sample rate changed
+                        if resampler is None or cached_sr != sr:
+                            resampler = torchaudio.transforms.Resample(
+                                orig_freq=sr, new_freq=self.sampling_rate
+                            )
+                            cached_sr = sr
+                        array = resampler(array)
+
+                    # Write to temp file - msclap expects file paths
+                    temp_file = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+                    temp_files.append(temp_file.name)
+                    sf.write(temp_file.name, array.numpy(), self.sampling_rate)
+
+                with torch.no_grad():
+                    # Use the official msclap API that expects file paths
+                    # https://github.com/microsoft/CLAP#api
+                    audio_features = self.model.get_audio_embeddings(
+                        temp_files, resample=False
                     )
-                    sr = self.sampling_rate
-
-                if sr != self.sampling_rate:
-                    resampler = torchaudio.transforms.Resample(
-                        orig_freq=sr, new_freq=self.sampling_rate
+                    # Normalize embeddings
+                    audio_features = audio_features / audio_features.norm(
+                        dim=-1, keepdim=True
                     )
-                    array = resampler(array)
-                audio_arrays.append(array.numpy())
+                    all_embeddings.append(audio_features.cpu().detach().numpy())
+            finally:
+                # Clean up temp files
 
-            with torch.no_grad():
-                # Use the internal audio encoder directly
-                # [0] gives audio embeddings, [1] gives class probabilities
-                audio_features = self.model.clap.audio_encoder(audio_arrays)[0]
-
-                # Normalize embeddings
-                audio_features = audio_features / audio_features.norm(
-                    dim=-1, keepdim=True
-                )
-                all_embeddings.append(audio_features.cpu().detach().numpy())
+                for f in temp_files:
+                    try:
+                        Path(f).unlink()
+                    except OSError:
+                        pass
 
         return np.vstack(all_embeddings)
 
@@ -162,7 +200,7 @@ ms_clap_2022 = ModelMeta(
     loader=MSClapWrapper,
     name="microsoft/msclap-2022",
     languages=["eng-Latn"],
-    revision="N/A",
+    revision="no_revision",
     release_date="2022-12-01",
     modalities=["audio", "text"],
     n_parameters=196_000_000,
@@ -178,13 +216,23 @@ ms_clap_2022 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(),
+    citation="""
+@inproceedings{CLAP2022,
+  title={Clap learning audio concepts from natural language supervision},
+  author={Elizalde, Benjamin and Deshmukh, Soham and Al Ismail, Mahmoud and Wang, Huaming},
+  booktitle={ICASSP 2023-2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  pages={1--5},
+  year={2023},
+  organization={IEEE}
+}
+""",
 )
 
 ms_clap_2023 = ModelMeta(
     loader=MSClapWrapper,
     name="microsoft/msclap-2023",
     languages=["eng-Latn"],
-    revision="N/A",
+    revision="no_revision",
     release_date="2023-09-01",
     modalities=["audio", "text"],
     n_parameters=160_000_000,
@@ -200,4 +248,15 @@ ms_clap_2023 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(),
+    citation="""
+@misc{CLAP2023,
+      title={Natural Language Supervision for General-Purpose Audio Representations},
+      author={Benjamin Elizalde and Soham Deshmukh and Huaming Wang},
+      year={2023},
+      eprint={2309.05767},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD},
+      url={https://arxiv.org/abs/2309.05767}
+}
+""",
 )

@@ -2,32 +2,41 @@ from __future__ import annotations
 
 import json
 import logging
-from argparse import Namespace
+import warnings
 from collections import defaultdict
-from collections.abc import Callable, Iterable
 from functools import cached_property
 from importlib.metadata import version
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 from huggingface_hub import EvalResult
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
-from typing_extensions import Self
 
+from mteb import TaskMetadata
 from mteb._helpful_enum import HelpfulStrEnum
+from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.abstask import AbsTask
 from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
 from mteb.types import (
-    HFSubset,
-    ISOLanguage,
-    ISOLanguageScript,
-    Score,
     ScoresDict,
     SplitName,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable, Mapping
+    from pathlib import Path
+
+    from typing_extensions import Self
+
+    from mteb.abstasks.task_metadata import TaskDomain
+    from mteb.types import (
+        HFSubset,
+        ISOLanguage,
+        ISOLanguageScript,
+        Score,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -39,67 +48,59 @@ class Criteria(HelpfulStrEnum):
     DATASET_REVISION = "dataset_revision"
 
 
-class ScalaNbClassificationDummy:
+class ScalaNbClassificationDummy(AbsTaskClassification):
     """A dummy task for loading historic results from before v1.11.0"""
 
-    metadata = Namespace(  # type: ignore
+    metadata = TaskMetadata(
         name="ScalaNbClassification",
+        description="A dummy",
         main_score="accuracy",
         type="Classification",
-        hf_subsets_to_langscripts={
-            "default": ["nob-Latn"],
-        },
-        dataset={"revision": "revision_not_applicable"},
-        revision="revision_not_applicable",
+        eval_langs=["nob-Latn"],
+        dataset={"path": "not/exists", "revision": "revision_not_applicable"},
     )
 
 
-class ScalaNnClassificationDummy:
+class ScalaNnClassificationDummy(AbsTaskClassification):
     """A dummy task for loading historic results from before v1.11.0"""
 
-    metadata = Namespace(  # type: ignore
+    metadata = TaskMetadata(
         name="ScalaNnClassification",
+        description="A dummy",
         main_score="accuracy",
         type="Classification",
-        hf_subsets_to_langscripts={
-            "default": ["nno-Latn"],
-        },
-        dataset={"revision": "revision_not_applicable"},
-        revision="revision_not_applicable",
+        eval_langs=["nob-Latn"],
+        dataset={"path": "not/exists", "revision": "revision_not_applicable"},
     )
 
 
-class ScalaDaClassificationDummy:
+class ScalaDaClassificationDummy(AbsTaskClassification):
     """A dummy task for loading historic results from before v1.11.0"""
 
-    metadata = Namespace(  # type: ignore
+    metadata = TaskMetadata(
         name="ScalaDaClassification",
+        description="A dummy",
         main_score="accuracy",
         type="Classification",
-        hf_subsets_to_langscripts={
-            "default": ["dan-Latn"],
-        },
-        dataset={"revision": "revision_not_applicable"},
-        revision="revision_not_applicable",
+        eval_langs=["dan-Latn"],
+        dataset={"path": "not/exists", "revision": "revision_not_applicable"},
     )
 
 
-class ScalaSvClassificationDummy:
+class ScalaSvClassificationDummy(AbsTaskClassification):
     """A dummy task for loading historic results from before v1.11.0"""
 
-    metadata = Namespace(  # type: ignore
+    metadata = TaskMetadata(
         name="ScalaSvClassification",
+        description="A dummy",
         main_score="accuracy",
         type="Classification",
-        hf_subsets_to_langscripts={
-            "default": ["swe-Latn"],
-        },
-        dataset={"revision": "revision_not_applicable"},
-        revision="revision_not_applicable",
+        eval_langs=["swe-Latn"],
+        dataset={"path": "not/exists", "revision": "revision_not_applicable"},
     )
 
 
-outdated_tasks = {
+outdated_tasks: dict[str, type[AbsTask]] = {
     "ScalaNbClassification": ScalaNbClassificationDummy,
     "ScalaNnClassification": ScalaNnClassificationDummy,
     "ScalaDaClassification": ScalaDaClassificationDummy,
@@ -166,10 +167,10 @@ class TaskResult(BaseModel):
     def from_task_results(
         cls,
         task: AbsTask | type[AbsTask],
-        scores: dict[SplitName, dict[HFSubset, ScoresDict]],
+        scores: dict[SplitName, Mapping[HFSubset, ScoresDict]],
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
-    ) -> Self:
+    ) -> TaskResult:
         """Create a TaskResult from the task and scores.
 
         Args:
@@ -246,12 +247,12 @@ class TaskResult(BaseModel):
         return get_task(self.task_name)
 
     @property
-    def domains(self) -> list[str]:
+    def domains(self) -> list[TaskDomain]:
         """Get the domains of the task."""
         doms = self.task.metadata.domains
         if doms is None:
             doms = []
-        return doms  # type: ignore
+        return doms
 
     @property
     def task_type(self) -> str:
@@ -307,7 +308,7 @@ class TaskResult(BaseModel):
                     if isinstance(v, dict):
                         self._round_scores(v, n)
                     elif isinstance(v, float):
-                        value[i] = round(v, n)
+                        value[i] = round(v, n)  # type: ignore[call-overload]
 
             elif isinstance(value, float):
                 scores[key] = round(value, n)
@@ -325,7 +326,7 @@ class TaskResult(BaseModel):
             json.dump(json_obj, f, indent=2)
 
     @classmethod
-    def from_disk(cls, path: Path, load_historic_data: bool = True) -> Self:  # type: ignore
+    def from_disk(cls, path: Path, load_historic_data: bool = True) -> TaskResult:
         """Load TaskResult from disk.
 
         Args:
@@ -336,16 +337,16 @@ class TaskResult(BaseModel):
             The loaded TaskResult object.
         """
         with path.open("r", encoding="utf-8") as f:
-            data = json.load(f)
+            json_str = f.read()
 
         if not load_historic_data:
             try:
-                return cls.model_validate(data)
+                return cls.model_validate_json(json_str)
             except Exception as e:
                 raise ValueError(
                     f"Error loading TaskResult from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
                 )
-
+        data = json.loads(json_str)
         pre_1_11_load = (
             (
                 "mteb_version" in data
@@ -356,7 +357,7 @@ class TaskResult(BaseModel):
         )  # assume it is before 1.11.0 if the version is not present
 
         try:
-            obj = cls.model_validate(data)
+            obj: TaskResult = cls.model_validate_json(json_str)
         except Exception as e:
             if not pre_1_11_load:
                 raise e
@@ -381,6 +382,7 @@ class TaskResult(BaseModel):
         from mteb import get_task
 
         task_name = obj.task_name
+        task: AbsTask | type[AbsTask]
         if task_name in outdated_tasks:
             task = outdated_tasks[task_name]
         else:
@@ -393,11 +395,11 @@ class TaskResult(BaseModel):
                     for key in list(hf_subset_scores.keys()):
                         if isinstance(hf_subset_scores[key], dict):
                             for k, v in hf_subset_scores[key].items():
-                                hf_subset_scores[f"{key}_{k}"] = v
-                            hf_subset_scores.pop(key)
+                                hf_subset_scores[f"{key}_{k}"] = v  # type: ignore[index]
+                            hf_subset_scores.pop(key)  # type: ignore[attr-defined]
 
     @classmethod
-    def _convert_from_before_v1_11_0(cls, data: dict) -> Self:
+    def _convert_from_before_v1_11_0(cls, data: dict) -> TaskResult:
         from mteb.get_tasks import _TASKS_REGISTRY
 
         # in case the task name is not found in the registry, try to find a lower case version
@@ -462,7 +464,9 @@ class TaskResult(BaseModel):
                     if main_score in hf_subset_scores:
                         hf_subset_scores["main_score"] = hf_subset_scores[main_score]
                     else:
-                        logger.warning(f"Main score {main_score} not found in scores")
+                        msg = f"Main score {main_score} not found in scores"
+                        logger.warning(msg)
+                        warnings.warn(msg)
                         hf_subset_scores["main_score"] = None
 
         # specific fixes:
@@ -481,7 +485,7 @@ class TaskResult(BaseModel):
                 scores["test"]["fra-fra"] = scores["test"].pop("fr")
 
         result: TaskResult = TaskResult.from_task_results(
-            task,  # type: ignore
+            task,
             scores,
             evaluation_time,
             kg_co2_emissions=None,
@@ -532,7 +536,7 @@ class TaskResult(BaseModel):
     def _get_score_fast(
         self,
         splits: Iterable[str] | None = None,
-        languages: str | None = None,
+        languages: list[ISOLanguage | ISOLanguageScript] | None = None,
         subsets: Iterable[str] | None = None,
     ) -> float:
         """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified.
@@ -581,7 +585,7 @@ class TaskResult(BaseModel):
         return val_sum / n_val
 
     @classmethod
-    def from_validated(cls, **data) -> Self:
+    def from_validated(cls, **data) -> TaskResult:
         """Create a TaskResult from validated data.
 
         Returns:
@@ -592,13 +596,13 @@ class TaskResult(BaseModel):
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, scores=...)"
 
-    def only_main_score(self) -> Self:
+    def only_main_score(self) -> TaskResult:
         """Return a new TaskResult object with only the main score.
 
         Returns:
             A new TaskResult object with only the main score.
         """
-        new_scores = {}
+        new_scores: dict[str, list[Score]] = {}
         for split in self.scores:
             new_scores[split] = []
             for subset_scores in self.scores[split]:
@@ -610,10 +614,12 @@ class TaskResult(BaseModel):
                     }
                 )
         new_res = {**self.to_dict(), "scores": new_scores}
-        new_res = TaskResult.from_validated(**new_res)
-        return new_res
+        return TaskResult.from_validated(**new_res)
 
-    def validate_and_filter_scores(self, task: AbsTask | None = None) -> Self:
+    def validate_and_filter_scores(
+        self,
+        task: AbsTask | None = None,
+    ) -> TaskResult:
         """Validate and filter the scores against the task metadata.
 
         This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
@@ -633,22 +639,34 @@ class TaskResult(BaseModel):
             task = get_task(self.task_name)
 
         splits = task.eval_splits
-        hf_subsets = task.hf_subsets
-        hf_subsets = set(hf_subsets)
+        hf_subsets = set(task.hf_subsets)  # Convert to set once
 
-        new_scores = {}
+        new_scores: dict[str, list[Score]] = {}
         seen_splits = set()
         for split in self.scores:
             if split not in splits:
                 continue
-            new_scores[split] = []
             seen_subsets = set()
-            for _scores in self.scores[split]:
-                if _scores["hf_subset"] not in hf_subsets:
-                    continue
-                new_scores[split].append(_scores)
+            if task.is_aggregate:
+                # aggregate tasks only have the default subset, but in metadata can be multiple
+                new_scores[split] = [
+                    _scores
+                    for _scores in self.scores[split]
+                    if _scores["hf_subset"] == "default"
+                ]
+                seen_subsets = {"default"}
+            else:
+                new_scores[split] = [
+                    _scores
+                    for _scores in self.scores[split]
+                    if _scores["hf_subset"] in hf_subsets
+                ]
+            for _scores in new_scores[split]:
                 seen_subsets.add(_scores["hf_subset"])
-            if seen_subsets != hf_subsets:
+
+            if seen_subsets != hf_subsets and not (
+                task.is_aggregate and "default" in seen_subsets
+            ):
                 missing_subsets = hf_subsets - seen_subsets
                 if len(missing_subsets) > 2:
                     subset1, subset2 = list(missing_subsets)[:2]
@@ -656,17 +674,39 @@ class TaskResult(BaseModel):
                 else:
                     missing_subsets_str = str(missing_subsets)
 
-                logger.warning(
-                    f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
-                )
+                msg = f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
+                logger.warning(msg)
+                warnings.warn(msg)
+                for missing_subset in missing_subsets:
+                    new_scores[split].append(
+                        {
+                            "hf_subset": missing_subset,
+                            "main_score": np.nan,
+                            "languages": task.metadata.hf_subsets_to_langscripts.get(
+                                missing_subset, []
+                            ),
+                        }
+                    )
             seen_splits.add(split)
         if seen_splits != set(splits):
-            logger.warning(
-                f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
-            )
-        new_res = {**self.to_dict(), "scores": new_scores}
-        new_res = TaskResult.from_validated(**new_res)
-        return new_res
+            msg = f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
+            logger.warning(msg)
+            warnings.warn(msg)
+            for missing_split in set(splits) - seen_splits:
+                new_scores[missing_split] = []
+                for missing_subset in hf_subsets:
+                    new_scores[missing_split].append(
+                        {
+                            "hf_subset": missing_subset,
+                            "main_score": np.nan,
+                            "languages": task.metadata.hf_subsets_to_langscripts.get(
+                                missing_subset, []
+                            ),
+                        }
+                    )
+        data = self.model_dump()
+        data["scores"] = new_scores
+        return type(self).model_construct(**data)
 
     def is_mergeable(
         self,
@@ -734,7 +774,7 @@ class TaskResult(BaseModel):
             "mteb_version",
             "dataset_revision",
         ],
-    ) -> Self:
+    ) -> TaskResult:
         """Merges two TaskResult objects.
 
         Args:

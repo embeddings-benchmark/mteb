@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import hashlib
 import json
 import logging
@@ -5,19 +7,23 @@ import os
 import random
 import string
 import time
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import requests
-from torch.utils.data import DataLoader
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
 
 from .bge_models import bge_full_data
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+
 
 conan_zh_datasets = {
     "BQ",
@@ -190,6 +196,7 @@ class ConanWrapper(AbsEncoder):
 
 Conan_embedding_v2 = ModelMeta(
     name="TencentBAC/Conan-embedding-v2",
+    model_type=["dense"],
     revision="e5c87c63889630bca87486f6a2645ed97c5ddb17",
     release_date="2025-04-10",
     languages=[
@@ -204,11 +211,12 @@ Conan_embedding_v2 = ModelMeta(
     embed_dim=3584,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license="apache-2.0",
     reference="https://huggingface.co/TencentBAC/Conan-embedding-v2",
     similarity_fn_name="cosine",
-    framework=["API"],
+    framework=["API", "Sentence Transformers", "Transformers"],
     use_instructions=True,
     training_datasets=E5_MISTRAL_TRAINING_DATA | bge_full_data | conan_zh_datasets,
     public_training_code=None,

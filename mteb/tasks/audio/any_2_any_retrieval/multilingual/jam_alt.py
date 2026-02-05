@@ -1,4 +1,3 @@
-import polars as pl
 from datasets import Audio, DatasetDict, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -28,85 +27,68 @@ def _load_jam_alt_data(
     split = "test"
     ds = load_dataset(**dataset_args, split=split)
 
-    # Convert to Polars DataFrame for fast filtering
-    df = pl.DataFrame(ds.to_pandas())
+    # Cast audio column once if needed
+    if "audio" in ds.column_names:
+        ds = ds.cast_column("audio", Audio(decode=True))
 
-    for lang in langs:
-        # Fast filtering with Polars
-        lang_df = df.filter(pl.col("song_language") == lang)
+    # Group indices by language
+    lang_indices = {lang: [] for lang in langs}
+    for idx, row in enumerate(ds):
+        lang = row["song_language"]
+        if lang in lang_indices:
+            lang_indices[lang].append(idx)
 
-        # Create corpus data
-        corpus_data = lang_df.with_columns(
-            [
-                (
-                    pl.lit("corpus-")
-                    + pl.col("song_name")
-                    + pl.col("line_indices").list.get(0).cast(pl.Utf8)
-                ).alias("id"),
-                pl.lit(corpus_column).alias("modality"),
-            ]
-        ).select(["id", "modality", corpus_column])
+    for lang, indices in lang_indices.items():
+        if not indices:
+            continue
 
-        # Convert back to HF dataset and recast audio column if needed
-        lang_corpus = ds.from_pandas(corpus_data.to_pandas())
-        if corpus_column == "audio":
-            lang_corpus = lang_corpus.cast_column("audio", Audio(decode=True))
-        corpus[lang][split] = lang_corpus
+        # Use select to avoid copying data
+        lang_ds = ds.select(indices)
 
-        # Create queries data
-        query_data = lang_df.with_columns(
-            [
-                (
-                    pl.lit("query-")
-                    + pl.col("song_name")
-                    + pl.col("line_indices").list.get(0).cast(pl.Utf8)
-                ).alias("id"),
-                pl.lit(query_column).alias("modality"),
-            ]
-        ).select(["id", "modality", query_column])
+        # Generate IDs using map (avoids creating new dataset)
+        def add_corpus_id(example, idx):
+            example["id"] = f"corpus-{example['song_name']}{example['line_indices'][0]}"
+            return example
 
-        # Convert back to HF dataset and recast audio column if needed
-        lang_query = ds.from_pandas(query_data.to_pandas())
-        if query_column == "audio":
-            lang_query = lang_query.cast_column("audio", Audio(decode=True))
-        queries[lang][split] = lang_query
+        def add_query_id(example, idx):
+            example["id"] = f"query-{example['song_name']}{example['line_indices'][0]}"
+            return example
 
-        # Build qrels efficiently with Polars
-        relevant_docs[lang][split] = {}
+        # Create corpus
+        corpus_ds = lang_ds.map(add_corpus_id, with_indices=True)
+        corpus_ds = corpus_ds.select_columns(["id", corpus_column])
+        corpus[lang][split] = corpus_ds
 
-        # Create query and corpus IDs
-        lang_df_with_ids = lang_df.with_columns(
-            [
-                (
-                    pl.lit("query-")
-                    + pl.col("song_name")
-                    + pl.col("line_indices").list.get(0).cast(pl.Utf8)
-                ).alias("query_id"),
-                (
-                    pl.lit("corpus-")
-                    + pl.col("song_name")
-                    + pl.col("line_indices").list.get(0).cast(pl.Utf8)
-                ).alias("corpus_id"),
-            ]
-        )
+        # Create queries
+        query_ds = lang_ds.map(add_query_id, with_indices=True)
+        query_ds = query_ds.select_columns(["id", query_column])
+        queries[lang][split] = query_ds
 
-        # Group by qrels_column for efficient matching
-        qrel_groups = lang_df_with_ids.group_by(qrels_column).agg(
-            [pl.col("query_id").unique(), pl.col("corpus_id").unique()]
-        )
+        # Build qrels efficiently
+        qrels = {}
+        qrel_groups = {}
 
-        # Build qrels from grouped data
-        for row in qrel_groups.iter_rows(named=True):
-            query_ids = row["query_id"]
-            corpus_ids = row["corpus_id"]
+        # Group by qrels_column
+        for row in lang_ds:
+            qrel_key = row[qrels_column]
+            query_id = f"query-{row['song_name']}{row['line_indices'][0]}"
+            corpus_id = f"corpus-{row['song_name']}{row['line_indices'][0]}"
 
-            # Create all combinations within this group
-            for query_id in query_ids:
-                if query_id not in relevant_docs[lang][split]:
-                    relevant_docs[lang][split][query_id] = {}
+            if qrel_key not in qrel_groups:
+                qrel_groups[qrel_key] = {"queries": set(), "corpus": set()}
 
-                for corpus_id in corpus_ids:
-                    relevant_docs[lang][split][query_id][corpus_id] = 1
+            qrel_groups[qrel_key]["queries"].add(query_id)
+            qrel_groups[qrel_key]["corpus"].add(corpus_id)
+
+        # Create cross-product within each group
+        for group in qrel_groups.values():
+            for query_id in group["queries"]:
+                if query_id not in qrels:
+                    qrels[query_id] = {}
+                for corpus_id in group["corpus"]:
+                    qrels[query_id][corpus_id] = 1
+
+        relevant_docs[lang][split] = qrels
 
     corpus = DatasetDict({lang: DatasetDict(splits) for lang, splits in corpus.items()})
     queries = DatasetDict(
@@ -117,17 +99,17 @@ def _load_jam_alt_data(
     return corpus, queries, relevant_docs
 
 
-class JamAltArtist(AbsTaskRetrieval):
+class JamAltArtistA2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JamAltArtistA2ARetrieval",
         description="Given audio clip of a song (query), retrieve all songs from the same artist in the Jam-Alt-Lines dataset",
         reference="https://huggingface.co/datasets/jamendolyrics/jam-alt-lines",
         dataset={
-            "path": "jamendolyrics/jam-alt-lines",
-            "revision": "11dc96be3bbefd4eb49a467825d7d3d3808105d7",
+            "path": "mteb/jam-alt-lines",
+            "revision": "e2d97afa7333eb489f1d451f76079d921be7a68f",
             "name": "pure",
         },
-        type="Any2AnyMultilingualRetrieval",
+        type="Any2AnyRetrieval",
         category="a2a",
         modalities=["audio"],
         eval_splits=["test"],
@@ -178,17 +160,17 @@ Music Information Retrieval Conference},
         self.data_loaded = True
 
 
-class JamAltLyricsT2A(AbsTaskRetrieval):
+class JamAltLyricT2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JamAltLyricT2ARetrieval",
         description="From textual lyrics (query), retrieve corresponding audio clips of songs from the Jam-Alt-Lines dataset",
         reference="https://huggingface.co/datasets/jamendolyrics/jam-alt-lines",
         dataset={
-            "path": "jamendolyrics/jam-alt-lines",
-            "revision": "11dc96be3bbefd4eb49a467825d7d3d3808105d7",
+            "path": "mteb/jam-alt-lines",
+            "revision": "e2d97afa7333eb489f1d451f76079d921be7a68f",
             "name": "pure",
         },
-        type="Any2AnyMultilingualRetrieval",
+        type="Any2AnyRetrieval",
         category="t2a",
         modalities=["text", "audio"],
         eval_splits=["test"],
@@ -236,17 +218,17 @@ Music Information Retrieval Conference},
         self.data_loaded = True
 
 
-class JamAltLyricsA2T(AbsTaskRetrieval):
+class JamAltLyricA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JamAltLyricA2TRetrieval",
         description="From audio clips of songs (query), retrieve corresponding textual lyric from the Jam-Alt-Lines dataset",
         reference="https://huggingface.co/datasets/jamendolyrics/jam-alt-lines",
         dataset={
-            "path": "jamendolyrics/jam-alt-lines",
-            "revision": "11dc96be3bbefd4eb49a467825d7d3d3808105d7",
+            "path": "mteb/jam-alt-lines",
+            "revision": "e2d97afa7333eb489f1d451f76079d921be7a68f",
             "name": "pure",
         },
-        type="Any2AnyMultilingualRetrieval",
+        type="Any2AnyRetrieval",
         category="a2t",
         modalities=["text", "audio"],
         eval_splits=["test"],

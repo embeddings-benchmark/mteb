@@ -1,28 +1,37 @@
+from __future__ import annotations
+
 import logging
 import warnings
-from collections.abc import Callable, Iterable, Sequence
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
 import pandas as pd
 from pydantic import BaseModel, ConfigDict, Field
-from typing_extensions import Self
+from typing_extensions import overload
 
-from mteb.abstasks.abstask import AbsTask
-from mteb.abstasks.task_metadata import (
-    TaskDomain,
-    TaskType,
-)
 from mteb.types import (
-    ISOLanguage,
-    ISOLanguageScript,
     Modalities,
-    Score,
-    ScoresDict,
-    SplitName,
 )
 
 from .task_result import TaskError, TaskResult
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable
+    from pathlib import Path
+
+    from mteb.abstasks.abstask import AbsTask
+    from mteb.abstasks.task_metadata import (
+        TaskDomain,
+        TaskType,
+    )
+    from mteb.types import (
+        ISOLanguage,
+        ISOLanguageScript,
+        Score,
+        ScoresDict,
+        SplitName,
+    )
+
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +67,7 @@ def _aggregate_and_pivot(
             index=index_columns,
             columns=columns,
             values="score",
-            aggfunc=aggregation_fn,
+            aggfunc=aggregation_fn,  # type: ignore[arg-type]
         ).reset_index()
     elif format == "long":
         return (
@@ -81,7 +90,7 @@ class ModelResult(BaseModel):
     model_revision: str | None
     task_results: list[TaskResult]
     default_modalities: list[Modalities] = Field(
-        default_factory=lambda: ["text"], alias="modalities"
+        default_factory=lambda: [cast("Modalities", "text")], alias="modalities"
     )
     model_config = (
         ConfigDict(  # to free up the name model_* which is otherwise protected
@@ -95,16 +104,17 @@ class ModelResult(BaseModel):
         return f"ModelResult(model_name={self.model_name}, model_revision={self.model_revision}, task_results=[...](#{n_entries}))"
 
     @classmethod
-    def from_validated(cls, **data: dict[str, Any]) -> Self:
+    def from_validated(cls, **data: dict[str, Any]) -> ModelResult:
         """Create a ModelResult from validated data.
 
         Args:
             data: The validated data.
         """
-        data["task_results"] = [
-            TaskResult.from_validated(**res) for res in data["task_results"]
+        data["task_results"] = [  # type: ignore[assignment]
+            TaskResult.from_validated(**res)  # type: ignore[arg-type]
+            for res in data["task_results"]
         ]
-        return cls.model_construct(**data)
+        return cls.model_construct(**data)  # type: ignore[arg-type]
 
     def _filter_tasks(
         self,
@@ -114,7 +124,7 @@ class ModelResult(BaseModel):
         task_types: list[TaskType] | None = None,
         modalities: list[Modalities] | None = None,
         is_public: bool | None = None,
-    ) -> Self:
+    ) -> ModelResult:
         new_task_results = []
         for task_result in self.task_results:
             if (task_names is not None) and (task_result.task_name not in task_names):
@@ -142,7 +152,7 @@ class ModelResult(BaseModel):
             task_results=new_task_results,
         )
 
-    def select_tasks(self, tasks: Sequence[AbsTask]) -> Self:
+    def select_tasks(self, tasks: Iterable[AbsTask]) -> ModelResult:
         """Select tasks from the ModelResult based on a list of AbsTask objects.
 
         Args:
@@ -159,6 +169,28 @@ class ModelResult(BaseModel):
             model_revision=self.model_revision,
             task_results=new_task_results,
         )
+
+    @overload
+    def _get_scores(
+        self,
+        splits: list[SplitName] | None = None,
+        languages: list[ISOLanguage | ISOLanguageScript] | None = None,
+        scripts: list[ISOLanguageScript] | None = None,
+        getter: Callable[[ScoresDict], Score] | None = None,
+        aggregation: Callable[[list[Score]], Any] | None = None,
+        format: Literal["wide"] = "wide",
+    ) -> dict: ...
+
+    @overload
+    def _get_scores(
+        self,
+        splits: list[SplitName] | None = None,
+        languages: list[ISOLanguage | ISOLanguageScript] | None = None,
+        scripts: list[ISOLanguageScript] | None = None,
+        getter: Callable[[ScoresDict], Score] | None = None,
+        aggregation: Callable[[list[Score]], Any] | None = None,
+        format: Literal["long"] = "long",
+    ) -> list: ...
 
     def _get_scores(
         self,
@@ -177,21 +209,24 @@ class ModelResult(BaseModel):
             aggregation = aggregation if aggregation is not None else np.mean
         else:
             use_fast = True
+        aggregation = cast("Callable[[list[Score]], Any]", aggregation)
+        getter = cast("Callable[[ScoresDict], Score]", getter)
+
         if format == "wide":
             scores = {}
             for res in self.task_results:
                 try:
                     if use_fast:
                         scores[res.task_name] = res._get_score_fast(
-                            splits=splits,  # type: ignore
-                            languages=languages,  # type: ignore
+                            splits=splits,
+                            languages=languages,
                         )
                     else:
                         scores[res.task_name] = res.get_score(
                             splits=splits,
                             languages=languages,
-                            aggregation=aggregation,  # type: ignore
-                            getter=getter,  # type: ignore
+                            aggregation=aggregation,
+                            getter=getter,
                             scripts=scripts,
                         )
                 except Exception as e:
@@ -206,14 +241,14 @@ class ModelResult(BaseModel):
                     if use_fast:
                         score = task_res._get_score_fast(
                             splits=splits,
-                            languages=languages,  # type: ignore
+                            languages=languages,
                         )
                     else:
                         score = task_res.get_score(
                             splits=splits,
                             languages=languages,
-                            aggregation=aggregation,  # type: ignore
-                            getter=getter,  # type: ignore
+                            aggregation=aggregation,
+                            getter=getter,
                             scripts=scripts,
                         )
                     entry = dict(
@@ -292,7 +327,9 @@ class ModelResult(BaseModel):
         scores_data = self._get_score_for_table()
 
         if not scores_data:
-            logger.warning("No scores data available. Returning empty DataFrame.")
+            msg = "No scores data available. Returning empty DataFrame."
+            logger.warning(msg)
+            warnings.warn(msg)
             return pd.DataFrame()
 
         # Create DataFrame
@@ -315,7 +352,7 @@ class ModelResult(BaseModel):
     def __hash__(self) -> int:
         return id(self)
 
-    def __iter__(self) -> Iterable[TaskResult]:
+    def __iter__(self) -> Iterable[TaskResult]:  # type: ignore[override]
         return iter(self.task_results)
 
     def __getitem__(self, index) -> TaskResult:
@@ -368,16 +405,38 @@ class ModelResult(BaseModel):
         return [task_res.task_name for task_res in self.task_results]
 
     @property
-    def modalities(self) -> list[str]:
+    def modalities(self) -> list[Modalities]:
         """Get all modalities in the task results.
 
         Returns:
             A list of modalities in the task results.
         """
-        mods = []
+        mods: list[Modalities] = []
         for task_res in self.task_results:
             task_modalities = getattr(task_res, "modalities", [])
             mods.extend(task_modalities)
         if not mods:
             mods = self.default_modalities
         return list(set(mods))
+
+    def to_disk(self, path: Path) -> None:
+        """Save ModelResult to disk as JSON.
+
+        Args:
+            path: The path to the file to save.
+        """
+        with path.open("w") as f:
+            f.write(self.model_dump_json(indent=2))
+
+    @classmethod
+    def from_disk(cls, path: Path) -> ModelResult:
+        """Load ModelResult from disk.
+
+        Args:
+            path: The path to the JSON file to load.
+
+        Returns:
+            The loaded ModelResult object.
+        """
+        with path.open("r", encoding="utf-8") as f:
+            return cls.model_validate_json(f.read())

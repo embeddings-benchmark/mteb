@@ -1,15 +1,21 @@
+from __future__ import annotations
+
 import logging
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 import numpy as np
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -161,12 +167,13 @@ class OpenAIModel(AbsEncoder):
             all_embeddings[mask] = no_empty_embeddings
         return all_embeddings
 
-    def _to_numpy(self, embedding_response) -> np.ndarray:
+    def _to_numpy(self, embedding_response) -> NDArray[np.floating]:
         return np.array([e.embedding for e in embedding_response.data])
 
 
 text_embedding_3_small = ModelMeta(
     name="openai/text-embedding-3-small",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -179,6 +186,7 @@ text_embedding_3_small = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://openai.com/index/new-embedding-models-and-api-updates/",
@@ -191,6 +199,7 @@ text_embedding_3_small = ModelMeta(
 )
 text_embedding_3_large = ModelMeta(
     name="openai/text-embedding-3-large",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -206,6 +215,7 @@ text_embedding_3_large = ModelMeta(
     framework=["API"],
     use_instructions=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
@@ -215,6 +225,7 @@ text_embedding_3_large = ModelMeta(
 )
 text_embedding_ada_002 = ModelMeta(
     name="openai/text-embedding-ada-002",
+    model_type=["dense"],
     revision="3",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
@@ -230,6 +241,7 @@ text_embedding_ada_002 = ModelMeta(
     framework=["API"],
     use_instructions=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
@@ -240,6 +252,7 @@ text_embedding_ada_002 = ModelMeta(
 
 text_embedding_3_small_512 = ModelMeta(
     name="openai/text-embedding-3-small (embed_dim=512)",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -253,6 +266,7 @@ text_embedding_3_small_512 = ModelMeta(
     embed_dim=512,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://openai.com/index/new-embedding-models-and-api-updates/",
@@ -266,6 +280,7 @@ text_embedding_3_small_512 = ModelMeta(
 
 text_embedding_3_large_512 = ModelMeta(
     name="openai/text-embedding-3-large (embed_dim=512)",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -282,6 +297,7 @@ text_embedding_3_large_512 = ModelMeta(
     framework=["API"],
     use_instructions=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed

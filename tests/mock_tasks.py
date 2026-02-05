@@ -1,5 +1,9 @@
 """This implements minimal viable mock tasks for testing the benchmarking framework."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import datasets
 import numpy as np
 from datasets import Audio, Dataset, DatasetDict
@@ -26,6 +30,9 @@ from mteb.abstasks.text.summarization import AbsTaskSummarization
 from mteb.abstasks.zeroshot_classification import (
     AbsTaskZeroShotClassification,
 )
+
+if TYPE_CHECKING:
+    from PIL.Image import Image
 
 general_args = {
     "description": "a mock task for testing",
@@ -112,8 +119,34 @@ def instruction_retrieval_datasplit() -> RetrievalSplitData:
     return base_ds
 
 
+def create_mock_images(np_rng: np.random.Generator, n: int = 2) -> list[Image]:
+    from PIL import Image
+
+    images = [np_rng.integers(0, 255, (100, 100, 3)) for _ in range(n)]
+    return [Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images]
+
+
+def create_mock_audio(
+    np_rng: np.random.Generator,
+    n: int = 2,
+    duration_s: float = 1.0,
+    sampling_rate: int = 16_000,
+) -> list[np.ndarray]:
+    audio_samples = []
+    num_samples = int(duration_s * sampling_rate)
+    for _ in range(n):
+        audio = np_rng.uniform(-1.0, 1.0, num_samples).astype(np.float32)
+        audio_samples.append(
+            {
+                "array": audio,
+                "sampling_rate": sampling_rate,
+            }
+        )
+    return audio_samples
+
+
 class MockClassificationTask(AbsTaskClassification):
-    classifier = LogisticRegression(n_jobs=1, max_iter=10)  # type: ignore
+    classifier = LogisticRegression(n_jobs=1, max_iter=10)
 
     expected_stats = {
         "test": {
@@ -127,6 +160,7 @@ class MockClassificationTask(AbsTaskClassification):
                 "unique_texts": 2,
             },
             "image_statistics": None,
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -146,6 +180,7 @@ class MockClassificationTask(AbsTaskClassification):
                 "unique_texts": 2,
             },
             "image_statistics": None,
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -160,10 +195,10 @@ class MockClassificationTask(AbsTaskClassification):
         type="Classification",
         name="MockClassificationTask",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"]
         test_texts = ["This is a test sentence", "This is another test sentence"]
 
@@ -203,6 +238,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                 "unique_texts": 2,
             },
             "image_statistics": None,
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -222,6 +258,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                         "unique_texts": 2,
                     },
                     "image_statistics": None,
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -241,6 +278,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                         "unique_texts": 2,
                     },
                     "image_statistics": None,
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -262,6 +300,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                 "unique_texts": 2,
             },
             "image_statistics": None,
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -281,6 +320,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                         "unique_texts": 2,
                     },
                     "image_statistics": None,
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -300,6 +340,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
                         "unique_texts": 2,
                     },
                     "image_statistics": None,
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -316,11 +357,11 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
         type="Classification",
         name="MockMultilingualClassificationTask",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"]
         test_texts = ["This is a test sentence", "This is another test sentence"]
         labels = [0, 1]
@@ -375,10 +416,10 @@ class MockBitextMiningTask(AbsTaskBitextMining):
         type="BitextMining",
         name="MockBitextMiningTask",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -465,11 +506,11 @@ class MockMultilingualBitextMiningTask(AbsTaskBitextMining):
         type="BitextMining",
         name="MockMultilingualBitextMiningTask",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -560,14 +601,14 @@ class MockMultilingualParallelBitextMiningTask(AbsTaskBitextMining):
         type="BitextMining",
         name="MockMultilingualParallelBitextMiningTask",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = {
         "eng_Latn-fra_Latn": ["eng-Latn", "fra-Latn"],
         "fra_Latn-eng_Latn": ["eng-Latn", "fra-Latn"],
     }
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -599,6 +640,7 @@ class MockClusteringTask(AbsTaskClusteringLegacy):
                 "unique_texts": 3,
             },
             "image_statistics": None,
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -613,10 +655,10 @@ class MockClusteringTask(AbsTaskClusteringLegacy):
         type="Clustering",
         name="MockClusteringTask",
         main_score="v_measure",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         sentences = [
             [
                 "This is a test sentence",
@@ -651,6 +693,7 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
                 "unique_texts": 3,
             },
             "image_statistics": None,
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -669,6 +712,7 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
                         "unique_texts": 3,
                     },
                     "image_statistics": None,
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -691,6 +735,7 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
                         "unique_texts": 3,
                     },
                     "image_statistics": None,
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -711,11 +756,11 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
         type="Clustering",
         name="MockMultilingualClusteringTask",
         main_score="v_measure",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         sentences = [
             [
                 "This is a test sentence",
@@ -758,6 +803,7 @@ class MockClusteringFastTask(AbsTaskClustering):
                 "unique_texts": 3,
             },
             "image_statistics": None,
+            "audio_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -772,10 +818,10 @@ class MockClusteringFastTask(AbsTaskClustering):
         type="Clustering",
         name="MockClusteringFastTask",
         main_score="v_measure",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         sentences = [
             "This is a test sentence",
             "This is another test sentence",
@@ -811,6 +857,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClustering):
                 "unique_texts": 3,
             },
             "image_statistics": None,
+            "audio_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -829,6 +876,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClustering):
                         "unique_texts": 3,
                     },
                     "image_statistics": None,
+                    "audio_statistics": None,
                     "labels_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -851,6 +899,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClustering):
                         "unique_texts": 3,
                     },
                     "image_statistics": None,
+                    "audio_statistics": None,
                     "labels_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -871,11 +920,11 @@ class MockMultilingualClusteringFastTask(AbsTaskClustering):
         type="Clustering",
         name="MockMultilingualClusteringFastTask",
         main_score="v_measure",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         sentences = [
             "This is a test sentence",
             "This is another test sentence",
@@ -904,8 +953,8 @@ class MockPairClassificationTask(AbsTaskPairClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_of_characters": 113,
             "unique_pairs": 2,
+            "number_of_characters": 113,
             "text1_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -914,6 +963,7 @@ class MockPairClassificationTask(AbsTaskPairClassification):
                 "unique_texts": 2,
             },
             "image1_statistics": None,
+            "audio1_statistics": None,
             "text2_statistics": {
                 "total_text_length": 61,
                 "min_text_length": 24,
@@ -922,6 +972,7 @@ class MockPairClassificationTask(AbsTaskPairClassification):
                 "unique_texts": 2,
             },
             "image2_statistics": None,
+            "audio2_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -936,10 +987,10 @@ class MockPairClassificationTask(AbsTaskPairClassification):
         type="PairClassification",
         name="MockPairClassificationTask",
         main_score="similarity_ap",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -965,8 +1016,8 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "number_of_characters": 226,
             "unique_pairs": 2,
+            "number_of_characters": 226,
             "text1_statistics": {
                 "total_text_length": 104,
                 "min_text_length": 23,
@@ -975,6 +1026,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                 "unique_texts": 2,
             },
             "image1_statistics": None,
+            "audio1_statistics": None,
             "text2_statistics": {
                 "total_text_length": 122,
                 "min_text_length": 24,
@@ -983,6 +1035,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                 "unique_texts": 2,
             },
             "image2_statistics": None,
+            "audio2_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -993,8 +1046,8 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 2,
-                    "number_of_characters": 113,
                     "unique_pairs": 2,
+                    "number_of_characters": 113,
                     "text1_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -1003,6 +1056,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                         "unique_texts": 2,
                     },
                     "image1_statistics": None,
+                    "audio1_statistics": None,
                     "text2_statistics": {
                         "total_text_length": 61,
                         "min_text_length": 24,
@@ -1011,6 +1065,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                         "unique_texts": 2,
                     },
                     "image2_statistics": None,
+                    "audio2_statistics": None,
                     "labels_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -1021,8 +1076,8 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                 },
                 "fra": {
                     "num_samples": 2,
-                    "number_of_characters": 113,
                     "unique_pairs": 2,
+                    "number_of_characters": 113,
                     "text1_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -1031,6 +1086,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                         "unique_texts": 2,
                     },
                     "image1_statistics": None,
+                    "audio1_statistics": None,
                     "text2_statistics": {
                         "total_text_length": 61,
                         "min_text_length": 24,
@@ -1039,6 +1095,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                         "unique_texts": 2,
                     },
                     "image2_statistics": None,
+                    "audio2_statistics": None,
                     "labels_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -1055,11 +1112,11 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
         type="PairClassification",
         name="MockMultilingualPairClassificationTask",
         main_score="similarity_ap",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -1102,6 +1159,7 @@ class MockPairImageClassificationTask(AbsTaskPairClassification):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio1_statistics": None,
             "text2_statistics": None,
             "image2_statistics": {
                 "min_image_width": 100,
@@ -1112,6 +1170,7 @@ class MockPairImageClassificationTask(AbsTaskPairClassification):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio2_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -1126,25 +1185,16 @@ class MockPairImageClassificationTask(AbsTaskPairClassification):
         type="PairClassification",
         name="MockPairImageClassificationTask",
         main_score="similarity_ap",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
 
     input1_column_name = "image1"
     input2_column_name = "image2"
 
-    def load_data(self) -> None:
-        from PIL import Image
-
-        images1 = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images1 = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images1
-        ]
-
-        images2 = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images2 = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images2
-        ]
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        images1 = create_mock_images(self.np_rng)
+        images2 = create_mock_images(self.np_rng)
 
         labels = [1, 0]
 
@@ -1184,6 +1234,8 @@ class MockSTSTask(AbsTaskSTS):
             },
             "image1_statistics": None,
             "image2_statistics": None,
+            "audio1_statistics": None,
+            "audio2_statistics": None,
             "label_statistics": {"min_score": 0, "avg_score": 0.5, "max_score": 1},
         }
     }
@@ -1192,10 +1244,10 @@ class MockSTSTask(AbsTaskSTS):
         type="STS",
         name="MockSTSTask",
         main_score="cosine_spearman",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -1242,6 +1294,8 @@ class MockMultilingualSTSTask(AbsTaskSTS):
             },
             "image1_statistics": None,
             "image2_statistics": None,
+            "audio1_statistics": None,
+            "audio2_statistics": None,
             "label_statistics": {"min_score": 0, "avg_score": 0.5, "max_score": 1},
             "hf_subset_descriptive_stats": {
                 "eng": {
@@ -1264,6 +1318,8 @@ class MockMultilingualSTSTask(AbsTaskSTS):
                     },
                     "image1_statistics": None,
                     "image2_statistics": None,
+                    "audio1_statistics": None,
+                    "audio2_statistics": None,
                     "label_statistics": {
                         "min_score": 0,
                         "avg_score": 0.5,
@@ -1290,6 +1346,8 @@ class MockMultilingualSTSTask(AbsTaskSTS):
                     },
                     "image1_statistics": None,
                     "image2_statistics": None,
+                    "audio1_statistics": None,
+                    "audio2_statistics": None,
                     "label_statistics": {
                         "min_score": 0,
                         "avg_score": 0.5,
@@ -1304,11 +1362,11 @@ class MockMultilingualSTSTask(AbsTaskSTS):
         type="STS",
         name="MockMultilingualSTSTask",
         main_score="cosine_spearman",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -1369,10 +1427,10 @@ class MockSummarizationTask(AbsTaskSummarization):
         type="Summarization",
         name="MockSummarizationTask",
         main_score="cosine_spearman",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         texts = ["This is a test sentence", "This is another test sentence"]
         human_summaries = [
             ["This is a summary", "This is another summary"],
@@ -1498,11 +1556,11 @@ class MockMultilingualSummarizationTask(AbsTaskSummarization):
         type="Summarization",
         name="MockMultilingualSummarizationTask",
         main_score="cosine_spearman",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         texts = ["This is a test sentence", "This is another test sentence"]
         human_summaries = [
             ["This is a summary", "This is another summary"],
@@ -1548,6 +1606,7 @@ class MockRerankingTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "documents_image_statistics": None,
+            "documents_audio_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -1556,6 +1615,7 @@ class MockRerankingTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_image_statistics": None,
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -1576,10 +1636,10 @@ class MockRerankingTask(AbsTaskRetrieval):
         type="Reranking",
         name="MockRerankingTask",
         main_score="map_at_1000",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         self.dataset = {"default": {"test": base_datasplit}}
@@ -1599,6 +1659,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "documents_image_statistics": None,
+            "documents_audio_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 104,
                 "min_text_length": 23,
@@ -1607,6 +1668,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_image_statistics": None,
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -1632,6 +1694,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "documents_image_statistics": None,
+                    "documents_audio_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -1640,6 +1703,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_image_statistics": None,
+                    "queries_audio_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -1665,6 +1729,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "documents_image_statistics": None,
+                    "documents_audio_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -1673,6 +1738,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_image_statistics": None,
+                    "queries_audio_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -1695,11 +1761,11 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
         type="Reranking",
         name="MockMultilingualRerankingTask",
         main_score="map_at_10",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         base_datasplit = base_retrieval_datasplit()
         self.dataset = {
             "eng": {"test": base_datasplit},
@@ -1722,6 +1788,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "documents_image_statistics": None,
+            "documents_audio_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -1730,6 +1797,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_image_statistics": None,
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -1750,6 +1818,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "documents_image_statistics": None,
+            "documents_audio_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
@@ -1758,6 +1827,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_image_statistics": None,
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -1773,10 +1843,10 @@ class MockRetrievalTask(AbsTaskRetrieval):
         type="Retrieval",
         name="MockRetrievalTask",
         main_score="ndcg_at_10",
-        **dict(general_args | {"eval_splits": ["val", "test"]}),  # type: ignore
+        **dict(general_args | {"eval_splits": ["val", "test"]}),
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         base_datasplit["top_ranked"] = None
@@ -1798,6 +1868,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "documents_image_statistics": None,
+            "documents_audio_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 117,
                 "min_text_length": 37,
@@ -1806,6 +1877,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_image_statistics": None,
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -1826,6 +1898,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "documents_image_statistics": None,
+            "documents_audio_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 117,
                 "min_text_length": 37,
@@ -1834,6 +1907,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_image_statistics": None,
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -1849,10 +1923,10 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
         type="Retrieval",
         name="MockRetrievalDialogTask",
         main_score="ndcg_at_10",
-        **dict(general_args | {"eval_splits": ["val", "test"]}),  # type: ignore
+        **dict(general_args | {"eval_splits": ["val", "test"]}),
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         base_datasplit["top_ranked"] = None
@@ -1891,6 +1965,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "documents_image_statistics": None,
+            "documents_audio_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 104,
                 "min_text_length": 23,
@@ -1899,6 +1974,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_image_statistics": None,
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -1919,6 +1995,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "documents_image_statistics": None,
+                    "documents_audio_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -1927,6 +2004,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_image_statistics": None,
+                    "queries_audio_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -1947,6 +2025,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "documents_image_statistics": None,
+                    "documents_audio_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -1955,6 +2034,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_image_statistics": None,
+                    "queries_audio_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -1977,6 +2057,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "documents_image_statistics": None,
+            "documents_audio_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 104,
                 "min_text_length": 23,
@@ -1985,6 +2066,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_image_statistics": None,
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -2005,6 +2087,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "documents_image_statistics": None,
+                    "documents_audio_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -2013,6 +2096,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_image_statistics": None,
+                    "queries_audio_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2033,6 +2117,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "documents_image_statistics": None,
+                    "documents_audio_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 52,
                         "min_text_length": 23,
@@ -2041,6 +2126,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_image_statistics": None,
+                    "queries_audio_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2058,11 +2144,11 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
         type="Retrieval",
         name="MockMultilingualRetrievalTask",
         main_score="ndcg_at_10",
-        **dict(general_args | {"eval_splits": ["val", "test"]}),  # type: ignore
+        **dict(general_args | {"eval_splits": ["val", "test"]}),
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         base_datasplit["top_ranked"] = None
@@ -2086,6 +2172,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
                 "unique_texts": 2,
             },
             "image_statistics": None,
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -2105,6 +2192,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
                 "unique_texts": 2,
             },
             "image_statistics": None,
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -2119,10 +2207,10 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
         type="MultilabelClassification",
         name="MockMultilabelClassification",
         main_score="lrap",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"] * 3
         test_texts = ["This is a test sentence", "This is another test sentence"] * 3
         labels = [[0, 1], [1, 0]] * 3
@@ -2159,6 +2247,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                 "unique_texts": 2,
             },
             "image_statistics": None,
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -2178,6 +2267,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                         "unique_texts": 2,
                     },
                     "image_statistics": None,
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -2197,6 +2287,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                         "unique_texts": 2,
                     },
                     "image_statistics": None,
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -2218,6 +2309,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                 "unique_texts": 2,
             },
             "image_statistics": None,
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -2237,6 +2329,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                         "unique_texts": 2,
                     },
                     "image_statistics": None,
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -2256,6 +2349,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
                         "unique_texts": 2,
                     },
                     "image_statistics": None,
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -2272,11 +2366,11 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
         type="MultilabelClassification",
         name="MockMultilingualMultilabelClassification",
         main_score="lrap",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"] * 3
         test_texts = ["This is a test sentence", "This is another test sentence"] * 3
         labels = [[0, 1], [1, 0]] * 3
@@ -2318,6 +2412,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "documents_image_statistics": None,
+            "documents_audio_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 112,
                 "min_text_length": 50,
@@ -2326,6 +2421,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_image_statistics": None,
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -2341,10 +2437,10 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
         type="InstructionRetrieval",
         name="MockInstructionRetrieval",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         base_datasplit = instruction_retrieval_datasplit()
         base_datasplit["top_ranked"] = None
 
@@ -2365,6 +2461,7 @@ class MockInstructionReranking(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "documents_image_statistics": None,
+            "documents_audio_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 112,
                 "min_text_length": 50,
@@ -2373,6 +2470,7 @@ class MockInstructionReranking(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_image_statistics": None,
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -2393,10 +2491,10 @@ class MockInstructionReranking(AbsTaskRetrieval):
         type="InstructionReranking",
         name="MockInstructionReranking",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         base_datasplit = instruction_retrieval_datasplit()
         self.dataset = {"default": {"test": base_datasplit}}
         self.data_loaded = True
@@ -2415,6 +2513,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "documents_image_statistics": None,
+            "documents_audio_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 224,
                 "min_text_length": 50,
@@ -2423,6 +2522,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_image_statistics": None,
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -2443,6 +2543,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "documents_image_statistics": None,
+                    "documents_audio_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 112,
                         "min_text_length": 50,
@@ -2451,6 +2552,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_image_statistics": None,
+                    "queries_audio_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2471,6 +2573,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "documents_image_statistics": None,
+                    "documents_audio_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 112,
                         "min_text_length": 50,
@@ -2479,6 +2582,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_image_statistics": None,
+                    "queries_audio_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2496,11 +2600,11 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
         type="InstructionRetrieval",
         name="MockMultilingualInstructionRetrieval",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         base_datasplit = instruction_retrieval_datasplit()
         base_datasplit["top_ranked"] = None
         self.dataset = {
@@ -2523,6 +2627,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "documents_image_statistics": None,
+            "documents_audio_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 224,
                 "min_text_length": 50,
@@ -2531,6 +2636,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_image_statistics": None,
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -2556,6 +2662,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "documents_image_statistics": None,
+                    "documents_audio_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 112,
                         "min_text_length": 50,
@@ -2564,6 +2671,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_image_statistics": None,
+                    "queries_audio_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2589,6 +2697,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "documents_image_statistics": None,
+                    "documents_audio_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 112,
                         "min_text_length": 50,
@@ -2597,6 +2706,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_image_statistics": None,
+                    "queries_audio_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2619,11 +2729,11 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
         type="InstructionReranking",
         name="MockMultilingualInstructionReranking",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         base_datasplit = instruction_retrieval_datasplit()
         self.dataset = {
             "eng": {"test": base_datasplit, "val": base_datasplit},
@@ -2641,7 +2751,7 @@ class MockAggregatedTask(AbsTaskAggregate):
             MockRetrievalTask(),
             MockRerankingTask(),
         ],
-        **general_args,  # type: ignore
+        **general_args,
     )
 
 
@@ -2660,6 +2770,7 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "documents_audio_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 60,
                 "min_text_length": 27,
@@ -2676,6 +2787,7 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -2696,18 +2808,13 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
         type="Any2AnyMultiChoice",
         name="MockMultiChoice",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image", "text"]
     metadata.category = "it2i"
 
-    def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        images = create_mock_images(self.np_rng)
         retrieval_split_data = RetrievalSplitData(
             queries=Dataset.from_dict(
                 {
@@ -2717,14 +2824,12 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
                         "This is a positive sentence",
                         "This is another positive sentence",
                     ],
-                    "modality": ["image,text" for _ in range(2)],
                 }
             ),
             corpus=Dataset.from_dict(
                 {
                     "id": ["d1", "d2"],
                     "image": [images[i] for i in range(2)],
-                    "modality": ["image" for _ in range(2)],
                 }
             ),
             relevant_docs={
@@ -2755,6 +2860,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "documents_audio_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 120,
                 "min_text_length": 27,
@@ -2771,6 +2877,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
                 "min_relevant_docs_per_query": 2,
@@ -2798,6 +2905,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "max_image_height": 100,
                         "unique_images": 2,
                     },
+                    "documents_audio_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 60,
                         "min_text_length": 27,
@@ -2814,6 +2922,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "max_image_height": 100,
                         "unique_images": 2,
                     },
+                    "queries_audio_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2841,6 +2950,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "max_image_height": 100,
                         "unique_images": 2,
                     },
+                    "documents_audio_statistics": None,
                     "queries_text_statistics": {
                         "total_text_length": 60,
                         "min_text_length": 27,
@@ -2857,6 +2967,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "max_image_height": 100,
                         "unique_images": 2,
                     },
+                    "queries_audio_statistics": None,
                     "relevant_docs_statistics": {
                         "num_relevant_docs": 2,
                         "min_relevant_docs_per_query": 2,
@@ -2879,19 +2990,14 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
         type="Any2AnyMultiChoice",
         name="MockMultilingualMultiChoice",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.eval_langs = multilingual_eval_langs
     metadata.modalities = ["image", "text"]
     metadata.category = "it2i"
 
-    def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        images = create_mock_images(self.np_rng)
 
         split_data = RetrievalSplitData(
             queries=Dataset.from_dict(
@@ -2902,14 +3008,12 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "This is a positive sentence",
                         "This is another positive sentence",
                     ],
-                    "modality": ["image,text" for _ in range(2)],
                 }
             ),
             corpus=Dataset.from_dict(
                 {
                     "id": ["d1", "d2"],
                     "image": [images[i] for i in range(2)],
-                    "modality": ["image" for _ in range(2)],
                 }
             ),
             relevant_docs={
@@ -2946,6 +3050,7 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "documents_image_statistics": None,
+            "documents_audio_statistics": None,
             "queries_text_statistics": None,
             "queries_image_statistics": {
                 "min_image_width": 100,
@@ -2956,6 +3061,7 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -2971,25 +3077,19 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalI2T",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
-    def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        images = create_mock_images(self.np_rng)
 
         retrieval_split_data = RetrievalSplitData(
             queries=Dataset.from_dict(
                 {
                     "id": [f"q{i}" for i in range(2)],
                     "image": [images[i] for i in range(2)],
-                    "modality": ["image" for _ in range(2)],
                 }
             ),
             corpus=Dataset.from_dict(
@@ -2999,7 +3099,6 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
                         "This is a positive sentence",
                         "This is another positive sentence",
                     ],
-                    "modality": ["text" for _ in range(2)],
                 }
             ),
             relevant_docs={
@@ -3027,6 +3126,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "documents_audio_statistics": None,
             "queries_text_statistics": {
                 "total_text_length": 60,
                 "min_text_length": 27,
@@ -3035,6 +3135,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_image_statistics": None,
+            "queries_audio_statistics": None,
             "relevant_docs_statistics": {
                 "num_relevant_docs": 2,
                 "min_relevant_docs_per_query": 2,
@@ -3050,18 +3151,13 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalT2I",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image", "text"]
     metadata.category = "t2i"
 
-    def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        images = create_mock_images(self.np_rng)
 
         retrieval_split_data = RetrievalSplitData(
             queries=Dataset.from_dict(
@@ -3071,14 +3167,12 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
                         "This is a positive sentence",
                         "This is another positive sentence",
                     ],
-                    "modality": ["text" for _ in range(2)],
                 }
             ),
             corpus=Dataset.from_dict(
                 {
                     "id": ["d1", "d2"],
                     "image": [images[i] for i in range(2)],
-                    "modality": ["image" for _ in range(2)],
                 }
             ),
             relevant_docs={
@@ -3106,6 +3200,7 @@ class MockImageClassificationTask(AbsTaskClassification):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3127,6 +3222,7 @@ class MockImageClassificationTask(AbsTaskClassification):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3141,7 +3237,7 @@ class MockImageClassificationTask(AbsTaskClassification):
         type="ImageClassification",
         name="MockImageClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     metadata.category = "i2c"
@@ -3149,13 +3245,8 @@ class MockImageClassificationTask(AbsTaskClassification):
     samples_per_label = 5
     input_column_name = "image"
 
-    def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        images = create_mock_images(self.np_rng)
         labels = [1, 0]
 
         self.dataset = DatasetDict(
@@ -3194,6 +3285,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3215,6 +3307,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                         "max_image_height": 100,
                         "unique_images": 2,
                     },
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -3236,6 +3329,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                         "max_image_height": 100,
                         "unique_images": 2,
                     },
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -3259,6 +3353,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3280,6 +3375,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                         "max_image_height": 100,
                         "unique_images": 2,
                     },
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -3301,6 +3397,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
                         "max_image_height": 100,
                         "unique_images": 2,
                     },
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -3317,20 +3414,15 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
         type="ImageClassification",
         name="MockMultilingualImageClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     metadata.category = "i2c"
     metadata.eval_langs = multilingual_eval_langs
     input_column_name = "image"
 
-    def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        images = create_mock_images(self.np_rng)
         labels = [1, 0]
         data = {
             "test": Dataset.from_dict(
@@ -3370,6 +3462,7 @@ class MockImageClusteringTask(AbsTaskClusteringLegacy):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3384,19 +3477,14 @@ class MockImageClusteringTask(AbsTaskClusteringLegacy):
         type="ImageClustering",
         name="MockImageClustering",
         main_score="nmi",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     input_column_name = "image"
     label_column_name = "label"
 
-    def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        images = create_mock_images(self.np_rng)
         labels = [1, 0]
 
         self.dataset = DatasetDict(
@@ -3426,6 +3514,7 @@ class MockImageClusteringFastTask(AbsTaskClustering):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -3440,7 +3529,7 @@ class MockImageClusteringFastTask(AbsTaskClustering):
         type="ImageClustering",
         name="MockImageClusteringFastTask",
         main_score="v_measure",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     input_column_name = "image"
@@ -3448,13 +3537,8 @@ class MockImageClusteringFastTask(AbsTaskClustering):
     max_fraction_of_documents_to_embed = None
     max_document_to_embed = 2
 
-    def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        images = create_mock_images(self.np_rng)
         labels = [1, 0]
 
         self.dataset = DatasetDict(
@@ -3485,6 +3569,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -3511,6 +3596,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -3530,7 +3616,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
         type="ImageMultilabelClassification",
         name="MockImageMultilabelClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     metadata.category = "i2c"
@@ -3538,13 +3624,8 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
     samples_per_label = 3
     input_column_name = "image"
 
-    def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        images = create_mock_images(self.np_rng)
         labels = [["0", "3"], ["1", "2"]]
 
         self.dataset = DatasetDict(
@@ -3583,6 +3664,7 @@ class MockMultilingualImageMultilabelClassificationTask(
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -3609,6 +3691,7 @@ class MockMultilingualImageMultilabelClassificationTask(
                         "max_image_height": 100,
                         "unique_images": 2,
                     },
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -3635,6 +3718,7 @@ class MockMultilingualImageMultilabelClassificationTask(
                         "max_image_height": 100,
                         "unique_images": 2,
                     },
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -3663,6 +3747,7 @@ class MockMultilingualImageMultilabelClassificationTask(
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 2,
                 "average_label_per_text": 2.0,
@@ -3689,6 +3774,7 @@ class MockMultilingualImageMultilabelClassificationTask(
                         "max_image_height": 100,
                         "unique_images": 2,
                     },
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -3715,6 +3801,7 @@ class MockMultilingualImageMultilabelClassificationTask(
                         "max_image_height": 100,
                         "unique_images": 2,
                     },
+                    "audio_statistics": None,
                     "label_statistics": {
                         "min_labels_per_text": 2,
                         "average_label_per_text": 2.0,
@@ -3736,20 +3823,15 @@ class MockMultilingualImageMultilabelClassificationTask(
         type="ImageMultilabelClassification",
         name="MockMultilingualImageMultilabelClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     metadata.eval_langs = multilingual_eval_langs
 
     input_column_name = "image"
 
-    def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        images = create_mock_images(self.np_rng)
         labels = [["0", "3"], ["1", "2"]]
 
         data = {
@@ -3803,18 +3885,13 @@ class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
         type="Compositionality",
         name="MockImageTextPairClassification",
         main_score="text_acc",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
-    def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        images = create_mock_images(self.np_rng)
         texts = ["This is a test sentence", "This is another test sentence"]
 
         self.dataset = DatasetDict(
@@ -3899,20 +3976,15 @@ class MockMultilingualImageTextPairClassificationTask(
         type="Compositionality",
         name="MockMultilingualImageTextPairClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        images = create_mock_images(self.np_rng)
         texts = ["This is a test sentence", "This is another test sentence"]
         data = {
             "test": Dataset.from_dict(
@@ -3958,6 +4030,8 @@ class MockVisualSTSTask(AbsTaskSTS):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio1_statistics": None,
+            "audio2_statistics": None,
             "label_statistics": {"min_score": 0.5, "avg_score": 0.5, "max_score": 0.5},
         }
     }
@@ -3966,18 +4040,13 @@ class MockVisualSTSTask(AbsTaskSTS):
         type="VisualSTS(eng)",
         name="MockVisualSTS",
         main_score="cosine_spearman",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     metadata.category = "i2i"
 
-    def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        images = create_mock_images(self.np_rng)
         scores = [0.5, 0.5]
 
         self.dataset = DatasetDict(
@@ -4011,6 +4080,7 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4032,18 +4102,13 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
         type="ZeroShotClassification",
         name="MockZeroShotClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
-    def load_data(self) -> None:
-        from PIL import Image
-
-        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        images = create_mock_images(self.np_rng)
         labels = ["label1", "label2"]
 
         self.dataset = DatasetDict(
@@ -4075,6 +4140,7 @@ class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
                 "unique_texts": 2,
             },
             "image_statistics": None,
+            "audio_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -4096,13 +4162,13 @@ class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
         type="ZeroShotClassification",
         name="MockTextZeroShotClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["text"]
     metadata.category = "t2t"
     input_column_name = "text"
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         texts = ["This is a test sentence", "This is another test sentence"]
         labels = ["label1", "label2"]
 
@@ -4135,6 +4201,7 @@ class MockRegressionTask(AbsTaskRegression):
                 "unique_texts": 2,
             },
             "image_statistics": None,
+            "audio_statistics": None,
             "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
         },
         "train": {
@@ -4148,6 +4215,7 @@ class MockRegressionTask(AbsTaskRegression):
                 "unique_texts": 2,
             },
             "image_statistics": None,
+            "audio_statistics": None,
             "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
         },
     }
@@ -4156,7 +4224,7 @@ class MockRegressionTask(AbsTaskRegression):
         type="Regression",
         name="MockRegressionTask",
         main_score="kendalltau",
-        **general_args,  # type: ignore
+        **general_args,
     )
 
     def load_data(self, **kwargs):
@@ -4199,6 +4267,7 @@ class MockImageRegressionTask(AbsTaskRegression):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio_statistics": None,
             "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
         },
         "train": {
@@ -4214,34 +4283,24 @@ class MockImageRegressionTask(AbsTaskRegression):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
+            "audio_statistics": None,
             "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
         },
     }
 
     metadata = TaskMetadata(
         type="Regression",
-        name="MockRegressionTask",
+        name="MockImageRegressionTask",
         main_score="kendalltau",
-        **general_args,  # type: ignore
+        **general_args,
     )
     metadata.modalities = ["image"]
     metadata.category = "i2c"
     input_column_name = "image"
 
     def load_data(self, **kwargs):
-        from PIL import Image
-
-        train_images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        train_images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA")
-            for image in train_images
-        ]
-
-        test_images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
-        test_images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA")
-            for image in test_images
-        ]
+        train_images = create_mock_images(self.np_rng)
+        test_images = create_mock_images(self.np_rng)
 
         train_values = [1.0, 0.0]
         test_values = [1.0, 0.0]
@@ -4273,16 +4332,24 @@ class MockAudioClusteringTask(AbsTaskClustering):
     expected_stats = {
         "test": {
             "num_samples": 3,
-            "number_of_samples": 3,
-            "min_audio_length": 16000,  # sr = 16000
-            "average_audio_length": 16000,  # 1s
-            "max_audio_length": 16000,  # 1s
-            "unique_audios": 3,
-            "min_labels_per_audio": 1,
-            "average_labels_per_audio": 1.0,
-            "max_labels_per_audio": 1,
-            "unique_labels": 3,
-            "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 3.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 3,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 3},
+            },
+            "labels_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 3,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
+            },
         }
     }
 
@@ -4295,13 +4362,7 @@ class MockAudioClusteringTask(AbsTaskClustering):
     metadata.modalities = ["audio"]
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(3)
-        ]
+        mock_audio = create_mock_audio(self.np_rng, n=3)
 
         labels = [0, 1, 2]
 
@@ -4323,23 +4384,47 @@ class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "total_duration": 2.0,  # 2 samples * 1s each
-            "min_duration": 1.0,
-            "avg_duration": 1.0,
-            "max_duration": 1.0,
-            "sample_rate": 16000,
-            "unique_labels": 2,
-            "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            "number_texts_intersect_with_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
         },
         "train": {
             "num_samples": 10,
-            "total_duration": 10.0,
-            "min_duration": 1.0,
-            "avg_duration": 1.0,
-            "max_duration": 1.0,
-            "sample_rate": 16000,
-            "unique_labels": 2,
-            "labels": {"0": {"count": 5}, "1": {"count": 5}},
+            "number_texts_intersect_with_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 10.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 10},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 5}, "1": {"count": 5}},
+            },
         },
     }
 
@@ -4353,13 +4438,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
     input_column_name = "audio"
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s audio
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
         labels = [[0], [1]]
 
         self.dataset = DatasetDict(
@@ -4381,13 +4460,32 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "total_duration": 2.0,  # 2 samples * 1s each
-            "min_duration": 1.0,
-            "avg_duration": 1.0,
-            "max_duration": 1.0,
-            "sample_rate": 16000,
-            "unique_labels": 2,
-            "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            "number_of_characters": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+            "candidates_labels_text_statistics": {
+                "total_text_length": 40,
+                "min_text_length": 20,
+                "average_text_length": 20.0,
+                "max_text_length": 20,
+                "unique_texts": 2,
+            },
         }
     }
 
@@ -4400,14 +4498,7 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
     metadata.modalities = ["audio"]
 
     def load_data(self, **kwargs):
-        # Create mock audio data as numpy arrays
-        mock_audio = [
-            {
-                "array": np.random.rand(16000).astype(np.float32),  # 1s audio
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
         labels = np.array([0, 1])  # Convert labels to numpy array
 
         self.dataset = DatasetDict(
@@ -4433,19 +4524,47 @@ class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalT2A",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["audio", "text"]
     metadata.category = "t2a"
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "number_of_characters": 60,
+            "documents_text_statistics": None,
+            "documents_image_statistics": None,
+            "documents_audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "queries_text_statistics": {
+                "total_text_length": 60,
+                "min_text_length": 27,
+                "average_text_length": 30.0,
+                "max_text_length": 33,
+                "unique_texts": 2,
+            },
+            "queries_image_statistics": None,
+            "queries_audio_statistics": None,
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 2,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 2,
+                "unique_relevant_docs": 2,
+            },
+            "top_ranked_statistics": None,
+        }
+    }
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         self.queries = DatasetDict(
             {
@@ -4488,19 +4607,48 @@ class MockAny2AnyRetrievalA2TTask(AbsTaskRetrieval):
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalA2T",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["audio", "text"]
     metadata.category = "a2t"
 
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "number_of_characters": 60,
+            "documents_text_statistics": {
+                "total_text_length": 60,
+                "min_text_length": 27,
+                "average_text_length": 30.0,
+                "max_text_length": 33,
+                "unique_texts": 2,
+            },
+            "documents_image_statistics": None,
+            "documents_audio_statistics": None,
+            "queries_text_statistics": None,
+            "queries_image_statistics": None,
+            "queries_audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 2,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 2,
+                "unique_relevant_docs": 2,
+            },
+            "top_ranked_statistics": None,
+        }
+    }
+
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         self.queries = DatasetDict(
             {
@@ -4542,19 +4690,50 @@ class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalA2A",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["audio"]
     metadata.category = "a2a"
 
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "number_of_characters": 0,
+            "documents_text_statistics": None,
+            "documents_image_statistics": None,
+            "documents_audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "queries_text_statistics": None,
+            "queries_image_statistics": None,
+            "queries_audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 2,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 2,
+                "unique_relevant_docs": 2,
+            },
+            "top_ranked_statistics": None,
+        }
+    }
+
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         self.queries = DatasetDict(
             {
@@ -4596,19 +4775,55 @@ class MockAudioReranking(AbsTaskRetrieval):
         type="AudioReranking",
         name="MockAudioReranking",
         main_score="map_at_1",
-        **general_args,  # type: ignore
+        **general_args,  # type: ignore[arg-type]
     )
     metadata.category = "a2a"
     metadata.modalities = ["audio"]
 
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "number_of_characters": 0,
+            "documents_text_statistics": None,
+            "documents_image_statistics": None,
+            "documents_audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "queries_text_statistics": None,
+            "queries_image_statistics": None,
+            "queries_audio_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 2,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 2,
+                "unique_relevant_docs": 2,
+            },
+            "top_ranked_statistics": {
+                "num_top_ranked": 4,
+                "min_top_ranked_per_query": 2,
+                "average_top_ranked_per_query": 2.0,
+                "max_top_ranked_per_query": 2,
+            },
+        }
+    }
+
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         queries = Dataset.from_dict(
             {
@@ -4651,18 +4866,65 @@ class MockAudioClassification(AbsTaskClassification):
         type="AudioClassification",
         name="MockAudioClassification",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["audio"]
     input_column_name = "audio"
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "number_texts_intersect_with_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 3.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.5,
+                "max_duration_seconds": 2.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 12000.0,
+                "sampling_rates": {16000: 1, 8000: 1},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 1}, "2": {"count": 1}},
+            },
+        },
+        "train": {
+            "num_samples": 10,
+            "number_texts_intersect_with_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 15.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.5,
+                "max_duration_seconds": 2.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 12000.0,
+                "sampling_rates": {16000: 5, 8000: 5},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 5}, "2": {"count": 5}},
+            },
+        },
+    }
 
     def load_data(self, **kwargs):
+        sampling_rates = [16000, 8000]
         mock_audio = [
             {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
+                "array": self.np_rng.random(16000),  # 1s
+                "sampling_rate": sampling_rates[i],
             }
-            for _ in range(2)
+            for i in range(2)
         ]
 
         self.dataset = DatasetDict(
@@ -4691,22 +4953,53 @@ class MockAudioPairClassification(AbsTaskPairClassification):
         type="AudioPairClassification",
         name="AbsTaskAudioPairClassification",
         main_score="max_ap",
-        **general_args,  # type: ignore
+        **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["audio"]
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "unique_pairs": 2,
+            "number_of_characters": None,
+            "text1_statistics": None,
+            "image1_statistics": None,
+            "audio1_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "text2_statistics": None,
+            "image2_statistics": None,
+            "audio2_statistics": {
+                "total_duration_seconds": 2.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 2},
+            },
+            "labels_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+        }
+    }
 
     input1_column_name = "audio1"
     input2_column_name = "audio1"
     label_column_name = "label"
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         self.dataset = DatasetDict(
             {
@@ -4729,21 +5022,39 @@ class MockAudioClassificationCrossVal(AbsTaskClassification):
         type="AudioClassification",
         name="MockAudioClassificationCrossVal",
         main_score="accuracy",
-        **general_args,  # type: ignore
+        **general_args,  # type: ignore[arg-type]
     )
     metadata.modalities = ["audio"]
     metadata.eval_splits = ["train"]
     input_column_name = "audio"
     is_cross_validation = True
+    expected_stats = {
+        "train": {
+            "num_samples": 10,
+            "number_texts_intersect_with_train": None,
+            "text_statistics": None,
+            "image_statistics": None,
+            "audio_statistics": {
+                "total_duration_seconds": 10.0,
+                "min_duration_seconds": 1.0,
+                "average_duration_seconds": 1.0,
+                "max_duration_seconds": 1.0,
+                "unique_audios": 2,
+                "average_sampling_rate": 16000.0,
+                "sampling_rates": {16000: 10},
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 5}, "2": {"count": 5}},
+            },
+        }
+    }
 
     def load_data(self, **kwargs):
-        mock_audio = [
-            {
-                "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000,
-            }
-            for _ in range(2)
-        ]
+        mock_audio = create_mock_audio(self.np_rng)
 
         self.dataset = DatasetDict(
             {

@@ -1,17 +1,23 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 from packaging.version import Version
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import __version__ as transformers_version
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import sentence_transformers_loader
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
 
 MULTILINGUAL_EVALUATED_LANGUAGES = [
     "arb-Arab",
@@ -150,11 +156,13 @@ google_text_emb_004 = ModelMeta(
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-embedding-004",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=False,
     revision="1",  # revision is intended for implementation
     release_date="2024-05-14",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=2048,
     embed_dim=768,
@@ -174,11 +182,13 @@ google_text_emb_005 = ModelMeta(
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-embedding-005",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=False,
     revision="1",  # revision is intended for implementation
     release_date="2024-11-18",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=2048,
     embed_dim=768,
@@ -198,11 +208,13 @@ google_text_multilingual_emb_002 = ModelMeta(
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-multilingual-embedding-002",
+    model_type=["dense"],
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,  # From the list of evaluated languages in https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/text-embeddings-api#supported_text_languages
     open_weights=False,
     revision="1",
     release_date="2024-05-14",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=2048,
     embed_dim=768,
@@ -222,11 +234,13 @@ google_gemini_embedding_001 = ModelMeta(
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/gemini-embedding-001",
+    model_type=["dense"],
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
     open_weights=False,
     revision="1",
     release_date="2025-03-07",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=2048,
     embed_dim=3072,
@@ -256,16 +270,18 @@ def gemma_embedding_loader(model_name: str, revision: str, **kwargs):
 embedding_gemma_300m = ModelMeta(
     loader=gemma_embedding_loader,
     name="google/embeddinggemma-300m",
+    model_type=["dense"],
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
     open_weights=True,
     revision="64614b0b8b64f0c6c1e52b07e4e9a4e8fe4d2da2",
     release_date="2025-09-04",
     n_parameters=307_581_696,
+    n_embedding_parameters=201_326_592,
     embed_dim=768,
     max_tokens=2048,
     license="gemma",
     reference="https://ai.google.dev/gemma/docs/embeddinggemma/model_card",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,

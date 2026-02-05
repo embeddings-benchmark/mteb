@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 import logging
 from collections import defaultdict
-from pathlib import Path
-from typing import Any, ClassVar, TypedDict
+from typing import TYPE_CHECKING, Any, ClassVar, TypedDict, cast
 
 from datasets import Dataset, DatasetDict
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
@@ -9,9 +10,15 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 from mteb._evaluators import BitextMiningEvaluator
 from mteb.abstasks._statistics_calculation import calculate_text_statistics
 from mteb.abstasks.abstask import AbsTask
-from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import HFSubset, ScoresDict
-from mteb.types.statistics import SplitDescriptiveStatistics, TextStatistics
+from mteb.models import EncoderProtocol
+from mteb.types.statistics import SplitDescriptiveStatistics
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from mteb.models import MTEBModels
+    from mteb.types import EncodeKwargs, HFSubset, ScoresDict
+    from mteb.types.statistics import TextStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -73,13 +80,17 @@ class AbsTaskBitextMining(AbsTask):
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Added load for "parallel" datasets"""
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
+
         if not self.data_loaded:
-            self.load_data()
+            self.load_data(num_proc=num_proc)
 
         hf_subsets = self.hf_subsets
 
@@ -87,16 +98,22 @@ class AbsTaskBitextMining(AbsTask):
         if subsets_to_run is not None:
             hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
-        scores = {}
+        encoder_model = cast("EncoderProtocol", model)
+
+        if self.dataset is None:
+            raise ValueError("Dataset is not loaded.")
+
+        scores: dict[str, BitextMiningMetrics] = {}
         if self.parallel_subsets:
-            scores = self._evaluate_subset(
-                model,
-                self.dataset[split],  # type: ignore
+            scores = self._evaluate_subset(  # type: ignore[assignment]
+                encoder_model,
+                self.dataset[split],
                 parallel=True,
                 hf_split=split,
                 hf_subset="parallel",
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
+                num_proc=num_proc,
                 **kwargs,
             )
         else:
@@ -109,42 +126,44 @@ class AbsTaskBitextMining(AbsTask):
                     data_split = self.dataset[split]
                 else:
                     data_split = self.dataset[hf_subset][split]
-                scores[hf_subset] = self._evaluate_subset(
-                    model,
+                scores[hf_subset] = self._evaluate_subset(  # type: ignore[assignment]
+                    encoder_model,
                     data_split,
                     hf_split=split,
                     hf_subset=hf_subset,
                     encode_kwargs=encode_kwargs,
                     prediction_folder=prediction_folder,
+                    num_proc=num_proc,
                     **kwargs,
                 )
 
-        return scores
+        return cast("dict[HFSubset, ScoresDict]", scores)
 
     def _get_pairs(self, parallel: bool) -> list[tuple[str, str]]:
         pairs = self._DEFAULT_PAIR
         if parallel:
-            pairs = [langpair.split("-") for langpair in self.hf_subsets]
+            pairs = [langpair.split("-") for langpair in self.hf_subsets]  # type: ignore[misc]
         return pairs
 
-    def _evaluate_subset(
+    def _evaluate_subset(  # type: ignore[override]
         self,
         model: EncoderProtocol,
         data_split: Dataset,
         *,
         hf_split: str,
         hf_subset: str,
-        parallel: bool = False,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        parallel: bool = False,
+        num_proc: int | None = None,
         **kwargs,
-    ) -> ScoresDict:
+    ) -> BitextMiningMetrics | dict[str, BitextMiningMetrics]:
         pairs = self._get_pairs(parallel)
 
         evaluator = BitextMiningEvaluator(
             data_split,
             task_metadata=self.metadata,
-            pair_columns=pairs,  # type: ignore
+            pair_columns=pairs,
             hf_split=hf_split,
             hf_subset=hf_subset,
             **kwargs,
@@ -156,7 +175,7 @@ class AbsTaskBitextMining(AbsTask):
             else data_split["gold"]
         )
 
-        neighbours = evaluator(model, encode_kwargs=encode_kwargs)
+        neighbours = evaluator(model, encode_kwargs=encode_kwargs, num_proc=num_proc)
 
         if prediction_folder:
             self._save_task_predictions(
@@ -168,16 +187,16 @@ class AbsTaskBitextMining(AbsTask):
             )
 
         if parallel:
-            metrics = {}
+            parallel_metrics = {}
             for keys, nearest_neighbors in neighbours.items():
-                metrics[keys] = self._compute_metrics(nearest_neighbors, gold)
+                parallel_metrics[keys] = self._compute_metrics(nearest_neighbors, gold)
 
-            for v in metrics.values():
+            for v in parallel_metrics.values():
                 self._add_main_score(v)
-        else:
-            def_pair_str = "-".join(self._DEFAULT_PAIR[0])
-            metrics = self._compute_metrics(neighbours[def_pair_str], gold)
-            self._add_main_score(metrics)
+            return parallel_metrics
+        def_pair_str = "-".join(self._DEFAULT_PAIR[0])
+        metrics = self._compute_metrics(neighbours[def_pair_str], gold)
+        self._add_main_score(metrics)
         return metrics
 
     def _compute_metrics(
@@ -249,9 +268,12 @@ class AbsTaskBitextMining(AbsTask):
             sentence2_statistics=text2_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+        if self.dataset is None:
+            raise ValueError("Dataset is not loaded.")
+
         if self.metadata.is_multilingual:
-            dataset = defaultdict(dict)
+            dataset: dict[str, dict[str, list[str]]] = defaultdict(dict)
             for config in self.metadata.eval_langs:
                 logger.info(f"Converting {config} of {self.metadata.name}")
 
@@ -266,10 +288,10 @@ class AbsTaskBitextMining(AbsTask):
                     for split in self.dataset[config]:
                         dataset[split][lang_1] = self.dataset[config][split][sent_1]
                         dataset[split][lang_2] = self.dataset[config][split][sent_2]
-            for split in dataset:
-                dataset[split] = Dataset.from_dict(dataset[split])
-            dataset = DatasetDict(dataset)
-            dataset.push_to_hub(repo_name)
+            dataset_dict = DatasetDict(
+                {split: Dataset.from_dict(dataset[split]) for split in dataset}
+            )
+            dataset_dict.push_to_hub(repo_name, num_proc=num_proc)
         else:
             sentences = {}
             for split in self.dataset:
@@ -281,4 +303,4 @@ class AbsTaskBitextMining(AbsTask):
                     }
                 )
             sentences = DatasetDict(sentences)
-            sentences.push_to_hub(repo_name)
+            sentences.push_to_hub(repo_name, num_proc=num_proc)

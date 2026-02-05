@@ -4,6 +4,7 @@ solon_embeddings_1_1 = ModelMeta(
     name="OrdalieTech/Solon-embeddings-mini-beta-1.1",
     languages=["fra-Latn"],
     n_parameters=210_000_000,
+    n_embedding_parameters=None,
     public_training_code=None,
     memory_usage_mb=808.0,
     open_weights=True,
@@ -14,7 +15,7 @@ solon_embeddings_1_1 = ModelMeta(
     max_tokens=8192,
     reference="https://huggingface.co/OrdalieTech/Solon-embeddings-mini-beta-1.1",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=False,
     public_training_data=(
         "https://huggingface.co/datasets/PleIAs/common_corpus; "

@@ -2,18 +2,20 @@ from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 embedding_gemma_300m_scandi = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore
+    loader=sentence_transformers_loader,
     name="emillykkejensen/EmbeddingGemma-Scandi-300m",
+    model_type=["dense"],
     languages=["dan-Latn", "swe-Latn", "nor-Latn", "nob-Latn", "nno-Latn"],
     open_weights=True,
     revision="9f3307b9f601db564a9190cb475324d128dcfe86",
     release_date="2025-10-17",
     n_parameters=307_581_696,
+    n_embedding_parameters=None,
     embed_dim=768,
     max_tokens=2048,
     license="apache-2.0",
     reference="https://huggingface.co/emillykkejensen/EmbeddingGemma-Scandi-300m",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/DDSC/nordic-embedding-training-data",
@@ -34,19 +36,21 @@ embedding_gemma_300m_scandi = ModelMeta(
 
 
 qwen_scandi = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore
+    loader=sentence_transformers_loader,
     name="emillykkejensen/Qwen3-Embedding-Scandi-0.6B",
+    model_type=["dense"],
     languages=["dan-Latn", "swe-Latn", "nor-Latn", "nob-Latn", "nno-Latn"],
     open_weights=True,
     revision="cf1e7ba36ebd3d605549d8f02930a18e17b54513",
     release_date="2025-10-17",
     n_parameters=595776512,
+    n_embedding_parameters=None,
     memory_usage_mb=2272,
     embed_dim=1024,
     max_tokens=32768,
     license="apache-2.0",
     reference="https://huggingface.co/emillykkejensen/Qwen3-Embedding-Scandi-0.6B",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/DDSC/nordic-embedding-training-data",
@@ -57,19 +61,21 @@ qwen_scandi = ModelMeta(
 
 
 mmbert_scandi = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore
+    loader=sentence_transformers_loader,
     name="emillykkejensen/mmBERTscandi-base-embedding",
+    model_type=["dense"],
     languages=["dan-Latn", "swe-Latn", "nor-Latn", "nob-Latn", "nno-Latn"],
     open_weights=True,
     revision="82d74c7a5d8e1ddf31b132865df2d16b2b0294ee",
     release_date="2025-10-17",
     n_parameters=306939648,
+    n_embedding_parameters=None,
     memory_usage_mb=1171,
     embed_dim=768,
     max_tokens=8192,
     license="apache-2.0",
     reference="https://huggingface.co/emillykkejensen/Qwen3-Embedding-Scandi-0.6B",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/DDSC/nordic-embedding-training-data",

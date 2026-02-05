@@ -1,27 +1,38 @@
-import logging
-from pathlib import Path
-from typing import Any, TypedDict, cast
+from __future__ import annotations
 
-from datasets import Dataset
+import logging
+from typing import TYPE_CHECKING, Any, TypedDict, cast
+
 from scipy.stats import pearsonr, spearmanr
 
 from mteb._evaluators import AnySTSEvaluator
-from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
 from mteb.models import EncoderProtocol
-from mteb.types import PromptType
 from mteb.types.statistics import (
-    ImageStatistics,
-    ScoreStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
 
 from ._statistics_calculation import (
+    calculate_audio_statistics,
     calculate_image_statistics,
     calculate_score_statistics,
     calculate_text_statistics,
 )
 from .abstask import AbsTask
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from datasets import Dataset
+
+    from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
+    from mteb.models import MTEBModels
+    from mteb.types import EncodeKwargs, PromptType
+    from mteb.types.statistics import (
+        AudioStatistics,
+        ImageStatistics,
+        ScoreStatistics,
+        TextStatistics,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +51,9 @@ class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
         image1_statistics: Statistics for image1
         image2_statistics: Statistics for image2
 
+        audio1_statistics: Statistics for audio1
+        audio2_statistics: Statistics for audio2
+
         label_statistics: Statistics for labels
     """
 
@@ -52,6 +66,9 @@ class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
 
     image1_statistics: ImageStatistics | None
     image2_statistics: ImageStatistics | None
+
+    audio1_statistics: AudioStatistics | None
+    audio2_statistics: AudioStatistics | None
 
     label_statistics: ScoreStatistics
 
@@ -103,14 +120,18 @@ class AbsTaskSTS(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: EncoderProtocol,
+        model: MTEBModels,
         data_split: Dataset,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> STSMetrics:
+        if not isinstance(model, EncoderProtocol):
+            raise TypeError("Expected model to be an instance of EncoderProtocol")
+
         normalized_scores = list(map(self._normalize, data_split["score"]))
         data_split = data_split.select_columns(list(self.column_names))
 
@@ -124,7 +145,11 @@ class AbsTaskSTS(AbsTask):
             input2_prompt_type=self.input2_prompt_type,
             **kwargs,
         )
-        scores = evaluator(model, encode_kwargs=encode_kwargs)
+        scores = evaluator(
+            model,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
 
         if prediction_folder:
             self._save_task_predictions(
@@ -142,7 +167,7 @@ class AbsTaskSTS(AbsTask):
     ) -> STSMetrics:
         def compute_corr(x: list[float], y: list[float]) -> tuple[float, float]:
             """Return (pearson, spearman) correlations between x and y."""
-            return pearsonr(x, y)[0], spearmanr(x, y)[0]
+            return float(pearsonr(x, y)[0]), float(spearmanr(x, y)[0])
 
         cosine_pearson, cosine_spearman = compute_corr(
             normalized_scores, scores["cosine_scores"]
@@ -179,7 +204,7 @@ class AbsTaskSTS(AbsTask):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> AnySTSDescriptiveStatistics:
         first_column, second_column = self.column_names
-        self.dataset = cast(dict[str, dict[str, Dataset]], self.dataset)
+        self.dataset = cast("dict[str, dict[str, Dataset]]", self.dataset)
 
         if hf_subset:
             sentence1 = self.dataset[hf_subset][split][first_column]
@@ -215,6 +240,13 @@ class AbsTaskSTS(AbsTask):
             image1_statistics = None
             image2_statistics = None
 
+        if "audio" in self.metadata.modalities:
+            audio1_statistics = calculate_audio_statistics(sentence1)
+            audio2_statistics = calculate_audio_statistics(sentence2)
+        else:
+            audio1_statistics = None
+            audio2_statistics = None
+
         labels_statistics = calculate_score_statistics(score)
 
         return AnySTSDescriptiveStatistics(
@@ -230,12 +262,16 @@ class AbsTaskSTS(AbsTask):
             text2_statistics=text2_statistics,
             image1_statistics=image1_statistics,
             image2_statistics=image2_statistics,
+            audio1_statistics=audio1_statistics,
+            audio2_statistics=audio2_statistics,
             label_statistics=labels_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         self._upload_dataset_to_hub(
-            repo_name, [self.column_names[0], self.column_names[1], "score"]
+            repo_name,
+            [self.column_names[0], self.column_names[1], "score"],
+            num_proc=num_proc,
         )
 
     def _normalize(self, x: float) -> float:

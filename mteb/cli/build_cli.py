@@ -1,17 +1,22 @@
 import argparse
 import logging
 import os
+import warnings
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import torch
 from rich.logging import RichHandler
 
 import mteb
 from mteb.cache import ResultCache
+from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
 
-from ._display_tasks import _display_benchmarks, _display_tasks
+if TYPE_CHECKING:
+    from mteb.abstasks.abstask import AbsTask
+    from mteb.types import EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +58,7 @@ def run(args: argparse.Namespace) -> None:
 
     if args.benchmarks:
         benchmarks = mteb.get_benchmarks(names=args.benchmarks)
-        tasks = [t for b in benchmarks for t in b.tasks]
+        tasks = tuple(t for b in benchmarks for t in b.tasks)
     else:
         tasks = mteb.get_tasks(
             categories=args.categories,
@@ -63,21 +68,23 @@ def run(args: argparse.Namespace) -> None:
             eval_splits=args.eval_splits,
         )
 
-    encode_kwargs = {}
+    encode_kwargs: EncodeKwargs = {}
     if args.batch_size is not None:
         encode_kwargs["batch_size"] = args.batch_size
 
     overwrite_strategy = args.overwrite_strategy
     if args.overwrite:
-        logger.warning(
-            "`--overwrite` is deprecated, please use `--overwrite-strategy 'always'` instead."
+        warnings.warn(
+            "`--overwrite` is deprecated, please use `--overwrite-strategy 'always'` instead.",
+            DeprecationWarning,
         )
         overwrite_strategy = OverwriteStrategy.ALWAYS.value
 
     prediction_folder = args.prediction_folder
     if args.save_predictions:
-        logger.warning(
-            "`--save_predictions` is deprecated, please use `--prediction-folder` instead."
+        warnings.warn(
+            "`--save_predictions` is deprecated, please use `--prediction-folder` instead.",
+            DeprecationWarning,
         )
         prediction_folder = args.output_folder
 
@@ -279,23 +286,25 @@ def _create_meta(args: argparse.Namespace) -> None:
         from_existing = Path(from_existing)
 
     if output_path.exists() and overwrite:
-        logger.warning("Output path already exists, overwriting.")
+        msg = "Output path already exists, overwriting."
+        logger.warning(msg)
+        warnings.warn(msg)
     elif output_path.exists():
         raise FileExistsError(
             "Output path already exists, use --overwrite to overwrite."
         )
 
-    tasks = []
+    benchmarks = None
+    tasks: list[AbsTask] = []
     if tasks_names is not None:
-        tasks = mteb.get_tasks(tasks_names)
+        tasks = list(mteb.get_tasks(tasks_names))
     if benchmarks is not None:
         benchmarks = mteb.get_benchmarks(benchmarks)
-        for benchmark in benchmarks:
-            tasks.extend(benchmark.tasks)
 
     generate_model_card(
         model_name,
-        tasks if len(tasks) > 0 else None,
+        tasks,
+        benchmarks,
         existing_model_card_id_or_path=from_existing,
         results_cache=ResultCache(results_folder),
         output_path=output_path,
@@ -356,6 +365,95 @@ def _add_create_meta_parser(subparsers) -> None:
     parser.set_defaults(func=_create_meta)
 
 
+def _add_leaderboard_parser(subparsers) -> None:
+    parser = subparsers.add_parser("leaderboard", help="Launch the MTEB leaderboard")
+
+    parser.add_argument(
+        "--cache-path",
+        type=str,
+        help="Path to the cache folder containing model results",
+        required=False,
+        default=None,
+    )
+    parser.add_argument(
+        "--host",
+        type=str,
+        default="0.0.0.0",
+        help="Host to run the leaderboard server on",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=7860,
+        help="Port to run the leaderboard server on",
+    )
+    parser.add_argument(
+        "--share",
+        action="store_true",
+        default=False,
+        help="Create a public URL for the leaderboard",
+    )
+
+    parser.set_defaults(func=_leaderboard)
+
+
+def _leaderboard(args: argparse.Namespace) -> None:
+    """Launch the MTEB leaderboard with specified cache path."""
+    # Import leaderboard module only when needed to avoid requiring leaderboard dependencies
+    # for other CLI commands
+    try:
+        import gradio as gr
+
+        from mteb.leaderboard import get_leaderboard_app
+    except ImportError as e:
+        raise ImportError(
+            "Seems like some dependencies are not installed. "
+            + "You can likely install these using: `pip install mteb[leaderboard]`. "
+            + f"{e}"
+        )
+
+    cache_path = args.cache_path
+
+    if cache_path:
+        logger.info(f"Using cache path: {cache_path}")
+        cache = ResultCache(cache_path)
+    else:
+        cache = ResultCache()
+        logger.info(f"Using default cache path: {cache.cache_path}")
+
+    app = get_leaderboard_app(cache)
+
+    logger.info(f"Starting leaderboard on {args.host}:{args.port}")
+    if args.share:
+        logger.info("Creating public URL...")
+
+    logging.getLogger("mteb.load_results.task_results").setLevel(
+        logging.ERROR
+    )  # Warnings related to task split
+    logging.getLogger("mteb.model_meta").setLevel(
+        logging.ERROR
+    )  # Warning related to model metadata (fetch_from_hf=False)
+    logging.getLogger("mteb.load_results.benchmark_results").setLevel(
+        logging.ERROR
+    )  # Warning related to model metadata (fetch_from_hf=False)
+    warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
+
+    # Head content for Tailwind CSS
+    head = """
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    """
+
+    app.launch(
+        server_name=args.host,
+        server_port=args.port,
+        share=args.share,
+        theme=gr.themes.Soft(
+            font=[gr.themes.GoogleFont("Roboto Mono"), "Arial", "sans-serif"],
+        ),
+        head=head,
+    )
+
+
 def build_cli() -> argparse.ArgumentParser:
     """Builds the argument parser for the MTEB CLI.
 
@@ -375,6 +473,7 @@ def build_cli() -> argparse.ArgumentParser:
     _add_available_tasks_parser(subparsers)
     _add_available_benchmarks_parser(subparsers)
     _add_create_meta_parser(subparsers)
+    _add_leaderboard_parser(subparsers)
 
     return parser
 

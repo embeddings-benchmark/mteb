@@ -1,8 +1,15 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from mteb.abstasks.abstask import _set_seed
-from mteb.models import EncoderProtocol
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Mapping
+
+    from mteb.models import EncoderProtocol
+    from mteb.types import EncodeKwargs
 
 
 class Evaluator(ABC):
@@ -17,8 +24,8 @@ class Evaluator(ABC):
 
     @abstractmethod
     def __call__(
-        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
-    ) -> dict[str, float]:
+        self, model: EncoderProtocol, *, encode_kwargs: EncodeKwargs, num_proc: int = 1
+    ) -> Mapping[str, float] | Iterable[Any]:
         """This is called during training to evaluate the model.
 
         It returns scores.
@@ -26,5 +33,6 @@ class Evaluator(ABC):
         Args:
             model: the model to evaluate
             encode_kwargs: kwargs to pass to the model's encode method
+            num_proc: number of processes to use for data loading
         """
         pass

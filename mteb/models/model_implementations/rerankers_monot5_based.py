@@ -1,14 +1,20 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
 
 from .rerankers_custom import RerankerWrapper
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +34,6 @@ prediction_tokens = {
     "unicamp-dl/mt5-base-en-msmarco": ["▁no", "▁yes"],
     "unicamp-dl/mt5-base-mmarco-v2": ["▁no", "▁yes"],
     "unicamp-dl/mt5-base-mmarco-v1": ["▁no", "▁yes"],
-    "unicamp-dl/mt5-13b-mmarco-100k": ["▁", "▁true"],
 }
 
 
@@ -315,11 +320,13 @@ monot5_small = ModelMeta(
         fp_options="float16",
     ),
     name="castorini/monot5-small-msmarco-10k",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="77f8e3f7b1eb1afe353aa21a7c3a2fc8feca702e",
     release_date="2022-03-28",
     n_parameters=None,
+    n_embedding_parameters=16_449_536,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -329,8 +336,7 @@ monot5_small = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["PyTorch"],
-    is_cross_encoder=True,
+    framework=["PyTorch", "Transformers"],
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -343,11 +349,12 @@ monot5_small = ModelMeta(
 )
 
 monot5_base = ModelMeta(
-    loader=MonoT5Reranker,  # type: ignore
+    loader=MonoT5Reranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
     name="castorini/monot5-base-msmarco-10k",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="f15657ab3d2a5dd0b9a30c8c0b6a0a73c9cb5884",
@@ -362,6 +369,7 @@ monot5_base = ModelMeta(
       url={https://arxiv.org/abs/2206.02873},
     }""",
     n_parameters=None,
+    n_embedding_parameters=24_674_304,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -371,8 +379,7 @@ monot5_base = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["PyTorch"],
-    is_cross_encoder=True,
+    framework=["PyTorch", "Transformers"],
 )
 
 monot5_large = ModelMeta(
@@ -381,11 +388,13 @@ monot5_large = ModelMeta(
         fp_options="float16",
     ),
     name="castorini/monot5-large-msmarco-10k",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="48cfad1d8dd587670393f27ee8ec41fde63e3d98",
     release_date="2022-03-28",
     n_parameters=None,
+    n_embedding_parameters=32_899_072,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -395,8 +404,7 @@ monot5_large = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["PyTorch"],
-    is_cross_encoder=True,
+    framework=["PyTorch", "Transformers"],
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -414,11 +422,13 @@ monot5_3b = ModelMeta(
         fp_options="float16",
     ),
     name="castorini/monot5-3b-msmarco-10k",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="bc0c419a438c81f592f878ce32430a1823f5db6c",
     release_date="2022-03-28",
     n_parameters=None,
+    n_embedding_parameters=32_899_072,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -428,8 +438,7 @@ monot5_3b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["PyTorch"],
-    is_cross_encoder=True,
+    framework=["PyTorch", "Transformers"],
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -442,11 +451,12 @@ monot5_3b = ModelMeta(
 )
 
 flant5_base = ModelMeta(
-    loader=FLANT5Reranker,  # type: ignore
+    loader=FLANT5Reranker,
     loader_kwargs=dict(
         fp_options="float16",
     ),
     name="google/flan-t5-base",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="7bcac572ce56db69c1ea7c8af255c5d7c9672fc2",
@@ -475,6 +485,7 @@ flant5_base = ModelMeta(
         # "qed": ["train"],
     ),
     n_parameters=None,
+    n_embedding_parameters=24_674_304,
     memory_usage_mb=944,
     max_tokens=None,
     embed_dim=None,
@@ -483,8 +494,7 @@ flant5_base = ModelMeta(
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    framework=["PyTorch"],
-    is_cross_encoder=True,
+    framework=["PyTorch", "Transformers", "safetensors"],
 )
 
 flant5_large = ModelMeta(
@@ -493,6 +503,7 @@ flant5_large = ModelMeta(
         fp_options="float16",
     ),
     name="google/flan-t5-large",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a",
@@ -521,6 +532,7 @@ flant5_large = ModelMeta(
         # "qed": ["train"],
     ),
     n_parameters=None,
+    n_embedding_parameters=32_899_072,
     memory_usage_mb=2987,
     max_tokens=None,
     embed_dim=None,
@@ -529,8 +541,7 @@ flant5_large = ModelMeta(
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    framework=["PyTorch"],
-    is_cross_encoder=True,
+    framework=["PyTorch", "Transformers", "safetensors"],
 )
 
 flant5_xl = ModelMeta(
@@ -539,6 +550,7 @@ flant5_xl = ModelMeta(
         fp_options="float16",
     ),
     name="google/flan-t5-xl",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="7d6315df2c2fb742f0f5b556879d730926ca9001",
@@ -567,6 +579,7 @@ flant5_xl = ModelMeta(
         # "qed": ["train"],
     ),
     n_parameters=None,
+    n_embedding_parameters=65_798_144,
     memory_usage_mb=10871,
     max_tokens=None,
     embed_dim=None,
@@ -575,8 +588,7 @@ flant5_xl = ModelMeta(
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    framework=["PyTorch"],
-    is_cross_encoder=True,
+    framework=["PyTorch", "Transformers", "safetensors"],
 )
 
 flant5_xxl = ModelMeta(
@@ -585,6 +597,7 @@ flant5_xxl = ModelMeta(
         fp_options="float16",
     ),
     name="google/flan-t5-xxl",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="ae7c9136adc7555eeccc78cdd960dfd60fb346ce",
@@ -613,6 +626,7 @@ flant5_xxl = ModelMeta(
         # "qed": ["train"],
     ),
     n_parameters=None,
+    n_embedding_parameters=131_596_288,
     memory_usage_mb=42980,
     max_tokens=None,
     embed_dim=None,
@@ -621,8 +635,7 @@ flant5_xxl = ModelMeta(
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    framework=["PyTorch"],
-    is_cross_encoder=True,
+    framework=["PyTorch", "Transformers", "safetensors"],
 )
 
 
@@ -632,11 +645,13 @@ llama2_7b = ModelMeta(
         fp_options="float16",
     ),
     name="meta-llama/Llama-2-7b-hf",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9",
     release_date="2023-07-18",
     n_parameters=None,
+    n_embedding_parameters=131_072_000,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -646,7 +661,7 @@ llama2_7b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     citation="""@misc{touvron2023llama2openfoundation,
       title={Llama 2: Open Foundation and Fine-Tuned Chat Models},
       author={Hugo Touvron and Louis Martin and Kevin Stone and Peter Albert and Amjad Almahairi and Yasmine Babaei and Nikolay Bashlykov and Soumya Batra and Prajjwal Bhargava and Shruti Bhosale and Dan Bikel and Lukas Blecher and Cristian Canton Ferrer and Moya Chen and Guillem Cucurull and David Esiobu and Jude Fernandes and Jeremy Fu and Wenyin Fu and Brian Fuller and Cynthia Gao and Vedanuj Goswami and Naman Goyal and Anthony Hartshorn and Saghar Hosseini and Rui Hou and Hakan Inan and Marcin Kardas and Viktor Kerkez and Madian Khabsa and Isabel Kloumann and Artem Korenev and Punit Singh Koura and Marie-Anne Lachaux and Thibaut Lavril and Jenya Lee and Diana Liskovich and Yinghai Lu and Yuning Mao and Xavier Martinet and Todor Mihaylov and Pushkar Mishra and Igor Molybog and Yixin Nie and Andrew Poulton and Jeremy Reizenstein and Rashi Rungta and Kalyan Saladi and Alan Schelten and Ruan Silva and Eric Michael Smith and Ranjan Subramanian and Xiaoqing Ellen Tan and Binh Tang and Ross Taylor and Adina Williams and Jian Xiang Kuan and Puxin Xu and Zheng Yan and Iliyan Zarov and Yuchen Zhang and Angela Fan and Melanie Kambadur and Sharan Narang and Aurelien Rodriguez and Robert Stojnic and Sergey Edunov and Thomas Scialom},
@@ -656,7 +671,6 @@ llama2_7b = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2307.09288},
     }""",
-    is_cross_encoder=True,
 )
 
 llama2_7b_chat = ModelMeta(
@@ -665,6 +679,7 @@ llama2_7b_chat = ModelMeta(
         fp_options="float16",
     ),
     name="meta-llama/Llama-2-7b-chat-hf",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="f5db02db724555f92da89c216ac04704f23d4590",
@@ -679,6 +694,7 @@ llama2_7b_chat = ModelMeta(
       url={https://arxiv.org/abs/2307.09288},
     }""",
     n_parameters=None,
+    n_embedding_parameters=131_072_000,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -688,8 +704,7 @@ llama2_7b_chat = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["PyTorch"],
-    is_cross_encoder=True,
+    framework=["PyTorch", "Transformers", "safetensors"],
 )
 
 mistral_7b = ModelMeta(
@@ -698,11 +713,13 @@ mistral_7b = ModelMeta(
         fp_options="float16",
     ),
     name="mistralai/Mistral-7B-Instruct-v0.2",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="3ad372fc79158a2148299e3318516c786aeded6c",
     release_date="2023-12-11",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -712,7 +729,7 @@ mistral_7b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     citation="""@misc{jiang2023mistral7b,
       title={Mistral 7B},
       author={Albert Q. Jiang and Alexandre Sablayrolles and Arthur Mensch and Chris Bamford and Devendra Singh Chaplot and Diego de las Casas and Florian Bressand and Gianna Lengyel and Guillaume Lample and Lucile Saulnier and Lélio Renard Lavaud and Marie-Anne Lachaux and Pierre Stock and Teven Le Scao and Thibaut Lavril and Thomas Wang and Timothée Lacroix and William El Sayed},
@@ -722,7 +739,6 @@ mistral_7b = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2310.06825},
     }""",
-    is_cross_encoder=True,
 )
 
 followir_7b = ModelMeta(
@@ -731,6 +747,7 @@ followir_7b = ModelMeta(
         fp_options="float16",
     ),
     name="jhu-clsp/FollowIR-7B",
+    model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="4d25d437e38b510c01852070c0731e8f6e1875d1",
@@ -739,6 +756,7 @@ followir_7b = ModelMeta(
         # "jhu-clsp/FollowIR-train"
     ),
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=13813,
     max_tokens=None,
     embed_dim=None,
@@ -747,7 +765,7 @@ followir_7b = ModelMeta(
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     citation="""
     @misc{weller2024followir,
       title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
@@ -758,7 +776,6 @@ followir_7b = ModelMeta(
       primaryClass={cs.IR}
     }
     """,
-    is_cross_encoder=True,
 )
 
 
@@ -874,6 +891,7 @@ mt5_base_mmarco_v2 = ModelMeta(
         fp_options="float16",
     ),
     name="unicamp-dl/mt5-base-mmarco-v2",
+    model_type=["cross-encoder"],
     languages=mt5_languages,
     open_weights=True,
     revision="cc0a949b9f21efcaba45c8cabb998ad02ce8d4e7",
@@ -889,6 +907,7 @@ mt5_base_mmarco_v2 = ModelMeta(
     """,
     training_datasets={"MSMARCO"},
     n_parameters=None,
+    n_embedding_parameters=192_086_016,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -897,30 +916,5 @@ mt5_base_mmarco_v2 = ModelMeta(
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    framework=["PyTorch"],
-    is_cross_encoder=True,
-)
-
-mt5_13b_mmarco_100k = ModelMeta(
-    loader=MonoT5Reranker,  # type: ignore
-    loader_kwargs=dict(
-        fp_options="float16",
-    ),
-    name="unicamp-dl/mt5-13b-mmarco-100k",
-    languages=mt5_languages,
-    open_weights=True,
-    revision="e1a4317e102a525ea9e16745ad21394a4f1bffbc",
-    release_date="2022-11-04",
-    n_parameters=None,
-    memory_usage_mb=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    public_training_code=None,
-    public_training_data=None,
-    similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
-    framework=["PyTorch"],
-    is_cross_encoder=True,
+    framework=["PyTorch", "Transformers"],
 )

@@ -1,17 +1,22 @@
+from __future__ import annotations
+
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import HubertModel, Wav2Vec2FeatureExtractor
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput
 
 
 class HubertWrapper(AbsEncoder):
@@ -149,6 +154,16 @@ hubert_base = ModelMeta(
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
     training_datasets=set(),  # "LibriSpeech": ["train"]},
     modalities=["audio"],
+    citation="""
+@misc{hsu2021hubertselfsupervisedspeechrepresentation,
+    title={HuBERT: Self-Supervised Speech Representation Learning by Masked Prediction of Hidden Units},
+    author={Wei-Ning Hsu and Benjamin Bolte and Yao-Hung Hubert Tsai and Kushal Lakhotia and Ruslan Salakhutdinov and Abdelrahman Mohamed},
+    year={2021},
+    eprint={2106.07447},
+    archivePrefix={arXiv},
+    primaryClass={cs.CL},
+    url={https://arxiv.org/abs/2106.07447},
+}""",
 )
 
 # Fine-tuned large model
@@ -172,4 +187,14 @@ hubert_large_ft = ModelMeta(
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
     training_datasets=set(),  # "LibriSpeech": ["train"]},
     modalities=["audio"],
+    citation="""
+@misc{hsu2021hubertselfsupervisedspeechrepresentation,
+    title={HuBERT: Self-Supervised Speech Representation Learning by Masked Prediction of Hidden Units},
+    author={Wei-Ning Hsu and Benjamin Bolte and Yao-Hung Hubert Tsai and Kushal Lakhotia and Ruslan Salakhutdinov and Abdelrahman Mohamed},
+    year={2021},
+    eprint={2106.07447},
+    archivePrefix={arXiv},
+    primaryClass={cs.CL},
+    url={https://arxiv.org/abs/2106.07447},
+}""",
 )

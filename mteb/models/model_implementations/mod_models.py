@@ -1,6 +1,6 @@
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import PromptType
+from mteb.types import PromptType
 
 
 def instruction_template(
@@ -175,13 +175,14 @@ MoD_Embedding = ModelMeta(
     revision="acbb5b70fdab262226a6af2bc62001de8021b05c",
     release_date="2025-12-14",
     n_parameters=4021774336,
+    n_embedding_parameters=None,
     memory_usage_mb=7671,
     embed_dim=2560,
     max_tokens=32768,
     license="apache-2.0",
     reference="https://huggingface.co/bflhc/MoD-Embedding",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,

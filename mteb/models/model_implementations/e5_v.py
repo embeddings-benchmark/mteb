@@ -1,14 +1,19 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
 from packaging import version
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 E5_V_TRANSFORMERS_VERSION = (
     "4.44.2"  # Issue 1647: Only works with transformers==4.44.2.
@@ -30,6 +35,7 @@ class E5VModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
+        device: str | None = None,
         composed_prompt=None,
         **kwargs: Any,
     ):
@@ -47,8 +53,7 @@ class E5VModel(AbsEncoder):
         self.processor = LlavaNextProcessor.from_pretrained(
             model_name, revision=revision
         )
-        if "device" in kwargs:
-            self.device = kwargs.pop("device")
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.model = LlavaNextForConditionalGeneration.from_pretrained(
             model_name, revision=revision, **kwargs
         )
@@ -87,7 +92,7 @@ class E5VModel(AbsEncoder):
                     ],
                     return_tensors="pt",
                     padding=True,
-                ).to("cuda")
+                ).to(self.device)
                 text_outputs = self.model(
                     **text_inputs, output_hidden_states=True, return_dict=True
                 ).hidden_states[-1][:, -1, :]
@@ -111,7 +116,7 @@ class E5VModel(AbsEncoder):
                     batch["image"],
                     return_tensors="pt",
                     padding=True,
-                ).to("cuda")
+                ).to(self.device)
                 image_outputs = self.model(
                     **img_inputs, output_hidden_states=True, return_dict=True
                 ).hidden_states[-1][:, -1, :]
@@ -141,7 +146,7 @@ class E5VModel(AbsEncoder):
                     ]
                     inputs = self.processor(
                         prompts, batch["image"], return_tensors="pt", padding=True
-                    ).to("cuda")
+                    ).to(self.device)
                     outputs = self.model(
                         **inputs, output_hidden_states=True, return_dict=True
                     ).hidden_states[-1][:, -1, :]
@@ -160,11 +165,13 @@ e5_v = ModelMeta(
         device_map="auto",
     ),
     name="royokong/e5-v",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="0c1f22679417b3ae925d779442221c40cd1861ab",
     release_date="2024-07-17",
     modalities=["image", "text"],
     n_parameters=8_360_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=15936,
     max_tokens=8192,
     embed_dim=4096,
@@ -172,7 +179,7 @@ e5_v = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/kongds/E5-V",
     public_training_data="https://huggingface.co/datasets/princeton-nlp/datasets-for-simcse",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/royokong/e5-v",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,

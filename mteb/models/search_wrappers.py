@@ -1,27 +1,35 @@
+from __future__ import annotations
+
 import heapq
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
 from datasets import Dataset
-from torch.utils.data import DataLoader
 
 from mteb._create_dataloaders import (
     create_dataloader,
 )
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.types import (
-    Array,
-    BatchedInput,
-    CorpusDatasetType,
     PromptType,
-    QueryDatasetType,
-    RetrievalOutputType,
-    TopRankedDocumentsType,
 )
 
-from .models_protocols import CrossEncoderProtocol, EncoderProtocol
-from .search_encoder_index.search_backend_protocol import IndexEncoderSearchProtocol
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import (
+        Array,
+        BatchedInput,
+        CorpusDatasetType,
+        EncodeKwargs,
+        QueryDatasetType,
+        RetrievalOutputType,
+        TopRankedDocumentsType,
+    )
+
+    from .models_protocols import CrossEncoderProtocol, EncoderProtocol
+    from .search_encoder_index.search_backend_protocol import IndexEncoderSearchProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +58,8 @@ class SearchEncoderWrapper:
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None = None,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -60,6 +69,7 @@ class SearchEncoderWrapper:
             hf_split: Split of current task, allows to know some additional information about current split.
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for dataloading.
         """
         # Always retain corpus for potential reranking or fallback flows
         self.task_corpus = corpus
@@ -69,6 +79,7 @@ class SearchEncoderWrapper:
                     corpus,
                     task_metadata,
                     prompt_type=PromptType.document,
+                    num_proc=num_proc,
                     **encode_kwargs,
                 ),
                 task_metadata=task_metadata,
@@ -88,8 +99,9 @@ class SearchEncoderWrapper:
         hf_split: str,
         hf_subset: str,
         top_k: int,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
+        num_proc: int | None = None,
     ) -> RetrievalOutputType:
         """Search the corpus for the given queries.
 
@@ -102,6 +114,7 @@ class SearchEncoderWrapper:
                 Passed only from Reranking tasks.
             top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for dataloading.
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
@@ -113,6 +126,7 @@ class SearchEncoderWrapper:
             queries,
             task_metadata,
             prompt_type=PromptType.query,
+            num_proc=num_proc,
             **encode_kwargs,
         )
 
@@ -200,7 +214,7 @@ class SearchEncoderWrapper:
         # Reset the task corpus dataloader to None to free up memory
         self.task_corpus = None
 
-        results = {qid: {} for qid in query_idx_to_id.values()}
+        results: RetrievalOutputType = {qid: {} for qid in query_idx_to_id.values()}
         for qid in result_heaps:
             for score, corpus_id in result_heaps[qid]:
                 results[qid][corpus_id] = score
@@ -215,16 +229,22 @@ class SearchEncoderWrapper:
         hf_subset: str,
         hf_split: str,
         top_k: int,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> dict[str, list[tuple[float, str]]]:
         logger.info("Encoding Corpus in batches (this might take a while)...")
+        if self.task_corpus is None:
+            raise ValueError("Corpus must be indexed before searching.")
+
         itr = range(0, len(self.task_corpus), self.corpus_chunk_size)
 
-        result_heaps = {qid: [] for qid in query_idx_to_id.values()}
+        result_heaps: dict[str, list[tuple[float, str]]] = {
+            qid: [] for qid in query_idx_to_id.values()
+        }
         for batch_num, corpus_start_idx in enumerate(itr):
             logger.info(f"Encoding Batch {batch_num + 1}/{len(itr)}...")
             corpus_end_idx = min(
-                corpus_start_idx + self.corpus_chunk_size, len(self.task_corpus)
+                corpus_start_idx + self.corpus_chunk_size,
+                len(self.task_corpus),
             )
             sub_corpus = self.task_corpus.select(
                 range(corpus_start_idx, corpus_end_idx)
@@ -249,7 +269,7 @@ class SearchEncoderWrapper:
             scores = self.model.similarity(query_embeddings, sub_corpus_embeddings)
 
             # get top-k values
-            cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
+            cos_scores_top_k_values_tensor, cos_scores_top_k_idx_tensor = torch.topk(
                 torch.as_tensor(scores),
                 min(
                     top_k + 1,
@@ -258,8 +278,8 @@ class SearchEncoderWrapper:
                 dim=1,
                 largest=True,
             )
-            cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
-            cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
+            cos_scores_top_k_idx = cos_scores_top_k_idx_tensor.cpu().tolist()
+            cos_scores_top_k_values = cos_scores_top_k_values_tensor.cpu().tolist()
 
             sub_corpus_ids = list(sub_corpus_ids)
             result_heaps = self._sort_full_corpus_results(
@@ -312,14 +332,18 @@ class SearchEncoderWrapper:
         task_metadata: TaskMetadata,
         hf_subset: str,
         hf_split: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
     ) -> dict[str, list[tuple[float, str]]]:
         """Rerank documents based on pre-ranked documents.
 
         Returns:
             A dictionary mapping query IDs to a list of tuples, each containing a relevance score and a document ID.
         """
-        result_heaps = {qid: [] for qid in query_idx_to_id.values()}
+        if self.task_corpus is None:
+            raise ValueError("Corpus must be indexed before searching.")
+        result_heaps: dict[str, list[tuple[float, str]]] = {
+            qid: [] for qid in query_idx_to_id.values()
+        }
         doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
 
         all_doc_embeddings = self.model.encode(
@@ -340,7 +364,8 @@ class SearchEncoderWrapper:
         for query_idx, query_embedding in enumerate(query_embeddings):
             query_id = query_idx_to_id[query_idx]
             if query_id not in top_ranked:
-                logger.warning(f"No pre-ranked documents found for query {query_id}")
+                msg = f"No pre-ranked documents found for query {query_id}"
+                logger.warning(msg)
                 continue
 
             ranked_ids = top_ranked[query_id]
@@ -386,12 +411,12 @@ class SearchEncoderWrapper:
 
     def _rerank_sort_results(
         self,
-        result_heaps: list[tuple[float, str]],
+        result_heaps: dict[str, list[tuple[float, str]]],
         query_id: str,
         ranked_ids: list[str],
         scores_top_k_idx: torch.Tensor,
         scores_top_k_values: torch.Tensor,
-    ) -> list[tuple[float, str]]:
+    ) -> dict[str, list[tuple[float, str]]]:
         """Sort the heap into descending order list.
 
         Returns:
@@ -459,7 +484,8 @@ class SearchCrossEncoderWrapper:
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None = None,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -469,6 +495,7 @@ class SearchCrossEncoderWrapper:
             hf_split: Split of current task, allows to know some additional information about current split.
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use.
         """
         self.task_corpus = corpus
 
@@ -480,8 +507,9 @@ class SearchCrossEncoderWrapper:
         hf_split: str,
         hf_subset: str,
         top_k: int,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
+        num_proc: int | None = None,
     ) -> RetrievalOutputType:
         """Search the corpus using the given queries.
 
@@ -494,6 +522,7 @@ class SearchCrossEncoderWrapper:
                 Passed only from Reranking tasks.
             top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use.
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
@@ -502,6 +531,8 @@ class SearchCrossEncoderWrapper:
             raise ValueError(
                 "CrossEncoder search requires top_ranked documents for reranking."
             )
+        if self.task_corpus is None:
+            raise ValueError("Corpus must be indexed before searching.")
 
         query_id_to_idx = {row["id"]: i for i, row in enumerate(queries)}
         doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
@@ -511,7 +542,8 @@ class SearchCrossEncoderWrapper:
         doc_pairs_ids: list[tuple[str, str]] = []
         for query_id, corpus_ids in top_ranked.items():
             if query_id not in top_ranked:
-                logger.warning(f"No pre-ranked documents found for query {query_id}")
+                msg = f"No pre-ranked documents found for query {query_id}"
+                logger.warning(msg)
                 continue
 
             query_idx = query_id_to_idx[query_id]
@@ -524,12 +556,14 @@ class SearchCrossEncoderWrapper:
             Dataset.from_list(total_queries),
             task_metadata,
             prompt_type=PromptType.document,
+            num_proc=num_proc,
             **encode_kwargs,
         )
         corpus_loader = create_dataloader(
             Dataset.from_list(total_docs),
             task_metadata,
             prompt_type=PromptType.document,
+            num_proc=num_proc,
             **encode_kwargs,
         )
         predictions = self.model.predict(
@@ -540,7 +574,7 @@ class SearchCrossEncoderWrapper:
             hf_subset=hf_subset,
         )
 
-        results = {qid: {} for qid in queries["id"]}
+        results: RetrievalOutputType = {qid: {} for qid in queries["id"]}
         for (query_id, corpus_id), score in zip(doc_pairs_ids, predictions):
             results[query_id][corpus_id] = float(score)
 

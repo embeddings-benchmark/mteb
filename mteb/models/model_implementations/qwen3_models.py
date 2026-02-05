@@ -1,6 +1,13 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import EncoderProtocol, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from mteb.models.models_protocols import EncoderProtocol
 
 
 def instruction_template(
@@ -134,18 +141,20 @@ def q3e_instruct_loader(
 Qwen3_Embedding_0B6 = ModelMeta(
     loader=q3e_instruct_loader,
     name="Qwen/Qwen3-Embedding-0.6B",
+    model_type=["dense"],
     languages=multilingual_langs,
     open_weights=True,
     revision="b22da495047858cce924d27d76261e96be6febc0",  # Commit of @tomaarsen
     release_date="2025-06-05",
     n_parameters=595776512,
+    n_embedding_parameters=None,
     memory_usage_mb=1136,
     embed_dim=1024,
     max_tokens=32768,
     license="apache-2.0",
     reference="https://huggingface.co/Qwen/Qwen3-Embedding-0.6B",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
@@ -156,18 +165,20 @@ Qwen3_Embedding_0B6 = ModelMeta(
 Qwen3_Embedding_4B = ModelMeta(
     loader=q3e_instruct_loader,
     name="Qwen/Qwen3-Embedding-4B",
+    model_type=["dense"],
     languages=multilingual_langs,
     open_weights=True,
     revision="636cd9bf47d976946cdbb2b0c3ca0cb2f8eea5ff",  # Commit of @tomaarsen
     release_date="2025-06-05",
     n_parameters=4021774336,
+    n_embedding_parameters=None,
     memory_usage_mb=7671,
     embed_dim=2560,
     max_tokens=32768,
     license="apache-2.0",
     reference="https://huggingface.co/Qwen/Qwen3-Embedding-4B",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
@@ -178,18 +189,20 @@ Qwen3_Embedding_4B = ModelMeta(
 Qwen3_Embedding_8B = ModelMeta(
     loader=q3e_instruct_loader,
     name="Qwen/Qwen3-Embedding-8B",
+    model_type=["dense"],
     languages=multilingual_langs,
     open_weights=True,
     revision="4e423935c619ae4df87b646a3ce949610c66241c",  # Commit of @tomaarsen
     release_date="2025-06-05",
     n_parameters=7567295488,
+    n_embedding_parameters=None,
     memory_usage_mb=14433,
     embed_dim=4096,
     max_tokens=32768,
     license="apache-2.0",
     reference="https://huggingface.co/Qwen/Qwen3-Embedding-8B",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,

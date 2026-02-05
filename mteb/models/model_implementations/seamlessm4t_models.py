@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
 from torch.utils.data import DataLoader
@@ -11,6 +13,13 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 from mteb.types._encoder_io import AudioInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput
 
 
 class SeamlessM4TWrapper(AbsEncoder):
@@ -68,24 +77,27 @@ class SeamlessM4TWrapper(AbsEncoder):
                         orig_freq=sr, new_freq=self.sampling_rate
                     )
                     array = resampler(array)
-                # truncate audio
-                array = array.cpu().detach().numpy()[:max_samples]
+
+                # Squeeze to 1D and truncate
+                array = array.squeeze()[:max_samples]
                 audio_arrays.append(array)
 
-                features = self.processor(
-                    audios=audio_arrays,
-                    sampling_rate=self.sampling_rate,
-                    return_tensors="pt",
-                    padding=True,
-                )
+            # Process the entire batch at once
+            features = self.processor(
+                audios=audio_arrays,
+                sampling_rate=self.sampling_rate,
+                return_tensors="pt",
+                padding=True,
+            )
 
-                input_features = features.input_features.to(self.device)
-                attention_mask = (
-                    features.attention_mask.to(self.device)
-                    if hasattr(features, "attention_mask")
-                    else None
-                )
+            input_features = features.input_features.to(self.device)
+            attention_mask = (
+                features.attention_mask.to(self.device)
+                if hasattr(features, "attention_mask")
+                else None
+            )
 
+            with torch.no_grad():
                 outputs = self.speech_encoder(
                     input_features,
                     attention_mask=attention_mask,
@@ -137,7 +149,7 @@ class SeamlessM4TWrapper(AbsEncoder):
 
                 all_embeddings.append(embeddings.cpu())
 
-        return torch.cat(all_embeddings, dim=0)
+        return torch.cat(all_embeddings, dim=0).numpy()
 
     def encode(
         self,
@@ -177,4 +189,14 @@ seamless_m4t_v2_large = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
+    citation="""
+@misc{communication2023seamlessmultilingualexpressivestreaming,
+      title={Seamless: Multilingual Expressive and Streaming Speech Translation},
+      author={Seamless Communication and Loïc Barrault and Yu-An Chung and Mariano Coria Meglioli and David Dale and Ning Dong and Mark Duppenthaler and Paul-Ambroise Duquenne and Brian Ellis and Hady Elsahar and Justin Haaheim and John Hoffman and Min-Jae Hwang and Hirofumi Inaguma and Christopher Klaiber and Ilia Kulikov and Pengwei Li and Daniel Licht and Jean Maillard and Ruslan Mavlyutov and Alice Rakotoarison and Kaushik Ram Sadagopan and Abinesh Ramakrishnan and Tuan Tran and Guillaume Wenzek and Yilin Yang and Ethan Ye and Ivan Evtimov and Pierre Fernandez and Cynthia Gao and Prangthip Hansanti and Elahe Kalbassi and Amanda Kallet and Artyom Kozhevnikov and Gabriel Mejia Gonzalez and Robin San Roman and Christophe Touret and Corinne Wong and Carleigh Wood and Bokai Yu and Pierre Andrews and Can Balioglu and Peng-Jen Chen and Marta R. Costa-jussà and Maha Elbayad and Hongyu Gong and Francisco Guzmán and Kevin Heffernan and Somya Jain and Justine Kao and Ann Lee and Xutai Ma and Alex Mourachko and Benjamin Peloquin and Juan Pino and Sravya Popuri and Christophe Ropers and Safiyyah Saleem and Holger Schwenk and Anna Sun and Paden Tomasello and Changhan Wang and Jeff Wang and Skyler Wang and Mary Williamson},
+      year={2023},
+      eprint={2312.05187},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2312.05187},
+}""",
 )

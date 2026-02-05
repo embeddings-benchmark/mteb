@@ -8,8 +8,8 @@ class RavdessZeroshotClassification(AbsTaskZeroShotClassification):
         description="Emotion classification Dataset. RAVDESS contains 24 professional actors (12 female, 12 male), vocalizing two lexically-matched statements in a neutral North American accent. Speech emotions includes neutral,calm, happy, sad, angry, fearful, surprise, and disgust expressions. These 8 emtoions also serve as labels for the dataset.",
         reference="https://huggingface.co/datasets/narad/ravdess",
         dataset={
-            "path": "narad/ravdess",
-            "revision": "2894394c52a8621bf8bb2e4d7c3b9cf77f6fa80e",
+            "path": "mteb/RavdessZeroshot",
+            "revision": "9ab83d763c01b2dec59d79a6dcb44691d2fb80ee",
         },
         type="AudioZeroshotClassification",
         category="a2t",
@@ -22,7 +22,7 @@ class RavdessZeroshotClassification(AbsTaskZeroShotClassification):
         license="cc-by-nc-sa-3.0",
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["audio"],
+        modalities=["audio", "text"],
         sample_creation="found",
         bibtex_citation=r"""
 @article{10.1371/journal.pone.0196391,

@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
 from torch.utils.data import DataLoader
@@ -12,6 +14,13 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 from mteb.types._encoder_io import AudioInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput
 
 
 class MMSWrapper(AbsEncoder):
@@ -170,6 +179,16 @@ mms_1b_all = ModelMeta(
     public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
     training_datasets=set(),
     modalities=["audio"],
+    citation="""
+@misc{pratap2023scalingspeechtechnology1000,
+  title={Scaling Speech Technology to 1,000+ Languages},
+  author={Vineel Pratap and Andros Tjandra and Bowen Shi and Paden Tomasello and Arun Babu and Sayani Kundu and Ali Elkahky and Zhaoheng Ni and Apoorv Vyas and Maryam Fazel-Zarandi and Alexei Baevski and Yossi Adi and Xiaohui Zhang and Wei-Ning Hsu and Alexis Conneau and Michael Auli},
+  year={2023},
+  eprint={2305.13516},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2305.13516},
+}""",
 )
 
 mms_1b_fl102 = ModelMeta(
@@ -192,6 +211,16 @@ mms_1b_fl102 = ModelMeta(
     public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
     training_datasets=set(),
     modalities=["audio"],
+    citation="""
+@misc{pratap2023scalingspeechtechnology1000,
+  title={Scaling Speech Technology to 1,000+ Languages},
+  author={Vineel Pratap and Andros Tjandra and Bowen Shi and Paden Tomasello and Arun Babu and Sayani Kundu and Ali Elkahky and Zhaoheng Ni and Apoorv Vyas and Maryam Fazel-Zarandi and Alexei Baevski and Yossi Adi and Xiaohui Zhang and Wei-Ning Hsu and Alexis Conneau and Michael Auli},
+  year={2023},
+  eprint={2305.13516},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2305.13516},
+}""",
 )
 
 mms_1b_l1107 = ModelMeta(
@@ -214,4 +243,14 @@ mms_1b_l1107 = ModelMeta(
     public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
     training_datasets=set(),
     modalities=["audio"],
+    citation="""
+@misc{pratap2023scalingspeechtechnology1000,
+  title={Scaling Speech Technology to 1,000+ Languages},
+  author={Vineel Pratap and Andros Tjandra and Bowen Shi and Paden Tomasello and Arun Babu and Sayani Kundu and Ali Elkahky and Zhaoheng Ni and Apoorv Vyas and Maryam Fazel-Zarandi and Alexei Baevski and Yossi Adi and Xiaohui Zhang and Wei-Ning Hsu and Alexis Conneau and Michael Auli},
+  year={2023},
+  eprint={2305.13516},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2305.13516},
+}""",
 )

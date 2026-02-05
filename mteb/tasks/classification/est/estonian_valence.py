@@ -40,12 +40,12 @@ class EstonianValenceClassification(AbsTaskClassification):
         superseded_by="EstonianValenceClassification.v2",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_column("paragraph", "text").rename_column(
             "valence", "label"
         )
         # convert label to a numbers
-        labels = self.dataset["train"]["label"]  # type: ignore
+        labels = self.dataset["train"]["label"]
         lab2idx = {lab: idx for idx, lab in enumerate(set(labels))}
         self.dataset = self.dataset.map(
             lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"]

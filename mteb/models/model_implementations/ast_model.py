@@ -1,18 +1,23 @@
+from __future__ import annotations
+
 import logging
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import ASTFeatureExtractor, ASTModel
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +71,13 @@ class ASTWrapper(AbsEncoder):
                         orig_freq=sr, new_freq=self.sampling_rate
                     )
                     array = resampler(array)
+
+                # Ensure minimum length for AST feature extractor (window size is 400)
+                min_samples = 401  # Just above the window size
+                if len(array) < min_samples:
+                    padding = torch.zeros(min_samples - len(array))
+                    array = torch.cat([array, padding])
+
                 audio_arrays.append(array.numpy())
 
             features = self.feature_extractor(
@@ -119,4 +131,14 @@ ast_audioset = ModelMeta(
     public_training_data="https://research.google.com/audioset/dataset/index.html",
     training_datasets=set(),  # "AudioSet": ["train"]},
     modalities=["audio"],
+    citation="""
+@misc{gong2021astaudiospectrogramtransformer,
+      title={AST: Audio Spectrogram Transformer},
+      author={Yuan Gong and Yu-An Chung and James Glass},
+      year={2021},
+      eprint={2104.01778},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD},
+      url={https://arxiv.org/abs/2104.01778},
+}""",
 )

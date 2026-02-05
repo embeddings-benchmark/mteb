@@ -1,18 +1,23 @@
+from __future__ import annotations
+
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import CLIPModel, CLIPProcessor
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput, TextInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput, TextInput
 
 
 class Wav2ClipZeroShotWrapper(AbsEncoder):
@@ -34,11 +39,16 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         self.sampling_rate = 16_000
         self.max_audio_length_s = max_audio_length_s
 
-        # text side (CLIP)
-        self.clip = CLIPModel.from_pretrained(model_name, revision=revision).to(device)
+        # text side (CLIP) - we use the standard OpenAI CLIP model as mentioned in paper
+        # Wav2Clip aligns audio embeddings to CLIP's embedding space using this specific model
+        clip_model_name = "openai/clip-vit-base-patch32"
+        clip_revision = "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268"
+        self.clip = CLIPModel.from_pretrained(
+            clip_model_name, revision=clip_revision, device_map=device
+        )
         self.clip.eval()
         self.clip_processor = CLIPProcessor.from_pretrained(
-            model_name, revision=revision
+            clip_model_name, revision=clip_revision
         )
 
     def get_audio_embeddings(
@@ -71,7 +81,7 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
                         orig_freq=sr, new_freq=self.sampling_rate
                     )
                     array = resampler(array)
-                audio_arrays.append(array.numpy())
+                audio_arrays.append(array)  # Keep as tensor
 
             max_length = max(wav.shape[-1] for wav in audio_arrays)
             padded_wavs = []
@@ -84,8 +94,8 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
                     padded_wav = wav
                 padded_wavs.append(padded_wav)
 
-            # Stack into batch tensor
-            batch_tensor = torch.stack(padded_wavs).cpu().detach().numpy()
+            # Stack into batch array and convert to numpy for embed_audio
+            batch_tensor = torch.stack(padded_wavs).numpy()
 
             # Process entire batch at once
             batch_embeds = self.embed_audio(batch_tensor, self.audio_model)
@@ -159,7 +169,7 @@ wav2clip_zero = ModelMeta(
     loader=Wav2ClipZeroShotWrapper,
     name="lyrebird/wav2clip",
     languages=["eng-Latn"],
-    revision="N/A",
+    revision="no_revision",
     release_date="2022-03-15",
     modalities=["audio", "text"],
     n_parameters=163_000_000,  # wav2clip: 11.7M + CLIP: 151.3M ≈ 163M
@@ -179,4 +189,14 @@ wav2clip_zero = ModelMeta(
         # "FreeSound": ["https://freesound.org/"],
         # "BBC Sound Effects": ["https://sound-effects.bbcrewind.co.uk/"],
     ),
+    citation="""
+@misc{wu2022wav2cliplearningrobustaudio,
+  title={Wav2CLIP: Learning Robust Audio Representations From CLIP},
+  author={Ho-Hsiang Wu and Prem Seetharaman and Kundan Kumar and Juan Pablo Bello},
+  year={2022},
+  eprint={2110.11499},
+  archivePrefix={arXiv},
+  primaryClass={cs.SD},
+  url={https://arxiv.org/abs/2110.11499},
+}""",
 )

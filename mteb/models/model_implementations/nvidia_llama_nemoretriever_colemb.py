@@ -1,16 +1,18 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING, Any
 
 import torch
+from packaging.specifiers import SpecifierSet
 from torch.utils.data import DataLoader
+from transformers import __version__ as transformers_version
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
 
 if TYPE_CHECKING:
-    pass
-
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperforming,
       title={Llama Nemoretriever Colembed: Top-Performing Text-Image Retrieval Model},
@@ -29,11 +31,21 @@ class LlamaNemoretrieverColembed(AbsEncoder):
         model_name_or_path: str,
         revision: str,
         trust_remote_code: bool,
+        transformers_version_constraint: str | None = None,
         device_map="cuda",
         torch_dtype=torch.bfloat16,
         attn_implementation="flash_attention_2",
         **kwargs,
     ):
+        if transformers_version_constraint is not None:
+            spec = SpecifierSet(transformers_version_constraint)
+            if transformers_version not in spec:
+                raise RuntimeError(
+                    f"Model `{model_name_or_path}` requires transformers{transformers_version_constraint}, "
+                    f"but {transformers_version} is installed. "
+                    f"Run: pip install 'transformers{transformers_version_constraint}'"
+                )
+
         from transformers import AutoModel
 
         self.model = AutoModel.from_pretrained(
@@ -140,25 +152,41 @@ TRAINING_DATA = {
     "wiki-ss-nq",
 }
 
+
+TRAINING_DATA_v2 = {
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreArxivQARetrieval",
+    "docmatix-ir",
+    "VDRMultilingualRetrieval",
+    "VisRAG-Ret-Train-Synthetic-data",
+    "VisRAG-Ret-Train-In-domain-data",
+    "wiki-ss-nq",
+}
+
 llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     loader=LlamaNemoretrieverColembed,
     loader_kwargs=dict(
         trust_remote_code=True,
+        transformers_version_constraint="==4.49.0",
     ),
     name="nvidia/llama-nemoretriever-colembed-1b-v1",
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
-    revision="1f0fdea7f5b19532a750be109b19072d719b8177",
+    revision="6eade800103413033f260bb55b49fe039fd28a6e",
     release_date="2025-06-27",
     modalities=["image", "text"],
     n_parameters=2_418_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=4610,
     max_tokens=8192,
     embed_dim=2048,
     license="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1/blob/main/LICENSE",
     open_weights=True,
-    public_training_code="Proprietary Code",
+    public_training_code=None,
     public_training_data="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1#training-dataset",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1",
     similarity_fn_name="MaxSim",
     use_instructions=True,
@@ -170,24 +198,110 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     loader=LlamaNemoretrieverColembed,
     loader_kwargs=dict(
         trust_remote_code=True,
+        transformers_version_constraint="==4.49.0",
     ),
     name="nvidia/llama-nemoretriever-colembed-3b-v1",
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
-    revision="50c36f4d5271c6851aa08bd26d69f6e7ca8b870c",
+    revision="4194bdd2cd2871f220ddba6273ce173ef1217a1e",
     release_date="2025-06-27",
     modalities=["image", "text"],
     n_parameters=4_407_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=8403,
     max_tokens=8192,
     embed_dim=3072,
     license="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1/blob/main/LICENSE",
     open_weights=True,
-    public_training_code="Proprietary Code",
+    public_training_code=None,
     public_training_data="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1#training-dataset",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/nvidia/llama-nemoretriever-colembed-3b-v1",
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=TRAINING_DATA,
+    citation=LLAMA_NEMORETRIEVER_CITATION,
+)
+
+llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
+    loader=LlamaNemoretrieverColembed,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        transformers_version_constraint="==4.49.0",
+    ),
+    name="nvidia/llama-nemotron-colembed-vl-3b-v2",
+    model_type=["late-interaction"],
+    languages=["eng-Latn"],
+    revision="75f03c712cb3a252e062295f9a0966e5d95d6156",
+    release_date="2026-01-21",
+    modalities=["image", "text"],
+    n_parameters=4_407_000_000,
+    memory_usage_mb=8403,
+    max_tokens=8192,
+    embed_dim=3072,
+    license="https://huggingface.co/nvidia/llama-nemotron-colembed-vl-3b-v2/blob/main/LICENSE",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/nvidia/llama-nemotron-colembed-vl-3b-v2#training-dataset",
+    framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/nvidia/llama-nemotron-colembed-vl-3b-v2",
+    similarity_fn_name="MaxSim",
+    use_instructions=True,
+    training_datasets=TRAINING_DATA,
+    citation=LLAMA_NEMORETRIEVER_CITATION,
+)
+
+nemotron_colembed_vl_4b_v2 = ModelMeta(
+    loader=LlamaNemoretrieverColembed,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        transformers_version_constraint="==5.0.0rc0",
+    ),
+    name="nvidia/nemotron-colembed-vl-4b-v2",
+    revision="823b1625c15fe3da73fa094205e538a7a2301a2a",
+    languages=["eng-Latn"],
+    release_date="2026-01-07",
+    modalities=["image", "text"],
+    n_parameters=4_800_000_000,
+    memory_usage_mb=9206,
+    max_tokens=262144,
+    embed_dim=2560,
+    license="https://huggingface.co/nvidia/nemotron-colembed-vl-4b-v2/blob/main/LICENSE",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/nvidia/nemotron-colembed-vl-4b-v2#training-dataset",
+    framework=["PyTorch", "Transformers"],
+    reference="https://huggingface.co/nvidia/nemotron-colembed-vl-4b-v2",
+    similarity_fn_name="MaxSim",
+    use_instructions=True,
+    training_datasets=TRAINING_DATA_v2,
+    citation=LLAMA_NEMORETRIEVER_CITATION,
+)
+
+
+nemotron_colembed_vl_8b_v2 = ModelMeta(
+    loader=LlamaNemoretrieverColembed,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        transformers_version_constraint="==5.0.0rc0",
+    ),
+    name="nvidia/nemotron-colembed-vl-8b-v2",
+    revision="6cbe43579dda6237768fc373768ad372cc5cdfec",
+    languages=["eng-Latn"],
+    release_date="2026-01-07",
+    modalities=["image", "text"],
+    n_parameters=8_700_000_000,
+    memory_usage_mb=16722,
+    max_tokens=262144,
+    embed_dim=4096,
+    license="https://huggingface.co/nvidia/nemotron-colembed-vl-8b-v2/blob/main/LICENSE",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/nvidia/nemotron-colembed-vl-8b-v2#training-dataset",
+    framework=["PyTorch", "Transformers"],
+    reference="https://huggingface.co/nvidia/nemotron-colembed-vl-8b-v2",
+    similarity_fn_name="MaxSim",
+    use_instructions=True,
+    training_datasets=TRAINING_DATA_v2,
     citation=LLAMA_NEMORETRIEVER_CITATION,
 )

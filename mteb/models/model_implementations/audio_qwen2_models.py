@@ -1,17 +1,22 @@
+from __future__ import annotations
+
 import logging
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -141,4 +146,15 @@ qwen2_audio_meta = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     modalities=["audio", "text"],
+    citation="""
+@misc{chu2024qwen2audiotechnicalreport,
+      title={Qwen2-Audio Technical Report},
+      author={Yunfei Chu and Jin Xu and Qian Yang and Haojie Wei and Xipin Wei and Zhifang Guo and Yichong Leng and Yuanjun Lv and Jinzheng He and Junyang Lin and Chang Zhou and Jingren Zhou},
+      year={2024},
+      eprint={2407.10759},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      url={https://arxiv.org/abs/2407.10759},
+}
+""",
 )

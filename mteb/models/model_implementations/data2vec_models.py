@@ -1,17 +1,22 @@
+from __future__ import annotations
+
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import Data2VecAudioModel, Wav2Vec2FeatureExtractor
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput
 
 
 class Data2VecAudioWrapper(AbsEncoder):
@@ -150,6 +155,16 @@ data2vec_audio_base = ModelMeta(
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
     training_datasets=set(),  # "LibriSpeech": ["train"]},
     modalities=["audio"],
+    citation="""
+@misc{baevski2022data2vecgeneralframeworkselfsupervised,
+    title={data2vec: A General Framework for Self-supervised Learning in Speech, Vision and Language},
+    author={Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
+    year={2022},
+    eprint={2202.03555},
+    archivePrefix={arXiv},
+    primaryClass={cs.LG},
+    url={https://arxiv.org/abs/2202.03555},
+}""",
 )
 
 data2vec_audio_large = ModelMeta(
@@ -172,4 +187,14 @@ data2vec_audio_large = ModelMeta(
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
     training_datasets=set(),  # "LibriSpeech": ["train"]},
     modalities=["audio"],
+    citation="""
+@misc{baevski2022data2vecgeneralframeworkselfsupervised,
+    title={data2vec: A General Framework for Self-supervised Learning in Speech, Vision and Language},
+    author={Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
+    year={2022},
+    eprint={2202.03555},
+    archivePrefix={arXiv},
+    primaryClass={cs.LG},
+    url={https://arxiv.org/abs/2202.03555},
+}""",
 )

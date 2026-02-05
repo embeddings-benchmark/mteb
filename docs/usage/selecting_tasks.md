@@ -16,6 +16,164 @@ results = mteb.evaluate(model, tasks=benchmark)
 
 The benchmark specifies not only a list of tasks, but also what splits and language to run on.
 
+### Filtering Benchmark Tasks
+
+You can filter benchmarks to evaluate your model on specific subsets of tasks. Use the tabs below to explore different filtering approaches:
+
+=== "By Task Type"
+
+    Filter a benchmark to only include specific task types. This is useful when you want to evaluate your model on a subset of tasks:
+
+    ```python
+    import mteb
+
+    # Get the full English benchmark
+    benchmark = mteb.get_benchmark("MTEB(eng, v2)")
+
+    # Filter to only retrieval tasks
+    retrieval_tasks = mteb.filter_tasks(benchmark, task_types=["Retrieval"])
+    print(f"Found {len(retrieval_tasks)} retrieval tasks")
+
+    # Run evaluation on only retrieval tasks
+    model = mteb.get_model(...)
+    results = mteb.evaluate(model, tasks=retrieval_tasks)
+    ```
+
+    You can filter by any task type:
+
+    - `"Retrieval"` - Information retrieval tasks
+    - `"Classification"` - Text classification tasks
+    - `"Clustering"` - Document clustering tasks
+    - `"STS"` - Semantic textual similarity tasks
+    - `"PairClassification"` - Pair classification tasks
+    - `"Reranking"` - Reranking tasks
+    - `"Summarization"` - Text summarization tasks
+    - `"InstructionRetrieval"` - Instruction-based retrieval tasks
+
+    For multiple task types:
+
+    ```python
+    # Get retrieval and reranking tasks from a benchmark
+    filtered_tasks = [
+        task for task in benchmark.tasks
+        if task.metadata.type in ["Retrieval", "Reranking"]
+    ]
+    ```
+
+=== "By Language"
+
+    Filter tasks by language using ISO 639-3 language codes:
+
+    ```python
+    import mteb
+
+    # Get all English retrieval tasks
+    eng_retrieval_tasks = mteb.get_tasks(
+        task_types=["Retrieval"],
+        languages=["eng"]
+    )
+
+    # Get tasks in multiple languages
+    multilingual_tasks = mteb.get_tasks(
+        languages=["eng", "fra", "deu", "spa"]
+    )
+
+    # Get retrieval tasks from the English benchmark
+    eng_benchmark = mteb.get_benchmark("MTEB(eng, v2)")
+    benchmark_task_names = [task.metadata.name for task in eng_benchmark.tasks]
+
+    retrieval_from_benchmark = mteb.get_tasks(
+        task_types=["Retrieval"],
+        tasks=benchmark_task_names  # Only tasks from the benchmark
+    )
+
+    print(f"Found {len(retrieval_from_benchmark)} retrieval tasks in MTEB(eng, v2)")
+    ```
+
+    For multilingual/cross-lingual tasks:
+
+    ```python
+    # Specify which languages to load
+    tasks = [
+        mteb.get_task("AmazonReviewsClassification", languages=["eng", "fra"]),
+        mteb.get_task("BUCCBitextMining", languages=["deu"]), # all subsets containing "deu"
+    ]
+
+    # Filter tasks supporting multiple languages
+    multilingual_retrieval = mteb.get_tasks(
+        task_types=["Retrieval"],
+        modalities=["text"]
+    )
+    multilingual_retrieval = [
+        task for task in multilingual_retrieval
+        if len(task.metadata.languages) > 1
+    ]
+    ```
+
+=== "By Domain"
+
+    Filter tasks by their domain to focus on specific areas:
+
+    ```python
+    import mteb
+
+    # Get tasks in specific domains
+    legal_tasks = mteb.get_tasks(domains=["Legal"])
+
+    # Get English retrieval tasks in scientific domains
+    specialized_tasks = mteb.get_tasks(
+        task_types=["Retrieval", "InstructionRetrieval"],
+        languages=["eng"],
+        domains=["Scientific", "Medical", "Legal"]
+    )
+
+    # Filter benchmark tasks by domain
+    benchmark = mteb.get_benchmark("MTEB(eng, v2)")
+    scientific_tasks = [
+        task for task in benchmark.tasks
+        if "Scientific" in task.metadata.domains
+    ]
+    ```
+
+=== "Custom Filters"
+
+    Combine multiple criteria for advanced filtering:
+
+    ```python
+    import mteb
+
+    # Complex filter: English classification in legal domain
+    filtered = mteb.get_tasks(
+        task_types=["Classification"],
+        languages=["eng"],
+        domains=["Legal"],
+        modalities=["text"]
+    )
+
+    # Filter by custom logic
+    benchmark = mteb.get_benchmark("MTEB(eng, v2)")
+
+    # Get short retrieval tasks (< 10k documents)
+    short_retrieval = [
+        task for task in benchmark.tasks
+        if task.metadata.type == "Retrieval"
+        and hasattr(task, 'metadata_dict')
+        and task.metadata_dict.get('n_documents', float('inf')) < 10000
+    ]
+
+    # Filter by task name patterns
+    news_tasks = [
+        task for task in benchmark.tasks
+        if "news" in task.metadata.name.lower()
+        or "News" in task.metadata.domains
+    ]
+
+    # Combine filters with set operations
+    retrieval_set = set(mteb.get_tasks(task_types=["Retrieval"]))
+    english_set = set(mteb.get_tasks(languages=["eng"]))
+    eng_retrieval = list(retrieval_set & english_set)
+    ```
+
 !!! note
     Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark.
     In the case of a language, we use the three-letter language code.
@@ -48,29 +206,22 @@ This can be done in multiple ways, e.g.:
 # by name
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
 # by type
-tasks = mteb.get_tasks(task_types=["Clustering", "Retrieval"]) # Only select clustering and retrieval tasks
+tasks = mteb.get_tasks(task_types=["Clustering", "Retrieval"]) # (1)
 # by language
-tasks = mteb.get_tasks(languages=["eng", "deu"]) # Only select datasets which contain "eng" or "deu" (iso 639-3 codes)
+tasks = mteb.get_tasks(languages=["eng", "deu"]) # (2)
 # by domain
 tasks = get_tasks(domains=["Legal"])
 # by modality
-tasks = mteb.get_tasks(modalities=["text", "image"]) # Only select tasks with text or image modalities
+tasks = mteb.get_tasks(modalities=["text", "image"]) # (3)
 # or using multiple
 tasks = get_tasks(languages=["eng", "deu"], script=["Latn"], domains=["Legal"])
 ```
 
+1.  Only select clustering and retrieval tasks
 
-You can also specify which languages to load for multilingual/cross-lingual tasks like below:
+2.  Only select datasets which contain "eng" or "deu" (iso 639-3 codes)
 
-```python
-import mteb
-
-tasks = [
-    mteb.get_task("AmazonReviewsClassification", languages = ["eng", "fra"]),
-    mteb.get_task("BUCCBitextMining", languages = ["deu"]), # all subsets containing "deu"
-]
-```
-For more information see the documentation for [`get_tasks`](../api/task.md#mteb.get_tasks) and [`get_task`](../api/task.md#mteb.get_task).
+3.  Only select tasks with text or image modalities
 
 ### Selecting Evaluation Split or Subsets
 A task in `mteb` mirrors the structure of a dataset on Huggingface. It includes a splits (i.e. "test") and a subset.

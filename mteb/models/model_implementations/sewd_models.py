@@ -1,17 +1,22 @@
+from __future__ import annotations
+
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import SEWDForCTC, Wav2Vec2FeatureExtractor
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput
 
 
 class SewDWrapper(AbsEncoder):
@@ -141,7 +146,7 @@ sewd_base = ModelMeta(
     name="asapp/sew-d-base-plus-400k-ft-ls100h",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="dba3bb02fda4248b6e082697eee756de8fe8aa8a",
+    revision="d78e7a1b50e9f1ce21887ca069330efdd5ccd4ca",
     release_date="2021-09-14",
     max_tokens=float("inf"),
     n_parameters=95_000_000,
@@ -156,6 +161,16 @@ sewd_base = ModelMeta(
     public_training_data=None,
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
+    citation="""
+@misc{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
+      title={Performance-Efficiency Trade-offs in Unsupervised Pre-training for Speech Recognition},
+      author={Felix Wu and Kwangyoun Kim and Jing Pan and Kyu Han and Kilian Q. Weinberger and Yoav Artzi},
+      year={2021},
+      eprint={2109.06870},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2109.06870},
+}""",
 )
 
 sewd_tiny = ModelMeta(
@@ -178,6 +193,16 @@ sewd_tiny = ModelMeta(
     public_training_data=None,
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
+    citation="""
+@misc{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
+      title={Performance-Efficiency Trade-offs in Unsupervised Pre-training for Speech Recognition},
+      author={Felix Wu and Kwangyoun Kim and Jing Pan and Kyu Han and Kilian Q. Weinberger and Yoav Artzi},
+      year={2021},
+      eprint={2109.06870},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2109.06870},
+}""",
 )
 
 sewd_mid = ModelMeta(
@@ -200,4 +225,14 @@ sewd_mid = ModelMeta(
     public_training_data=None,
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
+    citation="""
+@misc{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
+      title={Performance-Efficiency Trade-offs in Unsupervised Pre-training for Speech Recognition},
+      author={Felix Wu and Kwangyoun Kim and Jing Pan and Kyu Han and Kilian Q. Weinberger and Yoav Artzi},
+      year={2021},
+      eprint={2109.06870},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2109.06870},
+}""",
 )

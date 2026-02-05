@@ -1,12 +1,12 @@
-import logging
-from abc import ABC, abstractmethod
-from collections.abc import Callable, Sequence
-from typing import Any, Literal, cast, get_args, overload
+from __future__ import annotations
 
-from torch.utils.data import DataLoader
+import logging
+import warnings
+from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING, Any, Literal, cast, get_args, overload
 
 import mteb
-from mteb.abstasks.task_metadata import TaskMetadata, TaskType
+from mteb.abstasks.task_metadata import TaskType
 from mteb.similarity_functions import (
     cos_sim,
     dot_score,
@@ -16,12 +16,25 @@ from mteb.similarity_functions import (
     pairwise_max_sim,
 )
 from mteb.types import (
-    Array,
-    BatchedInput,
     PromptType,
 )
 
-from .model_meta import ModelMeta, ScoringFunction
+from .model_meta import ScoringFunction
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Sequence
+
+    from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import (
+        Array,
+        BatchedInput,
+        EncodeKwargs,
+    )
+
+    from .model_meta import ModelMeta
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +56,7 @@ class AbsEncoder(ABC):
     model: Any
     mteb_model_meta: ModelMeta | None = None
     model_prompts: dict[str, str] | None = None
-    instruction_template: str | Callable[[str, PromptType], str] | None = None
+    instruction_template: str | Callable[[str, PromptType | None], str] | None = None
     prompts_dict: dict[str, str] | None = None
 
     def get_prompt_name(
@@ -110,7 +123,7 @@ class AbsEncoder(ABC):
         if not self.model_prompts:
             return None
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-        return self.model_prompts.get(prompt_name)
+        return self.model_prompts.get(prompt_name) if prompt_name else None
 
     @staticmethod
     @overload
@@ -187,6 +200,7 @@ class AbsEncoder(ABC):
                 except KeyError:
                     msg = f"Task name {task_name} is not valid. {valid_keys_msg}"
                     logger.warning(msg)
+                    warnings.warn(msg)
                     invalid_task_messages.add(msg)
                     invalid_keys.add(task_key)
 
@@ -232,9 +246,9 @@ class AbsEncoder(ABC):
         if isinstance(prompt, dict) and prompt_type:
             if prompt.get(prompt_type.value):
                 return prompt[prompt_type.value]
-            logger.warning(
-                f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
-            )
+            msg = f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
+            logger.warning(msg)
+            warnings.warn(msg)
             return ""
 
         if prompt:
@@ -310,7 +324,7 @@ class AbsEncoder(ABC):
             ):
                 arr = self.model.similarity(embeddings1, embeddings2)
                 # We assume that the model returns an Array-like object:
-                arr = cast(Array, arr)
+                arr = cast("Array", arr)
                 return arr
             return cos_sim(embeddings1, embeddings2)
         if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
@@ -348,7 +362,7 @@ class AbsEncoder(ABC):
             ):
                 arr = self.model.similarity_pairwise(embeddings1, embeddings2)
                 # We assume that the model returns an Array-like object:
-                arr = cast(Array, arr)
+                arr = cast("Array", arr)
                 return arr
             return pairwise_cos_sim(embeddings1, embeddings2)
         if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
@@ -368,7 +382,7 @@ class AbsEncoder(ABC):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Encodes the given sentences using the encoder.
 

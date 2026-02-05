@@ -1,8 +1,14 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import torch
 
-from mteb.models import EncoderProtocol
 from mteb.models.model_meta import ScoringFunction
-from mteb.types import Array
+
+if TYPE_CHECKING:
+    from mteb.models import EncoderProtocol
+    from mteb.types import Array
 
 
 def _use_torch_compile():
@@ -186,7 +192,7 @@ def max_sim(a: Array, b: Array) -> torch.Tensor:
         b,
     )
 
-    return scores.max(axis=-1).values.sum(axis=-1)
+    return scores.max(axis=-1).values.sum(axis=-1)  # type: ignore[call-overload]
 
 
 # https://github.com/lightonai/pylate/blob/2d094a724866d6e15701781528368438081c0157/pylate/scores/scores.py#L67C1-L122C38
@@ -217,7 +223,7 @@ def pairwise_max_sim(
             document_embedding,
         )
 
-        scores.append(query_document_score.max(axis=-1).values.sum())
+        scores.append(query_document_score.max(axis=-1).values.sum())  # type: ignore[call-overload]
 
     return torch.stack(scores, dim=0)
 
@@ -317,11 +323,15 @@ def similarity(text_embeddings: Array, input_embeddings: Array) -> Array:
     Returns:
         Matrix with similarities
     """
-    text_embeddings = _convert_to_tensor(text_embeddings)
-    input_embeddings = _convert_to_tensor(input_embeddings)
+    text_embeddings_tensor = _convert_to_tensor(text_embeddings)
+    input_embeddings_tensor = _convert_to_tensor(input_embeddings)
 
-    text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
-    input_embeddings = input_embeddings / input_embeddings.norm(dim=-1, keepdim=True)
-    logits = torch.matmul(input_embeddings, text_embeddings.T)
+    text_embeddings_tensor = text_embeddings_tensor / text_embeddings_tensor.norm(
+        dim=-1, keepdim=True
+    )
+    input_embeddings_tensor = input_embeddings_tensor / input_embeddings_tensor.norm(
+        dim=-1, keepdim=True
+    )
+    logits = torch.matmul(input_embeddings_tensor, text_embeddings_tensor.T)
     probs = (logits * 100).softmax(dim=-1)
     return probs

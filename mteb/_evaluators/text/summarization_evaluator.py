@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import logging
 import sys
-from typing import Any, TypedDict
+from typing import TYPE_CHECKING, TypedDict
 
 import numpy as np
 import torch
@@ -9,9 +11,12 @@ from tqdm.auto import tqdm
 
 from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb._evaluators.evaluator import Evaluator
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import EncoderProtocol
 from mteb.similarity_functions import cos_sim, dot_score
+
+if TYPE_CHECKING:
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import EncoderProtocol
+    from mteb.types import EncodeKwargs
 
 # if later than python 3.13 use typing module
 if sys.version_info >= (3, 13):
@@ -94,7 +99,8 @@ class SummarizationEvaluator(Evaluator):
         self,
         model: EncoderProtocol,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None = None,
     ) -> SummarizationDistances:
         # Get the human & machine summaries for the text in one go for all
         human_lens = [len(human_summaries) for human_summaries in self.human_summaries]
@@ -110,6 +116,7 @@ class SummarizationEvaluator(Evaluator):
                     for human_summaries in self.human_summaries
                     for summary in human_summaries
                 ],
+                num_proc=num_proc,
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
@@ -135,10 +142,10 @@ class SummarizationEvaluator(Evaluator):
         )
 
         # Split the embeddings into the original human & machine summaries
-        embs_human_summaries_all = np.split(
+        embs_human_summaries_all_split = np.split(
             embs_human_summaries_all, np.cumsum(human_lens)[:-1]
         )
-        embs_machine_summaries_all = np.split(
+        embs_machine_summaries_all_split = np.split(
             embs_machine_summaries_all, np.cumsum(machine_lens)[:-1]
         )
 
@@ -148,7 +155,9 @@ class SummarizationEvaluator(Evaluator):
         all_human_scores = []
 
         for i, (embs_human_summaries, embs_machine_summaries) in tqdm(
-            enumerate(zip(embs_human_summaries_all, embs_machine_summaries_all)),
+            enumerate(
+                zip(embs_human_summaries_all_split, embs_machine_summaries_all_split)
+            ),
             desc="Scoring",
             total=len(self.human_summaries),
         ):
@@ -164,7 +173,7 @@ class SummarizationEvaluator(Evaluator):
                 dot_scores = dot_score(emb_machine_summary, embs_human_summaries)
 
                 _sim_score = [
-                    float(model.similarity(emb_machine_summary, emb_human_summary))  # type: ignore
+                    float(model.similarity(emb_machine_summary, emb_human_summary))
                     for emb_human_summary in embs_human_summaries
                 ]
                 sim_score = torch.tensor(_sim_score)
@@ -216,17 +225,19 @@ class SummarizationEvaluator(Evaluator):
             strict=True,
         ):
             cosine_spearman_scores.append(
-                spearmanr(human_scores, cosine_pred_scores).statistic
+                float(spearmanr(human_scores, cosine_pred_scores).statistic)
             )
             cosine_pearson_scores.append(
-                pearsonr(human_scores, cosine_pred_scores).statistic
+                float(pearsonr(human_scores, cosine_pred_scores).statistic)
             )
             dot_spearman_scores.append(
-                spearmanr(human_scores, dot_pred_scores).statistic
+                float(spearmanr(human_scores, dot_pred_scores).statistic)
             )
-            dot_pearson_scores.append(pearsonr(human_scores, dot_pred_scores).statistic)
-            spearman_scores.append(spearmanr(human_scores, sim_scores).statistic)
-            pearson_scores.append(pearsonr(human_scores, sim_scores).statistic)
+            dot_pearson_scores.append(
+                float(pearsonr(human_scores, dot_pred_scores).statistic)
+            )
+            spearman_scores.append(float(spearmanr(human_scores, sim_scores).statistic))
+            pearson_scores.append(float(pearsonr(human_scores, sim_scores).statistic))
 
         return SummarizationMetrics(
             pearson=float(np.mean(pearson_scores)),
@@ -273,10 +284,10 @@ class DeprecatedSummarizationEvaluator(SummarizationEvaluator):
             pearson_scores.append(pearsonr(human_scores, sim_scores))
 
         return SummarizationMetrics(
-            pearson=float(np.mean(pearson_scores)),
-            spearman=float(np.mean(spearman_scores)),
-            cosine_spearman=float(np.mean(cosine_spearman_scores)),
-            cosine_pearson=float(np.mean(cosine_pearson_scores)),
-            dot_pearson=float(np.mean(dot_pearson_scores)),
-            dot_spearman=float(np.mean(dot_spearman_scores)),
+            pearson=float(np.mean(pearson_scores)),  # type: ignore[arg-type]
+            spearman=float(np.mean(spearman_scores)),  # type: ignore[arg-type]
+            cosine_spearman=float(np.mean(cosine_spearman_scores)),  # type: ignore[arg-type]
+            cosine_pearson=float(np.mean(cosine_pearson_scores)),  # type: ignore[arg-type]
+            dot_pearson=float(np.mean(dot_pearson_scores)),  # type: ignore[arg-type]
+            dot_spearman=float(np.mean(dot_spearman_scores)),  # type: ignore[arg-type]
         )

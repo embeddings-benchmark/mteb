@@ -6,11 +6,13 @@ MTEB comes with an implementation of many popular models and APIs. These can be 
 
 ```python
 model_name = "intfloat/multilingual-e5-small"
-meta = mteb.get_model_meta(model_name)
+meta = mteb.get_model_meta(model_name) # (1)
 model = meta.load_model()
 # or directly using
 model = mteb.get_model(model_name)
 ```
+
+1.  Using `mteb.get_model_meta` allows us to work with the model without loading it. E.g. you can pass it to `mteb.evaluate`, which only loads the model if the results doesn't already exist.
 
 You can get an overview of the models available in `mteb` as follows:
 
@@ -23,25 +25,41 @@ openai_models = [meta for meta in model_metas if "openai" in meta.name]
 
 !!! tip
     Some models require additional dependencies to run on MTEB. An example of such a model is the OpenAI APIs.
-    These dependencies can be installed using `pip install mteb[openai]`
+    These dependencies can be installed using `pip install mteb[openai]` or `uv add "mteb[openai]"`
 
 ## Using a Sentence Transformer Model
 
-MTEB is made to be compatible with sentence transformers and thus you can readily evaluate any model that can be loaded via. sentence transformers
+MTEB is made to be compatible with sentence transformers and thus you can readily evaluate any model that can be loaded via. [sentence transformers](https://www.sbert.net/).
 on `MTEB`:
 
-```python
-model = SentenceTransformers("sentence-transformers/LaBSE")
+=== "SentenceTransformers"
 
-# select the desired tasks and evaluate
-tasks = mteb.get_tasks(tasks=["Banking77Classification"])
-results = mteb.evaluate(model, tasks=tasks)
-```
+    ```python
+    import mteb
+    from sentence_transformers import SentenceTransformer
+    model = SentenceTransformers("sentence-transformers/LaBSE")
 
-However, we do recommend checking if mteb includes an implementation of the model before using sentence transformers since some models (e.g. the [multilingual e5 models](https://huggingface.co/collections/intfloat/multilingual-e5-text-embeddings-67b2b8bb9bff40dec9fb3534)) require a prompt and not specifying it may reduce performance.
+    # select the desired tasks and evaluate
+    tasks = mteb.get_tasks(tasks=["Banking77Classification"])
+    results = mteb.evaluate(model, tasks=tasks)
+    ```
+
+=== "CrossEncoder"
+
+    ```python
+    import mteb
+    from sentence_transformers import CrossEncoder
+    model = CrossEncoder("sentence-transformers/LaBSE")
+
+    # select a reranking task and evaluate
+    tasks = mteb.get_tasks(tasks=["AskUbuntuDupQuestions"])
+    results = mteb.evaluate(model, tasks=tasks)
+    ```
+
+
 
 !!! note
-    If you want to evaluate a cross encoder for reranking, see the section on [running cross encoders for reranking](./running_the_evaluation.md#running-cross-encoders-on-reranking).
+    We do recommend using `mteb.get_model` which will by default load the model using the implementation in `mteb` if there is one, otherwise it will use `SentenceTransformers` or `CrossEncoder` from [sentence transformers](https://www.sbert.net/) if appropriate. The `mteb` implementations typically differ due to models requiring specific prompts or similar hyperparameters, and not specifying these may reduce performance (e.g. the [multilingual e5 models](https://huggingface.co/collections/intfloat/multilingual-e5-text-embeddings-67b2b8bb9bff40dec9fb3534) require specific prompts).
 
 ## Using a Custom Model
 
@@ -51,7 +69,7 @@ This entails implementing an `encode` function taking as input a list of sentenc
 
 ```python
 import mteb
-from mteb.types import PromptType
+from mteb.types import PromptType, Array
 import numpy as np
 
 
@@ -64,7 +82,7 @@ class CustomModel:
         hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs,
-    ) -> np.ndarray:
+    ) -> Array:
         """Encodes the given sentences using the encoder.
 
         Args:

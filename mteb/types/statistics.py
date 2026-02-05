@@ -1,6 +1,13 @@
-from typing_extensions import NotRequired, TypedDict
+from __future__ import annotations
 
-from mteb.types import HFSubset
+from typing import TYPE_CHECKING
+
+from typing_extensions import TypedDict
+
+if TYPE_CHECKING:
+    from typing_extensions import NotRequired
+
+    from mteb.types import HFSubset
 
 
 class SplitDescriptiveStatistics(TypedDict):
@@ -10,8 +17,14 @@ class SplitDescriptiveStatistics(TypedDict):
 
 
 class DescriptiveStatistics(TypedDict, SplitDescriptiveStatistics):
-    """Class for descriptive statistics for the full task."""
+    """Class for descriptive statistics for the full task.
 
+    Attributes:
+        num_samples: Total number of samples
+        hf_subset_descriptive_stats: HFSubset descriptive statistics (only for multilingual datasets)
+    """
+
+    num_samples: int
     hf_subset_descriptive_stats: NotRequired[dict[HFSubset, SplitDescriptiveStatistics]]
 
 
@@ -59,6 +72,31 @@ class ImageStatistics(TypedDict):
     unique_images: int
 
 
+class AudioStatistics(TypedDict):
+    """Class for descriptive statistics for audio.
+
+    Attributes:
+        total_duration_seconds: Total length of all audio clips in total frames
+        min_duration_seconds: Minimum length of audio clip in seconds
+        average_duration_seconds: Average length of audio clip in seconds
+        max_duration_seconds: Maximum length of audio clip in seconds
+        unique_audios: Number of unique audio clips
+        average_sampling_rate: Average sampling rate
+        sampling_rates: Dict of unique sampling rates and their frequencies
+    """
+
+    total_duration_seconds: float
+
+    min_duration_seconds: float
+    average_duration_seconds: float
+    max_duration_seconds: float
+
+    unique_audios: int
+
+    average_sampling_rate: float
+    sampling_rates: dict[int, int]
+
+
 class LabelStatistics(TypedDict):
     """Class for descriptive statistics for texts.
 
@@ -88,9 +126,9 @@ class ScoreStatistics(TypedDict):
         max_score: Maximum score
     """
 
-    min_score: int
+    min_score: int | float
     avg_score: float
-    max_score: int
+    max_score: int | float
 
 
 class TopRankedStatistics(TypedDict):

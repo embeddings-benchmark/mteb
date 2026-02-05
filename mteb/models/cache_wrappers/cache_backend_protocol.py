@@ -1,9 +1,11 @@
-from pathlib import Path
-from typing import Any, Protocol, runtime_checkable
+from __future__ import annotations
 
-import numpy as np
+from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
-from mteb.types import BatchedInput
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from mteb.types import Array
 
 
 @runtime_checkable
@@ -24,7 +26,7 @@ class CacheBackendProtocol(Protocol):
             **kwargs: Additional backend-specific arguments.
         """
 
-    def add(self, item: list[BatchedInput], vectors: np.ndarray) -> None:
+    def add(self, item: list[dict[str, Any]], vectors: Array) -> None:
         """Add a vector to the cache.
 
         Args:
@@ -32,7 +34,7 @@ class CacheBackendProtocol(Protocol):
             vectors: Embedding vector of shape (dim,) or (1, dim).
         """
 
-    def get_vector(self, item: BatchedInput) -> np.ndarray | None:
+    def get_vector(self, item: dict[str, Any]) -> Array | None:
         """Retrieve the cached vector for the given item.
 
         Args:
@@ -51,5 +53,5 @@ class CacheBackendProtocol(Protocol):
     def close(self) -> None:
         """Release resources or flush data."""
 
-    def __contains__(self, item: BatchedInput) -> bool:
+    def __contains__(self, item: dict[str, Any]) -> bool:
         """Check whether the cache contains an item."""

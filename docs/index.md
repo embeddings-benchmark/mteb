@@ -39,7 +39,7 @@ To see more check out the [installation guide](./installation.md).
 
     # Select model
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
-    model = mteb.get_model(model_name) # if the model is not implemented in MTEB it will be eq. to SentenceTransformer(model_name)
+    model = mteb.get_model(model_name) # (1)
 
     # Select tasks
     tasks = mteb.get_tasks(tasks=["Banking77Classification"])
@@ -47,6 +47,9 @@ To see more check out the [installation guide](./installation.md).
     # evaluate
     results = mteb.evaluate(model, tasks=tasks)
     ```
+
+    1. If the model is not implemented in MTEB, it will be loaded with `SentenceTransformer(model_name)` or `CrossEncoder(model_name)` if applicable.
+
 
     To see more check out the [usage documentation](./usage/get_started.md)
 

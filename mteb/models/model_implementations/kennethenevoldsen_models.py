@@ -4,20 +4,22 @@ from mteb.models.sentence_transformer_wrapper import (
 )
 
 dfm_enc_large = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore
+    loader=sentence_transformers_loader,
     name="KennethEnevoldsen/dfm-sentence-encoder-large",
+    model_type=["dense"],
     languages=["dan-Latn"],
     open_weights=True,
     revision="132c53391e7a780dc6a2f9a03724d0158fe7122c",
     release_date="2023-07-12",
     n_parameters=355087360,
+    n_embedding_parameters=51_200_000,
     memory_usage_mb=1554,
     embed_dim=1024,
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/KennethEnevoldsen/dfm-sentence-encoder-large",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     use_instructions=False,
     superseded_by=None,
     adapted_from="chcaa/dfm-encoder-large-v1",
@@ -38,20 +40,22 @@ dfm_enc_large = ModelMeta(
 )
 
 dfm_enc_med = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore
+    loader=sentence_transformers_loader,
     name="KennethEnevoldsen/dfm-sentence-encoder-medium",
+    model_type=["dense"],
     languages=["dan-Latn"],
     open_weights=True,
     revision="701bce95d499fa97610d57e8823c54fd1fb79930",
     release_date="2023-07-12",
     n_parameters=124445952,
+    n_embedding_parameters=38_403_840,
     memory_usage_mb=475,
     embed_dim=768,
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/KennethEnevoldsen/dfm-sentence-encoder-medium",
     similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers"],
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,

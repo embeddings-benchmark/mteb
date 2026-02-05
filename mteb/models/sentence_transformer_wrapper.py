@@ -1,23 +1,26 @@
 from __future__ import annotations
 
 import logging
+import warnings
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
 from packaging.version import Version
-from torch.utils.data import DataLoader
 
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder
 
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder, SentenceTransformer
+    from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -25,17 +28,18 @@ SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
 
 
 def sentence_transformers_loader(
-    model_name: str, revision: str | None = None, **kwargs
+    model_name: str, revision: str | None = None, device: str | None = None, **kwargs
 ) -> SentenceTransformerEncoderWrapper:
     """Loads a SentenceTransformer model and wraps it in a SentenceTransformerEncoderWrapper.
 
     Args:
         model_name: The name of the SentenceTransformer model to load.
         revision: The revision of the model to load.
+        device: The device used to load the model.
         kwargs: Additional arguments to pass to the SentenceTransformer model.
     """
     return SentenceTransformerEncoderWrapper(
-        model=model_name, revision=revision, **kwargs
+        model=model_name, revision=revision, device=device, **kwargs
     )
 
 
@@ -48,6 +52,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         self,
         model: str | SentenceTransformer,
         revision: str | None = None,
+        device: str | None = None,
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
@@ -56,6 +61,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         Args:
             model: The SentenceTransformer model to use. Can be a string (model name), a SentenceTransformer model, or a CrossEncoder model.
             revision: The revision of the model to use.
+            device: The device used to load the model.
             model_prompts: A dictionary mapping task names to prompt names.
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
@@ -65,7 +71,9 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         from sentence_transformers import SentenceTransformer
 
         if isinstance(model, str):
-            self.model = SentenceTransformer(model, revision=revision, **kwargs)
+            self.model = SentenceTransformer(
+                model, revision=revision, device=device, **kwargs
+            )
         else:
             self.model = model
 
@@ -75,9 +83,9 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         if built_in_prompts and not model_prompts:
             model_prompts = built_in_prompts
         elif model_prompts and built_in_prompts:
-            logger.warning(
-                f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
-            )
+            msg = f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
+            logger.warning(msg)
+            warnings.warn(msg)
             self.model.prompts = model_prompts
 
         self.model_prompts, invalid_prompts = self.validate_task_to_prompt_name(
@@ -86,9 +94,9 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
 
         if invalid_prompts:
             invalid_prompts = "\n".join(invalid_prompts)
-            logger.warning(
-                f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
-            )
+            msg = f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
+            logger.warning(msg)
+            warnings.warn(msg)
 
         if (
             self.model_prompts
@@ -98,13 +106,15 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 or PromptType.document.value not in self.model_prompts
             )
         ):
-            logger.warning(
-                "SentenceTransformers that use prompts most often need to be configured with at least 'query' and"
-                f" 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
-            )
+            msg = f"SentenceTransformers that use prompts most often need to be configured with at least 'query' and 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
+            logger.warning(msg)
+            warnings.warn(msg)
 
+    def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Compute the similarity between two collections of embeddings."""
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
-            self.similarity = self.model.similarity
+            return self.model.similarity(embeddings1, embeddings2)
+        return super().similarity(embeddings1, embeddings2)
 
     def encode(
         self,
@@ -114,7 +124,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Encodes the given sentences using the encoder.
 
@@ -150,7 +160,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         prompt_name = None
         if self.model_prompts is not None:
             prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-            prompt = self.model_prompts.get(prompt_name, None)
+            prompt = self.model_prompts.get(prompt_name, None)  # type: ignore[arg-type]
         if prompt_name:
             prompt_log = f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
         else:
@@ -193,7 +203,7 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Encodes the given sentences using the encoder.
 
@@ -221,7 +231,7 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
         prompt_name = None
         if self.model_prompts is not None:
             prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-            prompt = self.model_prompts.get(prompt_name, None)
+            prompt = self.model_prompts.get(prompt_name, None)  # type: ignore[arg-type]
         if prompt_name:
             logger.info(
                 f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
@@ -234,7 +244,9 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
         all_embeddings = []
         for batch in inputs:
             batch_column = next(iter(batch.keys()))
-            batched_input = [dict() for _ in range(len(batch[batch_column]))]
+            batched_input: list[dict[str, Any]] = [
+                dict() for _ in range(len(batch[batch_column]))
+            ]
 
             # transform from {"text": [text1, text2], "image": [image1, image2]} to
             # [{"text": text1, "image": image1}, {"text": text2, "image": image2}]
@@ -255,12 +267,24 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
 
 
 class CrossEncoderWrapper:
-    """Wrapper for CrossEncoder models."""
+    """Wrapper for CrossEncoder models.
+
+    Args:
+        model: The CrossEncoder model to use. Can be a string (model name) or a CrossEncoder model.
+        revision: The revision of the model to use.
+        device: The device used to load the model.
+        query_prefix: A prefix to add to all queries.
+        passage_prefix: A prefix to add to all passages.
+        **kwargs: Additional arguments to pass to the CrossEncoder model.
+    """
 
     def __init__(
         self,
         model: CrossEncoder | str,
         revision: str | None = None,
+        device: str | None = None,
+        query_prefix: str = "",
+        passage_prefix: str = "",
         **kwargs,
     ) -> None:
         from sentence_transformers import CrossEncoder
@@ -268,9 +292,11 @@ class CrossEncoderWrapper:
         if isinstance(model, CrossEncoder):
             self.model = model
         elif isinstance(model, str):
-            self.model = CrossEncoder(model, revision=revision, **kwargs)
+            self.model = CrossEncoder(model, revision=revision, device=device, **kwargs)
 
         self.mteb_model_meta = ModelMeta.from_cross_encoder(self.model)
+        self.query_prefix = query_prefix
+        self.passage_prefix = passage_prefix
 
     def predict(
         self,
@@ -281,7 +307,7 @@ class CrossEncoderWrapper:
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Predicts relevance scores for pairs of inputs. Note that, unlike the encoder, the cross-encoder can compare across inputs.
 
@@ -299,10 +325,10 @@ class CrossEncoderWrapper:
             The predicted relevance scores for each inputs pair.
         """
         all_queries_with_instructions = [
-            text for batch in inputs1 for text in batch["text"]
+            self.query_prefix + text for batch in inputs1 for text in batch["text"]
         ]
         all_corpus_with_instructions = [
-            text for batch in inputs2 for text in batch["text"]
+            self.passage_prefix + text for batch in inputs2 for text in batch["text"]
         ]
 
         return self.model.predict(

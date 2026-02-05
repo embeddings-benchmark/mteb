@@ -1,17 +1,22 @@
+from __future__ import annotations
+
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from transformers import ClapModel, ClapProcessor
 
-from mteb import TaskMetadata
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput, TextInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput, TextInput
 
 
 class ClapZeroShotWrapper(AbsEncoder):
@@ -159,12 +164,23 @@ clap_htsat_fused = ModelMeta(
     public_training_code="https://github.com/LAION-AI/CLAP",
     public_training_data="https://laion.ai/blog/laion-audio-630k/",
     framework=["PyTorch"],
-    reference="https://huggingface.co/laion/clap_htsat_fused",
+    reference="https://huggingface.co/laion/clap-htsat-fused",
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(
         # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
     ),
+    citation="""
+@misc{wu2024largescalecontrastivelanguageaudiopretraining,
+      title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
+      author={Yusong Wu and Ke Chen and Tianyu Zhang and Yuchen Hui and Marianna Nezhurina and Taylor Berg-Kirkpatrick and Shlomo Dubnov},
+      year={2024},
+      eprint={2211.06687},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD},
+      url={https://arxiv.org/abs/2211.06687},
+}
+""",
 )
 
 
@@ -184,12 +200,23 @@ clap_htsat_unfused = ModelMeta(
     public_training_code="https://github.com/LAION-AI/CLAP",
     public_training_data="https://laion.ai/blog/laion-audio-630k/",
     framework=["PyTorch"],
-    reference="https://huggingface.co/laion/clap_htsat_unfused",
+    reference="https://huggingface.co/laion/clap-htsat-unfused",
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(
         # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
     ),
+    citation="""
+@misc{wu2024largescalecontrastivelanguageaudiopretraining,
+      title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
+      author={Yusong Wu and Ke Chen and Tianyu Zhang and Yuchen Hui and Marianna Nezhurina and Taylor Berg-Kirkpatrick and Shlomo Dubnov},
+      year={2024},
+      eprint={2211.06687},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD},
+      url={https://arxiv.org/abs/2211.06687},
+}
+""",
 )
 
 larger_clap_general = ModelMeta(
@@ -214,6 +241,17 @@ larger_clap_general = ModelMeta(
     training_datasets=set(
         # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
     ),  # Additional finetuning over music dataset but not specified what the exact dataset is
+    citation="""
+@misc{wu2024largescalecontrastivelanguageaudiopretraining,
+      title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
+      author={Yusong Wu and Ke Chen and Tianyu Zhang and Yuchen Hui and Marianna Nezhurina and Taylor Berg-Kirkpatrick and Shlomo Dubnov},
+      year={2024},
+      eprint={2211.06687},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD},
+      url={https://arxiv.org/abs/2211.06687},
+}
+""",
 )
 
 larger_clap_music = ModelMeta(
@@ -238,6 +276,17 @@ larger_clap_music = ModelMeta(
     training_datasets=set(
         # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
     ),  # Additional finetuning over music dataset but not specified what the exact dataset is
+    citation="""
+@misc{wu2024largescalecontrastivelanguageaudiopretraining,
+      title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
+      author={Yusong Wu and Ke Chen and Tianyu Zhang and Yuchen Hui and Marianna Nezhurina and Taylor Berg-Kirkpatrick and Shlomo Dubnov},
+      year={2024},
+      eprint={2211.06687},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD},
+      url={https://arxiv.org/abs/2211.06687},
+}
+""",
 )
 
 larger_clap_music_and_speech = ModelMeta(
@@ -262,4 +311,15 @@ larger_clap_music_and_speech = ModelMeta(
     training_datasets=set(
         # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
     ),  # Additional finetuning over music dataset but not specified what the exact dataset is
+    citation="""
+@misc{wu2024largescalecontrastivelanguageaudiopretraining,
+      title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
+      author={Yusong Wu and Ke Chen and Tianyu Zhang and Yuchen Hui and Marianna Nezhurina and Taylor Berg-Kirkpatrick and Shlomo Dubnov},
+      year={2024},
+      eprint={2211.06687},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD},
+      url={https://arxiv.org/abs/2211.06687},
+}
+""",
 )

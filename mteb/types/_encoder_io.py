@@ -7,15 +7,28 @@ from typing import TYPE_CHECKING, TypedDict
 import numpy as np
 import torch
 from datasets import Dataset
-from typing_extensions import NotRequired
+from numpy.typing import NDArray
 
 if TYPE_CHECKING:
     from PIL import Image
+    from typing_extensions import NotRequired
+
+
+class EncodeKwargs(TypedDict):
+    """Keyword arguments for encoding methods.
+
+    Attributes:
+        batch_size: The batch size to use for encoding.
+        show_progress_bar: Whether to show a progress bar during encoding.
+    """
+
+    batch_size: NotRequired[int]
+    show_progress_bar: NotRequired[bool]
 
 
 # --- Output types ---
-Array = np.ndarray | torch.Tensor
-"""General array type, can be a numpy array or a torch tensor."""
+Array = NDArray[np.floating | np.integer | np.bool] | torch.Tensor
+"""General array type, can be a numpy array (float, int, or bool) or a torch tensor."""
 
 
 # --- Input types ---
@@ -106,7 +119,7 @@ class AudioInputItem(TypedDict):
     """
 
     array: np.ndarray
-    sampling_rate: int | None
+    sampling_rate: int
 
 
 class AudioInput(TypedDict):

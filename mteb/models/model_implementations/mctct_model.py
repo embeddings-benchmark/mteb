@@ -1,10 +1,12 @@
+from __future__ import annotations
+
+import logging
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
-from transformers import MCTCTFeatureExtractor, MCTCTModel
 
 from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies
@@ -12,6 +14,16 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 from mteb.types._encoder_io import AudioInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput
+
+
+logger = logging.getLogger(__name__)
 
 COMMON_VOICE_LANGUAGES = [
     "abk-Cyrl",  # Abkhaz
@@ -85,6 +97,19 @@ class MCTCTWrapper(AbsEncoder):
         **kwargs: Any,
     ):
         requires_audio_dependencies()
+        import transformers
+        from packaging import version
+
+        transformers_version = version.parse(transformers.__version__)
+        if transformers_version >= version.parse("5.0.0"):
+            raise RuntimeError(
+                f"transformers version {transformers.__version__} is not supported. "
+                "MCTCT requires transformers < 5.0.0. "
+                'You can run `pip install "mteb[mctct]"` to install the correct version.'
+            )
+
+        from transformers import MCTCTFeatureExtractor, MCTCTModel
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -148,11 +173,11 @@ class MCTCTWrapper(AbsEncoder):
                 outputs = self.model(
                     input_features=feature_inputs.input_features,
                     attention_mask=feature_inputs.attention_mask,
-                    output_hidden_states=True,
+                    output_hidden_states=False,
                     return_dict=True,
                 )
 
-                last_hidden = outputs.hidden_states[-1]
+                last_hidden = outputs.last_hidden_state
 
                 # Apply attention-masked pooling to exclude padding tokens
                 batch_size, hidden_seq_len, hidden_size = last_hidden.shape
@@ -177,6 +202,17 @@ class MCTCTWrapper(AbsEncoder):
                 masked_embeddings = last_hidden * hidden_attention_mask
                 valid_tokens = hidden_attention_mask.sum(dim=1)
                 embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
+
+                # Replace any NaNs with zeros to prevent crashes in downstream classifiers
+                nan_mask = torch.isnan(embeddings)
+                if nan_mask.any():
+                    logger.warning(
+                        f"Found {nan_mask.sum().item()} NaN values in embeddings, replacing with zeros. "
+                        "This may indicate empty or invalid audio samples."
+                    )
+                    embeddings = torch.where(
+                        nan_mask, torch.zeros_like(embeddings), embeddings
+                    )
 
                 all_embeddings.append(embeddings.cpu().detach())
 
@@ -217,4 +253,14 @@ mctct_large = ModelMeta(
     public_training_data="https://github.com/speechbrain/speechbrain",
     training_datasets={"Common Voice", "VoxPopuli"},
     modalities=["audio"],
+    citation="""
+@misc{lugosch2022pseudolabelingmassivelymultilingualspeech,
+      title={Pseudo-Labeling for Massively Multilingual Speech Recognition},
+      author={Loren Lugosch and Tatiana Likhomanenko and Gabriel Synnaeve and Ronan Collobert},
+      year={2022},
+      eprint={2111.00161},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2111.00161},
+}""",
 )

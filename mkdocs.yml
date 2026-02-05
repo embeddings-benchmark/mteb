@@ -15,12 +15,12 @@ theme:
     - navigation.top
     - search.suggest
     - search.highlight
-    - content.tabs.link
-    - content.code.annotation
-    - content.code.copy
     - content.action.edit
     - content.action.view
+    - content.code.copy
     - content.code.annotate
+    - content.code.annotation
+    - content.tabs.link
     - content.tooltips
     - navigation.footer
     - navigation.indexes
@@ -84,6 +84,7 @@ nav:
         - Two stage reranking: advanced_usage/two_stage_reranking.md
         - Cache embeddings: advanced_usage/cache_embeddings.md
         - Retrieval backend: advanced_usage/retrieval_backend.md
+        - vLLM Wrapper: advanced_usage/vllm_wrapper.md
   - Contributing:
       - Adding a Model: contributing/adding_a_model.md
       - Adding a Task: contributing/adding_a_dataset.md
@@ -129,6 +130,7 @@ plugins:
 
   - bibtex:
       bib_file: "docs/references.bib"
+      enable_inline_citations: false
 
 extra:
   social:

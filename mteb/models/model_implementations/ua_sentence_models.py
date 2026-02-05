@@ -5,8 +5,10 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 
 xlm_roberta_ua_distilled = ModelMeta(
     name="panalexeu/xlm-roberta-ua-distilled",
+    model_type=["dense"],
     loader=sentence_transformers_loader,
     n_parameters=278_000_000,
+    n_embedding_parameters=192_001_536,
     memory_usage_mb=1061,
     max_tokens=512,
     embed_dim=768,
@@ -16,7 +18,7 @@ xlm_roberta_ua_distilled = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/panalexeu/xlm-roberta-ua-distilled/blob/main/researches/research_final.ipynb",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers"],
+    framework=["Sentence Transformers", "safetensors"],
     reference="https://github.com/panalexeu/xlm-roberta-ua-distilled/tree/main",
     languages=["eng-Latn", "ukr-Cyrl"],
     training_datasets=set(

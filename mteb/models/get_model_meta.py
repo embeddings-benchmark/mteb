@@ -1,14 +1,22 @@
+from __future__ import annotations
+
 import difflib
 import logging
-from collections.abc import Iterable
-from typing import Any
+import warnings
+from typing import TYPE_CHECKING, Any
 
-from mteb.abstasks import AbsTask
 from mteb.models import (
     ModelMeta,
-    MTEBModels,
 )
 from mteb.models.model_implementations import MODEL_REGISTRY
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+    from mteb.abstasks import AbsTask
+    from mteb.models import (
+        MTEBModels,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +29,7 @@ def get_model_metas(
     n_parameters_range: tuple[int | None, int | None] = (None, None),
     use_instructions: bool | None = None,
     zero_shot_on: list[AbsTask] | None = None,
+    model_types: Iterable[str] | None = None,
 ) -> list[ModelMeta]:
     """Load all models' metadata that fit the specified criteria.
 
@@ -33,6 +42,7 @@ def get_model_metas(
             If (None, None), this filter is ignored.
         use_instructions: Whether to filter by models that use instructions. If None, all models are included.
         zero_shot_on: A list of tasks on which the model is zero-shot. If None this filter is ignored.
+        model_types: A list of model types to filter by. If None, all model types are included.
 
     Returns:
         A list of model metadata objects that fit the specified criteria.
@@ -41,6 +51,7 @@ def get_model_metas(
     model_names = set(model_names) if model_names is not None else None
     languages = set(languages) if languages is not None else None
     frameworks = set(frameworks) if frameworks is not None else None
+    model_types_set = set(model_types) if model_types is not None else None
     for model_meta in MODEL_REGISTRY.values():
         if (model_names is not None) and (model_meta.name not in model_names):
             continue
@@ -55,6 +66,10 @@ def get_model_metas(
             continue
         if (use_instructions is not None) and (
             model_meta.use_instructions != use_instructions
+        ):
+            continue
+        if model_types_set is not None and not model_types_set.intersection(
+            model_meta.model_type
         ):
             continue
 
@@ -75,7 +90,10 @@ def get_model_metas(
 
 
 def get_model(
-    model_name: str, revision: str | None = None, **kwargs: Any
+    model_name: str,
+    revision: str | None = None,
+    device: str | None = None,
+    **kwargs: Any,
 ) -> MTEBModels:
     """A function to fetch and load model object by name.
 
@@ -85,20 +103,36 @@ def get_model(
     Args:
         model_name: Name of the model to fetch
         revision: Revision of the model to fetch
+        device: Device used to load the model
         **kwargs: Additional keyword arguments to pass to the model loader
 
     Returns:
         A model object
     """
     meta = get_model_meta(model_name, revision)
-    model = meta.load_model(**kwargs)
+    model = meta.load_model(device=device, **kwargs)
 
-    model.mteb_model_meta = meta  # type: ignore
+    if kwargs:
+        logger.info(
+            f"Model '{model_name}' loaded with additional arguments: {list(kwargs.keys())}"
+        )
+        meta = meta.model_copy(deep=True)
+        meta.loader_kwargs |= kwargs
+
+    model.mteb_model_meta = meta  # type: ignore[misc]
     return model
 
 
+_MODEL_RENAMES: dict[str, str] = {
+    "bm25s": "baseline/bm25s",
+}
+
+
 def get_model_meta(
-    model_name: str, revision: str | None = None, fetch_from_hf: bool = True
+    model_name: str,
+    revision: str | None = None,
+    fetch_from_hf: bool = True,
+    fill_missing: bool = False,
 ) -> ModelMeta:
     """A function to fetch a model metadata object by name.
 
@@ -106,10 +140,17 @@ def get_model_meta(
         model_name: Name of the model to fetch
         revision: Revision of the model to fetch
         fetch_from_hf: Whether to fetch the model from HuggingFace Hub if not found in the registry
+        fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
 
     Returns:
         A model metadata object
     """
+    if model_name in _MODEL_RENAMES:
+        new_name = _MODEL_RENAMES[model_name]
+        msg = f"The model '{model_name}' has been renamed to '{new_name}'. To prevent this warning use the new name."
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
+        model_name = new_name
+
     if model_name in MODEL_REGISTRY:
         model_meta = MODEL_REGISTRY[model_name]
 
@@ -117,10 +158,25 @@ def get_model_meta(
             raise ValueError(
                 f"Model revision {revision} not found for model {model_name}. Expected {model_meta.revision}."
             )
+
+        if fill_missing and fetch_from_hf:
+            original_meta_dict = model_meta.model_dump()
+            new_meta = ModelMeta.from_hub(model_name, fill_missing=fill_missing)
+            new_meta_dict = new_meta.model_dump(exclude_none=True)
+
+            updates = {
+                k: v
+                for k, v in new_meta_dict.items()
+                if original_meta_dict.get(k) is None
+            }
+
+            if updates:
+                return model_meta.model_copy(update=updates)
         return model_meta
+
     if fetch_from_hf:
         logger.info(
-            "Model not found in model registry. Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
+            f"Model not found in model registry. Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
         )
         meta = ModelMeta.from_hub(model_name, revision)
         return meta

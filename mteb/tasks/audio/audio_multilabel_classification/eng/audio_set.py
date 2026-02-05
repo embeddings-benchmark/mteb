@@ -12,7 +12,7 @@ class AudioSetMultilingualClassification(AbsTaskMultilabelClassification):
         reference="https://huggingface.co/datasets/agkphysics/AudioSet",
         dataset={
             "path": "agkphysics/AudioSet",
-            "revision": "5a2fa42a1506470d275a47ff8e1fdac5b364e6ef",
+            "revision": "0c609e8302cf139307f639c57652032af0a88041",
         },
         type="AudioMultilabelClassification",
         category="a2t",
@@ -36,18 +36,19 @@ class AudioSetMultilingualClassification(AbsTaskMultilabelClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{45857,
-  address = {New Orleans, LA},
-  author = {Jort F. Gemmeke and Daniel P. W. Ellis and Dylan Freedman and Aren Jansen and Wade Lawrence and R. Channing Moore and Manoj Plakal and Marvin Ritter},
-  booktitle = {Proc. IEEE ICASSP 2017},
-  title = {Audio Set: An ontology and human-labeled dataset for audio events},
+@inproceedings{audioset,
+  author = {Gemmeke, Jort F and Ellis, Daniel PW and Freedman, Dylan and Jansen, Aren and Lawrence, Wade and Moore, R Channing and Plakal, Manoj and Ritter, Marvin},
+  booktitle = {2017 IEEE international conference on acoustics, speech and signal processing (ICASSP)},
+  organization = {IEEE},
+  pages = {776--780},
+  title = {Audio set: An ontology and human-labeled dataset for audio events},
   year = {2017},
 }
 """,
         superseded_by="AudioSetMini",
     )
 
-    evaluator = MultiOutputClassifier(estimator=LogisticRegression())
+    evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())
     input_column_name: str = "audio"
     label_column_name: str = "human_labels"
 
@@ -84,16 +85,17 @@ class AudioSetMiniMultilingualClassification(AbsTaskMultilabelClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{45857,
-  address = {New Orleans, LA},
-  author = {Jort F. Gemmeke and Daniel P. W. Ellis and Dylan Freedman and Aren Jansen and Wade Lawrence and R. Channing Moore and Manoj Plakal and Marvin Ritter},
-  booktitle = {Proc. IEEE ICASSP 2017},
-  title = {Audio Set: An ontology and human-labeled dataset for audio events},
+@inproceedings{audioset,
+  author = {Gemmeke, Jort F and Ellis, Daniel PW and Freedman, Dylan and Jansen, Aren and Lawrence, Wade and Moore, R Channing and Plakal, Manoj and Ritter, Marvin},
+  booktitle = {2017 IEEE international conference on acoustics, speech and signal processing (ICASSP)},
+  organization = {IEEE},
+  pages = {776--780},
+  title = {Audio set: An ontology and human-labeled dataset for audio events},
   year = {2017},
 }
 """,
     )
 
-    evaluator = MultiOutputClassifier(estimator=LogisticRegression())
+    evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())
     input_column_name: str = "audio"
     label_column_name: str = "human_labels"

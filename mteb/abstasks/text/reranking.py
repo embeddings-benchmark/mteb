@@ -16,7 +16,7 @@ else:
 
 logger = logging.getLogger(__name__)
 
-OLD_FORMAT_RERANKING_TASKS = []
+OLD_FORMAT_RERANKING_TASKS: list[str] = []
 
 
 @deprecated(
@@ -34,7 +34,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
         For dataformat and other information, see [AbsTaskRetrieval][mteb.abstasks.retrieval.AbsTaskRetrieval].
     """
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         """Load the dataset."""
         if self.data_loaded:
             return
@@ -43,7 +43,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
             self.transform_old_dataset_format()
         else:
             # use AbsTaskRetrieval default to load the data
-            return super().load_data()
+            return super().load_data(num_proc=num_proc)
 
     def _process_example(self, example: dict, split: str, query_idx: int) -> dict:
         """Process a single example from the dataset.
@@ -100,12 +100,14 @@ class AbsTaskReranking(AbsTaskRetrieval):
         if self.metadata.name not in OLD_FORMAT_RERANKING_TASKS:
             return
 
-        logging.info(
+        logger.info(
             f"Transforming old format to standard format for {self.metadata.name}"
         )
 
         given_dataset = copy(given_dataset)
-        self.dataset = defaultdict(lambda: defaultdict(dict))
+        self.dataset: dict[str, dict[str, RetrievalSplitData]] = defaultdict(
+            lambda: defaultdict(dict)  # type: ignore[arg-type]
+        )
 
         hf_subsets = self.hf_subsets
 
@@ -115,19 +117,19 @@ class AbsTaskReranking(AbsTaskRetrieval):
                 if hf_subset in cur_dataset:
                     cur_dataset = cur_dataset[hf_subset]
             elif "name" in self.metadata.dataset:
-                cur_dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+                cur_dataset = datasets.load_dataset(**self.metadata.dataset)
                 assert hf_subset == "default", (
                     f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
                 )
             else:
                 cur_dataset = datasets.load_dataset(
                     **self.metadata.dataset, name=hf_subset
-                )  # type: ignore
+                )
 
             for split in cur_dataset:
                 corpus = []
                 queries = []
-                relevant_docs = defaultdict(dict)
+                relevant_docs: dict[str, dict[str, int]] = defaultdict(dict)
                 top_ranked = defaultdict(list)
 
                 # Create an enumerated dataset to pass indices

@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import (
@@ -10,10 +11,14 @@ from mteb._requires_package import (
     requires_package,
     suggest_package,
 )
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +46,7 @@ class VLM2VecWrapper(AbsEncoder):
             model_name,
             "pip install flash-attn --no-build-isolation",
         ):
-            import flash_attn  # noqa
+            pass
 
         requires_package(self, "peft", model_name, "pip install 'mteb[peft]'")
         from peft import LoraConfig, PeftModel
@@ -269,11 +274,13 @@ vlm2vec_training_datasets = set(
 vlm2vec_lora = ModelMeta(
     loader=VLM2VecWrapper,
     name="TIGER-Lab/VLM2Vec-LoRA",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="7403b6327958071c1e33c822c7453adadccc7298",
     release_date="2024-10-08",
     modalities=["image", "text"],
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=131072,
     embed_dim=3072,
@@ -281,7 +288,7 @@ vlm2vec_lora = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/TIGER-AI-Lab/VLM2Vec",
     public_training_data="https://huggingface.co/datasets/TIGER-Lab/MMEB-train",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers"],
     reference="https://huggingface.co/TIGER-Lab/VLM2Vec-LoRA",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
@@ -292,11 +299,13 @@ vlm2vec_lora = ModelMeta(
 vlm2vec_full = ModelMeta(
     loader=VLM2VecWrapper,
     name="TIGER-Lab/VLM2Vec-Full",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="e9afa98002097ac2471827ba23ea1f2ddd229480",
     release_date="2024-10-08",
     modalities=["image", "text"],
     n_parameters=4_150_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=7909,
     max_tokens=131072,
     embed_dim=3072,
@@ -304,7 +313,7 @@ vlm2vec_full = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/TIGER-AI-Lab/VLM2Vec",
     public_training_data="https://huggingface.co/TIGER-Lab/VLM2Vec-Full",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/TIGER-Lab/VLM2Vec-Full",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,

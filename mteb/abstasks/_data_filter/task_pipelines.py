@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import logging
+from typing import TYPE_CHECKING
 
 from datasets import DatasetDict
 
-from mteb import TaskMetadata
-from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks._data_filter.filters import (
     deduplicate,
     filter_empty,
@@ -12,6 +13,10 @@ from mteb.abstasks._data_filter.filters import (
     filter_unclear_label,
     split_train_test,
 )
+
+if TYPE_CHECKING:
+    from mteb import TaskMetadata
+    from mteb.abstasks import AbsTaskClassification
 
 logger = logging.getLogger(__name__)
 
@@ -88,6 +93,9 @@ def process_classification(
             task.label_column_name,
             subset=None,
         )
+
+    if task.dataset is None:
+        raise ValueError("Task dataset is None.")
 
     new_ds = {}
     for subset in task.dataset:

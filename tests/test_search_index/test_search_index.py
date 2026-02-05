@@ -30,6 +30,7 @@ def test_retrieval_backends(
     task: AbsTaskRetrieval, similarity: ScoringFunction, tmp_path: Path
 ):
     """Test different retrieval backends for retrieval and reranking tasks."""
+    pytest.importorskip("faiss", reason="faiss is not installed")
     model = mteb.get_model("baseline/random-encoder-baseline")
     model_meta = deepcopy(model.mteb_model_meta)
     model_meta.similarity_fn_name = similarity

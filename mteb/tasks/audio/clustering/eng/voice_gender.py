@@ -9,8 +9,8 @@ class VoiceGenderClustering(AbsTaskClustering):
         description="Clustering audio recordings based on gender (male vs female).",
         reference="https://huggingface.co/datasets/mmn3690/voice-gender-clustering",
         dataset={
-            "path": "mmn3690/voice-gender-clustering",
-            "revision": "1b202ea7bcd0abd5283e628248803e1569257c80",
+            "path": "mteb/VoiceGenderClustering",
+            "revision": "def21cdda438562bf8515d1daa9b47ab6ea6dec6",
         },
         type="AudioClustering",
         category="a2a",
@@ -36,8 +36,3 @@ class VoiceGenderClustering(AbsTaskClustering):
     )
     max_fraction_of_documents_to_embed = None
     input_column_name: str = "audio"
-
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"], label=self.label_column_name
-        )

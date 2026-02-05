@@ -1,15 +1,23 @@
+from __future__ import annotations
+
 import logging
-from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
+
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +25,8 @@ logger = logging.getLogger(__name__)
 def instruct_wrapper(
     model_name_or_path: str,
     mode: str,
-    instruction_template: str | Callable[[str], str] | None = None,
+    instruction_template: str | Callable[[str, PromptType | None], str] | None = None,
+    device: str | None = None,
     **kwargs,
 ):
     """Instruct wrapper for models. Uses GritLM to pass instructions to the model.
@@ -28,6 +37,7 @@ def instruct_wrapper(
         model_name_or_path: Model name or path.
         mode: Mode of the model. Either 'query' or 'passage'.
         instruction_template: Instruction template. Should contain the string '{instruction}'.
+        device: Device used to load the model.
         **kwargs: Additional arguments to pass to the model.
     """
     requires_package(
@@ -40,7 +50,10 @@ def instruct_wrapper(
             self,
             model_name_or_path: str,
             mode: str,
-            instruction_template: str | Callable[[str, PromptType], str] | None = None,
+            device: str | None = None,
+            instruction_template: str
+            | Callable[[str, PromptType | None], str]
+            | None = None,
             **kwargs,
         ):
             if (
@@ -61,7 +74,12 @@ def instruct_wrapper(
                 )
 
             self.instruction_template = instruction_template
-            super().__init__(model_name_or_path=model_name_or_path, mode=mode, **kwargs)
+            super().__init__(
+                model_name_or_path=model_name_or_path,
+                mode=mode,
+                device=device,
+                **kwargs,
+            )
 
         def encode(
             self,
@@ -82,15 +100,20 @@ def instruct_wrapper(
             logger.info(
                 f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
             )
-            embeddings = super().encode(
-                _inputs, instruction=instruction, *args, **kwargs
+            embeddings = super().encode(  # type: ignore[safe-super,call-arg]
+                _inputs,  # type: ignore[arg-type]
+                instruction=instruction,
+                *args,
+                **kwargs,
             )
             if isinstance(embeddings, torch.Tensor):
                 # sometimes in kwargs can be return_tensors=True
                 embeddings = embeddings.cpu().detach().float().numpy()
             return embeddings
 
-    return InstructGritLMModel(model_name_or_path, mode, instruction_template, **kwargs)
+    return InstructGritLMModel(
+        model_name_or_path, mode, instruction_template=instruction_template, **kwargs
+    )
 
 
 class InstructSentenceTransformerModel(AbsEncoder):
@@ -100,6 +123,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
+        device: str | None = None,
         instruction_template: str
         | Callable[[str, PromptType | None], str]
         | None = None,
@@ -117,6 +141,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         Arguments:
             model_name: Model name of the sentence transformers model.
             revision: Revision of the sentence transformers model.
+            device: Device used to load the model.
             instruction_template: Model template. Should contain the string '{instruction}'.
             max_seq_length: Maximum sequence length. If None, the maximum sequence length will be read from the model config.
             apply_instruction_to_passages: Whether to apply the instruction template to the passages.
@@ -141,7 +166,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             )
 
         self.instruction_template = instruction_template
-        tokenizer_params = {}
+        tokenizer_params: dict[str, Any] = {}
         if add_eos_token:
             tokenizer_params["add_eos_token"] = add_eos_token
         if max_seq_length is not None:
@@ -153,7 +178,9 @@ class InstructSentenceTransformerModel(AbsEncoder):
         kwargs.setdefault("tokenizer_kwargs", {}).update(tokenizer_params)
 
         self.model_name = model_name
-        self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
+        self.model = SentenceTransformer(
+            model_name, revision=revision, device=device, **kwargs
+        )
         if max_seq_length:
             # https://github.com/huggingface/sentence-transformers/issues/3575
             self.model.max_seq_length = max_seq_length
@@ -193,6 +220,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
         """
         sentences = [text for batch in inputs for text in batch["text"]]
+        instruction: str | None
         instruction = self.get_task_instruction(task_metadata, prompt_type)
 
         # to passage prompts won't be applied to passages
