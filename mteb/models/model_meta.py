@@ -797,13 +797,13 @@ class ModelMeta(BaseModel):
                 return None
 
             vocab_size = config.get("vocab_size")
-            if vocab_size is None and "llm_config" in config:
-                vocab_size = config["llm_config"].get("vocab_size")
+            if vocab_size is None and "text_config" in config:
+                vocab_size = config["text_config"].get("vocab_size")
 
             hidden_size = config.get("hidden_size") or config.get("hidden_dim")
-            if hidden_size is None and "llm_config" in config:
-                hidden_size = config["llm_config"].get("hidden_size") or config[
-                    "llm_config"
+            if hidden_size is None and "text_config" in config:
+                hidden_size = config["text_config"].get("hidden_size") or config[
+                    "text_config"
                 ].get("hidden_dim")
 
             if vocab_size is not None and hidden_size is not None:

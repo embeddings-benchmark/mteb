@@ -696,7 +696,7 @@ llama2_7b_chat = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2307.09288},
     }""",
-    n_parameters=None,
+    n_parameters=7_000_000_000,
     n_embedding_parameters=131_072_000,
     memory_usage_mb=None,
     max_tokens=None,
@@ -708,6 +708,7 @@ llama2_7b_chat = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/meta-llama/Llama-2-7b-chat-hf",
 )
 
 mistral_7b = ModelMeta(
