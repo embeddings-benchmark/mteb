@@ -94,7 +94,6 @@ class NemotronColEmbedVL(AbsEncoder):
         ).eval()
 
     def get_text_embeddings(self, texts, batch_size: int = 32, **kwargs):
-        batch_size = 1
         return self.model.forward_queries(texts, batch_size=batch_size)
 
     def get_image_embeddings(
@@ -121,7 +120,6 @@ class NemotronColEmbedVL(AbsEncoder):
                 )
                 all_images.append(pil_img)
 
-        batch_size = 1
         return self.model.forward_images(all_images, batch_size=batch_size)
 
     def calculate_probs(self, text_embeddings, image_embeddings):
