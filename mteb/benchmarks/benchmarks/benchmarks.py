@@ -815,7 +815,7 @@ MTEB_SPA = Benchmark(
                 # Reranking
                 "MIRACLReranking",
                 # Retrieval
-                "MIRACLRetrieval",
+                "MIRACLRetrievalHardNegatives.v2",
                 "MintakaRetrieval",
                 "SpanishPassageRetrievalS2P",
                 "SpanishPassageRetrievalS2S",
