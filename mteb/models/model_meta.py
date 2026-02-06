@@ -483,7 +483,7 @@ class ModelMeta(BaseModel):
             release_date = cls.fetch_release_date(model_name)
             model_license = card_data.license if card_data.license != "other" else None
             n_parameters = cls._calculate_num_parameters_from_hub(model_name)
-            n_embedding_parameters = cls._calculate_embedding_parameters_from_hub(
+            n_embedding_parameters = cls._estimate_embedding_parameters_from_hub(
                 model_name, revision
             )
             memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
@@ -553,7 +553,7 @@ class ModelMeta(BaseModel):
         except Exception as e:
             error = e
         if meta.n_embedding_parameters is None:
-            meta.n_embedding_parameters = cls._calculate_embedding_parameters_from_hub(
+            meta.n_embedding_parameters = cls._estimate_embedding_parameters_from_hub(
                 name, revision
             )
 
@@ -658,7 +658,7 @@ class ModelMeta(BaseModel):
             error = e
 
         if meta.n_embedding_parameters is None:
-            meta.n_embedding_parameters = cls._calculate_embedding_parameters_from_hub(
+            meta.n_embedding_parameters = cls._estimate_embedding_parameters_from_hub(
                 model.model.name_or_path, revision
             )
 
@@ -781,52 +781,52 @@ class ModelMeta(BaseModel):
         return self._calculate_num_parameters_from_hub(self.name)
 
     @staticmethod
-    def _calculate_embedding_parameters_from_hub(
+    def _estimate_embedding_parameters_from_hub(
         model_name: str | None = None, revision: str | None = None
     ) -> int | None:
         if not model_name:
             return None
 
-        try:
-            config = _get_json_from_hub(
-                model_name, "config.json", "model", revision=revision
-            )
+        config = _get_json_from_hub(
+            model_name, "config.json", "model", revision=revision
+        )
 
-            if not config:
-                logger.warning(f"Could not load config.json for {model_name}")
-                return None
-
-            vocab_size = config.get("vocab_size")
-            if vocab_size is None and "text_config" in config:
-                vocab_size = config["text_config"].get("vocab_size")
-
-            hidden_size = config.get("hidden_size") or config.get("hidden_dim")
-            if hidden_size is None and "text_config" in config:
-                hidden_size = config["text_config"].get("hidden_size") or config[
-                    "text_config"
-                ].get("hidden_dim")
-
-            if vocab_size is not None and hidden_size is not None:
-                return vocab_size * hidden_size
-
-            logger.warning(
-                f"Could not find vocab_size and/or hidden_size in config for {model_name}"
-            )
+        if not config:
+            logger.warning(f"Could not load config.json for {model_name}")
             return None
 
-        except Exception as e:
+        vocab_size = config.get("vocab_size")
+        if vocab_size is None and "text_config" in config:
+            vocab_size = config["text_config"].get("vocab_size")
+
+        hidden_size = config.get("hidden_size") or config.get("hidden_dim")
+        if hidden_size is None and "text_config" in config:
+            hidden_size = config["text_config"].get("hidden_size") or config[
+                "text_config"
+            ].get("hidden_dim")
+
+        if vocab_size is None and hidden_size is None:
             logger.warning(
-                f"Can't calculate embedding parameters for {model_name}. Got error {e}"
+                f"Could not find both vocab_size and hidden_size (or hidden_dim) in config for {model_name}"
             )
             return None
+        elif vocab_size is None:
+            logger.warning(f"Could not find vocab_size in config for {model_name}")
+            return None
+        elif hidden_size is None:
+            logger.warning(
+                f"Could not find hidden_size or hidden_dim in config for {model_name}"
+            )
+            return None
+        return vocab_size * hidden_size
 
-    def calculate_embedding_parameters_from_hub(self) -> int | None:
-        """Calculate the number of embedding parameters from the model config (vocab_size * hidden_size).
+    def estimate_embedding_parameters_from_hub(self) -> int | None:
+        """Calculate the number of embedding parameters from the model config (vocab_size * hidden_size).  Note that this is an heuristic that works for many models, but might be incorrect.
 
         Returns:
             Number of embedding parameters in the model.
         """
-        return self._calculate_embedding_parameters_from_hub(self.name, self.revision)
+        return self._estimate_embedding_parameters_from_hub(self.name, self.revision)
 
     @staticmethod
     def _calculate_memory_usage_mb(
