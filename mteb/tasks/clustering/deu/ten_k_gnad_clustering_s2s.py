@@ -63,7 +63,7 @@ class TenKGnadClusteringS2SFast(AbsTaskClustering):
         adapted_from=["TenKGnadClusteringS2S"],
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int = 1, **kwargs) -> None:
         ds = _convert_to_fast(
             self.dataset, self.input_column_name, self.label_column_name, self.seed
         )
