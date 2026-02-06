@@ -1,4 +1,3 @@
-
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
