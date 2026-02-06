@@ -22,7 +22,7 @@ class LawIRKo(AbsTaskRetrieval):
         eval_langs=["kor-Hang"],
         main_score="ndcg_at_10",
         date=("2025-12-01", "2026-02-01"),
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=["Question answering"],
         license="mit",
         annotations_creators="derived",
