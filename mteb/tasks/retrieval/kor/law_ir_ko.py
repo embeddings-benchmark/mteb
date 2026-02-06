@@ -5,7 +5,11 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class LawIRKo(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="LawIRKo",
-        description="QA evaluation dataset based on Korean legal domain",
+        description="""QA evaluation dataset based on Korean legal domain
+        Task: The primary objective of this dataset is to evaluate a model's retrieval performance in identifying the relevant legal text when provided with a query containing specific information about a law and its articles.
+        Documents: The document corpus consists of official Korean legal and statutory texts, including statutes, acts, and regulations. Each document represents an individual legal article.
+        Queries: The queries are reconstructed based on specific law titles and their corresponding article names (e.g., 2: Responsibilities of Personal Information Controllers)
+        """,
         reference="https://huggingface.co/datasets/on-and-on/lawgov_ir-ko",
         dataset={
             "path": "on-and-on/lawgov_ir-ko",
