@@ -363,6 +363,7 @@ class ModelMeta(BaseModel):
         cls,
         model_name: str | None,
         revision: str | None = None,
+        fetch_from_hf: bool = True,
     ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
         """Detect the model type and appropriate loader based on HuggingFace Hub configuration files.
 
@@ -381,6 +382,8 @@ class ModelMeta(BaseModel):
         Args:
             model_name: The HuggingFace model name (can be None)
             revision: The model revision
+            fetch_from_hf: Whether to fetch from HuggingFace Hub
+
 
         Returns:
             A tuple of (loader_function, model_type) where:
@@ -389,7 +392,7 @@ class ModelMeta(BaseModel):
         """
         from mteb.models import CrossEncoderWrapper, sentence_transformers_loader
 
-        if not model_name or not _repo_exists(model_name):
+        if not fetch_from_hf or not model_name or not _repo_exists(model_name):
             return sentence_transformers_loader, "dense"
 
         try:
@@ -423,6 +426,7 @@ class ModelMeta(BaseModel):
         model_name: str | None,
         revision: str | None = None,
         fill_missing: bool = True,
+        fetch_from_hf: bool = True,
         compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta from a HuggingFace model name.
@@ -431,6 +435,7 @@ class ModelMeta(BaseModel):
             model_name: The HuggingFace model name.
             revision: Revision of the model
             fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            fetch_from_hf: Whether to fetch additional metadata from HuggingFace Hub.
             compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
@@ -448,7 +453,9 @@ class ModelMeta(BaseModel):
             )
             fill_missing = compute_metadata
 
-        loader, model_type = cls._detect_model_type_and_loader(model_name, revision)
+        loader, model_type = cls._detect_model_type_and_loader(
+            model_name, revision, fetch_from_hf
+        )
 
         frameworks: list[FRAMEWORKS] = ["PyTorch"]
         model_license = None
@@ -460,7 +467,7 @@ class ModelMeta(BaseModel):
         embedding_dim = None
         max_tokens = None
 
-        if model_name and fill_missing and _repo_exists(model_name):
+        if model_name and fill_missing and fetch_from_hf and _repo_exists(model_name):
             reference = "https://huggingface.co/" + model_name
             card = ModelCard.load(model_name)
             card_data: ModelCardData = card.data
@@ -522,6 +529,7 @@ class ModelMeta(BaseModel):
         model: SentenceTransformer,
         revision: str | None = None,
         fill_missing: bool = False,
+        fetch_from_hf: bool = True,
         compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta from a SentenceTransformer model.
@@ -530,6 +538,7 @@ class ModelMeta(BaseModel):
             model: SentenceTransformer model.
             revision: Revision of the model
             fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            fetch_from_hf: Whether to fetch metadata from HuggingFace Hub.
             compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
@@ -540,10 +549,14 @@ class ModelMeta(BaseModel):
             if model.model_card_data.model_name
             else model.model_card_data.base_model
         )
+
         meta = cls._from_hub(
-            name, revision, fill_missing=fill_missing, compute_metadata=compute_metadata
+            name,
+            revision,
+            fill_missing=fill_missing,
+            fetch_from_hf=fetch_from_hf,
+            compute_metadata=compute_metadata,
         )
-        error = None
         try:
             first = model[0]
 
@@ -551,15 +564,21 @@ class ModelMeta(BaseModel):
                 emb = first.auto_model.get_input_embeddings()
                 meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
         except Exception as e:
-            error = e
-        if meta.n_embedding_parameters is None:
+            if fetch_from_hf:
+                logger.warning(
+                    f"Could not extract embedding parameters directly from model {name}. "
+                    f"Attempting to estimate from config using vocab_size * hidden_size heuristic. "
+                    f"Note that this is an approximation and might be incorrect for some model architectures. "
+                    f"Error: {e}"
+                )
+            else:
+                logger.warning(
+                    f"Could not extract embedding parameters directly from model {name}: Error: {e}"
+                )
+
+        if meta.n_embedding_parameters is None and fetch_from_hf:
             meta.n_embedding_parameters = cls._estimate_embedding_parameters_from_hub(
                 name, revision
-            )
-
-        if meta.n_embedding_parameters is None:
-            logger.warning(
-                f"Could not calculate embedding parameters for {name}: {error}"
             )
         meta.revision = model.model_card_data.base_model_revision or meta.revision
         meta.max_tokens = model.max_seq_length
@@ -576,6 +595,7 @@ class ModelMeta(BaseModel):
         model: str,
         revision: str | None = None,
         fill_missing: bool = True,
+        fetch_from_hf: bool = True,
         compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta for model from HuggingFace hub.
@@ -584,6 +604,7 @@ class ModelMeta(BaseModel):
             model: Name of the model from HuggingFace hub. For example, `intfloat/multilingual-e5-large`
             revision: Revision of the model
             fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            fetch_from_hf: Whether to fetch metadata from HuggingFace Hub.
             compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
@@ -593,11 +614,12 @@ class ModelMeta(BaseModel):
             model,
             revision,
             fill_missing=fill_missing,
+            fetch_from_hf=fetch_from_hf,
             compute_metadata=compute_metadata,
         )
         meta.modalities = ["text"]
 
-        if model and fill_missing and _repo_exists(model):
+        if model and fill_missing and fetch_from_hf and _repo_exists(model):
             # have max_seq_length field
             sbert_config = _get_json_from_hub(
                 model, "sentence_bert_config.json", "model", revision=revision
@@ -627,6 +649,7 @@ class ModelMeta(BaseModel):
         model: CrossEncoder,
         revision: str | None = None,
         fill_missing: bool = False,
+        fetch_from_hf: bool = True,
         compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta from a CrossEncoder.
@@ -635,6 +658,7 @@ class ModelMeta(BaseModel):
             model: The CrossEncoder model
             revision: Revision of the model
             fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            fetch_from_hf: Whether to fetch metadata from HuggingFace Hub.
             compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
@@ -646,25 +670,30 @@ class ModelMeta(BaseModel):
             model.model.name_or_path,
             revision,
             fill_missing=fill_missing,
+            fetch_from_hf=fetch_from_hf,
             compute_metadata=compute_metadata,
         )
-        error = None
         try:
             emb = model.model.get_input_embeddings()
 
             if isinstance(emb, nn.Embedding):
                 meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
         except Exception as e:
-            error = e
+            if fetch_from_hf:
+                logger.warning(
+                    f"Could not extract embedding parameters directly from model {model.model.name_or_path}. "
+                    f"Attempting to estimate from config using vocab_size * hidden_size heuristic. "
+                    f"Note that this is an approximation and might be incorrect for some model architectures. "
+                    f"Error: {e}"
+                )
+            else:
+                logger.warning(
+                    f"Could not extract embedding parameters directly from model {model.model.name_or_path}: Error: {e}"
+                )
 
-        if meta.n_embedding_parameters is None:
+        if meta.n_embedding_parameters is None and fetch_from_hf:
             meta.n_embedding_parameters = cls._estimate_embedding_parameters_from_hub(
                 model.model.name_or_path, revision
-            )
-
-        if meta.n_embedding_parameters is None:
-            logger.warning(
-                f"Could not calculate embedding parameters for {model.model.name_or_path}: {error}"
             )
         meta.revision = model.config._commit_hash or meta.revision
         meta.loader = CrossEncoderWrapper
@@ -792,7 +821,9 @@ class ModelMeta(BaseModel):
         )
 
         if not config:
-            logger.warning(f"Could not load config.json for {model_name}")
+            logger.warning(
+                f"Could not calculate embedding parameters for {model_name} as config.json could not be loaded"
+            )
             return None
 
         vocab_size = config.get("vocab_size")
@@ -807,15 +838,17 @@ class ModelMeta(BaseModel):
 
         if vocab_size is None and hidden_size is None:
             logger.warning(
-                f"Could not find both vocab_size and hidden_size (or hidden_dim) in config for {model_name}"
+                f"Could not calculate embedding parameters for {model_name} as both vocab_size and hidden_size/hidden_dim are missing from config"
             )
             return None
         elif vocab_size is None:
-            logger.warning(f"Could not find vocab_size in config for {model_name}")
+            logger.warning(
+                f"Could not calculate embedding parameters for {model_name} as vocab_size is missing from config"
+            )
             return None
         elif hidden_size is None:
             logger.warning(
-                f"Could not find hidden_size or hidden_dim in config for {model_name}"
+                f"Could not calculate embedding parameters for {model_name} as hidden_size/hidden_dim is missing from config"
             )
             return None
         return vocab_size * hidden_size
