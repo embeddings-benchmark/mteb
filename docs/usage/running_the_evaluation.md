@@ -17,7 +17,9 @@ Evaluating models in `mteb` typically takes the simple form:
     ```
 === "CLI"
     ```bash
-    mteb run -t MultiHateClassification -m sentence-transformers/static-similarity-mrl-multilingual-v1 -l ita dan
+    mteb run -t MultiHateClassification \
+      -m sentence-transformers/static-similarity-mrl-multilingual-v1 \
+      -l ita dan
     ```
 
 !!! info "Compatibility with SentenceTransformers"
@@ -50,7 +52,9 @@ results = mteb.evaluate(model, tasks=tasks, cache=cache)
     ```
 === "CLI"
     ```bash
-    mteb run -t NanoArguAnaRetrieval -m sentence-transformers/static-similarity-mrl-multilingual-v1 --co2-tracker
+    mteb run -t NanoArguAnaRetrieval \
+      -m sentence-transformers/static-similarity-mrl-multilingual-v1 \
+      --co2-tracker
     ```
 
 ## Passing in `encode` arguments
@@ -69,7 +73,10 @@ Prompts can be passed to the SentenceTransformer model using the `prompts` param
 from sentence_transformers import SentenceTransformer
 
 
-model = SentenceTransformer("intfloat/multilingual-e5-small", prompts={"query": "Query:", "document": "Passage:"})
+model = SentenceTransformer(
+    "intfloat/multilingual-e5-small", 
+  prompts={"query": "Query:", "document": "Passage:"}
+)
 results = mteb.evaluate(model, tasks=tasks)
 ```
 
@@ -108,7 +115,9 @@ To save the predictions from a task simply set the `prediction_folder`:
 
 === "CLI"
     ```bash
-    mteb run -t NanoArguAnaRetrieval -m sentence-transformers/static-similarity-mrl-multilingual-v1 --prediction-folder predictions
+    mteb run -t NanoArguAnaRetrieval \
+      -m sentence-transformers/static-similarity-mrl-multilingual-v1 \
+      --prediction-folder predictions
     ```
 
 The file will now be saved to `"{prediction_folder}/{task_name}_predictions.json"` and contain the rankings for each query along with the model name and revision of the model that produced the result.

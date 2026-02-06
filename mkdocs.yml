@@ -15,12 +15,12 @@ theme:
     - navigation.top
     - search.suggest
     - search.highlight
-    - content.tabs.link
-    - content.code.annotation
-    - content.code.copy
     - content.action.edit
     - content.action.view
+    - content.code.copy
     - content.code.annotate
+    - content.code.annotation
+    - content.tabs.link
     - content.tooltips
     - navigation.footer
     - navigation.indexes
