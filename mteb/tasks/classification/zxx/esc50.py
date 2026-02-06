@@ -9,7 +9,7 @@ class ESC50Classification(AbsTaskClassification):
         reference="https://huggingface.co/datasets/ashraq/esc50",
         dataset={
             "path": "mteb/esc50",
-            "revision": "0877d3708afd4deba0b89a2b54eb528e7f24ec6c",
+            "revision": "31ea534771aaf92c116698355e5cdc2ffda4bb6d",
         },
         type="AudioClassification",
         category="a2c",
