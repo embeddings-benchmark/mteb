@@ -27,8 +27,8 @@ class LawIRKo(AbsTaskRetrieval):
         bibtex_citation=r"""
 @misc{law_ko_ir_khee,
   author = {kang-hyeun Lee},
-  note = {A Benchmark Dataset for Korean Legal Information Retrieval and QA},
   howpublished = {\url{https://huggingface.co/datasets/on-and-on/lawgov_ir-ko}},
+  note = {A Benchmark Dataset for Korean Legal Information Retrieval and QA},
   year = {2026},
 }
 """,
