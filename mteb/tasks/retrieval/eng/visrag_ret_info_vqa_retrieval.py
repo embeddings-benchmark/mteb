@@ -91,7 +91,7 @@ class VisRAGRetInfoVQA(AbsTaskRetrieval):
             "revision": "04ee2db1d0a05304899453a3b03baef5e18991a3",
         },
         date=("2010-01-01", "2020-12-31"),
-        domains=["Non-fiction"],
+        domains=["Web"],
         license="mit",
         annotations_creators="derived",
         dialect=[],

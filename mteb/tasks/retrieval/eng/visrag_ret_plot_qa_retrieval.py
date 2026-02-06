@@ -91,7 +91,7 @@ class VisRAGRetPlotQA(AbsTaskRetrieval):
             "revision": "ef953ef8ab6d78ac112dd4cde6acdb2c2692039a",
         },
         date=("2000-01-01", "2019-12-31"),
-        domains=["Academic", "Non-fiction"],
+        domains=["Web"],
         license="mit",
         annotations_creators="derived",
         dialect=[],

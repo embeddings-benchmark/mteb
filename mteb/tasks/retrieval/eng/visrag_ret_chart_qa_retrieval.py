@@ -91,7 +91,7 @@ class VisRAGRetChartQA(AbsTaskRetrieval):
             "revision": "31f5ceb5d60b02e065bff394cb582f5bbb01a9b6",
         },
         date=("2010-01-01", "2021-12-31"),
-        domains=["Academic", "Non-fiction"],
+        domains=["Web"],
         license="gpl-3.0",
         annotations_creators="derived",
         dialect=[],

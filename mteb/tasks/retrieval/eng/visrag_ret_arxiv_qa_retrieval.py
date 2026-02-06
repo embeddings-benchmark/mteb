@@ -85,7 +85,7 @@ class VisRAGRetArxivQA(AbsTaskRetrieval):
             "revision": "00a31fc1e899b5f81d7760eca4907b1a1005865b",
         },
         date=("2000-01-01", "2024-12-31"),
-        domains=["Academic", "Non-fiction"],
+        domains=["Academic"],
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],

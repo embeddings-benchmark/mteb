@@ -92,7 +92,7 @@ class VisRAGRetMPDocVQA(AbsTaskRetrieval):
             "revision": "3ebd091c458cf04161f78cd7b12ea101f83e2529",
         },
         date=("1900-01-01", "2020-12-31"),
-        domains=["Engineering", "Non-fiction"],
+        domains=["Web"],
         license="mit",
         annotations_creators="derived",
         dialect=[],
