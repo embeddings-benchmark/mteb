@@ -10,8 +10,8 @@ class AmbientAcousticContextClustering(AbsTaskClustering):
         description="Clustering task based on a subset of the Ambient Acoustic Context dataset containing 1-second segments for workplace activities.",
         reference="https://dl.acm.org/doi/10.1145/3379503.3403535",
         dataset={
-            "path": "AdnanElAssadi/ambient-acoustic-context-small",
-            "revision": "360c858462b79492c6b09d5855ec4d59c87497c6",
+            "path": "mteb/ambient-acoustic-context-small",
+            "revision": "8f4de158d4162de768ebb4dc0594429d785077da",
         },
         type="AudioClustering",
         category="a2a",

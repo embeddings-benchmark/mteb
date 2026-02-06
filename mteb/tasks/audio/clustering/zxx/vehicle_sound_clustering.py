@@ -8,8 +8,8 @@ class VehicleSoundClustering(AbsTaskClustering):
         description="Clustering vehicle sounds recorded from smartphones (0 (car class), 1 (truck, bus and van class), 2 (motorcycle class))",
         reference="https://huggingface.co/datasets/DynamicSuperb/Vehicle_sounds_classification_dataset",
         dataset={
-            "path": "DynamicSuperb/Vehicle_sounds_classification_dataset",
-            "revision": "9ad231d349f9d0bddbf20a83d0d7635dccbd2501",
+            "path": "mteb/Vehicle_sounds_classification_dataset",
+            "revision": "5f905f9544d0c78b607639662c88c2ddd1216384",
         },
         type="AudioClustering",
         category="a2a",
