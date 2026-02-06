@@ -223,6 +223,12 @@ from .vidore_bench_retrieval import (
     VidoreTabfquadRetrieval,
     VidoreTatdqaRetrieval,
 )
+from .visrag_ret_arxiv_qa_retrieval import VisRAGRetArxivQA
+from .visrag_ret_chart_qa_retrieval import VisRAGRetChartQA
+from .visrag_ret_info_vqa_retrieval import VisRAGRetInfoVQA
+from .visrag_ret_mp_docvqa_retrieval import VisRAGRetMPDocVQA
+from .visrag_ret_plot_qa_retrieval import VisRAGRetPlotQA
+from .visrag_ret_slide_vqa_retrieval import VisRAGRetSlideVQA
 from .visual_news_i2t_retrieval import VisualNewsI2TRetrieval
 from .visual_news_t2i_retrieval import VisualNewsT2IRetrieval
 from .viz_wiz_it2t_retrieval import VizWizIT2TRetrieval
@@ -451,6 +457,12 @@ __all__ = [
     "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
     "VidoreTabfquadRetrieval",
     "VidoreTatdqaRetrieval",
+    "VisRAGRetArxivQA",
+    "VisRAGRetChartQA",
+    "VisRAGRetInfoVQA",
+    "VisRAGRetMPDocVQA",
+    "VisRAGRetPlotQA",
+    "VisRAGRetSlideVQA",
     "VisualNewsI2TRetrieval",
     "VisualNewsT2IRetrieval",
     "VizWizIT2TRetrieval",
