@@ -27,11 +27,20 @@ Additional options:
 - `--host HOST`: Specify the host to run the server on (default: 0.0.0.0)
 - `--port PORT`: Specify the port to run the server on (default: 7860)
 - `--share`: Create a public URL for the leaderboard
+- `--rebuild`: Force rebuild from full results repository, bypassing cached JSON. This is useful when you suspect the cache is stale or corrupted.
 
 Example with all options:
 ```bash
-mteb leaderboard --cache-path results --port 8080 --share
+mteb leaderboard --cache-path results --port 8080 --share --rebuild
 ```
+
+#### Cache Directory Structure
+
+The leaderboard stores data in the cache directory (default: `~/.cache/mteb` or set via `MTEB_CACHE` environment variable):
+
+- `results/` - Your locally run evaluation results
+- `remote/` - Cloned results from the [results repository](https://github.com/embeddings-benchmark/results)
+- `leaderboard/` - Pre-computed leaderboard cache for fast loading
 
 #### Using Make Command
 

@@ -364,7 +364,7 @@ class TestDownloadCachedResultsFromBranch:
     def test_default_output_path(
         self, mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
     ):
-        """Test that default output path is mteb/leaderboard/__cached_results.json when none provided."""
+        """Test that default output path is {cache_path}/leaderboard/__cached_results.json when none provided."""
         cache = ResultCache(cache_path=tmp_path)
 
         mock_response = Mock()
@@ -375,10 +375,8 @@ class TestDownloadCachedResultsFromBranch:
 
         result_path = cache._download_cached_results_from_branch()
 
-        # Default path should be mteb/leaderboard/__cached_results.json
-        # Get the mteb package directory
-        mteb_package_dir = Path(mteb.__file__).parent
-        expected_path = mteb_package_dir / "leaderboard" / "__cached_results.json"
+        # Default path should be {cache_path}/leaderboard/__cached_results.json
+        expected_path = tmp_path / "leaderboard" / "__cached_results.json"
         assert result_path == expected_path
         assert result_path.exists()
 
