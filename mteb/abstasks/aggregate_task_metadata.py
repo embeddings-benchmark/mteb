@@ -25,6 +25,7 @@ if TYPE_CHECKING:
         Licenses,
         Modalities,
         StrDate,
+        StrURL,
     )
 
     from .task_metadata import (
@@ -135,8 +136,8 @@ class AggregateTaskMetadata(TaskMetadata):
             return list(subtypes)
         return None
 
-    def _compute_license(self) -> Licenses | None:
-        licenses = set()
+    def _compute_license(self) -> Licenses | StrURL | None:
+        licenses: set[Licenses | StrURL] = set()
         for task in self.tasks:
             if task.metadata.license:
                 licenses.add(task.metadata.license)
