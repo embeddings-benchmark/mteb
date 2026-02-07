@@ -101,6 +101,7 @@ youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lk
 llama-embed-nemotron = ["transformers==4.51.0"]
 llama-nemotron-colembed-vl = ["transformers[torch]==4.49.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 nemotron-colembed-vl-v2 = ["transformers[torch]==5.0.0rc0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
+e5-omni = ["transformers>=4.48.0", "torchvision>=0.22.1", "qwen-omni-utils>=0.0.4", "accelerate"]
 faiss-cpu = ["faiss-cpu>=1.12.0"]
 eager_embed = ["qwen_vl_utils>=0.0.14"]
 vllm = ["vllm>=0.11.1"]
@@ -362,6 +363,7 @@ conflicts = [
         { extra = "jina-v4" },
         { extra = "sauerkrautlm-colpali" },
         { extra = "vllm" },
+        { extra = "e5-omni" },
     ]
 ]
 
