@@ -46,12 +46,10 @@ class MetaClip2Model(AbsEncoder):
         self.model = AutoModel.from_pretrained(
             model_name,
             revision=revision,
-            trust_remote_code=True,
         ).to(self.device)
         self.processor = AutoProcessor.from_pretrained(
             model_name,
             revision=revision,
-            trust_remote_code=True,
         )
 
     def get_text_embeddings(
