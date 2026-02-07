@@ -52,6 +52,9 @@ class CLIPModel(AbsEncoder):
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.model.get_text_features(**inputs)
+                # Handle both tensor and BaseModelOutputWithPooling returns
+                if hasattr(text_outputs, "pooler_output"):
+                    text_outputs = text_outputs.pooler_output
                 all_text_embeddings.append(text_outputs.cpu())
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
@@ -74,6 +77,9 @@ class CLIPModel(AbsEncoder):
             )
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
             image_outputs = self.model.get_image_features(**inputs)
+            # Handle both tensor and BaseModelOutputWithPooling returns
+            if hasattr(image_outputs, "pooler_output"):
+                image_outputs = image_outputs.pooler_output
             all_image_embeddings.append(image_outputs.cpu())
 
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
