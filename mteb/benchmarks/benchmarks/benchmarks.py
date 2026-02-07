@@ -2847,3 +2847,36 @@ KOVIDORE_V2 = Benchmark(
 }
 """,
 )
+
+VISRAG_RETRIEVAL = Benchmark(
+    name="VisRAG-Retrieval",
+    aliases=["VisRAG"],
+    display_name="VisRAG Retrieval",
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                "VisRAGRetArxivQA",
+                "VisRAGRetChartQA",
+                "VisRAGRetInfoVQA",
+                "VisRAGRetPlotQA",
+                "VisRAGRetMPDocVQA",
+                "VisRAGRetSlideVQA",
+            ],
+            languages=["eng"],
+            eval_splits=["train"],
+        )
+    ),
+    description="Benchmark of six VisRAG image-text retrieval tasks.",
+    reference="https://huggingface.co/collections/openbmb/visrag",
+    citation=r"""
+@misc{yu2025visragvisionbasedretrievalaugmentedgeneration,
+      title={VisRAG: Vision-based Retrieval-augmented Generation on Multi-modality Documents}, 
+      author={Shi Yu and Chaoyue Tang and Bokai Xu and Junbo Cui and Junhao Ran and Yukun Yan and Zhenghao Liu and Shuo Wang and Xu Han and Zhiyuan Liu and Maosong Sun},
+      year={2025},
+      eprint={2410.10594},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2410.10594}, 
+}
+""",
+)
