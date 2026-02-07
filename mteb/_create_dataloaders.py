@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import warnings
+from functools import lru_cache
 from typing import TYPE_CHECKING, Any, cast
 
 import torch
@@ -15,6 +16,8 @@ from mteb.types import (
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+    import numpy as np
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import (
@@ -291,7 +294,7 @@ def _prepare_image_dataset(
     )
 
 
-def _custom_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
+def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     """Custom collate function for DataLoader.
 
     - For the "image", "conversation" key, leave the images as a list (to avoid stacking errors).
@@ -551,4 +554,78 @@ def create_dataloader(
         dataset,
         batch_size=batch_size,
         num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
+    )
+
+
+class AudioCollator:
+    def __init__(
+        self, target_sampling_rate: int, max_samples: int | None = None
+    ) -> None:
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
+
+    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
+        return self.resample_audios(
+            inputs,
+            target_sampling_rate=self.target_sampling_rate,
+            max_samples=self.max_samples,
+        )
+
+    @staticmethod
+    def resample_audios(
+        inputs: list[dict[str, Any]],
+        target_sampling_rate: int,
+        max_samples: int | None = None,
+    ) -> BatchedInput:
+        collated_inputs = []
+        for row in inputs:
+            audio_array = AudioCollator.resample_audio(
+                row,
+                target_sampling_rate,
+                max_samples,
+            )
+            row["audio"] = {"array": audio_array, "sample_rate": target_sampling_rate}
+            collated_inputs.append(row)
+        return {
+            key: [row[key] for row in collated_inputs]
+            for key in collated_inputs[0].keys()
+        }
+
+    @staticmethod
+    def resample_audio(
+        row: dict[str, Any],
+        target_sampling_rate: int,
+        max_samples: int | None = None,
+    ) -> np.typing.NDArray[np.floating]:
+        audio = row["audio"]
+        if audio["sampling_rate"] != target_sampling_rate:
+            warnings.warn(
+                f"Resampling audio from {audio['sampling_rate']} Hz to {target_sampling_rate} Hz."
+            )
+            resampler = _get_resampler(
+                orig_freq=audio["sampling_rate"],
+                new_freq=target_sampling_rate,
+            )
+            audio_array = torch.from_numpy(audio["array"]).float()
+            audio_array = resampler(audio_array)
+            audio_array = audio_array.numpy()
+        else:
+            audio_array = audio["array"]
+
+        # Convert to mono if needed
+        if audio_array.dim() > 1 and audio_array.shape[0] > 1:
+            audio_array = torch.mean(audio_array, dim=0, keepdim=True)
+
+        if max_samples is not None and len(audio_array) > max_samples:
+            audio_array = audio_array[:max_samples]
+        return audio_array
+
+
+@lru_cache(maxsize=10)
+def _get_resampler(orig_freq: int, new_freq: int) -> Any:
+    import torchaudio
+
+    return torchaudio.transforms.Resample(
+        orig_freq=orig_freq,
+        new_freq=new_freq,
     )

@@ -138,7 +138,7 @@ def yamnet_loader(*args, **kwargs):
 
                 for a in batch["audio"]:
                     array = torch.tensor(a["array"], dtype=torch.float32)
-                    sr = a.get("sampling_rate", None)
+                    sr = a["sampling_rate"]
                     if sr is None:
                         warnings.warn(
                             f"No sampling_rate provided for an audio sample. "

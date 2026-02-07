@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import logging
-import warnings
 from typing import TYPE_CHECKING, Any
 
 import torch
 from tqdm.auto import tqdm
 from transformers import AutoProcessor, EncodecModel
 
+from mteb._create_dataloaders import AudioCollator
 from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -51,54 +51,18 @@ class EncodecWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        import torchaudio
+        max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
+        inputs.collate_fn = AudioCollator(self.sampling_rate, max_samples)
 
         all_embeddings = []
-        max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
         for batch in tqdm(
             inputs,
             disable=not show_progress_bar,
         ):
+            audio_array = [audio["array"] for audio in batch["audio"]]
             audio_arrays = []
-            for idx, a in enumerate(batch["audio"]):
-                array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate", None)
-
-                if sr is None:
-                    warnings.warn(
-                        f"No sampling_rate provided for an audio sample. "
-                        f"Assuming {self.sampling_rate} Hz (model default)."
-                    )
-                    sr = self.sampling_rate
-
-                # Convert to mono if needed
-                if array.dim() > 1 and array.shape[0] > 1:
-                    array = torch.mean(array, dim=0, keepdim=True)
-
-                if sr != self.sampling_rate:
-                    resampler = torchaudio.transforms.Resample(
-                        orig_freq=sr, new_freq=self.sampling_rate
-                    )
-                    array = resampler(array)
-
-                array = array.squeeze()
-
-                # Handle edge case where squeeze results in 0-dim tensor
-                if array.dim() == 0:
-                    array = array.unsqueeze(0)
-
-                # Warn and handle empty audio
-                if array.shape[-1] == 0:
-                    logger.warning(
-                        f"Empty audio sample at index {idx}, using 1 second of silence."
-                    )
-                    array = torch.zeros(self.sampling_rate)  # 1 second of silence
-
-                # Truncate if too long (processor doesn't allow both padding and truncation)
-                if array.shape[-1] > max_samples:
-                    array = array[:max_samples]
-
+            for array in audio_array:
                 # Ensure minimum length for encoder (Encodec needs ~320 samples per frame)
                 # Use 1 second minimum to be safe
                 min_samples = self.sampling_rate
