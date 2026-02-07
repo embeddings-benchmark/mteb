@@ -446,6 +446,10 @@ extend-exclude = [
     "mteb/tasks/pair_classification/nld/",
     "mteb/tasks/sts/nld/",
     "mteb/tasks/retrieval/nld/",
+    # Beltagy, Iz
+    "mteb/tasks/retrieval/eng/lembqm_sum_retrieval.py",
+    "mteb/tasks/classification/jpn/wrime_classification.py",
+    "mteb/tasks/reranking/eng/sci_docs_reranking.py",
 ]
 
 [tool.typos.type.py]

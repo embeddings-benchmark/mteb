@@ -50,7 +50,6 @@ To add a new task, you need to implement a new class that inherits from the [`Ab
         title = "{SPECTER}: Document-level Representation Learning using Citation-informed Transformers",
         author = "Cohan, Arman  and
           Feldman, Sergey  and
-          Beltagy, Iz  and
           Downey, Doug  and
           Weld, Daniel",
         editor = "Jurafsky, Dan  and
