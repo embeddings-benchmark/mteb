@@ -1,5 +1,6 @@
 from .ask_ubuntu_dup_questions import AskUbuntuDupQuestions
 from .built_bench_reranking import BuiltBenchReranking
+from .ecommerce_product_relevance_reranking import ERESSReranking
 from .fs_dnoisy18k_audio_reranking import FSDnoisy18kAudioReranking
 from .hume_core17_instruction_reranking import HUMECore17InstructionReranking
 from .hume_news21_instruction_reranking import HUMENews21InstructionReranking
@@ -20,6 +21,7 @@ from .web_linx_candidates_reranking import WebLINXCandidatesReranking
 __all__ = [
     "AskUbuntuDupQuestions",
     "BuiltBenchReranking",
+    "ERESSReranking",
     "FSDnoisy18kAudioReranking",
     "HUMECore17InstructionReranking",
     "HUMENews21InstructionReranking",
