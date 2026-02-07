@@ -1,0 +1,51 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
+
+
+class UrbanSound8KAudioReranking(AbsTaskRetrieval):
+    """UrbanSound8K dataset adapted for audio reranking task.
+
+    The UrbanSound8K dataset contains 8732 labeled sound excerpts (≤4s) of urban sounds from 10 classes:
+    air_conditioner, car_horn, children_playing, dog_bark, drilling, engine_idling, gun_shot, jackhammer,
+    siren, and street_music. This version is adapted for audio reranking where given a query audio from
+    one of the 10 urban sound classes, the task is to rank positive audio samples (same class) higher
+    than negative samples (different classes).
+
+    Each query has 4 positive examples (same urban sound class) and 16 negative examples
+    (different urban sound classes), creating a focused urban audio retrieval scenario
+    with 20 total candidates per query. The dataset contains 200 queries providing comprehensive
+    evaluation across all 10 urban sound categories.
+    """
+
+    metadata = TaskMetadata(
+        name="UrbanSound8KAudioReranking",
+        description="UrbanSound8K urban sound dataset adapted for audio reranking. Given a query audio of urban sounds, rank 4 relevant audio samples higher than 16 irrelevant ones from different urban sound classes. Contains 200 queries across 10 urban sound categories for comprehensive evaluation.",
+        reference="https://urbansounddataset.weebly.com/urbansound8k.html",
+        dataset={
+            "path": "mteb/UrbanSound8KAudioReranking",
+            "revision": "39896c7e1c66f809915490a1277198fe5ac3639d",
+        },
+        type="AudioReranking",
+        category="a2a",
+        modalities=["audio"],
+        eval_splits=["test"],
+        eval_langs=["zxx-Zxxx"],
+        main_score="map_at_1000",
+        date=("2014-11-01", "2014-11-03"),
+        domains=["Spoken"],
+        task_subtypes=["Environment Sound Reranking"],
+        license="cc-by-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{Salamon:UrbanSound:ACMMM:14,
+  author = {Salamon, Justin and Jacoby, Christopher and Bello, Juan Pablo},
+  booktitle = {Proceedings of the 22nd ACM international conference on Multimedia},
+  organization = {ACM},
+  pages = {1041--1044},
+  title = {A Dataset and Taxonomy for Urban Sound Research},
+  year = {2014},
+}
+""",
+    )

@@ -1,3 +1,39 @@
+from mteb.tasks.classification.eng.common_language_age_detection import (
+    CommonLanguageAgeDetection,
+)
+from mteb.tasks.classification.eng.common_language_gender_detection import (
+    CommonLanguageGenderDetection,
+)
+from mteb.tasks.classification.eng.common_language_language_classification import (
+    CommonLanguageLanguageClassification,
+)
+from mteb.tasks.classification.eng.cremad import CREMAD
+from mteb.tasks.classification.eng.cstr_vctk_accent_id import CSTRVCTKAccentID
+from mteb.tasks.classification.eng.cstr_vctk_gender_classification import (
+    CSTRVCTKGenderClassification,
+)
+from mteb.tasks.classification.eng.expresso import (
+    ExpressoConvEmotionClassification,
+    ExpressoReadEmotionClassification,
+)
+from mteb.tasks.classification.eng.fsdd import FSDD
+from mteb.tasks.classification.eng.globe_v2_age_classification import (
+    GlobeV2AgeClassification,
+)
+from mteb.tasks.classification.eng.globe_v2_gender_classification import (
+    GlobeV2GenderClassification,
+)
+from mteb.tasks.classification.eng.iemocap_emotion import IEMOCAPEmotionClassification
+from mteb.tasks.classification.eng.iemocap_gender import IEMOCAPGenderClassification
+from mteb.tasks.classification.eng.libri_count import LibriCount
+from mteb.tasks.classification.eng.speech_commands import SpeechCommandsClassification
+from mteb.tasks.classification.eng.spoke_n import SpokeNEnglishClassification
+from mteb.tasks.classification.eng.spoken_q_afor_ic import SpokenQAForIC
+from mteb.tasks.classification.eng.vocal_sound import VocalSoundClassification
+from mteb.tasks.classification.eng.vox_celeb_sa import VoxCelebSA
+from mteb.tasks.classification.eng.vox_lingua107_top10 import VoxLingua107Top10
+from mteb.tasks.classification.eng.vox_populi_accent_id import VoxPopuliAccentID
+
 from .amazon_polarity_classification import (
     AmazonPolarityClassification,
     AmazonPolarityClassificationV2,
@@ -249,6 +285,8 @@ from .yelp_review_full_classification import (
 )
 
 __all__ = [
+    "CREMAD",
+    "FSDD",
     "AmazonPolarityClassification",
     "AmazonPolarityClassificationV2",
     "ArxivClassification",
@@ -258,6 +296,8 @@ __all__ = [
     "BirdsnapClassification",
     "CIFAR10Classification",
     "CIFAR100Classification",
+    "CSTRVCTKAccentID",
+    "CSTRVCTKGenderClassification",
     "CUADAffiliateLicenseLicenseeLegalBenchClassification",
     "CUADAffiliateLicenseLicensorLegalBenchClassification",
     "CUADAntiAssignmentLegalBenchClassification",
@@ -298,6 +338,9 @@ __all__ = [
     "CUADWarrantyDurationLegalBenchClassification",
     "Caltech101Classification",
     "CanadaTaxCourtOutcomesLegalBenchClassification",
+    "CommonLanguageAgeDetection",
+    "CommonLanguageGenderDetection",
+    "CommonLanguageLanguageClassification",
     "ContractNLIConfidentialityOfAgreementLegalBenchClassification",
     "ContractNLIExplicitIdentificationLegalBenchClassification",
     "ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification",
@@ -327,6 +370,8 @@ __all__ = [
     "EmotionClassification",
     "EmotionClassificationV2",
     "EuroSATClassification",
+    "ExpressoConvEmotionClassification",
+    "ExpressoReadEmotionClassification",
     "FER2013Classification",
     "FGVCAircraftClassification",
     "FinancialPhrasebankClassification",
@@ -336,9 +381,13 @@ __all__ = [
     "FrenkEnClassificationV2",
     "FunctionOfDecisionSectionLegalBenchClassification",
     "GTSRBClassification",
+    "GlobeV2AgeClassification",
+    "GlobeV2GenderClassification",
     "HUMEEmotionClassification",
     "HUMEToxicConversationsClassification",
     "HUMETweetSentimentExtractionClassification",
+    "IEMOCAPEmotionClassification",
+    "IEMOCAPGenderClassification",
     "Imagenet1kClassification",
     "ImdbClassification",
     "ImdbClassificationV2",
@@ -364,6 +413,7 @@ __all__ = [
     "LearnedHandsTrafficLegalBenchClassification",
     "LegalReasoningCausalityLegalBenchClassification",
     "LegalReasoningCausalityLegalBenchClassificationV2",
+    "LibriCount",
     "MAUDLegalBenchClassification",
     "MAUDLegalBenchClassificationV2",
     "MNISTClassification",
@@ -412,6 +462,9 @@ __all__ = [
     "SDSGlovesClassificationV2",
     "STL10Classification",
     "SUN397Classification",
+    "SpeechCommandsClassification",
+    "SpokeNEnglishClassification",
+    "SpokenQAForIC",
     "StanfordCarsClassification",
     "TelemarketingSalesRuleLegalBenchClassification",
     "TextualismToolDictionariesLegalBenchClassification",
@@ -427,6 +480,10 @@ __all__ = [
     "UCCVCommonLawLegalBenchClassification",
     "UCF101Classification",
     "UnfairTOSLegalBenchClassification",
+    "VocalSoundClassification",
+    "VoxCelebSA",
+    "VoxLingua107Top10",
+    "VoxPopuliAccentID",
     "WikipediaBioMetChemClassification",
     "WikipediaBioMetChemClassificationV2",
     "WikipediaBiolumNeurochemClassification",

@@ -4,8 +4,18 @@ import mteb
 from mteb.abstasks import AbsTask
 
 from .mock_tasks import (
+    MockAny2AnyRetrievalA2ATask,
+    MockAny2AnyRetrievalA2TTask,
     MockAny2AnyRetrievalI2TTask,
+    MockAny2AnyRetrievalT2ATask,
     MockAny2AnyRetrievalT2ITask,
+    MockAudioClassification,
+    MockAudioClassificationCrossVal,
+    MockAudioClusteringTask,
+    MockAudioMultilabelClassificationTask,
+    MockAudioPairClassification,
+    MockAudioReranking,
+    MockAudioZeroshotClassificationTask,
     MockBitextMiningTask,
     MockClassificationTask,
     MockClusteringFastTask,
@@ -137,6 +147,19 @@ MOCK_MIEB_TASK_GRID = [
     MockPairImageClassificationTask(),
 ]
 
+MOCK_MAEB_TASK_GRID = [
+    MockAudioClusteringTask(),
+    MockAudioMultilabelClassificationTask(),
+    MockAudioZeroshotClassificationTask(),
+    MockAny2AnyRetrievalT2ATask(),
+    MockAny2AnyRetrievalA2TTask(),
+    MockAny2AnyRetrievalA2ATask(),
+    MockAudioReranking(),
+    MockAudioClassification(),
+    MockAudioClassificationCrossVal(),
+    MockAudioPairClassification(),
+]
+
 MOCK_MIEB_TASK_GRID_AS_STRING = [
     t.metadata.name if isinstance(t, AbsTask) else t for t in MOCK_MIEB_TASK_GRID
 ]
@@ -145,7 +168,7 @@ MOCK_MIEB_TASK_REGISTRY = {
     task.metadata.name: type(task) for task in MOCK_MIEB_TASK_GRID
 }
 
-ALL_TASK_TEST_GRID = MOCK_TASK_TEST_GRID + MOCK_MIEB_TASK_GRID
+ALL_TASK_TEST_GRID = MOCK_TASK_TEST_GRID + MOCK_MIEB_TASK_GRID + MOCK_MAEB_TASK_GRID
 
 ALL_TASK_TEST_GRID_AS_STRING = [
     t.metadata.name if isinstance(t, AbsTask) else t for t in ALL_TASK_TEST_GRID

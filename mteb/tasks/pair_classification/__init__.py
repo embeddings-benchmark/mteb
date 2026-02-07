@@ -15,3 +15,4 @@ from .por import *
 from .rus import *
 from .vie import *
 from .zho import *
+from .zxx import *

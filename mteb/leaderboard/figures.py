@@ -68,13 +68,25 @@ def _process_max_tokens(x):
 
 models_to_annotate = [
     "all-MiniLM-L6-v2",
+    "clap-htsat-fused",
+    "e5-v",
+    "EVA02-CLIP-bigE-14-plus",
     "GritLM-7B",
     "LaBSE",
+    "larger_clap_general",
+    "LCO-Embedding-Omni-3B",
+    "LCO-Embedding-Omni-7B",
+    "MuQ-MuLan-large",
     "multilingual-e5-large-instruct",
-    "EVA02-CLIP-bigE-14-plus",
-    "voyage-multimodal-3",
-    "e5-v",
+    "Qwen2-Audio-7B",
     "VLM2Vec-Full",
+    "voyage-multimodal-3",
+    "wav2clip",
+    "wav2vec2-xls-r-1b",
+    "wavlm-base-plus-svmsclap-2023",
+    "whisper-large-v3",
+    "whisper-medium",
+    "yamnet",
 ]
 
 
@@ -192,6 +204,16 @@ task_types.remove("InstructionRetrieval")
 # Not displayed, because the scores are negative,
 # doesn't work well with the radar chart.
 
+# Create a mapping for task types that lose digits when processed by _split_on_capital
+# e.g., "Any2AnyRetrieval" -> "Any Any Retrieval" -> "AnyAnyRetrieval" (loses the "2")
+_task_type_normalized = {t: "".join(t.split()) for t in task_types}
+# Add reverse mappings for task types with digits that get lost
+# "AnyAnyRetrieval" should also match to "Any2AnyRetrieval"
+_task_type_aliases = {
+    "AnyAnyRetrieval": "Any2AnyRetrieval",
+    "AnyAnyMultilingualRetrieval": "Any2AnyMultilingualRetrieval",
+}
+
 line_colors = [
     "#EE4266",
     "#00a6ed",
@@ -208,13 +230,28 @@ fill_colors = [
 ]
 
 
+def _is_task_type_column(column: str) -> bool:
+    """Check if a column name corresponds to a task type.
+
+    Handles cases where task types with digits (e.g., Any2AnyRetrieval) become
+    column names without digits (e.g., "Any Any Retrieval") after _split_on_capital.
+    """
+    normalized = "".join(column.split())
+    if normalized in task_types:
+        return True
+    # Check aliases for task types that lose digits
+    if normalized in _task_type_aliases:
+        return True
+    return False
+
+
 @_failsafe_plot
 def _radar_chart(df: pd.DataFrame) -> go.Figure:
     df = df.copy()
     df["Model"] = df["Model"].map(_parse_model_name)
-    # Remove whitespace
+    # Remove whitespace and match to task types
     task_type_columns = [
-        column for column in df.columns if "".join(column.split()) in task_types
+        column for column in df.columns if _is_task_type_column(column)
     ]
     if len(task_type_columns) <= 1:
         raise ValueError(

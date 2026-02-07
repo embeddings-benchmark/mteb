@@ -5,6 +5,7 @@ from .masakha_news_clustering_s2s import MasakhaNEWSClusteringS2S
 from .mlsum_clustering_p2p import MLSUMClusteringP2P, MLSUMClusteringP2PFast
 from .mlsum_clustering_s2s import MLSUMClusteringS2S, MLSUMClusteringS2SFast
 from .sib200_clustering_s2s import SIB200ClusteringFast
+from .vox_populi_gender_clustering import VoxPopuliGenderClustering
 from .wiki_clustering_p2p import WikiClusteringFastP2P, WikiClusteringP2P
 
 __all__ = [
@@ -17,6 +18,7 @@ __all__ = [
     "MasakhaNEWSClusteringP2P",
     "MasakhaNEWSClusteringS2S",
     "SIB200ClusteringFast",
+    "VoxPopuliGenderClustering",
     "WikiClusteringFastP2P",
     "WikiClusteringP2P",
 ]

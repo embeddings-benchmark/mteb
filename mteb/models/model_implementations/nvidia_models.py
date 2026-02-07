@@ -6,12 +6,11 @@ from typing import TYPE_CHECKING, Any
 import torch
 import torch.nn.functional as F
 from packaging.version import Version
-from tqdm import tqdm
+from tqdm.auto import tqdm
 from transformers import AutoModel, AutoTokenizer
 from transformers import __version__ as transformers_version
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import CrossEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
