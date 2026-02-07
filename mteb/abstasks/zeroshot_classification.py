@@ -83,6 +83,8 @@ class AbsTaskZeroShotClassification(AbsTask):
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Keep only eval splits. Zero-shot tasks don't need train splits."""
+        if self.dataset is None:
+            return
         splits_to_keep = set(self.metadata.eval_splits)
         for split in list(self.dataset.keys()):
             if split not in splits_to_keep:
