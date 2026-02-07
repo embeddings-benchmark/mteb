@@ -17,7 +17,7 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="ndcg_at_10",
-        date=None,  # no date specified.
+        date=("2023-02-01", "2023-02-28"),  # publication year
         domains=["Encyclopaedic", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",

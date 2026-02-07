@@ -19,7 +19,7 @@ class SyntecRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="ndcg_at_10",
-        date=None,  # not specified
+        date=("2024-01-01", "2024-12-31"),  # publication year
         domains=["Legal", "Written"],
         task_subtypes=[],
         license="not specified",

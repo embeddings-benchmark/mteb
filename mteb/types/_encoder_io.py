@@ -27,7 +27,7 @@ class EncodeKwargs(TypedDict):
 
 
 # --- Output types ---
-Array = NDArray[np.floating | np.integer | np.bool] | torch.Tensor
+Array = NDArray[np.floating | np.integer | np.bool_] | torch.Tensor
 """General array type, can be a numpy array (float, int, or bool) or a torch tensor."""
 
 

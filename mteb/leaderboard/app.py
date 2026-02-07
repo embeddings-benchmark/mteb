@@ -237,7 +237,7 @@ def _format_list(props: list[str]):
     return ", ".join(props)
 
 
-def _update_task_info(task_names: str) -> gr.DataFrame:
+def _update_task_info(task_names: str) -> pd.DataFrame:
     tasks = mteb.get_tasks(tasks=task_names)
     df = tasks.to_dataframe(
         properties=[
@@ -271,12 +271,7 @@ def _update_task_info(task_names: str) -> gr.DataFrame:
         }
     )
     df = df.drop(columns="reference")
-    return gr.DataFrame(
-        df,
-        datatype=["markdown"] + ["str"] * (len(df.columns) - 1),
-        buttons=["copy", "fullscreen"],
-        show_search="filter",
-    )
+    return df
 
 
 # Model sizes in million parameters
@@ -607,9 +602,13 @@ def get_leaderboard_app(
         models = gr.State(filtered_models)
         with gr.Row():
             with gr.Column(scale=1):
-                description = gr.Markdown(  # noqa: F841
-                    _update_description,
-                    inputs=[benchmark_select],
+                description = gr.Markdown(
+                    _update_description(
+                        default_benchmark.name,
+                        sorted(default_results.languages),
+                        sorted(default_results.task_types),
+                        sorted(default_results.domains),
+                    )
                 )
 
             with gr.Column(scale=1):
@@ -748,7 +747,12 @@ def get_leaderboard_app(
                 outputs=[download_per_language],
             )
         with gr.Tab("Task information"):
-            task_info_table = gr.DataFrame(_update_task_info, inputs=[task_select])  # noqa: F841
+            task_info_table = gr.DataFrame(
+                _update_task_info(sorted(default_results.task_names)),
+                datatype=["markdown"] + ["str"] * 6,
+                buttons=["copy", "fullscreen"],
+                show_search="filter",
+            )
 
         # This sets the benchmark from the URL query parameters
         demo.load(_set_benchmark_on_load, inputs=[], outputs=[benchmark_select])
@@ -776,6 +780,35 @@ def get_leaderboard_app(
                 initial_models,
             )
 
+        benchmark_select.change(
+            on_benchmark_select,
+            inputs=[benchmark_select],
+            outputs=[
+                lang_select,
+                domain_select,
+                type_select,
+                modality_select,
+                task_select,
+                scores,
+                zero_shot,
+                models,
+            ],
+        )
+        for trigger in [lang_select, type_select, domain_select]:
+            trigger.change(
+                _update_description,
+                inputs=[benchmark_select, lang_select, type_select, domain_select],
+                outputs=[description],
+                preprocess=False,
+                show_progress="hidden",
+            )
+        task_select.change(
+            _update_task_info,
+            inputs=[task_select],
+            outputs=[task_info_table],
+            preprocess=False,
+        )
+
         @cachetools.cached(
             cache={},
             key=lambda benchmark_name, languages: hash(
@@ -791,6 +824,13 @@ def get_leaderboard_app(
             elapsed = time.time() - start_time
             logger.debug(f"update_scores callback: {elapsed}s")
             return scores
+
+        lang_select.input(
+            update_scores_on_lang_change,
+            inputs=[benchmark_select, lang_select],
+            outputs=[scores],
+            preprocess=False,
+        )
 
         def update_task_list(
             benchmark_name, type_select, domain_select, lang_select, modality_select
@@ -817,6 +857,7 @@ def get_leaderboard_app(
                 modality_select,
             ],
             outputs=[task_select],
+            preprocess=False,
         )
         domain_task_event = domain_select.input(
             update_task_list,
@@ -828,6 +869,7 @@ def get_leaderboard_app(
                 modality_select,
             ],
             outputs=[task_select],
+            preprocess=False,
         )
         lang_task_event = lang_select.input(
             update_task_list,
@@ -839,6 +881,7 @@ def get_leaderboard_app(
                 modality_select,
             ],
             outputs=[task_select],
+            preprocess=False,
         )
         modality_task_event = modality_select.input(
             update_task_list,
@@ -850,6 +893,7 @@ def get_leaderboard_app(
                 modality_select,
             ],
             outputs=[task_select],
+            preprocess=False,
         )
 
         # Cancel pending filter events when benchmark changes to prevent
@@ -939,6 +983,7 @@ def get_leaderboard_app(
                 model_type_select,
             ],
             outputs=[models],
+            preprocess=False,
         )
 
         task_select.change(
@@ -954,6 +999,7 @@ def get_leaderboard_app(
                 model_type_select,
             ],
             outputs=[models],
+            preprocess=False,
         )
         availability.input(
             update_models,
@@ -968,6 +1014,7 @@ def get_leaderboard_app(
                 model_type_select,
             ],
             outputs=[models],
+            preprocess=False,
         )
         compatibility.input(
             update_models,
@@ -982,6 +1029,7 @@ def get_leaderboard_app(
                 model_type_select,
             ],
             outputs=[models],
+            preprocess=False,
         )
         instructions.input(
             update_models,
@@ -996,6 +1044,7 @@ def get_leaderboard_app(
                 model_type_select,
             ],
             outputs=[models],
+            preprocess=False,
         )
         max_model_size.change(
             update_models,
@@ -1010,6 +1059,7 @@ def get_leaderboard_app(
                 model_type_select,
             ],
             outputs=[models],
+            preprocess=False,
         )
         zero_shot.change(
             update_models,
@@ -1024,6 +1074,7 @@ def get_leaderboard_app(
                 model_type_select,
             ],
             outputs=[models],
+            preprocess=False,
         )
         model_type_select.change(
             update_models,
@@ -1038,6 +1089,7 @@ def get_leaderboard_app(
                 model_type_select,
             ],
             outputs=[models],
+            preprocess=False,
         )
 
         def _cache_key_for_update_tables(scores, tasks, models_to_keep, benchmark_name):
@@ -1133,6 +1185,7 @@ def get_leaderboard_app(
                     per_language_table,
                     language_tab,
                 ],
+                preprocess=False,
             )
 
         gr.Markdown(ACKNOWLEDGEMENT, elem_id="ack_markdown")
