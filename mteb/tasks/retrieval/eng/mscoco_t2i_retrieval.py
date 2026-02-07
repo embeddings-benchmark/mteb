@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -36,3 +38,9 @@ class MSCOCOT2IRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Identify the image showcasing the described everyday scene."},
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        # image contain only None
+        self.dataset["default"]["test"]["queries"] = self.dataset["default"]["test"][
+            "queries"
+        ].remove_columns("image")
