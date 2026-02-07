@@ -558,9 +558,17 @@ def create_dataloader(
 
 
 class AudioCollator:
+    """Collator for audio data that resamples audio to a target sampling rate and optionally truncates to a maximum number of samples."""
+
     def __init__(
         self, target_sampling_rate: int, max_samples: int | None = None
     ) -> None:
+        """Initialize the collator.
+
+        Args:
+            target_sampling_rate: The sampling rate to resample the audio to.
+            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
+        """
         self.target_sampling_rate = target_sampling_rate
         self.max_samples = max_samples
 
@@ -577,6 +585,13 @@ class AudioCollator:
         target_sampling_rate: int,
         max_samples: int | None = None,
     ) -> BatchedInput:
+        """Resample a batch of audio inputs to a target sampling rate and optionally truncate to a maximum number of samples.
+
+        Args:
+            inputs: A list of dictionaries containing audio data under the "audio" key, where each audio is a dictionary with "array" and "sampling_rate" keys.
+            target_sampling_rate: The sampling rate to resample the audio to.
+            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
+        """
         collated_inputs = []
         for row in inputs:
             audio_array = AudioCollator.resample_audio(
@@ -593,11 +608,18 @@ class AudioCollator:
 
     @staticmethod
     def resample_audio(
-        row: dict[str, Any],
+        audio: dict[str, Any],
         target_sampling_rate: int,
         max_samples: int | None = None,
     ) -> np.typing.NDArray[np.floating]:
-        audio = row["audio"]
+        """Resample an audio input to a target sampling rate and optionally truncate to a maximum number of samples.
+
+        Args:
+            audio: A list of dictionaries containing audio data under the "audio" key, where each audio is a dictionary with "array" and "sampling_rate" keys.
+            target_sampling_rate: The sampling rate to resample the audio to.
+            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
+        """
+        audio = audio["audio"]
         if audio["sampling_rate"] != target_sampling_rate:
             warnings.warn(
                 f"Resampling audio from {audio['sampling_rate']} Hz to {target_sampling_rate} Hz."
