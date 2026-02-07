@@ -5,6 +5,7 @@ import warnings
 from functools import lru_cache
 from typing import TYPE_CHECKING, Any, cast
 
+import numpy as np
 import torch
 from datasets import Dataset, Image
 from torch.utils.data import DataLoader, default_collate
@@ -16,8 +17,6 @@ from mteb.types import (
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-
-    import numpy as np
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import (
@@ -306,7 +305,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     Returns:
         A collated dictionary.
     """
-    collated: dict[str, Any] = {}
+    collated = {}
     for key in batch[0]:
         if key in (
             "image",  # images can be with different sizes
@@ -318,7 +317,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
             if any(item[key] is None for item in batch):
                 raise ValueError(f"Found None in batch for key '{key}'")
             collated[key] = default_collate([item[key] for item in batch])
-    return collated
+    return collated  # type: ignore[return-value]
 
 
 def _create_image_dataloader(
@@ -326,7 +325,7 @@ def _create_image_dataloader(
     image_column_name: str | None = None,
     batch_size: int = 32,
     transform: Callable[[Any], Any] | None = None,
-    collate_fn: Callable[[list[dict[str, Any]]], dict[str, Any]] = _custom_collate_fn,
+    collate_fn: Callable[[list[dict[str, Any]]], BatchedInput] = _custom_collate_fn,
     num_proc: int | None = None,
 ) -> DataLoader[ImageInput]:
     """Creates a DataLoader with the image dataset prepared using the explicit transformation.
@@ -601,7 +600,7 @@ class AudioCollator:
             )
             row["audio"] = {"array": audio_array, "sample_rate": target_sampling_rate}
             collated_inputs.append(row)
-        return {
+        return {  # type: ignore[return-value]
             key: [row[key] for row in collated_inputs]
             for key in collated_inputs[0].keys()
         }
@@ -636,7 +635,7 @@ class AudioCollator:
 
         # Convert to mono if needed
         if audio_array.dim() > 1 and audio_array.shape[0] > 1:
-            audio_array = torch.mean(audio_array, dim=0, keepdim=True)
+            audio_array = np.mean(audio_array, axis=0)
 
         if max_samples is not None and len(audio_array) > max_samples:
             audio_array = audio_array[:max_samples]

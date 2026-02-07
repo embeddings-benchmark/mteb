@@ -395,6 +395,7 @@ module = [
     "sklearn.*",
     "faiss",
     "vllm",
+    "torchaudio",
 ]
 ignore_missing_imports = true
 
