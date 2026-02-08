@@ -450,7 +450,11 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
 
     default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
     default_results = all_benchmark_results[default_benchmark.name]
-    default_task_types = set(default_results.task_types)
+    default_task_types = {
+        task_type
+        for task_type in default_results.task_types
+        if task_type != "InstructionRetrieval"
+    }
     display_radar_chart = len(default_task_types) > 1
 
     logger.info("Step 4/7: Filtering models...")
@@ -746,7 +750,12 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 initial_models,
             ) = _cache_on_benchmark_select(benchmark_name, all_benchmark_results)
             benchmark_results = all_benchmark_results[benchmark_name]
-            display_radar = len(set(benchmark_results.task_types)) > 1
+            eligible_task_types = {
+                task_type
+                for task_type in benchmark_results.task_types
+                if task_type != "InstructionRetrieval"
+            }
+            display_radar = len(eligible_task_types) > 1
             return (
                 gr.update(choices=languages, value=languages),
                 gr.update(choices=domains, value=domains),
