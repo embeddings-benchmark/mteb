@@ -81,12 +81,14 @@ class ResultCache:
             else self.cache_path / "remote" / "results"
         )
 
+        experiment_name = None
         if isinstance(model_name, ModelMeta):
             if model_revision is not None:
                 logger.warning(
                     "model_revision is ignored when model_name is a ModelMeta object"
                 )
             model_revision = model_name.revision
+            experiment_name = model_name.experiment_name()
             model_name = model_name.model_name_as_path()
         elif isinstance(model_name, str):
             model_name = model_name.replace("/", "__").replace(" ", "_")
@@ -110,6 +112,8 @@ class ResultCache:
                     revisions.sort(key=lambda p: p.stat().st_mtime, reverse=True)
                 model_revision = revisions[0].name
 
+        if experiment_name:
+            return model_path / model_revision / experiment_name / f"{task_name}.json"
         return model_path / model_revision / f"{task_name}.json"
 
     def load_task_result(
