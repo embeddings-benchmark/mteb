@@ -12,7 +12,7 @@ class OxfordPetsClassification(AbsTaskClassification):
         description="Classifying animal images.",
         reference="https://ieeexplore.ieee.org/abstract/document/6248092",
         dataset={
-            "path": "isaacchung/OxfordPets",
+            "path": "mteb/OxfordPets",
             "revision": "557b480fae8d69247be74d9503b378a09425096f",
         },
         type="ImageClassification",

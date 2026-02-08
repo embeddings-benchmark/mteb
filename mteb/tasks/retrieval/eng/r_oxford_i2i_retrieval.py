@@ -12,8 +12,8 @@ class ROxfordEasyI2IRetrieval(AbsTaskRetrieval):
         description="Retrieve photos of landmarks in Oxford, UK.",
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",
         dataset={
-            "path": "JamieSJS/r-oxford-easy-multi",
-            "revision": "4c167c3ce529f19457c9b8e694258cc6cf8e7cc7",
+            "path": "mteb/r-oxford-easy-multi",
+            "revision": "063cf78b598275e0454311a329651eb708c6ccd7",
         },
         type="Any2AnyRetrieval",
         category="i2i",
@@ -47,8 +47,8 @@ class ROxfordMediumI2IRetrieval(AbsTaskRetrieval):
         description="Retrieve photos of landmarks in Oxford, UK.",
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",
         dataset={
-            "path": "JamieSJS/r-oxford-medium-multi",
-            "revision": "83bd440268e200a4f60313070618e3f45000fa94",
+            "path": "mteb/r-oxford-medium-multi",
+            "revision": "b2f6a469e6d8126872049711e24c191f40698b04",
         },
         type="Any2AnyRetrieval",
         category="i2i",
@@ -82,8 +82,8 @@ class ROxfordHardI2IRetrieval(AbsTaskRetrieval):
         description="Retrieve photos of landmarks in Oxford, UK.",
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",
         dataset={
-            "path": "JamieSJS/r-oxford-hard-multi",
-            "revision": "fc7c4ae6655b1e6b132f3b262a359acef42dfce8",
+            "path": "mteb/r-oxford-hard-multi",
+            "revision": "d9d88e44ebba295dc660a2c7b1ce618a7e953375",
         },
         type="Any2AnyRetrieval",
         category="i2i",

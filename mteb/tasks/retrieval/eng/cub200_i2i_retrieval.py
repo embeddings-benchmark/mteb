@@ -8,7 +8,7 @@ class CUB200I2I(AbsTaskRetrieval):
         description="Retrieve bird images from 200 classes.",
         reference="https://www.florian-schroff.de/publications/CUB-200.pdf",
         dataset={
-            "path": "isaacchung/cub200_retrieval",
+            "path": "mteb/cub200_retrieval",
             "revision": "ad08c1307b15a226bf1b64e62656a17f1f85f7ec",
         },
         type="Any2AnyRetrieval",

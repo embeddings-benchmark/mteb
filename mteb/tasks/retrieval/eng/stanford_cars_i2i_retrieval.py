@@ -8,7 +8,7 @@ class StanfordCarsI2I(AbsTaskRetrieval):
         description="Retrieve car images from 196 makes.",
         reference="https://pure.mpg.de/rest/items/item_2029263/component/file_2029262/content",
         dataset={
-            "path": "isaacchung/stanford_cars_retrieval",
+            "path": "mteb/stanford_cars_retrieval",
             "revision": "b27a0612211af3598bd11fe28af20928f20cce06",
         },
         type="Any2AnyRetrieval",

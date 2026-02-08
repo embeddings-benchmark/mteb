@@ -8,8 +8,8 @@ class NIGHTSI2IRetrieval(AbsTaskRetrieval):
         description="Retrieval identical image to the given image.",
         reference="https://proceedings.neurips.cc/paper_files/paper/2023/hash/9f09f316a3eaf59d9ced5ffaefe97e0f-Abstract-Conference.html",
         dataset={
-            "path": "MRBench/mbeir_nights_task4",
-            "revision": "c9583e052be7ad52d870c62a207a2e887ba9b8aa",
+            "path": "mteb/mbeir_nights_task4",
+            "revision": "c798fa2f5173dc9fe0c727fd0abfd2f94cbc2f23",
         },
         type="Any2AnyRetrieval",
         category="i2i",

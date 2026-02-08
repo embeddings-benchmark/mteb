@@ -8,8 +8,8 @@ class VisualNewsT2IRetrieval(AbsTaskRetrieval):
         description="Retrieve news images with captions.",
         reference="https://aclanthology.org/2021.emnlp-main.542/",
         dataset={
-            "path": "MRBench/mbeir_visualnews_task0",
-            "revision": "94c519d850dba2b0058c2fc9b5da6142a59aa285",
+            "path": "mteb/mbeir_visualnews_task0",
+            "revision": "6ba75433fbeb6a06d9fccb27031bcafdfb8b5de1",
         },
         type="Any2AnyRetrieval",
         category="t2i",

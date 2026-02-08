@@ -8,8 +8,8 @@ class ImageNetDog15Clustering(AbsTaskClusteringLegacy):
         description="Clustering images from a 15-class dogs-only subset of the dog classes in ImageNet.",
         reference="http://vision.stanford.edu/aditya86/ImageNetDogs/main.html",
         dataset={
-            "path": "JamieSJS/imagenet-dog-15",
-            "revision": "bfb6ad3b2109d26c9daddf14f98d315daa35ee72",
+            "path": "mteb/imagenet-dog-15",
+            "revision": "16b4f3ff0eba385e23756afc3fdefc460a5c3444",
         },
         type="ImageClustering",
         category="i2c",
@@ -48,8 +48,8 @@ class ImageNet10Clustering(AbsTaskClusteringLegacy):
         description="Clustering images from an 10-class subset of ImageNet which are generally easy to distinguish.",
         reference="https://www.kaggle.com/datasets/liusha249/imagenet10",
         dataset={
-            "path": "JamieSJS/imagenet-10",
-            "revision": "88f8a6d47c257895094c5ad81e67ba751771fc99",
+            "path": "mteb/imagenet-10",
+            "revision": "6ee8458695d029cc225d046deb33342dfca9d4ce",
         },
         type="ImageClustering",
         category="i2t",
