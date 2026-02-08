@@ -131,6 +131,7 @@ class ModelMeta(BaseModel):
         model_type: A list of strings representing the type of model.
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
+        _experiment_params: **DO NOT SET** A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -163,6 +164,7 @@ class ModelMeta(BaseModel):
     model_type: list[MODEL_TYPES] = ["dense"]
     citation: str | None = None
     contacts: list[str] | None = None
+    _experiment_params: dict[str, Any] | None = None
 
     @model_validator(mode="before")
     @classmethod
@@ -283,6 +285,8 @@ class ModelMeta(BaseModel):
         if self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
 
+        self._experiment_params = kwargs if len(kwargs) > 0 else None
+
         # Allow overwrites
         _kwargs = self.loader_kwargs.copy()
         _kwargs.update(kwargs)
@@ -301,6 +305,14 @@ class ModelMeta(BaseModel):
         if self.name is None:
             raise ValueError("Model name is not set")
         return self.name.replace("/", "__").replace(" ", "_")
+
+    def experiment_name(self) -> str | None:
+        """Create a string representation of the experiment parameters sorted by key"""
+        if self._experiment_params is None or len(self._experiment_params) == 0:
+            return None
+        return "__".join(
+            f"{key}_{value}" for key, value in sorted(self._experiment_params.items())
+        )
 
     @classmethod
     def _detect_cross_encoder_or_dense(
@@ -864,7 +876,7 @@ class ModelMeta(BaseModel):
 
     def to_python(self) -> str:
         """Returns a string representation of the model."""
-        return _pydantic_instance_to_code(self)
+        return _pydantic_instance_to_code(self, exclude_fields=["_experiment_params"])
 
 
 def _pydantic_instance_to_code(
@@ -872,6 +884,7 @@ def _pydantic_instance_to_code(
     indent: int = 4,
     *,
     only_set_fields: bool = False,
+    exclude_fields: Sequence[str] | None = None,
 ) -> str:
     """Convert a Pydantic model instance into valid Python constructor code.
 
@@ -882,6 +895,7 @@ def _pydantic_instance_to_code(
         model: The Pydantic model to convert.
         indent: The indentation to use.
         only_set_fields: If True, only fields explicitly provided at model construction time
+        exclude_fields: Fields to exclude from the output, regardless of whether they were set or not.
     """
     cls_name = model.__class__.__name__
     pad = " " * indent
@@ -895,6 +909,8 @@ def _pydantic_instance_to_code(
         field_names = model_fields
 
     for field_name in field_names:
+        if exclude_fields and field_name in exclude_fields:
+            continue
         value = getattr(model, field_name)
         value_code = _value_to_code(value, indent)
         lines.append(f"{pad}{field_name}={value_code},")
