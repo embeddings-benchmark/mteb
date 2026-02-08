@@ -8,7 +8,7 @@ class FORBI2I(AbsTaskRetrieval):
         description="Retrieve flat object images from 8 classes.",
         reference="https://github.com/pxiangwu/FORB",
         dataset={
-            "path": "isaacchung/forb_retrieval",
+            "path": "mteb/forb_retrieval",
             "revision": "26ab4bd972854becada339afc80f5f3ffc047e2b",
         },
         type="Any2AnyRetrieval",
