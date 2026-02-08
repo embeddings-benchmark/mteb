@@ -450,6 +450,12 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
 
     default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
     default_results = all_benchmark_results[default_benchmark.name]
+    default_task_types = {
+        task_type
+        for task_type in default_results.task_types
+        if task_type != "InstructionRetrieval"
+    }
+    display_radar_chart = len(default_task_types) > 1
 
     logger.info("Step 4/7: Filtering models...")
     filter_start = time.time()
@@ -694,7 +700,9 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 _performance_size_plot, inputs=[summary_table], outputs=[plot]
             )
 
-        with gr.Tab("Performance per Task Type") as radar_plot_tab:
+        with gr.Tab(
+            "Performance per Task Type", visible=display_radar_chart
+        ) as radar_plot_tab:
             radar_plot = gr.Plot(_radar_chart, inputs=[summary_table])
             gr.Markdown(
                 "*We only display TOP 5 models that have been run on all task types in the benchmark*"
@@ -741,7 +749,13 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 show_zero_shot,
                 initial_models,
             ) = _cache_on_benchmark_select(benchmark_name, all_benchmark_results)
-
+            benchmark_results = all_benchmark_results[benchmark_name]
+            eligible_task_types = {
+                task_type
+                for task_type in benchmark_results.task_types
+                if task_type != "InstructionRetrieval"
+            }
+            display_radar = len(eligible_task_types) > 1
             return (
                 gr.update(choices=languages, value=languages),
                 gr.update(choices=domains, value=domains),
@@ -751,6 +765,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 scores,
                 gr.update(visible=show_zero_shot),
                 initial_models,
+                gr.update(visible=display_radar),
             )
 
         benchmark_select.change(
@@ -765,6 +780,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 scores,
                 zero_shot,
                 models,
+                radar_plot_tab,
             ],
         )
         for trigger in [lang_select, type_select, domain_select]:
@@ -1147,6 +1163,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             bench_scores,
             zero_shot,
             bench_initial_models,
+            display_radar,
         ) = on_benchmark_select(benchmark.name)
         # Call update_tables to populate cache (simulating models.change trigger)
         update_tables(bench_scores, bench_tasks, bench_initial_models, benchmark.name)
