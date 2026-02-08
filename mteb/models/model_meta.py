@@ -363,6 +363,7 @@ class ModelMeta(BaseModel):
         cls,
         model_name: str | None,
         revision: str | None = None,
+        fetch_from_hf: bool = True,
     ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
         """Detect the model type and appropriate loader based on HuggingFace Hub configuration files.
 
@@ -381,6 +382,8 @@ class ModelMeta(BaseModel):
         Args:
             model_name: The HuggingFace model name (can be None)
             revision: The model revision
+            fetch_from_hf: Whether to fetch from HuggingFace Hub
+
 
         Returns:
             A tuple of (loader_function, model_type) where:
@@ -389,7 +392,7 @@ class ModelMeta(BaseModel):
         """
         from mteb.models import CrossEncoderWrapper, sentence_transformers_loader
 
-        if not model_name or not _repo_exists(model_name):
+        if not fetch_from_hf or not model_name or not _repo_exists(model_name):
             return sentence_transformers_loader, "dense"
 
         try:
@@ -423,6 +426,7 @@ class ModelMeta(BaseModel):
         model_name: str | None,
         revision: str | None = None,
         fill_missing: bool = True,
+        fetch_from_hf: bool = True,
         compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta from a HuggingFace model name.
@@ -431,6 +435,7 @@ class ModelMeta(BaseModel):
             model_name: The HuggingFace model name.
             revision: Revision of the model
             fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            fetch_from_hf: Whether to fetch additional metadata from HuggingFace Hub.
             compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
@@ -448,18 +453,21 @@ class ModelMeta(BaseModel):
             )
             fill_missing = compute_metadata
 
-        loader, model_type = cls._detect_model_type_and_loader(model_name, revision)
+        loader, model_type = cls._detect_model_type_and_loader(
+            model_name, revision, fetch_from_hf
+        )
 
         frameworks: list[FRAMEWORKS] = ["PyTorch"]
         model_license = None
         reference = None
         n_parameters = None
+        n_embedding_parameters = None
         memory_usage_mb = None
         release_date = None
         embedding_dim = None
         max_tokens = None
 
-        if model_name and fill_missing and _repo_exists(model_name):
+        if model_name and fill_missing and fetch_from_hf and _repo_exists(model_name):
             reference = "https://huggingface.co/" + model_name
             card = ModelCard.load(model_name)
             card_data: ModelCardData = card.data
@@ -482,6 +490,9 @@ class ModelMeta(BaseModel):
             release_date = cls.fetch_release_date(model_name)
             model_license = card_data.license if card_data.license != "other" else None
             n_parameters = cls._calculate_num_parameters_from_hub(model_name)
+            n_embedding_parameters = cls._estimate_embedding_parameters_from_hub(
+                model_name, revision
+            )
             memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
             if model_config and hasattr(model_config, "hidden_size"):
                 embedding_dim = model_config.hidden_size
@@ -501,6 +512,7 @@ class ModelMeta(BaseModel):
             training_datasets=None,
             similarity_fn_name=None,
             n_parameters=n_parameters,
+            n_embedding_parameters=n_embedding_parameters,
             memory_usage_mb=memory_usage_mb,
             max_tokens=max_tokens,
             embed_dim=embedding_dim,
@@ -517,6 +529,7 @@ class ModelMeta(BaseModel):
         model: SentenceTransformer,
         revision: str | None = None,
         fill_missing: bool = False,
+        fetch_from_hf: bool = True,
         compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta from a SentenceTransformer model.
@@ -525,6 +538,7 @@ class ModelMeta(BaseModel):
             model: SentenceTransformer model.
             revision: Revision of the model
             fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            fetch_from_hf: Whether to fetch metadata from HuggingFace Hub.
             compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
@@ -535,8 +549,13 @@ class ModelMeta(BaseModel):
             if model.model_card_data.model_name
             else model.model_card_data.base_model
         )
+
         meta = cls._from_hub(
-            name, revision, fill_missing=fill_missing, compute_metadata=compute_metadata
+            name,
+            revision,
+            fill_missing=fill_missing,
+            fetch_from_hf=fetch_from_hf,
+            compute_metadata=compute_metadata,
         )
         try:
             first = model[0]
@@ -545,7 +564,22 @@ class ModelMeta(BaseModel):
                 emb = first.auto_model.get_input_embeddings()
                 meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
         except Exception as e:
-            logger.warning(f"Could not calculate embedding parameters for {name}: {e}")
+            if fetch_from_hf:
+                logger.warning(
+                    f"Could not extract embedding parameters directly from model {name}. "
+                    f"Attempting to estimate from config using vocab_size * hidden_size heuristic. "
+                    f"Note that this is an approximation and might be incorrect for some model architectures. "
+                    f"Error: {e}"
+                )
+            else:
+                logger.warning(
+                    f"Could not extract embedding parameters directly from model {name}: Error: {e}"
+                )
+
+        if meta.n_embedding_parameters is None and fetch_from_hf:
+            meta.n_embedding_parameters = cls._estimate_embedding_parameters_from_hub(
+                name, revision
+            )
         meta.revision = model.model_card_data.base_model_revision or meta.revision
         meta.max_tokens = model.max_seq_length
         meta.embed_dim = model.get_sentence_embedding_dimension()
@@ -561,6 +595,7 @@ class ModelMeta(BaseModel):
         model: str,
         revision: str | None = None,
         fill_missing: bool = True,
+        fetch_from_hf: bool = True,
         compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta for model from HuggingFace hub.
@@ -569,6 +604,7 @@ class ModelMeta(BaseModel):
             model: Name of the model from HuggingFace hub. For example, `intfloat/multilingual-e5-large`
             revision: Revision of the model
             fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            fetch_from_hf: Whether to fetch metadata from HuggingFace Hub.
             compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
@@ -578,11 +614,12 @@ class ModelMeta(BaseModel):
             model,
             revision,
             fill_missing=fill_missing,
+            fetch_from_hf=fetch_from_hf,
             compute_metadata=compute_metadata,
         )
         meta.modalities = ["text"]
 
-        if model and fill_missing and _repo_exists(model):
+        if model and fill_missing and fetch_from_hf and _repo_exists(model):
             # have max_seq_length field
             sbert_config = _get_json_from_hub(
                 model, "sentence_bert_config.json", "model", revision=revision
@@ -612,6 +649,7 @@ class ModelMeta(BaseModel):
         model: CrossEncoder,
         revision: str | None = None,
         fill_missing: bool = False,
+        fetch_from_hf: bool = True,
         compute_metadata: bool | None = None,
     ) -> Self:
         """Generates a ModelMeta from a CrossEncoder.
@@ -620,6 +658,7 @@ class ModelMeta(BaseModel):
             model: The CrossEncoder model
             revision: Revision of the model
             fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+            fetch_from_hf: Whether to fetch metadata from HuggingFace Hub.
             compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
@@ -631,6 +670,7 @@ class ModelMeta(BaseModel):
             model.model.name_or_path,
             revision,
             fill_missing=fill_missing,
+            fetch_from_hf=fetch_from_hf,
             compute_metadata=compute_metadata,
         )
         try:
@@ -639,8 +679,21 @@ class ModelMeta(BaseModel):
             if isinstance(emb, nn.Embedding):
                 meta.n_embedding_parameters = int(np.prod(emb.weight.shape))
         except Exception as e:
-            logger.warning(
-                f"Could not calculate embedding parameters for {model.model.name_or_path}: {e}"
+            if fetch_from_hf:
+                logger.warning(
+                    f"Could not extract embedding parameters directly from model {model.model.name_or_path}. "
+                    f"Attempting to estimate from config using vocab_size * hidden_size heuristic. "
+                    f"Note that this is an approximation and might be incorrect for some model architectures. "
+                    f"Error: {e}"
+                )
+            else:
+                logger.warning(
+                    f"Could not extract embedding parameters directly from model {model.model.name_or_path}: Error: {e}"
+                )
+
+        if meta.n_embedding_parameters is None and fetch_from_hf:
+            meta.n_embedding_parameters = cls._estimate_embedding_parameters_from_hub(
+                model.model.name_or_path, revision
             )
         meta.revision = model.config._commit_hash or meta.revision
         meta.loader = CrossEncoderWrapper
@@ -755,6 +808,58 @@ class ModelMeta(BaseModel):
             Number of parameters in the model.
         """
         return self._calculate_num_parameters_from_hub(self.name)
+
+    @staticmethod
+    def _estimate_embedding_parameters_from_hub(
+        model_name: str | None = None, revision: str | None = None
+    ) -> int | None:
+        if not model_name:
+            return None
+
+        config = _get_json_from_hub(
+            model_name, "config.json", "model", revision=revision
+        )
+
+        if not config:
+            logger.warning(
+                f"Could not calculate embedding parameters for {model_name} as config.json could not be loaded"
+            )
+            return None
+
+        vocab_size = config.get("vocab_size")
+        if vocab_size is None and "text_config" in config:
+            vocab_size = config["text_config"].get("vocab_size")
+
+        hidden_size = config.get("hidden_size") or config.get("hidden_dim")
+        if hidden_size is None and "text_config" in config:
+            hidden_size = config["text_config"].get("hidden_size") or config[
+                "text_config"
+            ].get("hidden_dim")
+
+        if vocab_size is None and hidden_size is None:
+            logger.warning(
+                f"Could not calculate embedding parameters for {model_name} as both vocab_size and hidden_size/hidden_dim are missing from config"
+            )
+            return None
+        elif vocab_size is None:
+            logger.warning(
+                f"Could not calculate embedding parameters for {model_name} as vocab_size is missing from config"
+            )
+            return None
+        elif hidden_size is None:
+            logger.warning(
+                f"Could not calculate embedding parameters for {model_name} as hidden_size/hidden_dim is missing from config"
+            )
+            return None
+        return vocab_size * hidden_size
+
+    def estimate_embedding_parameters_from_hub(self) -> int | None:
+        """Calculate the number of embedding parameters from the model config (vocab_size * hidden_size).  Note that this is an heuristic that works for many models, but might be incorrect.
+
+        Returns:
+            Number of embedding parameters in the model.
+        """
+        return self._estimate_embedding_parameters_from_hub(self.name, self.revision)
 
     @staticmethod
     def _calculate_memory_usage_mb(
