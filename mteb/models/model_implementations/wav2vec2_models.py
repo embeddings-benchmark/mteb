@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-import warnings
 from typing import TYPE_CHECKING, Any
 
 import torch
 from tqdm.auto import tqdm
 from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2ForCTC, Wav2Vec2Model
 
+from mteb._create_dataloaders import AudioCollator
 from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -117,7 +117,7 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        import torchaudio
+        inputs.collate_fn = AudioCollator(self.sampling_rate)
 
         all_embeddings = []
 
@@ -125,23 +125,7 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
             inputs,
             disable=not show_progress_bar,
         ):
-            audio_arrays = []
-            for a in batch["audio"]:
-                array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate", None)
-                if sr is None:
-                    warnings.warn(
-                        f"No sampling_rate provided for an audio sample. "
-                        f"Assuming {self.sampling_rate} Hz (model default)."
-                    )
-                    sr = self.sampling_rate
-
-                if sr != self.sampling_rate:
-                    resampler = torchaudio.transforms.Resample(
-                        orig_freq=sr, new_freq=self.sampling_rate
-                    )
-                    array = resampler(array)
-                audio_arrays.append(array.numpy())
+            audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             feature_inputs = self.feature_extractor(
                 audio_arrays,

@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import logging
-import warnings
 from typing import TYPE_CHECKING, Any
 
 import torch
 from tqdm.auto import tqdm
 from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
 
+from mteb._create_dataloaders import AudioCollator
 from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -54,8 +54,6 @@ class Qwen2AudioWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        import torchaudio
-
         all_embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):
@@ -69,22 +67,12 @@ class Qwen2AudioWrapper(AbsEncoder):
                 cur_text = ""
                 audio_row = audio_list[i] if i < len(audio_list) else None
                 if audio_row is not None:
-                    array = torch.tensor(audio_row["array"], dtype=torch.float32)
-                    sr = audio_row.get("sampling_rate", None)
-                    if sr is None:
-                        warnings.warn(
-                            f"No sampling_rate provided for an audio sample. "
-                            f"Assuming {self.sampling_rate} Hz (model default)."
-                        )
-                        sr = self.sampling_rate
-
-                    if sr != self.sampling_rate:
-                        resampler = torchaudio.transforms.Resample(
-                            orig_freq=sr, new_freq=self.sampling_rate
-                        )
-                        array = resampler(array)
+                    array = AudioCollator.resample_audio(
+                        audio_row,
+                        self.sampling_rate,
+                    )
                     cur_text += "<|audio_bos|><|AUDIO|><|audio_eos|>"
-                    audio_arrays.append(array.numpy())
+                    audio_arrays.append(array)
 
                 text_row = text_list[i] if i < len(text_list) else None
                 if text_row is not None:

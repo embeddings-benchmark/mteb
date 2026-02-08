@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import warnings
 from typing import TYPE_CHECKING, Any
 
 import torch
 from tqdm.auto import tqdm
 
+from mteb._create_dataloaders import AudioCollator
 from mteb._requires_package import requires_audio_dependencies, requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -48,7 +48,7 @@ class CNN14Wrapper(AbsEncoder):
         )
 
         # SpeechBrain uses a 16kHz sampling rate for audio
-        self.sampling_rate = 16000
+        self.sampling_rate = 16_000
 
     def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:
         max_len = max(w.shape[0] for w in batch)
@@ -61,7 +61,7 @@ class CNN14Wrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        import torchaudio
+        inputs.collate_fn = AudioCollator(self.sampling_rate)
 
         all_embeddings = []
 
@@ -72,19 +72,6 @@ class CNN14Wrapper(AbsEncoder):
             audio_tensors = []
             for a in batch["audio"]:
                 array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate", None)
-                if sr is None:
-                    warnings.warn(
-                        f"No sampling_rate provided for an audio sample. "
-                        f"Assuming {self.sampling_rate} Hz (model default)."
-                    )
-                    sr = self.sampling_rate
-
-                if sr != self.sampling_rate:
-                    resampler = torchaudio.transforms.Resample(
-                        orig_freq=sr, new_freq=self.sampling_rate
-                    )
-                    array = resampler(array)
 
                 array = array.squeeze()
 
