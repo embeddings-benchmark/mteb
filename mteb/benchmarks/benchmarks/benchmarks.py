@@ -1073,6 +1073,7 @@ MTEB_INDIC = Benchmark(
     name="MTEB(Indic, v1)",
     aliases=["MTEB(Indic)"],
     display_name="Indic",
+    language_view="all",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/in.svg",
     tasks=MTEBTasks(
         get_tasks(
@@ -1164,6 +1165,7 @@ MTEB_EU = Benchmark(
     name="MTEB(Europe, v1)",
     aliases=["MTEB(Europe)"],
     display_name="European",
+    language_view="all",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/eu.svg",
     tasks=get_tasks(
         tasks=[
