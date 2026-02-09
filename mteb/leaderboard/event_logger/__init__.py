@@ -61,7 +61,6 @@ from .models import (
     TableSwitchEvent,
 )
 
-
 __all__ = [
     "BaseEvent",
     "BenchmarkChangeEvent",
