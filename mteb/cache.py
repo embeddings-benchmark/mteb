@@ -552,7 +552,6 @@ class ResultCache:
         cache_paths = self._filter_paths_by_model_and_revision(
             cache_paths,
             models=models,
-            load_experiments=load_experiments,
         )
         cache_paths = self._filter_paths_by_task(cache_paths, tasks=tasks)
 
@@ -653,7 +652,6 @@ class ResultCache:
     def _filter_paths_by_model_and_revision(
         paths: list[Path],
         models: Sequence[str] | Iterable[ModelMeta] | None = None,
-        load_experiments: LoadExperimentEnum = LoadExperimentEnum.NEVER,
     ) -> list[Path]:
         """Filter a list of paths by model name and optional revision.
 
@@ -670,10 +668,7 @@ class ResultCache:
                 (
                     m.model_name_as_path(),
                     m.revision or "no_revision_available",
-                    # if we pass always. Make experiment name None, since we want to load experiments, but we don't want to filter by experiment name from model meta
-                    m.experiment_name
-                    if load_experiments != LoadExperimentEnum.ALWAYS
-                    else None,
+                    m.experiment_name,
                 )
                 for m in models
             }
@@ -682,11 +677,7 @@ class ResultCache:
                 if _EXPERIMENTS_FOLDER_NAME in path.parts:
                     revision = path.parent.parent.parent.name
                     model_name = path.parent.parent.parent.parent.name
-                    experiment_name = (
-                        path.parent.name
-                        if load_experiments != LoadExperimentEnum.ALWAYS
-                        else None
-                    )
+                    experiment_name = path.parent.name
                 else:
                     revision = path.parent.name
                     model_name = path.parent.parent.name

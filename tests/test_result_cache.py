@@ -311,13 +311,13 @@ def test_load_experiment_results(tmp_path):
     assert only_named_experiment_res.model_results[0].experiment_name == "a_test"
 
     # load specific experiment with model meta filter. Ignored `load_experiments` since model meta filter should take precedence
+    # and results are filtered out by experiment name
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta],
         load_experiments=LoadExperimentEnum.ALWAYS,
-        experiment_names=["a_test__b_test2"],
+        experiment_names=["a_test"],
     )
-    assert len(model_meta_res.model_results) == 2
-    assert model_meta_res.model_results[1].experiment_name == "a_test__b_test2"
+    assert len(model_meta_res.model_results) == 0
 
     # load specific experiment with model meta filter
     model_meta_res = cache.load_results(
@@ -344,15 +344,6 @@ def test_load_experiment_results(tmp_path):
     # load experiments with model name filter
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta.name],
-        load_experiments=LoadExperimentEnum.ALWAYS,
-    )
-    assert len(model_meta_res.model_results) == 3
-
-    tmp_model_meta = model.mteb_model_meta.model_copy()
-    tmp_model_meta.experiment_params = None
-    # load experiments with model name filter
-    model_meta_res = cache.load_results(
-        models=[tmp_model_meta],
         load_experiments=LoadExperimentEnum.ALWAYS,
     )
     assert len(model_meta_res.model_results) == 3
