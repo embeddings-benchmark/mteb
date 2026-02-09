@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
 import warnings
@@ -307,12 +308,45 @@ class ModelMeta(BaseModel):
         return self.name.replace("/", "__").replace(" ", "_")
 
     def experiment_name(self) -> str | None:
-        """Create a string representation of the experiment parameters sorted by key"""
+        """Create a filesystem-safe string representation of the experiment parameters.
+
+        Uses deterministic serialization and hashing to ensure stable, bounded output.
+        """
         if self._experiment_params is None or len(self._experiment_params) == 0:
             return None
-        return "__".join(
-            f"{key}_{value}" for key, value in sorted(self._experiment_params.items())
+
+        invalid_chars = set('<>:"|?*\\/\0')
+
+        def _serialize_value(value: Any) -> str:
+            """Convert value to deterministic string representation."""
+            if isinstance(value, (str, int, float, bool)) or value is None:
+                value = str(value)
+                for invalid_char in invalid_chars:
+                    value = value.replace(invalid_char, "_")
+                return value
+            if isinstance(value, (list, tuple)):
+                return f"[{','.join(_serialize_value(v) for v in value)}]"
+            if isinstance(value, dict):
+                items = sorted(value.items())
+                return f"{{{','.join(f'{k}:{_serialize_value(v)}' for k, v in items)}}}"
+            if isinstance(value, Enum):
+                return f"{value.__class__.__name__}.{value.name}"
+            # For complex objects, use type name + hash
+            return f"{type(value).__name__}_{hash(str(value))}"
+
+        params_str = "__".join(
+            f"{key}_{_serialize_value(value)}"
+            for key, value in sorted(self._experiment_params.items())
         )
+
+        # If too long or contains invalid chars, use hash
+        max_length = 200
+
+        if len(params_str) > max_length or any(c in invalid_chars for c in params_str):
+            param_hash = hashlib.sha256(params_str.encode()).hexdigest()[:16]
+            return f"exp_{param_hash}"
+
+        return params_str
 
     @classmethod
     def _detect_cross_encoder_or_dense(
