@@ -312,6 +312,13 @@ class ModelMeta(BaseModel):
         """Create a filesystem-safe string representation of the experiment parameters.
 
         Uses deterministic serialization and hashing to ensure stable, bounded output.
+
+        Examples:
+            >>> import mteb
+            >>> model = mteb.get_model("baseline/random-encoder-baseline", param1="test")
+            >>>
+            >>> print(model.mteb_model_meta.experiment_name)
+            >>> # param1_test
         """
         return _get_experiment_name_from_params(
             experiment_params=self.experiment_params
