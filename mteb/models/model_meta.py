@@ -1063,9 +1063,24 @@ def _get_experiment_name_from_params(experiment_params) -> str | None:
             return f"{{{','.join(f'{k}:{_serialize_value(v)}' for k, v in items)}}}"
         if isinstance(value, Enum):
             return f"{value.__class__.__name__}.{value.name}"
-        # For complex objects, use type name + hash
-        digest = hashlib.sha256(str(value).encode("utf-8")).hexdigest()[:8]
-        return f"{type(value).__name__}_{digest}"
+
+        # Handle common scientific types
+        if hasattr(value, "__module__") and value.__module__ == "numpy":
+            # numpy arrays and scalars
+            return f"np_{hashlib.sha256(np.asarray(value).tobytes()).hexdigest()[:8]}"
+
+        # Handle pydantic models and dataclasses
+        if isinstance(value, BaseModel):
+            # Use model_dump for deterministic JSON representation
+            json_str = json.dumps(value.model_dump(), sort_keys=True)
+            digest = hashlib.sha256(json_str.encode("utf-8")).hexdigest()[:8]
+            return f"{value.__class__.__name__}_{digest}"
+
+        raise ValueError(
+            f"experiment_params contains non-serializable type {type(value).__name__}. "
+            f"Only JSON-serializable types (str, int, float, bool, list, dict, None), "
+            f"Enums, numpy arrays, and Pydantic models are supported."
+        )
 
     params_str = "__".join(
         f"{key}_{_serialize_value(value)}"
