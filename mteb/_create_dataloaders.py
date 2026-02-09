@@ -14,6 +14,7 @@ from mteb.types import (
     ConversationTurn,
     PromptType,
 )
+from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -598,7 +599,9 @@ class AudioCollator:
                 target_sampling_rate,
                 max_samples,
             )
-            row["audio"] = {"array": audio_array, "sample_rate": target_sampling_rate}
+            row["audio"] = AudioInputItem(
+                array=audio_array, sampling_rate=target_sampling_rate
+            )
             collated_inputs.append(row)
         return {  # type: ignore[return-value]
             key: [row[key] for row in collated_inputs]
@@ -620,7 +623,7 @@ class AudioCollator:
         """
         audio = audio["audio"]
         if audio["sampling_rate"] != target_sampling_rate:
-            warnings.warn(
+            logger.debug(
                 f"Resampling audio from {audio['sampling_rate']} Hz to {target_sampling_rate} Hz."
             )
             resampler = _get_resampler(
