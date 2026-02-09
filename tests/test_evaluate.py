@@ -316,6 +316,7 @@ def test_evaluate_experiment(tmp_path):
         Path("results")
         / "baseline__random-encoder-baseline"
         / "1"
+        / "experiments"
         / "test_param_123__test_param2_abc"
         / "MockClassificationTask.json"
     )
