@@ -634,11 +634,13 @@ class AudioCollator:
             audio_array = audio["array"]
 
         # Convert to mono if needed
-        if audio_array.dim() > 1 and audio_array.shape[0] > 1:
+        if audio_array.ndim > 1 and audio_array.shape[0] > 1:
             audio_array = np.mean(audio_array, axis=0)
 
-        if max_samples is not None and len(audio_array) > max_samples:
-            audio_array = audio_array[:max_samples]
+        if max_samples is not None:
+            num_samples = audio_array.shape[-1]
+            if num_samples > max_samples:
+                audio_array = audio_array[..., :max_samples]
         return audio_array
 
 
