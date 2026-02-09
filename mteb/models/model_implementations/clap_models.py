@@ -6,6 +6,7 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 from transformers import ClapModel, ClapProcessor
+from transformers.modeling_outputs import BaseModelOutputWithPooling
 
 from mteb._create_dataloaders import AudioCollator
 from mteb.models import ModelMeta
@@ -65,6 +66,8 @@ class ClapZeroShotWrapper(AbsEncoder):
 
             with torch.no_grad():
                 audio_features = self.model.get_audio_features(**features)
+                if isinstance(audio_features, BaseModelOutputWithPooling):
+                    audio_features = audio_features.pooler_output
                 audio_features = audio_features / audio_features.norm(
                     dim=-1, keepdim=True
                 )
