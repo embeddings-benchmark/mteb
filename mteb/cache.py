@@ -88,7 +88,7 @@ class ResultCache:
                     "model_revision is ignored when model_name is a ModelMeta object"
                 )
             model_revision = model_name.revision
-            experiment_name = model_name.experiment_name()
+            experiment_name = model_name.experiment_name
             model_name = model_name.model_name_as_path()
         elif isinstance(model_name, str):
             model_name = model_name.replace("/", "__").replace(" ", "_")

@@ -165,7 +165,7 @@ class ModelMeta(BaseModel):
     model_type: list[MODEL_TYPES] = ["dense"]
     citation: str | None = None
     contacts: list[str] | None = None
-    _experiment_params: dict[str, Any] | None = None
+    experiment_params: dict[str, Any] | None = None
 
     @model_validator(mode="before")
     @classmethod
@@ -286,7 +286,7 @@ class ModelMeta(BaseModel):
         if self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
 
-        self._experiment_params = kwargs if len(kwargs) > 0 else None
+        self.experiment_params = kwargs if len(kwargs) > 0 else None
 
         # Allow overwrites
         _kwargs = self.loader_kwargs.copy()
@@ -307,12 +307,13 @@ class ModelMeta(BaseModel):
             raise ValueError("Model name is not set")
         return self.name.replace("/", "__").replace(" ", "_")
 
+    @property
     def experiment_name(self) -> str | None:
         """Create a filesystem-safe string representation of the experiment parameters.
 
         Uses deterministic serialization and hashing to ensure stable, bounded output.
         """
-        if self._experiment_params is None or len(self._experiment_params) == 0:
+        if self.experiment_params is None or len(self.experiment_params) == 0:
             return None
 
         invalid_chars = set('<>:"|?*\\/\0')
@@ -336,7 +337,7 @@ class ModelMeta(BaseModel):
 
         params_str = "__".join(
             f"{key}_{_serialize_value(value)}"
-            for key, value in sorted(self._experiment_params.items())
+            for key, value in sorted(self.experiment_params.items())
         )
 
         # If too long or contains invalid chars, use hash
