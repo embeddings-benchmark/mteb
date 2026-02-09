@@ -879,7 +879,7 @@ class ModelMeta(BaseModel):
 
     def to_python(self) -> str:
         """Returns a string representation of the model."""
-        return _pydantic_instance_to_code(self, exclude_fields=["_experiment_params"])
+        return _pydantic_instance_to_code(self, exclude_fields=["experiment_params"])
 
 
 def _pydantic_instance_to_code(
