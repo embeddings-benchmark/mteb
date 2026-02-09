@@ -132,7 +132,7 @@ class ModelMeta(BaseModel):
         model_type: A list of strings representing the type of model.
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
-        _experiment_params: **DO NOT SET** A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
+        experiment_params: **DO NOT SET** A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -313,41 +313,9 @@ class ModelMeta(BaseModel):
 
         Uses deterministic serialization and hashing to ensure stable, bounded output.
         """
-        if self.experiment_params is None or len(self.experiment_params) == 0:
-            return None
-
-        invalid_chars = set('<>:"|?*\\/\0')
-
-        def _serialize_value(value: Any) -> str:
-            """Convert value to deterministic string representation."""
-            if isinstance(value, (str, int, float, bool)) or value is None:
-                value = str(value)
-                for invalid_char in invalid_chars:
-                    value = value.replace(invalid_char, "_")
-                return value
-            if isinstance(value, (list, tuple)):
-                return f"[{','.join(_serialize_value(v) for v in value)}]"
-            if isinstance(value, dict):
-                items = sorted(value.items())
-                return f"{{{','.join(f'{k}:{_serialize_value(v)}' for k, v in items)}}}"
-            if isinstance(value, Enum):
-                return f"{value.__class__.__name__}.{value.name}"
-            # For complex objects, use type name + hash
-            return f"{type(value).__name__}_{hash(str(value))}"
-
-        params_str = "__".join(
-            f"{key}_{_serialize_value(value)}"
-            for key, value in sorted(self.experiment_params.items())
+        return _get_experiment_name_from_params(
+            experiment_params=self.experiment_params
         )
-
-        # If too long or contains invalid chars, use hash
-        max_length = 200
-
-        if len(params_str) > max_length or any(c in invalid_chars for c in params_str):
-            param_hash = hashlib.sha256(params_str.encode()).hexdigest()[:16]
-            return f"exp_{param_hash}"
-
-        return params_str
 
     @classmethod
     def _detect_cross_encoder_or_dense(
@@ -1073,3 +1041,41 @@ def _repo_exists(repo_id: str, repo_type: str | None = None) -> bool:
     except HFValidationError as e:
         logger.warning(f"Can't check existence of {repo_id}: {e}")
         return False
+
+
+def _get_experiment_name_from_params(experiment_params) -> str | None:
+    if experiment_params is None or len(experiment_params) == 0:
+        return None
+
+    invalid_chars = set('<>:"|?*\\/\0')
+
+    def _serialize_value(value: Any) -> str:
+        """Convert value to deterministic string representation."""
+        if isinstance(value, (str, int, float, bool)) or value is None:
+            value = str(value)
+            for invalid_char in invalid_chars:
+                value = value.replace(invalid_char, "_")
+            return value
+        if isinstance(value, (list, tuple)):
+            return f"[{','.join(_serialize_value(v) for v in value)}]"
+        if isinstance(value, dict):
+            items = sorted(value.items())
+            return f"{{{','.join(f'{k}:{_serialize_value(v)}' for k, v in items)}}}"
+        if isinstance(value, Enum):
+            return f"{value.__class__.__name__}.{value.name}"
+        # For complex objects, use type name + hash
+        return f"{type(value).__name__}_{hash(str(value))}"
+
+    params_str = "__".join(
+        f"{key}_{_serialize_value(value)}"
+        for key, value in sorted(experiment_params.items())
+    )
+
+    # If too long or contains invalid chars, use hash
+    max_length = 200
+
+    if len(params_str) > max_length or any(c in invalid_chars for c in params_str):
+        param_hash = hashlib.sha256(params_str.encode()).hexdigest()[:16]
+        return f"exp_{param_hash}"
+
+    return params_str

@@ -19,6 +19,7 @@ import mteb
 from mteb.abstasks import AbsTask
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
+from mteb.models.model_meta import _get_experiment_name_from_params
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
 
 if TYPE_CHECKING:
@@ -27,6 +28,7 @@ if TYPE_CHECKING:
     from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
+_EXPERIMENTS_FOLDER_NAME = "experiments"
 
 
 class ResultCache:
@@ -63,6 +65,7 @@ class ResultCache:
         model_name: str | ModelMeta,
         model_revision: str | None = None,
         remote: bool = False,
+        experiment_name: str | None = None,
     ) -> Path:
         """Get the path to the results of a specific task for a specific model and revision.
 
@@ -71,6 +74,7 @@ class ResultCache:
             model_name: The name of the model as a valid directory name or a ModelMeta object.
             model_revision: The revision of the model. Must be specified if model_name is a string.
             remote: If True, it will return the path to the remote results repository, otherwise it will return the path to the local results repository.
+            experiment_name: The name of the experiment as a valid directory name or a ModelMeta object.
 
         Returns:
             The path to the results of the task.
@@ -81,7 +85,6 @@ class ResultCache:
             else self.cache_path / "remote" / "results"
         )
 
-        experiment_name = None
         if isinstance(model_name, ModelMeta):
             if model_revision is not None:
                 logger.warning(
@@ -113,7 +116,13 @@ class ResultCache:
                 model_revision = revisions[0].name
 
         if experiment_name:
-            return model_path / model_revision / experiment_name / f"{task_name}.json"
+            return (
+                model_path
+                / model_revision
+                / _EXPERIMENTS_FOLDER_NAME
+                / experiment_name
+                / f"{task_name}.json"
+            )
         return model_path / model_revision / f"{task_name}.json"
 
     def load_task_result(
@@ -123,6 +132,7 @@ class ResultCache:
         model_revision: str | None = None,
         raise_if_not_found: bool = False,
         prioritize_remote: bool = False,
+        experiment_name: str | None = None,
     ) -> TaskResult | None:
         """Load the results from the local cache directory.
 
@@ -132,6 +142,7 @@ class ResultCache:
             model_revision: The revision of the model. Must be specified if model_name is a string.
             raise_if_not_found: If True, raise an error if the results are not found.
             prioritize_remote: If True, it will first try to load the results from the remote repository, if available.
+            experiment_name: The name of the experiment as a valid directory name or a ModelMeta object.
 
         Returns:
             The results of the task, or None if not found.
@@ -140,6 +151,7 @@ class ResultCache:
             model_name=model_name,
             model_revision=model_revision,
             task_name=task_name,
+            experiment_name=experiment_name,
         )
 
         if self.has_remote:
@@ -191,7 +203,7 @@ class ResultCache:
         if isinstance(model_name, ModelMeta):
             meta = model_name
             with model_meta_path.open("w") as f:
-                json.dump(meta.to_dict(), f, default=str)
+                json.dump(meta.to_dict(), f, default=str, indent=4)
 
     @property
     def default_cache_path(self) -> Path:
@@ -451,6 +463,7 @@ class ResultCache:
         tasks: Sequence[str] | Iterable[AbsTask] | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
+        load_experiments: bool = False,
     ) -> list[Path]:
         """Get all paths to result JSON files in the cache directory.
 
@@ -465,6 +478,7 @@ class ResultCache:
             tasks: A list of task names to filter the paths.
             require_model_meta: If True, only return paths that have a model_meta.json file.
             include_remote: If True, include remote results in the returned paths.
+            load_experiments: If True, include experiments in the returned paths.
 
         Returns:
             A list of paths in the cache directory.
@@ -488,15 +502,32 @@ class ResultCache:
         """
         cache_paths = [
             p
-            for p in (self.cache_path / "results").glob("**/*.json")
+            for p in (self.cache_path / "results").glob(
+                "*/*/*.json"
+            )  # model/revision/task.json
             if p.name != "model_meta.json"
         ]
+
+        def _experiments_paths(base_path: Path) -> list[Path]:
+            return [
+                p
+                for p in base_path.glob(f"*/*/{_EXPERIMENTS_FOLDER_NAME}/*/*.json")
+                if p.name != "model_meta.json"
+            ]
+
+        if load_experiments:
+            cache_paths += _experiments_paths(self.cache_path / "results")
+
         if include_remote:
             cache_paths += [
                 p
-                for p in (self.cache_path / "remote" / "results").glob("**/*.json")
+                for p in (self.cache_path / "remote" / "results").glob("*/*/*.json")
                 if p.name != "model_meta.json"
             ]
+            if load_experiments:
+                cache_paths += _experiments_paths(
+                    self.cache_path / "remote" / "results"
+                )
 
         cache_paths = self._filter_paths_by_model_and_revision(
             cache_paths,
@@ -561,7 +592,16 @@ class ResultCache:
     @staticmethod
     def _get_model_name_and_revision_from_path(
         revision_path: Path,
-    ) -> tuple[ModelName, Revision]:
+    ) -> tuple[ModelName, Revision, str | None]:
+        """Get model name, revision and experiment name from the given path.
+
+        Args:
+            revision_path: The path to the revision folder, which should contain a model_meta.json file. If the file is not found, it will attempt to extract the model name and revision from the path.
+
+        Returns:
+            A tuple containing the model name, revision and experiment name (if available).
+
+        """
         model_meta = revision_path / "model_meta.json"
         model_path = revision_path.parent
 
@@ -569,14 +609,26 @@ class ResultCache:
             logger.debug(
                 f"model_meta.json not found in {revision_path}, extracting model_name and revision from the path"
             )
+            if _EXPERIMENTS_FOLDER_NAME in revision_path.parts:
+                logger.debug(
+                    f"Path {revision_path} contains an experiment folder, extracting model_name and revision accordingly"
+                )
+                experiment_name = revision_path.name
+                revision = revision_path.parent.parent.name
+                model_name = revision_path.parent.parent.parent.name.replace(
+                    "__", "/"
+                ).replace("_", " ")
+                return model_name, revision, experiment_name
             model_name = model_path.name.replace("__", "/")
             revision = revision_path.name
-            return model_name, revision
+            return model_name, revision, None
         with model_meta.open("r") as f:
             model_meta_json = json.load(f)
             model_name = model_meta_json["name"]
             revision = model_meta_json["revision"]
-        return model_name, revision
+            experiment_params = model_meta_json.get("experiment_params", None)
+            experiment_name = _get_experiment_name_from_params(experiment_params)
+        return model_name, revision, experiment_name
 
     @staticmethod
     def _filter_paths_by_model_and_revision(
@@ -598,10 +650,19 @@ class ResultCache:
                 (m.model_name_as_path(), m.revision or "no_revision_available")
                 for m in models
             }
+            model_name_and_revision = list()
+            for path in paths:
+                if _EXPERIMENTS_FOLDER_NAME in path.parts:
+                    revision = path.parent.parent.name
+                    model_name = path.parent.parent.parent.name
+                else:
+                    revision = path.parent.name
+                    model_name = path.parent.parent.name
+                model_name_and_revision.append((model_name, revision))
             return [
                 p
-                for p in paths
-                if (p.parent.parent.name, p.parent.name) in name_and_revision
+                for model_revision, p in zip(model_name_and_revision, paths)
+                if model_name_and_revision in name_and_revision
             ]
 
         str_models = cast("Sequence[str]", models)
@@ -633,6 +694,8 @@ class ResultCache:
         include_remote: bool = True,
         validate_and_filter: bool = False,
         only_main_score: bool = False,
+        load_experiments: bool = False,
+        experiment_names: Sequence[str] | None = None,
     ) -> BenchmarkResults:
         """Loads the results from the cache directory and returns a BenchmarkResults object.
 
@@ -647,6 +710,8 @@ class ResultCache:
             validate_and_filter: If True it will validate that the results object for the task contains the correct splits and filter out
                 splits from the results object that are not default in the task metadata.
             only_main_score: If True, only the main score will be loaded.
+            load_experiments: If True, it will also load results from experiment folders.
+            experiment_names: If specified, it will only load results from experiments with the specified names. Only used if load_experiments is True.
 
         Returns:
             A BenchmarkResults object containing the results for the specified models and tasks.
@@ -670,6 +735,7 @@ class ResultCache:
             tasks=tasks,
             require_model_meta=require_model_meta,
             include_remote=include_remote,
+            load_experiments=load_experiments,
         )
         models_results = defaultdict(list)
 
@@ -686,8 +752,8 @@ class ResultCache:
 
             if only_main_score:
                 task_result = task_result.only_main_score()
-            model_name, revision = self._get_model_name_and_revision_from_path(
-                path.parent
+            model_name, revision, experiment_name = (
+                self._get_model_name_and_revision_from_path(path.parent)
             )
 
             if validate_and_filter:
@@ -702,7 +768,14 @@ class ResultCache:
                     )
                     continue
 
-            models_results[(model_name, revision)].append(task_result)
+            if (
+                experiment_names is not None
+                and experiment_name is not None
+                and experiment_name not in experiment_names
+            ):
+                continue
+
+            models_results[(model_name, revision, experiment_name)].append(task_result)
 
         # create BenchmarkResults object
         models_results_object = [
@@ -710,8 +783,13 @@ class ResultCache:
                 model_name=model_name,
                 model_revision=revision,
                 task_results=task_results,
+                experiment_name=experiment_name,
             )
-            for (model_name, revision), task_results in models_results.items()
+            for (
+                model_name,
+                revision,
+                experiment_name,
+            ), task_results in models_results.items()
         ]
 
         return BenchmarkResults(

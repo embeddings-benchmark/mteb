@@ -320,3 +320,38 @@ def test_evaluate_experiment(tmp_path):
         / "MockClassificationTask.json"
     )
     assert (tmp_path / expected_path).exists()
+
+
+def test_load_experiment_results(tmp_path):
+    """Test that results from an experiment can be loaded correctly."""
+    model = mteb.get_model("baseline/random-encoder-baseline")
+    task = MockRetrievalTask()
+    cache = mteb.ResultCache("test_exp")
+    mteb.evaluate(model, task, cache=cache)
+
+    model = mteb.get_model(
+        "baseline/random-encoder-baseline",
+        a="test",
+    )
+    mteb.evaluate(model, task, cache=cache)
+
+    model = mteb.get_model(
+        "baseline/random-encoder-baseline",
+        a="test",
+        b="test2",
+    )
+    mteb.evaluate(model, task, cache=cache)
+
+    base_res = cache.load_results()
+    assert len(base_res.model_results) == 1
+    assert base_res.model_results[0].experiment_name is None
+
+    experiment_res = cache.load_results(load_experiments=True)
+    assert len(experiment_res.model_results) == 3
+
+    named_experiment_res = cache.load_results(
+        load_experiments=True,
+        experiment_names=["a_test"],
+    )
+    assert len(named_experiment_res.model_results) == 2
+    assert named_experiment_res.model_results[1].experiment_name == "a_test"
