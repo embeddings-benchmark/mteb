@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import warnings
-from functools import lru_cache
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
@@ -621,12 +620,14 @@ class AudioCollator:
             target_sampling_rate: The sampling rate to resample the audio to.
             max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
         """
+        import torchaudio
+
         audio = audio["audio"]
         if audio["sampling_rate"] != target_sampling_rate:
             logger.debug(
                 f"Resampling audio from {audio['sampling_rate']} Hz to {target_sampling_rate} Hz."
             )
-            resampler = _get_resampler(
+            resampler = torchaudio.transforms.Resample(
                 orig_freq=audio["sampling_rate"],
                 new_freq=target_sampling_rate,
             )
@@ -645,13 +646,3 @@ class AudioCollator:
             if num_samples > max_samples:
                 audio_array = audio_array[..., :max_samples]
         return audio_array
-
-
-@lru_cache(maxsize=10)
-def _get_resampler(orig_freq: int, new_freq: int) -> Any:
-    import torchaudio
-
-    return torchaudio.transforms.Resample(
-        orig_freq=orig_freq,
-        new_freq=new_freq,
-    )
