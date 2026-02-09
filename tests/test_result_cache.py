@@ -294,6 +294,12 @@ def test_load_experiment_results(tmp_path):
     experiment_res = cache.load_results(load_experiments=LoadExperimentEnum.ALWAYS)
     assert len(experiment_res.model_results) == 3
 
+    # load only experiments
+    experiment_res = cache.load_results(
+        load_experiments=LoadExperimentEnum.ONLY_EXPERIMENTS
+    )
+    assert len(experiment_res.model_results) == 2
+
     # load specific experiment by name
     named_experiment_res = cache.load_results(
         load_experiments=LoadExperimentEnum.ALWAYS,
@@ -332,7 +338,7 @@ def test_load_experiment_results(tmp_path):
         models=[model.mteb_model_meta],
         load_experiments=LoadExperimentEnum.NEVER,
     )
-    assert len(model_meta_res.model_results) == 0
+    assert len(model_meta_res.model_results) == 1
 
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta],
@@ -349,12 +355,6 @@ def test_load_experiment_results(tmp_path):
     assert len(model_meta_res.model_results) == 3
 
     # load specific experiment with model name filter
-    model_meta_res = cache.load_results(
-        models=[model.mteb_model_meta.name],
-        load_experiments=LoadExperimentEnum.NEVER,
-    )
-    assert len(model_meta_res.model_results) == 1
-
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta.name],
         load_experiments=LoadExperimentEnum.ONLY_EXPERIMENTS,
