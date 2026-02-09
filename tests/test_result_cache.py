@@ -10,7 +10,7 @@ import pytest
 import requests
 
 import mteb
-from mteb.cache import ResultCache
+from mteb.cache import LoadExperimentEnum, ResultCache
 from mteb.results import TaskResult
 from tests.mock_tasks import MockMultilingualClusteringTask, MockRetrievalTask
 
@@ -291,34 +291,86 @@ def test_load_experiment_results(tmp_path):
     assert base_res.model_results[0].experiment_name is None
 
     # load all experiments
-    experiment_res = cache.load_results(load_experiments=True)
+    experiment_res = cache.load_results(load_experiments=LoadExperimentEnum.ALWAYS)
     assert len(experiment_res.model_results) == 3
 
     # load specific experiment by name
     named_experiment_res = cache.load_results(
-        load_experiments=True,
+        load_experiments=LoadExperimentEnum.ALWAYS,
         experiment_names=["a_test"],
     )
     assert len(named_experiment_res.model_results) == 2
     assert named_experiment_res.model_results[1].experiment_name == "a_test"
 
-    # load specific experiment with model meta filter
+    # load **only** specific experiment by name
+    only_named_experiment_res = cache.load_results(
+        load_experiments=LoadExperimentEnum.ONLY_EXPERIMENTS,
+        experiment_names=["a_test"],
+    )
+    assert len(only_named_experiment_res.model_results) == 1
+    assert only_named_experiment_res.model_results[0].experiment_name == "a_test"
+
+    # load specific experiment with model meta filter. Ignored `load_experiments` since model meta filter should take precedence
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta],
-        load_experiments=True,
+        load_experiments=LoadExperimentEnum.ALWAYS,
         experiment_names=["a_test__b_test2"],
     )
     assert len(model_meta_res.model_results) == 2
     assert model_meta_res.model_results[1].experiment_name == "a_test__b_test2"
 
-    # load specific experiment with model name filter
+    # load specific experiment with model meta filter
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta.name],
-        load_experiments=True,
+        load_experiments=LoadExperimentEnum.ALWAYS,
         experiment_names=["a_test__b_test2"],
     )
     assert len(model_meta_res.model_results) == 2
     assert model_meta_res.model_results[1].experiment_name == "a_test__b_test2"
+
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta],
+        load_experiments=LoadExperimentEnum.NEVER,
+    )
+    assert len(model_meta_res.model_results) == 0
+
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta],
+        load_experiments=LoadExperimentEnum.ONLY_EXPERIMENTS,
+    )
+    assert len(model_meta_res.model_results) == 1
+    assert model_meta_res.model_results[0].experiment_name == "a_test__b_test2"
+
+    # load experiments with model name filter
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta.name],
+        load_experiments=LoadExperimentEnum.ALWAYS,
+    )
+    assert len(model_meta_res.model_results) == 3
+
+    tmp_model_meta = model.mteb_model_meta.model_copy()
+    tmp_model_meta.experiment_params = None
+    # load experiments with model name filter
+    model_meta_res = cache.load_results(
+        models=[tmp_model_meta],
+        load_experiments=LoadExperimentEnum.ALWAYS,
+    )
+    assert len(model_meta_res.model_results) == 3
+
+    # load specific experiment with model name filter
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta.name],
+        load_experiments=LoadExperimentEnum.NEVER,
+    )
+    assert len(model_meta_res.model_results) == 1
+
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta.name],
+        load_experiments=LoadExperimentEnum.ONLY_EXPERIMENTS,
+        experiment_names=[model.mteb_model_meta.experiment_name],
+    )
+    assert len(model_meta_res.model_results) == 1
+    assert model_meta_res.model_results[0].experiment_name == "a_test__b_test2"
 
 
 # Tests for _download_cached_results_from_branch method
