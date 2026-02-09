@@ -5,6 +5,7 @@ Provides a concise API for logging various events
 
 import atexit
 import logging
+import os
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
@@ -69,6 +70,15 @@ class EventLogger:
             "collection": collection,
         }
 
+        # If MONGO_URI is not set, disable event logging and log one WARNING (do not create MongoDBStorage)
+        effective_uri = mongo_uri or os.getenv("MONGO_URI")
+        self._storage_disabled = not (effective_uri and effective_uri.strip())
+        if self._storage_disabled:
+            logger.warning(
+                "MONGO_URI not configured; event logging disabled. "
+                "Set environment variable MONGO_URI or pass mongo_uri to enable."
+            )
+
         # Thread pool for asynchronous writes
         self._executor = ThreadPoolExecutor(max_workers=max_workers)
 
@@ -85,6 +95,8 @@ class EventLogger:
         """
         if self._storage is not None:
             return True
+        if self._storage_disabled:
+            return False
 
         try:
             self._storage = MongoDBStorage(**self._storage_kwargs)

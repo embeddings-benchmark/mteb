@@ -14,7 +14,7 @@ Usage example:
     import gradio as gr
     from event_logger import EventLogger, get_session_js
 
-    # Initialize (requires MONGO_URI environment variable)
+    # Initialize (optional: set MONGO_URI to enable event logging)
     logger = EventLogger()
 
     with gr.Blocks() as demo:
