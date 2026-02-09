@@ -86,7 +86,7 @@ class LCOEmbedding(AbsEncoder):
 
                 if audio_row is not None:
                     array = AudioCollator.resample_audio(
-                        audio_row, self.sampling_rate, self.max_samples
+                        {"audio": audio_row}, self.sampling_rate, self.max_samples
                     )
                     content.append({"type": "audio", "audio": array})
 
