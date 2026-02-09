@@ -74,7 +74,7 @@ class ResultCache:
             model_name: The name of the model as a valid directory name or a ModelMeta object.
             model_revision: The revision of the model. Must be specified if model_name is a string.
             remote: If True, it will return the path to the remote results repository, otherwise it will return the path to the local results repository.
-            experiment_name: The name of the experiment as a valid directory name or a ModelMeta object.
+            experiment_name: The name of the experiment as a valid directory name. If model_name is a ModelMeta object, its experiment_name will be used.
 
         Returns:
             The path to the results of the task.
@@ -142,7 +142,7 @@ class ResultCache:
             model_revision: The revision of the model. Must be specified if model_name is a string.
             raise_if_not_found: If True, raise an error if the results are not found.
             prioritize_remote: If True, it will first try to load the results from the remote repository, if available.
-            experiment_name: The name of the experiment as a valid directory name or a ModelMeta object.
+            experiment_name: Optional experiment folder name (a valid directory name). If None, the default is used.
 
         Returns:
             The results of the task, or None if not found.
