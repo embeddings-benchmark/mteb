@@ -37,9 +37,7 @@ class BaseEvent(BaseModel):
         default=None, description="Event additional properties"
     )
 
-    model_config = {
-        "extra": "allow",  # Allow extra fields for free extension
-    }
+    model_config = ConfigDict(extra="allow")
 
     def to_mongo_dict(self) -> dict[str, Any]:
         """Convert to MongoDB document format
