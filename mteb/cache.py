@@ -160,6 +160,7 @@ class ResultCache:
                 model_revision=model_revision,
                 task_name=task_name,
                 remote=True,
+                experiment_name=experiment_name,
             )
             if remote_result_path.exists() and prioritize_remote:
                 result_path = remote_result_path
@@ -665,7 +666,15 @@ class ResultCache:
 
         str_models = cast("Sequence[str]", models)
         model_names = {m.replace("/", "__").replace(" ", "_") for m in str_models}
-        return [p for p in paths if p.parent.parent.name in model_names]
+        filtered_paths = []
+        for p in paths:
+            if _EXPERIMENTS_FOLDER_NAME in p.parts:
+                model_name = p.parent.parent.parent.parent.name
+            else:
+                model_name = p.parent.parent.name
+            if model_name in model_names:
+                filtered_paths.append(p)
+        return filtered_paths
 
     @staticmethod
     def _filter_paths_by_task(

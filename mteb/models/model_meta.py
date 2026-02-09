@@ -1064,7 +1064,8 @@ def _get_experiment_name_from_params(experiment_params) -> str | None:
         if isinstance(value, Enum):
             return f"{value.__class__.__name__}.{value.name}"
         # For complex objects, use type name + hash
-        return f"{type(value).__name__}_{hash(str(value))}"
+        digest = hashlib.sha256(str(value).encode("utf-8")).hexdigest()[:8]
+        return f"{type(value).__name__}_{digest}"
 
     params_str = "__".join(
         f"{key}_{_serialize_value(value)}"

@@ -269,7 +269,7 @@ def test_load_experiment_results(tmp_path):
     """Test that results from an experiment can be loaded correctly."""
     model = mteb.get_model("baseline/random-encoder-baseline")
     task = MockRetrievalTask()
-    cache = mteb.ResultCache(tmp_path / "test_exp")
+    cache = mteb.ResultCache(tmp_path)
     mteb.evaluate(model, task, cache=cache)
 
     model = mteb.get_model(
@@ -285,13 +285,16 @@ def test_load_experiment_results(tmp_path):
     )
     mteb.evaluate(model, task, cache=cache)
 
+    # load without experiments - should only get the first result
     base_res = cache.load_results()
     assert len(base_res.model_results) == 1
     assert base_res.model_results[0].experiment_name is None
 
+    # load all experiments
     experiment_res = cache.load_results(load_experiments=True)
     assert len(experiment_res.model_results) == 3
 
+    # load specific experiment by name
     named_experiment_res = cache.load_results(
         load_experiments=True,
         experiment_names=["a_test"],
@@ -299,8 +302,18 @@ def test_load_experiment_results(tmp_path):
     assert len(named_experiment_res.model_results) == 2
     assert named_experiment_res.model_results[1].experiment_name == "a_test"
 
+    # load specific experiment with model meta filter
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta],
+        load_experiments=True,
+        experiment_names=["a_test__b_test2"],
+    )
+    assert len(model_meta_res.model_results) == 2
+    assert model_meta_res.model_results[1].experiment_name == "a_test__b_test2"
+
+    # load specific experiment with model name filter
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta.name],
         load_experiments=True,
         experiment_names=["a_test__b_test2"],
     )
