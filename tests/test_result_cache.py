@@ -12,7 +12,7 @@ import requests
 import mteb
 from mteb.cache import ResultCache
 from mteb.results import TaskResult
-from tests.mock_tasks import MockMultilingualClusteringTask
+from tests.mock_tasks import MockMultilingualClusteringTask, MockRetrievalTask
 
 test_cache_path = Path(__file__).parent / "mock_mteb_cache"
 
@@ -263,6 +263,49 @@ def test_cache_load_different_subsets():
 
     assert np.isnan(result1.model_results[0].task_results[0].get_score())
     assert result2.model_results[0].task_results[0].get_score() == 0.01035
+
+
+def test_load_experiment_results(tmp_path):
+    """Test that results from an experiment can be loaded correctly."""
+    model = mteb.get_model("baseline/random-encoder-baseline")
+    task = MockRetrievalTask()
+    cache = mteb.ResultCache(tmp_path / "test_exp")
+    mteb.evaluate(model, task, cache=cache)
+
+    model = mteb.get_model(
+        "baseline/random-encoder-baseline",
+        a="test",
+    )
+    mteb.evaluate(model, task, cache=cache)
+
+    model = mteb.get_model(
+        "baseline/random-encoder-baseline",
+        a="test",
+        b="test2",
+    )
+    mteb.evaluate(model, task, cache=cache)
+
+    base_res = cache.load_results()
+    assert len(base_res.model_results) == 1
+    assert base_res.model_results[0].experiment_name is None
+
+    experiment_res = cache.load_results(load_experiments=True)
+    assert len(experiment_res.model_results) == 3
+
+    named_experiment_res = cache.load_results(
+        load_experiments=True,
+        experiment_names=["a_test"],
+    )
+    assert len(named_experiment_res.model_results) == 2
+    assert named_experiment_res.model_results[1].experiment_name == "a_test"
+
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta],
+        load_experiments=True,
+        experiment_names=["a_test__b_test2"],
+    )
+    assert len(model_meta_res.model_results) == 2
+    assert model_meta_res.model_results[1].experiment_name == "a_test__b_test2"
 
 
 # Tests for _download_cached_results_from_branch method

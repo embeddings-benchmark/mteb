@@ -615,20 +615,18 @@ class ResultCache:
                 )
                 experiment_name = revision_path.name
                 revision = revision_path.parent.parent.name
-                model_name = revision_path.parent.parent.parent.name.replace(
-                    "__", "/"
-                ).replace("_", " ")
+                model_name = revision_path.parent.parent.parent.name.replace("__", "/")
                 return model_name, revision, experiment_name
             model_name = model_path.name.replace("__", "/")
             revision = revision_path.name
             return model_name, revision, None
         with model_meta.open("r") as f:
             model_meta_json = json.load(f)
-            model_name = model_meta_json["name"]
-            revision = model_meta_json["revision"]
-            experiment_params = model_meta_json.get("experiment_params", None)
-            experiment_name = _get_experiment_name_from_params(experiment_params)
-        return model_name, revision, experiment_name
+        model_name = model_meta_json["name"]
+        revision = model_meta_json["revision"]
+        experiment_params = model_meta_json.get("experiment_params", None)
+        experiment_name_ = _get_experiment_name_from_params(experiment_params)
+        return model_name, revision, experiment_name_
 
     @staticmethod
     def _filter_paths_by_model_and_revision(
@@ -653,8 +651,8 @@ class ResultCache:
             model_name_and_revision = list()
             for path in paths:
                 if _EXPERIMENTS_FOLDER_NAME in path.parts:
-                    revision = path.parent.parent.name
-                    model_name = path.parent.parent.parent.name
+                    revision = path.parent.parent.parent.name
+                    model_name = path.parent.parent.parent.parent.name
                 else:
                     revision = path.parent.name
                     model_name = path.parent.parent.name
@@ -662,7 +660,7 @@ class ResultCache:
             return [
                 p
                 for model_revision, p in zip(model_name_and_revision, paths)
-                if model_name_and_revision in name_and_revision
+                if model_revision in name_and_revision
             ]
 
         str_models = cast("Sequence[str]", models)
