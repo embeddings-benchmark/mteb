@@ -66,7 +66,7 @@ in Natural Language Processing},
 """,
     )
 
-    def dataset_transform(self, num_proc: int = 1, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         self.dataset = self.dataset.rename_columns({"labels": "label"})
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]

@@ -68,6 +68,7 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
+        modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
 @article{loison2026vidorev3comprehensiveevaluation,

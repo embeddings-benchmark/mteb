@@ -34,7 +34,6 @@ prediction_tokens = {
     "unicamp-dl/mt5-base-en-msmarco": ["▁no", "▁yes"],
     "unicamp-dl/mt5-base-mmarco-v2": ["▁no", "▁yes"],
     "unicamp-dl/mt5-base-mmarco-v1": ["▁no", "▁yes"],
-    "unicamp-dl/mt5-13b-mmarco-100k": ["▁", "▁true"],
 }
 
 
@@ -369,7 +368,7 @@ monot5_base = ModelMeta(
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2206.02873},
     }""",
-    n_parameters=None,
+    n_parameters=296926464,
     n_embedding_parameters=24_674_304,
     memory_usage_mb=None,
     max_tokens=None,
@@ -428,7 +427,7 @@ monot5_3b = ModelMeta(
     open_weights=True,
     revision="bc0c419a438c81f592f878ce32430a1823f5db6c",
     release_date="2022-03-28",
-    n_parameters=None,
+    n_parameters=2950295552,
     n_embedding_parameters=32_899_072,
     memory_usage_mb=None,
     max_tokens=None,
@@ -440,6 +439,7 @@ monot5_3b = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch", "Transformers"],
+    reference="https://huggingface.co/castorini/monot5-3b-msmarco-10k",
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -485,7 +485,7 @@ flant5_base = ModelMeta(
         # "quasc": ["train"],
         # "qed": ["train"],
     ),
-    n_parameters=None,
+    n_parameters=247577856,
     n_embedding_parameters=24_674_304,
     memory_usage_mb=944,
     max_tokens=None,
@@ -496,6 +496,7 @@ flant5_base = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/google/flan-t5-base",
 )
 
 flant5_large = ModelMeta(
@@ -532,7 +533,7 @@ flant5_large = ModelMeta(
         # "quasc": ["train"],
         # "qed": ["train"],
     ),
-    n_parameters=None,
+    n_parameters=783150080,
     n_embedding_parameters=32_899_072,
     memory_usage_mb=2987,
     max_tokens=None,
@@ -543,6 +544,7 @@ flant5_large = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/google/flan-t5-large",
 )
 
 flant5_xl = ModelMeta(
@@ -719,8 +721,8 @@ mistral_7b = ModelMeta(
     open_weights=True,
     revision="3ad372fc79158a2148299e3318516c786aeded6c",
     release_date="2023-12-11",
-    n_parameters=None,
-    n_embedding_parameters=None,
+    n_parameters=7241732096,
+    n_embedding_parameters=131072000,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -731,6 +733,7 @@ mistral_7b = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2",
     citation="""@misc{jiang2023mistral7b,
       title={Mistral 7B},
       author={Albert Q. Jiang and Alexandre Sablayrolles and Arthur Mensch and Chris Bamford and Devendra Singh Chaplot and Diego de las Casas and Florian Bressand and Gianna Lengyel and Guillaume Lample and Lucile Saulnier and Lélio Renard Lavaud and Marie-Anne Lachaux and Pierre Stock and Teven Le Scao and Thibaut Lavril and Thomas Wang and Timothée Lacroix and William El Sayed},
@@ -756,8 +759,8 @@ followir_7b = ModelMeta(
     training_datasets=set(
         # "jhu-clsp/FollowIR-train"
     ),
-    n_parameters=None,
-    n_embedding_parameters=None,
+    n_parameters=7110660096,
+    n_embedding_parameters=131072000,
     memory_usage_mb=13813,
     max_tokens=None,
     embed_dim=None,
@@ -767,6 +770,7 @@ followir_7b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/jhu-clsp/FollowIR-7B",
     citation="""
     @misc{weller2024followir,
       title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
@@ -917,30 +921,5 @@ mt5_base_mmarco_v2 = ModelMeta(
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    framework=["PyTorch", "Transformers"],
-)
-
-mt5_13b_mmarco_100k = ModelMeta(
-    loader=MonoT5Reranker,
-    loader_kwargs=dict(
-        fp_options="float16",
-    ),
-    name="unicamp-dl/mt5-13b-mmarco-100k",
-    model_type=["cross-encoder"],
-    languages=mt5_languages,
-    open_weights=True,
-    revision="e1a4317e102a525ea9e16745ad21394a4f1bffbc",
-    release_date="2022-11-04",
-    n_parameters=None,
-    n_embedding_parameters=1_024_458_752,
-    memory_usage_mb=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    public_training_code=None,
-    public_training_data=None,
-    similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
     framework=["PyTorch", "Transformers"],
 )

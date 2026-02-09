@@ -42,7 +42,7 @@ class VGClustering(AbsTaskClusteringLegacy):
         main_score="v_measure",
         date=("2020-01-01", "2024-12-31"),  # best guess
         domains=["News", "Non-fiction", "Written"],
-        license=None,
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         task_subtypes=["Thematic clustering"],

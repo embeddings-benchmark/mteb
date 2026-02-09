@@ -25,11 +25,13 @@ if TYPE_CHECKING:
         Licenses,
         Modalities,
         StrDate,
+        StrURL,
     )
 
     from .task_metadata import (
         AnnotatorType,
         SampleCreationMethod,
+        TaskCategory,
         TaskDomain,
         TaskSubtype,
     )
@@ -84,12 +86,14 @@ class AggregateTaskMetadata(TaskMetadata):
             self.license = self._compute_license()
         if not self.annotations_creators:
             self.annotations_creators = self._compute_annotations_creators()
-        if not self.dialect:
+        if self.dialect is None:
             self.dialect = self._compute_dialect()
         if not self.sample_creation:
             self.sample_creation = self._compute_sample_creation()
         if not self.modalities:
             self.modalities = self._compute_modalities()
+        if not self.category:
+            self.category = self._compute_category()
 
         return self
 
@@ -132,13 +136,15 @@ class AggregateTaskMetadata(TaskMetadata):
             return list(subtypes)
         return None
 
-    def _compute_license(self) -> Licenses | None:
-        licenses = set()
+    def _compute_license(self) -> Licenses | StrURL | None:
+        licenses: set[Licenses | StrURL] = set()
         for task in self.tasks:
             if task.metadata.license:
                 licenses.add(task.metadata.license)
         if len(licenses) > 1:
             return "multiple"
+        if len(licenses) == 1:
+            return licenses.pop()
         return None
 
     def _compute_annotations_creators(self) -> AnnotatorType | None:
@@ -150,16 +156,17 @@ class AggregateTaskMetadata(TaskMetadata):
             logger.warning(
                 f"Multiple annotations_creators found for tasks in {self.name}. Using None as annotations_creators."
             )
+            return None
+        if len(creators) == 1:
+            return creators.pop()
         return None
 
-    def _compute_dialect(self) -> list[str] | None:
+    def _compute_dialect(self) -> list[str]:
         dialects = set()
         for task in self.tasks:
             if task.metadata.dialect:
                 dialects.update(set(task.metadata.dialect))
-        if dialects:
-            return list(dialects)
-        return None
+        return list(dialects)
 
     def _compute_sample_creation(self) -> SampleCreationMethod | None:
         sample_creations = set()
@@ -168,6 +175,8 @@ class AggregateTaskMetadata(TaskMetadata):
                 sample_creations.add(task.metadata.sample_creation)
         if len(sample_creations) > 1:
             return "multiple"
+        if len(sample_creations) == 1:
+            return sample_creations.pop()
         return None
 
     def _compute_modalities(self) -> list[Modalities]:
@@ -178,3 +187,12 @@ class AggregateTaskMetadata(TaskMetadata):
         if modalities:
             return list(modalities)
         return []
+
+    def _compute_category(self) -> TaskCategory | None:
+        categories = set()
+        for task in self.tasks:
+            if task.metadata.category:
+                categories.add(task.metadata.category)
+        if len(categories) == 1:
+            return categories.pop()
+        return None

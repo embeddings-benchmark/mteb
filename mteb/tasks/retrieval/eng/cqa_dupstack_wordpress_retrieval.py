@@ -17,7 +17,7 @@ class CQADupstackWordpressRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("2015-01-01", "2015-12-31"),  # publication year
         domains=["Written", "Web", "Programming"],
         task_subtypes=["Question answering"],
         license="apache-2.0",

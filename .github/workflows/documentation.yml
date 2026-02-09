@@ -44,7 +44,7 @@ jobs:
       - name: Build and Deploy
         if: github.event_name == 'push'
         run: |
-          make build-docs-overview
+          make build-docs
           uv run --group docs mkdocs gh-deploy --force
 
       - name: Build

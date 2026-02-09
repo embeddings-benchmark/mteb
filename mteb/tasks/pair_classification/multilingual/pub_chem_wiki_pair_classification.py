@@ -60,7 +60,7 @@ class PubChemWikiPairClassification(AbsTaskPairClassification):
 """,
     )
 
-    def dataset_transform(self, num_proc: int = 1, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         _dataset = {}
         for lang in self.hf_subsets:
             _dataset[lang] = {}

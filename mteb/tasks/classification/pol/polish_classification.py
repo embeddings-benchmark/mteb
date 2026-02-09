@@ -183,10 +183,25 @@ class PolEmo2OutClassification(AbsTaskClassification):
         domains=["Written", "Social"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-sa-4.0",
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
-        bibtex_citation=None,
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{kocon-etal-2019-multi,
+  address = {Hong Kong, China},
+  author = {Koco{\'n}, Jan  and
+Mi{\l}kowski, Piotr  and
+Za{\'s}ko-Zieli{\'n}ska, Monika},
+  booktitle = {Proceedings of the 23rd Conference on Computational Natural Language Learning (CoNLL)},
+  doi = {10.18653/v1/K19-1092},
+  month = nov,
+  pages = {980--991},
+  publisher = {Association for Computational Linguistics},
+  title = {Multi-Level Sentiment Analysis of {P}ol{E}mo 2.0: Extended Corpus of Multi-Domain Consumer Reviews},
+  url = {https://aclanthology.org/K19-1092},
+  year = {2019},
+}
+""",
         superseded_by="PolEmo2.0-OUT.v2",
     )
 
@@ -212,10 +227,25 @@ class PolEmo2OutClassificationV2(AbsTaskClassification):
         domains=["Written", "Social"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-sa-4.0",
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
-        bibtex_citation=None,
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{kocon-etal-2019-multi,
+  address = {Hong Kong, China},
+  author = {Koco{\'n}, Jan  and
+Mi{\l}kowski, Piotr  and
+Za{\'s}ko-Zieli{\'n}ska, Monika},
+  booktitle = {Proceedings of the 23rd Conference on Computational Natural Language Learning (CoNLL)},
+  doi = {10.18653/v1/K19-1092},
+  month = nov,
+  pages = {980--991},
+  publisher = {Association for Computational Linguistics},
+  title = {Multi-Level Sentiment Analysis of {P}ol{E}mo 2.0: Extended Corpus of Multi-Domain Consumer Reviews},
+  url = {https://aclanthology.org/K19-1092},
+  year = {2019},
+}
+""",
         adapted_from=["PolEmo2OutClassification"],
     )
 
@@ -339,9 +369,9 @@ class PacClassification(AbsTaskClassification):
         domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        annotations_creators=None,
+        annotations_creators="human-annotated",
         dialect=[],
-        sample_creation=None,
+        sample_creation="found",
         bibtex_citation=r"""
 @misc{augustyniak2022waydesigningcompilinglepiszcze,
   archiveprefix = {arXiv},
@@ -376,9 +406,9 @@ class PacClassificationV2(AbsTaskClassification):
         domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        annotations_creators=None,
+        annotations_creators="human-annotated",
         dialect=[],
-        sample_creation=None,
+        sample_creation="found",
         bibtex_citation=r"""
 @misc{augustyniak2022waydesigningcompilinglepiszcze,
   archiveprefix = {arXiv},
