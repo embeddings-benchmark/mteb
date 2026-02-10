@@ -290,6 +290,7 @@ def _prepare_image_dataset(
         num_proc=num_proc,
     )
 
+
 def _decode_audio(audio: Any) -> dict[str, Any]:
     """Decode audio if it's a lazy AudioDecoder (datasets v4+ with torchcodec)."""
     if hasattr(audio, "get_all_samples"):
