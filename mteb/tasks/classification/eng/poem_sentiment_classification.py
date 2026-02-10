@@ -53,7 +53,10 @@ class PoemSentimentClassificationV2(AbsTaskClassification):
         eval_splits=["validation", "test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("1700-01-01", "1900-01-01"), # a very rough guess of the date range of the poems, we do not have exact dates for all poems
+        date=(
+            "1700-01-01",
+            "1900-01-01",
+        ),  # a very rough guess of the date range of the poems, we do not have exact dates for all poems
         domains=["Written", "Fiction", "Poetry"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-4.0",

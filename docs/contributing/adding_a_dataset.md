@@ -23,7 +23,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.classification import AbsTaskClassification
 
 class MyNewTask(AbsTaskClassification):
-    # metada contains information such as title, description, metrics etc.
+    # metadata contains information such as title, description, metrics etc.
     metadata = TaskMetadata(...)
 
     # task specific setting e.g. specifying the column names
@@ -50,12 +50,12 @@ class MyNewTask(AbsTaskClassification):
 To add a dataset you first need to figure out which type of task is the best suited for the dataset. Below we will give you an overview of the most common,
 but do see [abstasks](../api/task.md#multimodal-tasks) for an overview of all the tasks available.
 
-| Task | Abstask | Description | Common Metric |
-| ---- | ------- | ----------- | -------------- |
-| Classification | [`AbsTaskClassification`][mteb.abstasks.classification.AbsTaskClassification]    | Fits a classifier on the embeddings derived from the model. The goal is the predict the labels correctly. This does not change the weights of the model itself. See also classes for [multi label classificaiton][mteb.abstasks.multilabel_classification.AbsTaskMultilabelClassification], [regression][mteb.abstasks.regression.AbsTaskRegression] and [pair classification][mteb.abstasks.pair_classification.AbsTaskPairClassification]. | [Accuracy](https://en.wikipedia.org/wiki/Accuracy_and_precision) |
-| Clustering | [`AbsTaskClustering`][mteb.abstasks.clustering.AbsTaskClustering]    | Cluster documents based on their embeddings. The goal is to cluster documents according to predefined categories. Support clustering in multiple hiarchies. | [V-Measure](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.v_measure_score.html) |
-| Retrieval | [`AbsTaskRetrieval`][mteb.abstasks.retrieval.AbsTaskRetrieval]    | Retrieval tasks include a corpus from which you retreive from using a query. The goal is to retrieve relevant documents. See also [`convert_to_reranking`](../api/task/?h=convert_to_reranking#mteb.abstasks.retrieval.AbsTaskRetrieval.convert_to_reranking) for how to convert a retrieval task into a reranking task. | [NDCG@10](https://en.wikipedia.org/wiki/Discounted_cumulative_gain#Normalized_DCG) |
-| Semantic Text Similarity | [`AbsTaskSTS`][mteb.abstasks.sts.AbsTaskSTS]    | Compares the (semantic) similarity of pairs of documents. The goal is to embed documents such that semanticly similar statements appear close. | [Spearman](https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient) |
+| Task (Abstask) | Description | Common Metric |
+| ---- | ----------- | -------------- |
+| Classification, [`AbsTaskClassification`][mteb.abstasks.classification.AbsTaskClassification]    | Fits a classifier on the embeddings derived from the model. The goal is the predict the labels correctly. This does not change the weights of the model itself. See also classes for [multi label classification][mteb.abstasks.multilabel_classification.AbsTaskMultilabelClassification], [regression][mteb.abstasks.regression.AbsTaskRegression] and [pair classification][mteb.abstasks.pair_classification.AbsTaskPairClassification]. | [accuracy](https://en.wikipedia.org/wiki/Accuracy_and_precision) |
+| Clustering, [`AbsTaskClustering`][mteb.abstasks.clustering.AbsTaskClustering]    | Cluster documents based on their embeddings. The goal is to cluster documents according to predefined categories. Support clustering in multiple hierarchies. | [v_measure](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.v_measure_score.html) |
+| Retrieval, [`AbsTaskRetrieval`][mteb.abstasks.retrieval.AbsTaskRetrieval]    | Retrieval tasks include a corpus from which you retrieve from using a query. The goal is to retrieve relevant documents. See also [`convert_to_reranking`](../api/task/?h=convert_to_reranking#mteb.abstasks.retrieval.AbsTaskRetrieval.convert_to_reranking) for how to convert a retrieval task into a reranking task. | [ndcg_at_10](https://en.wikipedia.org/wiki/Discounted_cumulative_gain#Normalized_DCG) |
+| Semantic Text Similarity, [`AbsTaskSTS`][mteb.abstasks.sts.AbsTaskSTS]    | Compares the (semantic) similarity of pairs of documents. The goal is to embed documents such that semanticly similar statements appear close. | [spearman](https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient) |
 
 !!! Note
     While each task has a main score we compute multiple and it is possible to select any of these are the main metric for your task.
@@ -89,7 +89,7 @@ Once we have decided on task, we can implement them as follows:
                 "path": "mteb/poem_sentiment",
                 "revision": "9fdc57b89ccc09a8d9256f376112d626878e51a7",
             },
-            prompt="Classify poem verses as positive or negtive"
+            prompt="Classify poem verses as positive or negative"
         )
 
         label_column_name = "label"
@@ -124,7 +124,7 @@ Once we have decided on task, we can implement them as follows:
     For our classification task we use the [swedn](https://huggingface.co/datasets/mteb/SwednClusteringP2P) dataset of Swedish newspapers
     along four main categories. It contains three splits "headlines", "articles" and "summaries", here we will look at the headlines only.
 
-    The clustering task performs multiple experiments to get a more consistent estimate and reports the avarage. Here we set it 3 experiments
+    The clustering task performs multiple experiments to get a more consistent estimate and reports the average. Here we set it 3 experiments
     using 1000 samples, but typically you would set it higher. Using the default is also a reasonable idea.
     
     We can then implement the task as follows:
@@ -277,7 +277,7 @@ Once we have decided on task, we can implement them as follows:
 
 ??? example "Overwriting `load_data`"
 
-    While we do not recommend overwriting `load_data` it can often be useful, when developing tasks and can also be used in conjuction with
+    While we do not recommend overwriting `load_data` it can often be useful, when developing tasks and can also be used in conjunction with
     [`push_dataset_to_hub`][mteb.AbsTask.push_dataset_to_hub] to push datasets to the hub in the correct format.
 
     ```python
@@ -320,7 +320,7 @@ Once we have decided on task, we can implement them as follows:
 
 ### Filling out the TaskMetadata
 
-To run a task locally you do not necesarily need to fill out all the fields in the `TaskMetadata`, but if you want to include the dataset in
+To run a task locally you do not necessarily need to fill out all the fields in the `TaskMetadata`, but if you want to include the dataset in
 `mteb` we require that all fields are filled out. This is to ensure that we have enough information about the dataset to be able to include it in the benchmark and to make it easier for users to understand the dataset and its characteristics.
 
 If you are making a PR, feel free to leave fields and `None` if you are unsure about how to fill. You can always ask about it during the PR.
@@ -390,13 +390,13 @@ task.push_dataset_to_hub(repo_name)
 Once you have your task you can create a pull request (PR) to the main repository. To do so place task inside the [`mteb/tasks`](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/tasks) directory, and make sure to import the task in the `__init__.py` file in the same directory.
 
 
-## Calculate descriptive statistics
+### Calculate descriptive statistics
 
 Before creating a pull request, it is important to calculate some descriptive statistics about the dataset. This is to ensure that the dataset is not too small, does not contain duplicates and that the documents are not too short. This is important to ensure that the dataset is of high quality and that it can be used to evaluate models in a meaningful way.
 
 To calculate the descriptive statistics, you can simply run [`task.calculate_descriptive_statistics()`][mteb.AbsTask.calculate_descriptive_statistics].
 
-## Submit a Pull Request
+### Submit a Pull Request
 
 Once added, here is a checklist to ensure that everything works before you submit the PR:
 
