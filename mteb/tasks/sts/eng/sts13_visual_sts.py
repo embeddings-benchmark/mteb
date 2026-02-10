@@ -6,8 +6,8 @@ class STS13VisualSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="STS13VisualSTS",
         dataset={
-            "path": "Pixel-Linguist/rendered-sts13",
-            "revision": "561ee9ca47ff3e4a657283c59416deca8dc169f2",
+            "path": "mteb/rendered-sts13",
+            "revision": "576f4c4340b774e41704af9bcb003376e37241f3",
         },
         description="SemEval STS 2013 dataset." + "then rendered into images.",
         reference="https://arxiv.org/abs/2402.08183/",
