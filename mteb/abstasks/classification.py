@@ -105,11 +105,11 @@ class AbsTaskClassification(AbsTask):
     """The class which classification tasks inherit from.
 
     A classification task consists of a dataset with input data and corresponding labels. The task is to predict the label for each input.
-    The task works by training a sklearn compatible model on samples drawn from the training split of the dataset, 
-    where the input data is encoded using the provided model. 
-    The trained model is then evaluated on the evaluation split of the dataset. This process is repeated for `n_experiments` times, and both average and 
+    The task works by training a sklearn compatible model on samples drawn from the training split of the dataset,
+    where the input data is encoded using the provided model.
+    The trained model is then evaluated on the evaluation split of the dataset. This process is repeated for `n_experiments` times, and both average and
     individual scores for each experiment are reported.
-    
+
     Attributes:
         dataset: Hugging Face dataset containing the data for the task. Should have train split (split name can be changed by train_split. Must contain the following columns:
             text: str (for text) or PIL.Image (for image). Column name can be changed via `input_column_name` attribute.

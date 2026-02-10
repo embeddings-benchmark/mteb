@@ -131,13 +131,13 @@ class AbsTaskClustering(AbsTask):
     This class embeds the corpus sentences then samples N samples from the corpus and clusters them. The similarity then is calculated using multiple
     measures, including a V-measure. This approach is then repeated K times.
 
-    If the clustering is hierarchical, and more than one label is specified in order for each observation, we calculate the metrics calculated in 
+    If the clustering is hierarchical, and more than one label is specified in order for each observation, we calculate the metrics calculated in
     the outlined way on each of the levels separately.
 
     Attributes:
-        dataset: A HuggingFace Dataset containing the data for the clustering task. Must contain the following columns `sentences` that contains 
+        dataset: A HuggingFace Dataset containing the data for the clustering task. Must contain the following columns `sentences` that contains
             inputs (texts or images) and labels columns.
-        max_fraction_of_documents_to_embed: Fraction of documents to embed for clustering. Cannot be set at the same time as `max_document_to_embed`. 
+        max_fraction_of_documents_to_embed: Fraction of documents to embed for clustering. Cannot be set at the same time as `max_document_to_embed`.
             If both are set to None, the entire dataset will be embedded for clustering.
         max_document_to_embed: Maximum number of documents to embed for clustering. Cannot be set at the same time as `max_fraction_of_documents_to_embed`.
             If both are set to None, the entire dataset will be embedded for clustering.
