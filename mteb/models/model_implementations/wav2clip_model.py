@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import warnings
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -8,6 +7,7 @@ import torch
 from tqdm.auto import tqdm
 from transformers import CLIPModel, CLIPProcessor
 
+from mteb._create_dataloaders import AudioCollator
 from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -57,7 +57,7 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
-        import torchaudio
+        inputs.collate_fn = AudioCollator(self.sampling_rate)
 
         all_embeddings = []
 
@@ -65,23 +65,7 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         for batch in tqdm(
             inputs, desc="Processing audio batches", disable=not show_progress_bar
         ):
-            audio_arrays = []
-            for a in batch["audio"]:
-                array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate", None)
-                if sr is None:
-                    warnings.warn(
-                        f"No sampling_rate provided for an audio sample. "
-                        f"Assuming {self.sampling_rate} Hz (model default)."
-                    )
-                    sr = self.sampling_rate
-
-                if sr != self.sampling_rate:
-                    resampler = torchaudio.transforms.Resample(
-                        orig_freq=sr, new_freq=self.sampling_rate
-                    )
-                    array = resampler(array)
-                audio_arrays.append(array)  # Keep as tensor
+            audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             max_length = max(wav.shape[-1] for wav in audio_arrays)
             padded_wavs = []

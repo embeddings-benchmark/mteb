@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import warnings
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -9,6 +8,7 @@ from tqdm.auto import tqdm
 from transformers import AutoProcessor, SeamlessM4Tv2Model
 
 from mteb import TaskMetadata
+from mteb._create_dataloaders import AudioCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
@@ -44,6 +44,7 @@ class SeamlessM4TWrapper(AbsEncoder):
 
         self.model = self.model.to(device)
         self.speech_encoder = self.speech_encoder.to(device)
+        self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
     def get_audio_embeddings(
         self,
@@ -51,36 +52,14 @@ class SeamlessM4TWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        import torchaudio
-
+        inputs.collate_fn = AudioCollator(self.sampling_rate, self.max_samples)
         all_embeddings = []
 
         for batch in tqdm(
             inputs,
             disable=not show_progress_bar,
         ):
-            audio_arrays = []
-            max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
-
-            for a in batch["audio"]:
-                array = torch.tensor(a["array"], dtype=torch.float32)
-                sr = a.get("sampling_rate", None)
-                if sr is None:
-                    warnings.warn(
-                        f"No sampling_rate provided for an audio sample. "
-                        f"Assuming {self.sampling_rate} Hz (model default)."
-                    )
-                    sr = self.sampling_rate
-
-                if sr != self.sampling_rate:
-                    resampler = torchaudio.transforms.Resample(
-                        orig_freq=sr, new_freq=self.sampling_rate
-                    )
-                    array = resampler(array)
-
-                # Squeeze to 1D and truncate
-                array = array.squeeze()[:max_samples]
-                audio_arrays.append(array)
+            audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             # Process the entire batch at once
             features = self.processor(
