@@ -102,7 +102,7 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
         except Exception:
             # Fallback to CTC model for models that don't have base versions
             self.model = Wav2Vec2ForCTC.from_pretrained(
-                model_name, revision=revision
+                model_name, revision=revision, use_safetensors=False,
             ).to(self.device)
             self.is_ctc_model = True
 

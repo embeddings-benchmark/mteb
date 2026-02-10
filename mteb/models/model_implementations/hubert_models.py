@@ -35,9 +35,9 @@ class HubertWrapper(AbsEncoder):
 
         # HuBERT uses the same feature extractor as Wav2Vec2
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
-        self.model = HubertModel.from_pretrained(model_name, revision=revision).to(
-            self.device
-        )
+        self.model = HubertModel.from_pretrained(
+            model_name, revision=revision, use_safetensors=False
+        ).to(self.device)
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 

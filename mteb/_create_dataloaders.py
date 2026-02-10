@@ -290,6 +290,20 @@ def _prepare_image_dataset(
         num_proc=num_proc,
     )
 
+def _decode_audio(audio: Any) -> dict[str, Any]:
+    """Decode audio if it's a lazy AudioDecoder (datasets v4+ with torchcodec)."""
+    if hasattr(audio, "get_all_samples"):
+        # datasets v4+ uses torchcodec AudioDecoder
+        samples = audio.get_all_samples()
+        # Convert to expected format: dict with 'array' and 'sampling_rate'
+        # samples.data is [channels, samples], convert to mono 1D array
+        data = samples.data
+        if data.dim() > 1:
+            data = data.mean(dim=0)
+        array = data.numpy()
+        return {"array": array, "sampling_rate": samples.sample_rate}
+    return audio
+
 
 def _custom_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
     """Custom collate function for DataLoader.
@@ -308,9 +322,11 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
         if key in (
             "image",  # images can be with different sizes
             "conversation",  # conversations are lists of varying lengths
-            "audio",  # audio can have different lengths
         ):
             collated[key] = [item[key] for item in batch]
+        elif key == "audio":
+            # Decode lazy AudioDecoder objects from datasets v4+
+            collated[key] = [_decode_audio(item[key]) for item in batch]
         else:
             if any(item[key] is None for item in batch):
                 raise ValueError(f"Found None in batch for key '{key}'")
