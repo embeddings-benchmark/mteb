@@ -85,7 +85,7 @@ class VisRAGRetSlideVQA(AbsTaskRetrieval):
             "revision": "6b5f81a3f6953095934c26c5d420dfd039184d69",
         },
         date=("2010-01-01", "2022-12-31"),
-        domains=["Web", "Non-fiction"],
+        domains=["Web"],
         task_subtypes=["Image Text Retrieval"],
         license="not specified",
         annotations_creators="derived",
