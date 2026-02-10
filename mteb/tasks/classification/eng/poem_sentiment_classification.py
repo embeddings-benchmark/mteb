@@ -41,7 +41,7 @@ class PoemSentimentClassification(AbsTaskClassification):
 class PoemSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PoemSentimentClassification.v2",
-        description="Poem Sentiment is a sentiment dataset of poem verses from Project Gutenberg. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
+        description="Poem Sentiment consist of poem verses from Project Gutenberg annotated for sentiment using the labels negative (0), positive (1), no_impact (2) and mixed (3). This version was corrected as a part of [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900) to fix common issues on the original datasets, including removing duplicates, and train-test leakage.",
         reference="https://arxiv.org/abs/2011.02686",
         dataset={
             "path": "mteb/poem_sentiment",
@@ -53,8 +53,8 @@ class PoemSentimentClassificationV2(AbsTaskClassification):
         eval_splits=["validation", "test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("1700-01-01", "1900-01-01"),
-        domains=["Reviews", "Written"],
+        date=("1700-01-01", "1900-01-01"), # a very rough guess of the date range of the poems, we do not have exact dates for all poems
+        domains=["Written", "Fiction", "Poetry"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-4.0",
         annotations_creators="human-annotated",
