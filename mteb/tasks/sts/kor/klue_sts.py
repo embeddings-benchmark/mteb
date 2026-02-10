@@ -20,7 +20,7 @@ class KlueSTS(AbsTaskSTS):
         main_score="cosine_spearman",
         date=("2011-01-01", "2021-11-02"),  # rough estimate,
         domains=["Reviews", "News", "Spoken", "Written", "Spoken"],
-        task_subtypes=None,
+        task_subtypes=[],
         license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
@@ -40,7 +40,7 @@ class KlueSTS(AbsTaskSTS):
     min_score = 0
     max_score = 5
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         # In the case of KLUE STS, score value is nested within the `labels` field.
         # We need to extract the `score` and move it outside of the `labels` field for access.
         for split in self.dataset:

@@ -17,7 +17,7 @@ class BiossesSTS(AbsTaskSTS):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cosine_spearman",
-        date=None,
+        date=("2017-07-01", "2017-12-31"),  # publication date
         domains=["Medical"],
         task_subtypes=[],
         license="not specified",

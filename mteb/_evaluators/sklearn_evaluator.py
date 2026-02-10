@@ -1,27 +1,36 @@
-import logging
-from typing import Any, Protocol, cast
+from __future__ import annotations
 
-import numpy as np
-from datasets import Dataset
-from torch.utils.data import DataLoader
-from typing_extensions import Self
+import logging
+from typing import TYPE_CHECKING, Any, Protocol, cast
 
 from mteb._create_dataloaders import create_dataloader
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import EncoderProtocol
-from mteb.types import Array, BatchedInput
 
 from .evaluator import Evaluator
+
+if TYPE_CHECKING:
+    import numpy as np
+    from datasets import Dataset
+    from numpy.typing import NDArray
+    from torch.utils.data import DataLoader
+    from typing_extensions import Self
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import EncoderProtocol
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
 
 class SklearnModelProtocol(Protocol):
-    def fit(self, X: Array, y: np.ndarray | list[int]) -> None: ...  # noqa: N803
-    def predict(self, X: Array) -> np.ndarray: ...  # noqa: N803
+    def fit(
+        self, X: Array, y: NDArray[np.integer | np.floating] | list[int | float]
+    ) -> None: ...
+    def predict(self, X: Array) -> NDArray[np.integer | np.floating]: ...
     def get_params(self) -> dict[str, Any]: ...
     def set_params(self, random_state: int, **kwargs: dict[str, Any]) -> Self: ...
-    def score(self, X: Array, y: np.ndarray | list[int]) -> float: ...  # noqa: N803
+    def score(
+        self, X: Array, y: NDArray[np.integer | np.floating] | list[int | float]
+    ) -> float: ...
 
 
 class SklearnEvaluator(Evaluator):
@@ -50,18 +59,22 @@ class SklearnEvaluator(Evaluator):
         self.evaluator_model = evaluator_model
 
     def create_dataloaders(
-        self, encode_kwargs: dict[str, Any]
+        self,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None,
     ) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
         dataloader_train = create_dataloader(
             self.train_dataset,
             self.task_metadata,
             input_column=self.values_column_name,
+            num_proc=num_proc,
             **encode_kwargs,
         )
         dataloader_test = create_dataloader(
             self.eval_dataset,
             self.task_metadata,
             input_column=self.values_column_name,
+            num_proc=num_proc,
             **encode_kwargs,
         )
         return dataloader_train, dataloader_test
@@ -70,10 +83,11 @@ class SklearnEvaluator(Evaluator):
         self,
         model: EncoderProtocol,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         test_cache: Array | None = None,
         train_cache: Array | None = None,
-    ) -> tuple[np.ndarray, Array]:
+        num_proc: int | None = None,
+    ) -> tuple[NDArray[np.integer | np.floating], Array]:
         """Classification evaluation by training a sklearn classifier on the embeddings of the training set and evaluating on the embeddings of the test set.
 
         Args:
@@ -81,6 +95,7 @@ class SklearnEvaluator(Evaluator):
             encode_kwargs: encode kwargs
             test_cache: embeddings of the test set, if already computed
             train_cache: embeddings of the train set, if already computed. Used for cross-validation.
+            num_proc: number of processes to use
 
         Returns:
             Tuple of test predictions and embeddings
@@ -88,6 +103,7 @@ class SklearnEvaluator(Evaluator):
         """
         dataloader_train, dataloader_test = self.create_dataloaders(
             encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
         )
 
         logger.info("Running - Encoding samples...")
@@ -107,7 +123,7 @@ class SklearnEvaluator(Evaluator):
                 hf_subset=self.hf_subset,
                 **encode_kwargs,
             )
-            test_cache = cast(Array, test_cache)
+            test_cache = cast("Array", test_cache)
 
         logger.info("Running - Fitting classifier...")
         y_train = self.train_dataset[self.label_column_name]

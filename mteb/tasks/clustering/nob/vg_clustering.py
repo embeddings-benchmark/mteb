@@ -1,12 +1,17 @@
+from __future__ import annotations
+
 import random
-from collections.abc import Iterable
 from itertools import islice
-from typing import TypeVar
+from typing import TYPE_CHECKING, TypeVar
 
 import datasets
 
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
 
 T = TypeVar("T")
 
@@ -37,7 +42,7 @@ class VGClustering(AbsTaskClusteringLegacy):
         main_score="v_measure",
         date=("2020-01-01", "2024-12-31"),  # best guess
         domains=["News", "Non-fiction", "Written"],
-        license=None,
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         task_subtypes=["Thematic clustering"],
@@ -53,7 +58,7 @@ class VGClustering(AbsTaskClusteringLegacy):
         superseded_by="VGHierarchicalClusteringP2P",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         splits = self.metadata.eval_splits
 
         documents: list = []

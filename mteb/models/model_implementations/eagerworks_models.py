@@ -1,17 +1,23 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import (
     requires_image_dependencies,
     requires_package,
 )
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
 
 
 class EagerEmbedV1Wrapper(AbsEncoder):
@@ -146,7 +152,8 @@ Eager_Embed_V1 = ModelMeta(
     revision="a6bec272729c5056e2c26618ce085205c82a3b3c",
     release_date="2025-11-20",
     modalities=["image", "text"],
-    n_parameters=4_000_000_000,
+    n_parameters=4437815808,
+    n_embedding_parameters=388956160,
     memory_usage_mb=16929,
     max_tokens=262144,
     embed_dim=2560,

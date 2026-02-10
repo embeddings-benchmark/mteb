@@ -1,19 +1,21 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
-from transformers import (
-    Qwen2_5OmniProcessor,
-    Qwen2_5OmniThinkerForConditionalGeneration,
-)
 
-from mteb import TaskMetadata
+from mteb._create_dataloaders import AudioCollator
 from mteb._requires_package import requires_audio_dependencies, requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +31,10 @@ class LCOEmbedding(AbsEncoder):
         requires_audio_dependencies()
         requires_package(
             self, "qwen_omni_utils", model_name, "pip install mteb[qwen_omni_utils]"
+        )
+        from transformers import (
+            Qwen2_5OmniProcessor,
+            Qwen2_5OmniThinkerForConditionalGeneration,
         )
 
         self.model_name = model_name
@@ -47,6 +53,8 @@ class LCOEmbedding(AbsEncoder):
 
         # Audio sampling rate target
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
+        # Pre-calculate max samples once
+        self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
     def encode(
         self,
@@ -59,11 +67,7 @@ class LCOEmbedding(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        import torchaudio
         from qwen_omni_utils import process_mm_info
-
-        # Pre-calculate max samples once
-        max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
         all_embeddings = []
 
@@ -79,28 +83,10 @@ class LCOEmbedding(AbsEncoder):
                 audio_row = audio_list[i] if i < len(audio_list) else None
 
                 if audio_row is not None:
-                    array = torch.tensor(audio_row["array"], dtype=torch.float32)
-                    sr = audio_row.get("sampling_rate", self.sampling_rate)
-
-                    # --- Handle empty audio if there's any ---
-                    if array.numel() == 0:
-                        logger.warning(
-                            f"Encountered empty audio in {hf_subset}. Using 0.1s silence placeholder."
-                        )
-                        # Create minimal silent audio (0.1 seconds) to prevent pooling crash
-                        array = torch.zeros(
-                            int(self.sampling_rate * 0.1), dtype=torch.float32
-                        )
-                    # --------------------------------
-
-                    if sr != self.sampling_rate:
-                        resampler = torchaudio.transforms.Resample(
-                            orig_freq=sr, new_freq=self.sampling_rate
-                        )
-                        array = resampler(array)
-                    if len(array) > max_samples:
-                        array = array[:max_samples]
-                    content.append({"type": "audio", "audio": array.numpy()})
+                    array = AudioCollator.resample_audio(
+                        {"audio": audio_row}, self.sampling_rate, self.max_samples
+                    )
+                    content.append({"type": "audio", "audio": array})
 
                 text_row = text_list[i] if i < len(text_list) else None
                 if text_row is not None:

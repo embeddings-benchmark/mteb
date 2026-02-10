@@ -1,11 +1,12 @@
+from __future__ import annotations
+
 import json
 import logging
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 from huggingface_hub import (
-    CardData,
     DatasetCard,
     DatasetCardData,
     constants,
@@ -17,13 +18,11 @@ from pydantic import (
     ConfigDict,
     field_validator,
 )
-from typing_extensions import Required, TypedDict
+from typing_extensions import Required, TypedDict  # noqa: TC002
 
 import mteb
 from mteb.languages import check_language_code
 from mteb.types import (
-    HFSubset,
-    ISOLanguageScript,
     Languages,
     Licenses,
     Modalities,
@@ -31,7 +30,17 @@ from mteb.types import (
     StrDate,
     StrURL,
 )
-from mteb.types.statistics import DescriptiveStatistics
+
+if TYPE_CHECKING:
+    from huggingface_hub import (
+        CardData,
+    )
+
+    from mteb.types import (
+        HFSubset,
+        ISOLanguageScript,
+    )
+    from mteb.types.statistics import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +80,8 @@ TaskSubtype = Literal[
     "Duplicate Detection",
     "Rendered semantic textual similarity",
     "Intent classification",
+    "Product Reranking",
+    "Query-Product Relevance",
     "Accent identification",
     "Environment Sound Classification",
     "Gunshot Audio Classification",
@@ -136,6 +147,7 @@ TaskDomain = Literal[
     "Chemistry",
     "Financial",
     "Entertainment",
+    "E-commerce",
     "AudioScene",
     "Speech",
     "Spoken",
@@ -447,7 +459,7 @@ class TaskMetadata(BaseModel):
         """Return a dictionary mapping huggingface subsets to languages."""
         if isinstance(self.eval_langs, dict):
             return self.eval_langs
-        return {"default": cast(list[str], self.eval_langs)}
+        return {"default": cast("list[str]", self.eval_langs)}
 
     @property
     def intext_citation(self, include_cite: bool = True) -> str:
@@ -829,7 +841,7 @@ class TaskMetadata(BaseModel):
             for val in self.eval_langs.values():
                 languages.extend(val)
         else:
-            languages = cast(list[str], self.eval_langs)
+            languages = cast("list[str]", self.eval_langs)
         # value "python" is not valid. It must be an ISO 639-1, 639-2 or 639-3 code (two/three letters),
         # or a special value like "code", "multilingual".
         readme_langs = []

@@ -35,7 +35,7 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
         superseded_by="SlovakMovieReviewSentimentClassification.v2",
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         self.dataset = self.dataset.rename_columns({"comment": "text"})
 
         self.dataset = self.stratified_subsampling(
@@ -76,7 +76,7 @@ class SlovakMovieReviewSentimentClassificationV2(AbsTaskClassification):
         adapted_from=["SlovakMovieReviewSentimentClassification"],
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )

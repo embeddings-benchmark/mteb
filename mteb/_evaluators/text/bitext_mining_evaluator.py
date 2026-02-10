@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING
 
 import torch
 from datasets import Dataset
@@ -7,9 +9,11 @@ from tqdm.auto import tqdm
 
 from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb._evaluators.evaluator import Evaluator
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import EncoderProtocol
-from mteb.types import Array
+
+if TYPE_CHECKING:
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import EncoderProtocol
+    from mteb.types import Array, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +37,11 @@ class BitextMiningEvaluator(Evaluator):
         self.task_metadata = task_metadata
 
     def __call__(
-        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
+        self,
+        model: EncoderProtocol,
+        *,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None = None,
     ) -> dict[str, list[dict[str, float]]]:
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
@@ -48,6 +56,7 @@ class BitextMiningEvaluator(Evaluator):
         for sub in tqdm(subsets):
             dataloader = _create_dataloader_from_texts(
                 self.sentences[sub],
+                num_proc=num_proc,
                 **encode_kwargs,
             )
             embeddings[sub] = model.encode(

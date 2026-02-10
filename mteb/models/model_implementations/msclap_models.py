@@ -1,20 +1,25 @@
+from __future__ import annotations
+
 import logging
 import tempfile
-import warnings
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb import TaskMetadata
+from mteb._create_dataloaders import AudioCollator
 from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput, TextInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput, TextInput
 
 logger = logging.getLogger(__name__)
 
@@ -61,52 +66,23 @@ class MSClapWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> np.ndarray:
         import soundfile as sf
-        import torchaudio
+
+        inputs.collate_fn = AudioCollator(self.sampling_rate)
 
         all_embeddings = []
-
-        # Cache resampler to avoid recreating for each sample
-        resampler = None
-        cached_sr = None
-
         for batch in tqdm(
             inputs,
             disable=not show_progress_bar,
         ):
             temp_files = []
+            audio_arrays = [audio["array"] for audio in batch["audio"]]
+
             try:
-                for a in batch["audio"]:
-                    array = torch.tensor(a["array"], dtype=torch.float32)
-                    sr = a.get("sampling_rate", None)
-                    if sr is None:
-                        warnings.warn(
-                            f"No sampling_rate provided for an audio sample. "
-                            f"Assuming {self.sampling_rate} Hz (model default)."
-                        )
-                        sr = self.sampling_rate
-
-                    # Handle empty audio arrays
-                    if array.numel() == 0:
-                        logger.warning(
-                            "Encountered empty audio array. Using a zero-filled array as placeholder."
-                        )
-                        # Create a minimal silent audio (0.1 seconds)
-                        array = torch.zeros(
-                            int(self.sampling_rate * 0.1), dtype=torch.float32
-                        )
-                    elif sr != self.sampling_rate:
-                        # Only create new resampler if sample rate changed
-                        if resampler is None or cached_sr != sr:
-                            resampler = torchaudio.transforms.Resample(
-                                orig_freq=sr, new_freq=self.sampling_rate
-                            )
-                            cached_sr = sr
-                        array = resampler(array)
-
+                for array in audio_arrays:
                     # Write to temp file - msclap expects file paths
                     temp_file = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
                     temp_files.append(temp_file.name)
-                    sf.write(temp_file.name, array.numpy(), self.sampling_rate)
+                    sf.write(temp_file.name, array, self.sampling_rate)
 
                 with torch.no_grad():
                     # Use the official msclap API that expects file paths

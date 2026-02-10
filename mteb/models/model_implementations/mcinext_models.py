@@ -1,16 +1,19 @@
+from __future__ import annotations
+
 import logging
 import os
 import time
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import requests
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
-from mteb.types import PromptType
 
+if TYPE_CHECKING:
+    from mteb.types import Array, PromptType
 logger = logging.getLogger(__name__)
 
 HAKIM_CITATION = """@article{sarmadi2025hakim,
@@ -299,7 +302,7 @@ class HakimModelWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
         **kwargs: Any,
-    ) -> np.ndarray:
+    ) -> Array:
         """Encodes sentences using the API.
 
         Returns:
@@ -355,6 +358,7 @@ hakim = ModelMeta(
     revision="1",
     release_date="2025-05-10",
     n_parameters=124_441_344,
+    n_embedding_parameters=None,
     memory_usage_mb=475,
     embed_dim=768,
     license="not specified",
@@ -423,6 +427,7 @@ hakim_small = ModelMeta(
     revision="1",
     release_date="2025-05-10",
     n_parameters=38_736_384,
+    n_embedding_parameters=None,
     memory_usage_mb=148,
     embed_dim=512,
     license="not specified",
@@ -490,6 +495,7 @@ hakim_unsup = ModelMeta(
     revision="1",
     release_date="2025-05-10",
     n_parameters=124_441_344,
+    n_embedding_parameters=None,
     memory_usage_mb=475,
     embed_dim=768,
     license="not specified",

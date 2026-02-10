@@ -1,18 +1,24 @@
+from __future__ import annotations
+
 import logging
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb import TaskMetadata
 from mteb._requires_package import requires_audio_dependencies, requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInput
+
 
 logger = logging.getLogger(__name__)
 
@@ -132,7 +138,7 @@ def yamnet_loader(*args, **kwargs):
 
                 for a in batch["audio"]:
                     array = torch.tensor(a["array"], dtype=torch.float32)
-                    sr = a.get("sampling_rate", None)
+                    sr = a["sampling_rate"]
                     if sr is None:
                         warnings.warn(
                             f"No sampling_rate provided for an audio sample. "
@@ -209,7 +215,7 @@ yamnet = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@inproceedings{gemmeke2017audioset,
+@inproceedings{audioset,
   title={Audio set: An ontology and human-labeled dataset for audio events},
   author={Gemmeke, Jort F and Ellis, Daniel PW and Freedman, Dylan and Jansen, Aren and Lawrence, Wade and Moore, R Channing and Plakal, Manoj and Ritter, Marvin},
   booktitle={2017 IEEE international conference on acoustics, speech and signal processing (ICASSP)},

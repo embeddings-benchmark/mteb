@@ -1,14 +1,20 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -774,6 +780,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta(
     release_date="2024-10-23",
     languages=["eng-Latn", "zho-Hans"],
     n_parameters=494032768,
+    n_embedding_parameters=136_134_656,
     memory_usage_mb=1885,
     max_tokens=512,
     embed_dim=896,
@@ -799,6 +806,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta(
     release_date="2024-08-27",
     languages=["eng-Latn", "zho-Hans"],
     n_parameters=494032768,
+    n_embedding_parameters=136_134_656,
     memory_usage_mb=1885,
     max_tokens=512,
     embed_dim=896,
@@ -830,6 +838,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
     release_date="2024-12-26",
     languages=["eng-Latn", "zho-Hans"],
     n_parameters=494032768,
+    n_embedding_parameters=136_134_656,
     memory_usage_mb=1885,
     max_tokens=512,
     embed_dim=896,
@@ -861,6 +870,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v2 = ModelMeta(
     release_date="2025-06-25",
     languages=["eng-Latn", "zho-Hans"],
     n_parameters=494032768,
+    n_embedding_parameters=136_134_656,
     memory_usage_mb=942,
     max_tokens=512,
     embed_dim=896,
@@ -892,6 +902,7 @@ KaLM_Embedding_KaLM_embedding_multilingual_mini_instruct_v2_5 = ModelMeta(
     release_date="2025-09-30",
     languages=["eng-Latn", "zho-Hans"],
     n_parameters=494032768,
+    n_embedding_parameters=136_134_656,
     memory_usage_mb=1885,
     max_tokens=512,
     embed_dim=896,
@@ -907,23 +918,23 @@ KaLM_Embedding_KaLM_embedding_multilingual_mini_instruct_v2_5 = ModelMeta(
     adapted_from="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2",
     superseded_by=None,
     citation="""@misc{zhao2025kalmembeddingv2,
-      title={KaLM-Embedding-V2: Superior Training Techniques and Data Inspire A Versatile Embedding Model}, 
+      title={KaLM-Embedding-V2: Superior Training Techniques and Data Inspire A Versatile Embedding Model},
       author={Xinping Zhao and Xinshuo Hu and Zifei Shan and Shouzheng Huang and Yao Zhou and Xin Zhang and Zetian Sun and Zhenyu Liu and Dongfang Li and Xinyuan Wei and Youcheng Pan and Yang Xiang and Meishan Zhang and Haofen Wang and Jun Yu and Baotian Hu and Min Zhang},
       year={2025},
       eprint={2506.20923},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2506.20923}, 
+      url={https://arxiv.org/abs/2506.20923},
 }
 
 @misc{hu2025kalmembedding,
-      title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Model}, 
+      title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Model},
       author={Xinshuo Hu and Zifei Shan and Xinping Zhao and Zetian Sun and Zhenyu Liu and Dongfang Li and Shaolin Ye and Xinyuan Wei and Qian Chen and Baotian Hu and Haofen Wang and Jun Yu and Min Zhang},
       year={2025},
       eprint={2501.01028},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2501.01028}, 
+      url={https://arxiv.org/abs/2501.01028},
 }""",
 )
 
@@ -942,6 +953,7 @@ KaLM_Embedding_gemma_3_12b_2511 = ModelMeta(
     open_weights=True,
     release_date="2025-11-06",
     n_parameters=11.76 * 1e9,
+    n_embedding_parameters=None,
     memory_usage_mb=44884,
     max_tokens=32768,
     embed_dim=3840,
@@ -954,22 +966,22 @@ KaLM_Embedding_gemma_3_12b_2511 = ModelMeta(
     public_training_data=None,
     training_datasets=KaLM_Embedding_gemma_3_12b_training_data,
     citation="""@misc{zhao2025kalmembeddingv2,
-      title={KaLM-Embedding-V2: Superior Training Techniques and Data Inspire A Versatile Embedding Model}, 
+      title={KaLM-Embedding-V2: Superior Training Techniques and Data Inspire A Versatile Embedding Model},
       author={Xinping Zhao and Xinshuo Hu and Zifei Shan and Shouzheng Huang and Yao Zhou and Xin Zhang and Zetian Sun and Zhenyu Liu and Dongfang Li and Xinyuan Wei and Youcheng Pan and Yang Xiang and Meishan Zhang and Haofen Wang and Jun Yu and Baotian Hu and Min Zhang},
       year={2025},
       eprint={2506.20923},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2506.20923}, 
+      url={https://arxiv.org/abs/2506.20923},
 }
 
 @misc{hu2025kalmembedding,
-      title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Model}, 
+      title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Model},
       author={Xinshuo Hu and Zifei Shan and Xinping Zhao and Zetian Sun and Zhenyu Liu and Dongfang Li and Shaolin Ye and Xinyuan Wei and Qian Chen and Baotian Hu and Haofen Wang and Jun Yu and Min Zhang},
       year={2025},
       eprint={2501.01028},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2501.01028}, 
+      url={https://arxiv.org/abs/2501.01028},
 }""",
 )

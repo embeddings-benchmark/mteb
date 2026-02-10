@@ -1,19 +1,26 @@
+from __future__ import annotations
+
 import logging
 import warnings
-from collections.abc import Mapping
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
-from datasets import Dataset, DatasetDict
 
-from mteb.models.models_protocols import MTEBModels
 from mteb.results.task_result import TaskResult
-from mteb.types import HFSubset, ScoresDict
-from mteb.types.statistics import DescriptiveStatistics
 
 from .abstask import AbsTask
-from .aggregate_task_metadata import AggregateTaskMetadata
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+    from pathlib import Path
+
+    from datasets import Dataset, DatasetDict
+
+    from mteb.models.models_protocols import MTEBModels
+    from mteb.types import EncodeKwargs, HFSubset, ScoresDict
+    from mteb.types.statistics import DescriptiveStatistics
+
+    from .aggregate_task_metadata import AggregateTaskMetadata
 
 logger = logging.getLogger(__name__)
 
@@ -127,7 +134,7 @@ class AbsTaskAggregate(AbsTask):
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
@@ -141,7 +148,7 @@ class AbsTaskAggregate(AbsTask):
         self,
         model: MTEBModels,
         data_split: DatasetDict | Dataset,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(

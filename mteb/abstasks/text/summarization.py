@@ -1,23 +1,33 @@
+from __future__ import annotations
+
 import logging
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
 
 import numpy as np
-from datasets import Dataset
 
 from mteb._evaluators import SummarizationEvaluator
-from mteb._evaluators.text.summarization_evaluator import SummarizationMetrics
 from mteb.abstasks._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,
 )
 from mteb.abstasks.abstask import AbsTask
-from mteb.models import EncoderProtocol, MTEBModels
+from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
-    ScoreStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from datasets import Dataset
+
+    from mteb._evaluators.text.summarization_evaluator import SummarizationMetrics
+    from mteb.models import MTEBModels
+    from mteb.types import EncodeKwargs
+    from mteb.types.statistics import (
+        ScoreStatistics,
+        TextStatistics,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -82,8 +92,9 @@ class AbsTaskSummarization(AbsTask):
         *,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int | None = None,
         **kwargs,
     ) -> SummarizationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -105,7 +116,7 @@ class AbsTaskSummarization(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        scores = evaluator(model, encode_kwargs=encode_kwargs)
+        scores = evaluator(model, encode_kwargs=encode_kwargs, num_proc=num_proc)
         if prediction_folder:
             self._save_task_predictions(
                 scores,

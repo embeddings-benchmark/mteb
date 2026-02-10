@@ -1,13 +1,17 @@
+from __future__ import annotations
+
 import re
 from collections import defaultdict
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 import numpy as np
 import pandas as pd
 
 import mteb
 from mteb.get_tasks import get_task, get_tasks
-from mteb.results.benchmark_results import BenchmarkResults
+
+if TYPE_CHECKING:
+    from mteb.results.benchmark_results import BenchmarkResults
 
 
 def _borda_count(scores: pd.Series) -> pd.Series:
@@ -58,7 +62,7 @@ def _get_means_per_types(per_task: pd.DataFrame):
                 dict(
                     model_name=model_name,
                     task_type=task_type,
-                    score=scores[tasks].mean(skipna=False),
+                    score=scores[tasks].mean(skipna=True),
                 )
             )
     return pd.DataFrame.from_records(records)
@@ -115,7 +119,6 @@ def _create_summary_table_from_benchmark_results(
 
     # Build joint table
     joint_table = mean_per_type.copy()
-    joint_table = joint_table.drop(models_to_remove, axis=0)
     joint_table.insert(0, "mean", overall_mean)
     joint_table.insert(1, "mean_by_task_type", typed_mean)
     joint_table["borda_rank"] = _get_borda_rank(per_task)
@@ -303,6 +306,7 @@ def _create_per_language_table_from_benchmark_results(
 
 def _create_summary_table_mean_public_private(
     benchmark_results: BenchmarkResults,
+    exclude_private_from_borda: bool = False,
 ) -> pd.DataFrame:
     """Create summary table from BenchmarkResults.
 
@@ -311,6 +315,7 @@ def _create_summary_table_mean_public_private(
 
     Args:
         benchmark_results: BenchmarkResults object containing model results
+        exclude_private_from_borda: If True, calculate Borda rank using only public tasks
 
     Returns:
         DataFrame with model summaries, ready for styling in the leaderboard
@@ -353,10 +358,13 @@ def _create_summary_table_mean_public_private(
 
     # Build joint table
     joint_table = mean_per_type.copy()
-    joint_table = joint_table.drop(models_to_remove, axis=0)
     joint_table.insert(0, "mean(public)", public_mean)
     joint_table.insert(1, "mean(private)", private_mean)
-    joint_table["borda_rank"] = _get_borda_rank(per_task)
+    if exclude_private_from_borda:
+        borda_per_task = per_task[public_task_name]
+    else:
+        borda_per_task = per_task
+    joint_table["borda_rank"] = _get_borda_rank(borda_per_task)
     joint_table = joint_table.sort_values("borda_rank", ascending=True)
     joint_table = joint_table.reset_index()
 
@@ -476,7 +484,6 @@ def _create_summary_table_mean_subset(
 
     # Build joint table
     joint_table = mean_per_type.copy()
-    joint_table = joint_table.drop(models_to_remove, axis=0)
     joint_table.insert(0, "mean(subset)", overall_subset_mean)
     joint_table["borda_rank"] = _get_borda_rank(per_subset)
     joint_table = joint_table.sort_values("mean(subset)", ascending=False)
@@ -595,7 +602,6 @@ def _create_summary_table_mean_task_type(
 
     # Build joint table
     joint_table = mean_per_type.copy()
-    joint_table = joint_table.drop(models_to_remove, axis=0)
     joint_table.insert(0, "mean_by_task_type", typed_mean)
     joint_table = joint_table.sort_values("mean_by_task_type", ascending=False)
     joint_table["borda_rank"] = _get_borda_rank(per_task)

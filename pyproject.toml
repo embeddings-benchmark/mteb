@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.6.5"
+version = "2.7.25"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -44,8 +44,6 @@ dependencies = [
     "pytrec-eval-terrier>=0.5.6",
     "pydantic>=2.0.0",
     "polars>=0.20.22",
-    "torch<2.9.0; python_full_version < '3.14'",
-    "torch>=2.9.0; python_full_version >= '3.14'",
 ]
 
 
@@ -64,10 +62,9 @@ image = [
     "transformers[torch-vision,vision]",
 ]
 audio = [
-    "torchaudio>=2.6.0,<2.8.0; python_full_version < '3.14'",
-    "datasets<4",  # https://github.com/huggingface/datasets/issues/7707
-    "librosa>=0.11.0",
-    "soundfile>=0.13.1",
+    "torchaudio",
+    # datsaets==4 requires transformers>=5, because of https://github.com/huggingface/transformers/issues/42103
+    "datasets[audio]",
 ]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
@@ -86,7 +83,7 @@ flash_attention = ["flash-attn>=2.6.3"]
 openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
 model2vec = ["model2vec>=0.3.0"]
 pylate = ["pylate>=1.3.1; python_full_version < '3.13'"]  # Required for sentence-transformers 5.0.0 compatibility (otherwise 1.1.6), pylate requires voyager, which in turn requires <=3.12
-msclap = ["msclap>=1.3.4"]
+msclap = ["msclap>=1.3.4", "soundfile>=0.13.1"]
 bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
 gritlm = ["gritlm>=1.0.2"]
 xformers = ["xformers>=0.0.29"]
@@ -106,13 +103,17 @@ sauerkrautlm-colpali = ["sauerkrautlm-colpali>=0.1.0; python_full_version < '3.1
 xet = ["huggingface_hub>=0.32.0"]
 youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lkeap>=3.0.1451"]
 llama-embed-nemotron = ["transformers==4.51.0"]
+llama-nemotron-colembed-vl = ["transformers[torch]==4.49.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
+nemotron-colembed-vl-v2 = ["transformers[torch]==5.0.0rc0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 faiss-cpu = ["faiss-cpu>=1.12.0"]
 eager_embed = ["qwen_vl_utils>=0.0.14"]
-speechbrain = ["speechbrain>=0.5.12", "torchaudio>=2.6.0,<2.8; python_full_version < '3.14'"]
+speechbrain = ["speechbrain>=0.5.12"]
 muq = ["muq==0.1.0"]
 wav2clip = ["wav2clip==0.1.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 qwen_omni_utils = ["qwen_omni_utils>=0.0.8"]
+vllm = ["vllm>=0.11.1"]
+mctct = ["transformers<5"]  # mctct was removed in transformers 5
 
 [dependency-groups]
 lint = [
@@ -249,7 +250,9 @@ select = [
     "PTH",     # use pathlib
     "TID",     # tidy-imports
     "D",       # pydocstyle
-    "PGH",  # pygrep-hooks Use specific rule codes when ignoring type issues
+    "PGH",     # pygrep-hooks Use specific rule codes when ignoring type issues
+    "LOG",     # logging
+    "TC",      # type-checking
 ]
 
 ignore = [
@@ -262,14 +265,29 @@ ignore = [
     "D415",     # First line should end with a period
     "C408",     # don't use unecc. collection call, e.g. dict over {}
 ]
+future-annotations = true  # For TC rules
+typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
+
 
 [tool.ruff.lint.per-file-ignores]
 "scripts/*" = ["ALL"]
-"docs/*" = ["D", "DOC"]
-"tests/*" = ["RUF012", "D", "DOC", "NPY"]
+"docs/*" = [
+    "D",
+    "DOC",
+]
+"tests/*" = [
+    "RUF012",
+    "D",
+    "DOC",
+    "TC",
+]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = ["D", "DOC"]
 "mteb/models/model_implementations/*" = ["D", "DOC"]
+"mteb/benchmarks/benchmark.py" = [
+    # pydantic would try to validate fields in Benchmark class
+    "TC",
+]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false
@@ -277,6 +295,7 @@ allow-multiline = false
 [tool.ruff.lint.pep8-naming]
 ignore-names = [
     "F",  # torch.nn.functional
+    "X",
     "X_train",
     "X_test",
 ]
@@ -288,6 +307,13 @@ convention = "google"
 mypy-init-return = true
 suppress-none-returning = true
 
+[tool.ruff.lint.flake8-type-checking]
+strict = true
+runtime-evaluated-base-classes = [
+    "pydantic.BaseModel",
+    "mteb.abstasks.task_metadata.TaskMetadata",  # https://github.com/astral-sh/ruff/issues/7866
+]
+
 [tool.semantic_release]
 branch = "main"
 version_toml = ["pyproject.toml:project.version"]
@@ -295,7 +321,7 @@ build_command = "python -m pip install build; python -m build"
 tag_format = "{version}"
 
 [tool.semantic_release.commit_parser_options]
-minor_tags = ["minor", "feat"]
+minor_tags = ["minor", "feat", "benchmark"]
 patch_tags = [
     "patch",
     "fix",
@@ -306,14 +332,16 @@ patch_tags = [
 
 [tool.pytest.ini_options]
 addopts = """
-            --reruns 3
-            --only-rerun requests.exceptions.ReadTimeout
-            --only-rerun huggingface_hub.errors.HfHubHTTPError
-            --only-rerun huggingface_hub.errors.LocalEntryNotFoundError
-            --only-rerun FileNotFoundError
-            --durations=5
-            --reruns-delay 10
-        """
+    -ra
+    --reruns 3
+    --only-rerun requests.exceptions.ReadTimeout
+    --only-rerun huggingface_hub.errors.HfHubHTTPError
+    --only-rerun huggingface_hub.errors.LocalEntryNotFoundError
+    --only-rerun FileNotFoundError
+    --durations=5
+    --reruns-delay 10
+"""
+# -ra -> # show extra test summary info for skipped, failed, etc.
 # --reruns 3 -> # Retry failed tests 3 times
 # requests.exceptions.ReadTimeout -> # HF Read timed out -> https://github.com/embeddings-benchmark/mteb/actions/runs/13275350693/job/37093688544
 # huggingface_hub.errors.HfHubHTTPError -> # HF is unavailable, e.g. seen here: https://github.com/embeddings-benchmark/mteb/actions/runs/13275350693/job/37093688544
@@ -339,15 +367,18 @@ conflicts = [
         { extra = "model2vec" },
         { extra = "pylate" }, # conflicting versions of transformers
         { extra = "llama-embed-nemotron" }, # conflicting versions of transformers
+        { extra = "llama-nemotron-colembed-vl" }, # conflicting versions of transformers
+        { extra = "nemotron-colembed-vl-v2" }, # conflicting versions of transformers
         { extra = "colpali-engine" },
         { extra = "colqwen3" },
         { extra = "jina-v4" },
         { extra = "sauerkrautlm-colpali" },
         { extra = "vllm" },
+        { extra = "msclap" },
+        { extra = "vllm" },
+        { extra = "muq" },
+        { extra = "mctct" },
     ],
-    [
-       { extra = "msclap" }, { extra = "audio" },
-    ]
 ]
 
 [tool.uv.extra-build-dependencies]
@@ -364,6 +395,8 @@ module = [
     "sklearn",
     "sklearn.*",
     "faiss",
+    "vllm",
+    "torchaudio",
 ]
 ignore_missing_imports = true
 
@@ -411,12 +444,14 @@ extend-exclude = [
     "*.json",
     "*.jsonl",
     "*.cff",
+    "*.tex",  # latex files with language codes
+    "*.bib",  # bibliography files with author names and journal abbreviations
     "*.txt",  # zero shot labels
     "docs/mmteb",
     "scripts/",
-    "docs/references.bib",
     "mteb/models/model_implementations/gme_v_models.py",  # video_grid_thw `thw`
     "mteb/models/model_implementations/vista_models.py",  # self.normlized: in visual bge
+    "mteb/models/model_implementations/salesforce_models.py", # multiligual in paper title
     "tests/mock_tasks.py",  #  "denne her matche ikke den ovenstående",
     "mteb/models/model_implementations/kalm_models.py",  # prompt:  classify ist topic",
     "mteb/tasks/reranking/eng/built_bench_reranking.py",  # prompt:   descriptions from buit asset
@@ -430,6 +465,10 @@ extend-exclude = [
     "mteb/tasks/sts/nld/",
     "mteb/tasks/retrieval/nld/",
     "mteb/descriptive_stats/",
+    # Beltagy, Iz
+    "mteb/tasks/retrieval/eng/lembqm_sum_retrieval.py",
+    "mteb/tasks/classification/jpn/wrime_classification.py",
+    "mteb/tasks/reranking/eng/sci_docs_reranking.py",
 ]
 
 [tool.typos.type.py]

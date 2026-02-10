@@ -1,11 +1,17 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from mteb.models.instruct_wrapper import (
     InstructSentenceTransformerModel,
     instruct_wrapper,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
+
+if TYPE_CHECKING:
+    from mteb.types import PromptType
 
 
 def instruction_template(
@@ -51,7 +57,8 @@ SFR_Embedding_2_R = ModelMeta(
     open_weights=True,
     revision="91762139d94ed4371a9fa31db5551272e0b83818",
     release_date="2024-06-14",  # initial commit of hf model.
-    n_parameters=7_110_000_000,
+    n_parameters=7110660096,
+    n_embedding_parameters=131072000,
     memory_usage_mb=13563,
     embed_dim=4096,
     license="cc-by-nc-4.0",
@@ -90,6 +97,7 @@ SFR_Embedding_Code_2B_R = ModelMeta(
     revision="c73d8631a005876ed5abde34db514b1fb6566973",
     release_date="2025-01-17",  # initial commit of hf model.
     n_parameters=2_610_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=4986,
     embed_dim=2304,
     license="cc-by-nc-4.0",
@@ -127,7 +135,8 @@ SFR_Embedding_Mistral = ModelMeta(
     open_weights=True,
     revision="938c560d1c236aa563b2dbdf084f28ab28bccb11",
     release_date="2024-01-24",  # initial commit of hf model.
-    n_parameters=7_110_000_000,
+    n_parameters=7110660096,
+    n_embedding_parameters=131072000,
     memory_usage_mb=13563,
     embed_dim=4096,
     license="cc-by-nc-4.0",

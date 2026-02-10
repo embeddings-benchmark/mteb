@@ -1,13 +1,18 @@
-from typing import Any, Literal
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any, Literal
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 
 class DINOModel(AbsEncoder):
@@ -111,7 +116,8 @@ dinov2_small = ModelMeta(
     revision="ed25f3a31f01632728cabb09d1542f84ab7b0056",
     release_date="2023-07-18",
     modalities=["image"],
-    n_parameters=22_100_000,
+    n_parameters=22056576,
+    n_embedding_parameters=None,
     memory_usage_mb=84,
     max_tokens=None,
     embed_dim=384,
@@ -142,7 +148,8 @@ dinov2_base = ModelMeta(
     revision="f9e44c814b77203eaa57a6bdbbd535f21ede1415",
     release_date="2023-07-18",
     modalities=["image"],
-    n_parameters=86_600_000,
+    n_parameters=86580480,
+    n_embedding_parameters=None,
     memory_usage_mb=330,
     max_tokens=None,
     embed_dim=768,
@@ -173,7 +180,8 @@ dinov2_large = ModelMeta(
     revision="47b73eefe95e8d44ec3623f8890bd894b6ea2d6c",
     release_date="2023-07-18",
     modalities=["image"],
-    n_parameters=304_000_000,
+    n_parameters=304368640,
+    n_embedding_parameters=None,
     memory_usage_mb=1161,
     max_tokens=None,
     embed_dim=1024,
@@ -204,7 +212,8 @@ dinov2_giant = ModelMeta(
     revision="611a9d42f2335e0f921f1e313ad3c1b7178d206d",
     release_date="2023-07-18",
     modalities=["image"],
-    n_parameters=1_140_000_000,
+    n_parameters=1136480768,
+    n_embedding_parameters=None,
     memory_usage_mb=4335,
     max_tokens=None,
     embed_dim=1536,
@@ -239,7 +248,8 @@ webssl_dino300m_full2b = ModelMeta(
     revision="8529cdb3fb75014932af3b896455fc21c386168e",
     release_date="2025-04-24",
     modalities=["image"],
-    n_parameters=304_000_000,
+    n_parameters=303655168,
+    n_embedding_parameters=None,
     memory_usage_mb=1158,
     max_tokens=None,
     embed_dim=1024,
@@ -270,7 +280,8 @@ webssl_dino1b_full2b = ModelMeta(
     revision="d3bf033d9c8cc62ea9e73c40956642cad2ec568a",
     release_date="2025-04-24",
     modalities=["image"],
-    n_parameters=1_130_000_000,
+    n_parameters=1134771200,
+    n_embedding_parameters=None,
     memory_usage_mb=4329,
     max_tokens=None,
     embed_dim=1536,
@@ -301,7 +312,8 @@ webssl_dino2b_full2b = ModelMeta(
     revision="cd5893e3fd2e988eb716792049b3dd53b3f1b68b",
     release_date="2025-04-24",
     modalities=["image"],
-    n_parameters=2_080_000_000,
+    n_parameters=2084237568,
+    n_embedding_parameters=None,
     memory_usage_mb=7951,
     max_tokens=None,
     embed_dim=2688,
@@ -332,7 +344,8 @@ webssl_dino3b_full2b = ModelMeta(
     revision="2d015c340b16bc47bc6557fcb4e6c83a9d4aa1d3",
     release_date="2025-04-24",
     modalities=["image"],
-    n_parameters=3_000_000_000,
+    n_parameters=2948317184,
+    n_embedding_parameters=None,
     memory_usage_mb=11247,
     max_tokens=None,
     embed_dim=3072,
@@ -363,7 +376,8 @@ webssl_dino5b_full2b = ModelMeta(
     revision="88006b18b9af369f6c611db7a64d908bde3714e0",
     release_date="2025-04-24",
     modalities=["image"],
-    n_parameters=5_000_000_000,
+    n_parameters=4938338816,
+    n_embedding_parameters=None,
     memory_usage_mb=18838,
     max_tokens=None,
     embed_dim=3584,
@@ -394,7 +408,8 @@ webssl_dino7b_full8b_224 = ModelMeta(
     revision="c6085463ea680043042a80c6d41db2c65e85f466",
     release_date="2025-04-24",
     modalities=["image"],
-    n_parameters=7_000_000_000,
+    n_parameters=6450170880,
+    n_embedding_parameters=None,
     memory_usage_mb=24605,
     max_tokens=None,
     embed_dim=4096,
@@ -425,7 +440,8 @@ webssl_dino7b_full8b_378 = ModelMeta(
     revision="53c8c5b43070bd2ddb3f66161140408ce832301f",
     release_date="2025-04-24",
     modalities=["image"],
-    n_parameters=7_000_000_000,
+    n_parameters=6452108288,
+    n_embedding_parameters=None,
     memory_usage_mb=24613,
     max_tokens=None,
     embed_dim=4096,
@@ -456,7 +472,8 @@ webssl_dino7b_full8b_518 = ModelMeta(
     revision="aee350d2c5e3e5fdb7ee6985291d808ea5eef431",
     release_date="2025-04-24",
     modalities=["image"],
-    n_parameters=7_000_000_000,
+    n_parameters=6454729728,
+    n_embedding_parameters=None,
     memory_usage_mb=24623,
     max_tokens=None,
     embed_dim=4096,
@@ -488,7 +505,8 @@ webssl_dino2b_light2b = ModelMeta(
     revision="633a663f304e63cc3cbec3f7f9ca2fbc94736128",
     release_date="2025-04-24",
     modalities=["image"],
-    n_parameters=2_000_000_000,
+    n_parameters=2084237568,
+    n_embedding_parameters=None,
     memory_usage_mb=7951,
     max_tokens=None,
     embed_dim=2688,
@@ -519,7 +537,8 @@ webssl_dino2b_heavy2b = ModelMeta(
     revision="9f46eb0c0129656a1ef195fde072e3765abdb7c6",
     release_date="2025-04-24",
     modalities=["image"],
-    n_parameters=2_000_000_000,
+    n_parameters=2084237568,
+    n_embedding_parameters=None,
     memory_usage_mb=7951,
     max_tokens=None,
     embed_dim=2688,
@@ -550,7 +569,8 @@ webssl_dino3b_light2b = ModelMeta(
     revision="4d0160f60673805431f4ad14983e712ed88be5b8",
     release_date="2025-04-24",
     modalities=["image"],
-    n_parameters=3_000_000_000,
+    n_parameters=2948317184,
+    n_embedding_parameters=None,
     memory_usage_mb=11247,
     max_tokens=None,
     embed_dim=3072,
@@ -581,7 +601,8 @@ webssl_dino3b_heavy2b = ModelMeta(
     revision="dd39c2910747561b332285d96c4dce0bdb240775",
     release_date="2025-04-24",
     modalities=["image"],
-    n_parameters=3_000_000_000,
+    n_parameters=2948317184,
+    n_embedding_parameters=None,
     memory_usage_mb=11247,
     max_tokens=None,
     embed_dim=3072,
@@ -612,7 +633,8 @@ webssl_mae300m_full2b = ModelMeta(
     revision="4655a0ac1726c206ba14d5ccb26758c62a4d03b0",
     release_date="2025-04-24",
     modalities=["image"],
-    n_parameters=304_000_000,
+    n_parameters=304351232,
+    n_embedding_parameters=None,
     memory_usage_mb=1161,
     max_tokens=None,
     embed_dim=1024,
@@ -643,7 +665,8 @@ webssl_mae700m_full2b = ModelMeta(
     revision="c32be382e757d73a178de1ead62c27391d4b4280",
     release_date="2025-04-24",
     modalities=["image"],
-    n_parameters=700_000_000,
+    n_parameters=632404480,
+    n_embedding_parameters=None,
     memory_usage_mb=2412,
     max_tokens=None,
     embed_dim=1280,
@@ -674,7 +697,8 @@ webssl_mae1b_full2b = ModelMeta(
     revision="5880aefedbad8db0f44d27358f6f08e8576f70fc",
     release_date="2025-04-24",
     modalities=["image"],
-    n_parameters=1_000_000_000,
+    n_parameters=1136925696,
+    n_embedding_parameters=None,
     memory_usage_mb=4337,
     max_tokens=None,
     embed_dim=1536,

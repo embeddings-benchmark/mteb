@@ -13,9 +13,14 @@ from .imagenet1k import Imagenet1kZeroShotClassification
 from .mnist import MNISTZeroShotClassification
 from .oxford_pets import OxfordPetsZeroShotClassification
 from .patch_camelyon import PatchCamelyonZeroShotClassification
+from .ravdess import RavdessZeroshotClassification
 from .rendered_sst2 import RenderedSST2
 from .resisc45 import RESISC45ZeroShotClassification
 from .sci_mmir import SciMMIR
+from .speech_commands import (
+    SpeechCommandsZeroshotClassificationV01,
+    SpeechCommandsZeroshotClassificationv02,
+)
 from .stanford_cars import StanfordCarsZeroShotClassification
 from .stl10 import STL10ZeroShotClassification
 from .sun397 import SUN397ZeroShotClassification
@@ -40,10 +45,13 @@ __all__ = [
     "OxfordPetsZeroShotClassification",
     "PatchCamelyonZeroShotClassification",
     "RESISC45ZeroShotClassification",
+    "RavdessZeroshotClassification",
     "RenderedSST2",
     "STL10ZeroShotClassification",
     "SUN397ZeroShotClassification",
     "SciMMIR",
+    "SpeechCommandsZeroshotClassificationV01",
+    "SpeechCommandsZeroshotClassificationv02",
     "StanfordCarsZeroShotClassification",
     "UCF101ZeroShotClassification",
 ]

@@ -137,6 +137,6 @@ Okazaki, Naoaki},
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         self.dataset = self.dataset.remove_columns(["language", "script"])
         self.dataset = self.dataset.rename_columns({"native sentence": "text"})

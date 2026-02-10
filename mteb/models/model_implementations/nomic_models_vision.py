@@ -4,17 +4,18 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 import torch.nn.functional as F
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
 
 if TYPE_CHECKING:
     from PIL import Image
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 NOMIC_EMBED_VISION_CITATION = """@article{nussbaum2024nomicembedvision,
       title={Nomic Embed Vision: Expanding the Latent Space},
@@ -173,7 +174,8 @@ nomic_embed_vision_v1_5 = ModelMeta(
     revision="af2246fffdab78d8458418480e4886a8e48b70a7",
     release_date="2024-06-08",
     modalities=["image", "text"],
-    n_parameters=92_900_000,
+    n_parameters=92946688,
+    n_embedding_parameters=None,
     memory_usage_mb=355,
     max_tokens=2048,
     embed_dim=768,

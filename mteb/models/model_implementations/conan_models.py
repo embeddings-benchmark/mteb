@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import hashlib
 import json
 import logging
@@ -5,19 +7,23 @@ import os
 import random
 import string
 import time
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import requests
-from torch.utils.data import DataLoader
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
 
 from .bge_models import bge_full_data
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+
 
 conan_zh_datasets = {
     "BQ",
@@ -205,6 +211,7 @@ Conan_embedding_v2 = ModelMeta(
     embed_dim=3584,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license="apache-2.0",
     reference="https://huggingface.co/TencentBAC/Conan-embedding-v2",

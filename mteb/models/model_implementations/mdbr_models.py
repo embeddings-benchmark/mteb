@@ -1,5 +1,7 @@
 from mteb.models.model_implementations.arctic_models import arctic_v1_training_datasets
-from mteb.models.model_implementations.mxbai_models import mixedbread_training_data
+from mteb.models.model_implementations.mixedbread_ai_models import (
+    mixedbread_training_data,
+)
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
@@ -42,7 +44,8 @@ mdbr_leaf_ir = ModelMeta(
         "safetensors",
         "Transformers",
     ],
-    n_parameters=22_861_056,
+    n_parameters=22713216,
+    n_embedding_parameters=11_720_448,
     memory_usage_mb=86,
     max_tokens=512,
     embed_dim=768,
@@ -76,7 +79,8 @@ mdbr_leaf_mt = ModelMeta(
         "safetensors",
         "Transformers",
     ],
-    n_parameters=22_958_592,
+    n_parameters=22713216,
+    n_embedding_parameters=11_720_448,
     memory_usage_mb=86,
     max_tokens=512,
     embed_dim=1024,

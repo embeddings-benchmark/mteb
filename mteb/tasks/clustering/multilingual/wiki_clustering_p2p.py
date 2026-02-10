@@ -47,7 +47,7 @@ class WikiClusteringP2P(AbsTaskClusteringLegacy):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
-        bibtex_citation=None,  # None exists
+        bibtex_citation="",  # None exists
         superseded_by="WikiClusteringP2P.v2",
     )
 
@@ -81,7 +81,7 @@ class WikiClusteringFastP2P(AbsTaskClustering):
         adapted_from=["WikiClusteringP2P"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         ds = {}
         for lang in self.hf_subsets:
             labels = []

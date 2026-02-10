@@ -18,14 +18,17 @@ class TenKGnadClusteringS2S(AbsTaskClusteringLegacy):
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="v_measure",
-        date=None,
+        date=(
+            "2000-01-01",
+            "2020-12-31",
+        ),  # since it is news it is guessed that it is from 2000 to 2020
         domains=["News", "Non-fiction", "Written"],
-        task_subtypes=["Topic classification"],
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
-        bibtex_citation=None,
+        task_subtypes=["Thematic clustering"],
+        license="cc-by-nc-sa-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation="",  # none found
         superseded_by="TenKGnadClusteringS2S.v2",
     )
 
@@ -36,7 +39,7 @@ class TenKGnadClusteringS2SFast(AbsTaskClustering):
 
     metadata = TaskMetadata(
         name="TenKGnadClusteringS2S.v2",
-        description="Clustering of news article titles. Clustering of 10 splits on the news article category.",
+        description="Clustering of news article titles. Clustering of 10 splits on the news article category. v2 uses a faster evaluation method used in the MMTEB paper, which allow for notably faster evaluation.",
         reference="https://tblock.github.io/10kGNAD/",
         dataset={
             "path": "slvnwhrl/tenkgnad-clustering-s2s",
@@ -53,17 +56,16 @@ class TenKGnadClusteringS2SFast(AbsTaskClustering):
             "2020-12-31",
         ),  # since it is news it is guessed that it is from 2000 to 2020
         domains=["News", "Non-fiction", "Written"],
-        task_subtypes=["Topic classification"],
+        task_subtypes=["Thematic clustering"],
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=None,  # none found
-        # due to duplicates
+        bibtex_citation="",  # none found
         adapted_from=["TenKGnadClusteringS2S"],
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         ds = _convert_to_fast(
             self.dataset, self.input_column_name, self.label_column_name, self.seed
         )

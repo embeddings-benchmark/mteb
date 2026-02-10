@@ -2,29 +2,36 @@ from __future__ import annotations
 
 import logging
 import warnings
-from collections.abc import Callable, Iterable
-from typing import Any, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
 import pandas as pd
 from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import overload
 
-from mteb.abstasks.abstask import AbsTask
-from mteb.abstasks.task_metadata import (
-    TaskDomain,
-    TaskType,
-)
 from mteb.types import (
-    ISOLanguage,
-    ISOLanguageScript,
     Modalities,
-    Score,
-    ScoresDict,
-    SplitName,
 )
 
 from .task_result import TaskError, TaskResult
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable
+    from pathlib import Path
+
+    from mteb.abstasks.abstask import AbsTask
+    from mteb.abstasks.task_metadata import (
+        TaskDomain,
+        TaskType,
+    )
+    from mteb.types import (
+        ISOLanguage,
+        ISOLanguageScript,
+        Score,
+        ScoresDict,
+        SplitName,
+    )
+
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +90,7 @@ class ModelResult(BaseModel):
     model_revision: str | None
     task_results: list[TaskResult]
     default_modalities: list[Modalities] = Field(
-        default_factory=lambda: [cast(Modalities, "text")], alias="modalities"
+        default_factory=lambda: [cast("Modalities", "text")], alias="modalities"
     )
     model_config = (
         ConfigDict(  # to free up the name model_* which is otherwise protected
@@ -202,8 +209,8 @@ class ModelResult(BaseModel):
             aggregation = aggregation if aggregation is not None else np.mean
         else:
             use_fast = True
-        aggregation = cast(Callable[[list[Score]], Any], aggregation)
-        getter = cast(Callable[[ScoresDict], Score], getter)
+        aggregation = cast("Callable[[list[Score]], Any]", aggregation)
+        getter = cast("Callable[[ScoresDict], Score]", getter)
 
         if format == "wide":
             scores = {}
@@ -411,3 +418,25 @@ class ModelResult(BaseModel):
         if not mods:
             mods = self.default_modalities
         return list(set(mods))
+
+    def to_disk(self, path: Path) -> None:
+        """Save ModelResult to disk as JSON.
+
+        Args:
+            path: The path to the file to save.
+        """
+        with path.open("w") as f:
+            f.write(self.model_dump_json(indent=2))
+
+    @classmethod
+    def from_disk(cls, path: Path) -> ModelResult:
+        """Load ModelResult from disk.
+
+        Args:
+            path: The path to the JSON file to load.
+
+        Returns:
+            The loaded ModelResult object.
+        """
+        with path.open("r", encoding="utf-8") as f:
+            return cls.model_validate_json(f.read())

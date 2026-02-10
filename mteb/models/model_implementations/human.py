@@ -2,13 +2,14 @@ from mteb.models import ModelMeta
 
 human = ModelMeta(
     loader=None,
-    name="Human",
+    name="baseline/Human",
     model_type=["dense"],
     languages=["eng-Latn", "ara-Arab", "rus-Cyrl", "dan-Latn", "nob-Latn"],
     open_weights=True,
     revision="2025_09_25",
     release_date=None,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     embed_dim=None,
     license=None,

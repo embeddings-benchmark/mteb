@@ -42,7 +42,7 @@ class SinhalaNewsClassification(AbsTaskClassification):
         superseded_by="SinhalaNewsClassification.v2",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_columns(
             {"comments": "text", "labels": "label"}
         )
@@ -91,7 +91,7 @@ class SinhalaNewsClassificationV2(AbsTaskClassification):
         adapted_from=["SinhalaNewsClassification"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"]
         )

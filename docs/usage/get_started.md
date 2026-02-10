@@ -15,7 +15,7 @@ import mteb
 model = ...
 
 # specify what you want to evaluate it on
-tasks = mteb.get_tasks(tasks=["{task1}", "{task1}"])
+tasks = mteb.get_tasks(tasks=["{task1}", "{task2}"])
 
 # run the evaluation
 results = mteb.evaluate(model, tasks=tasks)
@@ -28,14 +28,14 @@ For instance if we want to run [`"sentence-transformers/all-MiniLM-L6-v2"`](http
 model_name = "sentence-transformers/all-MiniLM-L6-v2"
 
 # load the model using MTEB
-model = mteb.get_model(model_name) # will default to SentenceTransformers(model_name) if not implemented in MTEB
-# or using SentenceTransformers
-model = SentenceTransformers(model_name)
+model = mteb.get_model(model_name) # (1)
 
 # select the desired tasks and evaluate
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
 results = mteb.evaluate(model, tasks=tasks)
 ```
+
+1.  Will default to `SentenceTransformers(model_name)` or `CrossEncoder(model_name)` if not implemented in MTEB
 
 !!! Note
     While `mteb.evaluate` supports `SentenceTransformers` we do recommend that the user use `mteb.get_model` to fetch the model as this prioritizes the

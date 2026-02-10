@@ -1,14 +1,13 @@
+from __future__ import annotations
+
 import logging
 from collections import defaultdict
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 import numpy as np
 import torch
-from sentence_transformers import CrossEncoder
-from torch.utils.data import DataLoader
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import PROGRAMMING_LANGS
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -16,7 +15,13 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from sentence_transformers import CrossEncoder
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -727,7 +732,8 @@ jina_reranker_v3 = ModelMeta(
     revision="050e171c4f75dfec5b648ed8470a2475e5a30f30",
     release_date="2025-09-18",  # official release date
     modalities=["text"],
-    n_parameters=int(0.6 * 1e9),
+    n_parameters=596836352,
+    n_embedding_parameters=155582464,
     memory_usage_mb=1138,
     max_tokens=131072,
     embed_dim=None,
@@ -770,7 +776,8 @@ jina_embeddings_v4 = ModelMeta(
     revision="4a58ca57710c49f51896e4bc820e202fbf64904b",
     release_date="2025-06-24",  # official release date
     modalities=["image", "text"],
-    n_parameters=int(3.8 * 1e9),
+    n_parameters=3934695552,
+    n_embedding_parameters=None,
     memory_usage_mb=7500,
     max_tokens=32768,
     embed_dim=2048,
@@ -818,7 +825,8 @@ jina_embeddings_v3 = ModelMeta(
     open_weights=True,
     revision="215a6e121fa0183376388ac6b1ae230326bfeaed",
     release_date="2024-09-18",  # official release date
-    n_parameters=int(572 * 1e6),
+    n_parameters=572310396,
+    n_embedding_parameters=None,
     memory_usage_mb=1092,
     max_tokens=8194,
     embed_dim=1024,
@@ -878,7 +886,8 @@ jina_embeddings_v2_base_en = ModelMeta(
     open_weights=True,
     revision="6e85f575bc273f1fd840a658067d0157933c83f0",
     release_date="2023-09-27",
-    n_parameters=137_000_000,
+    n_parameters=137368320,
+    n_embedding_parameters=23_445_504,
     memory_usage_mb=262,
     embed_dim=768,
     license="apache-2.0",
@@ -942,7 +951,8 @@ jina_embeddings_v2_small_en = ModelMeta(
     open_weights=True,
     revision="44e7d1d6caec8c883c2d4b207588504d519788d0",
     release_date="2023-09-27",
-    n_parameters=32_700_000,
+    n_parameters=32690688,
+    n_embedding_parameters=15_630_336,
     memory_usage_mb=62,
     embed_dim=512,
     license="apache-2.0",
@@ -1003,7 +1013,8 @@ jina_embedding_b_en_v1 = ModelMeta(
     open_weights=True,
     revision="32aa658e5ceb90793454d22a57d8e3a14e699516",
     release_date="2023-07-07",
-    n_parameters=110_000_000,
+    n_parameters=109628544,
+    n_embedding_parameters=24_674_304,
     memory_usage_mb=420,
     embed_dim=768,
     license="apache-2.0",
@@ -1060,7 +1071,8 @@ jina_embedding_s_en_v1 = ModelMeta(
     open_weights=True,
     revision="5ac6cd473e2324c6d5f9e558a6a9f65abb57143e",
     release_date="2023-07-07",
-    n_parameters=35_000_000,
+    n_parameters=35330816,
+    n_embedding_parameters=16_449_536,
     memory_usage_mb=134,
     embed_dim=512,
     license="apache-2.0",
