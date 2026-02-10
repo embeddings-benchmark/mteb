@@ -1,6 +1,25 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
+TRAINING_DATA = {
+    "MSMARCO",
+    "MIRACLRetrieval",
+    "LoTTE",
+    "TriviaQA",
+    "GooAQ",
+    "MrTidyRetrieval",
+}
+
+CITAITON = """@software{Tulkens2025pyNIFE,
+  author       = {St\'{e}phan Tulkens},
+  title        = {pyNIFE: nearly inference free embeddings in python},
+  year         = {2025},
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.17512919},
+  url          = {https://github.com/stephantul/pynife},
+  license      = {MIT},
+}"""
+
 ModelMeta(
     loader=sentence_transformers_loader,  # type: ignore[call-arg]
     loader_kwargs={},
@@ -17,24 +36,16 @@ ModelMeta(
     license="mit",
     open_weights=True,
     public_training_code=None,  # no reproducible training code, but likely uses https://pypi.org/project/pynife/
-    public_training_data=None,  # its a distilaltion of a model
+    public_training_data="https://huggingface.co/collections/stephantulkens/gte-modernbert-embedpress",  # + its a distilaltion of a model
     framework=["PyTorch", "safetensors", "Sentence Transformers"],
     reference="https://huggingface.co/stephantulkens/NIFE-gte-modernbert-base",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,  # assumed
-    training_datasets=set(),
+    training_datasets=TRAINING_DATA,
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],  # TODO: is router a model type?
-    citation="""@software{Tulkens2025pyNIFE,
-  author       = {St\'{e}phan Tulkens},
-  title        = {pyNIFE: nearly inference free embeddings in python},
-  year         = {2025},
-  publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.17512919},
-  url          = {https://github.com/stephantulkens/pynife},
-  license      = {MIT},
-}""",
+    citation=CITAITON,
     contacts=None,
     adapted_from="Alibaba-NLP/gte-modernbert-base",
 )
@@ -60,11 +71,11 @@ ModelMeta(
     reference="https://huggingface.co/stephantulkens/NIFE-mxbai-embed-large-v1",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,  # assumed
-    training_datasets=set(),
+    training_datasets=TRAINING_DATA,
     adapted_from="mixedbread-ai/mxbai-embed-large-v1",
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],  # TODO: is router a model type?
-    citation=None,
+    citation=CITAITON,
     contacts=None,
 )
