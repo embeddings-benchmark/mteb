@@ -130,6 +130,9 @@ Once we have decided on task, we can implement them as follows:
     We can then implement the task as follows:
 
     ```python
+    import mteb
+    from mteb.abstasks import AbsTaskClustering
+
     class MyClusteringTask(AbsTaskClustering):
     metadata = mteb.TaskMetadata(  # minimal metadata
         name="MyClusteringTask",
