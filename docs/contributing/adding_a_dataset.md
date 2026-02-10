@@ -283,42 +283,116 @@ Once we have decided on task, we can implement them as follows:
     While we do not recommend overwriting `load_data` it can often be useful, when developing tasks and can also be used in conjunction with
     [`push_dataset_to_hub`][mteb.AbsTask.push_dataset_to_hub] to push datasets to the hub in the correct format.
 
-    ```python
-    import mteb
-    from mteb.abstasks import AbsTaskClassification
+    === "Classification"
+         For our classification task we use a dummy dataset consisting of two samples with labels 0 and 1. We can implement the task as follows:
+        ```python
+        import mteb
+        from mteb.abstasks import AbsTaskClassification
 
 
-    class MyClassificationtask(AbsTaskClassification):
-        metadata = mteb.TaskMetadata(  # minimal metadata
-            name="MyClassificationTask",
-            description="A dummy classification just for testing",
-            main_score="accuracy",
-            eval_langs=["eng-Latn"],
-            eval_splits=["test"],
-            type="Classification",
-            dataset={"path": "na", "revision": "na"},
-        )
+        class MyClassificationtask(AbsTaskClassification):
+            metadata = mteb.TaskMetadata(  # minimal metadata
+                name="MyClassificationTask",
+                description="A dummy classification just for testing",
+                main_score="accuracy",
+                eval_langs=["eng-Latn"],
+                eval_splits=["test"],
+                type="Classification",
+                dataset={"path": "na", "revision": "na"},
+            )
 
-        label_column_name = "label"
-        input_column_name = "text"
+            label_column_name = "label"
+            input_column_name = "text"
 
-        def load_data(self, num_proc=None, **kwargs) -> None:
-            self.dataset = {
-                "test": [
-                    {"text": "sample text 1", "label": 1},
-                    {"text": "sample text 2", "label": 0},
-                ]
-            }
-            self.data_loaded = True
-    ```
+            def load_data(self, num_proc=None, **kwargs) -> None:
+                self.dataset = {
+                    "test": [
+                        {"text": "sample text 1", "label": 1},
+                        {"text": "sample text 2", "label": 0},
+                    ]
+                }
+                self.data_loaded = True
+        ```
+        which can then be run as follows:
+        ```py
+        task = MyClassificationtask()
+        mdl = mteb.get_model("baseline/random-encoder-baseline")
+        results = mteb.evaluate(mdl, task)
+        ```
+    === "Retrieval"
+        Retrieval tasks often have a more complex structure, with a corpus, queries and relevant documents. Here we implement a dummy retrieval task with a small corpus and a few queries.
+        ```python
+        import mteb
+        from mteb.abstasks import AbsTaskRetrieval
+        from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
+        from datasets import Dataset
 
-    which can then be run as follows:
+        class MyRetrievalTask(AbsTaskRetrieval):
+            metadata = mteb.TaskMetadata(  # minimal metadata
+                name="MyRetrievalTask",
+                description="A dummy retrieval task on a community question-answering dataset on android-related questions.",
+                main_score="ndcg_at_10",
+                eval_langs=["eng-Latn"],
+                eval_splits=["test"],
+                type="Retrieval",
+                dataset={
+                    "path": "mteb/CQADupstackAndroidRetrieval",
+                    "revision": "9be4c0e46342e8e3aff577a89b9a1ec9bc6b4af3",
+                },
+                prompt="Given a question, retrieve the most relevant question from the corpus.",
+            )
 
-    ```py
-    task = MyClassificationtask()
-    mdl = mteb.get_model("baseline/random-encoder-baseline")
-    results = mteb.evaluate(mdl, task)
-    ```
+            def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+                # corpus should have `id` and (`text` + `title`)/`image`/`audio` or any combination of these columns
+                corpus = Dataset.from_dict(
+                    {
+                        "id": ["doc1", "doc2", "doc3"],
+                        "text": [
+                            "This is the first document.",
+                            "This is the second document.",
+                            "This is the third document.",
+                        ],
+                        "title": ["Doc 1", "Doc 2", "Doc 3"],
+                    }
+                )
+
+                # queries should have `id` and `text`/`image`/`audio` or any combination of these columns
+                queries = Dataset.from_dict(
+                    {
+                        "id": ["query1", "query2"],
+                        "text": [
+                            "What is the first document about?",
+                            "What is the second document about?",
+                        ],
+                    }
+                )
+
+                # qrels should be a dictionary `dict[query_id][document_id] = relevance_score`
+                qrels = {
+                    "query1": {"doc1": 1, "doc2": 0, "doc3": 0},
+                    "query2": {"doc1": 0, "doc2": 1, "doc3": 0},
+                }
+
+                # for reranking only
+                # should be a dictionary `dict[query_id] = [document_id1, document_id2, ...]` with the top ranked documents
+                top_ranked = {
+                    "query1": ["doc1", "doc2", "doc3"],
+                    "query2": ["doc2", "doc1", "doc3"],
+                }
+
+                self.dataset["default"]["test"] = RetrievalSplitData(
+                    corpus=corpus,
+                    queries=queries,
+                    relevant_docs=qrels,
+                    top_ranked=top_ranked,  # only for reranking
+                )
+        ```
+        which can then be run as follows:
+        ```py
+        task = MyRetrievalTask()
+        mdl = mteb.get_model("baseline/random-encoder-baseline")
+        results = mteb.evaluate(mdl, task)
+        ```
 
 
 ### Filling out the TaskMetadata
