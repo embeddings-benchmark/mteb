@@ -119,17 +119,66 @@ Once we have decided on task, we can implement them as follows:
     # 0.49428571428571433
     ```
 
-=== "Clustering"
-
-    MISSING
-
 === "Retrieval"
 
-    MISSING
+```python
+from datasets import load_dataset
 
-=== "Semantic Similarity"
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 
-    MISSING
+
+
+class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MyRetrievalTask",
+        description="A dummy retrieval task.",
+        reference="https://arxiv.org/",
+        dataset={
+            "path": "you_org/your_dataset",
+            "revision": "some_revision_9935aadbad5c8deec30910489db1b2c7133ae7a7",
+        },
+        type="Retrieval",
+        category="t2t",  # first part is query, second part is document
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_5",
+        date=("2024-01-01", "2024-07-01"),
+        domains=["Web"],
+        task_subtypes=["Article retrieval"],
+        license="mit",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@article{your_paper,
+  title = {Your paper},
+}
+""",
+        prompt={
+            "query": "your prompt for the query",
+            "document": "your prompt for the document",  # most of models do not use this
+        },
+        adapted_from=None,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+        corpus = load_dataset(...)  # should have `id` and (`text` + `title`)/`image`/`audio` or any combination of these columns
+        queries = load_dataset(...)  # should have `id` and `text`/`image`/`audio` or any combination of these columns
+        qrels = load_dataset(...)  # qrels should be a dictionary `dict[query_id][document_id] = relevance_score`
+        # reranking only
+        top_ranked = load_dataset(...)  # should be a dictionary `dict[query_id] = [document_id1, document_id2, ...]` with the top ranked documents
+
+        self.dataset["your_subset"]["your_split"] = RetrievalSplitData(
+            corpus=corpus,
+            queries=queries,
+            relevant_docs=qrels,
+            top_ranked=top_ranked,  # only for reranking
+        )
+
+```
 
 
 ??? example "Overwriting `load_data`"
