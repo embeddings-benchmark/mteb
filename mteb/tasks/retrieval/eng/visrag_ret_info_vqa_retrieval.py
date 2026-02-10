@@ -72,12 +72,7 @@ class VisRAGRetInfoVQA(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="VisRAGRetInfoVQA",
-        description=(
-            "Retrieve infographics based on natural‑language questions.  "
-            "The corpus contains 459 infographic images and the 718 queries "
-            "come from the InfographicVQA dataset.  Each query has a single "
-            "relevant image."
-        ),
+        description="Evaluate the retrieval and understanding of complex infographics where layout and graphical elements are essential for cross-modal question answering.",
         reference="https://arxiv.org/abs/2104.12756",
         type="Retrieval",
         task_subtypes=["Image Text Retrieval"],

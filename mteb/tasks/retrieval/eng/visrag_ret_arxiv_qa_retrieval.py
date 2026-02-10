@@ -66,12 +66,7 @@ def _load_visrag_data(
 class VisRAGRetArxivQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VisRAGRetArxivQA",
-        description=(
-            "Retrieve figures from arXiv papers given question prompts.  "
-            "The corpus consists of 8,066 images extracted from scientific papers, "
-            "and the 816 queries are multiple‑choice questions generated from the "
-            "ArXivQA dataset.  Each query has exactly one relevant image."
-        ),
+        description="evaluate vision-based retrieval and generation on scientific figures and their surrounding context to preserve complex layouts and mathematical notations.",
         reference="https://arxiv.org/abs/2403.00231",
         type="Retrieval",
         task_subtypes=["Image Text Retrieval"],
@@ -85,7 +80,7 @@ class VisRAGRetArxivQA(AbsTaskRetrieval):
             "revision": "00a31fc1e899b5f81d7760eca4907b1a1005865b",
         },
         date=("2000-01-01", "2024-12-31"),
-        domains=["Academic"],
+        domains=["Academic", "Non-fiction"],
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],

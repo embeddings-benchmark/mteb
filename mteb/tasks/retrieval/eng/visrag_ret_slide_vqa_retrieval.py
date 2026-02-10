@@ -72,12 +72,7 @@ class VisRAGRetSlideVQA(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="VisRAGRetSlideVQA",
-        description=(
-            "Retrieve slide images given natural‑language questions from the SlideVQA "
-            "dataset.  The corpus consists of 1,284 slide images and the 556 queries "
-            "are multiple‑choice questions about slide content.  Each query maps "
-            "to one relevant slide image."
-        ),
+        description="Retrieve and reason across multiple slide images within a deck to answer multi-hop questions in a vision-centric retrieval-augmented generation pipeline.",
         reference="https://arxiv.org/abs/2301.04883",
         type="Retrieval",
         category="t2i",
@@ -90,7 +85,7 @@ class VisRAGRetSlideVQA(AbsTaskRetrieval):
             "revision": "6b5f81a3f6953095934c26c5d420dfd039184d69",
         },
         date=("2010-01-01", "2022-12-31"),
-        domains=["Web"],
+        domains=["Web", "Non-fiction"],
         task_subtypes=["Image Text Retrieval"],
         license="not specified",
         annotations_creators="derived",

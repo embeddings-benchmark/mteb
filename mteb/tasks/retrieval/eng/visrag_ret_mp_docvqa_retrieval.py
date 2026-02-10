@@ -66,19 +66,14 @@ def _load_visrag_data(
 class VisRAGRetMPDocVQA(AbsTaskRetrieval):
     """VisRAG Retrieval task for MP-DocVQA industrial documents.
 
-    The corpus contains scanned pages from multi‑page industrial documents and
+    The corpus contains scanned pages from multi-page industrial documents and
     the queries are questions targeting specific pages.  Each query has one
     relevant page image.
     """
 
     metadata = TaskMetadata(
         name="VisRAGRetMPDocVQA",
-        description=(
-            "Retrieve scanned document pages based on question prompts.  "
-            "The corpus consists of 741 page images from multi-page industrial "
-            "documents and the 591 queries originate from the MP-DocVQA dataset.  "
-            "Each query maps to exactly one relevant page image."
-        ),
+        description="Benchmark the ability to retrieve specific relevant pages from multi-page documents and generate answers based on visual evidence.",
         reference="https://arxiv.org/abs/2212.05935",
         type="Retrieval",
         task_subtypes=["Image Text Retrieval"],
@@ -92,7 +87,7 @@ class VisRAGRetMPDocVQA(AbsTaskRetrieval):
             "revision": "3ebd091c458cf04161f78cd7b12ea101f83e2529",
         },
         date=("1900-01-01", "2020-12-31"),
-        domains=["Web"],
+        domains=["Web", "Non-fiction"],
         license="mit",
         annotations_creators="derived",
         dialect=[],

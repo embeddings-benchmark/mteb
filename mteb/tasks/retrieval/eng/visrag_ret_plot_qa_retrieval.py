@@ -73,11 +73,7 @@ class VisRAGRetPlotQA(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="VisRAGRetPlotQA",
-        description=(
-            "Retrieve scientific plots based on question texts.  "
-            "The corpus has 9,593 plot images and the 863 queries come from the "
-            "PlotQA dataset.  Each query points to one relevant plot image."
-        ),
+        description="Execute vision-based retrieval and numerical reasoning over scientific plots to answer questions without relying on structured data parsing.",
         reference="https://arxiv.org/abs/1909.00997",
         type="Retrieval",
         task_subtypes=["Image Text Retrieval"],
@@ -91,7 +87,7 @@ class VisRAGRetPlotQA(AbsTaskRetrieval):
             "revision": "ef953ef8ab6d78ac112dd4cde6acdb2c2692039a",
         },
         date=("2000-01-01", "2019-12-31"),
-        domains=["Web"],
+        domains=["Web", "Non-fiction"],
         license="mit",
         annotations_creators="derived",
         dialect=[],

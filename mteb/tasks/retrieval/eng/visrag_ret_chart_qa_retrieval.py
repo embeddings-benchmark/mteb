@@ -72,12 +72,7 @@ class VisRAGRetChartQA(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="VisRAGRetChartQA",
-        description=(
-            "Retrieve chart images given natural language questions.  "
-            "The corpus contains 500 chart images and the 63 queries are "
-            "questions drawn from the ChartQA benchmark.  Each query has one "
-            "relevant image."
-        ),
+        description="Assess end-to-end vision-based RAG performance on real-world charts requiring complex logical and visual reasoning from retrieved images.",
         reference="https://arxiv.org/abs/2203.10244",
         type="Retrieval",
         task_subtypes=["Image Text Retrieval"],
@@ -91,7 +86,7 @@ class VisRAGRetChartQA(AbsTaskRetrieval):
             "revision": "31f5ceb5d60b02e065bff394cb582f5bbb01a9b6",
         },
         date=("2010-01-01", "2021-12-31"),
-        domains=["Web"],
+        domains=["Web", "Non-fiction"],
         license="gpl-3.0",
         annotations_creators="derived",
         dialect=[],
