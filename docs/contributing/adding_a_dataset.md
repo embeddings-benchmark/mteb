@@ -1,11 +1,11 @@
 # Adding a Dataset
 
-To add a new dataset to MTEB, you need to do three things:
+To add a new dataset to MTEB, you need to do four things:
 
-- 1) **Implement a new task**: Implement a task with the desired dataset, by subclassing an abstract task
-- 2) **Fill out the metadata** describing the task, main scores, languages etc.
-- 3) **Calculate descriptive statistics**, which is used to detect duplicates, few number of samples or very short documents
-- 4) **Submit a Pull Request** of the the edits to the [MTEB](https://github.com/embeddings-benchmark/mteb/blob/main) repository
+1. **Implement a new task**: Implement a task with the desired dataset, by subclassing an abstract task
+2. **Fill out the metadata** describing the task, main scores, languages etc.
+3. **Calculate descriptive statistics**, which is used to detect duplicates, few number of samples or very short documents
+4. **Submit a Pull Request** of the edits to the [MTEB](https://github.com/embeddings-benchmark/mteb/blob/main) repository
 
 We go through these steps below, but if you have any questions regarding this process feel free to open a discussion [thread](https://github.com/embeddings-benchmark/mteb/discussions). It is also reasonable to look at [tasks already implemented](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/tasks) to get an idea about the structure.
 
@@ -50,12 +50,12 @@ class MyNewTask(AbsTaskClassification):
 To add a dataset you first need to figure out which type of task is the best suited for the dataset. Below we will give you an overview of the most common,
 but do see [abstasks](../api/task.md#multimodal-tasks) for an overview of all the tasks available.
 
-| Task (Abstask) | Description | Common Metric |
-| ---- | ----------- | -------------- |
-| Classification, [`AbsTaskClassification`][mteb.abstasks.classification.AbsTaskClassification]    | Fits a classifier on the embeddings derived from the model. The goal is the predict the labels correctly. This does not change the weights of the model itself. See also classes for [multi label classification][mteb.abstasks.multilabel_classification.AbsTaskMultilabelClassification], [regression][mteb.abstasks.regression.AbsTaskRegression] and [pair classification][mteb.abstasks.pair_classification.AbsTaskPairClassification]. | [accuracy](https://en.wikipedia.org/wiki/Accuracy_and_precision) |
-| Clustering, [`AbsTaskClustering`][mteb.abstasks.clustering.AbsTaskClustering]    | Cluster documents based on their embeddings. The goal is to cluster documents according to predefined categories. Support clustering in multiple hierarchies. | [v_measure](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.v_measure_score.html) |
-| Retrieval, [`AbsTaskRetrieval`][mteb.abstasks.retrieval.AbsTaskRetrieval]    | Retrieval tasks include a corpus from which you retrieve from using a query. The goal is to retrieve relevant documents. See also [`convert_to_reranking`](../api/task/?h=convert_to_reranking#mteb.abstasks.retrieval.AbsTaskRetrieval.convert_to_reranking) for how to convert a retrieval task into a reranking task. | [ndcg_at_10](https://en.wikipedia.org/wiki/Discounted_cumulative_gain#Normalized_DCG) |
-| Semantic Text Similarity, [`AbsTaskSTS`][mteb.abstasks.sts.AbsTaskSTS]    | Compares the (semantic) similarity of pairs of documents. The goal is to embed documents such that semanticly similar statements appear close. | [spearman](https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient) |
+| Task (Abstask)                                                                                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                 | Common Metric                                                                                       |
+|-----------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| Classification, [`AbsTaskClassification`][mteb.abstasks.classification.AbsTaskClassification] | Fits a classifier on the embeddings derived from the model. The goal is to predict the labels correctly. This does not change the weights of the model itself. See also classes for [multi label classification][mteb.abstasks.multilabel_classification.AbsTaskMultilabelClassification], [regression][mteb.abstasks.regression.AbsTaskRegression] and [pair classification][mteb.abstasks.pair_classification.AbsTaskPairClassification]. | [accuracy](https://en.wikipedia.org/wiki/Accuracy_and_precision)                                    |
+| Clustering, [`AbsTaskClustering`][mteb.abstasks.clustering.AbsTaskClustering]                 | Cluster documents based on their embeddings. The goal is to cluster documents according to predefined categories. Support clustering in multiple hierarchies.                                                                                                                                                                                                                                                                               | [v_measure](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.v_measure_score.html) |
+| Retrieval, [`AbsTaskRetrieval`][mteb.abstasks.retrieval.AbsTaskRetrieval]                     | Retrieval tasks include a corpus from which you retrieve from using a query. The goal is to retrieve relevant documents. See also [`convert_to_reranking`](../api/task/?h=convert_to_reranking#mteb.abstasks.retrieval.AbsTaskRetrieval.convert_to_reranking) for how to convert a retrieval task into a reranking task.                                                                                                                    | [ndcg_at_10](https://en.wikipedia.org/wiki/Discounted_cumulative_gain#Normalized_DCG)               |
+| Semantic Text Similarity, [`AbsTaskSTS`][mteb.abstasks.sts.AbsTaskSTS]                        | Compares the (semantic) similarity of pairs of documents. The goal is to embed documents such that semantically similar statements appear close.                                                                                                                                                                                                                                                                                            | [spearman](https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient)                 |
 
 !!! Note
     While each task has a main score we compute multiple and it is possible to select any of these are the main metric for your task.
@@ -68,7 +68,7 @@ Once we have decided on task, we can implement them as follows:
 === "Classification"
 
     For our classification task we use the [poem sentiment](https://huggingface.co/datasets/mteb/poem_sentiment) dataset, which consist of verses
-    with four labels 0 (negative), 1 (positive), 2 (no_impact) and 3 (mixed). Let us say that we just want to look at the label 1 and 2.
+    with four labels 0 (negative), 1 (positive), 2 (no_impact) and 3 (mixed). Let us say that we just want to look at the labels 0 and 1.
 
     We can then implement the task as follows:
 
@@ -126,7 +126,7 @@ Once we have decided on task, we can implement them as follows:
 
     The clustering task performs multiple experiments to get a more consistent estimate and reports the average. Here we set it 3 experiments
     using 1000 samples, but typically you would set it higher. Using the default is also a reasonable idea.
-    
+
     We can then implement the task as follows:
 
     ```python
@@ -134,25 +134,25 @@ Once we have decided on task, we can implement them as follows:
     from mteb.abstasks import AbsTaskClustering
 
     class MyClusteringTask(AbsTaskClustering):
-    metadata = mteb.TaskMetadata(  # minimal metadata
-        name="MyClusteringTask",
-        description="A dummy clustering task on swedish news articles",
-        main_score="v_measure",
-        eval_langs=["swe-Latn"],
-        eval_splits=["headlines"],  # just use the headlines split for evaluation
-        type="Clustering",
-        dataset={
-            "path": "mteb/SwednClusteringP2P",
-            "revision": "f8dbf10ec231cc25e9f63454d5cd2d90af95e5f8",
-        },
-    )
+        metadata = mteb.TaskMetadata(  # minimal metadata
+            name="MyClusteringTask",
+            description="A dummy clustering task on swedish news articles",
+            main_score="v_measure",
+            eval_langs=["swe-Latn"],
+            eval_splits=["headlines"],  # just use the headlines split for evaluation
+            type="Clustering",
+            dataset={
+                "path": "mteb/SwednClusteringP2P",
+                "revision": "f8dbf10ec231cc25e9f63454d5cd2d90af95e5f8",
+            },
+        )
 
-    label_column_name = "labels"
-    input_column_name = "sentences"
-    n_clusters = 10  # number of clustering experiments to run
-    max_documents_per_cluster = (
-        1000  # numberof documents to sample per each clustering experiment
-    )
+        label_column_name = "labels"
+        input_column_name = "sentences"
+        n_clusters = 10  # number of clustering experiments to run
+        max_documents_per_cluster = (
+            1000  # numberof documents to sample per each clustering experiment
+        )
     ```
 
     Once we have the task we can then test to make sure that everything works as intended:
@@ -216,7 +216,7 @@ Once we have decided on task, we can implement them as follows:
     # ensure that we can evaluate the model on the task
     mdl = mteb.get_model("baseline/random-encoder-baseline")
     results = mteb.evaluate(mdl, task)
-    print(results[0].get_score())  # print the spearman score of the random baseline
+    print(results[0].get_score())  # print the ndcg_at_10 score of the random baseline
     # 0.021194685839832323
     ```
 
@@ -238,7 +238,7 @@ Once we have decided on task, we can implement them as follows:
         metadata = mteb.TaskMetadata(  # minimal metadata
             name="MySTSTask",
             description="A dummy STS task on a cross-lingual dataset between English and 3 indic languages",
-            main_score="v_measure",
+            main_score="spearman",
             # for multilingual tasks, we need to specify the eval_langs as a mapping between the huggingface subset (e.g. "en-as")
             # and their respective language codes in the dataset.
             eval_langs={
@@ -246,7 +246,7 @@ Once we have decided on task, we can implement them as follows:
                 "en-bn": ["eng-Latn", "ben-Beng"],
                 "en-gu": ["eng-Latn", "guj-Gujr"],
             },
-            eval_splits=["test"], 
+            eval_splits=["test"],
             type="STS",
             dataset={
                 "path": "mteb/IndicCrosslingualSTS",
@@ -258,7 +258,7 @@ Once we have decided on task, we can implement them as follows:
         min_score = 0
         max_score = 5
     ```
-    
+
     Once we have the task we can then test to make sure that everything works as intended:
 
     ```python
@@ -333,29 +333,29 @@ available within `mteb` as `PoemSentimentClassification.v2`, for more details ab
 
 ```python
 TaskMetadata(
-        name="PoemSentimentClassification.v2",
-        # description should 
-        description="Poem Sentiment consist of poem verses from Project Gutenberg annotated for sentiment using the labels negative (0), positive (1), no_impact (2) and mixed (3). This version was corrected as a part of [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900) to fix common issues on the original datasets, including removing duplicates, and train-test leakage.",
-        reference="https://arxiv.org/abs/2011.02686",
-        dataset={
-            "path": "mteb/poem_sentiment",
-            "revision": "9fdc57b89ccc09a8d9256f376112d626878e51a7",
-        },
-        type="Classification",
-        category="t2c", # text-2-class
-        modalities=["text"],
-        eval_splits=["validation", "test"],
-        eval_langs=["eng-Latn"],
-        main_score="accuracy",
-        date=("1700-01-01", "1900-01-01"), # a very rough guess of the date range of the poems, we do not have exact dates for all poems
-        domains=["Written", "Fiction", "Poetry"],
-        task_subtypes=["Sentiment/Hate speech"], # if no subtypes match then just use []
-        license="cc-by-4.0",
-        annotations_creators="human-annotated", 
-        dialect=["eng-Latn-US", "en-Latn-GB"], # dialects is often unknown if so just use []
-        sample_creation="found", # the text was not created for the purpose of the dataset, but rather found and annotated
-        adapted_from=["PoemSentimentClassification"], # Previous version of the dataset, can be None
-        bibtex_citation=r"""
+    name="PoemSentimentClassification.v2",
+    # description should provide a concise overview of the dataset
+    description="Poem Sentiment consists of poem verses from Project Gutenberg annotated for sentiment using the labels negative (0), positive (1), no_impact (2), and mixed (3). This version was corrected as part of [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900) to fix common issues in the original dataset, including removing duplicates and train-test leakage.",
+    reference="https://arxiv.org/abs/2011.02686",
+    dataset={
+        "path": "mteb/poem_sentiment",
+        "revision": "9fdc57b89ccc09a8d9256f376112d626878e51a7",
+    },
+    type="Classification",
+    category="t2c", # text-2-class
+    modalities=["text"],
+    eval_splits=["validation", "test"],
+    eval_langs=["eng-Latn"],
+    main_score="accuracy",
+    date=("1700-01-01", "1900-01-01"), # a very rough guess of the date range of the poems, we do not have exact dates for all poems
+    domains=["Written", "Fiction", "Poetry"],
+    task_subtypes=["Sentiment/Hate speech"], # if no subtypes match then just use []
+    license="cc-by-4.0",
+    annotations_creators="human-annotated",
+    dialect=["eng-Latn-US", "en-Latn-GB"], # dialects is often unknown if so just use []
+    sample_creation="found", # the text was not created for the purpose of the dataset, but rather found and annotated
+    adapted_from=["PoemSentimentClassification"], # Previous version of the dataset, can be None
+    bibtex_citation=r"""
 @misc{sheng2020investigating,
   archiveprefix = {arXiv},
   author = {Emily Sheng and David Uthus},
@@ -365,7 +365,7 @@ TaskMetadata(
   year = {2020},
 }
 """,
-    )
+)
 ```
 
 
