@@ -2849,8 +2849,8 @@ KOVIDORE_V2 = Benchmark(
 )
 
 VISRAG_RETRIEVAL = Benchmark(
-    name="VisRAG(v1)",
-    aliases=["VisRAG"],
+    name="VisRAG Retrieval(v1)",
+    aliases=["VisRAG", "VisRAG Retrieval", "VisRag", "VisRAG(v1)"],
     display_name="VisRAG Retrieval",
     tasks=MTEBTasks(
         get_tasks(
