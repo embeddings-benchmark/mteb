@@ -317,7 +317,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
             if any(item[key] is None for item in batch):
                 raise ValueError(f"Found None in batch for key '{key}'")
             collated[key] = default_collate([item[key] for item in batch])
-    return collated  # type: ignore[return-value]
+    return cast("BatchedInput", collated)
 
 
 def _create_image_dataloader(
@@ -602,10 +602,13 @@ class AudioCollator:
                 array=audio_array, sampling_rate=target_sampling_rate
             )
             collated_inputs.append(row)
-        return {  # type: ignore[return-value]
-            key: [row[key] for row in collated_inputs]
-            for key in collated_inputs[0].keys()
-        }
+        return cast(
+            "BatchedInput",
+            {
+                key: [row[key] for row in collated_inputs]
+                for key in collated_inputs[0].keys()
+            },
+        )
 
     @staticmethod
     def resample_audio(
