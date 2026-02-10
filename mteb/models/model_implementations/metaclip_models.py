@@ -8,6 +8,8 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
+from .facebookai import XLMR_LANGUAGES
+
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
@@ -15,7 +17,21 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput, PromptType
 
 
-class CLIPModel(AbsEncoder):
+METACLIP2_CITATION = """@article{xu2025metaclip2,
+  title={MetaCLIP 2: A Worldwide Scaling Recipe},
+  author={Xu, Hu and Xie, Saining and Ghosh, Gargi and Kira, Zsolt and Darrell, Trevor},
+  journal={arXiv preprint arXiv:2507.22062},
+  year={2025}
+}"""
+
+
+class MetaClip2Model(AbsEncoder):
+    """Wrapper for MetaCLIP 2 models.
+
+    MetaCLIP 2 is a multilingual vision-language model that uses the mT5 tokenizer
+    for worldwide language support.
+    """
+
     def __init__(
         self,
         model_name: str,
@@ -27,10 +43,14 @@ class CLIPModel(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.model = AutoModel.from_pretrained(model_name, revision=revision).to(
-            self.device
+        self.model = AutoModel.from_pretrained(
+            model_name,
+            revision=revision,
+        ).to(self.device)
+        self.processor = AutoProcessor.from_pretrained(
+            model_name,
+            revision=revision,
         )
-        self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
 
     def get_text_embeddings(
         self,
@@ -52,7 +72,7 @@ class CLIPModel(AbsEncoder):
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.model.get_text_features(**inputs)
-                # Handle both tensor and BaseModelOutputWithPooling returns
+                # MetaCLIP 2 returns BaseModelOutputWithPooling, extract pooler_output
                 if hasattr(text_outputs, "pooler_output"):
                     text_outputs = text_outputs.pooler_output
                 all_text_embeddings.append(text_outputs.cpu())
@@ -77,7 +97,7 @@ class CLIPModel(AbsEncoder):
             )
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
             image_outputs = self.model.get_image_features(**inputs)
-            # Handle both tensor and BaseModelOutputWithPooling returns
+            # MetaCLIP 2 returns BaseModelOutputWithPooling, extract pooler_output
             if hasattr(image_outputs, "pooler_output"):
                 image_outputs = image_outputs.pooler_output
             all_image_embeddings.append(image_outputs.cpu())
@@ -116,86 +136,27 @@ class CLIPModel(AbsEncoder):
         raise ValueError
 
 
-CLIP_CITATION = """
-@article{radford2021learning,
-  title={Learning Transferable Visual Models From Natural Language Supervision},
-  author={Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya},
-  journal={arXiv preprint arXiv:2103.00020},
-  year={2021}
-}"""
-
-
-clip_vit_large_patch14 = ModelMeta(
-    loader=CLIPModel,
-    name="openai/clip-vit-large-patch14",
+metaclip2_mt5_worldwide_b32 = ModelMeta(
+    loader=MetaClip2Model,
+    name="facebook/metaclip-2-mt5-worldwide-b32",
     model_type=["dense"],
-    languages=["eng-Latn"],
-    revision="32bd64288804d66eefd0ccbe215aa642df71cc41",
-    release_date="2021-02-26",
+    languages=XLMR_LANGUAGES,
+    revision="fbbce525749bfc4a54b932bafe85313ee889d98f",
+    release_date="2025-11-12",
     modalities=["image", "text"],
-    n_parameters=427616513,
-    n_embedding_parameters=None,
-    memory_usage_mb=1631,
+    n_parameters=253980417,
+    n_embedding_parameters=128_057_344,
+    memory_usage_mb=969,
     max_tokens=77,
-    embed_dim=768,
-    license=None,
+    embed_dim=512,
+    license="cc-by-nc-4.0",
     open_weights=True,
-    public_training_code=None,
+    public_training_code="https://github.com/facebookresearch/MetaCLIP",
     public_training_data=None,
     framework=["PyTorch", "Transformers", "safetensors"],
-    reference="https://huggingface.co/openai/clip-vit-large-patch14",
+    reference="https://huggingface.co/facebook/metaclip-2-mt5-worldwide-b32",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=None,
-    citation=CLIP_CITATION,
-)
-
-clip_vit_base_patch32 = ModelMeta(
-    loader=CLIPModel,
-    name="openai/clip-vit-base-patch32",
-    model_type=["dense"],
-    languages=["eng-Latn"],
-    revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
-    release_date="2021-02-26",
-    modalities=["image", "text"],
-    n_parameters=151277313,
-    n_embedding_parameters=None,
-    memory_usage_mb=576,
-    max_tokens=77,
-    embed_dim=512,
-    license=None,
-    open_weights=True,
-    public_training_code=None,
-    public_training_data=None,
-    framework=["PyTorch", "Transformers"],
-    reference="https://huggingface.co/openai/clip-vit-base-patch32",
-    similarity_fn_name=ScoringFunction.COSINE,
-    use_instructions=False,
-    training_datasets=None,
-    citation=CLIP_CITATION,
-)
-
-clip_vit_base_patch16 = ModelMeta(
-    loader=CLIPModel,
-    name="openai/clip-vit-base-patch16",
-    model_type=["dense"],
-    languages=["eng-Latn"],
-    revision="57c216476eefef5ab752ec549e440a49ae4ae5f3",
-    release_date="2021-02-26",
-    modalities=["image", "text"],
-    n_parameters=149620737,
-    n_embedding_parameters=None,
-    memory_usage_mb=576,
-    max_tokens=77,
-    embed_dim=512,
-    license=None,
-    open_weights=True,
-    public_training_code=None,
-    public_training_data=None,
-    framework=["PyTorch", "Transformers"],
-    reference="https://huggingface.co/openai/clip-vit-base-patch16",
-    similarity_fn_name=ScoringFunction.COSINE,
-    use_instructions=False,
-    training_datasets=None,
-    citation=CLIP_CITATION,
+    training_datasets={"CommonCrawl"},
+    citation=METACLIP2_CITATION,
 )
