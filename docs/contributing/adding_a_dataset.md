@@ -17,19 +17,21 @@ We go through these steps below, but if you have any questions regarding this pr
 Implementing a task in `mteb`, typically has the following structure:
 
 ```python
+from datasets import load_dataset
+
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.classification import AbsTaskClassification
 
-class MyNewTask(AbsTaskClassification): 
+class MyNewTask(AbsTaskClassification):
     # metada contains information such as title, description, metrics etc.
-    metadata = TaskMetadata(...) 
+    metadata = TaskMetadata(...)
 
     # task specific setting e.g. specifying the column names
     label_column_name = "label"
     input_column_name = "text"
 
     # This is the function that loads the dataset, this is typically untouched
-    def load_data(self):
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         self.dataset = load_dataset(
             **self.metadata.dataset,
         )
@@ -38,13 +40,14 @@ class MyNewTask(AbsTaskClassification):
 
     # dataset transform, which allow you to process the dataset
     # including downsampling, filtering etc.
-    def dataset_transform(self):
-        # some processing 
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+        # some processing
+        ...
 ```
 
 ### Select an appropriate task
 
-To add a dataset you first need to figure out which type of task is the best suited for the dataset. Below we will give you an overview of the most common, 
+To add a dataset you first need to figure out which type of task is the best suited for the dataset. Below we will give you an overview of the most common,
 but do see [abstasks](../api/task.md#multimodal-tasks) for an overview of all the tasks available.
 
 | Task | Abstask | Description | Common Metric |
@@ -64,7 +67,7 @@ Once we have decided on task, we can implement them as follows:
 
 === "Classification"
 
-    For our classification task we use the [poem sentiment](https://huggingface.co/datasets/mteb/poem_sentiment) dataset, which consist of verses 
+    For our classification task we use the [poem sentiment](https://huggingface.co/datasets/mteb/poem_sentiment) dataset, which consist of verses
     with four labels 0 (negative), 1 (positive), 2 (no_impact) and 3 (mixed). Let us say that we just want to look at the label 1 and 2.
 
     We can then implement the task as follows:
@@ -86,7 +89,7 @@ Once we have decided on task, we can implement them as follows:
                 "path": "mteb/poem_sentiment",
                 "revision": "9fdc57b89ccc09a8d9256f376112d626878e51a7",
             },
-            prompt="Classify poem verses as positive or negtive" 
+            prompt="Classify poem verses as positive or negtive"
         )
 
         label_column_name = "label"
@@ -104,7 +107,7 @@ Once we have decided on task, we can implement them as follows:
     ```python
     # ensure that the dataset can be loaded and transformed properly
     task = MyClassificationtask()
-    task.load_data() 
+    task.load_data()
 
     print(task.dataset["test"][0]) # check one of the samples:
     # {'id': 1, 'text': 'shall yet be glad for him, and he shall bless', 'label': 1}
@@ -215,7 +218,6 @@ Once we have decided on task, we can implement them as follows:
     ```
 
 
-
 === "Multilingual Semantic Similarity"
 
     We kick up the notch here an do a multilingual example using a [Indic Cross-lingual semantic similarity corpus](https://huggingface.co/datasets/mteb/IndicCrosslingualSTS). We will use just three of the languages as an example, but we can easily add more. The subsets on huggingface we will
@@ -275,8 +277,8 @@ Once we have decided on task, we can implement them as follows:
 
 ??? example "Overwriting `load_data`"
 
-    While we do not recommend overwriting `load_data` it can often be useful, when developing tasks and can also be used in conjuction with 
-    [`push_dataset_to_hub`](../api/task/?h=push_data#mteb.AbsTask.push_dataset_to_hub) to push datasets to the hub in the correct format.
+    While we do not recommend overwriting `load_data` it can often be useful, when developing tasks and can also be used in conjuction with
+    [`push_dataset_to_hub`][mteb.AbsTask.push_dataset_to_hub] to push datasets to the hub in the correct format.
 
     ```python
     import mteb
