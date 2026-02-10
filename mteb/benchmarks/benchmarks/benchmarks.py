@@ -2849,7 +2849,7 @@ KOVIDORE_V2 = Benchmark(
 )
 
 VISRAG_RETRIEVAL = Benchmark(
-    name="VisRAG-Retrieval",
+    name="VisRAG(v1)",
     aliases=["VisRAG"],
     display_name="VisRAG Retrieval",
     tasks=MTEBTasks(
@@ -2862,8 +2862,6 @@ VISRAG_RETRIEVAL = Benchmark(
                 "VisRAGRetMPDocVQA",
                 "VisRAGRetSlideVQA",
             ],
-            languages=["eng"],
-            eval_splits=["train"],
         )
     ),
     description="Benchmark of six VisRAG image-text retrieval tasks.",
