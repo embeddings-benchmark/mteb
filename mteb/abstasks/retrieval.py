@@ -115,7 +115,7 @@ def _filter_queries_without_positives(
 class AbsTaskRetrieval(AbsTask):
     """The class which retrieval tasks inherit from.
 
-    A retrieval task consist of a corpus of documents, a set of queries, and a mapping of which documents are relevant for each query.
+    A retrieval task consists of a corpus of documents, a set of queries, and a mapping of which documents are relevant for each query.
     The task is to retrieve the relevant documents for each query. The evaluation is done by indexing the corpus and then searching for each query.
     The retrieved documents are then compared to the relevant documents to calculate the evaluation scores.
 

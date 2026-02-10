@@ -95,7 +95,7 @@ class AbsTaskSTS(AbsTask):
     A semantic textual similarity (STS) task consists of a dataset with pairs of sentences and corresponding similarity scores.
     The task is to predict the similarity score for each pair of sentences.
 
-    The task works by encoding the sentences using the provided model and then calculating similarity scores using both model defined similarity
+    The task works by encoding the sentences using the provided model and then calculating similarity scores using both the model-defined similarity
     function (if available) and generic similarity functions, including cosine similarity, Manhattan distance, and Euclidean distance.
     The predicted similarity scores are then compared to the true similarity scores using Pearson and Spearman correlation coefficients.
 
