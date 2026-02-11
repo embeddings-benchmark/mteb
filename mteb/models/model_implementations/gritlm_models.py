@@ -1,6 +1,6 @@
 import logging
 
-from mteb.models.instruct_wrapper import instruct_wrapper
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
@@ -31,11 +31,10 @@ GRITLM_CITATION = """
 
 
 gritlm7b = ModelMeta(
-    loader=instruct_wrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=gritlm_instruction,
-        mode="embedding",
-        torch_dtype="auto",
+        model_kwargs={"dtype": "auto"},
     ),
     name="GritLM/GritLM-7B",
     model_type=["dense"],
@@ -61,11 +60,10 @@ gritlm7b = ModelMeta(
 )
 
 gritlm8x7b = ModelMeta(
-    loader=instruct_wrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=gritlm_instruction,
-        mode="embedding",
-        torch_dtype="auto",
+        model_kwargs={"dtype": "auto"},
     ),
     name="GritLM/GritLM-8x7B",
     model_type=["dense"],

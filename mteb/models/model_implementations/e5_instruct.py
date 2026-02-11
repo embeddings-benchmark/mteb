@@ -2,7 +2,6 @@ import torch
 
 from mteb.models.instruct_wrapper import (
     InstructSentenceTransformerModel,
-    instruct_wrapper,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -30,14 +29,10 @@ E5_MISTRAL_TRAINING_DATA = {
 } | ME5_TRAINING_DATA
 
 e5_instruct = ModelMeta(
-    loader=instruct_wrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
-        attn="cccc",
-        pooling_method="mean",
-        mode="embedding",
-        torch_dtype=torch.float16,
-        normalized=True,
+        model_kwargs={"dtype": torch.float16},
     ),
     name="intfloat/multilingual-e5-large-instruct",
     model_type=["dense"],
@@ -75,16 +70,12 @@ e5_instruct = ModelMeta(
 )
 
 e5_mistral = ModelMeta(
-    loader=instruct_wrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
-        attn="cccc",
-        pooling_method="lasttoken",
-        mode="embedding",
-        torch_dtype=torch.float16,
+        model_kwargs={"dtype": torch.float16},
         # The ST script does not normalize while the HF one does so unclear what to do
         # https://huggingface.co/intfloat/e5-mistral-7b-instruct#transformers
-        normalized=True,
     ),
     name="intfloat/e5-mistral-7b-instruct",
     model_type=["dense"],
@@ -130,16 +121,12 @@ e5_mistral = ModelMeta(
 )
 
 zeta_alpha_ai__zeta_alpha_e5_mistral = ModelMeta(
-    loader=instruct_wrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
-        attn="cccc",
-        pooling_method="lasttoken",
-        mode="embedding",
-        torch_dtype=torch.bfloat16,
+        model_kwargs={"dtype": torch.bfloat16},
         # The ST script does not normalize while the HF one does so unclear what to do
         # https://huggingface.co/intfloat/e5-mistral-7b-instruct#transformers
-        normalized=True,
     ),
     name="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
     model_type=["dense"],
