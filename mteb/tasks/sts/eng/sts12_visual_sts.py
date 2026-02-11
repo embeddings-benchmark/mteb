@@ -6,8 +6,8 @@ class STS12VisualSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="STS12VisualSTS",
         dataset={
-            "path": "Pixel-Linguist/rendered-sts12",
-            "revision": "820c25edfba736f3789201b2476208cc62c2ccb9",
+            "path": "mteb/rendered-sts12",
+            "revision": "16fabd3185c013b2e5e73f8b3343068e3d438689",
         },
         description="SemEval-2012 Task 6." + "then rendered into images.",
         reference="https://arxiv.org/abs/2402.08183/",

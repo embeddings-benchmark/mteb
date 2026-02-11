@@ -8,8 +8,8 @@ class VisualNewsI2TRetrieval(AbsTaskRetrieval):
         description="Retrieval entity-rich captions for news images.",
         reference="https://aclanthology.org/2021.emnlp-main.542/",
         dataset={
-            "path": "MRBench/mbeir_visualnews_task3",
-            "revision": "aaee58895a66e4d619168849267ed2bb40d37043",
+            "path": "mteb/mbeir_visualnews_task3",
+            "revision": "158d0c0ce9cdd4f292964393de7dd47dc3e87519",
         },
         type="Any2AnyRetrieval",
         category="i2t",

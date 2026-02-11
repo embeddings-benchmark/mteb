@@ -8,8 +8,8 @@ class OVENIT2ITRetrieval(AbsTaskRetrieval):
         description="Retrieval a Wiki image and passage to answer query about an image.",
         reference="https://openaccess.thecvf.com/content/ICCV2023/html/Hu_Open-domain_Visual_Entity_Recognition_Towards_Recognizing_Millions_of_Wikipedia_Entities_ICCV_2023_paper.html",
         dataset={
-            "path": "MRBench/mbeir_oven_task8",
-            "revision": "350d14b7258189654e26a2be93dc0bd6bee09b76",
+            "path": "mteb/mbeir_oven_task8",
+            "revision": "619847759581b2e57dfc1d68e2dadedc9599b283",
         },
         type="Any2AnyRetrieval",
         category="it2it",
