@@ -81,8 +81,8 @@ class VisRAGRetSlideVQA(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="recall_at_10",
         dataset={
-            "path": "openbmb/VisRAG-Ret-Test-SlideVQA",
-            "revision": "6b5f81a3f6953095934c26c5d420dfd039184d69",
+            "path": "mteb/VisRAGRetSlideVQA",
+            "revision": "c62fb65928b0bf7b709cd3084c87edf75a1ba29b",
         },
         date=("2010-01-01", "2022-12-31"),
         domains=["Web"],

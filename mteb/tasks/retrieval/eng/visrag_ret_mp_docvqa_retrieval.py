@@ -83,8 +83,8 @@ class VisRAGRetMPDocVQA(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="recall_at_10",
         dataset={
-            "path": "openbmb/VisRAG-Ret-Test-MP-DocVQA",
-            "revision": "3ebd091c458cf04161f78cd7b12ea101f83e2529",
+            "path": "mteb/VisRAGRetMPDocVQA",
+            "revision": "b1feea8bb4b37ade699d6974d71a11868866569f",
         },
         date=("1900-01-01", "2020-12-31"),
         domains=["Web", "Non-fiction"],

@@ -76,8 +76,8 @@ class VisRAGRetArxivQA(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="recall_at_10",
         dataset={
-            "path": "openbmb/VisRAG-Ret-Test-ArxivQA",
-            "revision": "00a31fc1e899b5f81d7760eca4907b1a1005865b",
+            "path": "mteb/VisRAGRetArxivQA",
+            "revision": "b0da0f3f9677461eb78e34a7164596ff4f86bd52",
         },
         date=("2000-01-01", "2024-12-31"),
         domains=["Academic", "Non-fiction"],

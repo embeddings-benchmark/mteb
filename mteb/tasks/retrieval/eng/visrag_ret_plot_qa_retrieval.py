@@ -83,8 +83,8 @@ class VisRAGRetPlotQA(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="recall_at_10",
         dataset={
-            "path": "openbmb/VisRAG-Ret-Test-PlotQA",
-            "revision": "ef953ef8ab6d78ac112dd4cde6acdb2c2692039a",
+            "path": "mteb/VisRAGRetPlotQA",
+            "revision": "0c2dad65a167e80a131c4839211ca8ec5b7f870e",
         },
         date=("2000-01-01", "2019-12-31"),
         domains=["Web", "Non-fiction"],

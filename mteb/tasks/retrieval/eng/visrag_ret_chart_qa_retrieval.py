@@ -82,8 +82,8 @@ class VisRAGRetChartQA(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="recall_at_10",
         dataset={
-            "path": "openbmb/VisRAG-Ret-Test-ChartQA",
-            "revision": "31f5ceb5d60b02e065bff394cb582f5bbb01a9b6",
+            "path": "mteb/VisRAGRetChartQA",
+            "revision": "4665d4a3ebc9ea5a4e635985a4fd2a595b78b3c0",
         },
         date=("2010-01-01", "2021-12-31"),
         domains=["Web", "Non-fiction"],
