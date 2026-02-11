@@ -106,8 +106,8 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
                 Stemmer.Stemmer(stemmer_language) if stemmer_language else None
             )
 
-        def encode(self, texts: list[str]):
-            """Encode input texts using bm25s tokenizer."""
+        def _encode(self, texts: list[str]):
+            """Tokenize texts using bm25s. Not to be confused with EncoderProtocol.encode()."""
             return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
 
         def index(
@@ -124,7 +124,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
             corpus_texts = [
                 "\n".join([doc.get("title", ""), doc["text"]]) for doc in corpus
             ]
-            encoded_corpus = self.encode(corpus_texts)
+            encoded_corpus = self._encode(corpus_texts)
 
             logger.info(
                 f"Indexing Corpus... {len(encoded_corpus.ids):,} documents, "
@@ -169,7 +169,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
             queries_loader = _create_text_queries_dataloader(queries)
             queries_texts = [text for batch in queries_loader for text in batch["text"]]
 
-            query_tokenized = self.encode(queries_texts)
+            query_tokenized = self._encode(queries_texts)
 
             logger.info(f"Retrieving Results... {len(queries):,} queries")
 
