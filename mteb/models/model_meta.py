@@ -363,7 +363,6 @@ class ModelMeta(BaseModel):
         cls,
         model_name: str | None,
         revision: str | None = None,
-        fetch_from_hf: bool = True,
     ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
         """Detect the model type and appropriate loader based on HuggingFace Hub configuration files.
 
@@ -382,7 +381,6 @@ class ModelMeta(BaseModel):
         Args:
             model_name: The HuggingFace model name (can be None)
             revision: The model revision
-            fetch_from_hf: Whether to fetch from HuggingFace Hub
 
 
         Returns:
@@ -392,7 +390,7 @@ class ModelMeta(BaseModel):
         """
         from mteb.models import CrossEncoderWrapper, sentence_transformers_loader
 
-        if not fetch_from_hf or not model_name or not _repo_exists(model_name):
+        if not model_name or not _repo_exists(model_name):
             return sentence_transformers_loader, "dense"
 
         try:
@@ -453,9 +451,15 @@ class ModelMeta(BaseModel):
             )
             fill_missing = compute_metadata
 
-        loader, model_type = cls._detect_model_type_and_loader(
-            model_name, revision, fetch_from_hf
-        )
+        if fetch_from_hf:
+            loader, model_type = cls._detect_model_type_and_loader(model_name, revision)
+        else:
+            from mteb.models import sentence_transformers_loader
+
+            logger.info(
+                "fetch_from_hf is set to False. Skipping fetching metadata from HuggingFace Hub and using default loader and model type."
+            )
+            loader, model_type = sentence_transformers_loader, "dense"
 
         frameworks: list[FRAMEWORKS] = ["PyTorch"]
         model_license = None
