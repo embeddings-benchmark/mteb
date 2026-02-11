@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 
 from mteb.models.instruct_wrapper import (
     InstructSentenceTransformerModel,
-    instruct_wrapper,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -40,16 +39,13 @@ SFR_TRAINING_DATA = {  # inherits from e5
 } | E5_MISTRAL_TRAINING_DATA
 
 SFR_Embedding_2_R = ModelMeta(
-    loader=instruct_wrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
-        attn="cccc",
-        pooling_method="lasttoken",
-        mode="embedding",
-        torch_dtype="auto",
         # The ST script does not normalize while the HF one does so unclear what to do
         # https://huggingface.co/Salesforce/SFR-Embedding-2_R
-        normalized=True,
+        model_kwargs={"dtype": "auto"},
+        trust_remote_code=True,
     ),
     name="Salesforce/SFR-Embedding-2_R",
     model_type=["dense"],
@@ -84,11 +80,8 @@ SFR_Embedding_Code_2B_R = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
-        attn="cccc",
-        pooling_method="lasttoken",
-        mode="embedding",
-        torch_dtype="auto",
-        normalized=True,
+        model_kwargs={"dtype": "auto"},
+        trust_remote_code=True,
     ),
     name="Salesforce/SFR-Embedding-Code-2B_R",
     model_type=["dense"],
@@ -120,14 +113,11 @@ SFR_Embedding_Code_2B_R = ModelMeta(
 )
 
 SFR_Embedding_Mistral = ModelMeta(
-    loader=instruct_wrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
-        attn="cccc",
-        pooling_method="lasttoken",
-        mode="embedding",
-        torch_dtype="auto",
-        normalized=True,
+        model_kwargs={"dtype": "auto"},
+        trust_remote_code=True,
     ),
     name="Salesforce/SFR-Embedding-Mistral",
     model_type=["dense"],
