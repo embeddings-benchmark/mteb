@@ -12,7 +12,7 @@ Once you have selected the tasks, you can create a new benchmark as follows:
 ```python
 import mteb
 
-amozon_bench = Benchmark(
+custom_bench = Benchmark(
     name="MTEB(custom, v1)", # set the name 
     tasks=mteb.get_tasks( # (1)
         tasks=["AmazonCounterfactualClassification", "AmazonPolarityClassification"],
