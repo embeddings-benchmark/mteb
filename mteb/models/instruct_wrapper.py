@@ -132,6 +132,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         padding_side: str | None = None,
         add_eos_token: bool = False,
         prompts_dict: dict[str, str] | None = None,
+        include_prompt: bool = True,
         **kwargs: Any,
     ):
         """Instruct Sentence Transformer Wrapper. Wrapper that passes instructions to the Sentence Transformer model.
@@ -149,6 +150,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             add_eos_token: Whether to add the eos token to each input example.
             prompts_dict: Dictionary of task names to prompt names. If task name is missing in the dict or prompts dict is None, prompt from task metadata or
                 AbsTask.abstask_prompt will be used.
+            include_prompt: Whether to include the prompt in the input.
             **kwargs: Kwargs for Sentence Transformer model.
         """
         from sentence_transformers import SentenceTransformer
@@ -184,6 +186,8 @@ class InstructSentenceTransformerModel(AbsEncoder):
         if max_seq_length:
             # https://github.com/huggingface/sentence-transformers/issues/3575
             self.model.max_seq_length = max_seq_length
+        if not include_prompt:
+            self.model.set_pooling_include_prompt(include_prompt=False)
         self.apply_instruction_to_passages = apply_instruction_to_passages
         self.prompts_dict = prompts_dict
 

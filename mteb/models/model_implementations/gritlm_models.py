@@ -35,6 +35,7 @@ gritlm7b = ModelMeta(
     loader_kwargs=dict(
         instruction_template=gritlm_instruction,
         model_kwargs={"dtype": "auto"},
+        include_prompt=False,
     ),
     name="GritLM/GritLM-7B",
     model_type=["dense"],
@@ -64,6 +65,7 @@ gritlm8x7b = ModelMeta(
     loader_kwargs=dict(
         instruction_template=gritlm_instruction,
         model_kwargs={"dtype": "auto"},
+        include_prompt=False,
     ),
     name="GritLM/GritLM-8x7B",
     model_type=["dense"],
