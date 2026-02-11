@@ -390,9 +390,6 @@ class ModelMeta(BaseModel):
         """
         from mteb.models import CrossEncoderWrapper, sentence_transformers_loader
 
-        if not model_name or not _repo_exists(model_name):
-            return sentence_transformers_loader, "dense"
-
         try:
             modules_config = _get_json_from_hub(
                 model_name, "modules.json", "model", revision=revision
@@ -451,7 +448,7 @@ class ModelMeta(BaseModel):
             )
             fill_missing = compute_metadata
 
-        if fetch_from_hf:
+        if model_name and fill_missing and fetch_from_hf and _repo_exists(model_name):
             loader, model_type = cls._detect_model_type_and_loader(model_name, revision)
         else:
             from mteb.models import sentence_transformers_loader
