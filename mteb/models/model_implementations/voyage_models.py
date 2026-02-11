@@ -125,7 +125,6 @@ VOYAGE_TOTAL_TOKEN_LIMITS = {
     "voyage-3-lite": 120_000,
     "voyage-code-2": 120_000,
     "voyage-3-m-exp": 120_000,
-    "voyage-4-nano": 32_000,
 }
 
 
