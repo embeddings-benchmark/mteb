@@ -124,7 +124,7 @@ Once we have decided on task, we can implement them as follows:
     For our classification task we use the [swedn](https://huggingface.co/datasets/mteb/SwednClusteringP2P) dataset of Swedish newspapers
     along four main categories. It contains three splits "headlines", "articles" and "summaries", here we will look at the headlines only.
 
-    The clustering task performs multiple experiments to get a more consistent estimate and reports the average. Here we set it 3 experiments
+    The clustering task performs multiple experiments to get a more consistent estimate and reports the average. Here we set it to 10 experiments
     using 1000 samples, but typically you would set it higher. Using the default is also a reasonable idea.
 
     We can then implement the task as follows:
