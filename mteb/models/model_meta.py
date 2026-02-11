@@ -448,16 +448,6 @@ class ModelMeta(BaseModel):
             )
             fill_missing = compute_metadata
 
-        if model_name and fill_missing and fetch_from_hf and _repo_exists(model_name):
-            loader, model_type = cls._detect_model_type_and_loader(model_name, revision)
-        else:
-            from mteb.models import sentence_transformers_loader
-
-            logger.info(
-                "fetch_from_hf is set to False. Skipping fetching metadata from HuggingFace Hub and using default loader and model type."
-            )
-            loader, model_type = sentence_transformers_loader, "dense"
-
         frameworks: list[FRAMEWORKS] = ["PyTorch"]
         model_license = None
         reference = None
@@ -467,8 +457,12 @@ class ModelMeta(BaseModel):
         release_date = None
         embedding_dim = None
         max_tokens = None
+        from mteb.models import sentence_transformers_loader
+
+        loader, model_type = sentence_transformers_loader, "dense"
 
         if model_name and fill_missing and fetch_from_hf and _repo_exists(model_name):
+            loader, model_type = cls._detect_model_type_and_loader(model_name, revision)
             reference = "https://huggingface.co/" + model_name
             card = ModelCard.load(model_name)
             card_data: ModelCardData = card.data
