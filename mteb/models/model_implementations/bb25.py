@@ -108,9 +108,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
 
         def encode(self, texts: list[str]):
             """Encode input texts using bm25s tokenizer."""
-            return bm25s.tokenize(
-                texts, stopwords=self.stopwords, stemmer=self.stemmer
-            )
+            return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
 
         def index(
             self,
@@ -141,22 +139,17 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
                 # Per-document token IDs for composite prior computation.
                 # Stored as compact numpy int32 arrays to minimize memory.
                 self.corpus_token_ids = [
-                    np.array(doc_ids, dtype=np.int32)
-                    for doc_ids in encoded_corpus.ids
+                    np.array(doc_ids, dtype=np.int32) for doc_ids in encoded_corpus.ids
                 ]
                 self.corpus_vocab = dict(encoded_corpus.vocab)
                 self.doc_lengths = np.array(
                     [len(ids) for ids in encoded_corpus.ids], dtype=np.float64
                 )
                 self.avg_dl = (
-                    float(self.doc_lengths.mean())
-                    if len(self.doc_lengths) > 0
-                    else 0.0
+                    float(self.doc_lengths.mean()) if len(self.doc_lengths) > 0 else 0.0
                 )
 
-            logger.info(
-                f"Indexed {len(self.corpus_idx_to_id):,} documents"
-            )
+            logger.info(f"Indexed {len(self.corpus_idx_to_id):,} documents")
 
         def search(
             self,
@@ -174,9 +167,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
             query_ids = list(queries["id"])
             results: RetrievalOutputType = {qid: {} for qid in query_ids}
             queries_loader = _create_text_queries_dataloader(queries)
-            queries_texts = [
-                text for batch in queries_loader for text in batch["text"]
-            ]
+            queries_texts = [text for batch in queries_loader for text in batch["text"]]
 
             query_tokenized = self.encode(queries_texts)
 
@@ -189,9 +180,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
 
             use_prior = self.prior_weight > 0
             if use_prior:
-                query_id_to_str = {
-                    v: k for k, v in query_tokenized.vocab.items()
-                }
+                query_id_to_str = {v: k for k, v in query_tokenized.vocab.items()}
 
             for qi, qid in enumerate(query_ids):
                 doc_indices = queries_results[qi]
@@ -221,22 +210,17 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
                     # preventing sigmoid saturation on high-scoring queries.
                     score_std = float(np.std(cand_bm25_scores))
                     alpha_eff = (
-                        self.alpha / score_std
-                        if score_std > 1e-10
-                        else self.alpha
+                        self.alpha / score_std if score_std > 1e-10 else self.alpha
                     )
 
                     # Sigmoid likelihood (monotonic -- preserves BM25 ranking)
-                    x = np.clip(
-                        alpha_eff * (cand_bm25_scores - beta), -500, 500
-                    )
+                    x = np.clip(alpha_eff * (cand_bm25_scores - beta), -500, 500)
                     likelihood = 1.0 / (1.0 + np.exp(-x))
 
                     if use_prior:
                         # Map query token IDs to corpus vocab IDs
                         query_term_strs = [
-                            query_id_to_str[tid]
-                            for tid in query_tokenized.ids[qi]
+                            query_id_to_str[tid] for tid in query_tokenized.ids[qi]
                         ]
                         query_corpus_ids = np.array(
                             [
@@ -257,9 +241,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
                             cand_doc_lengths[ci] = self.doc_lengths[doc_idx]
                             if has_query_terms:
                                 doc_ids = self.corpus_token_ids[doc_idx]
-                                query_tfs[ci] = np.isin(
-                                    doc_ids, query_corpus_ids
-                                ).sum()
+                                query_tfs[ci] = np.isin(doc_ids, query_corpus_ids).sum()
 
                         composite = _composite_prior(
                             query_tfs, cand_doc_lengths, self.avg_dl
@@ -267,8 +249,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
                         # Interpolate between flat prior (0.5) and composite
                         prior = 0.5 + self.prior_weight * (composite - 0.5)
                         posterior = (likelihood * prior) / (
-                            likelihood * prior
-                            + (1.0 - likelihood) * (1.0 - prior)
+                            likelihood * prior + (1.0 - likelihood) * (1.0 - prior)
                         )
                     else:
                         # prior=0.5 => posterior = likelihood
