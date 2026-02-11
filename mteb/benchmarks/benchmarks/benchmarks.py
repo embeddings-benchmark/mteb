@@ -797,18 +797,11 @@ MTEB_SPA = Benchmark(
             languages=["spa"],
             tasks=[
                 # Classification
-                "AmazonReviewsClassification",
-                "MassiveIntentClassification",
-                "MassiveScenarioClassification",
-                "MTOPDomainClassification",
-                "MTOPIntentClassification",
-                "MultilingualSentimentClassification",
                 "SpanishNewsClassification.v2",
                 "SpanishSentimentClassification.v2",
                 # Clustering
                 "MLSUMClusteringP2P",
                 "MLSUMClusteringS2S",
-                "SpanishNewsClusteringP2P",
                 # Pair Classification
                 "PawsXPairClassification",
                 "XNLI",
@@ -831,7 +824,7 @@ MTEB_SPA = Benchmark(
     description="Spanish text embedding benchmark covering classification, clustering, pair classification, reranking, retrieval, and semantic textual similarity tasks.",
     reference=None,
     citation=None,
-    contacts=[],
+    contacts=["Clemente-H"],
 )
 
 MTEB_code = Benchmark(
