@@ -71,7 +71,7 @@ def _multilabel_subsampling(
 
 
 class AbsTask(ABC):
-    """The abstract class for the tasks
+    """The abstract class for the tasks. All tasks in `mteb` inherit from this class.
 
     Attributes:
         metadata: The metadata describing the task
