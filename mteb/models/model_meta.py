@@ -71,7 +71,7 @@ FRAMEWORKS = Literal[
     "Transformers",
 ]
 
-MODEL_TYPES = Literal["dense", "cross-encoder", "late-interaction", "sparse"]
+MODEL_TYPES = Literal["dense", "cross-encoder", "late-interaction", "sparse", "router"]
 
 
 class ScoringFunction(HelpfulStrEnum):
@@ -761,6 +761,9 @@ class ModelMeta(BaseModel):
         model_name: str, n_parameters: int | None
     ) -> int | None:
         MB = 1024**2  # noqa: N806
+        if n_parameters is None:
+            return None
+
         try:
             safetensors_metadata = get_safetensors_metadata(model_name)
             if len(safetensors_metadata.parameter_count) >= 0:
@@ -791,8 +794,6 @@ class ModelMeta(BaseModel):
                 f"Can't calculate memory usage for {model_name}. Got error {e}"
             )
 
-        if n_parameters is None:
-            return None
         # Model memory in bytes. For FP32 each parameter is 4 bytes.
         model_memory_bytes = n_parameters * 4
 
