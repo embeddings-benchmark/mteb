@@ -32,8 +32,7 @@ gte_qwen2_7b_instruct = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
-        # The ST script does not normalize while the HF one does so unclear what to do
-        # https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct#sentence-transformers
+        apply_instruction_to_passages=False,
         model_kwargs={"dtype": torch.float16},
         add_eos_token=True,
     ),
@@ -63,6 +62,7 @@ gte_qwen1_5_7b_instruct = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
+        apply_instruction_to_passages=False,
         model_kwargs={"dtype": torch.float16},
         add_eos_token=True,
     ),
@@ -97,6 +97,7 @@ gte_qwen2_1_5b_instruct = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
+        apply_instruction_to_passages=False,
         model_kwargs={"dtype": torch.float16},
         add_eos_token=True,
     ),

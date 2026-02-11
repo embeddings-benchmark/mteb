@@ -33,6 +33,7 @@ e5_instruct = ModelMeta(
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
         model_kwargs={"dtype": torch.float16},
+        apply_instruction_to_passages=False,
     ),
     name="intfloat/multilingual-e5-large-instruct",
     model_type=["dense"],
@@ -74,8 +75,7 @@ e5_mistral = ModelMeta(
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
         model_kwargs={"dtype": torch.float16},
-        # The ST script does not normalize while the HF one does so unclear what to do
-        # https://huggingface.co/intfloat/e5-mistral-7b-instruct#transformers
+        apply_instruction_to_passages=False,
     ),
     name="intfloat/e5-mistral-7b-instruct",
     model_type=["dense"],
@@ -125,8 +125,7 @@ zeta_alpha_ai__zeta_alpha_e5_mistral = ModelMeta(
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
         model_kwargs={"dtype": torch.bfloat16},
-        # The ST script does not normalize while the HF one does so unclear what to do
-        # https://huggingface.co/intfloat/e5-mistral-7b-instruct#transformers
+        apply_instruction_to_passages=False,
     ),
     name="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
     model_type=["dense"],

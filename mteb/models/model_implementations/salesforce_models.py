@@ -42,8 +42,7 @@ SFR_Embedding_2_R = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
-        # The ST script does not normalize while the HF one does so unclear what to do
-        # https://huggingface.co/Salesforce/SFR-Embedding-2_R
+        apply_instruction_to_passages=False,
         model_kwargs={"dtype": "auto"},
         trust_remote_code=True,
     ),
@@ -80,6 +79,7 @@ SFR_Embedding_Code_2B_R = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
+        apply_instruction_to_passages=False,
         model_kwargs={"dtype": "auto"},
         trust_remote_code=True,
     ),
@@ -116,6 +116,7 @@ SFR_Embedding_Mistral = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
+        apply_instruction_to_passages=False,
         model_kwargs={"dtype": "auto"},
         trust_remote_code=True,
     ),

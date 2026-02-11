@@ -55,6 +55,7 @@ stella_en_400m = ModelMeta(
     loader_kwargs=dict(
         model_kwargs={"dtype": "auto"},
         trust_remote_code=True,
+        apply_instruction_to_passages=False,
     ),
     name="NovaSearch/stella_en_400M_v5",
     model_type=["dense"],
@@ -89,6 +90,7 @@ stella_en_1_5b = ModelMeta(
     loader_kwargs=dict(
         model_kwargs={"dtype": "auto"},
         trust_remote_code=True,
+        apply_instruction_to_passages=False,
     ),
     name="NovaSearch/stella_en_1.5B_v5",
     model_type=["dense"],

@@ -31,6 +31,7 @@ Linq_Embed_Mistral = ModelMeta(
     loader_kwargs=dict(
         instruction_template=instruction_template,
         model_kwargs={"dtype": torch.bfloat16},
+        apply_instruction_to_passages=False,
     ),
     name="Linq-AI-Research/Linq-Embed-Mistral",
     model_type=["dense"],
