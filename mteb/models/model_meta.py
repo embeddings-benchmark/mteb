@@ -361,7 +361,7 @@ class ModelMeta(BaseModel):
     @classmethod
     def _detect_model_type_and_loader(
         cls,
-        model_name: str | None,
+        model_name: str,
         revision: str | None = None,
     ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
         """Detect the model type and appropriate loader based on HuggingFace Hub configuration files.
@@ -379,7 +379,7 @@ class ModelMeta(BaseModel):
         - Model name contains "rerank" or "cross-encoder"
 
         Args:
-            model_name: The HuggingFace model name (can be None)
+            model_name: The HuggingFace model name
             revision: The model revision
 
 
