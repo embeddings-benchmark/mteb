@@ -42,8 +42,8 @@ amozon_bench = Benchmark(
 
 To submit a benchmark to MTEB, you need to add your benchmark to [benchmarks.py](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/benchmarks/benchmarks/benchmarks.py) and then open a pull request (PR).
 
-Once submitted the PR will be reviewed by one of the organizers or contributors who might ask you to change things. The reviewer review both the implementation of the benchmark, but also quality and relevance of the tasks.
-Once the PR is approved the benchmark will be added into mteb and will be fetchable using [`mteb.get_benchmark(name)`][mteb.get_benchmark]. Note this does not automatically add the benchmark to the leaderboard, see next section for instructions on how to do that.
+Once submitted, the PR will be reviewed by one of the organizers or contributors, who might ask you to make changes. The reviewer reviews both the implementation of the benchmark and the quality and relevance of the tasks.
+Once the PR is approved, the benchmark will be added to MTEB and will be available via [`mteb.get_benchmark(name)`][mteb.get_benchmark]. Note this does not automatically add the benchmark to the leaderboard; see the next section for instructions on how to do that.
 
 ## Submitting a Benchmark to the Leaderboard
 
