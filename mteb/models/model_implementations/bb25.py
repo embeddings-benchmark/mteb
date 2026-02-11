@@ -214,9 +214,11 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
                     # Dynamic beta = median of BM25 scores for this query
                     beta = float(np.median(cand_bm25_scores))
 
-                    # Normalize alpha by score spread for scale invariance.
-                    # Without normalization, fixed alpha saturates the sigmoid
-                    # for tasks with high BM25 scores (e.g. long queries).
+                    # Dynamic alpha scaling for query-level score distribution
+                    # invariance. The paper defines alpha as sigmoid steepness;
+                    # dividing by std(scores) keeps the effective steepness
+                    # consistent across queries whose BM25 ranges vary widely,
+                    # preventing sigmoid saturation on high-scoring queries.
                     score_std = float(np.std(cand_bm25_scores))
                     alpha_eff = (
                         self.alpha / score_std
