@@ -57,4 +57,4 @@ To submit a benchmark to the leaderboard, you need to:
 
 !!! note "Not all benchmarks becomes leaderboards"
     A benchmark is a selection of tasks that intends to test for a specific purpose.
-    Some benchmarks are very specific, are intended for development or are superseeded by newer benchmark. We continually try to keep the benchmarks on the leaderboard relevant and thus we might remove benchmarks from the leaderboard if they are no longer relevant. However, these benchmarks will still be available in MTEB and can be used for evaluation, but they just won't be shown on the leaderboard.
+    Some benchmarks are very specific, are intended for development or are superseded by newer benchmark. We continually try to keep the benchmarks on the leaderboard relevant and thus we might remove benchmarks from the leaderboard if they are no longer relevant. However, these benchmarks will still be available in MTEB and can be used for evaluation, but they just won't be shown on the leaderboard.
