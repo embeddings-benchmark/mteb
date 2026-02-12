@@ -8,8 +8,8 @@ class TUBerlinT2IRetrieval(AbsTaskRetrieval):
         description="Retrieve sketch images based on text descriptions.",
         reference="https://dl.acm.org/doi/pdf/10.1145/2185520.2185540",
         dataset={
-            "path": "gowitheflow/tu-berlin",
-            "revision": "0cd78cd1ddbd3cafa9f319c638ebd77836ec9ff6",
+            "path": "mteb/tu-berlin",
+            "revision": "7f2a802146c499d092669f7874044dad96384b40",
         },
         type="Any2AnyRetrieval",
         category="t2i",

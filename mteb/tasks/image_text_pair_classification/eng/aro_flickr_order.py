@@ -20,8 +20,8 @@ class AROFlickrOrder(AbsTaskImageTextPairClassification):
         + "Each capation has four hard negatives created by order permutations.",
         reference="https://openreview.net/forum?id=KRLUvxh8uaX",
         dataset={
-            "path": "gowitheflow/ARO-Flickr-Order",
-            "revision": "1f9485f69c87947812378a1aedf86410c86a0aa8",
+            "path": "mteb/ARO-Flickr-Order",
+            "revision": "e5d7f3502345b2c398a6645b4d09b44e650287bf",
         },
         type="Compositionality",
         category="i2t",

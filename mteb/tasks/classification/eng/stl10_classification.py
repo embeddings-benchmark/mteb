@@ -8,8 +8,8 @@ class STL10Classification(AbsTaskClassification):
         description="Classifying 96x96 images from 10 classes.",
         reference="https://cs.stanford.edu/~acoates/stl10/",
         dataset={
-            "path": "tanganke/stl10",
-            "revision": "49ae7f94508f7feae62baf836db284306eab0b0f",
+            "path": "mteb/stl10",
+            "revision": "2da456fe65204f88c2cb5e5ff17f85f442ef3eaa",
         },
         type="ImageClassification",
         category="i2c",

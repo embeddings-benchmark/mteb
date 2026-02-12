@@ -13,8 +13,8 @@ class Country211Classification(AbsTaskClassification):
         description="Classifying images of 211 countries.",
         reference="https://huggingface.co/datasets/clip-benchmark/wds_country211",
         dataset={
-            "path": "clip-benchmark/wds_country211",
-            "revision": "1699f138f0558342a1cbf99f7cf36b4361bb5ebc",
+            "path": "mteb/wds_country211",
+            "revision": "c3875324cab4803fa6d3afcd5947a97c84fad4c6",
         },
         type="ImageClassification",
         category="i2c",
