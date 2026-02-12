@@ -10,8 +10,8 @@ class MSCOCOT2IRetrieval(AbsTaskRetrieval):
         description="Retrieve images based on captions.",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-10602-1_48",
         dataset={
-            "path": "MRBench/mbeir_mscoco_task0",
-            "revision": "cfe15bd2791dde5f8f20aebecf0b4eb3812972d6",
+            "path": "mteb/mbeir_mscoco_task0",
+            "revision": "8dfc4d250094f4e241bcb93211d6c5fbc99bb0bd",
         },
         type="Any2AnyRetrieval",
         category="t2i",

@@ -8,8 +8,8 @@ class TinyImageNet(AbsTaskClusteringLegacy):
         description="Clustering over 200 classes.",
         reference="https://huggingface.co/datasets/zh-plus/tiny-imagenet/viewer/default/valid",
         dataset={
-            "path": "zh-plus/tiny-imagenet",
-            "revision": "5a77092c28e51558c5586e9c5eb71a7e17a5e43f",
+            "path": "mteb/tiny-imagenet",
+            "revision": "e04e259f646f750bd0bdb2a56c2a4577d89bee3d",
         },
         type="ImageClustering",
         category="i2c",

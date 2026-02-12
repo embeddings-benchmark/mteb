@@ -8,8 +8,8 @@ class EDIST2ITRetrieval(AbsTaskRetrieval):
         description="Retrieve news images and titles based on news content.",
         reference="https://aclanthology.org/2023.emnlp-main.297/",
         dataset={
-            "path": "MRBench/mbeir_edis_task2",
-            "revision": "68c47ef3e49ef883073b3358bd4243eeca0aee9a",
+            "path": "mteb/mbeir_edis_task2",
+            "revision": "afc3409142cdf1adab05336dd1bc5fd3c0a659dc",
         },
         type="Any2AnyRetrieval",
         category="t2it",

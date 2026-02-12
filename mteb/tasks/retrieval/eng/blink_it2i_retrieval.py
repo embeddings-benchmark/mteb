@@ -8,8 +8,8 @@ class BLINKIT2IRetrieval(AbsTaskRetrieval):
         description="Retrieve images based on images and specific retrieval instructions.",
         reference="https://arxiv.org/abs/2404.12390",
         dataset={
-            "path": "JamieSJS/blink-it2i",
-            "revision": "7a1a1330565faca9c1aeec6f5acfc64f21296753",
+            "path": "mteb/blink-it2i",
+            "revision": "f399ecd9713a91c97d7e26ca3917d97b2d98b22a",
         },
         type="Any2AnyRetrieval",
         category="it2i",
