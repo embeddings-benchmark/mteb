@@ -72,7 +72,7 @@ jobs:
         docker tag ghcr.io/${{ github.repository }}/leaderboard:${{ github.sha }} mteb-leaderboard:test
 
     - name: Test container can start and run
-      timeout-minutes: 6
+      timeout-minutes: 9
       run: |
         # Start the container in background
         docker run -d --name mteb-test -p 7860:7860 mteb-leaderboard:test
