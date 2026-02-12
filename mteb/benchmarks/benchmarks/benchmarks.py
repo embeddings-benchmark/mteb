@@ -821,7 +821,7 @@ MTEB_SPA = Benchmark(
         )
         + (get_task("STS22", eval_splits=["test"], hf_subsets=["es"]),)
     ),
-    description="Spanish text embedding benchmark covering classification, clustering, pair classification, reranking, retrieval, and semantic textual similarity tasks.",
+    description="Spanish text embedding benchmark covering classification, clustering, pair classification, reranking, retrieval, and semantic textual similarity tasks. For a discussion on the benchmark construction see the [original submission](https://github.com/embeddings-benchmark/mteb/pull/4053).",
     reference=None,
     citation=None,
     contacts=["Clemente-H"],
