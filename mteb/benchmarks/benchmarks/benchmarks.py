@@ -787,6 +787,46 @@ two novel clustering tasks.""",  # Rephrased from the abstract
     contacts=["rafalposwiata"],
 )
 
+MTEB_SPA = Benchmark(
+    name="MTEB(spa, v1)",
+    aliases=["MTEB(spa)"],
+    display_name="Spanish",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/es.svg",
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["spa"],
+            tasks=[
+                # Classification
+                "SpanishNewsClassification.v2",
+                "SpanishSentimentClassification.v2",
+                # Clustering
+                "MLSUMClusteringP2P",
+                "MLSUMClusteringS2S",
+                # Pair Classification
+                "PawsXPairClassification",
+                "XNLI",
+                # Reranking
+                "MIRACLReranking",
+                # Retrieval
+                "MIRACLRetrievalHardNegatives.v2",
+                "MintakaRetrieval",
+                "SpanishPassageRetrievalS2P",
+                "SpanishPassageRetrievalS2S",
+                "XPQARetrieval",
+                # STS
+                "STSES",
+                "STSBenchmarkMultilingualSTS",
+                "STS17",
+            ],
+        )
+        + (get_task("STS22", eval_splits=["test"], hf_subsets=["es"]),)
+    ),
+    description="Spanish text embedding benchmark covering classification, clustering, pair classification, reranking, retrieval, and semantic textual similarity tasks. For a discussion on the benchmark construction see the [original submission](https://github.com/embeddings-benchmark/mteb/pull/4053).",
+    reference=None,
+    citation=None,
+    contacts=["Clemente-H"],
+)
+
 MTEB_code = Benchmark(
     name="MTEB(Code, v1)",
     aliases=["MTEB(code)"],
