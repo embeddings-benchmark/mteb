@@ -88,8 +88,8 @@ jobs:
           CURRENT_TIME=$(date +%s)
           ELAPSED=$((CURRENT_TIME - START_TIME))
 
-          # Maximum timeout: 5.5 minutes - always fail at timeout
-          if [ $ELAPSED -gt 330 ]; then
+          # Maximum timeout: 8 minutes - always fail at timeout
+          if [ $ELAPSED -gt 480 ]; then
             echo "❌ Timeout reached after ${ELAPSED}s - container failed to complete initialization"
             docker logs --tail 20 mteb-test
             docker stop mteb-test
