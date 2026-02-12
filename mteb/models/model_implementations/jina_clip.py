@@ -63,7 +63,7 @@ class JinaCLIPModel(AbsEncoder):
                     convert_to_numpy=convert_to_numpy,
                     convert_to_tensor=convert_to_tensor,
                 )
-                all_text_embeddings.append(text_outputs.cpu())
+                all_text_embeddings.append(text_outputs.cpu().to(torch.float32))
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
@@ -88,7 +88,7 @@ class JinaCLIPModel(AbsEncoder):
                     convert_to_numpy=convert_to_numpy,
                     convert_to_tensor=convert_to_tensor,
                 )
-                all_image_embeddings.append(image_outputs.cpu())
+                all_image_embeddings.append(image_outputs.cpu().to(torch.float32))
 
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings

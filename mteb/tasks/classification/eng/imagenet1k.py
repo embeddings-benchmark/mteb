@@ -13,8 +13,8 @@ class Imagenet1kClassification(AbsTaskClassification):
         description="ImageNet, a large-scale ontology of images built upon the backbone of the WordNet structure.",
         reference="https://ieeexplore.ieee.org/document/5206848",
         dataset={
-            "path": "clip-benchmark/wds_imagenet1k",
-            "revision": "b24c7a5a3ef12df09089055d1795e2ce7c7e7397",
+            "path": "mteb/wds_imagenet1k",
+            "revision": "b54c9af96641d8a2cba5d1144629c724de94ef76",
         },
         type="ImageClassification",
         category="i2c",
