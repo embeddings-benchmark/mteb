@@ -13,7 +13,7 @@ class GlobeV2GenderClassification(AbsTaskClassification):
         },
         type="AudioClassification",
         category="a2t",
-        eval_splits=["train"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2025-01-13", "2025-01-13"),
