@@ -150,7 +150,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             add_eos_token: Whether to add the eos token to each input example.
             prompts_dict: Dictionary of task names to prompt names. If task name is missing in the dict or prompts dict is None, prompt from task metadata or
                 AbsTask.abstask_prompt will be used.
-            include_prompt: Whether to include the prompt in the input.
+            include_prompt: Whether to include the prompt tokens in the pooling.
             **kwargs: Kwargs for Sentence Transformer model.
         """
         from sentence_transformers import SentenceTransformer
