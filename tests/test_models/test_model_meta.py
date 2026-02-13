@@ -30,6 +30,7 @@ _HISTORIC_MODELS = [
     "TomoroAI/tomoro-colqwen3-embed-8b",
     "VPLabs/SearchMap_Preview",
     "ai-sage/Giga-Embeddings-instruct",
+    "baseline/bb25",
     "baseline/bm25s",
     "codefuse-ai/C2LLM-0.5B",
     "codefuse-ai/C2LLM-7B",
