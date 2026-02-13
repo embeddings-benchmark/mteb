@@ -2,25 +2,25 @@ from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class GlobeV2AgeClassification(AbsTaskClassification):
+class GlobeV3GenderClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="GLOBEV2Age",
-        description="Age classification from the GLOBE v2 dataset (sampled and enhanced from CommonVoice dataset for TTS purpose). This dataset is a stratified and downsampled version of the original dataset, containing about 535 hours of speech data across 164 accents. We use the age column as the target label for audio classification.",
-        reference="https://huggingface.co/datasets/MushanW/GLOBE_V2",
+        name="GLOBEV3Gender",
+        description="Gender classification from the GLOBE v3 dataset (sampled and enhanced from CommonVoice dataset for TTS purpose). This dataset is a stratified and downsampled version of the original dataset, containing about 535 hours of speech data across 164 accents. We use the gender column as the target label for audio classification.",
+        reference="https://huggingface.co/datasets/MushanW/GLOBE_V3",
         dataset={
-            "path": "mteb/globe-v2-age-mini",
-            "revision": "b36e803c88037b09688f7c915d93b4cd654ba67e",
+            "path": "mteb/globe-v3-gender-mini",
+            "revision": "7020a6c14ec8a8e967013e04f2a695ead308bee1",
         },
         type="AudioClassification",
         category="a2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2025-01-13", "2025-01-13"),
+        date=("2025-05-26", "2025-05-26"),
         domains=["Spoken", "Speech"],
-        task_subtypes=["Age Classification"],
+        task_subtypes=["Gender Classification"],
         license="cc0-1.0",
-        annotations_creators="human-annotated",
+        annotations_creators="automatic",
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
@@ -36,4 +36,4 @@ class GlobeV2AgeClassification(AbsTaskClassification):
     )
 
     input_column_name: str = "audio"
-    label_column_name: str = "age"
+    label_column_name: str = "predicted_gender"

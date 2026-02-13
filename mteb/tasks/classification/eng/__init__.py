@@ -23,6 +23,12 @@ from mteb.tasks.classification.eng.globe_v2_age_classification import (
 from mteb.tasks.classification.eng.globe_v2_gender_classification import (
     GlobeV2GenderClassification,
 )
+from mteb.tasks.classification.eng.globe_v3_age_classification import (
+    GlobeV3AgeClassification,
+)
+from mteb.tasks.classification.eng.globe_v3_gender_classification import (
+    GlobeV3GenderClassification,
+)
 from mteb.tasks.classification.eng.iemocap_emotion import IEMOCAPEmotionClassification
 from mteb.tasks.classification.eng.iemocap_gender import IEMOCAPGenderClassification
 from mteb.tasks.classification.eng.libri_count import LibriCount
@@ -383,6 +389,8 @@ __all__ = [
     "GTSRBClassification",
     "GlobeV2AgeClassification",
     "GlobeV2GenderClassification",
+    "GlobeV3AgeClassification",
+    "GlobeV3GenderClassification",
     "HUMEEmotionClassification",
     "HUMEToxicConversationsClassification",
     "HUMETweetSentimentExtractionClassification",
