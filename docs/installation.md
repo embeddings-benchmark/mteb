@@ -28,6 +28,46 @@ If you want to run certain models implemented within mteb you will often need so
 
 If a specific model requires a dependency it will raise an error with the recommended installation. To see full list of available models you can look at the [models overview](./overview/available_models/text.md).
 
+## Audio Tasks
+
+If you want to run audio tasks, install the audio dependencies:
+
+=== "pip"
+    ```bash
+    pip install mteb[audio]
+    ```
+
+=== "uv"
+    ```bash
+    uv add "mteb[audio]"
+    ```
+
+### Additional Requirements for `datasets>=4`
+
+If you are using `datasets>=4`, you will need to:
+
+1. **Install FFmpeg**: The `datasets` library version 4+ uses `torchcodec` for audio processing, which requires FFmpeg to be installed on your system.
+
+    === "macOS"
+        ```bash
+        brew install ffmpeg
+        ```
+
+    === "Ubuntu/Debian"
+        ```bash
+        sudo apt-get install ffmpeg
+        ```
+
+    === "Windows"
+        Download from [ffmpeg.org](https://ffmpeg.org/download.html) and add to your PATH.
+
+2. **Use `transformers>=4.57.6`**: Due to compatibility issues with `datasets>=4`, you need a recent version of transformers:
+    ```bash
+    pip install "transformers>=4.57.6"
+    ```
+
+If you are using `datasets<4`, no additional requirements are needed beyond the `mteb[audio]` installation.
+
 ## Migrating to uv (for Contributors)
 
 If you're a contributor currently using pip, here's how to migrate to uv for faster dependency management:
