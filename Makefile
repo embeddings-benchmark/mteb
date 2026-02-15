@@ -37,14 +37,14 @@ pr:
 build-docs: build-docs-overview
 	@echo "--- 📚 Building documentation ---"
 	@echo "--- 🔍 Building with strict mode ---"
-	uv run --group docs mkdocs build --strict
+	uv run --no-sync --group docs mkdocs build --strict
 
 
 build-docs-overview:
 	@echo "--- 📚 Building documentation overview ---"
-	uv run --group docs python docs/overview/create_available_tasks.py
-	uv run --group docs python docs/overview/create_available_models.py
-	uv run --group docs python docs/overview/create_available_benchmarks.py
+	uv run --no-sync --group docs python docs/overview/create_available_tasks.py
+	uv run --no-sync --group docs python docs/overview/create_available_models.py
+	uv run --no-sync --group docs python docs/overview/create_available_benchmarks.py
 
 
 serve-docs:

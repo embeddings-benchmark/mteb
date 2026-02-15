@@ -1,5 +1,10 @@
+from typing import Any
+
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
+
+# Index of a corrupted/truncated image in the train split
+_CORRUPTED_TRAIN_INDEX = 3854
 
 
 class BirdsnapClassification(AbsTaskClassification):
@@ -8,12 +13,22 @@ class BirdsnapClassification(AbsTaskClassification):
     n_experiments: int = 5
     label_column_name: str = "common"
 
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        """Filter out the corrupted image at index 3854 in train split."""
+        if "train" in self.dataset:
+            train_indices = [
+                i
+                for i in range(len(self.dataset["train"]))
+                if i != _CORRUPTED_TRAIN_INDEX
+            ]
+            self.dataset["train"] = self.dataset["train"].select(train_indices)
+
     metadata = TaskMetadata(
         name="Birdsnap",
         description="Classifying bird images from 500 species.",
         reference="https://openaccess.thecvf.com/content_cvpr_2014/html/Berg_Birdsnap_Large-scale_Fine-grained_2014_CVPR_paper.html",
         dataset={
-            "path": "isaacchung/birdsnap",
+            "path": "mteb/birdsnap",
             "revision": "fd23015508be94f0b5b59d61630e4ea2536509e4",
         },
         type="ImageClassification",
