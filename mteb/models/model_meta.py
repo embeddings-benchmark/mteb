@@ -4,7 +4,7 @@ import hashlib
 import json
 import logging
 import warnings
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import field
 from enum import Enum
 from functools import partial
@@ -39,7 +39,7 @@ from mteb.models.models_protocols import MTEBModels
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Mapping, Sequence
 
     from huggingface_hub import (
         GitCommitInfo,
@@ -1050,7 +1050,9 @@ def _repo_exists(repo_id: str, repo_type: str | None = None) -> bool:
         return False
 
 
-def _get_experiment_name_from_params(experiment_params) -> str | None:
+def _get_experiment_name_from_params(
+    experiment_params: Mapping[str, Any],
+) -> str | None:
     if experiment_params is None or len(experiment_params) == 0:
         return None
 

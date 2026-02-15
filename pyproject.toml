@@ -481,3 +481,6 @@ Ono = "Ono"
 Yau = "Yau"
 Altas = "Altas"
 matche = "matche"
+
+[tool.typos.type.md.extend-words]
+Beng = "Beng"

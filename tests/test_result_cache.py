@@ -272,46 +272,39 @@ def test_load_experiment_results(tmp_path):
     cache = mteb.ResultCache(tmp_path)
     mteb.evaluate(model, task, cache=cache)
 
+    params_1 = {"a": "test"}
+    params_2 = {"a": "test", "b": "test2"}
     model = mteb.get_model(
         "baseline/random-encoder-baseline",
-        a="test",
+        **params_1,
     )
     mteb.evaluate(model, task, cache=cache)
 
     model = mteb.get_model(
         "baseline/random-encoder-baseline",
-        a="test",
-        b="test2",
+        **params_2,
     )
     mteb.evaluate(model, task, cache=cache)
 
     # load without experiments - should only get the first result
     base_res = cache.load_results()
-    assert len(base_res.model_results) == 1
+    assert len(base_res.model_results) == 3
     assert base_res.model_results[0].experiment_name is None
 
     # load all experiments
-    experiment_res = cache.load_results(load_experiments=LoadExperimentEnum.ALWAYS)
+    experiment_res = cache.load_results(load_experiments=LoadExperimentEnum.MATCH_NAME)
     assert len(experiment_res.model_results) == 3
 
-    # load only experiments
+    # don't load experiments
     experiment_res = cache.load_results(
-        load_experiments=LoadExperimentEnum.ONLY_EXPERIMENTS
+        load_experiments=LoadExperimentEnum.NO_EXPERIMENTS
     )
-    assert len(experiment_res.model_results) == 2
+    assert len(experiment_res.model_results) == 1
 
-    # load specific experiment by name
-    named_experiment_res = cache.load_results(
-        load_experiments=LoadExperimentEnum.ALWAYS,
-        experiment_names=["a_test"],
-    )
-    assert len(named_experiment_res.model_results) == 2
-    assert named_experiment_res.model_results[1].experiment_name == "a_test"
-
-    # load **only** specific experiment by name
+    # load **only** specific experiment by kwargs
     only_named_experiment_res = cache.load_results(
-        load_experiments=LoadExperimentEnum.ONLY_EXPERIMENTS,
-        experiment_names=["a_test"],
+        load_experiments=LoadExperimentEnum.MATCH_KWARGS,
+        experiment_params=params_1,
     )
     assert len(only_named_experiment_res.model_results) == 1
     assert only_named_experiment_res.model_results[0].experiment_name == "a_test"
@@ -320,29 +313,29 @@ def test_load_experiment_results(tmp_path):
     # and results are filtered out by experiment name
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta],
-        load_experiments=LoadExperimentEnum.ALWAYS,
-        experiment_names=["a_test"],
+        load_experiments=LoadExperimentEnum.MATCH_NAME,
+        experiment_params=params_1,
     )
     assert len(model_meta_res.model_results) == 0
 
     # load specific experiment with model meta filter
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta.name],
-        load_experiments=LoadExperimentEnum.ALWAYS,
-        experiment_names=["a_test__b_test2"],
+        load_experiments=LoadExperimentEnum.MATCH_NAME,
+        experiment_params=params_2,
     )
-    assert len(model_meta_res.model_results) == 2
-    assert model_meta_res.model_results[1].experiment_name == "a_test__b_test2"
+    assert len(model_meta_res.model_results) == 1
+    assert model_meta_res.model_results[0].experiment_name == "a_test__b_test2"
 
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta],
-        load_experiments=LoadExperimentEnum.NEVER,
+        load_experiments=LoadExperimentEnum.MATCH_KWARGS,
     )
     assert len(model_meta_res.model_results) == 1
 
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta],
-        load_experiments=LoadExperimentEnum.ONLY_EXPERIMENTS,
+        load_experiments=LoadExperimentEnum.NO_EXPERIMENTS,
     )
     assert len(model_meta_res.model_results) == 1
     assert model_meta_res.model_results[0].experiment_name == "a_test__b_test2"
@@ -350,15 +343,15 @@ def test_load_experiment_results(tmp_path):
     # load experiments with model name filter
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta.name],
-        load_experiments=LoadExperimentEnum.ALWAYS,
+        load_experiments=LoadExperimentEnum.MATCH_NAME,
     )
     assert len(model_meta_res.model_results) == 3
 
     # load specific experiment with model name filter
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta.name],
-        load_experiments=LoadExperimentEnum.ONLY_EXPERIMENTS,
-        experiment_names=[model.mteb_model_meta.experiment_name],
+        load_experiments=LoadExperimentEnum.MATCH_KWARGS,
+        experiment_params=[model.mteb_model_meta.experiment_params],
     )
     assert len(model_meta_res.model_results) == 1
     assert model_meta_res.model_results[0].experiment_name == "a_test__b_test2"

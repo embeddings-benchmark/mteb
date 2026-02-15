@@ -9,8 +9,9 @@ import shutil
 import subprocess
 import warnings
 from collections import defaultdict
+from collections.abc import Mapping
 from pathlib import Path
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import requests
 from pydantic import ValidationError
@@ -36,14 +37,14 @@ class LoadExperimentEnum(HelpfulStrEnum):
     """Enum to specify whether to load experiments when loading results from the cache.
 
     Attributes:
-        ALWAYS: Will always attempt to load experiments, if available.
-        NEVER: Will never attempt to load experiments, even if they are available.
-        ONLY_EXPERIMENTS: Will only load experiments, and ignore non-experiment results.
+        MATCH_NAME: Will load everything that matches the name of the model, including experiments. If a revision is supplied using `ModelMeta` this will also match the revision.
+        MATCH_KWARGS: Will load experiments that match the keyword arguments supplied in the`ModelMeta`. Assumes a `ModelMeta`s are supplied.
+        NO_EXPERIMENTS: Will only load models with default keyword arguments, meaning that it will not include any experiments.
     """
 
-    ALWAYS = "always"
-    NEVER = "never"
-    ONLY_EXPERIMENTS = "only-experiments"
+    MATCH_NAME = "match_name"
+    MATCH_KWARGS = "match_kwargs"
+    NO_EXPERIMENTS = "no_experiments"
 
 
 class ResultCache:
@@ -51,8 +52,8 @@ class ResultCache:
 
     Examples:
         >>> import mteb
-        >>> cache = mteb.ResultCache(cache_path="~/.cache/mteb") # default
-        >>> cache.download_from_remote() # download the latest results from the remote repository
+        >>> cache = mteb.ResultCache(cache_path="~/.cache/mteb")  # default
+        >>> cache.download_from_remote()  # download the latest results from the remote repository
         >>> result = cache.load_results("task_name", "model_name")
     """
 
@@ -479,7 +480,7 @@ class ResultCache:
         tasks: Sequence[str] | Iterable[AbsTask] | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
-        load_experiments: LoadExperimentEnum | str = LoadExperimentEnum.NEVER,
+        load_experiments: LoadExperimentEnum | str = LoadExperimentEnum.NO_EXPERIMENTS,
     ) -> list[Path]:
         """Get all paths to result JSON files in the cache directory.
 
@@ -534,10 +535,8 @@ class ResultCache:
             ]
 
         def _get_paths(base_path: Path, experiments: LoadExperimentEnum) -> list[Path]:
-            paths = []
-            if not experiments == LoadExperimentEnum.ONLY_EXPERIMENTS:
-                paths += _cache_paths(base_path)
-            if not experiments == LoadExperimentEnum.NEVER:
+            paths = _cache_paths(base_path)
+            if not experiments == LoadExperimentEnum.NO_EXPERIMENTS:
                 paths += _experiments_paths(base_path)
             return paths
 
@@ -726,8 +725,8 @@ class ResultCache:
         include_remote: bool = True,
         validate_and_filter: bool = False,
         only_main_score: bool = False,
-        load_experiments: LoadExperimentEnum | str = LoadExperimentEnum.NEVER,
-        experiment_names: Sequence[str] | None = None,
+        load_experiments: LoadExperimentEnum | str = LoadExperimentEnum.MATCH_KWARGS,
+        experiment_params: Mapping[str, Any] | list[Mapping[str, Any]] | None = None,
     ) -> BenchmarkResults:
         """Loads the results from the cache directory and returns a BenchmarkResults object.
 
@@ -743,7 +742,7 @@ class ResultCache:
                 splits from the results object that are not default in the task metadata.
             only_main_score: If True, only the main score will be loaded.
             load_experiments: If True, it will also load results from experiment folders.
-            experiment_names: If specified, it will only load results from experiments with the specified names. Only used if load_experiments is True.
+            experiment_params: If specified, it will only load results from experiments with the specified kwargs. Only used if load_experiments is True.
 
         Returns:
             A BenchmarkResults object containing the results for the specified models and tasks.
@@ -771,7 +770,9 @@ class ResultCache:
                 "LoadExperiments will be ignored when models are passed as ModelMeta objects, since the experiment name is already included in the model metadata. "
                 "To load experiments, make sure to include the experiment name in the ModelMeta objects passed in the models argument."
             )
-            load_experiments = LoadExperimentEnum.ALWAYS  # will be filtered out later
+            load_experiments = (
+                LoadExperimentEnum.MATCH_KWARGS
+            )  # will be filtered out later
 
         paths = self.get_cache_paths(
             models=models,
@@ -790,6 +791,13 @@ class ResultCache:
                 else:
                     task_names[task] = None
 
+        experiment_names = set()
+        if isinstance(experiment_params, Mapping):
+            experiment_params = [experiment_params]
+        if isinstance(experiment_params, list):
+            experiment_names = {
+                _get_experiment_name_from_params(params) for params in experiment_params
+            }
         for path in paths:
             task_result = TaskResult.from_disk(path)
 
@@ -812,14 +820,8 @@ class ResultCache:
                     continue
 
             if (
-                experiment_name is not None
-                and load_experiments is LoadExperimentEnum.NEVER
-            ):
-                continue
-
-            if (
-                experiment_name is not None
-                and experiment_names is not None
+                load_experiments is not LoadExperimentEnum.NO_EXPERIMENTS
+                and len(experiment_names) > 0
                 and experiment_name not in experiment_names
             ):
                 logger.debug(
