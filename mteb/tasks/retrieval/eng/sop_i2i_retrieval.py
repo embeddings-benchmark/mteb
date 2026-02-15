@@ -8,8 +8,8 @@ class SOPI2IRetrieval(AbsTaskRetrieval):
         description="Retrieve product photos of 22634 online products.",
         reference="https://paperswithcode.com/dataset/stanford-online-products",
         dataset={
-            "path": "JamieSJS/stanford-online-products",
-            "revision": "0b3a1622902e6258425e673405bdfb1e5dfa8618",
+            "path": "mteb/stanford-online-products",
+            "revision": "9556adace66a20ac7ef034b6b9dd854c0ed9779f",
         },
         type="Any2AnyRetrieval",
         category="i2i",

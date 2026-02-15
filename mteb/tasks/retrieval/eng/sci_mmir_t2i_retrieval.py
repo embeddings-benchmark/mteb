@@ -62,8 +62,8 @@ class SciMMIRT2IRetrieval(AbsTaskRetrieval):
         description="Retrieve figures and tables based on captions.",
         reference="https://aclanthology.org/2024.findings-acl.746/",
         dataset={
-            "path": "m-a-p/SciMMIR",
-            "revision": "eea276dc58c52eab33e9476acb137ff5530b78e9",
+            "path": "mteb/SciMMIR",
+            "revision": "2a10b6b1f93cac7084aa809512749272cf0a893a",
         },
         type="Any2AnyRetrieval",
         category="t2i",

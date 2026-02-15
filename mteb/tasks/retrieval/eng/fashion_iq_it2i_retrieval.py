@@ -8,8 +8,8 @@ class FashionIQIT2IRetrieval(AbsTaskRetrieval):
         description="Retrieve clothes based on descriptions.",
         reference="https://openaccess.thecvf.com/content/CVPR2021/html/Wu_Fashion_IQ_A_New_Dataset_Towards_Retrieving_Images_by_Natural_CVPR_2021_paper.html",
         dataset={
-            "path": "MRBench/mbeir_fashioniq_task7",
-            "revision": "e6f0ec70becc413d940cd62b2cfa3b1d3a08c31a",
+            "path": "mteb/mbeir_fashioniq_task7",
+            "revision": "469fba95d895f129f1d297619835d724db01904d",
         },
         type="Any2AnyRetrieval",
         category="it2i",

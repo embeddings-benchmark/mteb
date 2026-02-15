@@ -12,8 +12,8 @@ class SUN397Classification(AbsTaskClassification):
         description="Large scale scene recognition in 397 categories.",
         reference="https://ieeexplore.ieee.org/abstract/document/5539970",
         dataset={
-            "path": "dpdl-benchmark/sun397",
-            "revision": "7e6af6a2499ad708618be868e1471eac0aca1168",
+            "path": "mteb/sun397",
+            "revision": "c684cff33166060e2ae05525a5c4abdf5e6d7bce",
         },
         type="ImageClassification",
         category="i2c",
