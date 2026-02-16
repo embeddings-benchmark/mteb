@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import hashlib
-from collections import Counter
+from collections import Counter, defaultdict
 from typing import TYPE_CHECKING, cast
 
 from mteb.types.statistics import (
+    AudioStatistics,
     ImageStatistics,
     LabelStatistics,
     RelevantDocsStatistics,
@@ -19,6 +20,7 @@ if TYPE_CHECKING:
     from PIL import Image
 
     from mteb.types import TopRankedDocumentsType
+    from mteb.types._encoder_io import AudioInputItem
 
 
 def calculate_text_statistics(texts: list[str]) -> TextStatistics:
@@ -72,6 +74,43 @@ def calculate_image_statistics(images: list[Image.Image]) -> ImageStatistics:
         max_image_height=max(img_heights),
         # some image types (PngImageFile) may be unhashable
         unique_images=len(seen_hashes),
+    )
+
+
+def calculate_audio_statistics(audios: list[AudioInputItem]) -> AudioStatistics:
+    """Calculate descriptive statistics for a list of audio clips.
+
+    Args:
+        audios: List of audio clips to analyze. Each audio clip should be a dictionary with 'array' and 'sampling_rate' keys.
+
+    Returns:
+        A dictionary containing the descriptive statistics.
+    """
+    audio_lengths = []
+    sampling_rates: dict[int, int] = defaultdict(int)
+    unique_audios = set()
+
+    for audio in audios:
+        array = audio["array"]
+        sampling_rate = audio["sampling_rate"]
+        length_in_seconds = len(array) / sampling_rate
+        audio_lengths.append(length_in_seconds)
+        sampling_rates[sampling_rate] += 1
+
+        audio_bytes = array.tobytes()
+        audio_hash = hashlib.md5(audio_bytes).hexdigest()
+        unique_audios.add(audio_hash)
+
+    return AudioStatistics(
+        total_duration_seconds=sum(audio_lengths),
+        min_duration_seconds=min(audio_lengths),
+        average_duration_seconds=sum(audio_lengths) / len(audio_lengths),
+        max_duration_seconds=max(audio_lengths),
+        unique_audios=len(unique_audios),
+        average_sampling_rate=(
+            sum(rate * count for rate, count in sampling_rates.items()) / len(audios)
+        ),
+        sampling_rates=dict(sampling_rates),
     )
 
 
