@@ -40,6 +40,7 @@ pixie_rune_v1_0 = ModelMeta(
     open_weights=True,
     framework=["Sentence Transformers", "PyTorch", "safetensors"],
     n_parameters=567754752,
+    n_embedding_parameters=256002048,
     memory_usage_mb=2166,
     max_tokens=6144,
     embed_dim=1024,

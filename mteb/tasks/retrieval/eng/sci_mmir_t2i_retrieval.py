@@ -62,8 +62,8 @@ class SciMMIRT2IRetrieval(AbsTaskRetrieval):
         description="Retrieve figures and tables based on captions.",
         reference="https://aclanthology.org/2024.findings-acl.746/",
         dataset={
-            "path": "m-a-p/SciMMIR",
-            "revision": "eea276dc58c52eab33e9476acb137ff5530b78e9",
+            "path": "mteb/SciMMIR",
+            "revision": "2a10b6b1f93cac7084aa809512749272cf0a893a",
         },
         type="Any2AnyRetrieval",
         category="t2i",
@@ -88,7 +88,7 @@ class SciMMIRT2IRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int = 1, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = _load_data(

@@ -21,7 +21,7 @@ class FinParaSTS(AbsTaskSTS):
         main_score="cosine_spearman",
         date=("2017-01-01", "2021-12-31"),
         domains=["News", "Subtitles", "Written"],
-        task_subtypes=None,
+        task_subtypes=[],
         license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",
         dialect=[],

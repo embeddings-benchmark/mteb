@@ -19,7 +19,7 @@ class RonSTS(AbsTaskSTS):
         main_score="cosine_spearman",
         date=("2020-01-01", "2021-01-31"),
         domains=["News", "Social", "Web", "Written"],  # web for image captions
-        task_subtypes=None,
+        task_subtypes=[],
         license="cc-by-4.0",  # not specified
         annotations_creators="human-annotated",
         dialect=[],

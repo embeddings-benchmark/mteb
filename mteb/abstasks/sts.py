@@ -90,7 +90,15 @@ class STSMetrics(TypedDict):
 
 
 class AbsTaskSTS(AbsTask):
-    """Abstract class for STS experiments.
+    """The class which semantic textual similarity (STS) tasks inherit from.
+
+    A semantic textual similarity (STS) task consists of a dataset with pairs of sentences and corresponding similarity scores.
+    The task is to predict the similarity score for each pair of sentences.
+
+    The task works by encoding the sentences using the provided model and then calculating similarity scores using both the model-defined similarity
+    function (if available) and generic similarity functions, including cosine similarity, Manhattan distance, and Euclidean distance.
+    The predicted similarity scores are then compared to the true similarity scores using Pearson and Spearman correlation coefficients.
+
 
     Attributes:
         dataset: Dataset or dict of Datasets for different subsets (e.g., languages). Dataset must contain columns specified in column_names and a 'score' column.
@@ -118,7 +126,7 @@ class AbsTaskSTS(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> STSMetrics:
         if not isinstance(model, EncoderProtocol):

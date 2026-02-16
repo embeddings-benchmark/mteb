@@ -48,7 +48,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
         model: EncoderProtocol,
         *,
         encode_kwargs: EncodeKwargs,
-        num_proc: int = 1,
+        num_proc: int | None = None,
     ) -> Array:
         dataloader = create_dataloader(
             self.dataset,

@@ -8,8 +8,8 @@ class ImageCoDeT2IRetrieval(AbsTaskRetrieval):
         description="Retrieve a specific video frame based on a precise caption.",
         reference="https://aclanthology.org/2022.acl-long.241.pdf",
         dataset={
-            "path": "JamieSJS/imagecode",
-            "revision": "a424cd523ffb157b69a875fb5e71c1d51be54089",
+            "path": "mteb/imagecode",
+            "revision": "3d13625935ec7e207e7e870e33a033cf51d60626",
         },
         type="Any2AnyRetrieval",
         category="t2i",

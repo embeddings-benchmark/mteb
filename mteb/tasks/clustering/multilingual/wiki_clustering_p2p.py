@@ -47,7 +47,7 @@ class WikiClusteringP2P(AbsTaskClusteringLegacy):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
-        bibtex_citation=None,  # None exists
+        bibtex_citation="",  # None exists
         superseded_by="WikiClusteringP2P.v2",
     )
 

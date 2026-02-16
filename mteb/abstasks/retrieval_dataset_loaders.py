@@ -78,7 +78,7 @@ class RetrievalDatasetLoader:
 
     def load(
         self,
-        num_proc: int = 1,
+        num_proc: int | None = None,
     ) -> RetrievalSplitData:
         """Loads the dataset split for the specified configuration.
 
@@ -128,7 +128,11 @@ class RetrievalDatasetLoader:
             f"Split {self.split} not found in {splits}. Please specify a valid split."
         )
 
-    def _load_dataset_split(self, config: str, num_proc: int) -> Dataset:
+    def _load_dataset_split(
+        self,
+        config: str,
+        num_proc: int | None,
+    ) -> Dataset:
         return load_dataset(
             self.hf_repo,
             config,
@@ -138,7 +142,10 @@ class RetrievalDatasetLoader:
             num_proc=num_proc,
         )
 
-    def _load_corpus(self, num_proc: int) -> CorpusDatasetType:
+    def _load_corpus(
+        self,
+        num_proc: int | None,
+    ) -> CorpusDatasetType:
         config = f"{self.config}-corpus" if self.config is not None else "corpus"
         logger.info("Loading corpus subset: %s", config)
 
@@ -151,7 +158,10 @@ class RetrievalDatasetLoader:
         logger.debug("Doc Example: %s", corpus_ds[0])
         return corpus_ds
 
-    def _load_queries(self, num_proc: int) -> QueryDatasetType:
+    def _load_queries(
+        self,
+        num_proc: int | None,
+    ) -> QueryDatasetType:
         config = f"{self.config}-queries" if self.config is not None else "queries"
         logger.info("Loading queries subset: %s", config)
 
@@ -168,7 +178,10 @@ class RetrievalDatasetLoader:
 
         return queries_ds
 
-    def _load_qrels(self, num_proc: int) -> RelevantDocumentsType:
+    def _load_qrels(
+        self,
+        num_proc: int | None,
+    ) -> RelevantDocumentsType:
         config = f"{self.config}-qrels" if self.config is not None else "default"
 
         logger.info("Loading qrels subset: %s", config)
@@ -203,7 +216,10 @@ class RetrievalDatasetLoader:
         logger.info("Loaded %d %s qrels.", len(qrels_dict), self.split.upper())
         return qrels_dict
 
-    def _load_top_ranked(self, num_proc: int) -> TopRankedDocumentsType:
+    def _load_top_ranked(
+        self,
+        num_proc: int | None,
+    ) -> TopRankedDocumentsType:
         config = (
             f"{self.config}-top_ranked" if self.config is not None else "top_ranked"
         )
@@ -226,7 +242,10 @@ class RetrievalDatasetLoader:
         logger.info(f"Top ranked loaded: {len(top_ranked_ds)}")
         return top_ranked_dict
 
-    def _load_instructions(self, num_proc: int) -> InstructionDatasetType:
+    def _load_instructions(
+        self,
+        num_proc: int | None,
+    ) -> InstructionDatasetType:
         config = (
             f"{self.config}-instruction" if self.config is not None else "instruction"
         )
@@ -246,7 +265,7 @@ class RetrievalDatasetLoader:
 def _combine_queries_with_instructions_datasets(
     queries_dataset: QueryDatasetType,
     instruction_dataset: InstructionDatasetType | dict[str, str],
-    num_proc: int,
+    num_proc: int | None,
 ) -> Dataset:
     if isinstance(instruction_dataset, Dataset):
         instruction_to_query_idx = {

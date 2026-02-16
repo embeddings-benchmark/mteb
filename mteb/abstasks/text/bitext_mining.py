@@ -82,7 +82,7 @@ class AbsTaskBitextMining(AbsTask):
         *,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Added load for "parallel" datasets"""
@@ -155,7 +155,7 @@ class AbsTaskBitextMining(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         parallel: bool = False,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs,
     ) -> BitextMiningMetrics | dict[str, BitextMiningMetrics]:
         pairs = self._get_pairs(parallel)

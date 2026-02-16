@@ -32,7 +32,7 @@ class SearchProtocol(Protocol):
         hf_split: str,
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
-        num_proc: int,
+        num_proc: int | None,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -56,7 +56,7 @@ class SearchProtocol(Protocol):
         top_k: int,
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
-        num_proc: int,
+        num_proc: int | None,
     ) -> RetrievalOutputType:
         """Search the corpus using the given queries.
 

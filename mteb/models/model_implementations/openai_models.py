@@ -11,6 +11,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    from numpy.typing import NDArray
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -166,7 +167,7 @@ class OpenAIModel(AbsEncoder):
             all_embeddings[mask] = no_empty_embeddings
         return all_embeddings
 
-    def _to_numpy(self, embedding_response) -> np.ndarray:
+    def _to_numpy(self, embedding_response) -> NDArray[np.floating]:
         return np.array([e.embedding for e in embedding_response.data])
 
 

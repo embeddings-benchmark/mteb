@@ -41,7 +41,7 @@ class IndicXnliPairClassification(AbsTaskPairClassification):
         main_score="max_ap",
         date=("2022-04-22", "2022-10-06"),
         domains=["Non-fiction", "Fiction", "Government", "Written"],
-        task_subtypes=None,
+        task_subtypes=[],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],

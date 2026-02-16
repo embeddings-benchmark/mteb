@@ -31,6 +31,8 @@ from .abstask import AbsTask
 if TYPE_CHECKING:
     from pathlib import Path
 
+    from numpy.typing import NDArray
+
     from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
     from mteb.models import MTEBModels
     from mteb.types import EncodeKwargs, HFSubset, ScoresDict
@@ -100,15 +102,21 @@ class FullClassificationMetrics(ClassificationMetrics):
 
 
 class AbsTaskClassification(AbsTask):
-    """Abstract class for classification tasks
+    """The class which classification tasks inherit from.
+
+    A classification task consists of a dataset with input data and corresponding labels. The task is to predict the label for each input.
+    The task works by training a sklearn compatible model on samples drawn from the training split of the dataset,
+    where the input data is encoded using the provided model.
+    The trained model is then evaluated on the evaluation split of the dataset. This process is repeated for `n_experiments` times, and both average and
+    individual scores for each experiment are reported.
 
     Attributes:
         dataset: Hugging Face dataset containing the data for the task. Should have train split (split name can be changed by train_split. Must contain the following columns:
             text: str (for text) or PIL.Image (for image). Column name can be changed via `input_column_name` attribute.
             label: int. Column name can be changed via `label_column_name` attribute.
         evaluator_model: The model to use for evaluation. Can be any sklearn compatible model. Default is `LogisticRegression`.
-       samples_per_label: Number of samples per label to use for training the evaluator model. Default is 8.
-       n_experiments: Number of experiments to run. Default is 10.
+        samples_per_label: Number of samples per label to use for training the evaluator model. Default is 8.
+        n_experiments: Number of experiments to run. Default is 10.
         train_split: Name of the split to use for training the evaluator model. Default is "train".
         label_column_name: Name of the column containing the labels. Default is "label".
         input_column_name: Name of the column containing the input data. Default is "text".
@@ -136,7 +144,7 @@ class AbsTaskClassification(AbsTask):
         *,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluate a model on the classification task.
@@ -199,7 +207,7 @@ class AbsTaskClassification(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -270,8 +278,8 @@ class AbsTaskClassification(AbsTask):
 
     def _calculate_scores(
         self,
-        y_test: np.ndarray | list[int],
-        y_pred: np.ndarray,
+        y_test: NDArray[np.integer] | list[int],
+        y_pred: NDArray[np.integer | np.floating] | list[int],
     ) -> ClassificationMetrics:
         scores = ClassificationMetrics(
             accuracy=accuracy_score(y_test, y_pred),

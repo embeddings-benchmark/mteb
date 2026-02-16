@@ -39,7 +39,7 @@ class Assin2STS(AbsTaskSTS):
     min_score = 1
     max_score = 5
 
-    def dataset_transform(self, num_proc: int = 1, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         self.dataset = self.dataset.rename_columns(
             {
                 "premise": "sentence1",

@@ -70,8 +70,8 @@ copyright: This text is freely available under a Creative Commons Attribution 4.
 nav:
   - Get Started:
       - index.md
-      - whats_new.md
       - Installation: installation.md
+      - whats_new.md
       - Usage:
         - Get Started: usage/get_started.md
         - Defining the Model: usage/defining_the_model.md
@@ -89,7 +89,7 @@ nav:
       - Adding a Model: contributing/adding_a_model.md
       - Adding a Task: contributing/adding_a_dataset.md
       - Adding a Benchmark: contributing/adding_a_benchmark.md
-      - Guidelines: CONTRIBUTING.md
+      - CONTRIBUTING.md
   - Overview:
       - overview/index.md
       - Benchmarks:

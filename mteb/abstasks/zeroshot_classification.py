@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 
 import torch
 from datasets import Dataset
@@ -81,6 +81,15 @@ class AbsTaskZeroShotClassification(AbsTask):
     input_column_name: str = "image"
     label_column_name: str = "label"
 
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        """Keep only eval splits. Zero-shot tasks don't need train splits."""
+        if self.dataset is None:
+            return
+        splits_to_keep = set(self.metadata.eval_splits)
+        for split in list(self.dataset.keys()):
+            if split not in splits_to_keep:
+                del self.dataset[split]
+
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ZeroShotClassificationDescriptiveStatistics:
@@ -127,7 +136,7 @@ class AbsTaskZeroShotClassification(AbsTask):
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs,
     ) -> ZeroShotClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
