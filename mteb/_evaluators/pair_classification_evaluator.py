@@ -97,7 +97,7 @@ class PairClassificationEvaluator(Evaluator):
         logger.info("Running pair classification - Encoding samples (1/2)")
         embeddings1 = model.encode(
             create_dataloader(
-                self.dataset,
+                self.dataset.select_columns(self.input1_column_name),
                 task_metadata=self.task_metadata,
                 input_column=self.input1_column_name,
                 num_proc=num_proc,
@@ -112,7 +112,7 @@ class PairClassificationEvaluator(Evaluator):
         logger.info("Running pair classification - Encoding samples (2/2)")
         embeddings2 = model.encode(
             create_dataloader(
-                self.dataset,
+                self.dataset.select_columns(self.input2_column_name),
                 task_metadata=self.task_metadata,
                 input_column=self.input2_column_name,
                 num_proc=num_proc,

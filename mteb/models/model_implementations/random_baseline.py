@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types._encoder_io import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import Array, AudioInputItem, BatchedInput, PromptType
 
 
 def _string_to_vector(text: str | None, size: int) -> NDArray[np.floating]:
@@ -57,6 +57,23 @@ def _image_to_vector(image: Image.Image, size: int) -> NDArray[np.floating]:
     return rng.random(size, dtype=np.float32)
 
 
+def _audio_to_vector(audio: AudioInputItem, size: int) -> np.ndarray:
+    """Generate a deterministic random vector based on audio content.
+
+    Args:
+        audio: Audio data (e.g., numpy array).
+        size: Size of the output vector.
+
+    Returns:
+        A numpy array of shape (size,) containing the random vector.
+    """
+    # Convert audio to bytes and then to a numeric seed
+    audio_bytes = audio["array"].tobytes()
+    seed = int(hashlib.sha256(audio_bytes).hexdigest(), 16) % (2**32)
+    rng = np.random.default_rng(seed)
+    return rng.random(size, dtype=np.float32)
+
+
 _EMBEDDING_DIM = 32
 
 _common_mock_metadata = dict(
@@ -76,6 +93,7 @@ _common_mock_metadata = dict(
     public_training_code=None,  # No training code, as this is a random baseline
     public_training_data=None,  # No training data, as this is a random baseline
     training_datasets=set(),
+    modalities=["text", "image", "audio"],
 )
 
 
@@ -94,7 +112,11 @@ def _batch_to_embeddings(
     """
     embeddings = []
     for batch in inputs:
-        has_text, has_image = "text" in batch, "image" in batch
+        has_text, has_image, has_audio = (
+            "text" in batch,
+            "image" in batch,
+            "audio" in batch,
+        )
 
         if has_text and has_image:
             for text, image in zip(batch["text"], batch["image"]):
@@ -108,6 +130,10 @@ def _batch_to_embeddings(
         elif has_text:
             embeddings.extend(
                 _string_to_vector(txt, embedding_dim) for txt in batch["text"]
+            )
+        elif has_audio:
+            embeddings.extend(
+                _audio_to_vector(aud, embedding_dim) for aud in batch["audio"]
             )
         else:
             raise KeyError("Input batch must contain 'text' and/or 'image' keys.")
@@ -192,7 +218,6 @@ random_encoder_baseline = ModelMeta(
     loader=RandomEncoderBaseline,
     name="baseline/random-encoder-baseline",
     model_type=["dense"],
-    modalities=["text", "image"],
     **_common_mock_metadata,
 )
 
@@ -237,6 +262,5 @@ random_cross_encoder_baseline = ModelMeta(
     loader=RandomCrossEncoderBaseline,
     name="baseline/random-cross-encoder-baseline",
     model_type=["cross-encoder"],
-    modalities=["text", "image"],
     **_common_mock_metadata,
 )

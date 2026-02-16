@@ -1,0 +1,94 @@
+{
+    "test": {
+        "num_samples": 588,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 2004.1887916666667,
+            "min_duration_seconds": 0.7720625,
+            "average_duration_seconds": 3.408484339569161,
+            "max_duration_seconds": 12.867395833333333,
+            "unique_audios": 588,
+            "average_sampling_rate": 48000.0,
+            "sampling_rates": {
+                "48000": 588
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 7,
+            "labels": {
+                "confused": {
+                    "count": 63
+                },
+                "default": {
+                    "count": 178
+                },
+                "enunciated": {
+                    "count": 49
+                },
+                "happy": {
+                    "count": 82
+                },
+                "laughing": {
+                    "count": 65
+                },
+                "sad": {
+                    "count": 76
+                },
+                "whisper": {
+                    "count": 75
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 2000,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 6549.6245,
+            "min_duration_seconds": 0.6465625,
+            "average_duration_seconds": 3.27481225,
+            "max_duration_seconds": 14.586854166666667,
+            "unique_audios": 2000,
+            "average_sampling_rate": 48000.0,
+            "sampling_rates": {
+                "48000": 2000
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 7,
+            "labels": {
+                "confused": {
+                    "count": 268
+                },
+                "default": {
+                    "count": 407
+                },
+                "enunciated": {
+                    "count": 271
+                },
+                "happy": {
+                    "count": 260
+                },
+                "laughing": {
+                    "count": 268
+                },
+                "sad": {
+                    "count": 263
+                },
+                "whisper": {
+                    "count": 263
+                }
+            }
+        }
+    }
+}

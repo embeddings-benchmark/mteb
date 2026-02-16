@@ -11,6 +11,7 @@ from sklearn.metrics import average_precision_score
 
 from mteb._evaluators import PairClassificationEvaluator
 from mteb.abstasks._statistics_calculation import (
+    calculate_audio_statistics,
     calculate_image_statistics,
     calculate_label_statistics,
     calculate_text_statistics,
@@ -33,6 +34,7 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import MTEBModels
     from mteb.types import EncodeKwargs, PromptType
     from mteb.types.statistics import (
+        AudioStatistics,
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
@@ -50,7 +52,13 @@ class PairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
         unique_pairs: Number of unique pairs
 
         text1_statistics: Statistics for sentence1
+        image1_statistics: Statistics for image1
+        audio1_statistics: Statistics for audio1
+
         text2_statistics: Statistics for sentence2
+        image2_statistics: Statistics for image2
+        audio2_statistics: Statistics for audio2
+
         labels_statistics: Statistics for labels
     """
 
@@ -60,8 +68,10 @@ class PairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
 
     text1_statistics: TextStatistics | None
     image1_statistics: ImageStatistics | None
+    audio1_statistics: AudioStatistics | None
     text2_statistics: TextStatistics | None
     image2_statistics: ImageStatistics | None
+    audio2_statistics: AudioStatistics | None
     labels_statistics: LabelStatistics
 
 
@@ -217,6 +227,8 @@ class AbsTaskPairClassification(AbsTask):
         image1_statistics = None
         image2_statistics = None
         number_of_characters = None
+        audio1_statistics = None
+        audio2_statistics = None
         unique_pairs = None
         if self.metadata.modalities == ["text"]:
             text1_statistics = calculate_text_statistics(input1)
@@ -227,7 +239,7 @@ class AbsTaskPairClassification(AbsTask):
             )
             unique_pairs = len(set(zip(input1, input2)))
 
-        elif self.metadata.modalities == ["image"]:
+        if self.metadata.modalities == ["image"]:
             image1_statistics = calculate_image_statistics(input1)
             image2_statistics = calculate_image_statistics(input2)
 
@@ -243,14 +255,33 @@ class AbsTaskPairClassification(AbsTask):
             image_2_hashes = _compute_image_hash(input2)
             unique_pairs = len(set(zip(image_1_hashes, image_2_hashes)))
 
+        if self.metadata.modalities == ["audio"]:
+            audio1_statistics = calculate_audio_statistics(input1)
+            audio2_statistics = calculate_audio_statistics(input2)
+
+            def _compute_audio_hash(inputs: list) -> list[str]:
+                hashes = set()
+                for audio in inputs:
+                    array = audio["array"]
+                    audio_bytes = array.tobytes()
+                    audio_hash = hashlib.md5(audio_bytes).hexdigest()
+                    hashes.add(audio_hash)
+                return list(hashes)
+
+            audio_1_hashes = _compute_audio_hash(input1)
+            audio_2_hashes = _compute_audio_hash(input2)
+            unique_pairs = len(set(zip(audio_1_hashes, audio_2_hashes)))
+
         return PairClassificationDescriptiveStatistics(
             num_samples=len(input1),
             unique_pairs=unique_pairs,
             number_of_characters=number_of_characters,
             text1_statistics=text1_statistics,
             image1_statistics=image1_statistics,
+            audio1_statistics=audio1_statistics,
             text2_statistics=text2_statistics,
             image2_statistics=image2_statistics,
+            audio2_statistics=audio2_statistics,
             labels_statistics=calculate_label_statistics(labels),
         )
 

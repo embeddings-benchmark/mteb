@@ -1,0 +1,73 @@
+{
+    "train": {
+        "num_samples": 2048,
+        "number_of_characters": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 7378.455532937722,
+            "min_duration_seconds": 0.1090249433106576,
+            "average_duration_seconds": 3.602761490692247,
+            "max_duration_seconds": 4.036647314949202,
+            "unique_audios": 2048,
+            "average_sampling_rate": 48306.82275390625,
+            "sampling_rates": {
+                "44100": 1264,
+                "48000": 583,
+                "24000": 17,
+                "96000": 140,
+                "16000": 7,
+                "22050": 12,
+                "11025": 13,
+                "8000": 6,
+                "192000": 4,
+                "11024": 2
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 10,
+            "labels": {
+                "8": {
+                    "count": 218
+                },
+                "0": {
+                    "count": 234
+                },
+                "3": {
+                    "count": 235
+                },
+                "9": {
+                    "count": 234
+                },
+                "5": {
+                    "count": 235
+                },
+                "2": {
+                    "count": 235
+                },
+                "4": {
+                    "count": 234
+                },
+                "7": {
+                    "count": 234
+                },
+                "6": {
+                    "count": 88
+                },
+                "1": {
+                    "count": 101
+                }
+            }
+        },
+        "candidates_labels_text_statistics": {
+            "total_text_length": 293,
+            "min_text_length": 24,
+            "average_text_length": 29.3,
+            "max_text_length": 35,
+            "unique_texts": 10
+        }
+    }
+}
