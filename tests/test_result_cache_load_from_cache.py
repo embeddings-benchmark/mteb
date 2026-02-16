@@ -1,4 +1,4 @@
-"""Test cases for the load_from_cache and _rebuild_from_full_repository methods."""
+"""Test cases for the _load_from_cache and _rebuild_from_full_repository methods."""
 
 from unittest.mock import MagicMock, patch
 
@@ -9,7 +9,7 @@ from mteb.results import BenchmarkResults
 
 
 class TestLoadFromCache:
-    """Test the load_from_cache method."""
+    """Test the _load_from_cache method."""
 
     def test_rebuild_flag_forces_full_rebuild(self, tmp_path):
         """Test rebuild=True bypasses cache and forces rebuild."""
@@ -22,7 +22,7 @@ class TestLoadFromCache:
         with patch.object(cache, "_rebuild_from_full_repository") as mock_rebuild:
             mock_result = MagicMock(spec=BenchmarkResults)
             mock_rebuild.return_value = mock_result
-            result = cache.load_from_cache(cache_filename, rebuild=True)
+            result = cache._load_from_cache(cache_filename, rebuild=True)
             mock_rebuild.assert_called_once_with(expected_path)
             assert result == mock_result
 
@@ -38,7 +38,7 @@ class TestLoadFromCache:
         expected_path.write_text("{}")
         with patch("mteb.results.BenchmarkResults.from_disk") as mock_from_disk:
             mock_from_disk.return_value = mock_result
-            result = cache.load_from_cache(cache_filename, rebuild=False)
+            result = cache._load_from_cache(cache_filename, rebuild=False)
             mock_from_disk.assert_called_once_with(expected_path)
             assert result == mock_result
 
@@ -50,7 +50,7 @@ class TestLoadFromCache:
         ):
             mock_dl.return_value = expected_path
             mock_from_disk.return_value = mock_result
-            result = cache.load_from_cache(cache_filename, rebuild=False)
+            result = cache._load_from_cache(cache_filename, rebuild=False)
             mock_dl.assert_called_once_with(output_path=expected_path)
             assert result == mock_result
 
@@ -61,7 +61,7 @@ class TestLoadFromCache:
         ):
             mock_dl.side_effect = Exception("Download failed")
             mock_rebuild.return_value = mock_result
-            result = cache.load_from_cache(cache_filename, rebuild=False)
+            result = cache._load_from_cache(cache_filename, rebuild=False)
             mock_rebuild.assert_called_once_with(expected_path)
             assert result == mock_result
 
@@ -82,7 +82,7 @@ class TestLoadFromCache:
             mock_dl.side_effect = Exception("Download failed")
             mock_result = MagicMock(spec=BenchmarkResults)
             mock_rebuild.return_value = mock_result
-            result = cache.load_from_cache(cache_filename, rebuild=False)
+            result = cache._load_from_cache(cache_filename, rebuild=False)
             mock_rebuild.assert_called_once_with(expected_path)
             assert result == mock_result
 

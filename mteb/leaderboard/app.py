@@ -415,7 +415,7 @@ def get_leaderboard_app(
 
     logger.info("Step 1/7: Loading all benchmark results...")
     load_start = time.time()
-    all_results = cache.load_from_cache(rebuild=rebuild)
+    all_results = cache._load_from_cache(rebuild=rebuild)
     load_time = time.time() - load_start
     logger.info(f"Step 1/7 complete: Loaded results in {load_time:.2f}s")
 

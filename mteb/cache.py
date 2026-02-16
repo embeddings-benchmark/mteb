@@ -436,7 +436,7 @@ class ResultCache:
             logger.warning(msg)
             warnings.warn(msg)
 
-    def load_from_cache(
+    def _load_from_cache(
         self,
         cache_filename: str = "__cached_results.json",
         rebuild: bool = False,
