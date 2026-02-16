@@ -752,14 +752,7 @@ def get_leaderboard_app(
         models = gr.State(filtered_models)
         with gr.Row():
             with gr.Column(scale=1):
-                description = gr.Markdown(
-                    _update_description(
-                        default_benchmark.name,
-                        sorted(default_results.languages),
-                        sorted(default_results.task_types),
-                        sorted(default_results.domains),
-                    )
-                )
+                description = gr.Markdown(_update_description(default_benchmark.name))
 
             with gr.Column(scale=1):
                 with gr.Accordion("Cite and share this benchmark", open=False):
@@ -963,7 +956,7 @@ def get_leaderboard_app(
         for trigger in [lang_select, type_select, domain_select]:
             trigger.change(
                 _update_description,
-                inputs=[benchmark_select, lang_select, type_select, domain_select],
+                inputs=[benchmark_select],
                 outputs=[description],
                 preprocess=False,
                 show_progress="hidden",
