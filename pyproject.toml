@@ -377,7 +377,6 @@ conflicts = [
         { extra = "vllm" },
         { extra = "jina-clip" },
         { extra = "msclap" },
-        { extra = "vllm" },
         { extra = "muq" },
         { extra = "mctct" },
     ],
