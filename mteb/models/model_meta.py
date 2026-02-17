@@ -28,6 +28,7 @@ from huggingface_hub.errors import (
     SafetensorsParsingError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
+from sentence_transformers import CrossEncoder, SentenceTransformer
 from sentence_transformers.models import Transformer
 from transformers import AutoConfig
 
@@ -43,7 +44,6 @@ if TYPE_CHECKING:
         GitCommitInfo,
         ModelCardData,
     )
-    from sentence_transformers import CrossEncoder, SentenceTransformer
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
@@ -447,7 +447,6 @@ class ModelMeta(BaseModel):
         if overwrites:
             empty_model = empty_model.model_copy(update=overwrites)
 
-
         if empty_model.name is None:
             empty_model.name = "no_model_name/available"
         if empty_model.revision is None:
@@ -593,18 +592,8 @@ class ModelMeta(BaseModel):
             )
             return cls._create_empty(
                 overwrites=dict(
-                    loader=loader,
                     name=model_name,
-                    model_type=[model_type],
                     revision=revision,
-                    reference=None,
-                    release_date=None,
-                    license=None,
-                    framework=None,
-                    n_parameters=None,
-                    memory_usage_mb=None,
-                    max_tokens=None,
-                    embed_dim=None,
                 )
             )
 
@@ -738,7 +727,7 @@ class ModelMeta(BaseModel):
             revision: Revision of the model
             fill_missing: Deprecated. The fill missing did not add any functionality for this function, but was added for compatibility with
                 'from_sentence_transformer_model' and `from_cross_encoder`. It will be removed in a future version.
-            compute_metadata: Deprecated. Was superseeded by fill_missing.
+            compute_metadata: Deprecated. Was superseded by fill_missing.
 
         Returns:
             The generated ModelMeta.
