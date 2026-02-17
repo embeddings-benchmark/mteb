@@ -6,14 +6,12 @@ LEAF-distilled embedding model: E5-small-unsupervised backbone, mxbai-embed-larg
 
 from mteb.models import ModelMeta, sentence_transformers_loader
 
-model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
-
 MINIAC_EMBED_TRAINING_DATASETS = {
     "fineweb",
     "cc_news",
     "english-words-definitions",
     "amazon-qa",
-    "msmarco",
+    "MSMARCO",
     "PubMedQA",
     "trivia_qa",
     "LoTTE",
@@ -21,9 +19,7 @@ MINIAC_EMBED_TRAINING_DATASETS = {
 
 miniac_embed = ModelMeta(
     loader=sentence_transformers_loader,
-    loader_kwargs=dict(
-        model_prompts=model_prompts,
-    ),
+    loader_kwargs=dict(),
     name="ManiacLabs/miniac-embed",
     model_type=["dense"],
     revision="0fe5413163ce75cf13e6351b39a8b6f321b64e79",
