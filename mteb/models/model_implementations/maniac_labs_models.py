@@ -36,13 +36,13 @@ MINIAC_EMBED_CITATION = (
 model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
 
 MINIAC_EMBED_TRAINING_DATASETS = {
-    "HuggingFaceFW/fineweb",
+    "fineweb",
     "cc_news",
-    "MongoDB/english-words-definitions",
-    "sentence-transformers/amazon-qa",
-    "sentence-transformers/msmarco",
-    "qiaojin/PubMedQA",
-    "mandarjoshi/trivia_qa",
+    "english-words-definitions",
+    "amazon-qa",
+    "msmarco",
+    "PubMedQA",
+    "trivia_qa",
     "LoTTE",
 }
 
