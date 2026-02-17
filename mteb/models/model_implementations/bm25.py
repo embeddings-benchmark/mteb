@@ -54,13 +54,13 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
             hf_split: str,
             hf_subset: str,
             encode_kwargs: EncodeKwargs,
-            num_proc: int = 1,
+            num_proc: int | None = None,
         ) -> None:
             logger.info("Encoding Corpus...")
             corpus_texts = [
                 "\n".join([doc.get("title", ""), doc["text"]]) for doc in corpus
             ]  # concatenate all document values (title, text, ...)
-            encoded_corpus = self.encode(corpus_texts)
+            encoded_corpus = self._encode(corpus_texts)
 
             logger.info(
                 f"Indexing Corpus... {len(encoded_corpus.ids):,} documents, {len(encoded_corpus.vocab):,} vocab"
@@ -81,7 +81,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
             top_k: int,
             encode_kwargs: EncodeKwargs,
             top_ranked: TopRankedDocumentsType | None = None,
-            num_proc: int = 1,
+            num_proc: int | None = None,
         ) -> RetrievalOutputType:
             logger.info("Encoding Queries...")
             query_ids = list(queries["id"])
@@ -89,7 +89,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
             queries_loader = _create_text_queries_dataloader(queries)
             queries_texts = [text for batch in queries_loader for text in batch["text"]]
 
-            query_token_strs = self.encode(queries_texts)
+            query_token_strs = self._encode(queries_texts)
 
             logger.info(f"Retrieving Results... {len(queries):,} queries")
 
@@ -120,8 +120,8 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
 
             return results
 
-        def encode(self, texts: list[str]):
-            """Encode input text as term vectors"""
+        def _encode(self, texts: list[str]):
+            """Tokenize texts using bm25s. Not to be confused with EncoderProtocol.encode()."""
             return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
 
     return BM25Search(**kwargs)

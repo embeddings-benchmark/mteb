@@ -12,6 +12,7 @@ from .indic_lang_classification import IndicLangClassification
 from .indic_nlp_news_classification import IndicNLPNewsClassification
 from .indic_sentiment_classification import IndicSentimentClassification
 from .language_classification import LanguageClassification
+from .m_in_ds14 import MInDS14Classification
 from .masakha_news_classification import MasakhaNEWSClassification
 from .massive_intent_classification import MassiveIntentClassification
 from .massive_scenario_classification import MassiveScenarioClassification
@@ -34,10 +35,13 @@ from .ru_sci_bench_classification import (
 from .scala_classification import ScalaClassification
 from .scandi_sent_classification import ScandiSentClassification
 from .sib200_classification import SIB200Classification
+from .sibfleurs import SIBFLEURSMultilingualClassification
 from .south_african_lang_classification import SouthAfricanLangClassification
 from .swiss_judgement_classification import SwissJudgementClassification
 from .turkic_classification import TurkicClassification
 from .tweet_sentiment_classification import TweetSentimentClassification
+from .vox_populi_gender_id import VoxPopuliGenderID
+from .vox_populi_language_id import VoxPopuliLanguageID
 
 __all__ = [
     "AfriSentiClassification",
@@ -52,6 +56,7 @@ __all__ = [
     "IndicNLPNewsClassification",
     "IndicSentimentClassification",
     "LanguageClassification",
+    "MInDS14Classification",
     "MTOPDomainClassification",
     "MTOPIntentClassification",
     "MasakhaNEWSClassification",
@@ -70,10 +75,13 @@ __all__ = [
     "RuSciBenchOECDClassificationV2",
     "RuSciBenchPubTypeClassification",
     "SIB200Classification",
+    "SIBFLEURSMultilingualClassification",
     "ScalaClassification",
     "ScandiSentClassification",
     "SouthAfricanLangClassification",
     "SwissJudgementClassification",
     "TurkicClassification",
     "TweetSentimentClassification",
+    "VoxPopuliGenderID",
+    "VoxPopuliLanguageID",
 ]

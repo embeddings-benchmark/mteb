@@ -28,6 +28,7 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
+    calculate_audio_statistics,
     calculate_image_statistics,
     calculate_relevant_docs_statistics,
     calculate_text_statistics,
@@ -57,6 +58,7 @@ if TYPE_CHECKING:
         ScoresDict,
     )
     from mteb.types.statistics import (
+        AudioStatistics,
         ImageStatistics,
         RelevantDocsStatistics,
         TextStatistics,
@@ -76,8 +78,10 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
 
         documents_text_statistics: Statistics for documents
         documents_image_statistics: Statistics for documents
+        documents_audio_statistics: Statistics for documents
         queries_text_statistics: Statistics for queries
         queries_image_statistics: Statistics for queries
+        queries_audio_statistics: Statistics for queries
         relevant_docs_statistics: Statistics for relevant documents
         top_ranked_statistics: Statistics for top ranked documents (if available)
     """
@@ -87,8 +91,11 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
 
     documents_text_statistics: TextStatistics | None
     documents_image_statistics: ImageStatistics | None
+    documents_audio_statistics: AudioStatistics | None
+
     queries_text_statistics: TextStatistics | None
     queries_image_statistics: ImageStatistics | None
+    queries_audio_statistics: AudioStatistics | None
 
     relevant_docs_statistics: RelevantDocsStatistics
 
@@ -113,7 +120,12 @@ def _filter_queries_without_positives(
 
 
 class AbsTaskRetrieval(AbsTask):
-    """Abstract class for retrieval experiments.
+    """The class which retrieval tasks inherit from.
+
+    A retrieval task consists of a corpus of documents, a set of queries, and a mapping of which documents are relevant for each query.
+    The task is to retrieve the relevant documents for each query. The evaluation is done by indexing the corpus and then searching for each query.
+    The retrieved documents are then compared to the relevant documents to calculate the evaluation scores.
+
 
     Attributes:
         dataset: A nested dictionary where the first key is the subset (language or "default"),
@@ -148,7 +160,10 @@ class AbsTaskRetrieval(AbsTask):
             )
         )
 
-    def convert_v1_dataset_format_to_v2(self, num_proc: int) -> None:
+    def convert_v1_dataset_format_to_v2(
+        self,
+        num_proc: int | None,
+    ) -> None:
         """Convert dataset from v1 (from `self.queries`, `self.document`) format to v2 format (`self.dotaset`)."""
         # check if dataset is `v1` version
         if not hasattr(self, "queries"):
@@ -257,7 +272,7 @@ class AbsTaskRetrieval(AbsTask):
         if hasattr(self, "top_ranked"):
             del self.top_ranked
 
-    def load_data(self, num_proc: int = 1, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         """Load the dataset for the retrieval task."""
         if self.data_loaded:
             return
@@ -301,7 +316,7 @@ class AbsTaskRetrieval(AbsTask):
         *,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluate the model on the retrieval task.
@@ -342,7 +357,7 @@ class AbsTaskRetrieval(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
@@ -473,7 +488,7 @@ class AbsTaskRetrieval(AbsTask):
         split: str,
         hf_subset: str | None = None,
         compute_overall: bool = False,
-        num_proc: int = 1,
+        num_proc: int | None = None,
     ) -> RetrievalDescriptiveStatistics:
         self.convert_v1_dataset_format_to_v2(num_proc)
         if hf_subset and hf_subset in self.dataset:
@@ -535,8 +550,10 @@ class AbsTaskRetrieval(AbsTask):
 
         documents_text_statistics = None
         documents_image_statistics = None
+        documents_audio_statistics = None
         queries_text_statistics = None
         queries_image_statistics = None
+        queries_audio_statistics = None
 
         if "t" in corpus_modalities:
             corpus_texts = corpus.map(_corpus_to_dict)["text"]
@@ -545,6 +562,9 @@ class AbsTaskRetrieval(AbsTask):
 
         if "i" in corpus_modalities:
             documents_image_statistics = calculate_image_statistics(corpus["image"])
+
+        if "a" in corpus_modalities:
+            documents_audio_statistics = calculate_audio_statistics(corpus["audio"])
 
         if "t" in queries_modalities:
             queries_ = queries
@@ -560,6 +580,9 @@ class AbsTaskRetrieval(AbsTask):
         if "i" in queries_modalities:
             queries_image_statistics = calculate_image_statistics(queries["image"])
 
+        if "a" in queries_modalities:
+            queries_audio_statistics = calculate_audio_statistics(queries["audio"])
+
         relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
 
         if top_ranked is not None and num_queries and len(top_ranked) > 0:
@@ -574,8 +597,10 @@ class AbsTaskRetrieval(AbsTask):
             number_of_characters=number_of_characters,
             documents_text_statistics=documents_text_statistics,
             documents_image_statistics=documents_image_statistics,
+            documents_audio_statistics=documents_audio_statistics,
             queries_text_statistics=queries_text_statistics,
             queries_image_statistics=queries_image_statistics,
+            queries_audio_statistics=queries_audio_statistics,
             relevant_docs_statistics=relevant_docs_statistics,
             top_ranked_statistics=top_ranked_statistics,
         )

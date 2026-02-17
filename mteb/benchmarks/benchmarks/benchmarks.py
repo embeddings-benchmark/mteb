@@ -790,6 +790,46 @@ two novel clustering tasks.""",  # Rephrased from the abstract
     contacts=["rafalposwiata"],
 )
 
+MTEB_SPA = Benchmark(
+    name="MTEB(spa, v1)",
+    aliases=["MTEB(spa)"],
+    display_name="Spanish",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/es.svg",
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["spa"],
+            tasks=[
+                # Classification
+                "SpanishNewsClassification.v2",
+                "SpanishSentimentClassification.v2",
+                # Clustering
+                "MLSUMClusteringP2P",
+                "MLSUMClusteringS2S",
+                # Pair Classification
+                "PawsXPairClassification",
+                "XNLI",
+                # Reranking
+                "MIRACLReranking",
+                # Retrieval
+                "MIRACLRetrievalHardNegatives.v2",
+                "MintakaRetrieval",
+                "SpanishPassageRetrievalS2P",
+                "SpanishPassageRetrievalS2S",
+                "XPQARetrieval",
+                # STS
+                "STSES",
+                "STSBenchmarkMultilingualSTS",
+                "STS17",
+            ],
+        )
+        + (get_task("STS22", eval_splits=["test"], hf_subsets=["es"]),)
+    ),
+    description="Spanish text embedding benchmark covering classification, clustering, pair classification, reranking, retrieval, and semantic textual similarity tasks. For a discussion on the benchmark construction see the [original submission](https://github.com/embeddings-benchmark/mteb/pull/4053).",
+    reference=None,
+    citation=None,
+    contacts=["Clemente-H"],
+)
+
 MTEB_code = Benchmark(
     name="MTEB(Code, v1)",
     aliases=["MTEB(code)"],
@@ -1076,6 +1116,7 @@ MTEB_INDIC = Benchmark(
     name="MTEB(Indic, v1)",
     aliases=["MTEB(Indic)"],
     display_name="Indic",
+    language_view="all",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/in.svg",
     tasks=MTEBTasks(
         get_tasks(
@@ -1167,6 +1208,7 @@ MTEB_EU = Benchmark(
     name="MTEB(Europe, v1)",
     aliases=["MTEB(Europe)"],
     display_name="European",
+    language_view="all",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/eu.svg",
     tasks=get_tasks(
         tasks=[
@@ -2851,4 +2893,331 @@ KOVIDORE_V2 = Benchmark(
   year = {2026},
 }
 """,
+)
+
+MAEB_PLUS = Benchmark(
+    name="MAEB+",
+    display_name="MAEB+",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Classification (35)
+            "AmbientAcousticContext",
+            "AudioSet",
+            "AudioSetMini",
+            "BeijingOpera",
+            "BirdCLEF",
+            "BirdSet",
+            "CommonLanguageAgeDetection",
+            "CommonLanguageGenderDetection",
+            "CommonLanguageLanguageDetection",
+            "CREMA_D",
+            "ESC50",
+            "FSD2019Kaggle",
+            "FSD50K",
+            "FSDD",
+            "GTZANGenre",
+            "GunshotTriangulation",
+            "IEMOCAPEmotion",
+            "IEMOCAPGender",
+            "LibriCount",
+            "MInDS14",
+            "MridinghamStroke",
+            "MridinghamTonic",
+            "NSynth",
+            "SIBFLEURS",
+            "SpeechCommands",
+            "SpokeNEnglish",
+            "SpokenQAForIC",
+            "TUTAcousticScenes",
+            "UrbanSound8k",
+            "VocalSound",
+            "VoxCelebSA",
+            "VoxLingua107_Top10",
+            "VoxPopuliAccentID",
+            "VoxPopuliGenderID",
+            "VoxPopuliLanguageID",
+            # Clustering (10)
+            "AmbientAcousticContextClustering",
+            "CREMA_DClustering",
+            "ESC50Clustering",
+            "GTZANGenreClustering",
+            "MusicGenreClustering",
+            "VehicleSoundClustering",
+            "VoiceGenderClustering",
+            "VoxCelebClustering",
+            "VoxPopuliAccentClustering",
+            "VoxPopuliGenderClustering",
+            # PairClassification (5)
+            "CREMADPairClassification",
+            "ESC50PairClassification",
+            "NMSQAPairClassification",
+            "VocalSoundPairClassification",
+            "VoxPopuliAccentPairClassification",
+            # Reranking (5)
+            "ESC50AudioReranking",
+            "FSDnoisy18kAudioReranking",
+            "GTZANAudioReranking",
+            "UrbanSound8KAudioReranking",
+            "VocalSoundAudioReranking",
+            # Zeroshot Classification (5)
+            "ESC50_Zeroshot",
+            "RavdessZeroshot",
+            "SpeechCommandsZeroshotv0.01",
+            "SpeechCommandsZeroshotv0.02",
+            "UrbanSound8kZeroshot",
+            # Audio-to-Audio Retrieval (1)
+            "JamAltArtistA2ARetrieval",
+            # Audio-to-Text Retrieval (19)
+            "AudioCapsA2TRetrieval",
+            "AudioSetStrongA2TRetrieval",
+            "ClothoA2TRetrieval",
+            "CMUArcticA2TRetrieval",
+            "CommonVoiceMini17A2TRetrieval",
+            "CommonVoiceMini21A2TRetrieval",
+            "EmoVDBA2TRetrieval",
+            "FleursA2TRetrieval",
+            "GigaSpeechA2TRetrieval",
+            "GoogleSVQA2TRetrieval",
+            "HiFiTTSA2TRetrieval",
+            "JamAltLyricA2TRetrieval",
+            "JLCorpusA2TRetrieval",
+            "LibriTTSA2TRetrieval",
+            "MACSA2TRetrieval",
+            "MusicCapsA2TRetrieval",
+            "SoundDescsA2TRetrieval",
+            "UrbanSound8KA2TRetrieval",
+            # Text-to-Audio Retrieval (18)
+            "AudioCapsT2ARetrieval",
+            "AudioSetStrongT2ARetrieval",
+            "ClothoT2ARetrieval",
+            "CMUArcticT2ARetrieval",
+            "CommonVoiceMini17T2ARetrieval",
+            "CommonVoiceMini21T2ARetrieval",
+            "EmoVDBT2ARetrieval",
+            "FleursT2ARetrieval",
+            "GigaSpeechT2ARetrieval",
+            "GoogleSVQT2ARetrieval",
+            "HiFiTTST2ARetrieval",
+            "JamAltLyricT2ARetrieval",
+            "JLCorpusT2ARetrieval",
+            "LibriTTST2ARetrieval",
+            "MACST2ARetrieval",
+            "MusicCapsT2ARetrieval",
+            "SoundDescsT2ARetrieval",
+            "SpokenSQuADT2ARetrieval",
+            "UrbanSound8KT2ARetrieval",
+        ]
+    ),
+    description="""MAEB+ is the full Massive Audio Embedding Benchmark (v1), containing 98 tasks with audio modality across 6 task types: classification, clustering, pair classification, reranking, zero-shot classification, and retrieval.""",
+    reference=None,
+    citation="",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+)
+
+MAEB_AUDIO = Benchmark(
+    name="MAEB(audio-only)",
+    display_name="Audio-Only",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Any2AnyRetrieval (1)
+            "JamAltArtistA2ARetrieval",
+            # AudioClassification (10)
+            "BeijingOpera",
+            "BirdCLEF",
+            "CREMA_D",
+            "CommonLanguageAgeDetection",
+            "GTZANGenre",
+            "IEMOCAPGender",
+            "MInDS14",
+            "MridinghamTonic",
+            "VoxCelebSA",
+            "VoxPopuliLanguageID",
+            # AudioClustering (3)
+            "CREMA_DClustering",
+            "VehicleSoundClustering",
+            "VoxPopuliGenderClustering",
+            # AudioMultilabelClassification (1)
+            "SIBFLEURS",
+            # AudioPairClassification (3)
+            "CREMADPairClassification",
+            "NMSQAPairClassification",
+            "VoxPopuliAccentPairClassification",
+            # AudioReranking (1)
+            "GTZANAudioReranking",
+        ]
+    ),
+    description="""MAEB(audio-only) is the audio-only subset of MAEB with 19 tasks spanning 6 task types: classification (10), clustering (3), multilabel classification (1), pair classification (3), reranking (1), and retrieval (1).""",
+    reference=None,
+    citation="",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+)
+
+MAEB_EXTENDED = Benchmark(
+    name="MAEB(extended)",
+    display_name="Extended",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    tasks=get_tasks(
+        tasks=[
+            # === Audio-only tasks (53) ===
+            # AudioMultilabelClassification (4)
+            "FSD50K",
+            "SIBFLEURS",
+            "FSD2019Kaggle",
+            "AudioSetMini",
+            # AudioClassification (28)
+            "VoxPopuliAccentID",
+            "MInDS14",
+            "VoxPopuliGenderID",
+            "BeijingOpera",
+            "AmbientAcousticContext",
+            "CREMA_D",
+            "VoxCelebSA",
+            "TUTAcousticScenes",
+            "NSynth",
+            "VocalSound",
+            "VoxLingua107_Top10",
+            "ESC50",
+            "CommonLanguageAgeDetection",
+            "IEMOCAPEmotion",
+            "CommonLanguageLanguageDetection",
+            "CommonLanguageGenderDetection",
+            "IEMOCAPGender",
+            "SpokeNEnglish",
+            "FSDD",
+            "LibriCount",
+            "GTZANGenre",
+            "BirdCLEF",
+            "VoxPopuliLanguageID",
+            "MridinghamStroke",
+            "GunshotTriangulation",
+            "SpeechCommands",
+            "MridinghamTonic",
+            "BirdSet",
+            # AudioReranking (5)
+            "ESC50AudioReranking",
+            "UrbanSound8KAudioReranking",
+            "GTZANAudioReranking",
+            "FSDnoisy18kAudioReranking",
+            "VocalSoundAudioReranking",
+            # AudioClustering (10)
+            "VoiceGenderClustering",
+            "VoxPopuliAccentClustering",
+            "AmbientAcousticContextClustering",
+            "VoxCelebClustering",
+            "VoxPopuliGenderClustering",
+            "VehicleSoundClustering",
+            "MusicGenreClustering",
+            "ESC50Clustering",
+            "CREMA_DClustering",
+            "GTZANGenreClustering",
+            # AudioPairClassification (5)
+            "VoxPopuliAccentPairClassification",
+            "ESC50PairClassification",
+            "NMSQAPairClassification",
+            "VocalSoundPairClassification",
+            "CREMADPairClassification",
+            # Audio2AudioRetrieval (1)
+            "JamAltArtistA2ARetrieval",
+            # === Audio-text tasks (38) ===
+            # Any2AnyRetrieval - Audio to Text (13)
+            "AudioCapsA2TRetrieval",
+            "AudioSetStrongA2TRetrieval",
+            "CMUArcticA2TRetrieval",
+            "EmoVDBA2TRetrieval",
+            "GigaSpeechA2TRetrieval",
+            "HiFiTTSA2TRetrieval",
+            "JLCorpusA2TRetrieval",
+            "JamAltLyricA2TRetrieval",
+            "LibriTTSA2TRetrieval",
+            "MACSA2TRetrieval",
+            "MusicCapsA2TRetrieval",
+            "SpokenSQuADT2ARetrieval",
+            "UrbanSound8KA2TRetrieval",
+            # Any2AnyRetrieval - Text to Audio (12)
+            "AudioCapsT2ARetrieval",
+            "AudioSetStrongT2ARetrieval",
+            "CMUArcticT2ARetrieval",
+            "EmoVDBT2ARetrieval",
+            "GigaSpeechT2ARetrieval",
+            "HiFiTTST2ARetrieval",
+            "JLCorpusT2ARetrieval",
+            "JamAltLyricT2ARetrieval",
+            "LibriTTST2ARetrieval",
+            "MACST2ARetrieval",
+            "MusicCapsT2ARetrieval",
+            "UrbanSound8KT2ARetrieval",
+            # AudioZeroshotClassification (5)
+            "ESC50_Zeroshot",
+            "RavdessZeroshot",
+            "SpeechCommandsZeroshotv0.01",
+            "SpeechCommandsZeroshotv0.02",
+            "UrbanSound8kZeroshot",
+            # Audio captioning (2)
+            "ClothoA2TRetrieval",
+            "ClothoT2ARetrieval",
+            # Multilingual - Fleurs (2) - 102 languages
+            "FleursA2TRetrieval",
+            "FleursT2ARetrieval",
+            # Multilingual - CommonVoice 21 (2) - 82+ languages
+            "CommonVoiceMini21A2TRetrieval",
+            "CommonVoiceMini21T2ARetrieval",
+        ]
+    ),
+    description="""MAEB(extended) is an intermediate benchmark used during task selection, containing 89 tasks that combine audio-only and audio-text evaluation before filtering to MAEB. Audio-only (53 tasks): classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), audio-to-audio retrieval (1). Audio-text (36 tasks): audio-text retrieval (31), zero-shot classification (5).""",
+    reference=None,
+    citation="",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+)
+
+MAEB = Benchmark(
+    name="MAEB",
+    display_name="MAEB",
+    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Any2AnyRetrieval (9)
+            "ClothoT2ARetrieval",
+            "CommonVoiceMini21T2ARetrieval",
+            "FleursT2ARetrieval",
+            "GigaSpeechT2ARetrieval",
+            "JamAltArtistA2ARetrieval",
+            "JamAltLyricA2TRetrieval",
+            "MACST2ARetrieval",
+            "SpokenSQuADT2ARetrieval",
+            "UrbanSound8KT2ARetrieval",
+            # AudioClassification (10)
+            "BeijingOpera",
+            "BirdCLEF",
+            "CREMA_D",
+            "CommonLanguageAgeDetection",
+            "GTZANGenre",
+            "IEMOCAPGender",
+            "MInDS14",
+            "MridinghamTonic",
+            "VoxCelebSA",
+            "VoxPopuliLanguageID",
+            # AudioClustering (3)
+            "CREMA_DClustering",
+            "VehicleSoundClustering",
+            "VoxPopuliGenderClustering",
+            # AudioMultilabelClassification (2)
+            "FSD2019Kaggle",
+            "SIBFLEURS",
+            # AudioPairClassification (3)
+            "CREMADPairClassification",
+            "NMSQAPairClassification",
+            "VoxPopuliAccentPairClassification",
+            # AudioReranking (1)
+            "GTZANAudioReranking",
+            # AudioZeroshotClassification (2)
+            "RavdessZeroshot",
+            "SpeechCommandsZeroshotv0.02",
+        ]
+    ),
+    description="""MAEB is a comprehensive audio benchmark with 30 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (10), clustering (3), multilabel classification (2), pair classification (3), reranking (1), and zero-shot classification (2).""",
+    reference=None,
+    citation="",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )

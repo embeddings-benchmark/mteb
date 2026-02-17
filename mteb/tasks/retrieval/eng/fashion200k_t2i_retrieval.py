@@ -8,8 +8,8 @@ class Fashion200kT2IRetrieval(AbsTaskRetrieval):
         description="Retrieve clothes based on descriptions.",
         reference="https://openaccess.thecvf.com/content_iccv_2017/html/Han_Automatic_Spatially-Aware_Fashion_ICCV_2017_paper.html",
         dataset={
-            "path": "MRBench/mbeir_fashion200k_task0",
-            "revision": "1b86e2dde50e671d5c83d07a79e8b1d8c696964b",
+            "path": "mteb/mbeir_fashion200k_task0",
+            "revision": "725e5e2ccb114089e0070e83cdc94b83bc104d40",
         },
         type="Any2AnyRetrieval",
         category="t2i",

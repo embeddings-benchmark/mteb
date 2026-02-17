@@ -21,8 +21,8 @@ class SciDocsReranking(AbsTaskRetrieval):
         domains=["Academic", "Non-fiction", "Written"],
         task_subtypes=["Scientific Reranking"],
         license="cc-by-4.0",
-        annotations_creators=None,
-        dialect=None,
+        annotations_creators="derived",
+        dialect=[],
         sample_creation="found",
         prompt="Given a title of a scientific paper, retrieve the titles of other relevant papers",
         bibtex_citation=r"""

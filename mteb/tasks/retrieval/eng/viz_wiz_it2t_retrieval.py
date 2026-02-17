@@ -8,8 +8,8 @@ class VizWizIT2TRetrieval(AbsTaskRetrieval):
         description="Retrieve the correct answer for a question about an image.",
         reference="https://openaccess.thecvf.com/content_cvpr_2018/papers/Gurari_VizWiz_Grand_Challenge_CVPR_2018_paper.pdf",
         dataset={
-            "path": "JamieSJS/vizwiz",
-            "revision": "044af162d55f82ab603fa16ffcf7f1e4dbf300e9",
+            "path": "mteb/vizwiz",
+            "revision": "c9a6f7bf3f5cbc8e76a29a423ba48d7b549b8d87",
         },
         type="Any2AnyRetrieval",
         category="it2t",

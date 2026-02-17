@@ -17,7 +17,7 @@ class TwitterURLCorpus(AbsTaskPairClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="max_ap",
-        date=None,
+        date=("2017-01-01", "2017-12-31"),  # publication year
         domains=["Social", "Written"],
         task_subtypes=[],
         license="not specified",

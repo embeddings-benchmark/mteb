@@ -10,6 +10,7 @@ from tqdm.auto import tqdm
 from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
@@ -17,6 +18,82 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
+
+VOYAGE_MULTILINGUAL_LANGUAGES = [
+    "afr-Latn",
+    "ara-Arab",
+    "aze-Latn",
+    "bel-Cyrl",
+    "bul-Cyrl",
+    "ben-Beng",
+    "cat-Latn",
+    "ceb-Latn",
+    "ces-Latn",
+    "cym-Latn",
+    "dan-Latn",
+    "deu-Latn",
+    "ell-Grek",
+    "eng-Latn",
+    "spa-Latn",
+    "est-Latn",
+    "eus-Latn",
+    "fas-Arab",
+    "fin-Latn",
+    "fra-Latn",
+    "glg-Latn",
+    "guj-Gujr",
+    "heb-Hebr",
+    "hin-Deva",
+    "hrv-Latn",
+    "hat-Latn",
+    "hun-Latn",
+    "hye-Armn",
+    "ind-Latn",
+    "isl-Latn",
+    "ita-Latn",
+    "jpn-Jpan",
+    "jav-Latn",
+    "kat-Geor",
+    "kaz-Cyrl",
+    "khm-Khmr",
+    "kan-Knda",
+    "kor-Hang",
+    "kir-Cyrl",
+    "lao-Laoo",
+    "lit-Latn",
+    "lav-Latn",
+    "mkd-Cyrl",
+    "mal-Mlym",
+    "mon-Cyrl",
+    "mar-Deva",
+    "msa-Latn",
+    "mya-Mymr",
+    "nep-Deva",
+    "nld-Latn",
+    "nor-Latn",
+    "nob-Latn",
+    "nno-Latn",
+    "pan-Guru",
+    "pol-Latn",
+    "por-Latn",
+    "que-Latn",
+    "ron-Latn",
+    "rus-Cyrl",
+    "sin-Sinh",
+    "slk-Latn",
+    "slv-Latn",
+    "swa-Latn",
+    "tam-Taml",
+    "tel-Telu",
+    "tha-Thai",
+    "tgl-Latn",
+    "tur-Latn",
+    "ukr-Cyrl",
+    "urd-Arab",
+    "vie-Latn",
+    "yor-Latn",
+    "zho-Hans",
+]
 
 VOYAGE_TRAINING_DATA = set(
     # Self-reported (message from VoyageAI member)
@@ -150,7 +227,7 @@ class VoyageModel(AbsEncoder):
         sentences: list[str],
         batch_size: int,
         input_type: Literal["query", "document"],
-    ) -> np.ndarray:
+    ) -> Array:
         embeddings, index = [], 0
 
         output_dtype = VOYAGE_DTYPE_TRANSLATION.get(
@@ -789,6 +866,30 @@ voyage_3_exp = ModelMeta(
         "ArxivClusteringP2P.v2",
         "STSBenchmarkMultilingualSTS",  # translated, not trained on
     },
+    public_training_code=None,
+    public_training_data=None,
+)
+
+voyage_4_nano = ModelMeta(
+    loader=sentence_transformers_loader,
+    loader_kwargs={"trust_remote_code": True},
+    name="voyageai/voyage-4-nano",
+    model_type=["dense"],
+    revision="29e841f72aa70c2802a92aff8c6eeb23229591b0",
+    release_date="2026-01-15",
+    languages=VOYAGE_MULTILINGUAL_LANGUAGES,
+    open_weights=True,
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    n_parameters=346_451_968,
+    n_embedding_parameters=155_582_464,
+    memory_usage_mb=661,
+    max_tokens=32000,
+    embed_dim=2048,
+    license="apache-2.0",
+    reference="https://huggingface.co/voyageai/voyage-4-nano",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
 )

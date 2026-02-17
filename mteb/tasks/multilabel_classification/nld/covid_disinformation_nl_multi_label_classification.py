@@ -66,7 +66,7 @@ Yih, Scott Wen-tau},
         },
     )
 
-    def dataset_transform(self, num_proc: int = 1, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         labels = [
             "q2_label",
             "q3_label",

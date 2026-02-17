@@ -6,12 +6,11 @@ from typing import TYPE_CHECKING, Any
 import torch
 import torch.nn.functional as F
 from packaging.version import Version
-from tqdm import tqdm
+from tqdm.auto import tqdm
 from transformers import AutoModel, AutoTokenizer
 from transformers import __version__ as transformers_version
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import CrossEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
@@ -626,7 +625,7 @@ llama_embed_nemotron_8b = ModelMeta(
     revision="84a375593d27d3528beb4e104822515659e093b4",
     release_date="2025-10-23",
     n_parameters=7_504_924_672,
-    n_embedding_parameters=None,
+    n_embedding_parameters=525336576,
     memory_usage_mb=28629,
     embed_dim=4096,
     license="https://huggingface.co/nvidia/llama-embed-nemotron-8b/blob/main/LICENSE",

@@ -24,13 +24,13 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("2017-01-01", "2017-12-31"),
+        domains=["Fiction", "Non-fiction", "Written"],
+        task_subtypes=["Question answering"],
+        license="apache-2.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation=r"""
 @article{kocisky-etal-2018-narrativeqa,
   address = {Cambridge, MA},
@@ -57,7 +57,7 @@ Roark, Brian},
 """,
     )
 
-    def load_data(self, num_proc: int = 1, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
 

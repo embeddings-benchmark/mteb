@@ -9,12 +9,13 @@ from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
 
 from mteb._evaluators import ClusteringEvaluator
-from mteb.models import EncoderProtocol, MTEBModels
+from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
     SplitDescriptiveStatistics,
 )
 
 from ._statistics_calculation import (
+    calculate_audio_statistics,
     calculate_image_statistics,
     calculate_label_statistics,
     calculate_text_statistics,
@@ -27,6 +28,7 @@ if TYPE_CHECKING:
     from mteb.models import MTEBModels
     from mteb.types import EncodeKwargs, ScoresDict
     from mteb.types.statistics import (
+        AudioStatistics,
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
@@ -43,6 +45,7 @@ class ClusteringDescriptiveStatistics(SplitDescriptiveStatistics):
 
         text_statistics: Statistics for text
         image_statistics: Statistics for images
+        audio_statistics: Statistics for audio
         label_statistics: Statistics for labels
     """
 
@@ -50,6 +53,7 @@ class ClusteringDescriptiveStatistics(SplitDescriptiveStatistics):
 
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
+    audio_statistics: AudioStatistics | None
     label_statistics: LabelStatistics
 
 
@@ -95,7 +99,7 @@ class AbsTaskClusteringLegacy(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
         if not isinstance(model, EncoderProtocol):
@@ -227,12 +231,15 @@ class AbsTaskClusteringLegacy(AbsTask):
         if isinstance(labels[0], list):
             labels = [item for sublist in labels for item in sublist]
 
-        text_statistics, image_statistics = None, None
+        text_statistics, image_statistics, audio_statistics = None, None, None
         if "image" in self.metadata.modalities:
             image_statistics = calculate_image_statistics(inputs)
 
         if "text" in self.metadata.modalities:
             text_statistics = calculate_text_statistics(inputs)
+
+        if "audio" in self.metadata.modalities:
+            audio_statistics = calculate_audio_statistics(inputs)
 
         label_statistics = calculate_label_statistics(labels)
 
@@ -240,6 +247,7 @@ class AbsTaskClusteringLegacy(AbsTask):
             num_samples=len(inputs),
             text_statistics=text_statistics,
             image_statistics=image_statistics,
+            audio_statistics=audio_statistics,
             label_statistics=label_statistics,
         )
 

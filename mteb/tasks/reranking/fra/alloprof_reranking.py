@@ -19,10 +19,10 @@ class AlloprofReranking(AbsTaskRetrieval):
         main_score="map_at_1000",
         date=("2020-01-01", "2023-04-14"),  # supposition
         domains=["Web", "Academic", "Written"],
-        task_subtypes=None,
+        task_subtypes=["Question answering"],
         license="cc-by-nc-sa-4.0",
         annotations_creators="expert-annotated",
-        dialect=None,
+        dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
 @misc{lef23,

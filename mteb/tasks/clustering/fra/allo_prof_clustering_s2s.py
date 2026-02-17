@@ -25,7 +25,7 @@ class AlloProfClusteringS2S(AbsTaskClusteringLegacy):
         task_subtypes=["Thematic clustering"],
         license="mit",
         annotations_creators="human-annotated",
-        dialect=None,
+        dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
 @misc{lef23,

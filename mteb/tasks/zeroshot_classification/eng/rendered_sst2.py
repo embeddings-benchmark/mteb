@@ -10,8 +10,8 @@ class RenderedSST2(AbsTaskZeroShotClassification):
         description="RenderedSST2.",
         reference="https://huggingface.co/datasets/clip-benchmark/wds_renderedsst2",
         dataset={
-            "path": "clip-benchmark/wds_renderedsst2",
-            "revision": "66b9a461eda025201dd147e5f390f5984c33643a",
+            "path": "mteb/wds_renderedsst2",
+            "revision": "c10537bc389e9741a27f7b14767bd42f2b77476b",
         },
         type="ZeroShotClassification",
         category="i2t",

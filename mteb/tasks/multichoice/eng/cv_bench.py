@@ -97,8 +97,8 @@ class CVBenchCount(AbsTaskRetrieval):
         description="count the number of objects in the image.",
         reference="https://arxiv.org/pdf/2406.16860",
         dataset={
-            "path": "nyu-visionx/CV-Bench",
-            "revision": "22409a927ab5cf68e3655023d51694587455fc99",
+            "path": "mteb/CV-Bench",
+            "revision": "9926abb226c15b55dd8cce8c91cac1abf2326a61",
         },
         type="VisionCentricQA",
         category="it2t",
@@ -123,7 +123,7 @@ class CVBenchCount(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int = 1, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
@@ -139,8 +139,8 @@ class CVBenchRelation(AbsTaskRetrieval):
         description="decide the relation of the objects in the image.",
         reference="https://arxiv.org/pdf/2406.16860",
         dataset={
-            "path": "nyu-visionx/CV-Bench",
-            "revision": "22409a927ab5cf68e3655023d51694587455fc99",
+            "path": "mteb/CV-Bench",
+            "revision": "9926abb226c15b55dd8cce8c91cac1abf2326a61",
         },
         type="VisionCentricQA",
         category="it2t",
@@ -165,7 +165,7 @@ class CVBenchRelation(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int = 1, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
@@ -181,8 +181,8 @@ class CVBenchDepth(AbsTaskRetrieval):
         description="judge the depth of the objects in the image with similarity matching.",
         reference="https://arxiv.org/pdf/2406.16860",
         dataset={
-            "path": "nyu-visionx/CV-Bench",
-            "revision": "22409a927ab5cf68e3655023d51694587455fc99",
+            "path": "mteb/CV-Bench",
+            "revision": "9926abb226c15b55dd8cce8c91cac1abf2326a61",
         },
         type="VisionCentricQA",
         category="it2t",
@@ -207,7 +207,7 @@ class CVBenchDepth(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int = 1, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
@@ -223,8 +223,8 @@ class CVBenchDistance(AbsTaskRetrieval):
         description="judge the distance of the objects in the image with similarity matching.",
         reference="https://arxiv.org/pdf/2406.16860",
         dataset={
-            "path": "nyu-visionx/CV-Bench",
-            "revision": "22409a927ab5cf68e3655023d51694587455fc99",
+            "path": "mteb/CV-Bench",
+            "revision": "9926abb226c15b55dd8cce8c91cac1abf2326a61",
         },
         type="VisionCentricQA",
         category="it2t",
@@ -249,7 +249,7 @@ class CVBenchDistance(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int = 1, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,

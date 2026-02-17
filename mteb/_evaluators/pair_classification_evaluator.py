@@ -16,6 +16,7 @@ from mteb.similarity_functions import compute_pairwise_similarity
 
 if TYPE_CHECKING:
     from datasets import Dataset
+    from numpy.typing import NDArray
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
@@ -91,12 +92,12 @@ class PairClassificationEvaluator(Evaluator):
         self,
         model: EncoderProtocol,
         encode_kwargs: EncodeKwargs,
-        num_proc: int = 1,
+        num_proc: int | None = None,
     ) -> PairClassificationDistances:
         logger.info("Running pair classification - Encoding samples (1/2)")
         embeddings1 = model.encode(
             create_dataloader(
-                self.dataset,
+                self.dataset.select_columns(self.input1_column_name),
                 task_metadata=self.task_metadata,
                 input_column=self.input1_column_name,
                 num_proc=num_proc,
@@ -111,7 +112,7 @@ class PairClassificationEvaluator(Evaluator):
         logger.info("Running pair classification - Encoding samples (2/2)")
         embeddings2 = model.encode(
             create_dataloader(
-                self.dataset,
+                self.dataset.select_columns(self.input2_column_name),
                 task_metadata=self.task_metadata,
                 input_column=self.input2_column_name,
                 num_proc=num_proc,
@@ -155,7 +156,7 @@ class PairClassificationEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         **encode_kwargs: Any,
-    ) -> np.ndarray:
+    ) -> NDArray[np.floating]:
         index_map = {}
         all_unique_texts: list[str] = []
         all_texts_indexes = []

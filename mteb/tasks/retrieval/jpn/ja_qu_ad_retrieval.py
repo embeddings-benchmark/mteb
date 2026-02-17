@@ -22,7 +22,7 @@ class JaQuADRetrieval(AbsTaskRetrieval):
         task_subtypes=["Question answering"],
         license="cc-by-sa-3.0",
         annotations_creators="human-annotated",
-        dialect=None,
+        dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
 @misc{so2022jaquad,
