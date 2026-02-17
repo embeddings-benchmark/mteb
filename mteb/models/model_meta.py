@@ -416,7 +416,7 @@ class ModelMeta(BaseModel):
         return sentence_transformers_loader, "dense"
 
     @classmethod
-    def _create_empty(cls, overwrites: dict[str, Any] | None = None) -> Self:
+    def create_empty(cls, overwrites: dict[str, Any] | None = None) -> Self:
         """Creates an empty ModelMeta with all fields set to None or empty."""
         empty_model = cls(
             loader=None,
@@ -499,7 +499,7 @@ class ModelMeta(BaseModel):
             else model.model_card_data.base_model
         )
         n_parameters = cls._get_n_embedding_parameters_from_sentence_transformers(model)
-        return cls._create_empty(
+        return cls.create_empty(
             overwrites=dict(
                 name=name,
                 revision=model.model_card_data.base_model_revision,
@@ -554,7 +554,7 @@ class ModelMeta(BaseModel):
         """Generates a ModelMeta from only a CrossEncoder model, without fetching any additional metadata from HuggingFace Hub."""
         from mteb.models import CrossEncoderWrapper
 
-        return cls._create_empty(
+        return cls.create_empty(
             overwrites=dict(
                 loader=CrossEncoderWrapper,
                 name=model.model.name_or_path,
@@ -593,7 +593,7 @@ class ModelMeta(BaseModel):
             warnings.warn(
                 f"Could not find model {model_name} on HuggingFace Hub repository ({reference}). Metadata will be limited."
             )
-            return cls._create_empty(
+            return cls.create_empty(
                 overwrites=dict(
                     name=model_name,
                     revision=revision,
@@ -623,7 +623,7 @@ class ModelMeta(BaseModel):
         n_parameters = cls._calculate_num_parameters_from_hub(model_name)
         memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
 
-        embedding_dim = getattr(model_config, "embedding_dim", None)
+        embedding_dim = getattr(model_config, "hidden_size", None)
         max_tokens = getattr(model_config, "max_position_embeddings", None)
 
         sbert_config = _get_json_from_hub(
@@ -643,7 +643,7 @@ class ModelMeta(BaseModel):
             else ScoringFunction.COSINE
         )
 
-        return cls._create_empty(
+        return cls.create_empty(
             overwrites=dict(
                 loader=loader,
                 name=model_name,
