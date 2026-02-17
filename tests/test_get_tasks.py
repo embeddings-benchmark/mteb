@@ -1,3 +1,4 @@
+import difflib
 import re
 from collections import defaultdict
 from itertools import combinations
@@ -175,6 +176,37 @@ def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:
                     id_to_raw[id2],
                 )
             )
+
+    all_titles = set(by_title.keys())
+    for title, items in by_title.items():
+        if items[0][2] in (
+            "BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language",
+            "BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language",
+            "Introduction to the CoNLL-2002 Shared Task: Language-Independent Named Entity Recognition",
+            "Introduction to the CoNLL-2003 Shared Task: Language-Independent Named Entity Recognition",
+            "Overview of the TREC 2019 deep learning track",
+            "Overview of the TREC 2020 deep learning track",
+            "Overview of the TREC 2022 NeuCLIR track",
+            "Overview of the TREC 2023 NeuCLIR Track",
+            "MoD-Embedding: A Fine-tuned Multilingual Text Embedding Model",
+            "Octen-Embedding-8B: A Fine-tuned Multilingual Text Embedding Model",
+        ):
+            continue
+        use_titles = all_titles - {title}
+        close_matches = difflib.get_close_matches(title, use_titles, n=2, cutoff=0.9)
+        if close_matches:
+            close_match_items = by_title[close_matches[0]][0]
+            for item in items:
+                duplicates.append(
+                    (
+                        item[0],
+                        close_match_items[0],
+                        item[1],
+                        close_match_items[1],
+                        item[2],
+                        close_match_items[2],
+                    )
+                )
     return duplicates
 
 
@@ -182,7 +214,7 @@ def test_no_duplicate_citations_with_different_ids():
     """Ensure no task citations refer to the same paper under different BibTeX IDs."""
     duplicates = _get_duplicate_citations()
     assert not duplicates, (
-        "Found duplicate citations (same paper, different BibTeX IDs). "
+        f"Found {len(duplicates)} duplicate citations (same paper, different BibTeX IDs). "
         "Unify citation keys or titles so each paper is cited once.\n\n"
         + "\n\n".join(
             f"--- Duplicate {i}: {item1} / {item2} ---\n"

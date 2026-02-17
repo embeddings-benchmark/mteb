@@ -896,15 +896,23 @@ mt5_base_mmarco_v2 = ModelMeta(
     open_weights=True,
     revision="cc0a949b9f21efcaba45c8cabb998ad02ce8d4e7",
     release_date="2022-01-05",
-    citation="""@misc{bonifacio2021mmarco,
-      title={mMARCO: A Multilingual Version of MS MARCO Passage Ranking Dataset},
-      author={Luiz Henrique Bonifacio and Vitor Jeronymo and Hugo Queiroz Abonizio and Israel Campiotti and Marzieh Fadaee and  and Roberto Lotufo and Rodrigo Nogueira},
-      year={2021},
-      eprint={2108.13897},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-    }
-    """,
+    citation="""@article{DBLP:journals/corr/abs-2108-13897,
+  author = {Luiz Bonifacio and
+Israel Campiotti and
+Roberto de Alencar Lotufo and
+Rodrigo Frassetto Nogueira},
+  bibsource = {dblp computer science bibliography, https://dblp.org},
+  biburl = {https://dblp.org/rec/journals/corr/abs-2108-13897.bib},
+  eprint = {2108.13897},
+  eprinttype = {arXiv},
+  journal = {CoRR},
+  timestamp = {Mon, 20 Mar 2023 15:35:34 +0100},
+  title = {mMARCO: {A} Multilingual Version of {MS} {MARCO} Passage Ranking Dataset},
+  url = {https://arxiv.org/abs/2108.13897},
+  volume = {abs/2108.13897},
+  year = {2021},
+}
+""",
     training_datasets={"MSMARCO"},
     n_parameters=None,
     n_embedding_parameters=192_086_016,

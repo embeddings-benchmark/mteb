@@ -62,12 +62,20 @@ class MMarcoReranking(AbsTaskRetrieval):
         sample_creation=None,
         prompt="Given a Chinese search query, retrieve web passages that answer the question",
         bibtex_citation=r"""
-@misc{bonifacio2021mmarco,
-  archiveprefix = {arXiv},
-  author = {Luiz Henrique Bonifacio and Vitor Jeronymo and Hugo Queiroz Abonizio and Israel Campiotti and Marzieh Fadaee and  and Roberto Lotufo and Rodrigo Nogueira},
+@article{DBLP:journals/corr/abs-2108-13897,
+  author = {Luiz Bonifacio and
+Israel Campiotti and
+Roberto de Alencar Lotufo and
+Rodrigo Frassetto Nogueira},
+  bibsource = {dblp computer science bibliography, https://dblp.org},
+  biburl = {https://dblp.org/rec/journals/corr/abs-2108-13897.bib},
   eprint = {2108.13897},
-  primaryclass = {cs.CL},
-  title = {mMARCO: A Multilingual Version of MS MARCO Passage Ranking Dataset},
+  eprinttype = {arXiv},
+  journal = {CoRR},
+  timestamp = {Mon, 20 Mar 2023 15:35:34 +0100},
+  title = {mMARCO: {A} Multilingual Version of {MS} {MARCO} Passage Ranking Dataset},
+  url = {https://arxiv.org/abs/2108.13897},
+  volume = {abs/2108.13897},
   year = {2021},
 }
 """,
