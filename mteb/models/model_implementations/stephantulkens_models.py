@@ -10,7 +10,7 @@ TRAINING_DATA = {
     "MrTidyRetrieval",
 }
 
-CITAITON = """@software{Tulkens2025pyNIFE,
+CITATION = """@software{Tulkens2025pyNIFE,
   author       = {St\'{e}phan Tulkens},
   title        = {pyNIFE: nearly inference free embeddings in python},
   year         = {2025},
@@ -45,7 +45,7 @@ nife_gte_modernbert_base_as_router_meta = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["router"],
-    citation=CITAITON,
+    citation=CITATION,
     contacts=["stephantul"],
     adapted_from="Alibaba-NLP/gte-modernbert-base",
 )
@@ -76,6 +76,6 @@ nife_mxbai_embed_large_v1_as_router_meta = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["router"],
-    citation=CITAITON,
+    citation=CITATION,
     contacts=["stephantul"],
 )
