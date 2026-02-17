@@ -2891,7 +2891,8 @@ KOVIDORE_V2 = Benchmark(
 )
 
 MAEB_PLUS = Benchmark(
-    name="MAEB+",
+    name="MAEB+(beta)",
+    aliases=["MAEB+"],
     display_name="MAEB+",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
@@ -3011,8 +3012,9 @@ MAEB_PLUS = Benchmark(
 )
 
 MAEB_AUDIO = Benchmark(
-    name="MAEB(audio-only)",
-    display_name="Audio-Only",
+    name="MAEB(beta, audio-only)",
+    aliases=["MAEB(audio-only)"],
+    display_name="MAEB Audio-Only",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
@@ -3050,7 +3052,8 @@ MAEB_AUDIO = Benchmark(
 )
 
 MAEB_EXTENDED = Benchmark(
-    name="MAEB(extended)",
+    name="MAEB(beta, extended)",
+    aliases=["MAEB(extended)"],
     display_name="Extended",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
@@ -3165,9 +3168,9 @@ MAEB_EXTENDED = Benchmark(
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
-
 MAEB = Benchmark(
-    name="MAEB",
+    name="MAEB(beta)",
+    aliases=["MAEB"],
     display_name="MAEB",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
