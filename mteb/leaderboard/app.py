@@ -1,13 +1,14 @@
 from __future__ import annotations
 
+import hashlib
 import itertools
 import json
 import logging
+import secrets
 import tempfile
 import time
 import warnings
-from pathlib import Path
-from typing import TYPE_CHECKING, Literal, get_args
+from typing import Literal, get_args
 from urllib.parse import urlencode
 
 import cachetools
@@ -23,6 +24,7 @@ from mteb.leaderboard.benchmark_selector import (
     R_BENCHMARK_ENTRIES,
     _make_selector,
 )
+from mteb.leaderboard.event_logger import EventLogger
 from mteb.leaderboard.figures import _performance_size_plot, _radar_chart
 from mteb.leaderboard.table import (
     apply_per_language_styling_from_benchmark,
@@ -32,116 +34,12 @@ from mteb.leaderboard.table import (
 from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 from mteb.models.model_meta import MODEL_TYPES
 
-if TYPE_CHECKING:
-    from mteb import BenchmarkResults
-
 logger = logging.getLogger(__name__)
+event_logger = EventLogger()
 
 
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 MODEL_TYPE_CHOICES = list(get_args(MODEL_TYPES))
-
-
-def _load_results(cache: ResultCache) -> BenchmarkResults:
-    """Load benchmark results using an optimized caching strategy.
-
-    This function implements a two-tier caching strategy for faster leaderboard startup:
-
-    1. **Primary Strategy (Fast)**: Download pre-computed cached results from the
-       'cached-data' branch as a compressed JSON file (~2MB vs ~200MB full repo).
-       This avoids the need to clone the entire results repository and provides
-       near-instantaneous loading for most users.
-
-    2. **Fallback Strategy (Slower)**: If the cached download fails, fall back to
-       the original approach of downloading the full results repository and
-       building the cache from scratch.
-
-    The cached results file contains pre-aggregated benchmark data that eliminates
-    the need for expensive operations like task selection and revision joining
-    during app startup.
-
-    Args:
-        cache: ResultCache instance used for both optimized and fallback operations
-
-    Returns:
-        BenchmarkResults: Complete benchmark results ready for leaderboard display
-
-    Raises:
-        Various exceptions related to network issues, file I/O, or data validation
-        are logged and may cause fallback to the slower repository-based approach.
-    """
-    start_time = time.time()
-    results_cache_path = Path(__file__).parent.joinpath("__cached_results.json")
-
-    if not results_cache_path.exists():
-        # First try to download the cached results file from the cached-data branch
-        # This is faster than cloning the entire results repository
-        logger.info(
-            "Cached results not found, trying to download from cached-data branch..."
-        )
-
-        try:
-            # Use ResultCache's optimized download method
-            # Default saves to mteb/leaderboard/__cached_results.json
-            results_cache_path = cache._download_cached_results_from_branch()
-            download_time = time.time() - start_time
-            logger.info(
-                f"Downloaded cached results from cached-data branch in {download_time:.2f}s"
-            )
-
-        except Exception as e:
-            logger.error(
-                f"Failed to download from cached-data branch: {type(e).__name__}: {e}"
-            )
-            logger.info("Falling back to downloading full remote repository...")
-
-            # Fall back to the original approach: clone the full repo
-            cache.download_from_remote()
-            download_time = time.time() - start_time
-            logger.info(f"Downloaded remote results in {download_time:.2f}s")
-
-            load_start = time.time()
-            all_model_names = [model_meta.name for model_meta in mteb.get_model_metas()]
-
-            all_results = cache.load_results(
-                models=all_model_names,
-                only_main_score=True,
-                require_model_meta=False,
-                include_remote=True,
-            )
-            load_time = time.time() - load_start
-            logger.info(f"Loaded results from cache in {load_time:.2f}s")
-            return all_results
-
-    # Load the cached results file (either pre-existing or just downloaded)
-    logger.info("Loading cached results from disk...")
-    try:
-        logger.info(f"Opening file: {results_cache_path}")
-
-        file_size = results_cache_path.stat().st_size
-        logger.info(f"File exists, size: {file_size} bytes")
-
-        with results_cache_path.open() as cache_file:
-            logger.info("File opened successfully, attempting JSON parse...")
-            json_data = json.load(cache_file)
-            logger.info(
-                f"JSON parsed successfully, keys: {list(json_data.keys()) if isinstance(json_data, dict) else 'not a dict'}"
-            )
-
-        logger.info("Attempting BenchmarkResults.from_validated...")
-        results = mteb.BenchmarkResults.from_validated(**json_data)
-        logger.info("BenchmarkResults.from_validated successful")
-
-    except Exception as e:
-        # TODO: Handle the case when we fail to load cached results from disk.
-        logger.error(
-            f"Failed to load cached results from disk: {type(e).__name__}: {e}"
-        )
-        raise
-
-    total_time = time.time() - start_time
-    logger.info(f"Loaded cached results in {total_time:.2f}s")
-    return results
 
 
 def _produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
@@ -409,14 +307,115 @@ def _cache_update_task_list(
     return benchmark_tasks, tasks_to_keep
 
 
-def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
-    """Returns a Gradio Blocks app for the MTEB leaderboard."""
+def _generate_fingerprint_session_id(request: gr.Request) -> str:
+    """Generate a fallback session ID based on request fingerprint.
+
+    This is used when browser storage is unavailable (degraded mode). The fingerprint
+    is generated from IP address and browser characteristics to ensure the same user
+    gets a consistent session ID across page refreshes even without browser storage.
+
+    Args:
+        request: Gradio request object containing client info and headers
+
+    Returns:
+        A fingerprint-based session ID with 'fingerprint_' prefix
+    """
+    try:
+        # Collect browser fingerprint factors including IP
+        factors = [
+            request.client.host if request.client else "unknown",  # IP address
+            request.headers.get("user-agent", "unknown"),  # Browser info
+            request.headers.get("accept-language", "unknown"),  # Language preference
+        ]
+
+        # Create a hash of the fingerprint
+        fingerprint = "|".join(factors)
+        hash_value = hashlib.sha256(fingerprint.encode()).hexdigest()[:16]
+
+        return f"fingerprint_{hash_value}"
+    except Exception as e:
+        # If fingerprint generation fails, generate a temporary random ID
+        logger.warning(f"Failed to generate fingerprint session ID: {e}")
+        return f"temp_{secrets.token_hex(8)}"
+
+
+def on_page_load(session_data_json: str, request: gr.Request):
+    """Log page view with session tracking.
+
+    Handles two modes based on browser storage availability:
+    - Normal mode (localStorage available): Uses random token, persisted in browser
+    - Degraded mode (localStorage blocked): Uses fingerprint, regenerated but consistent
+
+    Args:
+        session_data_json: JSON string containing session data (with _storage_available flag)
+        request: Gradio request object for fingerprint generation
+
+    Returns:
+        Tuple of (updated JSON string with session data, session_id string)
+    """
+    # Parse existing session data
+    try:
+        session_data = json.loads(session_data_json) if session_data_json else {}
+    except json.JSONDecodeError:
+        logger.warning(f"Failed to parse session data JSON: {session_data_json}")
+        session_data = {}
+
+    # Check storage availability from JavaScript
+    storage_available = session_data.pop("_storage_available", False)
+
+    # Get or generate session_id based on storage availability
+    session_id = session_data.get("session_id", "")
+
+    if not session_id:
+        if storage_available:
+            # Normal mode: Generate random token that will be persisted
+            session_id = f"browser_{secrets.token_hex(16)}"
+            logger.info(f"Normal mode - generated session: {session_id[:20]}...")
+        else:
+            # Degraded mode: Generate fingerprint-based ID for consistency
+            session_id = _generate_fingerprint_session_id(request)
+            logger.warning(f"Degraded mode - using fingerprint: {session_id[:20]}...")
+
+    # Update session data
+    session_data.update(
+        {
+            "session_id": session_id,
+            "storage_available": storage_available,
+            "last_visit": time.time(),
+        }
+    )
+
+    # Log the page view
+    event_logger.log_page_view(
+        session_id=session_id,
+        benchmark=None,
+    )
+
+    # Return updated JSON string and extracted session_id
+    return json.dumps(session_data), session_id
+
+
+def get_leaderboard_app(
+    cache: ResultCache = ResultCache(), rebuild: bool = False
+) -> gr.Blocks:
+    """Returns a Gradio Blocks app for the MTEB leaderboard.
+
+    Args:
+        cache: ResultCache instance for managing benchmark data
+        rebuild: If True, bypasses any pre-computed JSON cache and forces a full rebuild
+                from the results repository. This clones/pulls the full results git repo,
+                builds BenchmarkResults from individual model files, and overwrites the
+                existing cache. Useful for ensuring the freshest data or debugging cache issues.
+
+    Returns:
+        gr.Blocks: A Gradio Blocks application configured with the MTEB leaderboard interface
+    """
     app_start = time.time()
     logger.info("=== Starting leaderboard app initialization ===")
 
     logger.info("Step 1/7: Loading all benchmark results...")
     load_start = time.time()
-    all_results = _load_results(cache)
+    all_results = cache._load_from_cache(rebuild=rebuild)
     load_time = time.time() - load_start
     logger.info(f"Step 1/7 complete: Loaded results in {load_time:.2f}s")
 
@@ -555,6 +554,58 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         title="MTEB Leaderboard",
         fill_width=True,
     ) as demo:
+        # Session tracking: Use State instead of BrowserState to avoid localStorage errors
+        # JavaScript will manually handle localStorage when available
+        session_data = gr.State("{}")
+        session_id = gr.State("")
+
+        # On page load: read from localStorage (if available) and initialize session
+        demo.load(
+            fn=on_page_load,
+            inputs=[session_data],
+            outputs=[session_data, session_id],
+            js="""
+            function(session_data) {
+                const STORAGE_KEY = '__mteb_session_data__';
+                let data = {};
+
+                // Try to read from localStorage
+                try {
+                    const stored = localStorage.getItem(STORAGE_KEY);
+                    if (stored) {
+                        data = JSON.parse(stored);
+                    }
+                    data._storage_available = true;
+                    window.__mteb_storage_available__ = true;
+                } catch(e) {
+                    console.warn('MTEB: localStorage unavailable, using fingerprint mode');
+                    data._storage_available = false;
+                    window.__mteb_storage_available__ = false;
+                }
+
+                return [JSON.stringify(data)];
+            }
+            """,
+        )
+
+        # After session is generated, save to localStorage if available
+        session_data.change(
+            fn=None,
+            inputs=[session_data],
+            js="""
+            function(session_data) {
+                if (window.__mteb_storage_available__) {
+                    try {
+                        localStorage.setItem('__mteb_session_data__', session_data);
+                    } catch(e) {
+                        console.warn('MTEB: Failed to save session to localStorage');
+                    }
+                }
+                return session_data;
+            }
+            """,
+        )
+
         with gr.Sidebar(
             position="left",
             label="Benchmark Selection and Customization",
@@ -738,7 +789,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         # This sets the benchmark from the URL query parameters
         demo.load(_set_benchmark_on_load, inputs=[], outputs=[benchmark_select])
 
-        def on_benchmark_select(benchmark_name):
+        def on_benchmark_select(benchmark_name, session_id=None):
             (
                 languages,
                 domains,
@@ -749,6 +800,12 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 show_zero_shot,
                 initial_models,
             ) = _cache_on_benchmark_select(benchmark_name, all_benchmark_results)
+
+            if session_id:
+                event_logger.log_benchmark_change(
+                    session_id=session_id, new_value=benchmark_name, old_value=None
+                )
+
             benchmark_results = all_benchmark_results[benchmark_name]
             eligible_task_types = {
                 task_type
@@ -770,7 +827,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
 
         benchmark_select.change(
             on_benchmark_select,
-            inputs=[benchmark_select],
+            inputs=[benchmark_select, session_id],
             outputs=[
                 lang_select,
                 domain_select,
@@ -822,11 +879,30 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         )
 
         def update_task_list(
-            benchmark_name, type_select, domain_select, lang_select, modality_select
+            benchmark_name,
+            type_select,
+            domain_select,
+            lang_select,
+            modality_select,
+            session_id=None,
         ):
             benchmark_tasks, tasks_to_keep = _cache_update_task_list(
                 benchmark_name, type_select, domain_select, lang_select, modality_select
             )
+            if session_id is not None:
+                event_logger.log_filter_change(
+                    session_id=session_id,
+                    filter_name="task_type",
+                    new_value=benchmark_name,
+                    old_value=None,  # Optional: previous value
+                    benchmark=benchmark_name,
+                    filters={  # Optional: snapshot of all filters
+                        "task_type": type_select,
+                        "domain": domain_select,
+                        "language": lang_select,
+                        "modality": modality_select,
+                    },
+                )
             return gr.update(choices=benchmark_tasks, value=tasks_to_keep)
 
         type_select.input(
@@ -837,6 +913,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 domain_select,
                 lang_select,
                 modality_select,
+                session_id,
             ],
             outputs=[task_select],
             preprocess=False,
@@ -849,6 +926,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 domain_select,
                 lang_select,
                 modality_select,
+                session_id,
             ],
             outputs=[task_select],
             preprocess=False,
@@ -861,6 +939,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 domain_select,
                 lang_select,
                 modality_select,
+                session_id,
             ],
             outputs=[task_select],
             preprocess=False,
@@ -873,6 +952,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 domain_select,
                 lang_select,
                 modality_select,
+                session_id,
             ],
             outputs=[task_select],
             preprocess=False,
@@ -887,7 +967,8 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             instructions,
             max_model_size,
             zero_shot,
-            model_type_select: hash(
+            model_type_select,
+            session_id: hash(
                 (
                     id(scores),
                     hash(tuple(tasks)),
@@ -909,6 +990,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             max_model_size: int,
             zero_shot: Literal["allow_all", "remove_unknown", "only_zero_shot"],
             model_type_select: list[str],
+            session_id,
         ):
             start_time = time.time()
             model_names = list({entry["model_name"] for entry in scores})
@@ -925,6 +1007,23 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             elapsed = time.time() - start_time
             logger.debug(f"update_models callback: {elapsed}s")
             # Always return sorted models to ensure models.change triggers update_tables
+            if session_id is not None:
+                event_logger.log_filter_change(
+                    session_id=session_id,
+                    filter_name="model_type",
+                    new_value=None,
+                    old_value=None,  # Optional: previous value
+                    benchmark=None,
+                    filters={  # Optional: snapshot of all filters
+                        "scores": scores,
+                        "tasks": tasks,
+                        "availability": availability,
+                        "compatibility": compatibility,
+                        "instructions": instructions,
+                        "max_model_size": max_model_size,
+                        "zero_shot": zero_shot,
+                    },
+                )
 
             return sorted(filtered_models)
 
@@ -939,6 +1038,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 max_model_size,
                 zero_shot,
                 model_type_select,
+                session_id,
             ],
             outputs=[models],
             preprocess=False,
@@ -955,6 +1055,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 max_model_size,
                 zero_shot,
                 model_type_select,
+                session_id,
             ],
             outputs=[models],
             preprocess=False,
@@ -970,6 +1071,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 max_model_size,
                 zero_shot,
                 model_type_select,
+                session_id,
             ],
             outputs=[models],
             preprocess=False,
@@ -985,6 +1087,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 max_model_size,
                 zero_shot,
                 model_type_select,
+                session_id,
             ],
             outputs=[models],
             preprocess=False,
@@ -1000,6 +1103,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 max_model_size,
                 zero_shot,
                 model_type_select,
+                session_id,
             ],
             outputs=[models],
             preprocess=False,
@@ -1015,6 +1119,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 max_model_size,
                 zero_shot,
                 model_type_select,
+                session_id,
             ],
             outputs=[models],
             preprocess=False,
@@ -1030,6 +1135,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 max_model_size,
                 zero_shot,
                 model_type_select,
+                session_id,
             ],
             outputs=[models],
             preprocess=False,
@@ -1045,6 +1151,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 max_model_size,
                 zero_shot,
                 model_type_select,
+                session_id,
             ],
             outputs=[models],
             preprocess=False,

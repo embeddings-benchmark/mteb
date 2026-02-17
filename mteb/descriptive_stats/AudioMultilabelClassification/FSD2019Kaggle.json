@@ -1,0 +1,1596 @@
+{
+    "test": {
+        "num_samples": 8962,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 92833.88,
+            "min_duration_seconds": 0.32,
+            "average_duration_seconds": 10.358611916982817,
+            "max_duration_seconds": 30.0,
+            "unique_audios": 4481,
+            "average_sampling_rate": 44100.0,
+            "sampling_rates": {
+                "44100": 8962
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.394777951350145,
+            "max_labels_per_text": 6,
+            "unique_labels": 80,
+            "labels": {
+                "Frying_(food)": {
+                    "count": 116
+                },
+                "Dishes_and_pots_and_pans": {
+                    "count": 194
+                },
+                "Finger_snapping": {
+                    "count": 130
+                },
+                "Cutlery_and_silverware": {
+                    "count": 176
+                },
+                "Chink_and_clink": {
+                    "count": 244
+                },
+                "Sink_(filling_or_washing)": {
+                    "count": 256
+                },
+                "Water_tap_and_faucet": {
+                    "count": 300
+                },
+                "Gurgling": {
+                    "count": 256
+                },
+                "Marimba_and_xylophone": {
+                    "count": 104
+                },
+                "Bass_guitar": {
+                    "count": 134
+                },
+                "Bass_drum": {
+                    "count": 172
+                },
+                "Knock": {
+                    "count": 168
+                },
+                "Male_speech_and_man_speaking": {
+                    "count": 300
+                },
+                "Applause": {
+                    "count": 214
+                },
+                "Clapping": {
+                    "count": 170
+                },
+                "Skateboard": {
+                    "count": 120
+                },
+                "Zipper_(clothing)": {
+                    "count": 216
+                },
+                "Female_speech_and_woman_speaking": {
+                    "count": 226
+                },
+                "Screaming": {
+                    "count": 168
+                },
+                "Crackle": {
+                    "count": 158
+                },
+                "Scissors": {
+                    "count": 110
+                },
+                "Drip": {
+                    "count": 230
+                },
+                "Fill_(with_liquid)": {
+                    "count": 150
+                },
+                "Gasp": {
+                    "count": 114
+                },
+                "Traffic_noise_and_roadway_noise": {
+                    "count": 180
+                },
+                "Microwave_oven": {
+                    "count": 140
+                },
+                "Tick-tock": {
+                    "count": 124
+                },
+                "Cheering": {
+                    "count": 218
+                },
+                "Accordion": {
+                    "count": 104
+                },
+                "Walk_and_footsteps": {
+                    "count": 160
+                },
+                "Run": {
+                    "count": 142
+                },
+                "Printer": {
+                    "count": 120
+                },
+                "Electric_guitar": {
+                    "count": 128
+                },
+                "Strum": {
+                    "count": 106
+                },
+                "Slam": {
+                    "count": 124
+                },
+                "Raindrop": {
+                    "count": 108
+                },
+                "Purr": {
+                    "count": 124
+                },
+                "Glockenspiel": {
+                    "count": 128
+                },
+                "Stream": {
+                    "count": 184
+                },
+                "Trickle_and_dribble": {
+                    "count": 300
+                },
+                "Car_passing_by": {
+                    "count": 202
+                },
+                "Keys_jangling": {
+                    "count": 148
+                },
+                "Writing": {
+                    "count": 194
+                },
+                "Tap": {
+                    "count": 284
+                },
+                "Waves_and_surf": {
+                    "count": 148
+                },
+                "Chirp_and_tweet": {
+                    "count": 148
+                },
+                "Cricket": {
+                    "count": 140
+                },
+                "Yell": {
+                    "count": 108
+                },
+                "Burping_and_eructation": {
+                    "count": 190
+                },
+                "Bark": {
+                    "count": 126
+                },
+                "Shatter": {
+                    "count": 126
+                },
+                "Motorcycle": {
+                    "count": 150
+                },
+                "Accelerating_and_revving_and_vroom": {
+                    "count": 130
+                },
+                "Mechanical_fan": {
+                    "count": 102
+                },
+                "Church_bell": {
+                    "count": 116
+                },
+                "Child_speech_and_kid_speaking": {
+                    "count": 142
+                },
+                "Hiss": {
+                    "count": 124
+                },
+                "Drawer_open_or_close": {
+                    "count": 144
+                },
+                "Chewing_and_mastication": {
+                    "count": 152
+                },
+                "Fart": {
+                    "count": 122
+                },
+                "Bus": {
+                    "count": 154
+                },
+                "Crowd": {
+                    "count": 266
+                },
+                "Gong": {
+                    "count": 140
+                },
+                "Whispering": {
+                    "count": 130
+                },
+                "Squeak": {
+                    "count": 146
+                },
+                "Sigh": {
+                    "count": 136
+                },
+                "Acoustic_guitar": {
+                    "count": 150
+                },
+                "Bathtub_(filling_or_washing)": {
+                    "count": 132
+                },
+                "Male_singing": {
+                    "count": 102
+                },
+                "Cupboard_open_or_close": {
+                    "count": 114
+                },
+                "Race_car_and_auto_racing": {
+                    "count": 130
+                },
+                "Bicycle_bell": {
+                    "count": 116
+                },
+                "Harmonica": {
+                    "count": 114
+                },
+                "Hi-hat": {
+                    "count": 114
+                },
+                "Female_singing": {
+                    "count": 116
+                },
+                "Computer_keyboard": {
+                    "count": 128
+                },
+                "Toilet_flush": {
+                    "count": 136
+                },
+                "Meow": {
+                    "count": 148
+                },
+                "Sneeze": {
+                    "count": 116
+                },
+                "Buzz": {
+                    "count": 100
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "curated": {
+                "num_samples": 4481,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": null,
+                "image_statistics": null,
+                "audio_statistics": {
+                    "total_duration_seconds": 46416.94,
+                    "min_duration_seconds": 0.32,
+                    "average_duration_seconds": 10.358611916982817,
+                    "max_duration_seconds": 30.0,
+                    "unique_audios": 4481,
+                    "average_sampling_rate": 44100.0,
+                    "sampling_rates": {
+                        "44100": 4481
+                    }
+                },
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.394777951350145,
+                    "max_labels_per_text": 6,
+                    "unique_labels": 80,
+                    "labels": {
+                        "Frying_(food)": {
+                            "count": 58
+                        },
+                        "Dishes_and_pots_and_pans": {
+                            "count": 97
+                        },
+                        "Finger_snapping": {
+                            "count": 65
+                        },
+                        "Cutlery_and_silverware": {
+                            "count": 88
+                        },
+                        "Chink_and_clink": {
+                            "count": 122
+                        },
+                        "Sink_(filling_or_washing)": {
+                            "count": 128
+                        },
+                        "Water_tap_and_faucet": {
+                            "count": 150
+                        },
+                        "Gurgling": {
+                            "count": 128
+                        },
+                        "Marimba_and_xylophone": {
+                            "count": 52
+                        },
+                        "Bass_guitar": {
+                            "count": 67
+                        },
+                        "Bass_drum": {
+                            "count": 86
+                        },
+                        "Knock": {
+                            "count": 84
+                        },
+                        "Male_speech_and_man_speaking": {
+                            "count": 150
+                        },
+                        "Applause": {
+                            "count": 107
+                        },
+                        "Clapping": {
+                            "count": 85
+                        },
+                        "Skateboard": {
+                            "count": 60
+                        },
+                        "Zipper_(clothing)": {
+                            "count": 108
+                        },
+                        "Female_speech_and_woman_speaking": {
+                            "count": 113
+                        },
+                        "Screaming": {
+                            "count": 84
+                        },
+                        "Crackle": {
+                            "count": 79
+                        },
+                        "Scissors": {
+                            "count": 55
+                        },
+                        "Drip": {
+                            "count": 115
+                        },
+                        "Fill_(with_liquid)": {
+                            "count": 75
+                        },
+                        "Gasp": {
+                            "count": 57
+                        },
+                        "Traffic_noise_and_roadway_noise": {
+                            "count": 90
+                        },
+                        "Microwave_oven": {
+                            "count": 70
+                        },
+                        "Tick-tock": {
+                            "count": 62
+                        },
+                        "Cheering": {
+                            "count": 109
+                        },
+                        "Accordion": {
+                            "count": 52
+                        },
+                        "Walk_and_footsteps": {
+                            "count": 80
+                        },
+                        "Run": {
+                            "count": 71
+                        },
+                        "Printer": {
+                            "count": 60
+                        },
+                        "Electric_guitar": {
+                            "count": 64
+                        },
+                        "Strum": {
+                            "count": 53
+                        },
+                        "Slam": {
+                            "count": 62
+                        },
+                        "Raindrop": {
+                            "count": 54
+                        },
+                        "Purr": {
+                            "count": 62
+                        },
+                        "Glockenspiel": {
+                            "count": 64
+                        },
+                        "Stream": {
+                            "count": 92
+                        },
+                        "Trickle_and_dribble": {
+                            "count": 150
+                        },
+                        "Car_passing_by": {
+                            "count": 101
+                        },
+                        "Keys_jangling": {
+                            "count": 74
+                        },
+                        "Writing": {
+                            "count": 97
+                        },
+                        "Tap": {
+                            "count": 142
+                        },
+                        "Waves_and_surf": {
+                            "count": 74
+                        },
+                        "Chirp_and_tweet": {
+                            "count": 74
+                        },
+                        "Cricket": {
+                            "count": 70
+                        },
+                        "Yell": {
+                            "count": 54
+                        },
+                        "Burping_and_eructation": {
+                            "count": 95
+                        },
+                        "Bark": {
+                            "count": 63
+                        },
+                        "Shatter": {
+                            "count": 63
+                        },
+                        "Motorcycle": {
+                            "count": 75
+                        },
+                        "Accelerating_and_revving_and_vroom": {
+                            "count": 65
+                        },
+                        "Mechanical_fan": {
+                            "count": 51
+                        },
+                        "Church_bell": {
+                            "count": 58
+                        },
+                        "Child_speech_and_kid_speaking": {
+                            "count": 71
+                        },
+                        "Hiss": {
+                            "count": 62
+                        },
+                        "Drawer_open_or_close": {
+                            "count": 72
+                        },
+                        "Chewing_and_mastication": {
+                            "count": 76
+                        },
+                        "Fart": {
+                            "count": 61
+                        },
+                        "Bus": {
+                            "count": 77
+                        },
+                        "Crowd": {
+                            "count": 133
+                        },
+                        "Gong": {
+                            "count": 70
+                        },
+                        "Whispering": {
+                            "count": 65
+                        },
+                        "Squeak": {
+                            "count": 73
+                        },
+                        "Sigh": {
+                            "count": 68
+                        },
+                        "Acoustic_guitar": {
+                            "count": 75
+                        },
+                        "Bathtub_(filling_or_washing)": {
+                            "count": 66
+                        },
+                        "Male_singing": {
+                            "count": 51
+                        },
+                        "Cupboard_open_or_close": {
+                            "count": 57
+                        },
+                        "Race_car_and_auto_racing": {
+                            "count": 65
+                        },
+                        "Bicycle_bell": {
+                            "count": 58
+                        },
+                        "Harmonica": {
+                            "count": 57
+                        },
+                        "Hi-hat": {
+                            "count": 57
+                        },
+                        "Female_singing": {
+                            "count": 58
+                        },
+                        "Computer_keyboard": {
+                            "count": 64
+                        },
+                        "Toilet_flush": {
+                            "count": 68
+                        },
+                        "Meow": {
+                            "count": 74
+                        },
+                        "Sneeze": {
+                            "count": 58
+                        },
+                        "Buzz": {
+                            "count": 50
+                        }
+                    }
+                }
+            },
+            "noisy": {
+                "num_samples": 4481,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": null,
+                "image_statistics": null,
+                "audio_statistics": {
+                    "total_duration_seconds": 46416.94,
+                    "min_duration_seconds": 0.32,
+                    "average_duration_seconds": 10.358611916982817,
+                    "max_duration_seconds": 30.0,
+                    "unique_audios": 4481,
+                    "average_sampling_rate": 44100.0,
+                    "sampling_rates": {
+                        "44100": 4481
+                    }
+                },
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.394777951350145,
+                    "max_labels_per_text": 6,
+                    "unique_labels": 80,
+                    "labels": {
+                        "Frying_(food)": {
+                            "count": 58
+                        },
+                        "Dishes_and_pots_and_pans": {
+                            "count": 97
+                        },
+                        "Finger_snapping": {
+                            "count": 65
+                        },
+                        "Cutlery_and_silverware": {
+                            "count": 88
+                        },
+                        "Chink_and_clink": {
+                            "count": 122
+                        },
+                        "Sink_(filling_or_washing)": {
+                            "count": 128
+                        },
+                        "Water_tap_and_faucet": {
+                            "count": 150
+                        },
+                        "Gurgling": {
+                            "count": 128
+                        },
+                        "Marimba_and_xylophone": {
+                            "count": 52
+                        },
+                        "Bass_guitar": {
+                            "count": 67
+                        },
+                        "Bass_drum": {
+                            "count": 86
+                        },
+                        "Knock": {
+                            "count": 84
+                        },
+                        "Male_speech_and_man_speaking": {
+                            "count": 150
+                        },
+                        "Applause": {
+                            "count": 107
+                        },
+                        "Clapping": {
+                            "count": 85
+                        },
+                        "Skateboard": {
+                            "count": 60
+                        },
+                        "Zipper_(clothing)": {
+                            "count": 108
+                        },
+                        "Female_speech_and_woman_speaking": {
+                            "count": 113
+                        },
+                        "Screaming": {
+                            "count": 84
+                        },
+                        "Crackle": {
+                            "count": 79
+                        },
+                        "Scissors": {
+                            "count": 55
+                        },
+                        "Drip": {
+                            "count": 115
+                        },
+                        "Fill_(with_liquid)": {
+                            "count": 75
+                        },
+                        "Gasp": {
+                            "count": 57
+                        },
+                        "Traffic_noise_and_roadway_noise": {
+                            "count": 90
+                        },
+                        "Microwave_oven": {
+                            "count": 70
+                        },
+                        "Tick-tock": {
+                            "count": 62
+                        },
+                        "Cheering": {
+                            "count": 109
+                        },
+                        "Accordion": {
+                            "count": 52
+                        },
+                        "Walk_and_footsteps": {
+                            "count": 80
+                        },
+                        "Run": {
+                            "count": 71
+                        },
+                        "Printer": {
+                            "count": 60
+                        },
+                        "Electric_guitar": {
+                            "count": 64
+                        },
+                        "Strum": {
+                            "count": 53
+                        },
+                        "Slam": {
+                            "count": 62
+                        },
+                        "Raindrop": {
+                            "count": 54
+                        },
+                        "Purr": {
+                            "count": 62
+                        },
+                        "Glockenspiel": {
+                            "count": 64
+                        },
+                        "Stream": {
+                            "count": 92
+                        },
+                        "Trickle_and_dribble": {
+                            "count": 150
+                        },
+                        "Car_passing_by": {
+                            "count": 101
+                        },
+                        "Keys_jangling": {
+                            "count": 74
+                        },
+                        "Writing": {
+                            "count": 97
+                        },
+                        "Tap": {
+                            "count": 142
+                        },
+                        "Waves_and_surf": {
+                            "count": 74
+                        },
+                        "Chirp_and_tweet": {
+                            "count": 74
+                        },
+                        "Cricket": {
+                            "count": 70
+                        },
+                        "Yell": {
+                            "count": 54
+                        },
+                        "Burping_and_eructation": {
+                            "count": 95
+                        },
+                        "Bark": {
+                            "count": 63
+                        },
+                        "Shatter": {
+                            "count": 63
+                        },
+                        "Motorcycle": {
+                            "count": 75
+                        },
+                        "Accelerating_and_revving_and_vroom": {
+                            "count": 65
+                        },
+                        "Mechanical_fan": {
+                            "count": 51
+                        },
+                        "Church_bell": {
+                            "count": 58
+                        },
+                        "Child_speech_and_kid_speaking": {
+                            "count": 71
+                        },
+                        "Hiss": {
+                            "count": 62
+                        },
+                        "Drawer_open_or_close": {
+                            "count": 72
+                        },
+                        "Chewing_and_mastication": {
+                            "count": 76
+                        },
+                        "Fart": {
+                            "count": 61
+                        },
+                        "Bus": {
+                            "count": 77
+                        },
+                        "Crowd": {
+                            "count": 133
+                        },
+                        "Gong": {
+                            "count": 70
+                        },
+                        "Whispering": {
+                            "count": 65
+                        },
+                        "Squeak": {
+                            "count": 73
+                        },
+                        "Sigh": {
+                            "count": 68
+                        },
+                        "Acoustic_guitar": {
+                            "count": 75
+                        },
+                        "Bathtub_(filling_or_washing)": {
+                            "count": 66
+                        },
+                        "Male_singing": {
+                            "count": 51
+                        },
+                        "Cupboard_open_or_close": {
+                            "count": 57
+                        },
+                        "Race_car_and_auto_racing": {
+                            "count": 65
+                        },
+                        "Bicycle_bell": {
+                            "count": 58
+                        },
+                        "Harmonica": {
+                            "count": 57
+                        },
+                        "Hi-hat": {
+                            "count": 57
+                        },
+                        "Female_singing": {
+                            "count": 58
+                        },
+                        "Computer_keyboard": {
+                            "count": 64
+                        },
+                        "Toilet_flush": {
+                            "count": 68
+                        },
+                        "Meow": {
+                            "count": 74
+                        },
+                        "Sneeze": {
+                            "count": 58
+                        },
+                        "Buzz": {
+                            "count": 50
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 24785,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 327140.5994557823,
+            "min_duration_seconds": 0.3,
+            "average_duration_seconds": 13.19913655258351,
+            "max_duration_seconds": 57.571179138321995,
+            "unique_audios": 24713,
+            "average_sampling_rate": 44100.0,
+            "sampling_rates": {
+                "44100": 24785
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.2004034698406294,
+            "max_labels_per_text": 7,
+            "unique_labels": 80,
+            "labels": {
+                "Chirp_and_tweet": {
+                    "count": 375
+                },
+                "Cricket": {
+                    "count": 375
+                },
+                "Skateboard": {
+                    "count": 375
+                },
+                "Crackle": {
+                    "count": 375
+                },
+                "Harmonica": {
+                    "count": 375
+                },
+                "Slam": {
+                    "count": 375
+                },
+                "Screaming": {
+                    "count": 375
+                },
+                "Yell": {
+                    "count": 375
+                },
+                "Computer_keyboard": {
+                    "count": 375
+                },
+                "Hi-hat": {
+                    "count": 375
+                },
+                "Buzz": {
+                    "count": 356
+                },
+                "Raindrop": {
+                    "count": 375
+                },
+                "Drawer_open_or_close": {
+                    "count": 375
+                },
+                "Knock": {
+                    "count": 375
+                },
+                "Run": {
+                    "count": 375
+                },
+                "Hiss": {
+                    "count": 375
+                },
+                "Bark": {
+                    "count": 375
+                },
+                "Tick-tock": {
+                    "count": 372
+                },
+                "Accordion": {
+                    "count": 347
+                },
+                "Applause": {
+                    "count": 375
+                },
+                "Crowd": {
+                    "count": 375
+                },
+                "Cheering": {
+                    "count": 375
+                },
+                "Printer": {
+                    "count": 375
+                },
+                "Car_passing_by": {
+                    "count": 375
+                },
+                "Motorcycle": {
+                    "count": 375
+                },
+                "Female_speech_and_woman_speaking": {
+                    "count": 375
+                },
+                "Acoustic_guitar": {
+                    "count": 375
+                },
+                "Microwave_oven": {
+                    "count": 375
+                },
+                "Finger_snapping": {
+                    "count": 375
+                },
+                "Meow": {
+                    "count": 375
+                },
+                "Bass_guitar": {
+                    "count": 375
+                },
+                "Fart": {
+                    "count": 375
+                },
+                "Waves_and_surf": {
+                    "count": 375
+                },
+                "Frying_(food)": {
+                    "count": 363
+                },
+                "Zipper_(clothing)": {
+                    "count": 375
+                },
+                "Bathtub_(filling_or_washing)": {
+                    "count": 375
+                },
+                "Scissors": {
+                    "count": 375
+                },
+                "Toilet_flush": {
+                    "count": 375
+                },
+                "Whispering": {
+                    "count": 375
+                },
+                "Bus": {
+                    "count": 375
+                },
+                "Cupboard_open_or_close": {
+                    "count": 375
+                },
+                "Church_bell": {
+                    "count": 375
+                },
+                "Marimba_and_xylophone": {
+                    "count": 375
+                },
+                "Chewing_and_mastication": {
+                    "count": 375
+                },
+                "Traffic_noise_and_roadway_noise": {
+                    "count": 375
+                },
+                "Fill_(with_liquid)": {
+                    "count": 350
+                },
+                "Water_tap_and_faucet": {
+                    "count": 375
+                },
+                "Bass_drum": {
+                    "count": 375
+                },
+                "Mechanical_fan": {
+                    "count": 349
+                },
+                "Dishes_and_pots_and_pans": {
+                    "count": 375
+                },
+                "Sink_(filling_or_washing)": {
+                    "count": 375
+                },
+                "Chink_and_clink": {
+                    "count": 375
+                },
+                "Child_speech_and_kid_speaking": {
+                    "count": 375
+                },
+                "Purr": {
+                    "count": 365
+                },
+                "Male_singing": {
+                    "count": 375
+                },
+                "Trickle_and_dribble": {
+                    "count": 353
+                },
+                "Bicycle_bell": {
+                    "count": 367
+                },
+                "Sneeze": {
+                    "count": 363
+                },
+                "Gasp": {
+                    "count": 348
+                },
+                "Strum": {
+                    "count": 375
+                },
+                "Stream": {
+                    "count": 375
+                },
+                "Shatter": {
+                    "count": 375
+                },
+                "Writing": {
+                    "count": 375
+                },
+                "Female_singing": {
+                    "count": 375
+                },
+                "Sigh": {
+                    "count": 357
+                },
+                "Burping_and_eructation": {
+                    "count": 375
+                },
+                "Gong": {
+                    "count": 375
+                },
+                "Glockenspiel": {
+                    "count": 356
+                },
+                "Race_car_and_auto_racing": {
+                    "count": 356
+                },
+                "Drip": {
+                    "count": 375
+                },
+                "Electric_guitar": {
+                    "count": 375
+                },
+                "Tap": {
+                    "count": 375
+                },
+                "Walk_and_footsteps": {
+                    "count": 375
+                },
+                "Gurgling": {
+                    "count": 375
+                },
+                "Clapping": {
+                    "count": 375
+                },
+                "Squeak": {
+                    "count": 375
+                },
+                "Cutlery_and_silverware": {
+                    "count": 375
+                },
+                "Male_speech_and_man_speaking": {
+                    "count": 375
+                },
+                "Keys_jangling": {
+                    "count": 375
+                },
+                "Accelerating_and_revving_and_vroom": {
+                    "count": 375
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "curated": {
+                "num_samples": 4970,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": null,
+                "image_statistics": null,
+                "audio_statistics": {
+                    "total_duration_seconds": 38008.942131519274,
+                    "min_duration_seconds": 0.3,
+                    "average_duration_seconds": 7.647674473142711,
+                    "max_duration_seconds": 57.571179138321995,
+                    "unique_audios": 4969,
+                    "average_sampling_rate": 44100.0,
+                    "sampling_rates": {
+                        "44100": 4970
+                    }
+                },
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.157344064386318,
+                    "max_labels_per_text": 6,
+                    "unique_labels": 80,
+                    "labels": {
+                        "Chirp_and_tweet": {
+                            "count": 75
+                        },
+                        "Cricket": {
+                            "count": 75
+                        },
+                        "Skateboard": {
+                            "count": 75
+                        },
+                        "Crackle": {
+                            "count": 75
+                        },
+                        "Harmonica": {
+                            "count": 75
+                        },
+                        "Slam": {
+                            "count": 75
+                        },
+                        "Screaming": {
+                            "count": 75
+                        },
+                        "Yell": {
+                            "count": 75
+                        },
+                        "Computer_keyboard": {
+                            "count": 75
+                        },
+                        "Hi-hat": {
+                            "count": 75
+                        },
+                        "Buzz": {
+                            "count": 56
+                        },
+                        "Raindrop": {
+                            "count": 75
+                        },
+                        "Drawer_open_or_close": {
+                            "count": 75
+                        },
+                        "Knock": {
+                            "count": 75
+                        },
+                        "Run": {
+                            "count": 75
+                        },
+                        "Hiss": {
+                            "count": 75
+                        },
+                        "Bark": {
+                            "count": 75
+                        },
+                        "Tick-tock": {
+                            "count": 72
+                        },
+                        "Accordion": {
+                            "count": 47
+                        },
+                        "Applause": {
+                            "count": 75
+                        },
+                        "Crowd": {
+                            "count": 75
+                        },
+                        "Cheering": {
+                            "count": 75
+                        },
+                        "Printer": {
+                            "count": 75
+                        },
+                        "Car_passing_by": {
+                            "count": 75
+                        },
+                        "Motorcycle": {
+                            "count": 75
+                        },
+                        "Female_speech_and_woman_speaking": {
+                            "count": 75
+                        },
+                        "Acoustic_guitar": {
+                            "count": 75
+                        },
+                        "Microwave_oven": {
+                            "count": 75
+                        },
+                        "Finger_snapping": {
+                            "count": 75
+                        },
+                        "Meow": {
+                            "count": 75
+                        },
+                        "Bass_guitar": {
+                            "count": 75
+                        },
+                        "Fart": {
+                            "count": 75
+                        },
+                        "Waves_and_surf": {
+                            "count": 75
+                        },
+                        "Frying_(food)": {
+                            "count": 63
+                        },
+                        "Zipper_(clothing)": {
+                            "count": 75
+                        },
+                        "Bathtub_(filling_or_washing)": {
+                            "count": 75
+                        },
+                        "Scissors": {
+                            "count": 75
+                        },
+                        "Toilet_flush": {
+                            "count": 75
+                        },
+                        "Whispering": {
+                            "count": 75
+                        },
+                        "Bus": {
+                            "count": 75
+                        },
+                        "Cupboard_open_or_close": {
+                            "count": 75
+                        },
+                        "Church_bell": {
+                            "count": 75
+                        },
+                        "Marimba_and_xylophone": {
+                            "count": 75
+                        },
+                        "Chewing_and_mastication": {
+                            "count": 75
+                        },
+                        "Traffic_noise_and_roadway_noise": {
+                            "count": 75
+                        },
+                        "Fill_(with_liquid)": {
+                            "count": 50
+                        },
+                        "Water_tap_and_faucet": {
+                            "count": 75
+                        },
+                        "Bass_drum": {
+                            "count": 75
+                        },
+                        "Mechanical_fan": {
+                            "count": 49
+                        },
+                        "Dishes_and_pots_and_pans": {
+                            "count": 75
+                        },
+                        "Sink_(filling_or_washing)": {
+                            "count": 75
+                        },
+                        "Chink_and_clink": {
+                            "count": 75
+                        },
+                        "Child_speech_and_kid_speaking": {
+                            "count": 75
+                        },
+                        "Purr": {
+                            "count": 65
+                        },
+                        "Male_singing": {
+                            "count": 75
+                        },
+                        "Trickle_and_dribble": {
+                            "count": 53
+                        },
+                        "Bicycle_bell": {
+                            "count": 67
+                        },
+                        "Sneeze": {
+                            "count": 63
+                        },
+                        "Gasp": {
+                            "count": 48
+                        },
+                        "Strum": {
+                            "count": 75
+                        },
+                        "Stream": {
+                            "count": 75
+                        },
+                        "Shatter": {
+                            "count": 75
+                        },
+                        "Writing": {
+                            "count": 75
+                        },
+                        "Female_singing": {
+                            "count": 75
+                        },
+                        "Sigh": {
+                            "count": 57
+                        },
+                        "Burping_and_eructation": {
+                            "count": 75
+                        },
+                        "Gong": {
+                            "count": 75
+                        },
+                        "Glockenspiel": {
+                            "count": 56
+                        },
+                        "Race_car_and_auto_racing": {
+                            "count": 56
+                        },
+                        "Drip": {
+                            "count": 75
+                        },
+                        "Electric_guitar": {
+                            "count": 75
+                        },
+                        "Tap": {
+                            "count": 75
+                        },
+                        "Walk_and_footsteps": {
+                            "count": 75
+                        },
+                        "Gurgling": {
+                            "count": 75
+                        },
+                        "Clapping": {
+                            "count": 75
+                        },
+                        "Squeak": {
+                            "count": 75
+                        },
+                        "Cutlery_and_silverware": {
+                            "count": 75
+                        },
+                        "Male_speech_and_man_speaking": {
+                            "count": 75
+                        },
+                        "Keys_jangling": {
+                            "count": 75
+                        },
+                        "Accelerating_and_revving_and_vroom": {
+                            "count": 75
+                        }
+                    }
+                }
+            },
+            "noisy": {
+                "num_samples": 19815,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": null,
+                "image_statistics": null,
+                "audio_statistics": {
+                    "total_duration_seconds": 289131.657324263,
+                    "min_duration_seconds": 1.0448979591836736,
+                    "average_duration_seconds": 14.591554747628717,
+                    "max_duration_seconds": 15.998548752834466,
+                    "unique_audios": 19744,
+                    "average_sampling_rate": 44100.0,
+                    "sampling_rates": {
+                        "44100": 19815
+                    }
+                },
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.2112036336109009,
+                    "max_labels_per_text": 7,
+                    "unique_labels": 80,
+                    "labels": {
+                        "Female_singing": {
+                            "count": 300
+                        },
+                        "Bus": {
+                            "count": 300
+                        },
+                        "Traffic_noise_and_roadway_noise": {
+                            "count": 300
+                        },
+                        "Cricket": {
+                            "count": 300
+                        },
+                        "Marimba_and_xylophone": {
+                            "count": 300
+                        },
+                        "Squeak": {
+                            "count": 300
+                        },
+                        "Screaming": {
+                            "count": 300
+                        },
+                        "Buzz": {
+                            "count": 300
+                        },
+                        "Sneeze": {
+                            "count": 300
+                        },
+                        "Mechanical_fan": {
+                            "count": 300
+                        },
+                        "Gong": {
+                            "count": 300
+                        },
+                        "Chink_and_clink": {
+                            "count": 300
+                        },
+                        "Bathtub_(filling_or_washing)": {
+                            "count": 300
+                        },
+                        "Male_singing": {
+                            "count": 300
+                        },
+                        "Strum": {
+                            "count": 300
+                        },
+                        "Glockenspiel": {
+                            "count": 300
+                        },
+                        "Acoustic_guitar": {
+                            "count": 300
+                        },
+                        "Bark": {
+                            "count": 300
+                        },
+                        "Motorcycle": {
+                            "count": 300
+                        },
+                        "Crackle": {
+                            "count": 300
+                        },
+                        "Bicycle_bell": {
+                            "count": 300
+                        },
+                        "Fart": {
+                            "count": 300
+                        },
+                        "Female_speech_and_woman_speaking": {
+                            "count": 300
+                        },
+                        "Tick-tock": {
+                            "count": 300
+                        },
+                        "Meow": {
+                            "count": 300
+                        },
+                        "Male_speech_and_man_speaking": {
+                            "count": 300
+                        },
+                        "Bass_guitar": {
+                            "count": 300
+                        },
+                        "Zipper_(clothing)": {
+                            "count": 300
+                        },
+                        "Scissors": {
+                            "count": 300
+                        },
+                        "Knock": {
+                            "count": 300
+                        },
+                        "Microwave_oven": {
+                            "count": 300
+                        },
+                        "Hiss": {
+                            "count": 300
+                        },
+                        "Gasp": {
+                            "count": 300
+                        },
+                        "Walk_and_footsteps": {
+                            "count": 300
+                        },
+                        "Tap": {
+                            "count": 300
+                        },
+                        "Slam": {
+                            "count": 300
+                        },
+                        "Yell": {
+                            "count": 300
+                        },
+                        "Run": {
+                            "count": 300
+                        },
+                        "Printer": {
+                            "count": 300
+                        },
+                        "Waves_and_surf": {
+                            "count": 300
+                        },
+                        "Church_bell": {
+                            "count": 300
+                        },
+                        "Fill_(with_liquid)": {
+                            "count": 300
+                        },
+                        "Drip": {
+                            "count": 300
+                        },
+                        "Skateboard": {
+                            "count": 300
+                        },
+                        "Drawer_open_or_close": {
+                            "count": 300
+                        },
+                        "Accordion": {
+                            "count": 300
+                        },
+                        "Water_tap_and_faucet": {
+                            "count": 300
+                        },
+                        "Toilet_flush": {
+                            "count": 300
+                        },
+                        "Sink_(filling_or_washing)": {
+                            "count": 300
+                        },
+                        "Writing": {
+                            "count": 300
+                        },
+                        "Trickle_and_dribble": {
+                            "count": 300
+                        },
+                        "Dishes_and_pots_and_pans": {
+                            "count": 300
+                        },
+                        "Cutlery_and_silverware": {
+                            "count": 300
+                        },
+                        "Frying_(food)": {
+                            "count": 300
+                        },
+                        "Applause": {
+                            "count": 300
+                        },
+                        "Shatter": {
+                            "count": 300
+                        },
+                        "Burping_and_eructation": {
+                            "count": 300
+                        },
+                        "Harmonica": {
+                            "count": 300
+                        },
+                        "Keys_jangling": {
+                            "count": 300
+                        },
+                        "Whispering": {
+                            "count": 300
+                        },
+                        "Clapping": {
+                            "count": 300
+                        },
+                        "Child_speech_and_kid_speaking": {
+                            "count": 300
+                        },
+                        "Gurgling": {
+                            "count": 300
+                        },
+                        "Crowd": {
+                            "count": 300
+                        },
+                        "Purr": {
+                            "count": 300
+                        },
+                        "Computer_keyboard": {
+                            "count": 300
+                        },
+                        "Chirp_and_tweet": {
+                            "count": 300
+                        },
+                        "Cheering": {
+                            "count": 300
+                        },
+                        "Accelerating_and_revving_and_vroom": {
+                            "count": 300
+                        },
+                        "Chewing_and_mastication": {
+                            "count": 300
+                        },
+                        "Raindrop": {
+                            "count": 300
+                        },
+                        "Bass_drum": {
+                            "count": 300
+                        },
+                        "Sigh": {
+                            "count": 300
+                        },
+                        "Electric_guitar": {
+                            "count": 300
+                        },
+                        "Cupboard_open_or_close": {
+                            "count": 300
+                        },
+                        "Race_car_and_auto_racing": {
+                            "count": 300
+                        },
+                        "Car_passing_by": {
+                            "count": 300
+                        },
+                        "Hi-hat": {
+                            "count": 300
+                        },
+                        "Finger_snapping": {
+                            "count": 300
+                        },
+                        "Stream": {
+                            "count": 300
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -5,7 +5,7 @@ install:
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	uv sync --no-editable --extra bm25s --extra pylate --extra image --extra codecarbon --extra leaderboard --extra faiss-cpu --group dev
+	uv sync --no-editable --extra bm25s --extra image --extra audio --extra codecarbon --extra leaderboard --extra faiss-cpu --group dev
 
 lint:
 	@echo "--- 🧹 Running linters ---"
@@ -77,7 +77,7 @@ leaderboard-test-all:
 
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
-	uv run --extra leaderboard python -m mteb.leaderboard.app
+	uv run --no-sync --extra leaderboard python -m mteb.leaderboard.app
 
 format-citations:
 	@echo "--- 🧹 Formatting citations ---"

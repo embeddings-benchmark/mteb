@@ -8,8 +8,6 @@ Examples:
     TaskP2PEncoder.py     -> task_p2p_encoder.py
 """
 
-from __future__ import annotations
-
 import argparse
 import re
 from pathlib import Path
@@ -30,6 +28,12 @@ FIXED_TOKENS: list[str] = [
     "i2c",
     "i2t",
     "t2i",
+    "at2t",
+    "at2a",
+    "a2at",
+    "t2at",
+    "at2at",
+    "a2a",
 ]
 
 
