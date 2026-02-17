@@ -29,7 +29,6 @@ from huggingface_hub.errors import (
 )
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 from sentence_transformers import CrossEncoder, SentenceTransformer
-from sentence_transformers.models import Transformer
 from transformers import AutoConfig
 
 from mteb._helpful_enum import HelpfulStrEnum
@@ -535,11 +534,16 @@ class ModelMeta(BaseModel):
             emb = model.model.get_input_embeddings()
             return int(np.prod(emb.weight.shape))
         elif isinstance(model, SentenceTransformer):
-            vocab = len(model.tokenizer.vocab)
+            vocab = None
+            try:
+                vocab = len(model.tokenizer.vocab)
+            except Exception as e:
+                msg = f"Could not determine vocab size for model {model.model_card_data.model_name} and therefore cannot calculate number of embedding parameters. \nError: \n{e}"
+                logger.warning(msg)
             embedding_dimensions = model.get_sentence_embedding_dimension()
-            if embedding_dimensions is not None:
+            if embedding_dimensions is not None and vocab is not None:
                 return vocab * embedding_dimensions
-        
+
         logger.warning(
             f"Model does not have a recognized architecture for calculating embedding parameters (model={model.model_card_data.model_name})."
         )
