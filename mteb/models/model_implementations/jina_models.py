@@ -732,15 +732,6 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
-        from sentence_transformers import __version__ as st_version
-
-        current_sentence_transformers_version = tuple(map(int, st_version.split(".")))
-
-        if current_sentence_transformers_version < MIN_SENTENCE_TRANSFORMERS_VERSION:
-            raise RuntimeError(
-                f"sentence_transformers version {st_version} is lower than the required version 3.1.0"
-            )
-
         super().__init__(
             model, revision, device=device, model_prompts=model_prompts, **kwargs
         )
@@ -781,8 +772,6 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
             sentences, task=task, prompt_name=prompt_name, **kwargs
         )
 
-        if isinstance(embeddings, torch.Tensor):
-            embeddings = embeddings.cpu().detach().float().numpy()
         return embeddings
 
 
