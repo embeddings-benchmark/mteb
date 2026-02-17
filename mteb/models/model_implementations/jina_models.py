@@ -15,13 +15,14 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
