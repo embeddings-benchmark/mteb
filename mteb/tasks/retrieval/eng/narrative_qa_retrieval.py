@@ -32,13 +32,27 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{kočiský2017narrativeqa,
-  archiveprefix = {arXiv},
-  author = {Tomáš Kočiský and Jonathan Schwarz and Phil Blunsom and Chris Dyer and Karl Moritz Hermann and Gábor Melis and Edward Grefenstette},
-  eprint = {1712.07040},
-  primaryclass = {cs.CL},
-  title = {The NarrativeQA Reading Comprehension Challenge},
-  year = {2017},
+@article{kocisky-etal-2018-narrativeqa,
+  address = {Cambridge, MA},
+  author = {Ko{\v{c}}isk{\'y}, Tom{\'a}{\v{s}}  and
+Schwarz, Jonathan  and
+Blunsom, Phil  and
+Dyer, Chris  and
+Hermann, Karl Moritz  and
+Melis, G{\'a}bor  and
+Grefenstette, Edward},
+  doi = {10.1162/tacl_a_00023},
+  editor = {Lee, Lillian  and
+Johnson, Mark  and
+Toutanova, Kristina  and
+Roark, Brian},
+  journal = {Transactions of the Association for Computational Linguistics},
+  pages = {317--328},
+  publisher = {MIT Press},
+  title = {The {N}arrative{QA} Reading Comprehension Challenge},
+  url = {https://aclanthology.org/Q18-1023},
+  volume = {6},
+  year = {2018},
 }
 """,
     )

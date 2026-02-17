@@ -73,12 +73,13 @@ class MMarcoRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@misc{xiao2024cpack,
+@misc{xiao2024cpackpackagedresourcesadvance,
   archiveprefix = {arXiv},
   author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
   eprint = {2309.07597},
   primaryclass = {cs.CL},
   title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
+  url = {https://arxiv.org/abs/2309.07597},
   year = {2024},
 }
 """,
@@ -111,12 +112,13 @@ class DuRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{qiu2022dureaderretrieval,
+@misc{qiu2022dureaderretrievallargescalechinesebenchmark,
   archiveprefix = {arXiv},
   author = {Yifu Qiu and Hongyu Li and Yingqi Qu and Ying Chen and Qiaoqiao She and Jing Liu and Hua Wu and Haifeng Wang},
   eprint = {2203.10232},
   primaryclass = {cs.CL},
   title = {DuReader_retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine},
+  url = {https://arxiv.org/abs/2203.10232},
   year = {2022},
 }
 """,

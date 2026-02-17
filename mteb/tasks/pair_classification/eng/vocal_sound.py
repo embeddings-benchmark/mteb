@@ -25,12 +25,14 @@ class VocalSoundPairClassification(AbsTaskPairClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{inproceedings,
+@inproceedings{Gong_2022,
   author = {Gong, Yuan and Yu, Jin and Glass, James},
-  doi = {10.1109/ICASSP43922.2022.9746828},
-  month = {05},
-  pages = {151-155},
+  booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp43922.2022.9746828},
+  month = may,
+  publisher = {IEEE},
   title = {Vocalsound: A Dataset for Improving Human Vocal Sounds Recognition},
+  url = {http://dx.doi.org/10.1109/ICASSP43922.2022.9746828},
   year = {2022},
 }
 """,
