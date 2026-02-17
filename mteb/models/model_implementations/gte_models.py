@@ -439,7 +439,7 @@ gte_base_en_v15 = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2407.19669},
 }
-@misc{li2023gte,
+@misc{li2023towards,
   title={Towards General Text Embeddings with Multi-stage Contrastive Learning},
   author={Zehan Li and Xin Zhang and Yanzhao Zhang and Dingkun Long and Pengjun Xie and Meishan Zhang},
   year={2023},

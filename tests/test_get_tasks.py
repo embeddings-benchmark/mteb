@@ -8,13 +8,8 @@ import mteb
 from mteb import get_task, get_tasks
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskType
-from mteb.get_tasks import MTEBTasks, _gather_tasks
+from mteb.get_tasks import MTEBTasks
 from mteb.types import Modalities
-
-
-@pytest.fixture
-def all_tasks():
-    return get_tasks()
 
 
 @pytest.mark.parametrize(
@@ -141,24 +136,39 @@ def _normalize_title_for_comparison(title: str) -> str:
 def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:
     """Same paper under different bibtex ids -> (task1, task2, id1, id2, raw_title_1, raw_title_2)."""
     by_title: dict[str, list[tuple[str, str, str]]] = defaultdict(list)
-    for task_cls in _gather_tasks():
-        if task_cls.metadata.bibtex_citation is not None:
-            for cid, title in _parse_bibtex_entries(task_cls.metadata.bibtex_citation):
-                norm = _normalize_title_for_comparison(title)
-                by_title[norm].append((task_cls.metadata.name, cid, title))
+    for task_cls in mteb.get_tasks():
+        if task_cls.metadata.bibtex_citation is None:
+            continue
+        for cid, title in _parse_bibtex_entries(task_cls.metadata.bibtex_citation):
+            norm = _normalize_title_for_comparison(title)
+            by_title[norm].append((f"task:{task_cls.metadata.name}", cid, title))
 
-    duplicates: list[tuple[str, str, str, str, str, str]] = []
+    for model_meta in mteb.get_model_metas():
+        if model_meta.citation is None:
+            continue
+        for cid, title in _parse_bibtex_entries(model_meta.citation):
+            norm = _normalize_title_for_comparison(title)
+            by_title[norm].append((f"model:{model_meta.name}", cid, title))
+
+    for benchmark in mteb.get_benchmarks():
+        if benchmark.citation is None:
+            continue
+        for cid, title in _parse_bibtex_entries(benchmark.citation):
+            norm = _normalize_title_for_comparison(title)
+            by_title[norm].append((f"benchmark:{benchmark.name}", cid, title))
+
+    duplicates = []
     for norm_title, items in by_title.items():
         id_to_raw = {cid: raw for _, cid, raw in items}
-        id_to_task = {cid: task for task, cid, raw in items}
+        id_to_item = {cid: item for item, cid, raw in items}
         if len(id_to_raw) < 2:
             continue
         unique_ids = sorted(id_to_raw)
         for id1, id2 in combinations(unique_ids, 2):
             duplicates.append(
                 (
-                    id_to_task[id1],
-                    id_to_task[id2],
+                    id_to_item[id1],
+                    id_to_item[id2],
                     id1,
                     id2,
                     id_to_raw[id1],
@@ -175,9 +185,9 @@ def test_no_duplicate_citations_with_different_ids():
         "Found duplicate citations (same paper, different BibTeX IDs). "
         "Unify citation keys or titles so each paper is cited once.\n\n"
         + "\n\n".join(
-            f"--- Duplicate {i}: {task1} / {task2} ---\n"
-            f"  id1 = {id1!r} (task: {task1})\n      title: {title1}\n"
-            f"  id2 = {id2!r} (task: {task2})\n      title: {title2}"
-            for i, (task1, task2, id1, id2, title1, title2) in enumerate(duplicates, 1)
+            f"--- Duplicate {i}: {item1} / {item2} ---\n"
+            f"  id1 = {id1!r} ({item1})\n      title: {title1}\n"
+            f"  id2 = {id2!r} ({item2})\n      title: {title2}"
+            for i, (item1, item2, id1, id2, title1, title2) in enumerate(duplicates, 1)
         )
     )
