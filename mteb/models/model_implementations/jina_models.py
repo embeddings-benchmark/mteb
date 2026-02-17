@@ -720,6 +720,164 @@ def get_programming_task_override(
     return current_task_name
 
 
+class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
+    """following the hf model card documentation."""
+
+    def __init__(
+        self,
+        model: str,
+        revision: str,
+        device: str | None = None,
+        model_prompts: dict[str, str] | None = None,
+        **kwargs,
+    ) -> None:
+        from sentence_transformers import __version__ as st_version
+
+        current_sentence_transformers_version = tuple(map(int, st_version.split(".")))
+
+        if current_sentence_transformers_version < MIN_SENTENCE_TRANSFORMERS_VERSION:
+            raise RuntimeError(
+                f"sentence_transformers version {st_version} is lower than the required version 3.1.0"
+            )
+
+        super().__init__(
+            model, revision, device=device, model_prompts=model_prompts, **kwargs
+        )
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+        if prompt_name:
+            logger.info(
+                f"Using prompt_name={prompt_name} for task={task_metadata.name} prompt_type={prompt_type}"
+            )
+        else:
+            logger.info(
+                f"No model prompts found for task={task_metadata.name} prompt_type={prompt_type}"
+            )
+        sentences = [text for batch in inputs for text in batch["text"]]
+
+        logger.info(f"Encoding {len(sentences)} sentences.")
+
+        jina_task_name = None
+        if self.model_prompts and prompt_name:
+            jina_task_name = self.model_prompts.get(prompt_name, None)
+
+        task = jina_task_name if jina_task_name else "retrieval"
+        prompt_name = (
+            "query" if prompt_type and prompt_type == PromptType.query else "document"
+        )
+
+        embeddings = self.model.encode(
+            sentences, task=task, prompt_name=prompt_name, **kwargs
+        )
+
+        if isinstance(embeddings, torch.Tensor):
+            embeddings = embeddings.cpu().detach().float().numpy()
+        return embeddings
+
+
+jina_embeddings_v5_text_small = ModelMeta(
+    loader=JinaV5TextWrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        model_prompts={
+            "Retrieval": "retrieval",
+            "Clustering": "clustering",
+            "Classification": "classification",
+            "STS": "text-matching",
+            "PairClassification": "text-matching",
+            "BitextMining": "text-matching",
+            "MultilabelClassification": "classification",
+            "Reranking": "retrieval",
+            "Summarization": "text-matching",
+            "InstructionReranking": "retrieval",
+        },
+    ),
+    name="jinaai/jina-embeddings-v5-text-small",
+    model_type=["dense"],
+    modalities=["text"],
+    languages=multilingual_langs,
+    open_weights=True,
+    revision="46ed7da5b47e4bca710b756313fafaf4110c6bd1",
+    release_date="2026-02-17",  # official release date
+    n_parameters=596049920,
+    n_embedding_parameters=None,
+    memory_usage_mb=1137.0,
+    max_tokens=32768,
+    embed_dim=1024,
+    license="cc-by-nc-4.0",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "safetensors",
+    ],
+    use_instructions=True,
+    reference="https://huggingface.co/jinaai/jina-embeddings-v5-text-small",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    adapted_from="Qwen3-0.6B",
+    citation="""""",
+)
+
+
+jina_embeddings_v5_text_nano = ModelMeta(
+    loader=JinaV5TextWrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        model_prompts={
+            "Retrieval": "retrieval",
+            "Clustering": "clustering",
+            "Classification": "classification",
+            "STS": "text-matching",
+            "PairClassification": "text-matching",
+            "BitextMining": "text-matching",
+            "MultilabelClassification": "classification",
+            "Reranking": "retrieval",
+            "Summarization": "text-matching",
+            "InstructionReranking": "retrieval",
+        },
+    ),
+    name="jinaai/jina-embeddings-v5-text-nano",
+    model_type=["dense"],
+    modalities=["text"],
+    languages=multilingual_langs,
+    open_weights=True,
+    revision="4c1f9846bb85490df1d9e535834cf00ceb33823b",
+    release_date="2026-02-17",  # official release date
+    n_parameters=211766016,
+    n_embedding_parameters=None,
+    memory_usage_mb=404.0,
+    max_tokens=8192,
+    embed_dim=768,
+    license="cc-by-nc-4.0",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "safetensors",
+    ],
+    use_instructions=True,
+    reference="https://huggingface.co/jinaai/jina-embeddings-v5-text-nano",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    adapted_from="EuroBERT",
+    citation="""""",
+)
+
 jina_reranker_v3 = ModelMeta(
     loader=JinaRerankerV3Wrapper,
     loader_kwargs=dict(
