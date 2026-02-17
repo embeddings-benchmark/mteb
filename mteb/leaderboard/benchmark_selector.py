@@ -54,10 +54,8 @@ GP_BENCHMARK_ENTRIES = [
                 "Audio",
                 mteb.get_benchmarks(
                     [
-                        "MAEB(audio-only)",
-                        "MAEB",
-                        "MAEB(extended)",
-                        "MAEB+",
+                        "MAEB(beta)",
+                        "MAEB(beta, audio-only)",
                     ]
                 ),
             ),

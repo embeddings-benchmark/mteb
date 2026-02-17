@@ -2891,7 +2891,8 @@ KOVIDORE_V2 = Benchmark(
 )
 
 MAEB_PLUS = Benchmark(
-    name="MAEB+",
+    name="MAEB+(beta)",
+    aliases=["MAEB+"],
     display_name="MAEB+",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
@@ -3004,15 +3005,16 @@ MAEB_PLUS = Benchmark(
             "UrbanSound8KT2ARetrieval",
         ]
     ),
-    description="""MAEB+ is the full Massive Audio Embedding Benchmark (v1), containing 98 tasks with audio modality across 6 task types: classification, clustering, pair classification, reranking, zero-shot classification, and retrieval.""",
+    description="""MAEB+ is the full Massive Audio Embedding Benchmark (v1), containing 98 tasks with audio modality across 6 task types: classification, clustering, pair classification, reranking, zero-shot classification, and retrieval. The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
 MAEB_AUDIO = Benchmark(
-    name="MAEB(audio-only)",
-    display_name="Audio-Only",
+    name="MAEB(beta, audio-only)",
+    aliases=["MAEB(audio-only)"],
+    display_name="MAEB Audio-Only",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
@@ -3043,14 +3045,15 @@ MAEB_AUDIO = Benchmark(
             "GTZANAudioReranking",
         ]
     ),
-    description="""MAEB(audio-only) is the audio-only subset of MAEB with 19 tasks spanning 6 task types: classification (10), clustering (3), multilabel classification (1), pair classification (3), reranking (1), and retrieval (1).""",
+    description="""MAEB(audio-only) is the audio-only subset of MAEB with 19 tasks spanning 6 task types: classification (10), clustering (3), multilabel classification (1), pair classification (3), reranking (1), and retrieval (1). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
 MAEB_EXTENDED = Benchmark(
-    name="MAEB(extended)",
+    name="MAEB(beta, extended)",
+    aliases=["MAEB(extended)"],
     display_name="Extended",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
@@ -3160,14 +3163,14 @@ MAEB_EXTENDED = Benchmark(
             "CommonVoiceMini21T2ARetrieval",
         ]
     ),
-    description="""MAEB(extended) is an intermediate benchmark used during task selection, containing 89 tasks that combine audio-only and audio-text evaluation before filtering to MAEB. Audio-only (53 tasks): classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), audio-to-audio retrieval (1). Audio-text (36 tasks): audio-text retrieval (31), zero-shot classification (5).""",
+    description="""MAEB(extended) is an intermediate benchmark used during task selection, containing 89 tasks that combine audio-only and audio-text evaluation before filtering to MAEB. Audio-only (53 tasks): classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), audio-to-audio retrieval (1). Audio-text (36 tasks): audio-text retrieval (31), zero-shot classification (5). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
-
 MAEB = Benchmark(
-    name="MAEB",
+    name="MAEB(beta)",
+    aliases=["MAEB"],
     display_name="MAEB",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
@@ -3211,7 +3214,7 @@ MAEB = Benchmark(
             "SpeechCommandsZeroshotv0.02",
         ]
     ),
-    description="""MAEB is a comprehensive audio benchmark with 30 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (10), clustering (3), multilabel classification (2), pair classification (3), reranking (1), and zero-shot classification (2).""",
+    description="""MAEB is a comprehensive audio benchmark with 30 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (10), clustering (3), multilabel classification (2), pair classification (3), reranking (1), and zero-shot classification (2). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
