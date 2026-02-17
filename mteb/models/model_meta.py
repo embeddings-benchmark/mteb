@@ -528,23 +528,22 @@ class ModelMeta(BaseModel):
             "Calculating number of embedding parameters for SentenceTransformer model."
         )
 
+        emb = None
         if isinstance(model, CrossEncoder) and hasattr(
             model.model, "get_input_embeddings"
         ):
             emb = model.model.get_input_embeddings()
+            return int(np.prod(emb.weight.shape))
         elif isinstance(model, SentenceTransformer):
-            first = model[0]
-            if isinstance(first, Transformer) and hasattr(
-                first.auto_model, "get_input_embeddings"
-            ):
-                emb = first.auto_model.get_input_embeddings()
-        else:
-            logger.warning(
-                f"Model does not have a recognized architecture for calculating embedding parameters (model={model.model_card_data.model_name})."
-            )
-            return None
-
-        return int(np.prod(emb.weight.shape))
+            vocab = len(model.tokenizer.vocab)
+            embedding_dimensions = model.get_sentence_embedding_dimension()
+            if embedding_dimensions is not None:
+                return vocab * embedding_dimensions
+        
+        logger.warning(
+            f"Model does not have a recognized architecture for calculating embedding parameters (model={model.model_card_data.model_name})."
+        )
+        return None
 
     @classmethod
     def _from_cross_encoder_model(cls, model: CrossEncoder) -> Self:
