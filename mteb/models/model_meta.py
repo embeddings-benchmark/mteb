@@ -29,7 +29,6 @@ from huggingface_hub.errors import (
 )
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 from sentence_transformers.models import Transformer
-from torch import nn
 from transformers import AutoConfig
 
 from mteb._helpful_enum import HelpfulStrEnum
@@ -418,9 +417,9 @@ class ModelMeta(BaseModel):
         return sentence_transformers_loader, "dense"
 
     @classmethod
-    def _create_empty(cls, overwrites: dict | None = None) -> Self:
+    def _create_empty(cls, overwrites: dict[str, Any] | None = None) -> Self:
         """Creates an empty ModelMeta with all fields set to None or empty."""
-        kwargs: dict[str, Any] = dict(
+        empty_model = cls(
             loader=None,
             name=None,
             revision=None,
@@ -446,16 +445,15 @@ class ModelMeta(BaseModel):
             contacts=None,
         )
         if overwrites:
-            kwargs.update(overwrites)
+            empty_model = empty_model.model_copy(update=overwrites)
 
-        if kwargs.get("name") is None:
-            kwargs["name"] = "no_model_name/available"
-        if kwargs.get("revision") is None:
-            kwargs["revision"] = "no_revision_available"
 
-        return cls(
-            **kwargs,
-        )
+        if empty_model.name is None:
+            empty_model.name = "no_model_name/available"
+        if empty_model.revision is None:
+            empty_model.revision = "no_revision_available"
+
+        return empty_model
 
     def merge(self, overwrite: Self) -> Self:
         """Merges another this ModelMeta with another ModelMeta.
@@ -502,9 +500,7 @@ class ModelMeta(BaseModel):
             if model.model_card_data.model_name
             else model.model_card_data.base_model
         )
-        n_parameters = cls._get_n_embedding_parameters_from_sentence_transformer_model(
-            model
-        )
+        n_parameters = cls._get_n_embedding_parameters_from_sentence_transformers(model)
         return cls._create_empty(
             overwrites=dict(
                 name=name,
@@ -519,8 +515,8 @@ class ModelMeta(BaseModel):
         )
 
     @staticmethod
-    def _get_n_embedding_parameters_from_sentence_transformer_model(
-        model: SentenceTransformer,
+    def _get_n_embedding_parameters_from_sentence_transformers(
+        model: SentenceTransformer | CrossEncoder,
     ) -> int | None:
         """Calculates the number of embedding parameters in a SentenceTransformer model
 
@@ -532,16 +528,24 @@ class ModelMeta(BaseModel):
         logger.info(
             "Calculating number of embedding parameters for SentenceTransformer model."
         )
-        try:
-            first = model[0]
 
-            if isinstance(first, Transformer):
+        if isinstance(model, CrossEncoder) and hasattr(
+            model.model, "get_input_embeddings"
+        ):
+            emb = model.model.get_input_embeddings()
+        elif isinstance(model, SentenceTransformer):
+            first = model[0]
+            if isinstance(first, Transformer) and hasattr(
+                first.auto_model, "get_input_embeddings"
+            ):
                 emb = first.auto_model.get_input_embeddings()
-                return int(np.prod(emb.weight.shape))
-        except Exception as e:
+        else:
             logger.warning(
-                f"Could not calculate embedding parameters (model={model.model_card_data.model_name}): {e}"
+                f"Model does not have a recognized architecture for calculating embedding parameters (model={model.model_card_data.model_name})."
             )
+            return None
+
+        return int(np.prod(emb.weight.shape))
 
     @classmethod
     def _from_cross_encoder_model(cls, model: CrossEncoder) -> Self:
@@ -555,22 +559,11 @@ class ModelMeta(BaseModel):
                 revision=model.config._commit_hash,
                 framework=["Sentence Transformers", "PyTorch"],
                 model_type=["cross-encoder"],
+                n_parameters=cls._get_n_embedding_parameters_from_sentence_transformers(
+                    model
+                ),
             )
         )
-
-    @staticmethod
-    def _get_n_embedding_parameters_from_cross_encoder_model(
-        model: CrossEncoder,
-    ) -> int | None:
-        try:
-            emb = model.model.get_input_embeddings()
-
-            if isinstance(emb, nn.Embedding):
-                return int(np.prod(emb.weight.shape))
-        except Exception as e:
-            logger.warning(
-                f"Could not calculate embedding parameters for (model: {model.model.name_or_path}): {e}"
-            )
 
     @classmethod
     def _from_hub(
@@ -592,7 +585,6 @@ class ModelMeta(BaseModel):
         loader: Callable[..., MTEBModels] | None
         model_type: MODEL_TYPES
 
-        loader, model_type = cls._detect_model_type_and_loader(model_name, revision)
         reference = "https://huggingface.co/" + model_name
 
         if not _repo_exists(model_name):
@@ -616,6 +608,7 @@ class ModelMeta(BaseModel):
                 )
             )
 
+        loader, model_type = cls._detect_model_type_and_loader(model_name, revision)
         card = ModelCard.load(model_name)
         card_data = card.data
         card_data = cast("ModelCardData", card_data)
@@ -638,10 +631,8 @@ class ModelMeta(BaseModel):
         n_parameters = cls._calculate_num_parameters_from_hub(model_name)
         memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
 
-
         embedding_dim = getattr(model_config, "embedding_dim", None)
         max_tokens = getattr(model_config, "max_position_embeddings", None)
-
 
         sbert_config = _get_json_from_hub(
             model_name, "sentence_bert_config.json", "model", revision=revision
@@ -655,7 +646,8 @@ class ModelMeta(BaseModel):
         )
         similarity_fn_name = (
             ScoringFunction.from_str(config_sbert["similarity_fn_name"])
-            if config_sbert is not None and config_sbert.get("similarity_fn_name") is not None
+            if config_sbert is not None
+            and config_sbert.get("similarity_fn_name") is not None
             else ScoringFunction.COSINE
         )
 
@@ -719,10 +711,15 @@ class ModelMeta(BaseModel):
 
         meta = cls._from_sentence_transformer_model(model)
         if fetch_from_hf:
-            name = cast("str", meta.name)
-            meta_hub = cls._from_hub(name, revision)
-            # prioritize metadata from the model card but fill missing fields from the hub
-            meta = meta_hub.merge(meta)
+            if meta.name is None:
+                logger.warning(
+                    "Model name is not set in metadata extracted from SentenceTransformer model. Cannot fetch additional metadata from HuggingFace Hub."
+                )
+            else:
+                name = cast("str", meta.name)
+                meta_hub = cls._from_hub(name, revision)
+                # prioritize metadata from the model card but fill missing fields from the hub
+                meta = meta_hub.merge(meta)
 
         return meta
 
@@ -1019,7 +1016,7 @@ class ModelMeta(BaseModel):
         }
 
         # Assume PyTorch support by default
-        # TODO: could be detected from repo as well
+        # TODO: could be detected from repo as well: https://github.com/embeddings-benchmark/mteb/issues/4104
         frameworks: list[FRAMEWORKS] = ["PyTorch"]
 
         for framework_tag in tag_to_framework.keys():
