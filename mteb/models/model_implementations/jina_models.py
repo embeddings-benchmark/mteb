@@ -811,7 +811,7 @@ jina_embeddings_v5_text_small = ModelMeta(
     revision="46ed7da5b47e4bca710b756313fafaf4110c6bd1",
     release_date="2026-02-17",  # official release date
     n_parameters=596049920,
-    n_embedding_parameters=None,
+    n_embedding_parameters=155582464,
     memory_usage_mb=1137.0,
     max_tokens=32768,
     embed_dim=1024,
@@ -828,7 +828,7 @@ jina_embeddings_v5_text_small = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    adapted_from="Qwen3-0.6B",
+    adapted_from="Qwen/Qwen3-0.6B",
     citation="""""",
 )
 
@@ -858,7 +858,7 @@ jina_embeddings_v5_text_nano = ModelMeta(
     revision="4c1f9846bb85490df1d9e535834cf00ceb33823b",
     release_date="2026-02-17",  # official release date
     n_parameters=211766016,
-    n_embedding_parameters=None,
+    n_embedding_parameters=98500608,
     memory_usage_mb=404.0,
     max_tokens=8192,
     embed_dim=768,
@@ -875,7 +875,7 @@ jina_embeddings_v5_text_nano = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    adapted_from="EuroBERT",
+    adapted_from="EuroBERT/EuroBERT-210m",
     citation="""""",
 )
 
