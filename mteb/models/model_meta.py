@@ -638,16 +638,10 @@ class ModelMeta(BaseModel):
         n_parameters = cls._calculate_num_parameters_from_hub(model_name)
         memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
 
-        embedding_dim = (
-            model_config.hidden_size
-            if model_config and hasattr(model_config, "hidden_size")
-            else None
-        )
-        max_tokens = (
-            model_config.max_position_embeddings
-            if model_config and hasattr(model_config, "max_position_embeddings")
-            else None
-        )
+
+        embedding_dim = getattr(model_config, "embedding_dim", None)
+        max_tokens = getattr(model_config, "max_position_embeddings", None)
+
 
         sbert_config = _get_json_from_hub(
             model_name, "sentence_bert_config.json", "model", revision=revision
@@ -659,15 +653,11 @@ class ModelMeta(BaseModel):
         config_sbert = _get_json_from_hub(
             model_name, "config_sentence_transformers.json", "model", revision=revision
         )
-        if (
-            config_sbert is not None
-            and config_sbert.get("similarity_fn_name") is not None
-        ):
-            similarity_fn_name = ScoringFunction.from_str(
-                config_sbert["similarity_fn_name"]
-            )
-        else:
-            similarity_fn_name = ScoringFunction.COSINE
+        similarity_fn_name = (
+            ScoringFunction.from_str(config_sbert["similarity_fn_name"])
+            if config_sbert is not None and config_sbert.get("similarity_fn_name") is not None
+            else ScoringFunction.COSINE
+        )
 
         return cls._create_empty(
             overwrites=dict(
