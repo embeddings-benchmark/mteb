@@ -270,12 +270,28 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
     citation="""
-    @article{conneau2019unsupervised,
-  title={Unsupervised cross-lingual representation learning at scale},
-  author={Conneau, Alexis and Khandelwal, Kartikay and Goyal, Naman and Chaudhary, Vishrav and Wenzek, Guillaume and Guzm{\'a}n, Francisco and Grave, Edouard and Ott, Myle and Zettlemoyer, Luke and Stoyanov, Veselin},
-  journal={arXiv preprint arXiv:1911.02116},
-  year={2019}
-}
+    @article{DBLP:journals/corr/abs-1911-02116,
+      author    = {Alexis Conneau and
+                   Kartikay Khandelwal and
+                   Naman Goyal and
+                   Vishrav Chaudhary and
+                   Guillaume Wenzek and
+                   Francisco Guzm{\'{a}}n and
+                   Edouard Grave and
+                   Myle Ott and
+                   Luke Zettlemoyer and
+                   Veselin Stoyanov},
+      title     = {Unsupervised Cross-lingual Representation Learning at Scale},
+      journal   = {CoRR},
+      volume    = {abs/1911.02116},
+      year      = {2019},
+      url       = {http://arxiv.org/abs/1911.02116},
+      eprinttype = {arXiv},
+      eprint    = {1911.02116},
+      timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
+      biburl    = {https://dblp.org/rec/journals/corr/abs-1911-02116.bib},
+      bibsource = {dblp computer science bibliography, https://dblp.org}
+    }
 
 @article{reimers2019sentence,
    title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
@@ -320,12 +336,28 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
     citation="""
-    @article{conneau2019unsupervised,
-  title={Unsupervised cross-lingual representation learning at scale},
-  author={Conneau, Alexis and Khandelwal, Kartikay and Goyal, Naman and Chaudhary, Vishrav and Wenzek, Guillaume and Guzm{\'a}n, Francisco and Grave, Edouard and Ott, Myle and Zettlemoyer, Luke and Stoyanov, Veselin},
-  journal={arXiv preprint arXiv:1911.02116},
-  year={2019}
-}
+    @article{DBLP:journals/corr/abs-1911-02116,
+      author    = {Alexis Conneau and
+                   Kartikay Khandelwal and
+                   Naman Goyal and
+                   Vishrav Chaudhary and
+                   Guillaume Wenzek and
+                   Francisco Guzm{\'{a}}n and
+                   Edouard Grave and
+                   Myle Ott and
+                   Luke Zettlemoyer and
+                   Veselin Stoyanov},
+      title     = {Unsupervised Cross-lingual Representation Learning at Scale},
+      journal   = {CoRR},
+      volume    = {abs/1911.02116},
+      year      = {2019},
+      url       = {http://arxiv.org/abs/1911.02116},
+      eprinttype = {arXiv},
+      eprint    = {1911.02116},
+      timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
+      biburl    = {https://dblp.org/rec/journals/corr/abs-1911-02116.bib},
+      bibsource = {dblp computer science bibliography, https://dblp.org}
+    }
 
 @article{reimers2019sentence,
    title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
@@ -370,11 +402,27 @@ Lajavaness__bilingual_embedding_small = ModelMeta(
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
     citation="""
-    @article{conneau2019unsupervised,
-  title={Unsupervised cross-lingual representation learning at scale},
-  author={Conneau, Alexis and Khandelwal, Kartikay and Goyal, Naman and Chaudhary, Vishrav and Wenzek, Guillaume and Guzm{\'a}n, Francisco and Grave, Edouard and Ott, Myle and Zettlemoyer, Luke and Stoyanov, Veselin},
-  journal={arXiv preprint arXiv:1911.02116},
-  year={2019}
+@article{DBLP:journals/corr/abs-1911-02116,
+  author    = {Alexis Conneau and
+               Kartikay Khandelwal and
+               Naman Goyal and
+               Vishrav Chaudhary and
+               Guillaume Wenzek and
+               Francisco Guzm{\'{a}}n and
+               Edouard Grave and
+               Myle Ott and
+               Luke Zettlemoyer and
+               Veselin Stoyanov},
+  title     = {Unsupervised Cross-lingual Representation Learning at Scale},
+  journal   = {CoRR},
+  volume    = {abs/1911.02116},
+  year      = {2019},
+  url       = {http://arxiv.org/abs/1911.02116},
+  eprinttype = {arXiv},
+  eprint    = {1911.02116},
+  timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
+  biburl    = {https://dblp.org/rec/journals/corr/abs-1911-02116.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
 @article{reimers2019sentence,

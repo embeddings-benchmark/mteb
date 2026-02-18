@@ -4,7 +4,7 @@ import mteb
 from mteb.models.model_meta import ModelMeta
 
 # Historic models with n_embedding_parameters=None. Do NOT add new models to this list.
-_HISTORIC_MODELS = [
+_MISSING_N_EMBEDDING_MODELS = [
     "ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-3B-v1",
     "ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-7B-v1",
     "BAAI/bge-visualized-base",
@@ -185,6 +185,64 @@ _HISTORIC_MODELS = [
     "google/text-embedding-005",
     "google/text-multilingual-embedding-002",
     "ICT-TIME-and-Querit/BOOM_4B_v1",
+    # audio models
+    "google/vggish",
+    "LCO-Embedding/LCO-Embedding-Omni-3B",
+    "LCO-Embedding/LCO-Embedding-Omni-7B",
+    "facebook/wav2vec2-base",
+    "facebook/wav2vec2-base-960h",
+    "facebook/wav2vec2-large",
+    "facebook/wav2vec2-large-xlsr-53",
+    "facebook/wav2vec2-lv-60-espeak-cv-ft",
+    "facebook/wav2vec2-xls-r-1b",
+    "facebook/wav2vec2-xls-r-2b",
+    "facebook/wav2vec2-xls-r-2b-21-to-en",
+    "facebook/wav2vec2-xls-r-300m",
+    "vitouphy/wav2vec2-xls-r-300m-phoneme",
+    "laion/clap-htsat-fused",
+    "laion/clap-htsat-unfused",
+    "laion/larger_clap_general",
+    "laion/larger_clap_music",
+    "laion/larger_clap_music_and_speech",
+    "lyrebird/wav2clip",
+    "microsoft/msclap-2022",
+    "microsoft/msclap-2023",
+    "microsoft/unispeech-sat-base-100h-libri-ft",
+    "microsoft/wavlm-base",
+    "microsoft/wavlm-base-plus",
+    "microsoft/wavlm-base-plus-sd",
+    "microsoft/wavlm-base-plus-sv",
+    "microsoft/wavlm-base-sd",
+    "microsoft/wavlm-base-sv",
+    "microsoft/wavlm-large",
+    "facebook/seamless-m4t-v2-large",
+    "Qwen/Qwen2-Audio-7B",
+    "facebook/hubert-base-ls960",
+    "facebook/hubert-large-ls960-ft",
+    "baseline/random-cross-encoder-baseline",
+    "baseline/random-encoder-baseline",
+    "facebook/encodec_24khz",
+    "speechbrain/m-ctc-t-large",
+    "MIT/ast-finetuned-audioset-10-10-0.4593",
+    "asapp/sew-d-base-plus-400k-ft-ls100h",
+    "asapp/sew-d-mid-400k-ft-ls100h",
+    "asapp/sew-d-tiny-100k-ft-ls100h",
+    "google/yamnet",
+    "openai/whisper-base",
+    "openai/whisper-large-v3",
+    "openai/whisper-medium",
+    "openai/whisper-small",
+    "openai/whisper-tiny",
+    "microsoft/speecht5_asr",
+    "microsoft/speecht5_multimodal",
+    "facebook/mms-1b-all",
+    "facebook/mms-1b-fl102",
+    "facebook/mms-1b-l1107",
+    "facebook/data2vec-audio-base-960h",
+    "facebook/data2vec-audio-large-960h",
+    "OpenMuQ/MuQ-MuLan-large",
+    "speechbrain/cnn14-esc50",
+    "microsoft/speecht5_tts",
 ]
 
 
@@ -349,7 +407,7 @@ def test_n_embedding_parameters(model_meta: ModelMeta):
     Historic models (in _HISTORIC_MODELS) are allowed to have None values.
     New models must have n_embedding_parameters defined, otherwise the test fails.
     """
-    if model_meta.name in _HISTORIC_MODELS:
+    if model_meta.name in _MISSING_N_EMBEDDING_MODELS:
         assert model_meta.n_embedding_parameters is None
     else:
         assert model_meta.n_embedding_parameters is not None, (
