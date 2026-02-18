@@ -506,6 +506,3 @@ Altas = "Altas"
 matche = "matche"
 expresso = "expresso"
 Expresso = "Expresso"
-
-[tool.typos.type.md.extend-words]
-Beng = "Beng"
