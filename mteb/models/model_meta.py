@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
 import warnings
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import field
 from enum import Enum
 from functools import partial
@@ -131,6 +132,7 @@ class ModelMeta(BaseModel):
         model_type: A list of strings representing the type of model.
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
+        experiment_params: **DO NOT SET** A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -163,6 +165,7 @@ class ModelMeta(BaseModel):
     model_type: list[MODEL_TYPES] = ["dense"]
     citation: str | None = None
     contacts: list[str] | None = None
+    experiment_params: Mapping[str, Any] | None = None
 
     @model_validator(mode="before")
     @classmethod
@@ -283,6 +286,12 @@ class ModelMeta(BaseModel):
         if self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
 
+        if self.experiment_params is None:
+            self.experiment_params = kwargs if len(kwargs) > 0 else None
+        elif len(kwargs) > 0 and self.experiment_params is not None:
+            kwargs |= self.experiment_params
+            self.experiment_params = kwargs
+
         # Allow overwrites
         _kwargs = self.loader_kwargs.copy()
         _kwargs.update(kwargs)
@@ -301,6 +310,23 @@ class ModelMeta(BaseModel):
         if self.name is None:
             raise ValueError("Model name is not set")
         return self.name.replace("/", "__").replace(" ", "_")
+
+    @property
+    def experiment_name(self) -> str | None:
+        """Create a filesystem-safe string representation of the experiment parameters.
+
+        Uses deterministic serialization and hashing to ensure stable, bounded output.
+
+        Examples:
+            >>> import mteb
+            >>> model = mteb.get_model("baseline/random-encoder-baseline", param1="test")
+            >>>
+            >>> print(model.mteb_model_meta.experiment_name)
+            >>> # param1_test
+        """
+        return _get_experiment_name_from_params(
+            experiment_params=self.experiment_params
+        )
 
     @classmethod
     def _detect_cross_encoder_or_dense(
@@ -864,7 +890,7 @@ class ModelMeta(BaseModel):
 
     def to_python(self) -> str:
         """Returns a string representation of the model."""
-        return _pydantic_instance_to_code(self)
+        return _pydantic_instance_to_code(self, exclude_fields=["experiment_params"])
 
 
 def _pydantic_instance_to_code(
@@ -872,6 +898,7 @@ def _pydantic_instance_to_code(
     indent: int = 4,
     *,
     only_set_fields: bool = False,
+    exclude_fields: Sequence[str] | None = None,
 ) -> str:
     """Convert a Pydantic model instance into valid Python constructor code.
 
@@ -882,6 +909,7 @@ def _pydantic_instance_to_code(
         model: The Pydantic model to convert.
         indent: The indentation to use.
         only_set_fields: If True, only fields explicitly provided at model construction time
+        exclude_fields: Fields to exclude from the output, regardless of whether they were set or not.
     """
     cls_name = model.__class__.__name__
     pad = " " * indent
@@ -895,6 +923,8 @@ def _pydantic_instance_to_code(
         field_names = model_fields
 
     for field_name in field_names:
+        if exclude_fields and field_name in exclude_fields:
+            continue
         value = getattr(model, field_name)
         value_code = _value_to_code(value, indent)
         lines.append(f"{pad}{field_name}={value_code},")
@@ -1022,3 +1052,59 @@ def _repo_exists(repo_id: str, repo_type: str | None = None) -> bool:
     except HFValidationError as e:
         logger.warning(f"Can't check existence of {repo_id}: {e}")
         return False
+
+
+def _get_experiment_name_from_params(
+    experiment_params: Mapping[str, Any] | None,
+) -> str | None:
+    if experiment_params is None or len(experiment_params) == 0:
+        return None
+
+    invalid_chars = set('<>:"|?*\\/\0')
+
+    def _serialize_value(value: Any) -> str:
+        """Convert value to deterministic string representation."""
+        if isinstance(value, (str, int, float, bool)) or value is None:
+            value = str(value)
+            for invalid_char in invalid_chars:
+                value = value.replace(invalid_char, "_")
+            return value
+        if isinstance(value, (list, tuple)):
+            return f"[{','.join(_serialize_value(v) for v in value)}]"
+        if isinstance(value, dict):
+            items = sorted(value.items())
+            return f"{{{','.join(f'{k}:{_serialize_value(v)}' for k, v in items)}}}"
+        if isinstance(value, Enum):
+            return f"{value.__class__.__name__}.{value.name}"
+
+        # Handle common scientific types
+        if hasattr(value, "__module__") and value.__module__ == "numpy":
+            # numpy arrays and scalars
+            return f"np_{hashlib.sha256(np.asarray(value).tobytes()).hexdigest()[:8]}"
+
+        # Handle pydantic models and dataclasses
+        if isinstance(value, BaseModel):
+            # Use model_dump for deterministic JSON representation
+            json_str = json.dumps(value.model_dump(), sort_keys=True)
+            digest = hashlib.sha256(json_str.encode("utf-8")).hexdigest()[:8]
+            return f"{value.__class__.__name__}_{digest}"
+
+        raise ValueError(
+            f"experiment_params contains non-serializable type {type(value).__name__}. "
+            f"Only JSON-serializable types (str, int, float, bool, list, dict, None), "
+            f"Enums, numpy arrays, and Pydantic models are supported."
+        )
+
+    params_str = "__".join(
+        f"{key}_{_serialize_value(value)}"
+        for key, value in sorted(experiment_params.items())
+    )
+
+    # If too long or contains invalid chars, use hash
+    max_length = 200
+
+    if len(params_str) > max_length or any(c in invalid_chars for c in params_str):
+        param_hash = hashlib.sha256(params_str.encode()).hexdigest()[:16]
+        return f"exp_{param_hash}"
+
+    return params_str

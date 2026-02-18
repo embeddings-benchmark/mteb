@@ -391,6 +391,16 @@ def test_loader_kwargs_persisted_in_metadata():
     assert meta.loader_kwargs["not_existing_param"] == 123
 
 
+def test_get_model_kwargs_does_not_mutate_registry_meta():
+    model_name = "baseline/random-encoder-baseline"
+
+    model = mteb.get_model(model_name, not_existing_param=123)
+    assert model.mteb_model_meta.experiment_params == {"not_existing_param": 123}
+
+    current_registry_meta = mteb.get_model_meta(model_name)
+    assert current_registry_meta.experiment_params is None
+
+
 def test_fill_missing_parameter():
     """Test that fill_missing parameter fetches missing metadata from HuggingFace Hub"""
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
@@ -473,3 +483,21 @@ def test_load_sentence_transformer_via_get_model_meta():
     assert model_meta.model_type == ["dense"]
     assert not model_meta.is_cross_encoder
     assert model_meta.loader.__name__ == "sentence_transformers_loader"
+
+
+def test_load_model_with_experiments():
+    model_name = "baseline/random-encoder-baseline"
+
+    model1 = mteb.get_model(model_name, param=1)
+    model_meta = mteb.get_model_meta(model_name, experiment_params={"param": 1})
+
+    assert model_meta.experiment_name == model1.mteb_model_meta.experiment_name
+
+    # test that experiment params are correctly passed from meta to model
+    model2 = mteb.get_model(model_name, param=2, other_param="value")
+    model_meta2 = mteb.get_model_meta(model_name, experiment_params={"param": 2})
+    model_from_meta2 = model_meta2.load_model(other_param="value")
+    assert (
+        model2.mteb_model_meta.experiment_name
+        == model_from_meta2.mteb_model_meta.experiment_name
+    )
