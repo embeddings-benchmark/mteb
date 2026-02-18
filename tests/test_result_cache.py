@@ -337,6 +337,12 @@ def test_load_experiment_results(tmp_path):
         models=[model.mteb_model_meta],
         load_experiments=LoadExperimentEnum.NO_EXPERIMENTS,
     )
+    assert len(model_meta_res.model_results) == 0
+
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta],
+        load_experiments=LoadExperimentEnum.MATCH_KWARGS,
+    )
     assert len(model_meta_res.model_results) == 1
     assert model_meta_res.model_results[0].experiment_name == "a_test__b_test2"
 

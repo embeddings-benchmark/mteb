@@ -861,16 +861,6 @@ class ResultCache:
         if isinstance(load_experiments, str):
             load_experiments = LoadExperimentEnum.from_str(load_experiments)
 
-        first_model = next(iter(models)) if models is not None else None
-        if isinstance(first_model, ModelMeta):
-            warnings.warn(
-                "LoadExperiments will be ignored when models are passed as ModelMeta objects, since the experiment name is already included in the model metadata. "
-                "To load experiments, make sure to include the experiment name in the ModelMeta objects passed in the models argument."
-            )
-            load_experiments = (
-                LoadExperimentEnum.MATCH_KWARGS
-            )  # will be filtered out later
-
         paths = self.get_cache_paths(
             models=models,
             tasks=tasks,
