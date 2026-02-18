@@ -286,7 +286,11 @@ class ModelMeta(BaseModel):
         if self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
 
-        self.experiment_params = kwargs if len(kwargs) > 0 else None
+        if self.experiment_params is None:
+            self.experiment_params = kwargs if len(kwargs) > 0 else None
+        elif len(kwargs) > 0 and self.experiment_params is not None:
+            kwargs |= self.experiment_params
+            self.experiment_params = kwargs
 
         # Allow overwrites
         _kwargs = self.loader_kwargs.copy()
