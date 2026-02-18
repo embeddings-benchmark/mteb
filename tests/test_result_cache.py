@@ -381,6 +381,11 @@ def test_load_experiment_results(tmp_path):
     )
     assert len(model_meta_res.model_results) == 1
 
+    model_meta_res = cache.load_results(
+        experiment_params=[model.mteb_model_meta.experiment_params],
+    )
+    assert len(model_meta_res.model_results) == 1
+
 
 # Tests for _download_cached_results_from_branch method
 
