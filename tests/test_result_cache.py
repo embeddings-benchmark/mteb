@@ -288,8 +288,11 @@ def test_load_experiment_results(tmp_path):
 
     # load without experiments - should only get the first result
     base_res = cache.load_results()
-    assert len(base_res.model_results) == 3
+    assert len(base_res.model_results) == 1
     assert base_res.model_results[0].experiment_name is None
+
+    base_res = cache.load_results(experiment_params=[params_1, params_2])
+    assert len(base_res.model_results) == 2
 
     # load all experiments
     experiment_res = cache.load_results(load_experiments=LoadExperimentEnum.MATCH_NAME)
@@ -309,14 +312,12 @@ def test_load_experiment_results(tmp_path):
     assert len(only_named_experiment_res.model_results) == 1
     assert only_named_experiment_res.model_results[0].experiment_name == "a_test"
 
-    # load specific experiment with model meta filter. Ignored `load_experiments` since model meta filter should take precedence
-    # and results are filtered out by experiment name
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta],
         load_experiments=LoadExperimentEnum.MATCH_NAME,
         experiment_params=params_1,
     )
-    assert len(model_meta_res.model_results) == 0
+    assert len(model_meta_res.model_results) == 1
 
     # load specific experiment with model meta filter
     model_meta_res = cache.load_results(
@@ -337,7 +338,7 @@ def test_load_experiment_results(tmp_path):
         models=[model.mteb_model_meta],
         load_experiments=LoadExperimentEnum.NO_EXPERIMENTS,
     )
-    assert len(model_meta_res.model_results) == 0
+    assert len(model_meta_res.model_results) == 1
 
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta],
@@ -361,6 +362,24 @@ def test_load_experiment_results(tmp_path):
     )
     assert len(model_meta_res.model_results) == 1
     assert model_meta_res.model_results[0].experiment_name == "a_test__b_test2"
+
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta],
+        load_experiments=LoadExperimentEnum.MATCH_NAME,
+    )
+    assert len(model_meta_res.model_results) == 3
+
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta],
+        load_experiments=LoadExperimentEnum.MATCH_KWARGS,
+    )
+    assert len(model_meta_res.model_results) == 1
+
+    model_meta_res = cache.load_results(
+        models=[model.mteb_model_meta.name],
+        load_experiments=LoadExperimentEnum.MATCH_KWARGS,
+    )
+    assert len(model_meta_res.model_results) == 1
 
 
 # Tests for _download_cached_results_from_branch method

@@ -648,6 +648,7 @@ class ResultCache:
         cache_paths = self._filter_paths_by_model_and_revision(
             cache_paths,
             models=models,
+            load_experiments=load_experiments,
         )
         cache_paths = self._filter_paths_by_task(cache_paths, tasks=tasks)
 
@@ -748,6 +749,7 @@ class ResultCache:
     def _filter_paths_by_model_and_revision(
         paths: list[Path],
         models: Sequence[str] | Iterable[ModelMeta] | None = None,
+        load_experiments: LoadExperimentEnum | None = None,
     ) -> list[Path]:
         """Filter a list of paths by model name and optional revision.
 
@@ -764,7 +766,9 @@ class ResultCache:
                 (
                     m.model_name_as_path(),
                     m.revision or "no_revision_available",
-                    m.experiment_name,
+                    m.experiment_name
+                    if load_experiments is LoadExperimentEnum.MATCH_KWARGS
+                    else None,
                 )
                 for m in models
             }
@@ -773,7 +777,11 @@ class ResultCache:
                 if _EXPERIMENTS_FOLDER_NAME in path.parts:
                     revision = path.parent.parent.parent.name
                     model_name = path.parent.parent.parent.parent.name
-                    experiment_name = path.parent.name
+                    experiment_name = (
+                        path.parent.name
+                        if load_experiments is LoadExperimentEnum.MATCH_KWARGS
+                        else None
+                    )
                 else:
                     revision = path.parent.name
                     model_name = path.parent.parent.name
@@ -861,6 +869,19 @@ class ResultCache:
         if isinstance(load_experiments, str):
             load_experiments = LoadExperimentEnum.from_str(load_experiments)
 
+        if (
+            load_experiments is not LoadExperimentEnum.MATCH_KWARGS
+            and experiment_params is not None
+        ):
+            warnings.warn(
+                "experiment_params is specified but load_experiments is not set to MATCH_KWARGS."
+                "No results will be loaded."
+            )
+
+        models_as_model_meta = models is not None and isinstance(
+            next(iter(models)), ModelMeta
+        )
+
         paths = self.get_cache_paths(
             models=models,
             tasks=tasks,
@@ -906,14 +927,18 @@ class ResultCache:
                     )
                     continue
 
-            if (
-                load_experiments is not LoadExperimentEnum.NO_EXPERIMENTS
-                and len(experiment_names) > 0
-                and experiment_name not in experiment_names
-            ):
+            if len(experiment_names) > 0 and experiment_name not in experiment_names:
                 logger.debug(
                     f"Skipping experiment {experiment_name} as it is not in the specified experiment names"
                 )
+                continue
+
+            if (
+                load_experiments is LoadExperimentEnum.MATCH_KWARGS
+                and not models_as_model_meta  # for models meta path are prefiltered
+                and len(experiment_names) == 0
+                and experiment_name is not None
+            ):
                 continue
 
             models_results[(model_name, revision, experiment_name)].append(task_result)
