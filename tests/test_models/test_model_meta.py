@@ -393,18 +393,12 @@ def test_loader_kwargs_persisted_in_metadata():
 
 def test_get_model_kwargs_does_not_mutate_registry_meta():
     model_name = "baseline/random-encoder-baseline"
-    registry_meta = mteb.get_model_meta(model_name)
-    original_experiment_params = registry_meta.experiment_params
 
-    try:
-        model = mteb.get_model(model_name, not_existing_param=123)
-        assert model.mteb_model_meta.experiment_params == {"not_existing_param": 123}
+    model = mteb.get_model(model_name, not_existing_param=123)
+    assert model.mteb_model_meta.experiment_params == {"not_existing_param": 123}
 
-        current_registry_meta = mteb.get_model_meta(model_name)
-        assert current_registry_meta.experiment_params == original_experiment_params
-    finally:
-        # Keep registry state stable for the rest of the test session.
-        registry_meta.experiment_params = original_experiment_params
+    current_registry_meta = mteb.get_model_meta(model_name)
+    assert current_registry_meta.experiment_params is None
 
 
 def test_fill_missing_parameter():
