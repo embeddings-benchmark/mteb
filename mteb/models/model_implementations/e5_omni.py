@@ -88,6 +88,8 @@ class E5OmniWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        from qwen_omni_utils import process_mm_info
+
         all_embeddings = []
 
         for batch in tqdm(inputs, desc="Encoding"):
@@ -97,17 +99,13 @@ class E5OmniWrapper(AbsEncoder):
             if not batch_texts and not batch_images:
                 raise ValueError("No text or image features found in batch.")
 
-            if prompt_type == PromptType.query:
-                text_prefix = "Query: "
-            else:
-                text_prefix = ""
+            text_prefix = "Query: " if prompt_type == PromptType.query else ""
 
             messages = []
             max_len = max(len(batch_texts), len(batch_images))
             for i in range(max_len):
                 content = []
                 if i < len(batch_texts):
-                    # Prepend the appropriate prefix to text
                     prefixed_text = (
                         f"{text_prefix}{batch_texts[i]}"
                         if text_prefix
@@ -127,33 +125,29 @@ class E5OmniWrapper(AbsEncoder):
                     rendered = rendered[0]
                 texts.append(f"{rendered}<|endoftext|>")
 
-            from qwen_omni_utils import process_mm_info
-
-            audios, images, videos = [], [], []
+            # Collect and flatten multimodal content across the batch.
+            # process_mm_info returns lists (or None) per message; the processor
+            # expects a single flat list of all images/audios/videos in order.
+            audio_inputs: list = []
+            image_inputs: list = []
+            video_inputs: list = []
             for msg in messages:
                 a, im, v = process_mm_info(msg, use_audio_in_video=True)
-                audios.append(a)
-                images.append(im)
-                videos.append(v)
+                if a is not None:
+                    audio_inputs.extend(a if isinstance(a, list) else [a])
+                if im is not None:
+                    image_inputs.extend(im if isinstance(im, list) else [im])
+                if v is not None:
+                    video_inputs.extend(v if isinstance(v, list) else [v])
 
-            # Check if we have any actual multimodal content (not all None)
-            # If all are None, pass None to processor instead of a list of Nones
-            has_audio = any(a is not None for a in audios)
-            has_images = any(im is not None for im in images)
-            has_videos = any(v is not None for v in videos)
+            is_multimodal = bool(audio_inputs or image_inputs or video_inputs)
 
-            audio_inputs = audios if has_audio else None
-            image_inputs = images if has_images else None
-            video_inputs = videos if has_videos else None
-
-            is_multimodal = has_audio or has_images or has_videos
-
-            processor_kwargs = {
+            processor_kwargs: dict = {
                 "text": texts,
-                "images": image_inputs,
-                "videos": video_inputs,
-                "audio": audio_inputs,
-                "padding": True,
+                "images": image_inputs if image_inputs else None,
+                "videos": video_inputs if video_inputs else None,
+                "audio": audio_inputs if audio_inputs else None,
+                "padding": "longest",
                 "return_tensors": "pt",
             }
 
@@ -165,18 +159,23 @@ class E5OmniWrapper(AbsEncoder):
 
             model_inputs = self.processor(**processor_kwargs).to(self.device)
 
-            # Run a plain forward pass and pool exactly as in the model card:
-            # last_hidden_state[:, -1] with left padding.
+            # Follow the model card exactly: prepare_inputs_for_generation sets up
+            # cache positions and positional encodings for the Thinker architecture.
+            # Skipping this step produces incorrect hidden states and bad embeddings.
+            cache_position = torch.arange(
+                0, model_inputs["input_ids"].shape[1], device=self.device
+            )
+            prepared_inputs = self.model.prepare_inputs_for_generation(
+                **model_inputs, use_cache=True, cache_position=cache_position
+            )
+
             outputs = self.model(
-                **model_inputs,
+                **prepared_inputs,
                 return_dict=True,
                 output_hidden_states=True,
-                use_cache=False,
             )
             last_hidden_state = outputs.hidden_states[-1]
             embeddings = last_hidden_state[:, -1]
-
-            # Normalize embeddings as recommended by the authors
             embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
 
             all_embeddings.append(embeddings.cpu().to(torch.float32))
@@ -206,8 +205,8 @@ e5_omni_3b = ModelMeta(
     loader=E5OmniWrapper,
     name="Haon-Chen/e5-omni-3B",
     languages=bgem3_languages,
-    revision="d2765489f361965142c069c2dc18291220a3819a",
-    release_date="2026-01-07",
+    revision="e3530921a79351089af9376317b95d70470eabd6",
+    release_date="2026-01-09",
     modalities=[
         "text",
         "image",
@@ -234,8 +233,8 @@ e5_omni_7b = ModelMeta(
     loader=E5OmniWrapper,
     name="Haon-Chen/e5-omni-7B",
     languages=bgem3_languages,
-    revision="bbf5f87c0899abf7890bca98c307113f3c813041",
-    release_date="2026-01-07",
+    revision="0514b08201bc73b9a6025b1a05815ff69334806c",
+    release_date="2026-01-09",
     modalities=[
         "text",
         "image",
