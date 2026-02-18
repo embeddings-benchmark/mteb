@@ -39,7 +39,7 @@ from mteb.models.models_protocols import MTEBModels
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping, Sequence
+    from collections.abc import Sequence
 
     from huggingface_hub import (
         GitCommitInfo,
@@ -165,7 +165,7 @@ class ModelMeta(BaseModel):
     model_type: list[MODEL_TYPES] = ["dense"]
     citation: str | None = None
     contacts: list[str] | None = None
-    experiment_params: dict[str, Any] | None = None
+    experiment_params: Mapping[str, Any] | None = None
 
     @model_validator(mode="before")
     @classmethod
@@ -1051,7 +1051,7 @@ def _repo_exists(repo_id: str, repo_type: str | None = None) -> bool:
 
 
 def _get_experiment_name_from_params(
-    experiment_params: Mapping[str, Any],
+    experiment_params: Mapping[str, Any] | None,
 ) -> str | None:
     if experiment_params is None or len(experiment_params) == 0:
         return None
