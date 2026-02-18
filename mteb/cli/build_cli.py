@@ -13,7 +13,6 @@ from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
-from mteb.models.compression_wrappers import CompressionWrapper
 
 if TYPE_CHECKING:
     from mteb.abstasks.abstask import AbsTask
@@ -80,13 +79,6 @@ def run(args: argparse.Namespace) -> None:
             DeprecationWarning,
         )
         overwrite_strategy = OverwriteStrategy.ALWAYS.value
-
-    quantization_level = args.quantization
-    if quantization_level != "full":
-        model = CompressionWrapper(
-            model=model,
-            quantization_level=quantization_level,
-        )
 
     prediction_folder = args.prediction_folder
     if args.save_predictions:
@@ -277,13 +269,6 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
         type=str,
         default=None,
         help="Folder to save the model predictions in. If None, predictions will not be saved.",
-    )
-    parser.add_argument(
-        "--quantization",
-        type=str,
-        default="full",
-        choices=["full", "float8", "int8", "int4", "binary"],
-        help="Copmute performance on quantized embeddings instead of full precision.",
     )
 
     parser.set_defaults(func=run)

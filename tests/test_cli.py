@@ -77,7 +77,6 @@ def test_run_task(
         benchmarks=None,
         overwrite=False,
         save_predictions=None,
-        quantization="full",
     )
 
     run(args)

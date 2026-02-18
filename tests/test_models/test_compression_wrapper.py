@@ -1,10 +1,12 @@
 import numpy as np
 import pytest
+import torch
 from datasets import Dataset
 from torch.utils.data import DataLoader
 
 from mteb import TaskMetadata
 from mteb.models import CompressionWrapper
+from mteb.models.compression_wrappers.compression_wrapper import QuantizationLevel
 from mteb.models.model_implementations.random_baseline import (
     RandomEncoderBaseline,
     random_encoder_baseline,
@@ -37,18 +39,19 @@ def test_float8_compression():
     model = RandomEncoderBaseline(model_name="dummy", revision=None)
     model.mteb_model_meta = random_encoder_baseline
     model.mteb_model_meta.name = "dummy"
-    wrapper = CompressionWrapper(model, "float8")
+    wrapper = CompressionWrapper(model, QuantizationLevel.FLOAT8)
     embeddings = wrapper.encode(
         task_texts,
         task_metadata=task_metadata,
         hf_split="test",
         hf_subset="test",
     )
-    assert model.mteb_model_meta.name == "dummy (output_dtype=float8)"
     assert embeddings.dtype == np.float16
 
 
-@pytest.mark.parametrize("level, bits", [("int8", 8), ("int4", 4)])
+@pytest.mark.parametrize(
+    "level, bits", [(QuantizationLevel.INT8, 8), (QuantizationLevel.INT4, 4)]
+)
 def test_int_compression(level: str, bits: int):
     model = RandomEncoderBaseline(model_name="dummy", revision=None)
     wrapper = CompressionWrapper(model, level)
@@ -65,7 +68,7 @@ def test_int_compression(level: str, bits: int):
 
 def test_binary_compression():
     model = RandomEncoderBaseline(model_name="dummy", revision=None)
-    wrapper = CompressionWrapper(model, "binary")
+    wrapper = CompressionWrapper(model, QuantizationLevel.BINARY)
     embeddings = wrapper.encode(
         task_texts,
         task_metadata=task_metadata,
@@ -77,7 +80,7 @@ def test_binary_compression():
 
 def test_query_compression():
     model = RandomEncoderBaseline(model_name="dummy", revision=None)
-    wrapper = CompressionWrapper(model, "int8")
+    wrapper = CompressionWrapper(model, QuantizationLevel.INT8)
     embeddings = wrapper.encode(
         task_texts,
         task_metadata=task_metadata,
@@ -85,12 +88,13 @@ def test_query_compression():
         hf_subset="test",
         prompt_type=PromptType.query,
     )
-    assert np.array_equal(embeddings, wrapper.query_embeds)
+    assert wrapper.quantize_queries
+    assert embeddings.dtype == torch.float32
 
 
 def test_query_compression_multimodal():
     model = RandomEncoderBaseline(model_name="dummy", revision=None)
-    wrapper = CompressionWrapper(model, "int8")
+    wrapper = CompressionWrapper(model, QuantizationLevel.INT8)
     metadata = task_metadata.model_copy()
     metadata.category = "t2i"
     embeddings = wrapper.encode(
@@ -100,7 +104,7 @@ def test_query_compression_multimodal():
         hf_subset="test",
         prompt_type=PromptType.query,
     )
-    assert wrapper.query_embeds is None
+    assert not wrapper.quantize_queries
     assert np.max(embeddings) <= 2**8 / 2 and np.min(embeddings) >= -(2**8) / 2
 
 
@@ -120,7 +124,7 @@ def test_invalid_compression():
 def test_quantize_queries():
     model = RandomEncoderBaseline(model_name="dummy", revision=None)
     model.mteb_model_meta = random_encoder_baseline
-    wrapper = CompressionWrapper(model, "int8")
+    wrapper = CompressionWrapper(model, QuantizationLevel.INT8)
     query_embeds = wrapper.encode(
         task_texts,
         task_metadata=task_metadata,
@@ -134,7 +138,7 @@ def test_quantize_queries():
         hf_split="test",
         hf_subset="test",
     )
-    assert np.array_equal(query_embeds, wrapper.query_embeds)
+    assert wrapper.quantize_queries
     assert wrapper.mins is not None
     wrapper.similarity(doc_embeds, query_embeds)
     assert wrapper.mins is None

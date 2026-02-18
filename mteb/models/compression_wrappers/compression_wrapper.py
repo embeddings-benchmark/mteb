@@ -1,4 +1,5 @@
 import logging
+from enum import Enum
 from typing import Any
 
 import torch
@@ -12,41 +13,60 @@ from mteb.types import Array, BatchedInput, PromptType
 logger = logging.getLogger(__name__)
 
 
+class QuantizationLevel(Enum):
+    """Enum for valid compression levels."""
+
+    FLOAT8 = 1,
+    INT8 = 2,
+    INT4 = 3,
+    BINARY = 4,
+
+
 class CompressionWrapper:
     """Wraps a model to quantize the embeddings and compute results on the compressed vectors instead."""
 
     def __init__(
         self,
         model: EncoderProtocol,
-        quantization_level: str,
+        quantization_level: QuantizationLevel = QuantizationLevel.FLOAT8,
+        quantiles: tuple[float, float] | None = None,
+        float_type: torch.dtype = torch.float8_e4m3fn,
     ) -> None:
         """Init
 
         Args:
             model: The model to produce quantized embeddings.
             quantization_level: The quantization level to use. Has to be supported by the quantize_embeddings method.
+            quantiles: Lower and upper percentiles to crop embeddings before integer quantization.
+            float_type: The float8 type to use when compressing embeddings to 8bit floats.
         """
+        assert float_type in [
+            torch.float8_e4m3fn,
+            torch.float8_e5m2,
+            torch.float8_e8m0fnu,
+            torch.float8_e4m3fnuz,
+            torch.float8_e5m2fnuz,
+        ]
         self.model = model
         self._quantization_level = quantization_level
+        self.quantiles = quantiles
+        self.float_type = float_type
+        self.quantize_queries = False
         self.mins, self.maxs = None, None
         self.min_embeds = 10_000
         self.query_embeds = None
         self.hf_subset = None
         self.task_name = None
         embed_types = None
+        if quantiles is not None:
+            assert 0 < quantiles[0] < quantiles[1] < 1
+            self.quantiles = torch.tensor(quantiles)
         if model.mteb_model_meta:
             embed_types = model.mteb_model_meta.embedding_types
-            model.mteb_model_meta.name = (
-                f"{model.mteb_model_meta.name} (output_dtype={quantization_level})"
-            )
         if embed_types and quantization_level in embed_types:
             logger.warning(
-                f"The model {model.mteb_model_meta.name} internally supports quantization to {quantization_level}. "
-                f"Setting output file name to {model.mteb_model_meta.name} (output_dtype={quantization_level}*) to "
-                f"avoid conflict."
-            )
-            model.mteb_model_meta.name = (
-                f"{model.mteb_model_meta.name} (output_dtype={quantization_level}*)"
+                f"The model {model.mteb_model_meta.name} internally supports quantization to {quantization_level}, "
+                f"which might lead to better results."
             )
         logger.info("Initialized CompressionWrapper.")
 
@@ -106,23 +126,24 @@ class CompressionWrapper:
         ]:
             # With multimodal tasks, always quantize text and image embeddings separately
             logger.info(f"Quantizing query embeddings to {self._quantization_level}")
-            return self._quantize_embeddings(embeddings, PromptType.document)
+            embeddings = self._quantize_embeddings(embeddings)
+            self._reset_boundaries()
+            return embeddings
         elif prompt_type == PromptType.query and self._quantization_level in [
-            "int8",
-            "int4",
+            QuantizationLevel.INT8,
+            QuantizationLevel.INT4,
         ]:
             # Otherwise, compute thresholds for int8/int4 quantization on documents first, then apply them on queries
             logger.info("Query embeddings will be quantized on similarity calculation.")
-            self.query_embeds = embeddings
+            self.quantize_queries = True
             return embeddings
         else:
             logger.info(f"Quantizing embeddings to {self._quantization_level}")
-            return self._quantize_embeddings(embeddings, prompt_type)
+            return self._quantize_embeddings(embeddings)
 
     def _quantize_embeddings(
         self,
         embeddings: torch.tensor,
-        prompt_type: PromptType | None = None,
     ) -> Array:
         """Compresses embeddings to represent each dimension with lower bit-precision.
 
@@ -133,23 +154,28 @@ class CompressionWrapper:
 
         Args:
             embeddings: The embeddings to quantize.
-            prompt_type: The name type of prompt. (query or passage)
 
         Returns:
             The quantized embeddings.
         """
-        quantiles = torch.tensor([0.025, 0.975])
-        if self._quantization_level == "float8":
+        if self._quantization_level == QuantizationLevel.FLOAT8:
             # Cast to float8, then back to float16 using PyTorch as numpy doesn't support float8
-            quantized = embeddings.type(torch.float8_e4m3fn).type(torch.float16)
-        elif self._quantization_level == "int8" or self._quantization_level == "int4":
-            num_bits = 8 if self._quantization_level == "int8" else 4
-            cutoffs = torch.quantile(embeddings, quantiles, dim=0)
-            quantized = torch.clip(embeddings, cutoffs[0], cutoffs[1])
-            mins, maxs = self._get_min_max_per_dim(embeddings, prompt_type)
+            quantized = embeddings.type(self.float_type).type(torch.float16)
+        elif self._quantization_level in [
+            QuantizationLevel.INT8,
+            QuantizationLevel.INT4,
+        ]:
+            num_bits = 8 if self._quantization_level == QuantizationLevel.INT8 else 4
+            if self.quantiles is not None:
+                cutoffs = torch.quantile(embeddings, self.quantiles, dim=0)
+                embeddings = torch.clip(embeddings, cutoffs[0], cutoffs[1])
+            mins, maxs = self._get_min_max_per_dim(embeddings)
             steps = (maxs - mins) / (2**num_bits - 1)
-            quantized = torch.floor((quantized - mins) / steps) - int(2**num_bits * 0.5)
-        elif self._quantization_level == "binary":
+            quantized = torch.floor((embeddings - mins) / steps) - int(
+                2**num_bits * 0.5
+            )
+            quantized = quantized.type(torch.int8)
+        elif self._quantization_level == QuantizationLevel.BINARY:
             quantized = torch.where(embeddings > 0, 1.0, 0.0)
         else:
             raise ValueError(
@@ -160,7 +186,6 @@ class CompressionWrapper:
     def _get_min_max_per_dim(
         self,
         embeddings: torch.tensor,
-        prompt_type: PromptType | None = None,
     ) -> tuple[torch.Tensor, torch.Tensor]:
         """Computes thresholds for integer quantization.
 
@@ -170,21 +195,12 @@ class CompressionWrapper:
 
         Args:
             embeddings: The embeddings for which minima and maxima should be calculated.
-            prompt_type: The name type of prompt. (query or passage)
 
         Returns:
             The minimum and maximum values per embedding dimension.
         """
-        if prompt_type == PromptType.query:
-            if self.mins is not None and self.maxs is not None:
-                return self.mins, self.maxs
-            else:
-                raise ValueError(
-                    "Quantizing query embeddings requires pre-computed thresholds! Make sure to calculate quantized "
-                    "document embeddings first."
-                )
-        # Use values calculated on first set of text for tasks like bitext mining or classification
-        elif self.mins is not None and self.maxs is not None:
+        # Use pre-computed values, if present
+        if self.mins is not None and self.maxs is not None:
             return self.mins, self.maxs
         else:
             if len(embeddings) < self.min_embeds:
@@ -205,22 +221,27 @@ class CompressionWrapper:
         self.mins = None
         self.maxs = None
 
+    def _quantize_queries(
+        self,
+        embeddings: Array,
+    ) -> Array:
+        """Quantizes embeddings to integer range"""
+        if not isinstance(embeddings, torch.Tensor):
+            embeddings = torch.tensor(embeddings)
+        if embeddings.dtype != torch.int8:
+            logger.info("Quantizing query embeddings.")
+            embeddings = torch.tensor(self._quantize_embeddings(embeddings))
+        return embeddings.float()
+
     def similarity(
         self,
         embeddings1: Array,
         embeddings2: Array,
     ) -> Array:
         """Refer to [EncoderProtocol.similarity][mteb.models.EncoderProtocol.similarity] for more details."""
-        if self.query_embeds is not None:
-            if not isinstance(embeddings1, torch.Tensor):
-                embeddings1 = torch.tensor(embeddings1)
-            if not isinstance(embeddings2, torch.Tensor):
-                embeddings2 = torch.tensor(embeddings2)
-            logger.info("Quantizing query embeddings.")
-            if torch.equal(embeddings1, self.query_embeds):
-                embeddings1 = self._quantize_embeddings(embeddings1, PromptType.query)
-            elif torch.equal(embeddings2, self.query_embeds):
-                embeddings2 = self._quantize_embeddings(embeddings2, PromptType.query)
+        if self.quantize_queries:
+            embeddings1 = self._quantize_queries(embeddings1)
+            embeddings2 = self._quantize_queries(embeddings2)
         self._reset_boundaries()
         return self.model.similarity(embeddings1, embeddings2)
 
@@ -230,5 +251,8 @@ class CompressionWrapper:
         embeddings2: Array,
     ) -> Array:
         """Refer to [EncoderProtocol.similarity][mteb.models.EncoderProtocol.similarity_pairwise] for more details."""
+        if self.quantize_queries:
+            embeddings1 = self._quantize_queries(embeddings1)
+            embeddings2 = self._quantize_queries(embeddings2)
         self._reset_boundaries()
         return self.model.similarity_pairwise(embeddings1, embeddings2)
