@@ -732,6 +732,7 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
+        requires_package(self, "peft", model, "pip install 'mteb[peft]'")
         super().__init__(
             model, revision, device=device, model_prompts=model_prompts, **kwargs
         )
