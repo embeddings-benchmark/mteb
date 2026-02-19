@@ -1,10 +1,10 @@
 import logging
-from enum import StrEnum
 from typing import Any
 
 import torch
 from torch.utils.data import DataLoader
 
+from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import EncoderProtocol
@@ -13,7 +13,7 @@ from mteb.types import Array, BatchedInput, PromptType
 logger = logging.getLogger(__name__)
 
 
-class QuantizationLevel(StrEnum):
+class QuantizationLevel(HelpfulStrEnum):
     """Enum for valid compression levels."""
 
     FLOAT8 = "float8",
