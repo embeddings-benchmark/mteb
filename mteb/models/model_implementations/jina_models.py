@@ -818,7 +818,15 @@ jina_embeddings_v5_text_small = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="Qwen/Qwen3-0.6B",
-    citation="""""",
+    citation="""@misc{akram2026jinaembeddingsv5texttasktargetedembeddingdistillation,
+      title={jina-embeddings-v5-text: Task-Targeted Embedding Distillation}, 
+      author={Mohammad Kalim Akram and Saba Sturua and Nastia Havriushenko and Quentin Herreros and Michael Günther and Maximilian Werk and Han Xiao},
+      year={2026},
+      eprint={2602.15547},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2602.15547}, 
+}""",
 )
 
 
@@ -865,7 +873,15 @@ jina_embeddings_v5_text_nano = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="EuroBERT/EuroBERT-210m",
-    citation="""""",
+    citation="""@misc{akram2026jinaembeddingsv5texttasktargetedembeddingdistillation,
+      title={jina-embeddings-v5-text: Task-Targeted Embedding Distillation}, 
+      author={Mohammad Kalim Akram and Saba Sturua and Nastia Havriushenko and Quentin Herreros and Michael Günther and Maximilian Werk and Han Xiao},
+      year={2026},
+      eprint={2602.15547},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2602.15547}, 
+}""",
 )
 
 jina_reranker_v3 = ModelMeta(
