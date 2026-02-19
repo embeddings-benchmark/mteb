@@ -1,5 +1,5 @@
 import logging
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 import torch
@@ -13,13 +13,13 @@ from mteb.types import Array, BatchedInput, PromptType
 logger = logging.getLogger(__name__)
 
 
-class QuantizationLevel(Enum):
+class QuantizationLevel(StrEnum):
     """Enum for valid compression levels."""
 
-    FLOAT8 = 1,
-    INT8 = 2,
-    INT4 = 3,
-    BINARY = 4,
+    FLOAT8 = "float8",
+    INT8 = "int8",
+    INT4 = "int4",
+    BINARY = "binary",
 
 
 class CompressionWrapper:
@@ -230,7 +230,7 @@ class CompressionWrapper:
             embeddings = torch.tensor(embeddings)
         if embeddings.dtype != torch.int8:
             logger.info("Quantizing query embeddings.")
-            embeddings = torch.tensor(self._quantize_embeddings(embeddings))
+            return torch.tensor(self._quantize_embeddings(embeddings.clone())).float()
         return embeddings.float()
 
     def similarity(
