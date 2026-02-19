@@ -2,14 +2,17 @@ from __future__ import annotations
 
 from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Literal, cast
 
+import huggingface_hub
 import pandas as pd
+from huggingface_hub import list_collections
 
 from mteb.abstasks.abstask import AbsTask
 from mteb.types import StrURL
 
 if TYPE_CHECKING:
+    from mteb.abstasks.aggregated_task import AbsTaskAggregate
     from mteb.results import BenchmarkResults
 
 
@@ -111,6 +114,55 @@ class Benchmark:
                 }
             )
             return no_results_frame
+
+    def push_collection_to_hub(self, hf_username: str) -> None:
+        """Push the benchmark collection to Hugging Face Hub.
+
+        Args:
+            hf_username: Hugging Face username or organization name
+        """
+        collections = list(list_collections(owner=hf_username))
+        collection_exists = False
+        for c in collections:
+            if c.title == self.name:
+                collection_exists = True
+                break
+        collection = None
+        if not collection_exists:
+            collection = huggingface_hub.create_collection(
+                title=self.name,
+                namespace=hf_username,
+                description=self.description[:150] if self.description else None,
+            )
+        else:
+            for c in collections:
+                if c.title == self.name:
+                    collection = c
+                    break
+            # list collections would output only 4 items
+            collection = huggingface_hub.get_collection(collection_slug=collection.slug)
+
+        existing_items = [item.item_id for item in collection.items]
+
+        # get tasks from aggregate tasks in the benchmark
+        flatten_tasks = []
+        for task in self.tasks:
+            if task.is_aggregate:
+                task = cast("AbsTaskAggregate", task)
+                flatten_tasks.extend(task.tasks)
+            else:
+                flatten_tasks.append(task)
+
+        for task in flatten_tasks:
+            task_path = task.metadata.dataset["path"]
+            if task_path in existing_items:
+                continue
+            huggingface_hub.add_collection_item(
+                collection_slug=collection.slug,
+                item_id=task_path,
+                item_type="dataset",
+            )
+            existing_items.append(task_path)
 
 
 class RtebBenchmark(Benchmark):

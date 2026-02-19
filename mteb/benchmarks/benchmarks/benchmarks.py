@@ -2915,13 +2915,13 @@ VISRAG_RETRIEVAL = Benchmark(
     reference="https://huggingface.co/collections/openbmb/visrag",
     citation=r"""
 @misc{yu2025visragvisionbasedretrievalaugmentedgeneration,
-      title={VisRAG: Vision-based Retrieval-augmented Generation on Multi-modality Documents}, 
-      author={Shi Yu and Chaoyue Tang and Bokai Xu and Junbo Cui and Junhao Ran and Yukun Yan and Zhenghao Liu and Shuo Wang and Xu Han and Zhiyuan Liu and Maosong Sun},
-      year={2025},
-      eprint={2410.10594},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2410.10594}, 
+  archiveprefix = {arXiv},
+  author = {Shi Yu and Chaoyue Tang and Bokai Xu and Junbo Cui and Junhao Ran and Yukun Yan and Zhenghao Liu and Shuo Wang and Xu Han and Zhiyuan Liu and Maosong Sun},
+  eprint = {2410.10594},
+  primaryclass = {cs.IR},
+  title = {VisRAG: Vision-based Retrieval-augmented Generation on Multi-modality Documents},
+  url = {https://arxiv.org/abs/2410.10594},
+  year = {2025},
 }
 """,
 )
