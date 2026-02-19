@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Literal, cast
 
 import huggingface_hub
 import pandas as pd
-from huggingface_hub import list_collections
 
 from mteb.abstasks.abstask import AbsTask
 from mteb.types import StrURL
@@ -121,7 +120,7 @@ class Benchmark:
         Args:
             hf_username: Hugging Face username or organization name
         """
-        collections = list(list_collections(owner=hf_username))
+        collections = huggingface_hub.list_collections(owner=hf_username)
         existing_collection = None
         for collection in collections:
             if collection.title == self.name:
