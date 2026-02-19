@@ -732,23 +732,9 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
-        requires_package(self, "peft", model, "pip install 'mteb[peft]'")
         super().__init__(
             model, revision, device=device, model_prompts=model_prompts, **kwargs
         )
-
-        self.prompt_name_to_task = {
-            "Retrieval": "retrieval",
-            "Clustering": "clustering",
-            "Classification": "classification",
-            "STS": "text-matching",
-            "PairClassification": "text-matching",
-            "BitextMining": "text-matching",
-            "MultilabelClassification": "classification",
-            "Reranking": "retrieval",
-            "Summarization": "text-matching",
-            "InstructionReranking": "retrieval",
-        }
 
     def encode(
         self,
@@ -775,25 +761,37 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
 
         jina_task_name = None
         if self.model_prompts and prompt_name:
-            jina_task_name = self.prompt_name_to_task.get(prompt_name, None)
+            jina_task_name = self.model_prompts.get(prompt_name, None)
 
         task = jina_task_name if jina_task_name else "retrieval"
-        logger.info(f"Resolved task={task} for prompt_name={prompt_name}.")
-
-        prompt_name = (
-            "query" if prompt_type and prompt_type == PromptType.query else "document"
+        prompt = (
+            "Query: "
+            if prompt_type and prompt_type == PromptType.query
+            else "Document: "
         )
 
-        embeddings = self.model.encode(
-            sentences, task=task, prompt_name=prompt_name, **kwargs
-        )
+        embeddings = self.model.encode(sentences, task=task, prompt=prompt, **kwargs)
 
         return embeddings
 
 
 jina_embeddings_v5_text_small = ModelMeta(
     loader=JinaV5TextWrapper,
-    loader_kwargs=dict(trust_remote_code=True),
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        model_prompts={
+            "Retrieval": "retrieval",
+            "Clustering": "clustering",
+            "Classification": "classification",
+            "STS": "text-matching",
+            "PairClassification": "text-matching",
+            "BitextMining": "text-matching",
+            "MultilabelClassification": "classification",
+            "Reranking": "retrieval",
+            "Summarization": "text-matching",
+            "InstructionReranking": "retrieval",
+        },
+    ),
     name="jinaai/jina-embeddings-v5-text-small",
     model_type=["dense"],
     modalities=["text"],
@@ -821,20 +819,34 @@ jina_embeddings_v5_text_small = ModelMeta(
     training_datasets=None,
     adapted_from="Qwen/Qwen3-0.6B",
     citation="""@misc{akram2026jinaembeddingsv5texttasktargetedembeddingdistillation,
-      title={jina-embeddings-v5-text: Task-Targeted Embedding Distillation}, 
+      title={jina-embeddings-v5-text: Task-Targeted Embedding Distillation},
       author={Mohammad Kalim Akram and Saba Sturua and Nastia Havriushenko and Quentin Herreros and Michael Günther and Maximilian Werk and Han Xiao},
       year={2026},
       eprint={2602.15547},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2602.15547}, 
+      url={https://arxiv.org/abs/2602.15547},
 }""",
 )
 
 
 jina_embeddings_v5_text_nano = ModelMeta(
     loader=JinaV5TextWrapper,
-    loader_kwargs=dict(trust_remote_code=True),
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        model_prompts={
+            "Retrieval": "retrieval",
+            "Clustering": "clustering",
+            "Classification": "classification",
+            "STS": "text-matching",
+            "PairClassification": "text-matching",
+            "BitextMining": "text-matching",
+            "MultilabelClassification": "classification",
+            "Reranking": "retrieval",
+            "Summarization": "text-matching",
+            "InstructionReranking": "retrieval",
+        },
+    ),
     name="jinaai/jina-embeddings-v5-text-nano",
     model_type=["dense"],
     modalities=["text"],
@@ -862,13 +874,13 @@ jina_embeddings_v5_text_nano = ModelMeta(
     training_datasets=None,
     adapted_from="EuroBERT/EuroBERT-210m",
     citation="""@misc{akram2026jinaembeddingsv5texttasktargetedembeddingdistillation,
-      title={jina-embeddings-v5-text: Task-Targeted Embedding Distillation}, 
+      title={jina-embeddings-v5-text: Task-Targeted Embedding Distillation},
       author={Mohammad Kalim Akram and Saba Sturua and Nastia Havriushenko and Quentin Herreros and Michael Günther and Maximilian Werk and Han Xiao},
       year={2026},
       eprint={2602.15547},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2602.15547}, 
+      url={https://arxiv.org/abs/2602.15547},
 }""",
 )
 
