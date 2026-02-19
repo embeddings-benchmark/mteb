@@ -48,7 +48,6 @@ class UkrTweetToxicityBinaryClassification(AbsTaskClassification):
     url = "https://aclanthology.org/2024.woah-1.19",
     doi = "10.18653/v1/2024.woah-1.19",
     pages = "244--255",
-    abstract = "The task of toxicity detection is still a relevant task, especially in the context of safe and fair LMs development. Nevertheless, labeled binary toxicity classification corpora are not available for all languages, which is understandable given the resource-intensive nature of the annotation process. Ukrainian, in particular, is among the languages lacking such resources. To our knowledge, there has been no existing toxicity classification corpus in Ukrainian. In this study, we aim to fill this gap by investigating cross-lingual knowledge transfer techniques and creating labeled corpora by: (i){\textasciitilde}translating from an English corpus, (ii){\textasciitilde}filtering toxic samples using keywords, and (iii){\textasciitilde}annotating with crowdsourcing. We compare LLMs prompting and other cross-lingual transfer approaches with and without fine-tuning offering insights into the most robust and efficient baselines.",
 }
 """
 )
