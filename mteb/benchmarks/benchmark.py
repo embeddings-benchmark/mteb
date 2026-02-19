@@ -122,47 +122,40 @@ class Benchmark:
             hf_username: Hugging Face username or organization name
         """
         collections = list(list_collections(owner=hf_username))
-        collection_exists = False
-        for c in collections:
-            if c.title == self.name:
-                collection_exists = True
+        existing_collection = None
+        for collection in collections:
+            if collection.title == self.name:
+                existing_collection = collection
                 break
-        collection = None
-        if not collection_exists:
+
+        if existing_collection is None:
             collection = huggingface_hub.create_collection(
                 title=self.name,
                 namespace=hf_username,
                 description=self.description[:150] if self.description else None,
             )
         else:
-            for c in collections:
-                if c.title == self.name:
-                    collection = c
-                    break
             # list collections would output only 4 items
-            collection = huggingface_hub.get_collection(collection_slug=collection.slug)
-
-        existing_items = [item.item_id for item in collection.items]
-
-        # get tasks from aggregate tasks in the benchmark
-        flatten_tasks = []
-        for task in self.tasks:
-            if task.is_aggregate:
-                task = cast("AbsTaskAggregate", task)
-                flatten_tasks.extend(task.tasks)
-            else:
-                flatten_tasks.append(task)
-
-        for task in flatten_tasks:
-            task_path = task.metadata.dataset["path"]
-            if task_path in existing_items:
-                continue
-            huggingface_hub.add_collection_item(
-                collection_slug=collection.slug,
-                item_id=task_path,
-                item_type="dataset",
+            collection = huggingface_hub.get_collection(
+                collection_slug=existing_collection.slug
             )
-            existing_items.append(task_path)
+
+        existing_items = {item.item_id for item in collection.items}
+
+        for task in self.tasks:
+            tasks = (
+                cast("AbsTaskAggregate", task).tasks if task.is_aggregate else [task]
+            )
+            for benchmark_task in tasks:
+                task_path = benchmark_task.metadata.dataset["path"]
+                if task_path in existing_items:
+                    continue
+                huggingface_hub.add_collection_item(
+                    collection_slug=collection.slug,
+                    item_id=task_path,
+                    item_type="dataset",
+                )
+                existing_items.add(task_path)
 
 
 class RtebBenchmark(Benchmark):
