@@ -132,6 +132,7 @@ class Benchmark:
             collection = huggingface_hub.create_collection(
                 title=self.name,
                 namespace=hf_username,
+                # hf collections have a 150 character limit for description, so we truncate it if it's too long
                 description=self.description[:150] if self.description else None,
             )
         else:
