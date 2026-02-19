@@ -736,6 +736,19 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
             model, revision, device=device, model_prompts=model_prompts, **kwargs
         )
 
+        self.prompt_name_to_task = {
+            "Retrieval": "retrieval",
+            "Clustering": "clustering",
+            "Classification": "classification",
+            "STS": "text-matching",
+            "PairClassification": "text-matching",
+            "BitextMining": "text-matching",
+            "MultilabelClassification": "classification",
+            "Reranking": "retrieval",
+            "Summarization": "text-matching",
+            "InstructionReranking": "retrieval",
+        }
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -761,9 +774,11 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
 
         jina_task_name = None
         if self.model_prompts and prompt_name:
-            jina_task_name = self.model_prompts.get(prompt_name, None)
+            jina_task_name = self.prompt_name_to_task.get(prompt_name, None)
 
         task = jina_task_name if jina_task_name else "retrieval"
+        logger.info(f"Resolved task={task} for prompt_name={prompt_name}.")
+
         prompt_name = (
             "query" if prompt_type and prompt_type == PromptType.query else "document"
         )
@@ -777,21 +792,7 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
 
 jina_embeddings_v5_text_small = ModelMeta(
     loader=JinaV5TextWrapper,
-    loader_kwargs=dict(
-        trust_remote_code=True,
-        model_prompts={
-            "Retrieval": "retrieval",
-            "Clustering": "clustering",
-            "Classification": "classification",
-            "STS": "text-matching",
-            "PairClassification": "text-matching",
-            "BitextMining": "text-matching",
-            "MultilabelClassification": "classification",
-            "Reranking": "retrieval",
-            "Summarization": "text-matching",
-            "InstructionReranking": "retrieval",
-        },
-    ),
+    loader_kwargs=dict(trust_remote_code=True),
     name="jinaai/jina-embeddings-v5-text-small",
     model_type=["dense"],
     modalities=["text"],
@@ -832,21 +833,7 @@ jina_embeddings_v5_text_small = ModelMeta(
 
 jina_embeddings_v5_text_nano = ModelMeta(
     loader=JinaV5TextWrapper,
-    loader_kwargs=dict(
-        trust_remote_code=True,
-        model_prompts={
-            "Retrieval": "retrieval",
-            "Clustering": "clustering",
-            "Classification": "classification",
-            "STS": "text-matching",
-            "PairClassification": "text-matching",
-            "BitextMining": "text-matching",
-            "MultilabelClassification": "classification",
-            "Reranking": "retrieval",
-            "Summarization": "text-matching",
-            "InstructionReranking": "retrieval",
-        },
-    ),
+    loader_kwargs=dict(trust_remote_code=True),
     name="jinaai/jina-embeddings-v5-text-nano",
     model_type=["dense"],
     modalities=["text"],
