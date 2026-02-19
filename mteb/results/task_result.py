@@ -13,9 +13,16 @@ from huggingface_hub import EvalResult
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
 
+import mteb
 from mteb import TaskMetadata
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks import AbsTaskClassification
+from mteb.abstasks._eval.eval_result_model import (
+    EvalResult as BenchmarkEvalResult,
+)
+from mteb.abstasks._eval.eval_result_model import (
+    EvalResultDataset,
+)
 from mteb.abstasks.abstask import AbsTask
 from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
@@ -880,6 +887,46 @@ class TaskResult(BaseModel):
                     )
                 )
         return results
+
+    def _get_hf_benchmark_result(self) -> list[BenchmarkEvalResult]:
+        task_metadata = mteb.get_task(self.task_name).metadata
+        dataset_id = task_metadata.dataset["path"]
+        dataset_revision = task_metadata.dataset["revision"]
+        eval_results = []
+        evaluated_splits = set(self.scores.keys())
+        evaluated_subsets = set()
+        # todo save per subset/split?
+        for split, split_results in self.scores.items():
+            for subset_results in split_results:
+                subset_name = subset_results.get("hf_subset", "default")
+                task_id = f"{self.task_name}_{subset_name}_{split}"
+                eval_results.append(
+                    BenchmarkEvalResult(
+                        dataset=EvalResultDataset(
+                            id=dataset_id,
+                            task_id=task_id,
+                            revision=dataset_revision,
+                        ),
+                        metric=subset_results["main_score"],
+                    )
+                )
+                evaluated_subsets.add(subset_name)
+
+        if len(evaluated_splits) == len(task_metadata.eval_splits) and len(
+            evaluated_subsets
+        ) == len(task_metadata.hf_subsets):
+            # overall score
+            eval_results.append(
+                BenchmarkEvalResult(
+                    dataset=EvalResultDataset(
+                        id=dataset_id,
+                        task_id=task_metadata.name,
+                        revision=dataset_revision,
+                    ),
+                    metric=self.get_score(),
+                )
+            )
+        return eval_results
 
 
 class TaskError(BaseModel):

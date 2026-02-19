@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import tempfile
 import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
@@ -9,12 +10,15 @@ from copy import copy
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
+import huggingface_hub
 import numpy as np
+import yaml
 from datasets import ClassLabel, Dataset, DatasetDict, load_dataset
 from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm.auto import tqdm
 
 from mteb._set_seed import _set_seed
+from mteb.abstasks._eval.eval_model import EvalMeta
 from mteb.languages import LanguageScripts
 from mteb.models import (
     CrossEncoderProtocol,
@@ -583,12 +587,19 @@ class AbsTask(ABC):
     def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         raise NotImplementedError
 
-    def push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+    def push_dataset_to_hub(
+        self,
+        repo_name: str,
+        num_proc: int = 1,
+        *,
+        push_eval: bool = False,
+    ) -> None:
         """Push the dataset to the HuggingFace Hub.
 
         Args:
             repo_name: The name of the repository to push the dataset to.
             num_proc: Number of processes to use for loading the dataset.
+            push_eval: Whether to also push the eval.yaml file to the Hub
 
         Examples:
             >>> import mteb
@@ -603,6 +614,53 @@ class AbsTask(ABC):
         self._push_dataset_to_hub(repo_name, num_proc)
         # dataset repo not creating when pushing card
         self.metadata.push_dataset_card_to_hub(repo_name)
+        if push_eval:
+            self.push_eval_to_hub(repo_name)
+
+    def _eval_field_spec(self) -> dict[str, str]:
+        raise NotImplementedError
+
+    def push_eval_to_hub(self, repo_name: str) -> None:
+        """Push `eval.yaml` to the HuggingFace Hub
+
+        Args:
+            repo_name: repository name
+        """
+        from mteb.models.model_meta import _get_file_on_hub
+
+        eval_file_name = "eval.yaml"
+
+        existing_eval_path = _get_file_on_hub(
+            repo_id=repo_name,
+            file_name=eval_file_name,
+            repo_type="dataset",
+        )
+        # todo check how this works
+        # handle multiple tasks in one repo (e.g. MIRACLRetrievalHardNegatives, MIRACLRetrievalHardNegativesV2)
+        existing_eval_str = None
+        if existing_eval_path is not None:
+            with Path(existing_eval_path).open() as f:
+                existing_eval_str = f.read()
+
+        task_config = EvalMeta.create_from_task_metadata(
+            task_metadata=self.metadata,
+            field_spec=self._eval_field_spec(),
+        )
+        task_config_dict = task_config.model_dump()
+        with tempfile.NamedTemporaryFile(mode="w", delete=True) as tmp_file:
+            task_config_yaml_str = yaml.dump(task_config_dict)
+            if existing_eval_str is not None:
+                task_config_yaml_str = existing_eval_str + "\n" + task_config_yaml_str
+            tmp_file.write(task_config_yaml_str)
+
+            huggingface_hub.upload_file(
+                path_or_fileobj=tmp_file.name,
+                path_in_repo=eval_file_name,
+                repo_id=repo_name,
+                repo_type="dataset",
+                commit_message="Add eval config",
+                create_pr=True,
+            )
 
     @property
     def is_aggregate(self) -> bool:

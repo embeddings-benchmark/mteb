@@ -125,6 +125,8 @@ def get_model(
 
 _MODEL_RENAMES: dict[str, str] = {
     "bm25s": "baseline/bm25s",
+    # to store model's eval results to display on benchmark
+    "baseline/bm25s": "mteb/bm25s",
 }
 
 

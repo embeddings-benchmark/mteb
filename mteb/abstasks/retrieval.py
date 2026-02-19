@@ -741,6 +741,10 @@ class AbsTaskRetrieval(AbsTask):
                 self.dataset[subset][split]["top_ranked"] = top_k_sorted
         return self
 
+    def _eval_field_spec(self) -> dict[str, str]:
+        # TODO what to output?
+        return {}
+
 
 def _process_relevant_docs(
     collection: Mapping[str, Mapping[str, int]],
