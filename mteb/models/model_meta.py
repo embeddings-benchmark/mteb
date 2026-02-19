@@ -71,7 +71,7 @@ FRAMEWORKS = Literal[
     "Transformers",
 ]
 
-MODEL_TYPES = Literal["dense", "cross-encoder", "late-interaction", "sparse"]
+MODEL_TYPES = Literal["dense", "cross-encoder", "late-interaction", "sparse", "router"]
 
 
 class ScoringFunction(HelpfulStrEnum):
@@ -761,6 +761,7 @@ class ModelMeta(BaseModel):
         model_name: str, n_parameters: int | None
     ) -> int | None:
         MB = 1024**2  # noqa: N806
+
         try:
             safetensors_metadata = get_safetensors_metadata(model_name)
             if len(safetensors_metadata.parameter_count) >= 0:
