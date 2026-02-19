@@ -521,8 +521,6 @@ class ModelMeta(BaseModel):
         This is based on the heuristic: `vocab_size * embedding_dim` where vocab_size and embedding_dim are extracted from the model's first
         Transformer module.
         """
-        # TODO: this seems rather arbitrary to me - could we combine the logic with that of cross-encoders?
-        # also why the try-except? would love to know when this fails
         logger.info(
             "Calculating number of embedding parameters for SentenceTransformer model."
         )
