@@ -120,7 +120,12 @@ def _filter_queries_without_positives(
 
 
 class AbsTaskRetrieval(AbsTask):
-    """Abstract class for retrieval experiments.
+    """The class which retrieval tasks inherit from.
+
+    A retrieval task consists of a corpus of documents, a set of queries, and a mapping of which documents are relevant for each query.
+    The task is to retrieve the relevant documents for each query. The evaluation is done by indexing the corpus and then searching for each query.
+    The retrieved documents are then compared to the relevant documents to calculate the evaluation scores.
+
 
     Attributes:
         dataset: A nested dictionary where the first key is the subset (language or "default"),

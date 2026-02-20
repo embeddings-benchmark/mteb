@@ -128,23 +128,23 @@ class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
 
 
 class AbsTaskClustering(AbsTask):
-    """Abstract class for Clustering tasks.
+    """The abstract class for clustering tasks.
 
-    This class embeds the corpus sentences then samples N samples from the corpus and clusters them.
-    The similarity then is calculated using the V-measure metric, which is invariant to the permutation of the labels.
-    This approach is then repeated K times.
+    A clustering task consists of a dataset with input data and corresponding cluster labels. The task is to cluster the input data points and compare
+    the cluster assignments with the true cluster labels using V-measure.
+    This class embeds the corpus sentences then samples N samples from the corpus and clusters them. The similarity then is calculated using multiple
+    measures, including a V-measure. This approach is then repeated K times.
 
-    There are two ways to specify how a dataset is downsampled `max_document_to_embed` and `max_fraction_of_documents_to_embed`.
-    If both parameters are set to None, no downsampling is done in self._evaluate_subset().
-    Only one of these two parameters can be not None at the same time.
-
-    If the clustering is hierarchical, and more than one label is specified in order for each observation,
-    V-measures are calculated in the outlined way on each of the levels separately.
+    If the clustering is hierarchical and more than one label is specified in order for each observation, we compute the metrics as outlined
+    for each level separately.
 
     Attributes:
-        dataset: A HuggingFace Dataset containing the data for the clustering task. Must contain the following columns `sentences` that contains inputs (texts or images) and labels columns.
-        max_fraction_of_documents_to_embed: Fraction of documents to embed for clustering.
-        max_document_to_embed: Maximum number of documents to embed for clustering.
+        dataset: A HuggingFace Dataset containing the data for the clustering task. Must contain the following columns `sentences` that contains
+            inputs (texts or images) and labels columns.
+        max_fraction_of_documents_to_embed: Fraction of documents to embed for clustering. Cannot be set at the same time as `max_document_to_embed`.
+            If both are set to None, the entire dataset will be embedded for clustering.
+        max_document_to_embed: Maximum number of documents to embed for clustering. Cannot be set at the same time as `max_fraction_of_documents_to_embed`.
+            If both are set to None, the entire dataset will be embedded for clustering.
         max_documents_per_cluster: Number of documents to sample for each clustering experiment.
         n_clusters: Number of clustering experiments to run.
         k_mean_batch_size: Batch size to use for k-means clustering.

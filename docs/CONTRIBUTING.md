@@ -1,5 +1,5 @@
-## Contributing to MTEB
-We welcome contributions. Please see the current open issues or open an issue yourself. Once you have decided on what you'd like to contribute, this document describes how to set up the repository for development.
+# Contributing to `mteb`
+ We welcome contributions. Please see the current open issues or open an issue yourself. Once you have decided on what you'd like to contribute, this document describes how to set up the repository for development.
 
 
 ### Development Installation

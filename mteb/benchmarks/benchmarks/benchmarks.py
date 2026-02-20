@@ -520,11 +520,14 @@ SEB = Benchmark(
     description="A curated selection of tasks coverering the Scandinavian languages; Danish, Swedish and Norwegian, including Bokmål and Nynorsk.",
     reference="https://kennethenevoldsen.github.io/scandinavian-embedding-benchmark/",
     citation=r"""
-@inproceedings{enevoldsen2024scandinavian,
-  author = {Enevoldsen, Kenneth and Kardos, M{\'a}rton and Muennighoff, Niklas and Nielbo, Kristoffer},
-  booktitle = {Advances in Neural Information Processing Systems},
-  title = {The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding},
-  url = {https://nips.cc/virtual/2024/poster/97869},
+@article{enevoldsenScandinavianEmbeddingBenchmarks2024,
+  author = {Enevoldsen, Kenneth and Kardos, Márton and Muennighoff, Niklas and Nielbo, Kristoffer},
+  language = {en},
+  month = feb,
+  shorttitle = {The {Scandinavian} {Embedding} {Benchmarks}},
+  title = {The {Scandinavian} {Embedding} {Benchmarks}: {Comprehensive} {Assessment} of {Multilingual} and {Monolingual} {Text} {Embedding}},
+  url = {https://openreview.net/forum?id=pJl_i7HIA72},
+  urldate = {2024-04-12},
   year = {2024},
 }
 """,
@@ -785,6 +788,46 @@ two novel clustering tasks.""",  # Rephrased from the abstract
 }
 """,
     contacts=["rafalposwiata"],
+)
+
+MTEB_SPA = Benchmark(
+    name="MTEB(spa, v1)",
+    aliases=["MTEB(spa)"],
+    display_name="Spanish",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/es.svg",
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["spa"],
+            tasks=[
+                # Classification
+                "SpanishNewsClassification.v2",
+                "SpanishSentimentClassification.v2",
+                # Clustering
+                "MLSUMClusteringP2P",
+                "MLSUMClusteringS2S",
+                # Pair Classification
+                "PawsXPairClassification",
+                "XNLI",
+                # Reranking
+                "MIRACLReranking",
+                # Retrieval
+                "MIRACLRetrievalHardNegatives.v2",
+                "MintakaRetrieval",
+                "SpanishPassageRetrievalS2P",
+                "SpanishPassageRetrievalS2S",
+                "XPQARetrieval",
+                # STS
+                "STSES",
+                "STSBenchmarkMultilingualSTS",
+                "STS17",
+            ],
+        )
+        + (get_task("STS22", eval_splits=["test"], hf_subsets=["es"]),)
+    ),
+    description="Spanish text embedding benchmark covering classification, clustering, pair classification, reranking, retrieval, and semantic textual similarity tasks. For a discussion on the benchmark construction see the [original submission](https://github.com/embeddings-benchmark/mteb/pull/4053).",
+    reference=None,
+    citation=None,
+    contacts=["Clemente-H"],
 )
 
 MTEB_code = Benchmark(
@@ -1073,6 +1116,7 @@ MTEB_INDIC = Benchmark(
     name="MTEB(Indic, v1)",
     aliases=["MTEB(Indic)"],
     display_name="Indic",
+    language_view="all",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/in.svg",
     tasks=MTEBTasks(
         get_tasks(
@@ -1164,6 +1208,7 @@ MTEB_EU = Benchmark(
     name="MTEB(Europe, v1)",
     aliases=["MTEB(Europe)"],
     display_name="European",
+    language_view="all",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/eu.svg",
     tasks=get_tasks(
         tasks=[
@@ -1423,10 +1468,11 @@ BEIR = Benchmark(
     description="BEIR is a heterogeneous benchmark containing diverse IR tasks. It also provides a common and easy framework for evaluation of your NLP-based retrieval models within the benchmark.",
     reference="https://arxiv.org/abs/2104.08663",
     citation=r"""
-@article{thakur2021beir,
-  author = {Thakur, Nandan and Reimers, Nils and R{\"u}ckl{\'e}, Andreas and Srivastava, Abhishek and Gurevych, Iryna},
-  journal = {arXiv preprint arXiv:2104.08663},
-  title = {Beir: A heterogenous benchmark for zero-shot evaluation of information retrieval models},
+@inproceedings{thakur2021beir,
+  author = {Nandan Thakur and Nils Reimers and Andreas R{\"u}ckl{\'e} and Abhishek Srivastava and Iryna Gurevych},
+  booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
+  title = {{BEIR}: A Heterogeneous Benchmark for Zero-shot Evaluation of Information Retrieval Models},
+  url = {https://openreview.net/forum?id=wCu6T5xFjeJ},
   year = {2021},
 }
 """,
@@ -1512,13 +1558,14 @@ C_MTEB = Benchmark(
     description="The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchmark for Chinese text embeddings covering 6 tasks and 35 datasets.",
     reference="https://github.com/FlagOpen/FlagEmbedding/tree/master/research/C_MTEB",
     citation=r"""
-@misc{c-pack,
+@misc{xiao2024cpackpackagedresourcesadvance,
   archiveprefix = {arXiv},
-  author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
+  author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
   eprint = {2309.07597},
   primaryclass = {cs.CL},
   title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
-  year = {2023},
+  url = {https://arxiv.org/abs/2309.07597},
+  year = {2024},
 }
 """,
 )
@@ -1736,7 +1783,7 @@ CHEMTEB = Benchmark(
 @article{kasmaee2024chemteb,
   author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
   journal = {arXiv preprint arXiv:2412.00532},
-  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
+  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
   year = {2024},
 }
 """,
@@ -1785,7 +1832,7 @@ CHEMTEB_V1_1 = Benchmark(
 @article{kasmaee2024chemteb,
   author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
   journal = {arXiv preprint arXiv:2412.00532},
-  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
+  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
   year = {2024},
 }
 
@@ -2848,8 +2895,40 @@ KOVIDORE_V2 = Benchmark(
 """,
 )
 
+VISRAG_RETRIEVAL = Benchmark(
+    name="VisRAG Retrieval(v1)",
+    aliases=["VisRAG", "VisRAG Retrieval", "VisRag", "VisRAG(v1)"],
+    display_name="VisRAG Retrieval",
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                "VisRAGRetArxivQA",
+                "VisRAGRetChartQA",
+                "VisRAGRetInfoVQA",
+                "VisRAGRetPlotQA",
+                "VisRAGRetMPDocVQA",
+                "VisRAGRetSlideVQA",
+            ],
+        )
+    ),
+    description="Benchmark of six VisRAG image-text retrieval tasks.",
+    reference="https://huggingface.co/collections/openbmb/visrag",
+    citation=r"""
+@misc{yu2025visragvisionbasedretrievalaugmentedgeneration,
+  archiveprefix = {arXiv},
+  author = {Shi Yu and Chaoyue Tang and Bokai Xu and Junbo Cui and Junhao Ran and Yukun Yan and Zhenghao Liu and Shuo Wang and Xu Han and Zhiyuan Liu and Maosong Sun},
+  eprint = {2410.10594},
+  primaryclass = {cs.IR},
+  title = {VisRAG: Vision-based Retrieval-augmented Generation on Multi-modality Documents},
+  url = {https://arxiv.org/abs/2410.10594},
+  year = {2025},
+}
+""",
+)
+
 MAEB_PLUS = Benchmark(
-    name="MAEB+",
+    name="MAEB+(beta)",
+    aliases=["MAEB+"],
     display_name="MAEB+",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
@@ -2962,15 +3041,16 @@ MAEB_PLUS = Benchmark(
             "UrbanSound8KT2ARetrieval",
         ]
     ),
-    description="""MAEB+ is the full Massive Audio Embedding Benchmark (v1), containing 98 tasks with audio modality across 6 task types: classification, clustering, pair classification, reranking, zero-shot classification, and retrieval.""",
+    description="""MAEB+ is the full Massive Audio Embedding Benchmark (v1), containing 98 tasks with audio modality across 6 task types: classification, clustering, pair classification, reranking, zero-shot classification, and retrieval. The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
 MAEB_AUDIO = Benchmark(
-    name="MAEB(audio-only)",
-    display_name="Audio-Only",
+    name="MAEB(beta, audio-only)",
+    aliases=["MAEB(audio-only)"],
+    display_name="MAEB Audio-Only",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
         tasks=[
@@ -3001,14 +3081,15 @@ MAEB_AUDIO = Benchmark(
             "GTZANAudioReranking",
         ]
     ),
-    description="""MAEB(audio-only) is the audio-only subset of MAEB with 19 tasks spanning 6 task types: classification (10), clustering (3), multilabel classification (1), pair classification (3), reranking (1), and retrieval (1).""",
+    description="""MAEB(audio-only) is the audio-only subset of MAEB with 19 tasks spanning 6 task types: classification (10), clustering (3), multilabel classification (1), pair classification (3), reranking (1), and retrieval (1). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
 MAEB_EXTENDED = Benchmark(
-    name="MAEB(extended)",
+    name="MAEB(beta, extended)",
+    aliases=["MAEB(extended)"],
     display_name="Extended",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
@@ -3118,14 +3199,14 @@ MAEB_EXTENDED = Benchmark(
             "CommonVoiceMini21T2ARetrieval",
         ]
     ),
-    description="""MAEB(extended) is an intermediate benchmark used during task selection, containing 89 tasks that combine audio-only and audio-text evaluation before filtering to MAEB. Audio-only (53 tasks): classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), audio-to-audio retrieval (1). Audio-text (36 tasks): audio-text retrieval (31), zero-shot classification (5).""",
+    description="""MAEB(extended) is an intermediate benchmark used during task selection, containing 89 tasks that combine audio-only and audio-text evaluation before filtering to MAEB. Audio-only (53 tasks): classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), audio-to-audio retrieval (1). Audio-text (36 tasks): audio-text retrieval (31), zero-shot classification (5). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
-
 MAEB = Benchmark(
-    name="MAEB",
+    name="MAEB(beta)",
+    aliases=["MAEB"],
     display_name="MAEB",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(
@@ -3169,7 +3250,7 @@ MAEB = Benchmark(
             "SpeechCommandsZeroshotv0.02",
         ]
     ),
-    description="""MAEB is a comprehensive audio benchmark with 30 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (10), clustering (3), multilabel classification (2), pair classification (3), reranking (1), and zero-shot classification (2).""",
+    description="""MAEB is a comprehensive audio benchmark with 30 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (10), clustering (3), multilabel classification (2), pair classification (3), reranking (1), and zero-shot classification (2). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
     reference=None,
     citation="",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],

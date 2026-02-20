@@ -89,7 +89,7 @@ nav:
       - Adding a Model: contributing/adding_a_model.md
       - Adding a Task: contributing/adding_a_dataset.md
       - Adding a Benchmark: contributing/adding_a_benchmark.md
-      - Guidelines: CONTRIBUTING.md
+      - CONTRIBUTING.md
   - Overview:
       - overview/index.md
       - Benchmarks:

@@ -8,8 +8,8 @@ class VQA2IT2TRetrieval(AbsTaskRetrieval):
         description="Retrieve the correct answer for a question about an image.",
         reference="https://openaccess.thecvf.com/content_cvpr_2017/html/Goyal_Making_the_v_CVPR_2017_paper.html",
         dataset={
-            "path": "JamieSJS/vqa-2",
-            "revision": "69882b6ba0b443dd62e633e546725b0f13b7e3aa",
+            "path": "mteb/vqa-2",
+            "revision": "cee84d52b243da575fa9ba71501a8433464a79a1",
         },
         type="Any2AnyRetrieval",
         category="it2t",

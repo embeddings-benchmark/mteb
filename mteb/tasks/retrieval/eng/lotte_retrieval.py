@@ -25,7 +25,7 @@ class LoTTERetrieval(AbsTaskRetrieval):
         reference="https://github.com/stanford-futuredata/ColBERT/blob/main/LoTTE.md",
         eval_splits=["test", "dev"],
         eval_langs={domain: ["eng-Latn"] for domain in HF_SUBSETS},
-        main_score="precision_at_5",
+        main_score="recall_at_5",
         date=("2021-12-02", "2022-06-10"),
         domains=["Academic", "Web", "Social"],
         task_subtypes=["Article retrieval"],
