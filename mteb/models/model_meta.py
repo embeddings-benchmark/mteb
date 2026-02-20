@@ -305,14 +305,11 @@ class ModelMeta(BaseModel):
         cls,
         model_name: str,
         revision: str | None,
+        config: dict[str, Any] | None,
         sentence_transformers_loader: Callable[..., MTEBModels],
         cross_encoder_loader: Callable[..., MTEBModels],
     ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
         """Detect if model is CrossEncoder or default to dense."""
-        config = _get_json_from_hub(
-            model_name, "config.json", "model", revision=revision
-        )
-
         if not config:
             logger.warning(
                 f"Could not load config.json for {model_name}. "
@@ -361,6 +358,7 @@ class ModelMeta(BaseModel):
         cls,
         model_name: str,
         revision: str | None = None,
+        config: dict[str, Any] | None = None,
     ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
         """Detect the model type and appropriate loader based on HuggingFace Hub configuration files.
 
@@ -379,6 +377,7 @@ class ModelMeta(BaseModel):
         Args:
             model_name: The HuggingFace model name
             revision: The model revision
+            config: The loaded config.json from the HuggingFace model repository. If not provided, it will be fetched from the hub.
 
 
         Returns:
@@ -401,6 +400,7 @@ class ModelMeta(BaseModel):
                 return cls._detect_cross_encoder_or_dense(
                     model_name,
                     revision,
+                    config,
                     sentence_transformers_loader,
                     cross_encoder_loader=CrossEncoderWrapper,
                 )
@@ -496,7 +496,9 @@ class ModelMeta(BaseModel):
             if model.model_card_data.model_name
             else model.model_card_data.base_model
         )
-        n_parameters = cls._get_n_embedding_parameters_from_sentence_transformers(model)
+        n_embedding_parameters = (
+            cls._get_n_embedding_parameters_from_sentence_transformers(model)
+        )
         return cls.create_empty(
             overwrites=dict(
                 name=name,
@@ -506,7 +508,7 @@ class ModelMeta(BaseModel):
                 embed_dim=model.get_sentence_embedding_dimension(),
                 similarity_fn_name=ScoringFunction.from_str(model.similarity_fn_name),
                 framework=["Sentence Transformers", "PyTorch"],
-                n_parameters=n_parameters,
+                n_embedding_parameters=n_embedding_parameters,
             )
         )
 
@@ -557,7 +559,7 @@ class ModelMeta(BaseModel):
                 revision=model.config._commit_hash,
                 framework=["Sentence Transformers", "PyTorch"],
                 model_type=["cross-encoder"],
-                n_parameters=cls._get_n_embedding_parameters_from_sentence_transformers(
+                n_embedding_parameters=cls._get_n_embedding_parameters_from_sentence_transformers(
                     model
                 ),
             )
@@ -594,8 +596,12 @@ class ModelMeta(BaseModel):
                     revision=revision,
                 )
             )
-
-        loader, model_type = cls._detect_model_type_and_loader(model_name, revision)
+        config = _get_json_from_hub(
+            model_name, "config.json", "model", revision=revision
+        )
+        loader, model_type = cls._detect_model_type_and_loader(
+            model_name, revision, config=config
+        )
         card = ModelCard.load(model_name)
         card_data = card.data
         card_data = cast("ModelCardData", card_data)
@@ -616,6 +622,9 @@ class ModelMeta(BaseModel):
 
         model_license = card_data.license if card_data.license != "other" else None
         n_parameters = cls._calculate_num_parameters_from_hub(model_name)
+        n_embedding_parameters = cls._estimate_embedding_parameters_from_hub(
+            model_name, revision=revision, config=config
+        )
         memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
 
         embedding_dim = getattr(model_config, "hidden_size", None)
@@ -649,6 +658,7 @@ class ModelMeta(BaseModel):
                 license=model_license,
                 framework=frameworks,
                 n_parameters=n_parameters,
+                n_embedding_parameters=n_embedding_parameters,
                 memory_usage_mb=memory_usage_mb,
                 max_tokens=max_tokens,
                 embed_dim=embedding_dim,
@@ -906,14 +916,17 @@ class ModelMeta(BaseModel):
 
     @staticmethod
     def _estimate_embedding_parameters_from_hub(
-        model_name: str | None = None, revision: str | None = None
+        model_name: str | None = None,
+        revision: str | None = None,
+        config: dict[str, Any] | None = None,
     ) -> int | None:
+        """Calculate the number of embedding parameters from the model config (vocab_size * hidden_size).  Note that this is an heuristic that works for many models, but might be incorrect.
+
+        Returns:
+            Number of embedding parameters in the model.
+        """
         if not model_name:
             return None
-
-        config = _get_json_from_hub(
-            model_name, "config.json", "model", revision=revision
-        )
 
         if not config:
             logger.warning(
@@ -925,36 +938,24 @@ class ModelMeta(BaseModel):
         if vocab_size is None and "text_config" in config:
             vocab_size = config["text_config"].get("vocab_size")
 
+        if vocab_size is None:
+            logger.warning(
+                f"Could not calculate embedding parameters for {model_name} as vocab_size is missing from config"
+            )
+            return None
+
         hidden_size = config.get("hidden_size") or config.get("hidden_dim")
         if hidden_size is None and "text_config" in config:
             hidden_size = config["text_config"].get("hidden_size") or config[
                 "text_config"
             ].get("hidden_dim")
 
-        if vocab_size is None and hidden_size is None:
-            logger.warning(
-                f"Could not calculate embedding parameters for {model_name} as both vocab_size and hidden_size/hidden_dim are missing from config"
-            )
-            return None
-        elif vocab_size is None:
-            logger.warning(
-                f"Could not calculate embedding parameters for {model_name} as vocab_size is missing from config"
-            )
-            return None
-        elif hidden_size is None:
+        if hidden_size is None:
             logger.warning(
                 f"Could not calculate embedding parameters for {model_name} as hidden_size/hidden_dim is missing from config"
             )
             return None
         return vocab_size * hidden_size
-
-    def estimate_embedding_parameters_from_hub(self) -> int | None:
-        """Calculate the number of embedding parameters from the model config (vocab_size * hidden_size).  Note that this is an heuristic that works for many models, but might be incorrect.
-
-        Returns:
-            Number of embedding parameters in the model.
-        """
-        return self._estimate_embedding_parameters_from_hub(self.name, self.revision)
 
     @staticmethod
     def _calculate_memory_usage_mb(
