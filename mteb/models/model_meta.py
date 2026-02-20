@@ -664,7 +664,6 @@ class ModelMeta(BaseModel):
         model: SentenceTransformer,
         revision: str | None = None,
         fill_missing: bool = False,
-        fetch_from_hf: bool = True,
         compute_metadata: bool | None = None,
         fetch_from_hf: bool = False,
     ) -> Self:
