@@ -3,6 +3,7 @@ from .aila_statutes_retrieval import AILAStatutes
 from .alpha_nli_retrieval import AlphaNLI
 from .arc_challenge_retrieval import ARCChallenge
 from .argu_ana_retrieval import ArguAna
+from .audio_set_strong import AudioSetStrongA2TRetrieval, AudioSetStrongT2ARetrieval
 from .bar_exam_qa_retrieval import BarExamQARetrieval
 from .bill_sum_ca_retrieval import BillSumCARetrieval
 from .bill_sum_us_retrieval import BillSumUSRetrieval
@@ -14,6 +15,28 @@ from .birco_whats_that_book_reranking import BIRCOWhatsThatBookReranking
 from .blink_it2i_retrieval import BLINKIT2IRetrieval
 from .blink_it2t_retrieval import BLINKIT2TRetrieval
 from .bright_retrieval import BrightLongRetrieval, BrightRetrieval
+from .bright_v1_1_retrieval import (
+    BrightAopsRetrieval,
+    BrightBiologyLongRetrieval,
+    BrightBiologyRetrieval,
+    BrightEarthScienceLongRetrieval,
+    BrightEarthScienceRetrieval,
+    BrightEconomicsLongRetrieval,
+    BrightEconomicsRetrieval,
+    BrightLeetcodeRetrieval,
+    BrightPonyLongRetrieval,
+    BrightPonyRetrieval,
+    BrightPsychologyLongRetrieval,
+    BrightPsychologyRetrieval,
+    BrightRoboticsLongRetrieval,
+    BrightRoboticsRetrieval,
+    BrightStackoverflowLongRetrieval,
+    BrightStackoverflowRetrieval,
+    BrightSustainableLivingLongRetrieval,
+    BrightSustainableLivingRetrieval,
+    BrightTheoremQAQuestionsRetrieval,
+    BrightTheoremQATheoremsRetrieval,
+)
 from .built_bench_retrieval import BuiltBenchRetrieval
 from .chat_doctor_retrieval import ChatDoctorRetrieval
 from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval
@@ -26,6 +49,8 @@ from .climate_fever_retrieval import (
     ClimateFEVERHardNegativesV2,
     ClimateFEVERRetrievalv2,
 )
+from .clotho import ClothoA2TRetrieval, ClothoT2ARetrieval
+from .cmu_arctic import CMUArcticA2TRetrieval, CMUArcticT2ARetrieval
 from .cqa_dupstack_android_retrieval import CQADupstackAndroidRetrieval
 from .cqa_dupstack_english_retrieval import CQADupstackEnglishRetrieval
 from .cqa_dupstack_gaming_retrieval import CQADupstackGamingRetrieval
@@ -61,6 +86,7 @@ from .dapfam_patent_retrieval import (
 )
 from .dbpedia_retrieval import DBPedia, DBPediaHardNegatives, DBPediaHardNegativesV2
 from .edis_t2it_retrieval import EDIST2ITRetrieval
+from .emo_vdb import EmoVDBA2TRetrieval, EmoVDBT2ARetrieval
 from .encyclopedia_vqa_it2it_retrieval import EncyclopediaVQAIT2ITRetrieval
 from .english_finance1_retrieval import EnglishFinance1Retrieval
 from .english_finance2_retrieval import EnglishFinance2Retrieval
@@ -79,6 +105,7 @@ from .finance_bench_retrieval import FinanceBenchRetrieval
 from .flickr30k_i2t_retrieval import Flickr30kI2TRetrieval
 from .flickr30k_t2i_retrieval import Flickr30kT2IRetrieval
 from .forb_i2i_retrieval import FORBI2I
+from .giga_speech import GigaSpeechA2TRetrieval, GigaSpeechT2ARetrieval
 from .gl_dv2_i2i_retrieval import GLDv2I2IRetrieval
 from .gl_dv2_i2t_retrieval import GLDv2I2TRetrieval
 from .gov_report_retrieval import GovReportRetrieval
@@ -87,6 +114,7 @@ from .hateful_memes_i2t_retrieval import HatefulMemesI2TRetrieval
 from .hateful_memes_t2i_retrieval import HatefulMemesT2IRetrieval
 from .hc3_finance_retrieval import HC3FinanceRetrieval
 from .hella_swag_retrieval import HellaSwag
+from .hi_fi_tts import HiFiTTSA2TRetrieval, HiFiTTST2ARetrieval
 from .hotpot_qa_retrieval import (
     HotpotQA,
     HotpotQAHardNegatives,
@@ -95,6 +123,8 @@ from .hotpot_qa_retrieval import (
 from .image_co_de_t2i_retrieval import ImageCoDeT2IRetrieval
 from .info_seek_it2it_retrieval import InfoSeekIT2ITRetrieval
 from .info_seek_it2t_retrieval import InfoSeekIT2TRetrieval
+from .jl_corpus import JLCorpusA2TRetrieval, JLCorpusT2ARetrieval
+from .lass import LASSA2TRetrieval, LASST2ARetrieval
 from .legal_bench_consumer_contracts_qa_retrieval import LegalBenchConsumerContractsQA
 from .legal_bench_corporate_lobbying_retrieval import LegalBenchCorporateLobbying
 from .legal_summarization_retrieval import LegalSummarization
@@ -104,10 +134,12 @@ from .lemb_passkey_retrieval import LEMBPasskeyRetrieval
 from .lemb_summ_screen_fd_retrieval import LEMBSummScreenFDRetrieval
 from .lemb_wikim_qa_retrieval import LEMBWikimQARetrieval
 from .lembqm_sum_retrieval import LEMBQMSumRetrieval
+from .libri_tts import LibriTTSA2TRetrieval, LibriTTST2ARetrieval
 from .limit_retrieval import LIMITRetrieval, LIMITSmallRetrieval
 from .lit_search_retrieval import LitSearchRetrieval
 from .llava_it2t_retrieval import LLaVAIT2TRetrieval
 from .lotte_retrieval import LoTTERetrieval
+from .macs import MACSA2TRetrieval, MACST2ARetrieval
 from .medical_qa_retrieval import MedicalQARetrieval
 from .memotion_i2t_retrieval import MemotionI2TRetrieval
 from .memotion_t2i_retrieval import MemotionT2IRetrieval
@@ -176,6 +208,7 @@ from .siqa_retrieval import SIQA
 from .sketchy_i2i_retrieval import SketchyI2IRetrieval
 from .sop_i2i_retrieval import SOPI2IRetrieval
 from .spart_qa_retrieval import SpartQA
+from .spoken_s_qu_ad import SpokenSQuADT2ARetrieval
 from .stanford_cars_i2i_retrieval import StanfordCarsI2I
 from .temp_reason_l1_retrieval import TempReasonL1
 from .temp_reason_l2_context_retrieval import TempReasonL2Context
@@ -201,6 +234,12 @@ from .vidore_bench_retrieval import (
     VidoreTabfquadRetrieval,
     VidoreTatdqaRetrieval,
 )
+from .visrag_ret_arxiv_qa_retrieval import VisRAGRetArxivQA
+from .visrag_ret_chart_qa_retrieval import VisRAGRetChartQA
+from .visrag_ret_info_vqa_retrieval import VisRAGRetInfoVQA
+from .visrag_ret_mp_docvqa_retrieval import VisRAGRetMPDocVQA
+from .visrag_ret_plot_qa_retrieval import VisRAGRetPlotQA
+from .visrag_ret_slide_vqa_retrieval import VisRAGRetSlideVQA
 from .visual_news_i2t_retrieval import VisualNewsI2TRetrieval
 from .visual_news_t2i_retrieval import VisualNewsT2IRetrieval
 from .viz_wiz_it2t_retrieval import VizWizIT2TRetrieval
@@ -226,6 +265,8 @@ __all__ = [
     "ARCChallenge",
     "AlphaNLI",
     "ArguAna",
+    "AudioSetStrongA2TRetrieval",
+    "AudioSetStrongT2ARetrieval",
     "BIRCOArguAnaReranking",
     "BIRCOClinicalTrialReranking",
     "BIRCODorisMaeReranking",
@@ -236,10 +277,32 @@ __all__ = [
     "BarExamQARetrieval",
     "BillSumCARetrieval",
     "BillSumUSRetrieval",
+    "BrightAopsRetrieval",
+    "BrightBiologyLongRetrieval",
+    "BrightBiologyRetrieval",
+    "BrightEarthScienceLongRetrieval",
+    "BrightEarthScienceRetrieval",
+    "BrightEconomicsLongRetrieval",
+    "BrightEconomicsRetrieval",
+    "BrightLeetcodeRetrieval",
     "BrightLongRetrieval",
+    "BrightPonyLongRetrieval",
+    "BrightPonyRetrieval",
+    "BrightPsychologyLongRetrieval",
+    "BrightPsychologyRetrieval",
     "BrightRetrieval",
+    "BrightRoboticsLongRetrieval",
+    "BrightRoboticsRetrieval",
+    "BrightStackoverflowLongRetrieval",
+    "BrightStackoverflowRetrieval",
+    "BrightSustainableLivingLongRetrieval",
+    "BrightSustainableLivingRetrieval",
+    "BrightTheoremQAQuestionsRetrieval",
+    "BrightTheoremQATheoremsRetrieval",
     "BuiltBenchRetrieval",
     "CIRRIT2IRetrieval",
+    "CMUArcticA2TRetrieval",
+    "CMUArcticT2ARetrieval",
     "CQADupstackAndroidRetrieval",
     "CQADupstackEnglishRetrieval",
     "CQADupstackGamingRetrieval",
@@ -260,6 +323,8 @@ __all__ = [
     "ClimateFEVERHardNegatives",
     "ClimateFEVERHardNegativesV2",
     "ClimateFEVERRetrievalv2",
+    "ClothoA2TRetrieval",
+    "ClothoT2ARetrieval",
     "DAPFAMAllTitlAbsClmToFullTextRetrieval",
     "DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval",
     "DAPFAMAllTitlAbsClmToTitlAbsRetrieval",
@@ -282,6 +347,8 @@ __all__ = [
     "DBPediaHardNegatives",
     "DBPediaHardNegativesV2",
     "EDIST2ITRetrieval",
+    "EmoVDBA2TRetrieval",
+    "EmoVDBT2ARetrieval",
     "EncyclopediaVQAIT2ITRetrieval",
     "EnglishFinance1Retrieval",
     "EnglishFinance2Retrieval",
@@ -302,18 +369,26 @@ __all__ = [
     "Flickr30kT2IRetrieval",
     "GLDv2I2IRetrieval",
     "GLDv2I2TRetrieval",
+    "GigaSpeechA2TRetrieval",
+    "GigaSpeechT2ARetrieval",
     "GovReportRetrieval",
     "HC3FinanceRetrieval",
     "HagridRetrieval",
     "HatefulMemesI2TRetrieval",
     "HatefulMemesT2IRetrieval",
     "HellaSwag",
+    "HiFiTTSA2TRetrieval",
+    "HiFiTTST2ARetrieval",
     "HotpotQA",
     "HotpotQAHardNegatives",
     "HotpotQAHardNegativesV2",
     "ImageCoDeT2IRetrieval",
     "InfoSeekIT2ITRetrieval",
     "InfoSeekIT2TRetrieval",
+    "JLCorpusA2TRetrieval",
+    "JLCorpusT2ARetrieval",
+    "LASSA2TRetrieval",
+    "LASST2ARetrieval",
     "LEMBNarrativeQARetrieval",
     "LEMBNeedleRetrieval",
     "LEMBPasskeyRetrieval",
@@ -326,8 +401,12 @@ __all__ = [
     "LegalBenchConsumerContractsQA",
     "LegalBenchCorporateLobbying",
     "LegalSummarization",
+    "LibriTTSA2TRetrieval",
+    "LibriTTST2ARetrieval",
     "LitSearchRetrieval",
     "LoTTERetrieval",
+    "MACSA2TRetrieval",
+    "MACST2ARetrieval",
     "METI2IRetrieval",
     "MLQuestionsRetrieval",
     "MSCOCOI2TRetrieval",
@@ -385,6 +464,7 @@ __all__ = [
     "SciMMIRT2IRetrieval",
     "SketchyI2IRetrieval",
     "SpartQA",
+    "SpokenSQuADT2ARetrieval",
     "StanfordCarsI2I",
     "TUBerlinT2IRetrieval",
     "TempReasonL1",
@@ -409,6 +489,12 @@ __all__ = [
     "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
     "VidoreTabfquadRetrieval",
     "VidoreTatdqaRetrieval",
+    "VisRAGRetArxivQA",
+    "VisRAGRetChartQA",
+    "VisRAGRetInfoVQA",
+    "VisRAGRetMPDocVQA",
+    "VisRAGRetPlotQA",
+    "VisRAGRetSlideVQA",
     "VisualNewsI2TRetrieval",
     "VisualNewsT2IRetrieval",
     "VizWizIT2TRetrieval",

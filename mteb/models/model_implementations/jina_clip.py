@@ -1,15 +1,20 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies
-from mteb.abstasks.task_metadata import TaskMetadata
+from mteb._requires_package import requires_image_dependencies, requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.colpali_models import COLPALI_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 JINA_CLIP_CITATION = """@article{koukounas2024jinaclip,
   title={Jina CLIP: Your CLIP Model Is Also Your Text Retriever},
@@ -30,6 +35,8 @@ class JinaCLIPModel(AbsEncoder):
         from transformers import AutoModel
 
         requires_image_dependencies()
+        for package in ["timm", "peft", "einops"]:
+            requires_package(self, package, model_name, "pip install mteb[jina-clip]")
 
         self.model_name = model_name
         self.device = device
@@ -56,7 +63,7 @@ class JinaCLIPModel(AbsEncoder):
                     convert_to_numpy=convert_to_numpy,
                     convert_to_tensor=convert_to_tensor,
                 )
-                all_text_embeddings.append(text_outputs.cpu())
+                all_text_embeddings.append(text_outputs.cpu().to(torch.float32))
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
@@ -81,7 +88,7 @@ class JinaCLIPModel(AbsEncoder):
                     convert_to_numpy=convert_to_numpy,
                     convert_to_tensor=convert_to_tensor,
                 )
-                all_image_embeddings.append(image_outputs.cpu())
+                all_image_embeddings.append(image_outputs.cpu().to(torch.float32))
 
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
@@ -138,7 +145,8 @@ jina_clip_v1 = ModelMeta(
     revision="06150c7c382d7a4faedc7d5a0d8cdb59308968f4",
     release_date="2024-05-30",
     modalities=["image", "text"],
-    n_parameters=223_000_000,
+    n_parameters=222647041,
+    n_embedding_parameters=None,
     memory_usage_mb=849,
     max_tokens=8192,
     embed_dim=768,

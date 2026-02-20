@@ -1,0 +1,101 @@
+from sklearn.linear_model import LogisticRegression
+from sklearn.multioutput import MultiOutputClassifier
+
+from mteb.abstasks import AbsTaskMultilabelClassification
+from mteb.abstasks.task_metadata import TaskMetadata
+
+
+class AudioSetMultilingualClassification(AbsTaskMultilabelClassification):
+    metadata = TaskMetadata(
+        name="AudioSet",
+        description="AudioSet consists of an expanding ontology of 632 audio event classes and a collection of 2,084,320 human-labeled 10-second sound clips drawn from YouTube videos.",
+        reference="https://huggingface.co/datasets/agkphysics/AudioSet",
+        dataset={
+            "path": "agkphysics/AudioSet",
+            "revision": "0c609e8302cf139307f639c57652032af0a88041",
+        },
+        type="AudioMultilabelClassification",
+        category="a2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="lrap",
+        date=(
+            "2016-01-01",
+            "2017-01-30",
+        ),
+        domains=["Web", "Music", "Speech", "Scene"],
+        task_subtypes=[
+            "Environment Sound Classification",
+            "Music Instrument Recognition",
+            "Vocal Sound Classification",
+            "Gunshot Audio Classification",
+        ],
+        license="cc-by-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        modalities=["audio"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{audioset,
+  author = {Gemmeke, Jort F and Ellis, Daniel PW and Freedman, Dylan and Jansen, Aren and Lawrence, Wade and Moore, R Channing and Plakal, Manoj and Ritter, Marvin},
+  booktitle = {2017 IEEE international conference on acoustics, speech and signal processing (ICASSP)},
+  organization = {IEEE},
+  pages = {776--780},
+  title = {Audio set: An ontology and human-labeled dataset for audio events},
+  year = {2017},
+}
+""",
+        superseded_by="AudioSetMini",
+    )
+
+    evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())
+    input_column_name: str = "audio"
+    label_column_name: str = "human_labels"
+
+
+# Sampled using scripts/data/audioset/create_data.ipynb
+class AudioSetMiniMultilingualClassification(AbsTaskMultilabelClassification):
+    metadata = TaskMetadata(
+        name="AudioSetMini",
+        description="AudioSet consists of an expanding ontology of 632 audio event classes and a collection of 2,084,320 human-labeled 10-second sound clips drawn from YouTube videos. This is a mini version that is sampled from the original dataset.",
+        reference="https://huggingface.co/datasets/agkphysics/AudioSet",
+        dataset={
+            "path": "mteb/audioset",
+            "revision": "168a7e681ee40609129535d49855c7e3e77e5efa",
+        },
+        type="AudioMultilabelClassification",
+        category="a2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="lrap",
+        date=(
+            "2016-01-01",
+            "2017-01-30",
+        ),
+        domains=["Web", "Music", "Speech", "Scene"],
+        task_subtypes=[
+            "Environment Sound Classification",
+            "Music Instrument Recognition",
+            "Vocal Sound Classification",
+            "Gunshot Audio Classification",
+        ],
+        license="cc-by-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        modalities=["audio"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{audioset,
+  author = {Gemmeke, Jort F and Ellis, Daniel PW and Freedman, Dylan and Jansen, Aren and Lawrence, Wade and Moore, R Channing and Plakal, Manoj and Ritter, Marvin},
+  booktitle = {2017 IEEE international conference on acoustics, speech and signal processing (ICASSP)},
+  organization = {IEEE},
+  pages = {776--780},
+  title = {Audio set: An ontology and human-labeled dataset for audio events},
+  year = {2017},
+}
+""",
+    )
+
+    evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())
+    input_column_name: str = "audio"
+    label_column_name: str = "human_labels"

@@ -45,8 +45,7 @@ Lu Wang},
   eprinttype = {arXiv},
   journal = {CoRR},
   timestamp = {Wed, 26 Jun 2019 07:14:58 +0200},
-  title = {{BIGPATENT:} {A} Large-Scale Dataset for Abstractive and Coherent
-Summarization},
+  title = {{BIGPATENT}: A Large-Scale Dataset for Abstractive and Coherent Summarization},
   url = {http://arxiv.org/abs/1906.03741},
   volume = {abs/1906.03741},
   year = {2019},
@@ -94,8 +93,7 @@ Lu Wang},
   eprinttype = {arXiv},
   journal = {CoRR},
   timestamp = {Wed, 26 Jun 2019 07:14:58 +0200},
-  title = {{BIGPATENT:} {A} Large-Scale Dataset for Abstractive and Coherent
-Summarization},
+  title = {{BIGPATENT}: A Large-Scale Dataset for Abstractive and Coherent Summarization},
   url = {http://arxiv.org/abs/1906.03741},
   volume = {abs/1906.03741},
   year = {2019},
@@ -104,7 +102,7 @@ Summarization},
         adapted_from=["BigPatentClustering"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         for split in self.metadata.eval_splits:
             _check_label_distribution(self.dataset[split])
         self.dataset = self.stratified_subsampling(

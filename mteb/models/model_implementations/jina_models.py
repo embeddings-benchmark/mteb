@@ -1,14 +1,13 @@
+from __future__ import annotations
+
 import logging
 from collections import defaultdict
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 import numpy as np
 import torch
-from sentence_transformers import CrossEncoder
-from torch.utils.data import DataLoader
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import PROGRAMMING_LANGS
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -16,7 +15,14 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from sentence_transformers import CrossEncoder
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -715,6 +721,169 @@ def get_programming_task_override(
     return current_task_name
 
 
+class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
+    """following the hf model card documentation."""
+
+    def __init__(
+        self,
+        model: str,
+        revision: str,
+        device: str | None = None,
+        model_prompts: dict[str, str] | None = None,
+        **kwargs,
+    ) -> None:
+        super().__init__(
+            model, revision, device=device, model_prompts=model_prompts, **kwargs
+        )
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+        if prompt_name:
+            logger.info(
+                f"Using prompt_name={prompt_name} for task={task_metadata.name} prompt_type={prompt_type}"
+            )
+        else:
+            logger.info(
+                f"No model prompts found for task={task_metadata.name} prompt_type={prompt_type}"
+            )
+        sentences = [text for batch in inputs for text in batch["text"]]
+
+        logger.info(f"Encoding {len(sentences)} sentences.")
+
+        jina_task_name = None
+        if self.model_prompts and prompt_name:
+            jina_task_name = self.model_prompts.get(prompt_name, None)
+
+        task = jina_task_name if jina_task_name else "retrieval"
+        prompt = (
+            "Query: "
+            if prompt_type and prompt_type == PromptType.query
+            else "Document: "
+        )
+
+        embeddings = self.model.encode(sentences, task=task, prompt=prompt, **kwargs)
+
+        return embeddings
+
+
+jina_embeddings_v5_text_small = ModelMeta(
+    loader=JinaV5TextWrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        model_prompts={
+            "Retrieval": "retrieval",
+            "Clustering": "clustering",
+            "Classification": "classification",
+            "STS": "text-matching",
+            "PairClassification": "text-matching",
+            "BitextMining": "text-matching",
+            "MultilabelClassification": "classification",
+            "Reranking": "retrieval",
+            "Summarization": "text-matching",
+            "InstructionReranking": "retrieval",
+        },
+    ),
+    name="jinaai/jina-embeddings-v5-text-small",
+    model_type=["dense"],
+    modalities=["text"],
+    languages=multilingual_langs,
+    open_weights=True,
+    revision="46ed7da5b47e4bca710b756313fafaf4110c6bd1",
+    release_date="2026-02-17",  # official release date
+    n_parameters=596049920,
+    n_embedding_parameters=155582464,
+    memory_usage_mb=1137.0,
+    max_tokens=32768,
+    embed_dim=1024,
+    license="cc-by-nc-4.0",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "safetensors",
+    ],
+    use_instructions=True,
+    reference="https://huggingface.co/jinaai/jina-embeddings-v5-text-small",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    adapted_from="Qwen/Qwen3-0.6B",
+    citation="""@misc{akram2026jinaembeddingsv5texttasktargetedembeddingdistillation,
+      title={jina-embeddings-v5-text: Task-Targeted Embedding Distillation},
+      author={Mohammad Kalim Akram and Saba Sturua and Nastia Havriushenko and Quentin Herreros and Michael Günther and Maximilian Werk and Han Xiao},
+      year={2026},
+      eprint={2602.15547},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2602.15547},
+}""",
+)
+
+
+jina_embeddings_v5_text_nano = ModelMeta(
+    loader=JinaV5TextWrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+        model_prompts={
+            "Retrieval": "retrieval",
+            "Clustering": "clustering",
+            "Classification": "classification",
+            "STS": "text-matching",
+            "PairClassification": "text-matching",
+            "BitextMining": "text-matching",
+            "MultilabelClassification": "classification",
+            "Reranking": "retrieval",
+            "Summarization": "text-matching",
+            "InstructionReranking": "retrieval",
+        },
+    ),
+    name="jinaai/jina-embeddings-v5-text-nano",
+    model_type=["dense"],
+    modalities=["text"],
+    languages=multilingual_langs,
+    open_weights=True,
+    revision="4c1f9846bb85490df1d9e535834cf00ceb33823b",
+    release_date="2026-02-17",  # official release date
+    n_parameters=211766016,
+    n_embedding_parameters=98500608,
+    memory_usage_mb=404.0,
+    max_tokens=8192,
+    embed_dim=768,
+    license="cc-by-nc-4.0",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "safetensors",
+    ],
+    use_instructions=True,
+    reference="https://huggingface.co/jinaai/jina-embeddings-v5-text-nano",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    adapted_from="EuroBERT/EuroBERT-210m",
+    citation="""@misc{akram2026jinaembeddingsv5texttasktargetedembeddingdistillation,
+      title={jina-embeddings-v5-text: Task-Targeted Embedding Distillation},
+      author={Mohammad Kalim Akram and Saba Sturua and Nastia Havriushenko and Quentin Herreros and Michael Günther and Maximilian Werk and Han Xiao},
+      year={2026},
+      eprint={2602.15547},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2602.15547},
+}""",
+)
+
 jina_reranker_v3 = ModelMeta(
     loader=JinaRerankerV3Wrapper,
     loader_kwargs=dict(
@@ -727,7 +896,8 @@ jina_reranker_v3 = ModelMeta(
     revision="050e171c4f75dfec5b648ed8470a2475e5a30f30",
     release_date="2025-09-18",  # official release date
     modalities=["text"],
-    n_parameters=int(0.6 * 1e9),
+    n_parameters=596836352,
+    n_embedding_parameters=155582464,
     memory_usage_mb=1138,
     max_tokens=131072,
     embed_dim=None,
@@ -770,7 +940,8 @@ jina_embeddings_v4 = ModelMeta(
     revision="4a58ca57710c49f51896e4bc820e202fbf64904b",
     release_date="2025-06-24",  # official release date
     modalities=["image", "text"],
-    n_parameters=int(3.8 * 1e9),
+    n_parameters=3934695552,
+    n_embedding_parameters=None,
     memory_usage_mb=7500,
     max_tokens=32768,
     embed_dim=2048,
@@ -818,7 +989,8 @@ jina_embeddings_v3 = ModelMeta(
     open_weights=True,
     revision="215a6e121fa0183376388ac6b1ae230326bfeaed",
     release_date="2024-09-18",  # official release date
-    n_parameters=int(572 * 1e6),
+    n_parameters=572310396,
+    n_embedding_parameters=None,
     memory_usage_mb=1092,
     max_tokens=8194,
     embed_dim=1024,
@@ -878,7 +1050,8 @@ jina_embeddings_v2_base_en = ModelMeta(
     open_weights=True,
     revision="6e85f575bc273f1fd840a658067d0157933c83f0",
     release_date="2023-09-27",
-    n_parameters=137_000_000,
+    n_parameters=137368320,
+    n_embedding_parameters=23_445_504,
     memory_usage_mb=262,
     embed_dim=768,
     license="apache-2.0",
@@ -942,7 +1115,8 @@ jina_embeddings_v2_small_en = ModelMeta(
     open_weights=True,
     revision="44e7d1d6caec8c883c2d4b207588504d519788d0",
     release_date="2023-09-27",
-    n_parameters=32_700_000,
+    n_parameters=32690688,
+    n_embedding_parameters=15_630_336,
     memory_usage_mb=62,
     embed_dim=512,
     license="apache-2.0",
@@ -1003,7 +1177,8 @@ jina_embedding_b_en_v1 = ModelMeta(
     open_weights=True,
     revision="32aa658e5ceb90793454d22a57d8e3a14e699516",
     release_date="2023-07-07",
-    n_parameters=110_000_000,
+    n_parameters=109628544,
+    n_embedding_parameters=24_674_304,
     memory_usage_mb=420,
     embed_dim=768,
     license="apache-2.0",
@@ -1060,7 +1235,8 @@ jina_embedding_s_en_v1 = ModelMeta(
     open_weights=True,
     revision="5ac6cd473e2324c6d5f9e558a6a9f65abb57143e",
     release_date="2023-07-07",
-    n_parameters=35_000_000,
+    n_parameters=35330816,
+    n_embedding_parameters=16_449_536,
     memory_usage_mb=134,
     embed_dim=512,
     license="apache-2.0",

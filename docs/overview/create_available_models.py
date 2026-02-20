@@ -1,11 +1,16 @@
 """Updates the available models markdown files."""
 
+from __future__ import annotations
+
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from prettify_list import pretty_long_list
 
 import mteb
-from mteb.models import ModelMeta
+
+if TYPE_CHECKING:
+    from mteb.models import ModelMeta
 
 model_entry = """
 ####  {model_name_w_link}

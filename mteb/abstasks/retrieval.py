@@ -1,13 +1,13 @@
+from __future__ import annotations
+
 import json
 import logging
 from collections import defaultdict
-from collections.abc import Callable, Mapping, Sequence
 from pathlib import Path
 from time import time
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
-from typing_extensions import Self
 
 from mteb._create_dataloaders import (
     _combine_queries_with_instruction_text,
@@ -19,28 +19,16 @@ from mteb._evaluators.retrieval_metrics import make_score_dict
 from mteb.models import (
     CrossEncoderProtocol,
     EncoderProtocol,
-    MTEBModels,
     SearchCrossEncoderWrapper,
     SearchEncoderWrapper,
     SearchProtocol,
 )
-from mteb.types import (
-    EncodeKwargs,
-    HFSubset,
-    QueryDatasetType,
-    RelevantDocumentsType,
-    RetrievalOutputType,
-    ScoresDict,
-)
 from mteb.types.statistics import (
-    ImageStatistics,
-    RelevantDocsStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
-    TopRankedStatistics,
 )
 
 from ._statistics_calculation import (
+    calculate_audio_statistics,
     calculate_image_statistics,
     calculate_relevant_docs_statistics,
     calculate_text_statistics,
@@ -52,6 +40,31 @@ from .retrieval_dataset_loaders import (
     RetrievalSplitData,
     _combine_queries_with_instructions_datasets,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Mapping, Sequence
+
+    from typing_extensions import Self
+
+    from mteb.models import (
+        MTEBModels,
+    )
+    from mteb.types import (
+        EncodeKwargs,
+        HFSubset,
+        QueryDatasetType,
+        RelevantDocumentsType,
+        RetrievalOutputType,
+        ScoresDict,
+    )
+    from mteb.types.statistics import (
+        AudioStatistics,
+        ImageStatistics,
+        RelevantDocsStatistics,
+        TextStatistics,
+        TopRankedStatistics,
+    )
+
 
 logger = logging.getLogger(__name__)
 
@@ -65,8 +78,10 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
 
         documents_text_statistics: Statistics for documents
         documents_image_statistics: Statistics for documents
+        documents_audio_statistics: Statistics for documents
         queries_text_statistics: Statistics for queries
         queries_image_statistics: Statistics for queries
+        queries_audio_statistics: Statistics for queries
         relevant_docs_statistics: Statistics for relevant documents
         top_ranked_statistics: Statistics for top ranked documents (if available)
     """
@@ -76,8 +91,11 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
 
     documents_text_statistics: TextStatistics | None
     documents_image_statistics: ImageStatistics | None
+    documents_audio_statistics: AudioStatistics | None
+
     queries_text_statistics: TextStatistics | None
     queries_image_statistics: ImageStatistics | None
+    queries_audio_statistics: AudioStatistics | None
 
     relevant_docs_statistics: RelevantDocsStatistics
 
@@ -102,7 +120,12 @@ def _filter_queries_without_positives(
 
 
 class AbsTaskRetrieval(AbsTask):
-    """Abstract class for retrieval experiments.
+    """The class which retrieval tasks inherit from.
+
+    A retrieval task consists of a corpus of documents, a set of queries, and a mapping of which documents are relevant for each query.
+    The task is to retrieve the relevant documents for each query. The evaluation is done by indexing the corpus and then searching for each query.
+    The retrieved documents are then compared to the relevant documents to calculate the evaluation scores.
+
 
     Attributes:
         dataset: A nested dictionary where the first key is the subset (language or "default"),
@@ -137,7 +160,10 @@ class AbsTaskRetrieval(AbsTask):
             )
         )
 
-    def convert_v1_dataset_format_to_v2(self):
+    def convert_v1_dataset_format_to_v2(
+        self,
+        num_proc: int | None,
+    ) -> None:
         """Convert dataset from v1 (from `self.queries`, `self.document`) format to v2 format (`self.dotaset`)."""
         # check if dataset is `v1` version
         if not hasattr(self, "queries"):
@@ -204,6 +230,7 @@ class AbsTaskRetrieval(AbsTask):
                             _combine_queries_with_instructions_datasets(
                                 self.dataset[subset][split]["queries"],
                                 instructions,
+                                num_proc,
                             )
                         )
                     if hasattr(self, "top_ranked"):
@@ -229,9 +256,10 @@ class AbsTaskRetrieval(AbsTask):
                         _combine_queries_with_instructions_datasets(
                             self.dataset[subset][split]["queries"],
                             instructions,
+                            num_proc,
                         )
                     )
-                if hasattr(self, "top_ranked"):
+                if hasattr(self, "top_ranked") and self.top_ranked:
                     self.dataset[subset][split]["top_ranked"] = self.top_ranked[
                         split
                     ].copy()
@@ -244,13 +272,13 @@ class AbsTaskRetrieval(AbsTask):
         if hasattr(self, "top_ranked"):
             del self.top_ranked
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         """Load the dataset for the retrieval task."""
         if self.data_loaded:
             return
 
         dataset_path = self.metadata.dataset["path"]
-        eval_splits = self.metadata.eval_splits
+        eval_splits = self.eval_splits
         trust_remote_code = self.metadata.dataset.get("trust_remote_code", False)
         revision = self.metadata.dataset["revision"]
 
@@ -266,16 +294,18 @@ class AbsTaskRetrieval(AbsTask):
                 trust_remote_code=trust_remote_code,
                 split=split,
                 config=hf_subset,
-            ).load()
+            ).load(
+                num_proc=num_proc,
+            )
 
         if self.metadata.is_multilingual:
-            for lang in self.metadata.eval_langs:
+            for lang in self.hf_subsets:
                 for split in eval_splits:
                     _process_data(split, lang)
         else:
             for split in eval_splits:
                 _process_data(split)
-        self.dataset_transform()
+        self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
     def evaluate(
@@ -286,6 +316,7 @@ class AbsTaskRetrieval(AbsTask):
         *,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int | None = None,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluate the model on the retrieval task.
@@ -297,16 +328,16 @@ class AbsTaskRetrieval(AbsTask):
             subsets_to_run: Optional list of subsets to evaluate on
             encode_kwargs: Keyword arguments passed to the encoder
             prediction_folder: Folder to save model predictions
+            num_proc: Number of processes to use
             **kwargs: Additional keyword arguments passed to the evaluator
-
 
         Returns:
             Dictionary mapping subsets to their evaluation scores
         """
         if not self.data_loaded:
-            self.load_data()
+            self.load_data(num_proc=num_proc)
         # TODO: convert all tasks directly https://github.com/embeddings-benchmark/mteb/issues/2030
-        self.convert_v1_dataset_format_to_v2()
+        self.convert_v1_dataset_format_to_v2(num_proc=num_proc)
 
         return super().evaluate(
             model,
@@ -314,6 +345,7 @@ class AbsTaskRetrieval(AbsTask):
             subsets_to_run,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
+            num_proc=num_proc,
             **kwargs,
         )
 
@@ -325,6 +357,7 @@ class AbsTaskRetrieval(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        num_proc: int | None = None,
         **kwargs,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
@@ -336,6 +369,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_split: Split to evaluate on
             hf_subset: Subset to evaluate on
             prediction_folder: Folder with results prediction
+            num_proc: Number of processes to use
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
@@ -375,6 +409,7 @@ class AbsTaskRetrieval(AbsTask):
         results = retriever(
             search_model,
             encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
         )
         end_time = time()
         logger.debug(
@@ -449,9 +484,13 @@ class AbsTaskRetrieval(AbsTask):
         return {}
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> RetrievalDescriptiveStatistics:
-        self.convert_v1_dataset_format_to_v2()
+        self.convert_v1_dataset_format_to_v2(num_proc)
         if hf_subset and hf_subset in self.dataset:
             split_data = self.dataset[hf_subset][split]
             queries = split_data["queries"]
@@ -511,8 +550,10 @@ class AbsTaskRetrieval(AbsTask):
 
         documents_text_statistics = None
         documents_image_statistics = None
+        documents_audio_statistics = None
         queries_text_statistics = None
         queries_image_statistics = None
+        queries_audio_statistics = None
 
         if "t" in corpus_modalities:
             corpus_texts = corpus.map(_corpus_to_dict)["text"]
@@ -521,6 +562,9 @@ class AbsTaskRetrieval(AbsTask):
 
         if "i" in corpus_modalities:
             documents_image_statistics = calculate_image_statistics(corpus["image"])
+
+        if "a" in corpus_modalities:
+            documents_audio_statistics = calculate_audio_statistics(corpus["audio"])
 
         if "t" in queries_modalities:
             queries_ = queries
@@ -536,6 +580,9 @@ class AbsTaskRetrieval(AbsTask):
         if "i" in queries_modalities:
             queries_image_statistics = calculate_image_statistics(queries["image"])
 
+        if "a" in queries_modalities:
+            queries_audio_statistics = calculate_audio_statistics(queries["audio"])
+
         relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
 
         if top_ranked is not None and num_queries and len(top_ranked) > 0:
@@ -550,14 +597,16 @@ class AbsTaskRetrieval(AbsTask):
             number_of_characters=number_of_characters,
             documents_text_statistics=documents_text_statistics,
             documents_image_statistics=documents_image_statistics,
+            documents_audio_statistics=documents_audio_statistics,
             queries_text_statistics=queries_text_statistics,
             queries_image_statistics=queries_image_statistics,
+            queries_audio_statistics=queries_audio_statistics,
             relevant_docs_statistics=relevant_docs_statistics,
             top_ranked_statistics=top_ranked_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
-        self.convert_v1_dataset_format_to_v2()
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+        self.convert_v1_dataset_format_to_v2(num_proc)
 
         def _push_section(
             data: dict[str, RetrievalSplitData],
@@ -597,6 +646,7 @@ class AbsTaskRetrieval(AbsTask):
                     repo_name,
                     hf_subset_name,
                     commit_message=f"Add {hf_subset_name}-{subset_item}",
+                    num_proc=num_proc,
                 )
 
         for subset in self.dataset:
@@ -630,6 +680,7 @@ class AbsTaskRetrieval(AbsTask):
                 repo_name,
                 f"{subset}-qrels" if subset != "default" else "qrels",
                 commit_message=f"Add {subset}-qrels",
+                num_proc=num_proc,
             )
 
             _push_section(

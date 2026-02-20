@@ -20,13 +20,13 @@ class BlurbsClusteringP2P(AbsTaskClusteringLegacy):
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="v_measure",
-        date=None,
-        domains=["Written"],
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("1900-01-01", "2019-12-31"),
+        domains=["Fiction", "Written"],
+        task_subtypes=["Thematic clustering"],
+        license="cc-by-nc-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{Remus2019GermEval2T,
   author = {Steffen Remus and Rami Aly and Chris Biemann},
@@ -82,7 +82,7 @@ class BlurbsClusteringP2PFast(AbsTaskClustering):
         adapted_from=["BlurbsClusteringP2P"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = _convert_to_fast(
             self.dataset, self.input_column_name, self.label_column_name, self.seed
         )

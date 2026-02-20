@@ -21,29 +21,15 @@ class SciDocsReranking(AbsTaskRetrieval):
         domains=["Academic", "Non-fiction", "Written"],
         task_subtypes=["Scientific Reranking"],
         license="cc-by-4.0",
-        annotations_creators=None,
-        dialect=None,
+        annotations_creators="derived",
+        dialect=[],
         sample_creation="found",
         prompt="Given a title of a scientific paper, retrieve the titles of other relevant papers",
         bibtex_citation=r"""
-@inproceedings{cohan-etal-2020-specter,
-  address = {Online},
-  author = {Cohan, Arman  and
-Feldman, Sergey  and
-Beltagy, Iz  and
-Downey, Doug  and
-Weld, Daniel},
-  booktitle = {Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics},
-  doi = {10.18653/v1/2020.acl-main.207},
-  editor = {Jurafsky, Dan  and
-Chai, Joyce  and
-Schluter, Natalie  and
-Tetreault, Joel},
-  month = jul,
-  pages = {2270--2282},
-  publisher = {Association for Computational Linguistics},
-  title = {{SPECTER}: Document-level Representation Learning using Citation-informed Transformers},
-  url = {https://aclanthology.org/2020.acl-main.207},
+@inproceedings{specter2020cohan,
+  author = {Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
+  booktitle = {ACL},
+  title = {SPECTER: Document-level Representation Learning using Citation-informed Transformers},
   year = {2020},
 }
 """,

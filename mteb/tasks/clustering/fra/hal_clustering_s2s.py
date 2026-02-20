@@ -33,7 +33,7 @@ class HALClusteringS2S(AbsTaskClusteringLegacy):
         task_subtypes=["Thematic clustering"],
         license="apache-2.0",
         annotations_creators="human-annotated",
-        dialect=None,
+        dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
 @misc{ciancone2024extending,
@@ -48,7 +48,7 @@ class HALClusteringS2S(AbsTaskClusteringLegacy):
         superseded_by="HALClusteringS2S.v2",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         """Convert to standard format"""
         self.dataset = self.dataset.remove_columns("hal_id")
         titles = self.dataset["test"]["title"]
@@ -98,7 +98,7 @@ class HALClusteringS2SFast(AbsTaskClustering):
         adapted_from=["HALClusteringS2S"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         """Convert to standard format"""
         self.dataset["test"] = self.dataset["test"].remove_columns("hal_id")
         self.dataset["test"] = self.dataset["test"].rename_columns(

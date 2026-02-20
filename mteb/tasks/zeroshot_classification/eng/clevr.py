@@ -10,8 +10,8 @@ class CLEVR(AbsTaskZeroShotClassification):
         description="CLEVR closest object distance identification task.",
         reference="https://openaccess.thecvf.com/content_cvpr_2017/html/Johnson_CLEVR_A_Diagnostic_CVPR_2017_paper.html",
         dataset={
-            "path": "clip-benchmark/wds_vtab-clevr_closest_object_distance",
-            "revision": "ec9c04224a95836ca0344a6000ec8d8bc8a6d4f2",
+            "path": "mteb/wds_vtab-clevr_closest_object_distance",
+            "revision": "d2777bb7428d8d74d951b57de0bc2ca5408c4fd4",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -59,8 +59,8 @@ class CLEVRCount(AbsTaskZeroShotClassification):
         description="CLEVR count objects task.",
         reference="https://openaccess.thecvf.com/content_cvpr_2017/html/Johnson_CLEVR_A_Diagnostic_CVPR_2017_paper.html",
         dataset={
-            "path": "clip-benchmark/wds_vtab-clevr_count_all",
-            "revision": "8b5dce4d5393a04fb58b9261b22a881b02e379b1",
+            "path": "mteb/wds_vtab-clevr_count_all",
+            "revision": "2e31935f1deb7d22306d3bcb02b76c7cd87a10b3",
         },
         type="ZeroShotClassification",
         category="i2t",

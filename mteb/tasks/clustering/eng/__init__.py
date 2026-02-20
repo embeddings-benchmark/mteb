@@ -1,3 +1,4 @@
+from .ambient_acoustic_context_clustering import AmbientAcousticContextClustering
 from .arxiv_clustering_p2p import ArxivClusteringP2P, ArxivClusteringP2PFast
 from .arxiv_clustering_s2s import ArxivClusteringS2S
 from .arxiv_hierarchical_clustering import (
@@ -11,6 +12,7 @@ from .built_bench_clustering_p2p import BuiltBenchClusteringP2P
 from .built_bench_clustering_s2s import BuiltBenchClusteringS2S
 from .cifar import CIFAR10Clustering, CIFAR100Clustering
 from .clus_trec_covid import ClusTrecCovid
+from .crema_d_clustering import CREMADClustering
 from .hume_arxiv_clustering_p2p import HUMEArxivClusteringP2P
 from .hume_reddit_clustering_p2p import HUMERedditClusteringP2P
 from .hume_wiki_cities_clustering import HUMEWikiCitiesClustering
@@ -32,6 +34,9 @@ from .twenty_newsgroups_clustering import (
     TwentyNewsgroupsClustering,
     TwentyNewsgroupsClusteringFast,
 )
+from .voice_gender import VoiceGenderClustering
+from .vox_celeb_clustering import VoxCelebClustering
+from .vox_populi_accent_clustering import VoxPopuliAccentClustering
 from .wiki_cities_clustering import WikiCitiesClustering
 from .wikipedia_chemistry_specialties_clustering import (
     WikipediaChemistrySpecialtiesClustering,
@@ -39,6 +44,7 @@ from .wikipedia_chemistry_specialties_clustering import (
 from .wikipedia_chemistry_topics_clustering import WikipediaChemistryTopicsClustering
 
 __all__ = [
+    "AmbientAcousticContextClustering",
     "ArXivHierarchicalClusteringP2P",
     "ArXivHierarchicalClusteringS2S",
     "ArxivClusteringP2P",
@@ -54,6 +60,7 @@ __all__ = [
     "BuiltBenchClusteringS2S",
     "CIFAR10Clustering",
     "CIFAR100Clustering",
+    "CREMADClustering",
     "ClusTrecCovid",
     "HUMEArxivClusteringP2P",
     "HUMERedditClusteringP2P",
@@ -75,6 +82,9 @@ __all__ = [
     "TinyImageNet",
     "TwentyNewsgroupsClustering",
     "TwentyNewsgroupsClusteringFast",
+    "VoiceGenderClustering",
+    "VoxCelebClustering",
+    "VoxPopuliAccentClustering",
     "WikiCitiesClustering",
     "WikipediaChemistrySpecialtiesClustering",
     "WikipediaChemistryTopicsClustering",

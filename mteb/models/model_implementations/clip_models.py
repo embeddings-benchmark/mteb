@@ -1,13 +1,18 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 
 class CLIPModel(AbsEncoder):
@@ -47,6 +52,9 @@ class CLIPModel(AbsEncoder):
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.model.get_text_features(**inputs)
+                # Handle both tensor and BaseModelOutputWithPooling returns
+                if hasattr(text_outputs, "pooler_output"):
+                    text_outputs = text_outputs.pooler_output
                 all_text_embeddings.append(text_outputs.cpu())
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
@@ -69,6 +77,9 @@ class CLIPModel(AbsEncoder):
             )
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
             image_outputs = self.model.get_image_features(**inputs)
+            # Handle both tensor and BaseModelOutputWithPooling returns
+            if hasattr(image_outputs, "pooler_output"):
+                image_outputs = image_outputs.pooler_output
             all_image_embeddings.append(image_outputs.cpu())
 
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
@@ -122,7 +133,8 @@ clip_vit_large_patch14 = ModelMeta(
     revision="32bd64288804d66eefd0ccbe215aa642df71cc41",
     release_date="2021-02-26",
     modalities=["image", "text"],
-    n_parameters=428_000_000,
+    n_parameters=427616513,
+    n_embedding_parameters=None,
     memory_usage_mb=1631,
     max_tokens=77,
     embed_dim=768,
@@ -146,7 +158,8 @@ clip_vit_base_patch32 = ModelMeta(
     revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
     release_date="2021-02-26",
     modalities=["image", "text"],
-    n_parameters=151_000_000,
+    n_parameters=151277313,
+    n_embedding_parameters=None,
     memory_usage_mb=576,
     max_tokens=77,
     embed_dim=512,
@@ -170,7 +183,8 @@ clip_vit_base_patch16 = ModelMeta(
     revision="57c216476eefef5ab752ec549e440a49ae4ae5f3",
     release_date="2021-02-26",
     modalities=["image", "text"],
-    n_parameters=151_000_000,
+    n_parameters=149620737,
+    n_embedding_parameters=None,
     memory_usage_mb=576,
     max_tokens=77,
     embed_dim=512,

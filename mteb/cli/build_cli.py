@@ -3,17 +3,20 @@ import logging
 import os
 import warnings
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import torch
 from rich.logging import RichHandler
 
 import mteb
-from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
-from mteb.types._encoder_io import EncodeKwargs
+
+if TYPE_CHECKING:
+    from mteb.abstasks.abstask import AbsTask
+    from mteb.types import EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -373,6 +376,12 @@ def _add_leaderboard_parser(subparsers) -> None:
         default=None,
     )
     parser.add_argument(
+        "--rebuild",
+        action="store_true",
+        default=False,
+        help="Force a full rebuild from the results repository, bypassing pre-computed JSON cache",
+    )
+    parser.add_argument(
         "--host",
         type=str,
         default="0.0.0.0",
@@ -418,7 +427,7 @@ def _leaderboard(args: argparse.Namespace) -> None:
         cache = ResultCache()
         logger.info(f"Using default cache path: {cache.cache_path}")
 
-    app = get_leaderboard_app(cache)
+    app = get_leaderboard_app(cache, rebuild=args.rebuild)
 
     logger.info(f"Starting leaderboard on {args.host}:{args.port}")
     if args.share:

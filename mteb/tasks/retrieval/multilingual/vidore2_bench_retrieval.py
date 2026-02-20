@@ -16,6 +16,7 @@ def _load_data(
     splits: list[str],
     langs: list | None = None,
     revision: str | None = None,
+    num_proc: int | None = None,
 ):
     if langs is None:
         corpus = {}
@@ -32,6 +33,7 @@ def _load_data(
             "queries",
             split=split,
             revision=revision,
+            num_proc=num_proc,
         )
         query_ds = query_ds.map(
             lambda x: {
@@ -40,6 +42,7 @@ def _load_data(
                 "modality": "text",
             },
             remove_columns=["query-id", "query"],
+            num_proc=num_proc,
         )
 
         corpus_ds = load_dataset(
@@ -47,6 +50,7 @@ def _load_data(
             "corpus",
             split=split,
             revision=revision,
+            num_proc=num_proc,
         )
         corpus_ds = corpus_ds.map(
             lambda x: {
@@ -54,6 +58,7 @@ def _load_data(
                 "modality": "image",
             },
             remove_columns=["corpus-id"],
+            num_proc=num_proc,
         )
         corpus_ds = corpus_ds.select_columns(["id", "image"])
 
@@ -62,6 +67,7 @@ def _load_data(
             "qrels",
             split=split,
             revision=revision,
+            num_proc=num_proc,
         )
 
         if langs is None:
@@ -125,7 +131,7 @@ class Vidore2ESGReportsRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
 
@@ -134,6 +140,7 @@ class Vidore2ESGReportsRetrieval(AbsTaskRetrieval):
             splits=self.metadata.eval_splits,
             langs=_LANGS.keys(),
             revision=self.metadata.dataset["revision"],
+            num_proc=num_proc,
         )
 
         self.data_loaded = True
@@ -172,7 +179,7 @@ class Vidore2EconomicsReportsRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
 
@@ -181,6 +188,7 @@ class Vidore2EconomicsReportsRetrieval(AbsTaskRetrieval):
             splits=self.metadata.eval_splits,
             langs=_LANGS.keys(),
             revision=self.metadata.dataset["revision"],
+            num_proc=num_proc,
         )
 
         self.data_loaded = True
@@ -219,7 +227,7 @@ class Vidore2BioMedicalLecturesRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
 
@@ -228,6 +236,7 @@ class Vidore2BioMedicalLecturesRetrieval(AbsTaskRetrieval):
             splits=self.metadata.eval_splits,
             langs=_LANGS.keys(),
             revision=self.metadata.dataset["revision"],
+            num_proc=num_proc,
         )
 
         self.data_loaded = True
@@ -266,7 +275,7 @@ class Vidore2ESGReportsHLRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
 
@@ -274,6 +283,7 @@ class Vidore2ESGReportsHLRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             revision=self.metadata.dataset["revision"],
+            num_proc=num_proc,
         )
 
         self.data_loaded = True

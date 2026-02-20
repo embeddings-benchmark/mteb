@@ -1,31 +1,44 @@
+from __future__ import annotations
+
 import hashlib
 import logging
 from collections import defaultdict
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
 from datasets import Dataset
 from sklearn.metrics import average_precision_score
 
 from mteb._evaluators import PairClassificationEvaluator
-from mteb._evaluators.pair_classification_evaluator import (
-    PairClassificationDistances,
-)
 from mteb.abstasks._statistics_calculation import (
+    calculate_audio_statistics,
     calculate_image_statistics,
     calculate_label_statistics,
     calculate_text_statistics,
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ScoringFunction
-from mteb.models.models_protocols import EncoderProtocol, MTEBModels
-from mteb.types import EncodeKwargs, PromptType
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types.statistics import (
-    ImageStatistics,
-    LabelStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from numpy.typing import NDArray
+
+    from mteb._evaluators.pair_classification_evaluator import (
+        PairClassificationDistances,
+    )
+    from mteb.models.models_protocols import MTEBModels
+    from mteb.types import EncodeKwargs, PromptType
+    from mteb.types.statistics import (
+        AudioStatistics,
+        ImageStatistics,
+        LabelStatistics,
+        TextStatistics,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +52,13 @@ class PairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
         unique_pairs: Number of unique pairs
 
         text1_statistics: Statistics for sentence1
+        image1_statistics: Statistics for image1
+        audio1_statistics: Statistics for audio1
+
         text2_statistics: Statistics for sentence2
+        image2_statistics: Statistics for image2
+        audio2_statistics: Statistics for audio2
+
         labels_statistics: Statistics for labels
     """
 
@@ -49,8 +68,10 @@ class PairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
 
     text1_statistics: TextStatistics | None
     image1_statistics: ImageStatistics | None
+    audio1_statistics: AudioStatistics | None
     text2_statistics: TextStatistics | None
     image2_statistics: ImageStatistics | None
+    audio2_statistics: AudioStatistics | None
     labels_statistics: LabelStatistics
 
 
@@ -86,6 +107,7 @@ class AbsTaskPairClassification(AbsTask):
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int | None = None,
         **kwargs,
     ) -> dict[str, float]:
         if not isinstance(model, EncoderProtocol):
@@ -105,7 +127,11 @@ class AbsTaskPairClassification(AbsTask):
             input2_prompt_type=self.input2_prompt_type,
             **kwargs,
         )
-        similarity_scores = evaluator(model, encode_kwargs=encode_kwargs)
+        similarity_scores = evaluator(
+            model,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
 
         if prediction_folder:
             self._save_task_predictions(
@@ -123,7 +149,7 @@ class AbsTaskPairClassification(AbsTask):
         self, similarity_scores: PairClassificationDistances, labels: list[int]
     ) -> dict[str, float]:
         logger.info("Computing metrics...")
-        np_labels = np.asarray(labels)
+        np_labels: NDArray[np.int64] = np.asarray(labels, dtype=np.int64)
         output_scores = {}
         max_scores = defaultdict(list)
         for short_name, scores, reverse in [
@@ -201,6 +227,8 @@ class AbsTaskPairClassification(AbsTask):
         image1_statistics = None
         image2_statistics = None
         number_of_characters = None
+        audio1_statistics = None
+        audio2_statistics = None
         unique_pairs = None
         if self.metadata.modalities == ["text"]:
             text1_statistics = calculate_text_statistics(input1)
@@ -211,7 +239,7 @@ class AbsTaskPairClassification(AbsTask):
             )
             unique_pairs = len(set(zip(input1, input2)))
 
-        elif self.metadata.modalities == ["image"]:
+        if self.metadata.modalities == ["image"]:
             image1_statistics = calculate_image_statistics(input1)
             image2_statistics = calculate_image_statistics(input2)
 
@@ -227,18 +255,37 @@ class AbsTaskPairClassification(AbsTask):
             image_2_hashes = _compute_image_hash(input2)
             unique_pairs = len(set(zip(image_1_hashes, image_2_hashes)))
 
+        if self.metadata.modalities == ["audio"]:
+            audio1_statistics = calculate_audio_statistics(input1)
+            audio2_statistics = calculate_audio_statistics(input2)
+
+            def _compute_audio_hash(inputs: list) -> list[str]:
+                hashes = set()
+                for audio in inputs:
+                    array = audio["array"]
+                    audio_bytes = array.tobytes()
+                    audio_hash = hashlib.md5(audio_bytes).hexdigest()
+                    hashes.add(audio_hash)
+                return list(hashes)
+
+            audio_1_hashes = _compute_audio_hash(input1)
+            audio_2_hashes = _compute_audio_hash(input2)
+            unique_pairs = len(set(zip(audio_1_hashes, audio_2_hashes)))
+
         return PairClassificationDescriptiveStatistics(
             num_samples=len(input1),
             unique_pairs=unique_pairs,
             number_of_characters=number_of_characters,
             text1_statistics=text1_statistics,
             image1_statistics=image1_statistics,
+            audio1_statistics=audio1_statistics,
             text2_statistics=text2_statistics,
             image2_statistics=image2_statistics,
+            audio2_statistics=audio2_statistics,
             labels_statistics=calculate_label_statistics(labels),
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         # previously pair classification datasets were stored in a single row
         if self.dataset is None:
             # overall this shouldn't happen as we check for dataset before pushing to hub
@@ -262,10 +309,14 @@ class AbsTaskPairClassification(AbsTask):
                 self.input2_column_name,
                 self.label_column_name,
             ],
+            num_proc=num_proc,
         )
 
     def _compute_metrics_values(
-        self, scores: list[float], labels: np.ndarray, high_score_more_similar: bool
+        self,
+        scores: list[float],
+        labels: NDArray[np.int64],
+        high_score_more_similar: bool,
     ) -> dict[str, float]:
         """Compute the metrics for the given scores and labels.
 
@@ -299,7 +350,10 @@ class AbsTaskPairClassification(AbsTask):
         )
 
     def _find_best_acc_and_threshold(
-        self, scores: list[float], labels: np.ndarray, high_score_more_similar: bool
+        self,
+        scores: list[float],
+        labels: NDArray[np.int64],
+        high_score_more_similar: bool,
     ) -> tuple[float, float]:
         rows = list(zip(scores, labels))
         rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
@@ -307,7 +361,7 @@ class AbsTaskPairClassification(AbsTask):
         max_acc = 0
         best_threshold = -1.0
         positive_so_far = 0
-        remaining_negatives = sum(np.array(labels) == 0)
+        remaining_negatives = sum(labels == 0)
 
         for i in range(len(rows) - 1):
             score, label = rows[i]
@@ -323,10 +377,9 @@ class AbsTaskPairClassification(AbsTask):
         return max_acc, best_threshold
 
     def _find_best_f1_and_threshold(
-        self, scores, labels, high_score_more_similar: bool
+        self, scores, labels: NDArray[np.int64], high_score_more_similar: bool
     ) -> tuple[float, float, float, float]:
         scores = np.asarray(scores)
-        labels = np.asarray(labels)
 
         rows = list(zip(scores, labels))
 

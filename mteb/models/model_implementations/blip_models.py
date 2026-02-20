@@ -1,14 +1,19 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
 from torch.nn.functional import normalize
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 BLIP_CITATION = """@misc{https://doi.org/10.48550/arxiv.2201.12086,
     doi = {10.48550/ARXIV.2201.12086},
@@ -135,7 +140,8 @@ blip_image_captioning_large = ModelMeta(
     revision="2227ac38c9f16105cb0412e7cab4759978a8fd90",
     release_date="2023-12-07",
     modalities=["image", "text"],
-    n_parameters=470_000_000,
+    n_parameters=446128642,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=1792,
     max_tokens=512,
     embed_dim=768,
@@ -163,7 +169,8 @@ blip_image_captioning_base = ModelMeta(
     revision="89b09ea1789f7addf2f6d6f0dfc4ce10ab58ef84",
     release_date="2023-08-01",
     modalities=["image", "text"],
-    n_parameters=247_000_000,
+    n_parameters=224726017,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=942,
     max_tokens=512,
     embed_dim=768,
@@ -192,7 +199,8 @@ blip_vqa_base = ModelMeta(
     revision="c7df8e7cd7aa2ee9af18f56e2b29e59a92651b64",
     release_date="2023-12-07",
     modalities=["image", "text"],
-    n_parameters=247_000_000,
+    n_parameters=384672572,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=1467,
     max_tokens=512,
     embed_dim=768,
@@ -219,7 +227,8 @@ blip_vqa_capfilt_large = ModelMeta(
     revision="e53f95265aeab69013fabb5380500ab984adbbb4",
     release_date="2023-01-22",
     modalities=["image", "text"],
-    n_parameters=247_000_000,
+    n_parameters=384672572,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=942,
     max_tokens=512,
     embed_dim=768,
@@ -246,7 +255,8 @@ blip_itm_base_coco = ModelMeta(
     revision="7eaa90c11850c0b17fc38c6a11e7d88bd6ac231f",
     release_date="2023-08-01",
     modalities=["image", "text"],
-    n_parameters=247_000_000,
+    n_parameters=223744258,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=942,
     max_tokens=512,
     embed_dim=768,
@@ -273,7 +283,8 @@ blip_itm_large_coco = ModelMeta(
     revision="fef05cafc05298067cbbca00b125749394a77a6f",
     release_date="2023-08-01",
     modalities=["image", "text"],
-    n_parameters=470_000_000,
+    n_parameters=446128642,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=1793,
     max_tokens=512,
     embed_dim=768,
@@ -301,7 +312,8 @@ blip_itm_base_flickr = ModelMeta(
     revision="1de29e660d91ae1786c1876212ea805a22eab251",
     release_date="2023-08-01",
     modalities=["image", "text"],
-    n_parameters=247_000_000,
+    n_parameters=223744258,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=942,
     max_tokens=512,
     embed_dim=768,
@@ -329,7 +341,8 @@ blip_itm_large_flickr = ModelMeta(
     revision="bda12e6506758f54261b5ab174b2c55a3ba143fb",
     release_date="2023-08-01",
     modalities=["image", "text"],
-    n_parameters=470_000_000,
+    n_parameters=446128642,
+    n_embedding_parameters=23_442_432,
     memory_usage_mb=1793,
     max_tokens=512,
     embed_dim=768,

@@ -25,9 +25,11 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@article{vstefanik2023resources,
-  author = {{\v{S}}tef{\'a}nik, Michal and Kadl{\v{c}}{\'\i}k, Marek and Gramacki, Piotr and Sojka, Petr},
-  journal = {arXiv preprint arXiv:2304.01922},
+@misc{štefánik2023resources,
+  archiveprefix = {arXiv},
+  author = {Michal Štefánik and Marek Kadlčík and Piotr Gramacki and Petr Sojka},
+  eprint = {2304.01922},
+  primaryclass = {cs.CL},
   title = {Resources and Few-shot Learners for In-context Learning in Slavic Languages},
   year = {2023},
 }
@@ -35,7 +37,7 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
         superseded_by="SlovakMovieReviewSentimentClassification.v2",
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         self.dataset = self.dataset.rename_columns({"comment": "text"})
 
         self.dataset = self.stratified_subsampling(
@@ -66,9 +68,11 @@ class SlovakMovieReviewSentimentClassificationV2(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@article{vstefanik2023resources,
-  author = {{\v{S}}tef{\'a}nik, Michal and Kadl{\v{c}}{\'\i}k, Marek and Gramacki, Piotr and Sojka, Petr},
-  journal = {arXiv preprint arXiv:2304.01922},
+@misc{štefánik2023resources,
+  archiveprefix = {arXiv},
+  author = {Michal Štefánik and Marek Kadlčík and Piotr Gramacki and Petr Sojka},
+  eprint = {2304.01922},
+  primaryclass = {cs.CL},
   title = {Resources and Few-shot Learners for In-context Learning in Slavic Languages},
   year = {2023},
 }
@@ -76,7 +80,7 @@ class SlovakMovieReviewSentimentClassificationV2(AbsTaskClassification):
         adapted_from=["SlovakMovieReviewSentimentClassification"],
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )

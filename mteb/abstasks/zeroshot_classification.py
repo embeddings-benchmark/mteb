@@ -1,27 +1,37 @@
+from __future__ import annotations
+
 import logging
-from pathlib import Path
-from typing import TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 
 import torch
 from datasets import Dataset
 from sklearn import metrics
 
 from mteb._evaluators import ZeroShotClassificationEvaluator
-from mteb.models import EncoderProtocol, MTEBModels
-from mteb.types import EncodeKwargs
+from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
-    ImageStatistics,
-    LabelStatistics,
     SplitDescriptiveStatistics,
-    TextStatistics,
 )
 
 from ._statistics_calculation import (
+    calculate_audio_statistics,
     calculate_image_statistics,
     calculate_label_statistics,
     calculate_text_statistics,
 )
 from .abstask import AbsTask
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from mteb.models import MTEBModels
+    from mteb.types import EncodeKwargs
+    from mteb.types.statistics import (
+        AudioStatistics,
+        ImageStatistics,
+        LabelStatistics,
+        TextStatistics,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +45,7 @@ class ZeroShotClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
 
         text_statistics: None (no text inputs)
         image_statistics: Statistics for images
+        audio_statistics: None (no audio inputs)
         label_statistics: Statistics for dataset labels
 
         candidates_labels_text_statistics: Statistics for candidate labels text
@@ -45,6 +56,7 @@ class ZeroShotClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
 
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
+    audio_statistics: AudioStatistics | None
     label_statistics: LabelStatistics
     candidates_labels_text_statistics: TextStatistics
 
@@ -73,6 +85,15 @@ class AbsTaskZeroShotClassification(AbsTask):
     input_column_name: str = "image"
     label_column_name: str = "label"
 
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        """Keep only eval splits. Zero-shot tasks don't need train splits."""
+        if self.dataset is None:
+            return
+        splits_to_keep = set(self.metadata.eval_splits)
+        for split in list(self.dataset.keys()):
+            if split not in splits_to_keep:
+                del self.dataset[split]
+
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ZeroShotClassificationDescriptiveStatistics:
@@ -92,11 +113,15 @@ class AbsTaskZeroShotClassification(AbsTask):
 
         image_statistics = None
         text_statistics = None
+        audio_statistics = None
 
         if "image" in self.metadata.modalities:
             image_statistics = calculate_image_statistics(inputs)
         if self.metadata.modalities == ["text"]:
             text_statistics = calculate_text_statistics(inputs)
+
+        if "audio" in self.metadata.modalities:
+            audio_statistics = calculate_audio_statistics(inputs)
 
         label_statistics = calculate_label_statistics(labels)
         candidate_lens = calculate_text_statistics(self.get_candidate_labels())
@@ -106,6 +131,7 @@ class AbsTaskZeroShotClassification(AbsTask):
             number_of_characters=None,
             text_statistics=text_statistics,
             image_statistics=image_statistics,
+            audio_statistics=audio_statistics,
             label_statistics=label_statistics,
             candidates_labels_text_statistics=candidate_lens,
         )
@@ -119,6 +145,7 @@ class AbsTaskZeroShotClassification(AbsTask):
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
+        num_proc: int | None = None,
         **kwargs,
     ) -> ZeroShotClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -137,7 +164,11 @@ class AbsTaskZeroShotClassification(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        probs = evaluator(model, encode_kwargs=encode_kwargs)
+        probs = evaluator(
+            model,
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
 
         if prediction_folder:
             self._save_task_predictions(
@@ -162,13 +193,14 @@ class AbsTaskZeroShotClassification(AbsTask):
             accuracy=metrics.accuracy_score(labels, predictions),
         )
 
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
+    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
         self._upload_dataset_to_hub(
             repo_name,
             [
                 self.input_column_name,
                 self.label_column_name,
             ],
+            num_proc=num_proc,
         )
         labels_dataset = Dataset.from_dict({"labels": self.get_candidate_labels()})
         labels_dataset.push_to_hub(repo_name, config_name="labels")

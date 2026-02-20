@@ -1,22 +1,29 @@
+from __future__ import annotations
+
 import logging
-from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
 import torch.nn.functional as F
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.models_protocols import EncoderProtocol
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -125,7 +132,7 @@ class RepLLaMAModel(AbsEncoder):
                         sequence_lengths,
                     ]
                     embeddings = F.normalize(reps, p=2, dim=-1)
-                    all_embeddings.append(embeddings.cpu().numpy())
+                    all_embeddings.append(embeddings.cpu().detach().numpy())
 
         return np.concatenate(all_embeddings, axis=0)
 
@@ -172,6 +179,7 @@ repllama_llama2_original = ModelMeta(
         "mMARCO-NL",  # translation not trained on
     },
     n_parameters=7_000_000,
+    n_embedding_parameters=131_072_000,
     memory_usage_mb=27,
     max_tokens=4096,
     embed_dim=4096,
@@ -201,6 +209,7 @@ repllama_llama2_reproduced = ModelMeta(
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-ad5c1d0938a1e02954bcafb4d811ba2f34052e71",  # base-peft revision
     release_date="2024-09-15",
     n_parameters=7_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=27,
     max_tokens=4096,
     embed_dim=4096,

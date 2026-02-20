@@ -1,15 +1,21 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from torch.utils.data import DataLoader
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
 
 from .bge_models import bge_m3_training_data
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+
 
 logger = logging.getLogger(__name__)
 
@@ -97,68 +103,6 @@ class BGEReranker(RerankerWrapper):
         return scores
 
 
-class MonoBERTReranker(RerankerWrapper):
-    name: str = "MonoBERT"
-
-    def __init__(
-        self,
-        model_name_or_path="castorini/monobert-large-msmarco",
-        torch_compile=False,
-        **kwargs,
-    ):
-        from transformers import AutoModelForSequenceClassification, AutoTokenizer
-
-        super().__init__(model_name_or_path, **kwargs)
-        if not self.device:
-            self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        model_args = {}
-        if self.fp_options:
-            model_args["torch_dtype"] = self.fp_options
-        self.model = AutoModelForSequenceClassification.from_pretrained(
-            model_name_or_path,
-            **model_args,
-        )
-        self.model.to(self.device)
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
-        self.max_length = self.tokenizer.model_max_length
-        logger.info(f"Using max_length of {self.max_length}")
-
-        self.model.eval()
-
-    @torch.inference_mode()
-    def predict(
-        self,
-        inputs1: DataLoader[BatchedInput],
-        inputs2: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["query"]]
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
-
-        if instructions is not None and instructions[0] is not None:
-            queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
-
-        tokens = self.tokenizer(
-            queries,
-            passages,
-            padding=True,
-            truncation="only_second",
-            return_tensors="pt",
-            max_length=self.max_length,
-        ).to(self.device)
-        output = self.model(**tokens)[0]
-        batch_scores = torch.nn.functional.log_softmax(output, dim=1)
-        return batch_scores[:, 1].exp()
-
-
 class JinaReranker(RerankerWrapper):
     name = "Jina"
 
@@ -213,30 +157,6 @@ class JinaReranker(RerankerWrapper):
         return scores
 
 
-monobert_large = ModelMeta(
-    loader=MonoBERTReranker,
-    loader_kwargs=dict(
-        fp_options="float16",
-    ),
-    name="castorini/monobert-large-msmarco",
-    model_type=["cross-encoder"],
-    languages=["eng-Latn"],
-    open_weights=True,
-    revision="0a97706f3827389da43b83348d5d18c9d53876fa",
-    release_date="2020-05-28",
-    n_parameters=None,
-    memory_usage_mb=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    public_training_code=None,
-    public_training_data=None,
-    similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
-    framework=["Sentence Transformers", "PyTorch", "Transformers"],
-)
-
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
 jina_reranker_multilingual = ModelMeta(
     loader=JinaReranker,
@@ -250,6 +170,7 @@ jina_reranker_multilingual = ModelMeta(
     revision="126747772a932960028d9f4dc93bd5d9c4869be4",
     release_date="2024-09-26",
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=531,
     max_tokens=None,
     embed_dim=None,
@@ -313,6 +234,7 @@ bge_reranker_v2_m3 = ModelMeta(
     revision="953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
     release_date="2024-06-24",
     n_parameters=None,
+    n_embedding_parameters=256_002_048,
     memory_usage_mb=2166,
     max_tokens=None,
     embed_dim=None,
@@ -332,13 +254,13 @@ bge_reranker_v2_m3 = ModelMeta(
       archivePrefix={arXiv},
       primaryClass={cs.CL}
     }
-    @misc{chen2024bge,
-          title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation},
-          author={Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
-          year={2024},
-          eprint={2402.03216},
-          archivePrefix={arXiv},
-          primaryClass={cs.CL}
+    @misc{bge-m3,
+      archiveprefix = {arXiv},
+      author = {Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
+      eprint = {2402.03216},
+      primaryclass = {cs.CL},
+      title = {BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation},
+      year = {2024},
     }
     """,
 )

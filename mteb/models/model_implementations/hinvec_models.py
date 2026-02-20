@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 import logging
+from typing import TYPE_CHECKING
 
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
-from mteb.types import PromptType
 
+if TYPE_CHECKING:
+    from mteb.types import PromptType
 logger = logging.getLogger(__name__)
 
 
@@ -43,6 +47,7 @@ Hinvec_bidir = ModelMeta(
     revision="d4fc678720cc1b8c5d18599ce2d9a4d6090c8b6b",
     release_date="2025-06-19",
     n_parameters=939_591_680,
+    n_embedding_parameters=67108864,
     memory_usage_mb=3715,
     embed_dim=2048,
     license="cc-by-nc-4.0",

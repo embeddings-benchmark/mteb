@@ -17,13 +17,13 @@ class Ocnli(AbsTaskPairClassification):
         eval_splits=["validation"],
         eval_langs=["cmn-Hans"],
         main_score="max_accuracy",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("2020-01-01", "2020-12-31"),
+        domains=["Web", "Written"],
+        task_subtypes=["Textual Entailment"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="created",
         bibtex_citation=r"""
 @misc{hu2020ocnli,
   archiveprefix = {arXiv},
@@ -37,7 +37,7 @@ class Ocnli(AbsTaskPairClassification):
         prompt="Retrieve semantically similar text.",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_column("sent1", "sentence1")
         self.dataset = self.dataset.rename_column("sent2", "sentence2")
 
@@ -57,13 +57,13 @@ class Cmnli(AbsTaskPairClassification):
         eval_splits=["validation"],
         eval_langs=["cmn-Hans"],
         main_score="max_accuracy",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("2019-01-01", "2020-12-31"),
+        domains=["Web", "Written"],
+        task_subtypes=["Textual Entailment"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{xu-etal-2020-clue,
   address = {Barcelona, Spain (Online)},
@@ -112,6 +112,6 @@ Lan, Zhenzhong},
         prompt="Retrieve semantically similar text.",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         self.dataset = self.dataset.rename_column("sent1", "sentence1")
         self.dataset = self.dataset.rename_column("sent2", "sentence2")

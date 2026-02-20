@@ -1,14 +1,19 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
-from packaging.version import Version
+from packaging.specifiers import SpecifierSet
 from torch.utils.data import DataLoader
 from transformers import __version__ as transformers_version
 
-from mteb.abstasks.task_metadata import TaskMetadata
+from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperforming,
       title={Llama Nemoretriever Colembed: Top-Performing Text-Image Retrieval Model},
@@ -20,25 +25,62 @@ LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperfo
       url={https://arxiv.org/abs/2507.05513}
 }"""
 
+NEMOTRON_COLEMBED_CITATION_V2 = """
+@misc{moreira2026nemotroncolembedv2topperforming,
+    title={Nemotron ColEmbed V2: Top-Performing Late Interaction embedding models for Visual Document Retrieval},
+    author={Gabriel de Souza P. Moreira and Ronay Ak and Mengyao Xu and Oliver Holworthy and Benedikt Schifferer and Zhiding Yu and Yauhen Babakhin and Radek Osmulski and Jiarui Cai and Ryan Chesler and Bo Liu and Even Oldridge},
+    year={2026},
+    eprint={2602.03992},
+    archivePrefix={arXiv},
+    primaryClass={cs.IR},
+    url={https://arxiv.org/abs/2602.03992},
+}"""
 
-class LlamaNemoretrieverColembed(AbsEncoder):
+# Transformers version constraints per extra.
+# Keep in sync with pyproject.toml [project.optional-dependencies]
+#
+# Note: The extra name reflects the transformers version requirement, not the model version.
+# For example, llama-nemotron-colembed-vl-3b-v2 uses "llama-nemotron-colembed-vl" because it
+# requires transformers==4.49.0, even though it's a "v2" model by name.
+_TRANSFORMERS_CONSTRAINTS: dict[str, str] = {
+    "llama-nemotron-colembed-vl": "==4.49.0",  # llama-nemoretriever-colembed-*
+    "nemotron-colembed-vl-v2": "==5.0.0rc0",  # nemotron-colembed-vl-4b-v2, nemotron-colembed-vl-8b-v2
+}
+
+
+class NemotronColEmbedVL(AbsEncoder):
+    """Encoder for the NemotronColEmbedVL family of models."""
+
     def __init__(
         self,
         model_name_or_path: str,
         revision: str,
         trust_remote_code: bool,
+        extra_name: str = "llama-nemotron-colembed-vl",
         device_map="cuda",
         torch_dtype=torch.bfloat16,
         attn_implementation="flash_attention_2",
         **kwargs,
     ):
-        required_transformers_version = "4.49.0"
+        install_hint = f"pip install 'mteb[{extra_name}]'"
 
-        if Version(transformers_version) != Version(required_transformers_version):
-            raise RuntimeError(
-                f"transformers version {transformers_version} is not match with required "
-                f"install version {required_transformers_version} to run `nvidia/llama-nemoretriever-colembed`"
+        # Check transformers version
+        constraint = _TRANSFORMERS_CONSTRAINTS.get(extra_name)
+        if constraint is None:
+            raise ValueError(
+                f"Unknown extra_name '{extra_name}'. "
+                f"Must be one of: {list(_TRANSFORMERS_CONSTRAINTS.keys())}"
             )
+        if transformers_version not in SpecifierSet(constraint):
+            raise RuntimeError(
+                f"Model `{model_name_or_path}` requires transformers{constraint}, "
+                f"but {transformers_version} is installed. "
+                f"Run: {install_hint}"
+            )
+
+        # Check required packages
+        for package in ("torchvision", "accelerate", "flash_attn"):
+            requires_package(self, package, model_name_or_path, install_hint)
 
         from transformers import AutoModel
 
@@ -52,7 +94,6 @@ class LlamaNemoretrieverColembed(AbsEncoder):
         ).eval()
 
     def get_text_embeddings(self, texts, batch_size: int = 32, **kwargs):
-        batch_size = 1
         return self.model.forward_queries(texts, batch_size=batch_size)
 
     def get_image_embeddings(
@@ -79,7 +120,6 @@ class LlamaNemoretrieverColembed(AbsEncoder):
                 )
                 all_images.append(pil_img)
 
-        batch_size = 1
         return self.model.forward_images(all_images, batch_size=batch_size)
 
     def calculate_probs(self, text_embeddings, image_embeddings):
@@ -146,9 +186,23 @@ TRAINING_DATA = {
     "wiki-ss-nq",
 }
 
+
+TRAINING_DATA_v2 = {
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreArxivQARetrieval",
+    "docmatix-ir",
+    "VDRMultilingualRetrieval",
+    "VisRAG-Ret-Train-Synthetic-data",
+    "VisRAG-Ret-Train-In-domain-data",
+    "wiki-ss-nq",
+}
+
 llama_nemoretriever_colembed_1b_v1 = ModelMeta(
-    loader=LlamaNemoretrieverColembed,
+    loader=NemotronColEmbedVL,
     loader_kwargs=dict(
+        extra_name="llama-nemotron-colembed-vl",
         trust_remote_code=True,
     ),
     name="nvidia/llama-nemoretriever-colembed-1b-v1",
@@ -158,12 +212,13 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     release_date="2025-06-27",
     modalities=["image", "text"],
     n_parameters=2_418_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=4610,
     max_tokens=8192,
     embed_dim=2048,
     license="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1/blob/main/LICENSE",
     open_weights=True,
-    public_training_code="Proprietary Code",
+    public_training_code=None,
     public_training_data="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1#training-dataset",
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1",
@@ -174,8 +229,9 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
 )
 
 llama_nemoretriever_colembed_3b_v1 = ModelMeta(
-    loader=LlamaNemoretrieverColembed,
+    loader=NemotronColEmbedVL,
     loader_kwargs=dict(
+        extra_name="llama-nemotron-colembed-vl",
         trust_remote_code=True,
     ),
     name="nvidia/llama-nemoretriever-colembed-3b-v1",
@@ -185,12 +241,13 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     release_date="2025-06-27",
     modalities=["image", "text"],
     n_parameters=4_407_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=8403,
     max_tokens=8192,
     embed_dim=3072,
     license="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1/blob/main/LICENSE",
     open_weights=True,
-    public_training_code="Proprietary Code",
+    public_training_code=None,
     public_training_data="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1#training-dataset",
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/nvidia/llama-nemoretriever-colembed-3b-v1",
@@ -198,4 +255,88 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     use_instructions=True,
     training_datasets=TRAINING_DATA,
     citation=LLAMA_NEMORETRIEVER_CITATION,
+)
+
+llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
+    loader=NemotronColEmbedVL,
+    loader_kwargs=dict(
+        extra_name="llama-nemotron-colembed-vl",
+        trust_remote_code=True,
+    ),
+    name="nvidia/llama-nemotron-colembed-vl-3b-v2",
+    model_type=["late-interaction"],
+    languages=["eng-Latn"],
+    revision="75f03c712cb3a252e062295f9a0966e5d95d6156",
+    release_date="2026-01-21",
+    modalities=["image", "text"],
+    n_parameters=4_407_000_000,
+    memory_usage_mb=8403,
+    max_tokens=8192,
+    embed_dim=3072,
+    license="https://huggingface.co/nvidia/llama-nemotron-colembed-vl-3b-v2/blob/main/LICENSE",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/nvidia/llama-nemotron-colembed-vl-3b-v2#training-dataset",
+    framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/nvidia/llama-nemotron-colembed-vl-3b-v2",
+    similarity_fn_name="MaxSim",
+    use_instructions=True,
+    training_datasets=TRAINING_DATA,
+    citation=NEMOTRON_COLEMBED_CITATION_V2,
+)
+
+
+nemotron_colembed_vl_4b_v2 = ModelMeta(
+    loader=NemotronColEmbedVL,
+    loader_kwargs=dict(
+        extra_name="nemotron-colembed-vl-v2",
+        trust_remote_code=True,
+    ),
+    name="nvidia/nemotron-colembed-vl-4b-v2",
+    revision="823b1625c15fe3da73fa094205e538a7a2301a2a",
+    languages=["eng-Latn"],
+    release_date="2026-01-07",
+    modalities=["image", "text"],
+    n_parameters=4_800_000_000,
+    memory_usage_mb=9206,
+    max_tokens=262144,
+    embed_dim=2560,
+    license="https://huggingface.co/nvidia/nemotron-colembed-vl-4b-v2/blob/main/LICENSE",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/nvidia/nemotron-colembed-vl-4b-v2#training-dataset",
+    framework=["PyTorch", "Transformers"],
+    reference="https://huggingface.co/nvidia/nemotron-colembed-vl-4b-v2",
+    similarity_fn_name="MaxSim",
+    use_instructions=True,
+    training_datasets=TRAINING_DATA_v2,
+    citation=NEMOTRON_COLEMBED_CITATION_V2,
+)
+
+
+nemotron_colembed_vl_8b_v2 = ModelMeta(
+    loader=NemotronColEmbedVL,
+    loader_kwargs=dict(
+        extra_name="nemotron-colembed-vl-v2",
+        trust_remote_code=True,
+    ),
+    name="nvidia/nemotron-colembed-vl-8b-v2",
+    revision="6cbe43579dda6237768fc373768ad372cc5cdfec",
+    languages=["eng-Latn"],
+    release_date="2026-01-07",
+    modalities=["image", "text"],
+    n_parameters=8_700_000_000,
+    memory_usage_mb=16722,
+    max_tokens=262144,
+    embed_dim=4096,
+    license="https://huggingface.co/nvidia/nemotron-colembed-vl-8b-v2/blob/main/LICENSE",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/nvidia/nemotron-colembed-vl-8b-v2#training-dataset",
+    framework=["PyTorch", "Transformers"],
+    reference="https://huggingface.co/nvidia/nemotron-colembed-vl-8b-v2",
+    similarity_fn_name="MaxSim",
+    use_instructions=True,
+    training_datasets=TRAINING_DATA_v2,
+    citation=NEMOTRON_COLEMBED_CITATION_V2,
 )

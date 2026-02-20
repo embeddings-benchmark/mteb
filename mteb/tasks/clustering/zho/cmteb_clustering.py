@@ -51,7 +51,7 @@ class CLSClusteringFastS2S(AbsTaskClustering):
         adapted_from=["CLSClusteringS2S"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         ds = {}
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
@@ -110,7 +110,7 @@ class CLSClusteringFastP2P(AbsTaskClustering):
         adapted_from=["CLSClusteringP2P"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         ds = {}
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
@@ -145,13 +145,13 @@ class CLSClusteringS2S(AbsTaskClusteringLegacy):
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("2022-01-01", "2022-09-12"),
+        domains=["Academic", "Written"],
+        task_subtypes=["Thematic clustering", "Topic classification"],
+        license="apache-2.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation=r"""
 @article{li2022csl,
   author = {Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
@@ -180,13 +180,13 @@ class CLSClusteringP2P(AbsTaskClusteringLegacy):
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("2022-01-01", "2022-09-12"),
+        domains=["Academic", "Written"],
+        task_subtypes=["Thematic clustering", "Topic classification"],
+        license="apache-2.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation=r"""
 @article{li2022csl,
   author = {Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
@@ -239,7 +239,7 @@ class ThuNewsClusteringFastS2S(AbsTaskClustering):
         adapted_from=["ThuNewsClusteringS2S"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         ds = {}
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
@@ -298,7 +298,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClustering):
         adapted_from=["ThuNewsClusteringP2P"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(self, num_proc: int = 1):
         ds = {}
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
@@ -333,13 +333,13 @@ class ThuNewsClusteringS2S(AbsTaskClusteringLegacy):
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("2006-01-01", "2007-01-01"),
+        domains=["News", "Written"],
+        task_subtypes=["Thematic clustering", "Topic classification"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{eisner2007proceedings,
   author = {Eisner, Jason},
@@ -376,13 +376,13 @@ class ThuNewsClusteringP2P(AbsTaskClusteringLegacy):
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("2006-01-01", "2007-01-01"),
+        domains=["News", "Written"],
+        task_subtypes=["Thematic clustering", "Topic classification"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{eisner2007proceedings,
   author = {Eisner, Jason},

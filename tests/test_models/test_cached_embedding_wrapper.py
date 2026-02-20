@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import shutil
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pytest
@@ -8,16 +10,19 @@ from datasets import Dataset
 from torch.utils.data import DataLoader
 
 import mteb
-from mteb import TaskMetadata
 from mteb.abstasks import AbsTask
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.cache_wrappers.cache_backend_protocol import CacheBackendProtocol
 from mteb.models.cache_wrappers.cache_backends.faiss_cache import FaissCache
 from mteb.models.cache_wrappers.cache_backends.numpy_cache import NumpyCache
 from mteb.models.cache_wrappers.cache_wrapper import CachedEmbeddingWrapper
 from mteb.models.model_implementations.random_baseline import RandomEncoderBaseline
 from mteb.models.models_protocols import EncoderProtocol
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
 from tests.mock_tasks import MockMultiChoiceTask, MockRetrievalTask
+
+if TYPE_CHECKING:
+    from mteb.types import Array, BatchedInput
 
 
 class DummyModel(RandomEncoderBaseline):

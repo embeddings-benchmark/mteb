@@ -1,6 +1,6 @@
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import PromptType
+from mteb.types import PromptType
 
 
 def instruction_template(
@@ -178,6 +178,7 @@ Octen_Embedding_0B6 = ModelMeta(
     revision="1a00a4e837bd788f6f8d91bc43201a5e52cf8ef8",
     release_date="2026-01-10",
     n_parameters=595776512,
+    n_embedding_parameters=155309056,
     memory_usage_mb=1136,
     embed_dim=1024,
     max_tokens=32768,
@@ -208,6 +209,7 @@ Octen_Embedding_4B = ModelMeta(
     revision="6e188e3b072c3e3678b235ad84e6e97bcbb71e8f",
     release_date="2025-12-30",
     n_parameters=4021774336,
+    n_embedding_parameters=388262400,
     memory_usage_mb=7671,
     embed_dim=2560,
     max_tokens=32768,
@@ -235,9 +237,10 @@ Octen_Embedding_8B = ModelMeta(
     name="bflhc/Octen-Embedding-8B",
     languages=multilingual_langs,
     open_weights=True,
-    revision="f7db178d5a82fb841f606a6a67c423cead2fdbba",
+    revision="2030603c2926ab005fafd824fac5911e271be21f",
     release_date="2025-12-23",
     n_parameters=7567295488,
+    n_embedding_parameters=621219840,
     memory_usage_mb=14433,
     embed_dim=4096,
     max_tokens=32768,
