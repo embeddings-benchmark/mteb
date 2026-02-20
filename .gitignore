@@ -143,12 +143,24 @@ sb.ipynb
 tests/create_meta/model_card.md
 
 # removed results from mteb repo they are now available at: https://github.com/embeddings-benchmark/results
-results/
 uv.lock
 
 # model loading tests
 model_names.txt
-mteb/leaderboard/__cached_results.json
 
 # gradio
 .gradio/
+
+# codecarbon
+powermetrics_log.txt
+
+# vscode
+.vscode/launch.json
+
+/docs/overview/available_models/
+/docs/overview/available_tasks/
+/docs/overview/available_benchmarks.md
+
+CLAUDE.md
+
+*.tex

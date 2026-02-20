@@ -1,0 +1,35 @@
+{
+    "test_expert": {
+        "num_samples": 2040,
+        "number_of_characters": 595178,
+        "unique_pairs": 2040,
+        "text1_statistics": {
+            "total_text_length": 461125,
+            "min_text_length": 32,
+            "average_text_length": 226.04166666666666,
+            "max_text_length": 916,
+            "unique_texts": 514
+        },
+        "text2_statistics": {
+            "total_text_length": 134053,
+            "min_text_length": 15,
+            "average_text_length": 65.71225490196079,
+            "max_text_length": 267,
+            "unique_texts": 2035
+        },
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "0": {
+                    "count": 999
+                },
+                "1": {
+                    "count": 1041
+                }
+            }
+        }
+    }
+}

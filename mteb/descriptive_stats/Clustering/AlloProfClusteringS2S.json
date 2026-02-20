@@ -1,0 +1,60 @@
+{
+    "test": {
+        "num_samples": 2556,
+        "text_statistics": {
+            "total_text_length": 83909,
+            "min_text_length": 4,
+            "average_text_length": 32.82824726134585,
+            "max_text_length": 100,
+            "unique_texts": 2548
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 13,
+            "labels": {
+                "french": {
+                    "count": 582
+                },
+                "science": {
+                    "count": 422
+                },
+                "math": {
+                    "count": 498
+                },
+                "history": {
+                    "count": 435
+                },
+                "english": {
+                    "count": 206
+                },
+                "physics": {
+                    "count": 93
+                },
+                "contemporary_world": {
+                    "count": 88
+                },
+                "revision": {
+                    "count": 21
+                },
+                "chemistry": {
+                    "count": 71
+                },
+                "native_communities": {
+                    "count": 4
+                },
+                "geography": {
+                    "count": 84
+                },
+                "tips": {
+                    "count": 23
+                },
+                "financial_ed": {
+                    "count": 29
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,205 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite both of the below papers. In addition please cite any paper associated with the specific datasets and benchmarks you use."
+title: "MTEB: Your toolkit for evaluating embeddings"
+type: software
+url: "https://arxiv.org/abs/2502.13595"
+repository-code: "https://github.com/embeddings-benchmark/mteb"
+license: "Apache-2.0"
+keywords:
+  - text embeddings
+  - multilingual
+  - benchmark
+preferred-citation:
+  type: article
+  title: "MMTEB: Massive Multilingual Text Embedding Benchmark"
+  authors:
+    - family-names: Enevoldsen
+      given-names: Kenneth
+    - family-names: Chung
+      given-names: Isaac
+    - family-names: Kerboua
+      given-names: Imene
+    - family-names: Kardos
+      given-names: Márton
+    - family-names: Mathur
+      given-names: Ashwin
+    - family-names: Stap
+      given-names: David
+    - family-names: Gala
+      given-names: Jay
+    - family-names: Siblini
+      given-names: Wissam
+    - family-names: Krzemiński
+      given-names: Dominik
+    - family-names: Winata
+      given-names: Genta Indra
+    - family-names: Sturua
+      given-names: Saba
+    - family-names: Utpala
+      given-names: Saiteja
+    - family-names: Ciancone
+      given-names: Mathieu
+    - family-names: Schaeffer
+      given-names: Marion
+    - family-names: Sequeira
+      given-names: Gabriel
+    - family-names: Misra
+      given-names: Diganta
+    - family-names: Dhakal
+      given-names: Shreeya
+    - family-names: Rystrøm
+      given-names: Jonathan
+    - family-names: Solomatin
+      given-names: Roman
+    - family-names: Çağatan
+      given-names: Ömer
+    - family-names: Kundu
+      given-names: Akash
+    - family-names: Bernstorff
+      given-names: Martin
+    - family-names: Xiao
+      given-names: Shitao
+    - family-names: Sukhlecha
+      given-names: Akshita
+    - family-names: Pahwa
+      given-names: Bhavish
+    - family-names: Poświata
+      given-names: Rafał
+    - family-names: GV
+      given-names: Kranthi Kiran
+    - family-names: Ashraf
+      given-names: Shawon
+    - family-names: Auras
+      given-names: Daniel
+    - family-names: Plüster
+      given-names: Björn
+    - family-names: Harries
+      given-names: Jan Philipp
+    - family-names: Magne
+      given-names: Loïc
+    - family-names: Mohr
+      given-names: Isabelle
+    - family-names: Hendriksen
+      given-names: Mariya
+    - family-names: Zhu
+      given-names: Dawei
+    - family-names: Gisserot-Boukhlef
+      given-names: Hippolyte
+    - family-names: Aarsen
+      given-names: Tom
+    - family-names: Kostkan
+      given-names: Jan
+    - family-names: Wojtasik
+      given-names: Konrad
+    - family-names: Lee
+      given-names: Taemin
+    - family-names: Šuppa
+      given-names: Marek
+    - family-names: Zhang
+      given-names: Crystina
+    - family-names: Rocca
+      given-names: Roberta
+    - family-names: Hamdy
+      given-names: Mohammed
+    - family-names: Michail
+      given-names: Andrianos
+    - family-names: Yang
+      given-names: John
+    - family-names: Faysse
+      given-names: Manuel
+    - family-names: Vatolin
+      given-names: Aleksei
+    - family-names: Thakur
+      given-names: Nandan
+    - family-names: Dey
+      given-names: Manan
+    - family-names: Vasani
+      given-names: Dipam
+    - family-names: Chitale
+      given-names: Pranjal
+    - family-names: Tedeschi
+      given-names: Simone
+    - family-names: Tai
+      given-names: Nguyen
+    - family-names: Snegirev
+      given-names: Artem
+    - family-names: Günther
+      given-names: Michael
+    - family-names: Xia
+      given-names: Mengzhou
+    - family-names: Shi
+      given-names: Weijia
+    - family-names: Lù
+      given-names: Xing Han
+    - family-names: Clive
+      given-names: Jordan
+    - family-names: Krishnakumar
+      given-names: Gayatri
+    - family-names: Maksimova
+      given-names: Anna
+    - family-names: Wehrli
+      given-names: Silvan
+    - family-names: Tikhonova
+      given-names: Maria
+    - family-names: Panchal
+      given-names: Henil
+    - family-names: Abramov
+      given-names: Aleksandr
+    - family-names: Ostendorff
+      given-names: Malte
+    - family-names: Liu
+      given-names: Zheng
+    - family-names: Clematide
+      given-names: Simon
+    - family-names: Miranda
+      given-names: Lester James
+    - family-names: Fenogenova
+      given-names: Alena
+    - family-names: Song
+      given-names: Guangyu
+    - family-names: Safi
+      given-names: Ruqiya Bin
+    - family-names: Li
+      given-names: Wen-Ding
+    - family-names: Borghini
+      given-names: Alessia
+    - family-names: Cassano
+      given-names: Federico
+    - family-names: Su
+      given-names: Hongjin
+    - family-names: Lin
+      given-names: Jimmy
+    - family-names: Yen
+      given-names: Howard
+    - family-names: Hansen
+      given-names: Lasse
+    - family-names: Hooker
+      given-names: Sara
+    - family-names: Xiao
+      given-names: Chenghao
+    - family-names: Adlakha
+      given-names: Vaibhav
+    - family-names: Weller
+      given-names: Orion
+    - family-names: Reddy
+      given-names: Siva
+    - family-names: Muennighoff
+      given-names: Niklas
+  year: 2025
+  url: "https://arxiv.org/abs/2502.13595"
+  date-released: "2025-02-19"
+  abstract: "Text embeddings are typically evaluated on a limited set of tasks, which are constrained by language, domain, and task diversity. To address these limitations and provide a more comprehensive evaluation, we introduce the Massive Multilingual Text Embedding Benchmark (MMTEB) - a large-scale, community-driven expansion of MTEB, covering over 500 quality-controlled evaluation tasks across 250+ languages. MMTEB includes a diverse set of challenging, novel tasks such as instruction following, long-document retrieval, and code retrieval, representing the largest multilingual collection of evaluation tasks for embedding models to date. Using this collection, we develop several highly multilingual benchmarks, which we use to evaluate a representative set of models. We find that while large language models (LLMs) with billions of parameters can achieve state-of-the-art performance on certain language subsets and task categories, the best-performing publicly available model is multilingual-e5-large-instruct with only 560 million parameters. To facilitate accessibility and reduce computational cost, we introduce a novel downsampling method based on inter-task correlation, ensuring a diverse selection while preserving relative model rankings. Furthermore, we optimize tasks such as retrieval by sampling hard negatives, creating smaller but effective splits. These optimizations allow us to introduce benchmarks that drastically reduce computational demands. For instance, our newly introduced zero-shot English benchmark maintains a ranking order similar to the full-scale version but at a fraction of the computational cost."
+references:
+  - type: article
+    title: "MTEB: Massive Text Embedding Benchmark"
+    authors:
+      - family-names: Muennighoff
+        given-names: Niklas
+      - family-names: Tazi
+        given-names: Nouamane
+      - family-names: Magne
+        given-names: Loïc
+      - family-names: Reimers
+        given-names: Nils
+    year: 2023
+    url: "https://arxiv.org/abs/2210.07316"

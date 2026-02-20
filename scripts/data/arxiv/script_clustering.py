@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import gzip
 import os
 from collections import Counter
@@ -7,9 +5,9 @@ from collections import Counter
 import datasets
 import jsonlines
 import numpy as np
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
-np.random.seed(28042000)
+np.random.seed(28042000)  # noqa: NPY002
 
 d = datasets.load_dataset("mteb/raw_arxiv")["train"]
 # d = d.select(range(1000))
@@ -82,7 +80,7 @@ task_type = "p2p"
 
 # Coarse splits
 for k in tqdm(range(split_number)):
-    np.random.shuffle(indices)
+    np.random.shuffle(indices)  # noqa: NPY002
     current_indices = indices[:split_size]
     subset = d.select(current_indices)
     text = [get_text(item, task_type) for item in subset]
@@ -91,7 +89,7 @@ for k in tqdm(range(split_number)):
 
 # Fine grained splits
 for k in tqdm(range(split_number)):
-    np.random.shuffle(indices)
+    np.random.shuffle(indices)  # noqa: NPY002
     current_indices = indices[:split_size]
     subset = d.select(current_indices)
     text = [get_text(item, task_type) for item in subset]
@@ -104,7 +102,7 @@ for main_cat in tqdm(main_categories):
     if len(indices) == 0:
         print(f"No papers in {main_cat}")
         continue
-    np.random.shuffle(indices)
+    np.random.shuffle(indices)  # noqa: NPY002
     current_indices = indices[:split_size]
     subset = d.select(current_indices)
     text = [get_text(item, task_type) for item in subset]

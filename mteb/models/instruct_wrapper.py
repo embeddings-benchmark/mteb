@@ -1,16 +1,23 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
-from typing import Any, Callable
+from typing import TYPE_CHECKING, Any
 
-import numpy as np
 import torch
-from sentence_transformers import SentenceTransformer
 
-from mteb.encoder_interface import PromptType
-from mteb.models.wrapper import Wrapper
-from mteb.requires_package import requires_package
+from mteb._requires_package import requires_package
+from mteb.types import PromptType
+
+from .abs_encoder import AbsEncoder
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
+
 
 logger = logging.getLogger(__name__)
 
@@ -18,20 +25,35 @@ logger = logging.getLogger(__name__)
 def instruct_wrapper(
     model_name_or_path: str,
     mode: str,
-    instruction_template: str | Callable[[str], str] | None = None,
+    instruction_template: str | Callable[[str, PromptType | None], str] | None = None,
+    device: str | None = None,
     **kwargs,
 ):
+    """Instruct wrapper for models. Uses GritLM to pass instructions to the model.
+
+    It's recommended to use `InstructSentenceTransformerModel` instead of this wrapper for models.
+
+    Args:
+        model_name_or_path: Model name or path.
+        mode: Mode of the model. Either 'query' or 'passage'.
+        instruction_template: Instruction template. Should contain the string '{instruction}'.
+        device: Device used to load the model.
+        **kwargs: Additional arguments to pass to the model.
+    """
     requires_package(
         instruct_wrapper, "gritlm", model_name_or_path, "pip install 'mteb[gritlm]'"
     )
-    from gritlm import GritLM
+    from gritlm import GritLM  # type: ignore[import]
 
-    class InstructWrapper(GritLM, Wrapper):
+    class InstructGritLMModel(GritLM, AbsEncoder):
         def __init__(
             self,
             model_name_or_path: str,
             mode: str,
-            instruction_template: str | Callable[[str], str] | None = None,
+            device: str | None = None,
+            instruction_template: str
+            | Callable[[str, PromptType | None], str]
+            | None = None,
             **kwargs,
         ):
             if (
@@ -52,58 +74,85 @@ def instruct_wrapper(
                 )
 
             self.instruction_template = instruction_template
-            super().__init__(model_name_or_path=model_name_or_path, mode=mode, **kwargs)
+            super().__init__(
+                model_name_or_path=model_name_or_path,
+                mode=mode,
+                device=device,
+                **kwargs,
+            )
 
         def encode(
             self,
-            sentences: Sequence[str],
+            inputs: DataLoader[BatchedInput],
             *args,
-            task_name: str,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
             prompt_type: PromptType | None = None,
             **kwargs: Any,
-        ) -> np.ndarray:
-            instruction = self.get_instruction(task_name, prompt_type)
+        ) -> Array:
+            instruction = self.get_instruction(task_metadata, prompt_type)
 
             if self.instruction_template:
                 instruction = self.format_instruction(instruction, prompt_type)
+            _inputs = [text for batch in inputs for text in batch["text"]]
 
-            logger.info(f"Using instruction: '{instruction}' for task: '{task_name}'")
-            embeddings = super().encode(
-                sentences, instruction=instruction, *args, **kwargs
+            logger.info(
+                f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
+            )
+            embeddings = super().encode(  # type: ignore[safe-super,call-arg]
+                _inputs,  # type: ignore[arg-type]
+                instruction=instruction,
+                *args,
+                **kwargs,
             )
             if isinstance(embeddings, torch.Tensor):
                 # sometimes in kwargs can be return_tensors=True
                 embeddings = embeddings.cpu().detach().float().numpy()
             return embeddings
 
-    return InstructWrapper(model_name_or_path, mode, instruction_template, **kwargs)
+    return InstructGritLMModel(
+        model_name_or_path, mode, instruction_template=instruction_template, **kwargs
+    )
 
 
-class InstructSentenceTransformerWrapper(Wrapper):
+class InstructSentenceTransformerModel(AbsEncoder):
+    """Instruction wrapper for Sentence Transformer models."""
+
     def __init__(
         self,
         model_name: str,
         revision: str,
-        instruction_template: str | Callable[[str], str] | None = None,
+        device: str | None = None,
+        instruction_template: str
+        | Callable[[str, PromptType | None], str]
+        | None = None,
         max_seq_length: int | None = None,
         apply_instruction_to_passages: bool = True,
         padding_side: str | None = None,
         add_eos_token: bool = False,
+        prompts_dict: dict[str, str] | None = None,
         **kwargs: Any,
     ):
         """Instruct Sentence Transformer Wrapper. Wrapper that passes instructions to the Sentence Transformer model.
-        Applied for models like NV-Embed, gte-Qwen, e5-mistral, etc.
+
+        Applied for models like e5-instruct, jasper, etc.
 
         Arguments:
             model_name: Model name of the sentence transformers model.
             revision: Revision of the sentence transformers model.
+            device: Device used to load the model.
             instruction_template: Model template. Should contain the string '{instruction}'.
             max_seq_length: Maximum sequence length. If None, the maximum sequence length will be read from the model config.
             apply_instruction_to_passages: Whether to apply the instruction template to the passages.
             padding_side: Padding side. If None, the padding side will be read from the model config.
             add_eos_token: Whether to add the eos token to each input example.
+            prompts_dict: Dictionary of task names to prompt names. If task name is missing in the dict or prompts dict is None, prompt from task metadata or
+                AbsTask.abstask_prompt will be used.
             **kwargs: Kwargs for Sentence Transformer model.
         """
+        from sentence_transformers import SentenceTransformer
+
         if (
             isinstance(instruction_template, str)
             and "{instruction}" not in instruction_template
@@ -116,40 +165,78 @@ class InstructSentenceTransformerWrapper(Wrapper):
                 "No instruction template provided. Instructions will be used as-is."
             )
 
-        self.model_name = model_name
-        self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
         self.instruction_template = instruction_template
-        self.apply_instruction_to_passages = apply_instruction_to_passages
-        self.add_eos_token = add_eos_token
+        tokenizer_params: dict[str, Any] = {}
+        if add_eos_token:
+            tokenizer_params["add_eos_token"] = add_eos_token
         if max_seq_length is not None:
-            self.model.max_seq_length = max_seq_length
+            # https://github.com/UKPLab/sentence-transformers/blob/7341bf155b4349b88690b78c84beb5aa658c439f/sentence_transformers/models/Transformer.py#L115
+            tokenizer_params["model_max_length"] = max_seq_length
         if padding_side is not None:
-            self.model.tokenizer.padding_side = padding_side
+            tokenizer_params["padding_side"] = padding_side
+
+        kwargs.setdefault("tokenizer_kwargs", {}).update(tokenizer_params)
+
+        self.model_name = model_name
+        self.model = SentenceTransformer(
+            model_name, revision=revision, device=device, **kwargs
+        )
+        if max_seq_length:
+            # https://github.com/huggingface/sentence-transformers/issues/3575
+            self.model.max_seq_length = max_seq_length
+        self.apply_instruction_to_passages = apply_instruction_to_passages
+        self.prompts_dict = prompts_dict
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        if self.add_eos_token:
-            sentences = [
-                example + self.model.tokenizer.eos_token for example in sentences
-            ]
+    ) -> Array:
+        """Encodes the given sentences using the encoder.
 
-        instruction = self.get_task_instruction(task_name, prompt_type)
+        Args:
+            inputs: Batch of inputs to encode.
+            task_metadata: The metadata of the task. Encoders (e.g. SentenceTransformers) use to
+                select the appropriate prompts, with priority given to more specific task/prompt combinations over general ones.
+
+                The order of priorities for prompt selection are:
+                    1. Composed prompt of task name + prompt type (query or passage)
+                    2. Specific task prompt
+                    3. Composed prompt of task type + prompt type (query or passage)
+                    4. Specific task type prompt
+                    5. Specific prompt type (query or passage)
+            hf_split: Split of current task, allows to know some additional information about current split.
+                E.g. Current language
+            hf_subset: Subset of current task. Similar to `hf_split` to get more information
+            prompt_type: The name type of prompt. (query or passage)
+            **kwargs: Additional arguments to pass to the encoder.
+
+        Returns:
+            The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
+        """
+        sentences = [text for batch in inputs for text in batch["text"]]
+        instruction: str | None
+        instruction = self.get_task_instruction(task_metadata, prompt_type)
 
         # to passage prompts won't be applied to passages
-        if not self.apply_instruction_to_passages and prompt_type == PromptType.passage:
+        if (
+            not self.apply_instruction_to_passages
+            and prompt_type == PromptType.document
+        ):
             instruction = None
             logger.info(
-                f"No instruction used, because prompt type = {prompt_type.passage}"
+                f"No instruction used, because prompt type = {prompt_type.document}"
             )
 
         if instruction:
-            logger.info(f"Using instruction: '{instruction}' for task: '{task_name}'")
+            logger.info(
+                f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
+            )
 
         embeddings = self.model.encode(
             sentences,

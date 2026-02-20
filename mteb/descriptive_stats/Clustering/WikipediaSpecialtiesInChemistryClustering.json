@@ -1,0 +1,33 @@
+{
+    "test": {
+        "num_samples": 617,
+        "text_statistics": {
+            "total_text_length": 559335,
+            "min_text_length": 108,
+            "average_text_length": 906.5397082658022,
+            "max_text_length": 6844,
+            "unique_texts": 617
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 4,
+            "labels": {
+                "Biochemists": {
+                    "count": 153
+                },
+                "Geochemists": {
+                    "count": 113
+                },
+                "Electrochemists": {
+                    "count": 122
+                },
+                "Atmospheric Chemists": {
+                    "count": 229
+                }
+            }
+        }
+    }
+}

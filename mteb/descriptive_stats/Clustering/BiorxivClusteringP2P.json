@@ -1,0 +1,99 @@
+{
+    "test": {
+        "num_samples": 75000,
+        "text_statistics": {
+            "total_text_length": 124967580,
+            "min_text_length": 139,
+            "average_text_length": 1666.2344,
+            "max_text_length": 8912,
+            "unique_texts": 41562
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 26,
+            "labels": {
+                "neuroscience": {
+                    "count": 14251
+                },
+                "genetics": {
+                    "count": 2282
+                },
+                "biophysics": {
+                    "count": 3864
+                },
+                "animal behavior and cognition": {
+                    "count": 1148
+                },
+                "genomics": {
+                    "count": 3422
+                },
+                "systems biology": {
+                    "count": 1544
+                },
+                "ecology": {
+                    "count": 3469
+                },
+                "immunology": {
+                    "count": 3517
+                },
+                "evolutionary biology": {
+                    "count": 3756
+                },
+                "molecular biology": {
+                    "count": 2772
+                },
+                "bioengineering": {
+                    "count": 2169
+                },
+                "cancer biology": {
+                    "count": 2922
+                },
+                "plant biology": {
+                    "count": 2640
+                },
+                "microbiology": {
+                    "count": 7176
+                },
+                "physiology": {
+                    "count": 1251
+                },
+                "synthetic biology": {
+                    "count": 686
+                },
+                "pharmacology and toxicology": {
+                    "count": 864
+                },
+                "zoology": {
+                    "count": 433
+                },
+                "bioinformatics": {
+                    "count": 6294
+                },
+                "cell biology": {
+                    "count": 4433
+                },
+                "developmental biology": {
+                    "count": 2352
+                },
+                "biochemistry": {
+                    "count": 2790
+                },
+                "scientific communication and education": {
+                    "count": 349
+                },
+                "paleontology": {
+                    "count": 120
+                },
+                "pathology": {
+                    "count": 495
+                },
+                "epidemiology": {
+                    "count": 1
+                }
+            }
+        }
+    }
+}

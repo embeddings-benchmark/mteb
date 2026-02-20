@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import mteb
 
 for model_name in [

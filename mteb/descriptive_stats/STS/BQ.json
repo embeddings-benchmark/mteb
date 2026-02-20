@@ -1,0 +1,54 @@
+{
+    "validation": {
+        "num_samples": 10000,
+        "number_of_characters": 237203,
+        "unique_pairs": 10000,
+        "text1_statistics": {
+            "total_text_length": 117486,
+            "min_text_length": 1,
+            "average_text_length": 11.7486,
+            "max_text_length": 130,
+            "unique_texts": 4584
+        },
+        "text2_statistics": {
+            "total_text_length": 119717,
+            "min_text_length": 1,
+            "average_text_length": 11.9717,
+            "max_text_length": 112,
+            "unique_texts": 5172
+        },
+        "image1_statistics": null,
+        "image2_statistics": null,
+        "label_statistics": {
+            "min_score": 0,
+            "avg_score": 0.5,
+            "max_score": 1
+        }
+    },
+    "test": {
+        "num_samples": 10000,
+        "number_of_characters": 238712,
+        "unique_pairs": 10000,
+        "text1_statistics": {
+            "total_text_length": 117220,
+            "min_text_length": 2,
+            "average_text_length": 11.722,
+            "max_text_length": 70,
+            "unique_texts": 4301
+        },
+        "text2_statistics": {
+            "total_text_length": 121492,
+            "min_text_length": 1,
+            "average_text_length": 12.1492,
+            "max_text_length": 100,
+            "unique_texts": 4809
+        },
+        "image1_statistics": null,
+        "image2_statistics": null,
+        "label_statistics": {
+            "min_score": 0,
+            "avg_score": 0.5,
+            "max_score": 1
+        }
+    }
+}

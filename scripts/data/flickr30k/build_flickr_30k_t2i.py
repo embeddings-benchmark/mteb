@@ -1,10 +1,8 @@
-from __future__ import annotations
-
 import os
 
 from datasets import Dataset, DatasetDict, load_dataset
 from huggingface_hub import create_repo
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 WRITE_TOK = os.environ["HF_TOKEN"]
 
@@ -12,7 +10,7 @@ eval_split = "test"
 data_raw = load_dataset("clip-benchmark/wds_flickr30k")[eval_split]
 
 
-## t2i
+# t2i
 queries_ = {"id": [], "modality": [], "text": []}
 corpus_ = {"id": [], "modality": [], "image": []}
 relevant_docs_ = {"query-id": [], "corpus-id": [], "score": []}

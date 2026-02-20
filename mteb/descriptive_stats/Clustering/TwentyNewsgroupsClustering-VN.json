@@ -1,0 +1,81 @@
+{
+    "test": {
+        "num_samples": 35034,
+        "text_statistics": {
+            "total_text_length": 1324367,
+            "min_text_length": 7,
+            "average_text_length": 37.80233487469315,
+            "max_text_length": 337,
+            "unique_texts": 3335
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 20,
+            "labels": {
+                "12": {
+                    "count": 1423
+                },
+                "6": {
+                    "count": 1964
+                },
+                "2": {
+                    "count": 2307
+                },
+                "17": {
+                    "count": 2009
+                },
+                "0": {
+                    "count": 1202
+                },
+                "1": {
+                    "count": 1841
+                },
+                "10": {
+                    "count": 1794
+                },
+                "15": {
+                    "count": 1545
+                },
+                "7": {
+                    "count": 2139
+                },
+                "5": {
+                    "count": 2047
+                },
+                "3": {
+                    "count": 2143
+                },
+                "11": {
+                    "count": 1885
+                },
+                "8": {
+                    "count": 1727
+                },
+                "19": {
+                    "count": 1214
+                },
+                "9": {
+                    "count": 1656
+                },
+                "4": {
+                    "count": 2281
+                },
+                "13": {
+                    "count": 1153
+                },
+                "18": {
+                    "count": 1514
+                },
+                "16": {
+                    "count": 1456
+                },
+                "14": {
+                    "count": 1734
+                }
+            }
+        }
+    }
+}

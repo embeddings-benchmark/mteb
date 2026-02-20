@@ -1,0 +1,84 @@
+{
+    "test": {
+        "num_samples": 367,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 202245,
+            "min_text_length": 31,
+            "average_text_length": 551.0762942779292,
+            "max_text_length": 2437,
+            "unique_texts": 367
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 7,
+            "labels": {
+                "Facts": {
+                    "count": 49
+                },
+                "Procedural History": {
+                    "count": 58
+                },
+                "Issue": {
+                    "count": 51
+                },
+                "Rule": {
+                    "count": 56
+                },
+                "Analysis": {
+                    "count": 56
+                },
+                "Conclusion": {
+                    "count": 50
+                },
+                "Decree": {
+                    "count": 47
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 7,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 1447,
+            "min_text_length": 52,
+            "average_text_length": 206.71428571428572,
+            "max_text_length": 302,
+            "unique_texts": 7
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 7,
+            "labels": {
+                "Facts": {
+                    "count": 1
+                },
+                "Procedural History": {
+                    "count": 1
+                },
+                "Issue": {
+                    "count": 1
+                },
+                "Rule": {
+                    "count": 1
+                },
+                "Analysis": {
+                    "count": 1
+                },
+                "Conclusion": {
+                    "count": 1
+                },
+                "Decree": {
+                    "count": 1
+                }
+            }
+        }
+    }
+}

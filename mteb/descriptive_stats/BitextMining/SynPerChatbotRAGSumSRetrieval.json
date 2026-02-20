@@ -1,0 +1,21 @@
+{
+    "test": {
+        "num_samples": 1087,
+        "number_of_characters": 835245,
+        "unique_pairs": 1087,
+        "sentence1_statistics": {
+            "total_text_length": 683205,
+            "min_text_length": 37,
+            "average_text_length": 628.5234590616375,
+            "max_text_length": 2601,
+            "unique_texts": 1087
+        },
+        "sentence2_statistics": {
+            "total_text_length": 152040,
+            "min_text_length": 43,
+            "average_text_length": 139.87120515179393,
+            "max_text_length": 284,
+            "unique_texts": 1087
+        }
+    }
+}

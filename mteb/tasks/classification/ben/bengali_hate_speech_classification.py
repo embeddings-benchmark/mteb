@@ -1,0 +1,76 @@
+from mteb.abstasks.classification import AbsTaskClassification
+from mteb.abstasks.task_metadata import TaskMetadata
+
+
+class BengaliHateSpeechClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="BengaliHateSpeechClassification",
+        description="The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles collected from various Bengali media sources and categorized based on the type of hate in the text.",
+        reference="https://huggingface.co/datasets/bn_hate_speech",
+        dataset={
+            "path": "rezacsedu/bn_hate_speech",
+            "revision": "99612296bc093f0720cac7d7cbfcb67eecf1ca2f",
+        },
+        type="Classification",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["train"],
+        eval_langs=["ben-Beng"],
+        main_score="f1",
+        date=("2019-12-01", "2020-04-09"),
+        dialect=[],
+        domains=["News", "Written"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="mit",
+        annotations_creators="expert-annotated",
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{karim2020BengaliNLP,
+  author = {Karim, Md. Rezaul and Chakravarti, Bharathi Raja and P. McCrae, John and Cochez, Michael},
+  booktitle = {7th IEEE International Conference on Data Science and Advanced Analytics (IEEE DSAA,2020)},
+  publisher = {IEEE},
+  title = {Classification Benchmarks for Under-resourced Bengali Language based on Multichannel Convolutional-LSTM Network},
+  year = {2020},
+}
+""",
+        superseded_by="BengaliHateSpeechClassification.v2",
+    )
+
+    def dataset_transform(self, num_proc: int = 1):
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"]
+        )
+
+
+class BengaliHateSpeechClassificationV2(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="BengaliHateSpeechClassification.v2",
+        description="The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles collected from various Bengali media sources and categorized based on the type of hate in the text. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)",
+        reference="https://huggingface.co/datasets/bn_hate_speech",
+        dataset={
+            "path": "mteb/bengali_hate_speech",
+            "revision": "ccd942d16d2f0512799a1480034650a7b076027e",
+        },
+        type="Classification",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["ben-Beng"],
+        main_score="f1",
+        date=("2019-12-01", "2020-04-09"),
+        dialect=[],
+        domains=["News", "Written"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="mit",
+        annotations_creators="expert-annotated",
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{karim2020BengaliNLP,
+  author = {Karim, Md. Rezaul and Chakravarti, Bharathi Raja and P. McCrae, John and Cochez, Michael},
+  booktitle = {7th IEEE International Conference on Data Science and Advanced Analytics (IEEE DSAA,2020)},
+  publisher = {IEEE},
+  title = {Classification Benchmarks for Under-resourced Bengali Language based on Multichannel Convolutional-LSTM Network},
+  year = {2020},
+}
+""",
+    )

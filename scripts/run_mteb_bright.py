@@ -1,9 +1,7 @@
-from __future__ import annotations
-
 from sentence_transformers import SentenceTransformer
 
 from mteb import MTEB
-from mteb.tasks.Retrieval.eng.BrightRetrieval import BrightRetrieval
+from mteb.tasks.retrieval.eng.BrightRetrieval import BrightRetrieval
 
 # testing the task with a model:
 model = SentenceTransformer("sentence-transformers/all-mpnet-base-v2")

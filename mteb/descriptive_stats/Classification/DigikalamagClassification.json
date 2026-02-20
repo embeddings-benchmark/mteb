@@ -1,0 +1,84 @@
+{
+    "test": {
+        "num_samples": 852,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 2935825,
+            "min_text_length": 40,
+            "average_text_length": 3445.8039906103286,
+            "max_text_length": 36911,
+            "unique_texts": 852
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 7,
+            "labels": {
+                "\u0633\u0644\u0627\u0645\u062a \u0648 \u0632\u06cc\u0628\u0627\u06cc\u06cc": {
+                    "count": 161
+                },
+                "\u0639\u0644\u0645 \u0648 \u062a\u06a9\u0646\u0648\u0644\u0648\u0698\u06cc": {
+                    "count": 277
+                },
+                "\u0647\u0646\u0631 \u0648 \u0633\u06cc\u0646\u0645\u0627": {
+                    "count": 167
+                },
+                "\u0628\u0627\u0632\u06cc \u0648\u06cc\u062f\u06cc\u0648\u06cc\u06cc": {
+                    "count": 197
+                },
+                "\u06a9\u062a\u0627\u0628 \u0648 \u0627\u062f\u0628\u06cc\u0627\u062a": {
+                    "count": 25
+                },
+                "\u0631\u0627\u0647\u0646\u0645\u0627\u06cc \u062e\u0631\u06cc\u062f": {
+                    "count": 13
+                },
+                "\u0639\u0645\u0648\u0645\u06cc": {
+                    "count": 12
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 6896,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 23218475,
+            "min_text_length": 114,
+            "average_text_length": 3366.948230858469,
+            "max_text_length": 53321,
+            "unique_texts": 6896
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 7,
+            "labels": {
+                "\u0639\u0644\u0645 \u0648 \u062a\u06a9\u0646\u0648\u0644\u0648\u0698\u06cc": {
+                    "count": 2245
+                },
+                "\u0647\u0646\u0631 \u0648 \u0633\u06cc\u0646\u0645\u0627": {
+                    "count": 1350
+                },
+                "\u0628\u0627\u0632\u06cc \u0648\u06cc\u062f\u06cc\u0648\u06cc\u06cc": {
+                    "count": 1593
+                },
+                "\u06a9\u062a\u0627\u0628 \u0648 \u0627\u062f\u0628\u06cc\u0627\u062a": {
+                    "count": 206
+                },
+                "\u0633\u0644\u0627\u0645\u062a \u0648 \u0632\u06cc\u0628\u0627\u06cc\u06cc": {
+                    "count": 1304
+                },
+                "\u0639\u0645\u0648\u0645\u06cc": {
+                    "count": 97
+                },
+                "\u0631\u0627\u0647\u0646\u0645\u0627\u06cc \u062e\u0631\u06cc\u062f": {
+                    "count": 101
+                }
+            }
+        }
+    }
+}

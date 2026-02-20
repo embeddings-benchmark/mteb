@@ -5,20 +5,20 @@ the calculate_memory_usage_mb method, and then updates the source code in place 
 inserting or replacing the "memory_usage_mb" keyword argument in the ModelMeta constructor.
 """
 
-from __future__ import annotations
-
 import glob
 import importlib.util
 import os
 import re
 from typing import Any
 
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 # IMPORTANT: Adjust the import below to point to the module where ModelMeta is defined.
 # For example, if ModelMeta is defined in a file model_meta.py in your package, do:
 # from model_meta import ModelMeta
-from mteb.model_meta import ModelMeta  # <-- Replace with the actual import path
+from mteb.models.model_meta import (
+    ModelMeta,
+)  # <-- Replace with the actual import path
 
 
 def find_matching_paren(text: str, open_index: int) -> int | None:

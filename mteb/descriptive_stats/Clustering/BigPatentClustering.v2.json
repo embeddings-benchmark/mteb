@@ -1,0 +1,48 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "text_statistics": {
+            "total_text_length": 65738274,
+            "min_text_length": 4907,
+            "average_text_length": 32098.7666015625,
+            "max_text_length": 3105802,
+            "unique_texts": 2048
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 9,
+            "labels": {
+                "4": {
+                    "count": 211
+                },
+                "7": {
+                    "count": 274
+                },
+                "8": {
+                    "count": 171
+                },
+                "3": {
+                    "count": 439
+                },
+                "6": {
+                    "count": 17
+                },
+                "5": {
+                    "count": 436
+                },
+                "1": {
+                    "count": 296
+                },
+                "2": {
+                    "count": 145
+                },
+                "0": {
+                    "count": 59
+                }
+            }
+        }
+    }
+}

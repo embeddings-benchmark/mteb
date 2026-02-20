@@ -1,0 +1,89 @@
+{
+    "validation": {
+        "num_samples": 3000,
+        "number_texts_intersect_with_train": 92,
+        "text_statistics": {
+            "total_text_length": 153027,
+            "min_text_length": 16,
+            "average_text_length": 51.009,
+            "max_text_length": 1378,
+            "unique_texts": 2989
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 3,
+            "labels": {
+                "2": {
+                    "count": 1000
+                },
+                "1": {
+                    "count": 1000
+                },
+                "0": {
+                    "count": 1000
+                }
+            }
+        }
+    },
+    "test": {
+        "num_samples": 3000,
+        "number_texts_intersect_with_train": 89,
+        "text_statistics": {
+            "total_text_length": 155863,
+            "min_text_length": 18,
+            "average_text_length": 51.95433333333333,
+            "max_text_length": 833,
+            "unique_texts": 2998
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 3,
+            "labels": {
+                "2": {
+                    "count": 1000
+                },
+                "1": {
+                    "count": 1000
+                },
+                "0": {
+                    "count": 1000
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 120000,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 6210602,
+            "min_text_length": 11,
+            "average_text_length": 51.75501666666667,
+            "max_text_length": 2377,
+            "unique_texts": 117494
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 3,
+            "labels": {
+                "2": {
+                    "count": 40000
+                },
+                "1": {
+                    "count": 40000
+                },
+                "0": {
+                    "count": 40000
+                }
+            }
+        }
+    }
+}

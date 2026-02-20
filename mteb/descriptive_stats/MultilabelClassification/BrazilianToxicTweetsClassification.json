@@ -1,0 +1,84 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "number_texts_intersect_with_train": 23,
+        "text_statistics": {
+            "total_text_length": 172708,
+            "min_text_length": 5,
+            "average_text_length": 84.330078125,
+            "max_text_length": 304,
+            "unique_texts": 2046
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 0,
+            "average_label_per_text": 0.57958984375,
+            "max_labels_per_text": 4,
+            "unique_labels": 7,
+            "labels": {
+                "obscene": {
+                    "count": 653
+                },
+                "insult": {
+                    "count": 430
+                },
+                "misogyny": {
+                    "count": 46
+                },
+                "racism": {
+                    "count": 13
+                },
+                "xenophobia": {
+                    "count": 13
+                },
+                "homophobia": {
+                    "count": 32
+                },
+                "None": {
+                    "count": 1145
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 8192,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 714281,
+            "min_text_length": 4,
+            "average_text_length": 87.1925048828125,
+            "max_text_length": 322,
+            "unique_texts": 8172
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 0,
+            "average_label_per_text": 0.5751953125,
+            "max_labels_per_text": 4,
+            "unique_labels": 7,
+            "labels": {
+                "None": {
+                    "count": 4580
+                },
+                "obscene": {
+                    "count": 2576
+                },
+                "insult": {
+                    "count": 1700
+                },
+                "homophobia": {
+                    "count": 139
+                },
+                "misogyny": {
+                    "count": 179
+                },
+                "racism": {
+                    "count": 54
+                },
+                "xenophobia": {
+                    "count": 64
+                }
+            }
+        }
+    }
+}

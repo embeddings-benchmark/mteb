@@ -1,0 +1,28 @@
+{
+    "train": {
+        "num_samples": 729,
+        "number_of_characters": 63582,
+        "unique_pairs": 727,
+        "text1_statistics": {
+            "total_text_length": 31809,
+            "min_text_length": 11,
+            "average_text_length": 43.63374485596708,
+            "max_text_length": 114,
+            "unique_texts": 672
+        },
+        "text2_statistics": {
+            "total_text_length": 31773,
+            "min_text_length": 8,
+            "average_text_length": 43.584362139917694,
+            "max_text_length": 115,
+            "unique_texts": 701
+        },
+        "image1_statistics": null,
+        "image2_statistics": null,
+        "label_statistics": {
+            "min_score": 0.0,
+            "avg_score": 2.342330589849108,
+            "max_score": 5.0
+        }
+    }
+}

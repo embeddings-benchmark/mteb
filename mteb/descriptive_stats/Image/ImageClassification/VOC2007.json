@@ -1,76 +1,165 @@
 {
     "test": {
         "num_samples": 4952,
-        "min_image_width": 148,
-        "average_image_width": 471.24656704361877,
-        "max_image_width": 500,
-        "min_image_height": 139,
-        "average_image_height": 381.53776252019384,
-        "max_image_height": 500,
-        "min_labels_per_sample": 1,
-        "average_label_per_sample": 1.4161954765751212,
-        "max_labels_per_sample": 5,
-        "unique_num_labels": 20,
-        "labels": {
-            "14": {
-                "count": 2007
-            },
-            "11": {
-                "count": 418
-            },
-            "18": {
-                "count": 259
-            },
-            "17": {
-                "count": 223
-            },
-            "8": {
-                "count": 417
-            },
-            "6": {
-                "count": 721
-            },
-            "15": {
-                "count": 224
-            },
-            "10": {
-                "count": 190
-            },
-            "12": {
-                "count": 274
-            },
-            "7": {
-                "count": 322
-            },
-            "9": {
-                "count": 127
-            },
-            "5": {
-                "count": 174
-            },
-            "1": {
-                "count": 239
-            },
-            "13": {
-                "count": 222
-            },
-            "2": {
-                "count": 282
-            },
-            "19": {
-                "count": 229
-            },
-            "16": {
-                "count": 97
-            },
-            "0": {
-                "count": 204
-            },
-            "3": {
-                "count": 172
-            },
-            "4": {
-                "count": 212
+        "number_texts_intersect_with_train": null,
+        "text_statistics": null,
+        "image_statistics": {
+            "min_image_width": 148,
+            "average_image_width": 471.24656704361877,
+            "max_image_width": 500,
+            "min_image_height": 139,
+            "average_image_height": 381.53776252019384,
+            "max_image_height": 500,
+            "unique_images": 4952
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.4161954765751212,
+            "max_labels_per_text": 5,
+            "unique_labels": 20,
+            "labels": {
+                "11": {
+                    "count": 418
+                },
+                "14": {
+                    "count": 2007
+                },
+                "18": {
+                    "count": 259
+                },
+                "8": {
+                    "count": 417
+                },
+                "17": {
+                    "count": 223
+                },
+                "6": {
+                    "count": 721
+                },
+                "15": {
+                    "count": 224
+                },
+                "10": {
+                    "count": 190
+                },
+                "12": {
+                    "count": 274
+                },
+                "7": {
+                    "count": 322
+                },
+                "9": {
+                    "count": 127
+                },
+                "5": {
+                    "count": 174
+                },
+                "1": {
+                    "count": 239
+                },
+                "13": {
+                    "count": 222
+                },
+                "2": {
+                    "count": 282
+                },
+                "19": {
+                    "count": 229
+                },
+                "16": {
+                    "count": 97
+                },
+                "0": {
+                    "count": 204
+                },
+                "3": {
+                    "count": 172
+                },
+                "4": {
+                    "count": 212
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 2501,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": null,
+        "image_statistics": {
+            "min_image_width": 127,
+            "average_image_width": 471.97600959616153,
+            "max_image_width": 500,
+            "min_image_height": 96,
+            "average_image_height": 383.8740503798481,
+            "max_image_height": 500,
+            "unique_images": 2500
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.474610155937625,
+            "max_labels_per_text": 5,
+            "unique_labels": 20,
+            "labels": {
+                "6": {
+                    "count": 376
+                },
+                "14": {
+                    "count": 1025
+                },
+                "12": {
+                    "count": 139
+                },
+                "1": {
+                    "count": 116
+                },
+                "0": {
+                    "count": 112
+                },
+                "18": {
+                    "count": 127
+                },
+                "11": {
+                    "count": 203
+                },
+                "7": {
+                    "count": 163
+                },
+                "8": {
+                    "count": 224
+                },
+                "2": {
+                    "count": 180
+                },
+                "3": {
+                    "count": 81
+                },
+                "15": {
+                    "count": 133
+                },
+                "19": {
+                    "count": 128
+                },
+                "17": {
+                    "count": 111
+                },
+                "13": {
+                    "count": 120
+                },
+                "4": {
+                    "count": 139
+                },
+                "5": {
+                    "count": 97
+                },
+                "10": {
+                    "count": 97
+                },
+                "16": {
+                    "count": 48
+                },
+                "9": {
+                    "count": 69
+                }
             }
         }
     }

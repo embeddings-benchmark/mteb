@@ -1,0 +1,244 @@
+{
+    "test": {
+        "num_samples": 150,
+        "text_statistics": {
+            "total_text_length": 19344,
+            "min_text_length": 55,
+            "average_text_length": 128.96,
+            "max_text_length": 316,
+            "unique_texts": 150
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 12,
+            "labels": {
+                "4": {
+                    "count": 20
+                },
+                "6": {
+                    "count": 20
+                },
+                "3": {
+                    "count": 20
+                },
+                "5": {
+                    "count": 20
+                },
+                "2": {
+                    "count": 20
+                },
+                "0": {
+                    "count": 20
+                },
+                "science/technology": {
+                    "count": 5
+                },
+                "travel": {
+                    "count": 5
+                },
+                "politics": {
+                    "count": 5
+                },
+                "sports": {
+                    "count": 5
+                },
+                "health": {
+                    "count": 5
+                },
+                "entertainment": {
+                    "count": 5
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "eng_Latn": {
+                "num_samples": 30,
+                "text_statistics": {
+                    "total_text_length": 3658,
+                    "min_text_length": 59,
+                    "average_text_length": 121.93333333333334,
+                    "max_text_length": 232,
+                    "unique_texts": 30
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 6,
+                    "labels": {
+                        "4": {
+                            "count": 5
+                        },
+                        "6": {
+                            "count": 5
+                        },
+                        "3": {
+                            "count": 5
+                        },
+                        "5": {
+                            "count": 5
+                        },
+                        "2": {
+                            "count": 5
+                        },
+                        "0": {
+                            "count": 5
+                        }
+                    }
+                }
+            },
+            "arb_Arab": {
+                "num_samples": 30,
+                "text_statistics": {
+                    "total_text_length": 3692,
+                    "min_text_length": 55,
+                    "average_text_length": 123.06666666666666,
+                    "max_text_length": 316,
+                    "unique_texts": 30
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 6,
+                    "labels": {
+                        "science/technology": {
+                            "count": 5
+                        },
+                        "travel": {
+                            "count": 5
+                        },
+                        "politics": {
+                            "count": 5
+                        },
+                        "sports": {
+                            "count": 5
+                        },
+                        "health": {
+                            "count": 5
+                        },
+                        "entertainment": {
+                            "count": 5
+                        }
+                    }
+                }
+            },
+            "dan_Latn": {
+                "num_samples": 30,
+                "text_statistics": {
+                    "total_text_length": 3854,
+                    "min_text_length": 58,
+                    "average_text_length": 128.46666666666667,
+                    "max_text_length": 222,
+                    "unique_texts": 30
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 6,
+                    "labels": {
+                        "4": {
+                            "count": 5
+                        },
+                        "6": {
+                            "count": 5
+                        },
+                        "3": {
+                            "count": 5
+                        },
+                        "5": {
+                            "count": 5
+                        },
+                        "2": {
+                            "count": 5
+                        },
+                        "0": {
+                            "count": 5
+                        }
+                    }
+                }
+            },
+            "fra_Latn": {
+                "num_samples": 30,
+                "text_statistics": {
+                    "total_text_length": 4093,
+                    "min_text_length": 83,
+                    "average_text_length": 136.43333333333334,
+                    "max_text_length": 221,
+                    "unique_texts": 30
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 6,
+                    "labels": {
+                        "4": {
+                            "count": 5
+                        },
+                        "6": {
+                            "count": 5
+                        },
+                        "3": {
+                            "count": 5
+                        },
+                        "5": {
+                            "count": 5
+                        },
+                        "2": {
+                            "count": 5
+                        },
+                        "0": {
+                            "count": 5
+                        }
+                    }
+                }
+            },
+            "rus_Cyrl": {
+                "num_samples": 30,
+                "text_statistics": {
+                    "total_text_length": 4047,
+                    "min_text_length": 57,
+                    "average_text_length": 134.9,
+                    "max_text_length": 300,
+                    "unique_texts": 30
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 6,
+                    "labels": {
+                        "4": {
+                            "count": 5
+                        },
+                        "6": {
+                            "count": 5
+                        },
+                        "3": {
+                            "count": 5
+                        },
+                        "5": {
+                            "count": 5
+                        },
+                        "2": {
+                            "count": 5
+                        },
+                        "0": {
+                            "count": 5
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

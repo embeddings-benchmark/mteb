@@ -1,0 +1,80 @@
+{
+    "validation": {
+        "num_samples": 500,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 54082,
+            "min_text_length": 28,
+            "average_text_length": 108.164,
+            "max_text_length": 443,
+            "unique_texts": 500
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "0": {
+                    "count": 250
+                },
+                "1": {
+                    "count": 250
+                }
+            }
+        }
+    },
+    "test": {
+        "num_samples": 2000,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 216612,
+            "min_text_length": 25,
+            "average_text_length": 108.306,
+            "max_text_length": 689,
+            "unique_texts": 2000
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "0": {
+                    "count": 1000
+                },
+                "1": {
+                    "count": 1000
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 7443,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 816035,
+            "min_text_length": 24,
+            "average_text_length": 109.6379148192933,
+            "max_text_length": 5399,
+            "unique_texts": 7443
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "0": {
+                    "count": 3750
+                },
+                "1": {
+                    "count": 3693
+                }
+            }
+        }
+    }
+}

@@ -4,31 +4,37 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.38.14"
+version = "2.8.3"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
     { name = "MTEB Contributors", email = "niklas@huggingface.co" },
-    { email = "nouamane@huggingface.co" },
-    { email = "info@nils-reimers.de" },
+    { name = "Kenneth Enevoldsen", email = "kenneth.enevoldsen@cas.au.dk" },
+    { name = "Nouamane Tazi", email = "nouamane@huggingface.co" },
+    { name = "Nils Reimers", email = "info@nils-reimers.de" },
 ]
-license = { file = "LICENSE" }
-keywords = ["deep learning", "text embeddings", "benchmark"]
+maintainers = [
+    { name = "Kenneth Enevoldsen", email = "kenneth.enevoldsen@cas.au.dk" },
+    { name = "Roman Solomatin", email = "risolomatin@gmail.com" },
+    { name = "Isaac Chung", email = "chungisaac1217@gmail.com" },
+]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+keywords = ["deep learning", "text embeddings", "embeddings", "multimodal", "benchmark", "retrieval", "information retrieval"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
-    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
 ]
-requires-python = ">=3.9,<3.13"
+requires-python = ">=3.10,<3.15"
 dependencies = [
     "datasets>=2.19.0",
     "numpy>=1.0.0,<3.0.0",
     "requests>=2.26.0",
-    "scikit_learn>=1.0.2",
+    "scikit-learn>=1.4.0",
     "scipy>=0.0.0",
     "sentence_transformers>=3.0.0",
     "typing-extensions>=4.5.0",
@@ -37,52 +43,49 @@ dependencies = [
     "rich>=0.0.0",
     "pytrec-eval-terrier>=0.5.6",
     "pydantic>=2.0.0",
-    "typing_extensions>=0.0.0",
-    "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
 ]
 
 
 [project.urls]
-homepage = "https://github.com/embeddings-benchmark/mteb"
-"Huggingface Organization" = "https://huggingface.co/mteb"
-"Source Code" = "https://github.com/embeddings-benchmark/mteb"
+Homepage = "https://github.com/embeddings-benchmark/mteb"
+Documentation = "https://embeddings-benchmark.github.io/mteb/"
+Repository = "https://github.com/embeddings-benchmark/mteb"
+"Hugging Face Organization" = "https://huggingface.co/mteb"
 
 [project.scripts]
 mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
-image = ["torchvision>0.2.1"]
-dev = [
-"ruff==0.9.7", # locked so we don't get PRs which fail only due to a lint update
-"pytest>=8.3.4",
-"pytest-xdist>=3.6.1",
-"pytest-coverage>=0.0",
-"pytest-rerunfailures>=15.0",
-"iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
-"pre-commit>=4.1.0",
-"bibtexparser>=1.4.3" # used for tests/test_citation_formatting.py
+image = [
+    "torchvision>0.2.1",
+    "transformers[torch-vision,vision]",
+]
+audio = [
+    "torchaudio",
+    # datsaets==4 requires transformers>=5, because of https://github.com/huggingface/transformers/issues/42103
+    "datasets[audio]",
 ]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
-speedtask = [
-    "setuptools!=78.0.1",  # https://github.com/pypa/setuptools/issues/4910
-    "GPUtil>=1.4.0",
-    "psutil>=5.9.8"
-]
-peft = ["peft>=0.11.0"]
 leaderboard = [
-    "gradio==5.27.1; python_version > '3.9'", # 3.10 is required for gradio
-    "gradio_rangeslider>=0.0.8",
+    "gradio==6.0.1",
     "plotly>=5.24.0,<6.0.0",
     "cachetools>=5.2.0",
     "matplotlib>=3.9.4",
+    "pymongo>=4.15.5",
 ]
+
+# model specific optional dependencies:
+peft = ["peft>=0.11.0"]
 flagembedding = ["FlagEmbedding==1.3.4"]
 jina = ["einops>=0.8.0"]
+jina-clip = ["peft>=0.15.2", "einops>=0.8.0", "transformers>=4.52.0,<5.0.0", "torchvision>=0.22.1", "timm>=1.0.15,<1.1.0"]
+jina-v4 = ["peft>=0.15.2", "transformers>=4.52.0,<5.0.0", "torchvision>=0.22.1"]
 flash_attention = ["flash-attn>=2.6.3"]
 openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
 model2vec = ["model2vec>=0.3.0"]
-pylate = ["pylate>=1.1.4"]
+pylate = ["pylate>=1.3.1; python_full_version < '3.13'", "transformers>=4.52.0; python_full_version < '3.13'"]  # Required for sentence-transformers 5.0.0 compatibility (otherwise 1.1.6), pylate requires voyager, which in turn requires <=3.12
+msclap = ["msclap>=1.3.4", "soundfile>=0.13.1"]
 bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
 gritlm = ["gritlm>=1.0.2"]
 xformers = ["xformers>=0.0.29"]
@@ -94,9 +97,85 @@ vertexai = ["vertexai==1.71.1"]
 llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
 timm = ["timm>=1.0.15,<1.1.0"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
+nomic = ["einops>=0.8.1"]
+ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
+colpali_engine = ["colpali_engine>=0.3.12; python_full_version < '3.14'"]
+colqwen3 = ["transformers>=4.57", "torchvision>=0.22.1"]
+sauerkrautlm-colpali = ["sauerkrautlm-colpali>=0.1.0; python_full_version < '3.14'"]
+xet = ["huggingface_hub>=0.32.0"]
+youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lkeap>=3.0.1451"]
+llama-embed-nemotron = ["transformers==4.51.0"]
+llama-nemotron-colembed-vl = ["transformers[torch]==4.49.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
+nemotron-colembed-vl-v2 = ["transformers[torch]==5.0.0rc0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
+faiss-cpu = ["faiss-cpu>=1.12.0"]
+eager_embed = ["qwen_vl_utils>=0.0.14"]
+speechbrain = ["speechbrain>=0.5.12"]
+muq = ["muq==0.1.0"]
+wav2clip = ["wav2clip==0.1.0"]
+torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
+vllm = ["vllm>=0.11.1"]
+mctct = ["transformers<5"]  # mctct was removed in transformers 5
+
+[dependency-groups]
+lint = [
+    "ruff==0.14.0", # locked so we don't get PRs which fail only due to a lint update
+    "pre-commit>=4.1.0",
+    "bibtexparser>=1.4.3", # used for tests/test_citation_formatting.py
+    "typos>1",
+]
+test = [
+    "pytest>=8.3.4,<8.4.0",
+    "pytest-xdist>=3.6.1,<3.7.0",
+    "pytest-coverage>=0.0",
+    "pytest-rerunfailures>=15.0,<16.0",
+    "iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
+    "GitPython>=3.0.0",
+    "tabulate>=0.9.0",
+]
+docs = [
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.5.47",
+    "mkdocstrings-python>=1.18.2",
+    "mkdocs-bibtex>=2.16.2",
+    "mkdocs-exclude>=1.0.2",
+    "mkdocs-include-dir-to-nav>=1.2.0",
+    "tabulate>=0.9.0",
+]
+typing = [
+    "mypy==1.19.1",
+    "types-cachetools>=6.2.0.20250827",
+    "types-pysocks>=1.7.1.20250828",
+    "types-pyyaml>=6.0.12.20250822",
+    "types-requests>=2.32.4.20250913",
+    "types-simplejson>=3.20.0.20250822",
+    "types-tqdm>=4.67.0.20250809",
+    "types-tensorflow>=2.18.0.20250809",
+    "types-pygments>=2.19.0.20251121",
+    "types-colorama>=0.4.15.20250801",
+    "types-gevent>=25.9.0.20251102",
+    "types-networkx>=3.6.1.20251220",
+    "types-openpyxl>=3.1.5.20250919",
+    "types-psutil>=7.1.3.20251211",
+    "types-python-dateutil>=2.9.0.20251115",
+    "types-pywin32>=311.0.0.20251008",
+    "types-regex>=2025.11.3.20251106",
+    "types-setuptools>=80.9.0.20251221",
+    "types-tabulate>=0.9.0.20241207",
+    "types-xlrd>=2.0.0.20251020",
+    "pandas-stubs>=2.3.2.250926",
+    "scipy-stubs>=1.15.3.0",
+    "types-defusedxml>=0.7.0.20250822",
+    "pillow>=12.0.0",
+]
+dev = [
+    {include-group = "lint"},
+    {include-group = "test"},
+    {include-group = "typing"},
+    {include-group = "docs"},
+]
+
 
 [tool.coverage.report]
-
 omit = ["tests/*", "mteb/tasks/**/*", "scripts"]
 
 # Regexes for lines to exclude from consideration
@@ -115,7 +194,7 @@ exclude_also = [
 
     # Don't complain about abstract methods, they aren't run:
     "@(abc\\.)?abstractmethod",
-    ]
+]
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -123,13 +202,16 @@ include = ["mteb", "mteb.*"]
 namespaces = false
 
 [tool.setuptools.package-data]
-"*" = ["*.json"]
-"mteb.abstasks" = ["the_ugly_duckling.txt"]
+"mteb" = [
+    "languages/*.json",  # for languages
+    "descriptive_stats/*/*.json",  # for descriptive_stats image
+    "descriptive_stats/Image/*/*.json",  # for descriptive_stats image
+]
+"mteb.abstasks" = ["dataset_card_template.md"]
 "mteb.tasks.Image.ZeroShotClassification.eng.templates" = ["*.txt"]
 
 [tool.ruff]
-
-target-version = "py39"
+target-version = "py310"
 
 
 [tool.ruff.lint]
@@ -141,29 +223,83 @@ select = [
     "UP", # upgrade to latest syntax if possible
     "FA", # Future annotations
     "C4", # cleaner comprehensions
+    "NPY", # numpy
+    "N",       # PEP8 naming convention
+    "RUF009",  # function-call-in-dataclass-default-argument
+    "RUF008",  # mutable-dataclass-default
+    "RUF013",  # implicit-optional
+    "RUF012",  # mutable-class-default
+    "RUF015",  # unnecessary-iterable-allocation-for-first-element
+    "RUF016",  # invalid-index-type
+    "RUF017",  # quadratic-list-summation
+    "RUF018",  # assignment-in-assert
+    "RUF019",  # unnecessary-key-check
+    "RUF020",  # never-union
+    "RUF021",  # parenthesize-chained-operators
+    "RUF022",  # unsorted-dunder-all
+    "RUF024",  # mutable-fromkeys-value
+    "RUF026",  # default-factory-kwarg
+    "RUF033",  # post-init-default
+    "RUF034",  # useless-if-else
+    "RUF041",  # unnecessary-nested-literal
+    "RUF040",  # invalid-assert-message-literal-argument
+    "RUF046",  # unnecessary-cast-to-int
+    "RUF051",  # if-key-in-dict-del
+    "RUF100",  # unused-noqa
+    "RUF101",  # redirected-noqa
+    "RUF200",  # invalid-pyproject-toml
+    "PTH",     # use pathlib
+    "TID",     # tidy-imports
+    "D",       # pydocstyle
+    "PGH",     # pygrep-hooks Use specific rule codes when ignoring type issues
+    "LOG",     # logging
+    "TC",      # type-checking
 ]
 
+ignore = [
+    "E501",   # line too long
+    "E741",     # ambiguous variable name
+    "D100",     # Missing docstring in public module
+    "D105",     # Missing docstring in magic method
+    "D104",     # Missing docstring in public package
+    "D107",     # Missing docstring in __init__
+    "D415",     # First line should end with a period
+    "C408",     # don't use unecc. collection call, e.g. dict over {}
+]
+future-annotations = true  # For TC rules
+typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
 
-ignore = ["E501",   # line too long
-        "E741",     # ambiguous variable name
-        "F403",     # undefined import
-        "D100",     # Missing docstring in public module
-        "D101",     # Missing docstring in public class
-        "D102",     # Missing docstring in public method
-        "D103",     # Missing docstring in public function
-        "D105",     # Missing docstring in magic method
-        "D104",     # Missing docstring in public package
-        "D107",     # Missing docstring in __init__
-        "D205",     # 1 blank line required between summary line and description
-        "D415",     # First line should end with a period
-        "C408",     # don't use unecc. collection call, e.g. dict over {}
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/*" = ["ALL"]
+"docs/*" = [
+    "D",
+    "DOC",
+]
+"tests/*" = [
+    "RUF012",
+    "D",
+    "DOC",
+    "TC",
+]
+"mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
+"mteb/tasks/*" = ["D", "DOC"]
+"mteb/models/model_implementations/*" = ["D", "DOC"]
+"mteb/benchmarks/benchmark.py" = [
+    # pydantic would try to validate fields in Benchmark class
+    "TC",
 ]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false
 
-[tool.ruff.lint.isort]
-required-imports = ["from __future__ import annotations"]
+[tool.ruff.lint.pep8-naming]
+ignore-names = [
+    "F",  # torch.nn.functional
+    "X",
+    "X_train",
+    "X_test",
+]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
@@ -172,6 +308,13 @@ convention = "google"
 mypy-init-return = true
 suppress-none-returning = true
 
+[tool.ruff.lint.flake8-type-checking]
+strict = true
+runtime-evaluated-base-classes = [
+    "pydantic.BaseModel",
+    "mteb.abstasks.task_metadata.TaskMetadata",  # https://github.com/astral-sh/ruff/issues/7866
+]
+
 [tool.semantic_release]
 branch = "main"
 version_toml = ["pyproject.toml:project.version"]
@@ -179,21 +322,27 @@ build_command = "python -m pip install build; python -m build"
 tag_format = "{version}"
 
 [tool.semantic_release.commit_parser_options]
-major_types = ["breaking"]
-minor_types = ["feat"]
-patch_types = ["fix", "perf"]
-
+minor_tags = ["minor", "feat", "benchmark"]
+patch_tags = [
+    "patch",
+    "fix",
+    "perf",
+    "model",
+    "dataset",
+]
 
 [tool.pytest.ini_options]
 addopts = """
-            --reruns 3
-            --only-rerun requests.exceptions.ReadTimeout
-            --only-rerun huggingface_hub.errors.HfHubHTTPError
-            --only-rerun huggingface_hub.errors.LocalEntryNotFoundError
-            --only-rerun FileNotFoundError
-            --durations=5
-            --reruns-delay 10
-        """
+    -ra
+    --reruns 3
+    --only-rerun requests.exceptions.ReadTimeout
+    --only-rerun huggingface_hub.errors.HfHubHTTPError
+    --only-rerun huggingface_hub.errors.LocalEntryNotFoundError
+    --only-rerun FileNotFoundError
+    --durations=5
+    --reruns-delay 10
+"""
+# -ra -> # show extra test summary info for skipped, failed, etc.
 # --reruns 3 -> # Retry failed tests 3 times
 # requests.exceptions.ReadTimeout -> # HF Read timed out -> https://github.com/embeddings-benchmark/mteb/actions/runs/13275350693/job/37093688544
 # huggingface_hub.errors.HfHubHTTPError -> # HF is unavailable, e.g. seen here: https://github.com/embeddings-benchmark/mteb/actions/runs/13275350693/job/37093688544
@@ -202,12 +351,159 @@ addopts = """
 # --durations=5 -> Show the 5 slowest tests
 # --reruns-delay 10 -> Delay between reruns in seconds to avoid running into the same issue again
 
+markers = [
+    "test_datasets: marks tests that tests dataset availability",
+]
+
 [tool.uv]
+default-groups = ["test", "docs", "typing", "lint"]
 override-dependencies = [
     "salesforce-lavis", # salesforce-lavis is not valid with sentence transformers >=3.0.0
 ]
 conflicts = [
-    [{ extra = "timm" }, { extra = "blip2" }],
-    [{ extra = "llm2vec" }, { extra = "pylate" }],
-    [{ extra = "llm2vec" }, { extra = "model2vec" }]
+    [
+        { extra = "timm" },
+        { extra = "blip2" },
+        { extra = "llm2vec" },
+        { extra = "model2vec" },
+        { extra = "pylate" }, # conflicting versions of transformers
+        { extra = "llama-embed-nemotron" }, # conflicting versions of transformers
+        { extra = "llama-nemotron-colembed-vl" }, # conflicting versions of transformers
+        { extra = "nemotron-colembed-vl-v2" }, # conflicting versions of transformers
+        { extra = "colpali_engine" },
+        { extra = "colqwen3" },
+        { extra = "jina-v4" },
+        { extra = "sauerkrautlm-colpali" },
+        { extra = "vllm" },
+        { extra = "jina-clip" },
+        { extra = "msclap" },
+        { extra = "muq" },
+        { extra = "mctct" },
+    ],
 ]
+
+[tool.uv.extra-build-dependencies]
+flash-attn = [{ requirement = "torch", match-runtime = true }]
+
+[tool.mypy]
+plugins = ['pydantic.mypy']
+
+[[tool.mypy.overrides]]
+# these modules not typed and don't have stubs
+module = [
+    "datasets",
+    "datasets.exceptions",
+    "sklearn",
+    "sklearn.*",
+    "faiss",
+    "vllm",
+    "torchaudio",
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# don't typecheck these modules (too many issues)
+module = [
+    "mteb.models.model_implementations.*",
+    "mteb.tasks.*",
+    "mteb.leaderboard.*",
+]
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+# mypy can't resolve dataset dict
+module = ["mteb.abstasks.*"]
+disable_error_code = ["index"]
+
+[tool.typos.default]
+binary = false
+locale = "en"
+extend-ignore-words-re = [
+    # authors
+    "Stap",
+    "Asai",
+    "Tung",
+    "Gool",
+    "Winn",
+    "STIL",
+    "Sherif",
+    "Mor",
+    "Ond",
+    "Mehta",
+    "Parth",
+    # languages/bibtext artifacts
+    "ba",
+    "creen",
+    "Accademia",
+    # ISO 15924 script codes
+    "Beng",  # Bengali script
+]
+extend-ignore-re = [
+    "author.*",  # ignore authors in citations
+]
+
+[tool.typos.files]
+extend-exclude = [
+    "*.json",
+    "*.jsonl",
+    "*.cff",
+    "*.tex",  # latex files with language codes
+    "*.bib",  # bibliography files with author names and journal abbreviations
+    "*.txt",  # zero shot labels
+    "docs/mmteb",
+    "scripts/",
+    "mteb/models/model_implementations/gme_v_models.py",  # video_grid_thw `thw`
+    "mteb/models/model_implementations/vista_models.py",  # self.normlized: in visual bge
+    "mteb/models/model_implementations/salesforce_models.py", # multiligual in paper title
+    "tests/mock_tasks.py",  #  "denne her matche ikke den ovenstående",
+    "mteb/models/model_implementations/kalm_models.py",  # prompt:  classify ist topic",
+    "mteb/tasks/reranking/eng/built_bench_reranking.py",  # prompt:   descriptions from buit asset
+    "mteb/tasks/retrieval/eng/built_bench_retrieval.py",
+    "mteb/tasks/retrieval/eng/llava_it2t_retrieval.py",
+    # dutch prompts
+    "mteb/tasks/classification/nld/",
+    "mteb/tasks/clustering/nld/",
+    "mteb/tasks/multilabel_classification/nld/",
+    "mteb/tasks/pair_classification/nld/",
+    "mteb/tasks/sts/nld/",
+    "mteb/tasks/retrieval/nld/",
+    "mteb/descriptive_stats/",
+    # Beltagy, Iz
+    "mteb/tasks/retrieval/eng/lembqm_sum_retrieval.py",
+    "mteb/tasks/classification/jpn/wrime_classification.py",
+    "mteb/tasks/reranking/eng/sci_docs_reranking.py",
+]
+
+[tool.typos.type.py]
+extend-ignore-re = [
+    # ignore lang identifiers
+    "...-....",
+    "..._....",
+]
+
+[tool.typos.type.py.extend-identifiers]
+BulgarianStoreReviewSentimentClassfication = "BulgarianStoreReviewSentimentClassfication"
+
+[tool.typos.type.py.extend-words]
+wdth = "wdth"
+Allo = "Allo"   # AlloProfClusteringS2S.v2
+# langs/splits
+som = "som"
+yor = "yor"
+Beng = "Beng"
+als = "als"
+tha = "tha"
+tham = "tham"
+thi = "thi"
+bre = "bre"
+mak = "mak"
+Maka = "Maka"
+Mape = "Mape"
+Mian = "Mian"
+Ono = "Ono"
+Yau = "Yau"
+Altas = "Altas"
+matche = "matche"
+expresso = "expresso"
+Expresso = "Expresso"
+NIFE = "NIFE"

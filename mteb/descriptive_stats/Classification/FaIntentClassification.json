@@ -1,0 +1,66 @@
+{
+    "test": {
+        "num_samples": 122,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 5294,
+            "min_text_length": 18,
+            "average_text_length": 43.39344262295082,
+            "max_text_length": 76,
+            "unique_texts": 122
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 4,
+            "labels": {
+                "Catch_a_Cab": {
+                    "count": 31
+                },
+                "Order_Food": {
+                    "count": 29
+                },
+                "Play_Music": {
+                    "count": 31
+                },
+                "Get_Weather": {
+                    "count": 31
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 900,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 36673,
+            "min_text_length": 7,
+            "average_text_length": 40.74777777777778,
+            "max_text_length": 87,
+            "unique_texts": 900
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 4,
+            "labels": {
+                "Order_Food": {
+                    "count": 222
+                },
+                "Play_Music": {
+                    "count": 220
+                },
+                "Catch_a_Cab": {
+                    "count": 224
+                },
+                "Get_Weather": {
+                    "count": 234
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,60 @@
+{
+    "test": {
+        "num_samples": 1318,
+        "number_texts_intersect_with_train": 5,
+        "text_statistics": {
+            "total_text_length": 81593,
+            "min_text_length": 31,
+            "average_text_length": 61.90667678300455,
+            "max_text_length": 102,
+            "unique_texts": 1317
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 3,
+            "labels": {
+                "business": {
+                    "count": 491
+                },
+                "entertainment": {
+                    "count": 584
+                },
+                "tech": {
+                    "count": 243
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 5269,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 326423,
+            "min_text_length": 4,
+            "average_text_length": 61.951603719870945,
+            "max_text_length": 108,
+            "unique_texts": 5264
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 3,
+            "labels": {
+                "business": {
+                    "count": 1840
+                },
+                "entertainment": {
+                    "count": 2321
+                },
+                "tech": {
+                    "count": 1108
+                }
+            }
+        }
+    }
+}

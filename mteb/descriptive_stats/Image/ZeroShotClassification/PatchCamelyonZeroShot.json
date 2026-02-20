@@ -1,23 +1,37 @@
 {
     "test": {
         "num_samples": 32768,
-        "unique_num_labels": 2,
-        "min_image_width": 96,
-        "average_image_width": 96.0,
-        "max_image_width": 96,
-        "min_image_height": 96,
-        "average_image_height": 96.0,
-        "max_image_height": 96,
-        "min_label_text_length": 35,
-        "average_label_text_length": 52.0,
-        "max_label_text_length": 69,
-        "labels": {
-            "0": {
-                "count": 16391
-            },
-            "1": {
-                "count": 16377
+        "number_of_characters": null,
+        "text_statistics": null,
+        "image_statistics": {
+            "min_image_width": 96,
+            "average_image_width": 96.0,
+            "max_image_width": 96,
+            "min_image_height": 96,
+            "average_image_height": 96.0,
+            "max_image_height": 96,
+            "unique_images": 29383
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "0": {
+                    "count": 16391
+                },
+                "1": {
+                    "count": 16377
+                }
             }
+        },
+        "candidates_labels_text_statistics": {
+            "total_text_length": 103,
+            "min_text_length": 34,
+            "average_text_length": 51.5,
+            "max_text_length": 69,
+            "unique_texts": 2
         }
     }
 }

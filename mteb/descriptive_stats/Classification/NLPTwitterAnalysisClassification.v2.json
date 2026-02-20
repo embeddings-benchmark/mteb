@@ -1,0 +1,198 @@
+{
+    "test": {
+        "num_samples": 1330,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 171632,
+            "min_text_length": 7,
+            "average_text_length": 129.0466165413534,
+            "max_text_length": 4523,
+            "unique_texts": 1330
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 26,
+            "labels": {
+                "weather_and_seasons": {
+                    "count": 50
+                },
+                "health_and_wellness": {
+                    "count": 50
+                },
+                "automotive": {
+                    "count": 50
+                },
+                "fashion_and_style": {
+                    "count": 50
+                },
+                "other": {
+                    "count": 83
+                },
+                "business_and_finance": {
+                    "count": 50
+                },
+                "family_and_parenting": {
+                    "count": 49
+                },
+                "environment_and_sustainability": {
+                    "count": 50
+                },
+                "travel_and_adventure": {
+                    "count": 47
+                },
+                "funny_and_humorous": {
+                    "count": 50
+                },
+                "science_and_discovery": {
+                    "count": 50
+                },
+                "art_and_design": {
+                    "count": 49
+                },
+                "social_issues_and_activism": {
+                    "count": 55
+                },
+                "food_and_cooking": {
+                    "count": 49
+                },
+                "home_and_garden": {
+                    "count": 50
+                },
+                "politics_and_current_affairs": {
+                    "count": 50
+                },
+                "pets_and_animals": {
+                    "count": 50
+                },
+                "sports_and_athletics": {
+                    "count": 49
+                },
+                "technology_and_innovation": {
+                    "count": 49
+                },
+                "gaming": {
+                    "count": 50
+                },
+                "beauty_and_cosmetics": {
+                    "count": 50
+                },
+                "religion_and_spirituality": {
+                    "count": 50
+                },
+                "inspirational_and_motivational": {
+                    "count": 49
+                },
+                "education_and_learning": {
+                    "count": 53
+                },
+                "books_and_literature": {
+                    "count": 50
+                },
+                "entertainment_and_pop_culture": {
+                    "count": 48
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 2672,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 342701,
+            "min_text_length": 9,
+            "average_text_length": 128.2563622754491,
+            "max_text_length": 7000,
+            "unique_texts": 2672
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 26,
+            "labels": {
+                "travel_and_adventure": {
+                    "count": 100
+                },
+                "books_and_literature": {
+                    "count": 100
+                },
+                "pets_and_animals": {
+                    "count": 99
+                },
+                "family_and_parenting": {
+                    "count": 100
+                },
+                "inspirational_and_motivational": {
+                    "count": 98
+                },
+                "art_and_design": {
+                    "count": 100
+                },
+                "gaming": {
+                    "count": 100
+                },
+                "politics_and_current_affairs": {
+                    "count": 100
+                },
+                "other": {
+                    "count": 177
+                },
+                "science_and_discovery": {
+                    "count": 100
+                },
+                "environment_and_sustainability": {
+                    "count": 100
+                },
+                "religion_and_spirituality": {
+                    "count": 96
+                },
+                "home_and_garden": {
+                    "count": 100
+                },
+                "sports_and_athletics": {
+                    "count": 100
+                },
+                "automotive": {
+                    "count": 100
+                },
+                "food_and_cooking": {
+                    "count": 98
+                },
+                "health_and_wellness": {
+                    "count": 98
+                },
+                "education_and_learning": {
+                    "count": 108
+                },
+                "beauty_and_cosmetics": {
+                    "count": 100
+                },
+                "weather_and_seasons": {
+                    "count": 100
+                },
+                "entertainment_and_pop_culture": {
+                    "count": 96
+                },
+                "social_issues_and_activism": {
+                    "count": 106
+                },
+                "funny_and_humorous": {
+                    "count": 98
+                },
+                "business_and_finance": {
+                    "count": 99
+                },
+                "fashion_and_style": {
+                    "count": 99
+                },
+                "technology_and_innovation": {
+                    "count": 100
+                }
+            }
+        }
+    }
+}

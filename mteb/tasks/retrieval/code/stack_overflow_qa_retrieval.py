@@ -1,0 +1,40 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
+
+_EVAL_SPLIT = "test"
+
+
+class StackOverflowQARetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="StackOverflowQA",
+        description="The dataset is a collection of natural language queries and their corresponding response which may include some text mixed with code snippets. The task is to retrieve the most relevant response for a given query.",
+        reference="https://arxiv.org/abs/2407.02883",
+        dataset={
+            "path": "CoIR-Retrieval/stackoverflow-qa",
+            "revision": "db8f169f3894c14a00251061f957b2063eef2bd5",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=[_EVAL_SPLIT],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        date=("2019-01-01", "2019-12-31"),
+        domains=["Programming", "Written"],
+        task_subtypes=["Code retrieval"],
+        license="mit",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@misc{li2024coircomprehensivebenchmarkcode,
+  archiveprefix = {arXiv},
+  author = {Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
+  eprint = {2407.02883},
+  primaryclass = {cs.IR},
+  title = {CoIR: A Comprehensive Benchmark for Code Information Retrieval Models},
+  url = {https://arxiv.org/abs/2407.02883},
+  year = {2024},
+}
+""",
+    )

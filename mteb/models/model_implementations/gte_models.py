@@ -1,0 +1,451 @@
+import torch
+
+from mteb.models.instruct_wrapper import instruct_wrapper
+from mteb.models.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+)
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.types import PromptType
+
+
+def instruction_template(
+    instruction: str, prompt_type: PromptType | None = None
+) -> str:
+    return (
+        f"Instruct: {instruction}\nQuery: "
+        if (prompt_type is None or prompt_type == PromptType.query) and instruction
+        else ""
+    )
+
+
+GTE_CITATION = """
+@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learning},
+  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
+  journal={arXiv preprint arXiv:2308.03281},
+  year={2023}
+}
+"""
+
+gte_qwen2_7b_instruct = ModelMeta(
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
+        instruction_template=instruction_template,
+        attn="bbcc",
+        pooling_method="lasttoken",
+        mode="embedding",
+        torch_dtype=torch.float16,
+        # The ST script does not normalize while the HF one does so unclear what to do
+        # https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct#sentence-transformers
+        normalized=True,
+        embed_eos="<|endoftext|>",
+    ),
+    name="Alibaba-NLP/gte-Qwen2-7B-instruct",
+    model_type=["dense"],
+    languages=None,
+    open_weights=True,
+    revision="e26182b2122f4435e8b3ebecbf363990f409b45b",
+    release_date="2024-06-15",  # initial commit of hf model.
+    n_parameters=7069121024,
+    n_embedding_parameters=543_499_264,
+    memory_usage_mb=29040,
+    embed_dim=3584,
+    license="apache-2.0",
+    reference="https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
+    use_instructions=True,
+    citation=GTE_CITATION,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    max_tokens=32_768,
+)
+
+gte_qwen1_5_7b_instruct = ModelMeta(
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
+        instruction_template=instruction_template,
+        attn="bbcc",
+        pooling_method="lasttoken",
+        mode="embedding",
+        torch_dtype=torch.float16,
+        normalized=True,
+        embed_eos="<|endoftext|>",
+    ),
+    name="Alibaba-NLP/gte-Qwen1.5-7B-instruct",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="07d27e5226328010336563bc1b564a5e3436a298",
+    release_date="2024-04-20",  # initial commit of hf model.
+    n_parameters=7098994688,
+    n_embedding_parameters=622329856,
+    memory_usage_mb=29449,
+    embed_dim=4096,
+    license="apache-2.0",
+    max_tokens=32_768,
+    reference="https://huggingface.co/Alibaba-NLP/gte-Qwen1.5-7B-instruct",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    citation="""@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learning},
+  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
+  journal={arXiv preprint arXiv:2308.03281},
+  year={2023}
+}""",
+)
+
+gte_qwen2_1_5b_instruct = ModelMeta(
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
+        instruction_template=instruction_template,
+        attn="bbcc",
+        pooling_method="lasttoken",
+        mode="embedding",
+        torch_dtype=torch.float16,
+        normalized=True,
+        embed_eos="<|endoftext|>",
+    ),
+    name="Alibaba-NLP/gte-Qwen2-1.5B-instruct",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="c6c1b92f4a3e1b92b326ad29dd3c8433457df8dd",
+    release_date="2024-07-29",  # initial commit of hf model.
+    n_parameters=1543268864,
+    n_embedding_parameters=232_928_256,
+    memory_usage_mb=6776,
+    embed_dim=8960,
+    license="apache-2.0",
+    max_tokens=32_768,
+    reference="https://huggingface.co/Alibaba-NLP/gte-Qwen2-1.5B-instruct",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    citation="""@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learning},
+  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
+  journal={arXiv preprint arXiv:2308.03281},
+  year={2023}
+}""",
+)
+
+gte_small_zh = ModelMeta(
+    loader=sentence_transformers_loader,
+    name="thenlper/gte-small-zh",
+    model_type=["dense"],
+    languages=["zho-Hans"],
+    open_weights=True,
+    revision="af7bd46fbb00b3a6963c8dd7f1786ddfbfbe973a",
+    release_date="2023-11-08",  # initial commit of hf model.
+    n_parameters=30258688,
+    n_embedding_parameters=10_817_536,
+    memory_usage_mb=58,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/thenlper/gte-small-zh",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,  # Not disclosed
+    citation="""@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learning},
+  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
+  journal={arXiv preprint arXiv:2308.03281},
+  year={2023}
+}""",
+)
+
+gte_base_zh = ModelMeta(
+    loader=sentence_transformers_loader,
+    name="thenlper/gte-base-zh",
+    model_type=["dense"],
+    languages=["zho-Hans"],
+    open_weights=True,
+    revision="71ab7947d6fac5b64aa299e6e40e6c2b2e85976c",
+    release_date="2023-11-08",  # initial commit of hf model.
+    n_parameters=102267648,
+    n_embedding_parameters=16_226_304,
+    memory_usage_mb=195,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/thenlper/gte-base-zh",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,  # Not disclosed
+    citation="""@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learning},
+  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
+  journal={arXiv preprint arXiv:2308.03281},
+  year={2023}
+}""",
+)
+
+gte_large_zh = ModelMeta(
+    loader=sentence_transformers_loader,
+    name="thenlper/gte-large-zh",
+    model_type=["dense"],
+    languages=["zho-Hans"],
+    open_weights=True,
+    revision="64c364e579de308104a9b2c170ca009502f4f545",
+    release_date="2023-11-08",  # initial commit of hf model.
+    n_parameters=325522432,
+    n_embedding_parameters=21_635_072,
+    memory_usage_mb=621,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/thenlper/gte-large-zh",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,  # Not disclosed
+    citation="""@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learning},
+  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
+  journal={arXiv preprint arXiv:2308.03281},
+  year={2023}
+}""",
+)
+
+gte_multilingual_langs = [
+    "afr-Latn",
+    "ara-Arab",
+    "aze-Latn",
+    "bel-Cyrl",
+    "bul-Cyrl",
+    "ben-Beng",
+    "cat-Latn",
+    "ceb-Latn",
+    "ces-Latn",
+    "cym-Latn",
+    "dan-Latn",
+    "deu-Latn",
+    "ell-Grek",
+    "eng-Latn",
+    "spa-Latn",
+    "est-Latn",
+    "eus-Latn",
+    "fas-Arab",
+    "fin-Latn",
+    "fra-Latn",
+    "glg-Latn",
+    "guj-Gujr",
+    "heb-Hebr",
+    "hin-Deva",
+    "hrv-Latn",
+    "hat-Latn",
+    "hun-Latn",
+    "hye-Armn",
+    "ind-Latn",
+    "isl-Latn",
+    "ita-Latn",
+    "jpn-Jpan",
+    "jav-Latn",
+    "kat-Geor",
+    "kaz-Cyrl",
+    "khm-Khmr",
+    "kan-Knda",
+    "kor-Hang",
+    "kir-Cyrl",
+    "lao-Laoo",
+    "lit-Latn",
+    "lav-Latn",
+    "mkd-Cyrl",
+    "mal-Mlym",
+    "mon-Cyrl",
+    "mar-Deva",
+    "msa-Latn",
+    "mya-Mymr",
+    "nep-Deva",
+    "nld-Latn",
+    "nor-Latn",
+    "nob-Latn",
+    "nno-Latn",
+    "pan-Guru",
+    "pol-Latn",
+    "por-Latn",
+    "que-Latn",
+    "ron-Latn",
+    "rus-Cyrl",
+    "sin-Sinh",
+    "slk-Latn",
+    "slv-Latn",
+    "swa-Latn",
+    "tam-Taml",
+    "tel-Telu",
+    "tha-Thai",
+    "tgl-Latn",
+    "tur-Latn",
+    "ukr-Cyrl",
+    "urd-Arab",
+    "vie-Latn",
+    "yor-Latn",
+    "zho-Hans",
+]
+# Source: https://arxiv.org/pdf/2407.19669
+gte_multi_training_data = {
+    "T2Retrieval",
+    "DuRetrieval",
+    "MMarcoReranking",
+    "CMedQAv2-reranking",
+    "NQ-NL",  # translation not trained on
+    "NQ",
+    "MSMARCO",
+    "mMARCO-NL",  # translation not trained on
+    "HotpotQA",
+    "HotpotQA-NL",
+    "FEVER",
+    "FEVER-NL",
+    "MrTidyRetrieval",
+    "MultiLongDocRetrieval",
+    "MIRACLReranking",
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",  # https://arxiv.org/pdf/2407.19669, Table 11
+    # not in MTEB:
+    #   - TriviaQA
+    #   - SQuAD
+    #   - AllNLI
+    #   - Multi-CPR
+}
+
+gte_multilingual_base = ModelMeta(
+    loader=sentence_transformers_loader,
+    name="Alibaba-NLP/gte-multilingual-base",
+    model_type=["dense"],
+    languages=gte_multilingual_langs,
+    open_weights=True,
+    revision="ca1791e0bcc104f6db161f27de1340241b13c5a4",
+    release_date="2024-07-20",  # initial commit of hf model.
+    n_parameters=305368320,
+    n_embedding_parameters=192_036_864,
+    memory_usage_mb=582,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=8192,
+    reference="https://huggingface.co/Alibaba-NLP/gte-multilingual-base",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,  # couldn't find
+    training_datasets=gte_multi_training_data,
+    citation="""@inproceedings{zhang2024mgte,
+  title={mGTE: Generalized Long-Context Text Representation and Reranking Models for Multilingual Text Retrieval},
+  author={Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Wen and Dai, Ziqi and Tang, Jialong and Lin, Huan and Yang, Baosong and Xie, Pengjun and Huang, Fei and others},
+  booktitle={Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing: Industry Track},
+  pages={1393--1412},
+  year={2024}
+}""",
+)
+
+gte_modernbert_base = ModelMeta(
+    loader=sentence_transformers_loader,
+    name="Alibaba-NLP/gte-modernbert-base",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="7ca8b4ca700621b67618669f5378fe5f5820b8e4",
+    release_date="2025-01-21",  # initial commit of hf model.
+    n_parameters=149014272,
+    n_embedding_parameters=38682624,
+    memory_usage_mb=284,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=8192,
+    reference="https://huggingface.co/Alibaba-NLP/gte-modernbert-base",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "ONNX",
+        "safetensors",
+    ],
+    use_instructions=False,
+    public_training_code=None,  # couldn't find
+    public_training_data=None,
+    training_datasets=gte_multi_training_data,  # English part of gte_multi_training_data,
+    citation="""@inproceedings{zhang2024mgte,
+  title={mGTE: Generalized Long-Context Text Representation and Reranking Models for Multilingual Text Retrieval},
+  author={Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Wen and Dai, Ziqi and Tang, Jialong and Lin, Huan and Yang, Baosong and Xie, Pengjun and Huang, Fei and others},
+  booktitle={Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing: Industry Track},
+  pages={1393--1412},
+  year={2024}
+}
+
+@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learning},
+  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
+  journal={arXiv preprint arXiv:2308.03281},
+  year={2023}
+}""",
+)
+
+
+gte_base_en_v15 = ModelMeta(
+    loader=sentence_transformers_loader,
+    name="Alibaba-NLP/gte-base-en-v1.5",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="a829fd0e060bb84554da0dfd354d0de0f7712b7f",  # can be any
+    release_date="2024-06-20",  # initial commit of hf model
+    n_parameters=136776192,
+    n_embedding_parameters=23_445_504,
+    memory_usage_mb=None,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=8192,
+    reference="https://huggingface.co/Alibaba-NLP/gte-base-en-v1.5",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "ONNX",
+        "safetensors",
+    ],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from=None,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    citation="""@misc{zhang2024mgte,
+  title={mGTE: Generalized Long-Context Text Representation and Reranking Models for Multilingual Text Retrieval},
+  author={Xin Zhang and Yanzhao Zhang and Dingkun Long and Wen Xie and Ziqi Dai and Jialong Tang and Huan Lin and Baosong Yang and Pengjun Xie and Fei Huang and Meishan Zhang and Wenjie Li and Min Zhang},
+  year={2024},
+  eprint={2407.19669},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2407.19669},
+}
+@misc{li2023towards,
+  title={Towards General Text Embeddings with Multi-stage Contrastive Learning},
+  author={Zehan Li and Xin Zhang and Yanzhao Zhang and Dingkun Long and Pengjun Xie and Meishan Zhang},
+  year={2023},
+  eprint={2308.03281},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2308.03281},
+}""",
+)

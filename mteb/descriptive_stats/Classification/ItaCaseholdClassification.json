@@ -1,0 +1,447 @@
+{
+    "test": {
+        "num_samples": 221,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 929965,
+            "min_text_length": 468,
+            "average_text_length": 4207.986425339366,
+            "max_text_length": 17878,
+            "unique_texts": 221
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 64,
+            "labels": {
+                "Processo amministrativo": {
+                    "count": 39
+                },
+                "Militari, forze armate e di polizia": {
+                    "count": 9
+                },
+                "Urbanistica": {
+                    "count": 3
+                },
+                "Edilizia": {
+                    "count": 10
+                },
+                "Professioni e mestieri": {
+                    "count": 3
+                },
+                "Farmaci": {
+                    "count": 1
+                },
+                "Contratti della Pubblica amministrazione": {
+                    "count": 28
+                },
+                "Circolazione stradale": {
+                    "count": 1
+                },
+                "Risarcimento danni": {
+                    "count": 4
+                },
+                "Enti locali": {
+                    "count": 2
+                },
+                "Covid-19": {
+                    "count": 29
+                },
+                "Concessione amministrativa": {
+                    "count": 1
+                },
+                "Beni culturali": {
+                    "count": 2
+                },
+                "Autorit\u00e0 amministrative indipendenti": {
+                    "count": 3
+                },
+                "Magistrati": {
+                    "count": 3
+                },
+                "Energia elettrica": {
+                    "count": 2
+                },
+                "Contributi e finanziamenti": {
+                    "count": 2
+                },
+                "Atto amministrativo": {
+                    "count": 2
+                },
+                "Sicurezza pubblica": {
+                    "count": 1
+                },
+                "Agricoltura": {
+                    "count": 2
+                },
+                "Farmacia": {
+                    "count": 1
+                },
+                "Giurisdizione": {
+                    "count": 7
+                },
+                "Silenzio della P.A.": {
+                    "count": 1
+                },
+                "Accesso ai documenti": {
+                    "count": 4
+                },
+                "Ambiente": {
+                    "count": 2
+                },
+                "Universit\u00e0 degli studi": {
+                    "count": 2
+                },
+                "Amministrazione dello Stato": {
+                    "count": 1
+                },
+                "Pesca": {
+                    "count": 1
+                },
+                "Ricorso straordinario al Capo dello Stato": {
+                    "count": 2
+                },
+                "Cittadinanza": {
+                    "count": 1
+                },
+                "Pubblico impiego privatizzato": {
+                    "count": 1
+                },
+                "Ordinanza contingibile ed urgente": {
+                    "count": 1
+                },
+                "Caccia": {
+                    "count": 1
+                },
+                "Animali": {
+                    "count": 2
+                },
+                "Sport": {
+                    "count": 1
+                },
+                "Ricorso straordinario al Presidente della Regione Siciliana": {
+                    "count": 1
+                },
+                "Sanit\u00e0 pubblica": {
+                    "count": 5
+                },
+                "Rifiuti": {
+                    "count": 1
+                },
+                "Societ\u00e0 in house": {
+                    "count": 1
+                },
+                "Paesaggio": {
+                    "count": 2
+                },
+                "Lavoro": {
+                    "count": 1
+                },
+                "Economia": {
+                    "count": 1
+                },
+                "Informativa antimafia": {
+                    "count": 6
+                },
+                "Consiglio di Stato e Consiglio di Giustizia per la Regione Siciliana": {
+                    "count": 1
+                },
+                "Elezioni": {
+                    "count": 1
+                },
+                "Procedimento amministrativo": {
+                    "count": 2
+                },
+                "Pubblica istruzione": {
+                    "count": 3
+                },
+                "Inquinamento": {
+                    "count": 1
+                },
+                "Pubblica amministrazione": {
+                    "count": 1
+                },
+                "Straniero": {
+                    "count": 3
+                },
+                "Contratti pubblici": {
+                    "count": 1
+                },
+                "Telecomunicazione": {
+                    "count": 1
+                },
+                "Concorso": {
+                    "count": 1
+                },
+                "Commercio": {
+                    "count": 1
+                },
+                "Espropriazione per pubblica utilit\u00e0": {
+                    "count": 2
+                },
+                "Giustizia amministrativa": {
+                    "count": 2
+                },
+                "Imposte e tasse": {
+                    "count": 1
+                },
+                "Alimenti": {
+                    "count": 1
+                },
+                "Autorizzazione amministrativa": {
+                    "count": 1
+                },
+                "Aeroporti": {
+                    "count": 1
+                },
+                "Concorrenza": {
+                    "count": 1
+                },
+                "Leggi e decreti": {
+                    "count": 1
+                },
+                "Giochi": {
+                    "count": 1
+                },
+                "Annullamento d\u2019ufficio e revoca": {
+                    "count": 1
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 792,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 3651636,
+            "min_text_length": 322,
+            "average_text_length": 4610.651515151515,
+            "max_text_length": 19037,
+            "unique_texts": 792
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 71,
+            "labels": {
+                "Procedimento amministrativo": {
+                    "count": 7
+                },
+                "Edilizia": {
+                    "count": 36
+                },
+                "Contratti della Pubblica amministrazione": {
+                    "count": 102
+                },
+                "Giochi": {
+                    "count": 4
+                },
+                "Espropriazione per pubblica utilit\u00e0": {
+                    "count": 5
+                },
+                "Covid-19": {
+                    "count": 104
+                },
+                "Militari, forze armate e di polizia": {
+                    "count": 31
+                },
+                "Processo amministrativo": {
+                    "count": 138
+                },
+                "Energia elettrica": {
+                    "count": 9
+                },
+                "Alimenti": {
+                    "count": 4
+                },
+                "Autorit\u00e0 amministrative indipendenti": {
+                    "count": 13
+                },
+                "Ambiente": {
+                    "count": 8
+                },
+                "Consiglio di Stato e Consiglio di Giustizia per la Regione Siciliana": {
+                    "count": 4
+                },
+                "Magistrati": {
+                    "count": 9
+                },
+                "Concorrenza": {
+                    "count": 4
+                },
+                "Agricoltura": {
+                    "count": 5
+                },
+                "Pubblica istruzione": {
+                    "count": 13
+                },
+                "Animali": {
+                    "count": 7
+                },
+                "Rifiuti": {
+                    "count": 5
+                },
+                "Beni culturali": {
+                    "count": 5
+                },
+                "Giurisdizione": {
+                    "count": 25
+                },
+                "Societ\u00e0 in house": {
+                    "count": 2
+                },
+                "Enti locali": {
+                    "count": 8
+                },
+                "Paesaggio": {
+                    "count": 6
+                },
+                "Concorso": {
+                    "count": 5
+                },
+                "Farmaci": {
+                    "count": 4
+                },
+                "Sport": {
+                    "count": 5
+                },
+                "Elezioni": {
+                    "count": 5
+                },
+                "Sicurezza pubblica": {
+                    "count": 2
+                },
+                "Concessione amministrativa": {
+                    "count": 4
+                },
+                "Silenzio della P.A.": {
+                    "count": 2
+                },
+                "Straniero": {
+                    "count": 9
+                },
+                "Informativa antimafia": {
+                    "count": 22
+                },
+                "Contributi e finanziamenti": {
+                    "count": 8
+                },
+                "Farmacia": {
+                    "count": 5
+                },
+                "Risarcimento danni": {
+                    "count": 13
+                },
+                "Giustizia amministrativa": {
+                    "count": 6
+                },
+                "Ricorso straordinario al Presidente della Regione Siciliana": {
+                    "count": 2
+                },
+                "Atto amministrativo": {
+                    "count": 9
+                },
+                "Amministrazione dello Stato": {
+                    "count": 3
+                },
+                "Ricorso straordinario al Capo dello Stato": {
+                    "count": 8
+                },
+                "Urbanistica": {
+                    "count": 11
+                },
+                "Inquinamento": {
+                    "count": 3
+                },
+                "Cave": {
+                    "count": 2
+                },
+                "Piano nazionale di ripresa e resilienza": {
+                    "count": 2
+                },
+                "Sanit\u00e0 pubblica": {
+                    "count": 20
+                },
+                "Autorizzazione amministrativa": {
+                    "count": 2
+                },
+                "Lavoro": {
+                    "count": 2
+                },
+                "Imposte e tasse": {
+                    "count": 3
+                },
+                "Universit\u00e0 degli studi": {
+                    "count": 7
+                },
+                "Societ\u00e0": {
+                    "count": 2
+                },
+                "Pubblica amministrazione": {
+                    "count": 5
+                },
+                "Ordinanza contingibile ed urgente": {
+                    "count": 3
+                },
+                "Annullamento d\u2019ufficio e revoca": {
+                    "count": 2
+                },
+                "Criminalit\u00e0 organizzata": {
+                    "count": 2
+                },
+                "Mare": {
+                    "count": 2
+                },
+                "Circolazione stradale": {
+                    "count": 4
+                },
+                "Aeroporti": {
+                    "count": 2
+                },
+                "Professioni e mestieri": {
+                    "count": 9
+                },
+                "Cittadinanza": {
+                    "count": 4
+                },
+                "Accesso ai documenti": {
+                    "count": 14
+                },
+                "Pesca": {
+                    "count": 2
+                },
+                "Telecomunicazione": {
+                    "count": 2
+                },
+                "Unione Europea": {
+                    "count": 2
+                },
+                "Caccia": {
+                    "count": 2
+                },
+                "Contratti pubblici": {
+                    "count": 4
+                },
+                "Economia": {
+                    "count": 2
+                },
+                "Commercio": {
+                    "count": 3
+                },
+                "Demanio": {
+                    "count": 2
+                },
+                "Leggi e decreti": {
+                    "count": 2
+                },
+                "Pubblico impiego privatizzato": {
+                    "count": 4
+                }
+            }
+        }
+    }
+}

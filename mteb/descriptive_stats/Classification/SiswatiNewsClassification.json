@@ -1,0 +1,58 @@
+{
+    "train": {
+        "num_samples": 80,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 28336,
+            "min_text_length": 147,
+            "average_text_length": 354.2,
+            "max_text_length": 748,
+            "unique_texts": 80
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 12,
+            "labels": {
+                "arts, culture, entertainment and media": {
+                    "count": 14
+                },
+                "society": {
+                    "count": 32
+                },
+                "health": {
+                    "count": 3
+                },
+                "crime, law and justice": {
+                    "count": 7
+                },
+                "labour": {
+                    "count": 1
+                },
+                "disaster, accident and emergency incident": {
+                    "count": 1
+                },
+                "education": {
+                    "count": 6
+                },
+                "human interest": {
+                    "count": 9
+                },
+                "religion and belief": {
+                    "count": 4
+                },
+                "economy, business and finance": {
+                    "count": 1
+                },
+                "religion and belief#human interest": {
+                    "count": 1
+                },
+                "politics": {
+                    "count": 1
+                }
+            }
+        }
+    }
+}

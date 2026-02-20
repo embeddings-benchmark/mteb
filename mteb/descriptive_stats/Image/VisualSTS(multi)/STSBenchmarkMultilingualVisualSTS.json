@@ -1,401 +1,665 @@
 {
     "dev": {
         "num_samples": 15000,
-        "min_image1_width": 448,
-        "average_image1_width": 448.0,
-        "max_image1_width": 448,
-        "min_image1_height": 448,
-        "average_image1_height": 448.0,
-        "max_image1_height": 448,
-        "min_image2_width": 448,
-        "average_image2_width": 448.0,
-        "max_image2_width": 448,
-        "min_image2_height": 448,
-        "average_image2_height": 448.0,
-        "max_image2_height": 448,
-        "min_score": 0.0,
-        "avg_score": 2.3639075540602206,
-        "max_score": 5.0,
+        "number_of_characters": null,
+        "unique_pairs": null,
+        "text1_statistics": null,
+        "text2_statistics": null,
+        "image1_statistics": {
+            "min_image_width": 448,
+            "average_image_width": 448.0,
+            "max_image_width": 448,
+            "min_image_height": 448,
+            "average_image_height": 448.0,
+            "max_image_height": 448,
+            "unique_images": 14676
+        },
+        "image2_statistics": {
+            "min_image_width": 448,
+            "average_image_width": 448.0,
+            "max_image_width": 448,
+            "min_image_height": 448,
+            "average_image_height": 448.0,
+            "max_image_height": 448,
+            "unique_images": 14605
+        },
+        "label_statistics": {
+            "min_score": 0.0,
+            "avg_score": 2.3639075540602206,
+            "max_score": 5.0
+        },
         "hf_subset_descriptive_stats": {
             "en": {
                 "num_samples": 1500,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.3639075540602206,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1474
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1467
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.3639075540602206,
+                    "max_score": 5.0
+                }
             },
             "de": {
                 "num_samples": 1500,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.3639075540602206,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1467
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1457
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.3639075540602206,
+                    "max_score": 5.0
+                }
             },
             "es": {
                 "num_samples": 1500,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.3639075540602206,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1470
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1462
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.3639075540602206,
+                    "max_score": 5.0
+                }
             },
             "fr": {
                 "num_samples": 1500,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.3639075540602206,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1465
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1459
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.3639075540602206,
+                    "max_score": 5.0
+                }
             },
             "it": {
                 "num_samples": 1500,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.3639075540602206,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1469
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1463
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.3639075540602206,
+                    "max_score": 5.0
+                }
             },
             "nl": {
                 "num_samples": 1500,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.3639075540602206,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1471
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1461
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.3639075540602206,
+                    "max_score": 5.0
+                }
             },
             "pl": {
                 "num_samples": 1500,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.3639075540602206,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1466
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1460
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.3639075540602206,
+                    "max_score": 5.0
+                }
             },
             "pt": {
                 "num_samples": 1500,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.3639075540602206,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1470
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1464
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.3639075540602206,
+                    "max_score": 5.0
+                }
             },
             "ru": {
                 "num_samples": 1500,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.3639075540602206,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1464
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1454
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.3639075540602206,
+                    "max_score": 5.0
+                }
             },
             "zh": {
                 "num_samples": 1500,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.3639075540602206,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1466
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1459
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.3639075540602206,
+                    "max_score": 5.0
+                }
             }
         }
     },
     "test": {
         "num_samples": 13790,
-        "min_image1_width": 448,
-        "average_image1_width": 448.0,
-        "max_image1_width": 448,
-        "min_image1_height": 448,
-        "average_image1_height": 448.0,
-        "max_image1_height": 448,
-        "min_image2_width": 448,
-        "average_image2_width": 448.0,
-        "max_image2_width": 448,
-        "min_image2_height": 448,
-        "average_image2_height": 448.0,
-        "max_image2_height": 448,
-        "min_score": 0.0,
-        "avg_score": 2.6079166059890806,
-        "max_score": 5.0,
+        "number_of_characters": null,
+        "unique_pairs": null,
+        "text1_statistics": null,
+        "text2_statistics": null,
+        "image1_statistics": {
+            "min_image_width": 448,
+            "average_image_width": 448.0,
+            "max_image_width": 448,
+            "min_image_height": 448,
+            "average_image_height": 448.0,
+            "max_image_height": 448,
+            "unique_images": 12462
+        },
+        "image2_statistics": {
+            "min_image_width": 448,
+            "average_image_width": 448.0,
+            "max_image_width": 448,
+            "min_image_height": 448,
+            "average_image_height": 448.0,
+            "max_image_height": 448,
+            "unique_images": 13267
+        },
+        "label_statistics": {
+            "min_score": 0.0,
+            "avg_score": 2.6079166059890806,
+            "max_score": 5.0
+        },
         "hf_subset_descriptive_stats": {
             "en": {
                 "num_samples": 1379,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.6079166059890806,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1256
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1337
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.6079166059890806,
+                    "max_score": 5.0
+                }
             },
             "de": {
                 "num_samples": 1379,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.6079166059890806,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1248
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1327
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.6079166059890806,
+                    "max_score": 5.0
+                }
             },
             "es": {
                 "num_samples": 1379,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.6079166059890806,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1248
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1330
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.6079166059890806,
+                    "max_score": 5.0
+                }
             },
             "fr": {
                 "num_samples": 1379,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.6079166059890806,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1244
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1322
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.6079166059890806,
+                    "max_score": 5.0
+                }
             },
             "it": {
                 "num_samples": 1379,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.6079166059890806,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1249
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1330
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.6079166059890806,
+                    "max_score": 5.0
+                }
             },
             "nl": {
                 "num_samples": 1379,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.6079166059890806,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1247
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1327
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.6079166059890806,
+                    "max_score": 5.0
+                }
             },
             "pl": {
                 "num_samples": 1379,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.6079166059890806,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1243
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1325
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.6079166059890806,
+                    "max_score": 5.0
+                }
             },
             "pt": {
                 "num_samples": 1379,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.6079166059890806,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1249
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1332
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.6079166059890806,
+                    "max_score": 5.0
+                }
             },
             "ru": {
                 "num_samples": 1379,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.6079166059890806,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1240
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1321
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.6079166059890806,
+                    "max_score": 5.0
+                }
             },
             "zh": {
                 "num_samples": 1379,
-                "min_image1_width": 448,
-                "average_image1_width": 448.0,
-                "max_image1_width": 448,
-                "min_image1_height": 448,
-                "average_image1_height": 448.0,
-                "max_image1_height": 448,
-                "min_image2_width": 448,
-                "average_image2_width": 448.0,
-                "max_image2_width": 448,
-                "min_image2_height": 448,
-                "average_image2_height": 448.0,
-                "max_image2_height": 448,
-                "min_score": 0.0,
-                "avg_score": 2.6079166059890806,
-                "max_score": 5.0
+                "number_of_characters": null,
+                "unique_pairs": null,
+                "text1_statistics": null,
+                "text2_statistics": null,
+                "image1_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1242
+                },
+                "image2_statistics": {
+                    "min_image_width": 448,
+                    "average_image_width": 448.0,
+                    "max_image_width": 448,
+                    "min_image_height": 448,
+                    "average_image_height": 448.0,
+                    "max_image_height": 448,
+                    "unique_images": 1320
+                },
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 2.6079166059890806,
+                    "max_score": 5.0
+                }
             }
         }
     }

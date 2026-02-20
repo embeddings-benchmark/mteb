@@ -1,46 +1,53 @@
 """tests for the MTEB CLI"""
 
-from __future__ import annotations
-
 import subprocess
 import sys
 from argparse import Namespace
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 import pytest
 import yaml
 
-from mteb.cli import create_meta, run
+from mteb.cli.build_cli import (
+    _available_benchmarks,
+    _available_tasks,
+    _create_meta,
+    _leaderboard,
+    run,
+)
 
 
-def test_available_tasks():
-    command = f"{sys.executable} -m mteb available_tasks"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    assert result.returncode == 0, "Command failed"
-    assert "Banking77Classification" in result.stdout, (
-        "Sample task Banking77Classification task not found in available tasks"
+def test_available_tasks(capsys):
+    args = Namespace(
+        categories=None,
+        task_types=None,
+        languages=None,
+        tasks=None,
+    )
+    _available_tasks(args=args)
+
+    captured = capsys.readouterr()
+    assert "LccSentimentClassification" in captured.out, (
+        "Sample task LccSentimentClassification task not found in available tasks"
     )
 
 
-def test_available_benchmarks():
-    command = f"{sys.executable} -m mteb available_benchmarks"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    assert result.returncode == 0, "Command failed"
-    assert "MTEB(eng, v1)" in result.stdout, (
+def test_available_benchmarks(capsys):
+    args = Namespace(benchmarks=None)
+    _available_benchmarks(args=args)
+
+    captured = capsys.readouterr()
+    assert "MTEB(eng, v1)" in captured.out, (
         "Sample benchmark MTEB(eng, v1) task not found in available benchmarks"
     )
 
 
 run_task_fixures = [
     (
-        "sentence-transformers/average_word_embeddings_komninos",
+        "sentence-transformers/all-MiniLM-L6-v2",
         "BornholmBitextMining",
-        "21eec43590414cb8e3a6f654857abed0483ae36e",
-    ),
-    (
-        "intfloat/multilingual-e5-small",
-        "BornholmBitextMining",
-        "fd1525a9fd15316a2d503bf26ab031a61d056e98",
+        "8b3219a92973c328a8e22fadcfa821b5dc75636a",
     ),
 ]
 
@@ -50,30 +57,32 @@ def test_run_task(
     model_name: str,
     task_name: str,
     model_revision: str,
+    tmp_path: Path,
 ):
     args = Namespace(
         model=model_name,
         tasks=[task_name],
         model_revision=model_revision,
-        output_folder="tests/results/test_model",
-        verbosity=3,
+        output_folder=tmp_path.as_posix(),
         device=None,
         categories=None,
         task_types=None,
         languages=None,
         batch_size=None,
+        verbosity=3,
         co2_tracker=None,
-        overwrite=True,
+        overwrite_strategy="always",
         eval_splits=None,
+        prediction_folder=None,
         benchmarks=None,
+        overwrite=False,
+        save_predictions=None,
     )
 
     run(args)
 
     model_name_as_path = model_name.replace("/", "__").replace(" ", "_")
-    results_path = Path(
-        f"tests/results/test_model/{model_name_as_path}/{model_revision}"
-    )
+    results_path = tmp_path / "results" / model_name_as_path / model_revision
     assert results_path.exists(), "Output folder not created"
     assert "model_meta.json" in [f.name for f in list(results_path.glob("*.json"))], (
         "model_meta.json not found in output folder"
@@ -83,23 +92,24 @@ def test_run_task(
     )
 
 
-def test_create_meta():
+def test_create_meta(tmp_path):
     """Test create_meta function directly as well as through the command line interface"""
     test_folder = Path(__file__).parent
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
     output_folder = test_folder / "create_meta"
-    results = (
-        output_folder / "all-MiniLM-L6-v2" / "8b3219a92973c328a8e22fadcfa821b5dc75636a"
-    )
-    output_path = output_folder / "model_card.md"
+    output_path = tmp_path / "model_card.md"
 
     args = Namespace(
-        results_folder=results,
+        model_name=model_name,
+        results_folder=output_folder,
         output_path=output_path,
         overwrite=True,
         from_existing=None,
+        tasks=None,
+        benchmarks=None,
     )
 
-    create_meta(args)
+    _create_meta(args)
 
     assert output_path.exists(), "Output file not created"
 
@@ -122,7 +132,7 @@ def test_create_meta():
         )
 
     # ensure that the command line interface works as well
-    command = f"{sys.executable} -m mteb create_meta --results_folder {results} --output_path {output_path} --overwrite"
+    command = f"{sys.executable} -m mteb create-model-results --model-name {model_name} --results-folder {output_folder.as_posix()} --output-path {output_path.as_posix()} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
 
@@ -134,24 +144,27 @@ def test_create_meta():
         ("model_card_without_frontmatter.md", "model_card_gold_without_frontmatter.md"),
     ],
 )
-def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: str):
+def test_create_meta_from_existing(
+    existing_readme_name: str, gold_readme_name: str, tmp_path: Path
+):
     """Test create_meta function directly as well as through the command line interface"""
     test_folder = Path(__file__).parent
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
     output_folder = test_folder / "create_meta"
-    results = (
-        output_folder / "all-MiniLM-L6-v2" / "8b3219a92973c328a8e22fadcfa821b5dc75636a"
-    )
-    output_path = output_folder / "model_card.md"
+    output_path = tmp_path / "model_card.md"
     existing_readme = output_folder / existing_readme_name
 
     args = Namespace(
-        results_folder=results,
+        model_name=model_name,
+        results_folder=output_folder,
         output_path=output_path,
         overwrite=True,
         from_existing=str(existing_readme),
+        tasks=None,
+        benchmarks=None,
     )
 
-    create_meta(args)
+    _create_meta(args)
 
     assert output_path.exists(), "Output file not created"
 
@@ -183,15 +196,112 @@ def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: 
         )
     assert readme_output == gold_readme
     # ensure that the command line interface works as well
-    command = f"{sys.executable} -m mteb create_meta --results_folder {results} --output_path {output_path} --from_existing {existing_readme} --overwrite"
+    command = f"{sys.executable} -m mteb create-model-results --model-name {model_name} --results-folder {output_folder.as_posix()} --output-path {output_path.as_posix()} --from-existing {existing_readme.as_posix()} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
 
 
-def test_save_predictions():
-    command = f"{sys.executable} -m mteb run -m sentence-transformers/average_word_embeddings_komninos -t NFCorpus --output_folder tests/results --save_predictions"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    assert result.returncode == 0, "Command failed"
-    test_folder = Path(__file__).parent
-    results_path = test_folder / "results" / "NFCorpus_default_predictions.json"
-    assert results_path.exists(), "Predictions file not created"
+def test_leaderboard_help():
+    """Test that leaderboard help command works."""
+    command = [sys.executable, "-m", "mteb", "leaderboard", "--help"]
+    result = subprocess.run(command, capture_output=True, text=True)
+
+    assert result.returncode == 0, "Leaderboard help command failed"
+    assert "--cache-path" in result.stdout, "--cache-path option not found in help"
+    assert "--host" in result.stdout, "--host option not found in help"
+    assert "--port" in result.stdout, "--port option not found in help"
+    assert "--share" in result.stdout, "--share option not found in help"
+    assert "Path to the cache folder containing model results" in result.stdout, (
+        "Cache path description not found"
+    )
+
+
+@pytest.mark.parametrize(
+    "cache_path_input,host,port,share,test_description",
+    [
+        ("custom", "localhost", 8080, True, "custom cache path"),
+        (None, "127.0.0.1", 7860, False, "default cache path"),
+    ],
+)
+def test_leaderboard_cache_paths(
+    tmp_path: Path, cache_path_input, host, port, share, test_description
+):
+    """Test leaderboard with different cache path configurations."""
+
+    # Set up cache path based on parameter
+    if cache_path_input == "custom":
+        custom_cache = tmp_path / "my_results"
+        custom_cache.mkdir(exist_ok=True)
+        cache_path = str(custom_cache)
+        expected_cache_path = custom_cache
+    else:
+        cache_path = None
+        from mteb.cache import ResultCache
+
+        expected_cache_path = ResultCache().default_cache_path
+
+    # Mock the get_leaderboard_app function and the gradio app
+    mock_app = MagicMock()
+    mock_app.launch = MagicMock()
+
+    # Create a mock function that captures the cache argument and returns our mock app
+    def mock_get_app_func(cache, rebuild=False):
+        # Store the cache for verification
+        mock_get_app_func.called_with_cache = cache
+        mock_get_app_func.called_with_rebuild = rebuild
+        return mock_app
+
+    # Mock gradio themes
+    mock_theme = MagicMock()
+    mock_font = MagicMock()
+
+    # Patch the local import inside _leaderboard function
+    with patch.dict(
+        "sys.modules",
+        {
+            "mteb.leaderboard": MagicMock(get_leaderboard_app=mock_get_app_func),
+            "gradio": MagicMock(
+                themes=MagicMock(
+                    Soft=MagicMock(return_value=mock_theme),
+                    GoogleFont=MagicMock(return_value=mock_font),
+                )
+            ),
+        },
+    ):
+        args = Namespace(
+            cache_path=cache_path,
+            host=host,
+            port=port,
+            share=share,
+            rebuild=False,
+        )
+
+        _leaderboard(args)
+
+        # Verify get_leaderboard_app was called with a cache that has the correct path
+        assert hasattr(mock_get_app_func, "called_with_cache"), (
+            "get_leaderboard_app was not called"
+        )
+        cache_instance = mock_get_app_func.called_with_cache
+        assert cache_instance.cache_path == expected_cache_path, (
+            f"Expected cache path {expected_cache_path}, got {cache_instance.cache_path}"
+        )
+
+        # Verify launch parameters
+        mock_app.launch.assert_called_once_with(
+            server_name=host,
+            server_port=port,
+            share=share,
+            theme=mock_theme,
+            head='\n    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">\n    ',
+        )
+
+
+def test_leaderboard_cli_integration():
+    """Test the full CLI command integration."""
+    # Test that the command is recognized by the CLI
+    command = [sys.executable, "-m", "mteb", "--help"]
+    result = subprocess.run(command, capture_output=True, text=True)
+
+    assert result.returncode == 0
+    assert "leaderboard" in result.stdout, "Leaderboard command not found in main help"

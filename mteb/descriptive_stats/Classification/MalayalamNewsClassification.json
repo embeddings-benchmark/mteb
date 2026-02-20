@@ -1,0 +1,60 @@
+{
+    "test": {
+        "num_samples": 1260,
+        "number_texts_intersect_with_train": 34,
+        "text_statistics": {
+            "total_text_length": 101349,
+            "min_text_length": 14,
+            "average_text_length": 80.43571428571428,
+            "max_text_length": 375,
+            "unique_texts": 1251
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 3,
+            "labels": {
+                "business": {
+                    "count": 383
+                },
+                "sports": {
+                    "count": 446
+                },
+                "entertainment": {
+                    "count": 431
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 5036,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 400263,
+            "min_text_length": 10,
+            "average_text_length": 79.48034154090548,
+            "max_text_length": 399,
+            "unique_texts": 4958
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 3,
+            "labels": {
+                "business": {
+                    "count": 1540
+                },
+                "sports": {
+                    "count": 1743
+                },
+                "entertainment": {
+                    "count": 1753
+                }
+            }
+        }
+    }
+}

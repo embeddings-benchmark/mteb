@@ -1,0 +1,171 @@
+{
+    "test": {
+        "num_samples": 420464,
+        "text_statistics": {
+            "total_text_length": 27199473,
+            "min_text_length": 15,
+            "average_text_length": 64.68918385402793,
+            "max_text_length": 312,
+            "unique_texts": 64337
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 50,
+            "labels": {
+                "australia.txt": {
+                    "count": 8181
+                },
+                "Coffee.txt": {
+                    "count": 10680
+                },
+                "apple.txt": {
+                    "count": 9336
+                },
+                "boston.txt": {
+                    "count": 6737
+                },
+                "belgium.txt": {
+                    "count": 6807
+                },
+                "Christianity.txt": {
+                    "count": 8632
+                },
+                "Anarchism.txt": {
+                    "count": 9218
+                },
+                "collapse.txt": {
+                    "count": 12297
+                },
+                "chemistry.txt": {
+                    "count": 8475
+                },
+                "brasil.txt": {
+                    "count": 9188
+                },
+                "China.txt": {
+                    "count": 8685
+                },
+                "Advice.txt": {
+                    "count": 6677
+                },
+                "Animals.txt": {
+                    "count": 10287
+                },
+                "chess.txt": {
+                    "count": 6059
+                },
+                "Autos.txt": {
+                    "count": 7717
+                },
+                "AskReddit.txt": {
+                    "count": 8876
+                },
+                "anime.txt": {
+                    "count": 7396
+                },
+                "coins.txt": {
+                    "count": 8249
+                },
+                "books.txt": {
+                    "count": 7662
+                },
+                "Buddhism.txt": {
+                    "count": 9219
+                },
+                "Blogging.txt": {
+                    "count": 7076
+                },
+                "baltimore.txt": {
+                    "count": 6295
+                },
+                "Austin.txt": {
+                    "count": 9776
+                },
+                "Astronomy.txt": {
+                    "count": 6820
+                },
+                "blender.txt": {
+                    "count": 9139
+                },
+                "college.txt": {
+                    "count": 8825
+                },
+                "atheism.txt": {
+                    "count": 7387
+                },
+                "classicalmusic.txt": {
+                    "count": 11131
+                },
+                "beer.txt": {
+                    "count": 6563
+                },
+                "chicago.txt": {
+                    "count": 6557
+                },
+                "Atlanta.txt": {
+                    "count": 8975
+                },
+                "aviation.txt": {
+                    "count": 10393
+                },
+                "bicycling.txt": {
+                    "count": 9414
+                },
+                "AFL.txt": {
+                    "count": 6985
+                },
+                "cats.txt": {
+                    "count": 7661
+                },
+                "Boxing.txt": {
+                    "count": 7683
+                },
+                "amateurradio.txt": {
+                    "count": 7739
+                },
+                "airsoft.txt": {
+                    "count": 7768
+                },
+                "canada.txt": {
+                    "count": 10176
+                },
+                "astrology.txt": {
+                    "count": 7392
+                },
+                "amazon.txt": {
+                    "count": 10100
+                },
+                "cancer.txt": {
+                    "count": 4720
+                },
+                "comicbooks.txt": {
+                    "count": 11251
+                },
+                "Art.txt": {
+                    "count": 9279
+                },
+                "Catholicism.txt": {
+                    "count": 7687
+                },
+                "advertising.txt": {
+                    "count": 9761
+                },
+                "architecture.txt": {
+                    "count": 9054
+                },
+                "comedy.txt": {
+                    "count": 7791
+                },
+                "biology.txt": {
+                    "count": 7470
+                },
+                "cars.txt": {
+                    "count": 9218
+                }
+            }
+        }
+    }
+}

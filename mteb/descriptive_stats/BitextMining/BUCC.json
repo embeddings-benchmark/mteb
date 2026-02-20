@@ -1,0 +1,99 @@
+{
+    "test": {
+        "num_samples": 35000,
+        "number_of_characters": 146737556,
+        "unique_pairs": 35000,
+        "sentence1_statistics": {
+            "total_text_length": 3468826,
+            "min_text_length": 16,
+            "average_text_length": 99.10931428571429,
+            "max_text_length": 204,
+            "unique_texts": 34978
+        },
+        "sentence2_statistics": {
+            "total_text_length": 143268730,
+            "min_text_length": 17,
+            "average_text_length": 101.14933691422246,
+            "max_text_length": 339,
+            "unique_texts": 1133728
+        },
+        "hf_subset_descriptive_stats": {
+            "de-en": {
+                "num_samples": 9580,
+                "number_of_characters": 41450074,
+                "unique_pairs": 9580,
+                "sentence1_statistics": {
+                    "total_text_length": 1044984,
+                    "min_text_length": 50,
+                    "average_text_length": 109.07974947807934,
+                    "max_text_length": 204,
+                    "unique_texts": 9573
+                },
+                "sentence2_statistics": {
+                    "total_text_length": 40405090,
+                    "min_text_length": 17,
+                    "average_text_length": 101.18043156531952,
+                    "max_text_length": 293,
+                    "unique_texts": 397151
+                }
+            },
+            "fr-en": {
+                "num_samples": 9086,
+                "number_of_characters": 38272453,
+                "unique_pairs": 9086,
+                "sentence1_statistics": {
+                    "total_text_length": 902402,
+                    "min_text_length": 43,
+                    "average_text_length": 99.31785163988553,
+                    "max_text_length": 174,
+                    "unique_texts": 9081
+                },
+                "sentence2_statistics": {
+                    "total_text_length": 37370051,
+                    "min_text_length": 21,
+                    "average_text_length": 101.05202942051324,
+                    "max_text_length": 319,
+                    "unique_texts": 368033
+                }
+            },
+            "ru-en": {
+                "num_samples": 14435,
+                "number_of_characters": 57904085,
+                "unique_pairs": 14435,
+                "sentence1_statistics": {
+                    "total_text_length": 1467452,
+                    "min_text_length": 40,
+                    "average_text_length": 101.6593003117423,
+                    "max_text_length": 186,
+                    "unique_texts": 14425
+                },
+                "sentence2_statistics": {
+                    "total_text_length": 56436633,
+                    "min_text_length": 21,
+                    "average_text_length": 101.06828784332406,
+                    "max_text_length": 339,
+                    "unique_texts": 555503
+                }
+            },
+            "zh-en": {
+                "num_samples": 1899,
+                "number_of_characters": 9110944,
+                "unique_pairs": 1899,
+                "sentence1_statistics": {
+                    "total_text_length": 53988,
+                    "min_text_length": 16,
+                    "average_text_length": 28.429699842022117,
+                    "max_text_length": 40,
+                    "unique_texts": 1899
+                },
+                "sentence2_statistics": {
+                    "total_text_length": 9056956,
+                    "min_text_length": 22,
+                    "average_text_length": 101.92388026108485,
+                    "max_text_length": 249,
+                    "unique_texts": 88360
+                }
+            }
+        }
+    }
+}

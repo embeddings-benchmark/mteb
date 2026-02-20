@@ -1,0 +1,126 @@
+{
+    "test": {
+        "num_samples": 1171,
+        "number_texts_intersect_with_train": 565,
+        "text_statistics": {
+            "total_text_length": 82003,
+            "min_text_length": 10,
+            "average_text_length": 70.02818104184458,
+            "max_text_length": 188,
+            "unique_texts": 982
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 14,
+            "labels": {
+                "\u062e\u0648\u062f\u0631\u0648\u060c \u0645\u0648\u062a\u0648\u0631\u060c \u062f\u0648\u0686\u0631\u062e\u0647": {
+                    "count": 7
+                },
+                "\u06a9\u0648\u062f\u06a9": {
+                    "count": 49
+                },
+                "\u0646\u0648\u0634\u06cc\u062f\u0646\u06cc": {
+                    "count": 319
+                },
+                "\u0644\u0628\u0646\u06cc\u0627\u062a": {
+                    "count": 335
+                },
+                "\u062e\u0648\u0627\u0631 \u0648 \u0628\u0627\u0631": {
+                    "count": 134
+                },
+                "\u062e\u0634\u06a9\u0628\u0627\u0631\u060c \u062f\u0633\u0631 \u0648 \u0634\u06cc\u0631\u06cc\u0646\u06cc": {
+                    "count": 38
+                },
+                "\u0645\u062f \u0648 \u067e\u0648\u0634\u0627\u06a9": {
+                    "count": 26
+                },
+                "\u06a9\u0646\u0633\u0631\u0648\u062c\u0627\u062a": {
+                    "count": 46
+                },
+                "\u0645\u06cc\u0648\u0647 \u0648 \u0633\u0628\u0632\u06cc\u062c\u0627\u062a": {
+                    "count": 30
+                },
+                "\u062e\u0627\u0646\u0647 \u0648 \u0633\u0628\u06a9 \u0632\u0646\u062f\u06af\u06cc": {
+                    "count": 69
+                },
+                "\u062f\u06cc\u062c\u06cc\u062a\u0627\u0644": {
+                    "count": 21
+                },
+                "\u067e\u0631\u0648\u062a\u0626\u06cc\u0646": {
+                    "count": 40
+                },
+                "\u062f\u0633\u062a\u0645\u0627\u0644 \u0648 \u0634\u0648\u06cc\u0646\u062f\u0647": {
+                    "count": 24
+                },
+                "\u0622\u0631\u0627\u06cc\u0634\u06cc \u0648 \u0628\u0647\u062f\u0627\u0634\u062a\u06cc": {
+                    "count": 33
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 9364,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 660476,
+            "min_text_length": 7,
+            "average_text_length": 70.5335326783426,
+            "max_text_length": 289,
+            "unique_texts": 4714
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 14,
+            "labels": {
+                "\u0644\u0628\u0646\u06cc\u0627\u062a": {
+                    "count": 2772
+                },
+                "\u0645\u062f \u0648 \u067e\u0648\u0634\u0627\u06a9": {
+                    "count": 197
+                },
+                "\u062e\u0627\u0646\u0647 \u0648 \u0633\u0628\u06a9 \u0632\u0646\u062f\u06af\u06cc": {
+                    "count": 444
+                },
+                "\u062e\u0634\u06a9\u0628\u0627\u0631\u060c \u062f\u0633\u0631 \u0648 \u0634\u06cc\u0631\u06cc\u0646\u06cc": {
+                    "count": 274
+                },
+                "\u0622\u0631\u0627\u06cc\u0634\u06cc \u0648 \u0628\u0647\u062f\u0627\u0634\u062a\u06cc": {
+                    "count": 328
+                },
+                "\u062f\u0633\u062a\u0645\u0627\u0644 \u0648 \u0634\u0648\u06cc\u0646\u062f\u0647": {
+                    "count": 195
+                },
+                "\u06a9\u0648\u062f\u06a9": {
+                    "count": 343
+                },
+                "\u0646\u0648\u0634\u06cc\u062f\u0646\u06cc": {
+                    "count": 2549
+                },
+                "\u062f\u06cc\u062c\u06cc\u062a\u0627\u0644": {
+                    "count": 183
+                },
+                "\u06a9\u0646\u0633\u0631\u0648\u062c\u0627\u062a": {
+                    "count": 317
+                },
+                "\u062e\u0648\u0627\u0631 \u0648 \u0628\u0627\u0631": {
+                    "count": 1078
+                },
+                "\u0645\u06cc\u0648\u0647 \u0648 \u0633\u0628\u0632\u06cc\u062c\u0627\u062a": {
+                    "count": 294
+                },
+                "\u067e\u0631\u0648\u062a\u0626\u06cc\u0646": {
+                    "count": 353
+                },
+                "\u062e\u0648\u062f\u0631\u0648\u060c \u0645\u0648\u062a\u0648\u0631\u060c \u062f\u0648\u0686\u0631\u062e\u0647": {
+                    "count": 37
+                }
+            }
+        }
+    }
+}

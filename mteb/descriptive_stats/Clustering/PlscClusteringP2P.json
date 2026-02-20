@@ -1,0 +1,183 @@
+{
+    "test": {
+        "num_samples": 17537,
+        "text_statistics": {
+            "total_text_length": 17943948,
+            "min_text_length": 47,
+            "average_text_length": 1023.2051091976963,
+            "max_text_length": 13887,
+            "unique_texts": 13022
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 54,
+            "labels": {
+                "nauki \u015bcis\u0142e i przyrodnicze": {
+                    "count": 1250
+                },
+                "nauki in\u017cynieryjno-techniczne": {
+                    "count": 1250
+                },
+                "nauki humanistyczne": {
+                    "count": 1250
+                },
+                "nauki spo\u0142eczne": {
+                    "count": 1250
+                },
+                "sztuka": {
+                    "count": 220
+                },
+                "nauki medyczne i o zdrowiu": {
+                    "count": 1250
+                },
+                "nauki teologiczne": {
+                    "count": 1462
+                },
+                "nauki rolnicze": {
+                    "count": 1250
+                },
+                "informatyka techniczna i telekomunikacja": {
+                    "count": 212
+                },
+                "ekonomia i finanse": {
+                    "count": 212
+                },
+                "sztuki plastyczne i konserwacja dzie\u0142 sztuki": {
+                    "count": 116
+                },
+                "nauki o bezpiecze\u0144stwie": {
+                    "count": 212
+                },
+                "nauki fizyczne": {
+                    "count": 212
+                },
+                "automatyka, elektronika i elektrotechnika": {
+                    "count": 212
+                },
+                "in\u017cynieria mechaniczna": {
+                    "count": 212
+                },
+                "nauki prawne": {
+                    "count": 212
+                },
+                "in\u017cynieria chemiczna": {
+                    "count": 212
+                },
+                "architektura i urbanistyka": {
+                    "count": 212
+                },
+                "zootechnika i rybactwo": {
+                    "count": 212
+                },
+                "technologia \u017cywno\u015bci i \u017cywienia": {
+                    "count": 212
+                },
+                "nauki o zarz\u0105dzaniu i jako\u015bci": {
+                    "count": 212
+                },
+                "nauki le\u015bne": {
+                    "count": 212
+                },
+                "pedagogika": {
+                    "count": 212
+                },
+                "archeologia": {
+                    "count": 173
+                },
+                "j\u0119zykoznawstwo": {
+                    "count": 212
+                },
+                "nauki medyczne": {
+                    "count": 212
+                },
+                "nauki socjologiczne": {
+                    "count": 212
+                },
+                "in\u017cynieria materia\u0142owa": {
+                    "count": 212
+                },
+                "in\u017cynieria \u015brodowiska, g\u00f3rnictwo i energetyka": {
+                    "count": 212
+                },
+                "literaturoznawstwo": {
+                    "count": 212
+                },
+                "nauki o kulturze i religii": {
+                    "count": 212
+                },
+                "nauki o komunikacji spo\u0142ecznej i mediach": {
+                    "count": 212
+                },
+                "rolnictwo i ogrodnictwo": {
+                    "count": 212
+                },
+                "in\u017cynieria l\u0105dowa i transport": {
+                    "count": 212
+                },
+                "prawo kanoniczne": {
+                    "count": 212
+                },
+                "geografia spo\u0142eczno-ekonomiczna i gospodarka przestrzenna": {
+                    "count": 212
+                },
+                "historia": {
+                    "count": 212
+                },
+                "in\u017cynieria biomedyczna": {
+                    "count": 212
+                },
+                "nauki farmaceutyczne": {
+                    "count": 65
+                },
+                "psychologia": {
+                    "count": 212
+                },
+                "nauki o kulturze fizycznej": {
+                    "count": 212
+                },
+                "filozofia": {
+                    "count": 212
+                },
+                "nauki o sztuce": {
+                    "count": 212
+                },
+                "nauki biologiczne": {
+                    "count": 114
+                },
+                "sztuki filmowe i teatralne": {
+                    "count": 102
+                },
+                "nauki o ziemi i \u015brodowisku": {
+                    "count": 212
+                },
+                "matematyka": {
+                    "count": 76
+                },
+                "nauki o zdrowiu": {
+                    "count": 212
+                },
+                "informatyka": {
+                    "count": 212
+                },
+                "nauki o polityce i administracji": {
+                    "count": 212
+                },
+                "weterynaria": {
+                    "count": 4
+                },
+                "nauki chemiczne": {
+                    "count": 70
+                },
+                "sztuki muzyczne": {
+                    "count": 2
+                },
+                "astronomia": {
+                    "count": 1
+                }
+            }
+        }
+    }
+}

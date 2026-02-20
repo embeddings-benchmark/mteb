@@ -8,6 +8,10 @@ on:
     branches: [main]
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -15,14 +19,35 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest] #, macos-latest, windows-latest]
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
         include:
-          # Add Windows with Python 3.8 only to avoid tests taking too long
+          # Add Windows with Python 3.10 only to avoid tests taking too long
           - os: windows-latest
-            python-version: "3.9"
+            python-version: "3.10"
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Free disk space
+        if: runner.os != 'Windows'
+        run: |
+          sudo rm -rf \
+            "$AGENT_TOOLSDIRECTORY" \
+            /opt/ghc \
+            /opt/google/chrome \
+            /opt/microsoft/msedge \
+            /opt/microsoft/powershell \
+            /opt/pipx \
+            /usr/lib/mono \
+            /usr/local/julia* \
+            /usr/local/lib/android \
+            /usr/local/lib/node_modules \
+            /usr/local/share/chromium \
+            /usr/local/share/powershell \
+            /usr/local/share/powershell \
+            /usr/share/dotnet \
+            /usr/share/swift
+          docker system prune -af
+
+      - uses: actions/checkout@v6
 
       - name: Cache Hugging Face
         id: cache-hf
@@ -31,16 +56,58 @@ jobs:
           path: ~/.cache/huggingface
           key: ${{ runner.os }}-hf
 
-      - name: Setup Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+      - name: Install uv and set the Python version
+        uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
-          cache: "pip"
+
+      # required for evaluation the audio subset
+      - name: Install FFmpeg (Ubuntu)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:ubuntuhandbook1/ffmpeg8
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Setup Miniconda (Windows)
+        if: runner.os == 'Windows'
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          miniconda-version: "latest"
+          activate-environment: ffmpeg
+
+      - name: Install FFmpeg (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        # using conda to install ffmpeg on windows, to avoid issues with dlls
+        run: |
+          conda install -y "ffmpeg=8.0.1" -c conda-forge
+
+      - name: Check FFmpeg version
+        run: ffmpeg -version
 
       - name: Install dependencies
         shell: bash
         run: |
           make install-for-tests
+
+      - name: Setup Pytorch dll PATH (Windows)
+        # otherwise pytorch audio cannot find pytorch dlls on windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $torchLib = "D:\a\mteb\mteb\.venv\Lib\site-packages\torch\lib"
+          if (Test-Path $torchLib) {
+            echo "$torchLib" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+            $env:PATH = "$torchLib;$env:PATH"
+            echo "PATH=$env:PATH" >> $env:GITHUB_ENV
+          } else {
+            Write-Host "Torch lib path not found: $torchLib"
+          }
 
       - name: Run tests
         if: runner.os != 'Windows'
@@ -53,9 +120,14 @@ jobs:
         # this step will run the workflow twice since we have experienced
         # failures when running on windows when loading the datasets
         if: runner.os == 'Windows'
-        shell: bash
+        shell: pwsh
         run: |
           # run the test once and if it fails, run it again
           # if it fails again, the workflow will fail.
           # If it passes the first time the test will not run again
-          make test || make test
+          try {
+            make test
+          } catch {
+            Write-Host "First test run failed, retrying..."
+            make test
+          }

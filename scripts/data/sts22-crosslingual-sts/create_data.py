@@ -7,8 +7,6 @@ mv 6798bbee-77fa-452d-bde2-96b8631acb5d final_evaluation_data.csv
 python3 -m semeval_8_2022_ia_downloader.cli --links_file=final_evaluation_data.csv --dump_dir=test
 """
 
-from __future__ import annotations
-
 import glob
 import json
 import os

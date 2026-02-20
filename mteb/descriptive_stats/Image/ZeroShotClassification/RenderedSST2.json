@@ -1,23 +1,37 @@
 {
     "test": {
         "num_samples": 1821,
-        "unique_num_labels": 2,
-        "min_image_width": 448,
-        "average_image_width": 448.0,
-        "max_image_width": 448,
-        "min_image_height": 448,
-        "average_image_height": 448.0,
-        "max_image_height": 448,
-        "min_label_text_length": 28,
-        "average_label_text_length": 28.0,
-        "max_label_text_length": 28,
-        "labels": {
-            "0": {
-                "count": 912
-            },
-            "1": {
-                "count": 909
+        "number_of_characters": null,
+        "text_statistics": null,
+        "image_statistics": {
+            "min_image_width": 448,
+            "average_image_width": 448.0,
+            "max_image_width": 448,
+            "min_image_height": 448,
+            "average_image_height": 448.0,
+            "max_image_height": 448,
+            "unique_images": 1821
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "0": {
+                    "count": 912
+                },
+                "1": {
+                    "count": 909
+                }
             }
+        },
+        "candidates_labels_text_statistics": {
+            "total_text_length": 56,
+            "min_text_length": 28,
+            "average_text_length": 28.0,
+            "max_text_length": 28,
+            "unique_texts": 2
         }
     }
 }

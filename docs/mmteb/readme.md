@@ -19,7 +19,7 @@ Win some SWAG, and become a co-author of our upcoming paper. We aim to publish t
 
 ### 🗃️ 1: Contribute a new dataset
 
-For this segment, you open a PR in the MTEB repository where you create an implementation (subclass) of a task using a new language dataset uploaded to huggingface. Read more about how to add a dataset [here](../adding_a_dataset.md) and check out [one of the previous additions](https://github.com/embeddings-benchmark/mteb/pull/247) for an example.
+For this segment, you open a PR in the MTEB repository where you create an implementation (subclass) of a task using a new language dataset uploaded to huggingface. Read more about how to add a dataset [here](../contributing/adding_a_dataset.md) and check out [one of the previous additions](https://github.com/embeddings-benchmark/mteb/pull/247) for an example.
 
 ### 🖥️ 2: Contribute a new task
 

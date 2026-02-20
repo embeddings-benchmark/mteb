@@ -1,0 +1,102 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 757393,
+            "min_text_length": 9,
+            "average_text_length": 369.82080078125,
+            "max_text_length": 3992,
+            "unique_texts": 2048
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 10,
+            "labels": {
+                "1": {
+                    "count": 209
+                },
+                "6": {
+                    "count": 201
+                },
+                "8": {
+                    "count": 205
+                },
+                "4": {
+                    "count": 200
+                },
+                "7": {
+                    "count": 199
+                },
+                "2": {
+                    "count": 210
+                },
+                "9": {
+                    "count": 211
+                },
+                "3": {
+                    "count": 201
+                },
+                "0": {
+                    "count": 211
+                },
+                "5": {
+                    "count": 201
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 2048,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 719593,
+            "min_text_length": 12,
+            "average_text_length": 351.36376953125,
+            "max_text_length": 3987,
+            "unique_texts": 2048
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 10,
+            "labels": {
+                "6": {
+                    "count": 203
+                },
+                "5": {
+                    "count": 202
+                },
+                "7": {
+                    "count": 198
+                },
+                "2": {
+                    "count": 209
+                },
+                "8": {
+                    "count": 205
+                },
+                "3": {
+                    "count": 200
+                },
+                "9": {
+                    "count": 210
+                },
+                "1": {
+                    "count": 210
+                },
+                "0": {
+                    "count": 211
+                },
+                "4": {
+                    "count": 200
+                }
+            }
+        }
+    }
+}

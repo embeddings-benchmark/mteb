@@ -1,0 +1,1250 @@
+{
+    "test": {
+        "num_samples": 6242,
+        "number_texts_intersect_with_train": 66,
+        "text_statistics": {
+            "total_text_length": 16946423,
+            "min_text_length": 1,
+            "average_text_length": 2714.9027555270745,
+            "max_text_length": 26369,
+            "unique_texts": 6234
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 7,
+            "labels": {
+                "business": {
+                    "count": 785
+                },
+                "health": {
+                    "count": 1258
+                },
+                "politics": {
+                    "count": 1589
+                },
+                "sports": {
+                    "count": 1265
+                },
+                "entertainment": {
+                    "count": 762
+                },
+                "technology": {
+                    "count": 297
+                },
+                "religion": {
+                    "count": 286
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "amh": {
+                "num_samples": 376,
+                "number_texts_intersect_with_train": 34,
+                "text_statistics": {
+                    "total_text_length": 832938,
+                    "min_text_length": 118,
+                    "average_text_length": 2215.2606382978724,
+                    "max_text_length": 12042,
+                    "unique_texts": 373
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 4,
+                    "labels": {
+                        "business": {
+                            "count": 81
+                        },
+                        "health": {
+                            "count": 100
+                        },
+                        "politics": {
+                            "count": 100
+                        },
+                        "sports": {
+                            "count": 95
+                        }
+                    }
+                }
+            },
+            "eng": {
+                "num_samples": 948,
+                "number_texts_intersect_with_train": 2,
+                "text_statistics": {
+                    "total_text_length": 2910616,
+                    "min_text_length": 81,
+                    "average_text_length": 3070.2700421940926,
+                    "max_text_length": 20178,
+                    "unique_texts": 947
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 6,
+                    "labels": {
+                        "business": {
+                            "count": 160
+                        },
+                        "entertainment": {
+                            "count": 150
+                        },
+                        "health": {
+                            "count": 150
+                        },
+                        "politics": {
+                            "count": 165
+                        },
+                        "sports": {
+                            "count": 200
+                        },
+                        "technology": {
+                            "count": 123
+                        }
+                    }
+                }
+            },
+            "fra": {
+                "num_samples": 422,
+                "number_texts_intersect_with_train": 1,
+                "text_statistics": {
+                    "total_text_length": 2159222,
+                    "min_text_length": 206,
+                    "average_text_length": 5116.63981042654,
+                    "max_text_length": 25973,
+                    "unique_texts": 422
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 5,
+                    "labels": {
+                        "business": {
+                            "count": 100
+                        },
+                        "health": {
+                            "count": 100
+                        },
+                        "politics": {
+                            "count": 100
+                        },
+                        "sports": {
+                            "count": 100
+                        },
+                        "technology": {
+                            "count": 22
+                        }
+                    }
+                }
+            },
+            "hau": {
+                "num_samples": 637,
+                "number_texts_intersect_with_train": 1,
+                "text_statistics": {
+                    "total_text_length": 1625030,
+                    "min_text_length": 14,
+                    "average_text_length": 2551.0675039246466,
+                    "max_text_length": 25355,
+                    "unique_texts": 637
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 7,
+                    "labels": {
+                        "business": {
+                            "count": 80
+                        },
+                        "entertainment": {
+                            "count": 100
+                        },
+                        "health": {
+                            "count": 99
+                        },
+                        "politics": {
+                            "count": 100
+                        },
+                        "religion": {
+                            "count": 99
+                        },
+                        "sports": {
+                            "count": 100
+                        },
+                        "technology": {
+                            "count": 59
+                        }
+                    }
+                }
+            },
+            "ibo": {
+                "num_samples": 390,
+                "number_texts_intersect_with_train": 23,
+                "text_statistics": {
+                    "total_text_length": 741370,
+                    "min_text_length": 1,
+                    "average_text_length": 1900.948717948718,
+                    "max_text_length": 8864,
+                    "unique_texts": 387
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 6,
+                    "labels": {
+                        "business": {
+                            "count": 59
+                        },
+                        "entertainment": {
+                            "count": 74
+                        },
+                        "health": {
+                            "count": 85
+                        },
+                        "politics": {
+                            "count": 100
+                        },
+                        "religion": {
+                            "count": 15
+                        },
+                        "sports": {
+                            "count": 57
+                        }
+                    }
+                }
+            },
+            "lin": {
+                "num_samples": 175,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 185022,
+                    "min_text_length": 207,
+                    "average_text_length": 1057.2685714285715,
+                    "max_text_length": 3962,
+                    "unique_texts": 175
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 4,
+                    "labels": {
+                        "business": {
+                            "count": 17
+                        },
+                        "health": {
+                            "count": 39
+                        },
+                        "politics": {
+                            "count": 100
+                        },
+                        "sports": {
+                            "count": 19
+                        }
+                    }
+                }
+            },
+            "lug": {
+                "num_samples": 223,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 385757,
+                    "min_text_length": 409,
+                    "average_text_length": 1729.8520179372197,
+                    "max_text_length": 3451,
+                    "unique_texts": 223
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 5,
+                    "labels": {
+                        "business": {
+                            "count": 34
+                        },
+                        "health": {
+                            "count": 46
+                        },
+                        "politics": {
+                            "count": 100
+                        },
+                        "religion": {
+                            "count": 19
+                        },
+                        "sports": {
+                            "count": 24
+                        }
+                    }
+                }
+            },
+            "orm": {
+                "num_samples": 325,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 1021567,
+                    "min_text_length": 122,
+                    "average_text_length": 3143.283076923077,
+                    "max_text_length": 15516,
+                    "unique_texts": 325
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 5,
+                    "labels": {
+                        "entertainment": {
+                            "count": 32
+                        },
+                        "health": {
+                            "count": 97
+                        },
+                        "politics": {
+                            "count": 100
+                        },
+                        "sports": {
+                            "count": 81
+                        },
+                        "technology": {
+                            "count": 15
+                        }
+                    }
+                }
+            },
+            "pcm": {
+                "num_samples": 305,
+                "number_texts_intersect_with_train": 5,
+                "text_statistics": {
+                    "total_text_length": 735570,
+                    "min_text_length": 244,
+                    "average_text_length": 2411.7049180327867,
+                    "max_text_length": 14377,
+                    "unique_texts": 305
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 5,
+                    "labels": {
+                        "business": {
+                            "count": 20
+                        },
+                        "entertainment": {
+                            "count": 92
+                        },
+                        "health": {
+                            "count": 32
+                        },
+                        "politics": {
+                            "count": 62
+                        },
+                        "sports": {
+                            "count": 99
+                        }
+                    }
+                }
+            },
+            "run": {
+                "num_samples": 322,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 899422,
+                    "min_text_length": 44,
+                    "average_text_length": 2793.2360248447203,
+                    "max_text_length": 12756,
+                    "unique_texts": 322
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 6,
+                    "labels": {
+                        "business": {
+                            "count": 16
+                        },
+                        "entertainment": {
+                            "count": 32
+                        },
+                        "health": {
+                            "count": 75
+                        },
+                        "politics": {
+                            "count": 100
+                        },
+                        "religion": {
+                            "count": 15
+                        },
+                        "sports": {
+                            "count": 84
+                        }
+                    }
+                }
+            },
+            "sna": {
+                "num_samples": 369,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 740792,
+                    "min_text_length": 495,
+                    "average_text_length": 2007.5663956639567,
+                    "max_text_length": 4861,
+                    "unique_texts": 369
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 4,
+                    "labels": {
+                        "business": {
+                            "count": 100
+                        },
+                        "health": {
+                            "count": 85
+                        },
+                        "politics": {
+                            "count": 100
+                        },
+                        "sports": {
+                            "count": 84
+                        }
+                    }
+                }
+            },
+            "som": {
+                "num_samples": 294,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 1043387,
+                    "min_text_length": 94,
+                    "average_text_length": 3548.9353741496598,
+                    "max_text_length": 26369,
+                    "unique_texts": 294
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 7,
+                    "labels": {
+                        "business": {
+                            "count": 23
+                        },
+                        "entertainment": {
+                            "count": 28
+                        },
+                        "health": {
+                            "count": 71
+                        },
+                        "politics": {
+                            "count": 100
+                        },
+                        "religion": {
+                            "count": 15
+                        },
+                        "sports": {
+                            "count": 30
+                        },
+                        "technology": {
+                            "count": 27
+                        }
+                    }
+                }
+            },
+            "swa": {
+                "num_samples": 476,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 1694087,
+                    "min_text_length": 103,
+                    "average_text_length": 3559.0063025210084,
+                    "max_text_length": 12005,
+                    "unique_texts": 476
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 7,
+                    "labels": {
+                        "business": {
+                            "count": 64
+                        },
+                        "entertainment": {
+                            "count": 20
+                        },
+                        "health": {
+                            "count": 100
+                        },
+                        "politics": {
+                            "count": 100
+                        },
+                        "religion": {
+                            "count": 59
+                        },
+                        "sports": {
+                            "count": 100
+                        },
+                        "technology": {
+                            "count": 33
+                        }
+                    }
+                }
+            },
+            "tir": {
+                "num_samples": 272,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 568854,
+                    "min_text_length": 93,
+                    "average_text_length": 2091.375,
+                    "max_text_length": 9587,
+                    "unique_texts": 272
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 6,
+                    "labels": {
+                        "business": {
+                            "count": 16
+                        },
+                        "entertainment": {
+                            "count": 34
+                        },
+                        "health": {
+                            "count": 79
+                        },
+                        "politics": {
+                            "count": 100
+                        },
+                        "sports": {
+                            "count": 25
+                        },
+                        "technology": {
+                            "count": 18
+                        }
+                    }
+                }
+            },
+            "xho": {
+                "num_samples": 297,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 562970,
+                    "min_text_length": 409,
+                    "average_text_length": 1895.5218855218855,
+                    "max_text_length": 5994,
+                    "unique_texts": 297
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 5,
+                    "labels": {
+                        "business": {
+                            "count": 15
+                        },
+                        "entertainment": {
+                            "count": 100
+                        },
+                        "health": {
+                            "count": 20
+                        },
+                        "politics": {
+                            "count": 62
+                        },
+                        "sports": {
+                            "count": 100
+                        }
+                    }
+                }
+            },
+            "yor": {
+                "num_samples": 411,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 839819,
+                    "min_text_length": 1,
+                    "average_text_length": 2043.3552311435524,
+                    "max_text_length": 10464,
+                    "unique_texts": 411
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 5,
+                    "labels": {
+                        "entertainment": {
+                            "count": 100
+                        },
+                        "health": {
+                            "count": 80
+                        },
+                        "politics": {
+                            "count": 100
+                        },
+                        "religion": {
+                            "count": 64
+                        },
+                        "sports": {
+                            "count": 67
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 21734,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 58485151,
+            "min_text_length": 1,
+            "average_text_length": 2690.952010674519,
+            "max_text_length": 46502,
+            "unique_texts": 21591
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 7,
+            "labels": {
+                "sports": {
+                    "count": 4401
+                },
+                "business": {
+                    "count": 2725
+                },
+                "health": {
+                    "count": 4384
+                },
+                "politics": {
+                    "count": 5555
+                },
+                "entertainment": {
+                    "count": 2654
+                },
+                "technology": {
+                    "count": 1029
+                },
+                "religion": {
+                    "count": 986
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "amh": {
+                "num_samples": 1311,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 2747332,
+                    "min_text_length": 1,
+                    "average_text_length": 2095.6003051106027,
+                    "max_text_length": 16770,
+                    "unique_texts": 1243
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 4,
+                    "labels": {
+                        "sports": {
+                            "count": 329
+                        },
+                        "business": {
+                            "count": 282
+                        },
+                        "health": {
+                            "count": 350
+                        },
+                        "politics": {
+                            "count": 350
+                        }
+                    }
+                }
+            },
+            "eng": {
+                "num_samples": 3309,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 9997822,
+                    "min_text_length": 25,
+                    "average_text_length": 3021.402840737383,
+                    "max_text_length": 28842,
+                    "unique_texts": 3305
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 6,
+                    "labels": {
+                        "business": {
+                            "count": 559
+                        },
+                        "entertainment": {
+                            "count": 525
+                        },
+                        "health": {
+                            "count": 522
+                        },
+                        "technology": {
+                            "count": 429
+                        },
+                        "sports": {
+                            "count": 700
+                        },
+                        "politics": {
+                            "count": 574
+                        }
+                    }
+                }
+            },
+            "fra": {
+                "num_samples": 1476,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 7475668,
+                    "min_text_length": 67,
+                    "average_text_length": 5064.815718157181,
+                    "max_text_length": 46502,
+                    "unique_texts": 1474
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 5,
+                    "labels": {
+                        "sports": {
+                            "count": 350
+                        },
+                        "business": {
+                            "count": 350
+                        },
+                        "politics": {
+                            "count": 350
+                        },
+                        "health": {
+                            "count": 350
+                        },
+                        "technology": {
+                            "count": 76
+                        }
+                    }
+                }
+            },
+            "hau": {
+                "num_samples": 2219,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 5273176,
+                    "min_text_length": 12,
+                    "average_text_length": 2376.3749436683192,
+                    "max_text_length": 16709,
+                    "unique_texts": 2218
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 7,
+                    "labels": {
+                        "religion": {
+                            "count": 345
+                        },
+                        "entertainment": {
+                            "count": 350
+                        },
+                        "business": {
+                            "count": 279
+                        },
+                        "health": {
+                            "count": 345
+                        },
+                        "politics": {
+                            "count": 350
+                        },
+                        "sports": {
+                            "count": 347
+                        },
+                        "technology": {
+                            "count": 203
+                        }
+                    }
+                }
+            },
+            "ibo": {
+                "num_samples": 1356,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 2559120,
+                    "min_text_length": 1,
+                    "average_text_length": 1887.2566371681417,
+                    "max_text_length": 15301,
+                    "unique_texts": 1295
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 6,
+                    "labels": {
+                        "business": {
+                            "count": 204
+                        },
+                        "politics": {
+                            "count": 350
+                        },
+                        "sports": {
+                            "count": 199
+                        },
+                        "entertainment": {
+                            "count": 256
+                        },
+                        "health": {
+                            "count": 296
+                        },
+                        "religion": {
+                            "count": 51
+                        }
+                    }
+                }
+            },
+            "lin": {
+                "num_samples": 608,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 626299,
+                    "min_text_length": 241,
+                    "average_text_length": 1030.0970394736842,
+                    "max_text_length": 3094,
+                    "unique_texts": 608
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 4,
+                    "labels": {
+                        "health": {
+                            "count": 135
+                        },
+                        "business": {
+                            "count": 57
+                        },
+                        "politics": {
+                            "count": 350
+                        },
+                        "sports": {
+                            "count": 66
+                        }
+                    }
+                }
+            },
+            "lug": {
+                "num_samples": 771,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 1340821,
+                    "min_text_length": 248,
+                    "average_text_length": 1739.0674448767834,
+                    "max_text_length": 6106,
+                    "unique_texts": 771
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 5,
+                    "labels": {
+                        "religion": {
+                            "count": 63
+                        },
+                        "politics": {
+                            "count": 350
+                        },
+                        "sports": {
+                            "count": 81
+                        },
+                        "health": {
+                            "count": 159
+                        },
+                        "business": {
+                            "count": 118
+                        }
+                    }
+                }
+            },
+            "orm": {
+                "num_samples": 1128,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 3711657,
+                    "min_text_length": 99,
+                    "average_text_length": 3290.476063829787,
+                    "max_text_length": 16922,
+                    "unique_texts": 1126
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 5,
+                    "labels": {
+                        "technology": {
+                            "count": 50
+                        },
+                        "sports": {
+                            "count": 280
+                        },
+                        "politics": {
+                            "count": 350
+                        },
+                        "health": {
+                            "count": 338
+                        },
+                        "entertainment": {
+                            "count": 110
+                        }
+                    }
+                }
+            },
+            "pcm": {
+                "num_samples": 1060,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 2328253,
+                    "min_text_length": 1,
+                    "average_text_length": 2196.4650943396227,
+                    "max_text_length": 27843,
+                    "unique_texts": 1058
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 5,
+                    "labels": {
+                        "sports": {
+                            "count": 344
+                        },
+                        "entertainment": {
+                            "count": 322
+                        },
+                        "politics": {
+                            "count": 216
+                        },
+                        "health": {
+                            "count": 111
+                        },
+                        "business": {
+                            "count": 67
+                        }
+                    }
+                }
+            },
+            "run": {
+                "num_samples": 1117,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 3155241,
+                    "min_text_length": 37,
+                    "average_text_length": 2824.7457475380484,
+                    "max_text_length": 17059,
+                    "unique_texts": 1117
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 6,
+                    "labels": {
+                        "sports": {
+                            "count": 293
+                        },
+                        "entertainment": {
+                            "count": 110
+                        },
+                        "politics": {
+                            "count": 350
+                        },
+                        "religion": {
+                            "count": 51
+                        },
+                        "business": {
+                            "count": 53
+                        },
+                        "health": {
+                            "count": 260
+                        }
+                    }
+                }
+            },
+            "sna": {
+                "num_samples": 1288,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 2514372,
+                    "min_text_length": 8,
+                    "average_text_length": 1952.1521739130435,
+                    "max_text_length": 6889,
+                    "unique_texts": 1288
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 4,
+                    "labels": {
+                        "sports": {
+                            "count": 291
+                        },
+                        "health": {
+                            "count": 297
+                        },
+                        "business": {
+                            "count": 350
+                        },
+                        "politics": {
+                            "count": 350
+                        }
+                    }
+                }
+            },
+            "som": {
+                "num_samples": 1021,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 3693825,
+                    "min_text_length": 72,
+                    "average_text_length": 3617.8501469147895,
+                    "max_text_length": 16143,
+                    "unique_texts": 1021
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 7,
+                    "labels": {
+                        "politics": {
+                            "count": 350
+                        },
+                        "business": {
+                            "count": 79
+                        },
+                        "health": {
+                            "count": 247
+                        },
+                        "entertainment": {
+                            "count": 97
+                        },
+                        "sports": {
+                            "count": 103
+                        },
+                        "technology": {
+                            "count": 94
+                        },
+                        "religion": {
+                            "count": 51
+                        }
+                    }
+                }
+            },
+            "swa": {
+                "num_samples": 1658,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 6018165,
+                    "min_text_length": 35,
+                    "average_text_length": 3629.773823884198,
+                    "max_text_length": 24751,
+                    "unique_texts": 1658
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 7,
+                    "labels": {
+                        "sports": {
+                            "count": 350
+                        },
+                        "health": {
+                            "count": 350
+                        },
+                        "politics": {
+                            "count": 350
+                        },
+                        "religion": {
+                            "count": 204
+                        },
+                        "technology": {
+                            "count": 115
+                        },
+                        "entertainment": {
+                            "count": 68
+                        },
+                        "business": {
+                            "count": 221
+                        }
+                    }
+                }
+            },
+            "tir": {
+                "num_samples": 947,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 2094882,
+                    "min_text_length": 41,
+                    "average_text_length": 2212.1246040126716,
+                    "max_text_length": 12624,
+                    "unique_texts": 946
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 6,
+                    "labels": {
+                        "politics": {
+                            "count": 350
+                        },
+                        "technology": {
+                            "count": 62
+                        },
+                        "entertainment": {
+                            "count": 116
+                        },
+                        "business": {
+                            "count": 56
+                        },
+                        "health": {
+                            "count": 276
+                        },
+                        "sports": {
+                            "count": 87
+                        }
+                    }
+                }
+            },
+            "xho": {
+                "num_samples": 1032,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 1977998,
+                    "min_text_length": 77,
+                    "average_text_length": 1916.6647286821706,
+                    "max_text_length": 8675,
+                    "unique_texts": 1032
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 5,
+                    "labels": {
+                        "entertainment": {
+                            "count": 350
+                        },
+                        "sports": {
+                            "count": 347
+                        },
+                        "politics": {
+                            "count": 215
+                        },
+                        "health": {
+                            "count": 70
+                        },
+                        "business": {
+                            "count": 50
+                        }
+                    }
+                }
+            },
+            "yor": {
+                "num_samples": 1433,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 2970520,
+                    "min_text_length": 74,
+                    "average_text_length": 2072.937892533147,
+                    "max_text_length": 42588,
+                    "unique_texts": 1433
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 5,
+                    "labels": {
+                        "health": {
+                            "count": 278
+                        },
+                        "religion": {
+                            "count": 221
+                        },
+                        "entertainment": {
+                            "count": 350
+                        },
+                        "politics": {
+                            "count": 350
+                        },
+                        "sports": {
+                            "count": 234
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

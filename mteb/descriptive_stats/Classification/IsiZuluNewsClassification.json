@@ -1,0 +1,70 @@
+{
+    "train": {
+        "num_samples": 752,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 32402,
+            "min_text_length": 21,
+            "average_text_length": 43.087765957446805,
+            "max_text_length": 98,
+            "unique_texts": 752
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 16,
+            "labels": {
+                "economy, business and finance": {
+                    "count": 46
+                },
+                "politics": {
+                    "count": 118
+                },
+                "lifestyle and leisure": {
+                    "count": 1
+                },
+                "crime, law and justice": {
+                    "count": 292
+                },
+                "arts, culture, entertainment and media": {
+                    "count": 26
+                },
+                "religion and belief": {
+                    "count": 23
+                },
+                "sport": {
+                    "count": 22
+                },
+                "disaster, accident and emergency incident": {
+                    "count": 32
+                },
+                "society": {
+                    "count": 68
+                },
+                "health": {
+                    "count": 33
+                },
+                "education": {
+                    "count": 39
+                },
+                "conflict, war and peace": {
+                    "count": 6
+                },
+                "human interest": {
+                    "count": 23
+                },
+                "weather": {
+                    "count": 6
+                },
+                "labour": {
+                    "count": 15
+                },
+                "environment": {
+                    "count": 2
+                }
+            }
+        }
+    }
+}

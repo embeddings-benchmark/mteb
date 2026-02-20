@@ -1,0 +1,42 @@
+{
+    "train": {
+        "num_samples": 8059,
+        "number_of_characters": 945706,
+        "unique_pairs": 7546,
+        "sentence1_statistics": {
+            "total_text_length": 453582,
+            "min_text_length": 1,
+            "average_text_length": 56.28266534309468,
+            "max_text_length": 1508,
+            "unique_texts": 6052
+        },
+        "sentence2_statistics": {
+            "total_text_length": 492124,
+            "min_text_length": 1,
+            "average_text_length": 61.06514455887827,
+            "max_text_length": 1881,
+            "unique_texts": 7389
+        },
+        "hf_subset_descriptive_stats": {
+            "eng-eng_hin": {
+                "num_samples": 8059,
+                "number_of_characters": 945706,
+                "unique_pairs": 7546,
+                "sentence1_statistics": {
+                    "total_text_length": 453582,
+                    "min_text_length": 1,
+                    "average_text_length": 56.28266534309468,
+                    "max_text_length": 1508,
+                    "unique_texts": 6052
+                },
+                "sentence2_statistics": {
+                    "total_text_length": 492124,
+                    "min_text_length": 1,
+                    "average_text_length": 61.06514455887827,
+                    "max_text_length": 1881,
+                    "unique_texts": 7389
+                }
+            }
+        }
+    }
+}

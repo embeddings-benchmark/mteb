@@ -1,0 +1,150 @@
+{
+    "test": {
+        "num_samples": 1788,
+        "number_texts_intersect_with_train": 127,
+        "text_statistics": {
+            "total_text_length": 71994,
+            "min_text_length": 3,
+            "average_text_length": 40.26510067114094,
+            "max_text_length": 362,
+            "unique_texts": 1755
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 18,
+            "labels": {
+                "alarm": {
+                    "count": 12
+                },
+                "audio": {
+                    "count": 31
+                },
+                "iot": {
+                    "count": 120
+                },
+                "general": {
+                    "count": 111
+                },
+                "datetime": {
+                    "count": 54
+                },
+                "takeaway": {
+                    "count": 42
+                },
+                "weather": {
+                    "count": 89
+                },
+                "music": {
+                    "count": 50
+                },
+                "news": {
+                    "count": 97
+                },
+                "play": {
+                    "count": 213
+                },
+                "recommendation": {
+                    "count": 67
+                },
+                "qa": {
+                    "count": 192
+                },
+                "calendar": {
+                    "count": 202
+                },
+                "social": {
+                    "count": 75
+                },
+                "transport": {
+                    "count": 87
+                },
+                "email": {
+                    "count": 217
+                },
+                "cooking": {
+                    "count": 24
+                },
+                "lists": {
+                    "count": 105
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 11514,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 554168,
+            "min_text_length": 2,
+            "average_text_length": 48.12992878235192,
+            "max_text_length": 2511,
+            "unique_texts": 10947
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 18,
+            "labels": {
+                "alarm": {
+                    "count": 390
+                },
+                "audio": {
+                    "count": 290
+                },
+                "iot": {
+                    "count": 769
+                },
+                "calendar": {
+                    "count": 1688
+                },
+                "play": {
+                    "count": 1377
+                },
+                "general": {
+                    "count": 652
+                },
+                "datetime": {
+                    "count": 402
+                },
+                "takeaway": {
+                    "count": 257
+                },
+                "news": {
+                    "count": 503
+                },
+                "music": {
+                    "count": 332
+                },
+                "weather": {
+                    "count": 573
+                },
+                "qa": {
+                    "count": 1183
+                },
+                "recommendation": {
+                    "count": 433
+                },
+                "social": {
+                    "count": 391
+                },
+                "transport": {
+                    "count": 571
+                },
+                "email": {
+                    "count": 953
+                },
+                "lists": {
+                    "count": 539
+                },
+                "cooking": {
+                    "count": 211
+                }
+            }
+        }
+    }
+}

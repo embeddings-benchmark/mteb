@@ -2,38 +2,54 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING
 
-from pydantic import ConfigDict, model_validator
+from pydantic import ConfigDict, Field, model_validator
 
-from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import (
-    ANNOTATOR_TYPE,
-    LANGUAGES,
-    MODALITIES,
-    SAMPLE_CREATION_METHOD,
-    TASK_DOMAIN,
-    TASK_SUBTYPE,
-    TASK_TYPE,
-    HFSubset,
-    TaskMetadata,
+from mteb.types import (
+    Languages,
 )
-from mteb.custom_validators import LICENSES, STR_DATE
-from mteb.languages import ISO_LANGUAGE_SCRIPT
+
+from .abstask import AbsTask
+from .task_metadata import (
+    MetadataDatasetDict,
+    TaskMetadata,
+    TaskType,
+)
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
+
+    from mteb.types import (
+        ISOLanguageScript,
+        Licenses,
+        Modalities,
+        StrDate,
+        StrURL,
+    )
+
+    from .task_metadata import (
+        AnnotatorType,
+        SampleCreationMethod,
+        TaskCategory,
+        TaskDomain,
+        TaskSubtype,
+    )
 
 logger = logging.getLogger(__name__)
 
 
 class AggregateTaskMetadata(TaskMetadata):
-    """Metadata for an aggregation of tasks. This description only covers exceptions to the TaskMetadata. Many of the field if not filled out will be
-    autofilled from its tasks.
+    """Metadata for an aggregation of tasks.
+
+    This description only covers exceptions to the TaskMetadata. Many of the field if not filled out will be autofilled from its tasks.
 
     Attributes:
         name: The name of the aggregated task.
         description: A description of the task. Should explain the aggregation.
         prompt: An aggregate task does not have a prompt, thus this value is always None.
-        dataset: The dataset for the aggregated task is specified in its tasks. The aggregate task thus only specified the revision and uses a
-            placeholder path.
+        dataset: The dataset for the aggregated task is specified in its tasks.
+            The aggregate task thus only specified the revision and uses a placeholder path.
         tasks: A list of tasks, the majority of the metadata is described within its tasks.
         eval_splits: The splits of the tasks used for evaluation.
     """
@@ -42,61 +58,52 @@ class AggregateTaskMetadata(TaskMetadata):
 
     name: str
     description: str
-    dataset: dict[str, Any] = {
-        "path": "aggregate tasks do not have a path",  # just a place holder
-        "revision": "1",
-    }
+    dataset: MetadataDatasetDict = MetadataDatasetDict(
+        path="aggregate tasks do not have a path",  # just a place holder
+        revision="1",
+    )
 
     tasks: list[AbsTask]
     main_score: str
-    type: TASK_TYPE
+    type: TaskType
     eval_splits: list[str]
-    eval_langs: LANGUAGES = []
+    eval_langs: Languages = Field(default_factory=list)
     prompt: None = None
     reference: str | None = None
     bibtex_citation: str | None = None
 
-    @property
-    def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISO_LANGUAGE_SCRIPT]]:
-        """Return a dictionary mapping huggingface subsets to languages."""
-        if isinstance(self.eval_langs, dict):
-            langs = []
-            for v in self.eval_langs.values():
-                langs.extend(v)
-            langs = list(set(langs))
-            return {"default": langs}
-        return {"default": self.eval_langs}  # type: ignore
-
-    @model_validator(mode="after")  # type: ignore
-    def compute_unfilled_cases(self) -> AggregateTaskMetadata:
+    @model_validator(mode="after")
+    def _compute_unfilled_cases(self) -> Self:
         if not self.eval_langs:
-            self.eval_langs = self.compute_eval_langs()
+            self.eval_langs = self._compute_eval_langs()
         if not self.date:
-            self.date = self.compute_date()
+            self.date = self._compute_date()
         if not self.domains:
-            self.domains = self.compute_domains()
+            self.domains = self._compute_domains()
         if not self.task_subtypes:
-            self.task_subtypes = self.compute_task_subtypes()
+            self.task_subtypes = self._compute_task_subtypes()
         if not self.license:
-            self.license = self.compute_license()
+            self.license = self._compute_license()
         if not self.annotations_creators:
-            self.annotations_creators = self.compute_annotations_creators()
-        if not self.dialect:
-            self.dialect = self.compute_dialect()
+            self.annotations_creators = self._compute_annotations_creators()
+        if self.dialect is None:
+            self.dialect = self._compute_dialect()
         if not self.sample_creation:
-            self.sample_creation = self.compute_sample_creation()
+            self.sample_creation = self._compute_sample_creation()
         if not self.modalities:
-            self.modalities = self.compute_modalities()
+            self.modalities = self._compute_modalities()
+        if not self.category:
+            self.category = self._compute_category()
 
         return self
 
-    def compute_eval_langs(self) -> list[ISO_LANGUAGE_SCRIPT]:
+    def _compute_eval_langs(self) -> list[ISOLanguageScript]:
         langs = set()
         for task in self.tasks:
             langs.update(set(task.metadata.bcp47_codes))
         return list(langs)
 
-    def compute_date(self) -> tuple[STR_DATE, STR_DATE] | None:
+    def _compute_date(self) -> tuple[StrDate, StrDate] | None:
         # get min max date from tasks
         dates = []
         for task in self.tasks:
@@ -111,7 +118,7 @@ class AggregateTaskMetadata(TaskMetadata):
         max_date = max(dates)
         return min_date.isoformat(), max_date.isoformat()
 
-    def compute_domains(self) -> list[TASK_DOMAIN] | None:
+    def _compute_domains(self) -> list[TaskDomain] | None:
         domains = set()
         for task in self.tasks:
             if task.metadata.domains:
@@ -120,7 +127,7 @@ class AggregateTaskMetadata(TaskMetadata):
             return list(domains)
         return None
 
-    def compute_task_subtypes(self) -> list[TASK_SUBTYPE] | None:
+    def _compute_task_subtypes(self) -> list[TaskSubtype] | None:
         subtypes = set()
         for task in self.tasks:
             if task.metadata.task_subtypes:
@@ -129,16 +136,18 @@ class AggregateTaskMetadata(TaskMetadata):
             return list(subtypes)
         return None
 
-    def compute_license(self) -> LICENSES | None:
-        licenses = set()
+    def _compute_license(self) -> Licenses | StrURL | None:
+        licenses: set[Licenses | StrURL] = set()
         for task in self.tasks:
             if task.metadata.license:
                 licenses.add(task.metadata.license)
         if len(licenses) > 1:
             return "multiple"
+        if len(licenses) == 1:
+            return licenses.pop()
         return None
 
-    def compute_annotations_creators(self) -> ANNOTATOR_TYPE | None:
+    def _compute_annotations_creators(self) -> AnnotatorType | None:
         creators = set()
         for task in self.tasks:
             if task.metadata.annotations_creators:
@@ -147,31 +156,43 @@ class AggregateTaskMetadata(TaskMetadata):
             logger.warning(
                 f"Multiple annotations_creators found for tasks in {self.name}. Using None as annotations_creators."
             )
+            return None
+        if len(creators) == 1:
+            return creators.pop()
         return None
 
-    def compute_dialect(self) -> list[str] | None:
+    def _compute_dialect(self) -> list[str]:
         dialects = set()
         for task in self.tasks:
             if task.metadata.dialect:
                 dialects.update(set(task.metadata.dialect))
-        if dialects:
-            return list(dialects)
-        return None
+        return list(dialects)
 
-    def compute_sample_creation(self) -> SAMPLE_CREATION_METHOD | None:
+    def _compute_sample_creation(self) -> SampleCreationMethod | None:
         sample_creations = set()
         for task in self.tasks:
             if task.metadata.sample_creation:
                 sample_creations.add(task.metadata.sample_creation)
         if len(sample_creations) > 1:
             return "multiple"
+        if len(sample_creations) == 1:
+            return sample_creations.pop()
         return None
 
-    def compute_modalities(self) -> list[MODALITIES]:
+    def _compute_modalities(self) -> list[Modalities]:
         modalities = set()
         for task in self.tasks:
             if task.metadata.modalities:
                 modalities.update(set(task.metadata.modalities))
         if modalities:
             return list(modalities)
+        return []
+
+    def _compute_category(self) -> TaskCategory | None:
+        categories = set()
+        for task in self.tasks:
+            if task.metadata.category:
+                categories.add(task.metadata.category)
+        if len(categories) == 1:
+            return categories.pop()
         return None

@@ -1,0 +1,134 @@
+from __future__ import annotations
+
+import logging
+from typing import TYPE_CHECKING, Any, Protocol, cast
+
+from mteb._create_dataloaders import create_dataloader
+
+from .evaluator import Evaluator
+
+if TYPE_CHECKING:
+    import numpy as np
+    from datasets import Dataset
+    from numpy.typing import NDArray
+    from torch.utils.data import DataLoader
+    from typing_extensions import Self
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import EncoderProtocol
+    from mteb.types import Array, BatchedInput, EncodeKwargs
+
+logger = logging.getLogger(__name__)
+
+
+class SklearnModelProtocol(Protocol):
+    def fit(
+        self, X: Array, y: NDArray[np.integer | np.floating] | list[int | float]
+    ) -> None: ...
+    def predict(self, X: Array) -> NDArray[np.integer | np.floating]: ...
+    def get_params(self) -> dict[str, Any]: ...
+    def set_params(self, random_state: int, **kwargs: dict[str, Any]) -> Self: ...
+    def score(
+        self, X: Array, y: NDArray[np.integer | np.floating] | list[int | float]
+    ) -> float: ...
+
+
+class SklearnEvaluator(Evaluator):
+    def __init__(
+        self,
+        train_dataset: Dataset,
+        eval_dataset: Dataset,
+        values_column_name: str,
+        label_column_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        evaluator_model: SklearnModelProtocol,
+        **kwargs,
+    ) -> None:
+        super().__init__(**kwargs)
+        self.train_dataset = train_dataset
+        self.eval_dataset = eval_dataset
+
+        self.values_column_name = values_column_name
+        self.label_column_name = label_column_name
+
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
+        self.evaluator_model = evaluator_model
+
+    def create_dataloaders(
+        self,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None,
+    ) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
+        dataloader_train = create_dataloader(
+            self.train_dataset,
+            self.task_metadata,
+            input_column=self.values_column_name,
+            num_proc=num_proc,
+            **encode_kwargs,
+        )
+        dataloader_test = create_dataloader(
+            self.eval_dataset,
+            self.task_metadata,
+            input_column=self.values_column_name,
+            num_proc=num_proc,
+            **encode_kwargs,
+        )
+        return dataloader_train, dataloader_test
+
+    def __call__(  # type: ignore[override]
+        self,
+        model: EncoderProtocol,
+        *,
+        encode_kwargs: EncodeKwargs,
+        test_cache: Array | None = None,
+        train_cache: Array | None = None,
+        num_proc: int | None = None,
+    ) -> tuple[NDArray[np.integer | np.floating], Array]:
+        """Classification evaluation by training a sklearn classifier on the embeddings of the training set and evaluating on the embeddings of the test set.
+
+        Args:
+            model: Encoder
+            encode_kwargs: encode kwargs
+            test_cache: embeddings of the test set, if already computed
+            train_cache: embeddings of the train set, if already computed. Used for cross-validation.
+            num_proc: number of processes to use
+
+        Returns:
+            Tuple of test predictions and embeddings
+
+        """
+        dataloader_train, dataloader_test = self.create_dataloaders(
+            encode_kwargs=encode_kwargs,
+            num_proc=num_proc,
+        )
+
+        logger.info("Running - Encoding samples...")
+        if train_cache is None:
+            train_cache = model.encode(
+                dataloader_train,
+                task_metadata=self.task_metadata,
+                hf_split="train",
+                hf_subset=self.hf_subset,
+                **encode_kwargs,
+            )
+        if test_cache is None:
+            test_cache = model.encode(
+                dataloader_test,
+                task_metadata=self.task_metadata,
+                hf_split=self.hf_split,
+                hf_subset=self.hf_subset,
+                **encode_kwargs,
+            )
+            test_cache = cast("Array", test_cache)
+
+        logger.info("Running - Fitting classifier...")
+        y_train = self.train_dataset[self.label_column_name]
+        self.evaluator_model.fit(train_cache, y_train)
+
+        logger.info("Running - Evaluating classifier...")
+        y_pred = self.evaluator_model.predict(test_cache)
+        return y_pred, test_cache

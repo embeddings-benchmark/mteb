@@ -1,0 +1,168 @@
+{
+    "test": {
+        "num_samples": 1152,
+        "number_texts_intersect_with_train": 23,
+        "text_statistics": {
+            "total_text_length": 672566,
+            "min_text_length": 28,
+            "average_text_length": 583.8246527777778,
+            "max_text_length": 5970,
+            "unique_texts": 1144
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 21,
+            "labels": {
+                "bundeli-bns": {
+                    "count": 114
+                },
+                "bhojpuri-bho": {
+                    "count": 46
+                },
+                "panjabi-pan": {
+                    "count": 264
+                },
+                "bhadrawahi-bhd": {
+                    "count": 3
+                },
+                "korku-kfq": {
+                    "count": 62
+                },
+                "awadhi-awa": {
+                    "count": 16
+                },
+                "nimadi-noe": {
+                    "count": 55
+                },
+                "haryanvi-bgc": {
+                    "count": 194
+                },
+                "chhattisgarhi-hne": {
+                    "count": 32
+                },
+                "rajasthani-raj": {
+                    "count": 24
+                },
+                "magahi-mag": {
+                    "count": 119
+                },
+                "malvi-mup": {
+                    "count": 45
+                },
+                "angika-anp": {
+                    "count": 34
+                },
+                "braj-bra": {
+                    "count": 29
+                },
+                "bhili-bhb": {
+                    "count": 54
+                },
+                "kumaoni-kfy": {
+                    "count": 3
+                },
+                "garhwali-gbm": {
+                    "count": 45
+                },
+                "gujarati-guj": {
+                    "count": 5
+                },
+                "bengali-ben": {
+                    "count": 4
+                },
+                "kanauji-bjj": {
+                    "count": 2
+                },
+                "marathi-mar": {
+                    "count": 2
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 2138,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 1289774,
+            "min_text_length": 33,
+            "average_text_length": 603.2619270346117,
+            "max_text_length": 15395,
+            "unique_texts": 2108
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 21,
+            "labels": {
+                "haryanvi-bgc": {
+                    "count": 360
+                },
+                "angika-anp": {
+                    "count": 62
+                },
+                "garhwali-gbm": {
+                    "count": 83
+                },
+                "malvi-mup": {
+                    "count": 84
+                },
+                "bhili-bhb": {
+                    "count": 101
+                },
+                "magahi-mag": {
+                    "count": 221
+                },
+                "braj-bra": {
+                    "count": 54
+                },
+                "panjabi-pan": {
+                    "count": 490
+                },
+                "nimadi-noe": {
+                    "count": 102
+                },
+                "bundeli-bns": {
+                    "count": 212
+                },
+                "awadhi-awa": {
+                    "count": 31
+                },
+                "korku-kfq": {
+                    "count": 115
+                },
+                "bhojpuri-bho": {
+                    "count": 85
+                },
+                "chhattisgarhi-hne": {
+                    "count": 60
+                },
+                "rajasthani-raj": {
+                    "count": 43
+                },
+                "bhadrawahi-bhd": {
+                    "count": 5
+                },
+                "gujarati-guj": {
+                    "count": 9
+                },
+                "bengali-ben": {
+                    "count": 8
+                },
+                "kumaoni-kfy": {
+                    "count": 6
+                },
+                "marathi-mar": {
+                    "count": 3
+                },
+                "kanauji-bjj": {
+                    "count": 4
+                }
+            }
+        }
+    }
+}

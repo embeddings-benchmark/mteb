@@ -1,47 +1,61 @@
 {
     "test": {
         "num_samples": 5400,
-        "unique_num_labels": 10,
-        "min_image_width": 64,
-        "average_image_width": 64.0,
-        "max_image_width": 64,
-        "min_image_height": 64,
-        "average_image_height": 64.0,
-        "max_image_height": 64,
-        "min_label_text_length": 36,
-        "average_label_text_length": 45.2,
-        "max_label_text_length": 53,
-        "labels": {
-            "4": {
-                "count": 501
-            },
-            "3": {
-                "count": 496
-            },
-            "7": {
-                "count": 554
-            },
-            "2": {
-                "count": 573
-            },
-            "9": {
-                "count": 609
-            },
-            "0": {
-                "count": 596
-            },
-            "8": {
-                "count": 529
-            },
-            "1": {
-                "count": 608
-            },
-            "5": {
-                "count": 396
-            },
-            "6": {
-                "count": 538
+        "number_of_characters": null,
+        "text_statistics": null,
+        "image_statistics": {
+            "min_image_width": 64,
+            "average_image_width": 64.0,
+            "max_image_width": 64,
+            "min_image_height": 64,
+            "average_image_height": 64.0,
+            "max_image_height": 64,
+            "unique_images": 5400
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 10,
+            "labels": {
+                "4": {
+                    "count": 501
+                },
+                "3": {
+                    "count": 496
+                },
+                "7": {
+                    "count": 554
+                },
+                "2": {
+                    "count": 573
+                },
+                "9": {
+                    "count": 609
+                },
+                "0": {
+                    "count": 596
+                },
+                "8": {
+                    "count": 529
+                },
+                "1": {
+                    "count": 608
+                },
+                "5": {
+                    "count": 396
+                },
+                "6": {
+                    "count": 538
+                }
             }
+        },
+        "candidates_labels_text_statistics": {
+            "total_text_length": 452,
+            "min_text_length": 36,
+            "average_text_length": 45.2,
+            "max_text_length": 53,
+            "unique_texts": 10
         }
     }
 }

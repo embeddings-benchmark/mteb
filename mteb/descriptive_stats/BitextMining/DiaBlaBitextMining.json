@@ -1,0 +1,61 @@
+{
+    "test": {
+        "num_samples": 11496,
+        "number_of_characters": 1029116,
+        "unique_pairs": 5644,
+        "sentence1_statistics": {
+            "total_text_length": 551208,
+            "min_text_length": 1,
+            "average_text_length": 47.947807933194156,
+            "max_text_length": 250,
+            "unique_texts": 5572
+        },
+        "sentence2_statistics": {
+            "total_text_length": 477908,
+            "min_text_length": 1,
+            "average_text_length": 41.57167710508003,
+            "max_text_length": 213,
+            "unique_texts": 5506
+        },
+        "hf_subset_descriptive_stats": {
+            "fr-en": {
+                "num_samples": 5748,
+                "number_of_characters": 514558,
+                "unique_pairs": 5644,
+                "sentence1_statistics": {
+                    "total_text_length": 275604,
+                    "min_text_length": 1,
+                    "average_text_length": 47.947807933194156,
+                    "max_text_length": 250,
+                    "unique_texts": 5572
+                },
+                "sentence2_statistics": {
+                    "total_text_length": 238954,
+                    "min_text_length": 1,
+                    "average_text_length": 41.57167710508003,
+                    "max_text_length": 213,
+                    "unique_texts": 5506
+                }
+            },
+            "en-fr": {
+                "num_samples": 5748,
+                "number_of_characters": 514558,
+                "unique_pairs": 5644,
+                "sentence1_statistics": {
+                    "total_text_length": 275604,
+                    "min_text_length": 1,
+                    "average_text_length": 47.947807933194156,
+                    "max_text_length": 250,
+                    "unique_texts": 5572
+                },
+                "sentence2_statistics": {
+                    "total_text_length": 238954,
+                    "min_text_length": 1,
+                    "average_text_length": 41.57167710508003,
+                    "max_text_length": 213,
+                    "unique_texts": 5506
+                }
+            }
+        }
+    }
+}

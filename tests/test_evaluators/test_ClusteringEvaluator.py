@@ -1,8 +1,16 @@
 from __future__ import annotations
 
-import numpy as np
+from typing import TYPE_CHECKING
 
-from mteb.evaluation.evaluators import ClusteringEvaluator
+import numpy as np
+from datasets import Dataset
+from torch.utils.data import DataLoader
+
+from mteb._evaluators import ClusteringEvaluator
+from tests.mock_tasks import MockClusteringTask
+
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
 
 
 class TestClusteringEvaluator:
@@ -10,15 +18,28 @@ class TestClusteringEvaluator:
         class Model:
             def encode(
                 self,
-                sentences: list[str],
+                sentences: DataLoader,
+                task_metadata,
+                hf_split,
+                hf_subset,
                 task_name: str | None = None,
                 batch_size=32,
-            ) -> np.ndarray:
-                return np.eye(len(sentences))
+                **kwargs,
+            ) -> NDArray[np.floating]:
+                return np.eye(len(sentences.dataset))
 
         model = Model()
         sentences = ["dog walked home", "cat walked home", "robot walked to the park"]
-        clusterer = ClusteringEvaluator(sentences=sentences, labels=[1, 2, 3])
-        result = clusterer(model)
+        labels = [1, 2, 3]
+        dataset = Dataset.from_dict({"text": sentences, "labels": labels})
+        clusterer = ClusteringEvaluator(
+            dataset,
+            input_column_name="text",
+            label_column_name="labels",
+            task_metadata=MockClusteringTask.metadata,  # typing: ignore
+            hf_subset="",
+            hf_split="",
+        )
+        result = clusterer(model, encode_kwargs={"batch_size": 32})
 
-        assert result == {"v_measure": 1.0}
+        assert result == [2, 1, 0]

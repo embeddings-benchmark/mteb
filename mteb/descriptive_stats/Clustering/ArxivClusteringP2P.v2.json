@@ -1,0 +1,552 @@
+{
+    "test": {
+        "num_samples": 63488,
+        "text_statistics": {
+            "total_text_length": 64326208,
+            "min_text_length": 64,
+            "average_text_length": 1013.202620967742,
+            "max_text_length": 3903,
+            "unique_texts": 62714
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 177,
+            "labels": {
+                "hep": {
+                    "count": 2533
+                },
+                "cs": {
+                    "count": 4933
+                },
+                "math": {
+                    "count": 4626
+                },
+                "other": {
+                    "count": 1123
+                },
+                "astro-ph": {
+                    "count": 4334
+                },
+                "cond-mat": {
+                    "count": 2660
+                },
+                "stat": {
+                    "count": 758
+                },
+                "q-bio": {
+                    "count": 234
+                },
+                "eess": {
+                    "count": 215
+                },
+                "quant-ph": {
+                    "count": 3831
+                },
+                "q-fin": {
+                    "count": 81
+                },
+                "econ": {
+                    "count": 35
+                },
+                "cs.RO": {
+                    "count": 190
+                },
+                "gr-qc": {
+                    "count": 617
+                },
+                "cs.AI": {
+                    "count": 224
+                },
+                "physics.acc-ph": {
+                    "count": 68
+                },
+                "math.GR": {
+                    "count": 151
+                },
+                "hep-th": {
+                    "count": 1713
+                },
+                "cond-mat.stat-mech": {
+                    "count": 1392
+                },
+                "cs.IT": {
+                    "count": 385
+                },
+                "math.FA": {
+                    "count": 212
+                },
+                "math-ph": {
+                    "count": 415
+                },
+                "physics.chem-ph": {
+                    "count": 118
+                },
+                "hep-ph": {
+                    "count": 2086
+                },
+                "cond-mat.mes-hall": {
+                    "count": 1025
+                },
+                "cs.LG": {
+                    "count": 728
+                },
+                "physics.geo-ph": {
+                    "count": 46
+                },
+                "cs.HC": {
+                    "count": 80
+                },
+                "chao-dyn": {
+                    "count": 15
+                },
+                "cond-mat.str-el": {
+                    "count": 744
+                },
+                "physics.optics": {
+                    "count": 312
+                },
+                "cs.CL": {
+                    "count": 394
+                },
+                "cs.IR": {
+                    "count": 98
+                },
+                "nucl-th": {
+                    "count": 334
+                },
+                "math.AG": {
+                    "count": 386
+                },
+                "math.SG": {
+                    "count": 64
+                },
+                "q-bio.BM": {
+                    "count": 221
+                },
+                "astro-ph.SR": {
+                    "count": 648
+                },
+                "math.DS": {
+                    "count": 276
+                },
+                "cs.SE": {
+                    "count": 110
+                },
+                "math.AP": {
+                    "count": 547
+                },
+                "astro-ph.EP": {
+                    "count": 340
+                },
+                "math.QA": {
+                    "count": 115
+                },
+                "cs.CG": {
+                    "count": 52
+                },
+                "cs.CV": {
+                    "count": 762
+                },
+                "cs.DM": {
+                    "count": 61
+                },
+                "q-bio.MN": {
+                    "count": 190
+                },
+                "physics.gen-ph": {
+                    "count": 115
+                },
+                "cond-mat.supr-con": {
+                    "count": 496
+                },
+                "cs.DB": {
+                    "count": 67
+                },
+                "eess.SY": {
+                    "count": 586
+                },
+                "cs.GT": {
+                    "count": 67
+                },
+                "physics.plasm-ph": {
+                    "count": 132
+                },
+                "math.CO": {
+                    "count": 517
+                },
+                "astro-ph.IM": {
+                    "count": 252
+                },
+                "math.GT": {
+                    "count": 204
+                },
+                "math.NT": {
+                    "count": 393
+                },
+                "physics.atom-ph": {
+                    "count": 146
+                },
+                "cs.DS": {
+                    "count": 179
+                },
+                "astro-ph.GA": {
+                    "count": 650
+                },
+                "math.SP": {
+                    "count": 73
+                },
+                "math.OC": {
+                    "count": 344
+                },
+                "math.DG": {
+                    "count": 350
+                },
+                "hep-lat": {
+                    "count": 315
+                },
+                "physics.data-an": {
+                    "count": 45
+                },
+                "cs.SI": {
+                    "count": 110
+                },
+                "stat.AP": {
+                    "count": 274
+                },
+                "cond-mat.mtrl-sci": {
+                    "count": 960
+                },
+                "cs.PL": {
+                    "count": 58
+                },
+                "cs.SY": {
+                    "count": 84
+                },
+                "math.RT": {
+                    "count": 181
+                },
+                "physics.app-ph": {
+                    "count": 105
+                },
+                "math.RA": {
+                    "count": 123
+                },
+                "stat.ML": {
+                    "count": 475
+                },
+                "stat.ME": {
+                    "count": 540
+                },
+                "math.PR": {
+                    "count": 505
+                },
+                "hep-ex": {
+                    "count": 365
+                },
+                "math.NA": {
+                    "count": 298
+                },
+                "math.MG": {
+                    "count": 63
+                },
+                "astro-ph.CO": {
+                    "count": 663
+                },
+                "physics.ins-det": {
+                    "count": 162
+                },
+                "nlin.CD": {
+                    "count": 72
+                },
+                "math.CA": {
+                    "count": 218
+                },
+                "cond-mat.other": {
+                    "count": 108
+                },
+                "math.CV": {
+                    "count": 120
+                },
+                "cs.PF": {
+                    "count": 13
+                },
+                "q-bio.PE": {
+                    "count": 585
+                },
+                "math.OA": {
+                    "count": 106
+                },
+                "cs.CY": {
+                    "count": 99
+                },
+                "math.AT": {
+                    "count": 113
+                },
+                "cond-mat.quant-gas": {
+                    "count": 218
+                },
+                "cs.CE": {
+                    "count": 30
+                },
+                "astro-ph.HE": {
+                    "count": 554
+                },
+                "cond-mat.soft": {
+                    "count": 422
+                },
+                "cs.NI": {
+                    "count": 202
+                },
+                "math.ST": {
+                    "count": 231
+                },
+                "cond-mat.dis-nn": {
+                    "count": 219
+                },
+                "physics.flu-dyn": {
+                    "count": 216
+                },
+                "q-bio.QM": {
+                    "count": 363
+                },
+                "cs.FL": {
+                    "count": 34
+                },
+                "cs.NE": {
+                    "count": 60
+                },
+                "physics.atm-clus": {
+                    "count": 13
+                },
+                "nucl-ex": {
+                    "count": 116
+                },
+                "math.AC": {
+                    "count": 122
+                },
+                "physics.soc-ph": {
+                    "count": 139
+                },
+                "cs.SC": {
+                    "count": 17
+                },
+                "dg-ga": {
+                    "count": 8
+                },
+                "cs.CR": {
+                    "count": 198
+                },
+                "cs.LO": {
+                    "count": 117
+                },
+                "eess.SP": {
+                    "count": 975
+                },
+                "math.CT": {
+                    "count": 45
+                },
+                "nlin.SI": {
+                    "count": 56
+                },
+                "math.LO": {
+                    "count": 95
+                },
+                "physics.ed-ph": {
+                    "count": 28
+                },
+                "alg-geom": {
+                    "count": 16
+                },
+                "physics.comp-ph": {
+                    "count": 108
+                },
+                "math.GM": {
+                    "count": 44
+                },
+                "q-fin.GN": {
+                    "count": 285
+                },
+                "math.GN": {
+                    "count": 42
+                },
+                "eess.AS": {
+                    "count": 215
+                },
+                "eess.IV": {
+                    "count": 612
+                },
+                "math.HO": {
+                    "count": 31
+                },
+                "nlin.AO": {
+                    "count": 17
+                },
+                "physics.pop-ph": {
+                    "count": 24
+                },
+                "cs.GR": {
+                    "count": 15
+                },
+                "q-bio.CB": {
+                    "count": 89
+                },
+                "nlin.PS": {
+                    "count": 45
+                },
+                "cs.SD": {
+                    "count": 58
+                },
+                "econ.GN": {
+                    "count": 894
+                },
+                "cs.DC": {
+                    "count": 117
+                },
+                "physics.ao-ph": {
+                    "count": 40
+                },
+                "math.KT": {
+                    "count": 15
+                },
+                "cs.DL": {
+                    "count": 50
+                },
+                "stat.CO": {
+                    "count": 118
+                },
+                "physics.space-ph": {
+                    "count": 30
+                },
+                "q-bio.GN": {
+                    "count": 158
+                },
+                "cs.AR": {
+                    "count": 20
+                },
+                "cs.NA": {
+                    "count": 17
+                },
+                "chem-ph": {
+                    "count": 2
+                },
+                "physics.bio-ph": {
+                    "count": 93
+                },
+                "physics.class-ph": {
+                    "count": 61
+                },
+                "physics.hist-ph": {
+                    "count": 38
+                },
+                "q-bio.NC": {
+                    "count": 431
+                },
+                "cs.CC": {
+                    "count": 58
+                },
+                "acc-phys": {
+                    "count": 3
+                },
+                "q-fin.MF": {
+                    "count": 268
+                },
+                "stat.OT": {
+                    "count": 13
+                },
+                "q-fin.PR": {
+                    "count": 266
+                },
+                "q-bio.OT": {
+                    "count": 67
+                },
+                "q-fin.RM": {
+                    "count": 248
+                },
+                "q-fin.ST": {
+                    "count": 331
+                },
+                "physics.med-ph": {
+                    "count": 42
+                },
+                "cs.MM": {
+                    "count": 21
+                },
+                "cs.MA": {
+                    "count": 28
+                },
+                "q-alg": {
+                    "count": 17
+                },
+                "q-fin.PM": {
+                    "count": 211
+                },
+                "comp-gas": {
+                    "count": 6
+                },
+                "q-fin.CP": {
+                    "count": 200
+                },
+                "econ.EM": {
+                    "count": 748
+                },
+                "cs.MS": {
+                    "count": 7
+                },
+                "cs.ET": {
+                    "count": 29
+                },
+                "q-bio.SC": {
+                    "count": 64
+                },
+                "nlin.CG": {
+                    "count": 5
+                },
+                "cmp-lg": {
+                    "count": 8
+                },
+                "cs.GL": {
+                    "count": 1
+                },
+                "econ.TH": {
+                    "count": 452
+                },
+                "q-fin.TR": {
+                    "count": 181
+                },
+                "atom-ph": {
+                    "count": 1
+                },
+                "funct-an": {
+                    "count": 4
+                },
+                "patt-sol": {
+                    "count": 4
+                },
+                "q-bio.TO": {
+                    "count": 93
+                },
+                "solv-int": {
+                    "count": 7
+                },
+                "cs.OH": {
+                    "count": 23
+                },
+                "cs.OS": {
+                    "count": 6
+                },
+                "adap-org": {
+                    "count": 2
+                },
+                "q-fin.EC": {
+                    "count": 97
+                },
+                "mtrl-th": {
+                    "count": 1
+                }
+            }
+        }
+    }
+}

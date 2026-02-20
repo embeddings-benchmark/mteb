@@ -1,11 +1,10 @@
-from __future__ import annotations
-
 import logging
-import os
-from typing import Optional
+from pathlib import Path
 
 from jsonlines import Reader
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, conint, constr
+
+logger = logging.getLogger(__name__)
 
 commit_exceptions = {
     "scores_from_old_system",
@@ -22,18 +21,18 @@ commit_exceptions = {
 # Define a Pydantic model to represent each JSON object
 class JsonObject(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    GitHub: constr(min_length=1)  # noqa
-    new_dataset: Optional[conint(ge=1)] = Field(alias="New dataset", default=None)  # noqa
-    new_task: Optional[conint(ge=2)] = Field(alias="New task", default=None)  # noqa
-    dataset_annotations: Optional[conint(ge=1)] = Field(  # noqa
+    GitHub: constr(min_length=1)
+    new_dataset: conint(ge=1) | None = Field(alias="New dataset", default=None)
+    new_task: conint(ge=2) | None = Field(alias="New task", default=None)
+    dataset_annotations: conint(ge=1) | None = Field(
         alias="Dataset annotations", default=None
     )
-    bug_fixes: Optional[conint(ge=1)] = Field(alias="Bug fixes", default=None)  # noqa
-    running_models: Optional[conint(ge=1)] = Field(alias="Running Models", default=None)  # noqa
-    review_pr: Optional[conint(ge=2)] = Field(alias="Review PR", default=None)  # noqa
-    paper_writing: Optional[int] = Field(alias="Paper writing", default=None)  # noqa
-    Ideation: Optional[int] = None  # noqa
-    Coordination: Optional[int] = None  # noqa
+    bug_fixes: conint(ge=1) | None = Field(alias="Bug fixes", default=None)
+    running_models: conint(ge=1) | None = Field(alias="Running Models", default=None)
+    review_pr: conint(ge=2) | None = Field(alias="Review PR", default=None)
+    paper_writing: int | None = Field(alias="Paper writing", default=None)
+    Ideation: int | None = None
+    Coordination: int | None = None
 
 
 def check_max_points(obj: JsonObject, commit_n: str):
@@ -44,32 +43,29 @@ def check_max_points(obj: JsonObject, commit_n: str):
 
 # Function to validate JSONL files in a folder
 def validate_jsonl_files(folder_path):
-    for filename in os.listdir(folder_path):
-        if filename.endswith(".jsonl"):
-            file_path = os.path.join(folder_path, filename)
-            commit_n = os.path.splitext(filename)[0]
-            with open(file_path, encoding="utf-8") as file:
+    folder_path = Path(folder_path)
+    for file_path in folder_path.glob("*.jsonl"):
+        commit_n = file_path.stem
+        with file_path.open(encoding="utf-8") as file:
+            try:
+                # Read JSONL file
+                reader = Reader(file)
+            except Exception:
+                raise Exception("Error reading file:", file_path)
+            for line in reader:
                 try:
-                    # Read JSONL file
-                    reader = Reader(file)
-                except Exception:
-                    raise Exception("Error reading file:", file_path)
-                for line in reader:
-                    try:
-                        # Validate JSON object against schema
-                        x = JsonObject(**line)
-                        logging.debug(x)
-                        check_max_points(x, commit_n)
+                    # Validate JSON object against schema
+                    x = JsonObject(**line)
+                    logger.debug(x)
+                    check_max_points(x, commit_n)
 
-                    except ValidationError as e:
-                        raise Exception(
-                            "Validation Error in file:", file_path, line
-                        ) from e
+                except ValidationError as e:
+                    raise Exception("Validation Error in file:", file_path, line) from e
 
 
 # Main function
 def main():
-    folder_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "points")
+    folder_path = Path(__file__).parent / "points"
     validate_jsonl_files(folder_path)
 
 

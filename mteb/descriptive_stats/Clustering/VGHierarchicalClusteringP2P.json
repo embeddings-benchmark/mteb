@@ -1,0 +1,234 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "text_statistics": {
+            "total_text_length": 5493923,
+            "min_text_length": 80,
+            "average_text_length": 2682.57958984375,
+            "max_text_length": 20478,
+            "unique_texts": 2048
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 71,
+            "labels": {
+                "nyheter": {
+                    "count": 1014
+                },
+                "utenriks": {
+                    "count": 371
+                },
+                "innenriks": {
+                    "count": 527
+                },
+                "rampelys": {
+                    "count": 258
+                },
+                "musikk": {
+                    "count": 80
+                },
+                "sport": {
+                    "count": 650
+                },
+                "fotball": {
+                    "count": 341
+                },
+                "meninger": {
+                    "count": 100
+                },
+                "haandball": {
+                    "count": 23
+                },
+                "tv": {
+                    "count": 57
+                },
+                "forbruker": {
+                    "count": 32
+                },
+                "teknologi": {
+                    "count": 16
+                },
+                "kongelige": {
+                    "count": 1
+                },
+                "ishockey": {
+                    "count": 28
+                },
+                "kampsport": {
+                    "count": 8
+                },
+                "doping": {
+                    "count": 3
+                },
+                "helse": {
+                    "count": 6
+                },
+                "spill": {
+                    "count": 7
+                },
+                "ski": {
+                    "count": 15
+                },
+                "bil-og-motor": {
+                    "count": 9
+                },
+                "reise": {
+                    "count": 21
+                },
+                "film": {
+                    "count": 42
+                },
+                "tennis": {
+                    "count": 9
+                },
+                "vaer": {
+                    "count": 7
+                },
+                "mat-og-drikke": {
+                    "count": 5
+                },
+                "langrenn": {
+                    "count": 30
+                },
+                "alpint": {
+                    "count": 14
+                },
+                "moter-og-modeller": {
+                    "count": 1
+                },
+                "bok": {
+                    "count": 10
+                },
+                "hollywood": {
+                    "count": 1
+                },
+                "friidrett": {
+                    "count": 12
+                },
+                "basketball": {
+                    "count": 1
+                },
+                "grand-prix": {
+                    "count": 2
+                },
+                "sykkel": {
+                    "count": 21
+                },
+                "ungdoms-ol-2016": {
+                    "count": 1
+                },
+                "vintersport": {
+                    "count": 1
+                },
+                "skiskyting": {
+                    "count": 7
+                },
+                "golf": {
+                    "count": 3
+                },
+                "jernbanen": {
+                    "count": 1
+                },
+                "motorsport": {
+                    "count": 8
+                },
+                "travtips": {
+                    "count": 4
+                },
+                "hopp": {
+                    "count": 8
+                },
+                "ol": {
+                    "count": 5
+                },
+                "ski-vm-2015": {
+                    "count": 2
+                },
+                "teateranmeldelser": {
+                    "count": 1
+                },
+                "skoyter": {
+                    "count": 1
+                },
+                "dinepenger": {
+                    "count": 3
+                },
+                "storbritannia": {
+                    "count": 2
+                },
+                "utrolige-historier": {
+                    "count": 3
+                },
+                "idol": {
+                    "count": 2
+                },
+                "farmen": {
+                    "count": 1
+                },
+                "skoeyter": {
+                    "count": 1
+                },
+                "motor": {
+                    "count": 3
+                },
+                "musikal": {
+                    "count": 1
+                },
+                "sjakk": {
+                    "count": 3
+                },
+                "boksing": {
+                    "count": 5
+                },
+                "bil-baat-og-motor": {
+                    "count": 10
+                },
+                "justin-bieber": {
+                    "count": 2
+                },
+                "kongehuset": {
+                    "count": 1
+                },
+                "internasjonal-fotball": {
+                    "count": 1
+                },
+                "vg-lista-topp-20": {
+                    "count": 1
+                },
+                "roing": {
+                    "count": 1
+                },
+                "ol-2016": {
+                    "count": 1
+                },
+                "skotsk-fotball": {
+                    "count": 1
+                },
+                "leonard-cohen": {
+                    "count": 1
+                },
+                "skuespiller": {
+                    "count": 1
+                },
+                "william-og-kate": {
+                    "count": 1
+                },
+                "idrettspolitikk": {
+                    "count": 3
+                },
+                "norsk-film": {
+                    "count": 1
+                },
+                "game-of-thrones": {
+                    "count": 1
+                },
+                "snowboard": {
+                    "count": 1
+                }
+            }
+        }
+    }
+}

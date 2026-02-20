@@ -1,0 +1,126 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 568368,
+            "min_text_length": 37,
+            "average_text_length": 277.5234375,
+            "max_text_length": 1045,
+            "unique_texts": 2048
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 14,
+            "labels": {
+                "7": {
+                    "count": 147
+                },
+                "0": {
+                    "count": 146
+                },
+                "10": {
+                    "count": 146
+                },
+                "3": {
+                    "count": 146
+                },
+                "13": {
+                    "count": 147
+                },
+                "2": {
+                    "count": 146
+                },
+                "12": {
+                    "count": 147
+                },
+                "1": {
+                    "count": 146
+                },
+                "6": {
+                    "count": 146
+                },
+                "11": {
+                    "count": 146
+                },
+                "8": {
+                    "count": 146
+                },
+                "5": {
+                    "count": 147
+                },
+                "4": {
+                    "count": 146
+                },
+                "9": {
+                    "count": 146
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 2048,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 578420,
+            "min_text_length": 22,
+            "average_text_length": 282.431640625,
+            "max_text_length": 777,
+            "unique_texts": 2048
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 14,
+            "labels": {
+                "12": {
+                    "count": 147
+                },
+                "10": {
+                    "count": 146
+                },
+                "2": {
+                    "count": 146
+                },
+                "5": {
+                    "count": 147
+                },
+                "13": {
+                    "count": 147
+                },
+                "9": {
+                    "count": 146
+                },
+                "6": {
+                    "count": 146
+                },
+                "4": {
+                    "count": 146
+                },
+                "3": {
+                    "count": 146
+                },
+                "1": {
+                    "count": 146
+                },
+                "0": {
+                    "count": 146
+                },
+                "8": {
+                    "count": 146
+                },
+                "11": {
+                    "count": 146
+                },
+                "7": {
+                    "count": 147
+                }
+            }
+        }
+    }
+}
