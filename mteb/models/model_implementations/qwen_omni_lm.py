@@ -8,6 +8,7 @@ from transformers import (
     AutoProcessor,
 )
 
+from mteb._create_dataloaders import AudioCollator
 from mteb._requires_package import (
     requires_audio_dependencies,
     requires_image_dependencies,
@@ -65,21 +66,6 @@ class QwenOmniWrapper(AbsEncoder):
 
         self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
-
-    def _prepare_audio(self, audio_row: dict[str, Any]) -> torch.Tensor:
-        import torchaudio
-
-        array = torch.tensor(audio_row["array"], dtype=torch.float32)
-        sr = audio_row.get("sampling_rate", self.sampling_rate)
-        if sr != self.sampling_rate:
-            resampler = torchaudio.transforms.Resample(
-                orig_freq=sr, new_freq=self.sampling_rate
-            )
-            array = resampler(array)
-        max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
-        if len(array) > max_samples:
-            array = array[:max_samples]
-        return array
 
     def _build_messages(
         self,
@@ -146,9 +132,11 @@ class QwenOmniWrapper(AbsEncoder):
             for audio_row in raw_audio:
                 if audio_row is None:
                     batch_audio.append(None)
-                    continue
-                array = self._prepare_audio(audio_row)
-                batch_audio.append(array.numpy())
+                else:
+                    array = AudioCollator.resample_audio(
+                        {"audio": audio_row}, self.sampling_rate, self.max_samples
+                    )
+                    batch_audio.append(array)
 
             messages = self._build_messages(
                 batch_texts=batch_texts,
