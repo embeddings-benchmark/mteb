@@ -332,7 +332,7 @@ class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
         prompt = self.get_prompt(task_metadata, prompt_type)
         if prompt:
             logger.info(
-                f"Using prompt_name={prompt} for task={task_metadata.name} prompt={prompt_type}"
+                f"Using prompt={prompt} for task={task_metadata.name} prompt_type={prompt_type}"
             )
         else:
             logger.info(
