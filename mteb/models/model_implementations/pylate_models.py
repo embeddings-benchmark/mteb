@@ -308,12 +308,10 @@ class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
         self.model = ColBERT(self.model_name, revision=revision, **kwargs)
         built_in_prompts = getattr(self.model, "prompts", None)
         if built_in_prompts and not model_prompts:
-            self.model.prompts = built_in_prompts
             self.model_prompts = model_prompts
         elif model_prompts and built_in_prompts:
             logger.info(f"Model.prompts will be overwritten with {model_prompts}")
-            self.model.prompts = self.validate_task_to_prompt_name(model_prompts)
-            self.model_prompts = model_prompts
+            self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
         self.base_index_dir = Path(index_dir) if index_dir else None
         self._index_name = index_name
         self._index_autodelete = index_autodelete
