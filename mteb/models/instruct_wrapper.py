@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import warnings
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -40,6 +41,12 @@ def instruct_wrapper(
         device: Device used to load the model.
         **kwargs: Additional arguments to pass to the model.
     """
+    warnings.warn(
+        "`instruct_wrapper` is deprecated and will be removed in future versions. "
+        "Please use `InstructSentenceTransformerModel` instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
     requires_package(
         instruct_wrapper, "gritlm", model_name_or_path, "pip install 'mteb[gritlm]'"
     )
