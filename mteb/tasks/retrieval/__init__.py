@@ -22,3 +22,4 @@ from .swe import *
 from .tur import *
 from .vie import *
 from .zho import *
+from .zxx import *

@@ -4,6 +4,7 @@ import logging
 import warnings
 from typing import TYPE_CHECKING, Any, cast
 
+import numpy as np
 import torch
 from datasets import Dataset, Image
 from torch.utils.data import DataLoader, default_collate
@@ -12,6 +13,7 @@ from mteb.types import (
     ConversationTurn,
     PromptType,
 )
+from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -22,7 +24,13 @@ if TYPE_CHECKING:
         Conversation,
         QueryDatasetType,
     )
-    from mteb.types._encoder_io import CorpusInput, ImageInput, QueryInput, TextInput
+    from mteb.types._encoder_io import (
+        AudioInput,
+        CorpusInput,
+        ImageInput,
+        QueryInput,
+        TextInput,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +73,7 @@ def _corpus_to_dict(
         "text": text,
         "body": row["text"],
     }
-    # dataloders can't handle None
+    # dataloaders can't handle None
     if "title" in row and row["title"] is not None and len(row["title"]) > 0:
         new_row["title"] = row["title"]
     return new_row
@@ -285,7 +293,7 @@ def _prepare_image_dataset(
     )
 
 
-def _custom_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
+def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     """Custom collate function for DataLoader.
 
     - For the "image", "conversation" key, leave the images as a list (to avoid stacking errors).
@@ -297,16 +305,19 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
     Returns:
         A collated dictionary.
     """
-    collated: dict[str, Any] = {}
+    collated = {}
     for key in batch[0]:
-        if key in ("image", "conversation"):
-            # Leave the images as a list to avoid stacking errors.
+        if key in (
+            "image",  # images can be with different sizes
+            "conversation",  # conversations are lists of varying lengths
+            "audio",  # audio can have different lengths
+        ):
             collated[key] = [item[key] for item in batch]
         else:
             if any(item[key] is None for item in batch):
                 raise ValueError(f"Found None in batch for key '{key}'")
             collated[key] = default_collate([item[key] for item in batch])
-    return collated
+    return cast("BatchedInput", collated)
 
 
 def _create_image_dataloader(
@@ -314,7 +325,7 @@ def _create_image_dataloader(
     image_column_name: str | None = None,
     batch_size: int = 32,
     transform: Callable[[Any], Any] | None = None,
-    collate_fn: Callable[[list[dict[str, Any]]], dict[str, Any]] = _custom_collate_fn,
+    collate_fn: Callable[[list[dict[str, Any]]], BatchedInput] = _custom_collate_fn,
     num_proc: int | None = None,
 ) -> DataLoader[ImageInput]:
     """Creates a DataLoader with the image dataset prepared using the explicit transformation.
@@ -369,7 +380,7 @@ def _create_queries_dataloader(
     input_column: str | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
-) -> DataLoader[QueryInput | ImageInput]:
+) -> DataLoader[QueryInput | ImageInput | AudioInput]:
     """Create a dataloader for queries."""
     queries_type = task_metadata.get_modalities(PromptType.query)
     if queries_type == ["text"]:  # text only
@@ -385,6 +396,14 @@ def _create_queries_dataloader(
             batch_size=batch_size,
             num_proc=num_proc,
         )
+    if "audio" in task_metadata.modalities:
+        return _create_audio_dataloader(
+            dataset,
+            task_metadata,
+            input_column="audio",
+            batch_size=batch_size,
+            num_proc=num_proc,
+        )
     raise ValueError(f"Can't handle queries type {queries_type}")
 
 
@@ -394,7 +413,7 @@ def _create_document_dataloader(
     input_column: str | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
-) -> DataLoader[CorpusInput | ImageInput]:
+) -> DataLoader[CorpusInput | ImageInput | AudioInput]:
     """Create a dataloader for documents.
 
     Args:
@@ -421,7 +440,50 @@ def _create_document_dataloader(
             batch_size=batch_size,
             num_proc=num_proc,
         )
+    if "audio" in task_metadata.modalities:
+        return _create_audio_dataloader(
+            dataset,
+            task_metadata,
+            input_column="audio",
+            batch_size=batch_size,
+            num_proc=num_proc,
+        )
     raise ValueError(f"Can't handle queries type {document_type}")
+
+
+def _create_audio_dataloader(
+    dataset: Dataset,
+    task_metadata: TaskMetadata,
+    input_column: str | None = None,
+    batch_size: int = 32,
+    num_proc: int | None = None,
+) -> DataLoader[AudioInput]:
+    """Create a dataloader for audio.
+
+    Args:
+        dataset: The dataset containing the audio.
+        task_metadata: Metadata of the task to determine the audio type.
+        input_column: The column to use as input. If None, it will use the first column that matches the audio.
+        batch_size: Batch size for the dataloader.
+        num_proc: The number of workers for the dataloader.
+
+    Returns:
+        A DataLoader with the audio dataset.
+    """
+    if (
+        input_column
+        and input_column in dataset.column_names
+        and "audio" not in dataset.column_names
+    ):
+        dataset = dataset.rename_column(input_column, "audio")
+
+    return DataLoader(
+        dataset,
+        batch_size=batch_size,
+        collate_fn=_custom_collate_fn,
+        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
+        shuffle=False,
+    )
 
 
 def create_dataloader(
@@ -474,6 +536,14 @@ def create_dataloader(
             batch_size=batch_size,
             num_proc=num_proc,
         )
+    if "audio" in task_metadata.modalities:
+        return _create_audio_dataloader(
+            dataset,
+            task_metadata,
+            input_column=input_column,
+            batch_size=batch_size,
+            num_proc=num_proc,
+        )
     if "text" in task_metadata.modalities and input_column is not None:
         return _create_dataloader_from_texts(
             dataset[input_column],
@@ -484,3 +554,98 @@ def create_dataloader(
         batch_size=batch_size,
         num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
     )
+
+
+class AudioCollator:
+    """Collator for audio data that resamples audio to a target sampling rate and optionally truncates to a maximum number of samples."""
+
+    def __init__(
+        self, target_sampling_rate: int, max_samples: int | None = None
+    ) -> None:
+        """Initialize the collator.
+
+        Args:
+            target_sampling_rate: The sampling rate to resample the audio to.
+            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
+        """
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
+
+    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
+        return self.resample_audios(
+            inputs,
+            target_sampling_rate=self.target_sampling_rate,
+            max_samples=self.max_samples,
+        )
+
+    @staticmethod
+    def resample_audios(
+        inputs: list[dict[str, Any]],
+        target_sampling_rate: int,
+        max_samples: int | None = None,
+    ) -> BatchedInput:
+        """Resample a batch of audio inputs to a target sampling rate and optionally truncate to a maximum number of samples.
+
+        Args:
+            inputs: A list of dictionaries containing audio data under the "audio" key, where each audio is a dictionary with "array" and "sampling_rate" keys.
+            target_sampling_rate: The sampling rate to resample the audio to.
+            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
+        """
+        collated_inputs = []
+        for row in inputs:
+            audio_array = AudioCollator.resample_audio(
+                row,
+                target_sampling_rate,
+                max_samples,
+            )
+            row["audio"] = AudioInputItem(
+                array=audio_array, sampling_rate=target_sampling_rate
+            )
+            collated_inputs.append(row)
+        return cast(
+            "BatchedInput",
+            {
+                key: [row[key] for row in collated_inputs]
+                for key in collated_inputs[0].keys()
+            },
+        )
+
+    @staticmethod
+    def resample_audio(
+        audio: dict[str, Any],
+        target_sampling_rate: int,
+        max_samples: int | None = None,
+    ) -> np.typing.NDArray[np.floating]:
+        """Resample an audio input to a target sampling rate and optionally truncate to a maximum number of samples.
+
+        Args:
+            audio: A list of dictionaries containing audio data under the "audio" key, where each audio is a dictionary with "array" and "sampling_rate" keys.
+            target_sampling_rate: The sampling rate to resample the audio to.
+            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
+        """
+        import torchaudio
+
+        audio = audio["audio"]
+        if audio["sampling_rate"] != target_sampling_rate:
+            logger.debug(
+                f"Resampling audio from {audio['sampling_rate']} Hz to {target_sampling_rate} Hz."
+            )
+            resampler = torchaudio.transforms.Resample(
+                orig_freq=audio["sampling_rate"],
+                new_freq=target_sampling_rate,
+            )
+            audio_array = torch.from_numpy(audio["array"]).float()
+            audio_array = resampler(audio_array)
+            audio_array = audio_array.numpy()
+        else:
+            audio_array = audio["array"]
+
+        # Convert to mono if needed
+        if audio_array.ndim > 1 and audio_array.shape[0] > 1:
+            audio_array = np.mean(audio_array, axis=0)
+
+        if max_samples is not None:
+            num_samples = audio_array.shape[-1]
+            if num_samples > max_samples:
+                audio_array = audio_array[..., :max_samples]
+        return audio_array

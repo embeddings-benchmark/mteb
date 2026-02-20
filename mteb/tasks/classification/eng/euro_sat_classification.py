@@ -12,8 +12,8 @@ class EuroSATClassification(AbsTaskClassification):
         description="Classifying satellite images.",
         reference="https://ieeexplore.ieee.org/document/8736785",
         dataset={
-            "path": "timm/eurosat-rgb",
-            "revision": "b4e28552cd5f3932b6abc37eb20d3e84901ad728",
+            "path": "mteb/eurosat-rgb",
+            "revision": "da02b77448e750b3b034e0b5da008167b9706571",
         },
         type="ImageClassification",
         category="i2c",

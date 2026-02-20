@@ -8,8 +8,8 @@ class WebQAT2ITRetrieval(AbsTaskRetrieval):
         description="Retrieve sources of information based on questions.",
         reference="https://openaccess.thecvf.com/content/CVPR2022/html/Chang_WebQA_Multihop_and_Multimodal_QA_CVPR_2022_paper.html",
         dataset={
-            "path": "MRBench/mbeir_webqa_task2",
-            "revision": "53db4c9f9c93cb74926a1c9d04dea7d7acac2f21",
+            "path": "mteb/mbeir_webqa_task2",
+            "revision": "8a9243d504a2039b3467abdef2208a127a5c0737",
         },
         type="Any2AnyRetrieval",
         category="t2it",

@@ -25,6 +25,17 @@ LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperfo
       url={https://arxiv.org/abs/2507.05513}
 }"""
 
+NEMOTRON_COLEMBED_CITATION_V2 = """
+@misc{moreira2026nemotroncolembedv2topperforming,
+    title={Nemotron ColEmbed V2: Top-Performing Late Interaction embedding models for Visual Document Retrieval},
+    author={Gabriel de Souza P. Moreira and Ronay Ak and Mengyao Xu and Oliver Holworthy and Benedikt Schifferer and Zhiding Yu and Yauhen Babakhin and Radek Osmulski and Jiarui Cai and Ryan Chesler and Bo Liu and Even Oldridge},
+    year={2026},
+    eprint={2602.03992},
+    archivePrefix={arXiv},
+    primaryClass={cs.IR},
+    url={https://arxiv.org/abs/2602.03992},
+}"""
+
 # Transformers version constraints per extra.
 # Keep in sync with pyproject.toml [project.optional-dependencies]
 #
@@ -83,7 +94,6 @@ class NemotronColEmbedVL(AbsEncoder):
         ).eval()
 
     def get_text_embeddings(self, texts, batch_size: int = 32, **kwargs):
-        batch_size = 1
         return self.model.forward_queries(texts, batch_size=batch_size)
 
     def get_image_embeddings(
@@ -110,7 +120,6 @@ class NemotronColEmbedVL(AbsEncoder):
                 )
                 all_images.append(pil_img)
 
-        batch_size = 1
         return self.model.forward_images(all_images, batch_size=batch_size)
 
     def calculate_probs(self, text_embeddings, image_embeddings):
@@ -274,7 +283,7 @@ llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=TRAINING_DATA,
-    citation=LLAMA_NEMORETRIEVER_CITATION,
+    citation=NEMOTRON_COLEMBED_CITATION_V2,
 )
 
 
@@ -302,7 +311,7 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=TRAINING_DATA_v2,
-    citation=LLAMA_NEMORETRIEVER_CITATION,
+    citation=NEMOTRON_COLEMBED_CITATION_V2,
 )
 
 
@@ -330,5 +339,5 @@ nemotron_colembed_vl_8b_v2 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=TRAINING_DATA_v2,
-    citation=LLAMA_NEMORETRIEVER_CITATION,
+    citation=NEMOTRON_COLEMBED_CITATION_V2,
 )

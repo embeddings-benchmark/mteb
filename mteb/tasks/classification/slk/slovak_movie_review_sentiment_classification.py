@@ -25,9 +25,11 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@article{vstefanik2023resources,
-  author = {{\v{S}}tef{\'a}nik, Michal and Kadl{\v{c}}{\'\i}k, Marek and Gramacki, Piotr and Sojka, Petr},
-  journal = {arXiv preprint arXiv:2304.01922},
+@misc{štefánik2023resources,
+  archiveprefix = {arXiv},
+  author = {Michal Štefánik and Marek Kadlčík and Piotr Gramacki and Petr Sojka},
+  eprint = {2304.01922},
+  primaryclass = {cs.CL},
   title = {Resources and Few-shot Learners for In-context Learning in Slavic Languages},
   year = {2023},
 }
@@ -66,9 +68,11 @@ class SlovakMovieReviewSentimentClassificationV2(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@article{vstefanik2023resources,
-  author = {{\v{S}}tef{\'a}nik, Michal and Kadl{\v{c}}{\'\i}k, Marek and Gramacki, Piotr and Sojka, Petr},
-  journal = {arXiv preprint arXiv:2304.01922},
+@misc{štefánik2023resources,
+  archiveprefix = {arXiv},
+  author = {Michal Štefánik and Marek Kadlčík and Piotr Gramacki and Petr Sojka},
+  eprint = {2304.01922},
+  primaryclass = {cs.CL},
   title = {Resources and Few-shot Learners for In-context Learning in Slavic Languages},
   year = {2023},
 }

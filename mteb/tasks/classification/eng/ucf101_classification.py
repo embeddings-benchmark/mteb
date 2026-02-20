@@ -12,8 +12,8 @@ class UCF101Classification(AbsTaskClassification):
         description="UCF101 is an action recognition data set of realistic action videos collected from YouTube, having 101 action categories. This version of the dataset does not contain images but images saved frame by frame. Train and test splits are generated based on the authors' first version train/test list.",
         reference="https://huggingface.co/datasets/flwrlabs/ucf101",
         dataset={
-            "path": "flwrlabs/ucf101",
-            "revision": "1098eed48f2929443f47c39f3b5c814e16369c11",
+            "path": "mteb/ucf101",
+            "revision": "e0618988874f6ffbf90af69fa6dccecb9be3deb3",
         },
         type="ImageClassification",
         category="i2c",
