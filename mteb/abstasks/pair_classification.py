@@ -115,7 +115,9 @@ class AbsTaskPairClassification(AbsTask):
 
         if self.metadata.modalities == ["text"]:
             # for compatibility with v1 version where datasets were stored in a single row
-            data_split = data_split[0] if len(data_split) == 1 else data_split
+            data_split = (
+                Dataset.from_dict(data_split[0]) if len(data_split) == 1 else data_split
+            )
         evaluator = PairClassificationEvaluator(
             data_split,
             self.input1_column_name,
