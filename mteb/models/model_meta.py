@@ -575,8 +575,6 @@ class ModelMeta(BaseModel):
             model_name: The HuggingFace model name.
             revision: Revision of the model
             fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
-            fetch_from_hf: Whether to fetch additional metadata from HuggingFace Hub.
-            compute_metadata: Deprecated. Use fill_missing instead.
 
         Returns:
             The generated ModelMeta.
@@ -673,7 +671,6 @@ class ModelMeta(BaseModel):
             model: SentenceTransformer model.
             revision: Revision of the model
             fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
-            fetch_from_hf: Whether to fetch metadata from HuggingFace Hub.
             compute_metadata: Deprecated. Use fill_missing instead.
             fetch_from_hf: Whether to fetch additional metadata from HuggingFace Hub based on the model name. If False, only metadata that can be
                 extracted from the SentenceTransformer model will be used.
@@ -769,7 +766,6 @@ class ModelMeta(BaseModel):
             model: The CrossEncoder model
             revision: Revision of the model
             fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
-            fetch_from_hf: Whether to fetch metadata from HuggingFace Hub.
             compute_metadata: Deprecated. Use fill_missing instead.
             fetch_from_hf: Whether to fetch additional metadata from HuggingFace Hub based on the model name. If False, only metadata that can be
                 extracted from the CrossEncoder model will be used.
