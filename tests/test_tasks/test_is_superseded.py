@@ -1,7 +1,5 @@
 """Tests to ensure the superseded_by field is correct"""
 
-from __future__ import annotations
-
 import logging
 
 import mteb

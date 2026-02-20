@@ -76,13 +76,10 @@ def load_bright_data(
 
 
 _BIBTEX_CITATION = r"""
-@misc{su2024brightrealisticchallengingbenchmark,
-  archiveprefix = {arXiv},
-  author = {Hongjin Su and Howard Yen and Mengzhou Xia and Weijia Shi and Niklas Muennighoff and Han-yu Wang and Haisu Liu and Quan Shi and Zachary S. Siegel and Michael Tang and Ruoxi Sun and Jinsung Yoon and Sercan O. Arik and Danqi Chen and Tao Yu},
-  eprint = {2407.12883},
-  primaryclass = {cs.CL},
-  title = {BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval},
-  url = {https://arxiv.org/abs/2407.12883},
+@article{su2024bright,
+  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal = {arXiv preprint arXiv:2407.12883},
+  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
   year = {2024},
 }
 """

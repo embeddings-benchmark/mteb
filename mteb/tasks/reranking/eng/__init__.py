@@ -1,6 +1,7 @@
 from .ask_ubuntu_dup_questions import AskUbuntuDupQuestions
 from .built_bench_reranking import BuiltBenchReranking
 from .ecommerce_product_relevance_reranking import ERESSReranking
+from .fs_dnoisy18k_audio_reranking import FSDnoisy18kAudioReranking
 from .hume_core17_instruction_reranking import HUMECore17InstructionReranking
 from .hume_news21_instruction_reranking import HUMENews21InstructionReranking
 from .hume_robust04_instruction_reranking import HUMERobust04InstructionReranking
@@ -14,12 +15,14 @@ from .swe_bench_lite_reranking import SWEbenchLiteReranking
 from .swe_bench_multilingual_reranking import SWEbenchMultilingualRR
 from .swe_bench_verified_reranking import SWEbenchVerifiedReranking
 from .swe_poly_bench_reranking import SWEPolyBenchReranking
+from .vocal_sound_audio_reranking import VocalSoundAudioReranking
 from .web_linx_candidates_reranking import WebLINXCandidatesReranking
 
 __all__ = [
     "AskUbuntuDupQuestions",
     "BuiltBenchReranking",
     "ERESSReranking",
+    "FSDnoisy18kAudioReranking",
     "HUMECore17InstructionReranking",
     "HUMENews21InstructionReranking",
     "HUMERobust04InstructionReranking",
@@ -33,5 +36,6 @@ __all__ = [
     "SWEbenchVerifiedReranking",
     "SciDocsReranking",
     "StackOverflowDupQuestions",
+    "VocalSoundAudioReranking",
     "WebLINXCandidatesReranking",
 ]

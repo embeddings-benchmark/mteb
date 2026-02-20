@@ -1,0 +1,56 @@
+{
+    "test": {
+        "num_samples": 720,
+        "unique_pairs": 500,
+        "number_of_characters": null,
+        "text1_statistics": null,
+        "image1_statistics": null,
+        "audio1_statistics": {
+            "total_duration_seconds": 3006.0503945578225,
+            "min_duration_seconds": 1.0216780045351475,
+            "average_duration_seconds": 4.17506999244142,
+            "max_duration_seconds": 11.517097505668934,
+            "unique_audios": 543,
+            "average_sampling_rate": 47156.52777777778,
+            "sampling_rates": {
+                "48000": 578,
+                "44100": 127,
+                "96000": 5,
+                "8000": 4,
+                "16000": 6
+            }
+        },
+        "text2_statistics": null,
+        "image2_statistics": null,
+        "audio2_statistics": {
+            "total_duration_seconds": 3003.870766439908,
+            "min_duration_seconds": 1.0216780045351475,
+            "average_duration_seconds": 4.172042731166539,
+            "max_duration_seconds": 11.517097505668934,
+            "unique_audios": 500,
+            "average_sampling_rate": 47937.77777777778,
+            "sampling_rates": {
+                "48000": 594,
+                "96000": 4,
+                "44100": 112,
+                "192000": 3,
+                "16000": 6,
+                "8000": 1
+            }
+        },
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "1": {
+                    "count": 360
+                },
+                "0": {
+                    "count": 360
+                }
+            }
+        }
+    }
+}

@@ -25,7 +25,7 @@ class ImageNetDog15Clustering(AbsTaskClusteringLegacy):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{5206848,
+@inproceedings{deng2009imagenet,
   author = {Deng, Jia and Dong, Wei and Socher, Richard and Li, Li-Jia and Kai Li and Li Fei-Fei},
   booktitle = {2009 IEEE Conference on Computer Vision and Pattern Recognition},
   doi = {10.1109/CVPR.2009.5206848},
@@ -65,7 +65,7 @@ class ImageNet10Clustering(AbsTaskClusteringLegacy):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{5206848,
+@inproceedings{deng2009imagenet,
   author = {Deng, Jia and Dong, Wei and Socher, Richard and Li, Li-Jia and Kai Li and Li Fei-Fei},
   booktitle = {2009 IEEE Conference on Computer Vision and Pattern Recognition},
   doi = {10.1109/CVPR.2009.5206848},

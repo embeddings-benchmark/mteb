@@ -28,6 +28,7 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
+    calculate_audio_statistics,
     calculate_image_statistics,
     calculate_relevant_docs_statistics,
     calculate_text_statistics,
@@ -57,6 +58,7 @@ if TYPE_CHECKING:
         ScoresDict,
     )
     from mteb.types.statistics import (
+        AudioStatistics,
         ImageStatistics,
         RelevantDocsStatistics,
         TextStatistics,
@@ -76,8 +78,10 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
 
         documents_text_statistics: Statistics for documents
         documents_image_statistics: Statistics for documents
+        documents_audio_statistics: Statistics for documents
         queries_text_statistics: Statistics for queries
         queries_image_statistics: Statistics for queries
+        queries_audio_statistics: Statistics for queries
         relevant_docs_statistics: Statistics for relevant documents
         top_ranked_statistics: Statistics for top ranked documents (if available)
     """
@@ -87,8 +91,11 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
 
     documents_text_statistics: TextStatistics | None
     documents_image_statistics: ImageStatistics | None
+    documents_audio_statistics: AudioStatistics | None
+
     queries_text_statistics: TextStatistics | None
     queries_image_statistics: ImageStatistics | None
+    queries_audio_statistics: AudioStatistics | None
 
     relevant_docs_statistics: RelevantDocsStatistics
 
@@ -543,8 +550,10 @@ class AbsTaskRetrieval(AbsTask):
 
         documents_text_statistics = None
         documents_image_statistics = None
+        documents_audio_statistics = None
         queries_text_statistics = None
         queries_image_statistics = None
+        queries_audio_statistics = None
 
         if "t" in corpus_modalities:
             corpus_texts = corpus.map(_corpus_to_dict)["text"]
@@ -553,6 +562,9 @@ class AbsTaskRetrieval(AbsTask):
 
         if "i" in corpus_modalities:
             documents_image_statistics = calculate_image_statistics(corpus["image"])
+
+        if "a" in corpus_modalities:
+            documents_audio_statistics = calculate_audio_statistics(corpus["audio"])
 
         if "t" in queries_modalities:
             queries_ = queries
@@ -568,6 +580,9 @@ class AbsTaskRetrieval(AbsTask):
         if "i" in queries_modalities:
             queries_image_statistics = calculate_image_statistics(queries["image"])
 
+        if "a" in queries_modalities:
+            queries_audio_statistics = calculate_audio_statistics(queries["audio"])
+
         relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
 
         if top_ranked is not None and num_queries and len(top_ranked) > 0:
@@ -582,8 +597,10 @@ class AbsTaskRetrieval(AbsTask):
             number_of_characters=number_of_characters,
             documents_text_statistics=documents_text_statistics,
             documents_image_statistics=documents_image_statistics,
+            documents_audio_statistics=documents_audio_statistics,
             queries_text_statistics=queries_text_statistics,
             queries_image_statistics=queries_image_statistics,
+            queries_audio_statistics=queries_audio_statistics,
             relevant_docs_statistics=relevant_docs_statistics,
             top_ranked_statistics=top_ranked_statistics,
         )
