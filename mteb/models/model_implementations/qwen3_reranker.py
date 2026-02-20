@@ -1,15 +1,22 @@
-from typing import Any
+from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+import numpy as np
 import torch
-from torch.utils.data import DataLoader
+from tqdm.auto import tqdm
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
 )
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 
 class Qwen3RerankerWrapper:
@@ -19,7 +26,6 @@ class Qwen3RerankerWrapper:
         self,
         model_name_or_path: str,
         device: str | None = None,
-        attn_implementation: str | None = None,
         **kwargs,
     ):
         self.model_name_or_path = model_name_or_path
@@ -28,17 +34,12 @@ class Qwen3RerankerWrapper:
             if device is not None
             else ("cuda" if torch.cuda.is_available() else "cpu")
         )
-        self.batch_size = kwargs.get("batch_size", 8)
-        if attn_implementation:
-            attn_implementation = attn_implementation
 
         self.tokenizer = AutoTokenizer.from_pretrained(
             model_name_or_path, padding_side="left"
         )
         self.max_length = self.tokenizer.model_max_length
-        self.model = AutoModelForCausalLM.from_pretrained(
-            model_name_or_path, attn_implementation=attn_implementation, **kwargs
-        )
+        self.model = AutoModelForCausalLM.from_pretrained(model_name_or_path, **kwargs)
         self.model.to(self.device)
         self.model.eval()
 
@@ -101,20 +102,25 @@ class Qwen3RerankerWrapper:
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
     ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["query"]]
+        queries = [text for batch in inputs1 for text in batch["text"]]
         instructions = None
-        if "instruction" in inputs2.dataset.features:
+        if "instruction" in inputs1.dataset.features:
             instructions = [text for batch in inputs1 for text in batch["instruction"]]
         passages = [text for batch in inputs2 for text in batch["text"]]
 
         all_scores = []
-        for i in range(0, len(queries), self.batch_size):
-            batch_queries = queries[i : i + self.batch_size]
-            batch_passages = passages[i : i + self.batch_size]
+        for i in tqdm(
+            range(0, len(queries), batch_size),
+            disable=not show_progress_bar,
+            desc="Computing relevance scores",
+        ):
+            batch_queries = queries[i : i + batch_size]
+            batch_passages = passages[i : i + batch_size]
             batch_instructions = (
-                instructions[i : i + self.batch_size]
+                instructions[i : i + batch_size]
                 if instructions is not None
                 else [None] * len(batch_queries)
             )
@@ -130,7 +136,7 @@ class Qwen3RerankerWrapper:
             scores = self.compute_logits(inputs)
             all_scores.extend(scores)
 
-        return all_scores
+        return np.array(all_scores)
 
 
 qwen3_reranker_training_data = {
@@ -153,8 +159,7 @@ qwen3_reranker_training_data = {
 qwen3_reranker_0_6b = ModelMeta(
     loader=Qwen3RerankerWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
-        attn_implementation="flash_attention_2",
+        torch_dtype=torch.bfloat16,
     ),
     name="Qwen/Qwen3-Reranker-0.6B",
     revision="6e9e69830b95c52b5fd889b7690dda3329508de3",
@@ -192,8 +197,7 @@ qwen3_reranker_0_6b = ModelMeta(
 qwen3_reranker_4b = ModelMeta(
     loader=Qwen3RerankerWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
-        attn_implementation="flash_attention_2",
+        torch_dtype=torch.bfloat16,
     ),
     name="Qwen/Qwen3-Reranker-4B",
     revision="f16fc5d5d2b9b1d0db8280929242745d79794ef5",
@@ -231,8 +235,7 @@ qwen3_reranker_4b = ModelMeta(
 qwen3_reranker_8b = ModelMeta(
     loader=Qwen3RerankerWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
-        attn_implementation="flash_attention_2",
+        torch_dtype=torch.bfloat16,
     ),
     name="Qwen/Qwen3-Reranker-8B",
     revision="5fa94080caafeaa45a15d11f969d7978e087a3db",
