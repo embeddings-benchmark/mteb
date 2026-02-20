@@ -14,6 +14,7 @@ from mteb.benchmarks.benchmarks import (
     MTEB_EU,
     MTEB_FRA,
     MTEB_INDIC,
+    MTEB_AFRICA,
     MTEB_JPN,
     MTEB_KOR,
     MTEB_MAIN_RU,
@@ -54,6 +55,7 @@ PREVIOUS_BENCHMARK_NAMES = {
     "MTEB(Europe)": MTEB_EU.name,
     "MTEB(Chinese)": C_MTEB.name,
     "FaMTEB(fas, beta)": FA_MTEB.name,
+    "AfriMTEB": MTEB_AFRICA.name,
 }
 
 
