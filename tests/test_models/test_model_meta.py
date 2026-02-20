@@ -111,7 +111,6 @@ _MISSING_N_EMBEDDING_MODELS = [
     "MCINext/Hakim",
     "MCINext/Hakim-small",
     "MCINext/Hakim-unsup",
-    "ICT-TIME-and-Querit/BOOM_4B_v1",
     # audio models
     "google/vggish",
     "LCO-Embedding/LCO-Embedding-Omni-3B",
