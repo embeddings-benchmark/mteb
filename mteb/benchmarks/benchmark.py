@@ -114,25 +114,34 @@ class Benchmark:
             )
             return no_results_frame
 
-    def push_collection_to_hub(self, hf_username: str) -> None:
+    def push_collection_to_hub(
+        self,
+        hf_username: str,
+        collection_name: str | None = None,
+    ) -> None:
         """Push the benchmark collection to Hugging Face Hub.
 
         Args:
             hf_username: Hugging Face username or organization name
+            collection_name: Name for the collection on Hugging Face Hub. If not provided, the benchmark name will be used.
         """
         collections = huggingface_hub.list_collections(owner=hf_username)
+        collection_name = collection_name or self.name
         existing_collection = None
         for collection in collections:
-            if collection.title == self.name:
+            if collection.title == collection_name:
                 existing_collection = collection
                 break
 
         if existing_collection is None:
+            description = self.description
+            if description and len(description) > 150:
+                description = description[:147] + "..."
             collection = huggingface_hub.create_collection(
-                title=self.name,
+                title=collection_name,
                 namespace=hf_username,
                 # hf collections have a 150 character limit for description, so we truncate it if it's too long
-                description=self.description[:150] if self.description else None,
+                description=description if description else None,
             )
         else:
             # list collections would output only 4 items
