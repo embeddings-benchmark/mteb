@@ -44,7 +44,7 @@ NEMOTRON_COLEMBED_CITATION_V2 = """
 # requires transformers==4.49.0, even though it's a "v2" model by name.
 _TRANSFORMERS_CONSTRAINTS: dict[str, str] = {
     "llama-nemotron-colembed-vl": "==4.49.0",  # llama-nemoretriever-colembed-*
-    "nemotron-colembed-vl-v2": "==5.0.0rc0",  # nemotron-colembed-vl-4b-v2, nemotron-colembed-vl-8b-v2
+    "nemotron-colembed-vl-v2": "==5.0.0",  # nemotron-colembed-vl-4b-v2, nemotron-colembed-vl-8b-v2
 }
 
 
