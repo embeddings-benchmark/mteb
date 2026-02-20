@@ -24,7 +24,7 @@ class EvalTaskConfig(BaseModel):
         description="HF dataset split name, e.g. `test` or `train`. None for mean all splits are used.",
     )
     # TODO how to specify retrieval with 3 configs (qrels, query, corpus)?
-    field_spec: dict[str, str]
+    field_spec: dict[str, str] | None = None
 
 
 class EvalMeta(BaseModel):

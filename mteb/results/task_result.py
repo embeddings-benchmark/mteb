@@ -907,7 +907,7 @@ class TaskResult(BaseModel):
                             task_id=task_id,
                             revision=dataset_revision,
                         ),
-                        metric=subset_results["main_score"],
+                        value=subset_results["main_score"],
                     )
                 )
                 evaluated_subsets.add(subset_name)
@@ -923,7 +923,7 @@ class TaskResult(BaseModel):
                         task_id=task_metadata.name,
                         revision=dataset_revision,
                     ),
-                    metric=self.get_score(),
+                    value=self.get_score(),
                 )
             )
         return eval_results

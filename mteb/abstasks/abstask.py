@@ -646,7 +646,7 @@ class AbsTask(ABC):
             task_metadata=self.metadata,
             field_spec=self._eval_field_spec(),
         )
-        task_config_dict = task_config.model_dump()
+        task_config_dict = task_config.model_dump(exclude_none=True)
         with tempfile.NamedTemporaryFile(mode="w", delete=True) as tmp_file:
             task_config_yaml_str = yaml.dump(task_config_dict)
             if existing_eval_str is not None:

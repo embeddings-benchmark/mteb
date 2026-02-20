@@ -2,10 +2,11 @@
 
 import datetime
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, dataclasses
 
 
-class EvalResultDataset(BaseModel):
+@dataclasses.dataclass(frozen=True)
+class EvalResultDataset:
     model_config = ConfigDict(extra="forbid")
 
     id: str = Field(..., description="Repo name")
@@ -27,7 +28,7 @@ class EvalResult(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     dataset: EvalResultDataset
-    metric: float
+    value: float
     verify_token: str | None = None
     date: datetime.date | None = Field(
         None, description="evaluation ran in HF Jobs with inspect-ai"

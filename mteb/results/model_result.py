@@ -442,8 +442,12 @@ class ModelResult(BaseModel):
         with path.open("r", encoding="utf-8") as f:
             return cls.model_validate_json(f.read())
 
-    def push_model_results(self, create_pr: bool = False) -> None:
-        """Push the model results to the Hugging Face Hub."""
+    def push_model_results(self, *, create_pr: bool = False) -> None:
+        """Push the model results to the Hugging Face Hub.
+
+        Args:
+            create_pr: Whether to create a pull request
+        """
         with tempfile.TemporaryDirectory() as tmpdir:
             path = Path(tmpdir)
             for task_result in self.task_results:
