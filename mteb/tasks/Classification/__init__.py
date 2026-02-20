@@ -84,12 +84,15 @@ from .kur.KurdishSentimentClassification import *
 from .mal.MalayalamNewsClassification import *
 from .mar.MarathiNewsClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
+from .multilingual.AfriHateClassification import *
 from .multilingual.AfriSentiClassification import *
 from .multilingual.AfriSentiLangClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
 from .multilingual.CataloniaTweetClassification import *
 from .multilingual.CyrillicTurkicLangClassification import *
+from .multilingual.InjongoIntent import *
+from .multilingual.KinNewsClassification import *
 from .multilingual.HinDialectClassification import *
 from .multilingual.IndicLangClassification import *
 from .multilingual.IndicNLPNewsClassification import *
