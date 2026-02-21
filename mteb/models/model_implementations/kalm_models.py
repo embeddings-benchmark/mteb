@@ -18,11 +18,14 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-KALM_EMBEDDING_CITATION = """@article{hu2025kalm,
+KALM_EMBEDDING_CITATION = """@misc{hu2025kalmembedding,
   title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Model},
-  author={Hu, Xinshuo and Shan, Zifei and Zhao, Xinping and Sun, Zetian and Liu, Zhenyu and Li, Dongfang and Ye, Shaolin and Wei, Xinyuan and Chen, Qian and Hu, Baotian and others},
-  journal={arXiv preprint arXiv:2501.01028},
-  year={2025}
+  author={Xinshuo Hu and Zifei Shan and Xinping Zhao and Zetian Sun and Zhenyu Liu and Dongfang Li and Shaolin Ye and Xinyuan Wei and Qian Chen and Baotian Hu and Haofen Wang and Jun Yu and Min Zhang},
+  year={2025},
+  eprint={2501.01028},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2501.01028},
 }"""
 
 
@@ -953,7 +956,7 @@ KaLM_Embedding_gemma_3_12b_2511 = ModelMeta(
     open_weights=True,
     release_date="2025-11-06",
     n_parameters=11.76 * 1e9,
-    n_embedding_parameters=None,
+    n_embedding_parameters=1006878720,
     memory_usage_mb=44884,
     max_tokens=32768,
     embed_dim=3840,

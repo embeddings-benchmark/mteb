@@ -70,7 +70,7 @@ def _get_means_per_types(per_task: pd.DataFrame):
                 dict(
                     model_name=model_name,
                     task_type=task_type,
-                    score=scores[tasks].mean(skipna=False),
+                    score=scores[tasks].mean(skipna=True),
                 )
             )
     return pd.DataFrame.from_records(records)

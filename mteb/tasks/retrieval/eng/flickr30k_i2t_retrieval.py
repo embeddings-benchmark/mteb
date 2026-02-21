@@ -8,8 +8,8 @@ class Flickr30kI2TRetrieval(AbsTaskRetrieval):
         description="Retrieve captions based on images.",
         reference="https://www.semanticscholar.org/paper/From-image-descriptions-to-visual-denotations%3A-New-Young-Lai/44040913380206991b1991daf1192942e038fe31",
         dataset={
-            "path": "isaacchung/flickr30ki2t",
-            "revision": "6984df6bd4380034e7766d9a992d8907df363efb",
+            "path": "mteb/flickr30ki2t",
+            "revision": "e26fbfcb4532ab61e3c8512fdf3dd9008f2575bd",
         },
         type="Any2AnyRetrieval",
         category="i2t",

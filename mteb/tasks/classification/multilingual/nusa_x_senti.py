@@ -38,17 +38,12 @@ class NusaXSentiClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{winata2022nusax,
-  archiveprefix = {arXiv},
-  author = {Winata, Genta Indra and Aji, Alham Fikri and Cahyawijaya,
-Samuel and Mahendra, Rahmad and Koto, Fajri and Romadhony,
-Ade and Kurniawan, Kemal and Moeljadi, David and Prasojo,
-Radityo Eko and Fung, Pascale and Baldwin, Timothy and Lau,
-Jey Han and Sennrich, Rico and Ruder, Sebastian},
-  eprint = {2205.15960},
-  primaryclass = {cs.CL},
+@inproceedings{winata2023nusax,
+  author = {Winata, Genta Indra and Aji, Alham Fikri and Cahyawijaya, Samuel and Mahendra, Rahmad and Koto, Fajri and Romadhony, Ade and Kurniawan, Kemal and Moeljadi, David and Prasojo, Radityo Eko and Fung, Pascale and others},
+  booktitle = {Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics},
+  pages = {815--834},
   title = {NusaX: Multilingual Parallel Sentiment Dataset for 10 Indonesian Local Languages},
-  year = {2022},
+  year = {2023},
 }
 """,
     )

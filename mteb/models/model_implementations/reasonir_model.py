@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.models import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.types import PromptType

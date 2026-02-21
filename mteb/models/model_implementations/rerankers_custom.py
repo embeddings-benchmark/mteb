@@ -254,13 +254,13 @@ bge_reranker_v2_m3 = ModelMeta(
       archivePrefix={arXiv},
       primaryClass={cs.CL}
     }
-    @misc{chen2024bge,
-          title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation},
-          author={Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
-          year={2024},
-          eprint={2402.03216},
-          archivePrefix={arXiv},
-          primaryClass={cs.CL}
+    @misc{bge-m3,
+      archiveprefix = {arXiv},
+      author = {Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
+      eprint = {2402.03216},
+      primaryclass = {cs.CL},
+      title = {BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation},
+      year = {2024},
     }
     """,
 )

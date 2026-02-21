@@ -245,9 +245,10 @@ def test_leaderboard_cache_paths(
     mock_app.launch = MagicMock()
 
     # Create a mock function that captures the cache argument and returns our mock app
-    def mock_get_app_func(cache):
+    def mock_get_app_func(cache, rebuild=False):
         # Store the cache for verification
         mock_get_app_func.called_with_cache = cache
+        mock_get_app_func.called_with_rebuild = rebuild
         return mock_app
 
     # Mock gradio themes
@@ -272,6 +273,7 @@ def test_leaderboard_cache_paths(
             host=host,
             port=port,
             share=share,
+            rebuild=False,
         )
 
         _leaderboard(args)

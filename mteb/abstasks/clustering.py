@@ -19,6 +19,7 @@ from mteb.types.statistics import (
 )
 
 from ._statistics_calculation import (
+    calculate_audio_statistics,
     calculate_image_statistics,
     calculate_label_statistics,
     calculate_text_statistics,
@@ -31,6 +32,7 @@ if TYPE_CHECKING:
     from mteb.models import MTEBModels
     from mteb.types import Array, EncodeKwargs, ScoresDict
     from mteb.types.statistics import (
+        AudioStatistics,
         ImageStatistics,
         LabelStatistics,
         TextStatistics,
@@ -113,6 +115,7 @@ class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
 
         text_statistics: Statistics for text
         image_statistics: Statistics for images
+        audio_statistics: Statistics for audio
         labels_statistics: Statistics for labels
     """
 
@@ -120,27 +123,28 @@ class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
 
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
+    audio_statistics: AudioStatistics | None
     labels_statistics: LabelStatistics
 
 
 class AbsTaskClustering(AbsTask):
-    """Abstract class for Clustering tasks.
+    """The abstract class for clustering tasks.
 
-    This class embeds the corpus sentences then samples N samples from the corpus and clusters them.
-    The similarity then is calculated using the V-measure metric, which is invariant to the permutation of the labels.
-    This approach is then repeated K times.
+    A clustering task consists of a dataset with input data and corresponding cluster labels. The task is to cluster the input data points and compare
+    the cluster assignments with the true cluster labels using V-measure.
+    This class embeds the corpus sentences then samples N samples from the corpus and clusters them. The similarity then is calculated using multiple
+    measures, including a V-measure. This approach is then repeated K times.
 
-    There are two ways to specify how a dataset is downsampled `max_document_to_embed` and `max_fraction_of_documents_to_embed`.
-    If both parameters are set to None, no downsampling is done in self._evaluate_subset().
-    Only one of these two parameters can be not None at the same time.
-
-    If the clustering is hierarchical, and more than one label is specified in order for each observation,
-    V-measures are calculated in the outlined way on each of the levels separately.
+    If the clustering is hierarchical and more than one label is specified in order for each observation, we compute the metrics as outlined
+    for each level separately.
 
     Attributes:
-        dataset: A HuggingFace Dataset containing the data for the clustering task. Must contain the following columns `sentences` that contains inputs (texts or images) and labels columns.
-        max_fraction_of_documents_to_embed: Fraction of documents to embed for clustering.
-        max_document_to_embed: Maximum number of documents to embed for clustering.
+        dataset: A HuggingFace Dataset containing the data for the clustering task. Must contain the following columns `sentences` that contains
+            inputs (texts or images) and labels columns.
+        max_fraction_of_documents_to_embed: Fraction of documents to embed for clustering. Cannot be set at the same time as `max_document_to_embed`.
+            If both are set to None, the entire dataset will be embedded for clustering.
+        max_document_to_embed: Maximum number of documents to embed for clustering. Cannot be set at the same time as `max_fraction_of_documents_to_embed`.
+            If both are set to None, the entire dataset will be embedded for clustering.
         max_documents_per_cluster: Number of documents to sample for each clustering experiment.
         n_clusters: Number of clustering experiments to run.
         k_mean_batch_size: Batch size to use for k-means clustering.
@@ -282,12 +286,14 @@ class AbsTaskClustering(AbsTask):
         if isinstance(labels[0], list):
             labels = [item for sublist in labels for item in sublist]
 
-        text_statistics, image_statistics = None, None
+        text_statistics, image_statistics, audio_statistics = None, None, None
         if "image" in self.metadata.modalities:
             image_statistics = calculate_image_statistics(inputs)
 
         if "text" in self.metadata.modalities:
             text_statistics = calculate_text_statistics(inputs)
+        if "audio" in self.metadata.modalities:
+            audio_statistics = calculate_audio_statistics(inputs)
 
         label_statistics = calculate_label_statistics(labels)
 
@@ -295,6 +301,7 @@ class AbsTaskClustering(AbsTask):
             num_samples=len(inputs),
             text_statistics=text_statistics,
             image_statistics=image_statistics,
+            audio_statistics=audio_statistics,
             labels_statistics=label_statistics,
         )
 

@@ -37,14 +37,18 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
+
       - uses: actions/setup-python@v6
         with:
           python-version: "3.10"
 
+      - name: Install dependencies
+        run: uv sync --group docs
+
       - name: Build and Deploy
         if: github.event_name == 'push'
         run: |
-          make build-docs-overview
+          make build-docs
           uv run --group docs mkdocs gh-deploy --force
 
       - name: Build

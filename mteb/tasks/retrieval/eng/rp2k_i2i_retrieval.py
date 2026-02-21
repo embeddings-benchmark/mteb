@@ -8,8 +8,8 @@ class RP2kI2IRetrieval(AbsTaskRetrieval):
         description="Retrieve photos of 39457 products.",
         reference="https://arxiv.org/abs/2006.12634",
         dataset={
-            "path": "JamieSJS/rp2k",
-            "revision": "f8f82d4eb1aa4dc4dbf2c768596c8110a3703765",
+            "path": "mteb/rp2k",
+            "revision": "03b56e190634e7138c906d67cb356900ee50c98f",
         },
         type="Any2AnyRetrieval",
         category="i2i",
