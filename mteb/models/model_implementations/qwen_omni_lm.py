@@ -66,6 +66,7 @@ class QwenOmniWrapper(AbsEncoder):
 
         self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
+        self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
     def _build_messages(
         self,
