@@ -24,7 +24,6 @@ from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from transformers import AutoConfig
 
-from mteb import ResultCache
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb._hf_integration.hf_hub_utils import (
     _get_json_from_hub,
@@ -44,6 +43,7 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
+    from mteb.cache import ResultCache
     from mteb.models.models_protocols import EncoderProtocol
 
 
@@ -1073,7 +1073,7 @@ class ModelMeta(BaseModel):
         user: str | None = None,
         *,
         tasks: Sequence[AbsTask] | Sequence[str] | None = None,
-        cache: ResultCache = ResultCache(),
+        cache: ResultCache | None = None,
         create_pr: bool = False,
     ) -> None:
         """Pushes the evaluation results of the model to the HuggingFace Hub.
@@ -1084,6 +1084,11 @@ class ModelMeta(BaseModel):
             cache: The ResultCache containing the evaluation results to push.
             create_pr: Whether to create a pull request for the model card update if the model card already exists on the HuggingFace Hub. If False, the model card will be updated directly without a pull request.
         """
+        from mteb.cache import ResultCache
+
+        if cache is None:
+            cache = ResultCache()
+
         benchmark_result = cache.load_results(
             models=[self],
             tasks=tasks,

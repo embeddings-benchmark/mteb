@@ -10,7 +10,6 @@ from importlib.metadata import version
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import pytz
 from huggingface_hub import EvalResult
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
@@ -180,6 +179,7 @@ class TaskResult(BaseModel):
         scores: dict[SplitName, Mapping[HFSubset, ScoresDict]],
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
+        date: datetime.datetime | None = None,
     ) -> TaskResult:
         """Create a TaskResult from the task and scores.
 
@@ -190,6 +190,7 @@ class TaskResult(BaseModel):
                 the dataset.
             evaluation_time: The time taken to evaluate the model.
             kg_co2_emissions: The kg of CO2 emissions produced by the model during evaluation.
+            date: The date the model was trained on.
         """
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
@@ -211,7 +212,7 @@ class TaskResult(BaseModel):
             scores=flat_scores,
             evaluation_time=evaluation_time,
             kg_co2_emissions=kg_co2_emissions,
-            date=datetime.datetime.now(tz=pytz.utc),
+            date=date,
         )
 
     @field_validator("scores")
@@ -822,6 +823,9 @@ class TaskResult(BaseModel):
         merged_evaluation_time = None
         if self.evaluation_time and new_results.evaluation_time:
             merged_evaluation_time = self.evaluation_time + new_results.evaluation_time
+        date = self.date
+        if new_results.date is not None and (date is None or new_results.date > date):
+            date = new_results.date
         merged_results = TaskResult(
             dataset_revision=new_results.dataset_revision,
             task_name=new_results.task_name,
@@ -829,7 +833,7 @@ class TaskResult(BaseModel):
             scores=merged_scores,
             evaluation_time=merged_evaluation_time,
             kg_co2_emissions=merged_kg_co2_emissions,
-            date=datetime.datetime.now(tz=pytz.utc),
+            date=date,
         )
 
         return merged_results

@@ -69,7 +69,9 @@ def task_result():
     evaluation_time = 100
 
     return TaskResult.from_task_results(
-        task=DummyTask(), scores=scores, evaluation_time=evaluation_time
+        task=DummyTask(),
+        scores=scores,
+        evaluation_time=evaluation_time,
     )
 
 
@@ -86,6 +88,7 @@ def test_task_results_to_dict(task_result: TaskResult):
         "task_name": "dummy_task",
         "mteb_version": version("mteb"),
         "evaluation_time": 100,
+        "date": None,
         "kg_co2_emissions": None,
         "scores": {
             "train": [

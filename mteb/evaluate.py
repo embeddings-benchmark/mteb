@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 import logging
 import warnings
 from pathlib import Path
@@ -178,6 +179,7 @@ def _evaluate_task(
         task_results,
         evaluation_time=evaluation_time,
         kg_co2_emissions=None,
+        date=datetime.datetime.now(tz=datetime.timezone.utc),
     )
 
     if not data_preloaded:  # only unload if we loaded the data
