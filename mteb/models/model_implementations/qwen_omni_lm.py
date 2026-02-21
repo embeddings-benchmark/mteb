@@ -340,9 +340,6 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
 
 qwen3_omni_30b_a3b_captioner = ModelMeta(
     loader=QwenOmniWrapper,
-    loader_kwargs=dict(
-        model_class="Qwen3OmniMoeThinkerForConditionalGeneration",
-    ),
     name="Qwen/Qwen3-Omni-30B-A3B-Captioner",
     revision="a2bd106cbf527db5676e79662674da22b0545ec0",
     release_date="2025-09-15",
