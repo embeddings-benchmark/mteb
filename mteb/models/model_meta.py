@@ -1,28 +1,21 @@
 from __future__ import annotations
 
-import json
 import logging
 import warnings
 from collections.abc import Callable
 from dataclasses import field
 from enum import Enum
 from functools import partial
-from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
 from huggingface_hub import (
     ModelCard,
     get_safetensors_metadata,
-    hf_hub_download,
-    list_repo_commits,
     model_info,
-    repo_exists,
 )
 from huggingface_hub.errors import (
-    EntryNotFoundError,
     GatedRepoError,
-    HFValidationError,
     NotASafetensorsRepoError,
     RepositoryNotFoundError,
     SafetensorsParsingError,
@@ -32,6 +25,11 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from transformers import AutoConfig
 
 from mteb._helpful_enum import HelpfulStrEnum
+from mteb._hf_integration.hf_hub_utils import (
+    _get_json_from_hub,
+    _get_repo_commits,
+    _repo_exists,
+)
 from mteb.languages import check_language_code
 from mteb.models.models_protocols import MTEBModels
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
@@ -40,12 +38,12 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
 
     from huggingface_hub import (
-        GitCommitInfo,
         ModelCardData,
     )
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
+    from mteb.cache import ResultCache
     from mteb.models.models_protocols import EncoderProtocol
 
 
@@ -1070,6 +1068,37 @@ class ModelMeta(BaseModel):
         """Returns a string representation of the model."""
         return _pydantic_instance_to_code(self)
 
+    def push_eval_results(
+        self,
+        user: str | None = None,
+        *,
+        tasks: Sequence[AbsTask] | Sequence[str] | None = None,
+        cache: ResultCache | None = None,
+        create_pr: bool = False,
+    ) -> None:
+        """Pushes the evaluation results of the model to the HuggingFace Hub.
+
+        Args:
+            user: The user or organization of results source.
+            tasks: The tasks to push results for. If None, results for all tasks will be pushed.
+            cache: The ResultCache containing the evaluation results to push.
+            create_pr: Whether to create a pull request for the model card update if the model card already exists on the HuggingFace Hub. If False, the model card will be updated directly without a pull request.
+        """
+        from mteb.cache import ResultCache
+
+        if cache is None:
+            cache = ResultCache()
+
+        benchmark_result = cache.load_results(
+            models=[self],
+            tasks=tasks,
+        )
+        model_result = benchmark_result.model_results[0]
+        model_result.push_model_results(
+            user=user,
+            create_pr=create_pr,
+        )
+
 
 def _pydantic_instance_to_code(
     model: BaseModel,
@@ -1178,51 +1207,3 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
             similar.update(_collect_similar_tasks(parent, visited))
 
     return similar
-
-
-def _get_repo_commits(repo_id: str, repo_type: str) -> list[GitCommitInfo] | None:
-    try:
-        return list_repo_commits(repo_id=repo_id, repo_type=repo_type)
-    except (GatedRepoError, RepositoryNotFoundError) as e:
-        logger.warning(f"Can't get commits of {repo_id}: {e}")
-        return None
-
-
-def _get_json_from_hub(
-    repo_id: str, file_name: str, repo_type: str, revision: str | None = None
-) -> dict[str, Any] | None:
-    path = _get_file_on_hub(repo_id, file_name, repo_type, revision)
-    if path is None:
-        return None
-
-    with Path(path).open() as f:
-        js = json.load(f)
-    return js
-
-
-def _get_file_on_hub(
-    repo_id: str, file_name: str, repo_type: str, revision: str | None = None
-) -> str | None:
-    try:
-        return hf_hub_download(
-            repo_id=repo_id, filename=file_name, repo_type=repo_type, revision=revision
-        )
-    except (GatedRepoError, RepositoryNotFoundError, EntryNotFoundError) as e:
-        logger.warning(f"Can't get file {file_name} of {repo_id}: {e}")
-        return None
-
-
-def _repo_exists(repo_id: str, repo_type: str | None = None) -> bool:
-    """Checks if a repository exists on HuggingFace Hub.
-
-    Repo exists will raise HFValidationError for invalid local paths
-
-    Args:
-        repo_id: The repository ID.
-        repo_type: The type of repository (e.g., "model", "dataset", "space").
-    """
-    try:
-        return repo_exists(repo_id=repo_id, repo_type=repo_type)
-    except HFValidationError as e:
-        logger.warning(f"Can't check existence of {repo_id}: {e}")
-        return False
