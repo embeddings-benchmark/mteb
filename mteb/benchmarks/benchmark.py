@@ -2,14 +2,16 @@ from __future__ import annotations
 
 from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Literal, cast
 
+import huggingface_hub
 import pandas as pd
 
 from mteb.abstasks.abstask import AbsTask
 from mteb.types import StrURL
 
 if TYPE_CHECKING:
+    from mteb.abstasks.aggregated_task import AbsTaskAggregate
     from mteb.results import BenchmarkResults
 
 
@@ -111,6 +113,58 @@ class Benchmark:
                 }
             )
             return no_results_frame
+
+    def push_collection_to_hub(
+        self,
+        hf_username: str,
+        collection_name: str | None = None,
+    ) -> None:
+        """Push the benchmark collection to Hugging Face Hub.
+
+        Args:
+            hf_username: Hugging Face username or organization name
+            collection_name: Name for the collection on Hugging Face Hub. If not provided, the benchmark name will be used.
+        """
+        collections = huggingface_hub.list_collections(owner=hf_username)
+        collection_name = collection_name or self.name
+        existing_collection = None
+        for collection in collections:
+            if collection.title == collection_name:
+                existing_collection = collection
+                break
+
+        if existing_collection is None:
+            description = self.description
+            if description and len(description) > 150:
+                description = description[:147] + "..."
+            collection = huggingface_hub.create_collection(
+                title=collection_name,
+                namespace=hf_username,
+                # hf collections have a 150 character limit for description, so we truncate it if it's too long
+                description=description if description else None,
+            )
+        else:
+            # list collections would output only 4 items
+            collection = huggingface_hub.get_collection(
+                collection_slug=existing_collection.slug
+            )
+
+        existing_items = {item.item_id for item in collection.items}
+
+        for task in self.tasks:
+            tasks = (
+                cast("AbsTaskAggregate", task).tasks if task.is_aggregate else [task]
+            )
+            for benchmark_task in tasks:
+                task_path = benchmark_task.metadata.dataset["path"]
+                if task_path in existing_items:
+                    continue
+                huggingface_hub.add_collection_item(
+                    collection_slug=collection.slug,
+                    item_id=task_path,
+                    item_type="dataset",
+                )
+                existing_items.add(task_path)
 
 
 class RtebBenchmark(Benchmark):
