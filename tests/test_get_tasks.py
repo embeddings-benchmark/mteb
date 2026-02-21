@@ -190,6 +190,8 @@ def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:
             "Overview of the TREC 2023 NeuCLIR Track",
             "MoD-Embedding: A Fine-tuned Multilingual Text Embedding Model",
             "Octen-Embedding-8B: A Fine-tuned Multilingual Text Embedding Model",
+            "Qwen2.5-Omni Technical Report",
+            "Qwen3-Omni Technical Report",
         ):
             continue
         use_titles = all_titles - {title}
