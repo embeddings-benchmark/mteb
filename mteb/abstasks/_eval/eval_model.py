@@ -17,7 +17,7 @@ class EvalTaskConfig(BaseModel):
     id: str
     config: str | None = Field(
         None,
-        description="HF dataset config name (most time languages), e.g. `eng`, `fra`. None for mean all configs are used.",
+        description="HF dataset config name (typically languages), e.g. `eng`, `fra`. None for mean all configs are used. Config is also sometimes referred to as subset or in mteb as `hf_subset`.",
     )
     split: str | None = Field(
         None,
