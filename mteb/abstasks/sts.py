@@ -284,10 +284,3 @@ class AbsTaskSTS(AbsTask):
 
     def _normalize(self, x: float) -> float:
         return (x - self.min_score) / (self.max_score - self.min_score)
-
-    def _eval_field_spec(self) -> dict[str, str]:
-        return {
-            "input1": self.column_names[0],
-            "input2": self.column_names[1],
-            "label": "score",
-        }

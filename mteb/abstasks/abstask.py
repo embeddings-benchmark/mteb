@@ -17,8 +17,9 @@ from datasets import ClassLabel, Dataset, DatasetDict, load_dataset
 from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm.auto import tqdm
 
+from mteb._hf_integration.eval_model import HFEvalMeta, HFEvalTaskConfig
+from mteb._hf_integration.hf_hub_utils import _get_file_on_hub
 from mteb._set_seed import _set_seed
-from mteb.abstasks._eval.eval_model import EvalMeta
 from mteb.languages import LanguageScripts
 from mteb.models import (
     CrossEncoderProtocol,
@@ -617,17 +618,18 @@ class AbsTask(ABC):
         if push_eval:
             self.push_eval_to_hub(repo_name)
 
-    def _eval_field_spec(self) -> dict[str, str]:
-        raise NotImplementedError
-
-    def push_eval_to_hub(self, repo_name: str) -> None:
+    def push_eval_to_hub(
+        self,
+        repo_name: str,
+        *,
+        create_pr: bool = False,
+    ) -> None:
         """Push `eval.yaml` to the HuggingFace Hub
 
         Args:
             repo_name: repository name
+            create_pr: Whether to create the PR
         """
-        from mteb.models.model_meta import _get_file_on_hub
-
         eval_file_name = "eval.yaml"
 
         existing_eval_path = _get_file_on_hub(
@@ -635,23 +637,26 @@ class AbsTask(ABC):
             file_name=eval_file_name,
             repo_type="dataset",
         )
-        # todo check how this works
+
         # handle multiple tasks in one repo (e.g. MIRACLRetrievalHardNegatives, MIRACLRetrievalHardNegativesV2)
-        existing_eval_str = None
+        existing_eval = None
         if existing_eval_path is not None:
             with Path(existing_eval_path).open() as f:
-                existing_eval_str = f.read()
+                existing_eval_dict = yaml.safe_load(f)
+            if existing_eval is not None:
+                existing_eval = HFEvalMeta.model_validate(existing_eval_dict)
 
-        task_config = EvalMeta.create_from_task_metadata(
-            task_metadata=self.metadata,
-            field_spec=self._eval_field_spec(),
-        )
+        task_config = self._create_task_hf_config(existing_eval)
         task_config_dict = task_config.model_dump(exclude_none=True)
-        with tempfile.NamedTemporaryFile(mode="w", delete=True) as tmp_file:
-            task_config_yaml_str = yaml.dump(task_config_dict)
-            if existing_eval_str is not None:
-                task_config_yaml_str = existing_eval_str + "\n" + task_config_yaml_str
+
+        with tempfile.NamedTemporaryFile(mode="w") as tmp_file:
+            task_config_yaml_str = yaml.safe_dump(
+                task_config_dict,
+                # to keep order id, split, config
+                sort_keys=False,
+            )
             tmp_file.write(task_config_yaml_str)
+            tmp_file.flush()
 
             huggingface_hub.upload_file(
                 path_or_fileobj=tmp_file.name,
@@ -659,8 +664,39 @@ class AbsTask(ABC):
                 repo_id=repo_name,
                 repo_type="dataset",
                 commit_message="Add eval config",
-                create_pr=True,
+                create_pr=create_pr,
             )
+
+    def _create_task_hf_config(
+        self, existing_eval: HFEvalMeta | None = None
+    ) -> HFEvalMeta:
+        eval_task_config = [
+            # scores across all subsets and splits
+            HFEvalTaskConfig(
+                id=self.metadata.name,
+                split=None,
+                config=None,
+            )
+        ]
+
+        for subset in self.metadata.hf_subsets:
+            for split in self.metadata.eval_splits:
+                eval_task_config.append(
+                    HFEvalTaskConfig(
+                        id=f"{self.metadata.name}_{subset}_{split}",
+                        config=subset,
+                        split=split,
+                    )
+                )
+
+        task_config = HFEvalMeta(
+            name=self.metadata.name,
+            description=self.metadata.description,
+            tasks=eval_task_config,
+        )
+        if existing_eval is not None:
+            task_config = task_config.merge(existing_eval)
+        return task_config
 
     @property
     def is_aggregate(self) -> bool:

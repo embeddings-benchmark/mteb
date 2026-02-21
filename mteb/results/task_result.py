@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 import json
 import logging
 import warnings
@@ -9,6 +10,7 @@ from importlib.metadata import version
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
+import pytz
 from huggingface_hub import EvalResult
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
@@ -16,13 +18,12 @@ from pydantic import BaseModel, field_validator
 import mteb
 from mteb import TaskMetadata
 from mteb._helpful_enum import HelpfulStrEnum
+from mteb._hf_integration.eval_result_model import (
+    HFEvalResult,
+    HFEvalResultDataset,
+    HFEvalResultSource,
+)
 from mteb.abstasks import AbsTaskClassification
-from mteb.abstasks._eval.eval_result_model import (
-    EvalResult as BenchmarkEvalResult,
-)
-from mteb.abstasks._eval.eval_result_model import (
-    EvalResultDataset,
-)
 from mteb.abstasks.abstask import AbsTask
 from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
@@ -169,6 +170,7 @@ class TaskResult(BaseModel):
     scores: dict[SplitName, list[ScoresDict]]
     evaluation_time: float | None
     kg_co2_emissions: float | None = None
+    date: datetime.datetime | None = None
 
     @classmethod
     def from_task_results(
@@ -208,6 +210,7 @@ class TaskResult(BaseModel):
             scores=flat_scores,
             evaluation_time=evaluation_time,
             kg_co2_emissions=kg_co2_emissions,
+            date=datetime.datetime.now(tz=pytz.utc),
         )
 
     @field_validator("scores")
@@ -327,6 +330,7 @@ class TaskResult(BaseModel):
             path: The path to the file to save.
         """
         json_obj = self.model_dump()
+        json_obj["date"] = self.date.timestamp() if self.date else None
         self._round_scores(json_obj["scores"], 6)
 
         with path.open("w") as f:
@@ -824,6 +828,7 @@ class TaskResult(BaseModel):
             scores=merged_scores,
             evaluation_time=merged_evaluation_time,
             kg_co2_emissions=merged_kg_co2_emissions,
+            date=datetime.datetime.now(tz=pytz.utc),
         )
 
         return merged_results
@@ -888,26 +893,36 @@ class TaskResult(BaseModel):
                 )
         return results
 
-    def _get_hf_benchmark_result(self) -> list[BenchmarkEvalResult]:
+    def _to_hf_benchmark_result(self, user: str | None = None) -> list[HFEvalResult]:
         task_metadata = mteb.get_task(self.task_name).metadata
         dataset_id = task_metadata.dataset["path"]
         dataset_revision = task_metadata.dataset["revision"]
         eval_results = []
         evaluated_splits = set(self.scores.keys())
         evaluated_subsets = set()
-        # todo save per subset/split?
+
+        notes = f"Run of MTEB v{self.mteb_version}"
+        source = HFEvalResultSource(
+            url="https://github.com/embeddings-benchmark/mteb/",
+            name=notes,
+            user=user,
+        )
+
         for split, split_results in self.scores.items():
             for subset_results in split_results:
                 subset_name = subset_results.get("hf_subset", "default")
                 task_id = f"{self.task_name}_{subset_name}_{split}"
                 eval_results.append(
-                    BenchmarkEvalResult(
-                        dataset=EvalResultDataset(
+                    HFEvalResult(
+                        dataset=HFEvalResultDataset(
                             id=dataset_id,
                             task_id=task_id,
                             revision=dataset_revision,
                         ),
-                        value=subset_results["main_score"],
+                        value=round(subset_results["main_score"] * 100, 5),
+                        source=source,
+                        date=self.date,
+                        notes=notes,
                     )
                 )
                 evaluated_subsets.add(subset_name)
@@ -917,13 +932,16 @@ class TaskResult(BaseModel):
         ) == len(task_metadata.hf_subsets):
             # overall score
             eval_results.append(
-                BenchmarkEvalResult(
-                    dataset=EvalResultDataset(
+                HFEvalResult(
+                    dataset=HFEvalResultDataset(
                         id=dataset_id,
                         task_id=task_metadata.name,
                         revision=dataset_revision,
                     ),
-                    value=self.get_score(),
+                    value=round(self.get_score() * 100, 5),
+                    source=source,
+                    date=self.date,
+                    notes=notes,
                 )
             )
         return eval_results

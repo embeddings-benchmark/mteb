@@ -442,23 +442,24 @@ class ModelResult(BaseModel):
         with path.open("r", encoding="utf-8") as f:
             return cls.model_validate_json(f.read())
 
-    def push_model_results(self, *, create_pr: bool = False) -> None:
+    def push_model_results(
+        self, user: str | None = None, *, create_pr: bool = False
+    ) -> None:
         """Push the model results to the Hugging Face Hub.
 
         Args:
+            user: The user or organization of results source.
             create_pr: Whether to create a pull request
         """
         with tempfile.TemporaryDirectory() as tmpdir:
             path = Path(tmpdir)
             for task_result in self.task_results:
-                task_results = task_result._get_hf_benchmark_result()
-                task_results_dicts = [
-                    res.model_dump(exclude_none=True) for res in task_results
-                ]
+                task_results = task_result._to_hf_benchmark_result(user)
+                task_results_dicts = [res.to_dict() for res in task_results]
                 with (path / f"{task_result.task_name}.yaml").open(
                     "w", encoding="utf-8"
                 ) as f:
-                    yaml.dump(task_results_dicts, f)
+                    yaml.safe_dump(task_results_dicts, f)
 
             huggingface_hub.upload_folder(
                 repo_id=self.model_name,

@@ -3,6 +3,11 @@ from pathlib import Path
 
 import pytest
 
+import mteb
+from mteb import ResultCache
+from mteb._hf_integration.eval_result_model import (
+    HFEvalResultDataset,
+)
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.results import TaskResult
@@ -151,3 +156,31 @@ def test_task_results_validate_and_filter():
 def test_mteb_results_from_historic(path: Path):
     mteb_result = TaskResult.from_disk(path, load_historic_data=True)
     assert isinstance(mteb_result, TaskResult)
+
+
+def test_to_hf_result(mock_mteb_cache: ResultCache):
+    task_name = "Banking77Classification"
+    task_metadata = mteb.get_task(task_name).metadata
+    benchmark_result = mock_mteb_cache.load_results(
+        models=["baseline/random-encoder-baseline"], tasks=[task_name]
+    )
+    user_name = "test_user"
+    task_result = benchmark_result.model_results[0].task_results[0]
+    hf_results = task_result._to_hf_benchmark_result(user_name)
+    assert len(hf_results) == 2
+
+    assert hf_results[-1].dataset.task_id == task_name
+    assert hf_results[0].dataset == HFEvalResultDataset(
+        id=task_metadata.dataset["path"],
+        task_id=f"{task_name}_default_test",
+        revision=task_metadata.revision,
+    )
+
+    hf_result = hf_results[-1]
+    assert hf_result.dataset == HFEvalResultDataset(
+        id=task_metadata.dataset["path"],
+        task_id=task_name,
+        revision=task_metadata.revision,
+    )
+    assert hf_result.value == 1.2532
+    assert hf_result.source.user == user_name
