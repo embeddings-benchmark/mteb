@@ -24,6 +24,7 @@ from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from transformers import AutoConfig
 
+from mteb import ResultCache
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb._hf_integration.hf_hub_utils import (
     _get_json_from_hub,
@@ -1066,6 +1067,32 @@ class ModelMeta(BaseModel):
     def to_python(self) -> str:
         """Returns a string representation of the model."""
         return _pydantic_instance_to_code(self)
+
+    def push_eval_results(
+        self,
+        user: str | None = None,
+        *,
+        tasks: Sequence[AbsTask] | Sequence[str] | None = None,
+        cache: ResultCache = ResultCache(),
+        create_pr: bool = False,
+    ) -> None:
+        """Pushes the evaluation results of the model to the HuggingFace Hub.
+
+        Args:
+            user: The user or organization of results source.
+            tasks: The tasks to push results for. If None, results for all tasks will be pushed.
+            cache: The ResultCache containing the evaluation results to push.
+            create_pr: Whether to create a pull request for the model card update if the model card already exists on the HuggingFace Hub. If False, the model card will be updated directly without a pull request.
+        """
+        benchmark_result = cache.load_results(
+            models=[self],
+            tasks=tasks,
+        )
+        model_result = benchmark_result.model_results[0]
+        model_result.push_model_results(
+            user=user,
+            create_pr=create_pr,
+        )
 
 
 def _pydantic_instance_to_code(

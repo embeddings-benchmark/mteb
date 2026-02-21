@@ -14,6 +14,7 @@ import pytz
 from huggingface_hub import EvalResult
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
+from typing_extensions import deprecated
 
 import mteb
 from mteb import TaskMetadata
@@ -863,6 +864,10 @@ class TaskResult(BaseModel):
 
         return missing_splits
 
+    @deprecated(
+        "HF deprecated `EvalResults` in favor of `Benchmarks` and it's results. "
+        "To push new results use ModelMeta.push_eval_results()."
+    )
     def get_hf_eval_results(self) -> list[EvalResult]:
         """Create HF evaluation results objects from TaskResult objects.
 
