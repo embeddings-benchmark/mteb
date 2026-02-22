@@ -122,7 +122,7 @@ def _add_size_guide(fig: go.Figure):
 @_failsafe_plot
 def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df = df.copy()
-    df["Number of Parameters"] = df["Number of Parameters (B)"].map(_parse_n_params)
+    df["Number of Active Parameters"] = df["Active Parameters (B)"].map(_parse_n_params)
     df["Model"] = df["Model"].map(_parse_model_name)
     df["model_text"] = df["Model"].where(df["Model"].isin(models_to_annotate), "")
     df["Embedding Dimensions"] = df["Embedding Dimensions"].map(_parse_float)
@@ -130,7 +130,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df["Log(Tokens)"] = np.log10(df["Max Tokens"])
     df["Mean (Task)"] = df["Mean (Task)"].map(_parse_float)
     df = df.dropna(
-        subset=["Mean (Task)", "Number of Parameters", "Embedding Dimensions"]
+        subset=["Mean (Task)", "Number of Active Parameters", "Embedding Dimensions"]
     )
     if not len(df.index):
         return go.Figure()
@@ -140,7 +140,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     rank_column = "Rank (Borda)" if "Rank (Borda)" in df.columns else "Rank (Mean Task)"
     fig = px.scatter(
         df,
-        x="Number of Parameters",
+        x="Number of Active Parameters",
         y="Mean (Task)",
         log_x=True,
         template="plotly_white",
@@ -152,7 +152,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
         hover_data={
             "Max Tokens": True,
             "Embedding Dimensions": True,
-            "Number of Parameters": True,
+            "Number of Active Parameters": True,
             "Mean (Task)": True,
             rank_column: True,
             "Log(Tokens)": False,
