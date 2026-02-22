@@ -647,15 +647,9 @@ class AbsTask(ABC):
                 existing_eval = HFEvalMeta.model_validate(existing_eval_dict)
 
         task_config = self._create_task_hf_config(existing_eval)
-        task_config_dict = task_config.model_dump(exclude_none=True)
 
         with tempfile.NamedTemporaryFile(mode="w") as tmp_file:
-            task_config_yaml_str = yaml.safe_dump(
-                task_config_dict,
-                # to keep order id, split, config
-                sort_keys=False,
-            )
-            tmp_file.write(task_config_yaml_str)
+            tmp_file.write(task_config.to_yaml())
             tmp_file.flush()
 
             huggingface_hub.upload_file(

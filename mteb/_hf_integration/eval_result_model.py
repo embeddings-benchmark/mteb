@@ -3,7 +3,8 @@
 import datetime
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field
+import yaml
+from pydantic import BaseModel, ConfigDict, Field, RootModel
 
 
 class HFEvalResultDataset(BaseModel):
@@ -45,3 +46,17 @@ class HFEvalResult(BaseModel):
         if self.date:
             result["date"] = self.date.date().isoformat()
         return result
+
+
+class HFEvalResults(RootModel[list[HFEvalResult]]):
+    def __len__(self) -> int:
+        return len(self.root)
+
+    def __getitem__(self, item: int) -> HFEvalResult:
+        return self.root[item]
+
+    def to_yaml(self) -> str:
+        return yaml.safe_dump(
+            [result.to_dict() for result in self.root],
+            sort_keys=False,
+        )

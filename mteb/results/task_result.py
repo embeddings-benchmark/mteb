@@ -21,6 +21,7 @@ from mteb._helpful_enum import HelpfulStrEnum
 from mteb._hf_integration.eval_result_model import (
     HFEvalResult,
     HFEvalResultDataset,
+    HFEvalResults,
     HFEvalResultSource,
 )
 from mteb.abstasks import AbsTaskClassification
@@ -902,7 +903,7 @@ class TaskResult(BaseModel):
                 )
         return results
 
-    def _to_hf_benchmark_result(self, user: str | None = None) -> list[HFEvalResult]:
+    def _to_hf_benchmark_result(self, user: str | None = None) -> HFEvalResults:
         task_metadata = mteb.get_task(self.task_name).metadata
         dataset_id = task_metadata.dataset["path"]
         dataset_revision = task_metadata.dataset["revision"]
@@ -953,7 +954,7 @@ class TaskResult(BaseModel):
                     notes=notes,
                 )
             )
-        return eval_results
+        return HFEvalResults.model_validate(eval_results)
 
 
 class TaskError(BaseModel):

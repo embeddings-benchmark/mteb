@@ -216,6 +216,19 @@ def test_task_hf_config():
     assert config.tasks[1].config == "default"
     assert config.tasks[1].split == "test"
 
+    assert (
+        config.to_yaml()
+        == """name: ArguAna
+description: 'ArguAna: Retrieval of the Best Counterargument without Prior Topic Knowledge'
+evaluation_framework: mteb
+tasks:
+- id: ArguAna
+- id: ArguAna_default_test
+  config: default
+  split: test
+"""
+    )
+
 
 def test_task_hf_config_from_existing():
     task1 = mteb.get_task("MIRACLRetrievalHardNegatives")

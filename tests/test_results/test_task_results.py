@@ -187,3 +187,28 @@ def test_to_hf_result(mock_mteb_cache: ResultCache):
     )
     assert hf_result.value == 1.2532
     assert hf_result.source.user == user_name
+
+    assert (
+        hf_results.to_yaml()
+        == """- dataset:
+    id: mteb/banking77
+    task_id: Banking77Classification_default_test
+    revision: 0fd18e25b25c072e09e0d92ab615fda904d66300
+  value: 1.2532
+  notes: Run of MTEB v2.4.2
+  source:
+    url: https://github.com/embeddings-benchmark/mteb/
+    name: Run of MTEB v2.4.2
+    user: test_user
+- dataset:
+    id: mteb/banking77
+    task_id: Banking77Classification
+    revision: 0fd18e25b25c072e09e0d92ab615fda904d66300
+  value: 1.2532
+  notes: Run of MTEB v2.4.2
+  source:
+    url: https://github.com/embeddings-benchmark/mteb/
+    name: Run of MTEB v2.4.2
+    user: test_user
+"""
+    )

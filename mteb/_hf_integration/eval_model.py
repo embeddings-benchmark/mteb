@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from typing import Literal
 
+import yaml
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -41,3 +42,11 @@ class HFEvalMeta(BaseModel):
                 self.tasks.append(other_task)
         self.tasks = sorted(self.tasks, key=lambda t: t.id)
         return self
+
+    def to_yaml(self) -> str:
+        task_config_dict = self.model_dump(exclude_none=True)
+        return yaml.safe_dump(
+            task_config_dict,
+            # to keep order id, split, config
+            sort_keys=False,
+        )

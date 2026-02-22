@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING, Any, Literal, cast
 import huggingface_hub
 import numpy as np
 import pandas as pd
-import yaml
 from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import overload
 
@@ -455,11 +454,10 @@ class ModelResult(BaseModel):
             path = Path(tmpdir)
             for task_result in self.task_results:
                 task_results = task_result._to_hf_benchmark_result(user)
-                task_results_dicts = [res.to_dict() for res in task_results]
                 with (path / f"{task_result.task_name}.yaml").open(
                     "w", encoding="utf-8"
                 ) as f:
-                    yaml.safe_dump(task_results_dicts, f)
+                    f.write(task_results.to_yaml(), f)
 
             huggingface_hub.upload_folder(
                 repo_id=self.model_name,
