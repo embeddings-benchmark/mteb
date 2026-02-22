@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 
 
 class QwenOmniWrapper(AbsEncoder):
-    """Wrapper for Qwen Omni models supporting audio and images."""
+    """Wrapper for Qwen Omni models supporting audio and images. Last token pooling is used to get the embedding."""
 
     def __init__(
         self,
@@ -169,8 +169,9 @@ class QwenOmniWrapper(AbsEncoder):
             outputs = self.model(
                 **model_inputs, output_hidden_states=True, return_dict=True
             )
-            embeddings = outputs.hidden_states[-1][:, -1] # select last hidden state ([-1]) and last token position ([:, -1]).
-            embeddings = embeddings.to(torch.float32)
+            embeddings = outputs.hidden_states[-1][
+                :, -1
+            ]  # select last hidden state ([-1]) and last token position ([:, -1]).
             embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
             all_embeddings.append(embeddings.cpu())
 
