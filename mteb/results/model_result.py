@@ -457,7 +457,7 @@ class ModelResult(BaseModel):
                 with (path / f"{task_result.task_name}.yaml").open(
                     "w", encoding="utf-8"
                 ) as f:
-                    f.write(task_results.to_yaml(), f)
+                    f.write(task_results.to_yaml())
 
             huggingface_hub.upload_folder(
                 repo_id=self.model_name,
