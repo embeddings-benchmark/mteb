@@ -169,12 +169,12 @@ class QwenOmniWrapper(AbsEncoder):
             outputs = self.model(
                 **model_inputs, output_hidden_states=True, return_dict=True
             )
-            embeddings = outputs.hidden_states[-1][:, -1]
+            embeddings = outputs.hidden_states[-1][:, -1] # select last hidden state ([-1]) and last token position ([:, -1]).
             embeddings = embeddings.to(torch.float32)
             embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
             all_embeddings.append(embeddings.cpu())
 
-        return torch.cat(all_embeddings, dim=0).numpy()
+        return torch.cat(all_embeddings, dim=0)
 
 
 qwen25_omni_7b = ModelMeta(
