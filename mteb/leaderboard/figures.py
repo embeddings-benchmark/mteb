@@ -1,11 +1,14 @@
 import logging
+import re
 from typing import get_args
+from urllib.parse import urlparse
 
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
+import mteb
 from mteb.abstasks.task_metadata import TaskType
 
 logger = logging.getLogger(__name__)
@@ -64,6 +67,36 @@ def _process_max_tokens(x):
     if pd.isna(x) or x is None or np.isinf(x):
         return "Unknown"
     return str(int(x))
+
+
+def _parse_markdown_model_cell(model_cell: str) -> tuple[str, str | None]:
+    if model_cell is None or pd.isna(model_cell):
+        return "", None
+    model_cell = str(model_cell).strip()
+    match = re.fullmatch(r"\[([^\]]+)\]\(([^)]+)\)", model_cell)
+    if match is None:
+        return model_cell, None
+    return match.group(1), match.group(2)
+
+
+def _extract_hf_model_name(model_url: str | None) -> str | None:
+    if model_url is None or "huggingface" not in model_url:
+        return None
+    parsed = urlparse(model_url)
+    path_parts = [part for part in parsed.path.split("/") if part]
+    if len(path_parts) < 2:
+        return None
+    return f"{path_parts[0]}/{path_parts[1]}"
+
+
+def _extract_model_name_and_release_date(model_cell: str) -> tuple[str, str | None]:
+    display_name, model_url = _parse_markdown_model_cell(model_cell)
+    model_name = _extract_hf_model_name(model_url)
+    model_metas = {meta.name: meta for meta in mteb.get_model_metas()}
+
+    model_meta = model_metas.get(model_name) if model_name else None
+    release_date = model_meta.release_date if model_meta is not None else None
+    return display_name, release_date
 
 
 models_to_annotate = [
@@ -194,6 +227,72 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     fig.update_layout(
         font=dict(size=16, color="black"),
         margin=dict(b=20, t=10, l=20, r=10),
+    )
+    return fig
+
+
+@_failsafe_plot
+def _performance_over_time_plot(df: pd.DataFrame) -> go.Figure:
+    df = df.copy()
+    score_column = None
+    if "Mean (TaskType)" in df.columns:
+        score_column = "Mean (TaskType)"
+    elif "Mean (Task)" in df.columns:
+        score_column = "Mean (Task)"
+    if score_column is None or "Model" not in df.columns:
+        return _text_plot(
+            "Couldn't produce timeline plot. Required columns are missing."
+        )
+
+    model_release_info = df["Model"].map(_extract_model_name_and_release_date)
+    df["Model"] = model_release_info.map(lambda x: x[0])
+    df["Release Date"] = model_release_info.map(lambda x: x[1])
+    df["Release Date"] = pd.to_datetime(df["Release Date"], errors="coerce")
+    df[score_column] = df[score_column].map(_parse_float)
+
+    df = df.dropna(subset=["Release Date", score_column]).sort_values(
+        ["Release Date", score_column], ascending=[True, False]
+    )
+    if not len(df.index):
+        return _text_plot(
+            "Couldn't produce timeline plot. No models have a valid release date and score."
+        )
+
+    df["score"] = df[score_column].cummax()
+    fig = px.scatter(
+        df,
+        x="Release Date",
+        y=score_column,
+        template="plotly_white",
+        hover_name="Model",
+        hover_data={
+            "Release Date": "|%Y-%m-%d",
+            score_column: True,
+            "score": False,
+        },
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=df["Release Date"],
+            y=df["score"],
+            mode="lines",
+            line=dict(color="#1f7a1f", width=2, shape="hv"),
+            hovertemplate="Date: %{x|%Y-%m-%d}<br>%{y:.2f}<extra></extra>",
+        )
+    )
+
+    fig.update_traces(marker=dict(size=9), selector=dict(mode="markers"))
+    fig.update_layout(
+        xaxis_title="Release Date",
+        yaxis_title=f"{score_column} score",
+        showlegend=False,
+        font=dict(size=16, color="black"),
+        margin=dict(b=20, t=10, l=20, r=10),
+        hoverlabel=dict(
+            bgcolor="white",
+            font_size=16,
+        ),
     )
     return fig
 
