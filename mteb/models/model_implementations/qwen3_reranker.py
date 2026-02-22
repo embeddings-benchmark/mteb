@@ -9,6 +9,7 @@ from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
 )
+from vllm import SamplingParams
 
 from mteb.models.model_meta import ModelMeta
 
@@ -45,7 +46,15 @@ class Qwen3RerankerWrapper:
 
         self.token_false_id = self.tokenizer.convert_tokens_to_ids("no")
         self.token_true_id = self.tokenizer.convert_tokens_to_ids("yes")
-
+        self.true_token = self.tokenizer("yes", add_special_tokens=False).input_ids[0]
+        self.false_token = self.tokenizer("no", add_special_tokens=False).input_ids[0]
+        self.sampling_params = SamplingParams(
+            temperature=0,
+            top_p=0.95,
+            max_tokens=1,
+            logprobs=20,
+            allowed_token_ids=[self.true_token, self.false_token],
+        )
         self.prefix = '<|im_start|>system\nJudge whether the Document meets the requirements based on the Query and the Instruct provided. Note that the answer can only be "yes" or "no".<|im_end|>\n<|im_start|>user\n'
         self.suffix = "<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
         self.prefix_tokens = self.tokenizer.encode(
@@ -156,6 +165,13 @@ qwen3_reranker_training_data = {
     # + synthetic data
 }
 
+QWEN3_CITATION = """@article{qwen3embedding,
+  title={Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models},
+  author={Zhang, Yanzhao and Li, Mingxin and Long, Dingkun and Zhang, Xin and Lin, Huan and Yang, Baosong and Xie, Pengjun and Yang, An and Liu, Dayiheng and Lin, Junyang and Huang, Fei and Zhou, Jingren},
+  journal={arXiv preprint arXiv:2506.05176},
+  year={2025}
+}"""
+
 qwen3_reranker_0_6b = ModelMeta(
     loader=Qwen3RerankerWrapper,
     loader_kwargs=dict(
@@ -166,6 +182,7 @@ qwen3_reranker_0_6b = ModelMeta(
     release_date="2025-05-29",
     languages=None,
     n_parameters=595776512,
+    n_embedding_parameters=155309056,
     memory_usage_mb=1136.0,
     max_tokens=40960,
     embed_dim=1024,
@@ -182,15 +199,7 @@ qwen3_reranker_0_6b = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["cross-encoder"],
-    citation="""@misc{zhang2025qwen3embeddingadvancingtext,
-      title={Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models},
-      author={Yanzhao Zhang and Mingxin Li and Dingkun Long and Xin Zhang and Huan Lin and Baosong Yang and Pengjun Xie and An Yang and Dayiheng Liu and Junyang Lin and Fei Huang and Jingren Zhou},
-      year={2025},
-      eprint={2506.05176},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2506.05176},
-}""",
+    citation=QWEN3_CITATION,
     contacts=None,
 )
 
@@ -204,6 +213,7 @@ qwen3_reranker_4b = ModelMeta(
     release_date="2025-06-03",
     languages=None,
     n_parameters=4021784576,
+    n_embedding_parameters=388272640,
     memory_usage_mb=7671.0,
     max_tokens=40960,
     embed_dim=2560,
@@ -220,15 +230,7 @@ qwen3_reranker_4b = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["cross-encoder"],
-    citation="""@misc{zhang2025qwen3embeddingadvancingtext,
-      title={Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models},
-      author={Yanzhao Zhang and Mingxin Li and Dingkun Long and Xin Zhang and Huan Lin and Baosong Yang and Pengjun Xie and An Yang and Dayiheng Liu and Junyang Lin and Fei Huang and Jingren Zhou},
-      year={2025},
-      eprint={2506.05176},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2506.05176},
-}""",
+    citation=QWEN3_CITATION,
     contacts=None,
 )
 
@@ -242,6 +244,7 @@ qwen3_reranker_8b = ModelMeta(
     release_date="2025-05-29",
     languages=None,
     n_parameters=8188548096,
+    n_embedding_parameters=621236224,
     memory_usage_mb=15618.0,
     max_tokens=40960,
     embed_dim=4096,
@@ -258,14 +261,6 @@ qwen3_reranker_8b = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["cross-encoder"],
-    citation="""@misc{zhang2025qwen3embeddingadvancingtext,
-      title={Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models},
-      author={Yanzhao Zhang and Mingxin Li and Dingkun Long and Xin Zhang and Huan Lin and Baosong Yang and Pengjun Xie and An Yang and Dayiheng Liu and Junyang Lin and Fei Huang and Jingren Zhou},
-      year={2025},
-      eprint={2506.05176},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2506.05176},
-}""",
+    citation=QWEN3_CITATION,
     contacts=None,
 )
