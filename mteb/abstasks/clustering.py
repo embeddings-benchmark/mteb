@@ -208,9 +208,17 @@ class AbsTaskClustering(AbsTask):
             )
             downsampled_dataset = data_split.select(example_indices)
 
-        downsampled_dataset = downsampled_dataset.select_columns(
-            [self.input_column_name, self.label_column_name]
-        )
+        # Keep label and input columns, plus any columns required by
+        # the task's declared modalities (e.g., audio for va2c tasks)
+        modality_to_column = {"video": "video", "audio": "audio", "image": "image"}
+        columns_to_keep = {self.label_column_name, self.input_column_name}
+        available = set(data_split.column_names)
+        for mod in self.metadata.modalities:
+            col = modality_to_column.get(mod)
+            if col and col in available:
+                columns_to_keep.add(col)
+
+        downsampled_dataset = downsampled_dataset.select_columns(list(columns_to_keep))
 
         logger.info("Running clustering - Encoding samples...")
         embeddings = model.encode(
