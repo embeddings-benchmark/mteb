@@ -227,7 +227,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
             "image",  # images can be with different sizes
             "conversation",  # conversations are lists of varying lengths
             "audio",  # audio can have different lengths
-            "video",  # video VideoDecoder objects can't be collated
+            "video",  # video can have different lengths
         ):
             collated[key] = [item[key] for item in batch]
         else:
