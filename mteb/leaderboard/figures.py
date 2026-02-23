@@ -234,12 +234,8 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
 @_failsafe_plot
 def _performance_over_time_plot(df: pd.DataFrame) -> go.Figure:
     df = df.copy()
-    score_column = None
-    if "Mean (TaskType)" in df.columns:
-        score_column = "Mean (TaskType)"
-    elif "Mean (Task)" in df.columns:
-        score_column = "Mean (Task)"
-    if score_column is None or "Model" not in df.columns:
+    score_column = "Mean (Task)"
+    if score_column not in df.columns or "Model" not in df.columns:
         return _text_plot(
             "Couldn't produce timeline plot. Required columns are missing."
         )
