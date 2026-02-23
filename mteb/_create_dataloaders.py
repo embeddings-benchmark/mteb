@@ -589,16 +589,16 @@ def create_dataloader(
             batch_size=batch_size,
             num_proc=num_proc,
         )
-    if "audio" in task_metadata.modalities:
-        return _create_audio_dataloader(
+    if "video" in task_metadata.modalities:
+        return _create_video_dataloader(
             dataset,
             task_metadata,
             input_column=input_column,
             batch_size=batch_size,
             num_proc=num_proc,
         )
-    if "video" in task_metadata.modalities:
-        return _create_video_dataloader(
+    if "audio" in task_metadata.modalities:
+        return _create_audio_dataloader(
             dataset,
             task_metadata,
             input_column=input_column,

@@ -123,9 +123,8 @@ class PEAudioVisualWrapper(AbsEncoder):
             disable=not show_progress_bar,
             desc="Processing audio batches",
         ):
-            audio_arrays = [audio["array"] for audio in batch["audio"]]
             processed = self.processor(
-                audio=audio_arrays,
+                audio=batch["audio"],
                 return_tensors="pt",
                 padding=True,
             )
@@ -158,10 +157,9 @@ class PEAudioVisualWrapper(AbsEncoder):
             desc="Processing audio-video batches",
         ):
             videos = batch["video"]
-            audio_arrays = [audio["array"] for audio in batch["audio"]]
             processed = self.processor(
                 videos=videos,
-                audio=audio_arrays,
+                audio=batch["audio"],
                 return_tensors="pt",
                 padding=True,
             )
