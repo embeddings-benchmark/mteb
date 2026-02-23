@@ -100,7 +100,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             processed = {k: v.to(self.device) for k, v in processed.items()}
 
             with torch.inference_mode(), torch.autocast(
-                self.device, dtype=torch.bfloat16
+                str(self.device), dtype=torch.bfloat16
             ):
                 text_embeds = self.model.get_text_audio_video_embeds(
                     input_ids=processed["input_ids"],
@@ -134,7 +134,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             processed = {k: v.to(self.device) for k, v in processed.items()}
 
             with torch.inference_mode(), torch.autocast(
-                self.device, dtype=torch.bfloat16
+                str(self.device), dtype=torch.bfloat16
             ):
                 video_embeds = self.model.get_video_embeds(
                     pixel_values_videos=processed["pixel_values_videos"],
@@ -169,7 +169,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             processed = {k: v.to(self.device) for k, v in processed.items()}
 
             with torch.inference_mode(), torch.autocast(
-                self.device, dtype=torch.bfloat16
+                str(self.device), dtype=torch.bfloat16
             ):
                 audio_embeds = self.model.get_audio_embeds(
                     input_values=processed["input_values"],
@@ -206,7 +206,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             processed = {k: v.to(self.device) for k, v in processed.items()}
 
             with torch.inference_mode(), torch.autocast(
-                self.device, dtype=torch.bfloat16
+                str(self.device), dtype=torch.bfloat16
             ):
                 av_embeds = self.model.get_audio_video_embeds(
                     input_values=processed["input_values"],
