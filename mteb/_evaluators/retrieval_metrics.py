@@ -619,7 +619,7 @@ def calculate_cv_recall(
     k_values: list[int],
     skip_first_result: bool = False,
 ) -> dict[str, float]:
-    """Calculate Cross-Validation Recall (CV Recall) for a set of search results.
+    """Calculate Hit-Rate (Success) for a set of search results.
 
     This function computes a binary recall-like metric at various cutoff levels (k-values).
     For each query, it checks whether at least one relevant document appears within the top-k
