@@ -34,10 +34,6 @@ length, valid frameworks, license, and degree of openness.
 
 :::mteb.models.MTEBModels
 
-:::mteb.models.IndexEncoderSearchProtocol
-
-:::mteb.models.CacheBackendProtocol
-
 
 ## Cache Wrappers
 
