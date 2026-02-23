@@ -6,7 +6,9 @@ This section is an overview of releases for more information check out the autog
 
 ### Integration with HuggingFace Benchmarks
 
-Added integration with HuggingFace Benchmarks. This allows for users easily see scores of task directly on dataset card.
+Added integration with HuggingFace Benchmarks (more info in [blog](https://huggingface.co/blog/community-evals)). This allows for users easily see scores of task directly on dataset card.
+
+![img.png](images/visualizations/hf_benchmark.png)
 
 To convert your task into a HuggingFace benchmark, you can simply run:
 
@@ -31,6 +33,8 @@ model_meta.push_eval_results(
     create_pr=True,
 )
 ```
+
+In coming time we will be adding more "benchmark" tasks and submit scores to existing models.
 
 
 ## New in v2.8
