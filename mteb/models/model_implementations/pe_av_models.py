@@ -6,6 +6,7 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
+from mteb._create_dataloaders import AudioCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
@@ -43,6 +44,7 @@ class PEAudioVisualWrapper(AbsEncoder):
         self.model = PeAudioVideoModel.from_pretrained(model_name).to(self.device)
         self.model.eval()
         self.processor = PeAudioVideoProcessor.from_pretrained(model_name)
+        self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
     def _uniform_sample(self, total: int, n: int) -> list[int]:
         """Uniformly sample n indices from [0, total-1].
@@ -157,8 +159,10 @@ class PEAudioVisualWrapper(AbsEncoder):
             disable=not show_progress_bar,
             desc="Processing audio batches",
         ):
+            audio_arrays = [audio["array"] for audio in batch["audio"]]
             processed = self.processor(
-                audio=batch["audio"],
+                audio=audio_arrays,
+                sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding=True,
             )
@@ -191,9 +195,11 @@ class PEAudioVisualWrapper(AbsEncoder):
             desc="Processing audio-video batches",
         ):
             videos = self._decode_videos(batch["video"])
+            audio_arrays = [audio["array"] for audio in batch["audio"]]
             processed = self.processor(
                 videos=videos,
-                audio=batch["audio"],
+                audio=audio_arrays,
+                sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding=True,
             )
@@ -226,6 +232,9 @@ class PEAudioVisualWrapper(AbsEncoder):
         has_text = "text" in inputs.dataset.features
         has_video = "video" in inputs.dataset.features
         has_audio = "audio" in inputs.dataset.features
+
+        if has_audio:
+            inputs.collate_fn = AudioCollator(self.sampling_rate)
 
         # Joint audio-video embedding
         if has_video and has_audio and not has_text:
