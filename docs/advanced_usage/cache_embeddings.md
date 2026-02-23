@@ -24,7 +24,7 @@ from mteb.models.cache_wrappers.cache_backends import NumpyCache
 
 # Access the memory-mapped file and convert to array
 vector_map = NumpyCache("path_to_cache_dir/LccSentimentClassification")
-vector_map.load(name="LccSentimentClassification")
+vector_map.load()
 vectors = np.asarray(vector_map.vectors)
 
 # Remove all "placeholders" in the embedding cache
