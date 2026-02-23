@@ -208,12 +208,13 @@ class PEAudioVisualWrapper(AbsEncoder):
             with torch.inference_mode(), torch.autocast(
                 str(self.device), dtype=torch.bfloat16
             ):
-                av_embeds = self.model.get_audio_video_embeds(
+                av_output = self.model.get_audio_video_embeds(
                     input_values=processed["input_values"],
                     pixel_values_videos=processed["pixel_values_videos"],
                     padding_mask=processed.get("padding_mask"),
                     padding_mask_videos=processed.get("padding_mask_videos"),
                 )
+                av_embeds = av_output.audio_video_embeds
                 av_embeds = av_embeds / av_embeds.norm(dim=-1, keepdim=True)
                 all_embeddings.append(av_embeds.cpu().float().numpy())
 
