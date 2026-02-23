@@ -22,21 +22,56 @@ class PEAudioVisualWrapper(AbsEncoder):
 
     PE-AV embeds audio, video, audio-video, and text into a joint embedding space.
     Uses the transformers API (PeAudioVideoModel / PeAudioVideoProcessor).
+
+    Video inputs arrive as torchcodec VideoDecoder objects from HF datasets.
+    We sample frames using uniform sampling (matching the PE-AV internal
+    approach) and pass the decoded frame tensors to the processor.
     """
 
     def __init__(
         self,
         model_name: str = "facebook/pe-av-large",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        num_frames: int = 16,
         **kwargs: Any,
     ):
         from transformers import PeAudioVideoModel, PeAudioVideoProcessor
 
         self.model_name = model_name
         self.device = device
+        self.num_frames = num_frames
         self.model = PeAudioVideoModel.from_pretrained(model_name).to(self.device)
         self.model.eval()
         self.processor = PeAudioVideoProcessor.from_pretrained(model_name)
+
+    def _uniform_sample(total: int, n: int) -> list[int]:
+        """Uniformly sample n indices from [0, total-1].
+
+        Matches the PE-AV internal sampling strategy.
+        """
+        if n >= total:
+            return list(range(total))
+        stride = (total - 1) / (n - 1) if n > 1 else 0
+        return [int(round(i * stride)) for i in range(n)]
+
+    def _decode_videos(self, video_decoders: list) -> list[torch.Tensor]:
+        """Decode VideoDecoder objects into frame tensors.
+
+        Samples frames uniformly and decodes them using get_frames_at,
+        matching the PE-AV internal video loading approach.
+
+        Args:
+            video_decoders: List of torchcodec VideoDecoder objects.
+
+        Returns:
+            List of frame tensors, each with shape (T, H, W, C).
+        """
+        decoded = []
+        for decoder in video_decoders:
+            indices = self._uniform_sample(len(decoder), self.num_frames)
+            frames = decoder.get_frames_at(indices=indices).data
+            decoded.append(frames)
+        return decoded
 
     def get_text_embeddings(
         self,
@@ -45,7 +80,7 @@ class PEAudioVisualWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
-        """Get text embeddings, choosing the appropriate text encoder based on task modalities."""
+        """Get text embeddings aligned to audio-video space."""
         all_embeddings = []
 
         for batch in tqdm(
@@ -65,7 +100,6 @@ class PEAudioVisualWrapper(AbsEncoder):
             with torch.inference_mode(), torch.autocast(
                 self.device, dtype=torch.bfloat16
             ):
-                # Default to audio-visual text embeddings for broadest compatibility
                 text_embeds = self.model.get_text_audio_video_embeds(
                     input_ids=processed["input_ids"],
                     attention_mask=processed.get("attention_mask"),
@@ -89,7 +123,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             disable=not show_progress_bar,
             desc="Processing video batches",
         ):
-            videos = batch["video"]
+            videos = self._decode_videos(batch["video"])
             processed = self.processor(
                 videos=videos,
                 return_tensors="pt",
@@ -156,7 +190,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             disable=not show_progress_bar,
             desc="Processing audio-video batches",
         ):
-            videos = batch["video"]
+            videos = self._decode_videos(batch["video"])
             processed = self.processor(
                 videos=videos,
                 audio=batch["audio"],
