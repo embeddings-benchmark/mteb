@@ -44,7 +44,7 @@ class PEAudioVisualWrapper(AbsEncoder):
         self.model.eval()
         self.processor = PeAudioVideoProcessor.from_pretrained(model_name)
 
-    def _uniform_sample(total: int, n: int) -> list[int]:
+    def _uniform_sample(self, total: int, n: int) -> list[int]:
         """Uniformly sample n indices from [0, total-1].
 
         Matches the PE-AV internal sampling strategy.
