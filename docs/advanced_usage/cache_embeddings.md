@@ -34,7 +34,7 @@ vectors = vectors[~zero_mask]
 
 ### Different Cache backends
 
-By default, the [`CachedEmbeddingWrapper`][mteb.models.CachedEmbeddingWrapper] uses a NumPy memmap backend ([`NumpyCache`][mteb.models.cache_wrappers.cache_backends.NumpyCache]) to store embeddings. However, you can also use other backends. Currently, only [`FAISS`][mteb.models.cache_wrappers.cache_backends.FaissCache] is implemented, but you can provide your own custom backend that implements the [`CacheBackendProtocol`][mteb.models.cache_wrappers.CacheBackendProtocol] by passing it as the `search_backend` parameter when initializing the [`CachedEmbeddingWrapper`][mteb.models.CachedEmbeddingWrapper]. For example:
+By default, the [`CachedEmbeddingWrapper`][mteb.models.CachedEmbeddingWrapper] uses a NumPy memmap backend ([`NumpyCache`][mteb.models.cache_wrappers.cache_backends.NumpyCache]) to store embeddings. However, you can also use other backends. Currently, only [`FAISS`][mteb.models.cache_wrappers.cache_backends.FaissCache] is implemented, but you can provide your own custom backend that implements the [`CacheBackendProtocol`][mteb.models.cache_wrappers.CacheBackendProtocol] by passing it as the `cache_backend` parameter when initializing the [`CachedEmbeddingWrapper`][mteb.models.CachedEmbeddingWrapper]. For example:
 
 ```python
 import mteb
