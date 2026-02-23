@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import warnings
+from collections import defaultdict
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
@@ -17,6 +18,8 @@ from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+    from torchcodec.decoders import VideoDecoder
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import (
@@ -311,6 +314,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
             "image",  # images can be with different sizes
             "conversation",  # conversations are lists of varying lengths
             "audio",  # audio can have different lengths
+            "video",  # video VideoDecoder objects can't be collated
         ):
             collated[key] = [item[key] for item in batch]
         else:
@@ -404,6 +408,14 @@ def _create_queries_dataloader(
             batch_size=batch_size,
             num_proc=num_proc,
         )
+    if "video" in task_metadata.modalities:
+        return _create_video_dataloader(
+            dataset,
+            task_metadata,
+            input_column="video",
+            batch_size=batch_size,
+            num_proc=num_proc,
+        )
     raise ValueError(f"Can't handle queries type {queries_type}")
 
 
@@ -448,6 +460,14 @@ def _create_document_dataloader(
             batch_size=batch_size,
             num_proc=num_proc,
         )
+    if "video" in task_metadata.modalities:
+        return _create_video_dataloader(
+            dataset,
+            task_metadata,
+            input_column="video",
+            batch_size=batch_size,
+            num_proc=num_proc,
+        )
     raise ValueError(f"Can't handle queries type {document_type}")
 
 
@@ -476,6 +496,41 @@ def _create_audio_dataloader(
         and "audio" not in dataset.column_names
     ):
         dataset = dataset.rename_column(input_column, "audio")
+
+    return DataLoader(
+        dataset,
+        batch_size=batch_size,
+        collate_fn=_custom_collate_fn,
+        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
+        shuffle=False,
+    )
+
+
+def _create_video_dataloader(
+    dataset: Dataset,
+    task_metadata: TaskMetadata,
+    input_column: str | None = None,
+    batch_size: int = 32,
+    num_proc: int | None = None,
+) -> DataLoader[AudioInput]:
+    """Create a dataloader for video.
+
+    Args:
+        dataset: The dataset containing the audio.
+        task_metadata: Metadata of the task to determine the audio type.
+        input_column: The column to use as input. If None, it will use the first column that matches the audio.
+        batch_size: Batch size for the dataloader.
+        num_proc: The number of workers for the dataloader.
+
+    Returns:
+        A DataLoader with the audio dataset.
+    """
+    if (
+        input_column
+        and input_column in dataset.column_names
+        and "video" not in dataset.column_names
+    ):
+        dataset = dataset.rename_column(input_column, "video")
 
     return DataLoader(
         dataset,
@@ -538,6 +593,14 @@ def create_dataloader(
         )
     if "audio" in task_metadata.modalities:
         return _create_audio_dataloader(
+            dataset,
+            task_metadata,
+            input_column=input_column,
+            batch_size=batch_size,
+            num_proc=num_proc,
+        )
+    if "video" in task_metadata.modalities:
+        return _create_video_dataloader(
             dataset,
             task_metadata,
             input_column=input_column,
@@ -649,3 +712,98 @@ class AudioCollator:
             if num_samples > max_samples:
                 audio_array = audio_array[..., :max_samples]
         return audio_array
+
+
+class VideoCollator:
+    """Collator for video data that optionally truncates to a maximum number of frames."""
+
+    def __init__(self, max_frames: int) -> None:
+        """Initialize the collator.
+
+        Args:
+            max_frames: The maximum number of frames to keep for each video. If None, no truncation is applied.
+        """
+        self.max_frames = max_frames
+
+    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
+        if "video" not in inputs[0]:
+            return cast("BatchedInput", inputs)
+
+        collated_inputs = defaultdict(list)
+        for row in inputs:
+            video: VideoDecoder = row.pop("video")
+            row["video"].append(self.resample_video(video, self.max_frames))
+
+        return cast(
+            "BatchedInput",
+            {
+                key: [row[key] for row in collated_inputs]
+                for key in collated_inputs[0].keys()
+            },
+        )
+
+    @staticmethod
+    def resample_video(
+        video: VideoDecoder,
+        max_video_frames: int,
+    ) -> torch.Tensor:
+        """Resample a video input to a target number of frames.
+
+        Args:
+            video: A VideoDecoder object containing the video data.
+            max_video_frames: The maximum number of frames to keep for each video. If None, no truncation is applied.
+        """
+        video_frames = video.metadata.num_frames
+        frame_step = (
+            max(1, video_frames // max_video_frames)
+            if max_video_frames is not None
+            else 1
+        )
+        selected_frames = (
+            list(range(0, video_frames, frame_step))[:max_video_frames]
+            if max_video_frames is not None
+            else list(range(video_frames))
+        )
+        return video.get_frames_at(selected_frames).data
+
+
+class PostProcessingCollator:
+    """Collator that applies a post-processing function to the collated batch."""
+
+    def __init__(
+        self,
+        *,
+        # audio collator parameters
+        target_sampling_rate: int | None = None,
+        max_audio_samples: int | None = None,
+        # video collator parameters
+        max_video_frames: int | None = None,
+    ) -> None:
+        """Initialize the collator.
+
+        Args:
+            target_sampling_rate: The sampling rate to resample the audio to. If None, no resampling is applied.
+            max_audio_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
+            max_video_frames: The maximum number of frames to keep for each video. If None, no truncation is applied.
+        """
+        self.target_sampling_rate = target_sampling_rate
+        self.max_audio_samples = max_audio_samples
+        self.max_video_frames = max_video_frames
+
+    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
+        for row in inputs:
+            if "audio" in row and self.target_sampling_rate is not None:
+                row["audio"] = AudioCollator.resample_audio(
+                    row,
+                    target_sampling_rate=self.target_sampling_rate,
+                    max_samples=self.max_audio_samples,
+                )
+            if "video" in row and self.max_video_frames is not None:
+                row["video"] = VideoCollator.resample_video(
+                    row["video"],
+                    max_video_frames=self.max_video_frames,
+                )
+        return cast(
+            "BatchedInput",
+            {key: [row[key] for row in inputs] for key in inputs[0].keys()},
+        )

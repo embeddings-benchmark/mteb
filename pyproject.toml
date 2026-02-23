@@ -74,6 +74,7 @@ leaderboard = [
     "matplotlib>=3.9.4",
     "pymongo>=4.15.5",
 ]
+video = ["torchcodec"]
 
 # model specific optional dependencies:
 peft = ["peft>=0.11.0"]
