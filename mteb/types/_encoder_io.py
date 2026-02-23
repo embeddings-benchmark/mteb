@@ -11,7 +11,7 @@ from numpy.typing import NDArray
 
 if TYPE_CHECKING:
     from PIL import Image
-    from torchcodec.decoders import VideoDecoder
+    from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
     from typing_extensions import NotRequired
 
 
@@ -143,9 +143,9 @@ class VideoInput(TypedDict):
     video: VideoDecoder
 
 
-class MultimodalInput(
+class MultimodalInput(  # type: ignore[misc]
     TextInput, CorpusInput, QueryInput, ImageInput, AudioInput, VideoInput
-):  # type: ignore[misc]
+):
     """The input to the encoder for multimodal data."""
 
     pass

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import warnings
-from collections import defaultdict
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
@@ -19,7 +18,7 @@ from mteb.types._encoder_io import AudioInputItem
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-    from torchcodec.decoders import VideoDecoder
+    from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import (
@@ -729,10 +728,11 @@ class VideoCollator:
         if "video" not in inputs[0]:
             return cast("BatchedInput", inputs)
 
-        collated_inputs = defaultdict(list)
+        collated_inputs = []
         for row in inputs:
             video: VideoDecoder = row.pop("video")
             row["video"].append(self.resample_video(video, self.max_frames))
+            collated_inputs.append(row)
 
         return cast(
             "BatchedInput",
