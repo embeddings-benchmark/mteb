@@ -8,7 +8,7 @@ class Kinetics400Classification(AbsTaskClassification):
         description="Kinetics-400 is a large-scale action recognition dataset containing 400 human action classes from YouTube videos. Each clip is approximately 10 seconds long.",
         reference="https://arxiv.org/abs/1705.06950",
         dataset={
-            "path": "tmteb/kinetics-400",
+            "path": "mteb/kinetics-400",
             "revision": "e5b93b6eae80b8c9e9c88a381baae84d29b34fd2",
         },
         type="VideoClassification",
