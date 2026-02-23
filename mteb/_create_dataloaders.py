@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import warnings
-from collections import defaultdict
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
