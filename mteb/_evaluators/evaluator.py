@@ -24,7 +24,11 @@ class Evaluator(ABC):
 
     @abstractmethod
     def __call__(
-        self, model: EncoderProtocol, *, encode_kwargs: EncodeKwargs, num_proc: int = 1
+        self,
+        model: EncoderProtocol,
+        *,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None = None,
     ) -> Mapping[str, float] | Iterable[Any]:
         """This is called during training to evaluate the model.
 

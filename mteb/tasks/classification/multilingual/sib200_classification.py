@@ -234,7 +234,10 @@ class SIB200Classification(AbsTaskClassification):
 """,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         for lang in self.dataset.keys():
             self.dataset[lang] = self.dataset[lang].class_encode_column("category")
             self.dataset[lang] = self.dataset[lang].rename_columns(

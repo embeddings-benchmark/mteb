@@ -40,7 +40,10 @@ Borg, Claudia},
 """,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_columns({"labels": "label"})
         remove_cols = [
             col

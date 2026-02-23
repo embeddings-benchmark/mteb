@@ -39,7 +39,10 @@ class YueOpenriceReviewClassification(AbsTaskClassification):
 
     samples_per_label = 32
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )
@@ -82,7 +85,10 @@ class YueOpenriceReviewClassificationV2(AbsTaskClassification):
 
     samples_per_label = 32
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )

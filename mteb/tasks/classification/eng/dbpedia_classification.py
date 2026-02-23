@@ -40,7 +40,10 @@ class DBpediaClassification(AbsTaskClassification):
         superseded_by="DBpediaClassification.v2",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("content", "text")
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train", "test"]
@@ -85,7 +88,10 @@ class DBpediaClassificationV2(AbsTaskClassification):
         adapted_from=["DBpediaClassification"],
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train", "test"]
         )

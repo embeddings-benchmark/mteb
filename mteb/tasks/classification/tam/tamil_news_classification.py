@@ -35,7 +35,10 @@ class TamilNewsClassification(AbsTaskClassification):
         superseded_by="TamilNewsClassification.v2",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_columns(
             {"NewsInTamil": "text", "Category": "label"}
         )
@@ -75,5 +78,8 @@ class TamilNewsClassificationV2(AbsTaskClassification):
         adapted_from=["TamilNewsClassification"],
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)

@@ -35,7 +35,10 @@ class KannadaNewsClassification(AbsTaskClassification):
         superseded_by="KannadaNewsClassification.v2",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("headline", "text")
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"]
@@ -75,7 +78,10 @@ class KannadaNewsClassificationV2(AbsTaskClassification):
         adapted_from=["KannadaNewsClassification"],
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"]
         )
