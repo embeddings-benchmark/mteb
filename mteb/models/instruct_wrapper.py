@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import sys
 import warnings
 from typing import TYPE_CHECKING, Any
 
@@ -19,10 +20,19 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
 
+if sys.version_info >= (3, 13):
+    from warnings import deprecated
+else:
+    from typing_extensions import deprecated
+
 
 logger = logging.getLogger(__name__)
 
 
+@deprecated(
+    "`instruct_wrapper` is deprecated and will be removed in future versions. "
+    "Please use `InstructSentenceTransformerModel` instead."
+)
 def instruct_wrapper(
     model_name_or_path: str,
     mode: str,
@@ -52,6 +62,10 @@ def instruct_wrapper(
     )
     from gritlm import GritLM  # type: ignore[import]
 
+    @deprecated(
+        "`instruct_wrapper` is deprecated and will be removed in future versions. "
+        "Please use `InstructSentenceTransformerModel` instead."
+    )
     class InstructGritLMModel(GritLM, AbsEncoder):
         def __init__(
             self,
