@@ -25,3 +25,4 @@ class RetrievalEvaluationResult(NamedTuple):
     mrr: dict[str, float]
     naucs_mrr: dict[str, float]
     cv_recall: dict[str, float]
+    hit_rate: dict[str, float]

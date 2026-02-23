@@ -9,6 +9,7 @@ import pandas as pd
 import pytrec_eval
 from packaging.version import Version
 from sklearn.metrics import auc
+from typing_extensions import deprecated
 
 from mteb.types import RetrievalEvaluationResult
 
@@ -230,10 +231,20 @@ def evaluate_p_mrr_change(
             avg_mrr,
             naucs_mrr,
             cv_recall,
+            hit_rate,
         ) = calculate_retrieval_scores(group, qrels_sep[name], k_values)
         # add these to the followir_scores with name prefix
         scores_dict = make_score_dict(
-            ndcg, _map, recall, precision, naucs, avg_mrr, naucs_mrr, cv_recall, {}
+            ndcg,
+            _map,
+            recall,
+            precision,
+            naucs,
+            avg_mrr,
+            naucs_mrr,
+            cv_recall,
+            hit_rate,
+            {},
         )
         for key, value in scores_dict.items():
             followir_scores[name][key] = value  # type: ignore[index]
@@ -417,6 +428,7 @@ def make_score_dict(
     naucs: dict[str, float],
     naucs_mrr: dict[str, float],
     cv_recall: dict[str, float],
+    hit_rate: dict[str, float],
     task_scores: dict[str, float],
     previous_results_model_meta: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
@@ -438,6 +450,7 @@ def make_score_dict(
             for k, v in naucs_mrr.items()
         },
         **{f"cv_recall_at_{k.split('@')[1]}": v for k, v in cv_recall.items()},
+        **{f"hit_rate_at_{k.split('@')[1]}": v for k, v in hit_rate.items()},
         **task_scores,
         **(
             {"previous_results_model_meta": previous_results_model_meta}
@@ -458,8 +471,10 @@ def parse_metrics_from_scores(
     dict[str, list[float]],
     dict[str, list[float]],
     dict[str, list[float]],
+    dict[str, float],
 ]:
-    all_ndcgs, all_aps, all_recalls, all_precisions = (
+    all_ndcgs, all_aps, all_recalls, all_precisions, all_hit_rate = (
+        defaultdict(list),
         defaultdict(list),
         defaultdict(list),
         defaultdict(list),
@@ -472,14 +487,18 @@ def parse_metrics_from_scores(
             all_aps[f"MAP@{k}"].append(scores[query_id]["map_cut_" + str(k)])
             all_recalls[f"Recall@{k}"].append(scores[query_id]["recall_" + str(k)])
             all_precisions[f"P@{k}"].append(scores[query_id]["P_" + str(k)])
+            all_hit_rate[f"HitRate@{k}"].append(scores[query_id]["success_" + str(k)])
 
-    ndcg, _map, recall, precision = {}, {}, {}, {}
+    ndcg, _map, recall, precision, hit_rate = {}, {}, {}, {}, {}
 
     for k in k_values:
         ndcg[f"NDCG@{k}"] = round(sum(all_ndcgs[f"NDCG@{k}"]) / len(scores), 5)
         _map[f"MAP@{k}"] = round(sum(all_aps[f"MAP@{k}"]) / len(scores), 5)
         recall[f"Recall@{k}"] = round(sum(all_recalls[f"Recall@{k}"]) / len(scores), 5)
         precision[f"P@{k}"] = round(sum(all_precisions[f"P@{k}"]) / len(scores), 5)
+        hit_rate[f"HitRate@{k}"] = round(
+            sum(all_hit_rate[f"HitRate@{k}"]) / len(scores), 5
+        )
 
     return (
         ndcg,
@@ -490,6 +509,7 @@ def parse_metrics_from_scores(
         all_aps,
         all_recalls,
         all_precisions,
+        hit_rate,
     )
 
 
@@ -527,11 +547,11 @@ def max_over_subqueries(
         new_qrels[query_id_base] = qrels[query_id_full]  # all the same
 
     # now we have the new results, we can compute the scores
-    _, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, cv_recall = (
+    _, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, cv_recall, hit_rate = (
         calculate_retrieval_scores(new_results, new_qrels, k_values)
     )
     score_dict = make_score_dict(
-        ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, cv_recall, {}
+        ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, cv_recall, hit_rate, {}
     )
     return {"max_over_subqueries_" + k: v for k, v in score_dict.items()}
 
@@ -546,9 +566,11 @@ def calculate_retrieval_scores(
     ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
     recall_string = "recall." + ",".join([str(k) for k in k_values])
     precision_string = "P." + ",".join([str(k) for k in k_values])
+    hit_rate_string = "success." + ",".join([str(k) for k in k_values])
 
     evaluator = pytrec_eval.RelevanceEvaluator(
-        qrels, {map_string, ndcg_string, recall_string, precision_string}
+        qrels,
+        {map_string, ndcg_string, recall_string, precision_string, hit_rate_string},
     )
     scores: dict[str, dict[str, float]] = evaluator.evaluate(results)
 
@@ -561,6 +583,7 @@ def calculate_retrieval_scores(
         all_aps,
         all_recalls,
         all_precisions,
+        hit_rate,
     ) = parse_metrics_from_scores(scores, k_values)
     mrr_scores = mrr(qrels, results, k_values)
 
@@ -581,6 +604,7 @@ def calculate_retrieval_scores(
         mrr=avg_mrr,
         naucs_mrr=naucs_mrr,
         cv_recall=cv_recall,
+        hit_rate=hit_rate,
     )
 
 
@@ -613,6 +637,9 @@ def evaluate_abstention(
     return naucs
 
 
+@deprecated(
+    "`calculate_cv_recall` is deprecated and will be replaced with `hit_rate` in a future version"
+)
 def calculate_cv_recall(
     results: Mapping[str, Mapping[str, float]],
     qrels: RelevantDocumentsType,
