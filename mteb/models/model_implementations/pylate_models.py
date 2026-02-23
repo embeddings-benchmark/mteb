@@ -19,6 +19,7 @@ from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import (
@@ -308,11 +309,10 @@ class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
         self.model = ColBERT(self.model_name, revision=revision, **kwargs)
         built_in_prompts = getattr(self.model, "prompts", None)
         if built_in_prompts and not model_prompts:
-            self.model.prompts = built_in_prompts
+            self.model_prompts = built_in_prompts
         elif model_prompts and built_in_prompts:
             logger.info(f"Model.prompts will be overwritten with {model_prompts}")
-            self.model.prompts = self.validate_task_to_prompt_name(model_prompts)
-
+            self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
         self.base_index_dir = Path(index_dir) if index_dir else None
         self._index_name = index_name
         self._index_autodelete = index_autodelete
@@ -326,12 +326,12 @@ class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
-        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-        if prompt_name:
+        prompt = self.get_prompt(task_metadata, prompt_type)
+        if prompt:
             logger.info(
-                f"Using prompt_name={prompt_name} for task={task_metadata.name} prompt_type={prompt_type}"
+                f"Using prompt={prompt} for task={task_metadata.name} prompt_type={prompt_type}"
             )
         else:
             logger.info(
@@ -343,7 +343,7 @@ class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
 
         pred = self.model.encode(
             inputs,
-            prompt_name=prompt_name,
+            prompt=prompt,
             is_query=prompt_type == PromptType.query,
             **kwargs,
         )
