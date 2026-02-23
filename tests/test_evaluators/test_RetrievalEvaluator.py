@@ -79,13 +79,22 @@ class TestRetrievalEvaluator:
     def test_metrics_at_k(
         self, relevant_docs, results, ignore_identical_ids, expected_metrics
     ):
-        all_scores, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, cv_recall = (
-            self.evaluator.evaluate(
-                relevant_docs,
-                results,
-                [1, 2, 3],
-                ignore_identical_ids=ignore_identical_ids,
-            )
+        (
+            all_scores,
+            ndcg,
+            _map,
+            recall,
+            precision,
+            naucs,
+            mrr,
+            naucs_mrr,
+            cv_recall,
+            hit_rate,
+        ) = self.evaluator.evaluate(
+            relevant_docs,
+            results,
+            [1, 2, 3],
+            ignore_identical_ids=ignore_identical_ids,
         )
 
         assert ndcg == expected_metrics["ndcg"]
@@ -130,13 +139,22 @@ class TestRetrievalEvaluator:
             "4": {"0": 0.5, "1": 0.4, "2": 0.5},
         }
 
-        all_scores, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, cv_recall = (
-            self.evaluator.evaluate(
-                relevant_docs,
-                results,
-                [1, 2, 3],
-                ignore_identical_ids=ignore_identical_ids,
-            )
+        (
+            all_scores,
+            ndcg,
+            _map,
+            recall,
+            precision,
+            naucs,
+            mrr,
+            naucs_mrr,
+            cv_recall,
+            hit_rate,
+        ) = self.evaluator.evaluate(
+            relevant_docs,
+            results,
+            [1, 2, 3],
+            ignore_identical_ids=ignore_identical_ids,
         )
         aucs = ["nAUC_NDCG@3_max", "nAUC_NDCG@3_std", "nAUC_NDCG@3_diff1"]
         for auc in aucs:
