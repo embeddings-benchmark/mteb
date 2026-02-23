@@ -42,7 +42,10 @@ class GreekLegalCodeClassification(AbsTaskClassification):
 """,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset["validation"] = (
             self.dataset["validation"]
             .shuffle(seed=self.seed)

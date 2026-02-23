@@ -43,5 +43,8 @@ Vulić, Ivan},
     min_score = 0
     max_score = 5
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("label", "score")

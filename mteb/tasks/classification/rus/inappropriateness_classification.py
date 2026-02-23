@@ -57,7 +57,10 @@ Robnik-{\v{S}}ikonja, Marko},
         superseded_by="InappropriatenessClassification.v2",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, n_samples=2048, splits=["test"]
         )
@@ -118,7 +121,10 @@ Robnik-{\v{S}}ikonja, Marko},
         adapted_from=["InappropriatenessClassification"],
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, n_samples=2048, splits=["test"]
         )

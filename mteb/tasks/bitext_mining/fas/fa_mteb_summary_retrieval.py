@@ -27,7 +27,10 @@ class SAMSumFa(AbsTaskBitextMining):
         bibtex_citation="",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_columns(
             {"text": "sentence1", "summary": "sentence2"}
         )
@@ -58,7 +61,10 @@ class SynPerChatbotSumSRetrieval(AbsTaskBitextMining):
         bibtex_citation=""" """,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_columns(
             {"text": "sentence1", "summary": "sentence2"}
         )
@@ -89,7 +95,10 @@ class SynPerChatbotRAGSumSRetrieval(AbsTaskBitextMining):
         bibtex_citation=""" """,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_columns(
             {"text": "sentence1", "summary": "sentence2"}
         )

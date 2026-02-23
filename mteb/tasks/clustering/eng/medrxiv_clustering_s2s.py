@@ -37,7 +37,10 @@ class MedrxivClusteringS2SFast(AbsTaskClustering):
         adapted_from=["MedrxivClusteringS2S"],
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         ds = {}
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))

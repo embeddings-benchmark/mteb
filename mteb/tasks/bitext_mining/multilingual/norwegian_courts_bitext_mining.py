@@ -35,7 +35,10 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
         prompt="Retrieve parallel sentences in Norwegian Bokmål and Nynorsk",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         # Convert to standard format
         self.dataset = self.dataset.rename_column("nb", "sentence1")
         self.dataset = self.dataset.rename_column("nn", "sentence2")
