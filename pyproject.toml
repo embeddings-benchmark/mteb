@@ -440,6 +440,7 @@ extend-ignore-words-re = [
 ]
 extend-ignore-re = [
     "author.*",  # ignore authors in citations
+    "editor.*",  # ignore authors in citations
 ]
 
 [tool.typos.files]

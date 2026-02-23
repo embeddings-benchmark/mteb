@@ -36,13 +36,6 @@ Babakov, Nikolay  and
 Groh, Georg},
   booktitle = {Proceedings of the 8th Workshop on Online Abuse and Harms (WOAH 2024)},
   doi = {10.18653/v1/2024.woah-1.19},
-  editor = {Chung, Yi-Ling  and
-Talat, Zeerak  and
-Nozza, Debora  and
-Plaza-del-Arco, Flor Miriam  and
-R{\"o}ttger, Paul  and
-Mostafazadeh Davani, Aida  and
-Calabrese, Agostina},
   month = jun,
   pages = {244--255},
   publisher = {Association for Computational Linguistics},
