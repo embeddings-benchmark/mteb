@@ -14,7 +14,7 @@ cross_encoder = mteb.get_model("cross-encoder/ms-marco-TinyBERT-L-2-v2") # (1)
 
 1.  You can also directly use `CrossEncoder` from [sentence transformers](https://www.sbert.net/).
 
-Once we have that we can perform stage 1 retrieval, followed by a stage 2 reranking:
+Once we have that we can perform stage 1 retrieval, followed by a stage 2 reranking (call [`convert_to_reranking`][mteb.abstasks.retrieval.AbsTaskRetrieval.convert_to_reranking] to convert the task to a reranking task, which will use the predictions from stage 1 as input for stage 2):
 
 ```python
 prediction_folder = "model_predictions"
