@@ -30,6 +30,7 @@ if TYPE_CHECKING:
         ImageInput,
         QueryInput,
         TextInput,
+        VideoInput,
     )
 
 logger = logging.getLogger(__name__)
@@ -311,6 +312,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
             "image",  # images can be with different sizes
             "conversation",  # conversations are lists of varying lengths
             "audio",  # audio can have different lengths
+            "video",  # video can have different lengths
         ):
             collated[key] = [item[key] for item in batch]
         else:
@@ -404,6 +406,14 @@ def _create_queries_dataloader(
             batch_size=batch_size,
             num_proc=num_proc,
         )
+    if "video" in task_metadata.modalities:
+        return _create_video_dataloader(
+            dataset,
+            task_metadata,
+            input_column="video",
+            batch_size=batch_size,
+            num_proc=num_proc,
+        )
     raise ValueError(f"Can't handle queries type {queries_type}")
 
 
@@ -448,6 +458,14 @@ def _create_document_dataloader(
             batch_size=batch_size,
             num_proc=num_proc,
         )
+    if "video" in task_metadata.modalities:
+        return _create_video_dataloader(
+            dataset,
+            task_metadata,
+            input_column="video",
+            batch_size=batch_size,
+            num_proc=num_proc,
+        )
     raise ValueError(f"Can't handle queries type {document_type}")
 
 
@@ -476,6 +494,41 @@ def _create_audio_dataloader(
         and "audio" not in dataset.column_names
     ):
         dataset = dataset.rename_column(input_column, "audio")
+
+    return DataLoader(
+        dataset,
+        batch_size=batch_size,
+        collate_fn=_custom_collate_fn,
+        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
+        shuffle=False,
+    )
+
+
+def _create_video_dataloader(
+    dataset: Dataset,
+    task_metadata: TaskMetadata,
+    input_column: str | None = None,
+    batch_size: int = 32,
+    num_proc: int | None = None,
+) -> DataLoader[VideoInput]:
+    """Create a dataloader for video.
+
+    Args:
+        dataset: The dataset containing the video.
+        task_metadata: Metadata of the task to determine the video type.
+        input_column: The column to use as input. If None, it will use the first column that matches the video.
+        batch_size: Batch size for the dataloader.
+        num_proc: The number of workers for the dataloader.
+
+    Returns:
+        A DataLoader with the video dataset.
+    """
+    if (
+        input_column
+        and input_column in dataset.column_names
+        and "video" not in dataset.column_names
+    ):
+        dataset = dataset.rename_column(input_column, "video")
 
     return DataLoader(
         dataset,
@@ -538,6 +591,14 @@ def create_dataloader(
         )
     if "audio" in task_metadata.modalities:
         return _create_audio_dataloader(
+            dataset,
+            task_metadata,
+            input_column=input_column,
+            batch_size=batch_size,
+            num_proc=num_proc,
+        )
+    if "video" in task_metadata.modalities:
+        return _create_video_dataloader(
             dataset,
             task_metadata,
             input_column=input_column,
