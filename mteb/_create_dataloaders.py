@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import warnings
+from collections import defaultdict
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
@@ -601,6 +602,14 @@ def create_dataloader(
         )
     if "audio" in task_metadata.modalities:
         return _create_audio_dataloader(
+            dataset,
+            task_metadata,
+            input_column=input_column,
+            batch_size=batch_size,
+            num_proc=num_proc,
+        )
+    if "video" in task_metadata.modalities:
+        return _create_video_dataloader(
             dataset,
             task_metadata,
             input_column=input_column,
