@@ -227,6 +227,7 @@ QueryDatasetType = Dataset
 1. `id`, `text`, `instruction` (optionally) for text queries
 2. `id`, `image` for image queries
 3. `id`, `audio` for audio queries
+4. `id`, `video` for video queries
 or a combination of these for multimodal queries.
  """
 CorpusDatasetType = Dataset
@@ -234,6 +235,7 @@ CorpusDatasetType = Dataset
  1. `id`, `title` (optionally), `body` for text corpus
  2. `id`, `image` for image corpus
  3. `id`, `audio` for audio corpus
+ 4. `id`, `video` for video corpus
  or a combination of these for multimodal corpus.
  """
 InstructionDatasetType = Dataset
