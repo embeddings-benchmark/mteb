@@ -13,9 +13,10 @@ from urllib.parse import urlencode
 
 import cachetools
 import gradio as gr
-import pandas as pd  # noqa: TC002 # gradio tries to validate typehints
+import pandas as pd
 
 import mteb
+from mteb import BenchmarkResults
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.cache import ResultCache
 from mteb.leaderboard.benchmark_selector import (
@@ -309,6 +310,35 @@ def _cache_update_task_list(
     logger.debug(f"update_task_list callback: {elapsed}s")
 
     return benchmark_tasks, tasks_to_keep
+
+
+def _filter_benchmark_results_for_tables(
+    benchmark_results: BenchmarkResults,
+    task_names: set[str] | None,
+    model_names: set[str],
+    languages: list[str] | None,
+) -> BenchmarkResults:
+    """Apply task/model/language filters to BenchmarkResults for table rendering."""
+    if not task_names:
+        return benchmark_results._filter_tasks(task_names=[])
+
+    filtered_benchmark_results = benchmark_results._filter_tasks(
+        task_names=sorted(task_names)
+    )
+
+    # Keep only language-compatible subsets for each selected task.
+    if languages:
+        filtered_tasks = mteb.get_tasks(tasks=sorted(task_names), languages=languages)
+        filtered_benchmark_results = filtered_benchmark_results.select_tasks(
+            filtered_tasks
+        )
+
+    if model_names:
+        filtered_benchmark_results = filtered_benchmark_results.select_models(
+            sorted(model_names)
+        )
+
+    return filtered_benchmark_results
 
 
 def _generate_fingerprint_session_id(request: gr.Request) -> str:
@@ -1169,10 +1199,21 @@ def get_leaderboard_app(
             preprocess=False,
         )
 
-        def _cache_key_for_update_tables(scores, tasks, models_to_keep, benchmark_name):
-            scores_hash = hash(
-                tuple(sorted((d.get("model_name"), d.get("revision")) for d in scores))
-            )
+        def _cache_key_for_update_tables(
+            scores, tasks, models_to_keep, benchmark_name, languages
+        ):
+            # Build a deterministic fingerprint from score content.
+            # This keeps cache hits for equivalent data while invalidating on language-driven score changes.
+            score_signature = []
+            for entry in scores:
+                score_signature.append(
+                    (
+                        entry.get("model_name"),
+                        entry.get("task_name"),
+                        entry.get("score"),
+                    )
+                )
+            scores_hash = hash(tuple(sorted(score_signature)))
             tasks_hash = hash(tuple(sorted(tasks)))
             # Sort models_to_keep to ensure consistent hash regardless of input order
             models_hash = (
@@ -1181,7 +1222,10 @@ def get_leaderboard_app(
                 else None
             )
             bench_hash = hash(benchmark_name)
-            key = hash((scores_hash, tasks_hash, models_hash, bench_hash))
+            lang_hash = (
+                hash(tuple(sorted(languages))) if languages is not None else None
+            )
+            key = hash((scores_hash, tasks_hash, models_hash, bench_hash, lang_hash))
 
             return key
 
@@ -1194,11 +1238,11 @@ def get_leaderboard_app(
             tasks,
             models_to_keep,
             benchmark_name: str,
+            languages: list[str],
         ):
             start_time = time.time()
             tasks = set(tasks)
             benchmark = mteb.get_benchmark(benchmark_name)
-            benchmark_tasks = {task.metadata.name for task in benchmark.tasks}
 
             # Extract filtered model and task names from scores (respects UI filters)
             filtered_model_names = set()
@@ -1214,21 +1258,12 @@ def get_leaderboard_app(
                 filtered_model_names.add(entry["model_name"])
                 filtered_task_names.add(entry["task_name"])
 
-            # Create filtered BenchmarkResults as required by Kenneth
-            benchmark_results = all_benchmark_results[benchmark_name]
-            filtered_benchmark_results = benchmark_results
-
-            # Apply task filtering if needed
-            if filtered_task_names != benchmark_tasks:
-                filtered_benchmark_results = filtered_benchmark_results._filter_tasks(
-                    task_names=list(filtered_task_names)
-                )
-
-            # Apply model filtering if needed
-            if filtered_model_names:
-                filtered_benchmark_results = filtered_benchmark_results.select_models(
-                    list(filtered_model_names)
-                )
+            filtered_benchmark_results = _filter_benchmark_results_for_tables(
+                benchmark_results=all_benchmark_results[benchmark_name],
+                task_names=filtered_task_names,
+                model_names=filtered_model_names,
+                languages=languages,
+            )
 
             summary = apply_summary_styling_from_benchmark(
                 benchmark, filtered_benchmark_results
@@ -1252,10 +1287,10 @@ def get_leaderboard_app(
         # Only update tables when models change, not when scores/tasks change directly
         # This avoids redundant updates since scores/tasks changes trigger update_models
         # which then triggers models.change
-        for item in [models, task_select]:
+        for item in [models, task_select, lang_select]:
             item.change(
                 update_tables,
-                inputs=[scores, task_select, models, benchmark_select],
+                inputs=[scores, task_select, models, benchmark_select, lang_select],
                 outputs=[
                     summary_table,
                     per_task_table,
@@ -1285,7 +1320,13 @@ def get_leaderboard_app(
             display_radar,
         ) = on_benchmark_select(benchmark.name)
         # Call update_tables to populate cache (simulating models.change trigger)
-        update_tables(bench_scores, bench_tasks, bench_initial_models, benchmark.name)
+        update_tables(
+            bench_scores,
+            bench_tasks,
+            bench_initial_models,
+            benchmark.name,
+            bench_languages,
+        )
         # Also cache the filtered tasks scenario
         filtered_tasks = update_task_list(
             benchmark.name,
@@ -1295,7 +1336,11 @@ def get_leaderboard_app(
             bench_modalities,
         )
         update_tables(
-            bench_scores, filtered_tasks, bench_initial_models, benchmark.name
+            bench_scores,
+            filtered_tasks,
+            bench_initial_models,
+            benchmark.name,
+            bench_languages,
         )
     prerun_time = time.time() - prerun_start
     logger.info(
