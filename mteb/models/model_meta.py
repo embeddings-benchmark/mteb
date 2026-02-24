@@ -959,39 +959,42 @@ class ModelMeta(BaseModel):
 
     @staticmethod
     def _calculate_memory_usage_mb(
-        model_name: str, n_parameters: int | None
+        model_name: str,
+        n_parameters: int | None,
+        fetch_from_hf: bool = False,
     ) -> int | None:
         MB = 1024**2  # noqa: N806
 
-        try:
-            safetensors_metadata = get_safetensors_metadata(model_name)
-            if len(safetensors_metadata.parameter_count) >= 0:
-                dtype_size_map = {
-                    "F64": 8,  # 64-bit float
-                    "F32": 4,  # 32-bit float (FP32)
-                    "F16": 2,  # 16-bit float (FP16)
-                    "BF16": 2,  # BFloat16
-                    "I64": 8,  # 64-bit integer
-                    "I32": 4,  # 32-bit integer
-                    "I16": 2,  # 16-bit integer
-                    "I8": 1,  # 8-bit integer
-                    "U8": 1,  # Unsigned 8-bit integer
-                    "BOOL": 1,  # Boolean (assuming 1 byte per value)
-                }
-                total_memory_bytes = sum(
-                    parameters * dtype_size_map.get(dtype, 4)
-                    for dtype, parameters in safetensors_metadata.parameter_count.items()
+        if fetch_from_hf:
+            try:
+                safetensors_metadata = get_safetensors_metadata(model_name)
+                if len(safetensors_metadata.parameter_count) >= 0:
+                    dtype_size_map = {
+                        "F64": 8,  # 64-bit float
+                        "F32": 4,  # 32-bit float (FP32)
+                        "F16": 2,  # 16-bit float (FP16)
+                        "BF16": 2,  # BFloat16
+                        "I64": 8,  # 64-bit integer
+                        "I32": 4,  # 32-bit integer
+                        "I16": 2,  # 16-bit integer
+                        "I8": 1,  # 8-bit integer
+                        "U8": 1,  # Unsigned 8-bit integer
+                        "BOOL": 1,  # Boolean (assuming 1 byte per value)
+                    }
+                    total_memory_bytes = sum(
+                        parameters * dtype_size_map.get(dtype, 4)
+                        for dtype, parameters in safetensors_metadata.parameter_count.items()
+                    )
+                    return round(total_memory_bytes / MB)  # Convert to MB
+            except (
+                NotASafetensorsRepoError,
+                SafetensorsParsingError,
+                GatedRepoError,
+                RepositoryNotFoundError,
+            ) as e:
+                logger.warning(
+                    f"Can't calculate memory usage for {model_name}. Got error {e}"
                 )
-                return round(total_memory_bytes / MB)  # Convert to MB
-        except (
-            NotASafetensorsRepoError,
-            SafetensorsParsingError,
-            GatedRepoError,
-            RepositoryNotFoundError,
-        ) as e:
-            logger.warning(
-                f"Can't calculate memory usage for {model_name}. Got error {e}"
-            )
 
         if n_parameters is None:
             return None
@@ -1002,8 +1005,13 @@ class ModelMeta(BaseModel):
         model_memory_mb = model_memory_bytes / MB
         return round(model_memory_mb)
 
-    def calculate_memory_usage_mb(self) -> int | None:
+    def calculate_memory_usage_mb(self, fetch_from_hf: bool = False) -> int | None:
         """Calculates the memory usage of the model in MB.
+
+        Args:
+            fetch_from_hf: If True, fetch safetensors metadata from HuggingFace Hub
+                to get precise dtype-aware memory usage. If False (default), estimate
+                from n_parameters assuming FP32 (4 bytes per parameter).
 
         Returns:
             The memory usage of the model in MB, or None if it cannot be determined.
@@ -1011,7 +1019,9 @@ class ModelMeta(BaseModel):
         if "API" in self.framework or self.name is None:
             return None
 
-        return self._calculate_memory_usage_mb(self.name, self.n_parameters)
+        return self._calculate_memory_usage_mb(
+            self.name, self.n_parameters, fetch_from_hf=fetch_from_hf
+        )
 
     @staticmethod
     def fetch_release_date(model_name: str) -> StrDate | None:
