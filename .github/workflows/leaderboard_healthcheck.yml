@@ -2,7 +2,7 @@ name: Leaderboard Healthcheck
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "0 */12 * * *"  # run every 12 hours
   workflow_dispatch:
 
 permissions:
@@ -19,6 +19,7 @@ jobs:
           if curl -sS --fail --max-time 30 --connect-timeout 10 \
             -X POST "https://mteb-leaderboard.hf.space/gradio_api/call/on_page_load" \
             -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.HF_TOKEN }}" \
             -d '{"data":[]}' \
             -o /dev/null; then
             echo "alive=true" >> "$GITHUB_OUTPUT"
