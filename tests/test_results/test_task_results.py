@@ -165,7 +165,7 @@ def test_to_hf_result(mock_mteb_cache: ResultCache):
     task_name = "Banking77Classification"
     task_metadata = mteb.get_task(task_name).metadata
     benchmark_result = mock_mteb_cache.load_results(
-        models=["baseline/random-encoder-baseline"], tasks=[task_name]
+        models=["mteb/baseline-random-encoder"], tasks=[task_name]
     )
     user_name = "test_user"
     task_result = benchmark_result.model_results[0].task_results[0]

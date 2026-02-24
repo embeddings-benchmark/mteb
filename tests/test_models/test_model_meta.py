@@ -25,7 +25,7 @@ _MISSING_N_EMBEDDING_MODELS = [
     "TomoroAI/tomoro-colqwen3-embed-4b",
     "TomoroAI/tomoro-colqwen3-embed-8b",
     "ai-sage/Giga-Embeddings-instruct",
-    "baseline/bb25",
+    "mteb/baseline-bbb25",
     "mteb/baseline-bm25s",
     "consciousAI/cai-stellaris-text-embeddings",
     "deepvk/USER2-base",
@@ -98,8 +98,8 @@ _MISSING_N_EMBEDDING_MODELS = [
     "jinaai/jina-clip-v2",
     "jinaai/jina-embeddings-v4",
     "baseline/Human",
-    "baseline/random-cross-encoder-baseline",
-    "baseline/random-encoder-baseline",
+    "mteb/baseline-random-cross-encoder",
+    "mteb/baseline-random-encoder",
     "nvidia/nemotron-colembed-vl-4b-v2",
     "nvidia/nemotron-colembed-vl-8b-v2",
     "VAGOsolutions/SauerkrautLM-ColLFM2-450M-v0.1",
@@ -145,8 +145,8 @@ _MISSING_N_EMBEDDING_MODELS = [
     "Qwen/Qwen2-Audio-7B",
     "facebook/hubert-base-ls960",
     "facebook/hubert-large-ls960-ft",
-    "baseline/random-cross-encoder-baseline",
-    "baseline/random-encoder-baseline",
+    "mteb/baseline-random-cross-encoder",
+    "mteb/baseline-random-encoder",
     "facebook/encodec_24khz",
     "speechbrain/m-ctc-t-large",
     "MIT/ast-finetuned-audioset-10-10-0.4593",
@@ -306,7 +306,7 @@ def test_get_model_metas_each_model_type(model_type):
 
 def test_loader_kwargs_persisted_in_metadata():
     model = mteb.get_model(
-        "baseline/random-encoder-baseline",
+        "mteb/baseline-random-encoder",
         not_existing_param=123,
     )
 
