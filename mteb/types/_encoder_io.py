@@ -12,7 +12,6 @@ from numpy.typing import NDArray
 if TYPE_CHECKING:
     import numpy.typing as npt
     from PIL import Image
-    from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
     from typing_extensions import NotRequired
 
 
