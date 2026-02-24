@@ -13,7 +13,7 @@ from mteb._create_dataloaders import (
     create_dataloader,
 )
 from mteb._requires_package import requires_package
-from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.abs_encoder import AbsEncoder, get_prompt
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
@@ -180,7 +180,7 @@ class PylateSearchEncoder:
             batch_size=encode_kwargs.get("batch_size", 32),
             num_proc=num_proc,
         )
-        documents_embeddings = self.encode(
+        documents_embeddings = self._encode(
             documents_loader,
             task_metadata=task_metadata,
             hf_split=hf_split,
@@ -234,7 +234,7 @@ class PylateSearchEncoder:
         result_heaps = {qid: [] for qid in query_idx_to_id.values()}
         doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
 
-        all_doc_embeddings = self.encode(
+        all_doc_embeddings = self._encode(
             create_dataloader(
                 self.task_corpus,
                 task_metadata,
@@ -287,7 +287,7 @@ class PylateSearchEncoder:
         return result_heaps
 
 
-class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
+class MultiVectorModel(PylateSearchEncoder):
     task_corpus: CorpusDatasetType | None = None
 
     def __init__(
@@ -312,7 +312,9 @@ class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
             self.model_prompts = built_in_prompts
         elif model_prompts and built_in_prompts:
             logger.info(f"Model.prompts will be overwritten with {model_prompts}")
-            self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
+            self.model_prompts = AbsEncoder.validate_task_to_prompt_name(model_prompts)
+        elif model_prompts:
+            self.model_prompts = AbsEncoder.validate_task_to_prompt_name(model_prompts)
         self.base_index_dir = Path(index_dir) if index_dir else None
         self._index_name = index_name
         self._index_autodelete = index_autodelete
@@ -328,7 +330,7 @@ class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
-        prompt = self.get_prompt(task_metadata, prompt_type)
+        prompt = get_prompt(self.model_prompts, task_metadata, prompt_type)
         if prompt:
             logger.info(
                 f"Using prompt={prompt} for task={task_metadata.name} prompt_type={prompt_type}"
@@ -345,6 +347,7 @@ class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
             inputs,
             prompt=prompt,
             is_query=prompt_type == PromptType.query,
+            convert_to_numpy=True,
             **kwargs,
         )
 
