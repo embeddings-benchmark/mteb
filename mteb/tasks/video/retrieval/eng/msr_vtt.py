@@ -5,9 +5,9 @@ from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MSRVTT(AbsTaskRetrieval):
+class MSRVTTV2T(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MSRVTT",
+        name="MSRVTTV2T",
         description="MSRVTT",
         dataset={
             "path": "mteb/MSR-VTT",
@@ -63,6 +63,6 @@ if __name__ == "__main__":
 
     logging.basicConfig(level=logging.INFO)
 
-    task = MSRVTT()
+    task = MSRVTTV2T()
     model = mteb.get_model("baseline/random-encoder-baseline")
     mteb.evaluate(model, task)
