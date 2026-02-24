@@ -10,8 +10,8 @@ from datasets import Dataset
 from numpy.typing import NDArray
 
 if TYPE_CHECKING:
+    import numpy.typing as npt
     from PIL import Image
-    from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
     from typing_extensions import NotRequired
 
 
@@ -119,7 +119,7 @@ class AudioInputItem(TypedDict):
         sampling_rate: The sampling rate of the audio.
     """
 
-    array: np.ndarray
+    array: npt.NDArray[np.floating]
     sampling_rate: int
 
 
@@ -133,6 +133,20 @@ class AudioInput(TypedDict):
     audio: list[AudioInputItem]
 
 
+class VideoInputItem(TypedDict):
+    """A video item for the VideoInput.
+
+    Dataset based on `datasets.Video` will be converted to this format during encoding.
+
+    Attributes:
+        frames: The video frames as Tensor.
+        audio: The audio array as AudioInputItem.
+    """
+
+    frames: torch.Tensor
+    audio: AudioInputItem
+
+
 class VideoInput(TypedDict):
     """The input to the encoder for videos.
 
@@ -140,7 +154,7 @@ class VideoInput(TypedDict):
         video: The video to encode. VideoDecoder object.
     """
 
-    video: VideoDecoder | list[VideoDecoder]
+    video: list[VideoInputItem]
 
 
 class MultimodalInput(  # type: ignore[misc]

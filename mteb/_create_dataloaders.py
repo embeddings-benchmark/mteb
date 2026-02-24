@@ -13,7 +13,7 @@ from mteb.types import (
     ConversationTurn,
     PromptType,
 )
-from mteb.types._encoder_io import AudioInputItem
+from mteb.types._encoder_io import AudioInputItem, VideoInputItem
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -622,7 +622,9 @@ class AudioCollator:
     """Collator for audio data that resamples audio to a target sampling rate and optionally truncates to a maximum number of samples."""
 
     def __init__(
-        self, target_sampling_rate: int, max_samples: int | None = None
+        self,
+        target_sampling_rate: int,
+        max_samples: int | None = None,
     ) -> None:
         """Initialize the collator.
 
@@ -716,13 +718,23 @@ class AudioCollator:
 class VideoCollator:
     """Collator for video data that optionally truncates to a maximum number of frames."""
 
-    def __init__(self, max_frames: int) -> None:
+    def __init__(
+        self,
+        max_frames: int,
+        target_sampling_rate: int = 32_000,
+        max_samples: int | None = None,
+    ) -> None:
         """Initialize the collator.
 
         Args:
             max_frames: The maximum number of frames to keep for each video. If None, no truncation is applied.
+            target_sampling_rate: The sampling rate to resample the audio to.
+            max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
         """
         self.max_frames = max_frames
+        self.audio_collator = AudioCollator(
+            target_sampling_rate=target_sampling_rate, max_samples=max_samples
+        )
 
     def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
         if "video" not in inputs[0]:
@@ -730,8 +742,25 @@ class VideoCollator:
 
         collated_inputs = []
         for row in inputs:
-            video: VideoDecoder = row.pop("video")
-            row["video"].append(self.resample_video(video, self.max_frames))
+            videos = row.pop("video")
+            video_inputs = []
+            for video in videos:
+                frames = self.resample_video(video["frames"], self.max_frames)
+                audio = self.audio_collator.resample_audio(
+                    video,
+                    target_sampling_rate=self.audio_collator.target_sampling_rate,
+                    max_samples=self.audio_collator.max_samples,
+                )
+                video_inputs.append(
+                    VideoInputItem(
+                        frames=frames,
+                        audio=AudioInputItem(
+                            array=audio,
+                            sampling_rate=self.audio_collator.target_sampling_rate,
+                        ),
+                    )
+                )
+            row["video"] = video_inputs
             collated_inputs.append(row)
 
         return cast(

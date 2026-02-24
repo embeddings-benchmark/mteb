@@ -18,9 +18,15 @@ if TYPE_CHECKING:
     from numpy.typing import NDArray
     from PIL import Image
     from torch.utils.data import DataLoader
+    from torchcodec.decoders import VideoDecoder
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types._encoder_io import Array, AudioInputItem, BatchedInput, PromptType
+    from mteb.types._encoder_io import (
+        Array,
+        AudioInputItem,
+        BatchedInput,
+        PromptType,
+    )
 
 
 def _string_to_vector(text: str | None, size: int) -> NDArray[np.floating]:
@@ -76,7 +82,10 @@ def _audio_to_vector(audio: AudioInputItem, size: int) -> np.ndarray:
     return rng.random(size, dtype=np.float32)
 
 
-def _video_to_vector(video: torch.Tensor, size: int) -> np.ndarray:
+def _video_to_vector(
+    video: list[dict[str, VideoDecoder | AudioInputItem]],
+    size: int,
+) -> np.ndarray:
     """Generate a deterministic random vector based on video content.
 
     Args:
@@ -87,7 +96,13 @@ def _video_to_vector(video: torch.Tensor, size: int) -> np.ndarray:
         A numpy array of shape (size,) containing the random vector.
     """
     # Convert video to bytes and then to a numeric seed
-    video_bytes = video.cpu().numpy().tobytes()
+    video_bytes = b"".join(
+        [
+            VideoCollator.resample_video(item["frames"], 10).numpy().tobytes()
+            + item["audio"]["array"].tobytes()
+            for item in video
+        ]
+    )
     seed = int(hashlib.sha256(video_bytes).hexdigest(), 16) % (2**32)
     rng = np.random.default_rng(seed)
     return rng.random(size, dtype=np.float32)
@@ -150,7 +165,10 @@ def _batch_to_embeddings(
             ]
         if "video" in batch:
             video_embeddings = [
-                _video_to_vector(VideoCollator.resample_video(video, 10), embedding_dim)
+                _video_to_vector(
+                    video,
+                    embedding_dim,
+                )
                 for video in batch["video"]
             ]
 

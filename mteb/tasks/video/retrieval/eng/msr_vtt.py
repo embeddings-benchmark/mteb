@@ -1,8 +1,10 @@
-from datasets import load_dataset
+import datasets
+from datasets import Features, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.types._encoder_io import VideoInputItem
 
 
 class MSRVTTV2T(AbsTaskRetrieval):
@@ -41,6 +43,31 @@ class MSRVTTV2T(AbsTaskRetrieval):
         )
         dataset = dataset.add_column("id", [str(i) for i in range(len(dataset))])
         query = dataset.select_columns(["id", "video", "audio"])
+
+        def _combine_modalities(example: dict) -> dict:
+            example["video"] = [
+                VideoInputItem(
+                    frames=example["video"],
+                    audio=example.pop("audio"),
+                )
+            ]
+            return example
+
+        query_features = query.features
+        query = query.map(
+            _combine_modalities,
+            features=Features(
+                {
+                    "id": query_features["id"],
+                    "video": datasets.List(
+                        feature={
+                            "frames": query_features["video"],
+                            "audio": query_features["audio"],
+                        }
+                    ),
+                }
+            ),
+        )
         corpus = dataset.select_columns(["id", "caption"]).rename_column(
             "caption", "text"
         )
