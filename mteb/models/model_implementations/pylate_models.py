@@ -347,7 +347,6 @@ class MultiVectorModel(PylateSearchEncoder):
             inputs,
             prompt=prompt,
             is_query=prompt_type == PromptType.query,
-            convert_to_numpy=True,
             **kwargs,
         )
 
