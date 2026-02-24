@@ -625,7 +625,9 @@ class ModelMeta(BaseModel):
         n_embedding_parameters = cls._estimate_embedding_parameters_from_hub(
             model_name, revision=revision, config=config
         )
-        memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
+        memory_usage_mb = cls._calculate_memory_usage_mb(
+            model_name, n_parameters, fetch_from_hf=True
+        )
 
         embedding_dim = getattr(model_config, "hidden_size", None)
         max_tokens = getattr(model_config, "max_position_embeddings", None)
@@ -961,6 +963,7 @@ class ModelMeta(BaseModel):
     def _calculate_memory_usage_mb(
         model_name: str,
         n_parameters: int | None,
+        *,
         fetch_from_hf: bool = False,
     ) -> int | None:
         MB = 1024**2  # noqa: N806
@@ -968,7 +971,7 @@ class ModelMeta(BaseModel):
         if fetch_from_hf:
             try:
                 safetensors_metadata = get_safetensors_metadata(model_name)
-                if len(safetensors_metadata.parameter_count) >= 0:
+                if safetensors_metadata.parameter_count:
                     dtype_size_map = {
                         "F64": 8,  # 64-bit float
                         "F32": 4,  # 32-bit float (FP32)
