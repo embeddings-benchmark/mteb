@@ -50,7 +50,7 @@ class Qwen3RerankerWrapper:
         self.false_token = self.tokenizer("no", add_special_tokens=False).input_ids[0]
         self.generation_config = GenerationConfig(
             max_new_tokens=1,
-            do_sample=False,
+            do_sample=True,
             top_p=0.95,
             output_logits=True,
             return_dict_in_generate=True,
