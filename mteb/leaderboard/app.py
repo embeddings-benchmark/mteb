@@ -422,8 +422,6 @@ def get_leaderboard_app(
     all_results = cache._load_from_cache(rebuild=rebuild)
     load_time = time.time() - load_start
     logger.info(f"Step 1/7 complete: Loaded results in {load_time:.2f}s")
-    for handler in logging.root.handlers:
-        handler.flush()
 
     logger.info("Step 2/7: Fetching benchmarks...")
     bench_start = time.time()
@@ -434,8 +432,6 @@ def get_leaderboard_app(
     logger.info(
         f"Step 2/7 complete: Fetched {len(benchmarks)} benchmarks in {bench_time:.2f}s"
     )
-    for handler in logging.root.handlers:
-        handler.flush()
 
     logger.info(
         "Step 3/7: Processing all benchmarks (select_tasks + join_revisions)..."
@@ -454,8 +450,6 @@ def get_leaderboard_app(
         logger.info(
             f"Step 3/7 complete: Processed 0 benchmarks in {process_time:.2f}s (avg N/A)"
         )
-    for handler in logging.root.handlers:
-        handler.flush()
 
     default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
     default_results = all_benchmark_results[default_benchmark.name]
@@ -492,8 +486,6 @@ def get_leaderboard_app(
     logger.info(
         f"Step 4/7 complete: Filtered {len(filtered_model_names)} models in {filter_time:.2f}s"
     )
-    for handler in logging.root.handlers:
-        handler.flush()
 
     logger.info("Step 5/7: Generating tables...")
     table_start = time.time()
@@ -509,8 +501,6 @@ def get_leaderboard_app(
     )
     table_time = time.time() - table_start
     logger.info(f"Step 5/7 complete: Generated tables in {table_time:.2f}s")
-    for handler in logging.root.handlers:
-        handler.flush()
 
     # Check if this benchmark displays per-language results
     display_language_table = len(default_benchmark.language_view) > 0
@@ -561,8 +551,6 @@ def get_leaderboard_app(
     logger.info(
         f"Step 6/7 complete: Created Gradio components in {component_time:.2f}s"
     )
-    for handler in logging.root.handlers:
-        handler.flush()
 
     logger.info("Step 7/7: Building Gradio interface and callbacks...")
     interface_start = time.time()
@@ -1280,8 +1268,6 @@ def get_leaderboard_app(
         gr.Markdown(ACKNOWLEDGEMENT, elem_id="ack_markdown")
     interface_time = time.time() - interface_start
     logger.info(f"Step 7/7 complete: Built Gradio interface in {interface_time:.2f}s")
-    for handler in logging.root.handlers:
-        handler.flush()
 
     logger.info("Starting prerun on all benchmarks to populate caches...")
     prerun_start = time.time()
@@ -1315,13 +1301,9 @@ def get_leaderboard_app(
     logger.info(
         f"Prerun complete: Processed {len(benchmarks)} benchmarks in {prerun_time:.2f}s"
     )
-    for handler in logging.root.handlers:
-        handler.flush()
 
     total_time = time.time() - app_start
     logger.info(f"=== Leaderboard app initialization complete in {total_time:.2f}s ===")
-    for handler in logging.root.handlers:
-        handler.flush()
     return demo
 
 

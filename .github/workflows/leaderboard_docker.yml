@@ -72,7 +72,7 @@ jobs:
         docker tag ghcr.io/${{ github.repository }}/leaderboard:${{ github.sha }} mteb-leaderboard:test
 
     - name: Test container can start and run
-      timeout-minutes: 12
+      timeout-minutes: 9
       run: |
         # Start the container in background
         docker run -d --name mteb-test -p 7860:7860 mteb-leaderboard:test
@@ -88,8 +88,8 @@ jobs:
           CURRENT_TIME=$(date +%s)
           ELAPSED=$((CURRENT_TIME - START_TIME))
 
-          # Maximum timeout: 12 minutes - always fail at timeout
-          if [ $ELAPSED -gt 720 ]; then
+          # Maximum timeout: 8 minutes - always fail at timeout
+          if [ $ELAPSED -gt 480 ]; then
             echo "❌ Timeout reached after ${ELAPSED}s - container failed to complete initialization"
             docker logs --tail 20 mteb-test
             docker stop mteb-test
@@ -159,7 +159,7 @@ jobs:
           if [ $((ELAPSED % 30)) -eq 0 ] && [ $ELAPSED -gt 0 ]; then
             echo "Container still running after ${ELAPSED}s... (startup: $STARTUP_DETECTED, init_complete: $INIT_COMPLETE_DETECTED)"
             # Show last few lines of logs for progress
-            echo "$LOGS" | grep -E "(Step [0-9]/7|Starting leaderboard|initialization complete|Prerun complete|Running on)" | tail -3
+            echo "$LOGS" | grep -E "(Step [0-9]/7|Starting leaderboard|initialization complete|Running on)" | tail -2
           fi
 
           sleep 5

@@ -471,8 +471,6 @@ class ResultCache:
         # Strategy 1: Try loading from existing local quick cache
         if cache_path.exists():
             logger.info(f"Loading existing quick cache from {cache_path}")
-            for handler in logging.root.handlers:
-                handler.flush()
             try:
                 return BenchmarkResults.from_disk(cache_path)
             except Exception as e:
@@ -485,8 +483,6 @@ class ResultCache:
             logger.info(
                 "Attempting to download pre-computed cache from cached-data branch..."
             )
-            for handler in logging.root.handlers:
-                handler.flush()
             downloaded_path = self._download_cached_results_from_branch(
                 output_path=cache_path
             )
@@ -497,8 +493,6 @@ class ResultCache:
 
         # Strategy 3: Fallback to full repository clone
         logger.info("Falling back to full repository clone and rebuild...")
-        for handler in logging.root.handlers:
-            handler.flush()
         return self._rebuild_from_full_repository(cache_path)
 
     def _rebuild_from_full_repository(self, quick_cache_path: Path) -> BenchmarkResults:
