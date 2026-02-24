@@ -312,6 +312,7 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
     use_instructions=True,
     training_datasets=TRAINING_DATA_v2,
     citation=NEMOTRON_COLEMBED_CITATION_V2,
+    model_type=["late-interaction"],
 )
 
 
