@@ -9,7 +9,6 @@ import pandas as pd
 import pytrec_eval
 from packaging.version import Version
 from sklearn.metrics import auc
-from typing_extensions import deprecated
 
 from mteb.types import RetrievalEvaluationResult
 
@@ -230,7 +229,6 @@ def evaluate_p_mrr_change(
             naucs,
             avg_mrr,
             naucs_mrr,
-            cv_recall,
             hit_rate,
         ) = calculate_retrieval_scores(group, qrels_sep[name], k_values)
         # add these to the followir_scores with name prefix
@@ -242,7 +240,6 @@ def evaluate_p_mrr_change(
             naucs,
             avg_mrr,
             naucs_mrr,
-            cv_recall,
             hit_rate,
             {},
         )
@@ -427,7 +424,6 @@ def make_score_dict(
     mrr: dict[str, float],
     naucs: dict[str, float],
     naucs_mrr: dict[str, float],
-    cv_recall: dict[str, float],
     hit_rate: dict[str, float],
     task_scores: dict[str, float],
     previous_results_model_meta: dict[str, Any] | None = None,
@@ -449,7 +445,6 @@ def make_score_dict(
             k.replace("@", "_at_").replace("_P", "_precision").lower(): v
             for k, v in naucs_mrr.items()
         },
-        **{f"cv_recall_at_{k.split('@')[1]}": v for k, v in cv_recall.items()},
         **{f"hit_rate_at_{k.split('@')[1]}": v for k, v in hit_rate.items()},
         **task_scores,
         **(
@@ -547,11 +542,11 @@ def max_over_subqueries(
         new_qrels[query_id_base] = qrels[query_id_full]  # all the same
 
     # now we have the new results, we can compute the scores
-    _, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, cv_recall, hit_rate = (
+    _, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, hit_rate = (
         calculate_retrieval_scores(new_results, new_qrels, k_values)
     )
     score_dict = make_score_dict(
-        ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, cv_recall, hit_rate, {}
+        ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, hit_rate, {}
     )
     return {"max_over_subqueries_" + k: v for k, v in score_dict.items()}
 
@@ -591,7 +586,6 @@ def calculate_retrieval_scores(
         results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
     )
     naucs_mrr = evaluate_abstention(results, mrr_scores)
-    cv_recall = calculate_cv_recall(results, qrels, k_values, skip_first_result)
 
     avg_mrr = {k: sum(mrr_scores[k]) / len(mrr_scores[k]) for k in mrr_scores.keys()}
     return RetrievalEvaluationResult(
@@ -603,7 +597,6 @@ def calculate_retrieval_scores(
         naucs=naucs,
         mrr=avg_mrr,
         naucs_mrr=naucs_mrr,
-        cv_recall=cv_recall,
         hit_rate=hit_rate,
     )
 
@@ -635,61 +628,3 @@ def evaluate_abstention(
             naucs[f"nAUC_{metric_name}_{fct}"] = nauc(conf_scores, scores)
 
     return naucs
-
-
-@deprecated(
-    "`calculate_cv_recall` is deprecated and will be replaced with `hit_rate` in a future version"
-)
-def calculate_cv_recall(
-    results: Mapping[str, Mapping[str, float]],
-    qrels: RelevantDocumentsType,
-    k_values: list[int],
-    skip_first_result: bool = False,
-) -> dict[str, float]:
-    """Calculate Hit-Rate (Success) for a set of search results.
-
-    This function computes a binary recall-like metric at various cutoff levels (k-values).
-    For each query, it checks whether at least one relevant document appears within the top-k
-    retrieved results. The final score is averaged over all queries.
-
-    Arguments:
-        results: A mapping from query IDs to a dictionary of document IDs and their scores.
-        qrels: A mapping from query IDs to relevant documents with relevance scores.
-        k_values: A list of cutoff values at which to compute CV Recall, e.g., [1, 5, 10].
-        skip_first_result: Whether to skip the top-ranked result.
-
-    Returns:
-        A dictionary mapping metric names (e.g., "CV_Recall@1") to their corresponding
-        averaged scores across all queries, rounded to 5 decimal places.
-    """
-    all_cv_recalls = defaultdict(list)
-    sorted_results: dict[str, list[tuple[str, float]]] = {
-        qid: sorted(rels.items(), key=lambda item: item[1], reverse=True)
-        for qid, rels in results.items()
-    }
-
-    if skip_first_result:
-        for qid, rels in sorted_results.items():
-            sorted_results[qid].pop(0)
-
-    for query_id in results.keys():
-        top_docs = [
-            doc_id for doc_id, _ in sorted_results[query_id]
-        ]  # Sorted list of doc IDs
-
-        relevant_docs = {
-            key for key in qrels.get(query_id, {}).keys() if qrels[query_id][key] != 0
-        }
-
-        for k in k_values:
-            top_k_docs = top_docs[:k]
-
-            if relevant_docs.intersection(top_k_docs):
-                all_cv_recalls[k].append(1.0)
-            else:
-                all_cv_recalls[k].append(0.0)
-
-    return {
-        f"CV_Recall@{k}": round(sum(all_cv_recalls[k]) / len(results), 5)
-        for k in k_values
-    }

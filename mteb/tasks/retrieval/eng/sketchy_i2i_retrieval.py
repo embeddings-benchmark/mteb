@@ -15,7 +15,7 @@ class SketchyI2IRetrieval(AbsTaskRetrieval):
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cv_recall_at_1",
+        main_score="hit_rate_at_1",
         date=("2021-12-06", "2021-12-14"),  # conference dates
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],

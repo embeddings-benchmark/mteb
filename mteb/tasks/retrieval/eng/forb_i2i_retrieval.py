@@ -15,7 +15,7 @@ class FORBI2I(AbsTaskRetrieval):
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cv_recall_at_1",
+        main_score="hit_rate_at_1",
         date=("2022-01-01", "2023-01-01"),
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],

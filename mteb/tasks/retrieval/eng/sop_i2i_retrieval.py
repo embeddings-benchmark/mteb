@@ -15,7 +15,7 @@ class SOPI2IRetrieval(AbsTaskRetrieval):
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cv_recall_at_1",
+        main_score="hit_rate_at_1",
         date=("2019-07-17", "2019-07-17"),
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],

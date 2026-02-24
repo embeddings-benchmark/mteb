@@ -15,7 +15,7 @@ class BLINKIT2TRetrieval(AbsTaskRetrieval):
         category="it2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cv_recall_at_1",
+        main_score="hit_rate_at_1",
         date=("2018-01-01", "2018-12-31"),
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],

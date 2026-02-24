@@ -88,7 +88,6 @@ class TestRetrievalEvaluator:
             naucs,
             mrr,
             naucs_mrr,
-            cv_recall,
             hit_rate,
         ) = self.evaluator.evaluate(
             relevant_docs,
@@ -148,7 +147,6 @@ class TestRetrievalEvaluator:
             naucs,
             mrr,
             naucs_mrr,
-            cv_recall,
             hit_rate,
         ) = self.evaluator.evaluate(
             relevant_docs,
