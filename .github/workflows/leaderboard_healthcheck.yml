@@ -1,0 +1,51 @@
+name: Leaderboard Healthcheck
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  healthcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check leaderboard endpoint
+        id: health
+        run: |
+          if curl -sS --fail --max-time 30 --connect-timeout 10 \
+            -X POST "https://mteb-leaderboard.hf.space/gradio_api/call/on_page_load" \
+            -H "Content-Type: application/json" \
+            -d '{"data":[]}' \
+            -o /dev/null; then
+            echo "alive=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "alive=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create or update outage issue
+        if: steps.health.outputs.alive != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          title="Leaderboard healthcheck failing"
+          run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
+          gh issue create \
+            --title "$title" \
+            --label "leaderboard,bug" \
+            --body "$(cat <<EOF
+          Automated leaderboard healthcheck failed.
+
+          - Endpoint: https://mteb-leaderboard.hf.space/gradio_api/call/on_page_load
+          - Workflow run: ${run_url}
+
+          @Samoed @KennethEnevoldsen
+          EOF
+          )"
