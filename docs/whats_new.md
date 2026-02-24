@@ -47,11 +47,11 @@ import mteb
 
 tasks= mteb.get_tasks()
 
-audio_task = [task for task in tasks if "audio" in task.metadata.modalities]
+audio_task = mteb.get_tasks(modalities=["audio"])
 len(audio_task) # 108 tasks
 
 models = mteb.get_model_metas()
-audio_models = mteb.get_tasks(modalities=["audio"])
+audio_models = [model for model in models if "audio" in model.modalities]
 len(audio_models) # 56 models
 
 # and as easy as always to evaluate on these tasks:

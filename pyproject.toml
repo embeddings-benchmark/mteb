@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.8.3"
+version = "2.8.7"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -106,7 +106,7 @@ xet = ["huggingface_hub>=0.32.0"]
 youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lkeap>=3.0.1451"]
 llama-embed-nemotron = ["transformers==4.51.0"]
 llama-nemotron-colembed-vl = ["transformers[torch]==4.49.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
-nemotron-colembed-vl-v2 = ["transformers[torch]==5.0.0rc0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
+nemotron-colembed-vl-v2 = ["transformers[torch]==5.0.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 faiss-cpu = ["faiss-cpu>=1.12.0"]
 eager_embed = ["qwen_vl_utils>=0.0.14"]
 speechbrain = ["speechbrain>=0.5.12"]
@@ -440,6 +440,7 @@ extend-ignore-words-re = [
 ]
 extend-ignore-re = [
     "author.*",  # ignore authors in citations
+    "editor.*",  # ignore authors in citations
 ]
 
 [tool.typos.files]

@@ -25,7 +25,11 @@ from mteb.leaderboard.benchmark_selector import (
     _make_selector,
 )
 from mteb.leaderboard.event_logger import EventLogger
-from mteb.leaderboard.figures import _performance_size_plot, _radar_chart
+from mteb.leaderboard.figures import (
+    _performance_over_time_plot,
+    _performance_size_plot,
+    _radar_chart,
+)
 from mteb.leaderboard.table import (
     apply_per_language_styling_from_benchmark,
     apply_per_task_styling_from_benchmark,
@@ -749,6 +753,14 @@ def get_leaderboard_app(
             plot = gr.Plot(_performance_size_plot, inputs=[summary_table])
             plot_tab.select(
                 _performance_size_plot, inputs=[summary_table], outputs=[plot]
+            )
+
+        with gr.Tab("Performance over Time") as timeline_tab:
+            timeline_plot = gr.Plot(_performance_over_time_plot, inputs=[summary_table])
+            timeline_tab.select(
+                _performance_over_time_plot,
+                inputs=[summary_table],
+                outputs=[timeline_plot],
             )
 
         with gr.Tab(

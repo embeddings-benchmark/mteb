@@ -25,7 +25,10 @@ class LoTTERetrieval(AbsTaskRetrieval):
         reference="https://github.com/stanford-futuredata/ColBERT/blob/main/LoTTE.md",
         eval_splits=["test", "dev"],
         eval_langs={domain: ["eng-Latn"] for domain in HF_SUBSETS},
-        main_score="recall_at_5",
+        # in paper mentioned as `Success@5 (sometimes referred to as Recall@5)`,
+        # which is hit_rate@5 in code https://github.com/stanford-futuredata/ColBERT/blob/cc4f3dc91c0b45d2d08c251d9d95178285c65f1c/utility/evaluate/evaluate_lotte_rankings.py#L39-L40
+        # and mteb have cv_recall_at_5 which is actually hit_rate
+        main_score="cv_recall_at_5",
         date=("2021-12-02", "2022-06-10"),
         domains=["Academic", "Web", "Social"],
         task_subtypes=["Article retrieval"],
