@@ -378,7 +378,9 @@ class AbsTask(ABC):
             self.dataset[lang] = DatasetDict(subset)
 
     def calculate_descriptive_statistics(
-        self, overwrite_results: bool = False, num_proc: int = 1
+        self,
+        overwrite_results: bool = False,
+        num_proc: int | None = None,
     ) -> dict[str, DescriptiveStatistics]:
         """Calculates descriptive statistics from the dataset.
 
@@ -536,7 +538,10 @@ class AbsTask(ABC):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _upload_dataset_to_hub(
-        self, repo_name: str, fields: list[str] | dict[str, str], num_proc: int = 1
+        self,
+        repo_name: str,
+        fields: list[str] | dict[str, str],
+        num_proc: int | None = None,
     ) -> None:
         if self.dataset is None:
             raise ValueError("Dataset not loaded")
@@ -585,13 +590,17 @@ class AbsTask(ABC):
                 repo_name, commit_message="Add dataset", num_proc=num_proc
             )
 
-    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+    def _push_dataset_to_hub(
+        self,
+        repo_name: str,
+        num_proc: int | None = None,
+    ) -> None:
         raise NotImplementedError
 
     def push_dataset_to_hub(
         self,
         repo_name: str,
-        num_proc: int = 1,
+        num_proc: int | None = None,
         *,
         push_eval: bool = False,
     ) -> None:

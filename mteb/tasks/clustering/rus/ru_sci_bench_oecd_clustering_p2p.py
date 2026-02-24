@@ -32,7 +32,10 @@ class RuSciBenchOECDClusteringP2P(AbsTaskClustering):
         prompt="Identify the category of scientific papers based on the titles and abstracts",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_columns(
             {"label": "labels", "text": "sentences"}
         )

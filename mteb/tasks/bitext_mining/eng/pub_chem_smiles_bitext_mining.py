@@ -59,7 +59,10 @@ class PubChemSMILESBitextMining(AbsTaskBitextMining):
 """,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         for subset in self.hf_subsets:
             self.dataset[subset] = self.dataset[subset].rename_columns(
                 COL_MAPPING[subset]

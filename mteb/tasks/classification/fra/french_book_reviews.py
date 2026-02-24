@@ -29,7 +29,10 @@ class FrenchBookReviews(AbsTaskClassification):
         superseded_by="FrenchBookReviews.v2",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_columns({"reader_review": "text"})
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"]
@@ -63,7 +66,10 @@ class FrenchBookReviewsV2(AbsTaskClassification):
         adapted_from=["FrenchBookReviews"],
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"]
         )

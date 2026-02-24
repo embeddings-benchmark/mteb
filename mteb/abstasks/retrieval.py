@@ -605,7 +605,11 @@ class AbsTaskRetrieval(AbsTask):
             top_ranked_statistics=top_ranked_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+    def _push_dataset_to_hub(
+        self,
+        repo_name: str,
+        num_proc: int | None = None,
+    ) -> None:
         self.convert_v1_dataset_format_to_v2(num_proc)
 
         def _push_section(

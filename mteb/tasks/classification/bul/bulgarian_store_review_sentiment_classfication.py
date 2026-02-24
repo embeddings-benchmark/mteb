@@ -37,7 +37,10 @@ class BulgarianStoreReviewSentimentClassfication(AbsTaskClassification):
 """,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_columns(
             {"Review": "text", "Category": "label"}
         )

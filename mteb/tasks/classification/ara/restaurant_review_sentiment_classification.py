@@ -37,7 +37,10 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
         superseded_by="RestaurantReviewSentimentClassification.v2",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         # labels: 0 negative, 1 positive
         self.dataset = self.dataset.rename_column("polarity", "label")
         self.dataset = self.stratified_subsampling(
