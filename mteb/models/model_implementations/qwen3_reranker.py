@@ -8,8 +8,8 @@ from tqdm.auto import tqdm
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
+    GenerationConfig,
 )
-from vllm import SamplingParams
 
 from mteb.models.model_meta import ModelMeta
 
@@ -48,13 +48,14 @@ class Qwen3RerankerWrapper:
         self.token_true_id = self.tokenizer.convert_tokens_to_ids("yes")
         self.true_token = self.tokenizer("yes", add_special_tokens=False).input_ids[0]
         self.false_token = self.tokenizer("no", add_special_tokens=False).input_ids[0]
-        self.sampling_params = SamplingParams(
-            temperature=0,
+        self.generation_config = GenerationConfig(
+            max_new_tokens=1,
+            do_sample=False,
             top_p=0.95,
-            max_tokens=1,
-            logprobs=20,
-            allowed_token_ids=[self.true_token, self.false_token],
+            output_logits=True,
+            return_dict_in_generate=True,
         )
+
         self.prefix = '<|im_start|>system\nJudge whether the Document meets the requirements based on the Query and the Instruct provided. Note that the answer can only be "yes" or "no".<|im_end|>\n<|im_start|>user\n'
         self.suffix = "<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
         self.prefix_tokens = self.tokenizer.encode(
@@ -81,8 +82,9 @@ class Qwen3RerankerWrapper:
             - len(self.prefix_tokens)
             - len(self.suffix_tokens),
         )
+        inputs = self.tokenizer.apply_chat_template(pairs)
         for i, ele in enumerate(inputs["input_ids"]):
-            inputs["input_ids"][i] = self.prefix_tokens + ele + self.suffix_tokens
+            inputs["input_ids"][i] = ele + self.suffix_tokens
 
         inputs = self.tokenizer.pad(
             inputs, padding=True, return_tensors="pt", max_length=self.max_length
@@ -93,7 +95,10 @@ class Qwen3RerankerWrapper:
 
     @torch.no_grad()
     def compute_logits(self, inputs: dict) -> list[float]:
-        batch_scores = self.model(**inputs).logits[:, -1, :]
+        batch_scores = self.model.generate(
+            **inputs,
+            generation_config=self.generation_config,
+        ).logits[0]
         true_vector = batch_scores[:, self.token_true_id]
         false_vector = batch_scores[:, self.token_false_id]
         batch_scores = torch.stack([false_vector, true_vector], dim=1)
