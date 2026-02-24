@@ -212,7 +212,9 @@ class MIEBBenchmark(Benchmark):
     ) -> pd.DataFrame:
         from mteb.benchmarks._create_table import _create_summary_table_mean_task_type
 
-        return _create_summary_table_mean_task_type(benchmark_results)
+        return _create_summary_table_mean_task_type(
+            benchmark_results, mean_column_name="Mean (Task)"
+        )
 
 
 class VidoreBenchmark(Benchmark):
