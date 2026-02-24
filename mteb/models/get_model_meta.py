@@ -137,7 +137,7 @@ def get_model_meta(
     revision: str | None = None,
     fetch_from_hf: bool = True,
     fill_missing: bool = False,
-    experiment_params: Mapping[str, Any] | None = None,
+    experiment_kwargs: Mapping[str, Any] | None = None,
 ) -> ModelMeta:
     """A function to fetch a model metadata object by name.
 
@@ -146,7 +146,7 @@ def get_model_meta(
         revision: Revision of the model to fetch
         fetch_from_hf: Whether to fetch the model from HuggingFace Hub if not found in the registry
         fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
-        experiment_params: Optional dictionary of parameters to fill in the metadata for experimental models.
+        experiment_kwargs: Optional dictionary of parameters to fill in the metadata for experimental models.
 
     Returns:
         A model metadata object
@@ -165,9 +165,9 @@ def get_model_meta(
                 f"Model revision {revision} not found for model {model_name}. Expected {model_meta.revision}."
             )
 
-        if experiment_params is not None:
+        if experiment_kwargs is not None:
             model_meta = model_meta.model_copy(
-                update={"experiment_params": experiment_params}
+                update={"experiment_kwargs": experiment_kwargs}
             )
 
         if fill_missing and fetch_from_hf:

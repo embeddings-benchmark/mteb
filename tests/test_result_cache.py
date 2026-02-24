@@ -291,7 +291,7 @@ def test_load_experiment_results(tmp_path):
     assert len(base_res.model_results) == 1
     assert base_res.model_results[0].experiment_name is None
 
-    base_res = cache.load_results(experiment_params=[params_1, params_2])
+    base_res = cache.load_results(experiment_kwargs=[params_1, params_2])
     assert len(base_res.model_results) == 2
 
     # load all experiments
@@ -307,7 +307,7 @@ def test_load_experiment_results(tmp_path):
     # load **only** specific experiment by kwargs
     only_named_experiment_res = cache.load_results(
         load_experiments=LoadExperimentEnum.MATCH_KWARGS,
-        experiment_params=params_1,
+        experiment_kwargs=params_1,
     )
     assert len(only_named_experiment_res.model_results) == 1
     assert only_named_experiment_res.model_results[0].experiment_name == "a_test"
@@ -315,7 +315,7 @@ def test_load_experiment_results(tmp_path):
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta],
         load_experiments=LoadExperimentEnum.MATCH_NAME,
-        experiment_params=params_1,
+        experiment_kwargs=params_1,
     )
     assert len(model_meta_res.model_results) == 1
 
@@ -323,7 +323,7 @@ def test_load_experiment_results(tmp_path):
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta.name],
         load_experiments=LoadExperimentEnum.MATCH_NAME,
-        experiment_params=params_2,
+        experiment_kwargs=params_2,
     )
     assert len(model_meta_res.model_results) == 1
     assert model_meta_res.model_results[0].experiment_name == "a_test__b_test2"
@@ -358,7 +358,7 @@ def test_load_experiment_results(tmp_path):
     model_meta_res = cache.load_results(
         models=[model.mteb_model_meta.name],
         load_experiments=LoadExperimentEnum.MATCH_KWARGS,
-        experiment_params=[model.mteb_model_meta.experiment_params],
+        experiment_kwargs=[model.mteb_model_meta.experiment_kwargs],
     )
     assert len(model_meta_res.model_results) == 1
     assert model_meta_res.model_results[0].experiment_name == "a_test__b_test2"
@@ -382,7 +382,7 @@ def test_load_experiment_results(tmp_path):
     assert len(model_meta_res.model_results) == 1
 
     model_meta_res = cache.load_results(
-        experiment_params=[model.mteb_model_meta.experiment_params],
+        experiment_kwargs=[model.mteb_model_meta.experiment_kwargs],
     )
     assert len(model_meta_res.model_results) == 1
 

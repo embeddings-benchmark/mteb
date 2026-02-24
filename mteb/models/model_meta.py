@@ -129,7 +129,7 @@ class ModelMeta(BaseModel):
         model_type: A list of strings representing the type of model.
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
-        experiment_params: **DO NOT SET** A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
+        experiment_kwargs: **DO NOT SET** A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -162,7 +162,7 @@ class ModelMeta(BaseModel):
     model_type: list[MODEL_TYPES] = ["dense"]
     citation: str | None = None
     contacts: list[str] | None = None
-    experiment_params: Mapping[str, Any] | None = None
+    experiment_kwargs: Mapping[str, Any] | None = None
 
     @model_validator(mode="before")
     @classmethod
@@ -283,11 +283,11 @@ class ModelMeta(BaseModel):
         if self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
 
-        if self.experiment_params is None:
-            self.experiment_params = kwargs if len(kwargs) > 0 else None
-        elif len(kwargs) > 0 and self.experiment_params is not None:
-            kwargs |= self.experiment_params
-            self.experiment_params = kwargs
+        if self.experiment_kwargs is None:
+            self.experiment_kwargs = kwargs if len(kwargs) > 0 else None
+        elif len(kwargs) > 0 and self.experiment_kwargs is not None:
+            kwargs |= self.experiment_kwargs
+            self.experiment_kwargs = kwargs
 
         # Allow overwrites
         _kwargs = self.loader_kwargs.copy()
@@ -322,7 +322,7 @@ class ModelMeta(BaseModel):
             >>> # param1_test
         """
         return _get_experiment_name_from_params(
-            experiment_params=self.experiment_params
+            experiment_kwargs=self.experiment_kwargs
         )
 
     @classmethod
@@ -1093,7 +1093,7 @@ class ModelMeta(BaseModel):
 
     def to_python(self) -> str:
         """Returns a string representation of the model."""
-        return _pydantic_instance_to_code(self, exclude_fields=["experiment_params"])
+        return _pydantic_instance_to_code(self, exclude_fields=["experiment_kwargs"])
 
     def push_eval_results(
         self,
@@ -1241,9 +1241,9 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
 
 
 def _get_experiment_name_from_params(
-    experiment_params: Mapping[str, Any] | None,
+    experiment_kwargs: Mapping[str, Any] | None,
 ) -> str | None:
-    if experiment_params is None or len(experiment_params) == 0:
+    if experiment_kwargs is None or len(experiment_kwargs) == 0:
         return None
 
     invalid_chars = set('<>:"|?*\\/\0')
@@ -1276,14 +1276,14 @@ def _get_experiment_name_from_params(
             return f"{value.__class__.__name__}_{digest}"
 
         raise ValueError(
-            f"experiment_params contains non-serializable type {type(value).__name__}. "
+            f"experiment_kwargs contains non-serializable type {type(value).__name__}. "
             f"Only JSON-serializable types (str, int, float, bool, list, dict, None), "
             f"Enums, numpy arrays, and Pydantic models are supported."
         )
 
     params_str = "__".join(
         f"{key}_{_serialize_value(value)}"
-        for key, value in sorted(experiment_params.items())
+        for key, value in sorted(experiment_kwargs.items())
     )
 
     # If too long or contains invalid chars, use hash

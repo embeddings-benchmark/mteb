@@ -45,10 +45,10 @@ print(results.model_results)
 # [ModelResult(model_name=baseline/random-encoder-baseline, model_revision=1, task_results=[...](#1))]
 
 # getting results with specific experiment
-model_meta = mteb.get_model_meta("baseline/random-encoder-baseline", experiment_params={"a": "test"})
+model_meta = mteb.get_model_meta("baseline/random-encoder-baseline", experiment_kwargs={"a": "test"})
 result_with_experiment = cache.load_results(models=[model_meta])
 # equal to
-result_with_experiment = cache.load_results(models=["baseline/random-encoder-baseline"], experiment_params={"a": "test"})
+result_with_experiment = cache.load_results(models=["baseline/random-encoder-baseline"], experiment_kwargs={"a": "test"})
 print(result_with_experiment.model_results)
 # [ModelResult(model_name=baseline/random-encoder-baseline, model_revision=1, experiment_name=a_test, task_results=[...](#1))]
 

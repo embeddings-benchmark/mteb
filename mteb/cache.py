@@ -738,8 +738,8 @@ class ResultCache:
             model_meta_json = json.load(f)
         model_name = model_meta_json["name"]
         revision = model_meta_json["revision"]
-        experiment_params = model_meta_json.get("experiment_params", None)
-        experiment_name_ = _get_experiment_name_from_params(experiment_params)
+        experiment_kwargs = model_meta_json.get("experiment_kwargs", None)
+        experiment_name_ = _get_experiment_name_from_params(experiment_kwargs)
         return model_name, revision, experiment_name_
 
     @staticmethod
@@ -828,7 +828,7 @@ class ResultCache:
         validate_and_filter: bool = False,
         only_main_score: bool = False,
         load_experiments: LoadExperimentEnum | str = LoadExperimentEnum.MATCH_KWARGS,
-        experiment_params: Mapping[str, Any] | list[Mapping[str, Any]] | None = None,
+        experiment_kwargs: Mapping[str, Any] | list[Mapping[str, Any]] | None = None,
     ) -> BenchmarkResults:
         """Loads the results from the cache directory and returns a BenchmarkResults object.
 
@@ -844,7 +844,7 @@ class ResultCache:
                 splits from the results object that are not default in the task metadata.
             only_main_score: If True, only the main score will be loaded.
             load_experiments: If True, it will also load results from experiment folders.
-            experiment_params: If specified, it will only load results from experiments with the specified kwargs. Only used if load_experiments is True.
+            experiment_kwargs: If specified, it will only load results from experiments with the specified kwargs. Only used if load_experiments is True.
 
         Returns:
             A BenchmarkResults object containing the results for the specified models and tasks.
@@ -868,10 +868,10 @@ class ResultCache:
 
         if (
             load_experiments is not LoadExperimentEnum.MATCH_KWARGS
-            and experiment_params is not None
+            and experiment_kwargs is not None
         ):
             warnings.warn(
-                "experiment_params is specified but load_experiments is not set to MATCH_KWARGS."
+                "experiment_kwargs is specified but load_experiments is not set to MATCH_KWARGS."
                 "No results will be loaded."
             )
 
@@ -897,11 +897,11 @@ class ResultCache:
                     task_names[task] = None
 
         experiment_names = set()
-        if isinstance(experiment_params, Mapping):
-            experiment_params = [experiment_params]
-        if isinstance(experiment_params, list):
+        if isinstance(experiment_kwargs, Mapping):
+            experiment_kwargs = [experiment_kwargs]
+        if isinstance(experiment_kwargs, list):
             experiment_names = {
-                _get_experiment_name_from_params(params) for params in experiment_params
+                _get_experiment_name_from_params(params) for params in experiment_kwargs
             }
         for path in paths:
             task_result = TaskResult.from_disk(path)
