@@ -652,7 +652,7 @@ class AbsTask(ABC):
         if existing_eval_path is not None:
             with Path(existing_eval_path).open() as f:
                 existing_eval_dict = yaml.safe_load(f)
-            if existing_eval is not None:
+            if existing_eval_dict is not None:
                 existing_eval = HFEvalMeta.model_validate(existing_eval_dict)
 
         task_config = self._create_task_hf_config(existing_eval)
