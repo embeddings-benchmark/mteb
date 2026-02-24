@@ -212,10 +212,9 @@ class MIEBBenchmark(Benchmark):
     ) -> pd.DataFrame:
         from mteb.benchmarks._create_table import _create_summary_table_mean_task_type
 
-        joint_table = _create_summary_table_mean_task_type(benchmark_results)
-        if "Mean (TaskType)" in joint_table.columns:
-            joint_table = joint_table.rename(columns={"Mean (TaskType)": "Mean (Task)"})
-        return joint_table
+        return _create_summary_table_mean_task_type(
+            benchmark_results, mean_column_name="Mean (Task)"
+        )
 
 
 class VidoreBenchmark(Benchmark):

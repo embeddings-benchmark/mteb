@@ -553,7 +553,7 @@ def _create_summary_table_mean_subset(
 
 
 def _create_summary_table_mean_task_type(
-    benchmark_results: BenchmarkResults,
+    benchmark_results: BenchmarkResults, mean_column_name: str = "Mean (TaskType)"
 ) -> pd.DataFrame:
     """Create summary table from BenchmarkResults.
 
@@ -562,6 +562,7 @@ def _create_summary_table_mean_task_type(
 
     Args:
         benchmark_results: BenchmarkResults object containing model results
+        mean_column_name: Name for the mean-by-task-type column. Defaults to "Mean (TaskType)".
 
     Returns:
         DataFrame with model summaries, ready for styling in the leaderboard
@@ -660,7 +661,7 @@ def _create_summary_table_mean_task_type(
     joint_table = joint_table.rename(
         columns={
             "model_name": "Model",
-            "mean_by_task_type": "Mean (TaskType)",
+            "mean_by_task_type": mean_column_name,
             "borda_rank": "Rank (Borda)",
         }
     )
