@@ -129,7 +129,7 @@ class ModelMeta(BaseModel):
         model_type: A list of strings representing the type of model.
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
-        experiment_kwargs: **DO NOT SET** A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
+        experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -321,7 +321,7 @@ class ModelMeta(BaseModel):
             >>> print(model.mteb_model_meta.experiment_name)
             >>> # param1_test
         """
-        return _get_experiment_name_from_params(
+        return _serialize_experiment_kwargs_to_name(
             experiment_kwargs=self.experiment_kwargs
         )
 
@@ -1240,7 +1240,7 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
     return similar
 
 
-def _get_experiment_name_from_params(
+def _serialize_experiment_kwargs_to_name(
     experiment_kwargs: Mapping[str, Any] | None,
 ) -> str | None:
     if experiment_kwargs is None or len(experiment_kwargs) == 0:

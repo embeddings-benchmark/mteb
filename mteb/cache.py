@@ -21,7 +21,7 @@ from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks import AbsTask
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
-from mteb.models.model_meta import _get_experiment_name_from_params
+from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
 
 if TYPE_CHECKING:
@@ -739,7 +739,7 @@ class ResultCache:
         model_name = model_meta_json["name"]
         revision = model_meta_json["revision"]
         experiment_kwargs = model_meta_json.get("experiment_kwargs", None)
-        experiment_name_ = _get_experiment_name_from_params(experiment_kwargs)
+        experiment_name_ = _serialize_experiment_kwargs_to_name(experiment_kwargs)
         return model_name, revision, experiment_name_
 
     @staticmethod
@@ -901,7 +901,8 @@ class ResultCache:
             experiment_kwargs = [experiment_kwargs]
         if isinstance(experiment_kwargs, list):
             experiment_names = {
-                _get_experiment_name_from_params(params) for params in experiment_kwargs
+                _serialize_experiment_kwargs_to_name(params)
+                for params in experiment_kwargs
             }
         for path in paths:
             task_result = TaskResult.from_disk(path)
