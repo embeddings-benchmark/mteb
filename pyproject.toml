@@ -289,6 +289,12 @@ typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
     # pydantic would try to validate fields in Benchmark class
     "TC",
 ]
+"mteb/leaderboard/app.py" = [
+    # gradio would try to validate typehints
+    "TC002",
+    "TC001",
+]
+
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false
