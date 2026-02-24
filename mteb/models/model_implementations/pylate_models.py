@@ -100,7 +100,7 @@ class PylateSearchEncoder:
             num_proc=num_proc,
         )
 
-        query_embeddings = self.encode(
+        query_embeddings = self._encode(
             queries_dataloader,
             task_metadata=task_metadata,
             hf_split=hf_split,
@@ -318,7 +318,7 @@ class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
         self._index_autodelete = index_autodelete
         self.index_kwargs = index_kwargs or {}
 
-    def encode(
+    def _encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,
