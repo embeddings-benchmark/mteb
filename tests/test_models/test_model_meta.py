@@ -318,7 +318,7 @@ def test_loader_kwargs_persisted_in_metadata():
 
 
 def test_get_model_kwargs_does_not_mutate_registry_meta():
-    model_name = "baseline/random-encoder-baseline"
+    model_name = "mteb/baseline-random-encoder"
 
     model = mteb.get_model(model_name, not_existing_param=123)
     assert model.mteb_model_meta.experiment_kwargs == {"not_existing_param": 123}
@@ -412,7 +412,7 @@ def test_load_sentence_transformer_via_get_model_meta():
 
 
 def test_load_model_with_experiments():
-    model_name = "baseline/random-encoder-baseline"
+    model_name = "mteb/baseline-random-encoder"
 
     model1 = mteb.get_model(model_name, param=1)
     model_meta = mteb.get_model_meta(model_name, experiment_kwargs={"param": 1})

@@ -267,7 +267,7 @@ def test_cache_load_different_subsets():
 
 def test_load_experiment_results(tmp_path):
     """Test that results from an experiment can be loaded correctly."""
-    model = mteb.get_model("baseline/random-encoder-baseline")
+    model = mteb.get_model("mteb/baseline-random-encoder")
     task = MockRetrievalTask()
     cache = mteb.ResultCache(tmp_path)
     mteb.evaluate(model, task, cache=cache)
@@ -275,13 +275,13 @@ def test_load_experiment_results(tmp_path):
     params_1 = {"a": "test"}
     params_2 = {"a": "test", "b": "test2"}
     model = mteb.get_model(
-        "baseline/random-encoder-baseline",
+        "mteb/baseline-random-encoder",
         **params_1,
     )
     mteb.evaluate(model, task, cache=cache)
 
     model = mteb.get_model(
-        "baseline/random-encoder-baseline",
+        "mteb/baseline-random-encoder",
         **params_2,
     )
     mteb.evaluate(model, task, cache=cache)

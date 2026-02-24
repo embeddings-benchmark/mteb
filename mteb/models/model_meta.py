@@ -316,7 +316,7 @@ class ModelMeta(BaseModel):
 
         Examples:
             >>> import mteb
-            >>> model = mteb.get_model("baseline/random-encoder-baseline", param1="test")
+            >>> model = mteb.get_model("mteb/baseline-random-encoder", param1="test")
             >>>
             >>> print(model.mteb_model_meta.experiment_name)
             >>> # param1_test

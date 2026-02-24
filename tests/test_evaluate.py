@@ -305,7 +305,7 @@ def test_evaluate_preserves_preloaded_data_across_multiple_calls():
 def test_evaluate_experiment(tmp_path):
     """Test that evaluate() can be used in an experiment context."""
     model = mteb.get_model(
-        "baseline/random-encoder-baseline", test_param=123, test_param2="abc"
+        "mteb/baseline-random-encoder", test_param=123, test_param2="abc"
     )
     task = MockClassificationTask()
     cache = ResultCache(tmp_path)
