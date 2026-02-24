@@ -3,6 +3,11 @@ from pathlib import Path
 
 import pytest
 
+import mteb
+from mteb import ResultCache
+from mteb._hf_integration.eval_result_model import (
+    HFEvalResultDataset,
+)
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.results import TaskResult
@@ -64,7 +69,9 @@ def task_result():
     evaluation_time = 100
 
     return TaskResult.from_task_results(
-        task=DummyTask(), scores=scores, evaluation_time=evaluation_time
+        task=DummyTask(),
+        scores=scores,
+        evaluation_time=evaluation_time,
     )
 
 
@@ -81,6 +88,7 @@ def test_task_results_to_dict(task_result: TaskResult):
         "task_name": "dummy_task",
         "mteb_version": version("mteb"),
         "evaluation_time": 100,
+        "date": None,
         "kg_co2_emissions": None,
         "scores": {
             "train": [
@@ -151,3 +159,56 @@ def test_task_results_validate_and_filter():
 def test_mteb_results_from_historic(path: Path):
     mteb_result = TaskResult.from_disk(path, load_historic_data=True)
     assert isinstance(mteb_result, TaskResult)
+
+
+def test_to_hf_result(mock_mteb_cache: ResultCache):
+    task_name = "Banking77Classification"
+    task_metadata = mteb.get_task(task_name).metadata
+    benchmark_result = mock_mteb_cache.load_results(
+        models=["mteb/baseline-random-encoder"], tasks=[task_name]
+    )
+    user_name = "test_user"
+    task_result = benchmark_result.model_results[0].task_results[0]
+    hf_results = task_result._to_hf_benchmark_result(user_name)
+    assert len(hf_results) == 2
+
+    assert hf_results[-1].dataset.task_id == task_name
+    assert hf_results[0].dataset == HFEvalResultDataset(
+        id=task_metadata.dataset["path"],
+        task_id=f"{task_name}_default_test",
+        revision=task_metadata.revision,
+    )
+
+    hf_result = hf_results[-1]
+    assert hf_result.dataset == HFEvalResultDataset(
+        id=task_metadata.dataset["path"],
+        task_id=task_name,
+        revision=task_metadata.revision,
+    )
+    assert hf_result.value == 1.2532
+    assert hf_result.source.user == user_name
+
+    assert (
+        hf_results.to_yaml()
+        == """- dataset:
+    id: mteb/banking77
+    task_id: Banking77Classification_default_test
+    revision: 0fd18e25b25c072e09e0d92ab615fda904d66300
+  value: 1.2532
+  notes: Obtained using MTEB v2.4.2
+  source:
+    url: https://github.com/embeddings-benchmark/mteb/
+    name: Obtained using MTEB v2.4.2
+    user: test_user
+- dataset:
+    id: mteb/banking77
+    task_id: Banking77Classification
+    revision: 0fd18e25b25c072e09e0d92ab615fda904d66300
+  value: 1.2532
+  notes: Obtained using MTEB v2.4.2
+  source:
+    url: https://github.com/embeddings-benchmark/mteb/
+    name: Obtained using MTEB v2.4.2
+    user: test_user
+"""
+    )

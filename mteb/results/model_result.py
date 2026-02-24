@@ -1,23 +1,23 @@
 from __future__ import annotations
 
 import logging
+import tempfile
 import warnings
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
+import huggingface_hub
 import numpy as np
 import pandas as pd
 from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import overload
 
-from mteb.types import (
-    Modalities,
-)
+from mteb.types import Modalities
 
 from .task_result import TaskError, TaskResult
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable
-    from pathlib import Path
 
     from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import (
@@ -440,3 +440,30 @@ class ModelResult(BaseModel):
         """
         with path.open("r", encoding="utf-8") as f:
             return cls.model_validate_json(f.read())
+
+    def push_model_results(
+        self, user: str | None = None, *, create_pr: bool = False
+    ) -> None:
+        """Push the model results to the Hugging Face Hub.
+
+        Args:
+            user: The user or organization of results source.
+            create_pr: Whether to create a pull request
+        """
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir)
+            for task_result in self.task_results:
+                task_results = task_result._to_hf_benchmark_result(user)
+                with (path / f"{task_result.task_name}.yaml").open(
+                    "w", encoding="utf-8"
+                ) as f:
+                    f.write(task_results.to_yaml())
+
+            huggingface_hub.upload_folder(
+                repo_id=self.model_name,
+                repo_type="model",
+                path_in_repo=".eval_results",
+                folder_path=path,
+                commit_message=f"Add evaluation results for model {self.model_name} revision {self.model_revision}",
+                create_pr=create_pr,
+            )

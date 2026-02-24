@@ -223,7 +223,7 @@ def test_cache_load_different_subsets():
         "sentence-transformers/all-MiniLM-L6-v2"
     )  # model have only arab subset results
     model2 = mteb.get_model_meta(
-        "baseline/random-encoder-baseline"
+        "mteb/baseline-random-encoder"
     )  # model have all subsets results
 
     result1 = cache.load_results(
