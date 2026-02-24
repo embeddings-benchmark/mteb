@@ -305,7 +305,11 @@ class AbsTaskClustering(AbsTask):
             labels_statistics=label_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+    def _push_dataset_to_hub(
+        self,
+        repo_name: str,
+        num_proc: int | None = None,
+    ) -> None:
         self._upload_dataset_to_hub(
             repo_name,
             [self.input_column_name, self.label_column_name],

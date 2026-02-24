@@ -10,7 +10,7 @@ import mteb
 logging.basicConfig(level=logging.INFO)
 
 
-@pytest.mark.parametrize("model", [mteb.get_model("baseline/random-encoder-baseline")])
+@pytest.mark.parametrize("model", [mteb.get_model("mteb/baseline-random-encoder")])
 def test_run_using_benchmark(model: mteb.EncoderProtocol, tmp_path: Path):
     """Test that a benchmark object can be run using the MTEB class."""
     bench = mteb.Benchmark(
@@ -23,7 +23,7 @@ def test_run_using_benchmark(model: mteb.EncoderProtocol, tmp_path: Path):
     )  # we just want to test that it runs
 
 
-@pytest.mark.parametrize("model", [mteb.get_model("baseline/random-encoder-baseline")])
+@pytest.mark.parametrize("model", [mteb.get_model("mteb/baseline-random-encoder")])
 def test_run_using_list_of_benchmark(model: mteb.EncoderProtocol, tmp_path: Path):
     """Test that a list of benchmark objects can be run using the MTEB class."""
     bench = [

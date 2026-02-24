@@ -265,4 +265,5 @@ ops_colqwen3_4b = ModelMeta(
     use_instructions=True,
     training_datasets=OPS_COLQWEN3_TRAINING_DATA,
     citation=OPS_COLQWEN3_CITATION,
+    model_type=["late-interaction"],
 )

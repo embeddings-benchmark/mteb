@@ -81,7 +81,10 @@ class WikiClusteringFastP2P(AbsTaskClustering):
         adapted_from=["WikiClusteringP2P"],
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         ds = {}
         for lang in self.hf_subsets:
             labels = []

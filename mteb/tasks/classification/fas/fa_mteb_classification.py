@@ -602,7 +602,10 @@ class DeepSentiPers(AbsTaskClassification):
     )
     samples_per_label = 32
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("review", "text")
 
 
@@ -773,7 +776,10 @@ class NLPTwitterAnalysisClassification(AbsTaskClassification):
     )
     samples_per_label = 32
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("tweet", "text")
 
 
@@ -858,7 +864,10 @@ class FaIntentClassification(AbsTaskClassification):
     )
     samples_per_label = 32
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("words", "text")
         self.dataset = self.dataset.rename_column("intent_label", "label")
 
@@ -889,7 +898,10 @@ class StyleClassification(AbsTaskClassification):
     )
     samples_per_label = 32
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         mapping = {"formal": 1, "informal": 0}
         self.dataset = self.dataset.map(
             lambda example: {"label": mapping[example["label"]]}
@@ -927,7 +939,10 @@ class PerShopDomainClassification(AbsTaskClassification):
     )
     samples_per_label = 32
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("domain", "label")
 
 
@@ -962,5 +977,8 @@ class PerShopIntentClassification(AbsTaskClassification):
     )
     samples_per_label = 32
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("Intents & Actions", "label")

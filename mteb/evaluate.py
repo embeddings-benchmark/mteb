@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 import logging
 import warnings
 from pathlib import Path
@@ -70,10 +71,10 @@ def _sanitize_model(
     elif hasattr(model, "mteb_model_meta"):
         meta = getattr(model, "mteb_model_meta")
         if not isinstance(meta, ModelMeta):
-            meta = ModelMeta._from_hub(None)
+            meta = ModelMeta.create_empty()
         wrapped_model = cast("MTEBModels | ModelMeta", model)
     else:
-        meta = ModelMeta._from_hub(None) if not isinstance(model, ModelMeta) else model
+        meta = ModelMeta.create_empty() if not isinstance(model, ModelMeta) else model
         wrapped_model = meta
 
     model_name = cast("str", meta.name)
@@ -178,6 +179,7 @@ def _evaluate_task(
         task_results,
         evaluation_time=evaluation_time,
         kg_co2_emissions=None,
+        date=datetime.datetime.now(tz=datetime.timezone.utc),
     )
 
     if not data_preloaded:  # only unload if we loaded the data

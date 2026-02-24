@@ -115,7 +115,9 @@ class AbsTaskPairClassification(AbsTask):
 
         if self.metadata.modalities == ["text"]:
             # for compatibility with v1 version where datasets were stored in a single row
-            data_split = data_split[0] if len(data_split) == 1 else data_split
+            data_split = (
+                Dataset.from_dict(data_split[0]) if len(data_split) == 1 else data_split
+            )
         evaluator = PairClassificationEvaluator(
             data_split,
             self.input1_column_name,
@@ -285,7 +287,11 @@ class AbsTaskPairClassification(AbsTask):
             labels_statistics=calculate_label_statistics(labels),
         )
 
-    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+    def _push_dataset_to_hub(
+        self,
+        repo_name: str,
+        num_proc: int | None = None,
+    ) -> None:
         # previously pair classification datasets were stored in a single row
         if self.dataset is None:
             # overall this shouldn't happen as we check for dataset before pushing to hub

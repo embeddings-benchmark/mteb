@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import tempfile
 import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
@@ -9,11 +10,15 @@ from copy import copy
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
+import huggingface_hub
 import numpy as np
+import yaml
 from datasets import ClassLabel, Dataset, DatasetDict, load_dataset
 from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm.auto import tqdm
 
+from mteb._hf_integration.eval_model import HFEvalMeta, HFEvalTaskConfig
+from mteb._hf_integration.hf_hub_utils import _get_file_on_hub
 from mteb._set_seed import _set_seed
 from mteb.languages import LanguageScripts
 from mteb.models import (
@@ -373,7 +378,9 @@ class AbsTask(ABC):
             self.dataset[lang] = DatasetDict(subset)
 
     def calculate_descriptive_statistics(
-        self, overwrite_results: bool = False, num_proc: int = 1
+        self,
+        overwrite_results: bool = False,
+        num_proc: int | None = None,
     ) -> dict[str, DescriptiveStatistics]:
         """Calculates descriptive statistics from the dataset.
 
@@ -531,7 +538,10 @@ class AbsTask(ABC):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _upload_dataset_to_hub(
-        self, repo_name: str, fields: list[str] | dict[str, str], num_proc: int = 1
+        self,
+        repo_name: str,
+        fields: list[str] | dict[str, str],
+        num_proc: int | None = None,
     ) -> None:
         if self.dataset is None:
             raise ValueError("Dataset not loaded")
@@ -580,15 +590,26 @@ class AbsTask(ABC):
                 repo_name, commit_message="Add dataset", num_proc=num_proc
             )
 
-    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+    def _push_dataset_to_hub(
+        self,
+        repo_name: str,
+        num_proc: int | None = None,
+    ) -> None:
         raise NotImplementedError
 
-    def push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+    def push_dataset_to_hub(
+        self,
+        repo_name: str,
+        num_proc: int | None = None,
+        *,
+        push_eval: bool = False,
+    ) -> None:
         """Push the dataset to the HuggingFace Hub.
 
         Args:
             repo_name: The name of the repository to push the dataset to.
             num_proc: Number of processes to use for loading the dataset.
+            push_eval: Whether to also push the eval.yaml file to the Hub
 
         Examples:
             >>> import mteb
@@ -603,6 +624,82 @@ class AbsTask(ABC):
         self._push_dataset_to_hub(repo_name, num_proc)
         # dataset repo not creating when pushing card
         self.metadata.push_dataset_card_to_hub(repo_name)
+        if push_eval:
+            self.push_eval_to_hub(repo_name)
+
+    def push_eval_to_hub(
+        self,
+        repo_name: str,
+        *,
+        create_pr: bool = False,
+    ) -> None:
+        """Push `eval.yaml` to the HuggingFace Hub
+
+        Args:
+            repo_name: repository name
+            create_pr: Whether to create the PR
+        """
+        eval_file_name = "eval.yaml"
+
+        existing_eval_path = _get_file_on_hub(
+            repo_id=repo_name,
+            file_name=eval_file_name,
+            repo_type="dataset",
+        )
+
+        # handle multiple tasks in one repo (e.g. MIRACLRetrievalHardNegatives, MIRACLRetrievalHardNegativesV2)
+        existing_eval = None
+        if existing_eval_path is not None:
+            with Path(existing_eval_path).open() as f:
+                existing_eval_dict = yaml.safe_load(f)
+            if existing_eval is not None:
+                existing_eval = HFEvalMeta.model_validate(existing_eval_dict)
+
+        task_config = self._create_task_hf_config(existing_eval)
+
+        with tempfile.NamedTemporaryFile(mode="w") as tmp_file:
+            tmp_file.write(task_config.to_yaml())
+            tmp_file.flush()
+
+            huggingface_hub.upload_file(
+                path_or_fileobj=tmp_file.name,
+                path_in_repo=eval_file_name,
+                repo_id=repo_name,
+                repo_type="dataset",
+                commit_message="Add eval config",
+                create_pr=create_pr,
+            )
+
+    def _create_task_hf_config(
+        self, existing_eval: HFEvalMeta | None = None
+    ) -> HFEvalMeta:
+        eval_task_config = [
+            # scores across all subsets and splits
+            HFEvalTaskConfig(
+                id=self.metadata.name,
+                split=None,
+                config=None,
+            )
+        ]
+
+        for subset in self.metadata.hf_subsets:
+            for split in self.metadata.eval_splits:
+                eval_task_config.append(
+                    HFEvalTaskConfig(
+                        id=f"{self.metadata.name}_{subset}_{split}",
+                        config=subset,
+                        split=split,
+                    )
+                )
+
+        task_config = HFEvalMeta(
+            name=self.metadata.name,
+            description=self.metadata.description,
+            tasks=eval_task_config,
+        )
+        if existing_eval is not None:
+            task_config = task_config.merge(existing_eval)
+        return task_config
 
     @property
     def is_aggregate(self) -> bool:

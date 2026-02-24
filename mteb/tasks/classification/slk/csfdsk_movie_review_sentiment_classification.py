@@ -42,7 +42,10 @@ class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
     # Increase the samples_per_label in order to improve baseline performance
     samples_per_label = 20
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_columns(
             {"comment": "text", "rating_int": "label"}
         )
@@ -89,7 +92,10 @@ class CSFDSKMovieReviewSentimentClassificationV2(AbsTaskClassification):
     # Increase the samples_per_label in order to improve baseline performance
     samples_per_label = 20
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"], n_samples=N_SAMPLES
         )

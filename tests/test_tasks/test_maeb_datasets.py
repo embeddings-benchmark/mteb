@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 @pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)
-@pytest.mark.parametrize("model", [mteb.get_model("baseline/random-encoder-baseline")])
+@pytest.mark.parametrize("model", [mteb.get_model("mteb/baseline-random-encoder")])
 def test_benchmark_audio_encoder(task: str | AbsTask, model: mteb.EncoderProtocol):
     """Test that a task can be fetched and run"""
     pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")

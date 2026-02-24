@@ -44,7 +44,7 @@ NEMOTRON_COLEMBED_CITATION_V2 = """
 # requires transformers==4.49.0, even though it's a "v2" model by name.
 _TRANSFORMERS_CONSTRAINTS: dict[str, str] = {
     "llama-nemotron-colembed-vl": "==4.49.0",  # llama-nemoretriever-colembed-*
-    "nemotron-colembed-vl-v2": "==5.0.0rc0",  # nemotron-colembed-vl-4b-v2, nemotron-colembed-vl-8b-v2
+    "nemotron-colembed-vl-v2": "==5.0.0",  # nemotron-colembed-vl-4b-v2, nemotron-colembed-vl-8b-v2
 }
 
 
@@ -212,7 +212,7 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     release_date="2025-06-27",
     modalities=["image", "text"],
     n_parameters=2_418_000_000,
-    n_embedding_parameters=None,
+    n_embedding_parameters=262688768,
     memory_usage_mb=4610,
     max_tokens=8192,
     embed_dim=2048,
@@ -241,7 +241,7 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     release_date="2025-06-27",
     modalities=["image", "text"],
     n_parameters=4_407_000_000,
-    n_embedding_parameters=None,
+    n_embedding_parameters=394033152,
     memory_usage_mb=8403,
     max_tokens=8192,
     embed_dim=3072,
@@ -266,10 +266,11 @@ llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
     name="nvidia/llama-nemotron-colembed-vl-3b-v2",
     model_type=["late-interaction"],
     languages=["eng-Latn"],
-    revision="75f03c712cb3a252e062295f9a0966e5d95d6156",
+    revision="680b47b199f99bc0ec2f4e90ffa583ec0c2e452c",
     release_date="2026-01-21",
     modalities=["image", "text"],
     n_parameters=4_407_000_000,
+    n_embedding_parameters=394033152,
     memory_usage_mb=8403,
     max_tokens=8192,
     embed_dim=3072,
@@ -293,7 +294,7 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
         trust_remote_code=True,
     ),
     name="nvidia/nemotron-colembed-vl-4b-v2",
-    revision="823b1625c15fe3da73fa094205e538a7a2301a2a",
+    revision="0ed152d91f8ad4c5d48296b51c220f686641a398",
     languages=["eng-Latn"],
     release_date="2026-01-07",
     modalities=["image", "text"],
@@ -311,6 +312,7 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
     use_instructions=True,
     training_datasets=TRAINING_DATA_v2,
     citation=NEMOTRON_COLEMBED_CITATION_V2,
+    model_type=["late-interaction"],
 )
 
 
@@ -321,7 +323,7 @@ nemotron_colembed_vl_8b_v2 = ModelMeta(
         trust_remote_code=True,
     ),
     name="nvidia/nemotron-colembed-vl-8b-v2",
-    revision="6cbe43579dda6237768fc373768ad372cc5cdfec",
+    revision="34b640612f311ed05a6c7c62c6564847ed555f5f",
     languages=["eng-Latn"],
     release_date="2026-01-07",
     modalities=["image", "text"],
@@ -339,4 +341,5 @@ nemotron_colembed_vl_8b_v2 = ModelMeta(
     use_instructions=True,
     training_datasets=TRAINING_DATA_v2,
     citation=NEMOTRON_COLEMBED_CITATION_V2,
+    model_type=["late-interaction"],
 )

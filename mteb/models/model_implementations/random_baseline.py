@@ -216,7 +216,7 @@ class RandomEncoderBaseline:
 
 random_encoder_baseline = ModelMeta(
     loader=RandomEncoderBaseline,
-    name="baseline/random-encoder-baseline",
+    name="mteb/baseline-random-encoder",
     model_type=["dense"],
     **_common_mock_metadata,
 )
@@ -260,7 +260,7 @@ class RandomCrossEncoderBaseline:
 
 random_cross_encoder_baseline = ModelMeta(
     loader=RandomCrossEncoderBaseline,
-    name="baseline/random-cross-encoder-baseline",
+    name="mteb/baseline-random-cross-encoder",
     model_type=["cross-encoder"],
     **_common_mock_metadata,
 )

@@ -44,7 +44,10 @@ class VABBClusteringS2S(AbsTaskClustering):
         },
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         for split in self.dataset:
             self.dataset[split] = self.dataset[split].rename_columns(
                 {"title": "sentences"}

@@ -1,6 +1,6 @@
 {
     "loader_kwargs": {},
-    "name": "baseline/random-encoder-baseline",
+    "name": "mteb/baseline-random-encoder",
     "revision": "1",
     "release_date": null,
     "languages": null,
