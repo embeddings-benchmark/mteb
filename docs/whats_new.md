@@ -16,7 +16,7 @@ task = mteb.get_task("HUMEEmotionClassification")
 mteb.evaluate(model, task)
 
 # experiment with different hyperparameters
-model = mteb.get_model("mteb/baseline-random-encoder", a="test")
+model = mteb.get_model("mteb/baseline-random-encoder", truncate_dim=128)
 mteb.evaluate(model, task)
 ```
 Then in results folder will be
@@ -27,7 +27,7 @@ results
         └── 1
             ├── HUMEEmotionClassification.json
             ├── experiments
-            │ └── a_test
+            │ └── truncate_dim_128
             │     ├── HUMEEmotionClassification.json
             │     └── model_meta.json
             └── model_meta.json

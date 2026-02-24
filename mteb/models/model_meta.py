@@ -325,6 +325,18 @@ class ModelMeta(BaseModel):
             experiment_kwargs=self.experiment_kwargs
         )
 
+    @property
+    def model_name_with_experiment(self) -> str | None:
+        """Combines the model name with the experiment parameters for a more descriptive name."""
+        if self.name is None:
+            return None
+        experiment_str = _serialize_experiment_kwargs_to_name(
+            experiment_kwargs=self.experiment_kwargs,
+            value_field_separator="=",
+            kwargs_separator=", ",
+        )
+        return f"{self.name} ({experiment_str})" if experiment_str else self.name
+
     @classmethod
     def _detect_cross_encoder_or_dense(
         cls,
@@ -1242,6 +1254,8 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
 
 def _serialize_experiment_kwargs_to_name(
     experiment_kwargs: Mapping[str, Any] | None,
+    value_field_separator: str = "_",
+    kwargs_separator: str = "__",
 ) -> str | None:
     if experiment_kwargs is None or len(experiment_kwargs) == 0:
         return None
@@ -1281,8 +1295,8 @@ def _serialize_experiment_kwargs_to_name(
             f"Enums, numpy arrays, and Pydantic models are supported."
         )
 
-    params_str = "__".join(
-        f"{key}_{_serialize_value(value)}"
+    params_str = kwargs_separator.join(
+        f"{key}{value_field_separator}{_serialize_value(value)}"
         for key, value in sorted(experiment_kwargs.items())
     )
 
