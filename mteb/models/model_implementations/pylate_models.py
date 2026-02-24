@@ -7,8 +7,6 @@ import tempfile
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-import torch
-
 from mteb._create_dataloaders import (
     create_dataloader,
 )
@@ -257,8 +255,8 @@ class PylateSearchEncoder:
             if not ranked_ids:
                 continue
 
-            doc_indices = torch.tensor([doc_id_to_idx[doc_id] for doc_id in ranked_ids])
-            query_doc_embeddings = torch.as_tensor(all_doc_embeddings[doc_indices])
+            doc_indices = [doc_id_to_idx[doc_id] for doc_id in ranked_ids]
+            query_doc_embeddings = [all_doc_embeddings[idx] for idx in doc_indices]
 
             q_emb = query_embeddings[q_idx]
             reranked = rank.rerank(
