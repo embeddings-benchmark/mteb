@@ -152,7 +152,13 @@ class MultimodalInput(  # type: ignore[misc]
 
 
 BatchedInput = (
-    TextInput | CorpusInput | QueryInput | ImageInput | AudioInput | MultimodalInput
+    TextInput
+    | CorpusInput
+    | QueryInput
+    | ImageInput
+    | AudioInput
+    | VideoInput
+    | MultimodalInput
 )
 """
 Represents the input format accepted by the encoder for a batch of data.
