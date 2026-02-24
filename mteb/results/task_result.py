@@ -911,7 +911,7 @@ class TaskResult(BaseModel):
         evaluated_splits = set(self.scores.keys())
         evaluated_subsets = set()
 
-        notes = f"Run of MTEB v{self.mteb_version}"
+        notes = f"Obtained using MTEB v{self.mteb_version}"
         source = HFEvalResultSource(
             url="https://github.com/embeddings-benchmark/mteb/",
             name=notes,
