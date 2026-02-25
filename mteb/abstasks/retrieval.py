@@ -349,6 +349,21 @@ class AbsTaskRetrieval(AbsTask):
             **kwargs,
         )
 
+    @staticmethod
+    def _get_search_model(
+        model: EncoderProtocol, wrapper_model: Any
+    ) -> SearchProtocol | SearchEncoderWrapper | SearchCrossEncoderWrapper:
+        if isinstance(model, EncoderProtocol) and not isinstance(model, SearchProtocol):
+            return SearchEncoderWrapper(wrapper_model)
+        elif isinstance(model, CrossEncoderProtocol):
+            return SearchCrossEncoderWrapper(wrapper_model)
+        elif isinstance(model, SearchProtocol):
+            return wrapper_model
+        else:
+            raise TypeError(
+                f"RetrievalEvaluator expects a SearchInterface, Encoder, or CrossEncoder, got {type(model)}"
+            )
+
     def _evaluate_subset(
         self,
         model: MTEBModels,
@@ -394,16 +409,14 @@ class AbsTaskRetrieval(AbsTask):
 
         search_model: SearchProtocol
 
-        if isinstance(model, EncoderProtocol) and not isinstance(model, SearchProtocol):
-            search_model = SearchEncoderWrapper(model)
-        elif isinstance(model, CrossEncoderProtocol):
-            search_model = SearchCrossEncoderWrapper(model)
-        elif isinstance(model, SearchProtocol):
-            search_model = model
+        from mteb.models import CachedEmbeddingWrapper, CompressionWrapper
+
+        if isinstance(model, CompressionWrapper):
+            search_model = self._get_search_model(model.model, model)
+        elif isinstance(model, CachedEmbeddingWrapper):
+            search_model = self._get_search_model(model._model, model)
         else:
-            raise TypeError(
-                f"RetrievalEvaluator expects a SearchInterface, Encoder, or CrossEncoder, got {type(model)}"
-            )
+            search_model = self._get_search_model(model, model)
 
         start_time = time()
         results = retriever(
