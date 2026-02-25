@@ -159,7 +159,7 @@ class RandomEncoderBaseline:
         **kwargs: Any,
     ) -> None:
         self.rng_state = np.random.default_rng(42)
-        self.embedding_dim = truncate_dim
+        self.embedding_dim = embed_dim
         self.array_framework = array_framework
         self.dtype = dtype
 
