@@ -96,7 +96,10 @@ class PEAudioVisualWrapper(AbsEncoder):
             disable=not show_progress_bar,
             desc="Processing video batches",
         ):
-            videos = [item["frames"] for item in batch["video"]]
+            # batch["video"] is list[list[VideoInputItem]] — one inner list per row.
+            # Flatten to get a flat list of VideoInputItem dicts.
+            video_items = [v for item in batch["video"] for v in item]
+            videos = [v["frames"] for v in video_items]
             processed = self.processor(
                 videos=videos,
                 return_tensors="pt",
@@ -167,8 +170,11 @@ class PEAudioVisualWrapper(AbsEncoder):
             disable=not show_progress_bar,
             desc="Processing audio-video batches",
         ):
-            videos = [item["frames"] for item in batch["video"]]
-            audio_arrays = [item["audio"]["array"] for item in batch["video"]]
+            # batch["video"] is list[list[VideoInputItem]] — one inner list per row.
+            # Flatten to get a flat list of VideoInputItem dicts.
+            video_items = [v for item in batch["video"] for v in item]
+            videos = [v["frames"] for v in video_items]
+            audio_arrays = [v["audio"]["array"] for v in video_items]
             processed = self.processor(
                 videos=videos,
                 audio=audio_arrays,
