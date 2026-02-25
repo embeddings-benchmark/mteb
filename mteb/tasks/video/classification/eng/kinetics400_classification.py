@@ -74,7 +74,11 @@ class Kinetics400Classification(AbsTaskClassification):
                 _combine_modalities,
                 features=Features(
                     {
-                        "label": split_features["label"],
+                        k: v
+                        for k, v in split_features.items()
+                        if k != "audio"
+                    }
+                    | {
                         "video": datasets.List(
                             feature={
                                 "frames": split_features["video"],
