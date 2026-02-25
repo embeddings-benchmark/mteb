@@ -1,5 +1,9 @@
+import datasets
+from datasets import DatasetDict, Features, load_dataset
+
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.types._encoder_io import VideoInputItem
 
 
 class RAVDESSAVClustering(AbsTaskClustering):
@@ -43,3 +47,42 @@ class RAVDESSAVClustering(AbsTaskClustering):
     max_fraction_of_documents_to_embed = None
     input_column_name: str = "video"
     label_column_name: str = "emotion"
+
+    def load_data(self, **kwargs) -> None:
+        if self.data_loaded:
+            return
+
+        dataset = load_dataset(
+            self.metadata.dataset["path"],
+            revision=self.metadata.dataset["revision"],
+        )
+
+        def _combine_modalities(example: dict) -> dict:
+            example["video"] = [
+                VideoInputItem(
+                    frames=example["video"],
+                    audio=example.pop("audio"),
+                )
+            ]
+            return example
+
+        merged = {}
+        for split_name, split in dataset.items():
+            split_features = split.features
+            merged[split_name] = split.map(
+                _combine_modalities,
+                features=Features(
+                    {
+                        "emotion": split_features["emotion"],
+                        "video": datasets.List(
+                            feature={
+                                "frames": split_features["video"],
+                                "audio": split_features["audio"],
+                            }
+                        ),
+                    }
+                ),
+            )
+
+        self.dataset = DatasetDict(merged)
+        self.data_loaded = True
