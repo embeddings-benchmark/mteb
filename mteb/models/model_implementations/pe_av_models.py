@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import AudioCollator
+from mteb._create_dataloaders import VideoCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
@@ -24,9 +24,8 @@ class PEAudioVisualWrapper(AbsEncoder):
     PE-AV embeds audio, video, audio-video, and text into a joint embedding space.
     Uses the transformers API (PeAudioVideoModel / PeAudioVideoProcessor).
 
-    Video inputs arrive as torchcodec VideoDecoder objects from HF datasets.
-    We sample frames using uniform sampling (matching the PE-AV internal
-    approach) and pass the decoded frame tensors to the processor.
+    Video inputs arrive as pre-decoded frame tensors via the VideoCollator.
+    Audio is extracted from inside each VideoInputItem.
     """
 
     def __init__(
@@ -45,35 +44,6 @@ class PEAudioVisualWrapper(AbsEncoder):
         self.model.eval()
         self.processor = PeAudioVideoProcessor.from_pretrained(model_name)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
-
-    def _uniform_sample(self, total: int, n: int) -> list[int]:
-        """Uniformly sample n indices from [0, total-1].
-
-        Matches the PE-AV internal sampling strategy.
-        """
-        if n >= total:
-            return list(range(total))
-        stride = (total - 1) / (n - 1) if n > 1 else 0
-        return [int(round(i * stride)) for i in range(n)]
-
-    def _decode_videos(self, video_decoders: list) -> list[torch.Tensor]:
-        """Decode VideoDecoder objects into frame tensors.
-
-        Samples frames uniformly and decodes them using get_frames_at,
-        matching the PE-AV internal video loading approach.
-
-        Args:
-            video_decoders: List of torchcodec VideoDecoder objects.
-
-        Returns:
-            List of frame tensors, each with shape (T, H, W, C).
-        """
-        decoded = []
-        for decoder in video_decoders:
-            indices = self._uniform_sample(len(decoder), self.num_frames)
-            frames = decoder.get_frames_at(indices=indices).data
-            decoded.append(frames)
-        return decoded
 
     def get_text_embeddings(
         self,
@@ -99,8 +69,9 @@ class PEAudioVisualWrapper(AbsEncoder):
             )
             processed = {k: v.to(self.device) for k, v in processed.items()}
 
-            with torch.inference_mode(), torch.autocast(
-                str(self.device), dtype=torch.bfloat16
+            with (
+                torch.inference_mode(),
+                torch.autocast(str(self.device), dtype=torch.bfloat16),
             ):
                 text_embeds = self.model.get_text_audio_video_embeds(
                     input_ids=processed["input_ids"],
@@ -125,7 +96,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             disable=not show_progress_bar,
             desc="Processing video batches",
         ):
-            videos = self._decode_videos(batch["video"])
+            videos = [item["frames"] for item in batch["video"]]
             processed = self.processor(
                 videos=videos,
                 return_tensors="pt",
@@ -133,8 +104,9 @@ class PEAudioVisualWrapper(AbsEncoder):
             )
             processed = {k: v.to(self.device) for k, v in processed.items()}
 
-            with torch.inference_mode(), torch.autocast(
-                str(self.device), dtype=torch.bfloat16
+            with (
+                torch.inference_mode(),
+                torch.autocast(str(self.device), dtype=torch.bfloat16),
             ):
                 video_embeds = self.model.get_video_embeds(
                     pixel_values_videos=processed["pixel_values_videos"],
@@ -168,8 +140,9 @@ class PEAudioVisualWrapper(AbsEncoder):
             )
             processed = {k: v.to(self.device) for k, v in processed.items()}
 
-            with torch.inference_mode(), torch.autocast(
-                str(self.device), dtype=torch.bfloat16
+            with (
+                torch.inference_mode(),
+                torch.autocast(str(self.device), dtype=torch.bfloat16),
             ):
                 audio_embeds = self.model.get_audio_embeds(
                     input_values=processed["input_values"],
@@ -194,8 +167,8 @@ class PEAudioVisualWrapper(AbsEncoder):
             disable=not show_progress_bar,
             desc="Processing audio-video batches",
         ):
-            videos = self._decode_videos(batch["video"])
-            audio_arrays = [audio["array"] for audio in batch["audio"]]
+            videos = [item["frames"] for item in batch["video"]]
+            audio_arrays = [item["audio"]["array"] for item in batch["video"]]
             processed = self.processor(
                 videos=videos,
                 audio=audio_arrays,
@@ -205,8 +178,9 @@ class PEAudioVisualWrapper(AbsEncoder):
             )
             processed = {k: v.to(self.device) for k, v in processed.items()}
 
-            with torch.inference_mode(), torch.autocast(
-                str(self.device), dtype=torch.bfloat16
+            with (
+                torch.inference_mode(),
+                torch.autocast(str(self.device), dtype=torch.bfloat16),
             ):
                 av_output = self.model.get_audio_video_embeds(
                     input_values=processed["input_values"],
@@ -232,9 +206,18 @@ class PEAudioVisualWrapper(AbsEncoder):
     ) -> Array:
         has_text = "text" in inputs.dataset.features
         has_video = "video" in inputs.dataset.features
-        has_audio = "audio" in inputs.dataset.features
+        has_audio = "audio" in inputs.dataset.features or (
+            has_video and "audio" in task_metadata.modalities
+        )
 
-        if has_audio:
+        if has_video:
+            inputs.collate_fn = VideoCollator(
+                max_frames=self.num_frames,
+                target_sampling_rate=self.sampling_rate,
+            )
+        elif has_audio:
+            from mteb._create_dataloaders import AudioCollator
+
             inputs.collate_fn = AudioCollator(self.sampling_rate)
 
         # Joint audio-video embedding
