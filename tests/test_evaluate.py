@@ -300,3 +300,24 @@ def test_evaluate_preserves_preloaded_data_across_multiple_calls():
 
     mteb.evaluate(model, task, cache=None, co2_tracker=False)
     _ = task.dataset["test"]  # Verify dataset persists across multiple calls
+
+
+def test_evaluate_experiment(tmp_path):
+    """Test that evaluate() can be used in an experiment context."""
+    model = mteb.get_model(
+        "mteb/baseline-random-encoder", test_param=123, test_param2="abc"
+    )
+    task = MockClassificationTask()
+    cache = ResultCache(tmp_path)
+
+    mteb.evaluate(model, task, cache=cache)
+
+    expected_path = (
+        Path("results")
+        / "mteb__baseline-random-encoder"
+        / "1"
+        / "experiments"
+        / "test_param_123__test_param2_abc"
+        / "MockClassificationTask.json"
+    )
+    assert (tmp_path / expected_path).exists()

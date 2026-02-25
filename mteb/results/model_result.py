@@ -98,10 +98,15 @@ class ModelResult(BaseModel):
         )
     )
     exceptions: list[TaskError] | None = None
+    experiment_name: str | None = None
 
     def __repr__(self) -> str:
         n_entries = len(self.task_results)
-        return f"ModelResult(model_name={self.model_name}, model_revision={self.model_revision}, task_results=[...](#{n_entries}))"
+        return (
+            f"ModelResult(model_name={self.model_name}, model_revision={self.model_revision}, "
+            f"{'experiment_name=' + self.experiment_name + ', ' if self.experiment_name else ''}"
+            f"task_results=[...](#{n_entries}))"
+        )
 
     @classmethod
     def from_validated(cls, **data: dict[str, Any]) -> ModelResult:
@@ -150,6 +155,7 @@ class ModelResult(BaseModel):
             model_name=self.model_name,
             model_revision=self.model_revision,
             task_results=new_task_results,
+            experiment_name=self.experiment_name,
         )
 
     def select_tasks(self, tasks: Iterable[AbsTask]) -> ModelResult:
@@ -168,6 +174,7 @@ class ModelResult(BaseModel):
             model_name=self.model_name,
             model_revision=self.model_revision,
             task_results=new_task_results,
+            experiment_name=self.experiment_name,
         )
 
     @overload
