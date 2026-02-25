@@ -73,7 +73,11 @@ class RAVDESSAVClustering(AbsTaskClustering):
                 _combine_modalities,
                 features=Features(
                     {
-                        "emotion": split_features["emotion"],
+                        k: v
+                        for k, v in split_features.items()
+                        if k != "audio"
+                    }
+                    | {
                         "video": datasets.List(
                             feature={
                                 "frames": split_features["video"],
