@@ -186,6 +186,7 @@ vggish = ModelMeta(
     release_date="2019-06-13",
     max_tokens=float("inf"),
     n_parameters=72_141_184,
+    n_embedding_parameters=0,
     memory_usage_mb=275,
     embed_dim=128,
     license="apache-2.0",
