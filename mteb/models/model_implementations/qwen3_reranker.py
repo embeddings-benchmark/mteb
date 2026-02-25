@@ -66,15 +66,23 @@ class Qwen3RerankerWrapper:
         )
 
     @staticmethod
-    def format_instruction(instruction: str | None, query: str, doc: str) -> list[dict[str, str]]:
+    def format_instruction(
+        instruction: str | None, query: str, doc: str
+    ) -> list[dict[str, str]]:
         if isinstance(query, tuple):
             instruction = query[0]
             query = query[1]
         if instruction is None:
             instruction = "Given a web search query, retrieve relevant passages that answer the query"
         text = [
-            {"role": "system", "content": "Judge whether the Document meets the requirements based on the Query and the Instruct provided. Note that the answer can only be \"yes\" or \"no\"."},
-            {"role": "user", "content": f"<Instruct>: {instruction}\n\n<Query>: {query}\n\n<Document>: {doc}"},
+            {
+                "role": "system",
+                "content": 'Judge whether the Document meets the requirements based on the Query and the Instruct provided. Note that the answer can only be "yes" or "no".',
+            },
+            {
+                "role": "user",
+                "content": f"<Instruct>: {instruction}\n\n<Query>: {query}\n\n<Document>: {doc}",
+            },
         ]
         return text
 
