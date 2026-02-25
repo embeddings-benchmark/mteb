@@ -52,9 +52,11 @@ def get_benchmark(
             benchmark_name, benchmark_registry.keys()
         )
         if close_matches:
-            suggestion = f"KeyError: '{benchmark_name}' not found. Did you mean: {close_matches[0]}?"
+            suggestion = (
+                f"'{benchmark_name}' not found. Did you mean: {close_matches[0]}?"
+            )
         else:
-            suggestion = f"KeyError: '{benchmark_name}' not found and no similar keys were found."
+            suggestion = f"'{benchmark_name}' not found and no similar keys were found."
         raise KeyError(suggestion)
     return benchmark_registry[benchmark_name]
 
