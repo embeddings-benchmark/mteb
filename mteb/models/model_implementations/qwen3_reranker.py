@@ -66,11 +66,17 @@ class Qwen3RerankerWrapper:
         )
 
     @staticmethod
-    def format_instruction(instruction: str | None, query: str, doc: str) -> str:
+    def format_instruction(instruction: str | None, query: str, doc: str) -> list[dict[str, str]]:
+        if isinstance(query, tuple):
+            instruction = query[0]
+            query = query[1]
         if instruction is None:
             instruction = "Given a web search query, retrieve relevant passages that answer the query"
-        output = f"<Instruct>: {instruction}\n<Query>: {query}\n<Document>: {doc}"
-        return output
+        text = [
+            {"role": "system", "content": "Judge whether the Document meets the requirements based on the Query and the Instruct provided. Note that the answer can only be \"yes\" or \"no\"."},
+            {"role": "user", "content": f"<Instruct>: {instruction}\n\n<Query>: {query}\n\n<Document>: {doc}"},
+        ]
+        return text
 
     def process_inputs(self, pairs: list[str]) -> dict:
         inputs = self.tokenizer(
@@ -180,7 +186,7 @@ QWEN3_CITATION = """@article{qwen3embedding,
 qwen3_reranker_0_6b = ModelMeta(
     loader=Qwen3RerankerWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.bfloat16,
+        dtype=torch.bfloat16,
     ),
     name="Qwen/Qwen3-Reranker-0.6B",
     revision="6e9e69830b95c52b5fd889b7690dda3329508de3",
@@ -211,7 +217,7 @@ qwen3_reranker_0_6b = ModelMeta(
 qwen3_reranker_4b = ModelMeta(
     loader=Qwen3RerankerWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.bfloat16,
+        dtype=torch.bfloat16,
     ),
     name="Qwen/Qwen3-Reranker-4B",
     revision="f16fc5d5d2b9b1d0db8280929242745d79794ef5",
@@ -242,7 +248,7 @@ qwen3_reranker_4b = ModelMeta(
 qwen3_reranker_8b = ModelMeta(
     loader=Qwen3RerankerWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.bfloat16,
+        dtype=torch.bfloat16,
     ),
     name="Qwen/Qwen3-Reranker-8B",
     revision="5fa94080caafeaa45a15d11f969d7978e087a3db",
