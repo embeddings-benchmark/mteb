@@ -193,7 +193,23 @@ class AbsTaskClassification(AbsTask):
                 ds = self.dataset[hf_subset]
 
             if isinstance(ds, Dataset | DatasetDict):
-                ds = ds.select_columns([self.label_column_name, self.input_column_name])
+                # Keep label and input columns, plus any columns required by
+                # the task's declared modalities (e.g., audio for va2c tasks)
+                modality_to_column = {
+                    "video": "video",
+                    "audio": "audio",
+                    "image": "image",
+                }
+                columns_to_keep = {self.label_column_name, self.input_column_name}
+                if isinstance(ds, DatasetDict):
+                    available = set(next(iter(ds.values())).column_names)
+                else:
+                    available = set(ds.column_names)
+                for mod in self.metadata.modalities:
+                    col = modality_to_column.get(mod)
+                    if col and col in available:
+                        columns_to_keep.add(col)
+                ds = ds.select_columns(list(columns_to_keep))
             eval_function = (
                 self._evaluate_subset
                 if not self.is_cross_validation
@@ -525,7 +541,11 @@ class AbsTaskClassification(AbsTask):
             label_statistics=label_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+    def _push_dataset_to_hub(
+        self,
+        repo_name: str,
+        num_proc: int | None = None,
+    ) -> None:
         self._upload_dataset_to_hub(
             repo_name,
             [

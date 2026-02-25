@@ -37,7 +37,10 @@ class Ocnli(AbsTaskPairClassification):
         prompt="Retrieve semantically similar text.",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("sent1", "sentence1")
         self.dataset = self.dataset.rename_column("sent2", "sentence2")
 
@@ -112,6 +115,9 @@ Lan, Zhenzhong},
         prompt="Retrieve semantically similar text.",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("sent1", "sentence1")
         self.dataset = self.dataset.rename_column("sent2", "sentence2")

@@ -77,7 +77,10 @@ class MorocoV2(AbsTaskClassification):
         adapted_from=["Moroco"],
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )

@@ -52,7 +52,10 @@ and de Paiva, Valeria},
     min_score = 1
     max_score = 5
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.stratified_subsampling(
             self.dataset,
             seed=42,

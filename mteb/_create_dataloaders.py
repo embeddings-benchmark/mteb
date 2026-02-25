@@ -32,6 +32,7 @@ if TYPE_CHECKING:
         ImageInput,
         QueryInput,
         TextInput,
+        VideoInput,
     )
 
 logger = logging.getLogger(__name__)
@@ -511,18 +512,18 @@ def _create_video_dataloader(
     input_column: str | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
-) -> DataLoader[AudioInput]:
+) -> DataLoader[VideoInput]:
     """Create a dataloader for video.
 
     Args:
-        dataset: The dataset containing the audio.
-        task_metadata: Metadata of the task to determine the audio type.
-        input_column: The column to use as input. If None, it will use the first column that matches the audio.
+        dataset: The dataset containing the video.
+        task_metadata: Metadata of the task to determine the video type.
+        input_column: The column to use as input. If None, it will use the first column that matches the video.
         batch_size: Batch size for the dataloader.
         num_proc: The number of workers for the dataloader.
 
     Returns:
-        A DataLoader with the audio dataset.
+        A DataLoader with the video dataset.
     """
     if (
         input_column
@@ -587,6 +588,14 @@ def create_dataloader(
         return _create_image_dataloader(
             dataset,
             image_column_name=input_column,
+            batch_size=batch_size,
+            num_proc=num_proc,
+        )
+    if "video" in task_metadata.modalities:
+        return _create_video_dataloader(
+            dataset,
+            task_metadata,
+            input_column=input_column,
             batch_size=batch_size,
             num_proc=num_proc,
         )

@@ -50,7 +50,10 @@ class TERRa(AbsTaskPairClassification):
         **_terra_metadata,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("sent1", "sentence1")
         self.dataset = self.dataset.rename_column("sent2", "sentence2")
 
@@ -71,6 +74,9 @@ class TERRaV2(AbsTaskPairClassification):
         **_terra_metadata,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("sent1", "sentence1")
         self.dataset = self.dataset.rename_column("sent2", "sentence2")

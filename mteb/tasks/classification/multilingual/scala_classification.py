@@ -54,7 +54,10 @@ Fishel, Mark},
 
     samples_per_label = 32
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         for lang in self.dataset.keys():
             # convert label to a 0/1 label
             labels = self.dataset[lang]["train"]["label"]

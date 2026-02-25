@@ -39,7 +39,10 @@ Tetreault, Joel},
         superseded_by="UkrFormalityClassification.v2",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("labels", "label")
         self.dataset = self.dataset.class_encode_column("label")
         self.dataset = self.stratified_subsampling(
@@ -84,7 +87,10 @@ Tetreault, Joel},
         adapted_from=["UkrFormalityClassification"],
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train", "test"]
         )

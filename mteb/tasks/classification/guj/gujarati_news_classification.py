@@ -28,7 +28,10 @@ class GujaratiNewsClassification(AbsTaskClassification):
         superseded_by="GujaratiNewsClassification.v2",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("headline", "text")
 
 

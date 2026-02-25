@@ -28,7 +28,10 @@ class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
         superseded_by="TeluguAndhraJyotiNewsClassification.v2",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_columns({"body": "text", "topic": "label"})
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
 
@@ -59,5 +62,8 @@ class TeluguAndhraJyotiNewsClassificationV2(AbsTaskClassification):
         adapted_from=["TeluguAndhraJyotiNewsClassification"],
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
