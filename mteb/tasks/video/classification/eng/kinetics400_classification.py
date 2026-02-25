@@ -83,6 +83,7 @@ class Kinetics400Classification(AbsTaskClassification):
                         ),
                     }
                 ),
+                writer_batch_size=50,
             )
 
         self.dataset = DatasetDict(merged)
