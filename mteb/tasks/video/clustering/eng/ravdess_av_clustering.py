@@ -82,6 +82,7 @@ class RAVDESSAVClustering(AbsTaskClustering):
                         ),
                     }
                 ),
+                writer_batch_size=50,
             )
 
         self.dataset = DatasetDict(merged)
