@@ -296,8 +296,9 @@ class ModelMeta(BaseModel):
                 and isinstance(self.embed_dim, int)
                 and self.embed_dim != embed_dim
             ):
-                logger.warning(
-                    f"Requested embedding dimension {embed_dim} does not match the model's default embedding dimension {self.embed_dim}. Attempting to load the model with the requested embedding dimension."
+                raise ValueError(
+                    f"Requested embedding dimension {embed_dim} does not match the model's embedding dimension {self.embed_dim}."
+                    "Model does not support loading with a different embedding dimension."
                 )
             elif isinstance(self.embed_dim, list) and embed_dim not in self.embed_dim:
                 raise ValueError(
