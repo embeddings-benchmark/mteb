@@ -86,7 +86,6 @@ _MISSING_N_EMBEDDING_MODELS = [
     "mteb/baseline-random-cross-encoder",
     "mteb/baseline-random-encoder",
     "VAGOsolutions/SauerkrautLM-ColLFM2-450M-v0.1",
-    "VAGOsolutions/SauerkrautLM-ColMinistral3-3b-v0.1",
     "MCINext/Hakim",
     "MCINext/Hakim-small",
     "MCINext/Hakim-unsup",
