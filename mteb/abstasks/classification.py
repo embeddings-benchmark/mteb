@@ -195,7 +195,11 @@ class AbsTaskClassification(AbsTask):
             if isinstance(ds, Dataset | DatasetDict):
                 # Keep label and input columns, plus any columns required by
                 # the task's declared modalities (e.g., audio for va2c tasks)
-                modality_to_column = {"video": "video", "audio": "audio", "image": "image"}
+                modality_to_column = {
+                    "video": "video",
+                    "audio": "audio",
+                    "image": "image",
+                }
                 columns_to_keep = {self.label_column_name, self.input_column_name}
                 if isinstance(ds, DatasetDict):
                     available = set(next(iter(ds.values())).column_names)
