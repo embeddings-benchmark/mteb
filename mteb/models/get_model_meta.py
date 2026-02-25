@@ -93,6 +93,8 @@ def get_model(
     model_name: str,
     revision: str | None = None,
     device: str | None = None,
+    *,
+    embed_dim: int | None = None,
     **kwargs: Any,
 ) -> MTEBModels:
     """A function to fetch and load model object by name.
@@ -104,13 +106,14 @@ def get_model(
         model_name: Name of the model to fetch
         revision: Revision of the model to fetch
         device: Device used to load the model
+        embed_dim: Optional embedding dimension to load the model with. This is only used for models that support loading with a specified embedding dimension, and will be ignored for other models.
         **kwargs: Additional keyword arguments to pass to the model loader
 
     Returns:
         A model object
     """
     meta = get_model_meta(model_name, revision).model_copy(deep=True)
-    model = meta.load_model(device=device, **kwargs)
+    model = meta.load_model(device=device, embed_dim=embed_dim, **kwargs)
 
     if kwargs:
         logger.info(
