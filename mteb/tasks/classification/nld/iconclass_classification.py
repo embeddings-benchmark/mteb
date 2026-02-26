@@ -38,7 +38,5 @@ class IconclassClassification(AbsTaskClassification):
   year = {2023},
 }
 """,
-        prompt={
-            "query": "Classificeer de gegeven titel van het kunstwerk in het juiste onderwerp of thema"
-        },
+        prompt="Classificeer de gegeven titel van het kunstwerk in het juiste onderwerp of thema",
     )

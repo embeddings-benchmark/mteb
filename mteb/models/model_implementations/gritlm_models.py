@@ -1,9 +1,15 @@
+from __future__ import annotations
+
 import logging
+from typing import TYPE_CHECKING
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
+
+if TYPE_CHECKING:
+    from mteb.types import PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +18,9 @@ GRIT_LM_TRAINING_DATA = E5_MISTRAL_TRAINING_DATA
 # Note that some models in their ablations also use MEDI2 but not the main GritLM-7B & GritLM-8x7B models
 
 
-def gritlm_instruction(instruction: str = "", prompt_type=None) -> str:
+def gritlm_instruction(
+    instruction: str = "", prompt_type: PromptType | None = None
+) -> str:
     return (
         "<|user|>\n" + instruction + "\n<|embed|>\n" if instruction else "<|embed|>\n"
     )

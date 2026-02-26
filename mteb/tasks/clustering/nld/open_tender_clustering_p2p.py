@@ -38,9 +38,7 @@ class OpenTenderClusteringP2P(AbsTaskClustering):
   year = {2025},
 }
 """,
-        prompt={
-            "query": "Identificeer de hoofdcategorie van aanbestedingen op basis van de titels en beschrijvingen"
-        },
+        prompt="Identificeer de hoofdcategorie van aanbestedingen op basis van de titels en beschrijvingen",
     )
 
     def dataset_transform(

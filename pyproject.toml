@@ -471,9 +471,10 @@ extend-exclude = [
     "mteb/tasks/classification/nld/",
     "mteb/tasks/clustering/nld/",
     "mteb/tasks/multilabel_classification/nld/",
-    "mteb/tasks/pair_classification/nld/",
+    "mteb/tasks/pair_classification/nld/*",
     "mteb/tasks/sts/nld/",
     "mteb/tasks/retrieval/nld/",
+    "mteb/tasks/clustering/nld/",
     "mteb/descriptive_stats/",
     # Beltagy, Iz
     "mteb/tasks/retrieval/eng/lembqm_sum_retrieval.py",
