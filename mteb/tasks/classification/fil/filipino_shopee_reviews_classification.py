@@ -8,8 +8,8 @@ class FilipinoShopeeReviewsClassification(AbsTaskClassification):
         description="The Shopee reviews tl 15 dataset is constructed by randomly taking 2100 training samples and 450 samples for testing and validation for each review star from 1 to 5. In total, there are 10500 training samples and 2250 each in validation and testing samples.",
         reference="https://uijrt.com/articles/v4/i8/UIJRTV4I80009.pdf",
         dataset={
-            "path": "scaredmeow/shopee-reviews-tl-stars",
-            "revision": "d096f402fdc76886458c0cfb5dedc829bea2b935",
+            "path": "mteb/FilipinoShopeeReviewsClassification",
+            "revision": "c88a93f50ccbb36878cde3362cefd65e43bd6b75",
         },
         type="Classification",
         task_subtypes=["Sentiment/Hate speech"],
@@ -35,11 +35,3 @@ class FilipinoShopeeReviewsClassification(AbsTaskClassification):
 }
 """,
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["validation", "test"]
-        )

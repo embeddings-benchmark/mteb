@@ -165,13 +165,15 @@ Za{\'s}ko-Zieli{\'n}ska, Monika},
 class PolEmo2OutClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PolEmo2.0-OUT",
-        description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
-        + "school. The PolEmo2.0-OUT task is to predict the sentiment of out-of-domain (products and "
-        + "school) reviews using models train on reviews from medicine and hotels domains.",
+        description=(
+            "A collection of Polish online reviews from four domains: medicine, hotels, products and "
+            "school. The PolEmo2.0-OUT task is to predict the sentiment of out-of-domain (products and "
+            "school) reviews using models train on reviews from medicine and hotels domains."
+        ),
         reference="https://aclanthology.org/K19-1092.pdf",
         dataset={
-            "path": "PL-MTEB/polemo2_out",
-            "revision": "6a21ab8716e255ab1867265f8b396105e8aa63d4",
+            "path": "mteb/PolEmo2.0-OUT",
+            "revision": "4cdfe32a4a7b964afb7aaf9430b9ce6804f7d7e9",
         },
         type="Classification",
         category="t2c",

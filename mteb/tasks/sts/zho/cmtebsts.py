@@ -172,8 +172,8 @@ class STSB(AbsTaskSTS):
     metadata = TaskMetadata(
         name="STSB",
         dataset={
-            "path": "C-MTEB/STSB",
-            "revision": "0cde68302b3541bb8b3c340dc0644b0b745b3dc0",
+            "path": "mteb/STSB",
+            "revision": "e036defee8f190911de6fc825a944b928c8cda53",
         },
         description="A Chinese dataset for textual relatedness",
         reference="https://aclanthology.org/2021.emnlp-main.357",

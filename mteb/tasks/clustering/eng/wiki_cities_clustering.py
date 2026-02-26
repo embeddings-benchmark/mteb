@@ -8,8 +8,8 @@ class WikiCitiesClustering(AbsTaskClusteringLegacy):
         description="Clustering of Wikipedia articles of cities by country from https://huggingface.co/datasets/wikipedia. Test set includes 126 countries, and a total of 3531 cities.",
         reference="https://huggingface.co/datasets/wikipedia",
         dataset={
-            "path": "jinaai/cities_wiki_clustering",
-            "revision": "ddc9ee9242fa65332597f70e967ecc38b9d734fa",
+            "path": "mteb/WikiCitiesClustering",
+            "revision": "9f302fc86ddf2d9133ebcc03ee3a285f4729bb16",
         },
         type="Clustering",
         category="t2c",

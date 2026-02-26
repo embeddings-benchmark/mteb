@@ -8,8 +8,8 @@ class CEDRClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
         name="CEDRClassification",
         dataset={
-            "path": "ai-forever/cedr-classification",
-            "revision": "c0ba03d058e3e1b2f3fd20518875a4563dd12db4",
+            "path": "mteb/CEDRClassification",
+            "revision": "d872ceae33d049f0ef50e8abb9229b569ebfcf7d",
         },
         description="Classification of sentences by emotions, labeled into 5 categories (joy, sadness, surprise, fear, and anger).",
         reference="https://www.sciencedirect.com/science/article/pii/S1877050921013247",

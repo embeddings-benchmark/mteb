@@ -8,8 +8,8 @@ class BulgarianStoreReviewSentimentClassfication(AbsTaskClassification):
         description="Bulgarian online store review dataset for sentiment classification.",
         reference="https://doi.org/10.7910/DVN/TXIK9P",
         dataset={
-            "path": "artist/Bulgarian-Online-Store-Feedback-Text-Analysis",
-            "revision": "701984d6c6efea0e14a1c7850ef70e464c5577c0",
+            "path": "mteb/BulgarianStoreReviewSentimentClassfication",
+            "revision": "0d00595ed48ba8b802da579231a078557c6e9bc4",
         },
         type="Classification",
         category="t2c",
@@ -36,18 +36,3 @@ class BulgarianStoreReviewSentimentClassfication(AbsTaskClassification):
 }
 """,
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_columns(
-            {"Review": "text", "Category": "label"}
-        )
-
-        labels = self.dataset["train"]["label"]
-        lab2idx = {lab: idx for idx, lab in enumerate(sorted(set(labels)))}
-
-        self.dataset = self.dataset.map(
-            lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"]
-        )

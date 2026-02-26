@@ -7,8 +7,8 @@ class CyrillicTurkicLangClassification(AbsTaskClassification):
         name="CyrillicTurkicLangClassification",
         description="Cyrillic dataset of 8 Turkic languages spoken in Russia and former USSR",
         dataset={
-            "path": "tatiana-merz/cyrillic_turkic_langs",
-            "revision": "e42d330f33d65b7b72dfd408883daf1661f06f18",
+            "path": "mteb/CyrillicTurkicLangClassification",
+            "revision": "33fca064726e43e32ce645ed8d8c88c78f16c4d5",
         },
         reference="https://huggingface.co/datasets/tatiana-merz/cyrillic_turkic_langs",
         type="Classification",
@@ -43,11 +43,3 @@ class CyrillicTurkicLangClassification(AbsTaskClassification):
 }
 """,
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
-        )

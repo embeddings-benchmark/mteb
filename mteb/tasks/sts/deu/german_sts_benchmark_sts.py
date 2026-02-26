@@ -9,8 +9,8 @@ class GermanSTSBenchmarkSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="GermanSTSBenchmark",
         dataset={
-            "path": "jinaai/german-STSbenchmark",
-            "revision": "e36907544d44c3a247898ed81540310442329e20",
+            "path": "mteb/GermanSTSBenchmark",
+            "revision": "75829b73cccb64bf86a9f098cbc780d37b786091",
         },
         description="Semantic Textual Similarity Benchmark (STSbenchmark) dataset translated into German. "
         + "Translations were originally done by T-Systems on site services GmbH.",

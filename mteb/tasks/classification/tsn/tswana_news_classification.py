@@ -8,8 +8,8 @@ class TswanaNewsClassification(AbsTaskClassification):
         description="Tswana News Classification Dataset",
         reference="https://link.springer.com/chapter/10.1007/978-3-031-49002-6_17",
         dataset={
-            "path": "dsfsi/daily-news-dikgang",
-            "revision": "061ca1525717eebaaa9bada240f6cbb31eb3aa87",
+            "path": "mteb/TswanaNewsClassification",
+            "revision": "57b79978c2a361b5b8161569d1470b30e5dda867",
         },
         type="Classification",
         task_subtypes=["Topic classification"],

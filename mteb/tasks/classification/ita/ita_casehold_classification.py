@@ -6,8 +6,8 @@ class ItaCaseholdClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ItaCaseholdClassification",
         dataset={
-            "path": "itacasehold/itacasehold",
-            "revision": "fafcfc4fee815f7017848e54b26c47ece8ff1626",
+            "path": "mteb/ItaCaseholdClassification",
+            "revision": "2ca13897a3d1952b746e748a8584208699c0340e",
         },
         description="An Italian Dataset consisting of 1101 pairs of judgments and their official holdings between the years 2019 and 2022 from the archives of Italian Administrative Justice categorized with 64 subjects.",
         reference="https://doi.org/10.1145/3594536.3595177",
