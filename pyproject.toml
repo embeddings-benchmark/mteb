@@ -208,7 +208,7 @@ namespaces = false
     "descriptive_stats/Image/*/*.json",  # for descriptive_stats image
 ]
 "mteb.abstasks" = ["dataset_card_template.md"]
-"mteb.tasks.ZeroShotClassification.eng.templates" = ["*.txt"]
+"mteb.tasks.zeroshot_classification.eng.templates" = ["*.txt"]
 
 [tool.ruff]
 target-version = "py310"
