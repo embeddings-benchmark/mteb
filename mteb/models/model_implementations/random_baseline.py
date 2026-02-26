@@ -155,11 +155,11 @@ class RandomEncoderBaseline:
         revision: str | None,
         array_framework: Literal["numpy", "torch"] = "numpy",
         dtype: torch.dtype | np.floating = np.float32,
-        embed_dim: int = _EMBEDDING_DIM,
+        embed_dim: int | None = None,
         **kwargs: Any,
     ) -> None:
         self.rng_state = np.random.default_rng(42)
-        self.embedding_dim = embed_dim
+        self.embedding_dim = embed_dim or _EMBEDDING_DIM
         self.array_framework = array_framework
         self.dtype = dtype
 
