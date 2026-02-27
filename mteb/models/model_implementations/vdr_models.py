@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import math
-from typing import TYPE_CHECKING, Any, Unpack
+from typing import TYPE_CHECKING, Any
 
 import torch
 from tqdm.auto import tqdm
@@ -12,6 +12,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 if TYPE_CHECKING:
     from PIL import Image
     from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs, PromptType
