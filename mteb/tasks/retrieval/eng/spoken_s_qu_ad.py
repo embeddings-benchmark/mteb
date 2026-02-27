@@ -16,7 +16,7 @@ class SpokenSQuADT2ARetrieval(AbsTaskRetrieval):
         modalities=["text", "audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cv_recall_at_5",
+        main_score="hit_rate_at_5",
         date=("2018-03-01", "2018-03-01"),
         domains=["Academic", "Encyclopaedic", "Non-fiction"],
         task_subtypes=["Question Answering Retrieval", "Reading Comprehension"],
