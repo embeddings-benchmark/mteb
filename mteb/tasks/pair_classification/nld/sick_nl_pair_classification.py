@@ -33,7 +33,5 @@ class SICKNLPairClassification(AbsTaskPairClassification):
   year = {2021},
 }
 """,
-        prompt={
-            "query": "Zoek tekst die semantisch vergelijkbaar is met de gegeven tekst."
-        },
+        prompt="Zoek tekst die semantisch vergelijkbaar is met de gegeven tekst.",
     )
