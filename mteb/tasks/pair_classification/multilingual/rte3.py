@@ -1,5 +1,3 @@
-import datasets
-
 from mteb.abstasks.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -15,8 +13,8 @@ class RTE3(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="RTE3",
         dataset={
-            "path": "maximoss/rte3-multi",
-            "revision": "d94f96ca5a6798e20f5a77e566f7a288dc6138d7",
+            "path": "mteb/RTE3",
+            "revision": "54ea0052267265f4906dd77b0a3d041d301a5ee6",
         },
         description="Recognising Textual Entailment Challenge (RTE-3) aim to provide the NLP community with a benchmark to test progress in recognizing textual entailment",
         reference="https://aclanthology.org/W07-1401/",
@@ -51,37 +49,3 @@ Dolan, Bill},
 """,
         # sum of 4 languages after neutral filtering
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = datasets.load_dataset(
-            self.metadata.dataset["path"], revision=self.metadata.dataset["revision"]
-        )
-        self.dataset_transform()
-        self.data_loaded = True
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        _dataset = {}
-        for lang in self.hf_subsets:
-            _dataset[lang] = {}
-            for split in self.metadata.eval_splits:
-                # keep target language
-                hf_dataset = self.dataset[split].filter(lambda x: x["language"] == lang)
-                # keep labels 0=entailment and 2=contradiction, and map them as 1 and 0 for binary classification
-                hf_dataset = hf_dataset.filter(lambda x: x["label"] in [0, 2])
-                hf_dataset = hf_dataset.map(
-                    lambda example: {"label": 0 if example["label"] == 2 else 1}
-                )
-                _dataset[lang][split] = [
-                    {
-                        "sentence1": hf_dataset["premise"],
-                        "sentence2": hf_dataset["hypothesis"],
-                        "labels": hf_dataset["label"],
-                    }
-                ]
-        self.dataset = _dataset

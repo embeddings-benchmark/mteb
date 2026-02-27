@@ -8,8 +8,8 @@ class NepaliNewsClassification(AbsTaskClassification):
         description="A Nepali dataset for 7500 news articles ",
         reference="https://github.com/goru001/nlp-for-nepali",
         dataset={
-            "path": "bpHigh/iNLTK_Nepali_News_Dataset",
-            "revision": "79125f20d858a08f71ec4923169a6545221725c4",
+            "path": "mteb/NepaliNewsClassification",
+            "revision": "517059b8db27c65544a855d90b3e30e5a9853fc3",
         },
         type="Classification",
         category="t2c",
@@ -46,15 +46,6 @@ Tan, Liling},
 """,
         superseded_by="NepaliNewsClassification.v2",
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_column("paras", "text")
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )
 
 
 class NepaliNewsClassificationV2(AbsTaskClassification):

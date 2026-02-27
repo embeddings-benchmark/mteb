@@ -8,8 +8,8 @@ class SwahiliNewsClassification(AbsTaskClassification):
         description="Dataset for Swahili News Classification, categorized with 6 domains (Local News (Kitaifa), International News (Kimataifa), Finance News (Uchumi), Health News (Afya), Sports News (Michezo), and Entertainment News (Burudani)). Building and Optimizing Swahili Language Models: Techniques, Embeddings, and Datasets",
         reference="https://huggingface.co/datasets/Mollel/SwahiliNewsClassification",
         dataset={
-            "path": "Mollel/SwahiliNewsClassification",
-            "revision": "24fcf066e6b96f9e0d743e8b79184e0c599f73c3",
+            "path": "mteb/SwahiliNewsClassification",
+            "revision": "e9b91a8bc13eb2797ef476d72feda71581d0a4fe",
         },
         type="Classification",
         category="t2c",
@@ -36,14 +36,6 @@ class SwahiliNewsClassification(AbsTaskClassification):
 """,
         superseded_by="SwahiliNewsClassification.v2",
     )
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
-        self.dataset = self.dataset.rename_columns(
-            {"content": "text", "category": "label"}
-        )
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )
 
 
 class SwahiliNewsClassificationV2(AbsTaskClassification):

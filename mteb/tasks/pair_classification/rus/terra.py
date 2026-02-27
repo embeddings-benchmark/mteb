@@ -4,8 +4,8 @@ from mteb.types import PromptType
 
 _terra_metadata = dict(
     dataset={
-        "path": "ai-forever/terra-pairclassification",
-        "revision": "7b58f24536063837d644aab9a023c62199b2a612",
+        "path": "mteb/TERRa",
+        "revision": "48312c334eb916d88481dc4a41bd0d8b2fa0d576",
     },
     reference="https://arxiv.org/pdf/2010.15925",
     type="PairClassification",
@@ -50,13 +50,6 @@ class TERRa(AbsTaskPairClassification):
         **_terra_metadata,
     )
 
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_column("sent1", "sentence1")
-        self.dataset = self.dataset.rename_column("sent2", "sentence2")
-
 
 class TERRaV2(AbsTaskPairClassification):
     input1_prompt_type = PromptType.document
@@ -73,10 +66,3 @@ class TERRaV2(AbsTaskPairClassification):
         },
         **_terra_metadata,
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_column("sent1", "sentence1")
-        self.dataset = self.dataset.rename_column("sent2", "sentence2")

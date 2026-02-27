@@ -19,8 +19,8 @@ class NusaParagraphEmotionClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="NusaParagraphEmotionClassification",
         dataset={
-            "path": "gentaiscool/nusaparagraph_emot",
-            "revision": "c61e8c3ee47d2dce296e9601195916b54c21d575",
+            "path": "mteb/NusaParagraphEmotionClassification",
+            "revision": "5d4381326f7df57557c5a63032efba4a9a9b537a",
         },
         description="NusaParagraphEmotionClassification is a multi-class emotion classification on 10 Indonesian languages from the NusaParagraph dataset.",
         reference="https://github.com/IndoNLP/nusa-writes",
