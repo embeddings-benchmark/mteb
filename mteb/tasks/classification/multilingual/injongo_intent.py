@@ -64,7 +64,6 @@ class InjongoIntent(MultilingualTask, AbsTaskClassification):
 }""",
     )
 
-    # ---------------------------------------------------------------------
 
     def dataset_transform(self):
         """Convert HuggingFace splits to the lists of dicts expected by AbsTaskClassification."""
