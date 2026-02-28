@@ -341,12 +341,15 @@ def _create_image_dataloader(
     Returns:
         A DataLoader with the image dataset.
     """
+    columns_to_keep = ["image"]
+    if "image_ocr_text" in dataset.column_names:
+        columns_to_keep.append("image_ocr_text")
     dataset = _prepare_image_dataset(
         dataset,
         image_column_name,
         transform,
         num_proc=num_proc,
-    ).select_columns(["image"])
+    ).select_columns(columns_to_keep)
     return DataLoader(
         dataset,
         batch_size=batch_size,

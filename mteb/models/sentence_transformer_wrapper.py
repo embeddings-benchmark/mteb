@@ -154,7 +154,13 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             >= Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
         )
 
-        _inputs = [text for batch in inputs for text in batch["text"]]
+        # TODO: doing it like this would require us to redo all the model implementations
+        # an alternative might be to move it to constructor and then based on the types that the model can process move it to text for text only models (but leave it as "image_ocr_text" otherwise)
+        def __get_text(batch):
+            text_col = "text" if "text" in batch else "image_ocr_text"
+            return batch[text_col]
+
+        _inputs = [text for batch in inputs for text in __get_text(batch)]
 
         prompt = None
         prompt_name = None
