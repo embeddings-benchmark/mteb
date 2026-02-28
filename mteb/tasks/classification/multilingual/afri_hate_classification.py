@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.classification import AbsTaskClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AfriHateClassification(MultilingualTask, AbsTaskClassification):
+class AfriHateClassification(AbsTaskClassification):
     """
     AfriHate: A Multilingual African Hate Speech and Abusive Language Dataset.
     Each sample is a tweet annotated by native speakers with sociocultural understanding 
@@ -24,11 +23,10 @@ class AfriHateClassification(MultilingualTask, AbsTaskClassification):
         reference="https://aclanthology.org/2025.naacl-long.92/",
         dataset={
             "path": "afrihate/afrihate",
-            "revision": "main",
-            "trust_remote_code": True,
+            "revision": "e9352e69772d6341498b0f81a70bf95ed6108170",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={
@@ -40,9 +38,9 @@ class AfriHateClassification(MultilingualTask, AbsTaskClassification):
             "hau": ["hau-Latn"],  # Hausa
             "ary": ["ary-Arab"],  # Moroccan Arabic
             "pcm": ["pcm-Latn"],  # Nigerian Pidgin
-            "orm": ["orm-Latn"],  # Oromo
+            "gaz": ["orm-Latn"],  # Oromo
             "som": ["som-Latn"],  # Somali
-            "swa": ["swa-Latn"],  # Swahili
+            "swh": ["swa-Latn"],  # Swahili
             "tir": ["tir-Ethi"],  # Tigrinya
             "twi": ["twi-Latn"],  # Twi
             "xho": ["xho-Latn"],  # isiXhosa
@@ -102,7 +100,7 @@ class AfriHateClassification(MultilingualTask, AbsTaskClassification):
 """,
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, **kwargs) -> None:
         """
         Transform the dataset to MTEB expected format:
         
