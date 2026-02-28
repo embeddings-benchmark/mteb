@@ -260,7 +260,6 @@ _TOPIC2ID = {name: idx for idx, name in enumerate(_TOPICS)}
 class SIB200_14Classes(MultilingualTask, AbsTaskMultilabelClassification):
     """SIB‑200 (14 topics) multilingual multilabel classification benchmark."""
 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ metadata ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     metadata = TaskMetadata(
         name="SIB200-14Classes",
         description=(
