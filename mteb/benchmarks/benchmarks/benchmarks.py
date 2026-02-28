@@ -1222,6 +1222,18 @@ afri_languages = [
     "zul",
 ]
 
+afri_languages_lite = [
+    "amh",
+    "gaz",
+    "ibo",
+    "yor",
+    "hau",
+    "swh",
+    "kin",
+    "xho",
+    "zul",
+]
+
 MTEB_AFRICA = Benchmark(
     name="MTEB(Africa, v1)",
     aliases=["AfriMTEB"],
@@ -1278,7 +1290,37 @@ MTEB_AFRICA = Benchmark(
         exclusive_language_filter=True,
     ),
     description="A benchmark for evaluating text embedding models on African languages.",
-    reference="https://arxiv.org/abs/2502.13595",
+    reference="https://arxiv.org/abs/2510.23896",
+    citation=MMTEB_CITATION,
+    contacts=["Kosei1227"],
+)
+
+MTEB_AFRICA_LITE = Benchmark(
+    name="MTEB(Africa, v1, lite)",
+    aliases=["AfriMTEB-Lite"],
+    display_name="African Lite",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
+    tasks=get_tasks(
+        tasks=[
+            "AfriHateClassification",
+            "AfriSentiClassification",
+            "MasakhaNEWSClassification",
+            "KinNewsClassification",
+            "AfriXNLI",
+            "EmotionAnalysisPlus",
+            "FloresBitextMining",
+            "InjongoIntent",
+            "NTREXBitextMining",
+            "SIB200_14Classes",
+            "SIB200Classification",
+            "SIB200ClusteringS2S",
+            "BelebeleRetrieval",
+        ],
+        languages=afri_languages_lite,
+        exclusive_language_filter=True,
+    ),
+    description="A lite version of the African benchmark focusing on 9 geographically diverse languages.",
+    reference="https://arxiv.org/abs/2510.23896",
     citation=MMTEB_CITATION,
     contacts=["Kosei1227"],
 )
