@@ -346,7 +346,7 @@ def _create_image_dataloader(
         image_column_name,
         transform,
         num_proc=num_proc,
-    ).select_columns(["image"])
+    ).select_columns(["id", "image"])
     return DataLoader(
         dataset,
         batch_size=batch_size,
