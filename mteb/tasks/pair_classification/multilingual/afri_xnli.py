@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.pair_classification import AbsTaskPairClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AfriXNLI(MultilingualTask, AbsTaskPairClassification):
+class AfriXNLI(AbsTaskPairClassification):
     """Custom task for the AfriXNLI dataset."""
 
     metadata = TaskMetadata(
@@ -17,11 +16,10 @@ class AfriXNLI(MultilingualTask, AbsTaskPairClassification):
         reference="https://github.com/masakhane-io/afri-xnli",
         dataset={
             "path": "masakhane/afrixnli",  # dataset on the HF hub
-            "revision": "main",
-            "trust_remote_code": True,
+            "revision": "e3ca06b30f3e7af2a86f6c8609ea76fee326bc56",
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={
@@ -34,10 +32,10 @@ class AfriXNLI(MultilingualTask, AbsTaskPairClassification):
             "kin": ["kin-Latn"],
             "lin": ["lin-Latn"],
             "lug": ["lug-Latn"],
-            "orm": ["orm-Ethi"],
+            "gaz": ["orm-Ethi"],
             "sna": ["sna-Latn"],
             "sot": ["sot-Latn"],
-            "swa": ["swa-Latn"],
+            "swh": ["swa-Latn"],
             "twi": ["twi-Latn"],
             "wol": ["wol-Latn"],
             "xho": ["xho-Latn"],
@@ -55,24 +53,18 @@ class AfriXNLI(MultilingualTask, AbsTaskPairClassification):
         bibtex_citation="",
     )
 
-    def dataset_transform(self):
-        new_dataset = {}
-
+    def dataset_transform(self, **kwargs):
         for lang in self.dataset:
-            new_dataset[lang] = {}
             for split in self.dataset[lang]:
-                ds = (
-                    self.dataset[lang][split]
-                    .filter(lambda x: x["label"] in (0, 2))              # keep only entail / contradict
-                )
+                # keep only entail (0) / contradict (2)
+                ds = self.dataset[lang][split].filter(lambda x: x["label"] in (0, 2))
 
-                # turn 0 / 2 into binary 1 / 0
-                labels = [0 if lbl == 2 else 1 for lbl in ds["label"]]
+                # map to binary labels and standard column names
+                def map_labels(example):
+                    return {
+                        "sentence1": example["premise"],
+                        "sentence2": example["hypothesis"],
+                        "labels": 0 if example["label"] == 2 else 1,
+                    }
 
-                new_dataset[lang][split] = [{
-                    "sentence1": ds["premise"],       # list[str]
-                    "sentence2": ds["hypothesis"],    # list[str]
-                    "labels":    labels,              # list[int]
-                }]
-
-        self.dataset = new_dataset
+                self.dataset[lang][split] = ds.map(map_labels, remove_columns=ds.column_names)
