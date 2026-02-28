@@ -76,8 +76,8 @@ e5_instruct = ModelMeta(
 
 
 me5_instruct_afri_large_instruct = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
         model_name_or_path="McGill-NLP/AfriE5-Large-instruct",
         instruction_template=E5_INSTRUCTION,
         attn="cccc",
@@ -89,7 +89,7 @@ me5_instruct_afri_large_instruct = ModelMeta(
     name="McGill-NLP/AfriE5-Large-instruct",
     languages=XLMR_LANGUAGES,
     open_weights=True,
-    revision="main",
+    revision="2bbf55df87c1ddd7b20c5626d6f97ca6178766b7",
     release_date=E5_PAPER_RELEASE_DATE,
     framework=["GritLM", "PyTorch", "Sentence Transformers"],
     similarity_fn_name="cosine",
