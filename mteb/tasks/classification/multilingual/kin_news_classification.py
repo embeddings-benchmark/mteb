@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.classification import AbsTaskClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class KinNewsClassification(MultilingualTask, AbsTaskClassification):
+class KinNewsClassification(AbsTaskClassification):
     """
     KINNEWS and KIRNEWS: Benchmarking Cross-Lingual Text Classification for Kinyarwanda and Kirundi.
     Each sample is a news article from Rwanda and Burundi news websites and newspapers, 
@@ -25,11 +24,10 @@ class KinNewsClassification(MultilingualTask, AbsTaskClassification):
         reference="https://arxiv.org/abs/2010.12174",
         dataset={
             "path": "andreniyongabo/kinnews_kirnews",
-            "revision": "main",
-            "trust_remote_code": True,
+            "revision": "97dce354a363f853fa94c439dd42135fc31618f0",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         # Use HF builder config names as keys so MultiSubsetLoader loads correctly
@@ -55,7 +53,7 @@ class KinNewsClassification(MultilingualTask, AbsTaskClassification):
 """,
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, **kwargs) -> None:
         """
         Transform the dataset to MTEB expected format:
         
