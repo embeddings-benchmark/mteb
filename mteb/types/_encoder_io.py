@@ -107,7 +107,9 @@ class ImageInput(TypedDict):
     """
 
     image: list[Image.Image]
-    image_ocr_text: NotRequired[list[str]] # TODO: we could rename to "image_text" to also allow for image captions?
+    image_ocr_text: NotRequired[
+        list[str]
+    ]  # TODO: we could rename to "image_text" to also allow for image captions?
 
 
 class AudioInputItem(TypedDict):
