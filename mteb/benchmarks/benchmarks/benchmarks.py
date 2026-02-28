@@ -1257,7 +1257,6 @@ MTEB_AFRICA = Benchmark(
             # Additional comprehensive tasks
             # Retrieval tasks
             "BelebeleRetrieval",
-            "MIRACLRetrieval",
             "MIRACLRetrievalHardNegatives",
             "MrTidyRetrieval",
             "XQuADRetrieval",
