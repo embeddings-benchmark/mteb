@@ -1,20 +1,18 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskMultilabelClassification import (
+from mteb.abstasks.multilabel_classification import (
     AbsTaskMultilabelClassification,
 )
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class EmotionAnalysisPlus(MultilingualTask, AbsTaskMultilabelClassification):
+class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
     """
     BRIGHTER-emotion-categories: multi-label emotion detection (28 languages).
     Each sample can express one or more of the six Ekman emotions:
     anger, disgust, fear, joy, sadness, surprise.
     """
 
-    # ------------------------------------------------------------------ metadata
     metadata = TaskMetadata(
         name="EmotionAnalysisPlus",
         description=(
@@ -24,11 +22,10 @@ class EmotionAnalysisPlus(MultilingualTask, AbsTaskMultilabelClassification):
         reference="https://github.com/emotion-analysis-project/SemEval2025-Task11",
         dataset={
             "path": "llama-lang-adapt/EmotionAnalysisFinal",
-            "revision": "main",
-            "trust_remote_code": True,
+            "revision": "9397bb08c58a5591448c44237c6bed258a5d226c",
         },
         type="MultilabelClassification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs={
@@ -48,14 +45,13 @@ class EmotionAnalysisPlus(MultilingualTask, AbsTaskMultilabelClassification):
             "jav": ["jav-Latn"],
             "kin": ["kin-Latn"],
             "mar": ["mar-Deva"],
-            "orm": ["gaz-Latn"],
+            "gaz": ["gaz-Latn"],
             "pcm": ["pcm-Latn"],
-            "ptbr": ["por-Latn"],
-            "ptmz": ["por-Latn"],
             "ron": ["ron-Latn"],
             "rus": ["rus-Cyrl"],
+            "som": ["som-Latn"],
             "sun": ["sun-Latn"],
-            "swa": ["swa-Latn"],
+            "swh": ["swa-Latn"],
             "swe": ["swe-Latn"],
             "tat": ["tat-Cyrl"],
             "tir": ["tir-Ethi"],
@@ -89,7 +85,7 @@ class EmotionAnalysisPlus(MultilingualTask, AbsTaskMultilabelClassification):
     _LOOKUP_EMO = ("label", "emotions", "emotion", "category", "label_cat")
 
     # ---------------------------------------------------------------- transform
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, **kwargs) -> None:
         """
         Bring every split to the MTEB expected format:
 
