@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.classification import AbsTaskClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class InjongoIntent(MultilingualTask, AbsTaskClassification):
+class InjongoIntent(AbsTaskClassification):
     """Intent-classification component of the INJONGO benchmark
     (40 intents × 5 domains, 16 African languages + English)."""
 
@@ -24,7 +23,7 @@ class InjongoIntent(MultilingualTask, AbsTaskClassification):
             "revision": "fe4be3882a1614161dfe231ec793197bb74f4b44",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={
@@ -35,10 +34,10 @@ class InjongoIntent(MultilingualTask, AbsTaskClassification):
             "kin": ["kin-Latn"],
             "lin": ["lin-Latn"],
             "lug": ["lug-Latn"],
-            "orm": ["orm-Ethi"],
+            "gaz": ["orm-Ethi"],
             "sna": ["sna-Latn"],
             "sot": ["sot-Latn"],
-            "swa": ["swa-Latn"],
+            "swh": ["swa-Latn"],
             "twi": ["twi-Latn"],
             "wol": ["wol-Latn"],
             "xho": ["xho-Latn"],
@@ -48,14 +47,12 @@ class InjongoIntent(MultilingualTask, AbsTaskClassification):
         },
         main_score="accuracy",
         date=("2024-02-13", "2025-02-13"),
-        form=["spoken"],
         domains=["Spoken"],
         task_subtypes=["Intent classification"],
         license="cc-by-4.0",
         annotations_creators="human-annotated",
-        socioeconomic_status="mixed",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""@article{yu2025injongo,
   title     = {INJONGO: A Multicultural Intent Detection and Slot-filling Dataset for 16 African Languages},
   author    = {Yu, Hao and Alabi, Jesujoba O. and Bukula, Andiswa and et al.},
@@ -64,8 +61,7 @@ class InjongoIntent(MultilingualTask, AbsTaskClassification):
 }""",
     )
 
-
-    def dataset_transform(self):
+    def dataset_transform(self, **kwargs):
         """Convert HuggingFace splits to the lists of dicts expected by AbsTaskClassification."""
         transformed = {}
 
