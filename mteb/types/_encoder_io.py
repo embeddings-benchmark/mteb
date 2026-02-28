@@ -103,9 +103,11 @@ class ImageInput(TypedDict):
 
     Attributes:
         image: The image to encode. Can be a list of images or a list of lists of images.
+        image_ocr_text: An optional field containing the text derived from the image. E.g. using OCR or an image caption.
     """
 
     image: list[Image.Image]
+    image_ocr_text: NotRequired[list[str]] # TODO: we could rename to "image_text" to also allow for image captions?
 
 
 class AudioInputItem(TypedDict):
