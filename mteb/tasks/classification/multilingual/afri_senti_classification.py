@@ -18,6 +18,7 @@ def _transform(dataset, lang):
 
 
 class AfriSentiClassification(AbsTaskClassification):
+    fast_loading = True
     metadata = TaskMetadata(
         name="AfriSentiClassification",
         description="AfriSenti is the largest sentiment analysis dataset for under-represented African languages.",
@@ -41,11 +42,11 @@ class AfriSentiClassification(AbsTaskClassification):
             "kin": ["kin-Latn"],  # Kinyarwanda (Latin script)
             "por": ["por-Latn"],  # Portuguese (Latin script)
             "pcm": ["pcm-Latn"],  # Nigerian Pidgin (Latin script)
-            "swa": ["swa-Latn"],  # Swahili (macrolanguage) (Latin script)
+            "swh": ["swa-Latn"],  # Swahili (macrolanguage) (Latin script)
             "twi": ["twi-Latn"],  # Twi (Latin script)
             "tso": ["tso-Latn"],  # Tsonga (Latin script)
             "yor": ["yor-Latn"],  # Yoruba (Latin script)
-            "orm": ["orm-Ethi"],
+            "gaz": ["orm-Ethi"],
         },
         main_score="accuracy",
         date=("2023-02-16", "2023-09-03"),
