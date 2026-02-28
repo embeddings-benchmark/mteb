@@ -37,6 +37,7 @@ from .ru_sci_bench_classification import (
 )
 from .scala_classification import ScalaClassification
 from .scandi_sent_classification import ScandiSentClassification
+from .sib200_14classes import SIB200_14Classes
 from .sib200_classification import SIB200Classification
 from .sibfleurs import SIBFLEURSMultilingualClassification
 from .south_african_lang_classification import SouthAfricanLangClassification
@@ -81,6 +82,7 @@ __all__ = [
     "RuSciBenchOECDClassificationV2",
     "RuSciBenchPubTypeClassification",
     "SIB200Classification",
+    "SIB200_14Classes",
     "SIBFLEURSMultilingualClassification",
     "ScalaClassification",
     "ScandiSentClassification",
