@@ -171,7 +171,7 @@ class Benchmark:
         max_len = 50
         desc = self.description if self.description else ""
         desc = f"'{desc[:max_len]}..." if len(desc) > max_len else f"'{desc}'"
-        return f"{self.__class__.__name__}(name='{self.name}', desciption={desc}, tasks=[...] (#{n_tasks}), ...)"
+        return f"{self.__class__.__name__}(name='{self.name}', description={desc}, tasks=[...] (#{n_tasks}), ...)"
 
 
 class RtebBenchmark(Benchmark):
