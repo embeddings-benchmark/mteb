@@ -10,6 +10,7 @@ from datasets import Dataset
 from numpy.typing import NDArray
 
 if TYPE_CHECKING:
+    import numpy.typing as npt
     from PIL import Image
     from typing_extensions import NotRequired
 
@@ -118,7 +119,7 @@ class AudioInputItem(TypedDict):
         sampling_rate: The sampling rate of the audio.
     """
 
-    array: np.ndarray
+    array: npt.NDArray[np.floating]
     sampling_rate: int
 
 
@@ -132,14 +133,46 @@ class AudioInput(TypedDict):
     audio: list[AudioInputItem]
 
 
-class MultimodalInput(TextInput, CorpusInput, QueryInput, ImageInput, AudioInput):  # type: ignore[misc]
+class VideoInputItem(TypedDict):
+    """A video item for the VideoInput.
+
+    Dataset based on `datasets.Video` will be converted to this format during encoding.
+
+    Attributes:
+        frames: The video frames as Tensor.
+        audio: The audio array as AudioInputItem.
+    """
+
+    frames: torch.Tensor
+    audio: AudioInputItem
+
+
+class VideoInput(TypedDict):
+    """The input to the encoder for videos.
+
+    Attributes:
+        video: The video to encode. VideoDecoder object.
+    """
+
+    video: list[VideoInputItem]
+
+
+class MultimodalInput(  # type: ignore[misc]
+    TextInput, CorpusInput, QueryInput, ImageInput, AudioInput, VideoInput
+):
     """The input to the encoder for multimodal data."""
 
     pass
 
 
 BatchedInput = (
-    TextInput | CorpusInput | QueryInput | ImageInput | AudioInput | MultimodalInput
+    TextInput
+    | CorpusInput
+    | QueryInput
+    | ImageInput
+    | AudioInput
+    | VideoInput
+    | MultimodalInput
 )
 """
 Represents the input format accepted by the encoder for a batch of data.

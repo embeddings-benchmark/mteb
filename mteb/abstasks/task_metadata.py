@@ -246,6 +246,7 @@ TaskCategory = Literal[
     "a2at",
     "t2at",
     "at2at",
+    "v2t",
 ]
 """The category of the task.
 
@@ -269,6 +270,7 @@ TaskCategory = Literal[
 18. a2at: audio to audio+text
 19. t2at: text to audio+text
 20. at2at: audio+text to audio+text
+21. v2t: video to text
 """
 
 AnnotatorType = Literal[
@@ -547,6 +549,7 @@ class TaskMetadata(BaseModel):
             "t": "text",
             "i": "image",
             "a": "audio",
+            "v": "video",
         }
         if prompt_type == PromptType.query:
             return [

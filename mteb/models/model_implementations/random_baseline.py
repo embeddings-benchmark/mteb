@@ -5,7 +5,9 @@ from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import torch
+from tqdm.auto import tqdm
 
+from mteb._create_dataloaders import VideoCollator
 from mteb.models.model_meta import ModelMeta
 from mteb.similarity_functions import (
     select_pairwise_similarity,
@@ -16,9 +18,15 @@ if TYPE_CHECKING:
     from numpy.typing import NDArray
     from PIL import Image
     from torch.utils.data import DataLoader
+    from torchcodec.decoders import VideoDecoder
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types._encoder_io import Array, AudioInputItem, BatchedInput, PromptType
+    from mteb.types._encoder_io import (
+        Array,
+        AudioInputItem,
+        BatchedInput,
+        PromptType,
+    )
 
 
 def _string_to_vector(text: str | None, size: int) -> NDArray[np.floating]:
@@ -74,6 +82,32 @@ def _audio_to_vector(audio: AudioInputItem, size: int) -> np.ndarray:
     return rng.random(size, dtype=np.float32)
 
 
+def _video_to_vector(
+    video: list[dict[str, VideoDecoder | AudioInputItem]],
+    size: int,
+) -> np.ndarray:
+    """Generate a deterministic random vector based on video content.
+
+    Args:
+        video: Video data
+        size: Size of the output vector.
+
+    Returns:
+        A numpy array of shape (size,) containing the random vector.
+    """
+    # Convert video to bytes and then to a numeric seed
+    video_bytes = b"".join(
+        [
+            VideoCollator.resample_video(item["frames"], 10).numpy().tobytes()
+            + item["audio"]["array"].tobytes()
+            for item in video
+        ]
+    )
+    seed = int(hashlib.sha256(video_bytes).hexdigest(), 16) % (2**32)
+    rng = np.random.default_rng(seed)
+    return rng.random(size, dtype=np.float32)
+
+
 _EMBEDDING_DIM = 32
 
 _common_mock_metadata = dict(
@@ -93,7 +127,7 @@ _common_mock_metadata = dict(
     public_training_code=None,  # No training code, as this is a random baseline
     public_training_data=None,  # No training data, as this is a random baseline
     training_datasets=set(),
-    modalities=["text", "image", "audio"],
+    modalities=["text", "image", "audio", "video"],
 )
 
 
@@ -111,32 +145,58 @@ def _batch_to_embeddings(
         A 2D numpy array of shape (num_samples, embedding_dim) containing the embeddings
     """
     embeddings = []
-    for batch in inputs:
-        has_text, has_image, has_audio = (
-            "text" in batch,
-            "image" in batch,
-            "audio" in batch,
-        )
+    for batch in tqdm(inputs, desc="Encoding batches", unit="batch"):
+        text_embeddings = []
+        image_embeddings = []
+        audio_embeddings = []
+        video_embeddings = []
 
-        if has_text and has_image:
-            for text, image in zip(batch["text"], batch["image"]):
-                text_vec = _string_to_vector(text, embedding_dim)
-                img_vec = _image_to_vector(image, embedding_dim)
-                embeddings.append((text_vec + img_vec) / 2)
-        elif has_image:
-            embeddings.extend(
-                _image_to_vector(img, embedding_dim) for img in batch["image"]
-            )
-        elif has_text:
-            embeddings.extend(
+        if "text" in batch:
+            text_embeddings = [
                 _string_to_vector(txt, embedding_dim) for txt in batch["text"]
-            )
-        elif has_audio:
-            embeddings.extend(
-                _audio_to_vector(aud, embedding_dim) for aud in batch["audio"]
-            )
-        else:
-            raise KeyError("Input batch must contain 'text' and/or 'image' keys.")
+            ]
+        if "image" in batch:
+            image_embeddings = [
+                _image_to_vector(img, embedding_dim) for img in batch["image"]
+            ]
+        if "audio" in batch:
+            audio_embeddings = [
+                _audio_to_vector(audio, embedding_dim) for audio in batch["audio"]
+            ]
+        if "video" in batch:
+            video_embeddings = [
+                _video_to_vector(
+                    video,
+                    embedding_dim,
+                )
+                for video in batch["video"]
+            ]
+
+        # Combine embeddings
+        max_len = max(
+            [
+                len(text_embeddings),
+                len(image_embeddings),
+                len(audio_embeddings),
+                len(video_embeddings),
+            ]
+        )
+        for i in range(max_len):
+            combined_embedding = np.zeros(embedding_dim, dtype=np.float32)
+            count = 0
+            for embeddings_list in [
+                text_embeddings,
+                image_embeddings,
+                audio_embeddings,
+                video_embeddings,
+            ]:
+                if i < len(embeddings_list):
+                    combined_embedding += embeddings_list[i]
+                    count += 1
+            if count > 0:
+                combined_embedding /= count
+            embeddings.append(combined_embedding)
+
     return np.vstack(embeddings)
 
 
