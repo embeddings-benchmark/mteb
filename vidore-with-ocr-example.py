@@ -11,7 +11,9 @@ meta = Vidore3HrRetrieval.metadata
 class VidoreOCRFetchWrapper(EncoderProtocol):
     def __init__(self, *args, encoder: EncoderProtocol, **kwargs) -> None:
         self.encoder = encoder
-        self.task_to_ds = {"Vidore3HrRetrieval": "vidore/vidore_v3_hr"} # just one dataset as an example - I don't believe we have OCR for the closed datasets oO
+        self.task_to_ds = {
+            "Vidore3HrRetrieval": "vidore/vidore_v3_hr"
+        }  # just one dataset as an example - I don't believe we have OCR for the closed datasets oO
         self.id2markdown = None
         self.current_dataset = None
 
@@ -67,4 +69,5 @@ model = mteb.get_model("sentence-transformers/static-similarity-mrl-multilingual
 model_w_ocr = VidoreOCRFetchWrapper(encoder=model)
 task = Vidore3HrRetrieval()
 res = mteb.evaluate(model_w_ocr, task, cache=None)
-res[0].get_score()
+res[0].get_score()  # np.float64(0.23597)
+res[0].evaluation_time  # 165.57329511642456
