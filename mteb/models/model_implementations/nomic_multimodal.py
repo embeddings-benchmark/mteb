@@ -23,9 +23,8 @@ CITATION = """
   url={https://nomic.ai/blog/posts/nomic-embed-multimodal}
 }"""
 
-TRAINING_DATA = {
-    # https://huggingface.co/datasets/nomic-ai/colpali-queries-mined-20250321-by-source
-}
+# https://huggingface.co/datasets/nomic-ai/colpali-queries-mined-20250321-by-source
+TRAINING_DATA: set[str] = set()
 
 
 logger = logging.getLogger(__name__)
