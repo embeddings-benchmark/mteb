@@ -106,6 +106,7 @@ ast_audioset = ModelMeta(
     release_date="2021-07-08",
     max_tokens=None,
     n_parameters=86_600_000,
+    n_embedding_parameters=0,
     memory_usage_mb=330,
     embed_dim=768,
     license="apache-2.0",

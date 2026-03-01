@@ -157,6 +157,7 @@ seamless_m4t_v2_large = ModelMeta(
     release_date="2023-11-06",
     max_tokens=None,
     n_parameters=2_300_000_000,
+    n_embedding_parameters=262248448,
     memory_usage_mb=8809,
     embed_dim=1024,
     license="mit",

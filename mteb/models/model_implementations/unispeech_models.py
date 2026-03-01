@@ -130,6 +130,7 @@ unispeech_base = ModelMeta(
     release_date="2021-10-12",
     max_tokens=float("inf"),
     n_parameters=94_000_000,
+    n_embedding_parameters=24576,
     memory_usage_mb=359,
     embed_dim=768,
     license="apache-2.0",
