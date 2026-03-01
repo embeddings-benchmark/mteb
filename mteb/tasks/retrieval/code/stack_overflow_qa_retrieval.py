@@ -10,8 +10,8 @@ class StackOverflowQARetrieval(AbsTaskRetrieval):
         description="The dataset is a collection of natural language queries and their corresponding response which may include some text mixed with code snippets. The task is to retrieve the most relevant response for a given query.",
         reference="https://arxiv.org/abs/2407.02883",
         dataset={
-            "path": "CoIR-Retrieval/stackoverflow-qa",
-            "revision": "db8f169f3894c14a00251061f957b2063eef2bd5",
+            "path": "mteb/StackOverflowQA",
+            "revision": "7b46f5ebd2365278c1bb025986dda2fee893bbf5",
         },
         type="Retrieval",
         category="t2t",

@@ -10,8 +10,8 @@ class BLINKIT2IMultiChoice(AbsTaskRetrieval):
         description="Retrieve images based on images and specific retrieval instructions.",
         reference="https://arxiv.org/abs/2404.12390",
         dataset={
-            "path": "JamieSJS/blink-it2i-multi",
-            "revision": "a9f994925551c14503d00d86f1307bac6e2ead6a",
+            "path": "mteb/blink-it2i-multi",
+            "revision": "0418ecbea812ab97bda7eabe2c34065fdb81810f",
         },
         type="VisionCentricQA",
         category="it2i",

@@ -1,6 +1,13 @@
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
+fa_mteb = """@article{zinvandi2025famteb,
+  author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
+  journal = {arXiv preprint arXiv:2502.11571},
+  title = {Famteb: Massive text embedding benchmark in persian language},
+  year = {2025},
+}"""
+
 
 class SynPerQARetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
@@ -25,7 +32,7 @@ class SynPerQARetrieval(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="LM-generated and verified",
-        bibtex_citation="""""",
+        bibtex_citation=fa_mteb,
     )
 
 
@@ -52,7 +59,7 @@ class SynPerChatbotTopicsRetrieval(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="LM-generated and verified",
-        bibtex_citation="""""",
+        bibtex_citation=fa_mteb,
     )
 
 
@@ -79,7 +86,7 @@ class SynPerChatbotRAGTopicsRetrieval(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="LM-generated and verified",
-        bibtex_citation="""""",
+        bibtex_citation=fa_mteb,
     )
 
 
@@ -106,7 +113,7 @@ class SynPerChatbotRAGFAQRetrieval(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="LM-generated and verified",
-        bibtex_citation="""""",
+        bibtex_citation=fa_mteb,
     )
 
 
@@ -133,5 +140,5 @@ class PersianWebDocumentRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""""",
+        bibtex_citation=fa_mteb,
     )

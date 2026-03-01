@@ -1,10 +1,13 @@
+from __future__ import annotations
+
+import hashlib
 import itertools
 import json
 import logging
+import secrets
 import tempfile
 import time
 import warnings
-from pathlib import Path
 from typing import Literal, get_args
 from urllib.parse import urlencode
 
@@ -14,7 +17,6 @@ import pandas as pd
 
 import mteb
 from mteb import BenchmarkResults
-from mteb.abstasks.task_metadata import TaskDomain, TaskType
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.cache import ResultCache
 from mteb.leaderboard.benchmark_selector import (
@@ -23,35 +25,26 @@ from mteb.leaderboard.benchmark_selector import (
     R_BENCHMARK_ENTRIES,
     _make_selector,
 )
-from mteb.leaderboard.figures import _performance_size_plot, _radar_chart
+from mteb.leaderboard.event_logger import EventLogger
+from mteb.leaderboard.figures import (
+    _performance_over_time_plot,
+    _performance_size_plot,
+    _radar_chart,
+)
 from mteb.leaderboard.table import (
+    apply_per_language_styling_from_benchmark,
     apply_per_task_styling_from_benchmark,
     apply_summary_styling_from_benchmark,
 )
 from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
-from mteb.types import Modalities
+from mteb.models.model_meta import MODEL_TYPES
 
 logger = logging.getLogger(__name__)
+event_logger = EventLogger()
+
 
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
-
-
-def _load_results(cache: ResultCache) -> BenchmarkResults:
-    results_cache_path = Path(__file__).parent.joinpath("__cached_results.json")
-    if not results_cache_path.exists():
-        cache.download_from_remote()
-        all_model_names = [model_meta.name for model_meta in mteb.get_model_metas()]
-
-        all_results = cache.load_results(
-            models=all_model_names,
-            only_main_score=True,
-            require_model_meta=False,
-            include_remote=True,
-        )
-        return all_results
-    else:
-        with results_cache_path.open() as cache_file:
-            return mteb.BenchmarkResults.from_validated(**json.load(cache_file))
+MODEL_TYPE_CHOICES = list(get_args(MODEL_TYPES))
 
 
 def _produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
@@ -122,7 +115,7 @@ def _format_list(props: list[str]):
     return ", ".join(props)
 
 
-def _update_task_info(task_names: str) -> gr.DataFrame:
+def _update_task_info(task_names: str) -> pd.DataFrame:
     tasks = mteb.get_tasks(tasks=task_names)
     df = tasks.to_dataframe(
         properties=[
@@ -139,7 +132,10 @@ def _update_task_info(task_names: str) -> gr.DataFrame:
     df["languages"] = df["languages"].map(_format_list)
     df = df.sort_values("name")
     df["domains"] = df["domains"].map(_format_list)
-    df["name"] = f'<a href="{df["reference"]}" target="_blank">{df["name"]}</a>'
+    df["name"] = df.apply(
+        lambda row: f'<a href="{row["reference"]}" target="_blank">{row["name"]}</a>',
+        axis=1,
+    )
     df["modalities"] = df["modalities"].map(_format_list)
     df = df.rename(
         columns={
@@ -153,13 +149,7 @@ def _update_task_info(task_names: str) -> gr.DataFrame:
         }
     )
     df = df.drop(columns="reference")
-    return gr.DataFrame(
-        df,
-        datatype=["markdown"] + ["str"] * (len(df.columns) - 1),
-        show_copy_button=True,
-        show_fullscreen_button=True,
-        show_search="filter",
-    )
+    return df
 
 
 # Model sizes in million parameters
@@ -174,6 +164,7 @@ def _filter_models(
     instructions: bool | None,
     max_model_size: int,
     zero_shot_setting: Literal["only_zero_shot", "allow_all", "remove_unknown"],
+    model_types: list[str] | None,
 ):
     lower, upper = 0, max_model_size
     # Setting to None, when the user doesn't specify anything
@@ -192,6 +183,7 @@ def _filter_models(
         use_instructions=instructions,
         frameworks=compatibility,
         n_parameters_range=(lower, upper),
+        model_types=model_types,
     )
 
     models_to_keep = set()
@@ -215,21 +207,291 @@ def _should_show_zero_shot_filter(benchmark_name: str) -> bool:
     return True
 
 
-def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
-    """Returns a Gradio Blocks app for the MTEB leaderboard."""
-    logger.info("Loading all benchmark results")
-    all_results = _load_results(cache)
+@cachetools.cached(
+    cache={},
+    key=lambda benchmark_name, all_benchmark_results: hash(benchmark_name),
+)
+def _cache_on_benchmark_select(benchmark_name, all_benchmark_results):
+    start_time = time.time()
+    benchmark = mteb.get_benchmark(benchmark_name)
+    languages = [task.languages for task in benchmark.tasks if task.languages]
+    languages = set(itertools.chain.from_iterable(languages))
+    languages = sorted(languages)
+    domains = [
+        task.metadata.domains for task in benchmark.tasks if task.metadata.domains
+    ]
+    domains = set(itertools.chain.from_iterable(domains))
+    types = {task.metadata.type for task in benchmark.tasks if task.metadata.type}
+    modalities = set()
+    for task in benchmark.tasks:
+        modalities.update(task.metadata.modalities)
+    languages, domains, types, modalities = (
+        sorted(languages),
+        sorted(domains),
+        sorted(types),
+        sorted(modalities),
+    )
+    elapsed = time.time() - start_time
+    benchmark_results = all_benchmark_results[benchmark_name]
+    scores = benchmark_results._get_scores(format="long")
+    logger.debug(f"on_benchmark_select callback: {elapsed}s")
+    show_zero_shot = _should_show_zero_shot_filter(benchmark_name)
 
+    # Calculate initial models for this benchmark to avoid race conditions
+    benchmark_tasks = sorted([task.metadata.name for task in benchmark.tasks])
+    all_models_in_scores = list({entry["model_name"] for entry in scores})
+    initial_models = _filter_models(
+        all_models_in_scores,
+        benchmark_tasks,
+        availability=None,
+        compatibility=[],
+        instructions=None,
+        max_model_size=MAX_MODEL_SIZE,
+        zero_shot_setting="allow_all",
+        model_types=MODEL_TYPE_CHOICES,
+    )
+    # Sort to ensure consistency with update_models
+    initial_models = sorted(initial_models)
+
+    return (
+        languages,
+        domains,
+        types,
+        modalities,
+        benchmark_tasks,
+        scores,
+        show_zero_shot,
+        initial_models,
+    )
+
+
+@cachetools.cached(
+    cache={},
+    key=lambda benchmark_name,
+    type_select,
+    domain_select,
+    lang_select,
+    modality_select: hash(
+        (
+            hash(benchmark_name),
+            hash(tuple(type_select)),
+            hash(tuple(domain_select)),
+            hash(tuple(lang_select)),
+            hash(tuple(modality_select)),
+        )
+    ),
+)
+def _cache_update_task_list(
+    benchmark_name, type_select, domain_select, lang_select, modality_select
+):
+    if not len(lang_select):
+        return []
+    start_time = time.time()
+    benchmark_tasks = []
+    tasks_to_keep = []
+    for task in mteb.get_benchmark(benchmark_name).tasks:
+        benchmark_tasks.append(task.metadata.name)
+        if task.metadata.type not in type_select:
+            continue
+        if task.metadata.domains and not (
+            set(task.metadata.domains) & set(domain_select)
+        ):
+            continue
+        if task.languages and not (set(task.languages) & set(lang_select)):
+            continue
+        if task.metadata.modalities and not (
+            set(task.metadata.modalities) & set(modality_select)
+        ):
+            continue
+        tasks_to_keep.append(task.metadata.name)
+    benchmark_tasks.sort()
+    tasks_to_keep.sort()
+    elapsed = time.time() - start_time
+    logger.debug(f"update_task_list callback: {elapsed}s")
+
+    return benchmark_tasks, tasks_to_keep
+
+
+def _filter_benchmark_results_for_tables(
+    benchmark_results: BenchmarkResults,
+    task_names: set[str] | None,
+    model_names: set[str],
+    languages: list[str] | None,
+) -> BenchmarkResults:
+    """Apply task/model/language filters to BenchmarkResults for table rendering."""
+    if not task_names:
+        return benchmark_results._filter_tasks(task_names=[])
+
+    filtered_benchmark_results = benchmark_results._filter_tasks(
+        task_names=sorted(task_names)
+    )
+
+    # Keep only language-compatible subsets for each selected task.
+    if languages:
+        filtered_tasks = mteb.get_tasks(tasks=sorted(task_names), languages=languages)
+        filtered_benchmark_results = filtered_benchmark_results.select_tasks(
+            filtered_tasks
+        )
+
+    if model_names:
+        filtered_benchmark_results = filtered_benchmark_results.select_models(
+            sorted(model_names)
+        )
+
+    return filtered_benchmark_results
+
+
+def _generate_fingerprint_session_id(request: gr.Request) -> str:
+    """Generate a fallback session ID based on request fingerprint.
+
+    This is used when browser storage is unavailable (degraded mode). The fingerprint
+    is generated from IP address and browser characteristics to ensure the same user
+    gets a consistent session ID across page refreshes even without browser storage.
+
+    Args:
+        request: Gradio request object containing client info and headers
+
+    Returns:
+        A fingerprint-based session ID with 'fingerprint_' prefix
+    """
+    try:
+        # Collect browser fingerprint factors including IP
+        factors = [
+            request.client.host if request.client else "unknown",  # IP address
+            request.headers.get("user-agent", "unknown"),  # Browser info
+            request.headers.get("accept-language", "unknown"),  # Language preference
+        ]
+
+        # Create a hash of the fingerprint
+        fingerprint = "|".join(factors)
+        hash_value = hashlib.sha256(fingerprint.encode()).hexdigest()[:16]
+
+        return f"fingerprint_{hash_value}"
+    except Exception as e:
+        # If fingerprint generation fails, generate a temporary random ID
+        logger.warning(f"Failed to generate fingerprint session ID: {e}")
+        return f"temp_{secrets.token_hex(8)}"
+
+
+def on_page_load(session_data_json: str, request: gr.Request):
+    """Log page view with session tracking.
+
+    Handles two modes based on browser storage availability:
+    - Normal mode (localStorage available): Uses random token, persisted in browser
+    - Degraded mode (localStorage blocked): Uses fingerprint, regenerated but consistent
+
+    Args:
+        session_data_json: JSON string containing session data (with _storage_available flag)
+        request: Gradio request object for fingerprint generation
+
+    Returns:
+        Tuple of (updated JSON string with session data, session_id string)
+    """
+    # Parse existing session data
+    try:
+        session_data = json.loads(session_data_json) if session_data_json else {}
+    except json.JSONDecodeError:
+        logger.warning(f"Failed to parse session data JSON: {session_data_json}")
+        session_data = {}
+
+    # Check storage availability from JavaScript
+    storage_available = session_data.pop("_storage_available", False)
+
+    # Get or generate session_id based on storage availability
+    session_id = session_data.get("session_id", "")
+
+    if not session_id:
+        if storage_available:
+            # Normal mode: Generate random token that will be persisted
+            session_id = f"browser_{secrets.token_hex(16)}"
+            logger.info(f"Normal mode - generated session: {session_id[:20]}...")
+        else:
+            # Degraded mode: Generate fingerprint-based ID for consistency
+            session_id = _generate_fingerprint_session_id(request)
+            logger.warning(f"Degraded mode - using fingerprint: {session_id[:20]}...")
+
+    # Update session data
+    session_data.update(
+        {
+            "session_id": session_id,
+            "storage_available": storage_available,
+            "last_visit": time.time(),
+        }
+    )
+
+    # Log the page view
+    event_logger.log_page_view(
+        session_id=session_id,
+        benchmark=None,
+    )
+
+    # Return updated JSON string and extracted session_id
+    return json.dumps(session_data), session_id
+
+
+def get_leaderboard_app(
+    cache: ResultCache = ResultCache(), rebuild: bool = False
+) -> gr.Blocks:
+    """Returns a Gradio Blocks app for the MTEB leaderboard.
+
+    Args:
+        cache: ResultCache instance for managing benchmark data
+        rebuild: If True, bypasses any pre-computed JSON cache and forces a full rebuild
+                from the results repository. This clones/pulls the full results git repo,
+                builds BenchmarkResults from individual model files, and overwrites the
+                existing cache. Useful for ensuring the freshest data or debugging cache issues.
+
+    Returns:
+        gr.Blocks: A Gradio Blocks application configured with the MTEB leaderboard interface
+    """
+    app_start = time.time()
+    logger.info("=== Starting leaderboard app initialization ===")
+
+    logger.info("Step 1/7: Loading all benchmark results...")
+    load_start = time.time()
+    all_results = cache._load_from_cache(rebuild=rebuild)
+    load_time = time.time() - load_start
+    logger.info(f"Step 1/7 complete: Loaded results in {load_time:.2f}s")
+
+    logger.info("Step 2/7: Fetching benchmarks...")
+    bench_start = time.time()
     benchmarks = sorted(
         mteb.get_benchmarks(display_on_leaderboard=True), key=lambda x: x.name
     )
+    bench_time = time.time() - bench_start
+    logger.info(
+        f"Step 2/7 complete: Fetched {len(benchmarks)} benchmarks in {bench_time:.2f}s"
+    )
+
+    logger.info(
+        "Step 3/7: Processing all benchmarks (select_tasks + join_revisions)..."
+    )
+    process_start = time.time()
     all_benchmark_results = {
         benchmark.name: all_results.select_tasks(benchmark.tasks).join_revisions()
         for benchmark in benchmarks
     }
+    process_time = time.time() - process_start
+    if len(benchmarks) > 0:
+        logger.info(
+            f"Step 3/7 complete: Processed {len(benchmarks)} benchmarks in {process_time:.2f}s (avg {process_time / len(benchmarks):.2f}s/benchmark)"
+        )
+    else:
+        logger.info(
+            f"Step 3/7 complete: Processed 0 benchmarks in {process_time:.2f}s (avg N/A)"
+        )
+
     default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
     default_results = all_benchmark_results[default_benchmark.name]
-    logger.info("Benchmark results loaded")
+    default_task_types = {
+        task_type
+        for task_type in default_results.task_types
+        if task_type != "InstructionRetrieval"
+    }
+    display_radar_chart = len(default_task_types) > 1
+
+    logger.info("Step 4/7: Filtering models...")
+    filter_start = time.time()
 
     default_scores = default_results._get_scores(format="long")
     all_models = list({entry["model_name"] for entry in default_scores})
@@ -241,6 +503,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         instructions=None,
         max_model_size=MAX_MODEL_SIZE,
         zero_shot_setting="allow_all",
+        model_types=MODEL_TYPE_CHOICES,
     )
     default_filtered_scores = [
         entry for entry in default_scores if entry["model_name"] in filtered_models
@@ -249,63 +512,134 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
     # Filter BenchmarkResults based on default filtered models (as required by Kenneth)
     filtered_model_names = [entry["model_name"] for entry in default_filtered_scores]
     filtered_benchmark_results = default_results.select_models(filtered_model_names)
+    filter_time = time.time() - filter_start
+    logger.info(
+        f"Step 4/7 complete: Filtered {len(filtered_model_names)} models in {filter_time:.2f}s"
+    )
 
+    logger.info("Step 5/7: Generating tables...")
+    table_start = time.time()
     summary_table = apply_summary_styling_from_benchmark(
         default_benchmark, filtered_benchmark_results
     )
     per_task_table = apply_per_task_styling_from_benchmark(
         default_benchmark, filtered_benchmark_results
     )
+    per_language_table = apply_per_language_styling_from_benchmark(
+        default_benchmark,
+        filtered_benchmark_results,
+    )
+    table_time = time.time() - table_start
+    logger.info(f"Step 5/7 complete: Generated tables in {table_time:.2f}s")
 
-    lang_select = gr.Dropdown(
-        LANGUAGE,
+    # Check if this benchmark displays per-language results
+    display_language_table = len(default_benchmark.language_view) > 0
+
+    logger.info("Step 6/7: Creating Gradio components...")
+    component_start = time.time()
+    lang_select = gr.CheckboxGroup(
+        sorted(default_results.languages),
         value=sorted(default_results.languages),
-        allow_custom_value=True,
-        multiselect=True,
+        show_label=True,
+        show_select_all=True,
         label="Language",
         info="Select languages to include.",
     )
-    type_select = gr.Dropdown(
-        sorted(get_args(TaskType)),
+    type_select = gr.CheckboxGroup(
+        sorted(default_results.task_types),
         value=sorted(default_results.task_types),
-        multiselect=True,
+        show_label=True,
+        show_select_all=True,
         label="Task Type",
         info="Select task types to include.",
     )
-    domain_select = gr.Dropdown(
-        sorted(get_args(TaskDomain)),
+    domain_select = gr.CheckboxGroup(
+        sorted(default_results.domains),
         value=sorted(default_results.domains),
-        multiselect=True,
+        show_label=True,
+        show_select_all=True,
         label="Domain",
         info="Select domains to include.",
     )
-    task_select = gr.Dropdown(
-        sorted(all_results.task_names),
+    task_select = gr.CheckboxGroup(
+        sorted(default_results.task_names),
         value=sorted(default_results.task_names),
-        allow_custom_value=True,
-        multiselect=True,
+        show_label=True,
+        show_select_all=True,
         label="Task",
         info="Select specific tasks to include",
     )
-    modality_select = gr.Dropdown(
-        sorted(get_args(Modalities)),
+    modality_select = gr.CheckboxGroup(
+        sorted(default_results.modalities),
         value=sorted(default_results.modalities),
-        multiselect=True,
+        show_label=True,
+        show_select_all=True,
         label="Modality",
         info="Select modalities to include.",
     )
+    component_time = time.time() - component_start
+    logger.info(
+        f"Step 6/7 complete: Created Gradio components in {component_time:.2f}s"
+    )
 
-    head = """
-      <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    """
-
+    logger.info("Step 7/7: Building Gradio interface and callbacks...")
+    interface_start = time.time()
     with gr.Blocks(
+        title="MTEB Leaderboard",
         fill_width=True,
-        theme=gr.themes.Soft(
-            font=[gr.themes.GoogleFont("Roboto Mono"), "Arial", "sans-serif"],
-        ),
-        head=head,
     ) as demo:
+        # Session tracking: Use State instead of BrowserState to avoid localStorage errors
+        # JavaScript will manually handle localStorage when available
+        session_data = gr.State("{}")
+        session_id = gr.State("")
+
+        # On page load: read from localStorage (if available) and initialize session
+        demo.load(
+            fn=on_page_load,
+            inputs=[session_data],
+            outputs=[session_data, session_id],
+            js="""
+            function(session_data) {
+                const STORAGE_KEY = '__mteb_session_data__';
+                let data = {};
+
+                // Try to read from localStorage
+                try {
+                    const stored = localStorage.getItem(STORAGE_KEY);
+                    if (stored) {
+                        data = JSON.parse(stored);
+                    }
+                    data._storage_available = true;
+                    window.__mteb_storage_available__ = true;
+                } catch(e) {
+                    console.warn('MTEB: localStorage unavailable, using fingerprint mode');
+                    data._storage_available = false;
+                    window.__mteb_storage_available__ = false;
+                }
+
+                return [JSON.stringify(data)];
+            }
+            """,
+        )
+
+        # After session is generated, save to localStorage if available
+        session_data.change(
+            fn=None,
+            inputs=[session_data],
+            js="""
+            function(session_data) {
+                if (window.__mteb_storage_available__) {
+                    try {
+                        localStorage.setItem('__mteb_session_data__', session_data);
+                    } catch(e) {
+                        console.warn('MTEB: Failed to save session to localStorage');
+                    }
+                }
+                return session_data;
+            }
+            """,
+        )
+
         with gr.Sidebar(
             position="left",
             label="Benchmark Selection and Customization",
@@ -332,9 +666,13 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         models = gr.State(filtered_models)
         with gr.Row():
             with gr.Column(scale=1):
-                description = gr.Markdown(  # noqa: F841
-                    _update_description,
-                    inputs=[benchmark_select, lang_select, type_select, domain_select],
+                description = gr.Markdown(
+                    _update_description(
+                        default_benchmark.name,
+                        sorted(default_results.languages),
+                        sorted(default_results.task_types),
+                        sorted(default_results.domains),
+                    )
                 )
 
             with gr.Column(scale=1):
@@ -421,6 +759,12 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                                     label="Model Parameters",
                                     interactive=True,
                                 )
+                            with gr.Column():
+                                model_type_select = gr.CheckboxGroup(
+                                    MODEL_TYPE_CHOICES,
+                                    value=MODEL_TYPE_CHOICES,
+                                    label="Model Type",
+                                )
 
         with gr.Tab("Summary"):
             summary_table.render()
@@ -437,14 +781,21 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
 
         with gr.Tab("Performance per Model Size") as plot_tab:
             plot = gr.Plot(_performance_size_plot, inputs=[summary_table])
-            gr.Markdown(
-                "*We only display TOP 5 models that have been run on all tasks in the benchmark*"
-            )
             plot_tab.select(
                 _performance_size_plot, inputs=[summary_table], outputs=[plot]
             )
 
-        with gr.Tab("Performance per Task Type") as radar_plot_tab:
+        with gr.Tab("Performance over Time") as timeline_tab:
+            timeline_plot = gr.Plot(_performance_over_time_plot, inputs=[summary_table])
+            timeline_tab.select(
+                _performance_over_time_plot,
+                inputs=[summary_table],
+                outputs=[timeline_plot],
+            )
+
+        with gr.Tab(
+            "Performance per Task Type", visible=display_radar_chart
+        ) as radar_plot_tab:
             radar_plot = gr.Plot(_radar_chart, inputs=[summary_table])
             gr.Markdown(
                 "*We only display TOP 5 models that have been run on all task types in the benchmark*"
@@ -459,75 +810,66 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             download_per_task.click(
                 _download_table, inputs=[per_task_table], outputs=[download_per_task]
             )
+        with gr.Tab(
+            "Performance per language", visible=display_language_table
+        ) as language_tab:
+            per_language_table.render()
+            download_per_language = gr.DownloadButton("Download Table")
+            download_per_language.click(
+                _download_table,
+                inputs=[per_language_table],
+                outputs=[download_per_language],
+            )
         with gr.Tab("Task information"):
-            task_info_table = gr.DataFrame(_update_task_info, inputs=[task_select])  # noqa: F841
+            task_info_table = gr.DataFrame(
+                _update_task_info(sorted(default_results.task_names)),
+                datatype=["markdown"] + ["str"] * 6,
+                buttons=["copy", "fullscreen"],
+                show_search="filter",
+            )
 
         # This sets the benchmark from the URL query parameters
         demo.load(_set_benchmark_on_load, inputs=[], outputs=[benchmark_select])
 
-        @cachetools.cached(
-            cache={},
-            key=lambda benchmark_name: hash(benchmark_name),
-        )
-        def on_benchmark_select(benchmark_name):
-            start_time = time.time()
-            benchmark = mteb.get_benchmark(benchmark_name)
-            languages = [task.languages for task in benchmark.tasks if task.languages]
-            languages = set(itertools.chain.from_iterable(languages))
-            languages = sorted(languages)
-            domains = [
-                task.metadata.domains
-                for task in benchmark.tasks
-                if task.metadata.domains
-            ]
-            domains = set(itertools.chain.from_iterable(domains))
-            types = {
-                task.metadata.type for task in benchmark.tasks if task.metadata.type
-            }
-            modalities = set()
-            for task in benchmark.tasks:
-                modalities.update(task.metadata.modalities)
-            languages, domains, types, modalities = (
-                sorted(languages),
-                sorted(domains),
-                sorted(types),
-                sorted(modalities),
-            )
-            elapsed = time.time() - start_time
-            benchmark_results = all_benchmark_results[benchmark_name]
-            scores = benchmark_results._get_scores(format="long")
-            logger.debug(f"on_benchmark_select callback: {elapsed}s")
-            show_zero_shot = _should_show_zero_shot_filter(benchmark_name)
-
-            # Calculate initial models for this benchmark to avoid race conditions
-            benchmark_tasks = sorted([task.metadata.name for task in benchmark.tasks])
-            all_models_in_scores = list({entry["model_name"] for entry in scores})
-            initial_models = _filter_models(
-                all_models_in_scores,
-                benchmark_tasks,
-                availability=None,
-                compatibility=[],
-                instructions=None,
-                max_model_size=MAX_MODEL_SIZE,
-                zero_shot_setting="allow_all",
-            )
-            # Sort to ensure consistency with update_models
-            initial_models = sorted(initial_models)
-
-            return (
+        def on_benchmark_select(benchmark_name, session_id=None):
+            (
                 languages,
                 domains,
                 types,
                 modalities,
                 benchmark_tasks,
                 scores,
+                show_zero_shot,
+                initial_models,
+            ) = _cache_on_benchmark_select(benchmark_name, all_benchmark_results)
+
+            if session_id:
+                event_logger.log_benchmark_change(
+                    session_id=session_id, new_value=benchmark_name, old_value=None
+                )
+
+            benchmark_results = all_benchmark_results[benchmark_name]
+            eligible_task_types = {
+                task_type
+                for task_type in benchmark_results.task_types
+                if task_type != "InstructionRetrieval"
+            }
+            display_radar = len(eligible_task_types) > 1
+            return (
+                gr.update(choices=languages, value=languages),
+                gr.update(choices=domains, value=domains),
+                gr.update(choices=types, value=types),
+                gr.update(choices=modalities, value=modalities),
+                gr.update(choices=benchmark_tasks, value=benchmark_tasks),
+                scores,
                 gr.update(visible=show_zero_shot),
                 initial_models,
+                gr.update(visible=display_radar),
             )
 
         benchmark_select.change(
             on_benchmark_select,
-            inputs=[benchmark_select],
+            inputs=[benchmark_select, session_id],
             outputs=[
                 lang_select,
                 domain_select,
@@ -537,7 +879,22 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 scores,
                 zero_shot,
                 models,
+                radar_plot_tab,
             ],
+        )
+        for trigger in [lang_select, type_select, domain_select]:
+            trigger.change(
+                _update_description,
+                inputs=[benchmark_select, lang_select, type_select, domain_select],
+                outputs=[description],
+                preprocess=False,
+                show_progress="hidden",
+            )
+        task_select.change(
+            _update_task_info,
+            inputs=[task_select],
+            outputs=[task_info_table],
+            preprocess=False,
         )
 
         @cachetools.cached(
@@ -560,50 +917,35 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             update_scores_on_lang_change,
             inputs=[benchmark_select, lang_select],
             outputs=[scores],
+            preprocess=False,
         )
 
-        @cachetools.cached(
-            cache={},
-            key=lambda benchmark_name,
+        def update_task_list(
+            benchmark_name,
             type_select,
             domain_select,
             lang_select,
-            modality_select: hash(
-                (
-                    hash(benchmark_name),
-                    hash(tuple(type_select)),
-                    hash(tuple(domain_select)),
-                    hash(tuple(lang_select)),
-                    hash(tuple(modality_select)),
-                )
-            ),
-        )
-        def update_task_list(
-            benchmark_name, type_select, domain_select, lang_select, modality_select
+            modality_select,
+            session_id=None,
         ):
-            if not len(lang_select):
-                return []
-            start_time = time.time()
-            tasks_to_keep = []
-            for task in mteb.get_benchmark(benchmark_name).tasks:
-                if task.metadata.type not in type_select:
-                    continue
-                if task.metadata.domains is not None and not (
-                    set(task.metadata.domains) & set(domain_select)
-                ):
-                    continue
-                if task.languages is not None and not (
-                    set(task.languages) & set(lang_select)
-                ):
-                    continue
-                if task.metadata.modalities and not (
-                    set(task.metadata.modalities) & set(modality_select)
-                ):
-                    continue
-                tasks_to_keep.append(task.metadata.name)
-            elapsed = time.time() - start_time
-            logger.debug(f"update_task_list callback: {elapsed}s")
-            return sorted(tasks_to_keep)
+            benchmark_tasks, tasks_to_keep = _cache_update_task_list(
+                benchmark_name, type_select, domain_select, lang_select, modality_select
+            )
+            if session_id is not None:
+                event_logger.log_filter_change(
+                    session_id=session_id,
+                    filter_name="task_type",
+                    new_value=benchmark_name,
+                    old_value=None,  # Optional: previous value
+                    benchmark=benchmark_name,
+                    filters={  # Optional: snapshot of all filters
+                        "task_type": type_select,
+                        "domain": domain_select,
+                        "language": lang_select,
+                        "modality": modality_select,
+                    },
+                )
+            return gr.update(choices=benchmark_tasks, value=tasks_to_keep)
 
         type_select.input(
             update_task_list,
@@ -613,8 +955,10 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 domain_select,
                 lang_select,
                 modality_select,
+                session_id,
             ],
             outputs=[task_select],
+            preprocess=False,
         )
         domain_select.input(
             update_task_list,
@@ -624,8 +968,10 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 domain_select,
                 lang_select,
                 modality_select,
+                session_id,
             ],
             outputs=[task_select],
+            preprocess=False,
         )
         lang_select.input(
             update_task_list,
@@ -635,8 +981,10 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 domain_select,
                 lang_select,
                 modality_select,
+                session_id,
             ],
             outputs=[task_select],
+            preprocess=False,
         )
         modality_select.input(
             update_task_list,
@@ -646,8 +994,10 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 domain_select,
                 lang_select,
                 modality_select,
+                session_id,
             ],
             outputs=[task_select],
+            preprocess=False,
         )
 
         @cachetools.cached(
@@ -658,7 +1008,9 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             compatibility,
             instructions,
             max_model_size,
-            zero_shot: hash(
+            zero_shot,
+            model_type_select,
+            session_id: hash(
                 (
                     id(scores),
                     hash(tuple(tasks)),
@@ -667,6 +1019,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                     hash(instructions),
                     hash(max_model_size),
                     hash(zero_shot),
+                    hash(tuple(model_type_select)),
                 )
             ),
         )
@@ -678,6 +1031,8 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             instructions: bool | None,
             max_model_size: int,
             zero_shot: Literal["allow_all", "remove_unknown", "only_zero_shot"],
+            model_type_select: list[str],
+            session_id,
         ):
             start_time = time.time()
             model_names = list({entry["model_name"] for entry in scores})
@@ -689,10 +1044,28 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot_setting=zero_shot,
+                model_types=model_type_select,
             )
             elapsed = time.time() - start_time
             logger.debug(f"update_models callback: {elapsed}s")
             # Always return sorted models to ensure models.change triggers update_tables
+            if session_id is not None:
+                event_logger.log_filter_change(
+                    session_id=session_id,
+                    filter_name="model_type",
+                    new_value=None,
+                    old_value=None,  # Optional: previous value
+                    benchmark=None,
+                    filters={  # Optional: snapshot of all filters
+                        "scores": scores,
+                        "tasks": tasks,
+                        "availability": availability,
+                        "compatibility": compatibility,
+                        "instructions": instructions,
+                        "max_model_size": max_model_size,
+                        "zero_shot": zero_shot,
+                    },
+                )
 
             return sorted(filtered_models)
 
@@ -706,8 +1079,11 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                model_type_select,
+                session_id,
             ],
             outputs=[models],
+            preprocess=False,
         )
 
         task_select.change(
@@ -720,8 +1096,11 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                model_type_select,
+                session_id,
             ],
             outputs=[models],
+            preprocess=False,
         )
         availability.input(
             update_models,
@@ -733,8 +1112,11 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                model_type_select,
+                session_id,
             ],
             outputs=[models],
+            preprocess=False,
         )
         compatibility.input(
             update_models,
@@ -746,8 +1128,11 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                model_type_select,
+                session_id,
             ],
             outputs=[models],
+            preprocess=False,
         )
         instructions.input(
             update_models,
@@ -759,8 +1144,11 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                model_type_select,
+                session_id,
             ],
             outputs=[models],
+            preprocess=False,
         )
         max_model_size.change(
             update_models,
@@ -772,8 +1160,11 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                model_type_select,
+                session_id,
             ],
             outputs=[models],
+            preprocess=False,
         )
         zero_shot.change(
             update_models,
@@ -785,14 +1176,44 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 instructions,
                 max_model_size,
                 zero_shot,
+                model_type_select,
+                session_id,
             ],
             outputs=[models],
+            preprocess=False,
+        )
+        model_type_select.change(
+            update_models,
+            inputs=[
+                scores,
+                task_select,
+                availability,
+                compatibility,
+                instructions,
+                max_model_size,
+                zero_shot,
+                model_type_select,
+                session_id,
+            ],
+            outputs=[models],
+            preprocess=False,
         )
 
-        def _cache_key_for_update_tables(scores, tasks, models_to_keep, benchmark_name):
-            scores_hash = hash(
-                tuple(sorted((d.get("model_name"), d.get("revision")) for d in scores))
-            )
+        def _cache_key_for_update_tables(
+            scores, tasks, models_to_keep, benchmark_name, languages
+        ):
+            # Build a deterministic fingerprint from score content.
+            # This keeps cache hits for equivalent data while invalidating on language-driven score changes.
+            score_signature = []
+            for entry in scores:
+                score_signature.append(
+                    (
+                        entry.get("model_name"),
+                        entry.get("task_name"),
+                        entry.get("score"),
+                    )
+                )
+            scores_hash = hash(tuple(sorted(score_signature)))
             tasks_hash = hash(tuple(sorted(tasks)))
             # Sort models_to_keep to ensure consistent hash regardless of input order
             models_hash = (
@@ -801,7 +1222,10 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 else None
             )
             bench_hash = hash(benchmark_name)
-            key = hash((scores_hash, tasks_hash, models_hash, bench_hash))
+            lang_hash = (
+                hash(tuple(sorted(languages))) if languages is not None else None
+            )
+            key = hash((scores_hash, tasks_hash, models_hash, bench_hash, lang_hash))
 
             return key
 
@@ -814,11 +1238,11 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             tasks,
             models_to_keep,
             benchmark_name: str,
+            languages: list[str],
         ):
             start_time = time.time()
             tasks = set(tasks)
             benchmark = mteb.get_benchmark(benchmark_name)
-            benchmark_tasks = {task.metadata.name for task in benchmark.tasks}
 
             # Extract filtered model and task names from scores (respects UI filters)
             filtered_model_names = set()
@@ -834,21 +1258,12 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 filtered_model_names.add(entry["model_name"])
                 filtered_task_names.add(entry["task_name"])
 
-            # Create filtered BenchmarkResults as required by Kenneth
-            benchmark_results = all_benchmark_results[benchmark_name]
-            filtered_benchmark_results = benchmark_results
-
-            # Apply task filtering if needed
-            if filtered_task_names != benchmark_tasks:
-                filtered_benchmark_results = filtered_benchmark_results._filter_tasks(
-                    task_names=list(filtered_task_names)
-                )
-
-            # Apply model filtering if needed
-            if filtered_model_names:
-                filtered_benchmark_results = filtered_benchmark_results.select_models(
-                    list(filtered_model_names)
-                )
+            filtered_benchmark_results = _filter_benchmark_results_for_tables(
+                benchmark_results=all_benchmark_results[benchmark_name],
+                task_names=filtered_task_names,
+                model_names=filtered_model_names,
+                languages=languages,
+            )
 
             summary = apply_summary_styling_from_benchmark(
                 benchmark, filtered_benchmark_results
@@ -856,22 +1271,41 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             per_task = apply_per_task_styling_from_benchmark(
                 benchmark, filtered_benchmark_results
             )
+            per_language = apply_per_language_styling_from_benchmark(
+                benchmark,
+                filtered_benchmark_results,
+            )
             elapsed = time.time() - start_time
             logger.debug(f"update_tables callback: {elapsed}s")
-            return summary, per_task
+            return (
+                summary,
+                per_task,
+                per_language,
+                gr.update(visible=len(benchmark.language_view) > 0),
+            )
 
         # Only update tables when models change, not when scores/tasks change directly
         # This avoids redundant updates since scores/tasks changes trigger update_models
         # which then triggers models.change
-        for item in [models, task_select]:
+        for item in [models, task_select, lang_select]:
             item.change(
                 update_tables,
-                inputs=[scores, task_select, models, benchmark_select],
-                outputs=[summary_table, per_task_table],
+                inputs=[scores, task_select, models, benchmark_select, lang_select],
+                outputs=[
+                    summary_table,
+                    per_task_table,
+                    per_language_table,
+                    language_tab,
+                ],
+                preprocess=False,
             )
 
         gr.Markdown(ACKNOWLEDGEMENT, elem_id="ack_markdown")
+    interface_time = time.time() - interface_start
+    logger.info(f"Step 7/7 complete: Built Gradio interface in {interface_time:.2f}s")
 
+    logger.info("Starting prerun on all benchmarks to populate caches...")
+    prerun_start = time.time()
     # Prerun on all benchmarks, so that results of callbacks get cached
     for benchmark in benchmarks:
         (
@@ -883,9 +1317,16 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             bench_scores,
             zero_shot,
             bench_initial_models,
+            display_radar,
         ) = on_benchmark_select(benchmark.name)
         # Call update_tables to populate cache (simulating models.change trigger)
-        update_tables(bench_scores, bench_tasks, bench_initial_models, benchmark.name)
+        update_tables(
+            bench_scores,
+            bench_tasks,
+            bench_initial_models,
+            benchmark.name,
+            bench_languages,
+        )
         # Also cache the filtered tasks scenario
         filtered_tasks = update_task_list(
             benchmark.name,
@@ -895,22 +1336,62 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             bench_modalities,
         )
         update_tables(
-            bench_scores, filtered_tasks, bench_initial_models, benchmark.name
+            bench_scores,
+            filtered_tasks,
+            bench_initial_models,
+            benchmark.name,
+            bench_languages,
         )
+    prerun_time = time.time() - prerun_start
+    logger.info(
+        f"Prerun complete: Processed {len(benchmarks)} benchmarks in {prerun_time:.2f}s"
+    )
+
+    total_time = time.time() - app_start
+    logger.info(f"=== Leaderboard app initialization complete in {total_time:.2f}s ===")
     return demo
 
 
 if __name__ == "__main__":
-    logging.getLogger("mteb.load_results.task_results").setLevel(
-        logging.ERROR
-    )  # Warnings related to task split
-    logging.getLogger("mteb.model_meta").setLevel(
-        logging.ERROR
-    )  # Warning related to model metadata (fetch_from_hf=False)
-    logging.getLogger("mteb.load_results.benchmark_results").setLevel(
-        logging.ERROR
-    )  # Warning related to model metadata (fetch_from_hf=False)
+    import os
+
+    # Add process ID to logging for multiprocessing debugging
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - PID:%(process)d - %(name)s - %(levelname)s - %(message)s",
+        force=True,  # Override any existing handlers
+    )
+
+    # Flush log handlers immediately (helpful for multiprocessing)
+    for handler in logging.root.handlers:
+        handler.flush()
+
+    logger.info(f"Starting leaderboard app in process {os.getpid()}")
+
+    # Suppress specific WARNING messages while keeping INFO level for the app
+    logging.getLogger("mteb.results.task_result").setLevel(logging.ERROR)
+    logging.getLogger("mteb.models.model_meta").setLevel(logging.ERROR)
+    logging.getLogger("mteb.results.benchmark_results").setLevel(logging.ERROR)
+
     warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
+    warnings.filterwarnings("ignore", message="Could not get source model: .*")
+    warnings.filterwarnings(
+        "ignore", message="No scores data available. Returning empty DataFrame."
+    )
+    warnings.filterwarnings("ignore", message="Main score .* not found in scores")
+    warnings.filterwarnings("ignore", message=".*: Missing subsets .* for split .*")
+    warnings.filterwarnings("ignore", message=".*: Missing splits .*")
 
     app = get_leaderboard_app()
-    app.launch(server_name="0.0.0.0", server_port=7860)
+
+    head = """
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    """
+    app.launch(
+        server_name="0.0.0.0",
+        server_port=7860,
+        theme=gr.themes.Soft(
+            font=[gr.themes.GoogleFont("Roboto Mono"), "Arial", "sans-serif"],
+        ),
+        head=head,
+    )

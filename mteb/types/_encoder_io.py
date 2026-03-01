@@ -1,16 +1,34 @@
+from __future__ import annotations
+
 from collections.abc import Mapping
 from enum import Enum
-from typing import TypedDict
+from typing import TYPE_CHECKING, TypedDict
 
 import numpy as np
 import torch
 from datasets import Dataset
-from PIL import Image
-from typing_extensions import NotRequired
+from numpy.typing import NDArray
+
+if TYPE_CHECKING:
+    from PIL import Image
+    from typing_extensions import NotRequired
+
+
+class EncodeKwargs(TypedDict):
+    """Keyword arguments for encoding methods.
+
+    Attributes:
+        batch_size: The batch size to use for encoding.
+        show_progress_bar: Whether to show a progress bar during encoding.
+    """
+
+    batch_size: NotRequired[int]
+    show_progress_bar: NotRequired[bool]
+
 
 # --- Output types ---
-Array = np.ndarray | torch.Tensor
-"""General array type, can be a numpy array or a torch tensor."""
+Array = NDArray[np.floating | np.integer | np.bool_] | torch.Tensor
+"""General array type, can be a numpy array (float, int, or bool) or a torch tensor."""
 
 
 # --- Input types ---
@@ -90,6 +108,20 @@ class ImageInput(TypedDict):
     image: list[Image.Image]
 
 
+class AudioInputItem(TypedDict):
+    """An audio item for the AudioInput.
+
+    Dataset based on `datasets.Audio` will be converted to this format during encoding.
+
+    Attributes:
+        array: The audio array as bytes.
+        sampling_rate: The sampling rate of the audio.
+    """
+
+    array: np.ndarray
+    sampling_rate: int
+
+
 class AudioInput(TypedDict):
     """The input to the encoder for audio.
 
@@ -97,7 +129,7 @@ class AudioInput(TypedDict):
         audio: The audio to encode. Can be a list of audio files or a list of lists of audio files.
     """
 
-    audio: list[list[bytes]]
+    audio: list[AudioInputItem]
 
 
 class MultimodalInput(TextInput, CorpusInput, QueryInput, ImageInput, AudioInput):  # type: ignore[misc]
@@ -158,9 +190,19 @@ TextBatchedInput = TextInput | CorpusInput | QueryInput
 """The input to the encoder for a batch of text data."""
 
 QueryDatasetType = Dataset
-"""Retrieval query dataset, containing queries. Should have columns `id`, `text`."""
+"""Retrieval query dataset, containing queries. Should have columns:
+1. `id`, `text`, `instruction` (optionally) for text queries
+2. `id`, `image` for image queries
+3. `id`, `audio` for audio queries
+or a combination of these for multimodal queries.
+ """
 CorpusDatasetType = Dataset
-"""Retrieval corpus dataset, containing documents. Should have columns `id`, `title`, `body`."""
+"""Retrieval corpus dataset, containing documents. Should have columns:
+ 1. `id`, `title` (optionally), `body` for text corpus
+ 2. `id`, `image` for image corpus
+ 3. `id`, `audio` for audio corpus
+ or a combination of these for multimodal corpus.
+ """
 InstructionDatasetType = Dataset
 """Retrieval instruction dataset, containing instructions. Should have columns `query-id`, `instruction`."""
 RelevantDocumentsType = Mapping[str, Mapping[str, int]]

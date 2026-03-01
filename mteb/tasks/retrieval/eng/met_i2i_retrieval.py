@@ -8,14 +8,14 @@ class METI2IRetrieval(AbsTaskRetrieval):
         description="Retrieve photos of more than 224k artworks.",
         reference="https://arxiv.org/abs/2202.01747",
         dataset={
-            "path": "JamieSJS/met",
-            "revision": "08ceaa61c0d172214abb3b8e82971d8f69d2aec0",
+            "path": "mteb/met",
+            "revision": "c4994f2da3df0a6e20a310048a04be49da7282c3",
         },
         type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cv_recall_at_1",
+        main_score="hit_rate_at_1",
         date=("2021-12-06", "2021-12-14"),  # conference dates
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],

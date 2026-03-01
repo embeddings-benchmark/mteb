@@ -1,19 +1,25 @@
 """This script contains functions that are used to get an overview of the MTEB benchmark."""
 
+from __future__ import annotations
+
 import difflib
 import logging
+import warnings
 from collections import Counter, defaultdict
-from collections.abc import Sequence
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pandas as pd
 
 from mteb.abstasks import (
     AbsTask,
 )
-from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
 from mteb.filter_tasks import filter_tasks
-from mteb.types import Modalities
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
+
+    from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
+    from mteb.types import Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -22,12 +28,11 @@ logger = logging.getLogger(__name__)
 def _gather_tasks() -> tuple[type[AbsTask], ...]:
     import mteb.tasks as tasks
 
-    tasks = [
+    return tuple(
         t
         for t in tasks.__dict__.values()
         if isinstance(t, type) and issubclass(t, AbsTask)
-    ]
-    return tuple(tasks)
+    )
 
 
 def _create_name_to_task_mapping(
@@ -43,7 +48,7 @@ def _create_name_to_task_mapping(
     return metadata_names
 
 
-def _create_similar_tasks(tasks: Sequence[type[AbsTask]]) -> dict[str, list[str]]:
+def _create_similar_tasks(tasks: Iterable[type[AbsTask]]) -> dict[str, list[str]]:
     """Create a dictionary of similar tasks.
 
     Returns:
@@ -194,9 +199,8 @@ class MTEBTasks(tuple[AbsTask]):
             string with a LaTeX table.
         """
         if include_citation_in_name and "name" in properties:
-            properties += ["intext_citation"]
-            df = self.to_dataframe(properties)
-            df["name"] = df["name"] + " " + df["intext_citation"]
+            df = self.to_dataframe(tuple(properties) + ("intext_citation",))
+            df["name"] = df["name"] + " " + df["intext_citation"]  # type: ignore[operator]
             df = df.drop(columns=["intext_citation"])
         else:
             df = self.to_dataframe(properties)
@@ -221,17 +225,17 @@ class MTEBTasks(tuple[AbsTask]):
 
 
 def get_tasks(
-    tasks: list[str] | None = None,
+    tasks: Sequence[str] | None = None,
     *,
-    languages: list[str] | None = None,
-    script: list[str] | None = None,
-    domains: list[TaskDomain] | None = None,
-    task_types: list[TaskType] | None = None,  # type: ignore
-    categories: list[TaskCategory] | None = None,
+    languages: Sequence[str] | None = None,
+    script: Sequence[str] | None = None,
+    domains: Sequence[TaskDomain] | None = None,
+    task_types: Sequence[TaskType] | None = None,
+    categories: Sequence[TaskCategory] | None = None,
     exclude_superseded: bool = True,
-    eval_splits: list[str] | None = None,
+    eval_splits: Sequence[str] | None = None,
     exclusive_language_filter: bool = False,
-    modalities: list[Modalities] | None = None,
+    modalities: Sequence[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
     exclude_aggregate: bool = False,
     exclude_private: bool = True,
@@ -287,7 +291,7 @@ def get_tasks(
         ]
         return MTEBTasks(_tasks)
 
-    _tasks = filter_tasks(
+    tasks_: Sequence[type[AbsTask]] = filter_tasks(
         TASK_LIST,
         languages=languages,
         script=script,
@@ -300,12 +304,12 @@ def get_tasks(
         exclude_aggregate=exclude_aggregate,
         exclude_private=exclude_private,
     )
-    _tasks = [
-        cls().filter_languages(languages, script).filter_eval_splits(eval_splits)
-        for cls in _tasks
-    ]
-
-    return MTEBTasks(_tasks)
+    return MTEBTasks(
+        [
+            cls().filter_languages(languages, script).filter_eval_splits(eval_splits)
+            for cls in tasks_
+        ]
+    )
 
 
 _TASK_RENAMES = {"PersianTextTone": "SynPerTextToneClassification"}
@@ -313,10 +317,10 @@ _TASK_RENAMES = {"PersianTextTone": "SynPerTextToneClassification"}
 
 def get_task(
     task_name: str,
-    languages: list[str] | None = None,
-    script: list[str] | None = None,
-    eval_splits: list[str] | None = None,
-    hf_subsets: list[str] | None = None,
+    languages: Sequence[str] | None = None,
+    script: Sequence[str] | None = None,
+    eval_splits: Sequence[str] | None = None,
+    hf_subsets: Sequence[str] | None = None,
     exclusive_language_filter: bool = False,
 ) -> AbsTask:
     """Get a task by name.
@@ -340,9 +344,9 @@ def get_task(
     """
     if task_name in _TASK_RENAMES:
         _task_name = _TASK_RENAMES[task_name]
-        logger.warning(
-            f"The task with the given name '{task_name}' has been renamed to '{_task_name}'. To prevent this warning use the new name."
-        )
+        msg = f"The task with the given name '{task_name}' has been renamed to '{_task_name}'. To prevent this warning use the new name."
+        logger.warning(msg)
+        warnings.warn(msg)
 
     if task_name not in _TASKS_REGISTRY:
         close_matches = difflib.get_close_matches(task_name, _TASKS_REGISTRY.keys())

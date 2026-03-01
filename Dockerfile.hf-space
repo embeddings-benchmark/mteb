@@ -1,0 +1,6 @@
+FROM ghcr.io/embeddings-benchmark/mteb/leaderboard:latest
+
+ENV GRADIO_SERVER_NAME="0.0.0.0"
+EXPOSE 7860
+
+CMD ["make", "run-leaderboard"]

@@ -15,8 +15,8 @@ class SugarCrepe(AbsTaskImageTextPairClassification):
         description="Compositionality Evaluation of images to their captions.",
         reference="https://proceedings.neurips.cc/paper_files/paper/2023/hash/63461de0b4cb760fc498e85b18a7fe81-Abstract-Datasets_and_Benchmarks.html",
         dataset={
-            "path": "yjkimstats/SUGARCREPE_fmt",
-            "revision": "134abf9ade6a32f9fdae0e89022ff227a70b87e5",
+            "path": "mteb/SUGARCREPE_fmt",
+            "revision": "e9e0e3ce40c94023c819d3413edb5d090ec9f0d8",
         },
         type="Compositionality",
         category="i2t",
@@ -45,11 +45,11 @@ class SugarCrepe(AbsTaskImageTextPairClassification):
 """,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.dataset = datasets.DatasetDict({"test": self.dataset["train"]})
         self.dataset_transform()
         self.data_loaded = True

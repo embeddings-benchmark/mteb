@@ -2,7 +2,6 @@ import torch
 
 from mteb.models.instruct_wrapper import (
     InstructSentenceTransformerModel,
-    instruct_wrapper,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -30,25 +29,31 @@ E5_MISTRAL_TRAINING_DATA = {
 } | ME5_TRAINING_DATA
 
 e5_instruct = ModelMeta(
-    loader=instruct_wrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
-        attn="cccc",
-        pooling_method="mean",
-        mode="embedding",
-        torch_dtype=torch.float16,
-        normalized=True,
+        model_kwargs={"dtype": torch.float16},
+        apply_instruction_to_passages=False,
     ),
     name="intfloat/multilingual-e5-large-instruct",
+    model_type=["dense"],
     languages=XLMR_LANGUAGES,
     open_weights=True,
     revision="baa7be480a7de1539afce709c8f13f833a510e0a",
     release_date=E5_PAPER_RELEASE_DATE,
-    framework=["GritLM", "PyTorch", "Sentence Transformers"],
+    framework=[
+        "GritLM",
+        "PyTorch",
+        "Sentence Transformers",
+        "ONNX",
+        "safetensors",
+        "Transformers",
+    ],
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     reference="https://huggingface.co/intfloat/multilingual-e5-large-instruct",
     n_parameters=560_000_000,
+    n_embedding_parameters=256_002_048,
     memory_usage_mb=1068,
     embed_dim=1024,
     license="mit",
@@ -66,27 +71,30 @@ e5_instruct = ModelMeta(
 )
 
 e5_mistral = ModelMeta(
-    loader=instruct_wrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
-        attn="cccc",
-        pooling_method="lasttoken",
-        mode="embedding",
-        torch_dtype=torch.float16,
-        # The ST script does not normalize while the HF one does so unclear what to do
-        # https://huggingface.co/intfloat/e5-mistral-7b-instruct#transformers
-        normalized=True,
+        model_kwargs={"dtype": torch.float16},
+        apply_instruction_to_passages=False,
     ),
     name="intfloat/e5-mistral-7b-instruct",
+    model_type=["dense"],
     languages=MISTRAL_LANGUAGES,
     open_weights=True,
     revision="07163b72af1488142a360786df853f237b1a3ca1",
     release_date=E5_PAPER_RELEASE_DATE,
-    framework=["GritLM", "PyTorch", "Sentence Transformers"],
+    framework=[
+        "GritLM",
+        "PyTorch",
+        "Sentence Transformers",
+        "safetensors",
+        "Transformers",
+    ],
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     reference="https://huggingface.co/intfloat/e5-mistral-7b-instruct",
     n_parameters=7_111_000_000,
+    n_embedding_parameters=131_072_000,
     memory_usage_mb=13563,
     embed_dim=4096,
     license="mit",
@@ -113,22 +121,19 @@ e5_mistral = ModelMeta(
 )
 
 zeta_alpha_ai__zeta_alpha_e5_mistral = ModelMeta(
-    loader=instruct_wrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
-        attn="cccc",
-        pooling_method="lasttoken",
-        mode="embedding",
-        torch_dtype=torch.bfloat16,
-        # The ST script does not normalize while the HF one does so unclear what to do
-        # https://huggingface.co/intfloat/e5-mistral-7b-instruct#transformers
-        normalized=True,
+        model_kwargs={"dtype": torch.bfloat16},
+        apply_instruction_to_passages=False,
     ),
     name="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
+    model_type=["dense"],
     revision="c791d37474fa6a5c72eb3a2522be346bc21fbfc3",
     release_date="2024-08-30",
     languages=["eng-Latn"],
     n_parameters=7110660096,
+    n_embedding_parameters=131072000,
     memory_usage_mb=13563,
     max_tokens=32768.0,
     embed_dim=4096,
@@ -136,7 +141,13 @@ zeta_alpha_ai__zeta_alpha_e5_mistral = ModelMeta(
     open_weights=True,
     public_training_data=None,
     public_training_code=None,
-    framework=["PyTorch", "Sentence Transformers", "GritLM"],
+    framework=[
+        "PyTorch",
+        "Sentence Transformers",
+        "GritLM",
+        "safetensors",
+        "Transformers",
+    ],
     reference="https://huggingface.co/zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
@@ -201,10 +212,12 @@ BeastyZ__e5_R_mistral_7b = ModelMeta(
         tokenizer_kwargs={"pad_token": "</s>"},
     ),
     name="BeastyZ/e5-R-mistral-7b",
+    model_type=["dense"],
     revision="3f810a6a7fd220369ad248e3705cf13d71803602",
     release_date="2024-06-28",
     languages=["eng-Latn"],
     n_parameters=7241732096,
+    n_embedding_parameters=131_072_000,
     memory_usage_mb=27625,
     max_tokens=32768.0,
     embed_dim=4096,
@@ -212,7 +225,7 @@ BeastyZ__e5_R_mistral_7b = ModelMeta(
     open_weights=True,
     public_training_code="https://github.com/LeeSureman/E5-Retrieval-Reproduction",
     public_training_data="https://huggingface.co/datasets/BeastyZ/E5-R",
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/BeastyZ/e5-R-mistral-7b",
     similarity_fn_name="cosine",
     use_instructions=True,

@@ -1,19 +1,24 @@
 """This script contains functions that are used to get an overview of the MTEB benchmark."""
 
-import logging
-from collections.abc import Sequence
-from typing import overload
+from __future__ import annotations
 
-from mteb.abstasks import (
-    AbsTask,
-)
+import logging
+from typing import TYPE_CHECKING, overload
+
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
-from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
 from mteb.languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
 )
-from mteb.types import Modalities
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
+
+    from mteb.abstasks import (
+        AbsTask,
+    )
+    from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
+    from mteb.types import Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -34,14 +39,14 @@ def _check_is_valid_language(lang: str) -> None:
 
 @overload
 def filter_tasks(
-    tasks: Sequence[AbsTask],
+    tasks: Iterable[AbsTask],
     *,
-    languages: list[str] | None = None,
-    script: list[str] | None = None,
-    domains: list[TaskDomain] | None = None,
-    task_types: list[TaskType] | None = None,  # type: ignore
-    categories: list[TaskCategory] | None = None,
-    modalities: list[Modalities] | None = None,
+    languages: Sequence[str] | None = None,
+    script: Sequence[str] | None = None,
+    domains: Iterable[TaskDomain] | None = None,
+    task_types: Iterable[TaskType] | None = None,
+    categories: Iterable[TaskCategory] | None = None,
+    modalities: Iterable[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
@@ -51,14 +56,14 @@ def filter_tasks(
 
 @overload
 def filter_tasks(
-    tasks: Sequence[type[AbsTask]],
+    tasks: Iterable[type[AbsTask]],
     *,
-    languages: list[str] | None = None,
-    script: list[str] | None = None,
-    domains: list[TaskDomain] | None = None,
-    task_types: list[TaskType] | None = None,  # type: ignore
-    categories: list[TaskCategory] | None = None,
-    modalities: list[Modalities] | None = None,
+    languages: Sequence[str] | None = None,
+    script: Sequence[str] | None = None,
+    domains: Iterable[TaskDomain] | None = None,
+    task_types: Iterable[TaskType] | None = None,
+    categories: Iterable[TaskCategory] | None = None,
+    modalities: Iterable[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
@@ -67,14 +72,14 @@ def filter_tasks(
 
 
 def filter_tasks(
-    tasks: Sequence[AbsTask] | Sequence[type[AbsTask]],
+    tasks: Iterable[AbsTask] | Iterable[type[AbsTask]],
     *,
-    languages: list[str] | None = None,
-    script: list[str] | None = None,
-    domains: list[TaskDomain] | None = None,
-    task_types: list[TaskType] | None = None,  # type: ignore
-    categories: list[TaskCategory] | None = None,
-    modalities: list[Modalities] | None = None,
+    languages: Sequence[str] | None = None,
+    script: Sequence[str] | None = None,
+    domains: Iterable[TaskDomain] | None = None,
+    task_types: Iterable[TaskType] | None = None,
+    categories: Iterable[TaskCategory] | None = None,
+    modalities: Iterable[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
@@ -92,7 +97,6 @@ def filter_tasks(
         task_types: A string specifying the type of task e.g. "Classification" or "Retrieval". If None, all tasks are included.
         categories: A list of task categories these include "t2t" (text to text), "t2i" (text to image). See TaskMetadata for the full list.
         exclude_superseded: A boolean flag to exclude datasets which are superseded by another.
-        eval_splits: A list of evaluation splits to include. If None, all splits are included.
         modalities: A list of modalities to include. If None, all modalities are included.
         exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
             task's modalities and ALL task modalities are in filter modalities (exact match).
@@ -113,12 +117,12 @@ def filter_tasks(
     """
     langs_to_keep = None
     if languages:
-        [_check_is_valid_language(lang) for lang in languages]
+        [_check_is_valid_language(lang) for lang in languages]  # type: ignore[func-returns-value]
         langs_to_keep = set(languages)
 
     script_to_keep = None
     if script:
-        [_check_is_valid_script(s) for s in script]
+        [_check_is_valid_script(s) for s in script]  # type: ignore[func-returns-value]
         script_to_keep = set(script)
 
     domains_to_keep = None
@@ -178,4 +182,4 @@ def filter_tasks(
 
         _tasks.append(t)
 
-    return _tasks
+    return _tasks  # type: ignore[return-value]  # type checker cannot infer the overload return type

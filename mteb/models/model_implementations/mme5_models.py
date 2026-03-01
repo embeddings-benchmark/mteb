@@ -12,10 +12,12 @@ mme5_mllama = ModelMeta(
         "trust_remote_code": True,
     },
     name="intfloat/mmE5-mllama-11b-instruct",
+    model_type=["dense"],
     revision="cbb328b9bf9ff5362c852c3166931903226d46f1",
     release_date="2025-02-12",
     languages=["eng-Latn"],
-    n_parameters=10_600_000_000,  # 10.6B
+    n_parameters=10_600_000_000,
+    n_embedding_parameters=None,  # 10.6B
     memory_usage_mb=20300,
     max_tokens=128_000,
     embed_dim=4096,
@@ -24,7 +26,7 @@ mme5_mllama = ModelMeta(
     open_weights=True,
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/intfloat/mmE5-MMEB-hardneg, https://huggingface.co/datasets/intfloat/mmE5-synthetic",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/intfloat/mmE5-mllama-11b-instruct",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,

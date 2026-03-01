@@ -1,12 +1,12 @@
-import logging
-from abc import ABC, abstractmethod
-from collections.abc import Callable, Sequence
-from typing import Any, Literal, cast, get_args, overload
+from __future__ import annotations
 
-from torch.utils.data import DataLoader
+import logging
+import warnings
+from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING, Any, Literal, cast, get_args, overload
 
 import mteb
-from mteb.abstasks.task_metadata import TaskMetadata, TaskType
+from mteb.abstasks.task_metadata import TaskType
 from mteb.similarity_functions import (
     cos_sim,
     dot_score,
@@ -16,12 +16,25 @@ from mteb.similarity_functions import (
     pairwise_max_sim,
 )
 from mteb.types import (
-    Array,
-    BatchedInput,
     PromptType,
 )
 
-from .model_meta import ModelMeta, ScoringFunction
+from .model_meta import ScoringFunction
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Sequence
+
+    from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import (
+        Array,
+        BatchedInput,
+        EncodeKwargs,
+    )
+
+    from .model_meta import ModelMeta
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +56,7 @@ class AbsEncoder(ABC):
     model: Any
     mteb_model_meta: ModelMeta | None = None
     model_prompts: dict[str, str] | None = None
-    instruction_template: str | Callable[[str, PromptType], str] | None = None
+    instruction_template: str | Callable[[str, PromptType | None], str] | None = None
     prompts_dict: dict[str, str] | None = None
 
     def get_prompt_name(
@@ -54,11 +67,11 @@ class AbsEncoder(ABC):
         """A wrapper function around the model.encode method that handles the prompt_name argument and standardizes the output to a numpy array.
 
         The order of priorities for prompt selection are:
-            1. Composed prompt of task name + prompt type (query or passage)
+            1. Composed prompt of task name + prompt type
             2. Specific task prompt
-            3. Composed prompt of task type + prompt type (query or passage)
+            3. Composed prompt of task type + prompt type
             4. Specific task type prompt
-            5. Specific prompt type (query or passage)
+            5. Specific prompt type
 
         Args:
             task_metadata: The task name to use for building the encoding prompt
@@ -67,34 +80,7 @@ class AbsEncoder(ABC):
         Returns:
             The name of the prompt to use, or None if no prompt is found.
         """
-        if self.model_prompts is None:
-            return None
-        task_type = task_metadata.type
-        prompt_type_value = prompt_type.value if prompt_type else None
-        task_name = task_metadata.name
-
-        if (
-            task_name
-            and prompt_type
-            and f"{task_name}-{prompt_type_value}" in self.model_prompts
-        ):
-            return f"{task_name}-{prompt_type_value}"
-        if task_name and task_name in self.model_prompts:
-            return task_name
-        if (
-            task_type
-            and prompt_type
-            and f"{task_type}-{prompt_type_value}" in self.model_prompts
-        ):
-            return f"{task_type}-{prompt_type_value}"
-        if task_type and task_type in self.model_prompts:
-            return task_type
-        if prompt_type and prompt_type_value in self.model_prompts:
-            return prompt_type_value
-        logger.info(
-            "No combination of task name and prompt type was found in model prompts."
-        )
-        return None
+        return get_prompt_name(self.model_prompts, task_metadata, prompt_type)
 
     def get_prompt(
         self,
@@ -105,12 +91,9 @@ class AbsEncoder(ABC):
 
         Args:
             task_metadata: The metadata of the task.
-            prompt_type: The name type of prompt. (query or passage)
+            prompt_type: The name type of prompt.
         """
-        if not self.model_prompts:
-            return None
-        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-        return self.model_prompts.get(prompt_name)
+        return get_prompt_name(self.model_prompts, task_metadata, prompt_type)
 
     @staticmethod
     @overload
@@ -187,6 +170,7 @@ class AbsEncoder(ABC):
                 except KeyError:
                     msg = f"Task name {task_name} is not valid. {valid_keys_msg}"
                     logger.warning(msg)
+                    warnings.warn(msg)
                     invalid_task_messages.add(msg)
                     invalid_keys.add(task_key)
 
@@ -210,13 +194,11 @@ class AbsEncoder(ABC):
             task_metadata: The metadata of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
                 The order of priorities for prompt selection are:
-                    1. Composed prompt of task name + prompt type (query or passage)
-                    2. Specific task prompt
-                    3. Composed prompt of task type + prompt type (query or passage)
-                    4. Specific task type prompt
-                    5. Specific prompt type (query or passage)
-                    6. Default prompt from the task definition
-            prompt_type: The name type of prompt. (query or passage)
+                    1. Specific task prompt
+                    2. Specific task type prompt
+                    3. Specific prompt type
+                    4. Default prompt from the task definition
+            prompt_type: The name type of prompt.
 
         Returns:
             The instruction/prompt to be used for encoding sentences.
@@ -224,13 +206,19 @@ class AbsEncoder(ABC):
         prompt = task_metadata.prompt
         if self.prompts_dict and task_metadata.name in self.prompts_dict:
             prompt = self.prompts_dict[task_metadata.name]
+        elif self.prompts_dict and task_metadata.type in self.prompts_dict:
+            prompt = self.prompts_dict[task_metadata.type]
+        elif (
+            self.prompts_dict and prompt_type and prompt_type.value in self.prompts_dict
+        ):
+            prompt = self.prompts_dict[prompt_type.value]
 
         if isinstance(prompt, dict) and prompt_type:
             if prompt.get(prompt_type.value):
                 return prompt[prompt_type.value]
-            logger.warning(
-                f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
-            )
+            msg = f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
+            logger.warning(msg)
+            warnings.warn(msg)
             return ""
 
         if prompt:
@@ -246,7 +234,7 @@ class AbsEncoder(ABC):
 
         Args:
             instruction: The instruction to be formatted.
-            prompt_type: The name type of prompt. (query or passage)
+            prompt_type: The name type of prompt.
         """
         if self.instruction_template is None:
             raise ValueError(
@@ -269,7 +257,7 @@ class AbsEncoder(ABC):
 
         Args:
             task_metadata: The metadata of the task
-            prompt_type: The name type of prompt. (query or passage)
+            prompt_type: The name type of prompt.
 
         Returns:
             The instruction to be used for encoding sentences.
@@ -306,7 +294,7 @@ class AbsEncoder(ABC):
             ):
                 arr = self.model.similarity(embeddings1, embeddings2)
                 # We assume that the model returns an Array-like object:
-                arr = cast(Array, arr)
+                arr = cast("Array", arr)
                 return arr
             return cos_sim(embeddings1, embeddings2)
         if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
@@ -344,7 +332,7 @@ class AbsEncoder(ABC):
             ):
                 arr = self.model.similarity_pairwise(embeddings1, embeddings2)
                 # We assume that the model returns an Array-like object:
-                arr = cast(Array, arr)
+                arr = cast("Array", arr)
                 return arr
             return pairwise_cos_sim(embeddings1, embeddings2)
         if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
@@ -364,7 +352,7 @@ class AbsEncoder(ABC):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Encodes the given sentences using the encoder.
 
@@ -373,14 +361,14 @@ class AbsEncoder(ABC):
             task_metadata: The metadata of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
                 The order of priorities for prompt selection are:
-                    1. Composed prompt of task name + prompt type (query or passage)
+                    1. Composed prompt of task name + prompt type
                     2. Specific task prompt
-                    3. Composed prompt of task type + prompt type (query or passage)
+                    3. Composed prompt of task type + prompt type
                     4. Specific task type prompt
-                    5. Specific prompt type (query or passage)
+                    5. Specific prompt type
             hf_split: Split of current task
             hf_subset: Subset of current task
-            prompt_type: The name type of prompt. (query or passage)
+            prompt_type: The name type of prompt.
             **kwargs: Additional arguments to pass to the encoder.
 
         Returns:
@@ -389,3 +377,73 @@ class AbsEncoder(ABC):
         raise NotImplementedError(
             "The encode method must be implemented in the subclass."
         )
+
+
+def get_prompt_name(
+    model_prompts: dict[str, str] | None,
+    task_metadata: TaskMetadata,
+    prompt_type: PromptType | None,
+) -> str | None:
+    """A wrapper function around the model.encode method that handles the prompt_name argument and standardizes the output to a numpy array.
+
+    The order of priorities for prompt selection are:
+        1. Composed prompt of task name + prompt type
+        2. Specific task prompt
+        3. Composed prompt of task type + prompt type
+        4. Specific task type prompt
+        5. Specific prompt type
+
+    Args:
+        model_prompts: A dictionary of prompts to be used for encoding sentences.
+        task_metadata: The task name to use for building the encoding prompt
+        prompt_type: The prompt type (e.g. "query" | "document") to use for building the encoding prompt
+
+    Returns:
+        The name of the prompt to use, or None if no prompt is found.
+    """
+    if model_prompts is None:
+        return None
+    task_type = task_metadata.type
+    prompt_type_value = prompt_type.value if prompt_type else None
+    task_name = task_metadata.name
+
+    if (
+        task_name
+        and prompt_type
+        and f"{task_name}-{prompt_type_value}" in model_prompts
+    ):
+        return f"{task_name}-{prompt_type_value}"
+    if task_name and task_name in model_prompts:
+        return task_name
+    if (
+        task_type
+        and prompt_type
+        and f"{task_type}-{prompt_type_value}" in model_prompts
+    ):
+        return f"{task_type}-{prompt_type_value}"
+    if task_type and task_type in model_prompts:
+        return task_type
+    if prompt_type and prompt_type_value in model_prompts:
+        return prompt_type_value
+    logger.info(
+        "No combination of task name and prompt type was found in model prompts."
+    )
+    return None
+
+
+def get_prompt(
+    model_prompts: dict[str, str] | None,
+    task_metadata: TaskMetadata,
+    prompt_type: PromptType | None,
+) -> str | None:
+    """Get the prompt to be used for encoding sentences.
+
+    Args:
+        model_prompts: A dictionary of prompts to be used for encoding sentences.
+        task_metadata: The metadata of the task.
+        prompt_type: The name type of prompt.
+    """
+    if not model_prompts:
+        return None
+    prompt_name = get_prompt_name(model_prompts, task_metadata, prompt_type)
+    return model_prompts.get(prompt_name) if prompt_name else None

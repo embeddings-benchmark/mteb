@@ -1,9 +1,16 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import numpy as np
 from datasets import Dataset
 from torch.utils.data import DataLoader
 
 from mteb._evaluators import ClusteringEvaluator
 from tests.mock_tasks import MockClusteringTask
+
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
 
 
 class TestClusteringEvaluator:
@@ -18,7 +25,7 @@ class TestClusteringEvaluator:
                 task_name: str | None = None,
                 batch_size=32,
                 **kwargs,
-            ) -> np.ndarray:
+            ) -> NDArray[np.floating]:
                 return np.eye(len(sentences.dataset))
 
         model = Model()

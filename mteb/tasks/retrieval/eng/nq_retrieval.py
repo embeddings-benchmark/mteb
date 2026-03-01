@@ -17,7 +17,7 @@ class NQ(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("2019-01-01", "2019-12-31"),  # publication year
         domains=["Written", "Encyclopaedic"],
         task_subtypes=["Question answering"],
         license="cc-by-nc-sa-3.0",
@@ -57,13 +57,13 @@ class NQHardNegatives(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("2019-01-01", "2019-12-31"),  # publication year
+        domains=["Written", "Encyclopaedic"],
+        task_subtypes=["Question answering"],
+        license="cc-by-nc-sa-3.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation=r"""
 @article{47761,
   author = {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh

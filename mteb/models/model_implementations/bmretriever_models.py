@@ -1,5 +1,6 @@
-from collections.abc import Callable
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import torch
 from sentence_transformers import SentenceTransformer
@@ -8,6 +9,9 @@ from sentence_transformers.models import Pooling, Transformer
 from mteb.models import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def instruction_template(
@@ -25,6 +29,7 @@ class BMRetrieverWrapper(InstructSentenceTransformerModel):
         self,
         model_name: str,
         revision: str,
+        device: str | None = None,
         instruction_template: str
         | Callable[[str, PromptType | None], str]
         | None = None,
@@ -52,6 +57,7 @@ class BMRetrieverWrapper(InstructSentenceTransformerModel):
 
         transformer = Transformer(
             model_name,
+            device=device,
             **kwargs,
         )
         pooling = Pooling(
@@ -90,18 +96,20 @@ BMRetriever_410M = ModelMeta(
         apply_instruction_to_passages=True,
     ),
     name="BMRetriever/BMRetriever-410M",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="e3569bfbcfe3a1bc48c142e11a7b0f38e86065a3",
     release_date="2024-04-29",
     embed_dim=1024,
     n_parameters=353_822_720,
+    n_embedding_parameters=51_511_296,
     memory_usage_mb=1349,
     max_tokens=2048,
     license="mit",
     reference="https://huggingface.co/BMRetriever/BMRetriever-410M",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
@@ -119,18 +127,20 @@ BMRetriever_1B = ModelMeta(
         apply_instruction_to_passages=True,
     ),
     name="BMRetriever/BMRetriever-1B",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="1b758c5f4d3af48ef6035cc4088bdbcd7df43ca6",
     release_date="2024-04-29",
     embed_dim=2048,
     n_parameters=908_759_040,
+    n_embedding_parameters=103_022_592,
     memory_usage_mb=3466,
     max_tokens=2048,
     license="mit",
     reference="https://huggingface.co/BMRetriever/BMRetriever-1B",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
@@ -148,18 +158,20 @@ BMRetriever_2B = ModelMeta(
         apply_instruction_to_passages=True,
     ),
     name="BMRetriever/BMRetriever-2B",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="718179afd57926369c347f46eee616db81084941",
     release_date="2024-04-29",
     embed_dim=2048,
     n_parameters=2_506_172_416,
+    n_embedding_parameters=524_288_000,
     memory_usage_mb=9560,
     max_tokens=8192,
     license="mit",
     reference="https://huggingface.co/BMRetriever/BMRetriever-2B",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
@@ -177,18 +189,20 @@ BMRetriever_7B = ModelMeta(
         apply_instruction_to_passages=True,
     ),
     name="BMRetriever/BMRetriever-7B",
+    model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
     revision="13e6adb9273c5f254e037987d6b44e9e4b005b9a",
     release_date="2024-04-29",
     embed_dim=4096,
     n_parameters=7_110_660_096,
+    n_embedding_parameters=131_072_000,
     memory_usage_mb=27124,
     max_tokens=32768,
     license="mit",
     reference="https://huggingface.co/BMRetriever/BMRetriever-7B",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,

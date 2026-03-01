@@ -17,13 +17,13 @@ class SickePLPC(AbsTaskPairClassification):
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="max_ap",
-        date=None,
-        domains=["Reviews"],
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("2014-01-01", "2020-12-31"),
+        domains=["Reviews", "Written"],
+        task_subtypes=["Textual Entailment"],
+        license="cc-by-nc-sa-3.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="machine-translated",
         bibtex_citation=r"""
 @inproceedings{dadas-etal-2020-evaluation,
   address = {Marseille, France},
@@ -57,7 +57,10 @@ Piperidis, Stelios},
 """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("sent1", "sentence1")
         self.dataset = self.dataset.rename_column("sent2", "sentence2")
 
@@ -66,8 +69,8 @@ class PpcPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PpcPC",
         dataset={
-            "path": "PL-MTEB/ppc-pairclassification",
-            "revision": "2c7d2df57801a591f6b1e3aaf042e7a04ec7d9f2",
+            "path": "mteb/PpcPC",
+            "revision": "e7f83d7d05792c2c57c8708a102e4ea785b9c301",
         },
         description="Polish Paraphrase Corpus",
         reference="https://arxiv.org/pdf/2207.12759.pdf",
@@ -77,7 +80,7 @@ class PpcPC(AbsTaskPairClassification):
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="max_ap",
-        date=None,
+        date=("2022-01-01", "2022-12-31"),  # publication year
         domains=[
             "Fiction",
             "Non-fiction",
@@ -105,10 +108,6 @@ class PpcPC(AbsTaskPairClassification):
 """,
     )
 
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_column("sent1", "sentence1")
-        self.dataset = self.dataset.rename_column("sent2", "sentence2")
-
 
 class CdscePC(AbsTaskPairClassification):
     metadata = TaskMetadata(
@@ -125,7 +124,7 @@ class CdscePC(AbsTaskPairClassification):
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="max_ap",
-        date=None,
+        date=("2017-01-01", "2017-12-31"),  # publication year
         domains=["Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
@@ -151,7 +150,10 @@ Kan, Min-Yen},
 """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("sent1", "sentence1")
         self.dataset = self.dataset.rename_column("sent2", "sentence2")
 
@@ -203,6 +205,9 @@ Piperidis, Stelios},
 """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("sent1", "sentence1")
         self.dataset = self.dataset.rename_column("sent2", "sentence2")

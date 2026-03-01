@@ -36,3 +36,42 @@ class ClimateFEVERVN(AbsTaskRetrieval):
 """,
         adapted_from=["ClimateFEVER"],
     )
+
+
+class NanoClimateFEVERVN(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="NanoClimateFEVER-VN",
+        description="NanoClimateFEVERVN is a small version of A translated dataset from CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.",
+        reference="https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html",
+        dataset={
+            "path": "GreenNode/nano-climate-fever-vn",
+            "revision": "1852e852f07403d4529a8520d52b91ff6d57869b",
+        },
+        type="Retrieval",
+        category="t2t",
+        eval_splits=["test"],
+        eval_langs=["vie-Latn"],
+        main_score="ndcg_at_10",
+        date=("2025-07-29", "2025-07-30"),
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="machine-translated and LM verified",
+        domains=["Encyclopaedic", "Written"],
+        task_subtypes=["Claim verification"],
+        bibtex_citation=r"""
+@misc{pham2025vnmtebvietnamesemassivetext,
+  archiveprefix = {arXiv},
+  author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
+  eprint = {2507.21500},
+  primaryclass = {cs.CL},
+  title = {VN-MTEB: Vietnamese Massive Text Embedding Benchmark},
+  url = {https://arxiv.org/abs/2507.21500},
+  year = {2025},
+}
+""",
+        prompt={
+            "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
+        },
+        adapted_from=["ClimateFEVER-VN"],
+    )

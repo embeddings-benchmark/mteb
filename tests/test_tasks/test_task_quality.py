@@ -7,7 +7,7 @@ from typing import cast
 
 from mteb.abstasks import AbsTask
 from mteb.get_tasks import get_tasks
-from mteb.types.statistics import DescriptiveStatistics, TextStatistics
+from mteb.types.statistics import AudioStatistics, DescriptiveStatistics, TextStatistics
 
 # DO NOT ADD TO THIS LIST WITHOUT SPECIFYING WHY
 KNOWN_ISSUES = {
@@ -281,10 +281,10 @@ def _split_quality(
 ) -> list[str]:
     errors = []
 
-    num_samples = split_stats["num_samples"]  # type: ignore
+    num_samples = split_stats["num_samples"]
     text_stats = split_stats.get("text_statistics", None)
     if text_stats:
-        text_stats = cast(TextStatistics, text_stats)
+        text_stats = cast("TextStatistics", text_stats)
         unique_texts = text_stats["unique_texts"]
 
         # Note: there could be cases where a dataset
@@ -303,6 +303,21 @@ def _split_quality(
         if num_samples != unique_texts:
             errors.append(
                 f"{name} ({split}) contains duplicates ({num_samples=}, {unique_texts=})"
+            )
+
+    for stats_key in (
+        "audio_statistics",
+        "documents_audio_statistics",
+        "queries_audio_statistics",
+    ):
+        audio_stats = split_stats.get(stats_key)
+        if not audio_stats:
+            continue
+        audio_stats = cast(AudioStatistics, audio_stats)
+        min_duration_seconds = audio_stats["min_duration_seconds"]
+        if not (min_duration_seconds > 0):
+            errors.append(
+                f"{name} ({split}) has zero-length audio clips in {stats_key} ({min_duration_seconds=})"
             )
 
     # train-test leakage

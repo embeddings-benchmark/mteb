@@ -29,5 +29,8 @@ class RuToxicOKMLCUPMultilabelClassification(AbsTaskMultilabelClassification):
         bibtex_citation="""""",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("labels", "label")

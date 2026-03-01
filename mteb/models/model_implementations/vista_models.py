@@ -1,14 +1,19 @@
-from typing import Any, Literal
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any, Literal
 
 import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_image_dependencies
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 VISTA_CITATION = """@article{zhou2024vista,
   title={VISTA: Visualized Text Embedding For Universal Multi-Modal Retrieval},
@@ -247,11 +252,13 @@ visualized_bge_base = ModelMeta(
         image_tokens_num=196,
     ),
     name="BAAI/bge-visualized-base",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="98db10b10d22620010d06f11733346e1c98c34aa",
     release_date="2024-06-06",
     modalities=["image", "text"],
     n_parameters=196_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=1631,
     max_tokens=512,
     embed_dim=768,
@@ -274,11 +281,13 @@ visualized_bge_m3 = ModelMeta(
         image_tokens_num=256,
     ),
     name="BAAI/bge-visualized-m3",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="98db10b10d22620010d06f11733346e1c98c34aa",
     release_date="2024-06-06",
     modalities=["image", "text"],
     n_parameters=872_909_505,
+    n_embedding_parameters=None,
     memory_usage_mb=4263,
     max_tokens=8192,
     embed_dim=1024,

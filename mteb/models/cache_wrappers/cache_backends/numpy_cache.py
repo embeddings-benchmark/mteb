@@ -1,12 +1,17 @@
+from __future__ import annotations
+
 import json
 import logging
+import warnings
 from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from mteb.types import BatchedInput
-
 from ._hash_utils import _hash_item
+
+if TYPE_CHECKING:
+    from mteb.types import Array
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +19,7 @@ logger = logging.getLogger(__name__)
 class NumpyCache:
     """Generic vector cache for both text and images."""
 
-    def __init__(self, directory: str | Path, initial_vectors: int = 100000):
+    def __init__(self, directory: str | Path, initial_vectors: int = 100_000):
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)
         self.vectors_file = self.directory / "vectors.npy"
@@ -27,7 +32,7 @@ class NumpyCache:
         logger.info(f"Initialized VectorCacheMap in directory: {self.directory}")
         self._initialize_vectors_file()
 
-    def add(self, item: list[BatchedInput], vectors: np.ndarray) -> None:
+    def add(self, items: list[dict[str, Any]], vectors: Array) -> None:
         """Add a vector to the cache."""
         try:
             if self.vector_dim is None:
@@ -38,12 +43,17 @@ class NumpyCache:
                 self._save_dimension()
                 logger.info(f"Initialized vector dimension to {self.vector_dim}")
 
-            for item, vec in zip(item, vectors):
+            if self.vectors is None:
+                raise RuntimeError(
+                    "Vectors file not initialized. Call _initialize_vectors_file() first."
+                )
+
+            for item, vec in zip(items, vectors):
                 item_hash = _hash_item(item)
                 if item_hash in self.hash_to_index:
-                    logger.warning(
-                        "Hash collision or duplicate item. Overwriting existing vector."
-                    )
+                    msg = f"Hash collision or duplicate item for hash {item_hash}. Overwriting existing vector."
+                    logger.warning(msg)
+                    warnings.warn(msg)
                     index = self.hash_to_index[item_hash]
                 else:
                     index = len(self.hash_to_index)
@@ -74,18 +84,26 @@ class NumpyCache:
                 shape=(self.initial_vectors, self.vector_dim),
             )
         else:
-            self.vectors = np.memmap(self.vectors_file, dtype="float32", mode="r+")
-            self.vectors = self.vectors.reshape(-1, self.vector_dim)
+            self.vectors = np.memmap(
+                self.vectors_file,
+                dtype="float32",
+                mode="r+",
+                shape=(-1, self.vector_dim),
+            )
         logger.info(f"Vectors file initialized with shape: {self.vectors.shape}")
 
     def _double_vectors_file(self) -> None:
+        if self.vectors is None or self.vector_dim is None:
+            raise RuntimeError(
+                "Vectors file not initialized. Call _initialize_vectors_file() first."
+            )
         current_size = len(self.vectors)
         new_size = current_size * 2
         logger.info(f"Doubling vectors file from {current_size} to {new_size} vectors")
         self.vectors.flush()
         new_vectors = np.memmap(
-            self.vectors_file,
-            dtype="float32",
+            str(self.vectors_file),
+            dtype=np.float32,
             mode="r+",
             shape=(new_size, self.vector_dim),
         )
@@ -107,9 +125,9 @@ class NumpyCache:
                 f"Loaded vector dimension {self.vector_dim} from {self.dimension_file}"
             )
         else:
-            logger.warning(
-                "Dimension file not found. Vector dimension remains uninitialized."
-            )
+            msg = "Dimension file not found. Vector dimension remains uninitialized."
+            logger.warning(msg)
+            warnings.warn(msg)
 
     def save(self) -> None:
         """Persist VectorCacheMap to disk."""
@@ -146,25 +164,30 @@ class NumpyCache:
 
                 if self.vector_dim is not None:
                     self.vectors = np.memmap(
-                        self.vectors_file, dtype="float32", mode="r+"
+                        self.vectors_file,
+                        dtype="float32",
+                        mode="r+",
+                        shape=(-1, self.vector_dim),
                     )
-                    self.vectors = self.vectors.reshape(-1, self.vector_dim)
                     logger.info(f"Loaded vectors file with shape: {self.vectors.shape}")
                 else:
-                    logger.warning(
-                        "Vector dimension not set. Unable to load vectors file."
-                    )
+                    msg = "Vector dimension not set. Unable to load vectors file."
+                    logger.warning(msg)
+                    warnings.warn(msg)
                 logger.info(f"Loaded VectorCacheMap from {self.directory}")
             else:
-                logger.warning(
-                    "No existing files found. Initialized empty VectorCacheMap."
-                )
+                msg = "No existing files found. Initialized empty VectorCacheMap."
+                logger.warning(msg)
+                warnings.warn(msg)
         except Exception as e:
             logger.error(f"Error loading VectorCacheMap: {str(e)}")
             raise
 
-    def get_vector(self, item: BatchedInput) -> np.ndarray | None:
+    def get_vector(self, item: dict[str, Any]) -> Array | None:
         """Retrieve vector from index by hash."""
+        if self.vectors is None:
+            return None
+
         try:
             item_hash = _hash_item(item)
             if item_hash not in self.hash_to_index:
@@ -176,7 +199,7 @@ class NumpyCache:
             logger.error(f"Error retrieving vector for item: {str(e)}")
             raise
 
-    def __contains__(self, item: BatchedInput) -> bool:
+    def __contains__(self, item: dict[str, Any]) -> bool:
         return _hash_item(item) in self.hash_to_index
 
     def __del__(self):

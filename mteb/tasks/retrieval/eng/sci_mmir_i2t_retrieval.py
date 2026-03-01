@@ -62,8 +62,8 @@ class SciMMIRI2TRetrieval(AbsTaskRetrieval):
         description="Retrieve captions based on figures and tables.",
         reference="https://aclanthology.org/2024.findings-acl.746/",
         dataset={
-            "path": "m-a-p/SciMMIR",
-            "revision": "eea276dc58c52eab33e9476acb137ff5530b78e9",
+            "path": "mteb/SciMMIR",
+            "revision": "2a10b6b1f93cac7084aa809512749272cf0a893a",
         },
         type="Any2AnyRetrieval",
         category="i2t",
@@ -79,16 +79,19 @@ class SciMMIRI2TRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{wu2024scimmir,
-  author = {Wu, Siwei and Li, Yizhi and Zhu, Kang and Zhang, Ge and Liang, Yiming and Ma, Kaijing and Xiao, Chenghao and Zhang, Haoran and Yang, Bohao and Chen, Wenhu and others},
-  journal = {arXiv preprint arXiv:2401.13478},
+@misc{wu2024scimmirbenchmarkingscientificmultimodal,
+  archiveprefix = {arXiv},
+  author = {Siwei Wu and Yizhi Li and Kang Zhu and Ge Zhang and Yiming Liang and Kaijing Ma and Chenghao Xiao and Haoran Zhang and Bohao Yang and Wenhu Chen and Wenhao Huang and Noura Al Moubayed and Jie Fu and Chenghua Lin},
+  eprint = {2401.13478},
+  primaryclass = {cs.IR},
   title = {SciMMIR: Benchmarking Scientific Multi-modal Information Retrieval},
+  url = {https://arxiv.org/abs/2401.13478},
   year = {2024},
 }
 """,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = _load_data(

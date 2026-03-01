@@ -43,7 +43,7 @@ class PubChemWikiPairClassification(AbsTaskPairClassification):
 @article{kasmaee2024chemteb,
   author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
   journal = {arXiv preprint arXiv:2412.00532},
-  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
+  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
   year = {2024},
 }
 
@@ -60,7 +60,7 @@ class PubChemWikiPairClassification(AbsTaskPairClassification):
 """,
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         _dataset = {}
         for lang in self.hf_subsets:
             _dataset[lang] = {}

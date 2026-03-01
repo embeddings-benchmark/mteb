@@ -25,21 +25,19 @@ class PatentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{sharma-etal-2019-bigpatent,
-  address = {Florence, Italy},
-  author = {Sharma, Eva  and
-Li, Chen  and
-Wang, Lu},
-  booktitle = {Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics},
-  doi = {10.18653/v1/P19-1212},
-  editor = {Korhonen, Anna  and
-Traum, David  and
-M{\`a}rquez, Llu{\'\i}s},
-  month = jul,
-  pages = {2204--2213},
-  publisher = {Association for Computational Linguistics},
+@article{DBLP:journals/corr/abs-1906-03741,
+  author = {Eva Sharma and
+Chen Li and
+Lu Wang},
+  bibsource = {dblp computer science bibliography, https://dblp.org},
+  biburl = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
+  eprint = {1906.03741},
+  eprinttype = {arXiv},
+  journal = {CoRR},
+  timestamp = {Wed, 26 Jun 2019 07:14:58 +0200},
   title = {{BIGPATENT}: A Large-Scale Dataset for Abstractive and Coherent Summarization},
-  url = {https://aclanthology.org/P19-1212},
+  url = {http://arxiv.org/abs/1906.03741},
+  volume = {abs/1906.03741},
   year = {2019},
 }
 """,
@@ -70,21 +68,19 @@ class PatentClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{sharma-etal-2019-bigpatent,
-  address = {Florence, Italy},
-  author = {Sharma, Eva  and
-Li, Chen  and
-Wang, Lu},
-  booktitle = {Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics},
-  doi = {10.18653/v1/P19-1212},
-  editor = {Korhonen, Anna  and
-Traum, David  and
-M{\`a}rquez, Llu{\'\i}s},
-  month = jul,
-  pages = {2204--2213},
-  publisher = {Association for Computational Linguistics},
+@article{DBLP:journals/corr/abs-1906-03741,
+  author = {Eva Sharma and
+Chen Li and
+Lu Wang},
+  bibsource = {dblp computer science bibliography, https://dblp.org},
+  biburl = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
+  eprint = {1906.03741},
+  eprinttype = {arXiv},
+  journal = {CoRR},
+  timestamp = {Wed, 26 Jun 2019 07:14:58 +0200},
   title = {{BIGPATENT}: A Large-Scale Dataset for Abstractive and Coherent Summarization},
-  url = {https://aclanthology.org/P19-1212},
+  url = {http://arxiv.org/abs/1906.03741},
+  volume = {abs/1906.03741},
   year = {2019},
 }
 """,

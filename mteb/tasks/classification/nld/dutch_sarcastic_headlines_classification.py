@@ -27,12 +27,13 @@ class DutchSarcasticHeadlinesClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="""""",
-        prompt={
-            "query": "Classificeer de gegeven krantenkop als sarcastisch of niet sarcastisch"
-        },
+        prompt="Classificeer de gegeven krantenkop als sarcastisch of niet sarcastisch",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         for split in self.dataset:
             self.dataset[split] = self.dataset[split].rename_columns(
                 {"headline": "text", "is_sarcastic": "label"}

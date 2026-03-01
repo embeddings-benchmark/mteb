@@ -1,3 +1,4 @@
+from collections.abc import Mapping
 from typing import Any, NamedTuple
 
 HFSubset = str
@@ -8,7 +9,7 @@ SplitName = str
 Score = Any
 """A score value, could e.g. be accuracy. Normally it is a float or int, but it can take on any value. Should be json serializable."""
 
-ScoresDict = dict[str, Score]
+ScoresDict = Mapping[str, Score]
 """A dictionary of scores, typically also include metadata, e.g {'main_score': 0.5, 'accuracy': 0.5, 'f1': 0.6, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']}"""
 
 
@@ -23,4 +24,4 @@ class RetrievalEvaluationResult(NamedTuple):
     naucs: dict[str, float]
     mrr: dict[str, float]
     naucs_mrr: dict[str, float]
-    cv_recall: dict[str, float]
+    hit_rate: dict[str, float]

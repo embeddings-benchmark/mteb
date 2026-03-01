@@ -36,7 +36,10 @@ class Assin2RTE(AbsTaskPairClassification):
 """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         _dataset = {}
         self.dataset = self.stratified_subsampling(
             self.dataset,

@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import logging
 from collections import defaultdict
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pandas as pd
@@ -8,14 +10,21 @@ import pytrec_eval
 from packaging.version import Version
 from sklearn.metrics import auc
 
-from mteb.types import RelevantDocumentsType, RetrievalEvaluationResult
+from mteb.types import RetrievalEvaluationResult
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+    from numpy.typing import NDArray
+
+    from mteb.types import RelevantDocumentsType
 
 logger = logging.getLogger(__name__)
 
 
 def mrr(
     qrels: RelevantDocumentsType,
-    results: dict[str, dict[str, float]],
+    results: Mapping[str, Mapping[str, float]],
     k_values: list[int],
 ) -> dict[str, list[float]]:
     mrr_metrics = defaultdict(list)
@@ -32,7 +41,7 @@ def mrr(
             doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0
         }
         for k in k_values:
-            rr = 0
+            rr = 0.0
             for rank, hit in enumerate(top_hits[query_id][0:k]):
                 if hit[0] in query_relevant_docs:
                     rr = 1.0 / (rank + 1)
@@ -45,8 +54,8 @@ def recall_cap(
     qrels: RelevantDocumentsType,
     results: dict[str, dict[str, float]],
     k_values: list[int],
-) -> dict[str, list[float]]:
-    capped_recall = defaultdict(list)
+) -> dict[str, list[float | None]]:
+    capped_recall: dict[str, list[float | None]] = defaultdict(list)
 
     k_max = max(k_values)
 
@@ -139,7 +148,7 @@ def calculate_pmrr(original_run, new_run, changed_qrels):
     changes = []
     for qid in changed_qrels.keys():
         if qid + "-og" not in original_run or qid + "-changed" not in new_run:
-            logging.warning(f"Query {qid} not found in the runs for calculating p-MRR")
+            logger.warning(f"Query {qid} not found in the runs for calculating p-MRR")
             continue
         original_qid_run = original_run[qid + "-og"]
         new_qid_run = new_run[qid + "-changed"]
@@ -188,7 +197,7 @@ def evaluate_p_mrr_change(
     Returns:
         A dictionary with the scores, including "p-MRR", "og" and "changed" keys.
     """
-    followir_scores = defaultdict(dict)
+    followir_scores: dict[str, float | dict[str, float]] = defaultdict(dict)
 
     qrels_sep = {
         "og": {k: v for k, v in qrels.items() if k.endswith("-og")},
@@ -220,14 +229,22 @@ def evaluate_p_mrr_change(
             naucs,
             avg_mrr,
             naucs_mrr,
-            cv_recall,
+            hit_rate,
         ) = calculate_retrieval_scores(group, qrels_sep[name], k_values)
         # add these to the followir_scores with name prefix
         scores_dict = make_score_dict(
-            ndcg, _map, recall, precision, naucs, avg_mrr, naucs_mrr, cv_recall, {}
+            ndcg,
+            _map,
+            recall,
+            precision,
+            naucs,
+            avg_mrr,
+            naucs_mrr,
+            hit_rate,
+            {},
         )
         for key, value in scores_dict.items():
-            followir_scores[name][key] = value
+            followir_scores[name][key] = value  # type: ignore[index]
 
     return followir_scores
 
@@ -254,8 +271,8 @@ def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
     sim_scores_sorted = sorted(sim_scores)[::-1]
 
     cs_max = sim_scores_sorted[0]
-    cs_std = np.std(sim_scores)
-    cs_diff1 = None
+    cs_std = float(np.std(sim_scores))
+    cs_diff1 = 0.0
     if len(sim_scores) > 1:
         cs_diff1 = sim_scores_sorted[0] - sim_scores_sorted[1]
     elif len(sim_scores) == 1:
@@ -266,9 +283,9 @@ def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
 
 
 def nauc(
-    conf_scores: np.ndarray,
-    metrics: np.ndarray,
-    abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
+    conf_scores: NDArray[np.floating],
+    metrics: NDArray[np.floating],
+    abstention_rates: NDArray[np.floating] = np.linspace(0, 1, 11)[:-1],
 ) -> float:
     """Computes normalized Area Under the Curve (nAUC) on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
 
@@ -288,10 +305,10 @@ def nauc(
     """
 
     def abstention_curve(
-        conf_scores: np.ndarray,
-        metrics: np.ndarray,
-        abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
-    ) -> np.ndarray:
+        conf_scores: NDArray[np.floating],
+        metrics: NDArray[np.floating],
+        abstention_rates: NDArray[np.floating] = np.linspace(0, 1, 11)[:-1],
+    ) -> NDArray[np.floating]:
         """Computes the raw abstention curve for a given set of evaluated instances and corresponding confidence scores
 
         Args:
@@ -407,10 +424,10 @@ def make_score_dict(
     mrr: dict[str, float],
     naucs: dict[str, float],
     naucs_mrr: dict[str, float],
-    cv_recall: dict[str, float],
+    hit_rate: dict[str, float],
     task_scores: dict[str, float],
     previous_results_model_meta: dict[str, Any] | None = None,
-) -> dict[str, float]:
+) -> dict[str, Any]:
     return {
         **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
         **{f"map_at_{k.split('@')[1]}": v for (k, v) in _map.items()},
@@ -428,7 +445,7 @@ def make_score_dict(
             k.replace("@", "_at_").replace("_P", "_precision").lower(): v
             for k, v in naucs_mrr.items()
         },
-        **{f"cv_recall_at_{k.split('@')[1]}": v for k, v in cv_recall.items()},
+        **{f"hit_rate_at_{k.split('@')[1]}": v for k, v in hit_rate.items()},
         **task_scores,
         **(
             {"previous_results_model_meta": previous_results_model_meta}
@@ -449,8 +466,10 @@ def parse_metrics_from_scores(
     dict[str, list[float]],
     dict[str, list[float]],
     dict[str, list[float]],
+    dict[str, float],
 ]:
-    all_ndcgs, all_aps, all_recalls, all_precisions = (
+    all_ndcgs, all_aps, all_recalls, all_precisions, all_hit_rate = (
+        defaultdict(list),
         defaultdict(list),
         defaultdict(list),
         defaultdict(list),
@@ -463,14 +482,18 @@ def parse_metrics_from_scores(
             all_aps[f"MAP@{k}"].append(scores[query_id]["map_cut_" + str(k)])
             all_recalls[f"Recall@{k}"].append(scores[query_id]["recall_" + str(k)])
             all_precisions[f"P@{k}"].append(scores[query_id]["P_" + str(k)])
+            all_hit_rate[f"HitRate@{k}"].append(scores[query_id]["success_" + str(k)])
 
-    ndcg, _map, recall, precision = {}, {}, {}, {}
+    ndcg, _map, recall, precision, hit_rate = {}, {}, {}, {}, {}
 
     for k in k_values:
         ndcg[f"NDCG@{k}"] = round(sum(all_ndcgs[f"NDCG@{k}"]) / len(scores), 5)
         _map[f"MAP@{k}"] = round(sum(all_aps[f"MAP@{k}"]) / len(scores), 5)
         recall[f"Recall@{k}"] = round(sum(all_recalls[f"Recall@{k}"]) / len(scores), 5)
         precision[f"P@{k}"] = round(sum(all_precisions[f"P@{k}"]) / len(scores), 5)
+        hit_rate[f"HitRate@{k}"] = round(
+            sum(all_hit_rate[f"HitRate@{k}"]) / len(scores), 5
+        )
 
     return (
         ndcg,
@@ -481,6 +504,7 @@ def parse_metrics_from_scores(
         all_aps,
         all_recalls,
         all_precisions,
+        hit_rate,
     )
 
 
@@ -518,17 +542,17 @@ def max_over_subqueries(
         new_qrels[query_id_base] = qrels[query_id_full]  # all the same
 
     # now we have the new results, we can compute the scores
-    _, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, cv_recall = (
+    _, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, hit_rate = (
         calculate_retrieval_scores(new_results, new_qrels, k_values)
     )
     score_dict = make_score_dict(
-        ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, cv_recall, {}
+        ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, hit_rate, {}
     )
     return {"max_over_subqueries_" + k: v for k, v in score_dict.items()}
 
 
 def calculate_retrieval_scores(
-    results: dict[str, dict[str, float]],
+    results: Mapping[str, Mapping[str, float]],
     qrels: RelevantDocumentsType,
     k_values: list[int],
     skip_first_result: bool = False,
@@ -537,9 +561,11 @@ def calculate_retrieval_scores(
     ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
     recall_string = "recall." + ",".join([str(k) for k in k_values])
     precision_string = "P." + ",".join([str(k) for k in k_values])
+    hit_rate_string = "success." + ",".join([str(k) for k in k_values])
 
     evaluator = pytrec_eval.RelevanceEvaluator(
-        qrels, {map_string, ndcg_string, recall_string, precision_string}
+        qrels,
+        {map_string, ndcg_string, recall_string, precision_string, hit_rate_string},
     )
     scores: dict[str, dict[str, float]] = evaluator.evaluate(results)
 
@@ -552,6 +578,7 @@ def calculate_retrieval_scores(
         all_aps,
         all_recalls,
         all_precisions,
+        hit_rate,
     ) = parse_metrics_from_scores(scores, k_values)
     mrr_scores = mrr(qrels, results, k_values)
 
@@ -559,7 +586,6 @@ def calculate_retrieval_scores(
         results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
     )
     naucs_mrr = evaluate_abstention(results, mrr_scores)
-    cv_recall = calculate_cv_recall(results, qrels, k_values, skip_first_result)
 
     avg_mrr = {k: sum(mrr_scores[k]) / len(mrr_scores[k]) for k in mrr_scores.keys()}
     return RetrievalEvaluationResult(
@@ -571,12 +597,12 @@ def calculate_retrieval_scores(
         naucs=naucs,
         mrr=avg_mrr,
         naucs_mrr=naucs_mrr,
-        cv_recall=cv_recall,
+        hit_rate=hit_rate,
     )
 
 
 def evaluate_abstention(
-    results: dict[str, dict[str, float]],
+    results: Mapping[str, Mapping[str, float]],
     metric_scores: dict[str, list[float]],
 ) -> dict[str, float]:
     """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
@@ -591,69 +617,14 @@ def evaluate_abstention(
     all_sim_scores = [list(results[qid].values()) for qid in list(results.keys())]
     all_conf_scores = [confidence_scores(sim_scores) for sim_scores in all_sim_scores]
     conf_fcts = list(all_conf_scores[0].keys())
-    all_conf_scores = {
+    all_conf_scores_ = {
         fct: np.array([x[fct] for x in all_conf_scores]) for fct in conf_fcts
     }
-    metric_scores = {k: np.array(v) for k, v in metric_scores.items()}
+    metric_scores_ = {k: np.array(v) for k, v in metric_scores.items()}
     naucs = {}
 
-    for metric_name, scores in metric_scores.items():
-        for fct, conf_scores in all_conf_scores.items():
+    for metric_name, scores in metric_scores_.items():
+        for fct, conf_scores in all_conf_scores_.items():
             naucs[f"nAUC_{metric_name}_{fct}"] = nauc(conf_scores, scores)
 
     return naucs
-
-
-def calculate_cv_recall(
-    results: dict[str, dict[str, float]],
-    qrels: RelevantDocumentsType,
-    k_values: list[int],
-    skip_first_result: bool = False,
-) -> dict[str, float]:
-    """Calculate Cross-Validation Recall (CV Recall) for a set of search results.
-
-    This function computes a binary recall-like metric at various cutoff levels (k-values).
-    For each query, it checks whether at least one relevant document appears within the top-k
-    retrieved results. The final score is averaged over all queries.
-
-    Arguments:
-        results: A mapping from query IDs to a dictionary of document IDs and their scores.
-        qrels: A mapping from query IDs to relevant documents with relevance scores.
-        k_values: A list of cutoff values at which to compute CV Recall, e.g., [1, 5, 10].
-        skip_first_result: Whether to skip the top-ranked result.
-
-    Returns:
-        A dictionary mapping metric names (e.g., "CV_Recall@1") to their corresponding
-        averaged scores across all queries, rounded to 5 decimal places.
-    """
-    all_cv_recalls = defaultdict(list)
-    sorted_results: dict[str, list[tuple[str, float]]] = {
-        qid: sorted(rels.items(), key=lambda item: item[1], reverse=True)
-        for qid, rels in results.items()
-    }
-
-    if skip_first_result:
-        for qid, rels in sorted_results.items():
-            sorted_results[qid].pop(0)
-
-    for query_id in results.keys():
-        top_docs = [
-            doc_id for doc_id, _ in sorted_results[query_id]
-        ]  # Sorted list of doc IDs
-
-        relevant_docs = {
-            key for key in qrels.get(query_id, {}).keys() if qrels[query_id][key] != 0
-        }
-
-        for k in k_values:
-            top_k_docs = top_docs[:k]
-
-            if relevant_docs.intersection(top_k_docs):
-                all_cv_recalls[k].append(1.0)
-            else:
-                all_cv_recalls[k].append(0.0)
-
-    return {
-        f"CV_Recall@{k}": round(sum(all_cv_recalls[k]) / len(results), 5)
-        for k in k_values
-    }

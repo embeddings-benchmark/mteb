@@ -1,7 +1,8 @@
-import logging
-from typing import Any, TypedDict
+from __future__ import annotations
 
-from datasets import Dataset
+import logging
+from typing import TYPE_CHECKING, TypedDict
+
 from sklearn.metrics.pairwise import (
     paired_cosine_distances,
     paired_euclidean_distances,
@@ -9,11 +10,16 @@ from sklearn.metrics.pairwise import (
 )
 
 from mteb._create_dataloaders import create_dataloader
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import EncoderProtocol
 from mteb.similarity_functions import compute_pairwise_similarity
 
 from .evaluator import Evaluator
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import EncoderProtocol
+    from mteb.types import EncodeKwargs, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +48,8 @@ class AnySTSEvaluator(Evaluator):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
+        input1_prompt_type: PromptType | None,
+        input2_prompt_type: PromptType | None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -50,12 +58,15 @@ class AnySTSEvaluator(Evaluator):
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
+        self.input1_prompt_type = input1_prompt_type
+        self.input2_prompt_type = input2_prompt_type
 
     def __call__(
         self,
         model: EncoderProtocol,
         *,
-        encode_kwargs: dict[str, Any],
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None = None,
     ) -> STSEvaluatorScores:
         logger.info("Running semantic similarity - Encoding samples (1/2)")
         embeddings1 = model.encode(
@@ -63,11 +74,13 @@ class AnySTSEvaluator(Evaluator):
                 self.dataset,
                 self.task_metadata,
                 input_column=self.input_columns[0],
+                num_proc=num_proc,
                 **encode_kwargs,
             ),
             task_metadata=self.task_metadata,
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
+            prompt_type=self.input1_prompt_type,
             **encode_kwargs,
         )
 
@@ -82,6 +95,7 @@ class AnySTSEvaluator(Evaluator):
             task_metadata=self.task_metadata,
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
+            prompt_type=self.input2_prompt_type,
             **encode_kwargs,
         )
 

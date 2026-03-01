@@ -36,7 +36,10 @@ class DadoEvalCoarseClassification(AbsTaskClassification):
 """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("class", "label")
         unused_cols = [
             col

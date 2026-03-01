@@ -19,7 +19,7 @@ class MSMARCO(AbsTaskRetrieval):
         eval_splits=["dev"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("2016-01-01", "2016-12-31"),  # publication year
         domains=[
             "Encyclopaedic",
             "Academic",
@@ -81,7 +81,7 @@ class MSMARCOHardNegatives(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("2016-01-01", "2016-12-31"),  # publication year
         domains=[
             "Encyclopaedic",
             "Academic",

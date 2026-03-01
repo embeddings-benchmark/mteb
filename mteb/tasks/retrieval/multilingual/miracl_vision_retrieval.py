@@ -112,7 +112,7 @@ class MIRACLVisionRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MIRACLVisionRetrieval",
         description="Retrieve associated pages according to questions.",
-        reference="https://arxiv.org/pdf/2407.01449",
+        reference="https://arxiv.org/abs/2505.11651",
         dataset={
             "path": "nvidia/miracl-vision",
             "revision": "309e1696433408fbd555959cf1da968f3814f8b6",
@@ -143,7 +143,7 @@ class MIRACLVisionRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that is relevant to the user's query."},
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
 

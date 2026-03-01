@@ -8,8 +8,8 @@ class KurdishSentimentClassification(AbsTaskClassification):
         description="Kurdish Sentiment Dataset",
         reference="https://link.springer.com/article/10.1007/s10579-023-09716-6",
         dataset={
-            "path": "asparius/Kurdish-Sentiment",
-            "revision": "f334d90a9f68cc3af78cc2a2ece6a3b69408124c",
+            "path": "mteb/KurdishSentimentClassification",
+            "revision": "154ca47b902abfd9a9340e03c09f630bf2ce657f",
         },
         type="Classification",
         category="t2c",
@@ -25,7 +25,7 @@ class KurdishSentimentClassification(AbsTaskClassification):
         dialect=["Sorani"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{article,
+@article{badawi2024kurdisent,
   author = {Badawi, Soran and Kazemi, Arefeh and Rezaie, Vali},
   doi = {10.1007/s10579-023-09716-6},
   journal = {Language Resources and Evaluation},
@@ -62,7 +62,7 @@ class KurdishSentimentClassificationV2(AbsTaskClassification):
         dialect=["Sorani"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{article,
+@article{badawi2024kurdisent,
   author = {Badawi, Soran and Kazemi, Arefeh and Rezaie, Vali},
   doi = {10.1007/s10579-023-09716-6},
   journal = {Language Resources and Evaluation},

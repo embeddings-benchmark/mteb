@@ -3,22 +3,43 @@
 import pytest
 from pydantic import ValidationError
 
+import mteb
 from mteb.abstasks.task_metadata import TaskMetadata
-from tests.task_grid import ALL_TASK_TEST_GRID
+from tests.task_grid import (
+    MOCK_MAEB_TASK_GRID,
+    MOCK_MIEB_TASK_GRID,
+    MOCK_TASK_TEST_GRID,
+)
 
 
-@pytest.mark.parametrize("task", ALL_TASK_TEST_GRID)
-def test_descriptive_stats(task):
+def check_descriptive_stats(task):
     result_stat = task.calculate_descriptive_statistics()
     # remove descriptive task file
     task.metadata.descriptive_stat_path.unlink()
-    task_stat = task.expected_stats
     print(task.metadata.name)
     print(result_stat)
+    task_stat = task.expected_stats
 
     for key, value in result_stat.items():
         assert key in task_stat
         assert value == task_stat[key]
+
+
+@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
+def test_descriptive_statistics_mock_tasks(task):
+    check_descriptive_stats(task)
+
+
+@pytest.mark.parametrize("task", MOCK_MIEB_TASK_GRID)
+def test_descriptive_statistics_mock_mieb_tasks(task):
+    pytest.importorskip("PIL", reason="Image dependencies are not installed")
+    check_descriptive_stats(task)
+
+
+@pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)
+def test_descriptive_statistics_mock_maeb_tasks(task):
+    pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
+    check_descriptive_stats(task)
 
 
 def test_given_dataset_config_then_it_is_valid():
@@ -51,7 +72,7 @@ def test_given_dataset_config_then_it_is_valid():
 
 def test_given_missing_dataset_path_then_it_throws():
     with pytest.raises(ValueError):
-        TaskMetadata(  # type: ignore
+        TaskMetadata(
             name="MyTask",
             description="testing",
             reference=None,
@@ -178,3 +199,45 @@ def test_filled_metadata_is_filled():
         ).is_filled()
         is True
     )
+
+
+def test_task_hf_config():
+    task = mteb.get_task("ArguAna")
+    config = task._create_task_hf_config()
+    assert config.name == task.metadata.name
+    assert config.description == task.metadata.description
+    assert config.evaluation_framework == "mteb"
+    assert len(config.tasks) == 2
+
+    assert config.tasks[0].id == "ArguAna"
+    assert config.tasks[0].config is None
+
+    assert config.tasks[1].id == "ArguAna_default_test"
+    assert config.tasks[1].config == "default"
+    assert config.tasks[1].split == "test"
+
+    assert (
+        config.to_yaml()
+        == """name: ArguAna
+description: 'ArguAna: Retrieval of the Best Counterargument without Prior Topic Knowledge'
+evaluation_framework: mteb
+tasks:
+- id: ArguAna
+- id: ArguAna_default_test
+  config: default
+  split: test
+"""
+    )
+
+
+def test_task_hf_config_from_existing():
+    task1 = mteb.get_task("MIRACLRetrievalHardNegatives")
+    task2 = mteb.get_task("MIRACLRetrievalHardNegatives.v2")
+
+    config1 = task1._create_task_hf_config()
+    config2 = task2._create_task_hf_config(config1)
+
+    assert len(config2.tasks) == 2 * len(config1.tasks)
+
+    assert any(t.id == "MIRACLRetrievalHardNegatives" for t in config2.tasks)
+    assert any(t.id == "MIRACLRetrievalHardNegatives.v2" for t in config2.tasks)

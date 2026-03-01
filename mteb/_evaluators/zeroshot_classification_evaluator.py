@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING
 
 from datasets import Dataset
 
@@ -7,12 +9,16 @@ from mteb._create_dataloaders import (
     _create_dataloader_from_texts,
     create_dataloader,
 )
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import EncoderProtocol
 from mteb.similarity_functions import similarity
-from mteb.types import Array
 
 from .evaluator import Evaluator
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import EncoderProtocol
+    from mteb.types import Array, EncodeKwargs
 
 logger = logging.getLogger(__name__)
 
@@ -38,12 +44,17 @@ class ZeroShotClassificationEvaluator(Evaluator):
         self.hf_subset = hf_subset
 
     def __call__(
-        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
+        self,
+        model: EncoderProtocol,
+        *,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None = None,
     ) -> Array:
         dataloader = create_dataloader(
             self.dataset,
             input_column=self.input_column_name,
             task_metadata=self.task_metadata,
+            num_proc=num_proc,
             **encode_kwargs,
         )
 
@@ -53,6 +64,13 @@ class ZeroShotClassificationEvaluator(Evaluator):
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,
             hf_split=self.hf_split,
+            **encode_kwargs,
+        )
+
+        dataloader = create_dataloader(
+            self.dataset,
+            input_column=self.input_column_name,
+            task_metadata=self.task_metadata,
             **encode_kwargs,
         )
 
@@ -67,8 +85,8 @@ class ZeroShotClassificationEvaluator(Evaluator):
 
         logger.info("Running zero-shot classification - Evaluating accuracy...")
 
-        if self.task_metadata.modalities == ["text"]:
-            probs = model.similarity(text_label_embeddings, input_embeddings)
-        else:
+        if self.task_metadata.modalities == ["image", "text"]:
             probs = similarity(text_label_embeddings, input_embeddings)
+        else:
+            probs = model.similarity(input_embeddings, text_label_embeddings)
         return probs

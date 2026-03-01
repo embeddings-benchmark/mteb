@@ -1,9 +1,14 @@
-from collections.abc import Iterable
+from __future__ import annotations
+
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
-from typing_extensions import Self
+from mteb.languages.check_language_code import check_language_code
 
-from mteb.languages import check_language_code
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
+
+    from typing_extensions import Self
 
 
 @dataclass
@@ -25,7 +30,9 @@ class LanguageScripts:
 
     @classmethod
     def from_languages_and_scripts(
-        cls, languages: list[str] | None = None, scripts: list[str] | None = None
+        cls,
+        languages: Sequence[str] | None = None,
+        scripts: Sequence[str] | None = None,
     ) -> Self:
         """Create a LanguageScripts object from lists of languages and scripts.
 

@@ -1,15 +1,21 @@
+from __future__ import annotations
+
 import logging
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 import numpy as np
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -91,10 +97,6 @@ class OpenAIModel(AbsEncoder):
 
         from openai import NotGiven
 
-        if self.model_name == "text-embedding-ada-002" and self._embed_dim is not None:
-            logger.warning(
-                "Reducing embedding size available only for text-embedding-3-* models"
-            )
         sentences = [text for batch in inputs for text in batch["text"]]
 
         mask_sents = [(i, t) for i, t in enumerate(sentences) if t.strip()]
@@ -122,13 +124,22 @@ class OpenAIModel(AbsEncoder):
 
         no_empty_embeddings = []
 
+        # Set dimensions only for models that support it
+        dimensions = (
+            self._embed_dim or NotGiven()
+            if not self.model_name == "text-embedding-ada-002"
+            else NotGiven()
+        )
+        default_kwargs = dict(
+            model=self.model_name,
+            encoding_format="float",
+            dimensions=dimensions,
+        )
+
         for sublist in tqdm(sublists, leave=False, disable=not show_progress_bar):
             try:
                 response = self._client.embeddings.create(
-                    input=sublist,
-                    model=self.model_name,
-                    encoding_format="float",
-                    dimensions=self._embed_dim or NotGiven(),
+                    input=sublist, **default_kwargs
                 )
             except Exception as e:
                 # Sleep due to too many requests
@@ -138,19 +149,13 @@ class OpenAIModel(AbsEncoder):
                 time.sleep(10)
                 try:
                     response = self._client.embeddings.create(
-                        input=sublist,
-                        model=self.model_name,
-                        encoding_format="float",
-                        dimensions=self._embed_dim or NotGiven(),
+                        input=sublist, **default_kwargs
                     )
                 except Exception as e:
                     logger.info("Sleeping for 60 seconds due to error", e)
                     time.sleep(60)
                     response = self._client.embeddings.create(
-                        input=sublist,
-                        model=self.model_name,
-                        encoding_format="float",
-                        dimensions=self._embed_dim or NotGiven(),
+                        input=sublist, **default_kwargs
                     )
             no_empty_embeddings.extend(self._to_numpy(response))
 
@@ -162,12 +167,13 @@ class OpenAIModel(AbsEncoder):
             all_embeddings[mask] = no_empty_embeddings
         return all_embeddings
 
-    def _to_numpy(self, embedding_response) -> np.ndarray:
+    def _to_numpy(self, embedding_response) -> NDArray[np.floating]:
         return np.array([e.embedding for e in embedding_response.data])
 
 
 text_embedding_3_small = ModelMeta(
     name="openai/text-embedding-3-small",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -180,6 +186,7 @@ text_embedding_3_small = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://openai.com/index/new-embedding-models-and-api-updates/",
@@ -192,6 +199,7 @@ text_embedding_3_small = ModelMeta(
 )
 text_embedding_3_large = ModelMeta(
     name="openai/text-embedding-3-large",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -207,6 +215,7 @@ text_embedding_3_large = ModelMeta(
     framework=["API"],
     use_instructions=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
@@ -216,6 +225,7 @@ text_embedding_3_large = ModelMeta(
 )
 text_embedding_ada_002 = ModelMeta(
     name="openai/text-embedding-ada-002",
+    model_type=["dense"],
     revision="3",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
@@ -231,6 +241,7 @@ text_embedding_ada_002 = ModelMeta(
     framework=["API"],
     use_instructions=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
@@ -241,6 +252,7 @@ text_embedding_ada_002 = ModelMeta(
 
 text_embedding_3_small_512 = ModelMeta(
     name="openai/text-embedding-3-small (embed_dim=512)",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -254,6 +266,7 @@ text_embedding_3_small_512 = ModelMeta(
     embed_dim=512,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://openai.com/index/new-embedding-models-and-api-updates/",
@@ -267,6 +280,7 @@ text_embedding_3_small_512 = ModelMeta(
 
 text_embedding_3_large_512 = ModelMeta(
     name="openai/text-embedding-3-large (embed_dim=512)",
+    model_type=["dense"],
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -283,6 +297,7 @@ text_embedding_3_large_512 = ModelMeta(
     framework=["API"],
     use_instructions=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed

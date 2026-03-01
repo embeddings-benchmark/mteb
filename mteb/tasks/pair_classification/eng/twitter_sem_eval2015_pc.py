@@ -17,7 +17,7 @@ class TwitterSemEval2015PC(AbsTaskPairClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="max_ap",
-        date=None,
+        date=("2015-01-01", "2015-12-31"),  # publication year
         domains=["Social", "Written"],
         task_subtypes=[],
         license="not specified",
@@ -47,6 +47,9 @@ Jurgens, David},
         prompt="Retrieve tweets that are semantically similar to the given tweet",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.dataset.rename_column("sent1", "sentence1")
         self.dataset = self.dataset.rename_column("sent2", "sentence2")

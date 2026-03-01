@@ -1,4 +1,4 @@
-from .cache_wrappers import CachedEmbeddingWrapper
+from .cache_wrappers import CacheBackendProtocol, CachedEmbeddingWrapper
 from .model_meta import ModelMeta
 from .models_protocols import (
     CrossEncoderProtocol,
@@ -6,6 +6,7 @@ from .models_protocols import (
     MTEBModels,
     SearchProtocol,
 )
+from .search_encoder_index.search_backend_protocol import IndexEncoderSearchProtocol
 from .search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
 from .sentence_transformer_wrapper import (
     CrossEncoderWrapper,
@@ -14,10 +15,12 @@ from .sentence_transformer_wrapper import (
 )
 
 __all__ = [
+    "CacheBackendProtocol",
     "CachedEmbeddingWrapper",
     "CrossEncoderProtocol",
     "CrossEncoderWrapper",
     "EncoderProtocol",
+    "IndexEncoderSearchProtocol",
     "MTEBModels",
     "ModelMeta",
     "SearchCrossEncoderWrapper",

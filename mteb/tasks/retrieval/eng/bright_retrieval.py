@@ -1,3 +1,4 @@
+import warnings
 from collections import defaultdict
 
 import datasets
@@ -82,9 +83,15 @@ def load_bright_data(
     return corpus, queries, relevant_docs
 
 
-def load_data(self) -> None:
+def load_data(self, num_proc: int | None = None, **kwargs) -> None:
     if self.data_loaded:
         return
+
+    warnings.warn(
+        "This task contains wrong prompts in the metadata. "
+        "Please use BRIGHT(v1.1) benchmark instead.",
+        category=DeprecationWarning,
+    )
 
     self.corpus, self.queries, self.relevant_docs = self.load_bright_data(
         path=self.metadata.dataset["path"],
@@ -104,7 +111,7 @@ class BrightRetrieval(AbsTaskRetrieval):
             "revision": "a75a0eb483f6a5233a6efc2d63d71540a4443dfb",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
-        description="Bright retrieval dataset.",
+        description="BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval",
         type="Retrieval",
         category="t2t",
         eval_splits=["standard"],
@@ -119,16 +126,14 @@ class BrightRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@misc{su2024brightrealisticchallengingbenchmark,
-  archiveprefix = {arXiv},
-  author = {Hongjin Su and Howard Yen and Mengzhou Xia and Weijia Shi and Niklas Muennighoff and Han-yu Wang and Haisu Liu and Quan Shi and Zachary S. Siegel and Michael Tang and Ruoxi Sun and Jinsung Yoon and Sercan O. Arik and Danqi Chen and Tao Yu},
-  eprint = {2407.12883},
-  primaryclass = {cs.CL},
-  title = {BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval},
-  url = {https://arxiv.org/abs/2407.12883},
+@article{su2024bright,
+  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal = {arXiv preprint arXiv:2407.12883},
+  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
   year = {2024},
 }
 """,
+        superseded_by="BrightBiologyRetrieval",
     )
     load_bright_data = load_bright_data
     load_data = load_data

@@ -38,12 +38,13 @@ class IconclassClusteringS2S(AbsTaskClustering):
   year = {2023},
 }
 """,
-        prompt={
-            "query": "Identificeer het onderwerp of thema van kunstwerken op basis van de titels"
-        },
+        prompt="Identificeer het onderwerp of thema van kunstwerken op basis van de titels",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         for split in self.dataset:
             self.dataset[split] = self.dataset[split].map(
                 lambda ex: {"labels": ex["label"], "sentences": ex["text"]}

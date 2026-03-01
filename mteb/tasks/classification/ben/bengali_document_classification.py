@@ -43,7 +43,7 @@ Islam, Tanvir},
         superseded_by="BengaliDocumentClassification.v2",
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         self.dataset = self.dataset.rename_columns(
             {"article": "text", "category": "label"}
         )
@@ -92,7 +92,7 @@ Islam, Tanvir},
 """,
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )

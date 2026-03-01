@@ -10,7 +10,7 @@ class OxfordPetsZeroShotClassification(AbsTaskZeroShotClassification):
         description="Classifying animal images.",
         reference="https://arxiv.org/abs/1306.5151",
         dataset={
-            "path": "isaacchung/OxfordPets",
+            "path": "mteb/OxfordPets",
             "revision": "557b480fae8d69247be74d9503b378a09425096f",
         },
         type="ZeroShotClassification",

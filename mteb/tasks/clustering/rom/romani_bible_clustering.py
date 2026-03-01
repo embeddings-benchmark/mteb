@@ -8,8 +8,8 @@ class RomaniBibleClustering(AbsTaskClusteringLegacy):
         description="Clustering verses from the Bible in Kalderash Romani by book.",
         reference="https://romani.global.bible/info",
         dataset={
-            "path": "kardosdrur/romani-bible",
-            "revision": "97fae0e80a8d275bc685dcb3da08972af542ad6e",
+            "path": "mteb/RomaniBibleClustering",
+            "revision": "53db5afec1fe573b334cb6f1c8ee64a0849b3ce5",
         },
         type="Clustering",
         category="t2c",
@@ -24,5 +24,5 @@ class RomaniBibleClustering(AbsTaskClusteringLegacy):
         annotations_creators="derived",
         dialect=["Kalderash"],
         sample_creation="human-translated and localized",
-        bibtex_citation=None,
+        bibtex_citation="",
     )

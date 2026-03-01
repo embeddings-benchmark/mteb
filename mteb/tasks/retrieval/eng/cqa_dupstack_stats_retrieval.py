@@ -17,7 +17,7 @@ class CQADupstackStatsRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("2015-01-01", "2015-12-31"),  # publication year
         domains=["Written", "Academic", "Non-fiction"],
         task_subtypes=["Question answering", "Duplicate Detection"],
         license="apache-2.0",

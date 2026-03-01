@@ -89,7 +89,10 @@ Vylomova, Ekaterina},
 """,
     )
 
-    def dataset_transform(self):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         # create a train set from the test set for Welsh language (cym)
         lang = "cym"
         if lang in self.dataset.keys():

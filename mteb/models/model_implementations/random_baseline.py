@@ -1,17 +1,27 @@
+from __future__ import annotations
+
 import hashlib
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import torch
-from PIL import Image
-from torch.utils.data import DataLoader
 
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
-from mteb.types._encoder_io import Array, BatchedInput, PromptType
+from mteb.similarity_functions import (
+    select_pairwise_similarity,
+    select_similarity,
+)
+
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
+    from PIL import Image
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types._encoder_io import Array, AudioInputItem, BatchedInput, PromptType
 
 
-def _string_to_vector(text: str | None, size: int) -> np.ndarray:
+def _string_to_vector(text: str | None, size: int) -> NDArray[np.floating]:
     """Generate a deterministic random vector based on a string.
 
     Args:
@@ -30,7 +40,7 @@ def _string_to_vector(text: str | None, size: int) -> np.ndarray:
     return rng.random(size, dtype=np.float32)
 
 
-def _image_to_vector(image: Image.Image, size: int) -> np.ndarray:
+def _image_to_vector(image: Image.Image, size: int) -> NDArray[np.floating]:
     """Generate a deterministic random vector based on image content.
 
     Args:
@@ -43,6 +53,23 @@ def _image_to_vector(image: Image.Image, size: int) -> np.ndarray:
     # Convert image to bytes and then to a numeric seed
     image_bytes = image.tobytes()
     seed = int(hashlib.sha256(image_bytes).hexdigest(), 16) % (2**32)
+    rng = np.random.default_rng(seed)
+    return rng.random(size, dtype=np.float32)
+
+
+def _audio_to_vector(audio: AudioInputItem, size: int) -> np.ndarray:
+    """Generate a deterministic random vector based on audio content.
+
+    Args:
+        audio: Audio data (e.g., numpy array).
+        size: Size of the output vector.
+
+    Returns:
+        A numpy array of shape (size,) containing the random vector.
+    """
+    # Convert audio to bytes and then to a numeric seed
+    audio_bytes = audio["array"].tobytes()
+    seed = int(hashlib.sha256(audio_bytes).hexdigest(), 16) % (2**32)
     rng = np.random.default_rng(seed)
     return rng.random(size, dtype=np.float32)
 
@@ -60,18 +87,19 @@ _common_mock_metadata = dict(
     license="mit",
     max_tokens=np.inf,
     reference=None,
-    similarity_fn_name="cosine",  # type: ignore
+    similarity_fn_name="cosine",
     framework=[],
     use_instructions=False,
     public_training_code=None,  # No training code, as this is a random baseline
     public_training_data=None,  # No training data, as this is a random baseline
     training_datasets=set(),
+    modalities=["text", "image", "audio"],
 )
 
 
 def _batch_to_embeddings(
     inputs: DataLoader[BatchedInput], embedding_dim: int
-) -> np.ndarray:
+) -> NDArray[np.floating]:
     """Convert batched text/image inputs into embeddings.
 
     Args:
@@ -84,7 +112,11 @@ def _batch_to_embeddings(
     """
     embeddings = []
     for batch in inputs:
-        has_text, has_image = "text" in batch, "image" in batch
+        has_text, has_image, has_audio = (
+            "text" in batch,
+            "image" in batch,
+            "audio" in batch,
+        )
 
         if has_text and has_image:
             for text, image in zip(batch["text"], batch["image"]):
@@ -98,6 +130,10 @@ def _batch_to_embeddings(
         elif has_text:
             embeddings.extend(
                 _string_to_vector(txt, embedding_dim) for txt in batch["text"]
+            )
+        elif has_audio:
+            embeddings.extend(
+                _audio_to_vector(aud, embedding_dim) for aud in batch["audio"]
             )
         else:
             raise KeyError("Input batch must contain 'text' and/or 'image' keys.")
@@ -119,10 +155,11 @@ class RandomEncoderBaseline:
         revision: str | None,
         array_framework: Literal["numpy", "torch"] = "numpy",
         dtype: torch.dtype | np.floating = np.float32,
+        embed_dim: int = _EMBEDDING_DIM,
         **kwargs: Any,
     ) -> None:
         self.rng_state = np.random.default_rng(42)
-        self.embedding_dim = _EMBEDDING_DIM
+        self.embedding_dim = embed_dim
         self.array_framework = array_framework
         self.dtype = dtype
 
@@ -155,15 +192,9 @@ class RandomEncoderBaseline:
         Returns:
             Cosine similarity matrix between the two sets of embeddings
         """
-        norm1 = np.linalg.norm(
-            embeddings1.reshape(-1, self.embedding_dim), axis=1, keepdims=True
+        return select_similarity(
+            embeddings1, embeddings2, self.mteb_model_meta.similarity_fn_name
         )
-        norm2 = np.linalg.norm(
-            embeddings2.reshape(-1, self.embedding_dim), axis=1, keepdims=True
-        )
-        normalized1 = embeddings1 / (norm1 + 1e-10)
-        normalized2 = embeddings2 / (norm2 + 1e-10)
-        return np.dot(normalized1, normalized2.T)
 
     def similarity_pairwise(
         self,
@@ -179,23 +210,15 @@ class RandomEncoderBaseline:
         Returns:
             Cosine similarity for each pair of embeddings
         """
-        norm1 = np.linalg.norm(
-            embeddings1.reshape(-1, self.embedding_dim), axis=1, keepdims=True
+        return select_pairwise_similarity(
+            embeddings1, embeddings2, self.mteb_model_meta.similarity_fn_name
         )
-        norm2 = np.linalg.norm(
-            embeddings2.reshape(-1, self.embedding_dim), axis=1, keepdims=True
-        )
-        normalized1 = embeddings1 / (norm1 + 1e-10)
-        normalized2 = embeddings2 / (norm2 + 1e-10)
-        normalized1 = np.asarray(normalized1)
-        normalized2 = np.asarray(normalized2)
-        return np.sum(normalized1 * normalized2, axis=1)
 
 
 random_encoder_baseline = ModelMeta(
-    loader=RandomEncoderBaseline,  # type: ignore
-    name="baseline/random-encoder-baseline",
-    modalities=["text", "image"],
+    loader=RandomEncoderBaseline,
+    name="mteb/baseline-random-encoder",
+    model_type=["dense"],
     **_common_mock_metadata,
 )
 
@@ -237,9 +260,8 @@ class RandomCrossEncoderBaseline:
 
 
 random_cross_encoder_baseline = ModelMeta(
-    loader=RandomCrossEncoderBaseline,  # type: ignore
-    name="baseline/random-cross-encoder-baseline",
-    modalities=["text", "image"],
-    is_cross_encoder=True,
+    loader=RandomCrossEncoderBaseline,
+    name="mteb/baseline-random-cross-encoder",
+    model_type=["cross-encoder"],
     **_common_mock_metadata,
 )

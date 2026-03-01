@@ -1,13 +1,19 @@
+from __future__ import annotations
+
 import json
 import logging
 import sys
-from collections.abc import Sequence
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ModelMeta
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
-from mteb.types import ModelName, Revision
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
+    from pathlib import Path
+
+    from mteb.types import ModelName, Revision
 
 if sys.version_info >= (3, 13):
     from warnings import deprecated
@@ -45,8 +51,8 @@ def _model_name_and_revision(
 def load_results(
     results_repo: str = "https://github.com/embeddings-benchmark/results",
     download_latest: bool = True,
-    models: Sequence[ModelMeta] | Sequence[str] | None = None,
-    tasks: Sequence[AbsTask] | Sequence[str] | None = None,
+    models: Iterable[ModelMeta] | Sequence[str] | None = None,
+    tasks: Iterable[AbsTask] | Sequence[str] | None = None,
     validate_and_filter: bool = True,
     require_model_meta: bool = True,
     only_main_score: bool = False,
@@ -83,21 +89,21 @@ def load_results(
 
     if models is not None:
         models_to_keep = {}
-        for model_path in models:
-            if isinstance(model_path, ModelMeta):
-                models_to_keep[model_path.name] = model_path.revision
+        for model in models:
+            if isinstance(model, ModelMeta):
+                models_to_keep[model.name] = model.revision
             else:
-                models_to_keep[model_path] = None
+                models_to_keep[model] = None
     else:
         models_to_keep = None
 
-    task_names = {}
+    task_names: dict[str, AbsTask | None] = {}
     if tasks is not None:
-        for task in tasks:
-            if isinstance(task, AbsTask):
-                task_names[task.metadata.name] = task
+        for task_ in tasks:
+            if isinstance(task_, AbsTask):
+                task_names[task_.metadata.name] = task_
             else:
-                task_names[task] = None
+                task_names[task_] = None
 
     model_results = []
     for model_path in model_paths:

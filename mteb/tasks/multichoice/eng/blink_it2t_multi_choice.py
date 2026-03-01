@@ -10,8 +10,8 @@ class BLINKIT2TMultiChoice(AbsTaskRetrieval):
         description="Retrieve the correct text answer based on images and specific retrieval instructions.",
         reference="https://arxiv.org/abs/2404.12390",
         dataset={
-            "path": "JamieSJS/blink-it2t-multi",
-            "revision": "bc8f4c7f62450a4ceb737c8339061cf87aea42d5",
+            "path": "mteb/blink-it2t-multi",
+            "revision": "772e1c8461c0dff10b32f52326d55a67f0d3ca94",
         },
         type="VisionCentricQA",
         category="it2t",

@@ -38,12 +38,13 @@ class OpenTenderClusteringP2P(AbsTaskClustering):
   year = {2025},
 }
 """,
-        prompt={
-            "query": "Identificeer de hoofdcategorie van aanbestedingen op basis van de titels en beschrijvingen"
-        },
+        prompt="Identificeer de hoofdcategorie van aanbestedingen op basis van de titels en beschrijvingen",
     )
 
-    def dataset_transform(self):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         # reuse the dataset for classification
         for split in self.dataset:
             self.dataset[split] = self.dataset[split].map(

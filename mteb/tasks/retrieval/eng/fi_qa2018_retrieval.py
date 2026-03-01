@@ -19,7 +19,7 @@ class FiQA2018(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("2018-01-01", "2018-12-31"),  # publication year
         domains=["Written", "Financial"],
         task_subtypes=["Question answering"],
         license="not specified",

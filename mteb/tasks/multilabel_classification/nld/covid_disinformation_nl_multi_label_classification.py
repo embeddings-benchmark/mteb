@@ -61,12 +61,10 @@ Yih, Scott Wen-tau},
   year = {2021},
 }
 """,
-        prompt={
-            "query": "Classificeer COVID-19-gerelateerde sociale media-berichten in alle toepasselijke desinformatiecategorieën"
-        },
+        prompt="Classificeer COVID-19-gerelateerde sociale media-berichten in alle toepasselijke desinformatiecategorieën",
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         labels = [
             "q2_label",
             "q3_label",

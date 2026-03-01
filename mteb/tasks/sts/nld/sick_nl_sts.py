@@ -35,7 +35,7 @@ class SICKNLSTS(AbsTaskSTS):
   year = {2021},
 }
 """,
-        prompt={"query": "Haal semantisch vergelijkbare tekst op"},
+        prompt="Haal semantisch vergelijkbare tekst op",
     )
 
     min_score = 0

@@ -914,7 +914,7 @@ class BibleNLPBitextMining(AbsTaskBitextMining):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         # Convert to standard format
         for lang in self.hf_subsets:
             l1, l2 = (l.split("_")[0] for l in lang.split("-"))

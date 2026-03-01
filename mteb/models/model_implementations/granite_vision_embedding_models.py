@@ -1,17 +1,22 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import torch
-from PIL import Image
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import (
     requires_image_dependencies,
 )
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from PIL import Image
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -162,11 +167,13 @@ granite_vision_embedding = ModelMeta(
         torch_dtype=torch.float16,
     ),
     name="ibm-granite/granite-vision-3.3-2b-embedding",
+    model_type=["dense"],
     languages=["eng-Latn"],
     revision="cee615db64d89d1552a4ee39c50f25c0fc5c66ca",
     release_date="2025-06-11",
     modalities=["image", "text"],
     n_parameters=2_980_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=11351,
     max_tokens=128000,
     embed_dim=128,
@@ -174,7 +181,7 @@ granite_vision_embedding = ModelMeta(
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/ibm-granite/granite-vision-3.3-2b-embedding",
     similarity_fn_name="MaxSim",
     use_instructions=True,

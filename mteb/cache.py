@@ -1,28 +1,59 @@
+from __future__ import annotations
+
+import gzip
+import io
 import json
 import logging
 import os
 import shutil
 import subprocess
+import warnings
 from collections import defaultdict
-from collections.abc import Sequence
+from collections.abc import Mapping
 from pathlib import Path
-from typing import cast
+from typing import TYPE_CHECKING, Any, cast
 
+import requests
+from pydantic import ValidationError
+
+import mteb
+from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks import AbsTask
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
+from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
-from mteb.types import ModelName, Revision
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
+
+    from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
+_EXPERIMENTS_FOLDER_NAME = "experiments"
+
+
+class LoadExperimentEnum(HelpfulStrEnum):
+    """Enum to specify whether to load experiments when loading results from the cache.
+
+    Attributes:
+        MATCH_NAME: Will load everything that matches the name of the model, including experiments. If a revision is supplied using `ModelMeta` this will also match the revision.
+        MATCH_KWARGS: Will load experiments that match the keyword arguments supplied in the`ModelMeta`. Assumes a `ModelMeta`s are supplied.
+        NO_EXPERIMENTS: Will only load models with default keyword arguments, meaning that it will not include any experiments.
+    """
+
+    MATCH_NAME = "match_name"
+    MATCH_KWARGS = "match_kwargs"
+    NO_EXPERIMENTS = "no_experiments"
 
 
 class ResultCache:
     """Class to handle the local cache of MTEB results.
 
     Examples:
-        >>> from mteb.cache import ResultCache
-        >>> cache = ResultCache(cache_path="~/.cache/mteb") # default
-        >>> cache.download_from_remote() # download the latest results from the remote repository
+        >>> import mteb
+        >>> cache = mteb.ResultCache(cache_path="~/.cache/mteb")  # default
+        >>> cache.download_from_remote()  # download the latest results from the remote repository
         >>> result = cache.load_results("task_name", "model_name")
     """
 
@@ -50,6 +81,7 @@ class ResultCache:
         model_name: str | ModelMeta,
         model_revision: str | None = None,
         remote: bool = False,
+        experiment_name: str | None = None,
     ) -> Path:
         """Get the path to the results of a specific task for a specific model and revision.
 
@@ -58,6 +90,7 @@ class ResultCache:
             model_name: The name of the model as a valid directory name or a ModelMeta object.
             model_revision: The revision of the model. Must be specified if model_name is a string.
             remote: If True, it will return the path to the remote results repository, otherwise it will return the path to the local results repository.
+            experiment_name: The name of the experiment as a valid directory name. If model_name is a ModelMeta object, its experiment_name will be used.
 
         Returns:
             The path to the results of the task.
@@ -71,9 +104,10 @@ class ResultCache:
         if isinstance(model_name, ModelMeta):
             if model_revision is not None:
                 logger.warning(
-                    "model_revision is ignored when model_name is a ModelMeta object"
+                    "model_revision and experiment_name is ignored when model_name is a ModelMeta object"
                 )
             model_revision = model_name.revision
+            experiment_name = model_name.experiment_name
             model_name = model_name.model_name_as_path()
         elif isinstance(model_name, str):
             model_name = model_name.replace("/", "__").replace(" ", "_")
@@ -81,9 +115,9 @@ class ResultCache:
         model_path = results_folder / model_name
 
         if model_revision is None:
-            logger.warning(
-                "model_revision is not specified, attempting to load the latest revision. To disable this behavior, specify model_revision explicitly."
-            )
+            msg = "`model_revision` is not specified, attempting to load the latest revision. To disable this behavior, specify the 'model_revision` explicitly."
+            logger.warning(msg)
+            warnings.warn(msg)
             # get revs from paths
             revisions = [p for p in model_path.glob("*") if p.is_dir()]
             if not revisions:
@@ -97,6 +131,14 @@ class ResultCache:
                     revisions.sort(key=lambda p: p.stat().st_mtime, reverse=True)
                 model_revision = revisions[0].name
 
+        if experiment_name:
+            return (
+                model_path
+                / model_revision
+                / _EXPERIMENTS_FOLDER_NAME
+                / experiment_name
+                / f"{task_name}.json"
+            )
         return model_path / model_revision / f"{task_name}.json"
 
     def load_task_result(
@@ -106,6 +148,7 @@ class ResultCache:
         model_revision: str | None = None,
         raise_if_not_found: bool = False,
         prioritize_remote: bool = False,
+        experiment_name: str | None = None,
     ) -> TaskResult | None:
         """Load the results from the local cache directory.
 
@@ -115,6 +158,7 @@ class ResultCache:
             model_revision: The revision of the model. Must be specified if model_name is a string.
             raise_if_not_found: If True, raise an error if the results are not found.
             prioritize_remote: If True, it will first try to load the results from the remote repository, if available.
+            experiment_name: Optional experiment folder name (a valid directory name). If None, the default is used.
 
         Returns:
             The results of the task, or None if not found.
@@ -123,6 +167,7 @@ class ResultCache:
             model_name=model_name,
             model_revision=model_revision,
             task_name=task_name,
+            experiment_name=experiment_name,
         )
 
         if self.has_remote:
@@ -131,6 +176,7 @@ class ResultCache:
                 model_revision=model_revision,
                 task_name=task_name,
                 remote=True,
+                experiment_name=experiment_name,
             )
             if remote_result_path.exists() and prioritize_remote:
                 result_path = remote_result_path
@@ -174,7 +220,7 @@ class ResultCache:
         if isinstance(model_name, ModelMeta):
             meta = model_name
             with model_meta_path.open("w") as f:
-                json.dump(meta.to_dict(), f, default=str)
+                json.dump(meta.to_dict(), f, default=str, indent=4)
 
     @property
     def default_cache_path(self) -> Path:
@@ -195,12 +241,14 @@ class ResultCache:
         self,
         remote: str = "https://github.com/embeddings-benchmark/results",
         download_latest: bool = True,
+        revision: str | None = None,
     ) -> Path:
         """Downloads the latest version of the results repository from GitHub to a local cache directory. Required git to be installed.
 
         Args:
             remote: The URL of the results repository on GitHub.
             download_latest: If True it will download the latest version of the repository, otherwise it will only update the existing repository.
+            revision: If specified, it will checkout the given revision after cloning or pulling the repository.
 
         Returns:
             The path to the local cache directory.
@@ -228,14 +276,27 @@ class ResultCache:
                 )
                 raise ValueError(msg)
 
-            if download_latest:
+            if revision or download_latest:
                 logger.info(
-                    f"remote repository already exists in {results_directory}, updating it using git pull"
+                    f"remote repository already exists in {results_directory}, fetching updates"
                 )
-                subprocess.run(["git", "pull"], cwd=results_directory)
+                subprocess.run(
+                    ["git", "fetch", "--all", "--tags"],
+                    cwd=results_directory,
+                    check=True,
+                )
             else:
                 logger.debug(
-                    f"Results repository already exists in {results_directory}, skipping update, set download_latest=True to update it"
+                    f"Results repository already exists in {results_directory}, skipping update, "
+                    f"set download_latest=True to update it"
+                )
+
+            if revision:
+                logger.info(f"Checking out revision '{revision}'")
+                subprocess.run(
+                    ["git", "checkout", revision],
+                    cwd=results_directory,
+                    check=True,
                 )
             return results_directory
 
@@ -243,9 +304,160 @@ class ResultCache:
             f"No results repository found in {results_directory}, cloning it from {remote}"
         )
 
-        subprocess.run(["git", "clone", remote, "remote"], cwd=self.cache_path)
+        clone_cmd = ["git", "clone", "--depth", "1"]
+
+        if revision:
+            logger.info(f"Cloning repository at revision '{revision}'")
+            clone_cmd.append(f"--revision={revision}")
+        clone_cmd.extend([remote, "remote"])
+
+        subprocess.run(
+            clone_cmd,
+            cwd=self.cache_path,
+            check=True,
+        )
 
         return results_directory
+
+    def _download_cached_results_from_branch(
+        self,
+        branch: str = "cached-data",
+        filename: str = "__cached_results.json.gz",
+        output_path: Path | None = None,
+        remote: str = "https://github.com/embeddings-benchmark/results",
+        timeout: int = 60,
+        max_size_mb: int = 500,
+    ) -> Path:
+        """Download pre-computed cached results from a specific branch.
+
+        This is significantly faster than download_from_remote() since it downloads
+        only a compressed cache file instead of cloning the entire repository.
+
+        The method performs the following steps:
+        1. Downloads a gzipped JSON file from the specified branch
+        2. Validates file size and content type
+        3. Decompresses the gzip content
+        4. Writes the decompressed JSON to disk
+
+        Args:
+            branch: Branch name to download from (default: "cached-data")
+            filename: Name of the cached results file (default: "__cached_results.json.gz")
+            output_path: Where to save the file. If None, uses {cache_path}/leaderboard/__cached_results.json
+            remote: Base URL of the results repository
+            timeout: Request timeout in seconds (default: 60)
+            max_size_mb: Maximum allowed file size in megabytes (default: 500)
+
+        Returns:
+            Path to the downloaded and decompressed cache file
+
+        Raises:
+            requests.exceptions.RequestException: On HTTP errors
+            ValueError: On validation failures (size, content-type)
+            gzip.BadGzipFile: If content is not valid gzip
+            UnicodeDecodeError: If content cannot be decoded as UTF-8
+            PermissionError: If file cannot be written due to permissions
+            OSError: On other file system errors
+
+        Examples:
+            >>> import mteb
+            >>> cache = mteb.ResultCache()
+            >>> # Download optimized cached results
+            >>> cache_file = cache._download_cached_results_from_branch()
+            >>> # Use custom output path
+            >>> cache_file = cache._download_cached_results_from_branch(
+            ...     output_path=Path("/tmp/my_cache.json")
+            ... )
+        """
+        if output_path is None:
+            # Default to saving in {cache_path}/leaderboard/__cached_results.json
+            output_path = self.cache_path / "leaderboard" / "__cached_results.json"
+
+        # Extract repository owner and name from the remote URL
+        # e.g., "https://github.com/embeddings-benchmark/results" -> "embeddings-benchmark/results"
+        repo_path = remote.replace("https://github.com/", "").replace(
+            "http://github.com/", ""
+        )
+
+        url = f"https://raw.githubusercontent.com/{repo_path}/{branch}/{filename}"
+        logger.info(f"Downloading cached results from {url}")
+
+        # Step 1: Download with validation
+        max_size_bytes = max_size_mb * 1024 * 1024
+
+        try:
+            response = requests.get(url, timeout=timeout)
+            response.raise_for_status()
+
+            # Check if this is a Git LFS pointer file
+            content_type = response.headers.get("content-type", "").lower()
+            if (
+                content_type == "text/plain; charset=utf-8"
+                and b"git-lfs" in response.content
+            ):
+                # Try Git LFS media URL instead
+                media_url = f"https://media.githubusercontent.com/media/{repo_path}/{branch}/{filename}"
+                logger.info(f"Detected Git LFS file, trying media URL: {media_url}")
+                response = requests.get(media_url, timeout=timeout)
+                response.raise_for_status()
+                content_type = response.headers.get("content-type", "").lower()
+
+            # Validate content-type header
+            expected_content_types = [
+                "application/gzip",
+                "application/octet-stream",
+                "application/x-gzip",
+            ]
+            if content_type and not any(
+                ct in content_type for ct in expected_content_types
+            ):
+                raise Exception(
+                    f"Unexpected content-type: {content_type}. Expected one of: {expected_content_types}"
+                )
+
+            # Validate file size
+            content_length = len(response.content)
+            if content_length > max_size_bytes:
+                raise ValueError(
+                    f"Downloaded file too large: {content_length} bytes (max: {max_size_bytes})"
+                )
+
+            logger.info(
+                f"HTTP request successful, content length: {content_length} bytes"
+            )
+            content = response.content
+
+        except Exception as e:
+            logger.error(f"Unexpected HTTP error: {type(e).__name__}: {e}")
+            raise e
+
+        # Step 2: Decompress gzip data
+        logger.info("Attempting gzip decompression...")
+
+        try:
+            with gzip.open(io.BytesIO(content), "rt", encoding="utf-8") as gz_file:
+                data = gz_file.read()
+            logger.info(f"Decompression successful, data length: {len(data)} chars")
+
+        except Exception as e:
+            logger.error(f"Unexpected decompression error: {type(e).__name__}: {e}")
+            raise e
+
+        # Step 3: Write to disk
+        logger.info(f"Attempting to write to: {output_path}")
+
+        # Check parent directory exists and is writable
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        try:
+            output_path.write_text(data, encoding="utf-8")
+            logger.info(
+                f"File write successful, size: {output_path.stat().st_size} bytes"
+            )
+        except Exception as e:
+            logger.error(f"Unexpected file write error: {type(e).__name__}: {e}")
+            raise e
+
+        return output_path
 
     def clear_cache(self) -> None:
         """Clear the local cache directory."""
@@ -253,17 +465,116 @@ class ResultCache:
             shutil.rmtree(self.cache_path)
             logger.info(f"Cache directory {self.cache_path} cleared.")
         else:
-            logger.warning(f"Cache directory {self.cache_path} does not exist.")
+            msg = f"Cache directory `{self.cache_path}` does not exist."
+            logger.warning(msg)
+            warnings.warn(msg)
+
+    def _load_from_cache(
+        self,
+        cache_filename: str = "__cached_results.json",
+        rebuild: bool = False,
+    ) -> BenchmarkResults:
+        """Load benchmark results using the best available strategy.
+
+        Args:
+            cache_filename: Name of the cache file. The full path will be constructed as
+                {cache_path}/leaderboard/{cache_filename}.
+            rebuild: If True, force a full rebuild from the results repository, bypassing any
+                     pre-computed JSON cache.
+
+        Strategy:
+            1. If rebuild=False and local cache exists at cache_path → load and return
+            2. If rebuild=False, try downloading pre-computed cache from 'cached-data' branch
+               → save to cache_path and return
+            3. Fallback (or if rebuild=True): clone the full results repository, build from
+               individual model files, call results.to_disk(cache_path), and return.
+
+        Returns:
+            BenchmarkResults ready for leaderboard display
+        """
+        cache_path = self.cache_path / "leaderboard" / cache_filename
+
+        # If rebuild=True, skip directly to full repository rebuild
+        if rebuild:
+            logger.info(
+                "Rebuild requested, forcing full repository clone and rebuild..."
+            )
+            return self._rebuild_from_full_repository(cache_path)
+
+        # Strategy 1: Try loading from existing local quick cache
+        if cache_path.exists():
+            logger.info(f"Loading existing quick cache from {cache_path}")
+            try:
+                return BenchmarkResults.from_disk(cache_path)
+            except Exception as e:
+                logger.warning(
+                    f"Failed to load quick cache: {e}. Trying other strategies..."
+                )
+
+        # Strategy 2: Try downloading from cached-data branch
+        try:
+            logger.info(
+                "Attempting to download pre-computed cache from cached-data branch..."
+            )
+            downloaded_path = self._download_cached_results_from_branch(
+                output_path=cache_path
+            )
+            logger.info(f"Downloaded cache to {downloaded_path}")
+            return BenchmarkResults.from_disk(downloaded_path)
+        except Exception as e:
+            logger.warning(f"Failed to download from cached-data branch: {e}")
+
+        # Strategy 3: Fallback to full repository clone
+        logger.info("Falling back to full repository clone and rebuild...")
+        return self._rebuild_from_full_repository(cache_path)
+
+    def _rebuild_from_full_repository(self, quick_cache_path: Path) -> BenchmarkResults:
+        """Clone/pull the full results repository and build BenchmarkResults from individual files.
+
+        This method performs a full rebuild by:
+        1. Downloading or updating the full results repository
+        2. Loading results from all individual model files
+        3. Saving the aggregated results to the quick cache path
+        4. Returning the BenchmarkResults object
+
+        Args:
+            quick_cache_path: Path where the rebuilt cache should be saved
+
+        Returns:
+            BenchmarkResults built from the full repository
+        """
+        # Download or update the full repository
+        self.download_from_remote()
+
+        all_model_names = [
+            model_meta.name
+            for model_meta in mteb.get_model_metas()
+            if model_meta.name is not None
+        ]
+
+        all_results = self.load_results(
+            models=all_model_names,
+            only_main_score=True,
+            require_model_meta=False,
+            include_remote=True,
+        )
+
+        # Save to disk for future use
+        logger.info(f"Saving rebuilt cache to {quick_cache_path}")
+        all_results.to_disk(quick_cache_path)
+
+        return all_results
 
     def __repr__(self) -> str:
         return f"ResultCache(cache_path={self.cache_path})"
 
     def get_cache_paths(
         self,
-        models: Sequence[str] | Sequence[ModelMeta] | None = None,
-        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        models: Sequence[str] | Iterable[ModelMeta] | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
+        load_experiments: LoadExperimentEnum | str = LoadExperimentEnum.NO_EXPERIMENTS,
     ) -> list[Path]:
         """Get all paths to result JSON files in the cache directory.
 
@@ -278,13 +589,14 @@ class ResultCache:
             tasks: A list of task names to filter the paths.
             require_model_meta: If True, only return paths that have a model_meta.json file.
             include_remote: If True, include remote results in the returned paths.
+            load_experiments: If True, include experiments in the returned paths.
 
         Returns:
             A list of paths in the cache directory.
 
         Examples:
-            >>> from mteb.cache import ResultCache
-            >>> cache = ResultCache()
+            >>> import mteb
+            >>> cache = mteb.ResultCache()
             >>>
             >>> # Get all cache paths
             >>> paths = cache.get_cache_paths()
@@ -299,21 +611,41 @@ class ResultCache:
             >>> model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
             >>> paths = cache.get_cache_paths(models=[model_meta])
         """
-        cache_paths = [
-            p
-            for p in (self.cache_path / "results").glob("**/*.json")
-            if p.name != "model_meta.json"
-        ]
-        if include_remote:
-            cache_paths += [
+        if isinstance(load_experiments, str):
+            load_experiments = LoadExperimentEnum.from_str(load_experiments)
+
+        def _cache_paths(base_path: Path) -> list[Path]:
+            return [
                 p
-                for p in (self.cache_path / "remote" / "results").glob("**/*.json")
+                for p in base_path.glob("*/*/*.json")  # model/revision/task.json
                 if p.name != "model_meta.json"
             ]
+
+        def _experiments_paths(base_path: Path) -> list[Path]:
+            return [
+                p
+                for p in base_path.glob(f"*/*/{_EXPERIMENTS_FOLDER_NAME}/*/*.json")
+                if p.name != "model_meta.json"
+            ]
+
+        def _get_paths(base_path: Path, experiments: LoadExperimentEnum) -> list[Path]:
+            paths = _cache_paths(base_path)
+            if not experiments == LoadExperimentEnum.NO_EXPERIMENTS:
+                paths += _experiments_paths(base_path)
+            return paths
+
+        results_path = self.cache_path / "results"
+        remote_path = self.cache_path / "remote" / "results"
+
+        cache_paths = _get_paths(results_path, load_experiments)
+
+        if include_remote:
+            cache_paths += _get_paths(remote_path, load_experiments)
 
         cache_paths = self._filter_paths_by_model_and_revision(
             cache_paths,
             models=models,
+            load_experiments=load_experiments,
         )
         cache_paths = self._filter_paths_by_task(cache_paths, tasks=tasks)
 
@@ -374,7 +706,16 @@ class ResultCache:
     @staticmethod
     def _get_model_name_and_revision_from_path(
         revision_path: Path,
-    ) -> tuple[ModelName, Revision]:
+    ) -> tuple[ModelName, Revision, str | None]:
+        """Get model name, revision and experiment name from the given path.
+
+        Args:
+            revision_path: The path to the revision folder, which should contain a model_meta.json file. If the file is not found, it will attempt to extract the model name and revision from the path.
+
+        Returns:
+            A tuple containing the model name, revision and experiment name (if available).
+
+        """
         model_meta = revision_path / "model_meta.json"
         model_path = revision_path.parent
 
@@ -382,19 +723,30 @@ class ResultCache:
             logger.debug(
                 f"model_meta.json not found in {revision_path}, extracting model_name and revision from the path"
             )
+            if _EXPERIMENTS_FOLDER_NAME in revision_path.parts:
+                logger.debug(
+                    f"Path {revision_path} contains an experiment folder, extracting model_name and revision accordingly"
+                )
+                experiment_name = revision_path.name
+                revision = revision_path.parent.parent.name
+                model_name = revision_path.parent.parent.parent.name.replace("__", "/")
+                return model_name, revision, experiment_name
             model_name = model_path.name.replace("__", "/")
             revision = revision_path.name
-            return model_name, revision
+            return model_name, revision, None
         with model_meta.open("r") as f:
             model_meta_json = json.load(f)
-            model_name = model_meta_json["name"]
-            revision = model_meta_json["revision"]
-        return model_name, revision
+        model_name = model_meta_json["name"]
+        revision = model_meta_json["revision"]
+        experiment_kwargs = model_meta_json.get("experiment_kwargs", None)
+        experiment_name_ = _serialize_experiment_kwargs_to_name(experiment_kwargs)
+        return model_name, revision, experiment_name_
 
     @staticmethod
     def _filter_paths_by_model_and_revision(
         paths: list[Path],
-        models: Sequence[str] | Sequence[ModelMeta] | None = None,
+        models: Sequence[str] | Iterable[ModelMeta] | None = None,
+        load_experiments: LoadExperimentEnum | None = None,
     ) -> list[Path]:
         """Filter a list of paths by model name and optional revision.
 
@@ -404,25 +756,56 @@ class ResultCache:
         if not models:
             return paths
 
-        if isinstance(models[0], ModelMeta):
-            models = cast(list[ModelMeta], models)
+        first_model = next(iter(models))
+        if isinstance(first_model, ModelMeta):
+            models = cast("Iterable[ModelMeta]", models)
             name_and_revision = {
-                (m.model_name_as_path(), m.revision or "no_revision_available")
+                (
+                    m.model_name_as_path(),
+                    m.revision or "no_revision_available",
+                    m.experiment_name
+                    if load_experiments is LoadExperimentEnum.MATCH_KWARGS
+                    else None,
+                )
                 for m in models
             }
+            model_name_and_revision = list()
+            for path in paths:
+                if _EXPERIMENTS_FOLDER_NAME in path.parts:
+                    revision = path.parent.parent.parent.name
+                    model_name = path.parent.parent.parent.parent.name
+                    experiment_name = (
+                        path.parent.name
+                        if load_experiments is LoadExperimentEnum.MATCH_KWARGS
+                        else None
+                    )
+                else:
+                    revision = path.parent.name
+                    model_name = path.parent.parent.name
+                    experiment_name = None
+                model_name_and_revision.append((model_name, revision, experiment_name))
             return [
                 p
-                for p in paths
-                if (p.parent.parent.name, p.parent.name) in name_and_revision
+                for model_revision, p in zip(model_name_and_revision, paths)
+                if model_revision in name_and_revision
             ]
 
-        model_names = {m.replace("/", "__").replace(" ", "_") for m in models}
-        return [p for p in paths if p.parent.parent.name in model_names]
+        str_models = cast("Sequence[str]", models)
+        model_names = {m.replace("/", "__").replace(" ", "_") for m in str_models}
+        filtered_paths = []
+        for p in paths:
+            if _EXPERIMENTS_FOLDER_NAME in p.parts:
+                model_name = p.parent.parent.parent.parent.name
+            else:
+                model_name = p.parent.parent.name
+            if model_name in model_names:
+                filtered_paths.append(p)
+        return filtered_paths
 
     @staticmethod
     def _filter_paths_by_task(
         paths: list[Path],
-        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
     ) -> list[Path]:
         if tasks is not None:
             task_names = set()
@@ -438,31 +821,37 @@ class ResultCache:
 
     def load_results(
         self,
-        models: Sequence[str] | Sequence[ModelMeta] | None = None,
-        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        models: Sequence[str] | Iterable[ModelMeta] | None = None,
+        tasks: Sequence[str] | Iterable[AbsTask] | Benchmark | str | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
         validate_and_filter: bool = False,
         only_main_score: bool = False,
+        load_experiments: LoadExperimentEnum | str = LoadExperimentEnum.MATCH_KWARGS,
+        experiment_kwargs: Mapping[str, Any] | list[Mapping[str, Any]] | None = None,
     ) -> BenchmarkResults:
         """Loads the results from the cache directory and returns a BenchmarkResults object.
 
         Args:
             models: A list of model names to load the results for. If None it will load the results for all models.
-            tasks: A list of task names to load the results for. If None it will load the results for all tasks.
+            tasks: A list of task names to load the results for. If str is passed, then benchmark will be loaded.
+                If Benchmark is passed, then all tasks in the benchmark will be loaded.
+                If None it will load the results for all tasks.
             require_model_meta: If True it will ignore results that do not have a model_meta.json file. If false it attempt to
                 extract the model name and revision from the path.
             include_remote: If True, it will include results from the remote repository.
             validate_and_filter: If True it will validate that the results object for the task contains the correct splits and filter out
                 splits from the results object that are not default in the task metadata.
             only_main_score: If True, only the main score will be loaded.
+            load_experiments: If True, it will also load results from experiment folders.
+            experiment_kwargs: If specified, it will only load results from experiments with the specified kwargs. Only used if load_experiments is True.
 
         Returns:
             A BenchmarkResults object containing the results for the specified models and tasks.
 
         Examples:
-            >>> from mteb.cache import ResultCache
-            >>> cache = ResultCache()
+            >>> import mteb
+            >>> cache = mteb.ResultCache()
             >>>
             >>> # Load results for specific models and tasks
             >>> results = cache.load_results(
@@ -471,15 +860,35 @@ class ResultCache:
             ...     require_model_meta=True,
             ... )
         """
+        if isinstance(tasks, str):
+            tasks = mteb.get_benchmark(tasks)
+
+        if isinstance(load_experiments, str):
+            load_experiments = LoadExperimentEnum.from_str(load_experiments)
+
+        if (
+            load_experiments is not LoadExperimentEnum.MATCH_KWARGS
+            and experiment_kwargs is not None
+        ):
+            warnings.warn(
+                "experiment_kwargs is specified but load_experiments is not set to MATCH_KWARGS."
+                "No results will be loaded."
+            )
+
+        models_as_model_meta = models is not None and isinstance(
+            next(iter(models)), ModelMeta
+        )
+
         paths = self.get_cache_paths(
             models=models,
             tasks=tasks,
             require_model_meta=require_model_meta,
             include_remote=include_remote,
+            load_experiments=load_experiments,
         )
         models_results = defaultdict(list)
 
-        task_names = {}
+        task_names: dict[str, AbsTask | None] = {}
         if tasks is not None:
             for task in tasks:
                 if isinstance(task, AbsTask):
@@ -487,39 +896,67 @@ class ResultCache:
                 else:
                     task_names[task] = None
 
+        experiment_names = set()
+        if isinstance(experiment_kwargs, Mapping):
+            experiment_kwargs = [experiment_kwargs]
+        if isinstance(experiment_kwargs, list):
+            experiment_names = {
+                _serialize_experiment_kwargs_to_name(params)
+                for params in experiment_kwargs
+            }
         for path in paths:
             task_result = TaskResult.from_disk(path)
 
             if only_main_score:
                 task_result = task_result.only_main_score()
-            model_name, revision = self._get_model_name_and_revision_from_path(
-                path.parent
+            model_name, revision, experiment_name = (
+                self._get_model_name_and_revision_from_path(path.parent)
             )
 
             if validate_and_filter:
-                task = task_names[task_result.task_name]
+                task_instance = task_names[task_result.task_name]
                 try:
-                    task_result.validate_and_filter_scores(task=task)
-                except Exception as e:
+                    task_result = task_result.validate_and_filter_scores(
+                        task=task_instance
+                    )
+                except ValidationError as e:
                     logger.info(
                         f"Validation failed for {task_result.task_name} in {model_name} {revision}: {e}"
                     )
                     continue
 
-            models_results[(model_name, revision)].append(task_result)
+            if len(experiment_names) > 0 and experiment_name not in experiment_names:
+                logger.debug(
+                    f"Skipping experiment {experiment_name} as it is not in the specified experiment names"
+                )
+                continue
+
+            if (
+                load_experiments is LoadExperimentEnum.MATCH_KWARGS
+                and not models_as_model_meta  # for models meta path are prefiltered
+                and len(experiment_names) == 0
+                and experiment_name is not None
+            ):
+                continue
+
+            models_results[(model_name, revision, experiment_name)].append(task_result)
 
         # create BenchmarkResults object
-        models_results = [
+        models_results_object = [
             ModelResult(
                 model_name=model_name,
                 model_revision=revision,
                 task_results=task_results,
+                experiment_name=experiment_name,
             )
-            for (model_name, revision), task_results in models_results.items()
+            for (
+                model_name,
+                revision,
+                experiment_name,
+            ), task_results in models_results.items()
         ]
 
-        benchmark_results = BenchmarkResults(
-            model_results=models_results,
+        return BenchmarkResults(
+            model_results=models_results_object,
+            benchmark=tasks if isinstance(tasks, Benchmark) else None,
         )
-
-        return benchmark_results

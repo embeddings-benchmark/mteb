@@ -25,16 +25,19 @@ class FreshStackRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{freshstack2023,
-  author = {FreshStack Authors},
-  journal = {arXiv preprint arXiv:2301.12345},
-  title = {FreshStack: A Multi-language Code Generation and Retrieval Benchmark},
-  year = {2023},
+@misc{thakur2025freshstackbuildingrealisticbenchmarks,
+  archiveprefix = {arXiv},
+  author = {Nandan Thakur and Jimmy Lin and Sam Havens and Michael Carbin and Omar Khattab and Andrew Drozdov},
+  eprint = {2504.13128},
+  primaryclass = {cs.IR},
+  title = {FreshStack: Building Realistic Benchmarks for Evaluating Retrieval on Technical Documents},
+  url = {https://arxiv.org/abs/2504.13128},
+  year = {2025},
 }
 """,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
 

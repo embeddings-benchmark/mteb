@@ -19,7 +19,7 @@ class SyntecRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="ndcg_at_10",
-        date=None,  # not specified
+        date=("2024-01-01", "2024-12-31"),  # publication year
         domains=["Legal", "Written"],
         task_subtypes=[],
         license="not specified",
@@ -38,7 +38,7 @@ class SyntecRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
         # fetch both subsets of the dataset

@@ -1,6 +1,13 @@
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
+fa_mteb = """@article{zinvandi2025famteb,
+  author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
+  journal = {arXiv preprint arXiv:2502.11571},
+  title = {Famteb: Massive text embedding benchmark in persian language},
+  year = {2025},
+}"""
+
 
 class ArguAnaFa(AbsTaskRetrieval):
     ignore_identical_ids = True
@@ -25,7 +32,7 @@ class ArguAnaFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["ArguAna"],
         superseded_by="ArguAna-Fa.v2",
     )
@@ -54,7 +61,7 @@ class ArguAnaFaV2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["ArguAna"],
     )
 
@@ -81,7 +88,7 @@ class ClimateFEVERFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["ClimateFEVER"],
     )
 
@@ -108,7 +115,7 @@ class CQADupstackAndroidRetrievalFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["CQADupstackAndroidRetrieval"],
     )
 
@@ -135,7 +142,7 @@ class CQADupstackEnglishRetrievalFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["CQADupstackEnglishRetrieval"],
     )
 
@@ -162,7 +169,7 @@ class CQADupstackGamingRetrievalFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["CQADupstackGamingRetrieval"],
     )
 
@@ -189,7 +196,7 @@ class CQADupstackGisRetrievalFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["CQADupstackGisRetrieval"],
     )
 
@@ -216,7 +223,7 @@ class CQADupstackMathematicaRetrievalFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["CQADupstackMathematicaRetrieval"],
     )
 
@@ -243,7 +250,7 @@ class CQADupstackPhysicsRetrievalFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["CQADupstackPhysicsRetrieval"],
     )
 
@@ -270,7 +277,7 @@ class CQADupstackProgrammersRetrievalFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["CQADupstackProgrammersRetrieval"],
     )
 
@@ -297,7 +304,7 @@ class CQADupstackStatsRetrievalFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["CQADupstackStatsRetrieval"],
     )
 
@@ -324,7 +331,7 @@ class CQADupstackTexRetrievalFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["CQADupstackTexRetrieval"],
     )
 
@@ -351,7 +358,7 @@ class CQADupstackUnixRetrievalFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["CQADupstackUnixRetrieval"],
     )
 
@@ -378,7 +385,7 @@ class CQADupstackWebmastersRetrievalFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["CQADupstackWebmastersRetrieval"],
     )
 
@@ -405,7 +412,7 @@ class CQADupstackWordpressRetrievalFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["CQADupstackWordpressRetrieval"],
     )
 
@@ -432,7 +439,7 @@ class DBPediaFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["DBPedia"],
     )
 
@@ -460,7 +467,7 @@ class FiQA2018Fa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["FiQA2018"],
         superseded_by="FiQA2018-Fa.v2",
     )
@@ -490,7 +497,7 @@ class FiQA2018FaV2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["FiQA2018"],
     )
 
@@ -517,7 +524,7 @@ class HotpotQAFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["HotpotQA"],
     )
 
@@ -546,7 +553,7 @@ class MSMARCOFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["MSMARCO"],
     )
 
@@ -573,7 +580,7 @@ class NFCorpusFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["NFCorpus"],
     )
 
@@ -600,7 +607,7 @@ class NQFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["NQ"],
     )
 
@@ -629,7 +636,7 @@ class QuoraRetrievalFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["QuoraRetrieval"],
         superseded_by="QuoraRetrieval-Fa.v2",
     )
@@ -659,7 +666,7 @@ class QuoraRetrievalFaV2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["QuoraRetrieval"],
     )
 
@@ -686,7 +693,7 @@ class SCIDOCSFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["SCIDOCS"],
         superseded_by="SCIDOCS-Fa.v2",
     )
@@ -714,7 +721,7 @@ class SCIDOCSFaV2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["SCIDOCS"],
     )
 
@@ -741,7 +748,7 @@ class SciFactFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["SciFact"],
         superseded_by="SciFact-Fa.v2",
     )
@@ -769,7 +776,7 @@ class SciFactFaV2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["SciFact"],
     )
 
@@ -796,7 +803,7 @@ class TRECCOVIDFa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["TRECCOVID"],
         superseded_by="TRECCOVID-Fa.v2",
     )
@@ -824,7 +831,7 @@ class TRECCOVIDFaV2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["TRECCOVID"],
     )
 
@@ -851,7 +858,7 @@ class Touche2020Fa(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["Touche2020"],
         superseded_by="Touche2020-Fa.v2",
     )
@@ -879,7 +886,7 @@ class Touche2020FaV2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["Touche2020"],
     )
 
@@ -906,7 +913,7 @@ class HotpotQAFaHardNegatives(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["HotpotQA"],
     )
 
@@ -935,7 +942,7 @@ class MSMARCOFaHardNegatives(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["MSMARCO"],
     )
 
@@ -962,7 +969,7 @@ class NQFaHardNegatives(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["NQ"],
     )
 
@@ -991,6 +998,6 @@ class FEVERFaHardNegatives(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=fa_mteb,
         adapted_from=["FEVER"],
     )

@@ -1,8 +1,14 @@
-from collections.abc import Sequence
+from __future__ import annotations
 
-from mteb.abstasks import AbsTask
-from mteb.benchmarks import Benchmark
+from typing import TYPE_CHECKING
+
 from mteb.get_tasks import MTEBTasks
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
+
+    from mteb.abstasks import AbsTask
+    from mteb.benchmarks import Benchmark
 
 
 def _display_benchmarks(benchmarks: Sequence[Benchmark]) -> None:
@@ -31,7 +37,7 @@ def _display_benchmarks(benchmarks: Sequence[Benchmark]) -> None:
         _display_tasks(benchmark.tasks, name=name)
 
 
-def _display_tasks(task_list: Sequence[AbsTask], name: str | None = None) -> None:
+def _display_tasks(task_list: Iterable[AbsTask], name: str | None = None) -> None:
     from rich.console import Console
 
     console = Console()

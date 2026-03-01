@@ -51,7 +51,10 @@ Iryna Gurevych},
         adapted_from=["StackExchangeClustering"],
     )
 
-    def dataset_transform(self):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         ds = {}
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))

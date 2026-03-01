@@ -16,7 +16,7 @@ from .nusa_translation_bitext_mining import NusaTranslationBitextMining
 from .nusa_x_bitext_mining import NusaXBitextMining
 from .phinc_bitext_mining import PhincBitextMining
 from .roma_tales_bitext_mining import RomaTalesBitextMining
-from .ru_sci_bench_bitext_mining import RuSciBenchBitextMining
+from .ru_sci_bench_bitext_mining import RuSciBenchBitextMining, RuSciBenchBitextMiningV2
 from .tatoeba_bitext_mining import TatoebaBitextMining
 from .web_faq_bitext_mining import WebFAQBitextMiningQAs, WebFAQBitextMiningQuestions
 
@@ -40,6 +40,7 @@ __all__ = [
     "PhincBitextMining",
     "RomaTalesBitextMining",
     "RuSciBenchBitextMining",
+    "RuSciBenchBitextMiningV2",
     "TatoebaBitextMining",
     "WebFAQBitextMiningQAs",
     "WebFAQBitextMiningQuestions",

@@ -51,6 +51,15 @@ GP_BENCHMARK_ENTRIES = [
                 ),
             ),
             MenuEntry(
+                "Audio",
+                mteb.get_benchmarks(
+                    [
+                        "MAEB(beta)",
+                        "MAEB(beta, audio-only)",
+                    ]
+                ),
+            ),
+            MenuEntry(
                 "Domain-Specific ",
                 mteb.get_benchmarks(
                     [
@@ -71,18 +80,26 @@ GP_BENCHMARK_ENTRIES = [
                         "MTEB(cmn, v1)",
                         "MTEB(deu, v1)",
                         "MTEB(fra, v1)",
-                        "MTEB(jpn, v1)",
+                        "JMTEB(v2)",
                         "MTEB(kor, v1)",
                         "MTEB(nld, v1)",
                         "MTEB(pol, v1)",
-                        "MTEB(rus, v1)",
+                        "MTEB(rus, v1.1)",
                         "MTEB(fas, v2)",
                         "VN-MTEB (vie, v1)",
                     ]
                 )
                 + [
                     MenuEntry(
-                        "Other", mteb.get_benchmarks(["MTEB(eng, v1)", "MTEB(fas, v1)"])
+                        "Other",
+                        mteb.get_benchmarks(
+                            [
+                                "MTEB(eng, v1)",
+                                "MTEB(fas, v1)",
+                                "MTEB(rus, v1)",
+                                "MTEB(jpn, v1)",
+                            ]
+                        ),
                     )
                 ],
             ),

@@ -1,16 +1,99 @@
+from __future__ import annotations
+
 import time
 from functools import wraps
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
+
+VOYAGE_MULTILINGUAL_LANGUAGES = [
+    "afr-Latn",
+    "ara-Arab",
+    "aze-Latn",
+    "bel-Cyrl",
+    "bul-Cyrl",
+    "ben-Beng",
+    "cat-Latn",
+    "ceb-Latn",
+    "ces-Latn",
+    "cym-Latn",
+    "dan-Latn",
+    "deu-Latn",
+    "ell-Grek",
+    "eng-Latn",
+    "spa-Latn",
+    "est-Latn",
+    "eus-Latn",
+    "fas-Arab",
+    "fin-Latn",
+    "fra-Latn",
+    "glg-Latn",
+    "guj-Gujr",
+    "heb-Hebr",
+    "hin-Deva",
+    "hrv-Latn",
+    "hat-Latn",
+    "hun-Latn",
+    "hye-Armn",
+    "ind-Latn",
+    "isl-Latn",
+    "ita-Latn",
+    "jpn-Jpan",
+    "jav-Latn",
+    "kat-Geor",
+    "kaz-Cyrl",
+    "khm-Khmr",
+    "kan-Knda",
+    "kor-Hang",
+    "kir-Cyrl",
+    "lao-Laoo",
+    "lit-Latn",
+    "lav-Latn",
+    "mkd-Cyrl",
+    "mal-Mlym",
+    "mon-Cyrl",
+    "mar-Deva",
+    "msa-Latn",
+    "mya-Mymr",
+    "nep-Deva",
+    "nld-Latn",
+    "nor-Latn",
+    "nob-Latn",
+    "nno-Latn",
+    "pan-Guru",
+    "pol-Latn",
+    "por-Latn",
+    "que-Latn",
+    "ron-Latn",
+    "rus-Cyrl",
+    "sin-Sinh",
+    "slk-Latn",
+    "slv-Latn",
+    "swa-Latn",
+    "tam-Taml",
+    "tel-Telu",
+    "tha-Thai",
+    "tgl-Latn",
+    "tur-Latn",
+    "ukr-Cyrl",
+    "urd-Arab",
+    "vie-Latn",
+    "yor-Latn",
+    "zho-Hans",
+]
 
 VOYAGE_TRAINING_DATA = set(
     # Self-reported (message from VoyageAI member)
@@ -25,6 +108,9 @@ VOYAGE_DTYPE_TRANSLATION = {
 
 # Total token limits per model based on VoyageAI documentation
 VOYAGE_TOTAL_TOKEN_LIMITS = {
+    "voyage-4-large": 120_000,
+    "voyage-4": 320_000,
+    "voyage-4-lite": 1_000_000,
     "voyage-3.5-lite": 1_000_000,
     "voyage-3.5": 320_000,
     "voyage-2": 320_000,
@@ -141,7 +227,7 @@ class VoyageModel(AbsEncoder):
         sentences: list[str],
         batch_size: int,
         input_type: Literal["query", "document"],
-    ) -> np.ndarray:
+    ) -> Array:
         embeddings, index = [], 0
 
         output_dtype = VOYAGE_DTYPE_TRANSLATION.get(
@@ -173,6 +259,7 @@ class VoyageModel(AbsEncoder):
                     model=self._model_name,
                     input_type=input_type,
                     output_dtype=output_dtype,
+                    output_dimension=self.mteb_model_meta.embed_dim,
                 ).embeddings
             )
             pbar.update(len(batch))
@@ -206,8 +293,113 @@ model_prompts = {
     PromptType.document.value: "document",
 }
 
+voyage_4_large_2048d = ModelMeta(
+    name="voyageai/voyage-4-large (embed_dim=2048)",
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-01-15",
+    languages=None,  # supported languages not specified
+    loader=VoyageModel,
+    loader_kwargs=dict(
+        max_tokens=32000,
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=2048,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2026/01/15/voyage-4/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+)
+
+voyage_4 = ModelMeta(
+    name="voyageai/voyage-4",
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-01-15",
+    languages=None,  # supported languages not specified
+    loader=VoyageModel,
+    loader_kwargs=dict(
+        max_tokens=32000,
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2026/01/15/voyage-4/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+)
+
+voyage_4_lite = ModelMeta(
+    name="voyageai/voyage-4-lite",
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-01-15",
+    languages=None,  # supported languages not specified
+    loader=VoyageModel,
+    loader_kwargs=dict(
+        max_tokens=32000,
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2026/01/15/voyage-4/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+)
+
+voyage_4_large = ModelMeta(
+    name="voyageai/voyage-4-large",
+    model_type=["dense"],
+    revision="1",
+    release_date="2026-01-15",
+    languages=None,  # supported languages not specified
+    loader=VoyageModel,
+    loader_kwargs=dict(
+        max_tokens=32000,
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2026/01/15/voyage-4/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+)
+
 voyage_3_large = ModelMeta(
     name="voyageai/voyage-3-large",  # Date of publication of this post https://blog.voyageai.com/2025/01/07/voyage-3-large/
+    model_type=["dense"],
     revision="1",
     release_date="2025-01-07",
     languages=None,  # supported languages not specified
@@ -220,6 +412,7 @@ voyage_3_large = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2025/01/07/voyage-3-large/",
@@ -229,11 +422,13 @@ voyage_3_large = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    superseded_by="voyageai/voyage-4-large",
 )
 
 
 voyage_3_5 = ModelMeta(
     name="voyageai/voyage-3.5",
+    model_type=["dense"],
     revision="1",
     release_date="2025-01-21",
     languages=None,  # supported languages not specified
@@ -246,6 +441,7 @@ voyage_3_5 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2025/05/20/voyage-3-5/",
@@ -255,10 +451,12 @@ voyage_3_5 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    superseded_by="voyageai/voyage-4",
 )
 
 voyage_3_5_int8 = ModelMeta(
     name="voyageai/voyage-3.5 (output_dtype=int8)",
+    model_type=["dense"],
     revision="1",
     release_date="2025-01-21",
     languages=None,  # supported languages not specified
@@ -271,6 +469,7 @@ voyage_3_5_int8 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2025/05/20/voyage-3-5/",
@@ -285,6 +484,7 @@ voyage_3_5_int8 = ModelMeta(
 
 voyage_3_5_binary = ModelMeta(
     name="voyageai/voyage-3.5 (output_dtype=binary)",
+    model_type=["dense"],
     revision="1",
     release_date="2025-01-21",
     languages=None,  # supported languages not specified
@@ -297,6 +497,7 @@ voyage_3_5_binary = ModelMeta(
     embed_dim=1024,  # Same as original after unpacking from bits
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2025/05/20/voyage-3-5/",
@@ -311,6 +512,7 @@ voyage_3_5_binary = ModelMeta(
 
 voyage_large_2_instruct = ModelMeta(
     name="voyageai/voyage-large-2-instruct",
+    model_type=["dense"],
     revision="1",
     release_date="2024-05-05",
     languages=None,  # supported languages not specified
@@ -323,6 +525,7 @@ voyage_large_2_instruct = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/05/05/voyage-large-2-instruct-instruction-tuned-and-rank-1-on-mteb/",
@@ -336,6 +539,7 @@ voyage_large_2_instruct = ModelMeta(
 
 voyage_finance_2 = ModelMeta(
     name="voyageai/voyage-finance-2",
+    model_type=["dense"],
     revision="1",
     release_date="2024-05-30",
     languages=None,  # supported languages not specified
@@ -348,6 +552,7 @@ voyage_finance_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/06/03/domain-specific-embeddings-finance-edition-voyage-finance-2/",
@@ -361,6 +566,7 @@ voyage_finance_2 = ModelMeta(
 
 voyage_law_2 = ModelMeta(
     name="voyageai/voyage-law-2",
+    model_type=["dense"],
     revision="1",
     release_date="2024-04-15",
     languages=None,  # supported languages not specified
@@ -373,6 +579,7 @@ voyage_law_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/04/15/domain-specific-embeddings-and-retrieval-legal-edition-voyage-law-2/",
@@ -386,6 +593,7 @@ voyage_law_2 = ModelMeta(
 
 voyage_code_2 = ModelMeta(
     name="voyageai/voyage-code-2",
+    model_type=["dense"],
     revision="1",
     release_date="2024-01-23",
     languages=None,  # supported languages not specified
@@ -398,6 +606,7 @@ voyage_code_2 = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/01/23/voyage-code-2-elevate-your-code-retrieval/",
@@ -411,6 +620,7 @@ voyage_code_2 = ModelMeta(
 
 voyage_code_3 = ModelMeta(
     name="voyageai/voyage-code-3",
+    model_type=["dense"],
     revision="1",
     release_date="2024-12-04",
     languages=None,  # supported languages not specified
@@ -423,6 +633,7 @@ voyage_code_3 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/12/04/voyage-code-3/",
@@ -437,6 +648,7 @@ voyage_code_3 = ModelMeta(
 
 voyage_large_2 = ModelMeta(
     name="voyageai/voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
+    model_type=["dense"],
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
@@ -449,6 +661,7 @@ voyage_large_2 = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
@@ -462,6 +675,7 @@ voyage_large_2 = ModelMeta(
 
 voyage_2 = ModelMeta(
     name="voyageai/voyage-2",
+    model_type=["dense"],
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
@@ -474,6 +688,7 @@ voyage_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
@@ -486,6 +701,7 @@ voyage_2 = ModelMeta(
 )
 voyage_multilingual_2 = ModelMeta(
     name="voyageai/voyage-multilingual-2",
+    model_type=["dense"],
     revision="1",
     release_date="2024-06-10",
     languages=None,  # supported languages not specified
@@ -498,6 +714,7 @@ voyage_multilingual_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/06/10/voyage-multilingual-2-multilingual-embedding-model/",
@@ -511,6 +728,7 @@ voyage_multilingual_2 = ModelMeta(
 
 voyage_3 = ModelMeta(
     name="voyageai/voyage-3",
+    model_type=["dense"],
     revision="1",
     release_date="2024-09-18",
     languages=None,  # supported languages not specified
@@ -523,6 +741,7 @@ voyage_3 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/09/18/voyage-3/",
@@ -536,6 +755,7 @@ voyage_3 = ModelMeta(
 
 voyage_3_lite = ModelMeta(
     name="voyageai/voyage-3-lite",
+    model_type=["dense"],
     revision="1",
     release_date="2024-09-18",
     languages=None,  # supported languages not specified
@@ -548,6 +768,7 @@ voyage_3_lite = ModelMeta(
     embed_dim=512,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/09/18/voyage-3/",
@@ -557,10 +778,12 @@ voyage_3_lite = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    superseded_by="voyageai/voyage-4-lite",
 )
 
 voyage_3_exp = ModelMeta(
     name="voyageai/voyage-3-m-exp",
+    model_type=["dense"],
     revision="1",
     release_date="2025-01-08",
     languages=["eng-Latn"],
@@ -574,6 +797,7 @@ voyage_3_exp = ModelMeta(
     open_weights=False,
     # from their card https://huggingface.co/voyageai/voyage-3-m-exp#model-information
     n_parameters=int(6918 * 1e6),
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://huggingface.co/voyageai/voyage-3-m-exp",
@@ -642,6 +866,30 @@ voyage_3_exp = ModelMeta(
         "ArxivClusteringP2P.v2",
         "STSBenchmarkMultilingualSTS",  # translated, not trained on
     },
+    public_training_code=None,
+    public_training_data=None,
+)
+
+voyage_4_nano = ModelMeta(
+    loader=sentence_transformers_loader,
+    loader_kwargs={"trust_remote_code": True},
+    name="voyageai/voyage-4-nano",
+    model_type=["dense"],
+    revision="29e841f72aa70c2802a92aff8c6eeb23229591b0",
+    release_date="2026-01-15",
+    languages=VOYAGE_MULTILINGUAL_LANGUAGES,
+    open_weights=True,
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    n_parameters=346_451_968,
+    n_embedding_parameters=155_582_464,
+    memory_usage_mb=661,
+    max_tokens=32000,
+    embed_dim=2048,
+    license="apache-2.0",
+    reference="https://huggingface.co/voyageai/voyage-4-nano",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
 )

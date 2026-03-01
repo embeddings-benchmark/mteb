@@ -1,14 +1,19 @@
+from __future__ import annotations
+
 import hashlib
+from typing import TYPE_CHECKING, Any
 
-from PIL import Image
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
-from mteb.types import BatchedInput
+    from PIL import Image
 
 
-def _hash_item(item: BatchedInput) -> str:
+def _hash_item(item: Mapping[str, Any]) -> str:
     item_hash = ""
     if "text" in item:
-        item_hash = hashlib.sha256(item["text"].encode()).hexdigest()
+        item_text: str = item["text"]
+        item_hash = hashlib.sha256(item_text.encode()).hexdigest()
 
     if "image" in item:
         image: Image.Image = item["image"]

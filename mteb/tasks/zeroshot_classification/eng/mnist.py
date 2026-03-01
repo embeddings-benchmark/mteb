@@ -10,8 +10,8 @@ class MNISTZeroShotClassification(AbsTaskZeroShotClassification):
         description="Classifying handwritten digits.",
         reference="https://en.wikipedia.org/wiki/MNIST_database",
         dataset={
-            "path": "ylecun/mnist",
-            "revision": "77f3279092a1c1579b2250db8eafed0ad422088c",
+            "path": "mteb/mnist",
+            "revision": "cf6afcbae72cc3bb1fc07a9480fe0d8e0b615fcd",
         },
         type="ZeroShotClassification",
         category="i2t",

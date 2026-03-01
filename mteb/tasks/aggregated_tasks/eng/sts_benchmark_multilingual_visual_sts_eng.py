@@ -1,10 +1,10 @@
-from mteb.abstasks.abstask import AbsTask
-from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
+from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.tasks.sts.multilingual.sts_benchmark_multilingual_visual_sts import (
     STSBenchmarkMultilingualVisualSTS,
 )
 
-task_list_stsb: list[AbsTask] = [
+task_list_stsb = [
     STSBenchmarkMultilingualVisualSTS().filter_languages(
         languages=["eng"], hf_subsets=["en"]
     )

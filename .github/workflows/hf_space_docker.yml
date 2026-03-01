@@ -1,0 +1,73 @@
+name: Build HF Space Docker Image
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'Dockerfile.hf-space'
+      - '.github/workflows/hf_space_docker.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'Dockerfile.hf-space'
+      - '.github/workflows/hf_space_docker.yml'
+  workflow_dispatch:
+
+jobs:
+  build-hf-space:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build HF Space Docker image
+      run: |
+        docker build -f Dockerfile.hf-space -t mteb-hf-space:test .
+        echo "✅ Docker image built successfully"
+
+    - name: Test Docker image
+      run: |
+        # Test that the image can be created and the container starts
+        docker run -d --name mteb-test -p 7860:7860 mteb-hf-space:test
+        
+        # Give the container a moment to start
+        sleep 5
+        
+        # Check if container is running
+        if docker ps | grep -q mteb-test; then
+          echo "✅ Container is running"
+          docker logs mteb-test
+        else
+          echo "❌ Container failed to start"
+          docker logs mteb-test
+          exit 1
+        fi
+        
+        # Clean up
+        docker stop mteb-test
+        docker rm mteb-test
+
+    - name: Validate HF Space configuration
+      run: |
+        # Check that required environment variables and ports are set
+        docker run --rm mteb-hf-space:test sh -c '
+          if [ "$GRADIO_SERVER_NAME" = "0.0.0.0" ]; then
+            echo "✅ GRADIO_SERVER_NAME is correctly set"
+          else
+            echo "❌ GRADIO_SERVER_NAME is not set to 0.0.0.0"
+            exit 1
+          fi
+        '
+        
+        # Check exposed port
+        EXPOSED_PORT=$(docker inspect mteb-hf-space:test --format='{{range $key, $value := .Config.ExposedPorts}}{{$key}}{{end}}' | grep -o '7860')
+        if [ "$EXPOSED_PORT" = "7860" ]; then
+          echo "✅ Port 7860 is exposed"
+        else
+          echo "❌ Port 7860 is not exposed"
+          exit 1
+        fi

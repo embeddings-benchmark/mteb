@@ -48,18 +48,18 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
             "path": "code-rag-bench/programming-solutions",
             "revision": "1064f7bba54d5400d4836f5831fe4c2332a566a6",
         },
-        **common_args,  # type: ignore
+        **common_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
@@ -71,7 +71,7 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
         self.queries = {}
 
         split = self.metadata.eval_splits[0]
-        ds: datasets.Dataset = self.dataset[split]  # type: ignore
+        ds: datasets.Dataset = self.dataset[split]
         ds = ds.shuffle(seed=42)
 
         self.queries[split] = {}
@@ -105,18 +105,18 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
             "path": "code-rag-bench/online-tutorials",
             "revision": "095bb77130082e4690d6c3a031997b03487bf6e2",
         },
-        **common_args,  # type: ignore
+        **common_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
@@ -128,7 +128,7 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
         self.queries = {}
 
         split = self.metadata.eval_splits[0]
-        ds: datasets.Dataset = self.dataset[split]  # type: ignore
+        ds: datasets.Dataset = self.dataset[split]
         ds = ds.shuffle(seed=42)
 
         self.queries[split] = {}
@@ -165,18 +165,18 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
             "path": "code-rag-bench/library-documentation",
             "revision": "b530d3b5a25087d2074e731b76232db85b9e9107",
         },
-        **common_args,  # type: ignore
+        **common_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
@@ -188,7 +188,7 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
         self.queries = {}
 
         split = self.metadata.eval_splits[0]
-        ds: datasets.Dataset = self.dataset[split]  # type: ignore
+        ds: datasets.Dataset = self.dataset[split]
         ds = ds.shuffle(seed=42)
 
         self.queries[split] = {}
@@ -222,18 +222,18 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
             "path": "code-rag-bench/stackoverflow-posts",
             "revision": "04e05d86cb0ac467b29a5d87f4c56eac99dfc0a4",
         },
-        **common_args,  # type: ignore
+        **common_args,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
@@ -245,7 +245,7 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         self.queries = {}
 
         split = self.metadata.eval_splits[0]
-        ds: datasets.Dataset = self.dataset[split]  # type: ignore
+        ds: datasets.Dataset = self.dataset[split]
         ds = ds.shuffle(seed=42)
 
         self.queries[split] = {}

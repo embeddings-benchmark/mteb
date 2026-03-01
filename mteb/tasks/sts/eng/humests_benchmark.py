@@ -17,7 +17,7 @@ class HUMESTSBenchmark(AbsTaskSTS):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cosine_spearman",
-        date=None,
+        date=("2021-01-01", "2021-12-31"),  # publication year
         domains=["Blog", "News", "Written"],
         task_subtypes=[],
         license="not specified",

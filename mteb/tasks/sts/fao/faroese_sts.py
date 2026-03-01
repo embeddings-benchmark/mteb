@@ -6,8 +6,8 @@ class FaroeseSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="FaroeseSTS",
         dataset={
-            "path": "vesteinn/faroese-sts",
-            "revision": "8cb36efa69428b3dc290e1125995a999963163c5",
+            "path": "mteb/FaroeseSTS",
+            "revision": "06d4ff0e5366136f3bdce1307b7d220674c45a13",
         },
         description="Semantic Text Similarity (STS) corpus for Faroese.",
         reference="https://aclanthology.org/2023.nodalida-1.74.pdf",
@@ -42,6 +42,3 @@ Vulić, Ivan},
 
     min_score = 0
     max_score = 5
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_column("label", "score")

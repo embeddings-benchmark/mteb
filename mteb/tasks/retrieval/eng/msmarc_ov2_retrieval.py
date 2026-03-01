@@ -17,7 +17,7 @@ class MSMARCOv2(AbsTaskRetrieval):
         eval_splits=["train", "dev", "dev2"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("2016-01-01", "2016-12-31"),  # publication year
         domains=[
             "Encyclopaedic",
             "Academic",

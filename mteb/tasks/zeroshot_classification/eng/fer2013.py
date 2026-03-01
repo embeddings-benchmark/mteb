@@ -10,8 +10,8 @@ class FER2013ZeroShotClassification(AbsTaskZeroShotClassification):
         description="Classifying facial emotions.",
         reference="https://arxiv.org/abs/1412.6572",
         dataset={
-            "path": "clip-benchmark/wds_fer2013",
-            "revision": "9399b94167523fe5c40b3a857e24ef931ee4395b",
+            "path": "mteb/wds_fer2013",
+            "revision": "d9cabab388cb32bc071a1601ef68cb2f70ca0ba7",
         },
         type="ZeroShotClassification",
         category="i2t",

@@ -27,8 +27,8 @@ class ImageCoDe(AbsTaskImageTextPairClassification):
         description="Identify the correct image from a set of similar images based on a precise caption.",
         reference="https://aclanthology.org/2022.acl-long.241.pdf",
         dataset={
-            "path": "JamieSJS/imagecode-multi",
-            "revision": "d28adfd8b34fefa546fdf94bdc352622b2575f6c",
+            "path": "mteb/imagecode-multi",
+            "revision": "0a27b28e13841897d490a40fb88a003f04d7e314",
         },
         type="Compositionality",
         category="it2i",
@@ -53,7 +53,7 @@ class ImageCoDe(AbsTaskImageTextPairClassification):
 """,
     )
 
-    def load_data(self) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         if self.data_loaded:
             return
 

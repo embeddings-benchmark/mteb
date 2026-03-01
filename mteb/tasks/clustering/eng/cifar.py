@@ -8,8 +8,8 @@ class CIFAR10Clustering(AbsTaskClusteringLegacy):
         description="Clustering images from 10 classes.",
         reference="https://huggingface.co/datasets/uoft-cs/cifar10",
         dataset={
-            "path": "uoft-cs/cifar10",
-            "revision": "0b2714987fa478483af9968de7c934580d0bb9a2",
+            "path": "mteb/cifar10",
+            "revision": "69a62dd171e24a133d193073e73fda4dbb823266",
         },
         type="ImageClustering",
         category="i2c",
@@ -47,8 +47,8 @@ class CIFAR100Clustering(AbsTaskClusteringLegacy):
         description="Clustering images from 100 classes.",
         reference="https://huggingface.co/datasets/uoft-cs/cifar100",
         dataset={
-            "path": "uoft-cs/cifar100",
-            "revision": "aadb3af77e9048adbea6b47c21a81e47dd092ae5",
+            "path": "mteb/cifar100",
+            "revision": "ac5511f885f65fb75d31a9d8810a8440913f7721",
         },
         type="ImageClustering",
         category="i2t",

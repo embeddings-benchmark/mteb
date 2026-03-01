@@ -1,0 +1,54 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
+
+
+class ESC50AudioReranking(AbsTaskRetrieval):
+    """ESC-50 dataset adapted for audio reranking task.
+
+    The Environmental Sound Classification 50 (ESC-50) dataset consists of 2000 environmental audio recordings
+    suitable for benchmarking methods for environmental sound classification. This version is adapted for
+    audio reranking where given a query audio from one of 50 environmental sound classes, the task is to
+    rank positive audio samples (same class) higher than negative samples (different classes).
+
+    Each query has 5 positive examples (same environmental sound class) and 16 negative examples
+    (different environmental sound classes), creating a challenging audio-to-audio retrieval scenario
+    with 21 total candidates per query. The dataset contains 200 queries providing robust evaluation
+    across all 50 environmental sound categories.
+    """
+
+    metadata = TaskMetadata(
+        name="ESC50AudioReranking",
+        description="ESC-50 environmental sound dataset adapted for audio reranking. Given a query audio of environmental sounds, rank 5 relevant audio samples higher than 16 irrelevant ones from different sound classes. Contains 200 queries across 50 environmental sound categories for robust evaluation.",
+        reference="https://github.com/karolpiczak/ESC-50",
+        dataset={
+            "path": "mteb/ESC50AudioReranking",
+            "revision": "eff5c3112d71c4038377656f4d3ccb755fb7265f",
+        },
+        type="AudioReranking",
+        category="a2a",
+        modalities=["audio"],
+        eval_splits=["test"],
+        eval_langs=["zxx-Zxxx"],
+        main_score="map_at_1000",
+        date=("2015-01-01", "2015-12-31"),
+        domains=["AudioScene"],
+        task_subtypes=["Environment Sound Reranking"],
+        license="cc-by-3.0",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{piczak2015dataset,
+  author = {Piczak, Karol J.},
+  booktitle = {Proceedings of the 23rd {Annual ACM Conference} on {Multimedia}},
+  date = {2015-10-13},
+  doi = {10.1145/2733373.2806390},
+  isbn = {978-1-4503-3459-4},
+  location = {{Brisbane, Australia}},
+  pages = {1015--1018},
+  publisher = {{ACM Press}},
+  title = {{ESC}: {Dataset} for {Environmental Sound Classification}},
+  url = {http://dl.acm.org/citation.cfm?doid=2733373.2806390},
+}
+""",
+    )

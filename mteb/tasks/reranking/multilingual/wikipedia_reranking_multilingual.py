@@ -44,7 +44,7 @@ class WikipediaRerankingMultilingual(AbsTaskRetrieval):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=r"""
-@online{wikidump,
+@online{wikidump2024,
   author = {Wikimedia Foundation},
   title = {Wikimedia Downloads},
   url = {https://dumps.wikimedia.org},

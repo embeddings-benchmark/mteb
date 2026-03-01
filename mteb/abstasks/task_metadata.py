@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import json
 import logging
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 from huggingface_hub import (
     DatasetCard,
@@ -16,13 +18,11 @@ from pydantic import (
     ConfigDict,
     field_validator,
 )
-from typing_extensions import Required, TypedDict
+from typing_extensions import Required, TypedDict  # noqa: TC002
 
 import mteb
 from mteb.languages import check_language_code
 from mteb.types import (
-    HFSubset,
-    ISOLanguageScript,
     Languages,
     Licenses,
     Modalities,
@@ -30,7 +30,17 @@ from mteb.types import (
     StrDate,
     StrURL,
 )
-from mteb.types.statistics import DescriptiveStatistics
+
+if TYPE_CHECKING:
+    from huggingface_hub import (
+        CardData,
+    )
+
+    from mteb.types import (
+        HFSubset,
+        ISOLanguageScript,
+    )
+    from mteb.types.statistics import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +80,45 @@ TaskSubtype = Literal[
     "Duplicate Detection",
     "Rendered semantic textual similarity",
     "Intent classification",
+    "Product Reranking",
+    "Query-Product Relevance",
+    "Accent identification",
+    "Environment Sound Classification",
+    "Gunshot Audio Classification",
+    "Keyword Spotting",
+    "Instrument Source Classification",
+    "Music Genre Classification",
+    "Music Instrument Recognition",
+    "Spoken Language Identification",
+    "Stroke Classification of Musical Instrument",
+    "Tonic Classification of Musical Instrument",
+    "Speaker Count Identification",
+    "Species Classification",
+    "Spoken Digit Classification",
+    "Gender Clustering",
+    "Vocal Sound Classification",
+    "Music Clustering",
+    "Accent Clustering",
+    "Sentiment Clustering",
+    "Emotion Clustering",
+    "Sentiment Analysis",
+    "Vehicle Clustering",
+    "Environment Sound Clustering",
+    "Environment Sound Reranking",
+    "Emotion Reranking",
+    "Music Genre Reranking",
+    "Gender Classification",
+    "Age Classification",
+    "Song Lyrics Retrieval",
+    "Natural Sound Retrieval",
+    "Music Caption Retrieval",
+    "Speech Transcription Retrieval",
+    "Emotional Speech Retrieval",
+    "Environment Sound Retrieval",
+    "Speech Retrieval",
+    "Question Answering Retrieval",
+    "Reading Comprehension",
+    "Intent Classification",
 ]
 """The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". This list can be updated as needed."""
 
@@ -98,6 +147,12 @@ TaskDomain = Literal[
     "Chemistry",
     "Financial",
     "Entertainment",
+    "E-commerce",
+    "AudioScene",
+    "Speech",
+    "Spoken",
+    "Music",
+    "Bioacoustics",
 ]
 """
 The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though
@@ -135,22 +190,38 @@ MIEB_TASK_TYPE = (
     "Compositionality",
 )
 
-_TASK_TYPE = (
-    "BitextMining",
-    "Classification",
-    "MultilabelClassification",
-    "Clustering",
-    "PairClassification",
-    "Regression",
-    "Reranking",
-    "Retrieval",
-    "STS",
-    "Summarization",
-    "InstructionRetrieval",
-    "InstructionReranking",
-) + MIEB_TASK_TYPE
+MAEB_TASK_TYPE = (
+    "AudioClustering",
+    "AudioMultilabelClassification",
+    "AudioReranking",
+    "AudioZeroshotClassification",
+    "AudioClassification",
+    "AudioCrossFoldClassification",
+    "AudioPairClassification",
+    "Any2AnyRetrieval",
+)
 
-TaskType = Literal[_TASK_TYPE]
+
+_TASK_TYPE = (
+    (
+        "BitextMining",
+        "Classification",
+        "MultilabelClassification",
+        "Clustering",
+        "PairClassification",
+        "Regression",
+        "Reranking",
+        "Retrieval",
+        "STS",
+        "Summarization",
+        "InstructionRetrieval",
+        "InstructionReranking",
+    )
+    + MIEB_TASK_TYPE
+    + MAEB_TASK_TYPE
+)
+
+TaskType = Literal[_TASK_TYPE]  # type: ignore[valid-type]
 """The type of the task. E.g. includes "Classification", "Retrieval" and "Clustering"."""
 
 
@@ -166,6 +237,15 @@ TaskCategory = Literal[
     "i2it",
     "t2it",
     "it2it",
+    "a2a",
+    "a2c",
+    "a2t",
+    "t2a",
+    "at2t",
+    "at2a",
+    "a2at",
+    "t2at",
+    "at2at",
 ]
 """The category of the task.
 
@@ -180,6 +260,15 @@ TaskCategory = Literal[
 9. i2it: image to image+text
 10. t2it: text to image+text
 11. it2it: image+text to image+text
+12. a2a: audio to audio
+13. a2c: audio to category
+14. a2t: audio to text
+15. t2a: text to audio
+16. at2t: audio+text to text
+17. at2a: audio+text to audio
+18. a2at: audio to audio+text
+19. t2at: text to audio+text
+20. at2at: audio+text to audio+text
 """
 
 AnnotatorType = Literal[
@@ -188,12 +277,17 @@ AnnotatorType = Literal[
     "derived",
     "LM-generated",
     "LM-generated and reviewed",  # reviewed by humans
+    "automatic",  # any postprocessing using (Audio/Image/Video) models
+    "automatic-and-reviewed",  # mix of automated postprocessing and human-based verification
+    "algorithmic",
 ]
 """The type of the annotators. Is often important for understanding the quality of a dataset."""
 
 
-PromptDict = TypedDict(
-    "PromptDict", {prompt_type.value: str for prompt_type in PromptType}, total=False
+PromptDict = TypedDict(  # type: ignore[misc]
+    "PromptDict",
+    {prompt_type.value: str for prompt_type in PromptType},
+    total=False,
 )
 """A dictionary containing the prompt used for the task.
 
@@ -365,7 +459,7 @@ class TaskMetadata(BaseModel):
         """Return a dictionary mapping huggingface subsets to languages."""
         if isinstance(self.eval_langs, dict):
             return self.eval_langs
-        return {"default": self.eval_langs}  # type: ignore
+        return {"default": cast("list[str]", self.eval_langs)}
 
     @property
     def intext_citation(self, include_cite: bool = True) -> str:
@@ -376,9 +470,8 @@ class TaskMetadata(BaseModel):
         if include_cite and cite:
             # check for whitespace in the citation
             if " " in cite:
-                logger.warning(
-                    "Citation contains whitespace. Please ensure that the citation is correctly formatted."
-                )
+                msg = "Citation contains whitespace. Please ensure that the citation is correctly formatted."
+                logger.warning(msg)
             return f"\\cite{{{cite}}}"
         return cite
 
@@ -414,7 +507,7 @@ class TaskMetadata(BaseModel):
         for subset, subset_value in stats.items():
             if subset == "hf_subset_descriptive_stats":
                 continue
-            n_samples[subset] = subset_value["num_samples"]  # type: ignore
+            n_samples[subset] = subset_value["num_samples"]
         return n_samples
 
     @property
@@ -447,12 +540,13 @@ class TaskMetadata(BaseModel):
         Raises:
             ValueError: If the prompt type is not recognized.
         """
-        if prompt_type is None:
+        if prompt_type is None or self.category is None:
             return self.modalities
         query_modalities, doc_modalities = self.category.split("2")
         category_to_modality: dict[str, Modalities] = {
             "t": "text",
             "i": "image",
+            "a": "audio",
         }
         if prompt_type == PromptType.query:
             return [
@@ -467,7 +561,7 @@ class TaskMetadata(BaseModel):
 
     def _create_dataset_card_data(
         self,
-        existing_dataset_card_data: DatasetCardData | None = None,
+        existing_dataset_card_data: CardData | None = None,
     ) -> tuple[DatasetCardData, dict[str, Any]]:
         """Create a DatasetCardData object from the task metadata.
 
@@ -483,7 +577,6 @@ class TaskMetadata(BaseModel):
         dataset_type = [
             *self._hf_task_type(),
             *self._hf_task_category(),
-            *self._hf_subtypes(),
         ]
         languages = self._hf_languages()
 
@@ -502,12 +595,13 @@ class TaskMetadata(BaseModel):
 
         tags = ["mteb"] + self.modalities
 
-        descriptive_stats = self.descriptive_stats
-        if descriptive_stats is not None:
-            for split, split_stat in descriptive_stats.items():
+        descriptive_stats = ""
+        if self.descriptive_stats is not None:
+            descriptive_stats_ = self.descriptive_stats
+            for split, split_stat in descriptive_stats_.items():
                 if len(split_stat.get("hf_subset_descriptive_stats", {})) > 10:
                     split_stat.pop("hf_subset_descriptive_stats", {})
-            descriptive_stats = json.dumps(descriptive_stats, indent=4)
+            descriptive_stats = json.dumps(descriptive_stats_, indent=4)
 
         dataset_card_data_params = existing_dataset_card_data.to_dict()
         # override the existing values
@@ -584,10 +678,8 @@ class TaskMetadata(BaseModel):
 
     def _hf_subtypes(self) -> list[str]:
         # to get full list of available task_ids execute
-        # requests.post("https://huggingface.co/api/validate-yaml", json={
-        #   "content": "---\ntask_ids: 'test'\n---",
-        #   "repoType": "dataset"
-        # })
+        # https://huggingface.co/api/datasets-tags-by-type?type=task_ids
+        # ref https://huggingface-openapi.hf.space/#tag/datasets/GET/api/datasets-tags-by-type
         mteb_to_hf_subtype = {
             "Article retrieval": ["document-retrieval"],
             "Conversational retrieval": ["conversational", "utterance-retrieval"],
@@ -609,7 +701,7 @@ class TaskMetadata(BaseModel):
                 "hate-speech-detection",
             ],
             "Thematic clustering": [],
-            "Scientific Reranking": [],
+            "Scientific Reranking": ["text-scoring"],
             "Claim verification": ["fact-checking", "fact-checking-retrieval"],
             "Topic classification": ["topic-classification"],
             "Code retrieval": [],
@@ -617,25 +709,61 @@ class TaskMetadata(BaseModel):
             "Cross-Lingual Semantic Discrimination": [],
             "Textual Entailment": ["natural-language-inference"],
             "Counterfactual Detection": [],
-            "Emotion classification": [],
+            "Emotion classification": ["sentiment-classification"],
             "Reasoning as Retrieval": [],
             "Rendered Texts Understanding": [],
             "Image Text Retrieval": [],
             "Object recognition": [],
             "Scene recognition": [],
             "Caption Pairing": ["image-captioning"],
-            "Emotion recognition": [],
+            "Emotion recognition": ["sentiment-scoring"],
             "Textures recognition": [],
             "Activity recognition": [],
             "Tumor detection": [],
             "Duplicate Detection": [],
             "Rendered semantic textual similarity": [
                 "semantic-similarity-scoring",
-                "rendered semantic textual similarity",
+                "semantic-similarity-classification",
             ],
             "Intent classification": [
                 "intent-classification",
             ],
+            "Accent identification": [],
+            "Environment Sound Classification": [],
+            "Gunshot Audio Classification": [],
+            "Keyword Spotting": [],
+            "Instrument Source Classification": [],
+            "Music Genre Classification": [],
+            "Music Instrument Recognition": [],
+            "Spoken Language Identification": [],
+            "Stroke Classification of Musical Instrument": [],
+            "Tonic Classification of Musical Instrument": [],
+            "Speaker Count Identification": [],
+            "Species Classification": [],
+            "Spoken Digit Classification": [],
+            "Gender Clustering": [],
+            "Vocal Sound Classification": [],
+            "Music Clustering": [],
+            "Accent Clustering": [],
+            "Sentiment Clustering": [],
+            "Emotion Clustering": ["audio-emotion-recognition"],
+            "Sentiment Analysis": [],
+            "Vehicle Clustering": [],
+            "Environment Sound Clustering": [],
+            "Environment Sound Reranking": [],
+            "Emotion Reranking": ["audio-emotion-recognition"],
+            "Music Genre Reranking": [],
+            "Gender Classification": [],
+            "Age Classification": [],
+            "Song Lyrics Retrieval": [],
+            "Natural Sound Retrieval": [],
+            "Music Caption Retrieval": [],
+            "Speech Transcription Retrieval": [],
+            "Emotional Speech Retrieval": ["audio-emotion-recognition"],
+            "Environment Sound Retrieval": [],
+            "Speech Retrieval": [],
+            "Question Answering Retrieval": [],
+            "Reading Comprehension": [],
         }
         subtypes = []
         if self.task_subtypes:
@@ -645,10 +773,8 @@ class TaskMetadata(BaseModel):
 
     def _hf_task_type(self) -> list[str]:
         # to get full list of task_types execute:
-        # requests.post("https://huggingface.co/api/validate-yaml", json={
-        #     "content": "---\ntask_categories: ['test']\n---", "repoType": "dataset"
-        # }).json()
-        # or look at https://huggingface.co/tasks
+        # https://huggingface.co/api/datasets-tags-by-type?type=task_categories
+        # ref https://huggingface-openapi.hf.space/#tag/datasets/GET/api/datasets-tags-by-type
         mteb_task_type_to_datasets = {
             # Text
             "BitextMining": ["translation"],
@@ -664,10 +790,9 @@ class TaskMetadata(BaseModel):
             "InstructionReranking": ["text-ranking"],
             # Image
             "Any2AnyMultiChoice": ["visual-question-answering"],
-            "Any2AnyRetrieval": ["visual-document-retrieval"],
             "Any2AnyMultilingualRetrieval": ["visual-document-retrieval"],
             "VisionCentricQA": ["visual-question-answering"],
-            "ImageClustering": ["image-clustering"],
+            "ImageClustering": ["image-feature-extraction"],
             "ImageClassification": ["image-classification"],
             "ImageMultilabelClassification": ["image-classification"],
             "DocumentUnderstanding": ["visual-document-retrieval"],
@@ -675,11 +800,24 @@ class TaskMetadata(BaseModel):
             "VisualSTS(multi)": ["other"],
             "ZeroShotClassification": ["zero-shot-classification"],
             "Compositionality": ["other"],
+            # audio
+            "AudioClustering": ["audio-classification"],
+            "AudioMultilabelClassification": ["audio-classification"],
+            "AudioReranking": ["other"],
+            "AudioZeroshotClassification": ["other"],
+            "AudioClassification": ["audio-classification"],
+            "AudioCrossFoldClassification": ["audio-classification"],
+            "AudioPairClassification": ["audio-classification"],
         }
         if self.type == "ZeroShotClassification":
             if self.modalities == ["image"]:
                 return ["zero-shot-image-classification"]
             return ["zero-shot-classification"]
+
+        if self.type == "Any2AnyRetrieval":
+            if self.modalities == ["image"]:
+                return ["visual-document-retrieval"]
+            return ["other"]
 
         return mteb_task_type_to_datasets[self.type]
 
@@ -691,15 +829,19 @@ class TaskMetadata(BaseModel):
             dataset_type.extend(["image-to-text", "text-to-image"])
         if self.category in ["it2t", "it2i", "t2it", "i2it", "it2it"]:
             dataset_type.extend(["image-text-to-text"])
+        if self.category in ["a2a", "at2a", "a2at", "at2at"]:
+            dataset_type.append("audio-to-audio")
+        if self.category in ["a2t", "t2a", "at2t", "t2at", "at2at", "a2at"]:
+            dataset_type.extend(["text-to-audio"])
         return dataset_type
 
     def _hf_languages(self) -> list[str]:
         languages: list[str] = []
-        if self.is_multilingual:
-            for val in list(self.eval_langs.values()):
+        if self.is_multilingual and isinstance(self.eval_langs, dict):
+            for val in self.eval_langs.values():
                 languages.extend(val)
         else:
-            languages = self.eval_langs
+            languages = cast("list[str]", self.eval_langs)
         # value "python" is not valid. It must be an ISO 639-1, 639-2 or 639-3 code (two/three letters),
         # or a special value like "code", "multilingual".
         readme_langs = []
@@ -711,7 +853,7 @@ class TaskMetadata(BaseModel):
                 readme_langs.append(lang_name)
         return sorted(set(readme_langs))
 
-    def _hf_license(self) -> str:
+    def _hf_license(self) -> str | None:
         dataset_license = self.license
         if dataset_license:
             license_mapping = {

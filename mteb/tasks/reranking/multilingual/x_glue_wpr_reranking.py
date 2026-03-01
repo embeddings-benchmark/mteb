@@ -26,18 +26,27 @@ _CITATION = r"""
   year = {2019},
 }
 
-@inproceedings{Conneau2018XNLIEC,
-  author = {Alexis Conneau and Guillaume Lample and Ruty Rinott and Adina Williams and Samuel R. Bowman and Holger Schwenk and Veselin Stoyanov},
-  booktitle = {EMNLP},
+@inproceedings{conneau2018xnli,
+  author = {Conneau, Alexis
+and Rinott, Ruty
+and Lample, Guillaume
+and Williams, Adina
+and Bowman, Samuel R.
+and Schwenk, Holger
+and Stoyanov, Veselin},
+  booktitle = {Proceedings of the 2018 Conference on Empirical Methods
+in Natural Language Processing},
+  location = {Brussels, Belgium},
+  publisher = {Association for Computational Linguistics},
   title = {XNLI: Evaluating Cross-lingual Sentence Representations},
   year = {2018},
 }
 
-@article{Lewis2019MLQAEC,
-  author = {Patrick Lewis and Barlas Oguz and Ruty Rinott and Sebastian Riedel and Holger Schwenk},
-  journal = {ArXiv},
+@article{lewis2019mlqa,
+  author = {Lewis, Patrick and Oguz, Barlas and Rinott, Ruty and Riedel, Sebastian and Schwenk, Holger},
+  eid = {arXiv: 1910.07475},
+  journal = {arXiv preprint arXiv:1910.07475},
   title = {MLQA: Evaluating Cross-lingual Extractive Question Answering},
-  volume = {abs/1910.07475},
   year = {2019},
 }
 
@@ -65,11 +74,12 @@ _CITATION = r"""
   year = {2003},
 }
 
-@article{Yang2019PAWSXAC,
+@misc{yang2019pawsx,
+  archiveprefix = {arXiv},
   author = {Yinfei Yang and Yuan Zhang and Chris Tar and Jason Baldridge},
-  journal = {ArXiv},
+  eprint = {1908.11828},
+  primaryclass = {cs.CL},
   title = {PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification},
-  volume = {abs/1908.11828},
   year = {2019},
 }
 """

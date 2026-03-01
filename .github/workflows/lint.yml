@@ -11,15 +11,40 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Free disk space
+        run: |
+          sudo rm -rf \
+            "$AGENT_TOOLSDIRECTORY" \
+            /opt/ghc \
+            /opt/google/chrome \
+            /opt/microsoft/msedge \
+            /opt/microsoft/powershell \
+            /opt/pipx \
+            /usr/lib/mono \
+            /usr/local/julia* \
+            /usr/local/lib/android \
+            /usr/local/lib/node_modules \
+            /usr/local/share/chromium \
+            /usr/local/share/powershell \
+            /usr/local/share/powershell \
+            /usr/share/dotnet \
+            /usr/share/swift
+          docker system prune -af
 
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.10"
-          cache: "pip"
 
       - name: Install dependencies
-        run: make install
+        run: |
+          make install
 
       - name: Lint
         id: lint

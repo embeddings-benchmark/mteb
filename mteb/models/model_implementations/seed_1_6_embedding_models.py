@@ -1,23 +1,30 @@
+from __future__ import annotations
+
 import base64
 import logging
 import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from io import BytesIO
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import requests
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 
 from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.bge_models import bge_chinese_training_data
 from mteb.models.model_implementations.nvidia_models import nvidia_training_datasets
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from PIL import Image
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput
+
 
 logger = logging.getLogger(__name__)
 
@@ -408,6 +415,7 @@ TASK_NAME_TO_INSTRUCTION = {
 
 seed_embedding = ModelMeta(
     name="Bytedance/Seed1.6-embedding",
+    model_type=["dense"],
     revision="1",
     release_date="2025-06-18",
     languages=[
@@ -423,6 +431,7 @@ seed_embedding = ModelMeta(
     embed_dim=2048,
     open_weights=False,
     n_parameters=None,
+    n_embedding_parameters=None,
     memory_usage_mb=None,
     license=None,
     reference="https://seed1-6-embedding.github.io/",
