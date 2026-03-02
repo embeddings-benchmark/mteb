@@ -497,7 +497,7 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
 }""",
 )
 
-lightonai__LateOn_Code_pretrain = ModelMeta(
+lightonai__late_on_code_pretrain = ModelMeta(
     loader=MultiVectorModel,
     name="lightonai/LateOn-Code-pretrain",
     model_type=["late-interaction"],
@@ -539,7 +539,7 @@ lightonai__LateOn_Code_pretrain = ModelMeta(
 )
 
 
-lightonai__LateOn_Code = ModelMeta(
+lightonai__late_on_code = ModelMeta(
     loader=MultiVectorModel,
     name="lightonai/LateOn-Code",
     model_type=["late-interaction"],
@@ -581,7 +581,7 @@ lightonai__LateOn_Code = ModelMeta(
 }""",
 )
 
-lightonai__LateOn_Code_edge_pretrain = ModelMeta(
+lightonai__late_on_code_edge_pretrain = ModelMeta(
     loader=MultiVectorModel,
     name="lightonai/LateOn-Code-edge-pretrain",
     model_type=["late-interaction"],
@@ -629,7 +629,7 @@ lightonai__LateOn_Code_edge_pretrain = ModelMeta(
 )
 
 
-lightonai__LateOn_Code_edge = ModelMeta(
+lightonai__late_on_code_edge = ModelMeta(
     loader=MultiVectorModel,
     name="lightonai/LateOn-Code-edge",
     model_type=["late-interaction"],
