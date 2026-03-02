@@ -141,39 +141,8 @@ aiteamvn_vietnamese_embeddings = ModelMeta(
 }""",
 )
 
-hiieu_halong_embedding = ModelMeta(
-    name="hiieu/halong_embedding",
-    model_type=["dense"],
-    revision="b57776031035f70ed2030d2e35ecc533eb0f8f71",
-    release_date="2024-07-06",
-    languages=[
-        "vie-Latn",
-    ],
-    loader=sentence_transformers_loader,
-    use_instructions=False,
-    open_weights=True,
-    n_parameters=278043648,
-    n_embedding_parameters=192_001_536,
-    memory_usage_mb=1061,
-    embed_dim=768,
-    license="apache-2.0",
-    max_tokens=514,
-    reference="https://huggingface.co/hiieu/halong_embedding",
-    similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch", "safetensors"],
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets=None,
-    adapted_from="intfloat/multilingual-e5-base",
-    citation="""@misc{HalongEmbedding,
-  title={HalongEmbedding: A Vietnamese Text Embedding},
-  author={Ngo Hieu},
-  year={2024},
-  publisher={Huggingface},
-}""",
-)
 
-hiieu_halong_embedding = ModelMeta(
+contextboxai_halong_embedding = ModelMeta(
     name="contextboxai/halong_embedding",
     model_type=["dense"],
     revision="b57776031035f70ed2030d2e35ecc533eb0f8f71",
@@ -190,7 +159,7 @@ hiieu_halong_embedding = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     max_tokens=514,
-    reference="https://huggingface.co/hiieu/halong_embedding",
+    reference="https://huggingface.co/contextboxai/halong_embedding",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "safetensors"],
     public_training_code=None,
