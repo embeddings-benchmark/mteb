@@ -48,6 +48,45 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
     )
 
 
+class Vidore3FinanceEnOCRRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3FinanceEnOCRRetrieval",
+        description="Retrieve associated pages according to questions. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "vidore/vidore_v3_finance_en_mteb_format",
+            "revision": "fa78cb14152b3dde8c5defdc4e3ddf50de69dfeb",
+        },
+        type="DocumentUnderstanding",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Financial"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        adapted_from=["Vidore3FinanceEnRetrieval"],
+    )
+
+
 class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceFrRetrieval",
@@ -83,6 +122,46 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+    )
+
+
+class Vidore3FinanceFrOCRRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3FinanceFrOCRRetrieval",
+        description="Retrieve associated pages according to questions. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "vidore/vidore_v3_finance_fr_mteb_format",
+            "revision": "8a2adfda85a7967c7252129703d9b3c7c9f038a9",
+        },
+        type="DocumentUnderstanding",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Financial"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
+        adapted_from=["Vidore3FinanceEnRetrieval"],
     )
 
 
@@ -124,6 +203,46 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
     )
 
 
+class Vidore3IndustrialOCRRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3IndustrialOCRRetrieval",
+        description="Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "vidore/vidore_v3_industrial_mteb_format",
+            "revision": "f732b725cf4a70803210edfe265a04f8bd5328f6",
+        },
+        type="DocumentUnderstanding",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
+        adapted_from=["Vidore3IndustrialRetrieval"],
+    )
+
+
 class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PharmaceuticalsRetrieval",
@@ -159,6 +278,46 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+    )
+
+
+class Vidore3PharmaceuticalsOCRRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3PharmaceuticalsOCRRetrieval",
+        description="Retrieve associated pages according to questions. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "vidore/vidore_v3_pharmaceuticals_mteb_format",
+            "revision": "237ed4f43c7fb3c4df07ec4e9dd0a4366be555b0",
+        },
+        type="DocumentUnderstanding",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Medical"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
+        adapted_from=["Vidore3PharmaceuticalsRetrieval"],
     )
 
 
@@ -200,6 +359,46 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
     )
 
 
+class Vidore3ComputerScienceOCRRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3ComputerScienceOCRRetrieval",
+        description="Retrieve associated pages according to questions. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "vidore/vidore_v3_computer_science_mteb_format",
+            "revision": "fb7fb69f81f7db62790f40494124b8ad22b424ab",
+        },
+        type="DocumentUnderstanding",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering", "Programming"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
+        adapted_from=["Vidore3ComputerScienceRetrieval"],
+    )
+
+
 class Vidore3HrRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3HrRetrieval",
@@ -235,6 +434,46 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+    )
+
+
+class Vidore3HrOCRRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3HrOCRRetrieval",
+        description="Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "vidore/vidore_v3_hr_mteb_format",
+            "revision": "bc7d43d64815ed30f664168c8052106484aba7fd",
+        },
+        type="DocumentUnderstanding",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Social"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
+        adapted_from=["Vidore3HrRetrieval"],
     )
 
 
@@ -276,6 +515,46 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
     )
 
 
+class Vidore3EnergyOCRRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3EnergyOCRRetrieval",
+        description="Retrieve associated pages according to questions. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "vidore/vidore_v3_energy_mteb_format",
+            "revision": "84fca99e5978604bae30f2436eacb6dbaa0532e9",
+        },
+        type="DocumentUnderstanding",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering", "Chemistry", "Academic"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
+        adapted_from=["Vidore3EnergyRetrieval"],
+    )
+
+
 class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PhysicsRetrieval",
@@ -311,6 +590,46 @@ class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+    )
+
+
+class Vidore3PhysicsOCRRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3PhysicsOCRRetrieval",
+        description="Retrieve associated pages according to questions. This dataset, Physics, is a corpus of course slides on french bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "vidore/vidore_v3_physics_mteb_format",
+            "revision": "2c18ef90ab3ef93a9d86ecc6521cdae2a29f8300",
+        },
+        type="DocumentUnderstanding",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering", "Academic"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
+        adapted_from=["Vidore3PhysicsRetrieval"],
     )
 
 
@@ -388,3 +707,6 @@ class Vidore3TelecomRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
     )
+
+
+# TODO: Add the two missing datasets: Vidore3NuclearOCRRetrieval and Vidore3TelecomOCRRetrieval when the OCR data will be ready.
