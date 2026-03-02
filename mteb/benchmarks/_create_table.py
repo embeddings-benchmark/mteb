@@ -50,6 +50,16 @@ def _format_max_tokens(max_tokens: float | None) -> float | None:
     return float(max_tokens)
 
 
+def _get_embedding_size(embed_dim: int | list[int] | None) -> int | None:
+    if embed_dim is None:
+        return None
+    if isinstance(embed_dim, int):
+        return int(embed_dim)
+    if isinstance(embed_dim, list) and len(embed_dim) > 0:
+        return int(max(embed_dim))
+    return None
+
+
 def _get_means_per_types(per_task: pd.DataFrame):
     task_names_per_type = defaultdict(list)
     for task_name in per_task.columns:
@@ -139,7 +149,7 @@ def _create_summary_table_from_benchmark_results(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
+        model_metas.map(lambda m: _get_embedding_size),
     )
     joint_table.insert(
         1,
@@ -382,7 +392,7 @@ def _create_summary_table_mean_public_private(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
+        model_metas.map(lambda m: _get_embedding_size),
     )
     joint_table.insert(
         1,
@@ -503,7 +513,7 @@ def _create_summary_table_mean_subset(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
+        model_metas.map(lambda m: _get_embedding_size),
     )
     joint_table.insert(
         1,
@@ -621,7 +631,7 @@ def _create_summary_table_mean_task_type(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
+        model_metas.map(lambda m: _get_embedding_size),
     )
     joint_table.insert(
         1,

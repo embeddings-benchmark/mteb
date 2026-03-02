@@ -54,6 +54,8 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         model_prompts: dict[str, str] | None = None,
+        *,
+        embed_dim: int | None = None,
         **kwargs,
     ) -> None:
         """Wrapper for SentenceTransformer models.
@@ -66,13 +68,18 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
+            embed_dim: The embedding dimension of the model to use.
             **kwargs: Additional arguments to pass to the SentenceTransformer model.
         """
         from sentence_transformers import SentenceTransformer
 
         if isinstance(model, str):
             self.model = SentenceTransformer(
-                model, revision=revision, device=device, **kwargs
+                model,
+                revision=revision,
+                device=device,
+                truncate_dim=embed_dim,
+                **kwargs,
             )
         else:
             self.model = model
