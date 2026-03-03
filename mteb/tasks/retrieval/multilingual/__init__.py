@@ -233,7 +233,6 @@ __all__ = [
     "Vidore3TelecomRetrieval",
     "Vidore3TelecomRetrievalv2",
     "WITT2IRetrieval",
-    "WITT2IRetrieval",
     "WebFAQRetrieval",
     "WikipediaRetrievalMultilingual",
     "XFlickr30kCoT2IRetrieval",
@@ -241,5 +240,4 @@ __all__ = [
     "XMarket",
     "XPQARetrieval",
     "XQuADRetrieval",
-    "",
 ]
