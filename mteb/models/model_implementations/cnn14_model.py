@@ -126,6 +126,7 @@ cnn14_esc50 = ModelMeta(
     release_date="2022-11-26",
     max_tokens=None,
     n_parameters=80_753_615,
+    n_embedding_parameters=0,
     memory_usage_mb=308,
     embed_dim=2048,
     license="apache-2.0",

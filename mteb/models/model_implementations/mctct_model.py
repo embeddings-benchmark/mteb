@@ -221,6 +221,7 @@ mctct_large = ModelMeta(
     release_date="2022-01-10",
     max_tokens=None,
     n_parameters=1_058_978_691,
+    n_embedding_parameters=12387840,
     memory_usage_mb=4039,
     embed_dim=1536,
     license="apache-2.0",
