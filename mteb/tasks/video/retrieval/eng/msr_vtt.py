@@ -77,15 +77,3 @@ class MSRVTTV2T(AbsTaskRetrieval):
             queries=query, corpus=corpus, relevant_docs=qrels, top_ranked=None
         )
         self.data_loaded = True
-
-
-if __name__ == "__main__":
-    import logging
-
-    import mteb
-
-    logging.basicConfig(level=logging.INFO)
-
-    task = MSRVTTV2T()
-    model = mteb.get_model("baseline/random-encoder-baseline")
-    mteb.evaluate(model, task, overwrite_strategy="always")
