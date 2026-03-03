@@ -4,17 +4,19 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 from packaging.specifiers import SpecifierSet
+from torch.nn.functional import normalize
 from torch.utils.data import DataLoader
+from tqdm.auto import tqdm
 from transformers import __version__ as transformers_version
+
 from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.types import PromptType
-from torch.nn.functional import normalize
-from tqdm.auto import tqdm
+
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types import Array, BatchedInput
 
 LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperforming,
       title={Llama Nemoretriever Colembed: Top-Performing Text-Image Retrieval Model},
@@ -54,7 +56,7 @@ NEMOTRON_EMBED_VL_1B_V2_CITATION = """
 _TRANSFORMERS_CONSTRAINTS: dict[str, str] = {
     "llama-nemotron-colembed-vl": "==4.49.0",  # llama-nemoretriever-colembed-*
     "nemotron-colembed-vl-v2": "==5.0.0",  # nemotron-colembed-vl-4b-v2, nemotron-colembed-vl-8b-v2
-    "llama-nemotron-embed-vl-1b-v2": ">=4.56.0", # llama-nemotron-embed-vl-1b-v2
+    "llama-nemotron-embed-vl-1b-v2": ">=4.56.0",  # llama-nemotron-embed-vl-1b-v2
 }
 
 
@@ -358,7 +360,6 @@ nemotron_colembed_vl_8b_v2 = ModelMeta(
 #####################
 
 
-
 class LlamaNemotronEmbedVL(AbsEncoder):
     def __init__(
         self,
@@ -412,26 +413,35 @@ class LlamaNemotronEmbedVL(AbsEncoder):
         prompt_type: PromptType | None = None,
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ) -> Array:       
-        with torch.inference_mode():    
+    ) -> Array:
+        with torch.inference_mode():
             embeddings_list = []
-            for batch in tqdm(inputs, desc=f"Extracting {prompt_type} embeddings...", disable=not show_progress_bar):
+            for batch in tqdm(
+                inputs,
+                desc=f"Extracting {prompt_type} embeddings...",
+                disable=not show_progress_bar,
+            ):
                 if prompt_type == PromptType.query:
                     embeddings = self.model.encode_queries(batch["text"])
                 else:
                     if "image" in batch and "text" in batch:
-                        embeddings = self.model.encode_documents(images=batch["image"], texts=batch["text"])
+                        embeddings = self.model.encode_documents(
+                            images=batch["image"], texts=batch["text"]
+                        )
                     elif "image" in batch:
                         embeddings = self.model.encode_documents(images=batch["image"])
                     elif "text" in batch:
                         embeddings = self.model.encode_documents(texts=batch["text"])
                     else:
-                        raise ValueError(f"Could not find 'image' or 'text' in batch: {batch}")
-                else:
-                    raise ValueError(f"Invalid prompt type: {prompt_type}")
+                        raise ValueError(
+                            f"Could not find 'image' or 'text' in batch: {batch}"
+                        )
 
                 embeddings = normalize(embeddings, dim=-1)
-                assert torch.sum(embeddings).float().item() not in [float(0.), float("inf")]
+                assert torch.sum(embeddings).float().item() not in [
+                    0.0,
+                    float("inf"),
+                ]
                 embeddings_list.append(embeddings)
 
             concatenated_embeddings = torch.vstack(embeddings_list)
@@ -454,7 +464,7 @@ TRAINING_DATA_EMBED_VL_1B_V2 = {
     "SQuAD",
     "MultiLongDocRetrieval",
     "MLQARetrieval",
-    "Tiger Math/Stack"
+    "Tiger Math/Stack",
 }
 
 llama_nemotron_embed_vl_1b_v2 = ModelMeta(
@@ -467,8 +477,9 @@ llama_nemotron_embed_vl_1b_v2 = ModelMeta(
     revision="859e1f2dac29c56c37a5279cf55f53f3e74efc6b",
     release_date="2026-01-06",
     modalities=["image", "text"],
-    n_parameters=2_418_000_000,
-    memory_usage_mb=4610,
+    n_parameters=1_678_252_480,
+    n_embedding_parameters=262_688_768,
+    memory_usage_mb=6402,
     max_tokens=10240,
     embed_dim=2048,
     license="https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
