@@ -454,7 +454,7 @@ TRAINING_DATA_EMBED_VL_1B_V2 = {
     "StackExchangeClustering",
     "SQuAD",
     "MultiLongDocRetrieval",
-    "MLQA",
+    "MLQARetrieval",
     "Tiger Math/Stack"
 }
 
