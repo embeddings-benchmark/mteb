@@ -103,9 +103,11 @@ from .vidore3_bench_retrieval import (
     Vidore3FinanceFrRetrieval,
     Vidore3HrRetrieval,
     Vidore3IndustrialRetrieval,
+    Vidore3NuclearOCRRetrieval,
     Vidore3NuclearRetrieval,
     Vidore3PharmaceuticalsRetrieval,
     Vidore3PhysicsRetrieval,
+    Vidore3TelecomOCRRetrieval,
     Vidore3TelecomRetrieval,
 )
 from .web_faq_retrieval import WebFAQRetrieval
@@ -208,9 +210,11 @@ __all__ = [
     "Vidore3FinanceFrRetrieval",
     "Vidore3HrRetrieval",
     "Vidore3IndustrialRetrieval",
+    "Vidore3NuclearOCRRetrieval",
     "Vidore3NuclearRetrieval",
     "Vidore3PharmaceuticalsRetrieval",
     "Vidore3PhysicsRetrieval",
+    "Vidore3TelecomOCRRetrieval",
     "Vidore3TelecomRetrieval",
     "WITT2IRetrieval",
     "WebFAQRetrieval",
