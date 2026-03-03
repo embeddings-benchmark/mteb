@@ -11,7 +11,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.types import PromptType
 from torch.nn.functional import normalize
-from tqdm import tqdm
+from tqdm.auto import tqdm
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
