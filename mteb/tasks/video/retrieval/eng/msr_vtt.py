@@ -1,4 +1,3 @@
-import datasets
 from datasets import Features, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -45,12 +44,11 @@ class MSRVTTV2T(AbsTaskRetrieval):
         query = dataset.select_columns(["id", "video", "audio"])
 
         def _combine_modalities(example: dict) -> dict:
-            example["video"] = [
-                VideoInputItem(
-                    frames=example["video"],
-                    audio=example.pop("audio"),
-                )
-            ]
+            example["video"] = VideoInputItem(
+                frames=example["video"],
+                audio=example.pop("audio"),
+            )
+
             return example
 
         query_features = query.features
@@ -59,12 +57,10 @@ class MSRVTTV2T(AbsTaskRetrieval):
             features=Features(
                 {
                     "id": query_features["id"],
-                    "video": datasets.List(
-                        feature={
-                            "frames": query_features["video"],
-                            "audio": query_features["audio"],
-                        }
-                    ),
+                    "video": {
+                        "frames": query_features["video"],
+                        "audio": query_features["audio"],
+                    },
                 }
             ),
         )
@@ -92,4 +88,4 @@ if __name__ == "__main__":
 
     task = MSRVTTV2T()
     model = mteb.get_model("baseline/random-encoder-baseline")
-    mteb.evaluate(model, task)
+    mteb.evaluate(model, task, overwrite_strategy="always")

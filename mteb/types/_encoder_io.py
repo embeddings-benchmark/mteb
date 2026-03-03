@@ -154,7 +154,7 @@ class VideoInput(TypedDict):
         video: The video to encode. VideoDecoder object.
     """
 
-    video: list[VideoInputItem]
+    video: VideoInputItem
 
 
 class MultimodalInput(  # type: ignore[misc]

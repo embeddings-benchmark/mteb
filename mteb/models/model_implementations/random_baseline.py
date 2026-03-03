@@ -83,25 +83,22 @@ def _audio_to_vector(audio: AudioInputItem, size: int) -> np.ndarray:
 
 
 def _video_to_vector(
-    video: list[dict[str, VideoDecoder | AudioInputItem]],
+    item: dict[str, VideoDecoder | AudioInputItem],
     size: int,
-) -> np.ndarray:
+) -> NDArray[np.floating]:
     """Generate a deterministic random vector based on video content.
 
     Args:
-        video: Video data
+        item: Video data
         size: Size of the output vector.
 
     Returns:
         A numpy array of shape (size,) containing the random vector.
     """
     # Convert video to bytes and then to a numeric seed
-    video_bytes = b"".join(
-        [
-            VideoCollator.resample_video(item["frames"], 10).numpy().tobytes()
-            + item["audio"]["array"].tobytes()
-            for item in video
-        ]
+    video_bytes = (
+        VideoCollator.resample_video(item["frames"], 10).numpy().tobytes()
+        + item["audio"]["array"].tobytes()
     )
     seed = int(hashlib.sha256(video_bytes).hexdigest(), 16) % (2**32)
     rng = np.random.default_rng(seed)
