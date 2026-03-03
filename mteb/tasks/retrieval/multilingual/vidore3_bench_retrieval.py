@@ -522,8 +522,8 @@ class Vidore3EnergyOCRRetrieval(AbsTaskRetrieval):
         + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
-            "path": "vidore/vidore_v3_energy_mteb_format",
-            "revision": "84fca99e5978604bae30f2436eacb6dbaa0532e9",
+            "path": "mteb/Vidore3EnergyOCRRetrieval",
+            "revision": "575fbadfa82b5b5f1d503f4201d1a7d88602b4d8",
         },
         type="DocumentUnderstanding",
         category="t2it",
