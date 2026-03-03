@@ -45,10 +45,12 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
+        is_public=True,
+        superseded_by="Vidore3FinanceEnRetrieval.v2",
     )
 
 
-class Vidore3FinanceEnOCRRetrieval(AbsTaskRetrieval):
+class Vidore3FinanceEnRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceEnRetrieval.v2",
         description="Retrieve associated pages according to questions. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
@@ -122,10 +124,11 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        superseded_by="Vidore3FinanceFrRetrieval.v2",
     )
 
 
-class Vidore3FinanceFrOCRRetrieval(AbsTaskRetrieval):
+class Vidore3FinanceFrRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceFrRetrieval.v2",
         description="Retrieve associated pages according to questions. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
@@ -161,7 +164,7 @@ class Vidore3FinanceFrOCRRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
-        adapted_from=["Vidore3FinanceEnRetrieval"],
+        adapted_from=["Vidore3FinanceFrRetrieval"],
     )
 
 
@@ -200,10 +203,11 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        superseded_by="Vidore3IndustrialRetrieval.v2",
     )
 
 
-class Vidore3IndustrialOCRRetrieval(AbsTaskRetrieval):
+class Vidore3IndustrialRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3IndustrialRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
@@ -278,10 +282,11 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        superseded_by="Vidore3PharmaceuticalsRetrieval.v2",
     )
 
 
-class Vidore3PharmaceuticalsOCRRetrieval(AbsTaskRetrieval):
+class Vidore3PharmaceuticalsRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PharmaceuticalsRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
@@ -356,10 +361,11 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        superseded_by="Vidore3ComputerScienceRetrieval.v2",
     )
 
 
-class Vidore3ComputerScienceOCRRetrieval(AbsTaskRetrieval):
+class Vidore3ComputerScienceRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3ComputerScienceRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
@@ -434,10 +440,11 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        superseded_by="Vidore3HrRetrieval.v2",
     )
 
 
-class Vidore3HrOCRRetrieval(AbsTaskRetrieval):
+class Vidore3HrRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3HrRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
@@ -512,10 +519,11 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        superseded_by="Vidore3EnergyRetrieval.v2",
     )
 
 
-class Vidore3EnergyOCRRetrieval(AbsTaskRetrieval):
+class Vidore3EnergyRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3EnergyRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
@@ -590,10 +598,11 @@ class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        superseded_by="Vidore3PhysicsRetrieval.v2",
     )
 
 
-class Vidore3PhysicsOCRRetrieval(AbsTaskRetrieval):
+class Vidore3PhysicsRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PhysicsRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, Physics, is a corpus of course slides on french bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
@@ -668,6 +677,7 @@ class Vidore3NuclearRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
+        superseded_by="Vidore3NuclearRetrieval.v2",
     )
 
 
@@ -706,10 +716,11 @@ class Vidore3TelecomRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
+        superseded_by="Vidore3TelecomRetrieval.v2",
     )
 
 
-class Vidore3TelecomOCRRetrieval(AbsTaskRetrieval):
+class Vidore3TelecomRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3TelecomRetrieval.v2",
         description="Retrieve associated pages according to questions."
@@ -745,10 +756,11 @@ class Vidore3TelecomOCRRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
+        adapted_from=["Vidore3TelecomRetrieval"],
     )
 
 
-class Vidore3NuclearOCRRetrieval(AbsTaskRetrieval):
+class Vidore3NuclearRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3NuclearRetrieval.v2",
         description="Retrieve associated pages according to questions."
@@ -784,4 +796,5 @@ class Vidore3NuclearOCRRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
+        adapted_from=["Vidore3NuclearRetrieval"],
     )
