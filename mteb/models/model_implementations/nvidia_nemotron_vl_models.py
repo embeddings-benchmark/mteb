@@ -415,8 +415,7 @@ class LlamaNemotronEmbedVL(AbsEncoder):
     ) -> Array:       
         with torch.inference_mode():    
             embeddings_list = []
-            message = f"Extracting {prompt_type.name} embeddings..."
-            for batch in tqdm(inputs, desc=f"Extracting {message} embeddings...", disable=not show_progress_bar):
+            for batch in tqdm(inputs, desc=f"Extracting {prompt_type} embeddings...", disable=not show_progress_bar):
                 if prompt_type == PromptType.query:
                     embeddings = self.model.encode_queries(batch["text"])
                 else:
