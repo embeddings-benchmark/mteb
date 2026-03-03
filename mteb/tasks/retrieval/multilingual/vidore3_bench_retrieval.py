@@ -50,9 +50,9 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
 
 class Vidore3FinanceEnOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3FinanceEnOCRRetrieval",
+        name="Vidore3FinanceEnOCRRetrieval(beta)",
         description="Retrieve associated pages according to questions. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "vidore/vidore_v3_finance_en_mteb_format",
@@ -127,9 +127,9 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
 
 class Vidore3FinanceFrOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3FinanceFrOCRRetrieval",
+        name="Vidore3FinanceFrOCRRetrieval(beta)",
         description="Retrieve associated pages according to questions. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "vidore/vidore_v3_finance_fr_mteb_format",
@@ -205,9 +205,9 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
 
 class Vidore3IndustrialOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3IndustrialOCRRetrieval",
+        name="Vidore3IndustrialOCRRetrieval(beta)",
         description="Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "vidore/vidore_v3_industrial_mteb_format",
@@ -283,9 +283,9 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
 
 class Vidore3PharmaceuticalsOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3PharmaceuticalsOCRRetrieval",
+        name="Vidore3PharmaceuticalsOCRRetrieval(beta)",
         description="Retrieve associated pages according to questions. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "vidore/vidore_v3_pharmaceuticals_mteb_format",
@@ -361,9 +361,9 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
 
 class Vidore3ComputerScienceOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3ComputerScienceOCRRetrieval",
+        name="Vidore3ComputerScienceOCRRetrieval(beta)",
         description="Retrieve associated pages according to questions. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "vidore/vidore_v3_computer_science_mteb_format",
@@ -439,9 +439,9 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
 
 class Vidore3HrOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3HrOCRRetrieval",
+        name="Vidore3HrOCRRetrieval(beta)",
         description="Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "vidore/vidore_v3_hr_mteb_format",
@@ -517,9 +517,9 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
 
 class Vidore3EnergyOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3EnergyOCRRetrieval",
+        name="Vidore3EnergyOCRRetrieval(beta)",
         description="Retrieve associated pages according to questions. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "vidore/vidore_v3_energy_mteb_format",
@@ -595,9 +595,9 @@ class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
 
 class Vidore3PhysicsOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3PhysicsOCRRetrieval",
+        name="Vidore3PhysicsOCRRetrieval(beta)",
         description="Retrieve associated pages according to questions. This dataset, Physics, is a corpus of course slides on french bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models.",
+        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "vidore/vidore_v3_physics_mteb_format",
