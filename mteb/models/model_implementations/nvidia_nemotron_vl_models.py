@@ -419,7 +419,7 @@ class LlamaNemotronEmbedVL(AbsEncoder):
             for batch in tqdm(inputs, desc=f"Extracting {message} embeddings...", disable=not show_progress_bar):
                 if prompt_type == PromptType.query:
                     embeddings = self.model.encode_queries(batch["text"])
-                elif prompt_type == PromptType.document:
+                else:
                     if "image" in batch and "text" in batch:
                         embeddings = self.model.encode_documents(images=batch["image"], texts=batch["text"])
                     elif "image" in batch:
