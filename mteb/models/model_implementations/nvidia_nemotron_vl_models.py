@@ -447,7 +447,7 @@ TRAINING_DATA_EMBED_VL_1B_V2 = {
     "docmatix-ir",
     "wiki-ss-nq",
     "Cauldron (AI2D, OCRVQA, Websight)",
-    "vdr-multilingual-train dataset (vdr_en)",
+    "VDRMultilingualRetrieval",
     "HotpotQA",
     "MIRACLRetrieval",
     "NQ",
