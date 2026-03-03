@@ -50,9 +50,9 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
 
 class Vidore3FinanceEnOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3FinanceEnOCRRetrieval(beta)",
+        name="Vidore3FinanceEnRetrieval.v2",
         description="Retrieve associated pages according to questions. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
+        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3FinanceEnOCRRetrieval",
@@ -127,9 +127,9 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
 
 class Vidore3FinanceFrOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3FinanceFrOCRRetrieval(beta)",
+        name="Vidore3FinanceFrRetrieval.v2",
         description="Retrieve associated pages according to questions. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
+        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3FinanceFrOCRRetrieval",
@@ -205,9 +205,9 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
 
 class Vidore3IndustrialOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3IndustrialOCRRetrieval(beta)",
+        name="Vidore3IndustrialRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
+        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3IndustrialOCRRetrieval",
@@ -283,9 +283,9 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
 
 class Vidore3PharmaceuticalsOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3PharmaceuticalsOCRRetrieval(beta)",
+        name="Vidore3PharmaceuticalsRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
+        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3PharmaceuticalsOCRRetrieval",
@@ -361,9 +361,9 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
 
 class Vidore3ComputerScienceOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3ComputerScienceOCRRetrieval(beta)",
+        name="Vidore3ComputerScienceRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
+        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3ComputerScienceOCRRetrieval",
@@ -439,9 +439,9 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
 
 class Vidore3HrOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3HrOCRRetrieval(beta)",
+        name="Vidore3HrRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
+        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3HrOCRRetrieval",
@@ -517,9 +517,9 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
 
 class Vidore3EnergyOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3EnergyOCRRetrieval(beta)",
+        name="Vidore3EnergyRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
+        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3EnergyOCRRetrieval",
@@ -595,9 +595,9 @@ class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
 
 class Vidore3PhysicsOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3PhysicsOCRRetrieval(beta)",
+        name="Vidore3PhysicsRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, Physics, is a corpus of course slides on french bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        + "This variant includes the OCR'ed markdown so allow for comparison across image-text and text-only models. It is currently released as a beta and might be removed at a later stage.",
+        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3PhysicsOCRRetrieval",
@@ -711,8 +711,9 @@ class Vidore3TelecomRetrieval(AbsTaskRetrieval):
 
 class Vidore3TelecomOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3TelecomOCRRetrieval(beta)",
-        description="Retrieve associated pages according to questions.",
+        name="Vidore3TelecomRetrieval.v2",
+        description="Retrieve associated pages according to questions."
+        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb-private/Vidore3TelecomOCRRetrieval",
@@ -749,8 +750,9 @@ class Vidore3TelecomOCRRetrieval(AbsTaskRetrieval):
 
 class Vidore3NuclearOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3NuclearOCRRetrieval(beta)",
-        description="Retrieve associated pages according to questions.",
+        name="Vidore3NuclearRetrieval.v2",
+        description="Retrieve associated pages according to questions."
+        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb-private/Vidore3NuclearOCRRetrieval",
