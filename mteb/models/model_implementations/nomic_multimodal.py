@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 
 import torch
-from tqdm.auto import tqdm
 
 from mteb._requires_package import (
     requires_image_dependencies,
@@ -54,43 +53,6 @@ class BiQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
             device=device,
             **kwargs,
         )
-
-    def get_image_embeddings(self, images, batch_size: int = 32, **kwargs):
-        import torchvision.transforms.functional as F
-        from PIL import Image
-
-        all_embeds = []
-        with torch.no_grad():
-            for batch in tqdm(images, desc="Encoding images"):
-                imgs = [
-                    F.to_pil_image(b.to(self.device))
-                    if not isinstance(b, Image.Image)
-                    else b
-                    for b in batch["image"]
-                ]
-                inputs = self.processor.process_images(imgs)
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                outs = self.encode_input(inputs)
-                all_embeds.append(outs.cpu().to(torch.float32))
-
-        return torch.cat(all_embeds, dim=0)
-
-    def get_text_embeddings(self, texts, batch_size: int = 32, **kwargs):
-        all_embeds = []
-        with torch.no_grad():
-            for batch in tqdm(texts, desc="Encoding texts"):
-                batch = [
-                    self.processor.query_prefix
-                    + t
-                    + self.processor.query_augmentation_token * 10
-                    for t in batch["text"]
-                ]
-                inputs = self.processor.process_queries(batch)
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                outs = self.encode_input(inputs)
-                all_embeds.append(outs.cpu().to(torch.float32))
-
-        return torch.cat(all_embeds, dim=0)
 
 
 nomic_embed_multimodal_7b = ModelMeta(
