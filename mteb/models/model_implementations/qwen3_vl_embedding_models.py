@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import unicodedata
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar
 
 import torch
 import torch.nn.functional as F
@@ -11,14 +11,15 @@ from tqdm.autonotebook import tqdm
 from mteb._requires_package import requires_image_dependencies, requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from PIL import Image as PILImage
     from torch.utils.data import DataLoader
+    from transformers.cache_utils import Cache
+    from transformers.models.qwen3_vl.modeling_qwen3_vl import Qwen3VLConfig
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -46,23 +47,20 @@ def _build_qwen3_vl_for_embedding_class():
     behaviour intended by the model authors.
     """
     from dataclasses import dataclass
-    from typing import Optional, Union
 
-    from transformers.cache_utils import Cache
     from transformers.modeling_outputs import ModelOutput
     from transformers.models.qwen3_vl.modeling_qwen3_vl import (
-        Qwen3VLConfig,
         Qwen3VLModel,
         Qwen3VLPreTrainedModel,
     )
 
     @dataclass
     class Qwen3VLForEmbeddingOutput(ModelOutput):
-        last_hidden_state: Optional[torch.FloatTensor] = None
-        attention_mask: Optional[torch.Tensor] = None
+        last_hidden_state: torch.FloatTensor | None = None
+        attention_mask: torch.Tensor | None = None
 
     class Qwen3VLForEmbedding(Qwen3VLPreTrainedModel):
-        _checkpoint_conversion_mapping = {}
+        _checkpoint_conversion_mapping: ClassVar[dict] = {}
         accepts_loss_kwargs = False
 
         def __init__(self, config: Qwen3VLConfig):
@@ -103,7 +101,7 @@ def _build_qwen3_vl_for_embedding_class():
             input_ids: torch.LongTensor | None = None,
             attention_mask: torch.Tensor | None = None,
             position_ids: torch.LongTensor | None = None,
-            past_key_values: Optional[Cache] = None,
+            past_key_values: Cache | None = None,
             inputs_embeds: torch.FloatTensor | None = None,
             pixel_values: torch.Tensor | None = None,
             pixel_values_videos: torch.FloatTensor | None = None,
@@ -111,7 +109,7 @@ def _build_qwen3_vl_for_embedding_class():
             video_grid_thw: torch.LongTensor | None = None,
             cache_position: torch.LongTensor | None = None,
             **kwargs,
-        ) -> Union[tuple, Qwen3VLForEmbeddingOutput]:
+        ) -> tuple | Qwen3VLForEmbeddingOutput:
             outputs = self.model(
                 input_ids=input_ids,
                 pixel_values=pixel_values,
@@ -156,7 +154,7 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
         requires_package(
             self, "transformers", model_name, "pip install transformers>=4.57.0"
         )
-        
+
         requires_package(
             self, "qwen_vl_utils", model_name, "pip install qwen-vl-utils>=0.0.14"
         )
@@ -174,8 +172,8 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
         self.min_pixels = min_pixels
         self.max_pixels = max_pixels
 
-        Qwen3VLForEmbedding = _build_qwen3_vl_for_embedding_class()
-        self.model = Qwen3VLForEmbedding.from_pretrained(
+        qwen3_vl_cls = _build_qwen3_vl_for_embedding_class()
+        self.model = qwen3_vl_cls.from_pretrained(
             model_name,
             revision=revision,
             trust_remote_code=True,
@@ -252,9 +250,7 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
                 return_video_kwargs=True,
             )
         except Exception:
-            logger.warning(
-                "Failed to process vision info, falling back to text-only."
-            )
+            logger.warning("Failed to process vision info, falling back to text-only.")
             images = None
             video_inputs = None
             video_kwargs = {"do_sample_frames": False}
@@ -298,7 +294,7 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
     @staticmethod
     def _prepare_images(raw_images: list) -> list[PILImage.Image]:
         """Convert batch images (tensors or PIL) to PIL Image objects."""
-        import torchvision.transforms.functional as TF
+        import torchvision.transforms.functional as tv_functional
         from PIL import Image
 
         result = []
@@ -306,7 +302,7 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
             if isinstance(img, Image.Image):
                 result.append(img)
             else:
-                result.append(TF.to_pil_image(img.cpu()))
+                result.append(tv_functional.to_pil_image(img.cpu()))
         return result
 
     def encode(
@@ -337,9 +333,7 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
                 disable=not show_progress_bar,
                 desc="Encoding",
             ):
-                batch_size = len(
-                    batch["text"] if contains_text else batch["image"]
-                )
+                batch_size = len(batch["text"] if contains_text else batch["image"])
 
                 texts: list[str | None] = (
                     list(batch["text"]) if contains_text else [None] * batch_size
@@ -382,6 +376,7 @@ qwen3_vl_embedding_2b = ModelMeta(
     release_date="2026-01-08",
     modalities=["image", "text"],
     n_parameters=2_127_532_032,
+    n_embedding_parameters=311_164_928,
     memory_usage_mb=7629,
     embed_dim=2048,
     license="apache-2.0",
@@ -406,6 +401,7 @@ qwen3_vl_embedding_8b = ModelMeta(
     release_date="2026-01-08",
     modalities=["image", "text"],
     n_parameters=8_144_793_840,
+    n_embedding_parameters=622_329_856,
     memory_usage_mb=30518,
     embed_dim=4096,
     license="apache-2.0",
