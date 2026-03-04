@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Any
 
 import datasets
 from datasets import DatasetDict
@@ -156,7 +157,7 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, text_col="transcription", audio_col="audio"):
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """A2T: Query = audio, Corpus = text."""
         for lang in tqdm(self.hf_subsets, desc="Loading FleursA2TRetrieval subsets"):
             lang_dataset = datasets.load_dataset(
@@ -168,10 +169,10 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
             for split in self.metadata.eval_splits:
                 split_dataset = lang_dataset[split]
 
-                queries_ds = split_dataset.select_columns(["id", audio_col])
+                queries_ds = split_dataset.select_columns(["id", "audio"])
                 corpus_ds = split_dataset.select_columns(
-                    ["id", text_col]
-                ).rename_column(text_col, "text")
+                    ["id", "transcription"]
+                ).rename_column("transcription", "text")
 
                 relevant_docs_ = {
                     str(row["id"]): {str(row["id"]): 1} for row in split_dataset
@@ -225,7 +226,7 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, text_col="transcription", audio_col="audio"):
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """T2A: Query = text, Corpus = audio."""
         for lang in tqdm(self.hf_subsets, desc="Loading FleursT2ARetrieval subsets"):
             lang_dataset = datasets.load_dataset(
@@ -239,10 +240,10 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
 
                 # Create datasets directly without intermediate lists
                 queries_ds = split_dataset.select_columns(
-                    ["id", text_col]
-                ).rename_column(text_col, "text")
+                    ["id", "transcription"]
+                ).rename_column("transcription", "text")
 
-                corpus_ds = split_dataset.select_columns(["id", audio_col])
+                corpus_ds = split_dataset.select_columns(["id", "audio"])
 
                 # Create relevant_docs mapping
                 relevant_docs_ = {
