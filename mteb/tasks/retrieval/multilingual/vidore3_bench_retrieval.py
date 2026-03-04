@@ -728,7 +728,7 @@ class Vidore3TelecomRetrievalv2(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb-private/Vidore3TelecomOCRRetrieval",
-            "revision": "a54635a274ef2835721b7cbe3eb27483b9ec964b",
+            "revision": "057fe83342b446ede7928cb51bc6c7c3223da3d0",
         },
         type="DocumentUnderstanding",
         category="t2it",
