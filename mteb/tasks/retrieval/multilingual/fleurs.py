@@ -148,7 +148,7 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, **kwargs):
-        if getattr(self, "data_loaded", False):
+        if self.data_loaded:
             return
         self.corpus = defaultdict(DatasetDict)
         self.queries = defaultdict(DatasetDict)
@@ -156,9 +156,7 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(
-        self, id_col="path", text_col="transcription", audio_col="audio"
-    ):
+    def dataset_transform(self, text_col="transcription", audio_col="audio"):
         """A2T: Query = audio, Corpus = text."""
         for lang in tqdm(self.hf_subsets, desc="Loading FleursA2TRetrieval subsets"):
             lang_dataset = datasets.load_dataset(
@@ -170,18 +168,13 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
             for split in self.metadata.eval_splits:
                 split_dataset = lang_dataset[split]
 
-                queries_ds = split_dataset.select_columns(
-                    [id_col, audio_col]
-                ).rename_column(id_col, "id")
-
-                corpus_ds = (
-                    split_dataset.select_columns([id_col, text_col])
-                    .rename_column(id_col, "id")
-                    .rename_column(text_col, "text")
-                )
+                queries_ds = split_dataset.select_columns(["id", audio_col])
+                corpus_ds = split_dataset.select_columns(
+                    ["id", text_col]
+                ).rename_column(text_col, "text")
 
                 relevant_docs_ = {
-                    str(row[id_col]): {str(row[id_col]): 1} for row in split_dataset
+                    str(row["id"]): {str(row["id"]): 1} for row in split_dataset
                 }
 
                 self.corpus[lang][split] = corpus_ds
@@ -224,7 +217,7 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, **kwargs):
-        if getattr(self, "data_loaded", False):
+        if self.data_loaded:
             return
         self.corpus = defaultdict(DatasetDict)
         self.queries = defaultdict(DatasetDict)
@@ -232,9 +225,7 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(
-        self, id_col="path", text_col="transcription", audio_col="audio"
-    ):
+    def dataset_transform(self, text_col="transcription", audio_col="audio"):
         """T2A: Query = text, Corpus = audio."""
         for lang in tqdm(self.hf_subsets, desc="Loading FleursT2ARetrieval subsets"):
             lang_dataset = datasets.load_dataset(
@@ -247,19 +238,15 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
                 split_dataset = lang_dataset[split]
 
                 # Create datasets directly without intermediate lists
-                queries_ds = (
-                    split_dataset.select_columns([id_col, text_col])
-                    .rename_column(id_col, "id")
-                    .rename_column(text_col, "text")
-                )
+                queries_ds = split_dataset.select_columns(
+                    ["id", text_col]
+                ).rename_column(text_col, "text")
 
-                corpus_ds = split_dataset.select_columns(
-                    [id_col, audio_col]
-                ).rename_column(id_col, "id")
+                corpus_ds = split_dataset.select_columns(["id", audio_col])
 
                 # Create relevant_docs mapping
                 relevant_docs_ = {
-                    str(row[id_col]): {str(row[id_col]): 1} for row in split_dataset
+                    str(row["id"]): {str(row["id"]): 1} for row in split_dataset
                 }
 
                 self.corpus[lang][split] = corpus_ds
