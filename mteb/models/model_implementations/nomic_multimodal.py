@@ -92,13 +92,6 @@ class BiQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
 
         return torch.cat(all_embeds, dim=0)
 
-    def similarity(self, a, b):
-        import torch.nn.functional as F
-
-        a_norm = F.normalize(a, p=2, dim=-1)
-        b_norm = F.normalize(b, p=2, dim=-1)
-        return torch.mm(a_norm, b_norm.T)
-
 
 nomic_embed_multimodal_7b = ModelMeta(
     loader=BiQwen2_5Wrapper,
