@@ -67,6 +67,7 @@ _MISSING_N_EMBEDDING_MODELS = [
     "nomic-ai/colnomic-embed-multimodal-3b",
     "nomic-ai/colnomic-embed-multimodal-7b",
     # PEFT adapter repo — no config.json or model.safetensors, so _from_hub can't extract n_embedding_parameters
+    "nomic-ai/nomic-embed-multimodal-3b",
     "nomic-ai/nomic-embed-multimodal-7b",
     "nomic-ai/nomic-embed-text-v1",
     "nomic-ai/nomic-embed-text-v1-ablated",
