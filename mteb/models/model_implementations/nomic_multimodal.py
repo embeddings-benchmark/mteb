@@ -43,6 +43,7 @@ TRAINING_DATA: set[str] = set()
 
 logger = logging.getLogger(__name__)
 
+
 class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
     """Wrapper for BiQwen2_5 dense (single-vector) embedding model."""
 
@@ -65,7 +66,7 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
             model_name,
             device_map=self.device,
             adapter_kwargs={"revision": revision},
-            attn_implementation="flash_attention_2", # With this enabled it goes from 0.57382 to 0.58021 on Vidore2ESGReportsHLRetrieval
+            attn_implementation="flash_attention_2",  # With this enabled it goes from 0.57382 to 0.58021 on Vidore2ESGReportsHLRetrieval
             **kwargs,
         )
         self.mdl.eval()
@@ -102,16 +103,12 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
             return image_embeddings
         raise ValueError
 
-
     def get_image_embeddings(
         self,
         images,
         batch_size: int = 32,
         **kwargs,
     ):
-        import torchvision.transforms.functional as F
-        from PIL import Image
-
         all_embeds = []
 
         with torch.no_grad():
@@ -145,17 +142,15 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         )
         return padded
 
-#    def calculate_probs(self, text_embeddings, image_embeddings): # TODO: is this used anywhere? (seems like multiple models has it)
-#        scores = self.similarity(text_embeddings, image_embeddings).T
-#        return scores.softmax(dim=-1)
-#
-    def similarity(self, a, b): # Using the processing it goes from 0.57382 to 0.57297 on Vidore2ESGReportsHLRetrieval (without flash attention 2)
+    def similarity(
+        self, a, b
+    ):  # Using the processing it goes from 0.57382 to 0.57297 on Vidore2ESGReportsHLRetrieval (without flash attention 2)
         return self.processor.score(a, b, device=self.device)
 
 
 nomic_embed_multimodal_3b = ModelMeta(
     loader=BiQwen2_5Wrapper,
-    #loader_kwargs=dict(torch_dtype=torch.bfloat16),
+    loader_kwargs=dict(torch_dtype=torch.bfloat16),
     name="nomic-ai/nomic-embed-multimodal-3b",
     model_type=["dense"],
     languages=NOMIC_LANGUAGES,
