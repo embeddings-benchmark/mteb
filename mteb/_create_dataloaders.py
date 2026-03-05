@@ -514,3 +514,41 @@ class VideoCollator:
             else list(range(video_frames))
         )
         return video.get_frames_at(selected_frames).data
+
+
+class MultimodalCollator:
+    """Collator that handles any combination of video and audio modalities.
+
+    Delegates to VideoCollator when video is present (which also handles audio
+    embedded in VideoInputItem), and falls back to AudioCollator for audio-only.
+    """
+
+    def __init__(
+        self,
+        target_sampling_rate: int,
+        max_frames: int = 16,
+        max_samples: int | None = None,
+    ) -> None:
+        """Initialize the collator.
+
+        Args:
+            target_sampling_rate: The sampling rate to resample audio to.
+            max_frames: Maximum number of frames to keep per video.
+            max_samples: Maximum number of audio samples to keep. If None, no truncation.
+        """
+        self.video_collator = VideoCollator(
+            max_frames=max_frames,
+            target_sampling_rate=target_sampling_rate,
+            max_samples=max_samples,
+        )
+        self.audio_collator = AudioCollator(
+            target_sampling_rate=target_sampling_rate,
+            max_samples=max_samples,
+        )
+
+    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
+        if "video" in inputs[0]:
+            return self.video_collator(inputs)
+        if "audio" in inputs[0]:
+            return self.audio_collator(inputs)
+        return cast("BatchedInput", _custom_collate_fn(inputs))

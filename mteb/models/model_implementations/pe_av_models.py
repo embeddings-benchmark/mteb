@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import VideoCollator
+from mteb._create_dataloaders import MultimodalCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
@@ -45,6 +45,7 @@ class PEAudioVisualWrapper(AbsEncoder):
         self.processor = PeAudioVideoProcessor.from_pretrained(model_name)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
+    @torch.inference_mode()
     def get_text_embeddings(
         self,
         inputs: DataLoader[TextInput],
@@ -69,10 +70,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             )
             processed = {k: v.to(self.device) for k, v in processed.items()}
 
-            with (
-                torch.inference_mode(),
-                torch.autocast(str(self.device), dtype=torch.bfloat16),
-            ):
+            with torch.autocast(str(self.device), dtype=torch.bfloat16):
                 text_embeds = self.model.get_text_audio_video_embeds(
                     input_ids=processed["input_ids"],
                     attention_mask=processed.get("attention_mask"),
@@ -82,6 +80,7 @@ class PEAudioVisualWrapper(AbsEncoder):
 
         return np.vstack(all_embeddings)
 
+    @torch.inference_mode()
     def get_video_embeddings(
         self,
         inputs: DataLoader[VideoInput],
@@ -104,10 +103,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             )
             processed = {k: v.to(self.device) for k, v in processed.items()}
 
-            with (
-                torch.inference_mode(),
-                torch.autocast(str(self.device), dtype=torch.bfloat16),
-            ):
+            with torch.autocast(str(self.device), dtype=torch.bfloat16):
                 video_embeds = self.model.get_video_embeds(
                     pixel_values_videos=processed["pixel_values_videos"],
                     padding_mask_videos=processed.get("padding_mask_videos"),
@@ -117,6 +113,7 @@ class PEAudioVisualWrapper(AbsEncoder):
 
         return np.vstack(all_embeddings)
 
+    @torch.inference_mode()
     def get_audio_embeddings(
         self,
         inputs: DataLoader[AudioInput],
@@ -140,10 +137,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             )
             processed = {k: v.to(self.device) for k, v in processed.items()}
 
-            with (
-                torch.inference_mode(),
-                torch.autocast(str(self.device), dtype=torch.bfloat16),
-            ):
+            with torch.autocast(str(self.device), dtype=torch.bfloat16):
                 audio_embeds = self.model.get_audio_embeds(
                     input_values=processed["input_values"],
                     padding_mask=processed.get("padding_mask"),
@@ -153,6 +147,7 @@ class PEAudioVisualWrapper(AbsEncoder):
 
         return np.vstack(all_embeddings)
 
+    @torch.inference_mode()
     def get_audio_video_embeddings(
         self,
         inputs: DataLoader[BatchedInput],
@@ -178,10 +173,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             )
             processed = {k: v.to(self.device) for k, v in processed.items()}
 
-            with (
-                torch.inference_mode(),
-                torch.autocast(str(self.device), dtype=torch.bfloat16),
-            ):
+            with torch.autocast(str(self.device), dtype=torch.bfloat16):
                 av_output = self.model.get_audio_video_embeds(
                     input_values=processed["input_values"],
                     pixel_values_videos=processed["pixel_values_videos"],
@@ -210,15 +202,10 @@ class PEAudioVisualWrapper(AbsEncoder):
             has_video and "audio" in task_metadata.modalities
         )
 
-        if has_video:
-            inputs.collate_fn = VideoCollator(
-                max_frames=self.num_frames,
-                target_sampling_rate=self.sampling_rate,
-            )
-        elif has_audio:
-            from mteb._create_dataloaders import AudioCollator
-
-            inputs.collate_fn = AudioCollator(self.sampling_rate)
+        inputs.collate_fn = MultimodalCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_frames=self.num_frames,
+        )
 
         # Joint audio-video embedding
         if has_video and has_audio and not has_text:
