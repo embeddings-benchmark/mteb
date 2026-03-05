@@ -11,8 +11,8 @@ class Core17InstructionRetrieval(AbsTaskRetrieval):
         description="Measuring retrieval instruction following ability on Core17 narratives for the FollowIR benchmark.",
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
-            "path": "jhu-clsp/core17-instructions-mteb",
-            "revision": "7030c7efc3585d9020f243b12862997889243b78",
+            "path": "mteb/Core17InstructionRetrieval",
+            "revision": "67d8733dd0691f08f34ed9dda5941578cba8d91c",
         },
         type="InstructionReranking",
         category="t2t",
