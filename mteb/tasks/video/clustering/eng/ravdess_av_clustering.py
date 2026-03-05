@@ -1,4 +1,3 @@
-import datasets
 from datasets import DatasetDict, Features, load_dataset
 
 from mteb.abstasks.clustering import AbsTaskClustering
