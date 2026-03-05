@@ -42,6 +42,9 @@ class VDRModel(AbsEncoder):
         self.model = Qwen2VLForConditionalGeneration.from_pretrained(
             model_name,
             revision=revision,
+            attn_implementation="flash_attention_2",
+            # device_map="cuda",
+            **kwargs,
         ).to(self.device)
         self.model.eval()
 
@@ -78,7 +81,7 @@ class VDRModel(AbsEncoder):
                 truncation=True,
             ).to(self.device)
 
-            cache_position = torch.arange(0, len(inputs["input_ids"]))
+            cache_position = torch.arange(0, len(inputs["input_ids"])).to(self.device)
             inputs = self.model.prepare_inputs_for_generation(
                 **inputs,
                 cache_position=cache_position,
@@ -191,7 +194,7 @@ vdr_2b_multi_v1 = ModelMeta(
     loader=VDRModel,
     loader_kwargs=dict(
         trust_remote_code=True,
-        model_kwargs={"torch_dtype": torch.bfloat16},
+        dtype=torch.bfloat16,
     ),
     name="llamaindex/vdr-2b-multi-v1",
     model_type=["dense"],
