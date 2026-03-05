@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import torch
 from tqdm.auto import tqdm
@@ -12,7 +12,6 @@ from mteb._requires_package import (
 )
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -171,12 +170,12 @@ nomic_embed_multimodal_3b = ModelMeta(
     name="nomic-ai/nomic-embed-multimodal-3b",
     model_type=["dense"],
     languages=NOMIC_LANGUAGES,
-    revision="main",  # Will need to be updated with actual revision
+    revision="298930bb768c50b91d2799d6f3b0daf46ea52e70",
     release_date="2025-04-15",
     modalities=["image", "text"],
     n_parameters=3_000_000_000,
     n_embedding_parameters=None,
-    memory_usage_mb=6200,  # Estimated based on 3B vs 7B scaling
+    memory_usage_mb=6200,
     max_tokens=128000,
     embed_dim=128,
     license="apache-2.0",
