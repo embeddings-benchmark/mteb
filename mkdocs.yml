@@ -97,7 +97,12 @@ nav:
       - Tasks:
         - Available Tasks: overview/available_tasks
       - Models:
-        - Available Models: overview/available_models
+        - Text: overview/available_models/text.md
+        - Image: overview/available_models/image.md
+        - Image Text: overview/available_models/image_text.md
+        - Audio: overview/available_models/audio.md
+        - Audio Text: overview/available_models/audio_text.md
+        - Audio Image Text Video: overview/available_models/audio_image_text_video.md
   - API:
       - Overview: api/index.md
       - Evaluation: api/evaluation.md
