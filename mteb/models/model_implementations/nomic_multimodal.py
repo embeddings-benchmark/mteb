@@ -34,7 +34,7 @@ CITATION = """
   author={Nomic Team},
   year={2025},
   publisher={Nomic AI},
-  url={https://nomic.ai/blog/posts/nomic-embed-multimodal}
+  url={https://www.nomic.ai/news/nomic-embed-multimodal}
 }"""
 
 # https://huggingface.co/datasets/nomic-ai/colpali-queries-mined-20250321-by-source
