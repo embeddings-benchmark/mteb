@@ -1,0 +1,40 @@
+from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+
+zeroentropy_zembed_1 = ModelMeta(
+    loader=sentence_transformers_loader,
+    loader_kwargs={},
+    name='zeroentropy/zembed-1',
+    revision='fc4dc6ddd4a4f609978834de537b1f9f5cb29405',
+    release_date="2025-09-16",
+    languages=["eng-Latn"],
+    n_parameters=4000000000,
+    n_active_parameters_override=None,
+    n_embedding_parameters=388272640,
+    memory_usage_mb=15259,
+    max_tokens=40960,
+    embed_dim=2560,
+    license="cc-by-nc-4.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=['Sentence Transformers', 'PyTorch'],
+    reference="https://huggingface.co/zeroentropy/zembed-1",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=None,
+    training_datasets=None,
+    adapted_from="Qwen/Qwen3-4B",
+    superseded_by=None,
+    modalities=['text'],
+    model_type=['dense'],
+    citation="""@unknown{unknown,
+      author = {Pipitone, Nicholas and Alami, Ghita and Avadhanam, Advaith and Kaminskyi, Anton and Khoo, Ashley},
+      year = {2025},
+      month = {09},
+      pages = {},
+      title = {zELO: ELO-inspired Training Method for Rerankers and Embedding Models},
+      doi = {10.48550/arXiv.2509.12541}
+    }
+    """,
+    contacts=None,
+)
