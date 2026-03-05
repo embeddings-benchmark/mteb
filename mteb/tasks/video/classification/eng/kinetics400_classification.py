@@ -59,12 +59,10 @@ class Kinetics400Classification(AbsTaskClassification):
         )
 
         def _combine_modalities(example: dict) -> dict:
-            example["video"] = [
-                VideoInputItem(
-                    frames=example["video"],
-                    audio=example.pop("audio"),
-                )
-            ]
+            example["video"] = VideoInputItem(
+                frames=example["video"],
+                audio=example.pop("audio"),
+            )
             return example
 
         merged = {}
@@ -75,12 +73,10 @@ class Kinetics400Classification(AbsTaskClassification):
                 features=Features(
                     {k: v for k, v in split_features.items() if k != "audio"}
                     | {
-                        "video": datasets.List(
-                            feature={
-                                "frames": split_features["video"],
-                                "audio": split_features["audio"],
-                            }
-                        ),
+                        "video": {
+                            "frames": split_features["video"],
+                            "audio": split_features["audio"],
+                        },
                     }
                 ),
                 writer_batch_size=50,
