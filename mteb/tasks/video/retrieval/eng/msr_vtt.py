@@ -19,7 +19,7 @@ class MSRVTTV2T(AbsTaskRetrieval):
         eval_splits=["test"],
         main_score="ndcg_at_10",
         reference=None,
-        category="av2t",
+        category="va2t",
         modalities=["audio", "video", "text"],
         date=None,
         domains=None,
