@@ -44,7 +44,6 @@ TRAINING_DATA: set[str] = set()
 
 logger = logging.getLogger(__name__)
 
-
 class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
     """Wrapper for BiQwen2_5 dense (single-vector) embedding model."""
 
@@ -63,16 +62,15 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
 
-        # Load model
         self.mdl = BiQwen2_5.from_pretrained(
             model_name,
             device_map=self.device,
             adapter_kwargs={"revision": revision},
+            attn_implementation="flash_attention_2", # With this enabled it goes from 0.57382 to 0.58021 on Vidore2ESGReportsHLRetrieval
             **kwargs,
         )
         self.mdl.eval()
 
-        # Load processor
         self.processor = BiQwen2_5_Processor.from_pretrained(model_name)
 
     def encode(
@@ -105,8 +103,6 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
             return image_embeddings
         raise ValueError
 
-    def encode_input(self, inputs):
-        return self.mdl(**inputs)
 
     def get_image_embeddings(
         self,
@@ -121,16 +117,9 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
 
         with torch.no_grad():
             for batch in tqdm(images, desc="Encoding images"):
-                # batch may be list of tensors or PIL
-                imgs = [
-                    F.to_pil_image(b.to(self.device))
-                    if not isinstance(b, Image.Image)
-                    else b
-                    for b in batch["image"]
-                ]
-                inputs = self.processor.process_images(imgs)
+                inputs = self.processor.process_images(batch["image"])
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                outs = self.encode_input(inputs)
+                outs = self.mdl(**inputs)
                 all_embeds.extend(outs.cpu().to(torch.float32))
 
         padded = torch.nn.utils.rnn.pad_sequence(
@@ -149,7 +138,7 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
             for batch in tqdm(texts, desc="Encoding texts"):
                 inputs = self.processor.process_queries(batch["text"])
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                outs = self.encode_input(inputs)
+                outs = self.mdl(**inputs)
                 all_embeds.extend(outs.cpu().to(torch.float32))
 
         padded = torch.nn.utils.rnn.pad_sequence(
@@ -157,17 +146,17 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         )
         return padded
 
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        scores = self.similarity(text_embeddings, image_embeddings).T
-        return scores.softmax(dim=-1)
-
-    def similarity(self, a, b):
+#    def calculate_probs(self, text_embeddings, image_embeddings): # TODO: is this used anywhere? (seems like multiple models has it)
+#        scores = self.similarity(text_embeddings, image_embeddings).T
+#        return scores.softmax(dim=-1)
+#
+    def similarity(self, a, b): # Using the processing it goes from 0.57382 to 0.57297 on Vidore2ESGReportsHLRetrieval (without flash attention 2)
         return self.processor.score(a, b, device=self.device)
 
 
 nomic_embed_multimodal_3b = ModelMeta(
     loader=BiQwen2_5Wrapper,
-    loader_kwargs=dict(torch_dtype=torch.bfloat16),
+    #loader_kwargs=dict(torch_dtype=torch.bfloat16),
     name="nomic-ai/nomic-embed-multimodal-3b",
     model_type=["dense"],
     languages=NOMIC_LANGUAGES,
