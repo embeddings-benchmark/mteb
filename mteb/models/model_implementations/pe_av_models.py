@@ -71,10 +71,14 @@ class PEAudioVisualWrapper(AbsEncoder):
             processed = {k: v.to(self.device) for k, v in processed.items()}
 
             with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                text_embeds = self.model.get_text_audio_video_embeds(
+                text_outputs = self.model.text_model(
                     input_ids=processed["input_ids"],
                     attention_mask=processed.get("attention_mask"),
+                    output_hidden_states=True,
                 )
+                # Use last hidden layer CLS token, matching the HF wrapper's intent.
+                text_pooler = text_outputs.hidden_states[-1][:, 0]
+                text_embeds = self.model.text_audio_video_head(text_pooler)
                 text_embeds = text_embeds / text_embeds.norm(dim=-1, keepdim=True)
                 all_embeddings.append(text_embeds.cpu().float().numpy())
 
@@ -104,9 +108,12 @@ class PEAudioVisualWrapper(AbsEncoder):
             processed = {k: v.to(self.device) for k, v in processed.items()}
 
             with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                video_embeds = self.model.get_video_embeds(
+                video_out = self.model.video_model.video_encoder(
                     pixel_values_videos=processed["pixel_values_videos"],
                     padding_mask_videos=processed.get("padding_mask_videos"),
+                )
+                video_embeds = self.model.video_model.video_head(
+                    video_out.pooler_output
                 )
                 video_embeds = video_embeds / video_embeds.norm(dim=-1, keepdim=True)
                 all_embeddings.append(video_embeds.cpu().float().numpy())
