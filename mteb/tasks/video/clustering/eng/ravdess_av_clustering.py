@@ -72,11 +72,7 @@ class RAVDESSAVClustering(AbsTaskClustering):
             merged[split_name] = split.map(
                 _combine_modalities,
                 features=Features(
-                    {
-                        k: v
-                        for k, v in split_features.items()
-                        if k != "audio"
-                    }
+                    {k: v for k, v in split_features.items() if k != "audio"}
                     | {
                         "video": datasets.List(
                             feature={
