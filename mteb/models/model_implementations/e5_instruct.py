@@ -70,6 +70,40 @@ e5_instruct = ModelMeta(
     training_datasets=ME5_TRAINING_DATA,
 )
 
+
+me5_instruct_afri_large_instruct = ModelMeta(
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        model_name_or_path="McGill-NLP/AfriE5-Large-instruct",
+        instruction_template=E5_INSTRUCTION,
+        attn="cccc",
+        pooling_method="mean",
+        mode="embedding",
+        torch_dtype=torch.float16,
+        normalized=True,
+    ),
+    name="McGill-NLP/AfriE5-Large-instruct",
+    languages=XLMR_LANGUAGES,
+    open_weights=True,
+    revision="2bbf55df87c1ddd7b20c5626d6f97ca6178766b7",
+    release_date=E5_PAPER_RELEASE_DATE,
+    framework=["GritLM", "PyTorch", "Sentence Transformers"],
+    similarity_fn_name="cosine",
+    use_instructions=True,
+    reference="https://huggingface.co/McGill-NLP/AfriE5-Large-instruct",
+    n_parameters=560_000_000,
+    memory_usage_mb=1068,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=514,
+    adapted_from="FacebookAI/xlm-roberta-large",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=ME5_TRAINING_DATA,
+)
+
+
+
 e5_mistral = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
