@@ -4,7 +4,6 @@ repo_url: https://github.com/embeddings-benchmark/mteb
 watch: [mteb/, docs/]
 edit_uri: "blob/main/docs/"
 theme:
-  name: material
   favicon: images/logos/mteb_logo/dots-icon.png
   logo: images/logos/mteb_logo/dots-icon.png
   features:
@@ -24,6 +23,7 @@ theme:
     - content.tooltips
     - navigation.footer
     - navigation.indexes
+    - navigation.path
     - toc.follow
   palette:
     # System preference (auto)
@@ -65,7 +65,7 @@ markdown_extensions:
   - md_in_html
   - tables
 
-copyright: This text is freely available under a Creative Commons Attribution 4.0 license
+copyright: This site made available under a Creative Commons Attribution 4.0 license
 
 nav:
   - Get Started:
@@ -74,12 +74,12 @@ nav:
       - whats_new.md
       - Usage:
         - Get Started: usage/get_started.md
-        - Defining the Model: usage/defining_the_model.md
-        - Selecting Tasks: usage/selecting_tasks.md
-        - Running the Evaluation: usage/running_the_evaluation.md
-        - Loading Results: usage/loading_results.md
-        - Command Line Interface: usage/cli.md
-        - Running the Leaderboard: usage/leaderboard.md
+        - Define the Model: usage/defining_the_model.md
+        - Select Tasks: usage/selecting_tasks.md
+        - Run the Evaluation: usage/running_the_evaluation.md
+        - Load Results: usage/loading_results.md
+        - Command Line: usage/cli.md
+        - Run the Leaderboard: usage/leaderboard.md
       - Advanced Usage:
         - Two stage reranking: advanced_usage/two_stage_reranking.md
         - Cache embeddings: advanced_usage/cache_embeddings.md
