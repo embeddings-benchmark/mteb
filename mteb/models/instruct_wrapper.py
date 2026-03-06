@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import logging
-import sys
 import warnings
 from typing import TYPE_CHECKING, Any
 
 import torch
+from typing_extensions import deprecated
 
 from mteb._requires_package import requires_package
 from mteb.types import PromptType
@@ -16,14 +16,10 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     from torch.utils.data import DataLoader
+    from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
-
-if sys.version_info >= (3, 13):
-    from warnings import deprecated
-else:
-    from typing_extensions import deprecated
+    from mteb.types import Array, BatchedInput, EncodeKwargs
 
 
 logger = logging.getLogger(__name__)
@@ -110,7 +106,7 @@ def instruct_wrapper(
             hf_split: str,
             hf_subset: str,
             prompt_type: PromptType | None = None,
-            **kwargs: Any,
+            **kwargs: Unpack[EncodeKwargs],
         ) -> Array:
             instruction = self.get_instruction(task_metadata, prompt_type)
 
@@ -220,7 +216,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,
+        **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
         """Encodes the given sentences using the encoder.
 
