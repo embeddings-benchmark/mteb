@@ -1,3 +1,7 @@
+---
+icon: lucide/square-stack
+---
+
 ## Adding a benchmark
 
 The MTEB has a growing list of benchmarks, and we are always looking to add more. MTEB include both benchmark that displayed on the [leaderboard](https://huggingface.co/spaces/mteb/leaderboard) and benchmarks that are not displayed on the leaderboard but are still available for evaluation. These non-leaderboard benchmarks are available in the 

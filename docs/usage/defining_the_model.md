@@ -1,3 +1,7 @@
+---
+icon: lucide/bot
+---
+
 # Defining the Model
 
 ## Using a pre-defined Model

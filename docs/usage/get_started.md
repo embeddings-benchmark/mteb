@@ -1,3 +1,7 @@
+---
+icon: lucide/circle-play
+---
+
 # Get Started
 
 This usage documentation first introduces a simple example of how to evaluate a model using `mteb`.

@@ -1,3 +1,7 @@
+---
+icon: lucide/package-open
+---
+
 # Installation
 
 Installation is as simple as:

@@ -1,3 +1,7 @@
+---
+icon: lucide/table
+---
+
 # Loading and working with results
 
 To make the results more easily accessible, we have designed functionality for retrieving results from both online and the local cache.

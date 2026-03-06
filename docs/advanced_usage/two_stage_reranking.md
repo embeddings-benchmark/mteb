@@ -1,3 +1,8 @@
+---
+icon: lucide/list-ordered
+---
+
+
 ## Two stage reranking
 
 To use a cross encoder for reranking on a retrieval task you first need a task, a stage 1 model and our cross-encoder.

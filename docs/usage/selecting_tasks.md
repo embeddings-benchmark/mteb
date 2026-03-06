@@ -1,3 +1,7 @@
+---
+icon: lucide/square
+---
+
 # Selecting Tasks or Benchmarks
 
 This section describes how to select benchmarks and tasks to evaluate, including selecting specific subsets or splits to run.

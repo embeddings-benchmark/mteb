@@ -1,3 +1,8 @@
+---
+icon: lucide/zap
+---
+
+
 ## vLLM
 
 !!! note

@@ -1,3 +1,8 @@
+---
+icon: lucide/scan-search
+---
+
+
 # Retrieval Search backend
 
 !!! note "Available since 2.3.0"

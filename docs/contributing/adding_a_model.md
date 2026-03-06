@@ -1,3 +1,8 @@
+---
+icon: lucide/bot
+---
+
+
 ## Adding a model to the Leaderboard
 
 The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/leaderboard). To submit to it:

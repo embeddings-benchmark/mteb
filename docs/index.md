@@ -1,4 +1,4 @@
-# MTEB Documentation
+# MTEB
 
 !!! info
     We recently released `mteb` version 2.0.0, to see what is new check of [what is new](./whats_new.md) and see [how to upgrade](./whats_new.md#upgrading-from-v1) your existing code.

@@ -1,4 +1,8 @@
-# Command Line Interface
+---
+icon: lucide/terminal
+---
+
+# Command Line
 
 This described the is the command line interface for `mteb`.
 

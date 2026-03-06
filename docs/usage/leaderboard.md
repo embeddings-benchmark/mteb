@@ -1,4 +1,9 @@
-# Running the Leaderboard
+---
+icon: lucide/list-ordered
+---
+
+
+# Run the Leaderboard
 
 This section contains information on how to interact with the leaderboard including running it locally, analysing the results, annotating contamination and more.
 

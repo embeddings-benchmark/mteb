@@ -1,3 +1,7 @@
+---
+icon: lucide/square
+---
+
 # Tasks
 
 A task is an implementation of a dataset for evaluation. It could, for instance, be the MIRACL dataset consisting of queries, a corpus of documents
