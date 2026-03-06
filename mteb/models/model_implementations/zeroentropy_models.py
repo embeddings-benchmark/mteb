@@ -3,7 +3,7 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 
 zeroentropy_zembed_1 = ModelMeta(
     loader=sentence_transformers_loader,
-    loader_kwargs={},
+    loader_kwargs={"trust_remote_code": True},
     name='zeroentropy/zembed-1',
     revision='fc4dc6ddd4a4f609978834de537b1f9f5cb29405',
     release_date="2025-09-16",
