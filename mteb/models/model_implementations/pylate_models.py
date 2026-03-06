@@ -511,6 +511,13 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
 }""",
 )
 
+late_on_code_citation = """@misc{LateOn-Code,
+  title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
+  author = {Chaffin, Antoine},
+  url    = {https://huggingface.co/collections/lightonai/lateon-code},
+  year   = {2026}
+}"""
+
 lightonai__late_on_code_pretrain = ModelMeta(
     loader=MultiVectorModel,
     name="lightonai/LateOn-Code-pretrain",
@@ -558,12 +565,7 @@ lightonai__late_on_code_pretrain = ModelMeta(
         "TRECDL2020",
         "CornStack",
     },
-    citation="""@misc{LateOn-Code,
-  title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
-  author = {Chaffin, Antoine},
-  url    = {https://huggingface.co/collections/lightonai/lateon-code},
-  year   = {2026}
-}""",
+    citation=late_on_code_citation,
 )
 
 
@@ -624,12 +626,7 @@ lightonai__late_on_code = ModelMeta(
         "CodeSearchNetCCRetrieval",
         "COIRCodeSearchNetRetrieval",
     },
-    citation="""@misc{LateOn-Code,
-  title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
-  author = {Chaffin, Antoine},
-  url    = {https://huggingface.co/collections/lightonai/lateon-code},
-  year   = {2026}
-}""",
+    citation=late_on_code_citation,
 )
 
 lightonai__late_on_code_edge_pretrain = ModelMeta(
@@ -671,12 +668,7 @@ lightonai__late_on_code_edge_pretrain = ModelMeta(
         "MultiLongDocRetrieval",
         "CornStack",
     },
-    citation="""@misc{LateOn-Code,
-  title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
-  author = {Chaffin, Antoine},
-  url    = {https://huggingface.co/collections/lightonai/lateon-code},
-  year   = {2026}
-}""",
+    citation=late_on_code_citation,
 )
 
 
@@ -730,12 +722,7 @@ lightonai__late_on_code_edge = ModelMeta(
         "CodeSearchNetCCRetrieval",
         "COIRCodeSearchNetRetrieval",
     },
-    citation="""@misc{LateOn-Code,
-  title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
-  author = {Chaffin, Antoine},
-  url    = {https://huggingface.co/collections/lightonai/lateon-code},
-  year   = {2026}
-}""",
+    citation=late_on_code_citation,
 )
 
 
@@ -760,6 +747,15 @@ nomic_embed_supervised_data = {
     "HotpotQAHardNegatives.v2",
     "NanoHotpotQARetrieval",
 }
+colbert_zero_citation = """@misc{chaffin2026colbertzeropretrainpretraincolbert,
+  title         = {ColBERT-Zero: To Pre-train Or Not To Pre-train ColBERT models}, 
+  author        = {Antoine Chaffin and Luca Arnaboldi and Amélie Chatelain and Florent Krzakala},
+  year          = {2026},
+  eprint        = {2602.16609},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url           = {https://arxiv.org/abs/2602.16609}, 
+}"""
 lightonai__colbert_zero_unsupervised = ModelMeta(
     loader=MultiVectorModel,
     name="lightonai/ColBERT-Zero-unsupervised",
@@ -785,15 +781,7 @@ lightonai__colbert_zero_unsupervised = ModelMeta(
     adapted_from="answerdotai/ModernBERT-base",
     superseded_by=None,
     training_datasets=nomic_embed_unsupervised_data,
-    citation="""@misc{chaffin2026colbertzeropretrainpretraincolbert,
-  title         = {ColBERT-Zero: To Pre-train Or Not To Pre-train ColBERT models}, 
-  author        = {Antoine Chaffin and Luca Arnaboldi and Amélie Chatelain and Florent Krzakala},
-  year          = {2026},
-  eprint        = {2602.16609},
-  archivePrefix = {arXiv},
-  primaryClass  = {cs.CL},
-  url           = {https://arxiv.org/abs/2602.16609}, 
-}""",
+    citation=colbert_zero_citation,
 )
 
 
@@ -822,15 +810,7 @@ lightonai__colbert_zero_supervised = ModelMeta(
     adapted_from="lightonai/ColBERT-Zero-unsupervised",
     superseded_by=None,
     training_datasets=nomic_embed_unsupervised_data | nomic_embed_supervised_data,
-    citation="""@misc{chaffin2026colbertzeropretrainpretraincolbert,
-  title         = {ColBERT-Zero: To Pre-train Or Not To Pre-train ColBERT models}, 
-  author        = {Antoine Chaffin and Luca Arnaboldi and Amélie Chatelain and Florent Krzakala},
-  year          = {2026},
-  eprint        = {2602.16609},
-  archivePrefix = {arXiv},
-  primaryClass  = {cs.CL},
-  url           = {https://arxiv.org/abs/2602.16609}, 
-}""",
+    citation=colbert_zero_citation,
 )
 
 lightonai__colbert_zero = ModelMeta(
@@ -858,13 +838,5 @@ lightonai__colbert_zero = ModelMeta(
     adapted_from="lightonai/ColBERT-Zero-supervised",
     superseded_by=None,
     training_datasets=nomic_embed_unsupervised_data | nomic_embed_supervised_data,
-    citation="""@misc{chaffin2026colbertzeropretrainpretraincolbert,
-  title         = {ColBERT-Zero: To Pre-train Or Not To Pre-train ColBERT models}, 
-  author        = {Antoine Chaffin and Luca Arnaboldi and Amélie Chatelain and Florent Krzakala},
-  year          = {2026},
-  eprint        = {2602.16609},
-  archivePrefix = {arXiv},
-  primaryClass  = {cs.CL},
-  url           = {https://arxiv.org/abs/2602.16609}, 
-}""",
+    citation=colbert_zero_citation,
 )
