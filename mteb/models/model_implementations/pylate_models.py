@@ -765,6 +765,9 @@ lightonai__colbert_zero_unsupervised = ModelMeta(
     superseded_by=None,
     training_datasets={
         "QuoraRetrieval",
+        "CodeSearchNetCCRetrieval",
+        "CodeSearchNetRetrieval",
+        "COIRCodeSearchNetRetrieval",
     },
     citation="""@misc{chaffin2026colbertzeropretrainpretraincolbert,
   title         = {ColBERT-Zero: To Pre-train Or Not To Pre-train ColBERT models}, 
@@ -804,6 +807,9 @@ lightonai__colbert_zero_supervised = ModelMeta(
     superseded_by=None,
     training_datasets={
         "QuoraRetrieval",
+        "CodeSearchNetCCRetrieval",
+        "CodeSearchNetRetrieval",
+        "COIRCodeSearchNetRetrieval",
         "FEVER",
         "FEVERHardNegatives.v2",
         "NanoFEVERRetrieval",
@@ -855,6 +861,9 @@ lightonai__colbert_zero = ModelMeta(
     superseded_by=None,
     training_datasets={
         "QuoraRetrieval",
+        "CodeSearchNetCCRetrieval",
+        "CodeSearchNetRetrieval",
+        "COIRCodeSearchNetRetrieval",
         "FEVER",
         "FEVERHardNegatives.v2",
         "NanoFEVERRetrieval",
