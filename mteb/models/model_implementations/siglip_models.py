@@ -68,7 +68,7 @@ class SiglipModelWrapper(AbsEncoder):
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.model.get_text_features(**inputs)
-                all_text_embeddings.append(text_outputs.cpu())
+                all_text_embeddings.append(text_outputs["last_hidden_state"].cpu())
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
