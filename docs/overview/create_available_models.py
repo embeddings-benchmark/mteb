@@ -24,6 +24,10 @@ model_entry = """
 """
 
 h1_header = """
+---
+icon: {icon}
+---
+
 # {modalities} Model
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
@@ -53,6 +57,13 @@ citation_chunk = """
 {bibtex_citation}
 ```
 """
+
+modality_to_icon = {
+    "Text": "lucide/type",
+    "Image": "lucide/image",
+    "Audio": "lucide/audio-lines",
+    "Multimodal": "lucide/layers",
+}
 
 
 def human_readable_number(num: int) -> str:
@@ -109,6 +120,7 @@ def format_model_entry(meta: ModelMeta) -> str:
     required_mem = required_memory_string(meta.memory_usage_mb)
 
     entry = model_entry.format(
+        icon=modality_to_icon.get(meta.modalities[0], "lucide/layers"),
         model_name_w_link=model_name_w_link,
         revision=revision,
         license=license,
@@ -162,8 +174,12 @@ def main(folder: Path) -> None:
             modalities_string = modality_to_string(model_modalities)
             doc_task = folder / f"{modalities_string.lower().replace('-', '_')}.md"
             with doc_task.open("w") as f:
+                icon = modality_to_icon.get(
+                    modalities_string, modality_to_icon["Multimodal"]
+                )
                 f.write(
                     h1_header.format(
+                        icon=icon,
                         modalities=modalities_string,
                         num_models=len(metas),
                         models_md=md.strip(),

@@ -83,6 +83,16 @@ def format_benchmark_entry(benchmark: mteb.Benchmark) -> str:
 
     return entry
 
+header = """---
+icon: lucide/square-stack
+---
+
+# Available Benchmarks
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
+
+"""
+
 
 def main(path: Path) -> None:
     benchmarks = mteb.get_benchmarks()
@@ -91,7 +101,7 @@ def main(path: Path) -> None:
     for benchmark in sorted(benchmarks, key=lambda b: b.name):
         benchmark_entries += format_benchmark_entry(benchmark) + "\n"
 
-    content = "# Available Benchmarks\n\n"
+    content = header
     new_content = content + benchmark_entries.strip()
     with path.open("w") as f:
         f.write(new_content)
