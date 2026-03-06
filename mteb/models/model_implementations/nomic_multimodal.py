@@ -11,9 +11,8 @@ from mteb._requires_package import (
     requires_package,
 )
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.model_implementations.colpali_models import COLPALI_TRAINING_DATA
-
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -154,7 +153,10 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
 
 nomic_embed_multimodal_3b = ModelMeta(
     loader=BiQwen2_5Wrapper,
-    loader_kwargs=dict(torch_dtype=torch.bfloat16, base_revision="66285546d2b821cf421d4f5eb2576359d3770cd3"),
+    loader_kwargs=dict(
+        torch_dtype=torch.bfloat16,
+        base_revision="66285546d2b821cf421d4f5eb2576359d3770cd3",
+    ),
     name="nomic-ai/nomic-embed-multimodal-3b",
     model_type=["dense"],
     languages=NOMIC_LANGUAGES,
@@ -180,7 +182,10 @@ nomic_embed_multimodal_3b = ModelMeta(
 
 nomic_embed_multimodal_7b = ModelMeta(
     loader=BiQwen2_5Wrapper,
-    loader_kwargs=dict(torch_dtype=torch.bfloat16, base_revision="cc594898137f460bfe9f0759e9844b3ce807cfb5"),
+    loader_kwargs=dict(
+        torch_dtype=torch.bfloat16,
+        base_revision="cc594898137f460bfe9f0759e9844b3ce807cfb5",
+    ),
     name="nomic-ai/nomic-embed-multimodal-7b",
     model_type=["dense"],
     languages=NOMIC_LANGUAGES,
