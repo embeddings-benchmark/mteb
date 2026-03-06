@@ -357,8 +357,6 @@ nemotron_colembed_vl_8b_v2 = ModelMeta(
 )
 
 
-
-
 class LlamaNemotronEmbedVL(AbsEncoder):
     def __init__(
         self,
