@@ -3,7 +3,7 @@
 
 
 This is the API documentation for `mteb` a package for benchmark and evaluating the quality of embeddings.
-This package was initially introduced as a package for evaluating text embeddings for English[@mteb_2023], but have since been extended cover multiple languages[@mmteb_2025] and multiple modalities[@mieb_2025].
+This package was initially introduced as a package for evaluating text [embeddings for English](https://huggingface.co/papers/2210.07316), but have since been [extended cover multiple languages](https://huggingface.co/papers/2502.13595) and multiple modalities ([image](https://huggingface.co/papers/2504.10471), [audio](https://huggingface.co/papers/2602.16008)).
 
 # Package Overview
 This package generally consists of three main concepts *benchmarks*, *tasks* and *model implementations*.

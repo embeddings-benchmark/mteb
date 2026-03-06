@@ -87,7 +87,7 @@ model_meta.calculate_memory_usage_mb()
 
 ### Adding instruction models
 
-Some models, such as the [E5 models][@wang2024multilingual], use instructions or prefixes.
+Some models, such as the [E5 models](https://huggingface.co/papers/2402.05672), use instructions or prefixes.
 You can directly add the prompts when saving and uploading your model to the Hub. Refer to this [configuration file as an example](https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5/blob/3b5a16eaf17e47bd997da998988dce5877a57092/config_sentence_transformers.json).
 
 However, you can also add these directly to the model configuration:

@@ -182,7 +182,7 @@ You can filter benchmarks to evaluate your model on specific subsets of tasks. U
     Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark.
     In the case of a language, we use the three-letter language code.
     For large groups of languages, we use the group notation, e.g., `MTEB(Scandinavian, v1)` for Scandinavian languages.
-    External benchmarks implemented in MTEB like `CoIR`[@coir] use their original name.
+    External benchmarks implemented in MTEB like [`CoIR`](https://huggingface.co/papers/2407.02883) use their original name.
 
 To get an overview of all available benchmarks, simply run:
 
