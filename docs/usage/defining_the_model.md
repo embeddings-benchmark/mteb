@@ -10,7 +10,7 @@ MTEB comes with an implementation of many popular models and APIs. These can be 
 
 ```python
 model_name = "intfloat/multilingual-e5-small"
-meta = mteb.get_model_meta(model_name) # (1)
+meta = mteb.get_model_meta(model_name) # (1)!
 model = meta.load_model()
 # or directly using
 model = mteb.get_model(model_name)

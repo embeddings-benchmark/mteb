@@ -210,13 +210,13 @@ This can be done in multiple ways, e.g.:
 # by name
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
 # by type
-tasks = mteb.get_tasks(task_types=["Clustering", "Retrieval"]) # (1)
+tasks = mteb.get_tasks(task_types=["Clustering", "Retrieval"]) # (1)!
 # by language
-tasks = mteb.get_tasks(languages=["eng", "deu"]) # (2)
+tasks = mteb.get_tasks(languages=["eng", "deu"]) # (2)!
 # by domain
 tasks = get_tasks(domains=["Legal"])
 # by modality
-tasks = mteb.get_tasks(modalities=["text", "image"]) # (3)
+tasks = mteb.get_tasks(modalities=["text", "image"]) # (3)!
 # or using multiple
 tasks = get_tasks(languages=["eng", "deu"], script=["Latn"], domains=["Legal"])
 ```

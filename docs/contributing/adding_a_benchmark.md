@@ -4,7 +4,7 @@ icon: lucide/square-stack
 
 ## Adding a benchmark
 
-The MTEB has a growing list of benchmarks, and we are always looking to add more. MTEB include both benchmark that displayed on the [leaderboard](https://huggingface.co/spaces/mteb/leaderboard) and benchmarks that are not displayed on the leaderboard but are still available for evaluation. These non-leaderboard benchmarks are available in the 
+The MTEB has a growing list of benchmarks, and we are always looking to add more. MTEB include both benchmark that displayed on the [leaderboard](https://huggingface.co/spaces/mteb/leaderboard) and benchmarks that are not displayed on the leaderboard but are still available for evaluation. These non-leaderboard benchmarks are available in the
 `mteb.get_benchmark(s)` function and are e.g. useful for evaluating models during development or benchmark that are too specific to be added to the leaderboard.
 
 ### Implement a new benchmark
@@ -17,12 +17,12 @@ Once you have selected the tasks, you can create a new benchmark as follows:
 import mteb
 
 custom_bench = Benchmark(
-    name="MTEB(custom, v1)", # set the name 
-    tasks=mteb.get_tasks( # (1)
+    name="MTEB(custom, v1)", # set the name
+    tasks=mteb.get_tasks( # (1)!
         tasks=["AmazonCounterfactualClassification", "AmazonPolarityClassification"],
         languages=["eng"],
     ),
-    # give a short description of the benchmark of what the benchmarks 
+    # give a short description of the benchmark of what the benchmarks
     # seeks to test for:
     description=(
         "My custom Amazon benchmark, "
@@ -39,7 +39,7 @@ custom_bench = Benchmark(
     task in mteb comes with metadata (`task.metadata`) that includes a description of the task, the
     construction and annotation process, licensing and more. We additionally also
     include descriptive statistics (`task.metadata.descriptive_stats`) which includes information about the number of samples, minimum length and other statistics that can be useful to select the right tasks for your benchmark.
-    
+
     Generally we recommend selecting tasks that are well established in the community, are not machine translated, are not too small and that are not too similar to other tasks in the benchmark. However, the selection of tasks will depend on what you seek to measure with the benchmark, and thus we recommend carefully reading the metadata of the tasks and selecting the ones that best fit your needs.
 
 ## Submitting a Benchmark

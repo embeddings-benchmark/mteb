@@ -32,7 +32,7 @@ For instance if we want to run [`"sentence-transformers/all-MiniLM-L6-v2"`](http
 model_name = "sentence-transformers/all-MiniLM-L6-v2"
 
 # load the model using MTEB
-model = mteb.get_model(model_name) # (1)
+model = mteb.get_model(model_name) # (1)!
 
 # select the desired tasks and evaluate
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
