@@ -12,6 +12,8 @@ from mteb._requires_package import (
 )
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.model_implementations.colpali_models import COLPALI_TRAINING_DATA
+
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -38,7 +40,7 @@ CITATION = """
 }"""
 
 # https://huggingface.co/datasets/nomic-ai/colpali-queries-mined-20250321-by-source
-TRAINING_DATA: set[str] = set()
+TRAINING_DATA = COLPALI_TRAINING_DATA
 
 
 logger = logging.getLogger(__name__)
