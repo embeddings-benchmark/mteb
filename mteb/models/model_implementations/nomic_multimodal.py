@@ -39,7 +39,7 @@ CITATION = """
 }"""
 
 # https://huggingface.co/datasets/nomic-ai/colpali-queries-mined-20250321-by-source
-TRAINING_DATA = COLPALI_TRAINING_DATA
+TRAINING_DATA = COLPALI_TRAINING_DATA | {"VDRMultilingualRetrieval"}
 
 
 logger = logging.getLogger(__name__)
