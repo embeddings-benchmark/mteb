@@ -68,7 +68,9 @@ class SiglipModelWrapper(AbsEncoder):
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.model.get_text_features(**inputs)
-                embeddings = torch.mean(text_outputs["last_hidden_state"], dim=1) # mean pool
+                embeddings = torch.mean(
+                    text_outputs["last_hidden_state"], dim=1
+                )  # mean pool
                 all_text_embeddings.append(embeddings.cpu())
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
@@ -89,7 +91,9 @@ class SiglipModelWrapper(AbsEncoder):
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 image_outputs = self.model.get_image_features(**inputs)
-                embeddings = torch.mean(image_outputs["last_hidden_state"], dim=1) # mean pool
+                embeddings = torch.mean(
+                    image_outputs["last_hidden_state"], dim=1
+                )  # mean pool
                 all_image_embeddings.append(embeddings.cpu())
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
