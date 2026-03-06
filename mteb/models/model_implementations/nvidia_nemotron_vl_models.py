@@ -357,7 +357,6 @@ nemotron_colembed_vl_8b_v2 = ModelMeta(
 )
 
 
-#####################
 
 
 class LlamaNemotronEmbedVL(AbsEncoder):
@@ -403,13 +402,16 @@ class LlamaNemotronEmbedVL(AbsEncoder):
             attn_implementation=attn_implementation,
         ).eval()
 
+        # Sets the number of tiles the image can be split into
+        self.model.processor.max_input_tiles = 4
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,
         task_metadata: TaskMetadata,
         hf_split: str,
-        hf_subset: str,
+        gf_subset: str,
         prompt_type: PromptType | None = None,
         show_progress_bar: bool = True,
         **kwargs: Any,
