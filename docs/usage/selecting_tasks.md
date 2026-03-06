@@ -1,5 +1,5 @@
 ---
-icon: lucide/square
+icon: lucide/square-stack
 ---
 
 # Selecting Tasks or Benchmarks

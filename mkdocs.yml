@@ -75,7 +75,7 @@ nav:
       - Usage:
         - Get Started: usage/get_started.md
         - Define the Model: usage/defining_the_model.md
-        - Select Tasks: usage/selecting_tasks.md
+        - Select Benchmarks: usage/selecting_tasks.md
         - Run the Evaluation: usage/running_the_evaluation.md
         - Load Results: usage/loading_results.md
         - Command Line: usage/cli.md
