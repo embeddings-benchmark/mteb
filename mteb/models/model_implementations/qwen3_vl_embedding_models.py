@@ -110,6 +110,7 @@ def _build_qwen3_vl_for_embedding_class():
             cache_position: torch.LongTensor | None = None,
             **kwargs,
         ) -> tuple | Qwen3VLForEmbeddingOutput:
+            self.model.rope_deltas = None
             outputs = self.model(
                 input_ids=input_ids,
                 pixel_values=pixel_values,
@@ -148,6 +149,7 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
         max_length: int = MAX_LENGTH,
         min_pixels: int = MIN_PIXELS,
         max_pixels: int = MAX_PIXELS,
+        visual_document_use_text: bool = False,
         **kwargs: Any,
     ):
         requires_image_dependencies()
@@ -161,6 +163,7 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
 
         from transformers.models.qwen3_vl.processing_qwen3_vl import Qwen3VLProcessor
 
+        self.visual_document_use_text = visual_document_use_text
         self.device = device or (
             "cuda"
             if torch.cuda.is_available()
@@ -320,11 +323,20 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
         if not instruction:
             instruction = DEFAULT_INSTRUCTION
 
+        from mteb.types import PromptType
+
         contains_text = "text" in inputs.dataset.features
         contains_image = "image" in inputs.dataset.features
 
         if not contains_text and not contains_image:
             raise ValueError("No text or image features found in inputs.")
+
+        if (
+            prompt_type == PromptType.document
+            and not self.visual_document_use_text
+            and contains_image
+        ):
+            contains_text = False
 
         all_embeddings: list[torch.Tensor] = []
         with torch.no_grad():
