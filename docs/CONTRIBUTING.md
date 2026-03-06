@@ -1,4 +1,5 @@
 ---
+title: "CONTRIBUTING"
 icon: lucide/user-pen
 ---
 

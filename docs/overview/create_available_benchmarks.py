@@ -83,6 +83,7 @@ def format_benchmark_entry(benchmark: mteb.Benchmark) -> str:
 
     return entry
 
+
 header = """---
 icon: lucide/square-stack
 ---

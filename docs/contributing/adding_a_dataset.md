@@ -1,4 +1,5 @@
 ---
+title: "Adding a Task"
 icon: lucide/square
 ---
 
@@ -52,7 +53,7 @@ class MyNewTask(AbsTaskClassification):
 ### Select an appropriate task
 
 To add a dataset you first need to figure out which type of task is the best suited for the dataset. Below we will give you an overview of the most common,
-but do see [abstasks](../api/task.md#multimodal-tasks) for an overview of all the tasks available.
+but do see [abstasks](../API/task.md#multimodal-tasks) for an overview of all the tasks available.
 
 | Task (Abstask)                                                                                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                 | Common Metric                                                                                       |
 |-----------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
@@ -407,7 +408,7 @@ To run a task locally you do not necessarily need to fill out all the fields in 
 If you are making a PR, feel free to leave fields and `None` if you are unsure about how to fill. You can always ask about it during the PR.
 
 Here is an example of how to fill out the `TaskMetadata` for the poem sentiment classification dataset, we implemented above and which is also
-available within `mteb` as `PoemSentimentClassification.v2`, for more details about the fields see the [TaskMetadata documentation](../api/task.md#metadata).
+available within `mteb` as `PoemSentimentClassification.v2`, for more details about the fields see the [TaskMetadata documentation](../API/task.md#metadata).
 
 ```python
 TaskMetadata(
