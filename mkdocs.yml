@@ -71,13 +71,7 @@ markdown_extensions:
 copyright: This site made available under a Creative Commons Attribution 4.0 license
 
 plugins:
-  - include_dir_to_nav
   - search
-  - exclude:
-      glob:
-        # projects
-        - mieb/*
-        - mmteb/*
   - mkdocstrings:
       handlers:
         python:
@@ -89,10 +83,6 @@ plugins:
             heading_level: 3
             show_source: true
             show_root_heading: true
-
-  - bibtex:
-      bib_file: "docs/references.bib"
-      enable_inline_citations: false
 
 extra_javascript:
   - javascripts/extra.js
