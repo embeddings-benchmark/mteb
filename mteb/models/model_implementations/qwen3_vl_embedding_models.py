@@ -110,7 +110,10 @@ def _build_qwen3_vl_for_embedding_class():
             cache_position: torch.LongTensor | None = None,
             **kwargs,
         ) -> tuple | Qwen3VLForEmbeddingOutput:
+            # Setting to None enables image + text embeddings mode
+            # More info: https://github.com/embeddings-benchmark/mteb/pull/4198/changes#r2899945802
             self.model.rope_deltas = None
+
             outputs = self.model(
                 input_ids=input_ids,
                 pixel_values=pixel_values,
@@ -382,9 +385,9 @@ qwen3_vl_embedding_2b = ModelMeta(
     loader=Qwen3VLEmbeddingWrapper,
     name="Qwen/Qwen3-VL-Embedding-2B",
     model_type=["dense"],
-    languages=[],
+    languages=["eng-Latn"],
     open_weights=True,
-    revision="main",
+    revision="2a50926d213628c727f38025982a76f655673f54",
     release_date="2026-01-08",
     modalities=["image", "text"],
     n_parameters=2_127_532_032,
@@ -407,9 +410,9 @@ qwen3_vl_embedding_8b = ModelMeta(
     loader=Qwen3VLEmbeddingWrapper,
     name="Qwen/Qwen3-VL-Embedding-8B",
     model_type=["dense"],
-    languages=[],
+    languages=["eng-Latn"],
     open_weights=True,
-    revision="main",
+    revision="418d03899aeb9d954e776dfa762006616519a914",
     release_date="2026-01-08",
     modalities=["image", "text"],
     n_parameters=8_144_793_840,
