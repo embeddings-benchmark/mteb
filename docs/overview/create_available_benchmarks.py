@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from mteb.get_tasks import MTEBTasks
 
 benchmark_entry = """
-####  {benchmark_name}
+###  `{benchmark_name}` {{ .model-copy }}
 
 {description}
 

@@ -11,15 +11,15 @@ from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.get_tasks import MTEBTasks
 
 task_entry = """
-#### {task_name}
+#### `{task_name}` {{ .model-copy }}
 
 {description}
 
 {dataset_line}
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| {task_category_string} ({task_category}) | {main_score} | {languages} | {domains} | {annotation_creators} | {sample_creation} |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| {task_category_string} ({task_category}) | {languages} | {domains} | {annotation_creators} | {sample_creation} | {main_score} |
 
 """
 aggregated_tasks_section = """
@@ -31,6 +31,14 @@ aggregated_tasks_section = """
 task_type_section = """---
 title: "{task_type}"
 ---
+
+<style>
+.nowrap-table th {
+  white-space: nowrap;
+}
+</style>
+
+<div class="nowrap-table" markdown>
 
 # {task_type}
 
@@ -136,17 +144,17 @@ def format_task_entry(task: mteb.AbsTask) -> str:
     sample_creation = task.metadata.sample_creation or "not specified"
 
     if reference:
-        learn_more = f"[Learn more →]({reference})"
+        learn_more = f" • [Learn more →]({reference})"
     else:
-        learn_more = "Learn more → not specified"
+        learn_more = ""
 
     if not isinstance(task, AbsTaskAggregate):
         dataset_line = (
             f"**Dataset:** [`{dataset_name}`](https://huggingface.co/datasets/{dataset_name}) "
-            f"• **License:** {license} • {learn_more}"
+            f"• **License:** {license}{learn_more}"
         )
     else:
-        dataset_line = f"**License:** {license} • {learn_more}"
+        dataset_line = f"**License:** {license}{learn_more}"
 
     entry = task_entry.format(
         task_name=task.metadata.name,

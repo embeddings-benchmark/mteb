@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+import numpy as np
 from prettify_list import pretty_long_list
 
 import mteb
@@ -13,14 +14,14 @@ if TYPE_CHECKING:
     from mteb.models import ModelMeta
 
 model_entry = """
-####  {model_name_w_link}
+####  `{model_name}` {{ .model-copy }}
 
- **License:** {license}
+ **License:** {license} {learn_more}
 
+| :lucide-cpu: Parameters | :lucide-layers: Emb. Dim | :lucide-ruler: Max Tokens | :lucide-database: Memory | :lucide-calendar: Released | :lucide-languages: Languages |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| {n_parameters} | {embed_dim} | {max_tokens} | {required_memory} | {release_date} | {languages} |
 
-| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
-|-------|-------|-------|-------|-------|-------|
-| {max_tokens} | {embed_dim} | {n_parameters} | {required_memory} | {release_date} | {languages} |
 """
 
 h1_header = """
@@ -33,7 +34,7 @@ title: "{modalities} Model"
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-- **Number of models:** {num_models}
+lucide/bot: {num_models} Models
 
 {models_md}
 """
@@ -88,6 +89,8 @@ def human_readable_number(num: int) -> str:
     1500 -> 1.5K
     2000000 -> 2M
     """
+    if np.isinf(num):
+        return "Infinite"
     for unit in ["", "K", "M", "B", "T"]:
         if abs(num) < 1000:
             return f"{num:.1f}{unit}" if unit else str(int(num))
@@ -120,17 +123,12 @@ def required_memory_string(mem_in_mb: int | None) -> str:
 def format_model_entry(meta: ModelMeta) -> str:
     revision = meta.revision or "not specified"
     license = meta.license or "not specified"
-    model_name_w_link = (
-        f"[`{meta.name}`]({meta.reference})"
-        + "{ .model-copy }"  # adds copy and paste button
-        if meta.reference
-        else meta.name
-    )
     max_tokens = (
         human_readable_number(meta.max_tokens)
         if meta.max_tokens is not None
         else "not specified"
     )
+    learn_more = f"• [Learn more →]({meta.reference})" if meta.reference else ""
     embed_dim = meta.embed_dim if meta.embed_dim is not None else "not specified"
     n_parameters = (
         human_readable_number(meta.n_parameters)
@@ -147,7 +145,8 @@ def format_model_entry(meta: ModelMeta) -> str:
 
     entry = model_entry.format(
         icon=modality_to_icon.get(meta.modalities[0], "lucide/layers"),
-        model_name_w_link=model_name_w_link,
+        model_name=meta.name,
+        learn_more=learn_more,
         revision=revision,
         license=license,
         max_tokens=max_tokens,
