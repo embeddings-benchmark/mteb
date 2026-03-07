@@ -511,6 +511,13 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
 }""",
 )
 
+late_on_code_citation = """@misc{LateOn-Code,
+  title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
+  author = {Chaffin, Antoine},
+  url    = {https://huggingface.co/collections/lightonai/lateon-code},
+  year   = {2026}
+}"""
+
 lightonai__late_on_code_pretrain = ModelMeta(
     loader=MultiVectorModel,
     name="lightonai/LateOn-Code-pretrain",
@@ -529,7 +536,7 @@ lightonai__late_on_code_pretrain = ModelMeta(
     public_training_code="https://github.com/lightonai/pylate/blob/main/examples/train/lateon_code/pre-training.py",
     public_training_data="https://huggingface.co/datasets/lightonai/cornstack",
     release_date="2026-02-12",
-    n_parameters=int(149 * 1e6),
+    n_parameters=149015808,
     n_embedding_parameters=38684160,
     memory_usage_mb=568,
     max_tokens=8192,
@@ -558,12 +565,7 @@ lightonai__late_on_code_pretrain = ModelMeta(
         "TRECDL2020",
         "CornStack",
     },
-    citation="""@misc{LateOn-Code,
-  title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
-  author = {Chaffin, Antoine},
-  url    = {https://huggingface.co/collections/lightonai/lateon-code},
-  year   = {2026}
-}""",
+    citation=late_on_code_citation,
 )
 
 
@@ -585,7 +587,7 @@ lightonai__late_on_code = ModelMeta(
     public_training_code="https://github.com/lightonai/pylate/blob/main/examples/train/lateon_code/fine_tuning.py",
     public_training_data="https://huggingface.co/datasets/lightonai/nv-embed-supervised-distill-dedup-code",
     release_date="2026-02-12",
-    n_parameters=int(149 * 1e6),
+    n_parameters=149015808,
     n_embedding_parameters=38684160,
     memory_usage_mb=568,
     max_tokens=8192,
@@ -624,12 +626,7 @@ lightonai__late_on_code = ModelMeta(
         "CodeSearchNetCCRetrieval",
         "COIRCodeSearchNetRetrieval",
     },
-    citation="""@misc{LateOn-Code,
-  title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
-  author = {Chaffin, Antoine},
-  url    = {https://huggingface.co/collections/lightonai/lateon-code},
-  year   = {2026}
-}""",
+    citation=late_on_code_citation,
 )
 
 lightonai__late_on_code_edge_pretrain = ModelMeta(
@@ -650,7 +647,7 @@ lightonai__late_on_code_edge_pretrain = ModelMeta(
     public_training_code="https://github.com/lightonai/pylate/blob/main/examples/train/lateon_code/pre-training.py",
     public_training_data="https://huggingface.co/datasets/lightonai/cornstack",
     release_date="2026-02-12",
-    n_parameters=int(17 * 1e6),
+    n_parameters=16797952,
     n_embedding_parameters=12894720,
     memory_usage_mb=64,
     max_tokens=7999,
@@ -671,12 +668,7 @@ lightonai__late_on_code_edge_pretrain = ModelMeta(
         "MultiLongDocRetrieval",
         "CornStack",
     },
-    citation="""@misc{LateOn-Code,
-  title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
-  author = {Chaffin, Antoine},
-  url    = {https://huggingface.co/collections/lightonai/lateon-code},
-  year   = {2026}
-}""",
+    citation=late_on_code_citation,
 )
 
 
@@ -698,7 +690,7 @@ lightonai__late_on_code_edge = ModelMeta(
     public_training_code="https://github.com/lightonai/pylate/blob/main/examples/train/lateon_code/fine_tuning.py",
     public_training_data="https://huggingface.co/datasets/lightonai/nv-embed-supervised-distill-dedup-code",
     release_date="2026-02-12",
-    n_parameters=int(17 * 1e6),
+    n_parameters=16797952,
     n_embedding_parameters=12894720,
     memory_usage_mb=64,
     max_tokens=7999,
@@ -730,10 +722,121 @@ lightonai__late_on_code_edge = ModelMeta(
         "CodeSearchNetCCRetrieval",
         "COIRCodeSearchNetRetrieval",
     },
-    citation="""@misc{LateOn-Code,
-  title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
-  author = {Chaffin, Antoine},
-  url    = {https://huggingface.co/collections/lightonai/lateon-code},
-  year   = {2026}
-}""",
+    citation=late_on_code_citation,
+)
+
+
+nomic_embed_unsupervised_data = {
+    "QuoraRetrieval",
+    "CodeSearchNetCCRetrieval",
+    "CodeSearchNetRetrieval",
+    "COIRCodeSearchNetRetrieval",
+}
+nomic_embed_supervised_data = {
+    "FEVER",
+    "FEVERHardNegatives.v2",
+    "NanoFEVERRetrieval",
+    "MSMARCO",
+    "MSMARCOv2",
+    "MSMARCOHardNegatives",
+    "NanoMSMARCORetrieval",
+    "NQ",
+    "NQHardNegatives",
+    "NanoNQRetrieval",
+    "HotpotQA",
+    "HotpotQAHardNegatives.v2",
+    "NanoHotpotQARetrieval",
+}
+colbert_zero_citation = """@misc{chaffin2026colbertzeropretrainpretraincolbert,
+  title         = {ColBERT-Zero: To Pre-train Or Not To Pre-train ColBERT models}, 
+  author        = {Antoine Chaffin and Luca Arnaboldi and Amélie Chatelain and Florent Krzakala},
+  year          = {2026},
+  eprint        = {2602.16609},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url           = {https://arxiv.org/abs/2602.16609}, 
+}"""
+lightonai__colbert_zero_unsupervised = ModelMeta(
+    loader=MultiVectorModel,
+    name="lightonai/ColBERT-Zero-unsupervised",
+    model_type=["late-interaction"],
+    languages=[
+        "eng-Latn",
+    ],
+    open_weights=True,
+    revision="d5f1d1e4d7ddb9aa22ce0d8f57f0cd361f39ac77",
+    public_training_code="https://github.com/lightonai/pylate/blob/main/examples/train/ColBERT-zero/unsupervised.py",
+    public_training_data="https://huggingface.co/datasets/nomic-ai/nomic-embed-unsupervised-data",
+    release_date="2026-02-19",
+    n_parameters=149015808,
+    n_embedding_parameters=38684160,
+    memory_usage_mb=568,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name="MaxSim",
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/lightonai/ColBERT-Zero-unsupervised",
+    use_instructions=False,
+    adapted_from="answerdotai/ModernBERT-base",
+    superseded_by=None,
+    training_datasets=nomic_embed_unsupervised_data,
+    citation=colbert_zero_citation,
+)
+
+
+lightonai__colbert_zero_supervised = ModelMeta(
+    loader=MultiVectorModel,
+    name="lightonai/ColBERT-Zero-supervised",
+    model_type=["late-interaction"],
+    languages=[
+        "eng-Latn",
+    ],
+    open_weights=True,
+    revision="9340f7e825b4d37fdf2c6e950c1a928fe24d770b",
+    public_training_code="https://github.com/lightonai/pylate/blob/main/examples/train/ColBERT-zero/supervised.py",
+    public_training_data="https://huggingface.co/datasets/nomic-ai/nomic-embed-supervised",
+    release_date="2026-02-19",
+    n_parameters=149015808,
+    n_embedding_parameters=38684160,
+    memory_usage_mb=568,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name="MaxSim",
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/lightonai/ColBERT-Zero-supervised",
+    use_instructions=False,
+    adapted_from="lightonai/ColBERT-Zero-unsupervised",
+    superseded_by=None,
+    training_datasets=nomic_embed_unsupervised_data | nomic_embed_supervised_data,
+    citation=colbert_zero_citation,
+)
+
+lightonai__colbert_zero = ModelMeta(
+    loader=MultiVectorModel,
+    name="lightonai/ColBERT-Zero",
+    model_type=["late-interaction"],
+    languages=[
+        "eng-Latn",
+    ],
+    open_weights=True,
+    revision="5a1f22f2be589f17654d1ed455b635b70d4aff21",
+    public_training_code="https://github.com/lightonai/pylate/blob/main/examples/train/ColBERT-zero/distillation.py",
+    public_training_data="lightonai/ms-marco-en-bge-gemma",
+    release_date="2026-02-19",
+    n_parameters=149015808,
+    n_embedding_parameters=38684160,
+    memory_usage_mb=568,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name="MaxSim",
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/lightonai/ColBERT-Zero",
+    use_instructions=False,
+    adapted_from="lightonai/ColBERT-Zero-supervised",
+    superseded_by=None,
+    training_datasets=nomic_embed_unsupervised_data | nomic_embed_supervised_data,
+    citation=colbert_zero_citation,
 )
