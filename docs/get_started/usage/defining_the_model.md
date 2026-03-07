@@ -7,7 +7,7 @@ icon: lucide/bot
 
 ## Using a pre-defined Model
 
-MTEB comes with an implementation of many popular models and APIs. These can be loaded using [`mteb.get_model_meta`](../../API/model.md#mteb.get_model_meta) or [`mteb.get_model`](../../API/model.md#mteb.get_model):
+MTEB comes with an implementation of many popular models and APIs. These can be loaded using [`mteb.get_model_meta`](../../api/model.md#mteb.get_model_meta) or [`mteb.get_model`](../../api/model.md#mteb.get_model):
 
 ```python
 model_name = "intfloat/multilingual-e5-small"

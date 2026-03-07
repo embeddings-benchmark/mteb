@@ -9,7 +9,7 @@ This section describes how to select benchmarks and tasks to evaluate, including
 
 ## Selecting a Benchmark
 
-`mteb` comes with a set of predefined benchmarks. These can be fetched using [`get_benchmark`](../../API/benchmark.md#mteb.get_benchmark) or [`get_benchmarks`](../../API/benchmark.md#mteb.get_benchmarks) and run in a similar fashion to other sets of tasks.
+`mteb` comes with a set of predefined benchmarks. These can be fetched using [`get_benchmark`](../../api/benchmark.md#mteb.get_benchmark) or [`get_benchmarks`](../../api/benchmark.md#mteb.get_benchmarks) and run in a similar fashion to other sets of tasks.
 For instance to select the English benchmark that forms the English leaderboard:
 
 ```python
@@ -192,11 +192,11 @@ import mteb
 benchmarks = mteb.get_benchmarks()
 ```
 
-When using a benchmark from MTEB please cite `mteb` along with the citations of the benchmark which you can access using [`benchmark.citation`](../../API/benchmark.md#mteb.Benchmark).
+When using a benchmark from MTEB please cite `mteb` along with the citations of the benchmark which you can access using [`benchmark.citation`](../../api/benchmark.md#mteb.Benchmark).
 
 ## Selecting a Task
 
-`mteb` comes with the utility function [`get_task`](../../API/task.md#mteb.get_task) and [`get_tasks`](../../API/task.md#mteb.get_tasks) for fetching and analysing the tasks of interest.
+`mteb` comes with the utility function [`get_task`](../../api/task.md#mteb.get_task) and [`get_tasks`](../../api/task.md#mteb.get_tasks) for fetching and analysing the tasks of interest.
 
 This can be done in multiple ways, e.g.:
 
