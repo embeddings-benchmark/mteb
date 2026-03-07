@@ -1,3 +1,8 @@
+---
+title: "Model"
+icon: lucide/bot
+---
+
 # Models
 
 A model in `mteb` covers two concepts: metadata and implementation.
