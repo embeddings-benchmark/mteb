@@ -32,6 +32,7 @@ if TYPE_CHECKING:
         ImageInput,
         QueryInput,
         TextInput,
+        VideoInput,
     )
 
 logger = logging.getLogger(__name__)
@@ -313,7 +314,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
             "image",  # images can be with different sizes
             "conversation",  # conversations are lists of varying lengths
             "audio",  # audio can have different lengths
-            "video",  # video VideoDecoder objects can't be collated
+            "video",  # video can have different lengths
         ):
             collated[key] = [item[key] for item in batch]
         else:
@@ -383,7 +384,7 @@ def _create_queries_dataloader(
     input_column: str | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
-) -> DataLoader[QueryInput | ImageInput | AudioInput]:
+) -> DataLoader[QueryInput | ImageInput | AudioInput | VideoInput]:
     """Create a dataloader for queries."""
     queries_type = task_metadata.get_modalities(PromptType.query)
     if queries_type == ["text"]:  # text only
@@ -424,7 +425,7 @@ def _create_document_dataloader(
     input_column: str | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
-) -> DataLoader[CorpusInput | ImageInput | AudioInput]:
+) -> DataLoader[CorpusInput | ImageInput | AudioInput | VideoInput]:
     """Create a dataloader for documents.
 
     Args:
@@ -511,18 +512,18 @@ def _create_video_dataloader(
     input_column: str | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
-) -> DataLoader[AudioInput]:
+) -> DataLoader[VideoInput]:
     """Create a dataloader for video.
 
     Args:
-        dataset: The dataset containing the audio.
-        task_metadata: Metadata of the task to determine the audio type.
-        input_column: The column to use as input. If None, it will use the first column that matches the audio.
+        dataset: The dataset containing the video.
+        task_metadata: Metadata of the task to determine the video type.
+        input_column: The column to use as input. If None, it will use the first column that matches the video.
         batch_size: Batch size for the dataloader.
         num_proc: The number of workers for the dataloader.
 
     Returns:
-        A DataLoader with the audio dataset.
+        A DataLoader with the video dataset.
     """
     if (
         input_column
@@ -587,6 +588,14 @@ def create_dataloader(
         return _create_image_dataloader(
             dataset,
             image_column_name=input_column,
+            batch_size=batch_size,
+            num_proc=num_proc,
+        )
+    if "video" in task_metadata.modalities:
+        return _create_video_dataloader(
+            dataset,
+            task_metadata,
+            input_column=input_column,
             batch_size=batch_size,
             num_proc=num_proc,
         )
@@ -742,25 +751,20 @@ class VideoCollator:
 
         collated_inputs = []
         for row in inputs:
-            videos = row.pop("video")
-            video_inputs = []
-            for video in videos:
-                frames = self.resample_video(video["frames"], self.max_frames)
-                audio = self.audio_collator.resample_audio(
-                    video,
-                    target_sampling_rate=self.audio_collator.target_sampling_rate,
-                    max_samples=self.audio_collator.max_samples,
-                )
-                video_inputs.append(
-                    VideoInputItem(
-                        frames=frames,
-                        audio=AudioInputItem(
-                            array=audio,
-                            sampling_rate=self.audio_collator.target_sampling_rate,
-                        ),
-                    )
-                )
-            row["video"] = video_inputs
+            video = row.pop("video")
+            frames = self.resample_video(video["frames"], self.max_frames)
+            audio = self.audio_collator.resample_audio(
+                video,
+                target_sampling_rate=self.audio_collator.target_sampling_rate,
+                max_samples=self.audio_collator.max_samples,
+            )
+            row["video"] = VideoInputItem(
+                frames=frames,
+                audio=AudioInputItem(
+                    array=audio,
+                    sampling_rate=self.audio_collator.target_sampling_rate,
+                ),
+            )
             collated_inputs.append(row)
 
         return cast(
@@ -794,3 +798,41 @@ class VideoCollator:
             else list(range(video_frames))
         )
         return video.get_frames_at(selected_frames).data
+
+
+class MultimodalCollator:
+    """Collator that handles any combination of video and audio modalities.
+
+    Delegates to VideoCollator when video is present (which also handles audio
+    embedded in VideoInputItem), and falls back to AudioCollator for audio-only.
+    """
+
+    def __init__(
+        self,
+        target_sampling_rate: int,
+        max_frames: int = 16,
+        max_samples: int | None = None,
+    ) -> None:
+        """Initialize the collator.
+
+        Args:
+            target_sampling_rate: The sampling rate to resample audio to.
+            max_frames: Maximum number of frames to keep per video.
+            max_samples: Maximum number of audio samples to keep. If None, no truncation.
+        """
+        self.video_collator = VideoCollator(
+            max_frames=max_frames,
+            target_sampling_rate=target_sampling_rate,
+            max_samples=max_samples,
+        )
+        self.audio_collator = AudioCollator(
+            target_sampling_rate=target_sampling_rate,
+            max_samples=max_samples,
+        )
+
+    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
+        if "video" in inputs[0]:
+            return self.video_collator(inputs)
+        if "audio" in inputs[0]:
+            return self.audio_collator(inputs)
+        return cast("BatchedInput", _custom_collate_fn(inputs))

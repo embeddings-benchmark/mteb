@@ -201,6 +201,15 @@ MAEB_TASK_TYPE = (
     "Any2AnyRetrieval",
 )
 
+MVEB_TASK_TYPE = (
+    "VideoClassification",
+    "VideoClustering",
+    "VideoPairClassification",
+    "VideoZeroshotClassification",
+    "VideoCentricQA",
+    "Any2AnyRetrieval",
+)
+
 
 _TASK_TYPE = (
     (
@@ -219,6 +228,7 @@ _TASK_TYPE = (
     )
     + MIEB_TASK_TYPE
     + MAEB_TASK_TYPE
+    + MVEB_TASK_TYPE
 )
 
 TaskType = Literal[_TASK_TYPE]  # type: ignore[valid-type]
@@ -246,7 +256,20 @@ TaskCategory = Literal[
     "a2at",
     "t2at",
     "at2at",
+    "v2v",
+    "v2c",
     "v2t",
+    "t2v",
+    "vt2t",
+    "vt2v",
+    "v2vt",
+    "t2vt",
+    "vt2vt",
+    "va2c",
+    "va2t",
+    "vat2t",
+    "v2a",
+    "a2v",
 ]
 """The category of the task.
 
@@ -270,7 +293,20 @@ TaskCategory = Literal[
 18. a2at: audio to audio+text
 19. t2at: text to audio+text
 20. at2at: audio+text to audio+text
-21. v2t: video to text
+21. v2v: video to video
+22. v2c: video to category
+23. v2t: video to text
+24. t2v: text to video
+25. vt2t: video+text to text
+26. vt2v: video+text to video
+27. v2vt: video to video+text
+28. t2vt: text to video+text
+29. vt2vt: video+text to video+text
+30. va2c: video+audio to category
+31. va2t: video+audio to text
+32. vat2t: video+audio+text to text
+33. v2a: video to audio
+34. a2v: audio to video
 """
 
 AnnotatorType = Literal[
