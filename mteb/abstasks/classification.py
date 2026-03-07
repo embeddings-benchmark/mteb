@@ -133,7 +133,6 @@ class AbsTaskClassification(AbsTask):
 
     evaluator: type[SklearnEvaluator] = SklearnEvaluator
     evaluator_model: SklearnModelProtocol = LogisticRegression(
-        n_jobs=-1,
         max_iter=100,
     )
 
