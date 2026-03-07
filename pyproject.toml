@@ -116,7 +116,7 @@ wav2clip = ["wav2clip==0.1.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
 mctct = ["transformers<5"]  # mctct was removed in transformers 5
-siglip = ["sentencepiece>=0.2.0","protobuf>=6.0.0"]  
+siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]  
 
 [dependency-groups]
 lint = [
