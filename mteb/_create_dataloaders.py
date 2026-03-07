@@ -384,7 +384,7 @@ def _create_queries_dataloader(
     input_column: str | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
-) -> DataLoader[QueryInput | ImageInput | AudioInput]:
+) -> DataLoader[QueryInput | ImageInput | AudioInput | VideoInput]:
     """Create a dataloader for queries."""
     queries_type = task_metadata.get_modalities(PromptType.query)
     if queries_type == ["text"]:  # text only
@@ -425,7 +425,7 @@ def _create_document_dataloader(
     input_column: str | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
-) -> DataLoader[CorpusInput | ImageInput | AudioInput]:
+) -> DataLoader[CorpusInput | ImageInput | AudioInput | VideoInput]:
     """Create a dataloader for documents.
 
     Args:
