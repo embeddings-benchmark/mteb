@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
+from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -34,12 +35,8 @@ class SiglipModelWrapper(AbsEncoder):
     ):
         from transformers import AutoModel, AutoProcessor
 
-        try:
-            import sentencepiece  # noqa: F401
-        except ImportError:
-            raise ImportError(
-                "The `sentencepiece` package is required to run `pip install sentencepiece`"
-            )
+        # for sentencepiece and protobuf:
+        requires_package(self, "siglip", model_name, "pip install 'mteb[siglip]'")
 
         self.model_name = model_name
         self.device = device
