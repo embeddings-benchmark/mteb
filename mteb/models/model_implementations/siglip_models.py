@@ -83,7 +83,7 @@ class SiglipModelWrapper(AbsEncoder):
 
         with torch.no_grad():
             for batch in tqdm(images):
-                _images = [img.convert("RGB") for img in batch["image"]] 
+                _images = [img.convert("RGB") for img in batch["image"]]
                 inputs = self.processor(
                     images=_images, return_tensors="pt", padding=True
                 )
