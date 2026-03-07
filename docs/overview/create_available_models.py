@@ -211,15 +211,6 @@ def main(folder: Path) -> None:
                     ).strip()
                 )
 
-    modality_links = "\n".join(
-        [
-            f"- [{modality_to_string(modality)}](./{modality_to_filename(modality)})"
-            for modality in modality_sets
-        ]
-    )
-    with (folder / "index.md").open("w") as f:
-        f.write(index_header.format(modality_links=modality_links).strip())
-
 
 if __name__ == "__main__":
     root = Path(__file__).parent

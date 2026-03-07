@@ -32,12 +32,6 @@ task_type_section = """---
 title: "{task_type}"
 ---
 
-<style>
-.nowrap-table th {
-  white-space: nowrap;
-}
-</style>
-
 <div class="nowrap-table" markdown>
 
 # {task_type}
@@ -205,15 +199,17 @@ def main(folder: Path) -> None:
             tasks_md=_task_entries.strip(),
         )
         doc_task = folder / f"{task_type.lower()}.md"
-
+        md = (
+            """<style>
+.nowrap-table th {
+  white-space: nowrap;
+}
+</style>
+"""
+            + md
+        )
         with doc_task.open("w") as f:
             f.write(md)
-
-    task_types_md = "\n".join(
-        [f"- [{task_type}](./{task_type.lower()}.md)" for task_type in task_types]
-    )
-    with (folder / "index.md").open("w") as f:
-        f.write(task_index_section.format(task_types_md=task_types_md).strip())
 
 
 if __name__ == "__main__":
