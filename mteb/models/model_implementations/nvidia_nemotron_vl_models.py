@@ -409,7 +409,7 @@ class LlamaNemotronEmbedVL(AbsEncoder):
         *,
         task_metadata: TaskMetadata,
         hf_split: str,
-        gf_subset: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         show_progress_bar: bool = True,
         **kwargs: Any,
