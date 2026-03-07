@@ -26,6 +26,7 @@ model_entry = """
 h1_header = """
 ---
 icon: {icon}
+title: "{modalities} Model"
 ---
 
 # {modalities} Model
@@ -41,6 +42,20 @@ h2_header = """
 ## {instruction_based}
 
 {models_md}
+"""
+
+index_header = """
+---
+title: "Available Models"
+---
+
+# Available Models
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
+
+Browse models by modality:
+
+{modality_links}
 """
 
 
@@ -86,6 +101,10 @@ def modality_to_string(modality: tuple[str, ...]) -> str:
             "Multimodal"  # anything that is more than 2 we just display as multimodal
         )
     return ("-".join(modality)).capitalize()
+
+
+def modality_to_filename(modality: tuple[str, ...]) -> str:
+    return f"{modality_to_string(modality).lower().replace('-', '_')}.md"
 
 
 def required_memory_string(mem_in_mb: int | None) -> str:
@@ -179,7 +198,7 @@ def main(folder: Path) -> None:
                 models_md=_model_entries.strip(),
             )
             modalities_string = modality_to_string(model_modalities)
-            doc_task = folder / f"{modalities_string.lower().replace('-', '_')}.md"
+            doc_task = folder / modality_to_filename(model_modalities)
             with doc_task.open("w") as f:
                 icon = modality_to_icon.get(
                     modalities_string, modality_to_icon["Multimodal"]
@@ -192,6 +211,15 @@ def main(folder: Path) -> None:
                         models_md=md.strip(),
                     ).strip()
                 )
+
+    modality_links = "\n".join(
+        [
+            f"- [{modality_to_string(modality)}](./{modality_to_filename(modality)})"
+            for modality in modality_sets
+        ]
+    )
+    with (folder / "index.md").open("w") as f:
+        f.write(index_header.format(modality_links=modality_links).strip())
 
 
 if __name__ == "__main__":

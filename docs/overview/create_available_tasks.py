@@ -28,7 +28,10 @@ aggregated_tasks_section = """
 {task_table}
 """
 
-task_type_section = """
+task_type_section = """---
+title: "{task_type}"
+---
+
 # {task_type}
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
@@ -36,6 +39,19 @@ task_type_section = """
 - **Number of tasks:** {num_tasks}
 
 {tasks_md}
+"""
+
+task_index_section = """---
+title: "Available Tasks"
+---
+
+# Available Tasks
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
+
+Browse tasks by category:
+
+{task_types_md}
 """
 
 
@@ -184,6 +200,12 @@ def main(folder: Path) -> None:
 
         with doc_task.open("w") as f:
             f.write(md)
+
+    task_types_md = "\n".join(
+        [f"- [{task_type}](./{task_type.lower()}.md)" for task_type in task_types]
+    )
+    with (folder / "index.md").open("w") as f:
+        f.write(task_index_section.format(task_types_md=task_types_md).strip())
 
 
 if __name__ == "__main__":
