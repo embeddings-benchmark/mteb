@@ -36,7 +36,7 @@ class SiglipModelWrapper(AbsEncoder):
         from transformers import AutoModel, AutoProcessor
 
         # for sentencepiece and protobuf:
-        requires_package(self, "siglip", model_name, "pip install 'mteb[siglip]'")
+        requires_package(self, "sentencepiece", model_name, "pip install 'mteb[siglip]'")
 
         self.model_name = model_name
         self.device = device
