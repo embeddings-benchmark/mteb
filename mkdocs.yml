@@ -137,6 +137,11 @@ plugins:
       bib_file: "docs/references.bib"
       enable_inline_citations: false
 
+extra_javascript:
+  - javascripts/extra.js
+extra_css:
+  - stylesheets/extra.css
+
 extra:
   social:
     - icon: fontawesome/brands/github

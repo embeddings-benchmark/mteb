@@ -81,6 +81,10 @@ def human_readable_number(num: int) -> str:
 
 
 def modality_to_string(modality: tuple[str, ...]) -> str:
+    if len(modality) > 2:
+        return (
+            "Multimodal"  # anything that is more than 2 we just display as multimodal
+        )
     return ("-".join(modality)).capitalize()
 
 
@@ -98,7 +102,10 @@ def format_model_entry(meta: ModelMeta) -> str:
     revision = meta.revision or "not specified"
     license = meta.license or "not specified"
     model_name_w_link = (
-        f"[`{meta.name}`]({meta.reference})" if meta.reference else meta.name
+        f"[`{meta.name}`]({meta.reference})"
+        + "{ .model-copy }"  # adds copy and paste button
+        if meta.reference
+        else meta.name
     )
     max_tokens = (
         human_readable_number(meta.max_tokens)
