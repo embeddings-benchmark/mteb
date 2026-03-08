@@ -62,30 +62,3 @@ def generate_model_card(
         push_eval_results_user=push_eval_results_user,
         push_eval_results_create_pr=push_eval_results_create_pr,
     )
-
-
-def push_eval_results(
-    model_name: str,
-    user: str | None = None,
-    tasks: Sequence[AbsTask] | Sequence[str] | None = None,
-    results_cache: ResultCache | None = None,
-    create_pr: bool = False,
-) -> None:
-    """Push evaluation results for a model to the HuggingFace Hub.
-
-    Args:
-        model_name: Name of the model.
-        user: The user or organization of results source.
-        tasks: The tasks to push results for. If None, results for all tasks will be pushed.
-        results_cache: Instance of ResultCache to load results from.
-        create_pr: Whether to create a pull request for the model card update.
-    """
-    if results_cache is None:
-        results_cache = ResultCache()
-    meta = ModelMeta.create_empty(overwrites={"name": model_name})
-    meta.push_eval_results(
-        user=user,
-        tasks=tasks,
-        cache=results_cache,
-        create_pr=create_pr,
-    )
