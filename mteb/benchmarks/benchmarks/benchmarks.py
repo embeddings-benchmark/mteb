@@ -2690,8 +2690,6 @@ MTEB_THA = Benchmark(
             "MultiLongDocReranking",
             # Retrieval
             "BelebeleRetrieval",
-            "MIRACLRetrieval",
-            "MIRACLRetrievalHardNegatives",
             "MIRACLRetrievalHardNegatives.v2",
             "MKQARetrieval",
             "MrTidyRetrieval",
