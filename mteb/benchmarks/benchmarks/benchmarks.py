@@ -2656,6 +2656,55 @@ VN_MTEB = Benchmark(
     contacts=["BaoLocPham"],
 )
 
+MTEB_THA = Benchmark(
+    name="MTEB(tha, v1)",
+    aliases=["MTEB(tha)"],
+    display_name="Thai",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/th.svg",
+    tasks=get_tasks(
+        languages=["tha"],
+        tasks=[
+            # BitextMining
+            "BibleNLPBitextMining",
+            "FloresBitextMining",
+            "NTREXBitextMining",
+            "Tatoeba",
+            "WebFAQBitextMiningQAs",
+            "WebFAQBitextMiningQuestions",
+            # Classification
+            "LanguageClassification",
+            "MTOPDomainClassification",
+            "MTOPIntentClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "MultilingualSentimentClassification",
+            "SIB200Classification",
+            "WisesightSentimentClassification.v2",
+            "WongnaiReviewsClassification",
+            # Clustering
+            "SIB200ClusteringS2S",
+            # PairClassification
+            "XNLI",
+            # Reranking
+            "MIRACLReranking",
+            "MultiLongDocReranking",
+            # Retrieval
+            "BelebeleRetrieval",
+            "MIRACLRetrieval",
+            "MIRACLRetrievalHardNegatives",
+            "MIRACLRetrievalHardNegatives.v2",
+            "MKQARetrieval",
+            "MrTidyRetrieval",
+            "MultiLongDocRetrieval",
+            "WebFAQRetrieval",
+            "XQuADRetrieval",
+        ],
+    ),
+    description="A benchmark for evaluating Thai text embedding models across 28 tasks spanning 6 task types: bitext mining (6), classification (9), clustering (1), pair classification (1), reranking (2), and retrieval (9).",
+    reference=None,
+    citation=None,
+)
+
 JINA_VDR = Benchmark(
     name="JinaVDR",
     display_name="Jina Visual Document Retrieval",
