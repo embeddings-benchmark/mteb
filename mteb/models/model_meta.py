@@ -1132,6 +1132,9 @@ class ModelMeta(BaseModel):
         models_to_compare: Sequence[str] | None = None,
         token: str | None = None,
         push_to_hub: bool = False,
+        push_eval_results: bool = False,
+        push_eval_results_user: str | None = None,
+        push_eval_results_create_pr: bool = False,
     ) -> None:
         """Generate or update a model card with evaluation results from MTEB.
 
@@ -1145,6 +1148,9 @@ class ModelMeta(BaseModel):
             models_to_compare: List of models to add to results table.
             token: Optional token for pushing to Hugging Face Hub.
             push_to_hub: Whether to push the updated model card to the Hub if it exists there.
+            push_eval_results: Whether to also push eval results to the Hub.
+            push_eval_results_user: The user or organization of results source for pushing eval results.
+            push_eval_results_create_pr: Whether to create a pull request when pushing eval results.
         """
         from mteb.cache import ResultCache
 
@@ -1224,6 +1230,14 @@ class ModelMeta(BaseModel):
                 logger.warning(msg)
                 warnings.warn(msg)
         existing_model_card.save(output_path)
+
+        if push_eval_results:
+            self.push_eval_results(
+                user=push_eval_results_user,
+                tasks=tasks,
+                cache=results_cache,
+                create_pr=push_eval_results_create_pr,
+            )
 
     def push_eval_results(
         self,

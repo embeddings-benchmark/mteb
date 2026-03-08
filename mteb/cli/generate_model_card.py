@@ -24,6 +24,9 @@ def generate_model_card(
     models_to_compare: Sequence[str] | None = None,
     token: str | None = None,
     push_to_hub: bool = False,
+    push_eval_results: bool = False,
+    push_eval_results_user: str | None = None,
+    push_eval_results_create_pr: bool = False,
 ) -> None:
     """Generate or update a model card with evaluation results from MTEB.
 
@@ -38,6 +41,9 @@ def generate_model_card(
         add_table_to_model_card: Whether to add a results table to the model card.
         token: Optional token for pushing to Hugging Face Hub.
         push_to_hub: Whether to push the updated model card to the Hub if it exists there.
+        push_eval_results: Whether to also push eval results to the Hub.
+        push_eval_results_user: The user or organization of results source for pushing eval results.
+        push_eval_results_create_pr: Whether to create a pull request when pushing eval results.
     """
     if results_cache is None:
         results_cache = ResultCache()
@@ -52,6 +58,9 @@ def generate_model_card(
         models_to_compare=models_to_compare,
         token=token,
         push_to_hub=push_to_hub,
+        push_eval_results=push_eval_results,
+        push_eval_results_user=push_eval_results_user,
+        push_eval_results_create_pr=push_eval_results_create_pr,
     )
 
 
