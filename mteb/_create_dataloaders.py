@@ -16,7 +16,7 @@ from mteb.types import (
 from mteb.types._encoder_io import AudioInputItem, VideoInputItem
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Sequence
 
     from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
 
@@ -274,7 +274,7 @@ def _convert_images_to_rgb(
 
 def _prepare_image_dataset(
     dataset: Dataset,
-    image_column_name: str | list[str] | None = None,
+    image_column_name: str | Sequence[str] | None = None,
     transform: Callable[[Any], Any] | None = None,
     num_proc: int | None = None,
 ) -> Dataset:
@@ -327,7 +327,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
 
 def _create_image_dataloader(
     dataset: Dataset,
-    image_column_name: str | list[str] | None = None,
+    image_column_name: str | Sequence[str] | None = None,
     batch_size: int = 32,
     transform: Callable[[Any], Any] | None = None,
     collate_fn: Callable[[list[dict[str, Any]]], BatchedInput] = _custom_collate_fn,
@@ -382,7 +382,7 @@ def _create_text_queries_dataloader(
 def _create_queries_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
-    input_column: str | list[str] | None = None,
+    input_column: str | Sequence[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
 ) -> DataLoader[QueryInput | ImageInput | AudioInput | VideoInput]:
@@ -423,7 +423,7 @@ def _create_queries_dataloader(
 def _create_document_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
-    input_column: str | list[str] | None = None,
+    input_column: str | Sequence[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
 ) -> DataLoader[CorpusInput | ImageInput | AudioInput | VideoInput]:
@@ -475,7 +475,7 @@ def _create_document_dataloader(
 def _create_audio_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
-    input_column: str | list[str] | None = None,
+    input_column: str | Sequence[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
 ) -> DataLoader[AudioInput]:
@@ -511,7 +511,7 @@ def _create_audio_dataloader(
 def _create_video_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
-    input_column: str | list[str] | None = None,
+    input_column: str | Sequence[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
 ) -> DataLoader[VideoInput]:
@@ -548,7 +548,7 @@ def create_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
-    input_column: str | list[str] | None = None,
+    input_column: str | Sequence[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
     **kwargs: Any,
