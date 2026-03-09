@@ -841,8 +841,7 @@ lightonai__colbert_zero = ModelMeta(
     citation=colbert_zero_citation,
 )
 
-
-lightonai__Reason-ModernColBERT = ModelMeta(
+lightonai__reason_moderncolbert = ModelMeta(
     loader=MultiVectorModel,
     name="lightonai/Reason-ModernColBERT",
     model_type=["late-interaction"],
@@ -854,9 +853,9 @@ lightonai__Reason-ModernColBERT = ModelMeta(
     public_training_code="https://github.com/lightonai/pylate/blob/main/examples/train/reason_moderncolbert.py",
     public_training_data="https://huggingface.co/datasets/reasonir/reasonir-data",
     release_date="2025-05-22",
-    n_parameters=int(149 * 1e6),
+    n_parameters=149015808,
     n_embedding_parameters=38684160,
-    memory_usage_mb=None,
+    memory_usage_mb=568,
     max_tokens=8192,
     embed_dim=128,
     license="cc-by-nc-4.0",
