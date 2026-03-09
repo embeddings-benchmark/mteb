@@ -42,7 +42,7 @@ class Kinetics400Classification(AbsTaskClassification):
 """,
     )
 
-    input_column_name: str | ClassVar[list[str]] = ["video", "audio"]
+    input_column_name: ClassVar[str | list[str]] = ["video", "audio"]
     label_column_name: str = "label"
 
     is_cross_validation: bool = False
