@@ -16,7 +16,7 @@ from mteb.types import (
 from mteb.types._encoder_io import AudioInputItem, VideoInputItem
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Sequence
 
     from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
 
@@ -187,7 +187,7 @@ def _convert_images_to_rgb(
 
 def _prepare_image_dataset(
     dataset: Dataset,
-    image_column_name: str | list[str] | None = None,
+    image_column_name: str | Sequence[str] | None = None,
     transform: Callable[[Any], Any] | None = None,
     num_proc: int | None = None,
 ) -> Dataset:
@@ -295,7 +295,7 @@ def create_dataloader(
     *,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
-    input_column: str | list[str] | None = None,
+    input_column: str | Sequence[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
     **kwargs: Any,

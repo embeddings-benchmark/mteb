@@ -212,7 +212,9 @@ class AbsTaskClustering(AbsTask):
 
         # Keep label and input columns
         columns_to_keep = {self.label_column_name}
-        if isinstance(self.input_column_name, list):
+        if isinstance(self.input_column_name, Sequence) and not isinstance(
+            self.input_column_name, str
+        ):
             columns_to_keep.update(self.input_column_name)
         elif self.input_column_name is not None:
             columns_to_keep.add(self.input_column_name)
