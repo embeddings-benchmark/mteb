@@ -4,6 +4,7 @@ import itertools
 import logging
 import random
 from collections import defaultdict
+from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
@@ -27,7 +28,6 @@ from ._statistics_calculation import (
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
     from pathlib import Path
 
     from mteb.models import MTEBModels
