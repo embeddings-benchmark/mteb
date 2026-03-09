@@ -205,6 +205,7 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
         """
         instruction = instruction or DEFAULT_INSTRUCTION
         instruction = instruction.strip()
+        # Checks if the last character is not punctuation and appends "." then
         if instruction and not unicodedata.category(instruction[-1]).startswith("P"):
             instruction = instruction + "."
 
@@ -331,15 +332,15 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
         contains_text = "text" in inputs.dataset.features
         contains_image = "image" in inputs.dataset.features
 
-        if not contains_text and not contains_image:
-            raise ValueError("No text or image features found in inputs.")
-
         if (
             prompt_type == PromptType.document
             and not self.visual_document_use_text
             and contains_image
         ):
             contains_text = False
+
+        if not contains_text and not contains_image:
+            raise ValueError("No text or image features found in inputs.")
 
         all_embeddings: list[torch.Tensor] = []
         with torch.no_grad():
