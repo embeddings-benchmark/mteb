@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -40,7 +42,7 @@ class Kinetics400Classification(AbsTaskClassification):
 """,
     )
 
-    input_column_name: str | list[str] = ["video", "audio"]
+    input_column_name: str | ClassVar[list[str]] = ["video", "audio"]
     label_column_name: str = "label"
 
     is_cross_validation: bool = False

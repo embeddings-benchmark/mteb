@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -41,5 +43,5 @@ class RAVDESSAVClustering(AbsTaskClustering):
 """,
     )
     max_fraction_of_documents_to_embed = None
-    input_column_name: str | list[str] = ["video", "audio"]
+    input_column_name: str | ClassVar[list[str]] = ["video", "audio"]
     label_column_name: str = "emotion"
