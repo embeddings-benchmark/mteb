@@ -469,9 +469,9 @@ class VideoCollator:
         collated_inputs = []
         for row in inputs:
             video = row.pop("video")
-            frames = self.resample_video(video["frames"], self.max_frames)
+            frames = self.resample_video(video, self.max_frames)
             audio = self.audio_collator.resample_audio(
-                video,
+                row,
                 target_sampling_rate=self.audio_collator.target_sampling_rate,
                 max_samples=self.audio_collator.max_samples,
             )
