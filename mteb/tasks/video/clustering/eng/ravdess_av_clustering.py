@@ -1,8 +1,5 @@
-from datasets import DatasetDict, Features, load_dataset
-
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.types._encoder_io import VideoInputItem
 
 
 class RAVDESSAVClustering(AbsTaskClustering):
