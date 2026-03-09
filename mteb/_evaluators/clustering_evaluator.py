@@ -10,6 +10,8 @@ from mteb._create_dataloaders import create_dataloader
 from .evaluator import Evaluator
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from datasets import Dataset
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -24,7 +26,7 @@ class ClusteringEvaluator(Evaluator):
         self,
         dataset: Dataset,
         *,
-        input_column_name: str | list[str],
+        input_column_name: str | Sequence[str],
         label_column_name: str,
         task_metadata: TaskMetadata,
         hf_split: str,
