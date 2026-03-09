@@ -428,7 +428,7 @@ class LlamaNemotronEmbedVL(AbsEncoder):
                 desc=f"Extracting {prompt_type} embeddings...",
                 disable=not show_progress_bar,
             ):
-                if prompt_type == PromptType.query:
+                if prompt_type == PromptType.query and "text" in batch:
                     embeddings = self.model.encode_queries(batch["text"])
                 else:
                     if not self.use_image_modality and "image" in batch:
