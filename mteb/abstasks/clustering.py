@@ -277,7 +277,11 @@ class AbsTaskClustering(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClusteringFastDescriptiveStatistics:
-        col = self.input_column_name if isinstance(self.input_column_name, str) else self.input_column_name[0]
+        col = (
+            self.input_column_name
+            if isinstance(self.input_column_name, str)
+            else self.input_column_name[0]
+        )
         if hf_subset:
             inputs = self.dataset[hf_subset][split][col]
             labels = self.dataset[hf_subset][split][self.label_column_name]
@@ -320,7 +324,11 @@ class AbsTaskClustering(AbsTask):
         repo_name: str,
         num_proc: int | None = None,
     ) -> None:
-        cols = self.input_column_name if isinstance(self.input_column_name, list) else [self.input_column_name]
+        cols = (
+            self.input_column_name
+            if isinstance(self.input_column_name, list)
+            else [self.input_column_name]
+        )
         self._upload_dataset_to_hub(
             repo_name,
             cols + [self.label_column_name],

@@ -203,7 +203,7 @@ class AbsTaskClassification(AbsTask):
                     available = set(next(iter(ds.values())).column_names)
                 else:
                     available = set(ds.column_names)
-                
+
                 columns_to_keep = {col for col in columns_to_keep if col in available}
                 ds = ds.select_columns(list(columns_to_keep))
             eval_function = (
@@ -483,7 +483,11 @@ class AbsTaskClassification(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClassificationDescriptiveStatistics:
-        col = self.input_column_name if isinstance(self.input_column_name, str) else self.input_column_name[0]
+        col = (
+            self.input_column_name
+            if isinstance(self.input_column_name, str)
+            else self.input_column_name[0]
+        )
         train_text = []
         if hf_subset:
             inputs = self.dataset[hf_subset][split][col]
@@ -497,9 +501,7 @@ class AbsTaskClassification(AbsTask):
                 inputs.extend(self.dataset[hf_subset][split][col])
                 label.extend(self.dataset[hf_subset][split][self.label_column_name])
                 if split != self.train_split:
-                    train_text.extend(
-                        self.dataset[hf_subset][self.train_split][col]
-                    )
+                    train_text.extend(self.dataset[hf_subset][self.train_split][col])
         else:
             inputs = self.dataset[split][col]
             label = self.dataset[split][self.label_column_name]
@@ -539,7 +541,11 @@ class AbsTaskClassification(AbsTask):
         repo_name: str,
         num_proc: int | None = None,
     ) -> None:
-        cols = self.input_column_name if isinstance(self.input_column_name, list) else [self.input_column_name]
+        cols = (
+            self.input_column_name
+            if isinstance(self.input_column_name, list)
+            else [self.input_column_name]
+        )
         self._upload_dataset_to_hub(
             repo_name,
             cols + [self.label_column_name],

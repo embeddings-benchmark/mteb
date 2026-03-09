@@ -1,8 +1,5 @@
-from datasets import DatasetDict, Features, load_dataset
-
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.types._encoder_io import VideoInputItem
 
 
 class Kinetics400Classification(AbsTaskClassification):
