@@ -43,5 +43,5 @@ class RAVDESSAVClustering(AbsTaskClustering):
 """,
     )
     max_fraction_of_documents_to_embed = None
-    input_column_name: str | ClassVar[list[str]] = ["video", "audio"]
+    input_column_name: ClassVar[str | list[str]] = ["video", "audio"]
     label_column_name: str = "emotion"
