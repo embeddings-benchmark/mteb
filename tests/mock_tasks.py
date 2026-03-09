@@ -146,7 +146,7 @@ def create_mock_audio(
 
 
 class MockClassificationTask(AbsTaskClassification):
-    classifier = LogisticRegression(n_jobs=1, max_iter=10)
+    classifier = LogisticRegression(max_iter=10)
 
     expected_stats = {
         "test": {
@@ -224,7 +224,7 @@ class MockClassificationTask(AbsTaskClassification):
 
 
 class MockMultilingualClassificationTask(AbsTaskClassification):
-    classifier = LogisticRegression(n_jobs=1, max_iter=10)
+    classifier = LogisticRegression(max_iter=10)
 
     expected_stats = {
         "test": {
