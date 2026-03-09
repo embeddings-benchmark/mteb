@@ -274,13 +274,14 @@ def _convert_images_to_rgb(
 
 def _prepare_image_dataset(
     dataset: Dataset,
-    image_column_name: str | None = None,
+    image_column_name: str | list[str] | None = None,
     transform: Callable[[Any], Any] | None = None,
     num_proc: int | None = None,
 ) -> Dataset:
     """Prepare the image dataset by converting images to RGB and applying transformations."""
     if (
         image_column_name
+        and isinstance(image_column_name, str)
         and image_column_name in dataset.column_names
         and "image" not in dataset.column_names
     ):
@@ -326,7 +327,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
 
 def _create_image_dataloader(
     dataset: Dataset,
-    image_column_name: str | None = None,
+    image_column_name: str | list[str] | None = None,
     batch_size: int = 32,
     transform: Callable[[Any], Any] | None = None,
     collate_fn: Callable[[list[dict[str, Any]]], BatchedInput] = _custom_collate_fn,
@@ -381,7 +382,7 @@ def _create_text_queries_dataloader(
 def _create_queries_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
-    input_column: str | None = None,
+    input_column: str | list[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
 ) -> DataLoader[QueryInput | ImageInput | AudioInput | VideoInput]:
@@ -422,7 +423,7 @@ def _create_queries_dataloader(
 def _create_document_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
-    input_column: str | None = None,
+    input_column: str | list[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
 ) -> DataLoader[CorpusInput | ImageInput | AudioInput | VideoInput]:
@@ -474,7 +475,7 @@ def _create_document_dataloader(
 def _create_audio_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
-    input_column: str | None = None,
+    input_column: str | list[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
 ) -> DataLoader[AudioInput]:
@@ -492,6 +493,7 @@ def _create_audio_dataloader(
     """
     if (
         input_column
+        and isinstance(input_column, str)
         and input_column in dataset.column_names
         and "audio" not in dataset.column_names
     ):
@@ -509,7 +511,7 @@ def _create_audio_dataloader(
 def _create_video_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
-    input_column: str | None = None,
+    input_column: str | list[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
 ) -> DataLoader[VideoInput]:
@@ -527,6 +529,7 @@ def _create_video_dataloader(
     """
     if (
         input_column
+        and isinstance(input_column, str)
         and input_column in dataset.column_names
         and "video" not in dataset.column_names
     ):
@@ -545,7 +548,7 @@ def create_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
-    input_column: str | None = None,
+    input_column: str | list[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
     **kwargs: Any,
@@ -616,8 +619,17 @@ def create_dataloader(
             num_proc=num_proc,
         )
     if "text" in task_metadata.modalities and input_column is not None:
+        if isinstance(input_column, str):
+            text_data = dataset[input_column]
+        elif "text" in input_column and "text" in dataset.column_names:
+            text_data = dataset["text"]
+        else:
+            raise ValueError(
+                "Cannot determine which column to use for text evaluation. "
+                "Please include 'text' in input_column_name or use a single string."
+            )
         return _create_dataloader_from_texts(
-            dataset[input_column],
+            text_data,
             batch_size=batch_size,
         )
     return DataLoader(

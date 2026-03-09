@@ -38,7 +38,7 @@ class SklearnEvaluator(Evaluator):
         self,
         train_dataset: Dataset,
         eval_dataset: Dataset,
-        values_column_name: str,
+        values_column_name: str | list[str],
         label_column_name: str,
         task_metadata: TaskMetadata,
         hf_split: str,

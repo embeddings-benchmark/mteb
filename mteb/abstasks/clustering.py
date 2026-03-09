@@ -161,7 +161,7 @@ class AbsTaskClustering(AbsTask):
     k_mean_batch_size: int = 512
     max_depth = None
     abstask_prompt = "Identify categories in user passages."
-    input_column_name: str = "sentences"
+    input_column_name: str | list[str] = "sentences"
     label_column_name: str = "labels"
 
     def _evaluate_subset(
@@ -208,15 +208,15 @@ class AbsTaskClustering(AbsTask):
             )
             downsampled_dataset = data_split.select(example_indices)
 
-        # Keep label and input columns, plus any columns required by
-        # the task's declared modalities (e.g., audio for va2c tasks)
-        modality_to_column = {"video": "video", "audio": "audio", "image": "image"}
-        columns_to_keep = {self.label_column_name, self.input_column_name}
+        # Keep label and input columns
+        columns_to_keep = {self.label_column_name}
+        if isinstance(self.input_column_name, list):
+            columns_to_keep.update(self.input_column_name)
+        elif self.input_column_name is not None:
+            columns_to_keep.add(self.input_column_name)
+
         available = set(data_split.column_names)
-        for mod in self.metadata.modalities:
-            col = modality_to_column.get(mod)
-            if col and col in available:
-                columns_to_keep.add(col)
+        columns_to_keep = {col for col in columns_to_keep if col in available}
 
         downsampled_dataset = downsampled_dataset.select_columns(list(columns_to_keep))
 
@@ -276,17 +276,18 @@ class AbsTaskClustering(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClusteringFastDescriptiveStatistics:
+        col = self.input_column_name if isinstance(self.input_column_name, str) else self.input_column_name[0]
         if hf_subset:
-            inputs = self.dataset[hf_subset][split][self.input_column_name]
+            inputs = self.dataset[hf_subset][split][col]
             labels = self.dataset[hf_subset][split][self.label_column_name]
         elif compute_overall:
             inputs = []
             labels = []
             for hf_subset in self.metadata.eval_langs:
-                inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
+                inputs.extend(self.dataset[hf_subset][split][col])
                 labels.extend(self.dataset[hf_subset][split][self.label_column_name])
         else:
-            inputs = self.dataset[split][self.input_column_name]
+            inputs = self.dataset[split][col]
             labels = self.dataset[split][self.label_column_name]
 
         if isinstance(inputs[0], list):
@@ -318,9 +319,10 @@ class AbsTaskClustering(AbsTask):
         repo_name: str,
         num_proc: int | None = None,
     ) -> None:
+        cols = self.input_column_name if isinstance(self.input_column_name, list) else [self.input_column_name]
         self._upload_dataset_to_hub(
             repo_name,
-            [self.input_column_name, self.label_column_name],
+            cols + [self.label_column_name],
             num_proc=num_proc,
         )
 
