@@ -27,6 +27,7 @@ from ._statistics_calculation import (
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from pathlib import Path
 
     from mteb.models import MTEBModels
@@ -161,7 +162,7 @@ class AbsTaskClustering(AbsTask):
     k_mean_batch_size: int = 512
     max_depth = None
     abstask_prompt = "Identify categories in user passages."
-    input_column_name: str | list[str] = "sentences"
+    input_column_name: str | Sequence[str] = "sentences"
     label_column_name: str = "labels"
 
     def _evaluate_subset(
@@ -216,7 +217,12 @@ class AbsTaskClustering(AbsTask):
             columns_to_keep.add(self.input_column_name)
 
         available = set(data_split.column_names)
-        columns_to_keep = {col for col in columns_to_keep if col in available}
+        missing_columns = columns_to_keep - available
+        if missing_columns:
+            raise ValueError(
+                f"Missing required columns in dataset: {missing_columns}. "
+                f"Available columns: {available}"
+            )
 
         downsampled_dataset = downsampled_dataset.select_columns(list(columns_to_keep))
 

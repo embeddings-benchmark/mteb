@@ -32,6 +32,7 @@ from ._statistics_calculation import (
 from .abstask import AbsTask
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from pathlib import Path
 
     from numpy.typing import NDArray
@@ -141,7 +142,7 @@ class AbsTaskClassification(AbsTask):
     n_experiments: int = 10
     train_split: str = "train"
     label_column_name: str = "label"
-    input_column_name: str | list[str] = "text"
+    input_column_name: str | Sequence[str] = "text"
     abstask_prompt = "Classify user passages."
     is_cross_validation: bool = False
     n_splits = 5
@@ -205,7 +206,12 @@ class AbsTaskClassification(AbsTask):
                 else:
                     available = set(ds.column_names)
 
-                columns_to_keep = {col for col in columns_to_keep if col in available}
+                missing_columns = columns_to_keep - available
+                if missing_columns:
+                    raise ValueError(
+                        f"Missing required columns in dataset: {missing_columns}. "
+                        f"Available columns: {available}"
+                    )
                 ds = ds.select_columns(list(columns_to_keep))
             eval_function = (
                 self._evaluate_subset
