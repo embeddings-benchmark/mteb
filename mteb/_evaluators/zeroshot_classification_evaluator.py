@@ -27,7 +27,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
     def __init__(
         self,
         dataset: Dataset,
-        input_column_name: str,
+        input_column_name: str | list[str],
         candidate_labels: list[str],
         *,
         task_metadata: TaskMetadata,

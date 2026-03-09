@@ -24,7 +24,7 @@ class ClusteringEvaluator(Evaluator):
         self,
         dataset: Dataset,
         *,
-        input_column_name: str,
+        input_column_name: str | list[str],
         label_column_name: str,
         task_metadata: TaskMetadata,
         hf_split: str,

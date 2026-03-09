@@ -43,43 +43,7 @@ class Kinetics400Classification(AbsTaskClassification):
 """,
     )
 
-    input_column_name: str = "video"
+    input_column_name: str | list[str] = ["video", "audio"]
     label_column_name: str = "label"
 
     is_cross_validation: bool = False
-
-    def load_data(self, **kwargs) -> None:
-        if self.data_loaded:
-            return
-
-        dataset = load_dataset(
-            self.metadata.dataset["path"],
-            revision=self.metadata.dataset["revision"],
-        )
-
-        def _combine_modalities(example: dict) -> dict:
-            example["video"] = VideoInputItem(
-                frames=example["video"],
-                audio=example.pop("audio"),
-            )
-            return example
-
-        merged = {}
-        for split_name, split in dataset.items():
-            split_features = split.features
-            merged[split_name] = split.map(
-                _combine_modalities,
-                features=Features(
-                    {k: v for k, v in split_features.items() if k != "audio"}
-                    | {
-                        "video": {
-                            "frames": split_features["video"],
-                            "audio": split_features["audio"],
-                        },
-                    }
-                ),
-                writer_batch_size=50,
-            )
-
-        self.dataset = DatasetDict(merged)
-        self.data_loaded = True

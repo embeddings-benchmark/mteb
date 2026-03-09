@@ -187,13 +187,14 @@ def _convert_images_to_rgb(
 
 def _prepare_image_dataset(
     dataset: Dataset,
-    image_column_name: str | None = None,
+    image_column_name: str | list[str] | None = None,
     transform: Callable[[Any], Any] | None = None,
     num_proc: int | None = None,
 ) -> Dataset:
     """Prepare the image dataset by converting images to RGB and applying transformations."""
     if (
         image_column_name
+        and isinstance(image_column_name, str)
         and image_column_name in dataset.column_names
         and "image" not in dataset.column_names
     ):
@@ -294,7 +295,7 @@ def create_dataloader(
     *,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
-    input_column: str | None = None,
+    input_column: str | list[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
     **kwargs: Any,
