@@ -237,7 +237,8 @@ prompts_dict = {
     "SummEvalSummarization.v2": "Given a news summary, retrieve other semantically similar summaries.",
 }
 
-f2llmv2_prompts_dict = prompts_dict.update(
+f2llmv2_prompts_dict = prompts_dict.copy()
+f2llmv2_prompts_dict.update(
     {
         "STS": "Retrieve semantically similar text.",
         "BitextMining": "Retrieve translations of the following text.",
