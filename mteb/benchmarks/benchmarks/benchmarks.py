@@ -2700,7 +2700,7 @@ MTEB_THA = Benchmark(
     ),
     description="A benchmark for evaluating Thai text embedding models across 28 tasks spanning 6 task types: bitext mining (6), classification (9), clustering (1), pair classification (1), reranking (2), and retrieval (9).",
     reference=None,
-    citation=None,
+    citation=["anusoft"],
 )
 
 JINA_VDR = Benchmark(
