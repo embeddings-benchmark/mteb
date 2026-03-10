@@ -103,9 +103,9 @@ class ModelResult(BaseModel):
     def __repr__(self) -> str:
         n_entries = len(self.task_results)
         return (
-            f"ModelResult(model_name={self.model_name}, model_revision={self.model_revision}, "
+            f"ModelResult(model_name='{self.model_name}', model_revision='{self.model_revision}', "
             f"{'experiment_name=' + self.experiment_name + ', ' if self.experiment_name else ''}"
-            f"task_results=[...](#{n_entries}))"
+            f"task_results=[...](#{n_entries}), ...)"
         )
 
     @classmethod

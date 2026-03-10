@@ -278,6 +278,11 @@ class TaskResult(BaseModel):
         return self.task.metadata.is_public
 
     @property
+    def main_score(self) -> float:
+        """Get the main score of the result."""
+        return self.get_score()
+
+    @property
     def hf_subsets(self) -> list[str]:
         """Get the hf_subsets present in the scores."""
         hf_subsets = set()
@@ -608,7 +613,7 @@ class TaskResult(BaseModel):
         return cls.model_construct(**data)
 
     def __repr__(self) -> str:
-        return f"TaskResult(task_name={self.task_name}, scores=...)"
+        return f"TaskResult(task_name={self.task_name}, main_score={self.main_score:.2f}, scores=..., ...)"
 
     def only_main_score(self) -> TaskResult:
         """Return a new TaskResult object with only the main score.
