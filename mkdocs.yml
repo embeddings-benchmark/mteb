@@ -95,6 +95,13 @@ nav:
       - overview/index.md
       - Benchmarks:
         - Available Benchmarks: overview/available_benchmarks.md
+      - Models:
+        - Text: overview/available_models/text.md
+        - Image: overview/available_models/image.md
+        - Image Text: overview/available_models/image_text.md
+        - Audio: overview/available_models/audio.md
+        - Audio Text: overview/available_models/audio_text.md
+        - Multimodal: overview/available_models/multimodal.md
       - Tasks:
         - overview/available_tasks/retrieval.md
         - overview/available_tasks/audiopairclassification.md
@@ -124,13 +131,6 @@ nav:
         - overview/available_tasks/audioreranking.md
         - overview/available_tasks/instructionreranking.md
         - overview/available_tasks/imageclassification.md
-      - Models:
-        - Text: overview/available_models/text.md
-        - Image: overview/available_models/image.md
-        - Image Text: overview/available_models/image_text.md
-        - Audio: overview/available_models/audio.md
-        - Audio Text: overview/available_models/audio_text.md
-        - Multimodal: overview/available_models/multimodal.md
   - API:
       - Overview: api/index.md
       - Evaluation: api/evaluation.md
