@@ -1,5 +1,7 @@
 from typing import Any, ClassVar
 
+from datasets import Features
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.types._encoder_io import VideoInputItem
@@ -54,15 +56,19 @@ class Kinetics400Classification(AbsTaskClassification):
         def _combine_modalities(example):
             example["video"] = VideoInputItem(
                 frames=example["video"],
-                audio=example.pop("audio", None),
+                audio=example.pop("audio"),
             )
             return example
 
         for split in self.dataset:
+            features = self.dataset[split].features.copy()
+            features["video"] = {
+                "frames": features["video"],
+                "audio": features["audio"],
+            }
+
             self.dataset[split] = self.dataset[split].map(
                 _combine_modalities,
-                features=self.dataset[split].features.copy(),
-                remove_columns=["audio"]
-                if "audio" in self.dataset[split].column_names
-                else None,
+                features=Features(features),
+                remove_columns=["audio"],
             )
