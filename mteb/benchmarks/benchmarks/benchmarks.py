@@ -2536,7 +2536,7 @@ VIDORE_V3_1 = VidoreBenchmark(
     description="ViDoRe v3.1 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. "
     + "It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents. "
     + "The benchmark includes both open and closed datasets: to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml). "
-    + "The latests 3.1 version adds and markdown derived from OCR to allow easier evaluation of text-only baselines and joint image-text baselines.",
+    + "The latest 3.1 version adds and markdown derived from OCR to allow easier evaluation of text-only baselines and joint image-text baselines.",
     reference="https://arxiv.org/abs/2601.08620",
     citation=r"""
 @article{loison2026vidorev3comprehensiveevaluation,
