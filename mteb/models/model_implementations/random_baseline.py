@@ -97,7 +97,7 @@ def _video_to_vector(
     """
     # Convert video to bytes and then to a numeric seed
     video_bytes = (
-        VideoCollator.resample_video(item["frames"], 10).numpy().tobytes()
+        item["frames"].numpy().tobytes()
         + item["audio"]["array"].tobytes()
     )
     seed = int(hashlib.sha256(video_bytes).hexdigest(), 16) % (2**32)
