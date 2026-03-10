@@ -7,7 +7,7 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import VideoCollator
+from mteb._create_dataloaders import MultimodalCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta
 from mteb.similarity_functions import (
     select_pairwise_similarity,
@@ -229,6 +229,13 @@ class RandomEncoderBaseline:
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        has_video = "video" in inputs.dataset.features
+        has_audio = "audio" in inputs.dataset.features
+        if has_video or has_audio:
+            inputs.collate_fn = MultimodalCollator(
+                target_sampling_rate=16000,
+                max_frames=10,
+            )
         embedding = _batch_to_embeddings(inputs, self.embedding_dim)
         if self.array_framework == "torch":
             return torch.tensor(embedding, dtype=self.dtype)
@@ -304,6 +311,16 @@ class RandomCrossEncoderBaseline:
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        has_video = "video" in inputs1.dataset.features
+        has_audio = "audio" in inputs1.dataset.features
+        if has_video or has_audio:
+            collator = MultimodalCollator(
+                target_sampling_rate=16000,
+                max_frames=10,
+            )
+            inputs1.collate_fn = collator
+            inputs2.collate_fn = collator
+
         embeddings1 = _batch_to_embeddings(inputs1, self.embedding_dim)
         embeddings2 = _batch_to_embeddings(inputs2, self.embedding_dim)
         similarities = []
