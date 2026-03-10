@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.10.6"
+version = "2.10.8"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -101,7 +101,7 @@ open_clip_torch = ["open_clip_torch==2.31.0"]
 nomic = ["einops>=0.8.1"]
 ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
 colpali_engine = ["colpali_engine>=0.3.12; python_full_version < '3.14'"]
-colqwen3 = ["transformers>=4.57", "torchvision>=0.22.1"]
+colqwen3 = ["transformers>=4.57.0", "torchvision>=0.22.1"]
 sauerkrautlm-colpali = ["sauerkrautlm-colpali>=0.1.0; python_full_version < '3.14'"]
 xet = ["huggingface_hub>=0.32.0"]
 youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lkeap>=3.0.1451"]
@@ -116,6 +116,7 @@ wav2clip = ["wav2clip==0.1.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
 mctct = ["transformers<5"]  # mctct was removed in transformers 5
+qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"] 
 
 [dependency-groups]
 lint = [
@@ -382,6 +383,7 @@ conflicts = [
         { extra = "msclap" },
         { extra = "muq" },
         { extra = "mctct" },
+        { extra = "qwen-vl" },
     ],
 ]
 
@@ -512,3 +514,4 @@ matche = "matche"
 expresso = "expresso"
 Expresso = "Expresso"
 NIFE = "NIFE"
+thw = "thw"
