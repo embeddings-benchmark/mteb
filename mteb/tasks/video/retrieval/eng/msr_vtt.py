@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from datasets import load_dataset
+from datasets import Features, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
@@ -56,9 +56,19 @@ class MSRVTTV2T(AbsTaskRetrieval):
             return example
 
         query = dataset.select_columns(["id", "video", "audio"])
+        query_features = dataset.features.copy()
+
         query = query.map(
             _combine_modalities,
-            features=dataset.features.copy(),
+            features=Features(
+                {
+                    "id": query_features["id"],
+                    "video": {
+                        "frames": query_features["video"],
+                        "audio": query_features["audio"],
+                    },
+                }
+            ),
             remove_columns=["audio"],
         )
         corpus = dataset.select_columns(["id", "caption"]).rename_column(
