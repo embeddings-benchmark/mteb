@@ -367,14 +367,16 @@ class LlamaNemotronEmbedVL(AbsEncoder):
         device_map="cuda",
         torch_dtype=torch.bfloat16,
         attn_implementation="flash_attention_2",
-        use_image_modality: bool = False,
+        use_image_modality: bool = True,
         use_text_modality: bool = True,
         **kwargs,
     ):
         self.use_image_modality = use_image_modality
         self.use_text_modality = use_text_modality
         if not self.use_image_modality and not self.use_text_modality:
-            raise ValueError("At least one of use_image_modality or use_text_modality must be True")
+            raise ValueError(
+                "At least one of use_image_modality or use_text_modality must be True"
+            )
 
         install_hint = f"pip install 'mteb[{extra_name}]'"
 
