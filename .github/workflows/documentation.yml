@@ -6,15 +6,13 @@ on:
   pull_request:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
     steps:
       - name: Free disk space
         run: |
@@ -48,7 +46,7 @@ jobs:
           python-version: "3.10"
 
       - name: Configure GitHub Pages
-        if: github.event_name == 'push'
+        # if: github.event_name == 'push'
         uses: actions/configure-pages@v5
 
       - name: Install dependencies
@@ -58,11 +56,22 @@ jobs:
         run: make build-docs
 
       - name: Upload docs artifact
-        if: github.event_name == 'push'
+        # if: github.event_name == 'push'
         uses: actions/upload-pages-artifact@v4
         with:
           path: site
 
+  deploy:
+    # if: github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push'
+        id: deployment
         uses: actions/deploy-pages@v4
