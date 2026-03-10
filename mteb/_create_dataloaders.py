@@ -764,19 +764,22 @@ class VideoCollator:
         collated_inputs = []
         for row in inputs:
             video = row.pop("video")
-            frames = self.resample_video(video, self.max_frames)
-            audio = self.audio_collator.resample_audio(
-                row,
-                target_sampling_rate=self.audio_collator.target_sampling_rate,
-                max_samples=self.audio_collator.max_samples,
-            )
-            row["video"] = VideoInputItem(
-                frames=frames,
-                audio=AudioInputItem(
+            frames = self.resample_video(video["frames"], self.max_frames)
+
+            video_input: VideoInputItem = {"frames": frames}
+
+            if "audio" in video and video["audio"] is not None:
+                audio = self.audio_collator.resample_audio(
+                    video,
+                    target_sampling_rate=self.audio_collator.target_sampling_rate,
+                    max_samples=self.audio_collator.max_samples,
+                )
+                video_input["audio"] = AudioInputItem(
                     array=audio,
                     sampling_rate=self.audio_collator.target_sampling_rate,
-                ),
-            )
+                )
+
+            row["video"] = video_input
             collated_inputs.append(row)
 
         return cast(

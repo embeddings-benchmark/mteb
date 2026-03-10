@@ -1,7 +1,8 @@
-from typing import ClassVar
+from typing import Any, ClassVar
 
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.types._encoder_io import VideoInputItem
 
 
 class RAVDESSAVClustering(AbsTaskClustering):
@@ -43,5 +44,24 @@ class RAVDESSAVClustering(AbsTaskClustering):
 """,
     )
     max_fraction_of_documents_to_embed = None
-    input_column_name: ClassVar[str | list[str]] = ["video", "audio"]
+    input_column_name: ClassVar[str | list[str]] = "video"
     label_column_name: str = "emotion"
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        """Combine video and audio columns into a single video dict."""
+
+        def _combine_modalities(example):
+            example["video"] = VideoInputItem(
+                frames=example["video"],
+                audio=example.pop("audio", None),
+            )
+            return example
+
+        for split in self.dataset:
+            self.dataset[split] = self.dataset[split].map(
+                _combine_modalities,
+                features=self.dataset[split].features.copy(),
+                remove_columns=["audio"]
+                if "audio" in self.dataset[split].column_names
+                else None,
+            )
