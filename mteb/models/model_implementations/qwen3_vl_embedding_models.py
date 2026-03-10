@@ -157,11 +157,11 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
     ):
         requires_image_dependencies()
         requires_package(
-            self, "transformers", model_name, "pip install transformers>=4.57.0"
+            self, "transformers", model_name, "pip install 'mteb[qwen-vl]'"
         )
 
         requires_package(
-            self, "qwen_vl_utils", model_name, "pip install qwen-vl-utils>=0.0.14"
+            self, "qwen_vl_utils", model_name, "pip install 'mteb[qwen-vl]'"
         )
 
         from transformers.models.qwen3_vl.processing_qwen3_vl import Qwen3VLProcessor
