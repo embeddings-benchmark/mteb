@@ -2507,7 +2507,7 @@ VIDORE_V3 = VidoreBenchmark(
 """,
 )
 
-VIDORE_V3 = VidoreBenchmark(
+VIDORE_V3_1 = VidoreBenchmark(
     name="ViDoRe(v3.1)",
     display_name="ViDoRe v3.1",
     language_view=[
