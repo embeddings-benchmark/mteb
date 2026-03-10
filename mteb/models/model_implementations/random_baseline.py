@@ -7,7 +7,7 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import MultimodalCollator, VideoCollator
+from mteb._create_dataloaders import MultimodalCollator
 from mteb.models.model_meta import ModelMeta
 from mteb.similarity_functions import (
     select_pairwise_similarity,
@@ -96,10 +96,7 @@ def _video_to_vector(
         A numpy array of shape (size,) containing the random vector.
     """
     # Convert video to bytes and then to a numeric seed
-    video_bytes = (
-        item["frames"].numpy().tobytes()
-        + item["audio"]["array"].tobytes()
-    )
+    video_bytes = item["frames"].numpy().tobytes() + item["audio"]["array"].tobytes()
     seed = int(hashlib.sha256(video_bytes).hexdigest(), 16) % (2**32)
     rng = np.random.default_rng(seed)
     return rng.random(size, dtype=np.float32)
