@@ -8,11 +8,11 @@ import numpy as np
 import torch
 from datasets import Dataset
 from numpy.typing import NDArray
-from typing_extensions import NotRequired
 
 if TYPE_CHECKING:
     import numpy.typing as npt
     from PIL import Image
+    from typing_extensions import NotRequired
 
 
 class EncodeKwargs(TypedDict):
@@ -144,7 +144,7 @@ class VideoInputItem(TypedDict):
     """
 
     frames: torch.Tensor
-    audio: NotRequired[AudioInputItem | None]
+    audio: NotRequired[AudioInputItem] | None
 
 
 class VideoInput(TypedDict):

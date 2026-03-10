@@ -13,7 +13,7 @@ from mteb.types import (
     ConversationTurn,
     PromptType,
 )
-from mteb.types._encoder_io import AudioInputItem, VideoInputItem
+from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
@@ -33,6 +33,7 @@ if TYPE_CHECKING:
         QueryInput,
         TextInput,
         VideoInput,
+        VideoInputItem,
     )
 
 logger = logging.getLogger(__name__)
