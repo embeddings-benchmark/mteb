@@ -1,0 +1,20 @@
+.copy-model-btn {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  margin-left: 4px;
+  border-radius: 4px;
+  color: var(--md-default-fg-color--light);
+  vertical-align: middle;
+  transition: color 0.15s, background 0.15s;
+}
+.copy-model-btn:hover {
+  color: var(--md-accent-fg-color);
+  background: var(--md-code-bg-color);
+}
+.copy-model-btn.copied {
+  color: var(--md-typeset-a-color);
+}

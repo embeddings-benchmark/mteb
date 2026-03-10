@@ -1,3 +1,8 @@
+---
+title: "Results"
+icon: lucide/table
+---
+
 # Results
 
 When a models is evaluated in MTEB it produces results. These results consist of:
