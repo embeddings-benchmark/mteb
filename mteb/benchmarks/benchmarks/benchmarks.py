@@ -2507,6 +2507,50 @@ VIDORE_V3 = VidoreBenchmark(
 """,
 )
 
+VIDORE_V3 = VidoreBenchmark(
+    name="ViDoRe(v3.1)",
+    display_name="ViDoRe v3.1",
+    language_view=[
+        "deu-Latn",
+        "eng-Latn",
+        "fra-Latn",
+        "ita-Latn",
+        "por-Latn",
+        "spa-Latn",
+    ],
+    icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
+    tasks=get_tasks(
+        tasks=[
+            "Vidore3FinanceEnRetrieval.v2",
+            "Vidore3IndustrialRetrieval.v2",
+            "Vidore3ComputerScienceRetrieval.v2",
+            "Vidore3PharmaceuticalsRetrieval.v2",
+            "Vidore3HrRetrieval.v2",
+            "Vidore3FinanceFrRetrieval.v2",
+            "Vidore3PhysicsRetrieval.v2",
+            "Vidore3EnergyRetrieval.v2",
+            "Vidore3TelecomRetrieval.v2",
+            "Vidore3NuclearRetrieval.v2",
+        ]
+    ),
+    description="ViDoRe v3.1 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. "
+    + "It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents. "
+    + "The benchmark includes both open and closed datasets: to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml). "
+    + "The latests 3.1 version adds and markdown derived from OCR to allow easier evaluation of text-only baselines and joint image-text baselines.",
+    reference="https://arxiv.org/abs/2601.08620",
+    citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+)
+
 VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
     name="ViDoRe(v1&v2)",
     aliases=["VisualDocumentRetrieval"],
