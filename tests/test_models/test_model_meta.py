@@ -81,7 +81,9 @@ _MISSING_N_EMBEDDING_MODELS = [
     "mteb/baseline-random-cross-encoder",
     "mteb/baseline-random-encoder",
     "OpenMuQ/MuQ-MuLan-large",
-    "speechbrain/cnn14-esc50",
+    "microsoft/speecht5_asr",
+    "microsoft/speecht5_tts",
+    "microsoft/speecht5_multimodal",
 ]
 
 
@@ -239,7 +241,10 @@ def test_fill_missing_parameter():
     assert meta_with_compute.memory_usage_mb is not None
 
 
-@pytest.mark.parametrize("model_meta", mteb.get_model_metas(open_weights=True))
+@pytest.mark.parametrize(
+    "model_meta",
+    [m for m in mteb.get_model_metas(open_weights=True) if "text" in m.modalities],
+)
 def test_n_embedding_parameters(model_meta: ModelMeta):
     """
     Test that tracks models with n_embedding_parameters=None.
