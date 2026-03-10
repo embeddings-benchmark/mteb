@@ -96,7 +96,10 @@ def _video_to_vector(
         A numpy array of shape (size,) containing the random vector.
     """
     # Convert video to bytes and then to a numeric seed
-    video_bytes = item["frames"].numpy().tobytes() + item["audio"]["array"].tobytes()
+    video_bytes = item["frames"].numpy().tobytes()
+    if "audio" in item and item["audio"] is not None:
+        video_bytes += item["audio"]["array"].tobytes()
+
     seed = int(hashlib.sha256(video_bytes).hexdigest(), 16) % (2**32)
     rng = np.random.default_rng(seed)
     return rng.random(size, dtype=np.float32)
