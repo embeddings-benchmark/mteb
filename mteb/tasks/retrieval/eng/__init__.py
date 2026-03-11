@@ -123,7 +123,8 @@ from .hotpot_qa_retrieval import (
 from .image_co_de_t2i_retrieval import ImageCoDeT2IRetrieval
 from .info_seek_it2it_retrieval import InfoSeekIT2ITRetrieval
 from .info_seek_it2t_retrieval import InfoSeekIT2TRetrieval
-from .irpapers_retrieval import IRPapersRetrieval
+from .irpapers_t2i_retrieval import IRPapersT2IRetrieval
+from .irpapers_t2it_retrieval import IRPapersT2ITRetrieval
 from .jl_corpus import JLCorpusA2TRetrieval, JLCorpusT2ARetrieval
 from .lass import LASSA2TRetrieval, LASST2ARetrieval
 from .legal_bench_consumer_contracts_qa_retrieval import LegalBenchConsumerContractsQA
@@ -383,7 +384,8 @@ __all__ = [
     "HotpotQA",
     "HotpotQAHardNegatives",
     "HotpotQAHardNegativesV2",
-    "IRPapersRetrieval",
+    "IRPapersT2IRetrieval",
+    "IRPapersT2ITRetrieval",
     "ImageCoDeT2IRetrieval",
     "InfoSeekIT2ITRetrieval",
     "InfoSeekIT2TRetrieval",

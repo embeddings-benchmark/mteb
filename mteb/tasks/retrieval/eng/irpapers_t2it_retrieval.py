@@ -2,9 +2,9 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class IRPapersRetrieval(AbsTaskRetrieval):
+class IRPapersT2ITRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="IRPapersRetrieval",
+        name="IRPapersT2ITRetrieval",
         description="IRPAPERS is a collection of 166 Information Retrieval papers spanning 3,230 pages. Each page in the dataset is jointly represented as a base64 encoded string of the page image as well as an OCR-derived text transcription. IRPAPERS also contains 180 needle-in-the-haystack queries.",
         reference="https://arxiv.org/pdf/2602.17687",
         dataset={
