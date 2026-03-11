@@ -2664,31 +2664,19 @@ MTEB_THA = Benchmark(
     tasks=get_tasks(
         languages=["tha"],
         tasks=[
-            # BitextMining
-            "BibleNLPBitextMining",
-            "FloresBitextMining",
-            "NTREXBitextMining",
-            "Tatoeba",
-            "WebFAQBitextMiningQAs",
-            "WebFAQBitextMiningQuestions",
-            # Classification
-            "LanguageClassification",
+            # Classification (4) — native Thai or purpose-built; no machine-translated tasks
             "MTOPDomainClassification",
             "MTOPIntentClassification",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "MultilingualSentimentClassification",
             "SIB200Classification",
             "WisesightSentimentClassification.v2",
-            "WongnaiReviewsClassification",
-            # Clustering
+            # Clustering (1)
             "SIB200ClusteringS2S",
-            # PairClassification
+            # PairClassification (1)
             "XNLI",
-            # Reranking
+            # Reranking (2)
             "MIRACLReranking",
             "MultiLongDocReranking",
-            # Retrieval
+            # Retrieval (7) — human-judged or human-translated
             "BelebeleRetrieval",
             "MIRACLRetrievalHardNegatives.v2",
             "MKQARetrieval",
@@ -2698,9 +2686,9 @@ MTEB_THA = Benchmark(
             "XQuADRetrieval",
         ],
     ),
-    description="A benchmark for evaluating Thai text embedding models across 28 tasks spanning 6 task types: bitext mining (6), classification (9), clustering (1), pair classification (1), reranking (2), and retrieval (9).",
+    description="A benchmark for evaluating Thai text embedding models across 15 tasks spanning 5 task types: classification (4), clustering (1), pair classification (1), reranking (2), and retrieval (7). Tasks are native Thai or high-quality human translations; machine-translated and cross-lingual tasks are excluded.",
     reference=None,
-    citation=["anusoft"],
+    citation=None,
 )
 
 JINA_VDR = Benchmark(
