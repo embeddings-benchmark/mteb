@@ -44,7 +44,7 @@ class IRPapersRetrieval(AbsTaskRetrieval):
 
         self.dataset["default"]["train"]["corpus"] = self.dataset["default"]["train"][
             "corpus"
-        ].map(
-            lambda x: {"text": x["text"] if x["text"] is not None else ""},
+        ].filter(
+            lambda x: x["text"] is not None,
             num_proc=num_proc,
         )
