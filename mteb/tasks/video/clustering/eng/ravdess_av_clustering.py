@@ -60,15 +60,18 @@ class RAVDESSAVClustering(AbsTaskClustering):
             return example
 
         for split in self.dataset:
-            features = self.dataset[split].features.copy()
-            features["video"] = {
-                "frames": features["video"],
-                "audio": features["audio"],
-            }
-
+            split_features = self.dataset[split].features
             self.dataset[split] = self.dataset[split].map(
                 _combine_modalities,
-                features=Features(features),
+                features=Features(
+                    {k: v for k, v in split_features.items() if k != "audio"}
+                    | {
+                        "video": {
+                            "frames": split_features["video"],
+                            "audio": split_features["audio"],
+                        }
+                    }
+                ),
                 remove_columns=["audio"],
                 writer_batch_size=50,
             )
