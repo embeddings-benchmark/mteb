@@ -71,7 +71,7 @@ markdown_extensions:
 nav:
   - Get Started:
       - index.md
-      - Installation: installation.md
+      - installation.md
       - whats_new.md
       - Usage:
         - Get Started: get_started/usage/get_started.md
