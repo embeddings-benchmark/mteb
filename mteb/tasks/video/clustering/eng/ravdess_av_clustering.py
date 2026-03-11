@@ -70,4 +70,5 @@ class RAVDESSAVClustering(AbsTaskClustering):
                 _combine_modalities,
                 features=Features(features),
                 remove_columns=["audio"],
+                writer_batch_size=50,
             )
