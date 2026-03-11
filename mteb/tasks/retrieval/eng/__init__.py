@@ -14,7 +14,6 @@ from .birco_whats_that_book_reranking import BIRCOWhatsThatBookReranking
 from .blink_it2i_retrieval import BLINKIT2IRetrieval
 from .blink_it2t_retrieval import BLINKIT2TRetrieval
 from .bright_retrieval import BrightLongRetrieval, BrightRetrieval
-from .browse_comp_plus_retrieval import BrowseCompPlusRetrieval
 from .bright_v1_1_retrieval import (
     BrightAopsRetrieval,
     BrightBiologyLongRetrieval,
@@ -37,6 +36,7 @@ from .bright_v1_1_retrieval import (
     BrightTheoremQAQuestionsRetrieval,
     BrightTheoremQATheoremsRetrieval,
 )
+from .browse_comp_plus_retrieval import BrowseCompPlusRetrieval
 from .built_bench_retrieval import BuiltBenchRetrieval
 from .chat_doctor_retrieval import ChatDoctorRetrieval
 from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval

@@ -85,7 +85,9 @@ class BrowseCompPlusRetrieval(AbsTaskRetrieval):
   journal={arXiv preprint arXiv:2508.06600}
 }
 """,
-        prompt={"query": "Given a complex research question, retrieve relevant web documents that help answer it"},
+        prompt={
+            "query": "Given a complex research question, retrieve relevant web documents that help answer it"
+        },
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
@@ -105,7 +107,9 @@ class BrowseCompPlusRetrieval(AbsTaskRetrieval):
 
         for row in queries_ds:
             qid = str(row["query_id"])  # plain — not encrypted
-            queries_list.append({"id": qid, "text": _decrypt_string(row["query"], _CANARY)})
+            queries_list.append(
+                {"id": qid, "text": _decrypt_string(row["query"], _CANARY)}
+            )
 
             # Binary relevance: both gold_docs and evidence_docs get score=1
             # gold_docs: contain the final answer
@@ -124,7 +128,9 @@ class BrowseCompPlusRetrieval(AbsTaskRetrieval):
 
         queries_dataset = Dataset.from_list(queries_list)
 
-        logger.info("Loading BrowseComp-Plus corpus (~100K docs, may take a few minutes)...")
+        logger.info(
+            "Loading BrowseComp-Plus corpus (~100K docs, may take a few minutes)..."
+        )
         corpus_raw = load_dataset(
             "Tevatron/browsecomp-plus-corpus",
             revision=_CORPUS_REVISION,
