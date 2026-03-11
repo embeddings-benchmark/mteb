@@ -63,7 +63,7 @@ zeroentropy_zembed_1 = ModelMeta(
 
 zeroentropy_zerank_1 = ModelMeta(
     loader=CrossEncoderWrapper,
-    loader_kwargs={},
+    loader_kwargs={"trust_remote_code": True},
     name="zeroentropy/zerank-1",
     revision="9c848454a9a4561496c5130a9c27f22c6b2c5fc3",
     release_date="2025-07-01",
@@ -101,7 +101,7 @@ zeroentropy_zerank_1 = ModelMeta(
 
 zeroentropy_zerank_1_small = ModelMeta(
     loader=CrossEncoderWrapper,
-    loader_kwargs={},
+    loader_kwargs={"trust_remote_code": True},
     name="zeroentropy/zerank-1-small",
     revision="bfaf6a8852da288e60b7375e79943c7f417ad606",
     release_date="2025-07-01",
@@ -139,7 +139,7 @@ zeroentropy_zerank_1_small = ModelMeta(
 
 zeroentropy_zerank_2 = ModelMeta(
     loader=CrossEncoderWrapper,
-    loader_kwargs={},
+    loader_kwargs={"trust_remote_code": True},
     name="zeroentropy/zerank-2",
     revision="1b0a8f8c70348f5c553f8b534499fe7104ef9a4e",
     release_date="2025-11-19",
