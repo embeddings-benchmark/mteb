@@ -8,8 +8,8 @@ class PunjabiNewsClassification(AbsTaskClassification):
         description="A Punjabi dataset for 2-class classification of Punjabi news articles",
         reference="https://github.com/goru001/nlp-for-punjabi/",
         dataset={
-            "path": "mlexplorer008/punjabi_news_classification",
-            "revision": "cec3923e16519efe51d535497e711932b8f1dc44",
+            "path": "mteb/PunjabiNewsClassification",
+            "revision": "b76bb74317e828d00e474779c8c706eac8af231b",
         },
         type="Classification",
         category="t2c",
@@ -33,11 +33,3 @@ class PunjabiNewsClassification(AbsTaskClassification):
 }
 """,
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_columns(
-            {"article": "text", "is_about_politics": "label"}
-        )

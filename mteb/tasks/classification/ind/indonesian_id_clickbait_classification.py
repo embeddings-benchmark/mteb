@@ -6,8 +6,8 @@ class IndonesianIdClickbaitClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="IndonesianIdClickbaitClassification",
         dataset={
-            "path": "manandey/id_clickbait",
-            "revision": "9fa4d0824015fe537ae2c8166781f5c79873da2c",
+            "path": "mteb/IndonesianIdClickbaitClassification",
+            "revision": "fa22e2fe229619ae18cd236e23f538abf828f171",
         },
         description="The CLICK-ID dataset is a collection of Indonesian news headlines that was collected from 12 local online news publishers.",
         reference="http://www.sciencedirect.com/science/article/pii/S2352340920311252",
@@ -40,17 +40,6 @@ class IndonesianIdClickbaitClassification(AbsTaskClassification):
 """,
         superseded_by="IndonesianIdClickbaitClassification.v2",
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.remove_columns(["label"]).rename_columns(
-            {"title": "text", "label_score": "label"}
-        )
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )
 
 
 class IndonesianIdClickbaitClassificationV2(AbsTaskClassification):
@@ -91,11 +80,3 @@ class IndonesianIdClickbaitClassificationV2(AbsTaskClassification):
 """,
         adapted_from=["IndonesianIdClickbaitClassification"],
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )

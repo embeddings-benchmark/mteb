@@ -1,11 +1,8 @@
-from collections import Counter
-
 import datasets
 import numpy as np
 
 from mteb.abstasks.clustering import (
     AbsTaskClustering,
-    _check_label_distribution,
 )
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -72,8 +69,8 @@ class HALClusteringS2SFast(AbsTaskClustering):
         description="Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s)",
         reference="https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s",
         dataset={
-            "path": "lyon-nlp/clustering-hal-s2s",
-            "revision": "e06ebbbb123f8144bef1a5d18796f3dec9ae2915",
+            "path": "mteb/HALClusteringS2S.v2",
+            "revision": "f1b4d7e7d58992005012c43c9dd2cc7436a1e378",
         },
         type="Clustering",
         category="t2c",
@@ -100,39 +97,3 @@ class HALClusteringS2SFast(AbsTaskClustering):
 """,
         adapted_from=["HALClusteringS2S"],
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        """Convert to standard format"""
-        self.dataset["test"] = self.dataset["test"].remove_columns("hal_id")
-        self.dataset["test"] = self.dataset["test"].rename_columns(
-            {"title": "sentences", "domain": "labels"}
-        )
-        labels_count = Counter(self.dataset["test"]["labels"])
-
-        # keep classes with more than 2 samples after stratified_subsampling
-        frequent_labels = {
-            label
-            for label, count in labels_count.items()
-            if count > len(self.dataset["test"]) * 2 / NUM_SAMPLES
-        }
-        self.dataset["test"] = self.dataset["test"].filter(
-            lambda row: row["labels"] in frequent_labels
-        )
-        self.dataset["test"] = self.dataset["test"].cast(
-            datasets.Features(
-                sentences=datasets.Value("string"),
-                labels=datasets.ClassLabel(names=sorted(frequent_labels)),
-            )
-        )
-        for split in self.metadata.eval_splits:
-            _check_label_distribution(self.dataset[split])
-
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-        )

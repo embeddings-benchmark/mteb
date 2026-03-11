@@ -8,8 +8,8 @@ class CzechProductReviewSentimentClassification(AbsTaskClassification):
         description="User reviews of products on Czech e-shop Mall.cz with 3 sentiment classes (positive, neutral, negative)",
         reference="https://aclanthology.org/W13-1609/",
         dataset={
-            "path": "fewshot-goes-multilingual/cs_mall-product-reviews",
-            "revision": "2e6fedf42c9c104e83dfd95c3a453721e683e244",
+            "path": "mteb/CzechProductReviewSentimentClassification",
+            "revision": "66bf87809951d5382f930fbbea09e73ce8b3d671",
         },
         type="Classification",
         category="t2c",
@@ -98,8 +98,3 @@ Montoyo, Andres},
         adapted_from=["CzechProductReviewSentimentClassification"],
     )
     samples_per_label = 16
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
-        )

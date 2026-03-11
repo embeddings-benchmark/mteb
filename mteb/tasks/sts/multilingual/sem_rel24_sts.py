@@ -23,8 +23,8 @@ class SemRel24STS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="SemRel24STS",
         dataset={
-            "path": "SemRel/SemRel2024",
-            "revision": "ef5c383d1b87eb8feccde3dfb7f95e42b1b050dd",
+            "path": "mteb/SemRel24STS",
+            "revision": "f5146bf724c55899ca20502851dc98c5405b67f9",
         },
         description=(
             "SemRel2024 is a collection of Semantic Textual Relatedness (STR) datasets for 14 languages, "
@@ -65,7 +65,3 @@ Seid Muhie Yimam and Saif M. Mohammad},
 
     min_score = 0
     max_score = 1
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
-        for lang, subset in self.dataset.items():
-            self.dataset[lang] = subset.rename_column("label", "score")

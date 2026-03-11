@@ -100,7 +100,7 @@ class AbsTaskRegression(AbsTaskClassification):
     """
 
     evaluator: type[SklearnEvaluator] = SklearnEvaluator
-    evaluator_model: SklearnModelProtocol = LinearRegression(n_jobs=-1)
+    evaluator_model: SklearnModelProtocol = LinearRegression()
 
     train_split: str = "train"
     label_column_name: str = "value"

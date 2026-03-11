@@ -6,8 +6,8 @@ class EstonianValenceClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="EstonianValenceClassification",
         dataset={
-            "path": "kardosdrur/estonian-valence",
-            "revision": "9157397f05a127b3ac93b93dd88abf1bdf710c22",
+            "path": "mteb/EstonianValenceClassification",
+            "revision": "41e23c86f6c4685f856887443c13f0da74f46ca4",
         },
         description="Dataset containing annotated Estonian news data from the Postimees and Õhtuleht newspapers.",
         reference="https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054",
@@ -39,20 +39,6 @@ class EstonianValenceClassification(AbsTaskClassification):
 """,
         superseded_by="EstonianValenceClassification.v2",
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_column("paragraph", "text").rename_column(
-            "valence", "label"
-        )
-        # convert label to a numbers
-        labels = self.dataset["train"]["label"]
-        lab2idx = {lab: idx for idx, lab in enumerate(set(labels))}
-        self.dataset = self.dataset.map(
-            lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"]
-        )
 
     samples_per_label = 16
 

@@ -37,9 +37,7 @@ class VaccinChatNLClassification(AbsTaskClassification):
   year = {2022},
 }
 """,
-        prompt={
-            "query": "Gegeven een gebruikersuiting als query, bepaal de gebruikersintenties"
-        },
+        prompt="Gegeven een gebruikersuiting als query, bepaal de gebruikersintenties",
     )
 
     def dataset_transform(

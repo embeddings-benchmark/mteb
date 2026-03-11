@@ -2,7 +2,7 @@
 
 import pytest
 
-from mteb.abstasks import AbsTask
+from mteb.abstasks import AbsTask, AbsTaskRetrieval
 from mteb.get_tasks import get_tasks
 
 # Historic datasets without filled metadata. Do NOT add new datasets to this list.
@@ -50,3 +50,12 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YourTask().calculate_descriptive_statistics()`"
     )
     assert task.metadata.n_samples is not None
+
+    if task.metadata.prompt is not None and isinstance(task.metadata.prompt, dict):
+        if not (
+            isinstance(task, AbsTaskRetrieval) or task.metadata.name in ["TERRa.V2"]
+        ):
+            # Retrieval tasks and TERRa.V2 have a dict prompt, but other tasks should not
+            raise ValueError(
+                f"Task {task.metadata.name} has a dict prompt, but it should be a string. Please check the metadata of the task."
+            )
