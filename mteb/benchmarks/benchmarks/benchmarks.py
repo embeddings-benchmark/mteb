@@ -2689,6 +2689,7 @@ MTEB_THA = Benchmark(
     description="A benchmark for evaluating Thai text embedding models across 15 tasks spanning 5 task types: classification (4), clustering (1), pair classification (1), reranking (2), and retrieval (7). Tasks are native Thai or high-quality human translations; machine-translated and cross-lingual tasks are excluded.",
     reference=None,
     citation=None,
+    contacts=["anusoft"],
 )
 
 JINA_VDR = Benchmark(
