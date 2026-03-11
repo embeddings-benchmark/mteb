@@ -73,18 +73,16 @@ class BrowseCompPlusRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@article{chen2025BrowseCompPlus,
-  title={BrowseComp-Plus: A More Fair and Transparent Evaluation Benchmark of Deep-Research Agent},
-  author={Chen, Zijian and Ma, Xueguang and Zhuang, Shengyao and Nie, Ping and Zou, Kai
-          and Liu, Andrew and Green, Joshua and Patel, Kshama and Meng, Ruoxi and Su, Mingyi
-          and Sharifymoghaddam, Sahel and Li, Yanxi and Hong, Haoran and Shi, Xinyu
-          and Liu, Xuye and Thakur, Nandan and Zhang, Crystina and Gao, Luyu
-          and Chen, Wenhu and Lin, Jimmy},
-  year={2025},
-  journal={arXiv preprint arXiv:2508.06600}
-}
-""",
+        bibtex_citation=r"""@article{chen2025BrowseCompPlus,
+  author = {Chen, Zijian and Ma, Xueguang and Zhuang, Shengyao and Nie, Ping and Zou, Kai
+and Liu, Andrew and Green, Joshua and Patel, Kshama and Meng, Ruoxi and Su, Mingyi
+and Sharifymoghaddam, Sahel and Li, Yanxi and Hong, Haoran and Shi, Xinyu
+and Liu, Xuye and Thakur, Nandan and Zhang, Crystina and Gao, Luyu
+and Chen, Wenhu and Lin, Jimmy},
+  journal = {arXiv preprint arXiv:2508.06600},
+  title = {BrowseComp-Plus: A More Fair and Transparent Evaluation Benchmark of Deep-Research Agent},
+  year = {2025},
+}""",
         prompt={
             "query": "Given a complex research question, retrieve relevant web documents that help answer it"
         },
