@@ -144,7 +144,7 @@ class VideoInputItem(TypedDict):
     """
 
     frames: torch.Tensor
-    audio: NotRequired[AudioInputItem] | None
+    audio: NotRequired[AudioInputItem | None]
 
 
 class VideoInput(TypedDict):
