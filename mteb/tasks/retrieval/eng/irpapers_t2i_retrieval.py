@@ -36,3 +36,8 @@ class IRPapersT2IRetrieval(AbsTaskRetrieval):
 }
 """,
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+        self.dataset["default"]["train"]["corpus"] = self.dataset["default"]["train"][
+            "corpus"
+        ].remove_columns("transcription")
