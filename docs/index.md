@@ -5,7 +5,7 @@ title: "MTEB"
 # MTEB
 
 !!! info
-    We recently released `mteb` version 2.0.0, to see what is new check of [what is new](get_started/whats_new.md) and see [how to upgrade](get_started/whats_new.md#upgrading-from-v1) your existing code.
+    We recently released `mteb` version 2.0.0, to see what is new check of [what is new](whats_new.md) and see [how to upgrade](whats_new.md#upgrading-from-v1) your existing code.
 
 Welcome documentation of MTEB. `mteb` a package for benchmark and evaluating the quality of embeddings.
 
@@ -28,7 +28,7 @@ Installation is as simple as:
     uv add mteb
     ```
 
-To see more check out the [installation guide](get_started/installation.md).
+To see more check out the [installation guide](installation.md).
 
 ## Quickstart
 

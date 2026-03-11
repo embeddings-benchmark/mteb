@@ -1,4 +1,5 @@
 ---
+title: "What's New"
 icon: lucide/newspaper
 ---
 
@@ -83,7 +84,7 @@ print(all_specific_result.model_results)
 
 Added integration with HuggingFace Benchmarks (more info in [blog](https://huggingface.co/blog/community-evals)). This allows for users easily see scores of task directly on dataset card.
 
-![img.png](../images/visualizations/hf_benchmark.png)
+![img.png](images/visualizations/hf_benchmark.png)
 
 To convert your task into a HuggingFace benchmark, you can simply run:
 
@@ -152,7 +153,7 @@ This enables better insight into how users interact with the leaderboard and pro
 ### Added vLLM support
 
 Added vLLM support. While it is currently not the reference implementation for any models it allows you to run comparisons on performance and throughput
-on a single model. This can inform whether it is worth switching your local setup over to vLLM. While you can read more about it [here](advanced_usage/vllm_wrapper.md)
+on a single model. This can inform whether it is worth switching your local setup over to vLLM. While you can read more about it [here](get_started/advanced_usage/vllm_wrapper.md)
 
 ## New in v2.6
 
@@ -424,9 +425,9 @@ We're automatically wrapping `Encoder` and `CrossEncoder` models support `Search
 
 We've added a lot of new documentation to make it easier to get started with MTEB.
 
-- You can see api of our models in tasks in [API documentation](../api/index.md).
-- We've added a [getting started guide](usage/get_started.md) to help you get started with MTEB.
-- You can see implemented [tasks](../overview/available_tasks/retrieval.md) and [models](../overview/available_models/text.md) in MTEB.
+- You can see api of our models in tasks in [API documentation](api/index.md).
+- We've added a [getting started guide](get_started/usage/get_started.md) to help you get started with MTEB.
+- You can see implemented [tasks](overview/available_tasks/retrieval.md) and [models](overview/available_models/text.md) in MTEB.
 
 #### Better support for loading and comparing results
 
