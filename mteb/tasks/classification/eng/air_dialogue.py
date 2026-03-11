@@ -49,7 +49,7 @@ class AirDialogueClassification(AbsTaskClassification):
         """,
     )
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         def process_history(row: dict[str, Any]) -> dict[str, Any]:
             history = row["text"]
             text = ""
@@ -67,6 +67,7 @@ class AirDialogueClassification(AbsTaskClassification):
                 self.dataset[subset]
                 .map(
                     process_history,
+                    num_proc=num_proc,
                 )
                 .select_columns(["text", "label"])
             )

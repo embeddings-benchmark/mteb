@@ -1,4 +1,5 @@
-from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
+from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.tasks.dialog_state_tracking.eng.multi_woz import (
     MultiWoz21Attraction,
     MultiWoz21Hotel,

@@ -38,11 +38,13 @@ from .bright_v1_1_retrieval import (
     BrightTheoremQATheoremsRetrieval,
 )
 from .built_bench_retrieval import BuiltBenchRetrieval
+from .canard import Canard
 from .chat_doctor_retrieval import ChatDoctorRetrieval
 from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval
 from .chem_nq_retrieval import ChemNQRetrieval
 from .chemrxiv import ChemRxivRetrieval
 from .cirr_it2i_retrieval import CIRRIT2IRetrieval
+from .clarq import Clarq
 from .climate_fever_retrieval import (
     ClimateFEVER,
     ClimateFEVERHardNegatives,
@@ -247,6 +249,7 @@ from .vqa2_it2t_retrieval import VQA2IT2TRetrieval
 from .web_qa_t2it_retrieval import WebQAT2ITRetrieval
 from .web_qa_t2t_retrieval import WebQAT2TRetrieval
 from .wino_grande_retrieval import WinoGrande
+from .wizard_of_wikipedia import WiardOfWikipedia
 
 __all__ = [
     "CUB200I2I",
@@ -315,10 +318,12 @@ __all__ = [
     "CQADupstackUnixRetrieval",
     "CQADupstackWebmastersRetrieval",
     "CQADupstackWordpressRetrieval",
+    "Canard",
     "ChatDoctorRetrieval",
     "ChemHotpotQARetrieval",
     "ChemNQRetrieval",
     "ChemRxivRetrieval",
+    "Clarq",
     "ClimateFEVER",
     "ClimateFEVERHardNegatives",
     "ClimateFEVERHardNegativesV2",
@@ -500,5 +505,6 @@ __all__ = [
     "VizWizIT2TRetrieval",
     "WebQAT2ITRetrieval",
     "WebQAT2TRetrieval",
+    "WiardOfWikipedia",
     "WinoGrande",
 ]

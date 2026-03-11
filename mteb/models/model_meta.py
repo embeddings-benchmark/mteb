@@ -621,7 +621,7 @@ class ModelMeta(BaseModel):
         loader: Callable[..., MTEBModels] | None
         model_type: MODEL_TYPES
 
-        reference = "https://huggingface.co/" + model_name
+        reference = None  # "https://huggingface.co/" + model_name
 
         if not _repo_exists(model_name):
             warnings.warn(

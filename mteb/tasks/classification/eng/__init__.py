@@ -40,6 +40,7 @@ from mteb.tasks.classification.eng.vox_celeb_sa import VoxCelebSA
 from mteb.tasks.classification.eng.vox_lingua107_top10 import VoxLingua107Top10
 from mteb.tasks.classification.eng.vox_populi_accent_id import VoxPopuliAccentID
 
+from .abg_cosqa import AbgCosQA
 from .air_dialogue import AirDialogueClassification
 from .amazon_polarity_classification import (
     AmazonPolarityClassification,
@@ -202,6 +203,7 @@ from .legal_bench_classification import (
     UCCVCommonLawLegalBenchClassification,
     UnfairTOSLegalBenchClassification,
 )
+from .mantis import Mantis
 from .mnist_classification import MNISTClassification
 from .news_classification import NewsClassification, NewsClassificationV2
 from .oxford_flowers_classification import OxfordFlowersClassification
@@ -300,9 +302,10 @@ from .yelp_review_full_classification import (
 )
 
 __all__ = [
-    "AirDialogueClassification",
     "CREMAD",
     "FSDD",
+    "AbgCosQA",
+    "AirDialogueClassification",
     "AmazonPolarityClassification",
     "AmazonPolarityClassificationV2",
     "ArxivClassification",
@@ -440,6 +443,7 @@ __all__ = [
     "MAUDLegalBenchClassification",
     "MAUDLegalBenchClassificationV2",
     "MNISTClassification",
+    "Mantis",
     "NYSJudicialEthicsLegalBenchClassification",
     "NewsClassification",
     "NewsClassificationV2",

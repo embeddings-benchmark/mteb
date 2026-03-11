@@ -2,18 +2,21 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from collections.abc import Sequence
-from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
-from datasets import Dataset, DatasetDict
 from tqdm import tqdm
 
-from mteb.models.models_protocols import EncoderProtocol
-from mteb.types import ScoresDict
-
 from .classification import AbsTaskClassification
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+    from pathlib import Path
+
+    from datasets import Dataset, DatasetDict
+
+    from mteb.models.models_protocols import EncoderProtocol
+    from mteb.types import ScoresDict
 
 logger = logging.getLogger(__name__)
 
