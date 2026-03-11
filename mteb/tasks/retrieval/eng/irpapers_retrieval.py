@@ -41,3 +41,10 @@ class IRPapersRetrieval(AbsTaskRetrieval):
         self.dataset["default"]["train"]["corpus"] = self.dataset["default"]["train"][
             "corpus"
         ].rename_column("transcription", "text")
+
+        self.dataset["default"]["train"]["corpus"] = self.dataset["default"]["train"][
+            "corpus"
+        ].map(
+            lambda x: {"text": x["text"] if x["text"] is not None else ""},
+            num_proc=num_proc,
+        )
