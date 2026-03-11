@@ -1,5 +1,5 @@
 ---
-title: "CONTRIBUTING"
+title: "Setting Up MTEB"
 icon: lucide/user-pen
 ---
 
