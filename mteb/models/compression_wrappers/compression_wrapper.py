@@ -1,14 +1,20 @@
+from __future__ import annotations
+
 import logging
 import warnings
-from typing import Any
+from typing import TYPE_CHECKING, Any, Optional
 
 import torch
-from torch.utils.data import DataLoader
 
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import EncoderProtocol
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import PromptType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.model_meta import ModelMeta
+    from mteb.models.models_protocols import EncoderProtocol
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -31,13 +37,13 @@ class CompressionWrapper:
         """
         self.model = model
         self._quantization_level = quantization_level
-        self.quantiles = quantiles
+        self.quantiles = None
         self.quantize_queries = False
-        self.mins, self.maxs = None, None
+        self.mins: Optional[torch.Tensor] = None
+        self.maxs: Optional[torch.Tensor] = None
         self.min_embeds = 10_000
-        self.query_embeds = None
-        self.hf_subset = None
-        self.task_name = None
+        self.hf_subset = ''
+        self.task_name = ''
         embed_types = None
         if quantiles is not None:
             assert 0 < quantiles[0] < quantiles[1] < 1
@@ -128,7 +134,7 @@ class CompressionWrapper:
 
     def _quantize_embeddings(
         self,
-        embeddings: torch.tensor,
+        embeddings: torch.Tensor,
     ) -> Array:
         """Compresses embeddings to represent each dimension with lower bit-precision.
 
@@ -176,7 +182,7 @@ class CompressionWrapper:
 
     def _get_min_max_per_dim(
         self,
-        embeddings: torch.tensor,
+        embeddings: torch.Tensor,
     ) -> tuple[torch.Tensor, torch.Tensor]:
         """Computes thresholds for integer quantization.
 

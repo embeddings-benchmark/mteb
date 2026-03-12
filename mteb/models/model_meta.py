@@ -39,6 +39,9 @@ from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    from huggingface_hub import (
+        ModelCardData,
+    )
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
