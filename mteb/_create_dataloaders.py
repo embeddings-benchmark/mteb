@@ -241,42 +241,6 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     return cast("BatchedInput", collated)
 
 
-def _create_image_dataloader(
-    dataset: Dataset,
-    image_column_name: str | None = None,
-    batch_size: int = 32,
-    transform: Callable[[Any], Any] | None = None,
-    collate_fn: Callable[[list[dict[str, Any]]], BatchedInput] = _custom_collate_fn,
-    num_proc: int | None = None,
-) -> DataLoader[ImageInput]:
-    """Creates a DataLoader with the image dataset prepared using the explicit transformation.
-
-    Args:
-        dataset: The dataset containing images.
-        image_column_name: The name of the column containing images. If None, defaults to "image".
-        batch_size: Batch size for the dataloader.
-        transform: A transformation function to apply to each image (e.g., converting to tensor).
-        collate_fn: A custom collate function to handle batching.
-        num_proc: Number of processes to use.
-
-    Returns:
-        A DataLoader with the image dataset.
-    """
-    dataset = _prepare_image_dataset(
-        dataset,
-        image_column_name,
-        transform,
-        num_proc=num_proc,
-    )
-    return DataLoader(
-        dataset,
-        batch_size=batch_size,
-        collate_fn=collate_fn,
-        shuffle=False,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
-    )
-
-
 def _prepare_multimodal_dataset(
     dataset: Dataset,
     task_metadata: TaskMetadata,
@@ -391,76 +355,6 @@ def _create_document_dataloader(
 
     return DataLoader(
         prepared,
-        batch_size=batch_size,
-        collate_fn=_custom_collate_fn,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
-        shuffle=False,
-    )
-
-
-def _create_audio_dataloader(
-    dataset: Dataset,
-    task_metadata: TaskMetadata,
-    input_column: str | None = None,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[AudioInput]:
-    """Create a dataloader for audio.
-
-    Args:
-        dataset: The dataset containing the audio.
-        task_metadata: Metadata of the task to determine the audio type.
-        input_column: The column to use as input. If None, it will use the first column that matches the audio.
-        batch_size: Batch size for the dataloader.
-        num_proc: The number of workers for the dataloader.
-
-    Returns:
-        A DataLoader with the audio dataset.
-    """
-    if (
-        input_column
-        and input_column in dataset.column_names
-        and "audio" not in dataset.column_names
-    ):
-        dataset = dataset.rename_column(input_column, "audio")
-
-    return DataLoader(
-        dataset,
-        batch_size=batch_size,
-        collate_fn=_custom_collate_fn,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
-        shuffle=False,
-    )
-
-
-def _create_video_dataloader(
-    dataset: Dataset,
-    task_metadata: TaskMetadata,
-    input_column: str | None = None,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[AudioInput]:
-    """Create a dataloader for video.
-
-    Args:
-        dataset: The dataset containing the audio.
-        task_metadata: Metadata of the task to determine the audio type.
-        input_column: The column to use as input. If None, it will use the first column that matches the audio.
-        batch_size: Batch size for the dataloader.
-        num_proc: The number of workers for the dataloader.
-
-    Returns:
-        A DataLoader with the audio dataset.
-    """
-    if (
-        input_column
-        and input_column in dataset.column_names
-        and "video" not in dataset.column_names
-    ):
-        dataset = dataset.rename_column(input_column, "video")
-
-    return DataLoader(
-        dataset,
         batch_size=batch_size,
         collate_fn=_custom_collate_fn,
         num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
