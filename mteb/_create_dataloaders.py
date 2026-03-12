@@ -511,37 +511,42 @@ def create_dataloader(
             num_proc=num_proc,
         )
 
-    if "image" in task_metadata.modalities:
-        return _create_image_dataloader(
+    modalities = task_metadata.modalities
+
+    if "text" in modalities and input_column is not None:
+        return DataLoader(
+            Dataset.from_dict({"text": dataset[input_column]}),
+            batch_size=batch_size,
+            num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
+        )
+
+    if "image" in modalities:
+        dataset = _prepare_image_dataset(
             dataset,
             image_column_name=input_column,
-            batch_size=batch_size,
             num_proc=num_proc,
         )
-    if "audio" in task_metadata.modalities:
-        return _create_audio_dataloader(
-            dataset,
-            task_metadata,
-            input_column=input_column,
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "video" in task_metadata.modalities:
-        return _create_video_dataloader(
-            dataset,
-            task_metadata,
-            input_column=input_column,
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "text" in task_metadata.modalities and input_column is not None:
-        return _create_dataloader_from_texts(
-            dataset[input_column],
-            batch_size=batch_size,
-        )
+
+    if "audio" in modalities:
+        if (
+            input_column
+            and input_column in dataset.column_names
+            and "audio" not in dataset.column_names
+        ):
+            dataset = dataset.rename_column(input_column, "audio")
+
+    if "video" in modalities:
+        if (
+            input_column
+            and input_column in dataset.column_names
+            and "video" not in dataset.column_names
+        ):
+            dataset = dataset.rename_column(input_column, "video")
+
     return DataLoader(
         dataset,
         batch_size=batch_size,
+        collate_fn=_custom_collate_fn,
         num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
     )
 
