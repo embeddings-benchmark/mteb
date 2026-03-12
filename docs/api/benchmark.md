@@ -1,3 +1,8 @@
+---
+title: "Benchmark"
+icon: lucide/square-stack
+---
+
 # Benchmark
 
 A benchmark within `mteb` is essentially just a list of tasks along with some metadata about the benchmark.

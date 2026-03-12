@@ -8,8 +8,8 @@ class OdiaNewsClassification(AbsTaskClassification):
         description="A Odia dataset for 3-class classification of Odia news articles",
         reference="https://github.com/goru001/nlp-for-odia",
         dataset={
-            "path": "mlexplorer008/odia_news_classification",
-            "revision": "ffb8a34c9637fb20256e8c7be02504d16af4bd6b",
+            "path": "mteb/OdiaNewsClassification",
+            "revision": "066005f6178254a40a22c24b98c8bd40a073c0ac",
         },
         type="Classification",
         category="t2c",
@@ -34,13 +34,6 @@ class OdiaNewsClassification(AbsTaskClassification):
 """,
         superseded_by="OdiaNewsClassification.v2",
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_columns({"headings": "text"})
-        self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
 
 
 class OdiaNewsClassificationV2(AbsTaskClassification):

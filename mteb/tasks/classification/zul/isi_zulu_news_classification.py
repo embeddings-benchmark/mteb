@@ -8,8 +8,8 @@ class IsiZuluNewsClassification(AbsTaskClassification):
         description="isiZulu News Classification Dataset",
         reference="https://huggingface.co/datasets/dsfsi/za-isizulu-siswati-news",
         dataset={
-            "path": "isaacchung/isizulu-news",
-            "revision": "55caf0e52693a1ea63b15a4980a73fc137fb862b",
+            "path": "mteb/IsiZuluNewsClassification",
+            "revision": "692de64a824f0620161b6fc0b2c20f84d2b07b6f",
         },
         type="Classification",
         category="t2c",
@@ -37,12 +37,6 @@ class IsiZuluNewsClassification(AbsTaskClassification):
 """,
         superseded_by="IsiZuluNewsClassification.v2",
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_columns({"title": "text"})
 
 
 class IsiZuluNewsClassificationV2(AbsTaskClassification):

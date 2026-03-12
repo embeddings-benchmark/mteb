@@ -10,8 +10,8 @@ class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
         description="The dataset contains 30k user reviews from csfd.cz in Slovak.",
         reference="https://arxiv.org/abs/2304.01922",
         dataset={
-            "path": "fewshot-goes-multilingual/sk_csfd-movie-reviews",
-            "revision": "23a20c659d868740ef9c54854de631fe19cd5c17",
+            "path": "mteb/CSFDSKMovieReviewSentimentClassification",
+            "revision": "029e0a726b46539547e872b90d3073a48ce9bc13",
         },
         type="Classification",
         category="t2c",
@@ -41,17 +41,6 @@ class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
 
     # Increase the samples_per_label in order to improve baseline performance
     samples_per_label = 20
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_columns(
-            {"comment": "text", "rating_int": "label"}
-        )
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"], n_samples=N_SAMPLES
-        )
 
 
 class CSFDSKMovieReviewSentimentClassificationV2(AbsTaskClassification):

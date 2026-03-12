@@ -8,8 +8,8 @@ class GujaratiNewsClassification(AbsTaskClassification):
         description="A Gujarati dataset for 3-class classification of Gujarati news articles",
         reference="https://github.com/goru001/nlp-for-gujarati",
         dataset={
-            "path": "mlexplorer008/gujarati_news_classification",
-            "revision": "1a5f2fa2914bfeff4fcdc6fff4194fa8ec8fa19e",
+            "path": "mteb/GujaratiNewsClassification",
+            "revision": "7f438910e374d37b9136d4ded9888edb3551a494",
         },
         type="Classification",
         category="t2c",
@@ -27,12 +27,6 @@ class GujaratiNewsClassification(AbsTaskClassification):
         bibtex_citation="",  # none found
         superseded_by="GujaratiNewsClassification.v2",
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_column("headline", "text")
 
 
 class GujaratiNewsClassificationV2(AbsTaskClassification):

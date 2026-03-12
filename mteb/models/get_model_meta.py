@@ -11,7 +11,7 @@ from mteb.models import (
 from mteb.models.model_implementations import MODEL_REGISTRY
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Iterable, Mapping
 
     from mteb.abstasks import AbsTask
     from mteb.models import (
@@ -109,14 +109,13 @@ def get_model(
     Returns:
         A model object
     """
-    meta = get_model_meta(model_name, revision)
+    meta = get_model_meta(model_name, revision).model_copy(deep=True)
     model = meta.load_model(device=device, **kwargs)
 
     if kwargs:
         logger.info(
             f"Model '{model_name}' loaded with additional arguments: {list(kwargs.keys())}"
         )
-        meta = meta.model_copy(deep=True)
         meta.loader_kwargs |= kwargs
 
     model.mteb_model_meta = meta  # type: ignore[misc]
@@ -128,7 +127,7 @@ _MODEL_RENAMES: dict[str, str] = {
     # to store model's eval results to display on benchmark
     "baseline/bm25s": "mteb/baseline-bm25s",
     "baseline/random-cross-encoder-baseline": "mteb/baseline-random-cross-encoder",
-    "baseline/random-encoder-baseline": "mteb/baseline-random-encoder",
+    "mteb/baseline-random-encoder": "mteb/baseline-random-encoder",
     "baseline/bb25": "mteb/baseline-bb25",
 }
 
@@ -138,6 +137,7 @@ def get_model_meta(
     revision: str | None = None,
     fetch_from_hf: bool = True,
     fill_missing: bool = False,
+    experiment_kwargs: Mapping[str, Any] | None = None,
 ) -> ModelMeta:
     """A function to fetch a model metadata object by name.
 
@@ -146,6 +146,7 @@ def get_model_meta(
         revision: Revision of the model to fetch
         fetch_from_hf: Whether to fetch the model from HuggingFace Hub if not found in the registry
         fill_missing: Fill missing attributes from the metadata including number of parameters and memory usage.
+        experiment_kwargs: Optional dictionary of parameters to fill in the metadata for experimental models.
 
     Returns:
         A model metadata object
@@ -162,6 +163,11 @@ def get_model_meta(
         if revision and (not model_meta.revision == revision):
             raise ValueError(
                 f"Model revision {revision} not found for model {model_name}. Expected {model_meta.revision}."
+            )
+
+        if experiment_kwargs is not None:
+            model_meta = model_meta.model_copy(
+                update={"experiment_kwargs": experiment_kwargs}
             )
 
         if fill_missing and fetch_from_hf:
