@@ -24,7 +24,6 @@ if TYPE_CHECKING:
     from mteb.types import (
         BatchedInput,
         Conversation,
-        QueryDatasetType,
     )
     from mteb.types._encoder_io import (
         AudioInput,
@@ -81,33 +80,6 @@ def _corpus_to_dict(
     return new_row
 
 
-def _create_dataloader_for_retrieval_corpus(
-    dataset: Dataset,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[CorpusInput]:
-    """Create a dataloader from a corpus.
-
-    Args:
-        dataset: Corpus
-        batch_size: Batch size for the dataloader.
-        num_proc: Number of processes to use.
-
-    Returns:
-        A dataloader with the corpus.
-    """
-    dataset = dataset.map(
-        _corpus_to_dict,
-        desc="Converting corpus dict",
-        num_proc=num_proc,
-    )
-    return DataLoader(
-        dataset,
-        batch_size=batch_size,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
-    )
-
-
 def _combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str]:
     row["query"] = row["text"]
 
@@ -116,33 +88,6 @@ def _combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str
     else:
         row["text"] = row["query"]
     return row
-
-
-def _create_text_dataloader_for_queries(
-    queries: QueryDatasetType,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[QueryInput]:
-    """Create a dataloader from a list of queries.
-
-    Args:
-        queries: A list of queries.
-        batch_size: Batch size for the dataloader.
-        num_proc: Number of processes to use.
-
-    Returns:
-        A dataloader with the queries.
-    """
-    queries = queries.map(
-        _combine_queries_with_instruction_text,
-        desc="Processing queries for dataloading",
-        num_proc=num_proc,
-    )
-    return DataLoader(
-        queries,
-        batch_size=batch_size,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
-    )
 
 
 def _convert_conv_history_to_query(
@@ -205,33 +150,6 @@ def _convert_conv_history_to_query(
     row["text"] = conv_str
     row["conversation"] = current_conversation
     return cast("dict[str, str | list[ConversationTurn]]", row)
-
-
-def _create_dataloader_for_queries_conversation(
-    queries: QueryDatasetType,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[QueryInput]:
-    """Create a dataloader from a list of queries.
-
-    Args:
-        queries: A list of queries.
-        batch_size: Batch size for the dataloader.
-        num_proc: Number of processes to use.
-
-    Returns:
-        A dataloader with the queries.
-    """
-    return DataLoader(
-        queries.map(
-            _convert_conv_history_to_query,
-            desc="Converting conversations to queries",
-            num_proc=num_proc,
-        ),
-        collate_fn=_custom_collate_fn,
-        batch_size=batch_size,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
-    )
 
 
 def _transform_image_to_rgb(
