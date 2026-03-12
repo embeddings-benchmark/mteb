@@ -1,10 +1,10 @@
 import logging
+import warnings
 from typing import Any
 
 import torch
 from torch.utils.data import DataLoader
 
-from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import EncoderProtocol
@@ -13,44 +13,25 @@ from mteb.types import Array, BatchedInput, PromptType
 logger = logging.getLogger(__name__)
 
 
-class QuantizationLevel(HelpfulStrEnum):
-    """Enum for valid compression levels."""
-
-    FLOAT8 = "float8",
-    INT8 = "int8",
-    INT4 = "int4",
-    BINARY = "binary",
-
-
 class CompressionWrapper:
     """Wraps a model to quantize the embeddings and compute results on the compressed vectors instead."""
 
     def __init__(
         self,
         model: EncoderProtocol,
-        quantization_level: QuantizationLevel = QuantizationLevel.FLOAT8,
+        quantization_level: torch.dtype = torch.float8_e4m3fn,
         quantiles: tuple[float, float] | None = None,
-        float_type: torch.dtype = torch.float8_e4m3fn,
     ) -> None:
-        """Init
+        """Instantiates the wrapper with an embedding model and sets the quantization level.
 
         Args:
             model: The model to produce quantized embeddings.
             quantization_level: The quantization level to use. Has to be supported by the quantize_embeddings method.
-            quantiles: Lower and upper percentiles to crop embeddings before integer quantization.
-            float_type: The float8 type to use when compressing embeddings to 8bit floats.
+            quantiles: Optional lower and upper percentiles to crop embeddings before integer quantization.
         """
-        assert float_type in [
-            torch.float8_e4m3fn,
-            torch.float8_e5m2,
-            torch.float8_e8m0fnu,
-            torch.float8_e4m3fnuz,
-            torch.float8_e5m2fnuz,
-        ]
         self.model = model
         self._quantization_level = quantization_level
         self.quantiles = quantiles
-        self.float_type = float_type
         self.quantize_queries = False
         self.mins, self.maxs = None, None
         self.min_embeds = 10_000
@@ -68,6 +49,8 @@ class CompressionWrapper:
                 f"The model {model.mteb_model_meta.name} internally supports quantization to {quantization_level}, "
                 f"which might lead to better results."
             )
+            warnings.warn(f"The model {model.mteb_model_meta.name} internally supports quantization to "
+                          f"{quantization_level}, which might lead to better results.")
         logger.info("Initialized CompressionWrapper.")
 
     @property
@@ -98,7 +81,7 @@ class CompressionWrapper:
             **kwargs: Additional arguments to pass to the encoder.
 
         Returns:
-            The encoded and quantized input in a numpy array of the shape (Number of sentences) x (Embedding dimension).
+            The encoded and quantized input in an array of the shape (Number of sentences) x (Embedding dimension).
         """
         embeddings = self.model.encode(
             inputs,
@@ -130,8 +113,8 @@ class CompressionWrapper:
             self._reset_boundaries()
             return embeddings
         elif prompt_type == PromptType.query and self._quantization_level in [
-            QuantizationLevel.INT8,
-            QuantizationLevel.INT4,
+            torch.int8,
+            torch.int,
         ]:
             # Otherwise, compute thresholds for int8/int4 quantization on documents first, then apply them on queries
             logger.info("Query embeddings will be quantized on similarity calculation.")
@@ -158,14 +141,20 @@ class CompressionWrapper:
         Returns:
             The quantized embeddings.
         """
-        if self._quantization_level == QuantizationLevel.FLOAT8:
-            # Cast to float8, then back to float16 using PyTorch as numpy doesn't support float8
-            quantized = embeddings.type(self.float_type).type(torch.float16)
-        elif self._quantization_level in [
-            QuantizationLevel.INT8,
-            QuantizationLevel.INT4,
+        if self._quantization_level in [
+            torch.float8_e4m3fn,
+            torch.float8_e5m2,
+            torch.float8_e8m0fnu,
+            torch.float8_e4m3fnuz,
+            torch.float8_e5m2fnuz,
         ]:
-            num_bits = 8 if self._quantization_level == QuantizationLevel.INT8 else 4
+            # Cast to float8, then back to float16 using PyTorch as numpy doesn't support float8
+            quantized = embeddings.type(self._quantization_level).type(torch.float16)
+        elif self._quantization_level in [
+            torch.int8,
+            torch.int,
+        ]:
+            num_bits = 8 if self._quantization_level == torch.int8 else 4
             if self.quantiles is not None:
                 cutoffs = torch.quantile(embeddings, self.quantiles, dim=0)
                 embeddings = torch.clip(embeddings, cutoffs[0], cutoffs[1])
@@ -175,13 +164,13 @@ class CompressionWrapper:
                 2**num_bits * 0.5
             )
             quantized = quantized.type(torch.int8)
-        elif self._quantization_level == QuantizationLevel.BINARY:
+        elif self._quantization_level == torch.bool:
             quantized = torch.where(embeddings > 0, 1.0, 0.0)
         else:
             raise ValueError(
-                f"Quantization method {self._quantization_level} is not supported!"
+                f"Quantization method '{self._quantization_level}' is not supported!"
             )
-        return quantized.numpy()
+        return quantized
 
     def _get_min_max_per_dim(
         self,

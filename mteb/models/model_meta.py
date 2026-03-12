@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
+import torch
 from huggingface_hub import (
     ModelCard,
     get_safetensors_metadata,
@@ -164,7 +165,7 @@ class ModelMeta(BaseModel):
     model_type: list[MODEL_TYPES] = ["dense"]
     citation: str | None = None
     contacts: list[str] | None = None
-    embedding_types: list[str] | None = None
+    embedding_types: list | None = None
 
     @model_validator(mode="before")
     @classmethod

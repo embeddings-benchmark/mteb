@@ -142,6 +142,7 @@ EmbeddingType = Literal[
     "uint8",
     "binary",
 ]
+OUTPUT_TYPES = [torch.int8, torch.uint8, torch.bool]
 
 # Cohere API limits
 COHERE_MAX_BATCH_SIZE = 96  # Maximum number of texts per API call
@@ -404,7 +405,7 @@ cohere_mult_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
-    embedding_types=get_args(EmbeddingType),
+    embedding_types=OUTPUT_TYPES,
 )
 
 cohere_eng_3 = ModelMeta(
@@ -431,7 +432,7 @@ cohere_eng_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
-    embedding_types=get_args(EmbeddingType),
+    embedding_types=OUTPUT_TYPES,
 )
 
 cohere_mult_light_3 = ModelMeta(
@@ -458,7 +459,7 @@ cohere_mult_light_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
-    embedding_types=get_args(EmbeddingType),
+    embedding_types=OUTPUT_TYPES,
 )
 
 cohere_eng_light_3 = ModelMeta(
@@ -485,5 +486,5 @@ cohere_eng_light_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
-    embedding_types=get_args(EmbeddingType),
+    embedding_types=OUTPUT_TYPES,
 )
