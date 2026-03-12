@@ -359,24 +359,6 @@ def _create_image_dataloader(
     )
 
 
-def _create_text_queries_dataloader(
-    dataset: Dataset,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[QueryInput]:
-    if not isinstance(dataset["text"][0], list):
-        return _create_text_dataloader_for_queries(
-            dataset,
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    return _create_dataloader_for_queries_conversation(
-        dataset,
-        batch_size=batch_size,
-        num_proc=num_proc,
-    )
-
-
 def _prepare_multimodal_dataset(
     dataset: Dataset,
     task_metadata: TaskMetadata,
