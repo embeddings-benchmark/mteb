@@ -328,10 +328,9 @@ def create_dataloader(
         and "text" in task_metadata.modalities
         and input_column is not None
     ):
-        return DataLoader(
-            Dataset.from_dict({"text": dataset[input_column]}),
+        return _create_dataloader_from_texts(
+            dataset[input_column],
             batch_size=batch_size,
-            num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
         )
 
     prepared = _prepare_multimodal_dataset(
