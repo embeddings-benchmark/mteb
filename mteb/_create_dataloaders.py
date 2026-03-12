@@ -377,6 +377,67 @@ def _create_text_queries_dataloader(
     )
 
 
+def _prepare_multimodal_dataset(
+    dataset: Dataset,
+    task_metadata: TaskMetadata,
+    prompt_type: PromptType,
+    input_column: str | None = None,
+    num_proc: int | None = None,
+) -> Dataset:
+    """Apply all modality-specific transformations to the dataset.
+
+    Returns the transformed Dataset (no DataLoader wrapping).
+    """
+    modalities = task_metadata.get_modalities(prompt_type)
+    new_ds = dataset
+
+    if "text" in modalities:
+        if prompt_type == PromptType.document:
+            new_ds = new_ds.map(
+                _corpus_to_dict,
+                desc="Standardizing text corpus format",
+                num_proc=num_proc,
+            )
+        elif prompt_type == PromptType.query:
+            if isinstance(new_ds["text"][0], list):
+                new_ds = new_ds.map(
+                    _convert_conv_history_to_query,
+                    desc="Converting conversations to queries",
+                    num_proc=num_proc,
+                )
+            else:
+                new_ds = new_ds.map(
+                    _combine_queries_with_instruction_text,
+                    desc="Processing queries for dataloading",
+                    num_proc=num_proc,
+                )
+
+    if "image" in modalities:
+        new_ds = _prepare_image_dataset(
+            new_ds,
+            image_column_name=input_column if input_column else "image",
+            num_proc=num_proc,
+        )
+
+    if "audio" in modalities:
+        if (
+            input_column
+            and input_column in new_ds.column_names
+            and "audio" not in new_ds.column_names
+        ):
+            new_ds = new_ds.rename_column(input_column, "audio")
+
+    if "video" in modalities:
+        if (
+            input_column
+            and input_column in new_ds.column_names
+            and "video" not in new_ds.column_names
+        ):
+            new_ds = new_ds.rename_column(input_column, "video")
+
+    return new_ds
+
+
 def _create_queries_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
@@ -386,36 +447,26 @@ def _create_queries_dataloader(
 ) -> DataLoader[QueryInput | ImageInput | AudioInput]:
     """Create a dataloader for queries."""
     queries_type = task_metadata.get_modalities(PromptType.query)
-    if queries_type == ["text"]:  # text only
-        return _create_text_queries_dataloader(
-            dataset,
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "image" in queries_type:  # contains image
-        return _create_image_dataloader(
-            dataset,
-            image_column_name="image",
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "audio" in task_metadata.modalities:
-        return _create_audio_dataloader(
-            dataset,
-            task_metadata,
-            input_column="audio",
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "video" in task_metadata.modalities:
-        return _create_video_dataloader(
-            dataset,
-            task_metadata,
-            input_column="video",
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    raise ValueError(f"Can't handle queries type {queries_type}")
+    prepared = _prepare_multimodal_dataset(
+        dataset,
+        task_metadata,
+        prompt_type=PromptType.query,
+        input_column=input_column,
+        num_proc=num_proc,
+    )
+    needs_custom_collate = any(
+        m in queries_type for m in ("image", "audio", "video")
+    ) or (
+        "text" in queries_type and isinstance(dataset["text"][0], list)  # conversations
+    )
+
+    return DataLoader(
+        prepared,
+        batch_size=batch_size,
+        collate_fn=_custom_collate_fn if needs_custom_collate else None,
+        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
+        shuffle=False,
+    )
 
 
 def _create_document_dataloader(
@@ -438,36 +489,23 @@ def _create_document_dataloader(
         A dataloader for the documents.
     """
     document_type = task_metadata.get_modalities(PromptType.document)
-    if document_type == ["text"]:  # text only
-        return _create_dataloader_for_retrieval_corpus(
-            dataset,
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "image" in document_type:  # contains image
-        return _create_image_dataloader(
-            dataset,
-            image_column_name="image",
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "audio" in task_metadata.modalities:
-        return _create_audio_dataloader(
-            dataset,
-            task_metadata,
-            input_column="audio",
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    if "video" in task_metadata.modalities:
-        return _create_video_dataloader(
-            dataset,
-            task_metadata,
-            input_column="video",
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-    raise ValueError(f"Can't handle queries type {document_type}")
+    prepared = _prepare_multimodal_dataset(
+        dataset,
+        task_metadata,
+        prompt_type=PromptType.document,
+        input_column=input_column,
+        num_proc=num_proc,
+    )
+
+    needs_custom_collate = any(m in document_type for m in ("image", "audio", "video"))
+
+    return DataLoader(
+        prepared,
+        batch_size=batch_size,
+        collate_fn=_custom_collate_fn if needs_custom_collate else None,
+        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
+        shuffle=False,
+    )
 
 
 def _create_audio_dataloader(
