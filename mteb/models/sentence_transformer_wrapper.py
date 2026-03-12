@@ -74,7 +74,13 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             self.model = SentenceTransformer(
                 model, revision=revision, device=device, **kwargs
             )
-            self.mteb_model_meta = ModelMeta.create_empty()
+            self.mteb_model_meta = ModelMeta.create_empty(
+                overwrites=dict(
+                    name=model,
+                    revision=revision,
+                    loader=sentence_transformers_loader,
+                )
+            )
         else:
             self.model = model
             self.mteb_model_meta = ModelMeta.from_sentence_transformer_model(self.model)
