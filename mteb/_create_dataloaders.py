@@ -325,7 +325,7 @@ def create_dataloader(
     """
     if (
         prompt_type is None
-        and "text" in task_metadata.modalities
+        and task_metadata.modalities == ["text"]
         and input_column is not None
     ):
         return _create_dataloader_from_texts(
