@@ -297,10 +297,16 @@ class CrossEncoderWrapper:
 
         if isinstance(model, CrossEncoder):
             self.model = model
+            self.mteb_model_meta = ModelMeta.from_cross_encoder(self.model)
         elif isinstance(model, str):
             self.model = CrossEncoder(model, revision=revision, device=device, **kwargs)
-
-        self.mteb_model_meta = ModelMeta.from_cross_encoder(self.model)
+            self.mteb_model_meta = ModelMeta.create_empty(
+                overwrites=dict(
+                    name=model,
+                    revision=revision,
+                    loader=CrossEncoderWrapper,
+                )
+            )
         self.query_prefix = query_prefix
         self.passage_prefix = passage_prefix
 
