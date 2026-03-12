@@ -26,10 +26,6 @@ if TYPE_CHECKING:
         Conversation,
     )
     from mteb.types._encoder_io import (
-        AudioInput,
-        CorpusInput,
-        ImageInput,
-        QueryInput,
         TextInput,
     )
 
@@ -244,7 +240,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
 def _prepare_multimodal_dataset(
     dataset: Dataset,
     task_metadata: TaskMetadata,
-    prompt_type: PromptType,
+    prompt_type: PromptType | None = None,
     input_column: str | None = None,
     num_proc: int | None = None,
 ) -> Dataset:
@@ -301,67 +297,6 @@ def _prepare_multimodal_dataset(
     return dataset
 
 
-def _create_queries_dataloader(
-    dataset: Dataset,
-    task_metadata: TaskMetadata,
-    input_column: str | None = None,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[QueryInput | ImageInput | AudioInput]:
-    """Create a dataloader for queries."""
-    prepared = _prepare_multimodal_dataset(
-        dataset,
-        task_metadata,
-        prompt_type=PromptType.query,
-        input_column=input_column,
-        num_proc=num_proc,
-    )
-
-    return DataLoader(
-        prepared,
-        batch_size=batch_size,
-        collate_fn=_custom_collate_fn,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
-        shuffle=False,
-    )
-
-
-def _create_document_dataloader(
-    dataset: Dataset,
-    task_metadata: TaskMetadata,
-    input_column: str | None = None,
-    batch_size: int = 32,
-    num_proc: int | None = None,
-) -> DataLoader[CorpusInput | ImageInput | AudioInput]:
-    """Create a dataloader for documents.
-
-    Args:
-        dataset: The dataset containing the documents.
-        task_metadata: Metadata of the task to determine the document type.
-        input_column: The column to use as input. If None, it will use the first column that matches the modality.
-        batch_size: Batch size for the dataloader.
-        num_proc: Number of processes to use.
-
-    Returns:
-        A dataloader for the documents.
-    """
-    prepared = _prepare_multimodal_dataset(
-        dataset,
-        task_metadata,
-        prompt_type=PromptType.document,
-        input_column=input_column,
-        num_proc=num_proc,
-    )
-
-    return DataLoader(
-        prepared,
-        batch_size=batch_size,
-        collate_fn=_custom_collate_fn,
-        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
-        shuffle=False,
-    )
-
-
 def create_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
@@ -388,60 +323,31 @@ def create_dataloader(
     Returns:
         A dataloader for the dataset.
     """
-    if prompt_type == PromptType.query:
-        return _create_queries_dataloader(
-            dataset,
-            task_metadata,
-            batch_size=batch_size,
-            input_column=input_column,
-            num_proc=num_proc,
-        )
-    if prompt_type == PromptType.document:
-        return _create_document_dataloader(
-            dataset,
-            task_metadata,
-            input_column=input_column,
-            batch_size=batch_size,
-            num_proc=num_proc,
-        )
-
-    modalities = task_metadata.modalities
-
-    if "text" in modalities and input_column is not None:
+    if (
+        prompt_type is None
+        and "text" in task_metadata.modalities
+        and input_column is not None
+    ):
         return DataLoader(
             Dataset.from_dict({"text": dataset[input_column]}),
             batch_size=batch_size,
             num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
         )
 
-    if "image" in modalities:
-        dataset = _prepare_image_dataset(
-            dataset,
-            image_column_name=input_column,
-            num_proc=num_proc,
-        )
-
-    if "audio" in modalities:
-        if (
-            input_column
-            and input_column in dataset.column_names
-            and "audio" not in dataset.column_names
-        ):
-            dataset = dataset.rename_column(input_column, "audio")
-
-    if "video" in modalities:
-        if (
-            input_column
-            and input_column in dataset.column_names
-            and "video" not in dataset.column_names
-        ):
-            dataset = dataset.rename_column(input_column, "video")
+    prepared = _prepare_multimodal_dataset(
+        dataset,
+        task_metadata,
+        prompt_type=prompt_type,
+        input_column=input_column,
+        num_proc=num_proc,
+    )
 
     return DataLoader(
-        dataset,
+        prepared,
         batch_size=batch_size,
         collate_fn=_custom_collate_fn,
         num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
+        shuffle=False,
     )
 
 
