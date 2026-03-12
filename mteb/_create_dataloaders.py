@@ -237,7 +237,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     return cast("BatchedInput", collated)
 
 
-def _prepare_multimodal_dataset(
+def _prepare_dataset(
     dataset: Dataset,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
@@ -277,22 +277,14 @@ def _prepare_multimodal_dataset(
             image_column_name=input_column if input_column else "image",
             num_proc=num_proc,
         )
-
-    if "audio" in modalities:
-        if (
-            input_column
-            and input_column in dataset.column_names
-            and "audio" not in dataset.column_names
-        ):
-            dataset = dataset.rename_column(input_column, "audio")
-
-    if "video" in modalities:
-        if (
-            input_column
-            and input_column in dataset.column_names
-            and "video" not in dataset.column_names
-        ):
-            dataset = dataset.rename_column(input_column, "video")
+    for modality in ("audio", "video"):
+        if modality in modalities:
+            if (
+                input_column
+                and input_column in dataset.column_names
+                and modality not in dataset.column_names
+            ):
+                dataset = dataset.rename_column(input_column, modality)
 
     return dataset
 
@@ -333,7 +325,7 @@ def create_dataloader(
             batch_size=batch_size,
         )
 
-    prepared = _prepare_multimodal_dataset(
+    prepared = _prepare_dataset(
         dataset,
         task_metadata,
         prompt_type=prompt_type,
