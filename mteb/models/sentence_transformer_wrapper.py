@@ -74,10 +74,10 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             self.model = SentenceTransformer(
                 model, revision=revision, device=device, **kwargs
             )
+            self.mteb_model_meta = ModelMeta.create_empty()
         else:
             self.model = model
-
-        self.mteb_model_meta = ModelMeta.from_sentence_transformer_model(self.model)
+            self.mteb_model_meta = ModelMeta.from_sentence_transformer_model(self.model)
 
         built_in_prompts = getattr(self.model, "prompts", None)
         if built_in_prompts and not model_prompts:
