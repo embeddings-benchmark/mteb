@@ -25,8 +25,36 @@ if TYPE_CHECKING:
         BatchedInput,
         Conversation,
     )
+    from mteb.types._encoder_io import (
+        TextInput,
+    )
 
 logger = logging.getLogger(__name__)
+
+
+def _create_dataloader_from_texts(
+    text: list[str],
+    batch_size: int = 32,
+    num_proc: int | None = None,
+    **kwargs: Any,
+) -> DataLoader[TextInput]:
+    """Create a dataloader from a list of text.
+
+    Args:
+        text: A list of text to create a dataloader from.
+        batch_size: Batch size for the dataloader.
+        num_proc: Number of processes to use.
+        kwargs: Not used, present catching extra arguments.
+
+    Returns:
+        A dataloader with the text.
+    """
+    dataset = Dataset.from_dict({"text": text})
+    return DataLoader(
+        dataset,
+        batch_size=batch_size,
+        num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
+    )
 
 
 def _corpus_to_dict(
