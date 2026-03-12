@@ -64,7 +64,10 @@ class BrowseCompPlusRetrieval(AbsTaskRetrieval):
         category="t2t",
         modalities=["text"],
         eval_splits=["test"],
-        eval_langs=["eng-Latn"],
+        eval_langs={
+            "gold_only": ["eng-Latn"],
+            "gold_and_evidence": ["eng-Latn"],
+        },
         main_score="ndcg_at_10",
         date=("2025-01-01", "2025-08-01"),
         domains=["Web"],
@@ -101,7 +104,8 @@ and Chen, Wenhu and Lin, Jimmy},
 
         logger.info("Decrypting queries and building qrels...")
         queries_list = []
-        relevant_docs: dict[str, dict[str, int]] = defaultdict(dict)
+        gold_only_rels: dict[str, dict[str, int]] = defaultdict(dict)
+        gold_and_evidence_rels: dict[str, dict[str, int]] = defaultdict(dict)
 
         for row in queries_ds:
             qid = str(row["query_id"])  # plain — not encrypted
@@ -109,20 +113,18 @@ and Chen, Wenhu and Lin, Jimmy},
                 {"id": qid, "text": _decrypt_string(row["query"], _CANARY)}
             )
 
-            # Binary relevance: both gold_docs and evidence_docs get score=1
-            # gold_docs: contain the final answer
-            # evidence_docs: needed to reason toward the answer
-            seen_docids: set[str] = set()
+            seen: set[str] = set()
             for doc in row["gold_docs"]:
                 docid = _decrypt_string(doc["docid"], _CANARY)
-                if docid not in seen_docids:
-                    relevant_docs[qid][docid] = 1
-                    seen_docids.add(docid)
+                if docid not in seen:
+                    gold_only_rels[qid][docid] = 1
+                    gold_and_evidence_rels[qid][docid] = 1
+                    seen.add(docid)
             for doc in row["evidence_docs"]:
                 docid = _decrypt_string(doc["docid"], _CANARY)
-                if docid not in seen_docids:
-                    relevant_docs[qid][docid] = 1
-                    seen_docids.add(docid)
+                if docid not in seen:
+                    gold_and_evidence_rels[qid][docid] = 1
+                    seen.add(docid)
 
         queries_dataset = Dataset.from_list(queries_list)
 
@@ -135,15 +137,17 @@ and Chen, Wenhu and Lin, Jimmy},
             split="train",
             num_proc=num_proc,
         )
-        # Rename docid → id to match MTEB corpus format
-        corpus_dataset = corpus_raw.rename_column("docid", "id")
-        # Keep only id and text (drop url to keep footprint smaller)
-        corpus_dataset = corpus_dataset.select_columns(["id", "text"])
+        corpus_dataset = corpus_raw.rename_column("docid", "id").select_columns(
+            ["id", "text"]
+        )
 
-        self.dataset["default"]["test"] = RetrievalSplitData(
-            corpus=corpus_dataset,
-            queries=queries_dataset,
-            relevant_docs=dict(relevant_docs),
-            top_ranked=None,
+        split_kwargs = dict(
+            queries=queries_dataset, corpus=corpus_dataset, top_ranked=None
+        )
+        self.dataset["gold_only"]["test"] = RetrievalSplitData(
+            relevant_docs=dict(gold_only_rels), **split_kwargs
+        )
+        self.dataset["gold_and_evidence"]["test"] = RetrievalSplitData(
+            relevant_docs=dict(gold_and_evidence_rels), **split_kwargs
         )
         self.data_loaded = True
