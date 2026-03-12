@@ -119,8 +119,8 @@ class XM3600T2IRetrieval(AbsTaskRetrieval):
         description="Retrieve images based on multilingual descriptions.",
         reference="https://aclanthology.org/2022.emnlp-main.45/",
         dataset={
-            "path": "floschne/xm3600",
-            "revision": "8d3e5665526c55a5855cd6ddfbaba2032bc7cee4",
+            "path": "mteb/xm3600",
+            "revision": "536cd45bbfe53de9b08c0483bb4a76a4bd3673fa",
         },
         type="Any2AnyMultilingualRetrieval",
         category="t2i",

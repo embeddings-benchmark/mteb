@@ -147,7 +147,6 @@ uv.lock
 
 # model loading tests
 model_names.txt
-mteb/leaderboard/__cached_results.json
 
 # gradio
 .gradio/
@@ -163,3 +162,5 @@ powermetrics_log.txt
 /docs/overview/available_benchmarks.md
 
 CLAUDE.md
+
+*.tex

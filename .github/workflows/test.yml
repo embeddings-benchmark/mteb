@@ -61,10 +61,53 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      # required for evaluation the audio subset
+      - name: Install FFmpeg (Ubuntu)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:ubuntuhandbook1/ffmpeg8
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Setup Miniconda (Windows)
+        if: runner.os == 'Windows'
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          miniconda-version: "latest"
+          activate-environment: ffmpeg
+
+      - name: Install FFmpeg (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        # using conda to install ffmpeg on windows, to avoid issues with dlls
+        run: |
+          conda install -y "ffmpeg=8.0.1" -c conda-forge
+
+      - name: Check FFmpeg version
+        run: ffmpeg -version
+
       - name: Install dependencies
         shell: bash
         run: |
           make install-for-tests
+
+      - name: Setup Pytorch dll PATH (Windows)
+        # otherwise pytorch audio cannot find pytorch dlls on windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $torchLib = "D:\a\mteb\mteb\.venv\Lib\site-packages\torch\lib"
+          if (Test-Path $torchLib) {
+            echo "$torchLib" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+            $env:PATH = "$torchLib;$env:PATH"
+            echo "PATH=$env:PATH" >> $env:GITHUB_ENV
+          } else {
+            Write-Host "Torch lib path not found: $torchLib"
+          }
 
       - name: Run tests
         if: runner.os != 'Windows'
@@ -77,9 +120,14 @@ jobs:
         # this step will run the workflow twice since we have experienced
         # failures when running on windows when loading the datasets
         if: runner.os == 'Windows'
-        shell: bash
+        shell: pwsh
         run: |
           # run the test once and if it fails, run it again
           # if it fails again, the workflow will fail.
           # If it passes the first time the test will not run again
-          make test || make test
+          try {
+            make test
+          } catch {
+            Write-Host "First test run failed, retrying..."
+            make test
+          }

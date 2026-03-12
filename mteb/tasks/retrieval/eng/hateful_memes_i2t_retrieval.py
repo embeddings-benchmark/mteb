@@ -62,8 +62,8 @@ class HatefulMemesI2TRetrieval(AbsTaskRetrieval):
         description="Retrieve captions based on memes to assess OCR abilities.",
         reference="https://arxiv.org/pdf/2005.04790",
         dataset={
-            "path": "Ahren09/MMSoc_HatefulMemes",
-            "revision": "c9a9a6c3ef0765622a6de0af6ebb68f323ad73ba",
+            "path": "mteb/MMSoc_HatefulMemes",
+            "revision": "852290806bbf9d660f5c04c246f81ce38bfc1d48",
         },
         type="Any2AnyRetrieval",
         category="i2t",

@@ -368,7 +368,7 @@ monot5_base = ModelMeta(
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2206.02873},
     }""",
-    n_parameters=None,
+    n_parameters=296926464,
     n_embedding_parameters=24_674_304,
     memory_usage_mb=None,
     max_tokens=None,
@@ -427,7 +427,7 @@ monot5_3b = ModelMeta(
     open_weights=True,
     revision="bc0c419a438c81f592f878ce32430a1823f5db6c",
     release_date="2022-03-28",
-    n_parameters=None,
+    n_parameters=2950295552,
     n_embedding_parameters=32_899_072,
     memory_usage_mb=None,
     max_tokens=None,
@@ -439,6 +439,7 @@ monot5_3b = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch", "Transformers"],
+    reference="https://huggingface.co/castorini/monot5-3b-msmarco-10k",
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -484,7 +485,7 @@ flant5_base = ModelMeta(
         # "quasc": ["train"],
         # "qed": ["train"],
     ),
-    n_parameters=None,
+    n_parameters=247577856,
     n_embedding_parameters=24_674_304,
     memory_usage_mb=944,
     max_tokens=None,
@@ -495,6 +496,7 @@ flant5_base = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/google/flan-t5-base",
 )
 
 flant5_large = ModelMeta(
@@ -531,7 +533,7 @@ flant5_large = ModelMeta(
         # "quasc": ["train"],
         # "qed": ["train"],
     ),
-    n_parameters=None,
+    n_parameters=783150080,
     n_embedding_parameters=32_899_072,
     memory_usage_mb=2987,
     max_tokens=None,
@@ -542,6 +544,7 @@ flant5_large = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/google/flan-t5-large",
 )
 
 flant5_xl = ModelMeta(
@@ -693,7 +696,7 @@ llama2_7b_chat = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2307.09288},
     }""",
-    n_parameters=None,
+    n_parameters=7_000_000_000,
     n_embedding_parameters=131_072_000,
     memory_usage_mb=None,
     max_tokens=None,
@@ -705,6 +708,7 @@ llama2_7b_chat = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/meta-llama/Llama-2-7b-chat-hf",
 )
 
 mistral_7b = ModelMeta(
@@ -718,8 +722,8 @@ mistral_7b = ModelMeta(
     open_weights=True,
     revision="3ad372fc79158a2148299e3318516c786aeded6c",
     release_date="2023-12-11",
-    n_parameters=None,
-    n_embedding_parameters=None,
+    n_parameters=7241732096,
+    n_embedding_parameters=131072000,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
@@ -730,6 +734,7 @@ mistral_7b = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2",
     citation="""@misc{jiang2023mistral7b,
       title={Mistral 7B},
       author={Albert Q. Jiang and Alexandre Sablayrolles and Arthur Mensch and Chris Bamford and Devendra Singh Chaplot and Diego de las Casas and Florian Bressand and Gianna Lengyel and Guillaume Lample and Lucile Saulnier and Lélio Renard Lavaud and Marie-Anne Lachaux and Pierre Stock and Teven Le Scao and Thibaut Lavril and Thomas Wang and Timothée Lacroix and William El Sayed},
@@ -755,8 +760,8 @@ followir_7b = ModelMeta(
     training_datasets=set(
         # "jhu-clsp/FollowIR-train"
     ),
-    n_parameters=None,
-    n_embedding_parameters=None,
+    n_parameters=7110660096,
+    n_embedding_parameters=131072000,
     memory_usage_mb=13813,
     max_tokens=None,
     embed_dim=None,
@@ -766,6 +771,7 @@ followir_7b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/jhu-clsp/FollowIR-7B",
     citation="""
     @misc{weller2024followir,
       title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
@@ -896,15 +902,23 @@ mt5_base_mmarco_v2 = ModelMeta(
     open_weights=True,
     revision="cc0a949b9f21efcaba45c8cabb998ad02ce8d4e7",
     release_date="2022-01-05",
-    citation="""@misc{bonifacio2021mmarco,
-      title={mMARCO: A Multilingual Version of MS MARCO Passage Ranking Dataset},
-      author={Luiz Henrique Bonifacio and Vitor Jeronymo and Hugo Queiroz Abonizio and Israel Campiotti and Marzieh Fadaee and  and Roberto Lotufo and Rodrigo Nogueira},
-      year={2021},
-      eprint={2108.13897},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-    }
-    """,
+    citation="""@article{DBLP:journals/corr/abs-2108-13897,
+  author = {Luiz Bonifacio and
+Israel Campiotti and
+Roberto de Alencar Lotufo and
+Rodrigo Frassetto Nogueira},
+  bibsource = {dblp computer science bibliography, https://dblp.org},
+  biburl = {https://dblp.org/rec/journals/corr/abs-2108-13897.bib},
+  eprint = {2108.13897},
+  eprinttype = {arXiv},
+  journal = {CoRR},
+  timestamp = {Mon, 20 Mar 2023 15:35:34 +0100},
+  title = {mMARCO: {A} Multilingual Version of {MS} {MARCO} Passage Ranking Dataset},
+  url = {https://arxiv.org/abs/2108.13897},
+  volume = {abs/2108.13897},
+  year = {2021},
+}
+""",
     training_datasets={"MSMARCO"},
     n_parameters=None,
     n_embedding_parameters=192_086_016,

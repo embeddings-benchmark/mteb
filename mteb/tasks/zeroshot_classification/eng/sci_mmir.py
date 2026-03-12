@@ -10,8 +10,8 @@ class SciMMIR(AbsTaskZeroShotClassification):
         description="SciMMIR.",
         reference="https://huggingface.co/datasets/m-a-p/SciMMIR",
         dataset={
-            "path": "m-a-p/SciMMIR",
-            "revision": "eea276dc58c52eab33e9476acb137ff5530b78e9",
+            "path": "mteb/SciMMIR",
+            "revision": "2a10b6b1f93cac7084aa809512749272cf0a893a",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -41,7 +41,10 @@ class SciMMIR(AbsTaskZeroShotClassification):
 
     label_column_name: str = "class"
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         class_code = {
             "fig_result": 0,
             "fig_illustration": 1,

@@ -56,18 +56,15 @@ def test_model_meta_load_sentence_transformer_metadata_from_model():
     assert meta.revision is not None
     assert meta.max_tokens == 256
     assert meta.embed_dim == 384
-    assert meta.similarity_fn_name.value == "cosine"
+    assert (
+        meta.similarity_fn_name is not None
+        and meta.similarity_fn_name.value == "cosine"
+    )
 
 
-@pytest.mark.parametrize("as_sentence_transformer", [True, False])
 @pytest.mark.parametrize("model_name", ["sentence-transformers/all-MiniLM-L6-v2"])
-def test_model_meta_sentence_transformer_from_hub(
-    as_sentence_transformer: bool, model_name: str
-):
-    if as_sentence_transformer:
-        meta = ModelMeta.from_hub(model_name)
-    else:
-        meta = ModelMeta._from_hub(model_name)
+def test_model_meta_sentence_transformer_from_hub(model_name: str):
+    meta = ModelMeta.from_hub(model_name)
 
     assert meta.name == "sentence-transformers/all-MiniLM-L6-v2"
     assert meta.revision is not None
@@ -76,12 +73,11 @@ def test_model_meta_sentence_transformer_from_hub(
     assert meta.memory_usage_mb == 87
     assert meta.embed_dim == 384
     assert meta.license == "apache-2.0"
-    # model have max_position_embeddings 512, but in sentence_bert_config 256
-    if as_sentence_transformer:
-        assert meta.similarity_fn_name.value == "cosine"
-        assert meta.max_tokens == 256
-    else:
-        assert meta.max_tokens == 512
+    assert (
+        meta.similarity_fn_name is not None
+        and meta.similarity_fn_name.value == "cosine"
+    )
+    assert meta.max_tokens == 512
 
 
 @pytest.mark.parametrize("model_name", ["cross-encoder/ms-marco-TinyBERT-L2-v2"])

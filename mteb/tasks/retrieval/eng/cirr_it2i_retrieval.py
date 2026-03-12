@@ -8,8 +8,8 @@ class CIRRIT2IRetrieval(AbsTaskRetrieval):
         description="Retrieve images based on texts and images.",
         reference="https://openaccess.thecvf.com/content/ICCV2021/html/Liu_Image_Retrieval_on_Real-Life_Images_With_Pre-Trained_Vision-and-Language_Models_ICCV_2021_paper.html",
         dataset={
-            "path": "MRBench/mbeir_cirr_task7",
-            "revision": "503301cd99348035b9675883a543aa1ded0cf07c",
+            "path": "mteb/mbeir_cirr_task7",
+            "revision": "bb0713ed1ed136b2974fce68df7e26388040b650",
         },
         type="Any2AnyRetrieval",
         category="it2i",

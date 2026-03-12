@@ -1,13 +1,17 @@
-# MTEB Documentation
+---
+title: "MTEB"
+---
+
+# MTEB
 
 !!! info
-    We recently released `mteb` version 2.0.0, to see what is new check of [what is new](./whats_new/2.0.md) and see [how to upgrade](./whats_new/2.0.md#upgrading-from-v1) your existing code.
+    We recently released `mteb` version 2.0.0, to see what is new check of [what is new](whats_new.md) and see [how to upgrade](whats_new.md#upgrading-from-v1) your existing code.
 
 Welcome documentation of MTEB. `mteb` a package for benchmark and evaluating the quality of embeddings.
 
 MTEB is the go-to documentation for evaluating embeddings models across a variety of tasks, modalities and domains. MTEB covers more than a 1000 different tasks from covering a diverse set of tasks from historic Swedish patent classification to documentation retrieval for Python. These tasks spread across more than 1000 languages and cover both image and text tasks.
 
-This package was initially introduced as a package for evaluating text embeddings predominantly for English[@mteb_2023], but have since been extended for broad languages coverage[@mmteb_2025] and to support multiple modalities[@mieb_2025].
+This package was initially introduced as a package for evaluating text embeddings predominantly for [English](https://huggingface.co/papers/2210.07316), but have since been [extended for broad languages coverage](https://huggingface.co/papers/2502.13595) and multiple modalities ([image](https://huggingface.co/papers/2504.10471), [audio](https://huggingface.co/papers/2602.16008))
 
 
 ## Installation
@@ -24,7 +28,7 @@ Installation is as simple as:
     uv add mteb
     ```
 
-To see more check out the [installation guide](./installation.md).
+To see more check out the [installation guide](installation.md).
 
 ## Quickstart
 
@@ -39,7 +43,7 @@ To see more check out the [installation guide](./installation.md).
 
     # Select model
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
-    model = mteb.get_model(model_name) # (1)
+    model = mteb.get_model(model_name) # (1)!
 
     # Select tasks
     tasks = mteb.get_tasks(tasks=["Banking77Classification"])
@@ -70,7 +74,7 @@ To see more check out the [installation guide](./installation.md).
 ## Citing
 
 
-MTEB was introduced in the paper "MTEB: Massive Text Embedding Benchmark"[@mteb_2023], and heavily expanded in "MMTEB: Massive Multilingual Text Embedding Benchmark"[@mmteb_2025]. When using `mteb`, we recommend that you cite both articles.
+MTEB was introduced in the paper ["MTEB: Massive Text Embedding Benchmark"](https://huggingface.co/papers/2210.07316), and heavily expanded in ["MMTEB: Massive Multilingual Text Embedding Benchmark"](https://huggingface.co/papers/2502.13595). When using `mteb`, we recommend that you cite both articles.
 
 
 ```bibtex

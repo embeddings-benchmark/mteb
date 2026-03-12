@@ -29,14 +29,16 @@ model_prompts = {
     "BrightSustainableLivingLongRetrieval-query": "Represent this sustainable_living post for searching relevant documents: ",
     "BrightPonyLongRetrieval-query": "Represent this Pony question for searching relevant documents: ",
 }
-BGE_15_CITATION = """@misc{bge_embedding,
-      title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
-      author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
-      year={2023},
-      eprint={2309.07597},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}"""
+BGE_15_CITATION = """@misc{xiao2024cpackpackagedresourcesadvance,
+  archiveprefix = {arXiv},
+  author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
+  eprint = {2309.07597},
+  primaryclass = {cs.CL},
+  title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
+  url = {https://arxiv.org/abs/2309.07597},
+  year = {2024},
+}
+"""
 model_prompts_zh = {"query": "为这个句子生成表示以用于检索相关文章："}
 
 bge_m3_training_data = {
@@ -823,13 +825,14 @@ bge_multilingual_gemma2 = ModelMeta(
 }
 
 
-@misc{bge_embedding,
-      title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
-      author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
-      year={2023},
-      eprint={2309.07597},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+@misc{xiao2024cpackpackagedresourcesadvance,
+  archiveprefix = {arXiv},
+  author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
+  eprint = {2309.07597},
+  primaryclass = {cs.CL},
+  title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
+  url = {https://arxiv.org/abs/2309.07597},
+  year = {2024},
 }""",
 )
 

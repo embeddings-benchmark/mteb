@@ -49,8 +49,10 @@ class CompressionWrapper:
                 f"The model {model.mteb_model_meta.name} internally supports quantization to {quantization_level}, "
                 f"which might lead to better results."
             )
-            warnings.warn(f"The model {model.mteb_model_meta.name} internally supports quantization to "
-                          f"{quantization_level}, which might lead to better results.")
+            warnings.warn(
+                f"The model {model.mteb_model_meta.name} internally supports quantization to "
+                f"{quantization_level}, which might lead to better results."
+            )
         logger.info("Initialized CompressionWrapper.")
 
     @property
@@ -99,7 +101,7 @@ class CompressionWrapper:
             self._reset_boundaries()
 
         if not isinstance(embeddings, torch.Tensor):
-            embeddings = torch.tensor(embeddings)
+            embeddings = torch.tensor(embeddings).float()
 
         if prompt_type == PromptType.query and task_metadata.category in [
             "t2i",
@@ -194,6 +196,10 @@ class CompressionWrapper:
         else:
             if len(embeddings) < self.min_embeds:
                 logger.warning(
+                    f"Estimating quantization parameters on less than {self.min_embeds} embeddings (only "
+                    f"{len(embeddings)}). Parameters are likely unstable and results might not generalize."
+                )
+                warnings.warn(
                     f"Estimating quantization parameters on less than {self.min_embeds} embeddings (only "
                     f"{len(embeddings)}). Parameters are likely unstable and results might not generalize."
                 )

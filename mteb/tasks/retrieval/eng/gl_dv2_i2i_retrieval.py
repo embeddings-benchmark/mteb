@@ -8,8 +8,8 @@ class GLDv2I2IRetrieval(AbsTaskRetrieval):
         description="Retrieve names of landmarks based on their image.",
         reference="https://openaccess.thecvf.com/content_CVPR_2020/html/Weyand_Google_Landmarks_Dataset_v2_-_A_Large-Scale_Benchmark_for_Instance-Level_CVPR_2020_paper.html",
         dataset={
-            "path": "gowitheflow/gld-v2",
-            "revision": "c6b162ee349adb293901128a18c0b446f7b43457",
+            "path": "mteb/gld-v2",
+            "revision": "04ec40ce10b27c291cbc329045ecdfd01e06c4a7",
         },
         type="Any2AnyRetrieval",
         category="i2i",

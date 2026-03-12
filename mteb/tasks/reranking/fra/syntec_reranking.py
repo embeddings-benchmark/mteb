@@ -19,10 +19,10 @@ class SyntecReranking(AbsTaskRetrieval):
         main_score="map_at_1000",
         date=("2022-12-01", "2022-12-02"),
         domains=["Legal", "Written"],
-        task_subtypes=None,
+        task_subtypes=["Question answering"],
         license="cc-by-nc-sa-4.0",
         annotations_creators="human-annotated",
-        dialect=None,
+        dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
 @misc{ciancone2024extending,

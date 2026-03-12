@@ -18,7 +18,7 @@ class MintakaRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MintakaRetrieval",
         description="We introduce Mintaka, a complex, natural, and multilingual dataset designed for experimenting with end-to-end question-answering models. Mintaka is composed of 20,000 question-answer pairs collected in English, annotated with Wikidata entities, and translated into Arabic, French, German, Hindi, Italian, Japanese, Portuguese, and Spanish for a total of 180,000 samples. Mintaka includes 8 types of complex questions, including superlative, intersection, and multi-hop questions, which were naturally elicited from crowd workers. ",
-        reference=None,
+        reference="https://aclanthology.org/2022.coling-1.138",
         dataset={
             "path": "mteb/MintakaRetrieval",
             "revision": "43bc699486e768138ce3a6d4cd859da306ac9eef",

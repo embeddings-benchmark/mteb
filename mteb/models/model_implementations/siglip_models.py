@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
+from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -34,12 +35,10 @@ class SiglipModelWrapper(AbsEncoder):
     ):
         from transformers import AutoModel, AutoProcessor
 
-        try:
-            import sentencepiece  # noqa: F401
-        except ImportError:
-            raise ImportError(
-                "The `sentencepiece` package is required to run `pip install sentencepiece`"
-            )
+        # for sentencepiece and protobuf:
+        requires_package(
+            self, "sentencepiece", model_name, "pip install 'mteb[siglip]'"
+        )
 
         self.model_name = model_name
         self.device = device
@@ -68,7 +67,8 @@ class SiglipModelWrapper(AbsEncoder):
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.model.get_text_features(**inputs)
-                all_text_embeddings.append(text_outputs.cpu())
+                embeddings = text_outputs.pooler_output
+                all_text_embeddings.append(embeddings.cpu())
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
@@ -83,12 +83,14 @@ class SiglipModelWrapper(AbsEncoder):
 
         with torch.no_grad():
             for batch in tqdm(images):
+                _images = [img.convert("RGB") for img in batch["image"]]
                 inputs = self.processor(
-                    images=batch["image"], return_tensors="pt", padding=True
+                    images=_images, return_tensors="pt", padding=True
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 image_outputs = self.model.get_image_features(**inputs)
-                all_image_embeddings.append(image_outputs.cpu())
+                embeddings = image_outputs.pooler_output
+                all_image_embeddings.append(embeddings.cpu())
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
 
@@ -135,8 +137,8 @@ siglip_so400m_patch14_224 = ModelMeta(
     revision="d04cf29fca7b6374f74d8bea1969314492266b5e",
     release_date="2024-01-08",
     modalities=["image", "text"],
-    n_parameters=877_000_000,
-    n_embedding_parameters=None,
+    n_parameters=877360306,
+    n_embedding_parameters=36864000,
     memory_usage_mb=3347,
     max_tokens=16,
     embed_dim=1152,
@@ -160,8 +162,8 @@ siglip_so400m_patch14_384 = ModelMeta(
     revision="9fdffc58afc957d1a03a25b10dba0329ab15c2a3",
     release_date="2024-01-08",
     modalities=["image", "text"],
-    n_parameters=878_000_000,
-    n_embedding_parameters=None,
+    n_parameters=877960498,
+    n_embedding_parameters=36864000,
     memory_usage_mb=3349,
     max_tokens=64,
     embed_dim=1152,
@@ -185,8 +187,8 @@ siglip_so400m_patch16_256_i18n = ModelMeta(
     revision="365d321c0cfdea96bc28e3a29787a11a062681a1",
     release_date="2024-01-08",
     modalities=["image", "text"],
-    n_parameters=1_130_000_000,
-    n_embedding_parameters=None,
+    n_parameters=1128758962,
+    n_embedding_parameters=288000000,
     memory_usage_mb=4306,
     max_tokens=64,
     embed_dim=1152,
@@ -210,8 +212,8 @@ siglip_base_patch16_256_multilingual = ModelMeta(
     revision="8952a4eafcde3cb7ab46b1dd629b33f8784ca9c6",
     release_date="2024-01-08",
     modalities=["image", "text"],
-    n_parameters=371_000_000,
-    n_embedding_parameters=None,
+    n_parameters=370626050,
+    n_embedding_parameters=192000000,
     memory_usage_mb=1414,
     max_tokens=64,
     embed_dim=768,
@@ -235,8 +237,8 @@ siglip_base_patch16_256 = ModelMeta(
     revision="b078df89e446d623010d890864d4207fe6399f61",
     release_date="2024-01-08",
     modalities=["image", "text"],
-    n_parameters=203_000_000,
-    n_embedding_parameters=None,
+    n_parameters=203202050,
+    n_embedding_parameters=24576000,
     memory_usage_mb=775,
     max_tokens=64,
     embed_dim=768,
@@ -260,8 +262,8 @@ siglip_base_patch16_512 = ModelMeta(
     revision="753a949581523b60257d93e18391e8c27f72eb22",
     release_date="2024-01-08",
     modalities=["image", "text"],
-    n_parameters=204_000_000,
-    n_embedding_parameters=None,
+    n_parameters=203791874,
+    n_embedding_parameters=24576000,
     memory_usage_mb=777,
     max_tokens=64,
     embed_dim=768,
@@ -285,8 +287,8 @@ siglip_base_patch16_384 = ModelMeta(
     revision="41aec1c83b32e0a6fca20ad88ba058aa5b5ea394",
     release_date="2024-01-08",
     modalities=["image", "text"],
-    n_parameters=203_000_000,
-    n_embedding_parameters=None,
+    n_parameters=203447810,
+    n_embedding_parameters=24576000,
     memory_usage_mb=776,
     max_tokens=64,
     embed_dim=768,
@@ -310,8 +312,8 @@ siglip_base_patch16_224 = ModelMeta(
     revision="7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed",
     release_date="2024-01-08",
     modalities=["image", "text"],
-    n_parameters=203_000_000,
-    n_embedding_parameters=None,
+    n_parameters=203155970,
+    n_embedding_parameters=24576000,
     memory_usage_mb=775,
     max_tokens=64,
     embed_dim=768,
@@ -335,8 +337,8 @@ siglip_large_patch16_256 = ModelMeta(
     revision="d0da9f876e7d66b4e250cd2450c3ba2ce735e447",
     release_date="2024-01-08",
     modalities=["image", "text"],
-    n_parameters=652_000_000,
-    n_embedding_parameters=None,
+    n_parameters=652150786,
+    n_embedding_parameters=32768000,
     memory_usage_mb=2488,
     max_tokens=64,
     embed_dim=1024,
@@ -360,8 +362,8 @@ siglip_large_patch16_384 = ModelMeta(
     revision="ce005573a40965dfd21fd937fbdeeebf2439fc35",
     release_date="2024-01-08",
     modalities=["image", "text"],
-    n_parameters=652_000_000,
-    n_embedding_parameters=None,
+    n_parameters=652478466,
+    n_embedding_parameters=32768000,
     memory_usage_mb=2489,
     max_tokens=64,
     embed_dim=1024,

@@ -20,8 +20,8 @@ class AROCocoOrder(AbsTaskImageTextPairClassification):
         + "Each capation has four hard negatives created by order permutations.",
         reference="https://openreview.net/forum?id=KRLUvxh8uaX",
         dataset={
-            "path": "gowitheflow/ARO-COCO-order",
-            "revision": "853ec8757226585a38a80886c51fe0f3f268787c",
+            "path": "mteb/ARO-COCO-order",
+            "revision": "53c20afc02a87fed8c0245dde2e00f054da4b861",
         },
         type="Compositionality",
         category="i2t",

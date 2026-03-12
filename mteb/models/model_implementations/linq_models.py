@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 import torch
 
-from mteb.models.instruct_wrapper import instruct_wrapper
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
@@ -27,14 +27,11 @@ def instruction_template(
 
 
 Linq_Embed_Mistral = ModelMeta(
-    loader=instruct_wrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
-        attn="cccc",
-        pooling_method="lasttoken",
-        mode="embedding",
-        torch_dtype=torch.bfloat16,
-        normalized=True,
+        model_kwargs={"dtype": torch.bfloat16},
+        apply_instruction_to_passages=False,
     ),
     name="Linq-AI-Research/Linq-Embed-Mistral",
     model_type=["dense"],
@@ -42,8 +39,8 @@ Linq_Embed_Mistral = ModelMeta(
     open_weights=True,
     revision="0c1a0b0589177079acc552433cad51d7c9132379",
     release_date="2024-05-29",  # initial commit of hf model.
-    n_parameters=7_110_000_000,
-    n_embedding_parameters=None,
+    n_parameters=7110660096,
+    n_embedding_parameters=131072000,
     memory_usage_mb=13563,
     embed_dim=4096,
     license="cc-by-nc-4.0",

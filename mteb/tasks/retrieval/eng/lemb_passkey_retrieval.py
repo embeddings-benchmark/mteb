@@ -1,5 +1,3 @@
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -8,12 +6,11 @@ class LEMBPasskeyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="LEMBPasskeyRetrieval",
         dataset={
-            "path": "dwzhu/LongEmbed",
-            "revision": "6e346642246bfb4928c560ee08640dc84d074e8c",
-            "name": "passkey",
+            "path": "mteb/LEMBPasskeyRetrieval",
+            "revision": "86ac5a6437198a94ecd666440c78b3e78f258274",
         },
         reference="https://huggingface.co/datasets/dwzhu/LongEmbed",
-        description=("passkey subset of dwzhu/LongEmbed dataset."),
+        description="passkey subset of dwzhu/LongEmbed dataset.",
         type="Retrieval",
         category="t2t",
         modalities=["text"],
@@ -45,43 +42,3 @@ class LEMBPasskeyRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus = {}
-        self.queries = {}
-        self.relevant_docs = {}
-
-        for split in self.metadata.eval_splits:
-            context_length = int(split.split("_")[1])
-            query_list = datasets.load_dataset(**self.metadata.dataset)[
-                "queries"
-            ]  # dict_keys(['qid', 'text'])
-            query_list = query_list.filter(
-                lambda x: x["context_length"] == context_length
-            )
-            queries = {row["qid"]: row["text"] for row in query_list}
-
-            corpus_list = datasets.load_dataset(**self.metadata.dataset)[
-                "corpus"
-            ]  # dict_keys(['doc_id', 'text'])
-            corpus_list = corpus_list.filter(
-                lambda x: x["context_length"] == context_length
-            )
-            corpus = {row["doc_id"]: {"text": row["text"]} for row in corpus_list}
-
-            qrels_list = datasets.load_dataset(**self.metadata.dataset)[
-                "qrels"
-            ]  # dict_keys(['qid', 'doc_id'])
-            qrels_list = qrels_list.filter(
-                lambda x: x["context_length"] == context_length
-            )
-            qrels = {row["qid"]: {row["doc_id"]: 1} for row in qrels_list}
-
-            self.corpus[split] = corpus
-            self.queries[split] = queries
-            self.relevant_docs[split] = qrels
-
-        self.data_loaded = True

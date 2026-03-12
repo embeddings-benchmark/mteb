@@ -10,8 +10,8 @@ class DTDZeroShotClassification(AbsTaskZeroShotClassification):
         description="Describable Textures Dataset in 47 categories.",
         reference="https://www.robots.ox.ac.uk/~vgg/data/dtd/",
         dataset={
-            "path": "tanganke/dtd",
-            "revision": "d2afa97d9f335b1a6b3b09c637aef667f98f966e",
+            "path": "mteb/dtd",
+            "revision": "96726183040de9e64a590d08eaac8de940dfcbdf",
         },
         type="ZeroShotClassification",
         category="i2t",

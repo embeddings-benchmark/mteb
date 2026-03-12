@@ -34,7 +34,10 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
 """,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         _dataset = {}
         for split in self.metadata.eval_splits:
             hf_dataset = self.dataset[split]

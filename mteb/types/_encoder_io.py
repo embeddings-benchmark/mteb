@@ -10,6 +10,7 @@ from datasets import Dataset
 from numpy.typing import NDArray
 
 if TYPE_CHECKING:
+    import numpy.typing as npt
     from PIL import Image
     from typing_extensions import NotRequired
 
@@ -108,6 +109,20 @@ class ImageInput(TypedDict):
     image: list[Image.Image]
 
 
+class AudioInputItem(TypedDict):
+    """An audio item for the AudioInput.
+
+    Dataset based on `datasets.Audio` will be converted to this format during encoding.
+
+    Attributes:
+        array: The audio array as bytes.
+        sampling_rate: The sampling rate of the audio.
+    """
+
+    array: npt.NDArray[np.floating]
+    sampling_rate: int
+
+
 class AudioInput(TypedDict):
     """The input to the encoder for audio.
 
@@ -115,17 +130,49 @@ class AudioInput(TypedDict):
         audio: The audio to encode. Can be a list of audio files or a list of lists of audio files.
     """
 
-    audio: list[list[bytes]]
+    audio: list[AudioInputItem]
 
 
-class MultimodalInput(TextInput, CorpusInput, QueryInput, ImageInput, AudioInput):  # type: ignore[misc]
+class VideoInputItem(TypedDict):
+    """A video item for the VideoInput.
+
+    Dataset based on `datasets.Video` will be converted to this format during encoding.
+
+    Attributes:
+        frames: The video frames as Tensor.
+        audio: The audio array as AudioInputItem.
+    """
+
+    frames: torch.Tensor
+    audio: AudioInputItem
+
+
+class VideoInput(TypedDict):
+    """The input to the encoder for videos.
+
+    Attributes:
+        video: The video to encode. VideoDecoder object.
+    """
+
+    video: VideoInputItem
+
+
+class MultimodalInput(  # type: ignore[misc]
+    TextInput, CorpusInput, QueryInput, ImageInput, AudioInput, VideoInput
+):
     """The input to the encoder for multimodal data."""
 
     pass
 
 
 BatchedInput = (
-    TextInput | CorpusInput | QueryInput | ImageInput | AudioInput | MultimodalInput
+    TextInput
+    | CorpusInput
+    | QueryInput
+    | ImageInput
+    | AudioInput
+    | VideoInput
+    | MultimodalInput
 )
 """
 Represents the input format accepted by the encoder for a batch of data.
@@ -176,9 +223,19 @@ TextBatchedInput = TextInput | CorpusInput | QueryInput
 """The input to the encoder for a batch of text data."""
 
 QueryDatasetType = Dataset
-"""Retrieval query dataset, containing queries. Should have columns `id`, `text`."""
+"""Retrieval query dataset, containing queries. Should have columns:
+1. `id`, `text`, `instruction` (optionally) for text queries
+2. `id`, `image` for image queries
+3. `id`, `audio` for audio queries
+or a combination of these for multimodal queries.
+ """
 CorpusDatasetType = Dataset
-"""Retrieval corpus dataset, containing documents. Should have columns `id`, `title`, `body`."""
+"""Retrieval corpus dataset, containing documents. Should have columns:
+ 1. `id`, `title` (optionally), `body` for text corpus
+ 2. `id`, `image` for image corpus
+ 3. `id`, `audio` for audio corpus
+ or a combination of these for multimodal corpus.
+ """
 InstructionDatasetType = Dataset
 """Retrieval instruction dataset, containing instructions. Should have columns `query-id`, `instruction`."""
 RelevantDocumentsType = Mapping[str, Mapping[str, int]]

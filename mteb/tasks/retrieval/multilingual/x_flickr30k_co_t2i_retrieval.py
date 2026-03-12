@@ -76,8 +76,8 @@ class XFlickr30kCoT2IRetrieval(AbsTaskRetrieval):
         description="Retrieve images based on multilingual descriptions.",
         reference="https://proceedings.mlr.press/v162/bugliarello22a/bugliarello22a.pdf",
         dataset={
-            "path": "floschne/xflickrco",
-            "revision": "0af2c2eba58b27a71898787e286be04befdd7a20",
+            "path": "mteb/xflickrco",
+            "revision": "4da629e05455d757306174cdc72f2edfe00b9027",
         },
         type="Any2AnyMultilingualRetrieval",
         category="t2i",

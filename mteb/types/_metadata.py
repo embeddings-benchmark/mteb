@@ -63,5 +63,7 @@ Revision = str
 Modalities = Literal[
     "text",
     "image",
+    "audio",
+    "video",
 ]
 """The different modalities that a model can support."""

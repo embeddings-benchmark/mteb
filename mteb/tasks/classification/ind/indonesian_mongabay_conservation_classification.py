@@ -55,7 +55,10 @@ Purwarianti, Ayu},
         superseded_by="IndonesianMongabayConservationClassification.v2",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         splits = self.metadata.eval_splits
         class_labels = ["positif", "netral", "negatif"]
 

@@ -19,9 +19,9 @@ class KorSTS(AbsTaskSTS):
         main_score="cosine_spearman",
         date=("2012-01-01", "2017-01-01"),  # rough approximates
         domains=["News", "Web"],
-        task_subtypes=None,
+        task_subtypes=["Textual Entailment"],
         license="cc-by-sa-4.0",
-        annotations_creators=None,
+        annotations_creators="human-annotated",
         dialect=[],
         sample_creation="machine-translated and localized",
         bibtex_citation=r"""

@@ -1,8 +1,5 @@
 from mteb.models.model_implementations.pylate_models import MultiVectorModel
-from mteb.models.model_meta import (
-    ModelMeta,
-    ScoringFunction,
-)
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     sentence_transformers_loader,
@@ -30,7 +27,7 @@ mxbai_embed_large_v1 = ModelMeta(
     open_weights=True,
     revision="990580e27d329c7408b3741ecff85876e128e203",
     release_date="2024-03-07",  # initial commit of hf model.
-    n_parameters=335_000_000,
+    n_parameters=335141888,
     n_embedding_parameters=31_254_528,
     memory_usage_mb=639,
     max_tokens=512,
@@ -75,7 +72,7 @@ mxbai_embed_2d_large_v1 = ModelMeta(
     open_weights=True,
     revision="7e639ca8e344af398876ead3b19ec3c0b9068f49",
     release_date="2024-03-04",  # initial commit of hf model.
-    n_parameters=335_000_000,
+    n_parameters=335141888,
     n_embedding_parameters=31_254_528,
     memory_usage_mb=None,
     max_tokens=512,
@@ -107,7 +104,7 @@ mxbai_embed_xsmall_v1 = ModelMeta(
     open_weights=True,
     revision="2f741ec33328bb57e4704e1238fc59a4a5745705",
     release_date="2024-08-13",  # initial commit of hf model.
-    n_parameters=24_100_000,
+    n_parameters=24089472,
     n_embedding_parameters=11_720_448,
     memory_usage_mb=None,
     max_tokens=512,
@@ -137,6 +134,7 @@ mxbai_rerank_xsmall_v1 = ModelMeta(
     release_date="2024-02-29",
     languages=["eng-Latn"],
     n_parameters=70830337,
+    n_embedding_parameters=49190400,
     memory_usage_mb=135.0,
     max_tokens=512,
     embed_dim=None,
@@ -175,6 +173,7 @@ mxbai_rerank_base_v1 = ModelMeta(
     release_date="2024-02-29",
     languages=["eng-Latn"],
     n_parameters=184422913,
+    n_embedding_parameters=98380800,
     memory_usage_mb=352.0,
     max_tokens=512,
     embed_dim=None,
@@ -213,6 +212,7 @@ mxbai_rerank_large_v1 = ModelMeta(
     release_date="2024-02-29",
     languages=["eng-Latn"],
     n_parameters=435062785,
+    n_embedding_parameters=131174400,
     memory_usage_mb=830.0,
     max_tokens=512,
     embed_dim=None,
@@ -255,6 +255,7 @@ mxbai_edge_colbert_v0_17m = ModelMeta(
     public_training_data=None,
     release_date="2025-10-16",
     n_parameters=int(17 * 1e6),
+    n_embedding_parameters=12894720,
     memory_usage_mb=64,
     max_tokens=7999,
     embed_dim=None,
@@ -300,6 +301,7 @@ mxbai_edge_colbert_v0_32m = ModelMeta(
     public_training_data=None,
     release_date="2025-10-16",
     n_parameters=int(32 * 1e6),
+    n_embedding_parameters=19342080,
     memory_usage_mb=122,
     max_tokens=511,
     embed_dim=None,

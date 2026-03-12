@@ -76,13 +76,10 @@ def load_bright_data(
 
 
 _BIBTEX_CITATION = r"""
-@misc{su2024brightrealisticchallengingbenchmark,
-  archiveprefix = {arXiv},
-  author = {Hongjin Su and Howard Yen and Mengzhou Xia and Weijia Shi and Niklas Muennighoff and Han-yu Wang and Haisu Liu and Quan Shi and Zachary S. Siegel and Michael Tang and Ruoxi Sun and Jinsung Yoon and Sercan O. Arik and Danqi Chen and Tao Yu},
-  eprint = {2407.12883},
-  primaryclass = {cs.CL},
-  title = {BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval},
-  url = {https://arxiv.org/abs/2407.12883},
+@article{su2024bright,
+  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal = {arXiv preprint arXiv:2407.12883},
+  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
   year = {2024},
 }
 """
@@ -92,8 +89,8 @@ class BrightBiologyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightBiologyRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Biology StackExchange answers.",
@@ -136,8 +133,8 @@ class BrightEarthScienceRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightEarthScienceRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Earth Science StackExchange answers.",
@@ -180,8 +177,8 @@ class BrightEconomicsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightEconomicsRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Economics StackExchange answers.",
@@ -224,8 +221,8 @@ class BrightPsychologyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightPsychologyRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Psychology StackExchange answers.",
@@ -268,8 +265,8 @@ class BrightRoboticsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightRoboticsRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Robotics StackExchange answers.",
@@ -312,8 +309,8 @@ class BrightStackoverflowRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightStackoverflowRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Stack Overflow answers.",
@@ -356,8 +353,8 @@ class BrightSustainableLivingRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightSustainableLivingRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Sustainable Living StackExchange answers.",
@@ -400,8 +397,8 @@ class BrightPonyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightPonyRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of Pony programming language syntax documentation.",
@@ -444,8 +441,8 @@ class BrightLeetcodeRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightLeetcodeRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of similar algorithmic problems based on shared solution techniques.",
@@ -488,8 +485,8 @@ class BrightAopsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightAopsRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of similar Math Olympiad problems from Art of Problem Solving.",
@@ -532,8 +529,8 @@ class BrightTheoremQATheoremsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightTheoremQATheoremsRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of theorem definitions and proofs from ProofWiki.",
@@ -576,8 +573,8 @@ class BrightTheoremQAQuestionsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightTheoremQAQuestionsRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of theorem definitions from ProofWiki given questions rephrased as real-world scenarios.",
@@ -620,8 +617,8 @@ class BrightBiologyLongRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightBiologyLongRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Biology StackExchange answers with long documents.",
@@ -664,8 +661,8 @@ class BrightEarthScienceLongRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightEarthScienceLongRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Earth Science StackExchange answers with long documents.",
@@ -708,8 +705,8 @@ class BrightEconomicsLongRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightEconomicsLongRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Economics StackExchange answers with long documents.",
@@ -752,8 +749,8 @@ class BrightPsychologyLongRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightPsychologyLongRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Psychology StackExchange answers with long documents.",
@@ -796,8 +793,8 @@ class BrightRoboticsLongRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightRoboticsLongRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Robotics StackExchange answers with long documents.",
@@ -840,8 +837,8 @@ class BrightStackoverflowLongRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightStackoverflowLongRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Stack Overflow answers with long documents.",
@@ -884,8 +881,8 @@ class BrightSustainableLivingLongRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightSustainableLivingLongRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Sustainable Living StackExchange answers with long documents.",
@@ -928,8 +925,8 @@ class BrightPonyLongRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightPonyLongRetrieval",
         dataset={
-            "path": "xlangai/BRIGHT",
-            "revision": "3066d29c9651a576c8aba4832d249807b181ecae",
+            "path": "mteb/BRIGHT",
+            "revision": "c26703e6600d97c579ee2985f16cf307db13ed85",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of Pony programming language syntax documentation with long documents.",

@@ -134,7 +134,7 @@ def test_evaluate_w_missing_splits(
 )
 def test_cache_hit(task: AbsTask):
     """Test that evaluating with 'only-cache' raises an error when there are no cache hit."""
-    model = mteb.get_model("baseline/random-encoder-baseline")
+    model = mteb.get_model("mteb/baseline-random-encoder")
     with pytest.raises(
         ValueError,
         match="overwrite_strategy is set to 'only-cache' and the results file exists",
@@ -212,7 +212,7 @@ def test_evaluate_overwrites(
 
 
 def test_evaluate_aggregated_task():
-    model = mteb.get_model("baseline/random-encoder-baseline")
+    model = mteb.get_model("mteb/baseline-random-encoder")
     task = MockAggregatedTask()
     mteb.evaluate(model, task, cache=None)
 
@@ -227,7 +227,7 @@ def test_run_private_task_warning(caplog):
         raise DatasetNotFoundError
 
     task.load_data = load_data_dataset_not_found
-    model = mteb.get_model("baseline/random-encoder-baseline")
+    model = mteb.get_model("mteb/baseline-random-encoder")
 
     with caplog.at_level(logging.WARNING):
         result = mteb.evaluate(model, task, cache=None)
@@ -241,7 +241,7 @@ def test_run_private_task():
     task_metadata = copy(task.metadata)
     task_metadata.is_public = False
     task.metadata = task_metadata
-    model = mteb.get_model("baseline/random-encoder-baseline")
+    model = mteb.get_model("mteb/baseline-random-encoder")
     results = mteb.evaluate(model, task, cache=None, public_only=False)
     assert len(results.task_results) == 1
 
@@ -256,7 +256,7 @@ def test_run_task_raise_error():
         raise RuntimeError("Test error")
 
     task.load_data = load_error
-    model = mteb.get_model("baseline/random-encoder-baseline")
+    model = mteb.get_model("mteb/baseline-random-encoder")
     with pytest.raises(RuntimeError, match="Test error"):
         mteb.evaluate(model, task, cache=None)
 
@@ -271,7 +271,7 @@ def test_run_list_with_error():
     error_task.load_data = load_error
     task = MockRetrievalTask()
 
-    model = mteb.get_model("baseline/random-encoder-baseline")
+    model = mteb.get_model("mteb/baseline-random-encoder")
     results = mteb.evaluate(model, [error_task, task], cache=None, raise_error=False)
     assert len(results.task_results) == 1
     assert len(results.exceptions) == 1
@@ -300,3 +300,24 @@ def test_evaluate_preserves_preloaded_data_across_multiple_calls():
 
     mteb.evaluate(model, task, cache=None, co2_tracker=False)
     _ = task.dataset["test"]  # Verify dataset persists across multiple calls
+
+
+def test_evaluate_experiment(tmp_path):
+    """Test that evaluate() can be used in an experiment context."""
+    model = mteb.get_model(
+        "mteb/baseline-random-encoder", test_param=123, test_param2="abc"
+    )
+    task = MockClassificationTask()
+    cache = ResultCache(tmp_path)
+
+    mteb.evaluate(model, task, cache=cache)
+
+    expected_path = (
+        Path("results")
+        / "mteb__baseline-random-encoder"
+        / "1"
+        / "experiments"
+        / "test_param_123__test_param2_abc"
+        / "MockClassificationTask.json"
+    )
+    assert (tmp_path / expected_path).exists()

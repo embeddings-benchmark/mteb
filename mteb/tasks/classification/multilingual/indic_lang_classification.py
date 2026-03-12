@@ -1,7 +1,3 @@
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -64,8 +60,8 @@ class IndicLangClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="IndicLangClassification",
         dataset={
-            "path": "ai4bharat/Bhasha-Abhijnaanam",
-            "revision": "c54a95d9b9d62c891a03bd5da60715df7176b097",
+            "path": "mteb/IndicLangClassification",
+            "revision": "36d9c05b5a4ba276554abc4eaaae87666d1e9c61",
         },
         description="A language identification test set for native-script as well as Romanized text which spans 22 Indic languages.",
         reference="https://arxiv.org/abs/2305.15814",
@@ -102,41 +98,3 @@ Okazaki, Naoaki},
 }
 """,
     )
-
-    def load_data(self, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-
-        labels = sorted(_LANGUAGES.keys())
-
-        data = datasets.load_dataset(**self.metadata.dataset)["train"]["data"][0]
-
-        dataset = {"train": [], "test": []}
-        for lang, lang_code in LANG_MAP.items():
-            subset = [
-                item for item in data if (item["language"], item["script"]) == lang
-            ]
-            num_test_examples = min(2048, int(len(subset) * 0.7))
-            subset = datasets.Dataset.from_list(subset).train_test_split(
-                test_size=num_test_examples, seed=42
-            )
-            subset = subset.map(
-                lambda x: {"lang_code": lang_code, "label": labels.index(lang_code)}
-            )
-
-            dataset["train"].append(subset["train"])
-            dataset["test"].append(subset["test"])
-
-        self.dataset = datasets.DatasetDict(
-            {
-                "train": datasets.concatenate_datasets(dataset["train"]),
-                "test": datasets.concatenate_datasets(dataset["test"]),
-            }
-        )
-        self.dataset_transform()
-        self.data_loaded = True
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
-        self.dataset = self.dataset.remove_columns(["language", "script"])
-        self.dataset = self.dataset.rename_columns({"native sentence": "text"})

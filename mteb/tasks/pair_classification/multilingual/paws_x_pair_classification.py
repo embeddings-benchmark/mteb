@@ -9,7 +9,7 @@ class PawsXPairClassification(AbsTaskPairClassification):
             "path": "mteb/PawsXPairClassification",
             "revision": "558da352e7dba3ed3229fc4922aef2ebaff0a90b",
         },
-        description="{PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification",
+        description="PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification",
         reference="https://arxiv.org/abs/1908.11828",
         category="t2t",
         modalities=["text"],

@@ -52,6 +52,8 @@ def test_encode_kwargs_passed_to_all_encodes(task: AbsTask, tmp_path: Path):
 def test_task_metadata_passed_encoder(task: mteb.AbsTask, tmp_path: Path):
     """Test that all tasks correctly pass down the task_name to the encoder."""
     _task_name = task.metadata.name
+    if _task_name in [t.metadata.name for t in MOCK_MIEB_TASK_GRID]:
+        pytest.importorskip("PIL", reason="Image dependencies are not installed")
 
     class MockEncoder(AbsEncoder):
         mteb_model_meta = ModelMeta(

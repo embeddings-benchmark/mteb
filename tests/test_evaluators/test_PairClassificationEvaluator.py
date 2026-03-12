@@ -25,7 +25,7 @@ class TestPairClassificationEvaluator:
             input2_prompt_type=None,
         )
         distances = evaluator(
-            mteb.get_model("baseline/random-encoder-baseline"),
+            mteb.get_model("mteb/baseline-random-encoder"),
             encode_kwargs={"batch_size": 32},
         )
         assert distances["cosine_scores"] == pytest.approx(

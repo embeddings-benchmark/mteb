@@ -12,8 +12,8 @@ class PatchCamelyonZeroShotClassification(AbsTaskZeroShotClassification):
         description="Histopathology diagnosis classification dataset.",
         reference="https://link.springer.com/chapter/10.1007/978-3-030-00934-2_24",
         dataset={
-            "path": "clip-benchmark/wds_vtab-pcam",
-            "revision": "502695fe1a141108650e3c5b91c8b5e0ff84ed49",
+            "path": "mteb/wds_vtab-pcam",
+            "revision": "6544d35f2235ed00e2ac8494c09ff107f8af353c",
         },
         type="ZeroShotClassification",
         category="i2t",

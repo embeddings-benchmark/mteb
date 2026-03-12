@@ -120,7 +120,7 @@ def update_file(file_path: str) -> None:
         obj: Any = getattr(module, attr_name)
         if isinstance(obj, ModelMeta):
             # Compute memory_usage_mb via the instance method.
-            mem_usage: float | None = obj.calculate_memory_usage_mb()
+            mem_usage: float | None = obj.calculate_memory_usage_mb(fetch_from_hf=True)
             # Find the corresponding ModelMeta(...) call in the source file.
             call_range: tuple[int, int] | None = find_modelmeta_call_range(
                 content, attr_name

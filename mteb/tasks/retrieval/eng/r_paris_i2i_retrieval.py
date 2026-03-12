@@ -8,8 +8,8 @@ class RParisEasyI2IRetrieval(AbsTaskRetrieval):
         description="Retrieve photos of landmarks in Paris, UK.",
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html",
         dataset={
-            "path": "JamieSJS/r-paris-easy-multi",
-            "revision": "db94b5afd0014ab8c978f20a0fbcc52da1612a08",
+            "path": "mteb/r-paris-easy-multi",
+            "revision": "868eac192da81e6b8e478f4d30bdb8b4a24e871b",
         },
         type="Any2AnyRetrieval",
         category="i2i",
@@ -43,8 +43,8 @@ class RParisMediumI2IRetrieval(AbsTaskRetrieval):
         description="Retrieve photos of landmarks in Paris, UK.",
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html",
         dataset={
-            "path": "JamieSJS/r-paris-medium-multi",
-            "revision": "372c79fc823e1cebc1d55f8e0039aa239285e177",
+            "path": "mteb/r-paris-medium-multi",
+            "revision": "43d85ffeec4bacbfc9e1fe047e1eaf61c36fd8d6",
         },
         type="Any2AnyRetrieval",
         category="i2i",
@@ -78,8 +78,8 @@ class RParisHardI2IRetrieval(AbsTaskRetrieval):
         description="Retrieve photos of landmarks in Paris, UK.",
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html",
         dataset={
-            "path": "JamieSJS/r-paris-hard-multi",
-            "revision": "4e5997e48fb2f2f8bf1c8973851dedeb17e09a83",
+            "path": "mteb/r-paris-hard-multi",
+            "revision": "8a96e2c66a1ad6d0035df60accba4838c9d4e79f",
         },
         type="Any2AnyRetrieval",
         category="i2i",

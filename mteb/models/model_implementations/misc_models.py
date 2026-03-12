@@ -18,7 +18,7 @@ Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
     release_date="2024-10-31",
     languages=["eng-Latn"],
     n_parameters=7110660096,
-    n_embedding_parameters=None,
+    n_embedding_parameters=131072000,
     memory_usage_mb=13563,
     max_tokens=32768.0,
     embed_dim=None,
@@ -149,8 +149,8 @@ Hum_Works__lodestone_base_4096_v1 = ModelMeta(
     release_date="2023-08-25",
     languages=["eng-Latn"],
     loader=sentence_transformers_loader,
-    n_parameters=None,
-    n_embedding_parameters=None,
+    n_parameters=137368320,
+    n_embedding_parameters=23445504,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=768,
@@ -218,7 +218,7 @@ Jaume__gemma_2b_embeddings = ModelMeta(
     languages=[],
     loader=sentence_transformers_loader,
     n_parameters=2506172416,
-    n_embedding_parameters=None,
+    n_embedding_parameters=524288000,
     memory_usage_mb=9560,
     max_tokens=8192.0,
     embed_dim=2048,
@@ -270,12 +270,28 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
     citation="""
-    @article{conneau2019unsupervised,
-  title={Unsupervised cross-lingual representation learning at scale},
-  author={Conneau, Alexis and Khandelwal, Kartikay and Goyal, Naman and Chaudhary, Vishrav and Wenzek, Guillaume and Guzm{\'a}n, Francisco and Grave, Edouard and Ott, Myle and Zettlemoyer, Luke and Stoyanov, Veselin},
-  journal={arXiv preprint arXiv:1911.02116},
-  year={2019}
-}
+    @article{DBLP:journals/corr/abs-1911-02116,
+      author    = {Alexis Conneau and
+                   Kartikay Khandelwal and
+                   Naman Goyal and
+                   Vishrav Chaudhary and
+                   Guillaume Wenzek and
+                   Francisco Guzm{\'{a}}n and
+                   Edouard Grave and
+                   Myle Ott and
+                   Luke Zettlemoyer and
+                   Veselin Stoyanov},
+      title     = {Unsupervised Cross-lingual Representation Learning at Scale},
+      journal   = {CoRR},
+      volume    = {abs/1911.02116},
+      year      = {2019},
+      url       = {http://arxiv.org/abs/1911.02116},
+      eprinttype = {arXiv},
+      eprint    = {1911.02116},
+      timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
+      biburl    = {https://dblp.org/rec/journals/corr/abs-1911-02116.bib},
+      bibsource = {dblp computer science bibliography, https://dblp.org}
+    }
 
 @article{reimers2019sentence,
    title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
@@ -320,12 +336,28 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
     citation="""
-    @article{conneau2019unsupervised,
-  title={Unsupervised cross-lingual representation learning at scale},
-  author={Conneau, Alexis and Khandelwal, Kartikay and Goyal, Naman and Chaudhary, Vishrav and Wenzek, Guillaume and Guzm{\'a}n, Francisco and Grave, Edouard and Ott, Myle and Zettlemoyer, Luke and Stoyanov, Veselin},
-  journal={arXiv preprint arXiv:1911.02116},
-  year={2019}
-}
+    @article{DBLP:journals/corr/abs-1911-02116,
+      author    = {Alexis Conneau and
+                   Kartikay Khandelwal and
+                   Naman Goyal and
+                   Vishrav Chaudhary and
+                   Guillaume Wenzek and
+                   Francisco Guzm{\'{a}}n and
+                   Edouard Grave and
+                   Myle Ott and
+                   Luke Zettlemoyer and
+                   Veselin Stoyanov},
+      title     = {Unsupervised Cross-lingual Representation Learning at Scale},
+      journal   = {CoRR},
+      volume    = {abs/1911.02116},
+      year      = {2019},
+      url       = {http://arxiv.org/abs/1911.02116},
+      eprinttype = {arXiv},
+      eprint    = {1911.02116},
+      timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
+      biburl    = {https://dblp.org/rec/journals/corr/abs-1911-02116.bib},
+      bibsource = {dblp computer science bibliography, https://dblp.org}
+    }
 
 @article{reimers2019sentence,
    title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
@@ -370,11 +402,27 @@ Lajavaness__bilingual_embedding_small = ModelMeta(
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
     citation="""
-    @article{conneau2019unsupervised,
-  title={Unsupervised cross-lingual representation learning at scale},
-  author={Conneau, Alexis and Khandelwal, Kartikay and Goyal, Naman and Chaudhary, Vishrav and Wenzek, Guillaume and Guzm{\'a}n, Francisco and Grave, Edouard and Ott, Myle and Zettlemoyer, Luke and Stoyanov, Veselin},
-  journal={arXiv preprint arXiv:1911.02116},
-  year={2019}
+@article{DBLP:journals/corr/abs-1911-02116,
+  author    = {Alexis Conneau and
+               Kartikay Khandelwal and
+               Naman Goyal and
+               Vishrav Chaudhary and
+               Guillaume Wenzek and
+               Francisco Guzm{\'{a}}n and
+               Edouard Grave and
+               Myle Ott and
+               Luke Zettlemoyer and
+               Veselin Stoyanov},
+  title     = {Unsupervised Cross-lingual Representation Learning at Scale},
+  journal   = {CoRR},
+  volume    = {abs/1911.02116},
+  year      = {2019},
+  url       = {http://arxiv.org/abs/1911.02116},
+  eprinttype = {arXiv},
+  eprint    = {1911.02116},
+  timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
+  biburl    = {https://dblp.org/rec/journals/corr/abs-1911-02116.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
 @article{reimers2019sentence,
@@ -794,7 +842,7 @@ consciousai__cai_lunaris_text_embeddings = ModelMeta(
     release_date="2023-06-22",
     languages=None,
     loader=sentence_transformers_loader,
-    n_parameters=None,
+    n_parameters=335141888,
     n_embedding_parameters=31_254_528,
     memory_usage_mb=None,
     max_tokens=512.0,
@@ -1046,7 +1094,7 @@ dwzhu__e5_base_4k = ModelMeta(
     release_date="2024-03-28",
     languages=["eng-Latn"],
     loader=sentence_transformers_loader,
-    n_parameters=None,
+    n_parameters=112234752,
     n_embedding_parameters=23_440_896,
     memory_usage_mb=None,
     max_tokens=4096.0,
@@ -1259,7 +1307,7 @@ izhx__udever_bloom_1b1 = ModelMeta(
     release_date="2023-10-24",
     languages=udever_languages,
     loader=sentence_transformers_loader,
-    n_parameters=None,
+    n_parameters=1065314304,
     n_embedding_parameters=385_351_680,
     memory_usage_mb=None,
     max_tokens=None,
@@ -1289,7 +1337,7 @@ izhx__udever_bloom_3b = ModelMeta(
     release_date="2023-10-24",
     languages=udever_languages,
     loader=sentence_transformers_loader,
-    n_parameters=None,
+    n_parameters=3002557440,
     n_embedding_parameters=642_252_800,
     memory_usage_mb=None,
     max_tokens=None,
@@ -1319,7 +1367,7 @@ izhx__udever_bloom_560m = ModelMeta(
     release_date="2023-10-24",
     languages=udever_languages,
     loader=sentence_transformers_loader,
-    n_parameters=None,
+    n_parameters=559214592,
     n_embedding_parameters=256_901_120,
     memory_usage_mb=None,
     max_tokens=None,
@@ -1583,7 +1631,7 @@ bigscience__sgpt_bloom_7b1_msmarco = ModelMeta(
     release_date="2022-08-26",
     languages=None,
     loader=sentence_transformers_loader,
-    n_parameters=None,
+    n_parameters=7068205056,
     n_embedding_parameters=1_026_793_472,
     memory_usage_mb=None,
     max_tokens=None,
@@ -1725,7 +1773,7 @@ deepfile__embedder_100p = ModelMeta(
     release_date="2023-07-24",
     languages=None,
     loader=sentence_transformers_loader,
-    n_parameters=None,
+    n_parameters=278043648,
     n_embedding_parameters=192_001_536,
     memory_usage_mb=1061,
     max_tokens=514.0,
@@ -1749,7 +1797,7 @@ infgrad__stella_base_en_v2 = ModelMeta(
     release_date="2023-10-19",
     languages=["eng-Latn"],
     loader=sentence_transformers_loader,
-    n_parameters=None,
+    n_parameters=109482240,
     n_embedding_parameters=23_440_896,
     memory_usage_mb=None,
     max_tokens=512.0,
@@ -1895,7 +1943,7 @@ sbert_chinese_general_v1 = ModelMeta(
     release_date="2022-03-25",
     languages=["zho-Hans"],
     loader=sentence_transformers_loader,
-    n_parameters=None,
+    n_parameters=102267648,
     n_embedding_parameters=16_226_304,
     memory_usage_mb=None,  # Not visible on repo
     max_tokens=512,

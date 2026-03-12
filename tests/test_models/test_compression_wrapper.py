@@ -4,7 +4,7 @@ from datasets import Dataset
 from torch.utils.data import DataLoader
 
 import mteb
-from mteb import TaskMetadata, AbsTask, EncoderProtocol
+from mteb import AbsTask, EncoderProtocol, TaskMetadata
 from mteb.models import CompressionWrapper
 from mteb.types import PromptType
 from tests.task_grid import MOCK_TASK_TEST_GRID_MONOLINGUAL
@@ -32,7 +32,7 @@ task_texts = DataLoader(
 
 
 def test_float8_compression():
-    model = mteb.get_model("baseline/random-encoder-baseline")
+    model = mteb.get_model("mteb/baseline-random-encoder")
     wrapper = CompressionWrapper(model, torch.float8_e5m2)
     embeddings = wrapper.encode(
         task_texts,
@@ -43,11 +43,9 @@ def test_float8_compression():
     assert embeddings.dtype == torch.float16
 
 
-@pytest.mark.parametrize(
-    "level, bits", [(torch.int8, 8), (torch.int, 4)]
-)
+@pytest.mark.parametrize("level, bits", [(torch.int8, 8), (torch.int, 4)])
 def test_int_compression(level: str, bits: int):
-    model = mteb.get_model("baseline/random-encoder-baseline")
+    model = mteb.get_model("mteb/baseline-random-encoder")
     wrapper = CompressionWrapper(model, level)
     embeddings = wrapper.encode(
         task_texts,
@@ -55,13 +53,15 @@ def test_int_compression(level: str, bits: int):
         hf_split="test",
         hf_subset="test",
     )
-    assert torch.max(embeddings) <= 2**bits / 2 and torch.min(embeddings) >= -(2**bits) / 2
+    assert (
+        torch.max(embeddings) <= 2**bits / 2 and torch.min(embeddings) >= -(2**bits) / 2
+    )
     assert wrapper.mins is not None and len(wrapper.mins) == len(embeddings[0])
     assert wrapper.maxs is not None and len(wrapper.maxs) == len(embeddings[0])
 
 
 def test_binary_compression():
-    model = mteb.get_model("baseline/random-encoder-baseline")
+    model = mteb.get_model("mteb/baseline-random-encoder")
     wrapper = CompressionWrapper(model, torch.bool)
     embeddings = wrapper.encode(
         task_texts,
@@ -73,7 +73,7 @@ def test_binary_compression():
 
 
 def test_query_compression():
-    model = mteb.get_model("baseline/random-encoder-baseline")
+    model = mteb.get_model("mteb/baseline-random-encoder")
     wrapper = CompressionWrapper(model, torch.int8)
     embeddings = wrapper.encode(
         task_texts,
@@ -87,7 +87,7 @@ def test_query_compression():
 
 
 def test_query_compression_multimodal():
-    model = mteb.get_model("baseline/random-encoder-baseline")
+    model = mteb.get_model("mteb/baseline-random-encoder")
     wrapper = CompressionWrapper(model, torch.int8)
     metadata = task_metadata.model_copy()
     metadata.category = "t2i"
@@ -103,7 +103,7 @@ def test_query_compression_multimodal():
 
 
 def test_invalid_compression():
-    model = mteb.get_model("baseline/random-encoder-baseline")
+    model = mteb.get_model("mteb/baseline-random-encoder")
     wrapper = CompressionWrapper(model, "full")
     with pytest.raises(ValueError):
         wrapper.encode(
@@ -115,7 +115,7 @@ def test_invalid_compression():
 
 
 def test_quantize_queries():
-    model = mteb.get_model("baseline/random-encoder-baseline")
+    model = mteb.get_model("mteb/baseline-random-encoder")
     wrapper = CompressionWrapper(model, torch.int8)
     query_embeds = wrapper.encode(
         task_texts,
@@ -140,14 +140,14 @@ def test_quantize_queries():
 @pytest.mark.parametrize(
     "model",
     [
-        mteb.get_model("baseline/random-encoder-baseline"),
+        mteb.get_model("mteb/baseline-random-encoder"),
         mteb.get_model(
-            "baseline/random-encoder-baseline",
+            "mteb/baseline-random-encoder",
             array_framework="torch",
             dtype=torch.float32,
         ),
         mteb.get_model(
-            "baseline/random-encoder-baseline",
+            "mteb/baseline-random-encoder",
             array_framework="torch",
             dtype=torch.float16,
         ),

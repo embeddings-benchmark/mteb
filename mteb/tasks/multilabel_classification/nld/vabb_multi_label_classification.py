@@ -41,7 +41,5 @@ class VABBMultiLabelClassification(AbsTaskMultilabelClassification):
   year = {2024},
 }
 """,
-        prompt={
-            "query": "Classificeer de onderwerpen van een wetenschappelijk artikel op basis van de abstract"
-        },
+        prompt="Classificeer de onderwerpen van een wetenschappelijk artikel op basis van de abstract",
     )

@@ -20,7 +20,7 @@ class SwednClustering(AbsTaskClusteringLegacy):
         main_score="v_measure",
         date=("2000-01-01", "2020-12-31"),  # best guess
         domains=["News", "Non-fiction", "Written"],
-        license=None,
+        license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
         task_subtypes=["Thematic clustering"],

@@ -60,7 +60,10 @@ in Natural Language Processing},
 """,
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         _dataset = {}
         for lang in self.hf_subsets:
             _dataset[lang] = {}

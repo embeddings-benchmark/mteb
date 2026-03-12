@@ -12,8 +12,8 @@ class Food101Classification(AbsTaskClassification):
         description="Classifying food.",
         reference="https://huggingface.co/datasets/ethz/food101",
         dataset={
-            "path": "ethz/food101",
-            "revision": "e06acf2a88084f04bce4d4a525165d68e0a36c38",
+            "path": "mteb/food101",
+            "revision": "7cca05bfde8fdad4a9b39ed14a881c800cc1dca2",
         },
         type="ImageClassification",
         category="i2c",

@@ -12,8 +12,8 @@ class OxfordFlowersClassification(AbsTaskClassification):
         description="Classifying flowers",
         reference="https://huggingface.co/datasets/nelorth/oxford-flowers/viewer/default/train",
         dataset={
-            "path": "nelorth/oxford-flowers",
-            "revision": "a37b1891609c0376fa81eced756e7863e1bd873b",
+            "path": "mteb/oxford-flowers",
+            "revision": "df976877feae05654b0fcd8b394baff731b00652",
         },
         type="ImageClassification",
         category="i2c",

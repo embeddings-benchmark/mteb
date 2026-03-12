@@ -268,7 +268,11 @@ class AbsTaskBitextMining(AbsTask):
             sentence2_statistics=text2_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+    def _push_dataset_to_hub(
+        self,
+        repo_name: str,
+        num_proc: int | None = None,
+    ) -> None:
         if self.dataset is None:
             raise ValueError("Dataset is not loaded.")
 

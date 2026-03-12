@@ -2,101 +2,12 @@
 
 import pytest
 
-from mteb.abstasks import AbsTask
+from mteb.abstasks import AbsTask, AbsTaskRetrieval
 from mteb.get_tasks import get_tasks
 
 # Historic datasets without filled metadata. Do NOT add new datasets to this list.
-_HISTORIC_DATASETS = [
-    "PolEmo2.0-OUT",
-    "PolEmo2.0-OUT.v2",
-    "PAC",
-    "PAC.v2",
-    "TNews",
-    "TNews.v2",
-    "IFlyTek",
-    "IFlyTek.v2",
-    "MultilingualSentiment",
-    "MultilingualSentiment.v2",
-    "JDReview",
-    "JDReview.v2",
-    "OnlineShopping",
-    "Waimai",
-    "Waimai.v2",
-    "BlurbsClusteringP2P",
-    "BlurbsClusteringS2S",
-    "AlloProfClusteringP2P",
-    "AlloProfClusteringS2S",
-    "MasakhaNEWSClusteringS2S",
-    "SpanishNewsClusteringP2P",
-    "SwednClustering",
-    "CLSClusteringS2S",
-    "CLSClusteringP2P",
-    "ThuNewsClusteringS2S",
-    "ThuNewsClusteringP2P",
-    "GerDaLIR",
-    "GerDaLIRSmall",
-    "LegalQuAD",
-    "AILACasedocs",
-    "AILAStatutes",
-    "CQADupstackRetrieval",
-    "LegalBenchConsumerContractsQA",
-    "LegalBenchCorporateLobbying",
-    "LegalSummarization",
-    "NarrativeQARetrieval",
-    "SCIDOCS",
-    "SciFact",
-    "TRECCOVID",
-    "JaQuADRetrieval",
-    "Ko-miracl",
-    "Ko-StrategyQA",
-    "MintakaRetrieval",
-    "XMarket",
-    "ArguAna-PL",
-    "NFCorpus-PL",
-    "NQ-PL",
-    "Quora-PL",
-    "SCIDOCS-PL",
-    "SciFact-PL",
-    "SpanishPassageRetrievalS2P",
-    "SpanishPassageRetrievalS2S",
-    "T2Retrieval",
-    "MMarcoRetrieval",
-    "DuRetrieval",
-    "CovidRetrieval",
-    "CmedqaRetrieval",
-    "EcomRetrieval",
-    "MedicalRetrieval",
-    "VideoRetrieval",
-    "LeCaRDv2",
-    "PawsX",
-    "SICK-E-PL",
-    "Ocnli",
-    "Cmnli",
-    "AskUbuntuDupQuestions",
-    "SciDocsRR",
-    "AlloprofReranking",
-    "SyntecReranking",
-    "T2Reranking",
-    "MMarcoReranking",
-    "CMedQAv2-reranking",
-    "GermanSTSBenchmark",
-    "SICK-R",
-    "HUMESICK-R",
-    "SICKFr",
-    "KorSTS",
-    "STSES",
-    "ATEC",
-    "BQ",
-    "LCQMC",
-    "PAWSX",
-    "STSB",
-    "AFQMC",
-    "QBQTC",
-    "Quora-PLHardNegatives",
-    "SynPerChatbotConvSAClassification",
-    "CQADupstackRetrieval-Fa",
-    "CQADupstackRetrieval-PL",
-]
+# Tasks should be removed from this list once their metadata is filled.
+_HISTORIC_DATASETS = []
 
 
 @pytest.mark.parametrize(
@@ -123,7 +34,28 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
     if task.is_aggregate:  # aggregate tasks do not have descriptive stats
         return
 
+    # TODO https://github.com/embeddings-benchmark/mteb/issues/3498
+    if task.metadata.name in (
+        "FleursA2TRetrieval",
+        "FleursT2ARetrieval",
+        "SoundDescsA2TRetrieval",
+        "SoundDescsT2ARetrieval",
+        "BirdSet",
+        "AudioSet",
+    ):
+        assert task.metadata.descriptive_stats is None
+        pytest.skip("Skipping audio tasks for now, see issue #3498")
+
     assert task.metadata.descriptive_stats is not None, (
         f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YourTask().calculate_descriptive_statistics()`"
     )
     assert task.metadata.n_samples is not None
+
+    if task.metadata.prompt is not None and isinstance(task.metadata.prompt, dict):
+        if not (
+            isinstance(task, AbsTaskRetrieval) or task.metadata.name in ["TERRa.V2"]
+        ):
+            # Retrieval tasks and TERRa.V2 have a dict prompt, but other tasks should not
+            raise ValueError(
+                f"Task {task.metadata.name} has a dict prompt, but it should be a string. Please check the metadata of the task."
+            )

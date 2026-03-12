@@ -20,8 +20,8 @@ class NusaXBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="NusaXBitextMining",
         dataset={
-            "path": "gentaiscool/bitext_nusax_miners",
-            "revision": "fba4f2cfe2592641056f7a274c9aa8453b27a4a8",
+            "path": "mteb/NusaXBitextMining",
+            "revision": "6db681bd37d6827f8d132590429ce33a2af4c96e",
         },
         description="NusaX is a parallel dataset for machine translation and sentiment analysis on 11 Indonesia languages and English.",
         reference="https://huggingface.co/datasets/indonlp/NusaX-senti/",

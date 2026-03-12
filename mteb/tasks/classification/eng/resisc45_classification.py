@@ -12,8 +12,8 @@ class RESISC45Classification(AbsTaskClassification):
         description="Remote Sensing Image Scene Classification by Northwestern Polytechnical University (NWPU).",
         reference="https://ieeexplore.ieee.org/abstract/document/7891544",
         dataset={
-            "path": "timm/resisc45",
-            "revision": "fe12fc5f1b7606543b0355eda392f1ddc54625c6",
+            "path": "mteb/resisc45",
+            "revision": "a5b7c0d47eb6544fb2ef0d380b9c105f3c6dc259",
         },
         type="ImageClassification",
         category="i2c",

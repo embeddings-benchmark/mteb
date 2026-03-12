@@ -13,8 +13,8 @@ class AROVisualRelation(AbsTaskImageTextPairClassification):
         description="Compositionality Evaluation of images to their captions.",
         reference="https://openreview.net/forum?id=KRLUvxh8uaX",
         dataset={
-            "path": "gowitheflow/ARO-Visual-Relation",
-            "revision": "3867ad4f46a1ac2e63be034d1fc77dd8c2ef7209",
+            "path": "mteb/ARO-Visual-Relation",
+            "revision": "53c1115ab5871ab33b09d5bb8856236d46bdaf2d",
         },
         type="Compositionality",
         category="i2t",

@@ -8,8 +8,8 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
         description="User reviews of movies on the CSFD movie database, with 2 sentiment classes (positive, negative)",
         reference="https://arxiv.org/pdf/2304.01922",
         dataset={
-            "path": "janko/sk_csfd-movie-reviews",
-            "revision": "0c47583c9d339b3b6f89e4db76088af5f1ec8d39",
+            "path": "mteb/SlovakMovieReviewSentimentClassification",
+            "revision": "7d408f245f0d3df0eaaca08f89ab6a1936ada6f5",
         },
         type="Classification",
         category="t2c",
@@ -25,22 +25,17 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@article{vstefanik2023resources,
-  author = {{\v{S}}tef{\'a}nik, Michal and Kadl{\v{c}}{\'\i}k, Marek and Gramacki, Piotr and Sojka, Petr},
-  journal = {arXiv preprint arXiv:2304.01922},
+@misc{štefánik2023resources,
+  archiveprefix = {arXiv},
+  author = {Michal Štefánik and Marek Kadlčík and Piotr Gramacki and Petr Sojka},
+  eprint = {2304.01922},
+  primaryclass = {cs.CL},
   title = {Resources and Few-shot Learners for In-context Learning in Slavic Languages},
   year = {2023},
 }
 """,
         superseded_by="SlovakMovieReviewSentimentClassification.v2",
     )
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
-        self.dataset = self.dataset.rename_columns({"comment": "text"})
-
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
-        )
 
 
 class SlovakMovieReviewSentimentClassificationV2(AbsTaskClassification):
@@ -66,9 +61,11 @@ class SlovakMovieReviewSentimentClassificationV2(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@article{vstefanik2023resources,
-  author = {{\v{S}}tef{\'a}nik, Michal and Kadl{\v{c}}{\'\i}k, Marek and Gramacki, Piotr and Sojka, Petr},
-  journal = {arXiv preprint arXiv:2304.01922},
+@misc{štefánik2023resources,
+  archiveprefix = {arXiv},
+  author = {Michal Štefánik and Marek Kadlčík and Piotr Gramacki and Petr Sojka},
+  eprint = {2304.01922},
+  primaryclass = {cs.CL},
   title = {Resources and Few-shot Learners for In-context Learning in Slavic Languages},
   year = {2023},
 }

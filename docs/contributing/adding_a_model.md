@@ -1,9 +1,15 @@
+---
+title: "Adding a Model"
+icon: lucide/bot
+---
+
+
 ## Adding a model to the Leaderboard
 
 The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/leaderboard). To submit to it:
 
 1. Add the [model meta](#adding-a-model-implementation) to `mteb`
-2. [Evaluate](../usage/get_started.md#evaluating-a-model) the desired model using `mteb` on the [benchmarks](../usage/selecting_tasks.md#selecting-a-benchmark)
+2. [Evaluate](../get_started/usage/get_started.md#evaluating-a-model) the desired model using `mteb` on the [benchmarks](../get_started/usage/selecting_tasks.md#selecting-a-benchmark)
 3. Push the results to the [results repository](https://github.com/embeddings-benchmark/results) via a PR. Once merged they will appear on the leaderboard after a day.
 
 
@@ -82,7 +88,7 @@ model_meta.calculate_memory_usage_mb()
 
 ### Adding instruction models
 
-Some models, such as the [E5 models][@wang2024multilingual], use instructions or prefixes.
+Some models, such as the [E5 models](https://huggingface.co/papers/2402.05672), use instructions or prefixes.
 You can directly add the prompts when saving and uploading your model to the Hub. Refer to this [configuration file as an example](https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5/blob/3b5a16eaf17e47bd997da998988dce5877a57092/config_sentence_transformers.json).
 
 However, you can also add these directly to the model configuration:

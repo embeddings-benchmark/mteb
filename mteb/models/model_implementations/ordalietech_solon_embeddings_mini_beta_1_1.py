@@ -3,8 +3,8 @@ from mteb.models import ModelMeta, sentence_transformers_loader
 solon_embeddings_1_1 = ModelMeta(
     name="OrdalieTech/Solon-embeddings-mini-beta-1.1",
     languages=["fra-Latn"],
-    n_parameters=210_000_000,
-    n_embedding_parameters=None,
+    n_parameters=211766016,
+    n_embedding_parameters=98500608,
     public_training_code=None,
     memory_usage_mb=808.0,
     open_weights=True,

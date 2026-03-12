@@ -28,7 +28,7 @@ class RARbCode(AbsTaskRetrieval):
 @article{husain2019codesearchnet,
   author = {Husain, Hamel and Wu, Ho-Hsiang and Gazit, Tiferet and Allamanis, Miltiadis and Brockschmidt, Marc},
   journal = {arXiv preprint arXiv:1909.09436},
-  title = {Codesearchnet challenge: Evaluating the state of semantic code search},
+  title = {{CodeSearchNet} challenge: Evaluating the state of semantic code search},
   year = {2019},
 }
 

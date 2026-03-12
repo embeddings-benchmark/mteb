@@ -4,7 +4,6 @@ repo_url: https://github.com/embeddings-benchmark/mteb
 watch: [mteb/, docs/]
 edit_uri: "blob/main/docs/"
 theme:
-  name: material
   favicon: images/logos/mteb_logo/dots-icon.png
   logo: images/logos/mteb_logo/dots-icon.png
   features:
@@ -24,6 +23,7 @@ theme:
     - content.tooltips
     - navigation.footer
     - navigation.indexes
+    - navigation.path
     - toc.follow
   palette:
     # System preference (auto)
@@ -64,40 +64,73 @@ markdown_extensions:
   - attr_list
   - md_in_html
   - tables
-
-copyright: This text is freely available under a Creative Commons Attribution 4.0 license
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 nav:
   - Get Started:
       - index.md
-      - Installation: installation.md
+      - installation.md
       - whats_new.md
       - Usage:
-        - Get Started: usage/get_started.md
-        - Defining the Model: usage/defining_the_model.md
-        - Selecting Tasks: usage/selecting_tasks.md
-        - Running the Evaluation: usage/running_the_evaluation.md
-        - Loading Results: usage/loading_results.md
-        - Command Line Interface: usage/cli.md
-        - Running the Leaderboard: usage/leaderboard.md
+        - Get Started: get_started/usage/get_started.md
+        - Define the Model: get_started/usage/defining_the_model.md
+        - Select Benchmarks: get_started/usage/selecting_tasks.md
+        - Run the Evaluation: get_started/usage/running_the_evaluation.md
+        - Load Results: get_started/usage/loading_results.md
+        - Command Line: get_started/usage/cli.md
+        - Run the Leaderboard: get_started/usage/leaderboard.md
       - Advanced Usage:
-        - Two stage reranking: advanced_usage/two_stage_reranking.md
-        - Cache embeddings: advanced_usage/cache_embeddings.md
-        - Retrieval backend: advanced_usage/retrieval_backend.md
-        - vLLM Wrapper: advanced_usage/vllm_wrapper.md
+        - Two stage reranking: get_started/advanced_usage/two_stage_reranking.md
+        - Cache embeddings: get_started/advanced_usage/cache_embeddings.md
+        - Retrieval backend: get_started/advanced_usage/retrieval_backend.md
+        - vLLM Wrapper: get_started/advanced_usage/vllm_wrapper.md
   - Contributing:
       - Adding a Model: contributing/adding_a_model.md
       - Adding a Task: contributing/adding_a_dataset.md
       - Adding a Benchmark: contributing/adding_a_benchmark.md
-      - Guidelines: CONTRIBUTING.md
+      - CONTRIBUTING.md
   - Overview:
       - overview/index.md
       - Benchmarks:
         - Available Benchmarks: overview/available_benchmarks.md
-      - Tasks:
-        - Available Tasks: overview/available_tasks
       - Models:
-        - Available Models: overview/available_models
+        - Text: overview/available_models/text.md
+        - Image: overview/available_models/image.md
+        - Image Text: overview/available_models/image_text.md
+        - Audio: overview/available_models/audio.md
+        - Audio Text: overview/available_models/audio_text.md
+        - Multimodal: overview/available_models/multimodal.md
+      - Tasks:
+        - overview/available_tasks/retrieval.md
+        - overview/available_tasks/audiopairclassification.md
+        - overview/available_tasks/summarization.md
+        - overview/available_tasks/documentunderstanding.md
+        - overview/available_tasks/compositionality.md
+        - overview/available_tasks/multilabelclassification.md
+        - overview/available_tasks/reranking.md
+        - overview/available_tasks/any2anymultilingualretrieval.md
+        - overview/available_tasks/pairclassification.md
+        - overview/available_tasks/bitextmining.md
+        - overview/available_tasks/audiomultilabelclassification.md
+        - overview/available_tasks/visualsts(eng).md
+        - overview/available_tasks/clustering.md
+        - overview/available_tasks/any2anyretrieval.md
+        - overview/available_tasks/regression.md
+        - overview/available_tasks/classification.md
+        - overview/available_tasks/audiozeroshotclassification.md
+        - overview/available_tasks/visualsts(multi).md
+        - overview/available_tasks/visioncentricqa.md
+        - overview/available_tasks/sts.md
+        - overview/available_tasks/audioclassification.md
+        - overview/available_tasks/zeroshotclassification.md
+        - overview/available_tasks/imageclustering.md
+        - overview/available_tasks/audioclustering.md
+        - overview/available_tasks/instructionretrieval.md
+        - overview/available_tasks/audioreranking.md
+        - overview/available_tasks/instructionreranking.md
+        - overview/available_tasks/imageclassification.md
   - API:
       - Overview: api/index.md
       - Evaluation: api/evaluation.md
@@ -108,14 +141,10 @@ nav:
       - Additional Types: api/types.md
   - Leaderboard: https://huggingface.co/spaces/mteb/leaderboard
 
+copyright: This site made available under a Creative Commons Attribution 4.0 license
+
 plugins:
-  - include_dir_to_nav
   - search
-  - exclude:
-      glob:
-        # projects
-        - mieb/*
-        - mmteb/*
   - mkdocstrings:
       handlers:
         python:
@@ -128,9 +157,10 @@ plugins:
             show_source: true
             show_root_heading: true
 
-  - bibtex:
-      bib_file: "docs/references.bib"
-      enable_inline_citations: false
+extra_javascript:
+  - javascripts/extra.js
+extra_css:
+  - stylesheets/extra.css
 
 extra:
   social:

@@ -8,8 +8,8 @@ class MSCOCOI2TRetrieval(AbsTaskRetrieval):
         description="Retrieve captions based on images.",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-10602-1_48",
         dataset={
-            "path": "MRBench/mbeir_mscoco_task3",
-            "revision": "cca3a3e223763e6519a4d68936bc9279034d75d2",
+            "path": "mteb/mbeir_mscoco_task3",
+            "revision": "ec63d7122301171948387e757351fabd193fc39f",
         },
         type="Any2AnyRetrieval",
         category="i2t",

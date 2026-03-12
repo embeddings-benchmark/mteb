@@ -13,8 +13,8 @@ class GTSRBClassification(AbsTaskClassification):
         description="The German Traffic Sign Recognition Benchmark (GTSRB) is a multi-class classification dataset for traffic signs. It consists of dataset of more than 50,000 traffic sign images. The dataset comprises 43 classes with unbalanced class frequencies.",
         reference="https://benchmark.ini.rub.de/",
         dataset={
-            "path": "clip-benchmark/wds_gtsrb",
-            "revision": "1c13eff0803d2b02c9dc8dfe85e67770b3f0f3c5",
+            "path": "mteb/wds_gtsrb",
+            "revision": "a8f4bb6c8b6f76f4bdc548a7f2979057e546ab44",
         },
         type="ImageClassification",
         category="i2c",

@@ -1,11 +1,14 @@
 import logging
+import re
 from typing import get_args
+from urllib.parse import urlparse
 
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
+import mteb
 from mteb.abstasks.task_metadata import TaskType
 
 logger = logging.getLogger(__name__)
@@ -66,15 +69,57 @@ def _process_max_tokens(x):
     return str(int(x))
 
 
+def _parse_markdown_model_cell(model_cell: str) -> tuple[str, str | None]:
+    if model_cell is None or pd.isna(model_cell):
+        return "", None
+    model_cell = str(model_cell).strip()
+    match = re.fullmatch(r"\[([^\]]+)\]\(([^)]+)\)", model_cell)
+    if match is None:
+        return model_cell, None
+    return match.group(1), match.group(2)
+
+
+def _extract_hf_model_name(model_url: str | None) -> str | None:
+    if model_url is None or "huggingface" not in model_url:
+        return None
+    parsed = urlparse(model_url)
+    path_parts = [part for part in parsed.path.split("/") if part]
+    if len(path_parts) < 2:
+        return None
+    return f"{path_parts[0]}/{path_parts[1]}"
+
+
+def _extract_model_name_and_release_date(model_cell: str) -> tuple[str, str | None]:
+    display_name, model_url = _parse_markdown_model_cell(model_cell)
+    model_name = _extract_hf_model_name(model_url)
+    model_metas = {meta.name: meta for meta in mteb.get_model_metas()}
+
+    model_meta = model_metas.get(model_name) if model_name else None
+    release_date = model_meta.release_date if model_meta is not None else None
+    return display_name, release_date
+
+
 models_to_annotate = [
     "all-MiniLM-L6-v2",
+    "clap-htsat-fused",
+    "e5-v",
+    "EVA02-CLIP-bigE-14-plus",
     "GritLM-7B",
     "LaBSE",
+    "larger_clap_general",
+    "LCO-Embedding-Omni-3B",
+    "LCO-Embedding-Omni-7B",
+    "MuQ-MuLan-large",
     "multilingual-e5-large-instruct",
-    "EVA02-CLIP-bigE-14-plus",
-    "voyage-multimodal-3",
-    "e5-v",
+    "Qwen2-Audio-7B",
     "VLM2Vec-Full",
+    "voyage-multimodal-3",
+    "wav2clip",
+    "wav2vec2-xls-r-1b",
+    "wavlm-base-plus-svmsclap-2023",
+    "whisper-large-v3",
+    "whisper-medium",
+    "yamnet",
 ]
 
 
@@ -186,11 +231,83 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     return fig
 
 
+@_failsafe_plot
+def _performance_over_time_plot(df: pd.DataFrame) -> go.Figure:
+    df = df.copy()
+    score_column = "Mean (Task)"
+    if score_column not in df.columns or "Model" not in df.columns:
+        return _text_plot(
+            "Couldn't produce timeline plot. Required columns are missing."
+        )
+
+    model_release_info = df["Model"].map(_extract_model_name_and_release_date)
+    df["Model"] = model_release_info.map(lambda x: x[0])
+    df["Release Date"] = model_release_info.map(lambda x: x[1])
+    df["Release Date"] = pd.to_datetime(df["Release Date"], errors="coerce")
+    df[score_column] = df[score_column].map(_parse_float)
+
+    df = df.dropna(subset=["Release Date", score_column]).sort_values(
+        ["Release Date", score_column], ascending=[True, False]
+    )
+    if not len(df.index):
+        return _text_plot(
+            "Couldn't produce timeline plot. No models have a valid release date and score."
+        )
+
+    df["score"] = df[score_column].cummax()
+    fig = px.scatter(
+        df,
+        x="Release Date",
+        y=score_column,
+        template="plotly_white",
+        hover_name="Model",
+        hover_data={
+            "Release Date": "|%Y-%m-%d",
+            score_column: True,
+            "score": False,
+        },
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=df["Release Date"],
+            y=df["score"],
+            mode="lines",
+            line=dict(color="#1f7a1f", width=2, shape="hv"),
+            hovertemplate="Date: %{x|%Y-%m-%d}<br>%{y:.2f}<extra></extra>",
+        )
+    )
+
+    fig.update_traces(marker=dict(size=9), selector=dict(mode="markers"))
+    fig.update_layout(
+        xaxis_title="Release Date",
+        yaxis_title=f"{score_column} score",
+        showlegend=False,
+        font=dict(size=16, color="black"),
+        margin=dict(b=20, t=10, l=20, r=10),
+        hoverlabel=dict(
+            bgcolor="white",
+            font_size=16,
+        ),
+    )
+    return fig
+
+
 TOP_N = 5
 task_types = sorted(get_args(TaskType))
 task_types.remove("InstructionRetrieval")
 # Not displayed, because the scores are negative,
 # doesn't work well with the radar chart.
+
+# Create a mapping for task types that lose digits when processed by _split_on_capital
+# e.g., "Any2AnyRetrieval" -> "Any Any Retrieval" -> "AnyAnyRetrieval" (loses the "2")
+_task_type_normalized = {t: "".join(t.split()) for t in task_types}
+# Add reverse mappings for task types with digits that get lost
+# "AnyAnyRetrieval" should also match to "Any2AnyRetrieval"
+_task_type_aliases = {
+    "AnyAnyRetrieval": "Any2AnyRetrieval",
+    "AnyAnyMultilingualRetrieval": "Any2AnyMultilingualRetrieval",
+}
 
 line_colors = [
     "#EE4266",
@@ -208,13 +325,28 @@ fill_colors = [
 ]
 
 
+def _is_task_type_column(column: str) -> bool:
+    """Check if a column name corresponds to a task type.
+
+    Handles cases where task types with digits (e.g., Any2AnyRetrieval) become
+    column names without digits (e.g., "Any Any Retrieval") after _split_on_capital.
+    """
+    normalized = "".join(column.split())
+    if normalized in task_types:
+        return True
+    # Check aliases for task types that lose digits
+    if normalized in _task_type_aliases:
+        return True
+    return False
+
+
 @_failsafe_plot
 def _radar_chart(df: pd.DataFrame) -> go.Figure:
     df = df.copy()
     df["Model"] = df["Model"].map(_parse_model_name)
-    # Remove whitespace
+    # Remove whitespace and match to task types
     task_type_columns = [
-        column for column in df.columns if "".join(column.split()) in task_types
+        column for column in df.columns if _is_task_type_column(column)
     ]
     if len(task_type_columns) <= 1:
         raise ValueError(

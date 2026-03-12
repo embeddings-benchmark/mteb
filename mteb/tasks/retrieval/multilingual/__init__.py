@@ -1,4 +1,11 @@
+from .audio_caps import AudioCapsA2TRetrieval, AudioCapsT2ARetrieval
 from .belebele_retrieval import BelebeleRetrieval
+from .common_voice import (
+    CommonVoiceMini17A2TRetrieval,
+    CommonVoiceMini17T2ARetrieval,
+    CommonVoiceMini21A2TRetrieval,
+    CommonVoiceMini21T2ARetrieval,
+)
 from .cross_lingual_semantic_discrimination_wmt19 import (
     CrossLingualSemanticDiscriminationWMT19,
 )
@@ -7,7 +14,14 @@ from .cross_lingual_semantic_discrimination_wmt21 import (
 )
 from .cur_ev1_retrieval import CUREv1Retrieval
 from .euro_pirq_retrieval import EuroPIRQRetrieval
+from .fleurs import FleursA2TRetrieval, FleursT2ARetrieval
+from .google_svq import GoogleSVQA2TRetrieval, GoogleSVQT2ARetrieval
 from .indic_qa_retrieval import IndicQARetrieval
+from .jam_alt import (
+    JamAltArtistA2ARetrieval,
+    JamAltLyricA2TRetrieval,
+    JamAltLyricT2ARetrieval,
+)
 from .jina_vdr_bench_retrieval import (
     JinaVDRAirbnbSyntheticRetrieval,
     JinaVDRArabicChartQARetrieval,
@@ -84,15 +98,25 @@ from .vidore2_bench_retrieval import (
 )
 from .vidore3_bench_retrieval import (
     Vidore3ComputerScienceRetrieval,
+    Vidore3ComputerScienceRetrievalv2,
     Vidore3EnergyRetrieval,
+    Vidore3EnergyRetrievalv2,
     Vidore3FinanceEnRetrieval,
+    Vidore3FinanceEnRetrievalv2,
     Vidore3FinanceFrRetrieval,
+    Vidore3FinanceFrRetrievalv2,
     Vidore3HrRetrieval,
+    Vidore3HrRetrievalv2,
     Vidore3IndustrialRetrieval,
+    Vidore3IndustrialRetrievalv2,
     Vidore3NuclearRetrieval,
+    Vidore3NuclearRetrievalv2,
     Vidore3PharmaceuticalsRetrieval,
+    Vidore3PharmaceuticalsRetrievalv2,
     Vidore3PhysicsRetrieval,
+    Vidore3PhysicsRetrievalv2,
     Vidore3TelecomRetrieval,
+    Vidore3TelecomRetrievalv2,
 )
 from .web_faq_retrieval import WebFAQRetrieval
 from .wikipedia_retrieval_multilingual import WikipediaRetrievalMultilingual
@@ -104,12 +128,25 @@ from .xm3600_t2i_retrieval import XM3600T2IRetrieval
 from .xpqa_retrieval import XPQARetrieval
 
 __all__ = [
+    "AudioCapsA2TRetrieval",
+    "AudioCapsT2ARetrieval",
     "BelebeleRetrieval",
     "CUREv1Retrieval",
+    "CommonVoiceMini17A2TRetrieval",
+    "CommonVoiceMini17T2ARetrieval",
+    "CommonVoiceMini21A2TRetrieval",
+    "CommonVoiceMini21T2ARetrieval",
     "CrossLingualSemanticDiscriminationWMT19",
     "CrossLingualSemanticDiscriminationWMT21",
     "EuroPIRQRetrieval",
+    "FleursA2TRetrieval",
+    "FleursT2ARetrieval",
+    "GoogleSVQA2TRetrieval",
+    "GoogleSVQT2ARetrieval",
     "IndicQARetrieval",
+    "JamAltArtistA2ARetrieval",
+    "JamAltLyricA2TRetrieval",
+    "JamAltLyricT2ARetrieval",
     "JinaVDRAirbnbSyntheticRetrieval",
     "JinaVDRArabicChartQARetrieval",
     "JinaVDRArabicInfographicsVQARetrieval",
@@ -176,15 +213,25 @@ __all__ = [
     "Vidore2ESGReportsRetrieval",
     "Vidore2EconomicsReportsRetrieval",
     "Vidore3ComputerScienceRetrieval",
+    "Vidore3ComputerScienceRetrievalv2",
     "Vidore3EnergyRetrieval",
+    "Vidore3EnergyRetrievalv2",
     "Vidore3FinanceEnRetrieval",
+    "Vidore3FinanceEnRetrievalv2",
     "Vidore3FinanceFrRetrieval",
+    "Vidore3FinanceFrRetrievalv2",
     "Vidore3HrRetrieval",
+    "Vidore3HrRetrievalv2",
     "Vidore3IndustrialRetrieval",
+    "Vidore3IndustrialRetrievalv2",
     "Vidore3NuclearRetrieval",
+    "Vidore3NuclearRetrievalv2",
     "Vidore3PharmaceuticalsRetrieval",
+    "Vidore3PharmaceuticalsRetrievalv2",
     "Vidore3PhysicsRetrieval",
+    "Vidore3PhysicsRetrievalv2",
     "Vidore3TelecomRetrieval",
+    "Vidore3TelecomRetrievalv2",
     "WITT2IRetrieval",
     "WebFAQRetrieval",
     "WikipediaRetrievalMultilingual",

@@ -3,6 +3,8 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RuSciBenchGRNTIClassification(AbsTaskClassification):
+    superseded_by = "RuSciBenchGRNTIClassification.v2"
+
     metadata = TaskMetadata(
         name="RuSciBenchGRNTIClassification",
         dataset={
@@ -29,7 +31,10 @@ class RuSciBenchGRNTIClassification(AbsTaskClassification):
         superseded_by="RuSciBenchGRNTIClassification.v2",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, n_samples=2048, splits=["test"]
         )

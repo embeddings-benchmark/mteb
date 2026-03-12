@@ -6,8 +6,8 @@ class STS16VisualSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="STS16VisualSTS",
         dataset={
-            "path": "Pixel-Linguist/rendered-sts16",
-            "revision": "fc354f19598af93f32c0af1b94046ffdeaacde15",
+            "path": "mteb/rendered-sts16",
+            "revision": "655e604448c6d82015e7a6688a1f371a338e6781",
         },
         description="SemEval STS 2016 dataset" + "rendered into images.",
         reference="https://arxiv.org/abs/2402.08183/",

@@ -53,6 +53,7 @@ jobs:
         uses: python-semantic-release/python-semantic-release@v9.8.9
         with:
           github_token: ${{ secrets.RELEASE }}
+          changelog: "false"
 
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
