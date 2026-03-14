@@ -272,8 +272,8 @@ class PlscClusteringP2PFast(AbsTaskClustering):
         + "(https://bibliotekanauki.pl/), either on the scientific field or discipline.",
         reference="https://huggingface.co/datasets/rafalposwiata/plsc",
         dataset={
-            "path": "PL-MTEB/plsc-clustering-p2p",
-            "revision": "8436dd4c05222778013d6642ee2f3fa1722bca9b",
+            "path": "mteb/PlscClusteringP2P.v2",
+            "revision": "82128bcad8e4713bcaf0449ed7e02109aa00ca0c",
         },
         type="Clustering",
         category="t2c",
@@ -291,32 +291,3 @@ class PlscClusteringP2PFast(AbsTaskClustering):
         bibtex_citation="",
         adapted_from=["PlscClusteringP2P"],
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        ds = {}
-        for split in self.metadata.eval_splits:
-            labels = self.dataset[split]["labels"]
-            sentences = self.dataset[split]["sentences"]
-
-            _check_label_distribution(self.dataset[split])
-
-            # Remove sentences and labels with only 1 label example.
-            unique_labels, counts = np.unique(labels, return_counts=True)
-            solo_label_idx = np.where(counts == 1)
-            solo_labels = unique_labels[solo_label_idx]
-            is_solo = np.isin(labels, solo_labels)
-            split_ds = Dataset.from_dict({"labels": labels, "sentences": sentences})
-            if is_solo.any():
-                split_ds = split_ds.select(np.nonzero(is_solo == False)[0])  # noqa: E712
-            ds[split] = split_ds
-        self.dataset = DatasetDict(ds)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=N_SAMPLES,
-        )

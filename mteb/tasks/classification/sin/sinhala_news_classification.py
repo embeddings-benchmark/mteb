@@ -7,8 +7,8 @@ class SinhalaNewsClassification(AbsTaskClassification):
         name="SinhalaNewsClassification",
         description="This file contains news texts (sentences) belonging to 5 different news categories (political, business, technology, sports and Entertainment). The original dataset was released by Nisansa de Silva (Sinhala Text Classification: Observations from the Perspective of a Resource Poor Language, 2015).",
         dataset={
-            "path": "NLPC-UOM/Sinhala-News-Category-classification",
-            "revision": "7fb2f514ea683c5282dfec0a9672ece8de90ac50",
+            "path": "mteb/SinhalaNewsClassification",
+            "revision": "a86de19f6b79cf464f2bb5ca71d89cdbf41eeb9f",
         },
         reference="https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Category-classification",
         type="Classification",
@@ -41,17 +41,6 @@ class SinhalaNewsClassification(AbsTaskClassification):
 """,
         superseded_by="SinhalaNewsClassification.v2",
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_columns(
-            {"comments": "text", "labels": "label"}
-        )
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )
 
 
 class SinhalaNewsClassificationV2(AbsTaskClassification):

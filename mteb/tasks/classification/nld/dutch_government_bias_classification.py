@@ -34,7 +34,5 @@ class DutchGovernmentBiasClassification(AbsTaskClassification):
   year = {2025},
 }
 """,
-        prompt={
-            "query": "Classificeer het gegeven overheidsdocument als bevooroordeeld of niet bevooroordeeld"
-        },
+        prompt="Classificeer het gegeven overheidsdocument als bevooroordeeld of niet bevooroordeeld",
     )

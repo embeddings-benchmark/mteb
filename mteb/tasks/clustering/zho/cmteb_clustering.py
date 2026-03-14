@@ -83,8 +83,8 @@ class CLSClusteringFastP2P(AbsTaskClustering):
         description="Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the main category.",
         reference="https://arxiv.org/abs/2209.05034",
         dataset={
-            "path": "C-MTEB/CLSClusteringP2P",
-            "revision": "4b6227591c6c1a73bc76b1055f3b7f3588e72476",
+            "path": "mteb/CLSClusteringP2P.v2",
+            "revision": "4b012f4818da8625de8e2e90526db1570e7ed2c7",
         },
         type="Clustering",
         category="t2c",
@@ -112,28 +112,6 @@ class CLSClusteringFastP2P(AbsTaskClustering):
         prompt="Identify the main category of scholar papers based on the titles and abstracts",
         adapted_from=["CLSClusteringP2P"],
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        ds = {}
-        for split in self.metadata.eval_splits:
-            labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
-            sentences = list(
-                itertools.chain.from_iterable(self.dataset[split]["sentences"])
-            )
-
-            _check_label_distribution(self.dataset[split])
-
-            ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
-        self.dataset = DatasetDict(ds)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-        )
 
 
 class CLSClusteringS2S(AbsTaskClusteringLegacy):

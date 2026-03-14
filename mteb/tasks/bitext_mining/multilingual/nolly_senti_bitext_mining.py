@@ -13,8 +13,8 @@ class NollySentiBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="NollySentiBitextMining",
         dataset={
-            "path": "gentaiscool/bitext_nollysenti_miners",
-            "revision": "d48254fbdb51af1ae7f20831aab0bccf0b70a19c",
+            "path": "mteb/NollySentiBitextMining",
+            "revision": "77d807ea44797c4663a3e0aca353d630c62d85cf",
         },
         description="NollySenti is Nollywood movie reviews for five languages widely spoken in Nigeria (English, Hausa, Igbo, Nigerian-Pidgin, and Yoruba.",
         reference="https://github.com/IyanuSh/NollySenti",

@@ -8,8 +8,8 @@ class ArmenianParaphrasePC(AbsTaskPairClassification):
         description="asparius/Armenian-Paraphrase-PC",
         reference="https://github.com/ivannikov-lab/arpa-paraphrase-corpus",
         dataset={
-            "path": "asparius/Armenian-Paraphrase-PC",
-            "revision": "f43b4f32987048043a8b31e5e26be4d360c2438f",
+            "path": "mteb/ArmenianParaphrasePC",
+            "revision": "594f25dfef459cbfa30fc1765a6fb2053244f85b",
         },
         type="PairClassification",
         category="t2t",
@@ -35,10 +35,3 @@ class ArmenianParaphrasePC(AbsTaskPairClassification):
 }
 """,
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_column("sent1", "sentence1")
-        self.dataset = self.dataset.rename_column("sent2", "sentence2")

@@ -8,8 +8,8 @@ class MacedonianTweetSentimentClassification(AbsTaskClassification):
         description="An Macedonian dataset for tweet sentiment classification.",
         reference="https://aclanthology.org/R15-1034/",
         dataset={
-            "path": "isaacchung/macedonian-tweet-sentiment-classification",
-            "revision": "957e075ba35e4417ba7837987fd7053a6533a1a2",
+            "path": "mteb/MacedonianTweetSentimentClassification",
+            "revision": "6ec78a685dad2e2b37af77264676e9dddfa7dc8e",
         },
         type="Classification",
         category="t2c",

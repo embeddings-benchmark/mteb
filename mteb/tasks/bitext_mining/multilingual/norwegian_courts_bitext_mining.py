@@ -6,8 +6,8 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="NorwegianCourtsBitextMining",
         dataset={
-            "path": "kardosdrur/norwegian-courts",
-            "revision": "d79af07e969a6678fcbbe819956840425816468f",
+            "path": "mteb/NorwegianCourtsBitextMining",
+            "revision": "ddf68e49e8d393964288ad5b498f1d61cca7b23f",
         },
         description="Nynorsk and Bokmål parallel corpus from Norwegian courts. Norwegian courts have two standardised written languages. Bokmål is a variant closer to Danish, while Nynorsk was created to resemble regional dialects of Norwegian.",
         reference="https://opus.nlpl.eu/index.php",
@@ -34,11 +34,3 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
 """,
         prompt="Retrieve parallel sentences in Norwegian Bokmål and Nynorsk",
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        # Convert to standard format
-        self.dataset = self.dataset.rename_column("nb", "sentence1")
-        self.dataset = self.dataset.rename_column("nn", "sentence2")

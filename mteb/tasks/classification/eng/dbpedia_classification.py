@@ -8,8 +8,8 @@ class DBpediaClassification(AbsTaskClassification):
         description="DBpedia14 is a dataset of English texts from Wikipedia articles, categorized into 14 non-overlapping classes based on their DBpedia ontology.",
         reference="https://arxiv.org/abs/1509.01626",
         dataset={
-            "path": "fancyzhx/dbpedia_14",
-            "revision": "9abd46cf7fc8b4c64290f26993c540b92aa145ac",
+            "path": "mteb/DBpediaClassification",
+            "revision": "da1478c37d6ac46d5ca45aaf2a156020e2e9bfea",
         },
         type="Classification",
         category="t2c",
@@ -39,15 +39,6 @@ class DBpediaClassification(AbsTaskClassification):
 """,
         superseded_by="DBpediaClassification.v2",
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_column("content", "text")
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train", "test"]
-        )
 
 
 class DBpediaClassificationV2(AbsTaskClassification):

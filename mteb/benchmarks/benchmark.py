@@ -166,6 +166,13 @@ class Benchmark:
                 )
                 existing_items.add(task_path)
 
+    def __repr__(self) -> str:
+        n_tasks = len(self.tasks)
+        max_len = 50
+        desc = self.description if self.description else ""
+        desc = f"'{desc[:max_len]}..." if len(desc) > max_len else f"'{desc}'"
+        return f"{self.__class__.__name__}(name='{self.name}', description={desc}, tasks=[...] (#{n_tasks}), ...)"
+
 
 class RtebBenchmark(Benchmark):
     """Wrapper for RTEB benchmark."""

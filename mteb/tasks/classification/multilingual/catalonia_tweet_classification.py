@@ -13,8 +13,8 @@ class CataloniaTweetClassification(AbsTaskClassification):
         description="This dataset contains two corpora in Spanish and Catalan that consist of annotated Twitter messages for automatic stance detection. The data was collected over 12 days during February and March of 2019 from tweets posted in Barcelona, and during September of 2018 from tweets posted in the town of Terrassa, Catalonia. Each corpus is annotated with three classes: AGAINST, FAVOR and NEUTRAL, which express the stance towards the target - independence of Catalonia.",
         reference="https://aclanthology.org/2020.lrec-1.171/",
         dataset={
-            "path": "community-datasets/catalonia_independence",
-            "revision": "cf24d44e517efa534f048e5fc5981f399ed25bee",
+            "path": "mteb/CataloniaTweetClassification",
+            "revision": "a160e486a21cea511a4b23a90e6bd6f7920d3a8f",
         },
         type="Classification",
         category="t2c",
@@ -59,18 +59,3 @@ Piperidis, Stelios},
 }
 """,
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        for lang in self.dataset.keys():
-            self.dataset[lang] = self.dataset[lang].rename_columns(
-                {"TWEET": "text", "LABEL": "label"}
-            )
-            self.dataset[lang] = self.stratified_subsampling(
-                self.dataset[lang],
-                seed=self.seed,
-                splits=["validation", "test"],
-            )
-            self.dataset[lang] = self.dataset[lang].remove_columns(["id_str"])

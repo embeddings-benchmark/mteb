@@ -8,8 +8,8 @@ class SentimentAnalysisHindi(AbsTaskClassification):
         description="Hindi Sentiment Analysis Dataset",
         reference="https://huggingface.co/datasets/OdiaGenAI/sentiment_analysis_hindi",
         dataset={
-            "path": "OdiaGenAI/sentiment_analysis_hindi",
-            "revision": "1beac1b941da76a9c51e3e5b39d230fde9a80983",
+            "path": "mteb/SentimentAnalysisHindi",
+            "revision": "feab4a1cfc55f4b799f4ed902d8967e2ab68425c",
         },
         type="Classification",
         category="t2c",
@@ -36,14 +36,6 @@ class SentimentAnalysisHindi(AbsTaskClassification):
 """,
         superseded_by="SentimentAnalysisHindi.v2",
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )
 
 
 class SentimentAnalysisHindiV2(AbsTaskClassification):

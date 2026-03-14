@@ -10,8 +10,8 @@ class MalteseNewsClassification(AbsTaskMultilabelClassification):
         description="A multi-label topic classification dataset for Maltese News Articles. The data was collected from the press_mt subset from Korpus Malti v4.0. Article contents were cleaned to filter out JavaScript, CSS, & repeated non-Maltese sub-headings. The labels are based on the category field from this corpus.",
         reference="https://huggingface.co/datasets/MLRS/maltese_news_categories",
         dataset={
-            "path": "MLRS/maltese_news_categories",
-            "revision": "6bb0321659c4f07c4c2176c30c98c971be6571b4",
+            "path": "mteb/MalteseNewsClassification",
+            "revision": "dd971b06303e3c3285a45a03afb5fb067b7bfced",
         },
         type="MultilabelClassification",
         category="t2c",
@@ -39,15 +39,3 @@ Borg, Claudia},
 }
 """,
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_columns({"labels": "label"})
-        remove_cols = [
-            col
-            for col in self.dataset["test"].column_names
-            if col not in ["text", "label"]
-        ]
-        self.dataset = self.dataset.remove_columns(remove_cols)

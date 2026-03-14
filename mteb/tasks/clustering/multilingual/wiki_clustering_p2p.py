@@ -1,8 +1,3 @@
-import itertools
-
-import numpy as np
-from datasets import Dataset, DatasetDict
-
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -61,8 +56,8 @@ class WikiClusteringFastP2P(AbsTaskClustering):
         description="Clustering of wikipedia articles inspired by BlubrbsClusteringP2P. Labels are taken from top-level categories of the respective languages (e.g., https://lv.wikipedia.org/wiki/Kategorija:Pamatkategorijas).",
         reference="https://github.com/Rysias/wiki-clustering",
         dataset={
-            "path": "ryzzlestrizzle/multi-wiki-clustering-p2p",
-            "revision": "d4d92f8f28be71035be6a96bdfd4e200cf62faa8",
+            "path": "mteb/WikiClusteringP2P.v2",
+            "revision": "596293afadbf41fd03571343f9f3d2b869b4f2e3",
         },
         type="Clustering",
         category="t2c",
@@ -80,42 +75,3 @@ class WikiClusteringFastP2P(AbsTaskClustering):
         bibtex_citation="",  # None exists
         adapted_from=["WikiClusteringP2P"],
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        ds = {}
-        for lang in self.hf_subsets:
-            labels = []
-            sentences = []
-            ds[lang] = {}
-            lang_dict = {}
-            for split in self.metadata.eval_splits:
-                labels.extend(
-                    itertools.chain.from_iterable(self.dataset[lang][split]["labels"])
-                )
-                sentences.extend(
-                    itertools.chain.from_iterable(
-                        self.dataset[lang][split]["sentences"]
-                    )
-                )
-
-                # Remove sentences and labels with only 1 label example.
-                unique_labels, counts = np.unique(labels, return_counts=True)
-                solo_label_idx = np.where(counts == 1)
-                solo_labels = unique_labels[solo_label_idx]
-                is_solo = np.isin(labels, solo_labels)
-                split_ds = Dataset.from_dict({"labels": labels, "sentences": sentences})
-                if is_solo.any():
-                    split_ds = split_ds.select(np.nonzero(is_solo == False)[0])  # noqa: E712
-                lang_dict.update({split: split_ds})
-            ds[lang] = DatasetDict(lang_dict)
-        self.dataset = DatasetDict(ds)
-        for lang in self.hf_subsets:
-            self.dataset[lang] = self.stratified_subsampling(
-                self.dataset[lang],
-                self.seed,
-                self.metadata.eval_splits,
-                label="labels",
-            )

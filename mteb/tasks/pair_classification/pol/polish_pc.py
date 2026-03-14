@@ -69,8 +69,8 @@ class PpcPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PpcPC",
         dataset={
-            "path": "PL-MTEB/ppc-pairclassification",
-            "revision": "2c7d2df57801a591f6b1e3aaf042e7a04ec7d9f2",
+            "path": "mteb/PpcPC",
+            "revision": "e7f83d7d05792c2c57c8708a102e4ea785b9c301",
         },
         description="Polish Paraphrase Corpus",
         reference="https://arxiv.org/pdf/2207.12759.pdf",
@@ -107,13 +107,6 @@ class PpcPC(AbsTaskPairClassification):
 }
 """,
     )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.dataset.rename_column("sent1", "sentence1")
-        self.dataset = self.dataset.rename_column("sent2", "sentence2")
 
 
 class CdscePC(AbsTaskPairClassification):
