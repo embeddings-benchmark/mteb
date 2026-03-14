@@ -4,7 +4,7 @@ import hashlib
 import json
 import logging
 import warnings
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import field
 from enum import Enum
 from functools import partial
@@ -37,8 +37,6 @@ from mteb.models.models_protocols import MTEBModels
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
-
     from huggingface_hub import (
         ModelCardData,
     )
@@ -147,7 +145,7 @@ class ModelMeta(BaseModel):
     n_embedding_parameters: int | None = None
     memory_usage_mb: float | None
     max_tokens: float | None
-    embed_dim: int | list[int] | None
+    embed_dim: int | Sequence[int] | None
     license: Licenses | StrURL | None
     open_weights: bool | None
     public_training_code: str | None
@@ -248,6 +246,8 @@ class ModelMeta(BaseModel):
             if isinstance(dict_repr["training_datasets"], set)
             else dict_repr["training_datasets"]
         )
+        if isinstance(dict_repr["embedding_dim"], Sequence):
+            dict_repr["embedding_dim"] = max(dict_repr["embedding_dim"])
         dict_repr["loader"] = _get_loader_name(loader)
         dict_repr["is_cross_encoder"] = self.is_cross_encoder
         return dict_repr
@@ -308,7 +308,7 @@ class ModelMeta(BaseModel):
             if self.experiment_kwargs is None:
                 self.experiment_kwargs = {"embed_dim": embed_dim}
             else:
-                self.experiment_kwargs["embed_dim"] = embed_dim
+                self.experiment_kwargs["embed_dim"] = embed_dim  # type: ignore[index]
 
         if self.experiment_kwargs is None:
             self.experiment_kwargs = kwargs if len(kwargs) > 0 else None
