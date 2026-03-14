@@ -239,15 +239,16 @@ class ModelMeta(BaseModel):
 
     def to_dict(self):
         """Returns a dictionary representation of the model metadata."""
-        dict_repr = self.model_dump()
+        meta = self.model_copy(deep=True)
+        if isinstance(meta.embed_dim, Sequence):
+            meta.embed_dim = max(meta.embed_dim)
+        dict_repr = meta.model_dump()
         loader = dict_repr.pop("loader", None)
         dict_repr["training_datasets"] = (
             list(dict_repr["training_datasets"])
             if isinstance(dict_repr["training_datasets"], set)
             else dict_repr["training_datasets"]
         )
-        if isinstance(dict_repr["embedding_dim"], Sequence):
-            dict_repr["embedding_dim"] = max(dict_repr["embedding_dim"])
         dict_repr["loader"] = _get_loader_name(loader)
         dict_repr["is_cross_encoder"] = self.is_cross_encoder
         return dict_repr
@@ -297,8 +298,9 @@ class ModelMeta(BaseModel):
                 and self.embed_dim != embed_dim
             ):
                 raise ValueError(
-                    f"Requested embedding dimension {embed_dim} does not match the model's embedding dimension {self.embed_dim}."
-                    "Model does not support loading with a different embedding dimension."
+                    f"Requested embedding dimension {embed_dim} does not match the model's embedding dimension {self.embed_dim}. "
+                    "Model does not support loading with a different embedding dimension. "
+                    "You can change supported embedding dimensions in `meta.embed_dim`."
                 )
             elif isinstance(self.embed_dim, list) and embed_dim not in self.embed_dim:
                 raise ValueError(
