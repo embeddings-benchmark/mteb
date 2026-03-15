@@ -863,15 +863,17 @@ class ResultCache:
             return local_models
 
         if isinstance(models, (str, ModelMeta)):
-            models = [models]
+            models_to_process: list[str | ModelMeta] = [models]
+        else:
+            models_to_process = models
 
         normalized = []
-        for model in models:
+        for model in models_to_process:
             if isinstance(model, ModelMeta):
-                if model.revision is None:
+                if model.revision is None or model.name is None:
                     raise ValueError(
-                        f"ModelMeta {model.name} has no revision. "
-                        "Cannot submit results without revision."
+                        f"ModelMeta {model.name} has no revision or name. "
+                        "Cannot submit results without both."
                     )
                 normalized.append((model.name, model.revision))
             elif isinstance(model, str):
