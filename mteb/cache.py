@@ -1293,11 +1293,18 @@ class ResultCache:
 
         branch_name = f"mteb-results-{int(time.time())}"
         remote_path = self.cache_path / "remote"
-        fork_url = f"https://x-access-token:{token}@github.com/{user.login}/results.git"
+        fork_url = f"https://github.com/{user.login}/results.git"
         try:
             logger.info(f"Pushing to fork branch '{branch_name}'...")
             subprocess.run(
-                ["git", "push", fork_url, f"HEAD:refs/heads/{branch_name}"],
+                [
+                    "git",
+                    "-c",
+                    f"http.extraHeader=AUTHORIZATION: bearer {token}",
+                    "push",
+                    fork_url,
+                    f"HEAD:refs/heads/{branch_name}",
+                ],
                 cwd=remote_path,
                 check=True,
                 capture_output=True,
