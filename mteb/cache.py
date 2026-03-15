@@ -7,6 +7,7 @@ import logging
 import os
 import shutil
 import subprocess
+import time
 import warnings
 from collections import defaultdict
 from collections.abc import Mapping
@@ -23,6 +24,13 @@ from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
+
+try:
+    from github import Auth, Github, GithubException
+
+    HAS_PYGITHUB = True
+except ImportError:
+    HAS_PYGITHUB = False
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
@@ -818,6 +826,522 @@ class ResultCache:
 
             paths = [p for p in paths if p.stem in task_names]
         return paths
+
+    def _normalize_models(
+        self,
+        models: list[str] | list[ModelMeta] | str | ModelMeta | None = None,
+    ) -> list[tuple[str, str]]:
+        """Normalize model input to list of (model_name, revision) tuples.
+
+        Args:
+            models: Model(s) to normalize. Can be:
+                - None: get all models from local cache
+                - str: single model name
+                - ModelMeta: single model metadata object
+                - list[str]: list of model names
+                - list[ModelMeta]: list of model metadata objects
+
+        Returns:
+            List of (model_name, model_revision) tuples.
+
+        Raises:
+            ValueError: If no models found or invalid input.
+        """
+        if models is None:
+            # Get all models from local cache
+            local_models = self.get_models(
+                require_model_meta=True, include_remote=False
+            )
+            if not local_models:
+                raise ValueError(
+                    "No models found in local cache. Please evaluate models first."
+                )
+            return local_models
+
+        if isinstance(models, (str, ModelMeta)):
+            models = [models]
+
+        normalized = []
+        for model in models:
+            if isinstance(model, ModelMeta):
+                if model.revision is None:
+                    raise ValueError(
+                        f"ModelMeta {model.name} has no revision. "
+                        "Cannot submit results without revision."
+                    )
+                normalized.append((model.name, model.revision))
+            elif isinstance(model, str):
+                local_models = self.get_models(
+                    require_model_meta=False, include_remote=False
+                )
+                matching = [
+                    (name, rev)
+                    for name, rev in local_models
+                    if name.replace("/", "__") == model.replace("/", "__")
+                ]
+                if not matching:
+                    raise ValueError(
+                        f"Model '{model}' not found in local cache. "
+                        "Please evaluate it first."
+                    )
+                normalized.extend(matching)
+            else:
+                raise TypeError(f"Invalid model type: {type(model)}")
+
+        if not normalized:
+            raise ValueError("No valid models to submit.")
+
+        return list(set(normalized))
+
+    def _get_unsubmitted_results(
+        self,
+        models: list[tuple[str, str]],
+    ) -> dict[tuple[str, str], list[Path]]:
+        """Find unsubmitted results by comparing local vs remote.
+
+        Args:
+            models: List of (model_name, model_revision) tuples.
+
+        Returns:
+            Dict mapping (model_name, revision) to list of unsubmitted result file paths.
+        """
+        unsubmitted = {}
+
+        for model_name, revision in models:
+            model_name_path = model_name.replace("/", "__").replace(" ", "_")
+
+            local_results_dir = self.cache_path / "results" / model_name_path / revision
+            if not local_results_dir.exists():
+                logger.warning(
+                    f"No local results found for {model_name} (revision: {revision})"
+                )
+                continue
+
+            local_files = {
+                f.relative_to(local_results_dir)
+                for f in local_results_dir.glob("*.json")
+                if f.name != "model_meta.json"
+            }
+
+            remote_results_dir = (
+                self.cache_path / "remote" / "results" / model_name_path / revision
+            )
+            remote_files = set()
+            if remote_results_dir.exists():
+                remote_files = {
+                    f.relative_to(remote_results_dir)
+                    for f in remote_results_dir.glob("*.json")
+                    if f.name != "model_meta.json"
+                }
+
+            unsubmitted_files = local_files - remote_files
+
+            if unsubmitted_files:
+                unsubmitted[(model_name, revision)] = [
+                    local_results_dir / f for f in unsubmitted_files
+                ]
+
+        return unsubmitted
+
+    def _copy_results_to_remote(
+        self,
+        unsubmitted: dict[tuple[str, str], list[Path]],
+    ) -> None:
+        """Copy unsubmitted results to remote directory.
+
+        Args:
+            unsubmitted: Dict of (model_name, revision) -> list of result file paths.
+        """
+        for (model_name, revision), result_files in unsubmitted.items():
+            model_name_path = model_name.replace("/", "__").replace(" ", "_")
+            remote_model_dir = (
+                self.cache_path / "remote" / "results" / model_name_path / revision
+            )
+
+            remote_model_dir.mkdir(parents=True, exist_ok=True)
+            for local_file in result_files:
+                remote_file = remote_model_dir / local_file.name
+                shutil.copy2(local_file, remote_file)
+
+            if result_files:
+                local_meta_path = result_files[0].parent / "model_meta.json"
+                if local_meta_path.exists():
+                    remote_meta_path = remote_model_dir / "model_meta.json"
+                    shutil.copy2(local_meta_path, remote_meta_path)
+
+    def _create_commit(
+        self,
+        unsubmitted: dict[tuple[str, str], list[Path]],
+        models: list[tuple[str, str]],
+    ) -> str:
+        """Create a git commit in the remote repository.
+
+        Args:
+            unsubmitted: Dict of (model_name, revision) -> list of result file paths.
+            models: List of (model_name, model_revision) tuples.
+
+        Returns:
+            The commit SHA hash.
+
+        Raises:
+            RuntimeError: If git commit fails.
+        """
+        remote_path = self.cache_path / "remote"
+
+        if not remote_path.exists():
+            raise RuntimeError(
+                "Remote repository not found. Call download_from_remote() first."
+            )
+
+        try:
+            subprocess.run(
+                ["git", "add", "-A"],
+                cwd=remote_path,
+                check=True,
+                capture_output=True,
+            )
+
+            model_str = ", ".join(name for name, _ in models)
+            result_count = sum(len(files) for files in unsubmitted.values())
+            commit_message = (
+                f"Add MTEB evaluation results for {model_str}\n\n"
+                f"Models: {model_str}\n"
+                f"Total results: {result_count}\n"
+                f"Submitted by MTEB ResultCache"
+            )
+
+            subprocess.run(
+                ["git", "commit", "-m", commit_message],
+                cwd=remote_path,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            commit_sha = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=remote_path,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+
+            return commit_sha
+
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(f"Failed to create git commit: {e.stderr or e.stdout}")
+
+    def _prepare_pr_body(
+        self,
+        models: list[tuple[str, str]],
+        unsubmitted: dict[tuple[str, str], list[Path]],
+    ) -> str:
+        """Prepare the pull request body with results summary.
+
+        Args:
+            models: List of (model_name, model_revision) tuples.
+            unsubmitted: Dict of unsubmitted results.
+
+        Returns:
+            Formatted PR body string.
+        """
+        model_details = []
+        total_results = 0
+
+        for model_name, revision in models:
+            if (model_name, revision) in unsubmitted:
+                result_count = len(unsubmitted[(model_name, revision)])
+                total_results += result_count
+                model_details.append(
+                    f"- **{model_name}** (revision: `{revision}`): {result_count} results"
+                )
+
+        body = f"""
+    ## MTEB Evaluation Results Submission
+    
+    ### Models Submitted
+    {chr(10).join(model_details)}
+    
+    **Total Results:** {total_results}
+    
+    ---
+    
+    ### Details
+    - **Submitted by:** MTEB ResultCache
+    - **Timestamp:** {time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime())}
+    - **Submission method:** Automated via `ResultCache.submit_results()`
+    
+    ### Instructions for Reviewers
+    Please review the results files and ensure they meet the MTEB submission format requirements.
+    
+    ---
+    
+    *This PR was created automatically. Please check the results carefully before merging.*
+    """
+        return body.strip()
+
+    def submit_results(
+        self,
+        models: list[str] | list[ModelMeta] | str | ModelMeta | None = None,
+        *,
+        push: bool = False,
+    ) -> dict[str, Any]:
+        """Create a commit of the results to the official MTEB results repository.
+
+        It does this by downloading the remote (if not downloaded already) and
+        submitting the diff from the local result to the repository. Requires PyGithub
+        to be installed if `push=True`.
+
+        Args:
+            models: Model(s) whose results should be submitted. Can be:
+                - None: submit all unsubmitted results
+                - str or ModelMeta: single model
+                - list[str] or list[ModelMeta]: multiple models
+            push: If True, create a PR directly to the remote. If False, prints
+                  instructions for manual submission.
+
+        Returns:
+            Dictionary containing submission metadata:
+                - status: "ready_for_submission" or "pr_created"
+                - models_submitted: list of (model_name, revision) tuples
+                - result_count: number of result files submitted
+                - commit_sha: git commit hash
+                - pr_url: URL to created PR (only if push=True)
+                - pr_number: PR number (only if push=True)
+                - fork_url: URL to user's fork (only if push=True)
+
+        Raises:
+            ValueError: If no models found or invalid input.
+            RuntimeError: If git operations fail.
+            ImportError: If push=True and PyGithub is not installed.
+            GithubException: If GitHub API operations fail.
+
+        Examples:
+            >>> import mteb
+            >>> cache = mteb.ResultCache()
+            >>> results = mteb.evaluate(model, tasks, cache=cache)
+            >>>
+            >>> # Manual submission (step-by-step)
+            >>> submission = cache.submit_results(model, push=False)
+            >>> # Follow printed instructions
+            >>>
+            >>> # Automated submission
+            >>> submission = cache.submit_results(model, push=True)
+            >>> print(f"PR created: {submission['pr_url']}")
+        """
+        normalized_models = self._normalize_models(models)
+
+        if not self.has_remote:
+            self.download_from_remote()
+        else:
+            try:
+                subprocess.run(
+                    ["git", "fetch", "--all"],
+                    cwd=self.cache_path / "remote",
+                    check=True,
+                    capture_output=True,
+                )
+            except subprocess.CalledProcessError:
+                logger.warning("Failed to update remote, continuing with existing")
+
+        unsubmitted = self._get_unsubmitted_results(normalized_models)
+
+        if not unsubmitted:
+            logger.warning("No unsubmitted results found.")
+            return {
+                "status": "no_changes",
+                "models_submitted": normalized_models,
+                "result_count": 0,
+            }
+
+        self._copy_results_to_remote(unsubmitted)
+        commit_sha = self._create_commit(unsubmitted, normalized_models)
+
+        result_count = sum(len(files) for files in unsubmitted.values())
+
+        if not push:
+            remote_path = self.cache_path / "remote"
+            print("\n" + "=" * 80)
+            print(
+                f"✓ Commit created with {result_count} results for {len(normalized_models)} model(s)"
+            )
+            print("=" * 80)
+            print(f"\nCommit SHA: {commit_sha}")
+            print(f"Location: {remote_path}")
+            print("\n📋 To submit these results, follow these steps:\n")
+
+            print("1. Go to the remote repository:")
+            print(f"   {remote_path}\n")
+
+            print("2. Create a fork (if you don't have one already):\n")
+            print("   gh repo fork --remote --remote-name fork --clone=false\n")
+
+            print("3. Push your changes to your fork:\n")
+            print("   git push fork\n")
+
+            print("4. Create a pull request:\n")
+            print("   gh pr create --base main --head <your-username>:main\n")
+
+            print("5. Provide details about your evaluation in the PR description\n")
+            print("=" * 80)
+
+            return {
+                "status": "ready_for_submission",
+                "models_submitted": normalized_models,
+                "result_count": result_count,
+                "commit_sha": commit_sha,
+                "path": str(remote_path),
+            }
+
+        else:
+            if not HAS_PYGITHUB:
+                raise ImportError(
+                    "PyGithub is required for automated submission. "
+                    "Install it with: pip install PyGithub"
+                )
+
+            logger.info("Creating PR using PyGithub")
+            return self._create_pull_request(
+                commit_sha,
+                normalized_models,
+                unsubmitted,
+                result_count,
+            )
+
+    def _create_pull_request(
+        self,
+        commit_sha: str,
+        models: list[tuple[str, str]],
+        unsubmitted: dict[tuple[str, str], list[Path]],
+        result_count: int,
+    ) -> dict[str, Any]:
+        """Create a pull request on GitHub using PyGithub.
+
+        Args:
+            commit_sha: The commit SHA to reference.
+            models: List of (model_name, revision) tuples.
+            unsubmitted: Dict of unsubmitted results.
+            result_count: Total number of results.
+
+        Returns:
+            Dictionary with PR information.
+
+        Raises:
+            RuntimeError: If authentication fails.
+            GithubException: If GitHub API call fails.
+        """
+        token = os.getenv("GITHUB_TOKEN")
+        if not token:
+            raise RuntimeError(
+                "GITHUB_TOKEN environment variable not set. "
+                "Please set it to your GitHub personal access token."
+            )
+
+        try:
+            auth = Auth.Token(token)
+            gh = Github(auth=auth)
+            user = gh.get_user()
+        except Exception as e:
+            raise RuntimeError(f"Failed to authenticate with GitHub: {e}")
+
+        upstream_repo_name = "embeddings-benchmark/results"
+        try:
+            upstream = gh.get_repo(upstream_repo_name)
+            logger.info(f"Connected to upstream: {upstream_repo_name}")
+        except Exception as e:
+            raise RuntimeError(f"Failed to access upstream repository: {e}")
+
+        fork = None
+        try:
+            # Check if fork already exists
+            fork = gh.get_repo(f"{user.login}/results")
+            logger.info(f"Using existing fork: {fork.html_url}")
+        except Exception:
+            logger.info("Creating fork...")
+            try:
+                # Fork doesn't exist, create it
+                fork = user.create_fork(upstream)
+                logger.info(f"Fork created: {fork.html_url}")
+                time.sleep(2)
+            except GithubException as e:
+                if e.status == 422:
+                    fork = gh.get_repo(f"{user.login}/results")
+                else:
+                    raise RuntimeError(f"Failed to create fork: {e}")
+
+        try:
+            rate_limit = gh.get_rate_limit()
+            logger.info(
+                f"GitHub API rate limit: {rate_limit.core.remaining}/"
+                f"{rate_limit.core.limit} remaining"
+            )
+            if rate_limit.core.remaining < 5:
+                raise RuntimeError(
+                    f"GitHub API rate limit too low ({rate_limit.core.remaining} remaining). "
+                    f"Please try again later."
+                )
+        except Exception as e:
+            logger.warning(f"Could not check rate limit: {e}")
+
+        branch_name = f"mteb-results-{int(time.time())}"
+        remote_path = self.cache_path / "remote"
+        fork_url = f"https://x-access-token:{token}@github.com/{user.login}/results.git"
+        try:
+            logger.info(f"Pushing to fork branch '{branch_name}'...")
+            subprocess.run(
+                ["git", "push", fork_url, f"HEAD:refs/heads/{branch_name}"],
+                cwd=remote_path,
+                check=True,
+                capture_output=True,
+                timeout=60,
+            )
+            logger.info("Push successful")
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(f"Failed to push to fork: {e.stderr or e.stdout}")
+
+        try:
+            pr_body = self._prepare_pr_body(models, unsubmitted)
+            model_str = ", ".join(name for name, _ in models)
+
+            logger.info("Creating pull request...")
+            pr = upstream.create_pull(
+                title=f"MTEB Evaluation Results: {model_str}",
+                body=pr_body,
+                head=f"{user.login}:{branch_name}",
+                base="main",
+            )
+
+            logger.info(f"PR created successfully: {pr.html_url}")
+
+            print("\n" + "=" * 80)
+            print("✓ Pull request created successfully!")
+            print("=" * 80)
+            print(f"\nPR URL: {pr.html_url}")
+            print(f"PR Number: #{pr.number}")
+            print(f"Fork: {fork.html_url}")
+            print(f"\nModels: {model_str}")
+            print(f"Results: {result_count}")
+            print(f"Commit: {commit_sha}")
+            print("\n" + "=" * 80)
+
+            return {
+                "status": "pr_created",
+                "models_submitted": models,
+                "result_count": result_count,
+                "commit_sha": commit_sha,
+                "pr_url": pr.html_url,
+                "pr_number": pr.number,
+                "fork_url": fork.html_url,
+                "branch_name": branch_name,
+            }
+
+        except GithubException as e:
+            raise RuntimeError(
+                f"Failed to create pull request: "
+                f"Status {e.status}: {e.data.get('message', str(e))}"
+            )
+        except Exception as e:
+            raise RuntimeError(f"Unexpected error creating PR: {e}")
 
     def load_results(
         self,
