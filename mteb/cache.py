@@ -7,6 +7,7 @@ import logging
 import os
 import shutil
 import subprocess
+import textwrap
 import time
 import warnings
 from collections import defaultdict
@@ -292,6 +293,7 @@ class ResultCache:
                     ["git", "fetch", "--all", "--tags"],
                     cwd=results_directory,
                     check=True,
+                    text=True,
                 )
             else:
                 logger.debug(
@@ -305,6 +307,7 @@ class ResultCache:
                     ["git", "checkout", revision],
                     cwd=results_directory,
                     check=True,
+                    text=True,
                 )
             return results_directory
 
@@ -323,6 +326,7 @@ class ResultCache:
             clone_cmd,
             cwd=self.cache_path,
             check=True,
+            text=True,
         )
 
         return results_directory
@@ -999,6 +1003,7 @@ class ResultCache:
                 cwd=remote_path,
                 check=True,
                 capture_output=True,
+                text=True,
             )
 
             model_str = ", ".join(name for name, _ in models)
@@ -1056,28 +1061,28 @@ class ResultCache:
                     f"- **{model_name}** (revision: `{revision}`): {result_count} results"
                 )
 
-        body = f"""
-    ## MTEB Evaluation Results Submission
-    
-    ### Models Submitted
-    {chr(10).join(model_details)}
-    
-    **Total Results:** {total_results}
-    
-    ---
-    
-    ### Details
-    - **Submitted by:** MTEB ResultCache
-    - **Timestamp:** {time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime())}
-    - **Submission method:** Automated via `ResultCache.submit_results()`
-    
-    ### Instructions for Reviewers
-    Please review the results files and ensure they meet the MTEB submission format requirements.
-    
-    ---
-    
-    *This PR was created automatically. Please check the results carefully before merging.*
-    """
+        body = textwrap.dedent(f"""
+        ## MTEB Evaluation Results Submission
+
+        ### Models Submitted
+        {chr(10).join(model_details)}
+
+        **Total Results:** {total_results}
+
+        ---
+
+        ### Details
+        - **Submitted by:** MTEB ResultCache
+        - **Timestamp:** {time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime())}
+        - **Submission method:** Automated via `ResultCache.submit_results()`
+
+        ### Instructions for Reviewers
+        Please review the results files and ensure they meet the MTEB submission format requirements.
+
+        ---
+
+        *This PR was created automatically. Please check the results carefully before merging.*
+        """)
         return body.strip()
 
     def submit_results(
@@ -1140,6 +1145,7 @@ class ResultCache:
                     cwd=self.cache_path / "remote",
                     check=True,
                     capture_output=True,
+                    text=True,
                 )
             except subprocess.CalledProcessError:
                 logger.warning("Failed to update remote, continuing with existing")
@@ -1293,6 +1299,7 @@ class ResultCache:
                 cwd=remote_path,
                 check=True,
                 capture_output=True,
+                text=True,
                 timeout=60,
             )
             logger.info("Push successful")
