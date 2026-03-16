@@ -77,6 +77,15 @@ class ResultCache:
         """
         return (self.cache_path / "remote").exists()
 
+    @property
+    def remote_results_path(self) -> Path:
+        """Get the path to the remote results directory.
+
+        Returns:
+            The path to the remote results directory.
+        """
+        return self.cache_path / "remote" / "results"
+
     def get_task_result_path(
         self,
         task_name: str,
@@ -98,9 +107,7 @@ class ResultCache:
             The path to the results of the task.
         """
         results_folder = (
-            self.cache_path / "results"
-            if not remote
-            else self.cache_path / "remote" / "results"
+            self.cache_path / "results" if not remote else self.remote_results_path
         )
 
         if isinstance(model_name, ModelMeta):
@@ -640,7 +647,7 @@ class ResultCache:
             return paths
 
         results_path = self.cache_path / "results"
-        remote_path = self.cache_path / "remote" / "results"
+        remote_path = self.remote_results_path
 
         cache_paths = _get_paths(results_path, load_experiments)
 
@@ -922,9 +929,7 @@ class ResultCache:
                 if f.name != "model_meta.json"
             }
 
-            remote_results_dir = (
-                self.cache_path / "remote" / "results" / model_name_path / revision
-            )
+            remote_results_dir = self.remote_results_path / model_name_path / revision
             remote_files = set()
             if remote_results_dir.exists():
                 remote_files = {
@@ -953,9 +958,7 @@ class ResultCache:
         """
         for (model_name, revision), result_files in unsubmitted.items():
             model_name_path = model_name.replace("/", "__").replace(" ", "_")
-            remote_model_dir = (
-                self.cache_path / "remote" / "results" / model_name_path / revision
-            )
+            remote_model_dir = self.remote_results_path / model_name_path / revision
 
             remote_model_dir.mkdir(parents=True, exist_ok=True)
             for local_file in result_files:
@@ -1227,7 +1230,11 @@ class ResultCache:
             GithubException: If GitHub API call fails.
         """
         try:
-            from github import Auth, Github, GithubException
+            from github import (  # type: ignore[import-not-found]
+                Auth,
+                Github,
+                GithubException,
+            )
         except ImportError:
             raise ImportError(
                 "PyGithub is required for automated submission. "
