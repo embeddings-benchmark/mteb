@@ -26,13 +26,6 @@ from mteb.models import ModelMeta
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
 
-try:
-    from github import Auth, Github, GithubException  # type: ignore[import-not-found]
-
-    HAS_PYGITHUB = True
-except ImportError:
-    HAS_PYGITHUB = False
-
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
 
@@ -925,7 +918,7 @@ class ResultCache:
 
             local_files = {
                 f.relative_to(local_results_dir)
-                for f in local_results_dir.glob("*.json")
+                for f in local_results_dir.rglob("*.json")
                 if f.name != "model_meta.json"
             }
 
@@ -936,7 +929,7 @@ class ResultCache:
             if remote_results_dir.exists():
                 remote_files = {
                     f.relative_to(remote_results_dir)
-                    for f in remote_results_dir.glob("*.json")
+                    for f in remote_results_dir.rglob("*.json")
                     if f.name != "model_meta.json"
                 }
 
@@ -1202,13 +1195,6 @@ class ResultCache:
             }
 
         else:
-            if not HAS_PYGITHUB:
-                raise ImportError(
-                    "PyGithub is required for automated submission. "
-                    "Install it with: pip install PyGithub"
-                )
-
-            logger.info("Creating PR using PyGithub")
             return self._create_pull_request(
                 commit_sha,
                 normalized_models,
@@ -1238,6 +1224,15 @@ class ResultCache:
             RuntimeError: If authentication fails.
             GithubException: If GitHub API call fails.
         """
+        try:
+            from github import Auth, Github, GithubException
+        except ImportError:
+            raise ImportError(
+                "PyGithub is required for automated submission. "
+                "Install it with: pip install PyGithub"
+            )
+
+        logger.info("Creating PR using PyGithub")
         token = os.getenv("GITHUB_TOKEN")
         if not token:
             raise RuntimeError(
