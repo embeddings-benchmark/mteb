@@ -1162,29 +1162,31 @@ class ResultCache:
 
         if not push:
             remote_path = self.cache_path / "remote"
-            print("\n" + "=" * 80)
-            print(
+            logger.info("\n" + "=" * 80)
+            logger.info(
                 f"✓ Commit created with {result_count} results for {len(normalized_models)} model(s)"
             )
-            print("=" * 80)
-            print(f"\nCommit SHA: {commit_sha}")
-            print(f"Location: {remote_path}")
-            print("\n📋 To submit these results, follow these steps:\n")
+            logger.info("=" * 80)
+            logger.info(f"\nCommit SHA: {commit_sha}")
+            logger.info(f"Location: {remote_path}")
+            logger.info("\n📋 To submit these results, follow these steps:\n")
 
-            print("1. Go to the remote repository:")
-            print(f"   {remote_path}\n")
+            logger.info("1. Go to the remote repository:")
+            logger.info(f"   {remote_path}\n")
 
-            print("2. Create a fork (if you don't have one already):\n")
-            print("   gh repo fork --remote --remote-name fork --clone=false\n")
+            logger.info("2. Create a fork (if you don't have one already):\n")
+            logger.info("   gh repo fork --remote --remote-name fork --clone=false\n")
 
-            print("3. Push your changes to your fork:\n")
-            print("   git push fork\n")
+            logger.info("3. Push your changes to your fork:\n")
+            logger.info("   git push fork\n")
 
-            print("4. Create a pull request:\n")
-            print("   gh pr create --base main --head <your-username>:main\n")
+            logger.info("4. Create a pull request:\n")
+            logger.info("   gh pr create --base main --head <your-username>:main\n")
 
-            print("5. Provide details about your evaluation in the PR description\n")
-            print("=" * 80)
+            logger.info(
+                "5. Provide details about your evaluation in the PR description\n"
+            )
+            logger.info("=" * 80)
 
             return {
                 "status": "ready_for_submission",
@@ -1322,18 +1324,16 @@ class ResultCache:
                 base="main",
             )
 
-            logger.info(f"PR created successfully: {pr.html_url}")
-
-            print("\n" + "=" * 80)
-            print("✓ Pull request created successfully!")
-            print("=" * 80)
-            print(f"\nPR URL: {pr.html_url}")
-            print(f"PR Number: #{pr.number}")
-            print(f"Fork: {fork.html_url}")
-            print(f"\nModels: {model_str}")
-            print(f"Results: {result_count}")
-            print(f"Commit: {commit_sha}")
-            print("\n" + "=" * 80)
+            logger.info("\n" + "=" * 80)
+            logger.info("✓ Pull request created successfully!")
+            logger.info("=" * 80)
+            logger.info(f"\nPR URL: {pr.html_url}")
+            logger.info(f"PR Number: #{pr.number}")
+            logger.info(f"Fork: {fork.html_url}")
+            logger.info(f"\nModels: {model_str}")
+            logger.info(f"Results: {result_count}")
+            logger.info(f"Commit: {commit_sha}")
+            logger.info("\n" + "=" * 80)
 
             return {
                 "status": "pr_created",
