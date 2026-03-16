@@ -831,11 +831,44 @@ class ResultCache:
             paths = [p for p in paths if p.stem in task_names]
         return paths
 
+    def _load_model_meta_from_cache(
+        self,
+        model_name: str,
+        revision: str,
+    ) -> ModelMeta | None:
+        """Load ModelMeta from cache directory.
+
+        Args:
+            model_name: The model name.
+            revision: The model revision.
+
+        Returns:
+            ModelMeta object if found, None otherwise.
+        """
+        model_name_path = model_name.replace("/", "__").replace(" ", "_")
+        meta_file = (
+            self.cache_path / "results" / model_name_path / revision / "model_meta.json"
+        )
+
+        if not meta_file.exists():
+            logger.warning(
+                f"model_meta.json not found for {model_name} (revision: {revision})"
+            )
+            return None
+
+        try:
+            with meta_file.open("r") as f:
+                meta_dict = json.load(f)
+            return ModelMeta(**meta_dict)
+        except Exception as e:
+            logger.warning(f"Failed to load ModelMeta from {meta_file}: {e}")
+            return None
+
     def _normalize_models(
         self,
         models: list[str] | list[ModelMeta] | str | ModelMeta | None = None,
-    ) -> list[tuple[str, str]]:
-        """Normalize model input to list of (model_name, revision) tuples.
+    ) -> list[ModelMeta]:
+        """Normalize model input to list of ModelMeta objects.
 
         Args:
             models: Model(s) to normalize. Can be:
@@ -846,7 +879,7 @@ class ResultCache:
                 - list[ModelMeta]: list of model metadata objects
 
         Returns:
-            List of (model_name, model_revision) tuples.
+            List of ModelMeta objects.
 
         Raises:
             ValueError: If no models found or invalid input.
@@ -860,7 +893,13 @@ class ResultCache:
                 raise ValueError(
                     "No models found in local cache. Please evaluate models first."
                 )
-            return local_models
+            # Load ModelMeta for each (name, revision) tuple
+            normalized = []
+            for model_name, revision in local_models:
+                model_meta = self._load_model_meta_from_cache(model_name, revision)
+                if model_meta:
+                    normalized.append(model_meta)
+            return normalized
 
         if isinstance(models, (str, ModelMeta)):
             models_to_process: list[str | ModelMeta] = [models]
@@ -875,7 +914,7 @@ class ResultCache:
                         f"ModelMeta {model.name} has no revision or name. "
                         "Cannot submit results without both."
                     )
-                normalized.append((model.name, model.revision))
+                normalized.append(model)
             elif isinstance(model, str):
                 local_models = self.get_models(
                     require_model_meta=False, include_remote=False
@@ -890,30 +929,41 @@ class ResultCache:
                         f"Model '{model}' not found in local cache. "
                         "Please evaluate it first."
                     )
-                normalized.extend(matching)
+                # Load ModelMeta for each matching revision
+                for model_name, revision in matching:
+                    model_meta = self._load_model_meta_from_cache(model_name, revision)
+                    if model_meta:
+                        normalized.append(model_meta)
             else:
                 raise TypeError(f"Invalid model type: {type(model)}")
 
         if not normalized:
             raise ValueError("No valid models to submit.")
 
-        return list(set(normalized))
+        return normalized
 
     def _get_unsubmitted_results(
         self,
-        models: list[tuple[str, str]],
+        models: list[ModelMeta],
     ) -> dict[tuple[str, str], list[Path]]:
         """Find unsubmitted results by comparing local vs remote.
 
         Args:
-            models: List of (model_name, model_revision) tuples.
+            models: List of ModelMeta objects.
 
         Returns:
             Dict mapping (model_name, revision) to list of unsubmitted result file paths.
         """
         unsubmitted = {}
 
-        for model_name, revision in models:
+        for model in models:
+            model_name = model.name
+            revision = model.revision
+
+            if model_name is None or revision is None:
+                logger.warning(f"Skipping model with None name or revision: {model}")
+                continue
+
             model_name_path = model_name.replace("/", "__").replace(" ", "_")
 
             local_results_dir = self.cache_path / "results" / model_name_path / revision
@@ -974,13 +1024,13 @@ class ResultCache:
     def _create_commit(
         self,
         unsubmitted: dict[tuple[str, str], list[Path]],
-        models: list[tuple[str, str]],
+        models: list[ModelMeta],
     ) -> str:
         """Create a git commit in the remote repository.
 
         Args:
             unsubmitted: Dict of (model_name, revision) -> list of result file paths.
-            models: List of (model_name, model_revision) tuples.
+            models: List of ModelMeta objects.
 
         Returns:
             The commit SHA hash.
@@ -1004,7 +1054,7 @@ class ResultCache:
                 text=True,
             )
 
-            model_str = ", ".join(name for name, _ in models)
+            model_str = ", ".join(model.name for model in models if model.name)
             result_count = sum(len(files) for files in unsubmitted.values())
             commit_message = (
                 f"Add MTEB evaluation results for {model_str}\n\n"
@@ -1036,13 +1086,13 @@ class ResultCache:
 
     def _prepare_pr_body(
         self,
-        models: list[tuple[str, str]],
+        models: list[ModelMeta],
         unsubmitted: dict[tuple[str, str], list[Path]],
     ) -> str:
         """Prepare the pull request body with results summary.
 
         Args:
-            models: List of (model_name, model_revision) tuples.
+            models: List of ModelMeta objects.
             unsubmitted: Dict of unsubmitted results.
 
         Returns:
@@ -1051,8 +1101,10 @@ class ResultCache:
         model_details = []
         total_results = 0
 
-        for model_name, revision in models:
-            if (model_name, revision) in unsubmitted:
+        for model in models:
+            model_name = model.name
+            revision = model.revision
+            if model_name and revision and (model_name, revision) in unsubmitted:
                 result_count = len(unsubmitted[(model_name, revision)])
                 total_results += result_count
                 model_details.append(
@@ -1061,24 +1113,24 @@ class ResultCache:
 
         body = textwrap.dedent(f"""
         ## MTEB Evaluation Results Submission
-
+    
         ### Models Submitted
         {chr(10).join(model_details)}
-
+    
         **Total Results:** {total_results}
-
+    
         ---
-
+    
         ### Details
         - **Submitted by:** MTEB ResultCache
         - **Timestamp:** {time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime())}
         - **Submission method:** Automated via `ResultCache.submit_results()`
-
+    
         ### Instructions for Reviewers
         Please review the results files and ensure they meet the MTEB submission format requirements.
-
+    
         ---
-
+    
         *This PR was created automatically. Please check the results carefully before merging.*
         """)
         return body.strip()
@@ -1140,7 +1192,7 @@ class ResultCache:
             logger.warning("No unsubmitted results found.")
             return {
                 "status": "no_changes",
-                "models_submitted": normalized_models,
+                "models_submitted": [(m.name, m.revision) for m in normalized_models],
                 "result_count": 0,
             }
 
@@ -1179,7 +1231,7 @@ class ResultCache:
 
             return {
                 "status": "ready_for_submission",
-                "models_submitted": normalized_models,
+                "models_submitted": [(m.name, m.revision) for m in normalized_models],
                 "result_count": result_count,
                 "commit_sha": commit_sha,
                 "path": str(remote_path),
@@ -1196,7 +1248,7 @@ class ResultCache:
     def _create_pull_request(
         self,
         commit_sha: str,
-        models: list[tuple[str, str]],
+        models: list[ModelMeta],
         unsubmitted: dict[tuple[str, str], list[Path]],
         result_count: int,
     ) -> dict[str, Any]:
@@ -1307,7 +1359,7 @@ class ResultCache:
 
         try:
             pr_body = self._prepare_pr_body(models, unsubmitted)
-            model_str = ", ".join(name for name, _ in models)
+            model_str = ", ".join(model.name for model in models if model.name)
 
             logger.info("Creating pull request...")
             pr = upstream.create_pull(
@@ -1330,7 +1382,7 @@ class ResultCache:
 
             return {
                 "status": "pr_created",
-                "models_submitted": models,
+                "models_submitted": [(m.name, m.revision) for m in models],
                 "result_count": result_count,
                 "commit_sha": commit_sha,
                 "pr_url": pr.html_url,
