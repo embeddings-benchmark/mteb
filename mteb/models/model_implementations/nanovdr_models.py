@@ -18,6 +18,7 @@ nanovdr_s_multi = ModelMeta(
     release_date="2026-02-26",
     modalities=["text"],
     n_parameters=69_000_000,
+    n_embedding_parameters=1_572_864,
     memory_usage_mb=282,
     embed_dim=2048,
     license="apache-2.0",
