@@ -1133,21 +1133,7 @@ class ResultCache:
             >>> print(f"PR created: {submission['pr_url']}")
         """
         normalized_models = self._normalize_models(models)
-
-        if not self.has_remote:
-            self.download_from_remote()
-        else:
-            try:
-                subprocess.run(
-                    ["git", "fetch", "--all"],
-                    cwd=self.cache_path / "remote",
-                    check=True,
-                    capture_output=True,
-                    text=True,
-                )
-            except subprocess.CalledProcessError:
-                logger.warning("Failed to update remote, continuing with existing")
-
+        self.download_from_remote()
         unsubmitted = self._get_unsubmitted_results(normalized_models)
 
         if not unsubmitted:
