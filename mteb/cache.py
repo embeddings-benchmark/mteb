@@ -27,7 +27,7 @@ from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
 
 try:
-    from github import Auth, Github, GithubException
+    from github import Auth, Github, GithubException  # type: ignore[import-not-found]
 
     HAS_PYGITHUB = True
 except ImportError:
@@ -865,7 +865,7 @@ class ResultCache:
         if isinstance(models, (str, ModelMeta)):
             models_to_process: list[str | ModelMeta] = [models]
         else:
-            models_to_process = models
+            models_to_process = cast("list[str | ModelMeta]", models)
 
         normalized = []
         for model in models_to_process:
