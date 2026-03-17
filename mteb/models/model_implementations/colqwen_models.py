@@ -99,7 +99,7 @@ class ColQwen3_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
         requires_package(
             self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
         )
-        from colpali_engine.models import ColQwen3_5, ColQwen3_5_Processor
+        from colpali_engine.models import ColQwen3_5, ColQwen3_5Processor
         from transformers.utils.import_utils import is_flash_attn_2_available
 
         if attn_implementation is None:
@@ -110,7 +110,7 @@ class ColQwen3_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
         super().__init__(
             model_name=model_name,
             model_class=ColQwen3_5,
-            processor_class=ColQwen3_5_Processor,
+            processor_class=ColQwen3_5Processor,
             revision=revision,
             device=device,
             **kwargs,
@@ -534,7 +534,7 @@ colqwen3_5_v3 = ModelMeta(
     name="athrael-soju/colqwen3.5-4.5B-v3",
     model_type=["late-interaction"],
     languages=["eng-Latn"],
-    revision="fe68094c22e6e956190086d610b058263e562002",
+    revision="4ad8f151e39bce3adcf88e0bdd72e724c7606638",
     release_date="2026-03-15",
     modalities=["image", "text"],
     n_parameters=4_600_000_000,
