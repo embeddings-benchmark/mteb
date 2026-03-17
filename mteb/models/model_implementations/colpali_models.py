@@ -64,27 +64,35 @@ class ColPaliEngineWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        text_embeddings = None
-        image_embeddings = None
-        if "text" in inputs.dataset.features:
-            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
-        if "image" in inputs.dataset.features:
-            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
+        """Encode inputs using the appropriate modality.
 
-        if text_embeddings is not None and image_embeddings is not None:
-            if len(text_embeddings) != len(image_embeddings):
-                raise ValueError(
-                    "The number of texts and images must have the same length"
-                )
-            fused_embeddings = text_embeddings + image_embeddings
-            return fused_embeddings
-        elif text_embeddings is not None:
-            return text_embeddings
-        elif image_embeddings is not None:
-            return image_embeddings
-        raise ValueError
+        For ColPali-family visual document retrieval models:
+        - Queries are always encoded as text.
+        - Documents are encoded as images when available, since the page
+          screenshot is the primary representation. When a dataset has both
+          "text" and "image" features (e.g. ViDoRe V3 corpus entries with
+          OCR text + page screenshots), using images avoids an invalid
+          element-wise addition of multi-vector embeddings with different
+          sequence lengths.
+        """
+        from mteb.types import PromptType
+
+        features = inputs.dataset.features
+        has_image = "image" in features
+        has_text = "text" in features
+
+        if prompt_type == PromptType.query and has_text:
+            return self.get_text_embeddings(inputs, **kwargs)
+        if has_image:
+            return self.get_image_embeddings(inputs, **kwargs)
+        elif has_text:
+            return self.get_text_embeddings(inputs, **kwargs)
+        raise ValueError("No text or image features found in inputs.")
 
     def encode_input(self, inputs):
+        # Clear stale rope_deltas cache to avoid shape mismatches across batches
+        if hasattr(self.mdl, "rope_deltas"):
+            self.mdl.rope_deltas = None
         return self.mdl(**inputs)
 
     def get_image_embeddings(
