@@ -251,10 +251,11 @@ class NanoVDRWrapper(AbsEncoder):
     ) -> Array:
         from mteb.types import PromptType
 
-        if prompt_type == PromptType.query:
-            return self._encode_queries(inputs, show_progress_bar=show_progress_bar)
-        else:
+        if prompt_type == PromptType.document:
             return self._encode_documents(inputs, show_progress_bar=show_progress_bar)
+        else:
+            # Use the lightweight student for queries and all non-retrieval tasks
+            return self._encode_queries(inputs, show_progress_bar=show_progress_bar)
 
 
 nanovdr_s_multi = ModelMeta(
