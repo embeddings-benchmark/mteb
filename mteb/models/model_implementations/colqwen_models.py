@@ -190,8 +190,7 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
                     imgs = [img.convert("RGB") for img in imgs]
                     if texts is not None:
                         text_input = [
-                            self.processor.visual_prompt_prefix + t
-                            for t in texts
+                            self.processor.visual_prompt_prefix + t for t in texts
                         ]
                     else:
                         text_input = [self.processor.visual_prompt_prefix] * len(imgs)
@@ -202,8 +201,12 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
                         return_tensors="pt",
                     )
                     # Pad pixel_values for variable-size patches (mirrors process_images)
-                    offsets = inputs["image_grid_thw"][:, 1] * inputs["image_grid_thw"][:, 2]
-                    pixel_values = list(torch.split(inputs["pixel_values"], offsets.tolist()))
+                    offsets = (
+                        inputs["image_grid_thw"][:, 1] * inputs["image_grid_thw"][:, 2]
+                    )
+                    pixel_values = list(
+                        torch.split(inputs["pixel_values"], offsets.tolist())
+                    )
                     inputs["pixel_values"] = torch.nn.utils.rnn.pad_sequence(
                         pixel_values, batch_first=True
                     )
