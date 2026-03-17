@@ -257,6 +257,32 @@ google_gemini_embedding_001 = ModelMeta(
     training_datasets=GECKO_TRAINING_DATA,
 )
 
+google_gemini_embedding_2_preview = ModelMeta(
+    loader=GoogleTextEmbeddingModel,  # type: ignore[call-arg]
+    loader_kwargs=dict(
+        model_prompts=MODEL_PROMPTS,
+    ),
+    name="google/gemini-embedding-2-preview",
+    model_type=["dense"],
+    languages=MULTILINGUAL_EVALUATED_LANGUAGES,
+    open_weights=False,
+    revision="1",
+    release_date=None,
+    n_parameters=None,
+    n_embedding_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=2048,
+    embed_dim=3072,
+    license=None,
+    reference="https://ai.google.dev/gemini-api/docs/embeddings",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=GECKO_TRAINING_DATA,
+)
+
 
 def gemma_embedding_loader(model_name: str, revision: str, **kwargs):
     min_transformers_version = "4.56.0"
