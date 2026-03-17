@@ -44,13 +44,17 @@ class NanoVDRWrapper(AbsEncoder):
         **kwargs: Any,
     ):
         requires_package(
-            self, "sentence_transformers", model_name,
+            self,
+            "sentence_transformers",
+            model_name,
             "pip install sentence-transformers",
         )
 
         self.device = device or (
-            "cuda" if torch.cuda.is_available()
-            else "mps" if torch.backends.mps.is_available()
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
             else "cpu"
         )
 
@@ -58,7 +62,9 @@ class NanoVDRWrapper(AbsEncoder):
         from sentence_transformers import SentenceTransformer
 
         self.query_model = SentenceTransformer(
-            model_name, revision=revision, device=self.device,
+            model_name,
+            revision=revision,
+            device=self.device,
         )
 
         # Document encoder: frozen VLM teacher (lazy-loaded on first use)
@@ -72,26 +78,33 @@ class NanoVDRWrapper(AbsEncoder):
 
         requires_image_dependencies()
         requires_package(
-            self, "transformers", "Qwen/Qwen3-VL-Embedding-2B",
+            self,
+            "transformers",
+            "Qwen/Qwen3-VL-Embedding-2B",
             "pip install 'mteb[qwen-vl]'",
         )
         requires_package(
-            self, "qwen_vl_utils", "Qwen/Qwen3-VL-Embedding-2B",
+            self,
+            "qwen_vl_utils",
+            "Qwen/Qwen3-VL-Embedding-2B",
             "pip install 'mteb[qwen-vl]'",
         )
+
+        from transformers.models.qwen3_vl.processing_qwen3_vl import Qwen3VLProcessor
 
         from mteb.models.model_implementations.qwen3_vl_embedding_models import (
             _build_qwen3_vl_for_embedding_class,
         )
-        from transformers.models.qwen3_vl.processing_qwen3_vl import Qwen3VLProcessor
 
         qwen3_vl_cls = _build_qwen3_vl_for_embedding_class()
         self._doc_model = qwen3_vl_cls.from_pretrained(
-            "Qwen/Qwen3-VL-Embedding-2B", trust_remote_code=True,
+            "Qwen/Qwen3-VL-Embedding-2B",
+            trust_remote_code=True,
         ).to(self.device)
         self._doc_model.eval()
         self._doc_processor = Qwen3VLProcessor.from_pretrained(
-            "Qwen/Qwen3-VL-Embedding-2B", padding_side="right",
+            "Qwen/Qwen3-VL-Embedding-2B",
+            padding_side="right",
         )
 
     def _encode_queries(
@@ -127,7 +140,9 @@ class NanoVDRWrapper(AbsEncoder):
 
         all_embeddings: list[torch.Tensor] = []
         with torch.no_grad():
-            for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding docs"):
+            for batch in tqdm(
+                inputs, disable=not show_progress_bar, desc="Encoding docs"
+            ):
                 contains_image = "image" in batch and batch["image"] is not None
                 contains_text = "text" in batch
 
@@ -142,29 +157,51 @@ class NanoVDRWrapper(AbsEncoder):
                             pil_img = img
                         else:
                             pil_img = tv_functional.to_pil_image(img.cpu())
-                        content.append({
-                            "type": "image", "image": pil_img,
-                            "min_pixels": 4 * 32 * 32, "max_pixels": 1800 * 32 * 32,
-                        })
+                        content.append(
+                            {
+                                "type": "image",
+                                "image": pil_img,
+                                "min_pixels": 4 * 32 * 32,
+                                "max_pixels": 1800 * 32 * 32,
+                            }
+                        )
                     if contains_text and not contains_image:
                         text = batch["text"][i] if batch["text"][i] else "NULL"
                         content.append({"type": "text", "text": text})
 
-                    conversations.append([
-                        {"role": "system", "content": [{"type": "text", "text": "Represent the user's input."}]},
-                        {"role": "user", "content": content},
-                    ])
+                    conversations.append(
+                        [
+                            {
+                                "role": "system",
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "text": "Represent the user's input.",
+                                    }
+                                ],
+                            },
+                            {"role": "user", "content": content},
+                        ]
+                    )
 
                 text = self._doc_processor.apply_chat_template(
-                    conversations, add_generation_prompt=True, tokenize=False,
+                    conversations,
+                    add_generation_prompt=True,
+                    tokenize=False,
                 )
                 try:
                     images, video_inputs, video_kwargs = process_vision_info(
-                        conversations, image_patch_size=16,
-                        return_video_metadata=True, return_video_kwargs=True,
+                        conversations,
+                        image_patch_size=16,
+                        return_video_metadata=True,
+                        return_video_kwargs=True,
                     )
                 except Exception:
-                    images, video_inputs, video_kwargs = None, None, {"do_sample_frames": False}
+                    images, video_inputs, video_kwargs = (
+                        None,
+                        None,
+                        {"do_sample_frames": False},
+                    )
 
                 videos, video_metadata = None, None
                 if video_inputs is not None:
@@ -172,11 +209,16 @@ class NanoVDRWrapper(AbsEncoder):
                     videos, video_metadata = list(videos), list(video_metadata)
 
                 processed = self._doc_processor(
-                    text=text, images=images, videos=videos,
+                    text=text,
+                    images=images,
+                    videos=videos,
                     video_metadata=video_metadata,
-                    truncation=True, max_length=8192,
-                    padding=True, do_resize=False,
-                    return_tensors="pt", **video_kwargs,
+                    truncation=True,
+                    max_length=8192,
+                    padding=True,
+                    do_resize=False,
+                    return_tensors="pt",
+                    **video_kwargs,
                 )
                 processed = {k: v.to(self.device) for k, v in processed.items()}
 
@@ -187,7 +229,9 @@ class NanoVDRWrapper(AbsEncoder):
                 flipped = attn.flip(dims=[1])
                 last_pos = flipped.argmax(dim=1)
                 col = attn.shape[1] - last_pos - 1
-                row = torch.arange(outputs.last_hidden_state.shape[0], device=self.device)
+                row = torch.arange(
+                    outputs.last_hidden_state.shape[0], device=self.device
+                )
                 embeddings = outputs.last_hidden_state[row, col]
                 embeddings = F.normalize(embeddings, p=2, dim=-1)
                 all_embeddings.append(embeddings.cpu())
