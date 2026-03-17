@@ -96,6 +96,7 @@ me5_instruct_afri_large_instruct = ModelMeta(
     use_instructions=True,
     reference="https://huggingface.co/McGill-NLP/AfriE5-Large-instruct",
     n_parameters=560_000_000,
+    n_embedding_parameters=256_002_048,
     memory_usage_mb=1068,
     embed_dim=1024,
     license="mit",

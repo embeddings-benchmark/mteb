@@ -1244,7 +1244,7 @@ MTEB_AFRICA = Benchmark(
             # Original tasks
             "SIB200Classification",
             "FloresBitextMining",
-            "SIB200ClusteringFast",
+            "SIB200ClusteringS2S",
             "NTREXBitextMining",
             "AfriXNLI",
             "EmotionAnalysisPlus",

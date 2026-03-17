@@ -38,9 +38,9 @@ class AfriHateClassification(AbsTaskClassification):
             "hau": ["hau-Latn"],  # Hausa
             "ary": ["ary-Arab"],  # Moroccan Arabic
             "pcm": ["pcm-Latn"],  # Nigerian Pidgin
-            "gaz": ["orm-Latn"],  # Oromo
+            "orm": ["gaz-Latn"],  # Oromo
             "som": ["som-Latn"],  # Somali
-            "swh": ["swa-Latn"],  # Swahili
+            "swa": ["swh-Latn"],  # Swahili
             "tir": ["tir-Ethi"],  # Tigrinya
             "twi": ["twi-Latn"],  # Twi
             "xho": ["xho-Latn"],  # isiXhosa
