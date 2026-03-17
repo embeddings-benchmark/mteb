@@ -116,6 +116,47 @@ class ColQwen3_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
             **kwargs,
         )
 
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        """Encode inputs using the appropriate modality.
+
+        For ColQwen3.5 visual document retrieval models:
+        - Queries are always encoded as text.
+        - Documents are encoded as images when available, since the page
+          screenshot is the primary representation. When a dataset has both
+          "text" and "image" features (e.g. ViDoRe V3 corpus entries with
+          OCR text + page screenshots), using images avoids an invalid
+          element-wise addition of multi-vector embeddings with different
+          sequence lengths.
+        """
+        from mteb.types import PromptType
+
+        features = inputs.dataset.features
+        has_image = "image" in features
+        has_text = "text" in features
+
+        if prompt_type == PromptType.query and has_text:
+            return self.get_text_embeddings(inputs, **kwargs)
+        if has_image:
+            return self.get_image_embeddings(inputs, **kwargs)
+        elif has_text:
+            return self.get_text_embeddings(inputs, **kwargs)
+        raise ValueError("No text or image features found in inputs.")
+
+    def encode_input(self, inputs):
+        # Clear stale rope_deltas cache to avoid shape mismatches across batches
+        if hasattr(self.mdl, "rope_deltas"):
+            self.mdl.rope_deltas = None
+        return self.mdl(**inputs)
+
 
 class ColQwen3Wrapper(AbsEncoder):
     """Wrapper for the ColQwen3 vision-language retrieval model."""
