@@ -37,8 +37,7 @@ from .ru_sci_bench_classification import (
 )
 from .scala_classification import ScalaClassification
 from .scandi_sent_classification import ScandiSentClassification
-from .sib200_14classes import SIB200_14Classes
-from .sib200_classification import SIB200Classification
+from .sib200_classification import SIB200_14Classes, SIB200Classification
 from .sibfleurs import SIBFLEURSMultilingualClassification
 from .south_african_lang_classification import SouthAfricanLangClassification
 from .swiss_judgement_classification import SwissJudgementClassification
