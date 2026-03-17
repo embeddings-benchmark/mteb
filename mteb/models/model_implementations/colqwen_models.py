@@ -85,7 +85,7 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
         )
 
 
-class ColQwen3_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
+class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
     """Wrapper for ColQwen3.5 models (colpali_engine)."""
 
     def __init__(
@@ -93,28 +93,26 @@ class ColQwen3_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
         model_name: str = "athrael-soju/colqwen3.5-4.5B-v3",
         revision: str | None = None,
         device: str | None = None,
-        attn_implementation: str | None = None,
         **kwargs,
     ):
+        requires_image_dependencies()
         requires_package(
             self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
         )
         from colpali_engine.models import ColQwen3_5, ColQwen3_5Processor
-        from transformers.utils.import_utils import is_flash_attn_2_available
 
-        if attn_implementation is None:
-            attn_implementation = (
-                "flash_attention_2" if is_flash_attn_2_available() else None
-            )
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
 
-        super().__init__(
-            model_name=model_name,
-            model_class=ColQwen3_5,
-            processor_class=ColQwen3_5Processor,
-            revision=revision,
-            device=device,
+        self.model = ColQwen3_5.from_pretrained(
+            model_name,
+            torch_dtype=torch.bfloat16,
+            device_map=self.device,
+            adapter_kwargs={"revision": revision},
             **kwargs,
         )
+        self.model.eval()
+
+        self.processor = ColQwen3_5Processor.from_pretrained(model_name)
 
     def encode(
         self,
@@ -126,36 +124,104 @@ class ColQwen3_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        """Encode inputs using the appropriate modality.
+        if (
+            "text" not in inputs.dataset.features
+            and "image" not in inputs.dataset.features
+        ):
+            raise ValueError("No text or image features found in inputs.")
+        return self.get_fused_embeddings(inputs, **kwargs)
 
-        For ColQwen3.5 visual document retrieval models:
-        - Queries are always encoded as text.
-        - Documents are encoded as images when available, since the page
-          screenshot is the primary representation. When a dataset has both
-          "text" and "image" features (e.g. ViDoRe V3 corpus entries with
-          OCR text + page screenshots), using images avoids an invalid
-          element-wise addition of multi-vector embeddings with different
-          sequence lengths.
-        """
-        from mteb.types import PromptType
-
-        features = inputs.dataset.features
-        has_image = "image" in features
-        has_text = "text" in features
-
-        if prompt_type == PromptType.query and has_text:
-            return self.get_text_embeddings(inputs, **kwargs)
-        if has_image:
-            return self.get_image_embeddings(inputs, **kwargs)
-        elif has_text:
-            return self.get_text_embeddings(inputs, **kwargs)
-        raise ValueError("No text or image features found in inputs.")
-
-    def encode_input(self, inputs):
+    def _encode_inputs(self, encoded_inputs: dict[str, torch.Tensor]) -> torch.Tensor:
         # Clear stale rope_deltas cache to avoid shape mismatches across batches
-        if hasattr(self.mdl, "rope_deltas"):
-            self.mdl.rope_deltas = None
-        return self.mdl(**inputs)
+        if hasattr(self.model, "rope_deltas"):
+            self.model.rope_deltas = None
+        # ColQwen3_5.forward returns the projection tensor directly (not a named tuple)
+        return self.model(**encoded_inputs)
+
+    def get_fused_embeddings(
+        self,
+        image_texts_pairs: DataLoader[BatchedInput] | None = None,
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ):
+        import torchvision.transforms.functional as F
+        from PIL import Image
+
+        contains_image = "image" in image_texts_pairs.dataset.features
+        contains_text = "text" in image_texts_pairs.dataset.features
+        contains_both = contains_image and contains_text
+
+        if contains_both:
+            progress_desc = "Encoding images+texts"
+        elif contains_image:
+            progress_desc = "Encoding images"
+        elif contains_text:
+            progress_desc = "Encoding texts"
+        else:
+            raise ValueError("No text or image features found in inputs.")
+
+        all_embeds: list[torch.Tensor] = []
+        with torch.no_grad():
+            for batch in tqdm(
+                image_texts_pairs,
+                disable=not show_progress_bar,
+                desc=progress_desc,
+            ):
+                if contains_image:
+                    imgs = [
+                        F.to_pil_image(b.to(self.device))
+                        if not isinstance(b, Image.Image)
+                        else b
+                        for b in batch["image"]
+                    ]
+                else:
+                    imgs = None
+                if contains_text:
+                    texts = batch["text"]
+                else:
+                    texts = None
+                if contains_both:
+                    assert len(imgs) == len(texts), (
+                        f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
+                    )
+
+                if contains_image:
+                    imgs = [img.convert("RGB") for img in imgs]
+                    if texts is not None:
+                        text_input = [
+                            self.processor.visual_prompt_prefix + t
+                            for t in texts
+                        ]
+                    else:
+                        text_input = [self.processor.visual_prompt_prefix] * len(imgs)
+                    inputs = self.processor(
+                        text=text_input,
+                        images=imgs,
+                        padding="longest",
+                        return_tensors="pt",
+                    )
+                    # Pad pixel_values for variable-size patches (mirrors process_images)
+                    offsets = inputs["image_grid_thw"][:, 1] * inputs["image_grid_thw"][:, 2]
+                    pixel_values = list(torch.split(inputs["pixel_values"], offsets.tolist()))
+                    inputs["pixel_values"] = torch.nn.utils.rnn.pad_sequence(
+                        pixel_values, batch_first=True
+                    )
+                else:
+                    inputs = self.processor.process_queries(texts)
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                outs = self._encode_inputs(inputs)
+                all_embeds.extend(outs.cpu().to(torch.float32))
+
+        padded = torch.nn.utils.rnn.pad_sequence(
+            all_embeds, batch_first=True, padding_value=0
+        )
+        return padded
+
+    def similarity(self, a, b):
+        a = [torch.as_tensor(x) for x in a]
+        b = [torch.as_tensor(x) for x in b]
+        return self.processor.score_multi_vector(a, b, device=self.device)
 
 
 class ColQwen3Wrapper(AbsEncoder):
