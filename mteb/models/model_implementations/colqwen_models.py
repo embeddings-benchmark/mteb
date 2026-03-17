@@ -85,6 +85,38 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
         )
 
 
+class ColQwen3_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
+    """Wrapper for ColQwen3.5 models (colpali_engine)."""
+
+    def __init__(
+        self,
+        model_name: str = "athrael-soju/colqwen3.5-4.5B-v3",
+        revision: str | None = None,
+        device: str | None = None,
+        attn_implementation: str | None = None,
+        **kwargs,
+    ):
+        requires_package(
+            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
+        )
+        from colpali_engine.models import ColQwen3_5, ColQwen3_5_Processor
+        from transformers.utils.import_utils import is_flash_attn_2_available
+
+        if attn_implementation is None:
+            attn_implementation = (
+                "flash_attention_2" if is_flash_attn_2_available() else None
+            )
+
+        super().__init__(
+            model_name=model_name,
+            model_class=ColQwen3_5,
+            processor_class=ColQwen3_5_Processor,
+            revision=revision,
+            device=device,
+            **kwargs,
+        )
+
+
 class ColQwen3Wrapper(AbsEncoder):
     """Wrapper for the ColQwen3 vision-language retrieval model."""
 
@@ -475,4 +507,48 @@ evoqwen25_vl_retriever_7b_v1 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=EVOQWEN_TRAINING_DATA,
+)
+
+
+COLQWEN35_V3_TRAINING_DATA = {
+    # from https://huggingface.co/datasets/vidore/colpali_train_set
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreArxivQARetrieval",
+    # from https://huggingface.co/datasets/openbmb/VisRAG-Ret-Train-Synthetic-data
+    "VisRAG-Ret-Train-Synthetic-data",
+    # from https://huggingface.co/datasets/openbmb/VisRAG-Ret-Train-In-domain-data
+    "VisRAG-Ret-Train-In-domain-data",
+    # from https://huggingface.co/datasets/llamaindex/vdr-multilingual-train
+    "VDRMultilingualRetrieval",
+    # from https://huggingface.co/datasets/Metric-AI/tabfquad_train_set
+    "VidoreTabfquadRetrieval",
+}
+
+colqwen3_5_v3 = ModelMeta(
+    loader=ColQwen3_5Wrapper,
+    loader_kwargs=dict(
+        torch_dtype=torch.bfloat16,
+    ),
+    name="athrael-soju/colqwen3.5-4.5B-v3",
+    model_type=["late-interaction"],
+    languages=["eng-Latn"],
+    revision="fe68094c22e6e956190086d610b058263e562002",
+    release_date="2026-03-15",
+    modalities=["image", "text"],
+    n_parameters=4_600_000_000,
+    n_embedding_parameters=635_699_200,
+    memory_usage_mb=8660,
+    max_tokens=262144,
+    embed_dim=128,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "ColPali", "safetensors"],
+    reference="https://huggingface.co/athrael-soju/colqwen3.5-4.5B-v3",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=False,
+    training_datasets=COLQWEN35_V3_TRAINING_DATA,
 )
