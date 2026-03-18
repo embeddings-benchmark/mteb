@@ -189,7 +189,7 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
                     imgs = [img.convert("RGB") for img in imgs]
                     inputs = self.processor.process_images(imgs)
                 else:
-                    inputs = self.processor.process_texts(texts)
+                    inputs = self.processor.process_queries(texts)
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 outs = self._encode_inputs(inputs)
                 all_embeds.extend(outs.cpu().to(torch.float32))
