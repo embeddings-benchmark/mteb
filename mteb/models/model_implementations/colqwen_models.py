@@ -105,7 +105,6 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
 
         self.model = ColQwen3_5.from_pretrained(
             model_name,
-            torch_dtype=torch.bfloat16,
             device_map=self.device,
             adapter_kwargs={"revision": revision},
             **kwargs,
