@@ -174,14 +174,6 @@ class SLMBaseWrapper(AbsEncoder):
         )
         return padded
 
-    def calculate_probs(
-        self,
-        text_embeddings: torch.Tensor,
-        image_embeddings: torch.Tensor,
-    ) -> torch.Tensor:
-        scores = self.similarity(text_embeddings, image_embeddings).T
-        return scores.softmax(dim=-1)
-
     def similarity(
         self,
         a: torch.Tensor | list,

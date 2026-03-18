@@ -134,10 +134,6 @@ class NemotronColEmbedVL(AbsEncoder):
 
         return self.model.forward_images(all_images, batch_size=batch_size)
 
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        scores = self.similarity(text_embeddings, image_embeddings)
-        return (scores * 100).softmax(dim=-1)
-
     def similarity(self, a, b):
         return self.model.get_scores(a, b)
 
