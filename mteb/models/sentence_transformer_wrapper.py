@@ -74,10 +74,16 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             self.model = SentenceTransformer(
                 model, revision=revision, device=device, **kwargs
             )
+            self.mteb_model_meta = ModelMeta.create_empty(
+                overwrites=dict(
+                    name=model,
+                    revision=revision,
+                    loader=sentence_transformers_loader,
+                )
+            )
         else:
             self.model = model
-
-        self.mteb_model_meta = ModelMeta.from_sentence_transformer_model(self.model)
+            self.mteb_model_meta = ModelMeta.from_sentence_transformer_model(self.model)
 
         built_in_prompts = getattr(self.model, "prompts", None)
         if built_in_prompts and not model_prompts:
@@ -291,10 +297,16 @@ class CrossEncoderWrapper:
 
         if isinstance(model, CrossEncoder):
             self.model = model
+            self.mteb_model_meta = ModelMeta.from_cross_encoder(self.model)
         elif isinstance(model, str):
             self.model = CrossEncoder(model, revision=revision, device=device, **kwargs)
-
-        self.mteb_model_meta = ModelMeta.from_cross_encoder(self.model)
+            self.mteb_model_meta = ModelMeta.create_empty(
+                overwrites=dict(
+                    name=model,
+                    revision=revision,
+                    loader=CrossEncoderWrapper,
+                )
+            )
         self.query_prefix = query_prefix
         self.passage_prefix = passage_prefix
 
