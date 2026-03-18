@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import warnings
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 import torch
 
@@ -38,12 +38,7 @@ class CompressionWrapper:
         self.model = model
         self._quantization_level = quantization_level
         self.quantiles = None
-        self.quantize_queries = False
-        self.mins: Optional[torch.Tensor] = None
-        self.maxs: Optional[torch.Tensor] = None
         self.min_embeds = 10_000
-        self.hf_subset = ''
-        self.task_name = ''
         embed_types = None
         if quantiles is not None:
             assert 0 < quantiles[0] < quantiles[1] < 1
@@ -56,8 +51,8 @@ class CompressionWrapper:
                 f"which might lead to better results."
             )
             warnings.warn(
-                f"The model {model.mteb_model_meta.name} internally supports quantization to "
-                f"{quantization_level}, which might lead to better results."
+                f"The model {model.mteb_model_meta.name} internally supports quantization to {quantization_level}, "
+                f"which might lead to better results."
             )
         logger.info("Initialized CompressionWrapper.")
 
@@ -101,36 +96,11 @@ class CompressionWrapper:
             **kwargs,
         )
 
-        if self.hf_subset != hf_subset or task_metadata.name != self.task_name:
-            self.hf_subset = hf_subset
-            self.task_name = task_metadata.name
-            self._reset_boundaries()
-
         if not isinstance(embeddings, torch.Tensor):
             embeddings = torch.tensor(embeddings).float()
 
-        if prompt_type == PromptType.query and task_metadata.category in [
-            "t2i",
-            "i2t",
-            "it2i",
-            "i2it",
-        ]:
-            # With multimodal tasks, always quantize text and image embeddings separately
-            logger.info(f"Quantizing query embeddings to {self._quantization_level}")
-            embeddings = self._quantize_embeddings(embeddings)
-            self._reset_boundaries()
-            return embeddings
-        elif prompt_type == PromptType.query and self._quantization_level in [
-            torch.int8,
-            torch.int,
-        ]:
-            # Otherwise, compute thresholds for int8/int4 quantization on documents first, then apply them on queries
-            logger.info("Query embeddings will be quantized on similarity calculation.")
-            self.quantize_queries = True
-            return embeddings
-        else:
-            logger.info(f"Quantizing embeddings to {self._quantization_level}")
-            return self._quantize_embeddings(embeddings)
+        logger.info(f"Quantizing embeddings to {self._quantization_level}.")
+        return self._quantize_embeddings(embeddings)
 
     def _quantize_embeddings(
         self,
@@ -171,7 +141,6 @@ class CompressionWrapper:
             quantized = torch.floor((embeddings - mins) / steps) - int(
                 2**num_bits * 0.5
             )
-            quantized = quantized.type(torch.int8)
         elif self._quantization_level == torch.bool:
             quantized = torch.where(embeddings > 0, 1.0, 0.0)
         else:
@@ -196,43 +165,21 @@ class CompressionWrapper:
         Returns:
             The minimum and maximum values per embedding dimension.
         """
-        # Use pre-computed values, if present
-        if self.mins is not None and self.maxs is not None:
-            return self.mins, self.maxs
-        else:
-            if len(embeddings) < self.min_embeds:
-                logger.warning(
-                    f"Estimating quantization parameters on less than {self.min_embeds} embeddings (only "
-                    f"{len(embeddings)}). Parameters are likely unstable and results might not generalize."
-                )
-                warnings.warn(
-                    f"Estimating quantization parameters on less than {self.min_embeds} embeddings (only "
-                    f"{len(embeddings)}). Parameters are likely unstable and results might not generalize."
-                )
-            mins, maxs = (
-                torch.min(embeddings, dim=0).values,
-                torch.max(embeddings, dim=0).values,
+        if len(embeddings) < self.min_embeds:
+            logger.warning(
+                f"Estimating quantization parameters on less than {self.min_embeds} embeddings (only "
+                f"{len(embeddings)}). Parameters are likely unstable and results might not generalize."
             )
-            self.mins = mins
-            self.maxs = maxs
-            return mins, maxs
+            warnings.warn(
+                f"Estimating quantization parameters on less than {self.min_embeds} embeddings (only "
+                f"{len(embeddings)}). Parameters are likely unstable and results might not generalize."
+            )
 
-    def _reset_boundaries(self) -> None:
-        """Resets the minima and maxima for evaluation on multiple datasets or batches."""
-        self.mins = None
-        self.maxs = None
-
-    def _quantize_queries(
-        self,
-        embeddings: Array,
-    ) -> Array:
-        """Quantizes embeddings to integer range"""
-        if not isinstance(embeddings, torch.Tensor):
-            embeddings = torch.tensor(embeddings)
-        if embeddings.dtype != torch.int8:
-            logger.info("Quantizing query embeddings.")
-            return torch.tensor(self._quantize_embeddings(embeddings.clone())).float()
-        return embeddings.float()
+        mins, maxs = (
+            torch.min(embeddings, dim=0).values,
+            torch.max(embeddings, dim=0).values,
+        )
+        return mins, maxs
 
     def similarity(
         self,
@@ -240,10 +187,6 @@ class CompressionWrapper:
         embeddings2: Array,
     ) -> Array:
         """Refer to [EncoderProtocol.similarity][mteb.models.EncoderProtocol.similarity] for more details."""
-        if self.quantize_queries:
-            embeddings1 = self._quantize_queries(embeddings1)
-            embeddings2 = self._quantize_queries(embeddings2)
-        self._reset_boundaries()
         return self.model.similarity(embeddings1, embeddings2)
 
     def similarity_pairwise(
@@ -252,8 +195,4 @@ class CompressionWrapper:
         embeddings2: Array,
     ) -> Array:
         """Refer to [EncoderProtocol.similarity][mteb.models.EncoderProtocol.similarity_pairwise] for more details."""
-        if self.quantize_queries:
-            embeddings1 = self._quantize_queries(embeddings1)
-            embeddings2 = self._quantize_queries(embeddings2)
-        self._reset_boundaries()
         return self.model.similarity_pairwise(embeddings1, embeddings2)
