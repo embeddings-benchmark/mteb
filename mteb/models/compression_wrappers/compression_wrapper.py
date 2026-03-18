@@ -6,15 +6,13 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 
-from mteb.types import PromptType
-
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.model_meta import ModelMeta
     from mteb.models.models_protocols import EncoderProtocol
-    from mteb.types import Array, BatchedInput
+    from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
