@@ -3,10 +3,13 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
+import numpy as np
 import torch
 from tqdm.auto import tqdm
 
+from mteb._create_dataloaders import AudioCollator
 from mteb._requires_package import (
+    requires_audio_dependencies,
     requires_image_dependencies,
     requires_package,
 )
@@ -38,6 +41,7 @@ class E5OmniWrapper(AbsEncoder):
         torch_dtype: torch.dtype | str | None = torch.bfloat16,
         **kwargs: Any,
     ):
+        requires_audio_dependencies()
         requires_image_dependencies()
         requires_package(self, "transformers", model_name, "pip install mteb[e5-omni]")
         requires_package(
@@ -67,6 +71,9 @@ class E5OmniWrapper(AbsEncoder):
             use_fast=False,
         )
         self.processor.tokenizer.padding_side = "left"
+        self.sampling_rate = self.processor.feature_extractor.sampling_rate
+        self.max_audio_length_seconds = kwargs.pop("max_audio_length_seconds", 30.0)
+        self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
         self.model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained(
             model_name,
@@ -95,14 +102,16 @@ class E5OmniWrapper(AbsEncoder):
         for batch in tqdm(inputs, desc="Encoding"):
             batch_texts = batch.get("text", [])
             batch_images = batch.get("image", [])
+            batch_audios = batch.get("audio", [])
 
-            if not batch_texts and not batch_images:
-                raise ValueError("No text or image features found in batch.")
+            if not batch_texts and not batch_images and not batch_audios:
+                raise ValueError("No text, image, or audio features found in batch.")
 
             text_prefix = "Query: " if prompt_type == PromptType.query else ""
 
             messages = []
-            max_len = max(len(batch_texts), len(batch_images))
+            audio_inputs: list[np.ndarray] = []
+            max_len = max(len(batch_texts), len(batch_images), len(batch_audios))
             for i in range(max_len):
                 content = []
                 if i < len(batch_texts):
@@ -114,6 +123,21 @@ class E5OmniWrapper(AbsEncoder):
                     content.append({"type": "text", "text": prefixed_text})
                 if i < len(batch_images):
                     content.append({"type": "image", "image": batch_images[i]})
+                if i < len(batch_audios):
+                    audio_row = batch_audios[i]
+                    if isinstance(audio_row.get("array"), list):
+                        audio_row = dict(audio_row)
+                        audio_row["array"] = np.asarray(audio_row["array"])
+
+                    audio_array = AudioCollator.resample_audio(
+                        {"audio": audio_row},
+                        target_sampling_rate=self.sampling_rate,
+                        max_samples=self.max_samples,
+                    )
+                    if audio_array.ndim == 1:
+                        audio_array = audio_array[None, :]
+                    content.append({"type": "audio", "audio": "placeholder"})
+                    audio_inputs.append(audio_array)
                 messages.append([{"role": "user", "content": content}])
 
             texts = []
@@ -128,13 +152,10 @@ class E5OmniWrapper(AbsEncoder):
             # Collect and flatten multimodal content across the batch.
             # process_mm_info returns lists (or None) per message; the processor
             # expects a single flat list of all images/audios/videos in order.
-            audio_inputs: list = []
             image_inputs: list = []
             video_inputs: list = []
             for msg in messages:
-                a, im, v = process_mm_info(msg, use_audio_in_video=True)
-                if a is not None:
-                    audio_inputs.extend(a if isinstance(a, list) else [a])
+                _, im, v = process_mm_info(msg, use_audio_in_video=True)
                 if im is not None:
                     image_inputs.extend(im if isinstance(im, list) else [im])
                 if v is not None:
@@ -147,6 +168,7 @@ class E5OmniWrapper(AbsEncoder):
                 "images": image_inputs if image_inputs else None,
                 "videos": video_inputs if video_inputs else None,
                 "audio": audio_inputs if audio_inputs else None,
+                "sampling_rate": self.sampling_rate,
                 "padding": "longest",
                 "return_tensors": "pt",
             }
@@ -210,7 +232,8 @@ e5_omni_3b = ModelMeta(
     modalities=[
         "text",
         "image",
-    ],  # Wrapper currently supports text/image only.
+        "audio",
+    ],
     n_parameters=4_703_464_448,
     n_embedding_parameters=311_164_928,
     memory_usage_mb=8971,
@@ -238,7 +261,8 @@ e5_omni_7b = ModelMeta(
     modalities=[
         "text",
         "image",
-    ],  # Wrapper currently supports text/image only.
+        "audio",
+    ],
     n_parameters=8_931_813_888,
     n_embedding_parameters=544_997_376,
     memory_usage_mb=17036,
