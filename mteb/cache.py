@@ -12,6 +12,7 @@ import time
 import warnings
 from collections import defaultdict
 from collections.abc import Mapping
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
@@ -1113,24 +1114,24 @@ class ResultCache:
 
         body = textwrap.dedent(f"""
         ## MTEB Evaluation Results Submission
-    
+
         ### Models Submitted
         {chr(10).join(model_details)}
-    
+
         **Total Results:** {total_results}
-    
+
         ---
-    
+
         ### Details
         - **Submitted by:** MTEB ResultCache
-        - **Timestamp:** {time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime())}
+        f"- **Timestamp:** {datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")}"
         - **Submission method:** Automated via `ResultCache.submit_results()`
-    
+
         ### Instructions for Reviewers
         Please review the results files and ensure they meet the MTEB submission format requirements.
-    
+
         ---
-    
+
         *This PR was created automatically. Please check the results carefully before merging.*
         """)
         return body.strip()
@@ -1333,7 +1334,7 @@ class ResultCache:
         except Exception as e:
             logger.warning(f"Could not check rate limit: {e}")
 
-        branch_name = f"mteb-results-{int(time.time())}"
+        branch_name = f"mteb-results-{int(datetime.now().timestamp())}"
         remote_path = self.cache_path / "remote"
         fork_url = f"https://github.com/{user.login}/results.git"
         try:
