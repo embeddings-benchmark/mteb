@@ -32,6 +32,8 @@ KNOWN_ISSUES = {
     "ArxivClassification",
     "EmotionClassification",
     "FinancialPhrasebankClassification",
+    "AfriHateClassification",
+    "KinNewsClassification",
     "InjongoIntent",
     "SIB200-14Classes",
     "EmotionAnalysisPlus",
