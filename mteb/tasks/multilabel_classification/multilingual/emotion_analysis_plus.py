@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import ClassVar
+
 from mteb.abstasks.multilabel_classification import (
     AbsTaskMultilabelClassification,
 )
@@ -73,7 +75,7 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
     )
 
     # ---------------------------------------------------------------- constants
-    _EMOTION2ID = {
+    _EMOTION2ID: ClassVar[dict[str, int]] = {
         "anger": 0,
         "disgust": 1,
         "fear": 2,
@@ -81,8 +83,14 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
         "sadness": 4,
         "surprise": 5,
     }
-    _LOOKUP_TEXT = ("text", "sentence", "utterance")
-    _LOOKUP_EMO = ("label", "emotions", "emotion", "category", "label_cat")
+    _LOOKUP_TEXT: ClassVar[tuple[str, ...]] = ("text", "sentence", "utterance")
+    _LOOKUP_EMO: ClassVar[tuple[str, ...]] = (
+        "label",
+        "emotions",
+        "emotion",
+        "category",
+        "label_cat",
+    )
 
     # ---------------------------------------------------------------- transform
     def dataset_transform(self, **kwargs) -> None:
@@ -111,15 +119,15 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
                 # ── 3️⃣  map each row to {text, label} ────────────────────────
                 def to_labels(example):
                     labels = [
-                        self._EMOTION2ID[emo]      # integer ID
-                        for emo in emo_cols        # only the columns that exist
+                        self._EMOTION2ID[emo]  # integer ID
+                        for emo in emo_cols  # only the columns that exist
                         if int(example[emo]) == 1  # treat non-zero as “present”
                     ]
                     return {"text": example[text_col], "label": labels}
 
                 ds = ds.map(
                     to_labels,
-                    remove_columns=cols,          # drop original columns
+                    remove_columns=cols,  # drop original columns
                     desc=f"{lang}/{split}",
                 )
 
@@ -130,7 +138,5 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
         for lang, splits in self.dataset.items():
             if "train" not in splits:
                 self.dataset[lang]["train"] = (
-                    splits.get("validation")
-                    or splits.get("dev")
-                    or splits["test"]
+                    splits.get("validation") or splits.get("dev") or splits["test"]
                 )

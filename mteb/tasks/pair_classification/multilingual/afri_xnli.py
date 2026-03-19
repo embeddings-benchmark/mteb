@@ -67,4 +67,6 @@ class AfriXNLI(AbsTaskPairClassification):
                         "labels": 0 if example["label"] == 2 else 1,
                     }
 
-                self.dataset[lang][split] = ds.map(map_labels, remove_columns=ds.column_names)
+                self.dataset[lang][split] = ds.map(
+                    map_labels, remove_columns=ds.column_names
+                )

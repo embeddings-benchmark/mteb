@@ -8,13 +8,13 @@ from .x_stance import XStance
 from .xnli import XNLI, XNLIV2
 
 __all__ = [
+    "RTE3",
+    "XNLI",
+    "XNLIV2",
     "AfriXNLI",
     "IndicXnliPairClassification",
     "OpusparcusPC",
     "PawsXPairClassification",
     "PubChemWikiPairClassification",
-    "RTE3",
     "XStance",
-    "XNLI",
-    "XNLIV2",
 ]
