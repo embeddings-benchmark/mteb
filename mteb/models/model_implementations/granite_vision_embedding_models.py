@@ -153,10 +153,6 @@ class GraniteVisionEmbeddingWrapper:
             return image_embeddings
         raise ValueError
 
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        scores = self.similarity(text_embeddings, image_embeddings)
-        return (scores * 100).softmax(dim=-1)
-
     def similarity(self, a, b):
         return self.processor.score_multi_vector(a, b)
 

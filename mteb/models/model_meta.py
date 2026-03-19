@@ -57,6 +57,7 @@ FRAMEWORKS = Literal[
     "GritLM",
     "LLM2Vec",
     "TensorFlow",
+    "JAX",
     "API",
     "Tevatron",
     "NumPy",
@@ -66,6 +67,7 @@ FRAMEWORKS = Literal[
     "GGUF",
     "safetensors",
     "ONNX",
+    "OpenVINO",
     "Transformers",
 ]
 
@@ -1081,6 +1083,10 @@ class ModelMeta(BaseModel):
     def _get_frameworks_from_hf_tags(model_name: str) -> list[FRAMEWORKS]:
         """Extract frameworks supported by the model from HuggingFace model tags.
 
+        HuggingFace derives tags like ``pytorch``, ``tf``, ``jax``, ``onnx``,
+        ``safetensors``, ``gguf``, and ``openvino`` from the files present in a
+        repository. This method maps those tags to MTEB framework names.
+
         Args:
             model_name: HuggingFace model name
 
@@ -1097,22 +1103,25 @@ class ModelMeta(BaseModel):
             )
             return []
 
-        # Mapping from HuggingFace tags to MTEB framework names
+        # Mapping from HuggingFace tags to MTEB framework names.
+        # Order determines the order of the returned list.
         tag_to_framework: dict[str, FRAMEWORKS] = {
             "sentence-transformers": "Sentence Transformers",
+            "pytorch": "PyTorch",
+            "tf": "TensorFlow",
+            "jax": "JAX",
             "transformers": "Transformers",
             "onnx": "ONNX",
             "safetensors": "safetensors",
             "gguf": "GGUF",
+            "openvino": "OpenVINO",
         }
 
-        # Assume PyTorch support by default
-        # TODO: could be detected from repo as well: https://github.com/embeddings-benchmark/mteb/issues/4104
-        frameworks: list[FRAMEWORKS] = ["PyTorch"]
+        frameworks: list[FRAMEWORKS] = []
 
-        for framework_tag in tag_to_framework.keys():
+        for framework_tag, framework_name in tag_to_framework.items():
             if framework_tag in info.tags:
-                frameworks.append(tag_to_framework[framework_tag])
+                frameworks.append(framework_name)
 
         return frameworks
 
