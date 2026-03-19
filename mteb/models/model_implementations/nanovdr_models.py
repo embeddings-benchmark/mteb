@@ -251,6 +251,16 @@ class NanoVDRWrapper(AbsEncoder):
     ) -> Array:
         from mteb.types import PromptType
 
+        # Validate: reject tasks where queries contain images.
+        # NanoVDR only supports text-query → image-document retrieval.
+        if prompt_type == PromptType.query and "image" in inputs.dataset.features:
+            raise ValueError(
+                f"NanoVDR only supports text queries, but task "
+                f"'{task_metadata.name}' provides image inputs for queries. "
+                f"NanoVDR is a text-query → image-document retrieval model "
+                f"and does not support image-query or image-classification tasks."
+            )
+
         if prompt_type == PromptType.document:
             return self._encode_documents(inputs, show_progress_bar=show_progress_bar)
         else:
