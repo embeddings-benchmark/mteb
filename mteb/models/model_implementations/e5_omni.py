@@ -7,7 +7,6 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import AudioCollator
 from mteb._requires_package import (
     requires_audio_dependencies,
     requires_image_dependencies,
@@ -39,10 +38,11 @@ class E5OmniWrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         torch_dtype: torch.dtype | str | None = torch.bfloat16,
+        max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
         requires_image_dependencies()
+        requires_audio_dependencies()
         requires_package(self, "transformers", model_name, "pip install mteb[e5-omni]")
         requires_package(
             self, "qwen_omni_utils", model_name, "pip install mteb[e5-omni]"
@@ -71,9 +71,6 @@ class E5OmniWrapper(AbsEncoder):
             use_fast=False,
         )
         self.processor.tokenizer.padding_side = "left"
-        self.sampling_rate = self.processor.feature_extractor.sampling_rate
-        self.max_audio_length_seconds = kwargs.pop("max_audio_length_seconds", 30.0)
-        self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
         self.model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained(
             model_name,
@@ -83,6 +80,29 @@ class E5OmniWrapper(AbsEncoder):
         ).to(self.device)
         self.model.padding_side = "left"
         self.model.eval()
+
+        self.sampling_rate = self.processor.feature_extractor.sampling_rate
+        self.max_samples = int(max_audio_length_seconds * self.sampling_rate)
+
+    def _prepare_audio_array(self, audio_row: dict[str, Any]) -> np.ndarray:
+        audio_array = np.asarray(audio_row["array"], dtype=np.float32).squeeze()
+        if audio_array.ndim > 1:
+            audio_array = audio_array[0] if audio_array.shape[0] == 1 else audio_array.mean(axis=0)
+
+        source_sampling_rate = audio_row.get("sampling_rate", self.sampling_rate)
+        if source_sampling_rate != self.sampling_rate:
+            import torchaudio
+
+            resampler = torchaudio.transforms.Resample(
+                orig_freq=source_sampling_rate,
+                new_freq=self.sampling_rate,
+            )
+            audio_array = resampler(torch.from_numpy(audio_array).float()).numpy()
+
+        if self.max_samples is not None and audio_array.shape[-1] > self.max_samples:
+            audio_array = audio_array[..., : self.max_samples]
+
+        return np.asarray(audio_array, dtype=np.float32)
 
     @torch.no_grad()
     def encode(
@@ -104,14 +124,11 @@ class E5OmniWrapper(AbsEncoder):
             batch_images = batch.get("image", [])
             batch_audios = batch.get("audio", [])
 
-            if not batch_texts and not batch_images and not batch_audios:
-                raise ValueError("No text, image, or audio features found in batch.")
-
             text_prefix = "Query: " if prompt_type == PromptType.query else ""
 
             messages = []
-            audio_inputs: list[np.ndarray] = []
             max_len = max(len(batch_texts), len(batch_images), len(batch_audios))
+
             for i in range(max_len):
                 content = []
                 if i < len(batch_texts):
@@ -125,61 +142,37 @@ class E5OmniWrapper(AbsEncoder):
                     content.append({"type": "image", "image": batch_images[i]})
                 if i < len(batch_audios):
                     audio_row = batch_audios[i]
-                    if isinstance(audio_row.get("array"), list):
-                        audio_row = dict(audio_row)
-                        audio_row["array"] = np.asarray(audio_row["array"])
-
-                    audio_array = AudioCollator.resample_audio(
-                        {"audio": audio_row},
-                        target_sampling_rate=self.sampling_rate,
-                        max_samples=self.max_samples,
+                    content.append(
+                        {
+                            "type": "audio",
+                            "audio": self._prepare_audio_array(audio_row),
+                        }
                     )
-                    if audio_array.ndim == 1:
-                        audio_array = audio_array[None, :]
-                    content.append({"type": "audio", "audio": "placeholder"})
-                    audio_inputs.append(audio_array)
                 messages.append([{"role": "user", "content": content}])
 
-            texts = []
-            for msg in messages:
-                rendered = self.processor.apply_chat_template(
-                    msg, tokenize=False, add_generation_prompt=True
-                )
-                if isinstance(rendered, list):
-                    rendered = rendered[0]
-                texts.append(f"{rendered}<|endoftext|>")
+            texts = self.processor.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True
+            )
+            if isinstance(texts, str):
+                texts = [texts]
+            texts = [f"{rendered}<|endoftext|>" for rendered in texts]
 
-            # Collect and flatten multimodal content across the batch.
-            # process_mm_info returns lists (or None) per message; the processor
-            # expects a single flat list of all images/audios/videos in order.
-            image_inputs: list = []
-            video_inputs: list = []
-            for msg in messages:
-                _, im, v = process_mm_info(msg, use_audio_in_video=True)
-                if im is not None:
-                    image_inputs.extend(im if isinstance(im, list) else [im])
-                if v is not None:
-                    video_inputs.extend(v if isinstance(v, list) else [v])
+            audio_inputs, image_inputs, video_inputs = process_mm_info(
+                messages, use_audio_in_video=True
+            )
 
             is_multimodal = bool(audio_inputs or image_inputs or video_inputs)
 
-            processor_kwargs: dict = {
-                "text": texts,
-                "images": image_inputs if image_inputs else None,
-                "videos": video_inputs if video_inputs else None,
-                "audio": audio_inputs if audio_inputs else None,
-                "sampling_rate": self.sampling_rate,
-                "padding": "longest",
-                "return_tensors": "pt",
-            }
-
-            if is_multimodal:
-                processor_kwargs["truncation"] = False
-            else:
-                processor_kwargs["truncation"] = True
-                processor_kwargs["max_length"] = 512
-
-            model_inputs = self.processor(**processor_kwargs).to(self.device)
+            model_inputs = self.processor(
+                text=texts,
+                images=image_inputs if image_inputs else None,
+                videos=video_inputs if video_inputs else None,
+                audio=audio_inputs if audio_inputs else None,
+                padding="longest",
+                return_tensors="pt",
+                max_length=None if is_multimodal else 512,
+                truncation=not is_multimodal,
+            ).to(self.device)
 
             # Follow the model card exactly: prepare_inputs_for_generation sets up
             # cache positions and positional encodings for the Thinker architecture.
