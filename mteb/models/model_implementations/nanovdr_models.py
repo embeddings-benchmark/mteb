@@ -99,7 +99,6 @@ class NanoVDRWrapper(AbsEncoder):
         qwen3_vl_cls = _build_qwen3_vl_for_embedding_class()
         self._doc_model = qwen3_vl_cls.from_pretrained(
             "Qwen/Qwen3-VL-Embedding-2B",
-            trust_remote_code=True,
         ).to(self.device)
         self._doc_model.eval()
         self._doc_processor = Qwen3VLProcessor.from_pretrained(
