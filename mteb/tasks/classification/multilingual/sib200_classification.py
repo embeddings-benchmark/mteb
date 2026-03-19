@@ -244,13 +244,25 @@ class SIB200Classification(AbsTaskClassification):
 
 
 _TOPICS = [
-    "travel", "politics", "science", "sports", "technology", "health",
-    "nature", "entertainment", "geography", "business", "disasters",
-    "crime", "education", "religion",
+    "travel",
+    "politics",
+    "science",
+    "sports",
+    "technology",
+    "health",
+    "nature",
+    "entertainment",
+    "geography",
+    "business",
+    "disasters",
+    "crime",
+    "education",
+    "religion",
 ]
 _TOPIC2ID = {name: idx for idx, name in enumerate(_TOPICS)}
 
-class SIB200_14Classes(AbsTaskClassification):
+
+class SIB20014Classes(AbsTaskClassification):
     """SIB‑200 (14 topics) multilingual classification benchmark."""
 
     metadata = TaskMetadata(
@@ -279,13 +291,11 @@ class SIB200_14Classes(AbsTaskClassification):
         dialect=[],
         sample_creation="human-translated and localized",
         bibtex_citation=r"""
-@misc{adelani2023sib200,
-      title={SIB-200: A Simple, Inclusive, and Big Evaluation Dataset for Topic Classification in 200+ Languages and Dialects},
-      author={Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O. and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
-      year={2023},
-      eprint={2309.07445},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+@article{adelani2023sib,
+  author = {Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
+  journal = {arXiv preprint arXiv:2309.07445},
+  title = {SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
+  year = {2023},
 }
 """,
     )
@@ -299,11 +309,13 @@ class SIB200_14Classes(AbsTaskClassification):
         for lang in self.dataset:
             for split in self.dataset[lang]:
                 ds = self.dataset[lang][split]
-                
+
                 cols = ds.column_names
-                text_col = next(c for c in ("text", "sentence", "utterance") if c in cols)
-                lab_col  = next(c for c in ("label", "labels", "category")   if c in cols)
-                
+                text_col = next(
+                    c for c in ("text", "sentence", "utterance") if c in cols
+                )
+                lab_col = next(c for c in ("label", "labels", "category") if c in cols)
+
                 def to_mteb(example):
                     raw_label = example[lab_col]
                     if isinstance(raw_label, str):
@@ -311,5 +323,5 @@ class SIB200_14Classes(AbsTaskClassification):
                     else:
                         label = int(raw_label)
                     return {"text": example[text_col], "label": label}
-                
+
                 self.dataset[lang][split] = ds.map(to_mteb, remove_columns=cols)

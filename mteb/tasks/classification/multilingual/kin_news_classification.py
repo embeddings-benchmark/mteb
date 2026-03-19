@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class KinNewsClassification(AbsTaskClassification):
     """
     KINNEWS and KIRNEWS: Benchmarking Cross-Lingual Text Classification for Kinyarwanda and Kirundi.
-    Each sample is a news article from Rwanda and Burundi news websites and newspapers, 
+    Each sample is a news article from Rwanda and Burundi news websites and newspapers,
     classified into one of 14 possible classes.
     """
 
@@ -43,12 +43,11 @@ class KinNewsClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@article{niyongabo2020kinnews,
-  title={KINNEWS and KIRNEWS: Benchmarking Cross-Lingual Text Classification for Kinyarwanda and Kirundi},
-  author={Niyongabo, Rubungo Andre and Qu, Hong and Kreutzer, Julia and Huang, Li},
-  journal={arXiv preprint arXiv:2010.12174},
-  year={2020}
+        bibtex_citation=r"""@article{niyongabo2020kinnews,
+  author = {Niyongabo, Rubungo Andre and Qu, Hong and Kreutzer, Julia and Huang, Li},
+  journal = {arXiv preprint arXiv:2010.12174},
+  title = {KINNEWS and KIRNEWS: Benchmarking Cross-Lingual Text Classification for Kinyarwanda and Kirundi},
+  year = {2020},
 }
 """,
     )
@@ -56,27 +55,24 @@ class KinNewsClassification(AbsTaskClassification):
     def dataset_transform(self, **kwargs) -> None:
         """
         Transform the dataset to MTEB expected format:
-        
+
         * column **text**: concatenation of title and content
         * column **label**: int (0-13 for the 14 news topics)
         """
         for lang in self.dataset:
             for split in self.dataset[lang]:
                 ds = self.dataset[lang][split]
-                
+
                 def transform_example(example):
                     # Concatenate title and content for the text field
                     text = f"{example['title']} {example['content']}"
-                    
-                    return {
-                        "text": text,
-                        "label": example["label"]
-                    }
-                
+
+                    return {"text": text, "label": example["label"]}
+
                 ds = ds.map(
                     transform_example,
                     remove_columns=ds.column_names,
                     desc=f"{lang}/{split}",
                 )
-                
-                self.dataset[lang][split] = ds 
+
+                self.dataset[lang][split] = ds

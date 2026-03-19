@@ -78,11 +78,7 @@ e5_instruct = ModelMeta(
 me5_instruct_afri_large_instruct = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
-        model_name_or_path="McGill-NLP/AfriE5-Large-instruct",
         instruction_template=E5_INSTRUCTION,
-        attn="cccc",
-        pooling_method="mean",
-        mode="embedding",
         torch_dtype=torch.float16,
         normalized=True,
     ),
@@ -106,7 +102,6 @@ me5_instruct_afri_large_instruct = ModelMeta(
     public_training_data=None,
     training_datasets=ME5_TRAINING_DATA,
 )
-
 
 
 e5_mistral = ModelMeta(

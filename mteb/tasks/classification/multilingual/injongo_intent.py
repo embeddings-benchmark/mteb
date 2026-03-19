@@ -53,12 +53,13 @@ class InjongoIntent(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@article{yu2025injongo,
-  title     = {INJONGO: A Multicultural Intent Detection and Slot-filling Dataset for 16 African Languages},
-  author    = {Yu, Hao and Alabi, Jesujoba O. and Bukula, Andiswa and et al.},
-  journal   = {arXiv preprint arXiv:2502.09814},
-  year      = {2025}
-}""",
+        bibtex_citation=r"""@article{yu2025injongo,
+  author = {Yu, Hao and Alabi, Jesujoba O. and Bukula, Andiswa and et al.},
+  journal = {arXiv preprint arXiv:2502.09814},
+  title = {INJONGO: A Multicultural Intent Detection and Slot-filling Dataset for 16 African Languages},
+  year = {2025},
+}
+""",
     )
 
     def dataset_transform(self, **kwargs):
@@ -71,8 +72,12 @@ class InjongoIntent(AbsTaskClassification):
             for split_name, ds in splits.items():
                 # heuristic: locate the text and intent columns once per split
                 cols = ds.column_names
-                text_col = next((c for c in ["text", "utterance", "sentence"] if c in cols), None)
-                label_col = next((c for c in ["label", "intent", "labels"] if c in cols), None)
+                text_col = next(
+                    (c for c in ["text", "utterance", "sentence"] if c in cols), None
+                )
+                label_col = next(
+                    (c for c in ["label", "intent", "labels"] if c in cols), None
+                )
 
                 if text_col is None or label_col is None:
                     raise ValueError(
