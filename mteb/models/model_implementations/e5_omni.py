@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import numpy as np
 import torch
@@ -19,12 +19,6 @@ from mteb.models.model_implementations.bge_models import (
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
-
-if TYPE_CHECKING:
-    from torch.utils.data import DataLoader
-
-    from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -87,7 +81,11 @@ class E5OmniWrapper(AbsEncoder):
     def _prepare_audio_array(self, audio_row: dict[str, Any]) -> np.ndarray:
         audio_array = np.asarray(audio_row["array"], dtype=np.float32).squeeze()
         if audio_array.ndim > 1:
-            audio_array = audio_array[0] if audio_array.shape[0] == 1 else audio_array.mean(axis=0)
+            audio_array = (
+                audio_array[0]
+                if audio_array.shape[0] == 1
+                else audio_array.mean(axis=0)
+            )
 
         source_sampling_rate = audio_row.get("sampling_rate", self.sampling_rate)
         if source_sampling_rate != self.sampling_rate:
@@ -106,15 +104,8 @@ class E5OmniWrapper(AbsEncoder):
 
     @torch.no_grad()
     def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
+        self, inputs, *, task_metadata, hf_split, hf_subset, prompt_type=None, **kwargs
+    ):
         from qwen_omni_utils import process_mm_info
 
         all_embeddings = []
@@ -125,75 +116,62 @@ class E5OmniWrapper(AbsEncoder):
             batch_audios = batch.get("audio", [])
 
             text_prefix = "Query: " if prompt_type == PromptType.query else ""
-
-            messages = []
             max_len = max(len(batch_texts), len(batch_images), len(batch_audios))
 
             for i in range(max_len):
+                # Build a single conversation message
                 content = []
                 if i < len(batch_texts):
-                    prefixed_text = (
+                    t = (
                         f"{text_prefix}{batch_texts[i]}"
                         if text_prefix
                         else batch_texts[i]
                     )
-                    content.append({"type": "text", "text": prefixed_text})
+                    content.append({"type": "text", "text": t})
                 if i < len(batch_images):
                     content.append({"type": "image", "image": batch_images[i]})
                 if i < len(batch_audios):
-                    audio_row = batch_audios[i]
-                    content.append(
-                        {
-                            "type": "audio",
-                            "audio": self._prepare_audio_array(audio_row),
-                        }
-                    )
-                messages.append([{"role": "user", "content": content}])
+                    audio_array = self._prepare_audio_array(batch_audios[i])
+                    content.append({"type": "audio", "audio": audio_array})
 
-            texts = self.processor.apply_chat_template(
-                messages, tokenize=False, add_generation_prompt=True
-            )
-            if isinstance(texts, str):
-                texts = [texts]
-            texts = [f"{rendered}<|endoftext|>" for rendered in texts]
+                message = [{"role": "user", "content": content}]
 
-            audio_inputs, image_inputs, video_inputs = process_mm_info(
-                messages, use_audio_in_video=True
-            )
+                # Process exactly like the model card
+                text = self.processor.apply_chat_template(
+                    message, tokenize=False, add_generation_prompt=True
+                )
+                if isinstance(text, list):
+                    text = text[0]
+                text = f"{text}<|endoftext|>"
 
-            is_multimodal = bool(audio_inputs or image_inputs or video_inputs)
+                audios, images, videos = process_mm_info(
+                    message, use_audio_in_video=True
+                )
 
-            model_inputs = self.processor(
-                text=texts,
-                images=image_inputs if image_inputs else None,
-                videos=video_inputs if video_inputs else None,
-                audio=audio_inputs if audio_inputs else None,
-                padding="longest",
-                return_tensors="pt",
-                max_length=None if is_multimodal else 512,
-                truncation=not is_multimodal,
-            ).to(self.device)
+                is_mm = bool(audios or images or videos)
+                model_inputs = self.processor(
+                    text=text,
+                    images=images if images else None,
+                    videos=videos if videos else None,
+                    audio=audios if audios else None,
+                    padding="longest",
+                    return_tensors="pt",
+                    max_length=None if is_mm else 512,
+                    truncation=not is_mm,
+                ).to(self.device)
 
-            # Follow the model card exactly: prepare_inputs_for_generation sets up
-            # cache positions and positional encodings for the Thinker architecture.
-            # Skipping this step produces incorrect hidden states and bad embeddings.
-            cache_position = torch.arange(
-                0, model_inputs["input_ids"].shape[1], device=self.device
-            )
-            prepared_inputs = self.model.prepare_inputs_for_generation(
-                **model_inputs, use_cache=True, cache_position=cache_position
-            )
-
-            outputs = self.model(
-                **prepared_inputs,
-                return_dict=True,
-                output_hidden_states=True,
-            )
-            last_hidden_state = outputs.hidden_states[-1]
-            embeddings = last_hidden_state[:, -1]
-            embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
-
-            all_embeddings.append(embeddings.cpu().to(torch.float32))
+                cache_position = torch.arange(
+                    0, model_inputs["input_ids"].shape[1], device=self.device
+                )
+                prepared = self.model.prepare_inputs_for_generation(
+                    **model_inputs, use_cache=True, cache_position=cache_position
+                )
+                outputs = self.model(
+                    **prepared, return_dict=True, output_hidden_states=True
+                )
+                emb = outputs.hidden_states[-1][:, -1]
+                emb = torch.nn.functional.normalize(emb, p=2, dim=-1)
+                all_embeddings.append(emb.cpu().to(torch.float32))
 
         return torch.cat(all_embeddings, dim=0).numpy()
 
