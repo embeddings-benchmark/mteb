@@ -5,14 +5,13 @@ from functools import wraps
 from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
-from mteb.types import PromptType
+from mteb.types import PromptType, QuantizationLevel
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -128,7 +127,11 @@ VOYAGE_TOTAL_TOKEN_LIMITS = {
     "voyage-3-m-exp": 120_000,
 }
 
-OUTPUT_TYPES = [torch.int8, torch.uint8, torch.bool]
+OUTPUT_TYPES = [
+    QuantizationLevel.INT8,
+    QuantizationLevel.UINT8,
+    QuantizationLevel.BINARY,
+]
 
 
 def token_limit(max_tpm: int, interval: int = 60):

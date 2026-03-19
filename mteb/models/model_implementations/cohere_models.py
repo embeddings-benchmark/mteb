@@ -12,7 +12,7 @@ from tqdm.auto import tqdm
 from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import PromptType, QuantizationLevel
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -142,7 +142,12 @@ EmbeddingType = Literal[
     "uint8",
     "binary",
 ]
-OUTPUT_TYPES = [torch.int8, torch.uint8, torch.bool]
+
+OUTPUT_TYPES = [
+    QuantizationLevel.INT8,
+    QuantizationLevel.UINT8,
+    QuantizationLevel.BINARY,
+]
 
 # Cohere API limits
 COHERE_MAX_BATCH_SIZE = 96  # Maximum number of texts per API call

@@ -34,7 +34,14 @@ from mteb._hf_integration.hf_hub_utils import (
 )
 from mteb.languages import check_language_code
 from mteb.models.models_protocols import MTEBModels
-from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
+from mteb.types import (
+    ISOLanguageScript,
+    Licenses,
+    Modalities,
+    QuantizationLevel,
+    StrDate,
+    StrURL,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -164,7 +171,7 @@ class ModelMeta(BaseModel):
     citation: str | None = None
     contacts: list[str] | None = None
     experiment_kwargs: Mapping[str, Any] | None = None
-    embedding_types: list | None = None
+    embedding_types: list[QuantizationLevel] | None = None
 
     @model_validator(mode="before")
     @classmethod

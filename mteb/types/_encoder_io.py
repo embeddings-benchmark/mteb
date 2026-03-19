@@ -165,6 +165,27 @@ class MultimodalInput(  # type: ignore[misc]
     pass
 
 
+class QuantizationLevel(str, Enum):
+    """Enum for valid compression levels.
+
+    Used by the CompressionWrapper class and specified by models to indicate the dtypes of output embeddings they
+    support internally.
+    """
+
+    FLOAT16 = ("float16",)
+    BF16 = ("bf16",)
+    INT8 = ("int8",)
+    INT4 = ("int4",)
+    UINT8 = ("uint8",)
+    UINT4 = ("uint4",)
+    BINARY = ("binary",)
+    FLOAT8_E4M3FN = ("float8_e4m3fn",)
+    FLOAT8_E5M2 = ("float8_e5m2",)
+    FLOAT8_E8M0FNU = ("float8_e8m0fnu",)
+    FLOAT8_E4M3FNUZ = ("float8_e4m3fnuz",)
+    FLOAT8_E5M2FNUZ = ("float8_e5m2fnuz",)
+
+
 BatchedInput = (
     TextInput
     | CorpusInput

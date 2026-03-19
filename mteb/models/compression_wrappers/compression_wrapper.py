@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 
+from mteb.types import QuantizationLevel
+
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
@@ -23,7 +25,7 @@ class CompressionWrapper:
     def __init__(
         self,
         model: EncoderProtocol,
-        quantization_level: torch.dtype = torch.float8_e4m3fn,
+        quantization_level: QuantizationLevel = QuantizationLevel.FLOAT8_E4M3FN,
         quantiles: tuple[float, float] | None = None,
     ) -> None:
         """Instantiates the wrapper with an embedding model and sets the quantization level.
@@ -37,20 +39,22 @@ class CompressionWrapper:
         self._quantization_level = quantization_level
         self.quantiles = None
         self.min_embeds = 10_000
-        embed_types = None
+        embed_types = model.mteb_model_meta.embedding_types
+        model.mteb_model_meta.experiment_kwargs = {
+            "precision": quantization_level.value
+        }
+        model.mteb_model_meta.embedding_types = [quantization_level]
         if quantiles is not None:
             assert 0 < quantiles[0] < quantiles[1] < 1
             self.quantiles = torch.tensor(quantiles)
-        if model.mteb_model_meta:
-            embed_types = model.mteb_model_meta.embedding_types
         if embed_types and quantization_level in embed_types:
             logger.warning(
-                f"The model {model.mteb_model_meta.name} internally supports quantization to {quantization_level}, "
-                f"which might lead to better results."
+                f"The model {model.mteb_model_meta.name} internally supports quantization to "
+                f"{quantization_level.value}, which might lead to better results."
             )
             warnings.warn(
-                f"The model {model.mteb_model_meta.name} internally supports quantization to {quantization_level}, "
-                f"which might lead to better results."
+                f"The model {model.mteb_model_meta.name} internally supports quantization to "
+                f"{quantization_level.value}, which might lead to better results."
             )
         logger.info("Initialized CompressionWrapper.")
 
@@ -97,7 +101,7 @@ class CompressionWrapper:
         if not isinstance(embeddings, torch.Tensor):
             embeddings = torch.tensor(embeddings).float()
 
-        logger.info(f"Quantizing embeddings to {self._quantization_level}.")
+        logger.info(f"Quantizing embeddings to {self._quantization_level.value}.")
         return self._quantize_embeddings(embeddings)
 
     def _quantize_embeddings(
@@ -118,19 +122,24 @@ class CompressionWrapper:
             The quantized embeddings.
         """
         if self._quantization_level in [
-            torch.float8_e4m3fn,
-            torch.float8_e5m2,
-            torch.float8_e8m0fnu,
-            torch.float8_e4m3fnuz,
-            torch.float8_e5m2fnuz,
+            QuantizationLevel.FLOAT8_E4M3FN,
+            QuantizationLevel.FLOAT8_E5M2,
+            QuantizationLevel.FLOAT8_E8M0FNU,
+            QuantizationLevel.FLOAT8_E4M3FNUZ,
+            QuantizationLevel.FLOAT8_E5M2FNUZ,
+            QuantizationLevel.FLOAT16,
         ]:
             # Cast to float8, then back to float16 using PyTorch as numpy doesn't support float8
-            quantized = embeddings.type(self._quantization_level).type(torch.float16)
+            float_type = getattr(torch, self._quantization_level)
+            quantized = embeddings.type(float_type).type(torch.float16)
+        elif self._quantization_level == QuantizationLevel.BF16:
+            # Cast to bf16, then back to float32 using PyTorch as numpy doesn't support bf16
+            quantized = embeddings.type(torch.bfloat16).float()
         elif self._quantization_level in [
-            torch.int8,
-            torch.int,
+            QuantizationLevel.INT8,
+            QuantizationLevel.INT4,
         ]:
-            num_bits = 8 if self._quantization_level == torch.int8 else 4
+            num_bits = 8 if self._quantization_level == QuantizationLevel.INT8 else 4
             if self.quantiles is not None:
                 cutoffs = torch.quantile(embeddings, self.quantiles, dim=0)
                 embeddings = torch.clip(embeddings, cutoffs[0], cutoffs[1])
@@ -139,11 +148,11 @@ class CompressionWrapper:
             quantized = torch.floor((embeddings - mins) / steps) - int(
                 2**num_bits * 0.5
             )
-        elif self._quantization_level == torch.bool:
+        elif self._quantization_level == QuantizationLevel.BINARY:
             quantized = torch.where(embeddings > 0, 1.0, 0.0)
         else:
             raise ValueError(
-                f"Quantization method '{self._quantization_level}' is not supported!"
+                f"Quantization method '{self._quantization_level.value}' is not supported!"
             )
         return quantized
 
