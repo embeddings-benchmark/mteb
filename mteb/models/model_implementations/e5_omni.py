@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import numpy as np
 import torch
 from tqdm.auto import tqdm
 
@@ -78,30 +77,6 @@ class E5OmniWrapper(AbsEncoder):
 
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
         self.max_samples = int(max_audio_length_seconds * self.sampling_rate)
-
-    def _prepare_audio_array(self, audio_row: dict[str, Any]) -> np.ndarray:
-        audio_array = np.asarray(audio_row["array"], dtype=np.float32).squeeze()
-        if audio_array.ndim > 1:
-            audio_array = (
-                audio_array[0]
-                if audio_array.shape[0] == 1
-                else audio_array.mean(axis=0)
-            )
-
-        source_sampling_rate = audio_row.get("sampling_rate", self.sampling_rate)
-        if source_sampling_rate != self.sampling_rate:
-            import torchaudio
-
-            resampler = torchaudio.transforms.Resample(
-                orig_freq=source_sampling_rate,
-                new_freq=self.sampling_rate,
-            )
-            audio_array = resampler(torch.from_numpy(audio_array).float()).numpy()
-
-        if self.max_samples is not None and audio_array.shape[-1] > self.max_samples:
-            audio_array = audio_array[..., : self.max_samples]
-
-        return np.asarray(audio_array, dtype=np.float32)
 
     @torch.no_grad()
     def encode(
@@ -182,13 +157,13 @@ class E5OmniWrapper(AbsEncoder):
 
 
 E5_OMNI_CITATION = """@misc{chen2026e5omniexplicitcrossmodalalignment,
-      title={e5-omni: Explicit Cross-modal Alignment for Omni-modal Embeddings}, 
+      title={e5-omni: Explicit Cross-modal Alignment for Omni-modal Embeddings},
       author={Haonan Chen and Sicheng Gao and Radu Timofte and Tetsuya Sakai and Zhicheng Dou},
       year={2026},
       eprint={2601.03666},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2601.03666}, 
+      url={https://arxiv.org/abs/2601.03666},
 }"""
 
 E5_OMNI_TRAINING_DATASETS = bge_m3_training_data | {
