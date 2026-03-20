@@ -107,12 +107,8 @@ class E5OmniWrapper(AbsEncoder):
                 if i < len(batch_images):
                     content.append({"type": "image", "image": batch_images[i]})
                 if i < len(batch_audios):
-                    audio_row = batch_audios[i]
-                    if isinstance(audio_row.get("array"), list):
-                        audio_row = dict(audio_row)
-                        audio_row["array"] = np.asarray(audio_row["array"])
                     audio_array = AudioCollator.resample_audio(
-                        {"audio": audio_row},
+                        {"audio": batch_audios[i]},
                         self.sampling_rate,
                         self.max_samples,
                     )
