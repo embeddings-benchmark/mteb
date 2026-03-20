@@ -130,6 +130,7 @@ encodec_24khz = ModelMeta(
     release_date="2022-10-25",
     max_tokens=None,
     n_parameters=23_273_218,
+    n_embedding_parameters=0,
     memory_usage_mb=88,
     embed_dim=128,
     license="cc-by-nc-4.0",

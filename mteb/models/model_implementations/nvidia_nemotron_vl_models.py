@@ -134,10 +134,6 @@ class NemotronColEmbedVL(AbsEncoder):
 
         return self.model.forward_images(all_images, batch_size=batch_size)
 
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        scores = self.similarity(text_embeddings, image_embeddings)
-        return (scores * 100).softmax(dim=-1)
-
     def similarity(self, a, b):
         return self.model.get_scores(a, b)
 
@@ -311,6 +307,7 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
     release_date="2026-01-07",
     modalities=["image", "text"],
     n_parameters=4_800_000_000,
+    n_embedding_parameters=388956160,
     memory_usage_mb=9206,
     max_tokens=262144,
     embed_dim=2560,
@@ -340,6 +337,7 @@ nemotron_colembed_vl_8b_v2 = ModelMeta(
     release_date="2026-01-07",
     modalities=["image", "text"],
     n_parameters=8_700_000_000,
+    n_embedding_parameters=622329856,
     memory_usage_mb=16722,
     max_tokens=262144,
     embed_dim=4096,
