@@ -252,7 +252,7 @@ class NanoVDRWrapper(AbsEncoder):
 
         # Validate: reject tasks where queries contain images.
         # NanoVDR only supports text-query → image-document retrieval.
-        if prompt_type == PromptType.query and "image" in inputs.dataset.features:
+        if prompt_type in (PromptType.query, None) and "image" in inputs.dataset.features:
             raise ValueError(
                 f"NanoVDR only supports text queries, but task "
                 f"'{task_metadata.name}' provides image inputs for queries. "
