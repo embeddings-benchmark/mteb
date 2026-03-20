@@ -186,3 +186,19 @@ When submitting you models as a PR, please copy and paste the following checklis
 - [ ] I have tested the implementation works on a representative set of tasks.
 - [ ] The model is public, i.e., is available either as an API or the weights are publicly available to download
 ```
+
+
+### Matryoshka embeddings
+
+To add support for matryoshka embeddings you can specify `embed_dim` as a list of dimensions.
+
+```python
+import mteb
+from mteb.models import ModelMeta
+
+my_model = ModelMeta(
+    name="custom/my_model",
+    ...,
+    embed_dim=[128, 256, 512, 1024],
+)
+```
