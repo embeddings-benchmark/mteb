@@ -922,7 +922,7 @@ class ResultCache:
                 matching = [
                     (name, rev)
                     for name, rev in local_models
-                    if name.replace("/", "__") == model.replace("/", "__")
+                    if name == model.replace("/", "__")
                 ]
                 if not matching:
                     raise ValueError(
@@ -964,7 +964,7 @@ class ResultCache:
                 logger.warning(f"Skipping model with None name or revision: {model}")
                 continue
 
-            model_name_path = model_name.replace("/", "__").replace(" ", "_")
+            model_name_path = model.model_name_as_path()
 
             local_results_dir = self.cache_path / "results" / model_name_path / revision
             if not local_results_dir.exists():
@@ -1045,44 +1045,40 @@ class ResultCache:
                 "Remote repository not found. Call download_from_remote() first."
             )
 
-        try:
-            subprocess.run(
-                ["git", "add", "-A"],
-                cwd=remote_path,
-                check=True,
-                capture_output=True,
-                text=True,
-            )
+        subprocess.run(
+            ["git", "add", "-A"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
 
-            model_str = ", ".join(model.name for model in models if model.name)
-            result_count = sum(len(files) for files in unsubmitted.values())
-            commit_message = (
-                f"Add MTEB evaluation results for {model_str}\n\n"
-                f"Models: {model_str}\n"
-                f"Total results: {result_count}\n"
-                f"Submitted by MTEB ResultCache"
-            )
+        model_str = ", ".join(model.name for model in models if model.name)
+        result_count = sum(len(files) for files in unsubmitted.values())
+        commit_message = (
+            f"Add MTEB evaluation results for {model_str}\n\n"
+            f"Models: {model_str}\n"
+            f"Total results: {result_count}\n"
+            f"Submitted by MTEB ResultCache"
+        )
 
-            subprocess.run(
-                ["git", "commit", "-m", commit_message],
-                cwd=remote_path,
-                check=True,
-                capture_output=True,
-                text=True,
-            )
+        subprocess.run(
+            ["git", "commit", "-m", commit_message],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
 
-            commit_sha = subprocess.run(
-                ["git", "rev-parse", "HEAD"],
-                cwd=remote_path,
-                check=True,
-                capture_output=True,
-                text=True,
-            ).stdout.strip()
+        commit_sha = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
 
-            return commit_sha
-
-        except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"Failed to create git commit: {e.stderr or e.stdout}")
+        return commit_sha
 
     def _prepare_pr_body(
         self,
@@ -1111,11 +1107,12 @@ class ResultCache:
                     f"- **{model_name}** (revision: `{revision}`): {result_count} results"
                 )
 
+        model_details_str = "\n".join(model_details)
         body = textwrap.dedent(f"""
         ## MTEB Evaluation Results Submission
 
         ### Models Submitted
-        {chr(10).join(model_details)}
+        {model_details_str}
 
         **Total Results:** {total_results}
 
@@ -1320,8 +1317,7 @@ class ResultCache:
             )
         except ImportError:
             raise ImportError(
-                "PyGithub is required for automated submission. "
-                "Install it with: pip install PyGithub"
+                "PyGithub is not installed. Please install it using `pip install 'mteb[pygithub]'`"
             )
 
         logger.info("Creating PR using PyGithub")
@@ -1332,14 +1328,14 @@ class ResultCache:
             gh = Github(auth=auth)
             user = gh.get_user()
         except Exception as e:
-            raise RuntimeError(f"Failed to authenticate with GitHub: {e}")
+            raise RuntimeError(f"Failed to authenticate with GitHub: {e}") from e
 
         upstream_repo_name = "embeddings-benchmark/results"
         try:
             upstream = gh.get_repo(upstream_repo_name)
             logger.info(f"Connected to upstream: {upstream_repo_name}")
         except Exception as e:
-            raise RuntimeError(f"Failed to access upstream repository: {e}")
+            raise RuntimeError(f"Failed to access upstream repository: {e}") from e
 
         remote_path = self.cache_path / "remote"
         fork_url = None
@@ -1382,9 +1378,9 @@ class ResultCache:
         except subprocess.CalledProcessError as e:
             raise RuntimeError(
                 f"Failed to create/configure fork: {e.stderr or e.stdout}"
-            )
+            ) from e
         except Exception as e:
-            raise RuntimeError(f"Failed to setup fork: {e}")
+            raise RuntimeError(f"Failed to setup fork: {e}") from e
 
         try:
             rate_limit = gh.get_rate_limit()
@@ -1413,7 +1409,7 @@ class ResultCache:
             )
             logger.info("Push successful")
         except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"Failed to push to fork: {e.stderr or e.stdout}")
+            raise RuntimeError(f"Failed to push to fork: {e.stderr or e.stdout}") from e
 
         try:
             pr_body = self._prepare_pr_body(models, unsubmitted)
@@ -1453,9 +1449,9 @@ class ResultCache:
             raise RuntimeError(
                 f"Failed to create pull request: "
                 f"Status {e.status}: {e.data.get('message', str(e))}"
-            )
+            ) from e
         except Exception as e:
-            raise RuntimeError(f"Unexpected error creating PR: {e}")
+            raise RuntimeError(f"Unexpected error creating PR: {e}") from e
 
     def load_results(
         self,
