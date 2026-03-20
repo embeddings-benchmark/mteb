@@ -12,7 +12,7 @@ from mteb.models.model_implementations import MODEL_REGISTRY
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Mapping
-
+    from mteb.types import Modalities
     from mteb.abstasks import AbsTask
     from mteb.models import (
         MTEBModels,
@@ -30,7 +30,7 @@ def get_model_metas(
     use_instructions: bool | None = None,
     zero_shot_on: list[AbsTask] | None = None,
     model_types: Iterable[str] | None = None,
-    modalities: Iterable[str] | None = None,
+    modalities: Iterable[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
 ) -> list[ModelMeta]:
     """Load all models' metadata that fit the specified criteria.
