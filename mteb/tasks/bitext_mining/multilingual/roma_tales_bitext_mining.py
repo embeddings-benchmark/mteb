@@ -44,7 +44,10 @@ class RomaTalesBitextMining(AbsTaskBitextMining):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         for lang in self.hf_subsets:
             self.dataset[lang] = self.dataset[lang].rename_columns(
                 {"romani": "sentence1", "hungarian": "sentence2"}

@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Any
 import torch
 from tqdm.auto import tqdm
 
+from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -34,12 +35,10 @@ class SiglipModelWrapper(AbsEncoder):
     ):
         from transformers import AutoModel, AutoProcessor
 
-        try:
-            import sentencepiece  # noqa: F401
-        except ImportError:
-            raise ImportError(
-                "The `sentencepiece` package is required to run `pip install sentencepiece`"
-            )
+        # for sentencepiece and protobuf:
+        requires_package(
+            self, "sentencepiece", model_name, "pip install 'mteb[siglip]'"
+        )
 
         self.model_name = model_name
         self.device = device
@@ -68,7 +67,8 @@ class SiglipModelWrapper(AbsEncoder):
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.model.get_text_features(**inputs)
-                all_text_embeddings.append(text_outputs.cpu())
+                embeddings = text_outputs.pooler_output
+                all_text_embeddings.append(embeddings.cpu())
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
@@ -83,12 +83,14 @@ class SiglipModelWrapper(AbsEncoder):
 
         with torch.no_grad():
             for batch in tqdm(images):
+                _images = [img.convert("RGB") for img in batch["image"]]
                 inputs = self.processor(
-                    images=batch["image"], return_tensors="pt", padding=True
+                    images=_images, return_tensors="pt", padding=True
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 image_outputs = self.model.get_image_features(**inputs)
-                all_image_embeddings.append(image_outputs.cpu())
+                embeddings = image_outputs.pooler_output
+                all_image_embeddings.append(embeddings.cpu())
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
 

@@ -115,7 +115,7 @@ class TestRebuildFromFullRepository:
 
             mock_download.assert_called_once()
             mock_load_results.assert_called_once_with(
-                models=[meta1, meta2],  # None filtered out, ModelMeta objects passed
+                models=[meta1.name, meta2.name],
                 only_main_score=True,
                 require_model_meta=False,
                 include_remote=True,

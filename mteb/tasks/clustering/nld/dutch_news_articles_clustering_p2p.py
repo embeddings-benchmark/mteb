@@ -28,12 +28,13 @@ class DutchNewsArticlesClusteringP2P(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        prompt={
-            "query": "Identificeer de hoofdcategorie van nieuwsartikelen op basis van de titels en de inhoud"
-        },
+        prompt="Identificeer de hoofdcategorie van nieuwsartikelen op basis van de titels en de inhoud",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         for split in self.dataset:
             self.dataset[split] = self.dataset[split].rename_columns(
                 {"label": "labels", "text": "sentences"}

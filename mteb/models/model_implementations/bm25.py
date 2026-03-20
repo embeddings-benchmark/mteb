@@ -129,7 +129,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
 
 bm25_s = ModelMeta(
     loader=bm25_loader,
-    name="baseline/bm25s",
+    name="mteb/baseline-bm25s",
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,

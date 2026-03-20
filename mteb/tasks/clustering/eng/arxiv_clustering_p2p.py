@@ -82,7 +82,10 @@ class ArxivClusteringP2PFast(AbsTaskClusteringLegacy):
         # simply downsample each cluster.
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         rng_state = random.Random(self.seed)
 
         ds = {}

@@ -255,11 +255,11 @@ class TestCachedEmbeddingWrapper:
     [
         (
             MockMultiChoiceTask(),
-            mteb.get_model("baseline/random-encoder-baseline"),
+            mteb.get_model("mteb/baseline-random-encoder"),
         ),  # ti2i
         (
             MockRetrievalTask(),
-            mteb.get_model("baseline/random-encoder-baseline"),
+            mteb.get_model("mteb/baseline-random-encoder"),
         ),  # t2t
     ],
 )

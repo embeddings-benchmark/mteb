@@ -7,6 +7,7 @@ import torch
 
 from mteb._requires_package import requires_package
 from mteb.models.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 
 from .bge_models import bge_m3_training_data
 
@@ -263,4 +264,92 @@ bge_reranker_v2_m3 = ModelMeta(
       year = {2024},
     }
     """,
+)
+
+# SBERT MS MARCO CrossEncoders (Version 2 models). Same training/data/citation for all.
+_MS_MARCO_V2_COMMON = dict(
+    loader=CrossEncoderWrapper,
+    model_type=["cross-encoder"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    release_date="2021-04-16",
+    max_tokens=512,
+    license="apache-2.0",
+    public_training_code="https://github.com/UKPLab/sentence-transformers/tree/master/examples/cross_encoder/training/ms_marco",
+    public_training_data="https://huggingface.co/datasets/sentence-transformers/msmarco",
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets={"MSMARCO"},
+    framework=[
+        "Sentence Transformers",
+        "PyTorch",
+        "Transformers",
+        "safetensors",
+        "ONNX",
+    ],
+    citation="""@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/1908.10084",
+}
+""",
+)
+
+ms_marco_tinybert_l2_v2 = ModelMeta(
+    **_MS_MARCO_V2_COMMON,
+    name="cross-encoder/ms-marco-TinyBERT-L2-v2",
+    revision="81d1926f67cb8eee2c2be17ca9f793c7c3bd20cc",
+    n_parameters=4_386_049,
+    n_embedding_parameters=3_906_816,
+    memory_usage_mb=17,
+    embed_dim=128,
+    reference="https://huggingface.co/cross-encoder/ms-marco-TinyBERT-L2-v2",
+)
+
+ms_marco_minilm_l2_v2 = ModelMeta(
+    **_MS_MARCO_V2_COMMON,
+    name="cross-encoder/ms-marco-MiniLM-L2-v2",
+    revision="1b5cd67b15209f24824c50370e0397743aa9b787",
+    n_parameters=15_615_745,
+    n_embedding_parameters=11_720_448,
+    memory_usage_mb=60,
+    embed_dim=384,
+    reference="https://huggingface.co/cross-encoder/ms-marco-MiniLM-L2-v2",
+)
+
+ms_marco_minilm_l4_v2 = ModelMeta(
+    **_MS_MARCO_V2_COMMON,
+    name="cross-encoder/ms-marco-MiniLM-L4-v2",
+    revision="777b2f369bc1c2f850df8bd367ed1654bda4497b",
+    n_parameters=19_164_673,
+    n_embedding_parameters=11_720_448,
+    memory_usage_mb=73,
+    embed_dim=384,
+    reference="https://huggingface.co/cross-encoder/ms-marco-MiniLM-L4-v2",
+)
+
+ms_marco_minilm_l6_v2 = ModelMeta(
+    **_MS_MARCO_V2_COMMON,
+    name="cross-encoder/ms-marco-MiniLM-L6-v2",
+    revision="c5ee24cb16019beea0893ab7796b1df96625c6b8",
+    n_parameters=22_713_601,
+    n_embedding_parameters=11_720_448,
+    memory_usage_mb=87,
+    embed_dim=384,
+    reference="https://huggingface.co/cross-encoder/ms-marco-MiniLM-L6-v2",
+)
+
+ms_marco_minilm_l12_v2 = ModelMeta(
+    **_MS_MARCO_V2_COMMON,
+    name="cross-encoder/ms-marco-MiniLM-L12-v2",
+    revision="7b0235231ca2674cb8ca8f022859a6eba2b1c968",
+    n_parameters=33_360_385,
+    n_embedding_parameters=11_720_448,
+    memory_usage_mb=127,
+    embed_dim=384,
+    reference="https://huggingface.co/cross-encoder/ms-marco-MiniLM-L12-v2",
 )

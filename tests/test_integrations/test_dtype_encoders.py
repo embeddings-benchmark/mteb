@@ -17,14 +17,14 @@ logging.basicConfig(level=logging.INFO)
 @pytest.mark.parametrize(
     "model",
     [
-        mteb.get_model("baseline/random-encoder-baseline"),
+        mteb.get_model("mteb/baseline-random-encoder"),
         mteb.get_model(
-            "baseline/random-encoder-baseline",
+            "mteb/baseline-random-encoder",
             array_framework="torch",
             dtype=torch.float32,
         ),
         mteb.get_model(
-            "baseline/random-encoder-baseline",
+            "mteb/baseline-random-encoder",
             array_framework="torch",
             dtype=torch.float16,
         ),

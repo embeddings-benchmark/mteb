@@ -37,12 +37,13 @@ class VaccinChatNLClassification(AbsTaskClassification):
   year = {2022},
 }
 """,
-        prompt={
-            "query": "Gegeven een gebruikersuiting als query, bepaal de gebruikersintenties"
-        },
+        prompt="Gegeven een gebruikersuiting als query, bepaal de gebruikersintenties",
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         for split in self.dataset:
             self.dataset[split] = self.dataset[split].rename_columns(
                 {"sentence1": "text"}

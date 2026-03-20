@@ -435,7 +435,7 @@ class AbsTaskRetrieval(AbsTask):
             naucs,
             mrr,
             naucs_mrr,
-            cv_recall,
+            hit_rate,
         ) = retriever.evaluate(
             data_split["relevant_docs"],
             results,
@@ -459,7 +459,7 @@ class AbsTaskRetrieval(AbsTask):
             mrr,
             naucs,
             naucs_mrr,
-            cv_recall,
+            hit_rate,
             task_specific_scores,
             self._previous_results_model_meta,
         )
@@ -605,7 +605,11 @@ class AbsTaskRetrieval(AbsTask):
             top_ranked_statistics=top_ranked_statistics,
         )
 
-    def _push_dataset_to_hub(self, repo_name: str, num_proc: int = 1) -> None:
+    def _push_dataset_to_hub(
+        self,
+        repo_name: str,
+        num_proc: int | None = None,
+    ) -> None:
         self.convert_v1_dataset_format_to_v2(num_proc)
 
         def _push_section(

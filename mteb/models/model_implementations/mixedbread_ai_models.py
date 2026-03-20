@@ -1,8 +1,5 @@
 from mteb.models.model_implementations.pylate_models import MultiVectorModel
-from mteb.models.model_meta import (
-    ModelMeta,
-    ScoringFunction,
-)
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     sentence_transformers_loader,

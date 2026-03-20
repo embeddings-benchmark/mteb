@@ -18,47 +18,23 @@ _MISSING_N_EMBEDDING_MODELS = [
     "QuanSun/EVA02-CLIP-bigE-14",
     "QuanSun/EVA02-CLIP-bigE-14-plus",
     "Salesforce/SFR-Embedding-Code-2B_R",
-    "Salesforce/blip2-opt-2.7b",
-    "Salesforce/blip2-opt-6.7b-coco",
     "Snowflake/snowflake-arctic-embed-m-long",
     "TencentBAC/Conan-embedding-v2",
     "TomoroAI/tomoro-colqwen3-embed-4b",
     "TomoroAI/tomoro-colqwen3-embed-8b",
     "ai-sage/Giga-Embeddings-instruct",
-    "baseline/bb25",
-    "baseline/bm25s",
+    "mteb/baseline-bb25",
+    "mteb/baseline-bm25s",
     "consciousAI/cai-stellaris-text-embeddings",
     "deepvk/USER2-base",
     "deepvk/USER2-small",
     "facebook/SONAR",
-    "facebook/dinov2-base",
-    "facebook/dinov2-giant",
-    "facebook/dinov2-large",
-    "facebook/dinov2-small",
-    "facebook/webssl-dino1b-full2b-224",
-    "facebook/webssl-dino2b-full2b-224",
-    "facebook/webssl-dino2b-heavy2b-224",
-    "facebook/webssl-dino2b-light2b-224",
-    "facebook/webssl-dino300m-full2b-224",
-    "facebook/webssl-dino3b-full2b-224",
-    "facebook/webssl-dino3b-heavy2b-224",
-    "facebook/webssl-dino3b-light2b-224",
-    "facebook/webssl-mae1b-full2b-224",
-    "facebook/webssl-mae300m-full2b-224",
-    "ibm-granite/granite-vision-3.3-2b-embedding",
-    "intfloat/mmE5-mllama-11b-instruct",
     "jinaai/jina-clip-v1",
     "jinaai/jina-reranker-v2-base-multilingual",
     "jxm/cde-small-v1",
     "jxm/cde-small-v2",
-    "kakaobrain/align-base",
     "laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K",
     "laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K",
-    "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
-    "laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
-    "laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
-    "laion/CLIP-ViT-L-14-laion2B-s32B-b82K",
-    "laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
     "laion/CLIP-ViT-g-14-laion2B-s34B-b88K",
     "malenia1/ternary-weight-embedding",
     "microsoft/LLM2CLIP-Openai-B-16",
@@ -73,9 +49,6 @@ _MISSING_N_EMBEDDING_MODELS = [
     "nomic-ai/nomic-embed-vision-v1.5",
     "nyu-visionx/moco-v3-vit-b",
     "nyu-visionx/moco-v3-vit-l",
-    "openai/clip-vit-base-patch16",
-    "openai/clip-vit-base-patch32",
-    "openai/clip-vit-large-patch14",
     "samaya-ai/promptriever-llama2-7b-v1",
     "samaya-ai/promptriever-llama3.1-8b-instruct-v1",
     "samaya-ai/promptriever-llama3.1-8b-v1",
@@ -87,88 +60,30 @@ _MISSING_N_EMBEDDING_MODELS = [
     "vidore/colqwen2-v1.0",
     "vidore/colqwen2.5-v0.2",
     "voyageai/voyage-multimodal-3",
-    "facebook/webssl-dino5b-full2b-224",
-    "facebook/webssl-dino7b-full8b-224",
-    "facebook/webssl-dino7b-full8b-378",
-    "facebook/webssl-dino7b-full8b-518",
-    "facebook/webssl-mae700m-full2b-224",
     "OrlikB/KartonBERT-USE-base-v1",
     "OrlikB/st-polish-kartonberta-base-alpha-v1",
-    "OpenSearch-AI/Ops-Colqwen3-4B",
     "jinaai/jina-clip-v2",
-    "jinaai/jina-embeddings-v4",
     "baseline/Human",
-    "baseline/random-cross-encoder-baseline",
-    "baseline/random-encoder-baseline",
-    "nvidia/nemotron-colembed-vl-4b-v2",
-    "nvidia/nemotron-colembed-vl-8b-v2",
+    "mteb/baseline-random-cross-encoder",
+    "mteb/baseline-random-encoder",
     "VAGOsolutions/SauerkrautLM-ColLFM2-450M-v0.1",
-    "VAGOsolutions/SauerkrautLM-ColMinistral3-3b-v0.1",
-    "VAGOsolutions/SauerkrautLM-ColQwen3-1.7b-Turbo-v0.1",
-    "VAGOsolutions/SauerkrautLM-ColQwen3-2b-v0.1",
-    "VAGOsolutions/SauerkrautLM-ColQwen3-4b-v0.1",
-    "VAGOsolutions/SauerkrautLM-ColQwen3-8b-v0.1",
     "MCINext/Hakim",
     "MCINext/Hakim-small",
     "MCINext/Hakim-unsup",
     # audio models
-    "google/vggish",
-    "LCO-Embedding/LCO-Embedding-Omni-3B",
-    "LCO-Embedding/LCO-Embedding-Omni-7B",
-    "facebook/wav2vec2-base",
-    "facebook/wav2vec2-base-960h",
-    "facebook/wav2vec2-large",
-    "facebook/wav2vec2-large-xlsr-53",
-    "facebook/wav2vec2-lv-60-espeak-cv-ft",
-    "facebook/wav2vec2-xls-r-1b",
-    "facebook/wav2vec2-xls-r-2b",
-    "facebook/wav2vec2-xls-r-2b-21-to-en",
-    "facebook/wav2vec2-xls-r-300m",
-    "vitouphy/wav2vec2-xls-r-300m-phoneme",
-    "laion/clap-htsat-fused",
-    "laion/clap-htsat-unfused",
     "laion/larger_clap_general",
     "laion/larger_clap_music",
     "laion/larger_clap_music_and_speech",
     "lyrebird/wav2clip",
     "microsoft/msclap-2022",
     "microsoft/msclap-2023",
-    "microsoft/unispeech-sat-base-100h-libri-ft",
-    "microsoft/wavlm-base",
-    "microsoft/wavlm-base-plus",
-    "microsoft/wavlm-base-plus-sd",
-    "microsoft/wavlm-base-plus-sv",
-    "microsoft/wavlm-base-sd",
-    "microsoft/wavlm-base-sv",
-    "microsoft/wavlm-large",
-    "facebook/seamless-m4t-v2-large",
     "Qwen/Qwen2-Audio-7B",
-    "facebook/hubert-base-ls960",
-    "facebook/hubert-large-ls960-ft",
-    "baseline/random-cross-encoder-baseline",
-    "baseline/random-encoder-baseline",
-    "facebook/encodec_24khz",
-    "speechbrain/m-ctc-t-large",
-    "MIT/ast-finetuned-audioset-10-10-0.4593",
-    "asapp/sew-d-base-plus-400k-ft-ls100h",
-    "asapp/sew-d-mid-400k-ft-ls100h",
-    "asapp/sew-d-tiny-100k-ft-ls100h",
-    "google/yamnet",
-    "openai/whisper-base",
-    "openai/whisper-large-v3",
-    "openai/whisper-medium",
-    "openai/whisper-small",
-    "openai/whisper-tiny",
-    "microsoft/speecht5_asr",
-    "microsoft/speecht5_multimodal",
-    "facebook/mms-1b-all",
-    "facebook/mms-1b-fl102",
-    "facebook/mms-1b-l1107",
-    "facebook/data2vec-audio-base-960h",
-    "facebook/data2vec-audio-large-960h",
+    "mteb/baseline-random-cross-encoder",
+    "mteb/baseline-random-encoder",
     "OpenMuQ/MuQ-MuLan-large",
-    "speechbrain/cnn14-esc50",
+    "microsoft/speecht5_asr",
     "microsoft/speecht5_tts",
+    "microsoft/speecht5_multimodal",
 ]
 
 
@@ -306,7 +221,7 @@ def test_get_model_metas_each_model_type(model_type):
 
 def test_loader_kwargs_persisted_in_metadata():
     model = mteb.get_model(
-        "baseline/random-encoder-baseline",
+        "mteb/baseline-random-encoder",
         not_existing_param=123,
     )
 
@@ -315,6 +230,16 @@ def test_loader_kwargs_persisted_in_metadata():
 
     assert "not_existing_param" in meta.loader_kwargs
     assert meta.loader_kwargs["not_existing_param"] == 123
+
+
+def test_get_model_kwargs_does_not_mutate_registry_meta():
+    model_name = "mteb/baseline-random-encoder"
+
+    model = mteb.get_model(model_name, not_existing_param=123)
+    assert model.mteb_model_meta.experiment_kwargs == {"not_existing_param": 123}
+
+    current_registry_meta = mteb.get_model_meta(model_name)
+    assert current_registry_meta.experiment_kwargs is None
 
 
 def test_fill_missing_parameter():
@@ -326,7 +251,10 @@ def test_fill_missing_parameter():
     assert meta_with_compute.memory_usage_mb is not None
 
 
-@pytest.mark.parametrize("model_meta", mteb.get_model_metas(open_weights=True))
+@pytest.mark.parametrize(
+    "model_meta",
+    [m for m in mteb.get_model_metas(open_weights=True) if "text" in m.modalities],
+)
 def test_n_embedding_parameters(model_meta: ModelMeta):
     """
     Test that tracks models with n_embedding_parameters=None.
@@ -399,3 +327,21 @@ def test_load_sentence_transformer_via_get_model_meta():
     assert model_meta.model_type == ["dense"]
     assert not model_meta.is_cross_encoder
     assert model_meta.loader.__name__ == "sentence_transformers_loader"
+
+
+def test_load_model_with_experiments():
+    model_name = "mteb/baseline-random-encoder"
+
+    model1 = mteb.get_model(model_name, param=1)
+    model_meta = mteb.get_model_meta(model_name, experiment_kwargs={"param": 1})
+
+    assert model_meta.experiment_name == model1.mteb_model_meta.experiment_name
+
+    # test that experiment params are correctly passed from meta to model
+    model2 = mteb.get_model(model_name, param=2, other_param="value")
+    model_meta2 = mteb.get_model_meta(model_name, experiment_kwargs={"param": 2})
+    model_from_meta2 = model_meta2.load_model(other_param="value")
+    assert (
+        model2.mteb_model_meta.experiment_name
+        == model_from_meta2.mteb_model_meta.experiment_name
+    )

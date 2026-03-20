@@ -34,7 +34,7 @@ logging.basicConfig(level=logging.INFO)
     ],
 )
 def test_task_modality_filtering(task, modalities):
-    model_name = "baseline/random-encoder-baseline"
+    model_name = "mteb/baseline-random-encoder"
     model = mteb.get_model(model_name)
     model_meta = deepcopy(model.mteb_model_meta)
     model_meta.modalities = modalities
@@ -52,7 +52,7 @@ def test_task_modality_filtering(task, modalities):
 def test_task_modality_filtering_model_modalities_only_one_of_modalities(task, caplog):
     """Task have it2i, model only image."""
     with caplog.at_level(logging.WARNING):
-        model = mteb.get_model("baseline/random-encoder-baseline")
+        model = mteb.get_model("mteb/baseline-random-encoder")
         model_meta = deepcopy(model.mteb_model_meta)
         model_meta.modalities = ["image"]
         model.mteb_model_meta = model_meta
@@ -72,7 +72,7 @@ def test_task_modality_filtering_model_modalities_only_one_of_modalities(task, c
 @pytest.mark.parametrize("task", [MockImageClusteringTask()])
 def test_task_modality_filtering_model_modalities_more_than_task_modalities(task):
     scores = mteb.evaluate(
-        mteb.get_model("baseline/random-encoder-baseline"),
+        mteb.get_model("mteb/baseline-random-encoder"),
         task,
         cache=None,
     )

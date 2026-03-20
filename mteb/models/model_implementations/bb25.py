@@ -275,7 +275,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
 
 bb25_model = ModelMeta(
     loader=bb25_loader,
-    name="baseline/bb25",
+    name="mteb/baseline-bb25",
     model_type=["sparse"],
     languages=None,
     open_weights=True,

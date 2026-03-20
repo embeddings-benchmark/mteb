@@ -33,7 +33,10 @@ class BiorxivClusteringP2PFast(AbsTaskClustering):
         adapted_from=["BiorxivClusteringP2P"],
     )
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         for split in self.metadata.eval_splits:
             _check_label_distribution(self.dataset[split])
 

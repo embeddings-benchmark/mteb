@@ -40,7 +40,10 @@ class KlueSTS(AbsTaskSTS):
     min_score = 0
     max_score = 5
 
-    def dataset_transform(self, num_proc: int = 1):
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
         # In the case of KLUE STS, score value is nested within the `labels` field.
         # We need to extract the `score` and move it outside of the `labels` field for access.
         for split in self.dataset:

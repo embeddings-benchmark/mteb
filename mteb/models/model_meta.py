@@ -1,28 +1,23 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
 import warnings
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import field
 from enum import Enum
 from functools import partial
-from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
 from huggingface_hub import (
     ModelCard,
     get_safetensors_metadata,
-    hf_hub_download,
-    list_repo_commits,
     model_info,
-    repo_exists,
 )
 from huggingface_hub.errors import (
-    EntryNotFoundError,
     GatedRepoError,
-    HFValidationError,
     NotASafetensorsRepoError,
     RepositoryNotFoundError,
     SafetensorsParsingError,
@@ -32,6 +27,11 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from transformers import AutoConfig
 
 from mteb._helpful_enum import HelpfulStrEnum
+from mteb._hf_integration.hf_hub_utils import (
+    _get_json_from_hub,
+    _get_repo_commits,
+    _repo_exists,
+)
 from mteb.languages import check_language_code
 from mteb.models.models_protocols import MTEBModels
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
@@ -40,12 +40,12 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
 
     from huggingface_hub import (
-        GitCommitInfo,
         ModelCardData,
     )
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
+    from mteb.cache import ResultCache
     from mteb.models.models_protocols import EncoderProtocol
 
 
@@ -57,6 +57,7 @@ FRAMEWORKS = Literal[
     "GritLM",
     "LLM2Vec",
     "TensorFlow",
+    "JAX",
     "API",
     "Tevatron",
     "NumPy",
@@ -66,6 +67,7 @@ FRAMEWORKS = Literal[
     "GGUF",
     "safetensors",
     "ONNX",
+    "OpenVINO",
     "Transformers",
 ]
 
@@ -129,6 +131,7 @@ class ModelMeta(BaseModel):
         model_type: A list of strings representing the type of model.
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
+        experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -161,6 +164,7 @@ class ModelMeta(BaseModel):
     model_type: list[MODEL_TYPES] = ["dense"]
     citation: str | None = None
     contacts: list[str] | None = None
+    experiment_kwargs: Mapping[str, Any] | None = None
 
     @model_validator(mode="before")
     @classmethod
@@ -281,6 +285,12 @@ class ModelMeta(BaseModel):
         if self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
 
+        if self.experiment_kwargs is None:
+            self.experiment_kwargs = kwargs if len(kwargs) > 0 else None
+        elif len(kwargs) > 0 and self.experiment_kwargs is not None:
+            kwargs |= self.experiment_kwargs
+            self.experiment_kwargs = kwargs
+
         # Allow overwrites
         _kwargs = self.loader_kwargs.copy()
         _kwargs.update(kwargs)
@@ -299,6 +309,35 @@ class ModelMeta(BaseModel):
         if self.name is None:
             raise ValueError("Model name is not set")
         return self.name.replace("/", "__").replace(" ", "_")
+
+    @property
+    def experiment_name(self) -> str | None:
+        """Create a filesystem-safe string representation of the experiment parameters.
+
+        Uses deterministic serialization and hashing to ensure stable, bounded output.
+
+        Examples:
+            >>> import mteb
+            >>> model = mteb.get_model("mteb/baseline-random-encoder", param1="test")
+            >>>
+            >>> print(model.mteb_model_meta.experiment_name)
+            >>> # param1_test
+        """
+        return _serialize_experiment_kwargs_to_name(
+            experiment_kwargs=self.experiment_kwargs
+        )
+
+    @property
+    def model_name_with_experiment(self) -> str | None:
+        """Combines the model name with the experiment parameters for a more descriptive name."""
+        if self.name is None:
+            return None
+        experiment_str = _serialize_experiment_kwargs_to_name(
+            experiment_kwargs=self.experiment_kwargs,
+            value_field_separator="=",
+            kwargs_separator=", ",
+        )
+        return f"{self.name} ({experiment_str})" if experiment_str else self.name
 
     @classmethod
     def _detect_cross_encoder_or_dense(
@@ -625,7 +664,9 @@ class ModelMeta(BaseModel):
         n_embedding_parameters = cls._estimate_embedding_parameters_from_hub(
             model_name, revision=revision, config=config
         )
-        memory_usage_mb = cls._calculate_memory_usage_mb(model_name, n_parameters)
+        memory_usage_mb = cls._calculate_memory_usage_mb(
+            model_name, n_parameters, fetch_from_hf=True
+        )
 
         embedding_dim = getattr(model_config, "hidden_size", None)
         max_tokens = getattr(model_config, "max_position_embeddings", None)
@@ -959,39 +1000,43 @@ class ModelMeta(BaseModel):
 
     @staticmethod
     def _calculate_memory_usage_mb(
-        model_name: str, n_parameters: int | None
+        model_name: str,
+        n_parameters: int | None,
+        *,
+        fetch_from_hf: bool = False,
     ) -> int | None:
         MB = 1024**2  # noqa: N806
 
-        try:
-            safetensors_metadata = get_safetensors_metadata(model_name)
-            if len(safetensors_metadata.parameter_count) >= 0:
-                dtype_size_map = {
-                    "F64": 8,  # 64-bit float
-                    "F32": 4,  # 32-bit float (FP32)
-                    "F16": 2,  # 16-bit float (FP16)
-                    "BF16": 2,  # BFloat16
-                    "I64": 8,  # 64-bit integer
-                    "I32": 4,  # 32-bit integer
-                    "I16": 2,  # 16-bit integer
-                    "I8": 1,  # 8-bit integer
-                    "U8": 1,  # Unsigned 8-bit integer
-                    "BOOL": 1,  # Boolean (assuming 1 byte per value)
-                }
-                total_memory_bytes = sum(
-                    parameters * dtype_size_map.get(dtype, 4)
-                    for dtype, parameters in safetensors_metadata.parameter_count.items()
+        if fetch_from_hf:
+            try:
+                safetensors_metadata = get_safetensors_metadata(model_name)
+                if safetensors_metadata.parameter_count:
+                    dtype_size_map = {
+                        "F64": 8,  # 64-bit float
+                        "F32": 4,  # 32-bit float (FP32)
+                        "F16": 2,  # 16-bit float (FP16)
+                        "BF16": 2,  # BFloat16
+                        "I64": 8,  # 64-bit integer
+                        "I32": 4,  # 32-bit integer
+                        "I16": 2,  # 16-bit integer
+                        "I8": 1,  # 8-bit integer
+                        "U8": 1,  # Unsigned 8-bit integer
+                        "BOOL": 1,  # Boolean (assuming 1 byte per value)
+                    }
+                    total_memory_bytes = sum(
+                        parameters * dtype_size_map.get(dtype, 4)
+                        for dtype, parameters in safetensors_metadata.parameter_count.items()
+                    )
+                    return round(total_memory_bytes / MB)  # Convert to MB
+            except (
+                NotASafetensorsRepoError,
+                SafetensorsParsingError,
+                GatedRepoError,
+                RepositoryNotFoundError,
+            ) as e:
+                logger.warning(
+                    f"Can't calculate memory usage for {model_name}. Got error {e}"
                 )
-                return round(total_memory_bytes / MB)  # Convert to MB
-        except (
-            NotASafetensorsRepoError,
-            SafetensorsParsingError,
-            GatedRepoError,
-            RepositoryNotFoundError,
-        ) as e:
-            logger.warning(
-                f"Can't calculate memory usage for {model_name}. Got error {e}"
-            )
 
         if n_parameters is None:
             return None
@@ -1002,8 +1047,13 @@ class ModelMeta(BaseModel):
         model_memory_mb = model_memory_bytes / MB
         return round(model_memory_mb)
 
-    def calculate_memory_usage_mb(self) -> int | None:
+    def calculate_memory_usage_mb(self, fetch_from_hf: bool = False) -> int | None:
         """Calculates the memory usage of the model in MB.
+
+        Args:
+            fetch_from_hf: If True, fetch safetensors metadata from HuggingFace Hub
+                to get precise dtype-aware memory usage. If False (default), estimate
+                from n_parameters assuming FP32 (4 bytes per parameter).
 
         Returns:
             The memory usage of the model in MB, or None if it cannot be determined.
@@ -1011,7 +1061,9 @@ class ModelMeta(BaseModel):
         if "API" in self.framework or self.name is None:
             return None
 
-        return self._calculate_memory_usage_mb(self.name, self.n_parameters)
+        return self._calculate_memory_usage_mb(
+            self.name, self.n_parameters, fetch_from_hf=fetch_from_hf
+        )
 
     @staticmethod
     def fetch_release_date(model_name: str) -> StrDate | None:
@@ -1031,6 +1083,10 @@ class ModelMeta(BaseModel):
     def _get_frameworks_from_hf_tags(model_name: str) -> list[FRAMEWORKS]:
         """Extract frameworks supported by the model from HuggingFace model tags.
 
+        HuggingFace derives tags like ``pytorch``, ``tf``, ``jax``, ``onnx``,
+        ``safetensors``, ``gguf``, and ``openvino`` from the files present in a
+        repository. This method maps those tags to MTEB framework names.
+
         Args:
             model_name: HuggingFace model name
 
@@ -1047,28 +1103,62 @@ class ModelMeta(BaseModel):
             )
             return []
 
-        # Mapping from HuggingFace tags to MTEB framework names
+        # Mapping from HuggingFace tags to MTEB framework names.
+        # Order determines the order of the returned list.
         tag_to_framework: dict[str, FRAMEWORKS] = {
             "sentence-transformers": "Sentence Transformers",
+            "pytorch": "PyTorch",
+            "tf": "TensorFlow",
+            "jax": "JAX",
             "transformers": "Transformers",
             "onnx": "ONNX",
             "safetensors": "safetensors",
             "gguf": "GGUF",
+            "openvino": "OpenVINO",
         }
 
-        # Assume PyTorch support by default
-        # TODO: could be detected from repo as well: https://github.com/embeddings-benchmark/mteb/issues/4104
-        frameworks: list[FRAMEWORKS] = ["PyTorch"]
+        frameworks: list[FRAMEWORKS] = []
 
-        for framework_tag in tag_to_framework.keys():
+        for framework_tag, framework_name in tag_to_framework.items():
             if framework_tag in info.tags:
-                frameworks.append(tag_to_framework[framework_tag])
+                frameworks.append(framework_name)
 
         return frameworks
 
     def to_python(self) -> str:
         """Returns a string representation of the model."""
-        return _pydantic_instance_to_code(self)
+        return _pydantic_instance_to_code(self, exclude_fields=["experiment_kwargs"])
+
+    def push_eval_results(
+        self,
+        user: str | None = None,
+        *,
+        tasks: Sequence[AbsTask] | Sequence[str] | None = None,
+        cache: ResultCache | None = None,
+        create_pr: bool = False,
+    ) -> None:
+        """Pushes the evaluation results of the model to the HuggingFace Hub.
+
+        Args:
+            user: The user or organization of results source.
+            tasks: The tasks to push results for. If None, results for all tasks will be pushed.
+            cache: The ResultCache containing the evaluation results to push.
+            create_pr: Whether to create a pull request for the model card update if the model card already exists on the HuggingFace Hub. If False, the model card will be updated directly without a pull request.
+        """
+        from mteb.cache import ResultCache
+
+        if cache is None:
+            cache = ResultCache()
+
+        benchmark_result = cache.load_results(
+            models=[self],
+            tasks=tasks,
+        )
+        model_result = benchmark_result.model_results[0]
+        model_result.push_model_results(
+            user=user,
+            create_pr=create_pr,
+        )
 
 
 def _pydantic_instance_to_code(
@@ -1076,6 +1166,7 @@ def _pydantic_instance_to_code(
     indent: int = 4,
     *,
     only_set_fields: bool = False,
+    exclude_fields: Sequence[str] | None = None,
 ) -> str:
     """Convert a Pydantic model instance into valid Python constructor code.
 
@@ -1086,6 +1177,7 @@ def _pydantic_instance_to_code(
         model: The Pydantic model to convert.
         indent: The indentation to use.
         only_set_fields: If True, only fields explicitly provided at model construction time
+        exclude_fields: Fields to exclude from the output, regardless of whether they were set or not.
     """
     cls_name = model.__class__.__name__
     pad = " " * indent
@@ -1099,6 +1191,8 @@ def _pydantic_instance_to_code(
         field_names = model_fields
 
     for field_name in field_names:
+        if exclude_fields and field_name in exclude_fields:
+            continue
         value = getattr(model, field_name)
         value_code = _value_to_code(value, indent)
         lines.append(f"{pad}{field_name}={value_code},")
@@ -1180,49 +1274,59 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
     return similar
 
 
-def _get_repo_commits(repo_id: str, repo_type: str) -> list[GitCommitInfo] | None:
-    try:
-        return list_repo_commits(repo_id=repo_id, repo_type=repo_type)
-    except (GatedRepoError, RepositoryNotFoundError) as e:
-        logger.warning(f"Can't get commits of {repo_id}: {e}")
-        return None
-
-
-def _get_json_from_hub(
-    repo_id: str, file_name: str, repo_type: str, revision: str | None = None
-) -> dict[str, Any] | None:
-    path = _get_file_on_hub(repo_id, file_name, repo_type, revision)
-    if path is None:
-        return None
-
-    with Path(path).open() as f:
-        js = json.load(f)
-    return js
-
-
-def _get_file_on_hub(
-    repo_id: str, file_name: str, repo_type: str, revision: str | None = None
+def _serialize_experiment_kwargs_to_name(
+    experiment_kwargs: Mapping[str, Any] | None,
+    value_field_separator: str = "_",
+    kwargs_separator: str = "__",
 ) -> str | None:
-    try:
-        return hf_hub_download(
-            repo_id=repo_id, filename=file_name, repo_type=repo_type, revision=revision
-        )
-    except (GatedRepoError, RepositoryNotFoundError, EntryNotFoundError) as e:
-        logger.warning(f"Can't get file {file_name} of {repo_id}: {e}")
+    if experiment_kwargs is None or len(experiment_kwargs) == 0:
         return None
 
+    invalid_chars = set('<>:"|?*\\/\0')
 
-def _repo_exists(repo_id: str, repo_type: str | None = None) -> bool:
-    """Checks if a repository exists on HuggingFace Hub.
+    def _serialize_value(value: Any) -> str:
+        """Convert value to deterministic string representation."""
+        if isinstance(value, (str, int, float, bool)) or value is None:
+            value = str(value)
+            for invalid_char in invalid_chars:
+                value = value.replace(invalid_char, "_")
+            return value
+        if isinstance(value, (list, tuple)):
+            return f"[{','.join(_serialize_value(v) for v in value)}]"
+        if isinstance(value, dict):
+            items = sorted(value.items())
+            return f"{{{','.join(f'{k}:{_serialize_value(v)}' for k, v in items)}}}"
+        if isinstance(value, Enum):
+            return f"{value.__class__.__name__}.{value.name}"
 
-    Repo exists will raise HFValidationError for invalid local paths
+        # Handle common scientific types
+        if hasattr(value, "__module__") and value.__module__ == "numpy":
+            # numpy arrays and scalars
+            return f"np_{hashlib.sha256(np.asarray(value).tobytes()).hexdigest()[:8]}"
 
-    Args:
-        repo_id: The repository ID.
-        repo_type: The type of repository (e.g., "model", "dataset", "space").
-    """
-    try:
-        return repo_exists(repo_id=repo_id, repo_type=repo_type)
-    except HFValidationError as e:
-        logger.warning(f"Can't check existence of {repo_id}: {e}")
-        return False
+        # Handle pydantic models and dataclasses
+        if isinstance(value, BaseModel):
+            # Use model_dump for deterministic JSON representation
+            json_str = json.dumps(value.model_dump(), sort_keys=True)
+            digest = hashlib.sha256(json_str.encode("utf-8")).hexdigest()[:8]
+            return f"{value.__class__.__name__}_{digest}"
+
+        raise ValueError(
+            f"experiment_kwargs contains non-serializable type {type(value).__name__}. "
+            f"Only JSON-serializable types (str, int, float, bool, list, dict, None), "
+            f"Enums, numpy arrays, and Pydantic models are supported."
+        )
+
+    params_str = kwargs_separator.join(
+        f"{key}{value_field_separator}{_serialize_value(value)}"
+        for key, value in sorted(experiment_kwargs.items())
+    )
+
+    # If too long or contains invalid chars, use hash
+    max_length = 200
+
+    if len(params_str) > max_length or any(c in invalid_chars for c in params_str):
+        param_hash = hashlib.sha256(params_str.encode()).hexdigest()[:16]
+        return f"exp_{param_hash}"
+
+    return params_str

@@ -179,7 +179,7 @@ def test_benchmark_results(cache_path: Path) -> None:
         tasks=bench,
         models=[
             "sentence-transformers/all-MiniLM-L6-v2",
-            "baseline/random-encoder-baseline",
+            "mteb/baseline-random-encoder",
         ],
     )
     df = results.get_benchmark_result()
@@ -217,7 +217,7 @@ def test_generate_model_card_with_table_and_benchmarks(
         results_cache=ResultCache(cache_path),
         output_path=output_path,
         add_table_to_model_card=True,
-        models_to_compare=["baseline/random-encoder-baseline"],
+        models_to_compare=["mteb/baseline-random-encoder"],
     )
 
     assert output_path.exists(), "Model card file not created"
