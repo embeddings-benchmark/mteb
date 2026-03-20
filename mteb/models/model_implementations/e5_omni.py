@@ -7,6 +7,7 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
+from mteb._create_dataloaders import AudioCollator
 from mteb._requires_package import (
     requires_audio_dependencies,
     requires_image_dependencies,
@@ -131,7 +132,11 @@ class E5OmniWrapper(AbsEncoder):
                 if i < len(batch_images):
                     content.append({"type": "image", "image": batch_images[i]})
                 if i < len(batch_audios):
-                    audio_array = self._prepare_audio_array(batch_audios[i])
+                    audio_array = AudioCollator.resample_audio(
+                        {"audio": batch_audios[i]},
+                        self.sampling_rate,
+                        self.max_samples,
+                    )
                     content.append({"type": "audio", "audio": audio_array})
 
                 message = [{"role": "user", "content": content}]
