@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 from collections import defaultdict
+from collections.abc import Sequence
 from typing import TYPE_CHECKING, Literal
 
 import numpy as np
@@ -55,7 +56,7 @@ def _get_embedding_size(embed_dim: int | list[int] | None) -> int | None:
         return None
     if isinstance(embed_dim, int):
         return int(embed_dim)
-    if isinstance(embed_dim, list) and len(embed_dim) > 0:
+    if isinstance(embed_dim, Sequence) and len(embed_dim) > 0:
         return int(max(embed_dim))
     return None
 
