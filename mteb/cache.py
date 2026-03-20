@@ -8,7 +8,6 @@ import os
 import shutil
 import subprocess
 import textwrap
-import time
 import warnings
 from collections import defaultdict
 from collections.abc import Mapping
@@ -1246,6 +1245,51 @@ class ResultCache:
                 result_count,
             )
 
+    def _get_github_token(self) -> str:
+        """Get GitHub token using gh CLI authentication.
+
+        Returns:
+            GitHub token string
+
+        Raises:
+            RuntimeError: If authentication fails.
+        """
+        try:
+            result = subprocess.run(
+                ["gh", "auth", "token"],
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                logger.debug("Using token from gh auth")
+                return result.stdout.strip()
+        except FileNotFoundError:
+            logger.debug("gh CLI not found, trying git credential helper")
+        except Exception as e:
+            logger.debug(f"Failed to get token from gh auth: {e}")
+
+        try:
+            result = subprocess.run(
+                ["git", "credential", "fill"],
+                input="protocol=https\nhost=github.com\n\n",
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            if result.returncode == 0:
+                for line in result.stdout.split("\n"):
+                    if line.startswith("password="):
+                        logger.debug("Using token from git credential helper")
+                        return line.split("=", 1)[1]
+        except Exception as e:
+            logger.debug(f"Failed to get token from git credential: {e}")
+
+        raise RuntimeError(
+            "GitHub token not found. Please set up gh CLI (gh auth login) or "
+            "configure git credential helper."
+        )
+
     def _create_pull_request(
         self,
         commit_sha: str,
@@ -1281,12 +1325,7 @@ class ResultCache:
             )
 
         logger.info("Creating PR using PyGithub")
-        token = os.getenv("GITHUB_TOKEN")
-        if not token:
-            raise RuntimeError(
-                "GITHUB_TOKEN environment variable not set. "
-                "Please set it to your GitHub personal access token."
-            )
+        token = self._get_github_token()
 
         try:
             auth = Auth.Token(token)
@@ -1302,23 +1341,50 @@ class ResultCache:
         except Exception as e:
             raise RuntimeError(f"Failed to access upstream repository: {e}")
 
-        fork = None
+        remote_path = self.cache_path / "remote"
+        fork_url = None
         try:
-            # Check if fork already exists
-            fork = gh.get_repo(f"{user.login}/results")
-            logger.info(f"Using existing fork: {fork.html_url}")
-        except Exception:
-            logger.info("Creating fork...")
-            try:
-                # Fork doesn't exist, create it
-                fork = user.create_fork(upstream)
-                logger.info(f"Fork created: {fork.html_url}")
-                time.sleep(2)
-            except GithubException as e:
-                if e.status == 422:
-                    fork = gh.get_repo(f"{user.login}/results")
-                else:
-                    raise RuntimeError(f"Failed to create fork: {e}")
+            logger.info("Creating/configuring fork using gh CLI...")
+            subprocess.run(
+                [
+                    "gh",
+                    "repo",
+                    "fork",
+                    upstream_repo_name,
+                    "--remote",
+                    "--remote-name",
+                    "fork",
+                ],
+                cwd=remote_path,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+            logger.info("Fork created/configured")
+
+            # Get fork URL from gh CLI
+            result = subprocess.run(
+                ["gh", "repo", "view", "--json", "url"],
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            if result.returncode == 0:
+                fork_data = json.loads(result.stdout)
+                fork_url = fork_data.get(
+                    "url", f"https://github.com/{user.login}/results"
+                )
+            else:
+                fork_url = f"https://github.com/{user.login}/results"
+
+            logger.info(f"Using fork: {fork_url}")
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(
+                f"Failed to create/configure fork: {e.stderr or e.stdout}"
+            )
+        except Exception as e:
+            raise RuntimeError(f"Failed to setup fork: {e}")
 
         try:
             rate_limit = gh.get_rate_limit()
@@ -1335,19 +1401,10 @@ class ResultCache:
             logger.warning(f"Could not check rate limit: {e}")
 
         branch_name = f"mteb-results-{int(datetime.now().timestamp())}"
-        remote_path = self.cache_path / "remote"
-        fork_url = f"https://github.com/{user.login}/results.git"
         try:
             logger.info(f"Pushing to fork branch '{branch_name}'...")
             subprocess.run(
-                [
-                    "git",
-                    "-c",
-                    f"http.extraHeader=AUTHORIZATION: bearer {token}",
-                    "push",
-                    fork_url,
-                    f"HEAD:refs/heads/{branch_name}",
-                ],
+                ["git", "push", "fork", f"HEAD:refs/heads/{branch_name}"],
                 cwd=remote_path,
                 check=True,
                 capture_output=True,
@@ -1375,7 +1432,7 @@ class ResultCache:
             logger.info("=" * 80)
             logger.info(f"\nPR URL: {pr.html_url}")
             logger.info(f"PR Number: #{pr.number}")
-            logger.info(f"Fork: {fork.html_url}")
+            logger.info(f"Fork: {fork_url}")
             logger.info(f"\nModels: {model_str}")
             logger.info(f"Results: {result_count}")
             logger.info(f"Commit: {commit_sha}")
@@ -1388,7 +1445,7 @@ class ResultCache:
                 "commit_sha": commit_sha,
                 "pr_url": pr.html_url,
                 "pr_number": pr.number,
-                "fork_url": fork.html_url,
+                "fork_url": fork_url,
                 "branch_name": branch_name,
             }
 
