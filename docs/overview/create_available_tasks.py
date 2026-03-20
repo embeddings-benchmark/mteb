@@ -28,9 +28,7 @@ aggregated_tasks_section = """
 {task_table}
 """
 
-task_type_section = """---
-title: "{task_type}"
----
+task_type_section = """
 
 <div class="nowrap-table" markdown>
 
