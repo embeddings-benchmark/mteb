@@ -154,6 +154,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         add_eos_token: bool = False,
         prompts_dict: dict[str, str] | None = None,
         include_prompt: bool = True,
+        *,
         embed_dim: int | None = None,
         **kwargs: Any,
     ):
@@ -173,6 +174,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             prompts_dict: Dictionary of task names to prompt names. If task name is missing in the dict or prompts dict is None, prompt from task metadata or
                 AbsTask.abstask_prompt will be used.
             include_prompt: Whether to include the prompt tokens in the pooling.
+            embed_dim: The embedding dimension of the model to use.
             **kwargs: Kwargs for Sentence Transformer model.
         """
         from sentence_transformers import SentenceTransformer
