@@ -1130,14 +1130,14 @@ class ResultCache:
         Returns:
             Dict mapping (model_name, revision) to list of unsubmitted result file paths.
         """
-        unsubmitted = {}
+        unsubmitted: dict[tuple[str, str], list[Path]] = {}
 
         local_paths = self.get_cache_paths(
             models=models,
             require_model_meta=False,
             include_remote=False,
         )
-        remote_files_set = set()
+        remote_files_set: set[Path] = set()
         for model in models:
             if model.name is None or model.revision is None:
                 logger.warning(f"Skipping model with None name or revision: {model}")
