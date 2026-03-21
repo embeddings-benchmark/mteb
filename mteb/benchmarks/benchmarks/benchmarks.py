@@ -2700,6 +2700,42 @@ VN_MTEB = Benchmark(
     contacts=["BaoLocPham"],
 )
 
+MTEB_THA = Benchmark(
+    name="MTEB(tha, v1)",
+    aliases=["MTEB(tha)"],
+    display_name="Thai",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/th.svg",
+    tasks=get_tasks(
+        languages=["tha"],
+        tasks=[
+            # Classification (4) — native Thai or purpose-built; no machine-translated tasks
+            "MTOPDomainClassification",
+            "MTOPIntentClassification",
+            "SIB200Classification",
+            "WisesightSentimentClassification.v2",
+            # Clustering (1)
+            "SIB200ClusteringS2S",
+            # PairClassification (1)
+            "XNLI",
+            # Reranking (2)
+            "MIRACLReranking",
+            "MultiLongDocReranking",
+            # Retrieval (7) — human-judged or human-translated
+            "BelebeleRetrieval",
+            "MIRACLRetrievalHardNegatives.v2",
+            "MKQARetrieval",
+            "MrTidyRetrieval",
+            "MultiLongDocRetrieval",
+            "WebFAQRetrieval",
+            "XQuADRetrieval",
+        ],
+    ),
+    description="A benchmark for evaluating Thai text embedding models across 15 tasks spanning 5 task types: classification (4), clustering (1), pair classification (1), reranking (2), and retrieval (7). Tasks are native Thai or high-quality human translations; machine-translated and cross-lingual tasks are excluded.",
+    reference=None,
+    citation=None,
+    contacts=["anusoft"],
+)
+
 JINA_VDR = Benchmark(
     name="JinaVDR",
     display_name="Jina Visual Document Retrieval",
