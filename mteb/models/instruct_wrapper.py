@@ -154,6 +154,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         add_eos_token: bool = False,
         prompts_dict: dict[str, str] | None = None,
         include_prompt: bool = True,
+        embed_dim: int | None = None,
         **kwargs: Any,
     ):
         """Instruct Sentence Transformer Wrapper. Wrapper that passes instructions to the Sentence Transformer model.
@@ -202,7 +203,11 @@ class InstructSentenceTransformerModel(AbsEncoder):
 
         self.model_name = model_name
         self.model = SentenceTransformer(
-            model_name, revision=revision, device=device, **kwargs
+            model_name,
+            revision=revision,
+            device=device,
+            truncate_dim=embed_dim,
+            **kwargs,
         )
         if max_seq_length:
             # https://github.com/huggingface/sentence-transformers/issues/3575
