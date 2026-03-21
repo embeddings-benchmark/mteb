@@ -1132,44 +1132,40 @@ class ResultCache:
         """
         unsubmitted = {}
 
+        local_paths = self.get_cache_paths(
+            models=models,
+            require_model_meta=False,
+            include_remote=False,
+        )
+        remote_files_set = set()
         for model in models:
-            model_name = model.name
-            revision = model.revision
-
-            if model_name is None or revision is None:
+            if model.name is None or model.revision is None:
                 logger.warning(f"Skipping model with None name or revision: {model}")
                 continue
 
             model_name_path = model.model_name_as_path()
+            remote_results_dir = (
+                self.remote_results_path / model_name_path / model.revision
+            )
 
-            local_results_dir = self.cache_path / "results" / model_name_path / revision
-            if not local_results_dir.exists():
-                logger.warning(
-                    f"No local results found for {model_name} (revision: {revision})"
-                )
-                continue
-
-            local_files = {
-                f.relative_to(local_results_dir)
-                for f in local_results_dir.rglob("*.json")
-                if f.name != "model_meta.json"
-            }
-
-            remote_results_dir = self.remote_results_path / model_name_path / revision
-            remote_files = set()
             if remote_results_dir.exists():
-                remote_files = {
+                remote_files_set.update(
                     f.relative_to(remote_results_dir)
                     for f in remote_results_dir.rglob("*.json")
                     if f.name != "model_meta.json"
-                }
+                )
 
-            unsubmitted_files = local_files - remote_files
+        for local_path in local_paths:
+            model_name_path = local_path.parent.parent.name
+            revision = local_path.parent.name
+            model_name = model_name_path.replace("__", "/").replace("_", " ")
+            relative_path = local_path.name
 
-            if unsubmitted_files:
-                unsubmitted[(model_name, revision)] = [
-                    local_results_dir / f for f in unsubmitted_files
-                ]
+            if relative_path not in remote_files_set:
+                key = (model_name, revision)
+                if key not in unsubmitted:
+                    unsubmitted[key] = []
+                unsubmitted[key].append(local_path)
 
         return unsubmitted
 
@@ -1439,7 +1435,7 @@ class ResultCache:
                     )
                 except Exception as rollback_error:
                     logger.error(f"Rollback also failed: {rollback_error}")
-        raise
+            raise
 
     def _get_github_token(self) -> str:
         """Get GitHub token using gh CLI authentication.
