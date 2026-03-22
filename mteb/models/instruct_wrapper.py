@@ -154,6 +154,8 @@ class InstructSentenceTransformerModel(AbsEncoder):
         add_eos_token: bool = False,
         prompts_dict: dict[str, str] | None = None,
         include_prompt: bool = True,
+        *,
+        embed_dim: int | None = None,
         **kwargs: Any,
     ):
         """Instruct Sentence Transformer Wrapper. Wrapper that passes instructions to the Sentence Transformer model.
@@ -172,6 +174,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             prompts_dict: Dictionary of task names to prompt names. If task name is missing in the dict or prompts dict is None, prompt from task metadata or
                 AbsTask.abstask_prompt will be used.
             include_prompt: Whether to include the prompt tokens in the pooling.
+            embed_dim: The embedding dimension of the model to use.
             **kwargs: Kwargs for Sentence Transformer model.
         """
         from sentence_transformers import SentenceTransformer
@@ -202,7 +205,11 @@ class InstructSentenceTransformerModel(AbsEncoder):
 
         self.model_name = model_name
         self.model = SentenceTransformer(
-            model_name, revision=revision, device=device, **kwargs
+            model_name,
+            revision=revision,
+            device=device,
+            truncate_dim=embed_dim,
+            **kwargs,
         )
         if max_seq_length:
             # https://github.com/huggingface/sentence-transformers/issues/3575

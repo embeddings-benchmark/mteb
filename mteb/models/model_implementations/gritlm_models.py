@@ -93,6 +93,7 @@ gritlm8x7b = ModelMeta(
     framework=["GritLM", "PyTorch", "Transformers", "safetensors"],
     use_instructions=True,
     training_datasets=GRIT_LM_TRAINING_DATA,
+    modalities=["text"],
     citation=GRITLM_CITATION,
     # section 3.1 "We finetune our final models from Mistral 7B [68] and Mixtral 8x7B [69] using adaptations of E5 [160] and the Tülu 2 data
     public_training_code="https://github.com/ContextualAI/gritlm",

@@ -441,4 +441,5 @@ seed_embedding = ModelMeta(
     training_datasets=doubao_embedding_training_data,
     public_training_code=None,
     public_training_data=None,
+    modalities=["text", "image"],
 )

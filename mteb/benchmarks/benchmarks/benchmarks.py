@@ -2507,6 +2507,50 @@ VIDORE_V3 = VidoreBenchmark(
 """,
 )
 
+VIDORE_V3_1 = VidoreBenchmark(
+    name="ViDoRe(v3.1)",
+    display_name="ViDoRe v3.1",
+    language_view=[
+        "deu-Latn",
+        "eng-Latn",
+        "fra-Latn",
+        "ita-Latn",
+        "por-Latn",
+        "spa-Latn",
+    ],
+    icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
+    tasks=get_tasks(
+        tasks=[
+            "Vidore3FinanceEnRetrieval.v2",
+            "Vidore3IndustrialRetrieval.v2",
+            "Vidore3ComputerScienceRetrieval.v2",
+            "Vidore3PharmaceuticalsRetrieval.v2",
+            "Vidore3HrRetrieval.v2",
+            "Vidore3FinanceFrRetrieval.v2",
+            "Vidore3PhysicsRetrieval.v2",
+            "Vidore3EnergyRetrieval.v2",
+            "Vidore3TelecomRetrieval.v2",
+            "Vidore3NuclearRetrieval.v2",
+        ]
+    ),
+    description="ViDoRe v3.1 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. "
+    + "It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents. "
+    + "The benchmark includes both open and closed datasets: to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml). "
+    + "The latest 3.1 version adds and markdown derived from OCR to allow easier evaluation of text-only baselines and joint image-text baselines.",
+    reference="https://arxiv.org/abs/2601.08620",
+    citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+)
+
 VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
     name="ViDoRe(v1&v2)",
     aliases=["VisualDocumentRetrieval"],
@@ -2654,6 +2698,42 @@ VN_MTEB = Benchmark(
 }
 """,
     contacts=["BaoLocPham"],
+)
+
+MTEB_THA = Benchmark(
+    name="MTEB(tha, v1)",
+    aliases=["MTEB(tha)"],
+    display_name="Thai",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/th.svg",
+    tasks=get_tasks(
+        languages=["tha"],
+        tasks=[
+            # Classification (4) — native Thai or purpose-built; no machine-translated tasks
+            "MTOPDomainClassification",
+            "MTOPIntentClassification",
+            "SIB200Classification",
+            "WisesightSentimentClassification.v2",
+            # Clustering (1)
+            "SIB200ClusteringS2S",
+            # PairClassification (1)
+            "XNLI",
+            # Reranking (2)
+            "MIRACLReranking",
+            "MultiLongDocReranking",
+            # Retrieval (7) — human-judged or human-translated
+            "BelebeleRetrieval",
+            "MIRACLRetrievalHardNegatives.v2",
+            "MKQARetrieval",
+            "MrTidyRetrieval",
+            "MultiLongDocRetrieval",
+            "WebFAQRetrieval",
+            "XQuADRetrieval",
+        ],
+    ),
+    description="A benchmark for evaluating Thai text embedding models across 15 tasks spanning 5 task types: classification (4), clustering (1), pair classification (1), reranking (2), and retrieval (7). Tasks are native Thai or high-quality human translations; machine-translated and cross-lingual tasks are excluded.",
+    reference=None,
+    citation=None,
+    contacts=["anusoft"],
 )
 
 JINA_VDR = Benchmark(

@@ -153,10 +153,6 @@ class GraniteVisionEmbeddingWrapper:
             return image_embeddings
         raise ValueError
 
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        scores = self.similarity(text_embeddings, image_embeddings)
-        return (scores * 100).softmax(dim=-1)
-
     def similarity(self, a, b):
         return self.processor.score_multi_vector(a, b)
 
@@ -173,7 +169,7 @@ granite_vision_embedding = ModelMeta(
     release_date="2025-06-11",
     modalities=["image", "text"],
     n_parameters=2_980_000_000,
-    n_embedding_parameters=None,
+    n_embedding_parameters=100671488,
     memory_usage_mb=11351,
     max_tokens=128000,
     embed_dim=128,
