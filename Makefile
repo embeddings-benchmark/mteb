@@ -12,6 +12,7 @@ lint:
 	uv run --no-sync ruff format . 			# running ruff formatting
 	uv run --no-sync ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
 	uv run --no-sync typos
+	uv run --no-sync python scripts/check_circular_imports.py
 
 lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
@@ -19,10 +20,11 @@ lint-check:
 	uv run --no-sync ruff format . --check
 	uv run --no-sync ruff check .
 	uv run --no-sync typos --diff
+	uv run --no-sync python scripts/check_circular_imports.py
 
 test:
 	@echo "--- 🧪 Running tests ---"
-	uv run --no-sync --group test pytest -n auto -m "not (test_datasets or leaderboard_stability)"
+	uv run --no-sync --group test pytest -n auto -m "not (test_datasets or leaderboard_stability or test_reference_models)"
 
 
 test-with-coverage:
@@ -65,6 +67,10 @@ dataset-load-test:
 dataset-load-test-pr:
 	@echo "--- 🚀 Running dataset load test for PR ---"
 	eval "$$(uv run --no-sync python -m scripts.extract_datasets $(BASE_BRANCH))" && uv run --no-sync --group test pytest -m test_datasets
+
+reference-model-test:
+	@echo "--- Running reference model coverage test ---"
+	uv run --no-sync --group test pytest -m test_reference_models -v
 
 leaderboard-build-test:
 	@echo "--- 🚀 Running leaderboard build test ---"

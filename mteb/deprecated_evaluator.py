@@ -15,7 +15,6 @@ from typing import TYPE_CHECKING, Any, cast
 
 import datasets
 
-import mteb
 from mteb.abstasks import AbsTask
 from mteb.benchmarks import Benchmark
 from mteb.models import (
@@ -156,7 +155,9 @@ class MTEB:
     @classmethod
     def mteb_tasks(cls):
         """Get all tasks available in the MTEB."""
-        tasks = mteb.get_tasks()
+        from mteb.get_tasks import get_tasks
+
+        tasks = get_tasks()
         instance = cls(tasks)
         instance._display_tasks(tasks, name="MTEB tasks")
 

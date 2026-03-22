@@ -16,7 +16,6 @@ from typing import TYPE_CHECKING, Any, cast
 import requests
 from pydantic import ValidationError
 
-import mteb
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks import AbsTask
 from mteb.benchmarks.benchmark import Benchmark
@@ -546,6 +545,8 @@ class ResultCache:
         # Download or update the full repository
         self.download_from_remote()
 
+        import mteb
+
         all_model_names = [
             model_meta.name
             for model_meta in mteb.get_model_metas()
@@ -861,6 +862,8 @@ class ResultCache:
             ... )
         """
         if isinstance(tasks, str):
+            import mteb
+
             tasks = mteb.get_benchmark(tasks)
 
         if isinstance(load_experiments, str):
