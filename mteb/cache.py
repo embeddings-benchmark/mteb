@@ -7,9 +7,11 @@ import logging
 import os
 import shutil
 import subprocess
+import textwrap
 import warnings
 from collections import defaultdict
 from collections.abc import Mapping
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
@@ -75,6 +77,15 @@ class ResultCache:
         """
         return (self.cache_path / "remote").exists()
 
+    @property
+    def remote_results_path(self) -> Path:
+        """Get the path to the remote results directory.
+
+        Returns:
+            The path to the remote results directory.
+        """
+        return self.cache_path / "remote" / "results"
+
     def get_task_result_path(
         self,
         task_name: str,
@@ -96,9 +107,7 @@ class ResultCache:
             The path to the results of the task.
         """
         results_folder = (
-            self.cache_path / "results"
-            if not remote
-            else self.cache_path / "remote" / "results"
+            self.cache_path / "results" if not remote else self.remote_results_path
         )
 
         if isinstance(model_name, ModelMeta):
@@ -284,6 +293,7 @@ class ResultCache:
                     ["git", "fetch", "--all", "--tags"],
                     cwd=results_directory,
                     check=True,
+                    text=True,
                 )
             else:
                 logger.debug(
@@ -297,6 +307,7 @@ class ResultCache:
                     ["git", "checkout", revision],
                     cwd=results_directory,
                     check=True,
+                    text=True,
                 )
             return results_directory
 
@@ -315,6 +326,7 @@ class ResultCache:
             clone_cmd,
             cwd=self.cache_path,
             check=True,
+            text=True,
         )
 
         return results_directory
@@ -635,7 +647,7 @@ class ResultCache:
             return paths
 
         results_path = self.cache_path / "results"
-        remote_path = self.cache_path / "remote" / "results"
+        remote_path = self.remote_results_path
 
         cache_paths = _get_paths(results_path, load_experiments)
 
@@ -818,6 +830,834 @@ class ResultCache:
 
             paths = [p for p in paths if p.stem in task_names]
         return paths
+
+    def _load_model_meta_from_cache(
+        self,
+        model_name: str,
+        revision: str,
+    ) -> ModelMeta | None:
+        """Load ModelMeta from cache directory.
+
+        Args:
+            model_name: The model name.
+            revision: The model revision.
+
+        Returns:
+            ModelMeta object if found, None otherwise.
+        """
+        model_name_path = model_name.replace("/", "__").replace(" ", "_")
+        meta_file = (
+            self.cache_path / "results" / model_name_path / revision / "model_meta.json"
+        )
+
+        if not meta_file.exists():
+            logger.warning(
+                f"model_meta.json not found for {model_name} (revision: {revision})"
+            )
+            return None
+
+        try:
+            with meta_file.open("r") as f:
+                meta_dict = json.load(f)
+            return ModelMeta(**meta_dict)
+        except Exception as e:
+            logger.warning(f"Failed to load ModelMeta from {meta_file}: {e}")
+            return None
+
+    def _normalize_models(
+        self,
+        models: list[str] | list[ModelMeta] | str | ModelMeta | None = None,
+    ) -> list[ModelMeta]:
+        """Normalize model input to list of ModelMeta objects.
+
+        Args:
+            models: Model(s) to normalize. Can be:
+                - None: get all models from local cache
+                - str: single model name
+                - ModelMeta: single model metadata object
+                - list[str]: list of model names
+                - list[ModelMeta]: list of model metadata objects
+
+        Returns:
+            List of ModelMeta objects.
+
+        Raises:
+            ValueError: If no models found or invalid input.
+        """
+        if models is None:
+            local_models = self.get_models(
+                require_model_meta=True, include_remote=False
+            )
+            if not local_models:
+                raise ValueError(
+                    "No models found in local cache. Please evaluate models first."
+                )
+            normalized = []
+            for model_name, revision in local_models:
+                model_meta = self._load_model_meta_from_cache(model_name, revision)
+                if model_meta:
+                    normalized.append(model_meta)
+            return normalized
+
+        if isinstance(models, (str, ModelMeta)):
+            models_to_process: list[str | ModelMeta] = [models]
+        else:
+            models_to_process = cast("list[str | ModelMeta]", models)
+
+        normalized = []
+        for model in models_to_process:
+            if isinstance(model, ModelMeta):
+                if model.revision is None or model.name is None:
+                    raise ValueError(
+                        f"ModelMeta {model.name} has no revision or name. "
+                        "Cannot submit results without both."
+                    )
+                normalized.append(model)
+            elif isinstance(model, str):
+                local_models = self.get_models(
+                    require_model_meta=False, include_remote=False
+                )
+                matching = [
+                    (name, rev)
+                    for name, rev in local_models
+                    if name == model.replace("/", "__")
+                ]
+                if not matching:
+                    raise ValueError(
+                        f"Model '{model}' not found in local cache. "
+                        "Please evaluate it first."
+                    )
+                for model_name, revision in matching:
+                    model_meta = self._load_model_meta_from_cache(model_name, revision)
+                    if model_meta:
+                        normalized.append(model_meta)
+            else:
+                raise TypeError(f"Invalid model type: {type(model)}")
+
+        if not normalized:
+            raise ValueError("No valid models to submit.")
+
+        return normalized
+
+    def _get_current_branch(self) -> str:
+        """Get the current branch name in the remote repository.
+
+        Returns:
+            The current branch name (e.g., "main", "develop").
+
+        Raises:
+            RuntimeError: If unable to determine current branch.
+        """
+        remote_path = self.cache_path / "remote"
+        if not remote_path.exists():
+            return "main"
+
+        try:
+            result = subprocess.run(
+                ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+                cwd=remote_path,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            return result.stdout.strip()
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(
+                f"Failed to get current branch: {e.stderr or e.stdout}"
+            ) from e
+
+    def _checkout_branch(self, branch_name: str) -> None:
+        """Checkout a git branch in the remote repository.
+
+        Args:
+            branch_name: The branch name to checkout (e.g., "main").
+
+        Raises:
+            RuntimeError: If checkout fails.
+        """
+        remote_path = self.cache_path / "remote"
+
+        try:
+            subprocess.run(
+                ["git", "checkout", branch_name],
+                cwd=remote_path,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+            logger.info(f"Checked out branch: {branch_name}")
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(
+                f"Failed to checkout branch '{branch_name}': {e.stderr or e.stdout}"
+            ) from e
+
+    def _reset_to_commit(self, commit_sha: str) -> None:
+        """Hard reset the remote repository to a specific commit.
+
+        WARNING: This discards all uncommitted changes in the remote directory.
+
+        Args:
+            commit_sha: The commit hash to reset to.
+
+        Raises:
+            RuntimeError: If reset fails.
+        """
+        remote_path = self.cache_path / "remote"
+
+        try:
+            subprocess.run(
+                ["git", "reset", "--hard", commit_sha],
+                cwd=remote_path,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+            logger.info(f"Reset to commit: {commit_sha}")
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(
+                f"Failed to reset to commit {commit_sha}: {e.stderr or e.stdout}"
+            ) from e
+
+    def _delete_branch(self, branch_name: str, force: bool = False) -> None:
+        """Delete a git branch in the remote repository.
+
+        Args:
+            branch_name: The branch name to delete.
+            force: If True, use -D (force delete). If False, use -d (safe delete).
+
+        Raises:
+            RuntimeError: If deletion fails.
+        """
+        remote_path = self.cache_path / "remote"
+
+        try:
+            flag = "-D" if force else "-d"
+            subprocess.run(
+                ["git", "branch", flag, branch_name],
+                cwd=remote_path,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            logger.info(f"Deleted branch: {branch_name}")
+        except subprocess.CalledProcessError as e:
+            logger.warning(
+                f"Failed to delete branch '{branch_name}' "
+                f"(this is non-critical): {e.stderr or e.stdout}"
+            )
+
+    def _save_remote_state(self) -> dict[str, Any]:
+        """Save the current state of the remote repository for rollback.
+
+        Returns:
+            Dictionary containing state info:
+            - current_branch: current git branch
+            - head_commit: current HEAD commit SHA
+
+        Raises:
+            RuntimeError: If unable to get current state.
+        """
+        remote_path = self.cache_path / "remote"
+
+        if not remote_path.exists():
+            return {"current_branch": "main", "head_commit": None}
+
+        try:
+            current_branch = self._get_current_branch()
+            result = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=remote_path,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            head_commit = result.stdout.strip()
+
+            return {
+                "current_branch": current_branch,
+                "head_commit": head_commit,
+            }
+        except Exception as e:
+            logger.warning(f"Failed to save remote state: {e}")
+            return {"current_branch": "main", "head_commit": None}
+
+    def _rollback_remote_state(
+        self,
+        original_state: dict[str, Any],
+        branch_to_delete: str | None = None,
+    ) -> None:
+        """Rollback the remote repository to its original state.
+
+        Args:
+            original_state: State dict from _save_remote_state().
+            branch_to_delete: Optional branch name to delete (e.g., temp branch).
+        """
+        remote_path = self.cache_path / "remote"
+
+        if not remote_path.exists():
+            return
+
+        try:
+            if branch_to_delete:
+                self._delete_branch(branch_to_delete, force=True)
+
+            if original_state.get("head_commit"):
+                self._reset_to_commit(original_state["head_commit"])
+
+            self._checkout_branch(original_state.get("current_branch", "main"))
+            logger.info("Rolled back remote repository to original state")
+        except Exception as e:
+            logger.error(
+                f"Warning: Failed to fully rollback remote state: {e}. "
+                f"Remote repository may be in an inconsistent state. "
+                f"Manual cleanup may be needed."
+            )
+
+    def _get_unsubmitted_results(
+        self,
+        models: list[ModelMeta],
+    ) -> dict[tuple[str, str], list[Path]]:
+        """Find unsubmitted results by comparing local vs remote.
+
+        Args:
+            models: List of ModelMeta objects.
+
+        Returns:
+            Dict mapping (model_name, revision) to list of unsubmitted result file paths.
+        """
+        unsubmitted: dict[tuple[str, str], list[Path]] = {}
+
+        local_paths = self.get_cache_paths(
+            models=models,
+            require_model_meta=False,
+            include_remote=False,
+        )
+        remote_files_set: set[Path] = set()
+        for model in models:
+            if model.name is None or model.revision is None:
+                logger.warning(f"Skipping model with None name or revision: {model}")
+                continue
+
+            model_name_path = model.model_name_as_path()
+            remote_results_dir = (
+                self.remote_results_path / model_name_path / model.revision
+            )
+
+            if remote_results_dir.exists():
+                remote_files_set.update(
+                    f.relative_to(remote_results_dir)
+                    for f in remote_results_dir.rglob("*.json")
+                    if f.name != "model_meta.json"
+                )
+
+        for local_path in local_paths:
+            model_name_path = local_path.parent.parent.name
+            revision = local_path.parent.name
+            model_name = model_name_path.replace("__", "/").replace("_", " ")
+            relative_path = local_path.name
+
+            if relative_path not in remote_files_set:
+                key = (model_name, revision)
+                if key not in unsubmitted:
+                    unsubmitted[key] = []
+                unsubmitted[key].append(local_path)
+
+        return unsubmitted
+
+    def _copy_results_to_remote(
+        self,
+        unsubmitted: dict[tuple[str, str], list[Path]],
+    ) -> None:
+        """Copy unsubmitted results to remote directory.
+
+        Args:
+            unsubmitted: Dict of (model_name, revision) -> list of result file paths.
+        """
+        for (model_name, revision), result_files in unsubmitted.items():
+            model_name_path = model_name.replace("/", "__").replace(" ", "_")
+            remote_model_dir = self.remote_results_path / model_name_path / revision
+
+            remote_model_dir.mkdir(parents=True, exist_ok=True)
+            for local_file in result_files:
+                remote_file = remote_model_dir / local_file.name
+                shutil.copy2(local_file, remote_file)
+
+            if result_files:
+                local_meta_path = result_files[0].parent / "model_meta.json"
+                if local_meta_path.exists():
+                    remote_meta_path = remote_model_dir / "model_meta.json"
+                    shutil.copy2(local_meta_path, remote_meta_path)
+
+    def _create_commit(
+        self,
+        unsubmitted: dict[tuple[str, str], list[Path]],
+        models: list[ModelMeta],
+    ) -> str:
+        """Create a git commit in the remote repository.
+
+        Args:
+            unsubmitted: Dict of (model_name, revision) -> list of result file paths.
+            models: List of ModelMeta objects.
+
+        Returns:
+            The commit SHA hash.
+
+        Raises:
+            RuntimeError: If git commit fails.
+        """
+        remote_path = self.cache_path / "remote"
+
+        if not remote_path.exists():
+            raise RuntimeError(
+                "Remote repository not found. Call download_from_remote() first."
+            )
+
+        subprocess.run(
+            ["git", "add", "-A"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        model_str = ", ".join(model.name for model in models if model.name)
+        result_count = sum(len(files) for files in unsubmitted.values())
+        commit_message = (
+            f"Add MTEB evaluation results for {model_str}\n\n"
+            f"Models: {model_str}\n"
+            f"Total results: {result_count}\n"
+            f"Submitted by MTEB ResultCache"
+        )
+
+        subprocess.run(
+            ["git", "commit", "-m", commit_message],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        commit_sha = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+
+        return commit_sha
+
+    def _prepare_pr_body(
+        self,
+        models: list[ModelMeta],
+        unsubmitted: dict[tuple[str, str], list[Path]],
+    ) -> str:
+        """Prepare the pull request body with results summary.
+
+        Args:
+            models: List of ModelMeta objects.
+            unsubmitted: Dict of unsubmitted results.
+
+        Returns:
+            Formatted PR body string.
+        """
+        model_details = []
+        total_results = 0
+
+        for model in models:
+            model_name = model.name
+            revision = model.revision
+            if model_name and revision and (model_name, revision) in unsubmitted:
+                result_count = len(unsubmitted[(model_name, revision)])
+                total_results += result_count
+                model_details.append(
+                    f"- **{model_name}** (revision: `{revision}`): {result_count} results"
+                )
+
+        model_details_str = "\n".join(model_details)
+        body = textwrap.dedent(f"""
+        ## MTEB Evaluation Results Submission
+
+        ### Models Submitted
+        {model_details_str}
+
+        **Total Results:** {total_results}
+
+        ---
+
+        ### Details
+        - **Submitted by:** MTEB ResultCache
+        f"- **Timestamp:** {datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")}"
+        - **Submission method:** Automated via `ResultCache.submit_results()`
+
+        ### Instructions for Reviewers
+        Please review the results files and ensure they meet the MTEB submission format requirements.
+
+        ---
+
+        *This PR was created automatically. Please check the results carefully before merging.*
+        """)
+        return body.strip()
+
+    def submit_results(
+        self,
+        models: list[str] | list[ModelMeta] | str | ModelMeta | None = None,
+        *,
+        push: bool = False,
+    ) -> dict[str, Any]:
+        """Create a commit of the results to the official MTEB results repository (https://github.com/embeddings-benchmark/results).
+
+        It does this by downloading the remote (if not downloaded already) and
+        submitting the diff from the local result to the repository. Requires PyGithub
+        to be installed if `push=True`.
+
+        Args:
+            models: Model(s) whose results should be submitted. Can be:
+                - None: submit all unsubmitted results
+                - str or ModelMeta: single model
+                - list[str] or list[ModelMeta]: multiple models
+            push: If True, create a PR directly to the remote. If False, prints
+                  instructions for manual submission.
+
+        Returns:
+            Dictionary containing submission metadata:
+                - status: "ready_for_submission" or "pr_created"
+                - models_submitted: list of (model_name, revision) tuples
+                - result_count: number of result files submitted
+                - commit_sha: git commit hash
+                - pr_url: URL to created PR (only if push=True)
+                - pr_number: PR number (only if push=True)
+                - fork_url: URL to user's fork (only if push=True)
+
+        Raises:
+            ValueError: If no models found or invalid input.
+            RuntimeError: If git operations fail.
+            ImportError: If push=True and PyGithub is not installed.
+            GithubException: If GitHub API operations fail.
+
+        Examples:
+            >>> import mteb
+            >>> cache = mteb.ResultCache()
+            >>> results = mteb.evaluate(model, tasks, cache=cache)
+            >>>
+            >>> # Manual submission (step-by-step)
+            >>> submission = cache.submit_results(model, push=False)
+            >>> # Follow printed instructions
+            >>>
+            >>> # Automated submission
+            >>> submission = cache.submit_results(model, push=True)
+            >>> print(f"PR created: {submission['pr_url']}")
+        """
+        branch_name = (
+            f"mteb-results-{int(datetime.now().timestamp())}" if push else None
+        )
+        remote_state_before = self._save_remote_state() if push else {}
+        try:
+            normalized_models = self._normalize_models(models)
+            self.download_from_remote()
+            unsubmitted = self._get_unsubmitted_results(normalized_models)
+
+            if not unsubmitted:
+                logger.warning("No unsubmitted results found.")
+                return {
+                    "status": "no_changes",
+                    "models_submitted": [
+                        (m.name, m.revision) for m in normalized_models
+                    ],
+                    "result_count": 0,
+                }
+
+            self._copy_results_to_remote(unsubmitted)
+            commit_sha = self._create_commit(unsubmitted, normalized_models)
+            result_count = sum(len(files) for files in unsubmitted.values())
+
+            if not push:
+                remote_path = self.cache_path / "remote"
+                logger.info("\n" + "=" * 80)
+                logger.info(
+                    f"✓ Commit created with {result_count} results for {len(normalized_models)} model(s)"
+                )
+                logger.info("=" * 80)
+                logger.info(f"\nCommit SHA: {commit_sha}")
+                logger.info(f"Location: {remote_path}")
+                logger.info("\n📋 To submit these results, follow these steps:\n")
+
+                logger.info("1. Go to the remote repository:")
+                logger.info(f"   {remote_path}\n")
+
+                logger.info("2. Create a fork (if you don't have one already):\n")
+                logger.info(
+                    "   gh repo fork --remote --remote-name fork --clone=false\n"
+                )
+
+                logger.info("3. Push your changes to your fork:\n")
+                logger.info("   git push fork\n")
+
+                logger.info("4. Create a pull request:\n")
+                logger.info("   gh pr create --base main --head <your-username>:main\n")
+
+                logger.info(
+                    "5. Provide details about your evaluation in the PR description\n"
+                )
+                logger.info("=" * 80)
+
+                return {
+                    "status": "ready_for_submission",
+                    "models_submitted": [
+                        (m.name, m.revision) for m in normalized_models
+                    ],
+                    "result_count": result_count,
+                    "commit_sha": commit_sha,
+                    "path": str(remote_path),
+                }
+
+            else:
+                return self._create_pull_request(
+                    commit_sha,
+                    normalized_models,
+                    unsubmitted,
+                    result_count,
+                    branch_name=branch_name,
+                    remote_state_before=remote_state_before,
+                )
+        except Exception as e:
+            # On error, rollback changes if we're in push mode
+            if push and remote_state_before and branch_name:
+                logger.error(f"Error during submit_results, rolling back: {e}")
+                try:
+                    self._rollback_remote_state(
+                        remote_state_before, branch_to_delete=branch_name
+                    )
+                except Exception as rollback_error:
+                    logger.error(f"Rollback also failed: {rollback_error}")
+            raise
+
+    def _get_github_token(self) -> str:
+        """Get GitHub token using gh CLI authentication.
+
+        Returns:
+            GitHub token string
+
+        Raises:
+            RuntimeError: If authentication fails.
+        """
+        try:
+            result = subprocess.run(
+                ["gh", "auth", "token"],
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                logger.debug("Using token from gh auth")
+                return result.stdout.strip()
+        except FileNotFoundError:
+            logger.debug("gh CLI not found, trying git credential helper")
+        except Exception as e:
+            logger.debug(f"Failed to get token from gh auth: {e}")
+
+        try:
+            result = subprocess.run(
+                ["git", "credential", "fill"],
+                input="protocol=https\nhost=github.com\n\n",
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            if result.returncode == 0:
+                for line in result.stdout.split("\n"):
+                    if line.startswith("password="):
+                        logger.debug("Using token from git credential helper")
+                        return line.split("=", 1)[1]
+        except Exception as e:
+            logger.debug(f"Failed to get token from git credential: {e}")
+
+        raise RuntimeError(
+            "GitHub token not found. Please set up gh CLI (gh auth login) or "
+            "configure git credential helper."
+        )
+
+    def _create_pull_request(
+        self,
+        commit_sha: str,
+        models: list[ModelMeta],
+        unsubmitted: dict[tuple[str, str], list[Path]],
+        result_count: int,
+        branch_name: str | None,
+        remote_state_before: dict[str, Any],
+    ) -> dict[str, Any]:
+        """Create a pull request on GitHub using PyGithub.
+
+        Args:
+            commit_sha: The commit SHA to reference.
+            models: List of (model_name, revision) tuples.
+            unsubmitted: Dict of unsubmitted results.
+            result_count: Total number of results.
+            branch_name: Name of the branch to create.
+            remote_state_before: Original state of the remote repository before submission for rollback.
+
+        Returns:
+            Dictionary with PR information.
+
+        Raises:
+            RuntimeError: If authentication fails.
+            GithubException: If GitHub API call fails.
+        """
+        try:
+            from github import (  # type: ignore[import-not-found]
+                Auth,
+                Github,
+                GithubException,
+            )
+        except ImportError:
+            raise ImportError(
+                "PyGithub is not installed. Please install it using `pip install 'mteb[pygithub]'`"
+            )
+
+        logger.info("Creating PR using PyGithub")
+        token = self._get_github_token()
+
+        try:
+            auth = Auth.Token(token)
+            gh = Github(auth=auth)
+            user = gh.get_user()
+        except Exception as e:
+            raise RuntimeError(f"Failed to authenticate with GitHub: {e}") from e
+
+        upstream_repo_name = "embeddings-benchmark/results"
+        try:
+            upstream = gh.get_repo(upstream_repo_name)
+            logger.info(f"Connected to upstream: {upstream_repo_name}")
+        except Exception as e:
+            raise RuntimeError(f"Failed to access upstream repository: {e}") from e
+
+        remote_path = self.cache_path / "remote"
+        fork_url = None
+        try:
+            logger.info("Creating/configuring fork using gh CLI...")
+            subprocess.run(
+                [
+                    "gh",
+                    "repo",
+                    "fork",
+                    upstream_repo_name,
+                    "--remote",
+                    "--remote-name",
+                    "fork",
+                ],
+                cwd=remote_path,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+            logger.info("Fork created/configured")
+
+            # Get fork URL from gh CLI
+            result = subprocess.run(
+                ["gh", "repo", "view", "--json", "url"],
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            if result.returncode == 0:
+                fork_data = json.loads(result.stdout)
+                fork_url = fork_data.get(
+                    "url", f"https://github.com/{user.login}/results"
+                )
+            else:
+                fork_url = f"https://github.com/{user.login}/results"
+
+            logger.info(f"Using fork: {fork_url}")
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(
+                f"Failed to create/configure fork: {e.stderr or e.stdout}"
+            ) from e
+        except Exception as e:
+            raise RuntimeError(f"Failed to setup fork: {e}") from e
+
+        try:
+            rate_limit = gh.get_rate_limit()
+            logger.info(
+                f"GitHub API rate limit: {rate_limit.core.remaining}/"
+                f"{rate_limit.core.limit} remaining"
+            )
+            if rate_limit.core.remaining < 5:
+                raise RuntimeError(
+                    f"GitHub API rate limit too low ({rate_limit.core.remaining} remaining). "
+                    f"Please try again later."
+                )
+        except Exception as e:
+            logger.warning(f"Could not check rate limit: {e}")
+
+        try:
+            logger.info(f"Pushing to fork branch '{branch_name}'...")
+            subprocess.run(
+                ["git", "push", "fork", f"HEAD:refs/heads/{branch_name}"],
+                cwd=remote_path,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=60,
+            )
+            logger.info("Push successful")
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(f"Failed to push to fork: {e.stderr or e.stdout}") from e
+
+        try:
+            pr_body = self._prepare_pr_body(models, unsubmitted)
+            model_str = ", ".join(model.name for model in models if model.name)
+
+            logger.info("Creating pull request...")
+            pr = upstream.create_pull(
+                title=f"MTEB Evaluation Results: {model_str}",
+                body=pr_body,
+                head=f"{user.login}:{branch_name}",
+                base="main",
+            )
+
+            # Restore original branch in remote repository after PR creation success
+            try:
+                original_branch = remote_state_before.get("current_branch", "main")
+                self._checkout_branch(original_branch)
+                logger.info(f"Restored to original branch: {original_branch}")
+            except Exception as e:
+                logger.warning(f"Failed to restore original branch: {e}")
+
+            logger.info("\n" + "=" * 80)
+            logger.info("✓ Pull request created successfully!")
+            logger.info("=" * 80)
+            logger.info(f"\nPR URL: {pr.html_url}")
+            logger.info(f"PR Number: #{pr.number}")
+            logger.info(f"Fork: {fork_url}")
+            logger.info(f"\nModels: {model_str}")
+            logger.info(f"Results: {result_count}")
+            logger.info(f"Commit: {commit_sha}")
+            logger.info("\n" + "=" * 80)
+
+            return {
+                "status": "pr_created",
+                "models_submitted": [(m.name, m.revision) for m in models],
+                "result_count": result_count,
+                "commit_sha": commit_sha,
+                "pr_url": pr.html_url,
+                "pr_number": pr.number,
+                "fork_url": fork_url,
+                "branch_name": branch_name,
+            }
+
+        except GithubException as e:
+            raise RuntimeError(
+                f"Failed to create pull request: "
+                f"Status {e.status}: {e.data.get('message', str(e))}"
+            ) from e
+        except Exception as e:
+            raise RuntimeError(f"Unexpected error creating PR: {e}") from e
 
     def load_results(
         self,

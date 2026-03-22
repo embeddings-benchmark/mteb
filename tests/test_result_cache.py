@@ -1,6 +1,7 @@
 """Test cases for the ResultCache class in the mteb.cache module."""
 
 import gzip
+import subprocess
 from pathlib import Path
 from typing import cast
 from unittest.mock import Mock, patch
@@ -595,3 +596,108 @@ class TestDownloadCachedResultsFromBranch:
                 max_size_mb=max_size_mb
             )
             assert result_path.exists()
+
+
+def test_submit_results_with_fake_remote(tmp_path):
+    """Test submit_results with a fake remote repository.
+
+    This test:
+    1. Creates a fake remote git repository
+    2. Creates local result files in the cache
+    3. Calls submit_results(push=False) to create a commit
+    4. Verifies the commit was created with correct content
+    """
+
+    cache_path = tmp_path / "cache"
+    remote_path = cache_path / "remote"
+    remote_path.mkdir(parents=True)
+
+    subprocess.run(["git", "init"], cwd=remote_path, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "config", "user.email", "test@mteb.com"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "MTEB Test"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        [
+            "git",
+            "remote",
+            "add",
+            "origin",
+            "https://github.com/embeddings-benchmark/results",
+        ],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+
+    # Create initial commit so there's a main branch
+    (remote_path / "README.md").write_text("# MTEB Results\n")
+    subprocess.run(
+        ["git", "add", "README.md"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "commit", "-m", "Initial commit"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+
+    test_model = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+    model_name_path = test_model.model_name_as_path()
+    revision = cast("str", test_model.revision)
+
+    cache = ResultCache(cache_path=cache_path)
+    model_dir = cache.cache_path / "results" / model_name_path / revision
+    model_dir.mkdir(parents=True, exist_ok=True)
+
+    source_model_dir = test_cache_path / "results" / model_name_path / revision
+    result_files_copied = []
+    for result_file in source_model_dir.glob("*.json"):
+        if result_file.name != "model_meta.json":
+            (model_dir / result_file.name).write_text(result_file.read_text())
+            result_files_copied.append(result_file.name)
+
+    (model_dir / "model_meta.json").write_text(
+        (source_model_dir / "model_meta.json").read_text()
+    )
+
+    # TEST 1: First submission
+    result = cache.submit_results(models=[test_model], push=False)
+    assert result["status"] == "ready_for_submission"
+    assert result["result_count"] == len(result_files_copied)
+    assert result["commit_sha"]
+
+    commit_sha = result["commit_sha"]
+    check = subprocess.run(
+        ["git", "cat-file", "-t", commit_sha],
+        cwd=remote_path,
+        capture_output=True,
+        text=True,
+    )
+    assert check.returncode == 0
+    assert check.stdout.strip() == "commit"
+
+    for filename in result_files_copied:
+        # Verify file exists in the commit using git ls-tree
+        check = subprocess.run(
+            ["git", "ls-tree", "-r", "--name-only", commit_sha],
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        )
+        assert check.returncode == 0
+        expected_path = f"{model_name_path}/{revision}/{filename}"
+        assert expected_path in check.stdout, (
+            f"File {expected_path} not found in commit {commit_sha}"
+        )
