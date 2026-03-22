@@ -5,7 +5,7 @@ from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
 
 
@@ -129,7 +129,7 @@ gte_qwen2_1_5b_instruct = ModelMeta(
 )
 
 gte_small_zh = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="thenlper/gte-small-zh",
     model_type=["dense"],
     languages=["zho-Hans"],
@@ -158,7 +158,7 @@ gte_small_zh = ModelMeta(
 )
 
 gte_base_zh = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="thenlper/gte-base-zh",
     model_type=["dense"],
     languages=["zho-Hans"],
@@ -187,7 +187,7 @@ gte_base_zh = ModelMeta(
 )
 
 gte_large_zh = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="thenlper/gte-large-zh",
     model_type=["dense"],
     languages=["zho-Hans"],
@@ -317,7 +317,7 @@ gte_multi_training_data = {
 }
 
 gte_multilingual_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Alibaba-NLP/gte-multilingual-base",
     model_type=["dense"],
     languages=gte_multilingual_langs,
@@ -347,7 +347,7 @@ gte_multilingual_base = ModelMeta(
 )
 
 gte_modernbert_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Alibaba-NLP/gte-modernbert-base",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -391,7 +391,7 @@ gte_modernbert_base = ModelMeta(
 
 
 gte_base_en_v15 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Alibaba-NLP/gte-base-en-v1.5",
     model_type=["dense"],
     languages=["eng-Latn"],

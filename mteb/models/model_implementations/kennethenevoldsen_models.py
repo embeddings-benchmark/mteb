@@ -1,10 +1,10 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
-    sentence_transformers_loader,
+    SentenceTransformerEncoderWrapper,
 )
 
 dfm_enc_large = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="KennethEnevoldsen/dfm-sentence-encoder-large",
     model_type=["dense"],
     languages=["dan-Latn"],
@@ -40,7 +40,7 @@ dfm_enc_large = ModelMeta(
 )
 
 dfm_enc_med = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="KennethEnevoldsen/dfm-sentence-encoder-medium",
     model_type=["dense"],
     languages=["dan-Latn"],

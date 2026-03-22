@@ -2,7 +2,7 @@ from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 
@@ -338,7 +338,7 @@ bgem3_languages = [
 ]
 
 bge_small_en_v1_5 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -371,7 +371,7 @@ bge_small_en_v1_5 = ModelMeta(
 )
 
 bge_base_en_v1_5 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -404,7 +404,7 @@ bge_base_en_v1_5 = ModelMeta(
 )
 
 bge_large_en_v1_5 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -437,7 +437,7 @@ bge_large_en_v1_5 = ModelMeta(
 )
 
 bge_small_zh = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts_zh,
     ),
@@ -465,7 +465,7 @@ bge_small_zh = ModelMeta(
 )
 
 bge_base_zh = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts_zh,
     ),
@@ -493,7 +493,7 @@ bge_base_zh = ModelMeta(
 )
 
 bge_large_zh = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts_zh,
     ),
@@ -521,7 +521,7 @@ bge_large_zh = ModelMeta(
 )
 
 bge_small_en = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -549,7 +549,7 @@ bge_small_en = ModelMeta(
 )
 
 bge_base_en = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -583,7 +583,7 @@ bge_base_en = ModelMeta(
 )
 
 bge_large_en = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -612,7 +612,7 @@ bge_large_en = ModelMeta(
 
 
 bge_small_zh_v1_5 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts_zh,
     ),
@@ -639,7 +639,7 @@ bge_small_zh_v1_5 = ModelMeta(
 )
 
 bge_base_zh_v1_5 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts_zh,
     ),
@@ -666,7 +666,7 @@ bge_base_zh_v1_5 = ModelMeta(
 )
 
 bge_large_zh_v1_5 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts_zh,
     ),
@@ -693,7 +693,7 @@ bge_large_zh_v1_5 = ModelMeta(
 )
 
 bge_m3 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="BAAI/bge-m3",
     model_type=["dense"],
     languages=bgem3_languages,
@@ -781,7 +781,7 @@ bge_full_data = {
 
 
 bge_multilingual_gemma2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="BAAI/bge-multilingual-gemma2",
     model_type=["dense"],
     languages=[
@@ -837,7 +837,7 @@ bge_multilingual_gemma2 = ModelMeta(
 )
 
 bge_en_icl = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="BAAI/bge-en-icl",
     model_type=["dense"],
     languages=[
@@ -874,7 +874,7 @@ bge_en_icl = ModelMeta(
 )
 
 bge_m3_unsupervised = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="BAAI/bge-m3-unsupervised",
     model_type=["dense"],
     languages=bgem3_languages,
@@ -910,7 +910,7 @@ manu__bge_m3_custom_fr = ModelMeta(
     revision="ed3ef88678ba83ddf4c0fab71a93cb90d89a9078",
     release_date="2024-04-11",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=567754752,
     n_embedding_parameters=256_002_048,
     memory_usage_mb=2166,

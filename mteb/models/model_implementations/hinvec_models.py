@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 if TYPE_CHECKING:
     from mteb.types import PromptType
@@ -32,7 +32,7 @@ hinvec_training_datasets = {
 }
 
 Hinvec_bidir = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         instruction_template=instruction_template,
         trust_remote_code=True,

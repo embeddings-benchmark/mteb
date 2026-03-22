@@ -1,6 +1,6 @@
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 from .nvidia_models import nvidia_training_datasets
 
@@ -122,7 +122,7 @@ stella_en_1_5b = ModelMeta(
 )
 
 stella_large_zh_v3_1792d = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="dunzhang/stella-large-zh-v3-1792d",
     model_type=["dense"],
     languages=["zho-Hans"],
@@ -150,7 +150,7 @@ stella_large_zh_v3_1792d = ModelMeta(
 )
 
 stella_base_zh_v3_1792d = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="infgrad/stella-base-zh-v3-1792d",
     model_type=["dense"],
     languages=["zho-Hans"],
@@ -179,7 +179,7 @@ stella_base_zh_v3_1792d = ModelMeta(
 
 
 stella_mrl_large_zh_v3_5_1792d = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="dunzhang/stella-mrl-large-zh-v3.5-1792d",
     model_type=["dense"],
     languages=["zho-Hans"],
@@ -204,7 +204,7 @@ stella_mrl_large_zh_v3_5_1792d = ModelMeta(
 )
 
 zpoint_large_embedding_zh = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="iampanda/zpoint_large_embedding_zh",
     model_type=["dense"],
     languages=["zho-Hans"],

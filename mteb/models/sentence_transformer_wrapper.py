@@ -32,12 +32,20 @@ def sentence_transformers_loader(
 ) -> SentenceTransformerEncoderWrapper:
     """Loads a SentenceTransformer model and wraps it in a SentenceTransformerEncoderWrapper.
 
+    .. deprecated:: 2.11.0
+        Use :class:`SentenceTransformerEncoderWrapper` directly instead.
+
     Args:
         model_name: The name of the SentenceTransformer model to load.
         revision: The revision of the model to load.
         device: The device used to load the model.
         kwargs: Additional arguments to pass to the SentenceTransformer model.
     """
+    warnings.warn(
+        "sentence_transformers_loader is deprecated, use SentenceTransformerEncoderWrapper directly instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
     return SentenceTransformerEncoderWrapper(
         model=model_name, revision=revision, device=device, **kwargs
     )
