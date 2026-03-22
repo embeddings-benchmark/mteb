@@ -349,6 +349,8 @@ class TaskMetadata(BaseModel):
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
         adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
         is_public: Whether the dataset is publicly available. If False (closed/private), a HuggingFace token is required to run the datasets.
+        contributed_by: The name of the organization or individual who contributed the dataset. This is especially useful for private datasets
+            where it may be harder to gather information about the source.
         superseded_by: Denotes the task that this task is superseded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
     """
@@ -381,7 +383,15 @@ class TaskMetadata(BaseModel):
     bibtex_citation: str | None = None
     adapted_from: Sequence[str] | None = None
     is_public: bool = True
+    contributed_by: str | None = None
     superseded_by: str | None = None
+
+    @property
+    def full_description(self) -> str:
+        """Returns the description with contributor info appended if available."""
+        if self.contributed_by:
+            return f"{self.description} This dataset was contributed by {self.contributed_by}."
+        return self.description
 
     def _validate_metadata(self) -> None:
         self._eval_langs_are_valid(self.eval_langs)
@@ -453,7 +463,8 @@ class TaskMetadata(BaseModel):
         return all(
             getattr(self, field_name) is not None
             for field_name in self.model_fields
-            if field_name not in ["prompt", "adapted_from", "superseded_by"]
+            if field_name
+            not in ["prompt", "adapted_from", "contributed_by", "superseded_by"]
         )
 
     @property
@@ -628,7 +639,7 @@ class TaskMetadata(BaseModel):
             # parameters for readme generation
             dict(
                 citation=self.bibtex_citation,
-                dataset_description=self.description,
+                dataset_description=self.full_description,
                 dataset_reference=self.reference,
                 descriptive_stats=descriptive_stats,
                 dataset_task_name=self.name,
