@@ -379,7 +379,7 @@ class ModelMeta(BaseModel):
         model_name: str,
         revision: str | None,
         config: dict[str, Any] | None,
-        sentence_transformers_loader: Callable[..., MTEBModels],
+        encoder_loader: Callable[..., MTEBModels],
         cross_encoder_loader: Callable[..., MTEBModels],
     ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
         """Detect if model is CrossEncoder or default to dense."""
@@ -388,7 +388,7 @@ class ModelMeta(BaseModel):
                 f"Could not load config.json for {model_name}. "
                 "Defaulting to SentenceTransformer loader."
             )
-            return sentence_transformers_loader, "dense"
+            return encoder_loader, "dense"
 
         architectures = config.get("architectures", [])
 
@@ -405,7 +405,7 @@ class ModelMeta(BaseModel):
             f"Model {model_name} does not have modules.json or recognized architecture. "
             "Defaulting to SentenceTransformer loader."
         )
-        return sentence_transformers_loader, "dense"
+        return encoder_loader, "dense"
 
     @staticmethod
     def _is_causal_lm_reranker(
@@ -458,7 +458,10 @@ class ModelMeta(BaseModel):
             - loader_function: A callable that returns MTEBModels, or None if model doesn't exist
             - model_type: One of "dense", "cross-encoder", or "late-interaction"
         """
-        from mteb.models import CrossEncoderWrapper, sentence_transformers_loader
+        from mteb.models import (
+            CrossEncoderWrapper,
+            SentenceTransformerEncoderWrapper,
+        )
 
         try:
             modules_config = _get_json_from_hub(
@@ -468,13 +471,13 @@ class ModelMeta(BaseModel):
             if (
                 modules_config
             ):  # SentenceTransformer/SparseEncoder (Not support for now)
-                return sentence_transformers_loader, "dense"
+                return SentenceTransformerEncoderWrapper, "dense"
             else:
                 return cls._detect_cross_encoder_or_dense(
                     model_name,
                     revision,
                     config,
-                    sentence_transformers_loader,
+                    SentenceTransformerEncoderWrapper,
                     cross_encoder_loader=CrossEncoderWrapper,
                 )
 
@@ -484,7 +487,7 @@ class ModelMeta(BaseModel):
                 "Defaulting to SentenceTransformer loader."
             )
 
-        return sentence_transformers_loader, "dense"
+        return SentenceTransformerEncoderWrapper, "dense"
 
     @classmethod
     def create_empty(cls, overwrites: dict[str, Any] | None = None) -> Self:
@@ -562,7 +565,7 @@ class ModelMeta(BaseModel):
     @classmethod
     def _from_sentence_transformer_model(cls, model: SentenceTransformer) -> Self:
         """Generates a ModelMeta from only a SentenceTransformer model, without fetching any additional metadata from HuggingFace Hub."""
-        from mteb.models import sentence_transformers_loader
+        from mteb.models import SentenceTransformerEncoderWrapper
 
         name: str | None = (
             model.model_card_data.model_name
@@ -576,7 +579,7 @@ class ModelMeta(BaseModel):
             overwrites=dict(
                 name=name,
                 revision=model.model_card_data.base_model_revision,
-                loader=sentence_transformers_loader,
+                loader=SentenceTransformerEncoderWrapper,
                 max_tokens=model.max_seq_length,
                 embed_dim=model.get_sentence_embedding_dimension(),
                 similarity_fn_name=ScoringFunction.from_str(model.similarity_fn_name),

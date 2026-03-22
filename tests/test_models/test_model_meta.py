@@ -274,7 +274,7 @@ def test_model_to_python():
     meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
     assert meta.to_python() == (
         """ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={},
     name='sentence-transformers/all-MiniLM-L6-v2',
     revision='8b3219a92973c328a8e22fadcfa821b5dc75636a',
@@ -326,7 +326,7 @@ def test_load_sentence_transformer_via_get_model_meta():
 
     assert model_meta.model_type == ["dense"]
     assert not model_meta.is_cross_encoder
-    assert model_meta.loader.__name__ == "sentence_transformers_loader"
+    assert model_meta.loader.__name__ == "SentenceTransformerEncoderWrapper"
 
 
 def test_load_model_with_experiments():

@@ -1,5 +1,5 @@
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 RURI_V3_PROMPTS = {
     "Retrieval-query": "検索クエリ: ",
@@ -27,7 +27,7 @@ RURI_CITATION = r"""@misc{Ruri,
 }"""
 
 cl_nagoya_ruri_v3_30m = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=RURI_V3_PROMPTS,
     ),
@@ -59,7 +59,7 @@ cl_nagoya_ruri_v3_30m = ModelMeta(
 )
 
 cl_nagoya_ruri_v3_70m = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=RURI_V3_PROMPTS,
     ),
@@ -89,7 +89,7 @@ cl_nagoya_ruri_v3_70m = ModelMeta(
 )
 
 cl_nagoya_ruri_v3_130m = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=RURI_V3_PROMPTS,
     ),
@@ -119,7 +119,7 @@ cl_nagoya_ruri_v3_130m = ModelMeta(
 )
 
 cl_nagoya_ruri_v3_310m = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=RURI_V3_PROMPTS,
     ),
@@ -149,7 +149,7 @@ cl_nagoya_ruri_v3_310m = ModelMeta(
 )
 
 cl_nagoya_ruri_small_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=RURI_V1_V2_PROMPTS,
         trust_remote_code=True,
@@ -180,7 +180,7 @@ cl_nagoya_ruri_small_v2 = ModelMeta(
 )
 
 cl_nagoya_ruri_base_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=RURI_V1_V2_PROMPTS,
     ),
@@ -210,7 +210,7 @@ cl_nagoya_ruri_base_v2 = ModelMeta(
 )
 
 cl_nagoya_ruri_large_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=RURI_V1_V2_PROMPTS,
     ),
@@ -240,7 +240,7 @@ cl_nagoya_ruri_large_v2 = ModelMeta(
 )
 
 cl_nagoya_ruri_small_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=RURI_V1_V2_PROMPTS,
         trust_remote_code=True,
@@ -271,7 +271,7 @@ cl_nagoya_ruri_small_v1 = ModelMeta(
 )
 
 cl_nagoya_ruri_base_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=RURI_V1_V2_PROMPTS,
     ),
@@ -302,7 +302,7 @@ cl_nagoya_ruri_base_v1 = ModelMeta(
 
 
 cl_nagoya_ruri_large_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=RURI_V1_V2_PROMPTS,
     ),
