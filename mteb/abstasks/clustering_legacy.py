@@ -116,6 +116,13 @@ class AbsTaskClusteringLegacy(AbsTask):
                 logger.info(
                     f"Running clustering on cluster ({i + 1}/{len(data_split)})"
                 )
+                labels = cluster_set[self.label_column_name]
+                if len(set(labels)) <= 1:
+                    logger.warning(
+                        f"Cluster set {i} has {len(set(labels))} unique label(s), "
+                        "skipping as it provides no discriminative signal."
+                    )
+                    continue
                 clustering_dataset = Dataset.from_dict(cluster_set).select_columns(
                     [self.input_column_name, self.label_column_name]
                 )
