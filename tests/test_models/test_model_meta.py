@@ -349,18 +349,18 @@ def test_load_model_with_experiments():
 
 
 def test_get_model_metas_modalities_subset():
-    models = mteb.get_model_metas(modalities=[Modalities.TEXT])
+    models = mteb.get_model_metas(modalities=["text"])
 
     assert len(models) > 0
     for model in models:
-        assert Modalities.TEXT in model.modalities
+        assert "text" in model.modalities
 
 
 def test_get_model_metas_modalities_exact():
     models = mteb.get_model_metas(
-        modalities=[Modalities.TEXT], exclusive_modality_filter=True
+        modalities=["text"], exclusive_modality_filter=True
     )
 
     assert len(models) > 0
     for model in models:
-        assert set(model.modalities) == {Modalities.TEXT}
+        assert set(model.modalities) == {"text"}
