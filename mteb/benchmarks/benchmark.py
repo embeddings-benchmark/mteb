@@ -244,6 +244,7 @@ class VidoreBenchmark(Benchmark):
         import mteb
         from mteb.benchmarks._create_table import (
             _format_max_tokens,
+            _format_n_active_parameters,
             _format_n_parameters,
             _get_means_per_types,
             _split_on_capital,
@@ -315,6 +316,15 @@ class VidoreBenchmark(Benchmark):
             1,
             "Embedding Dimensions",
             model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
+        )
+        joint_table.insert(
+            1,
+            "Active Parameters (B)",
+            model_metas.map(
+                lambda m: _format_n_active_parameters(m.n_active_parameters)
+                if m.n_active_parameters is not None
+                else _format_n_parameters(m.n_parameters)
+            ),
         )
         joint_table.insert(
             1,

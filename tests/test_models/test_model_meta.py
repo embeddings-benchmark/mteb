@@ -19,6 +19,7 @@ _MISSING_N_EMBEDDING_MODELS = [
     "QuanSun/EVA02-CLIP-bigE-14-plus",
     "Salesforce/SFR-Embedding-Code-2B_R",
     "Snowflake/snowflake-arctic-embed-m-long",
+    "sentence-transformers/static-similarity-mrl-multilingual-v1",
     "TencentBAC/Conan-embedding-v2",
     "TomoroAI/tomoro-colqwen3-embed-4b",
     "TomoroAI/tomoro-colqwen3-embed-8b",
