@@ -300,7 +300,7 @@ def test_model_to_python():
     superseded_by=None,
     modalities=['text'],
     model_type=['dense'],
-    citation=\'@inproceedings{reimers-2019-sentence-bert,\\n    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",\\n    author = "Reimers, Nils and Gurevych, Iryna",\\n    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",\\n    month = "11",\\n    year = "2019",\\n    publisher = "Association for Computational Linguistics",\\n    url = "http://arxiv.org/abs/1908.10084",\\n}\\n\',
+    citation='@inproceedings{reimers-2019-sentence-bert,\\n    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",\\n    author = "Reimers, Nils and Gurevych, Iryna",\\n    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",\\n    month = "11",\\n    year = "2019",\\n    publisher = "Association for Computational Linguistics",\\n    url = "http://arxiv.org/abs/1908.10084",\\n}\\n',
     contacts=None,
 )"""
     )
@@ -357,9 +357,7 @@ def test_get_model_metas_modalities_subset():
 
 
 def test_get_model_metas_modalities_exact():
-    models = mteb.get_model_metas(
-        modalities=["text"], exclusive_modality_filter=True
-    )
+    models = mteb.get_model_metas(modalities=["text"], exclusive_modality_filter=True)
 
     assert len(models) > 0
     for model in models:
