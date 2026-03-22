@@ -3,6 +3,22 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
+zhinao_modernbert_zh_datasets = {
+    "BQ",
+    "LCQMC",
+    "PAWSX",
+    "STS-B",
+    "DuRetrieval",
+    "AFQMC",
+    "Cmnli",
+    "Ocnli",
+    "ThuNEWS",
+    "CMedQAv2",
+    "MMarco",
+    "T2Retrieval",
+    "JDReview"
+}
+
 zhinao_chinesemodernbert_embedding = ModelMeta(
     loader=sentence_transformers_loader,
     loader_kwargs={},
@@ -24,7 +40,7 @@ zhinao_chinesemodernbert_embedding = ModelMeta(
     reference="https://huggingface.co/qihoo360/Zhinao-ChineseModernBert-Embedding",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=zhinao_modernbert_zh_datasets,
     adapted_from=None,
     superseded_by=None,
     modalities=['text'],
