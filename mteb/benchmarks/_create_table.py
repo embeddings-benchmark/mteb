@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING, Literal
 import numpy as np
 import pandas as pd
 
-import mteb
 from mteb.get_tasks import get_task, get_tasks
+from mteb.models.get_model_meta import get_model_meta
 
 if TYPE_CHECKING:
     from mteb.results.benchmark_results import BenchmarkResults
@@ -126,7 +126,7 @@ def _create_summary_table_from_benchmark_results(
     joint_table = joint_table.reset_index()
 
     # Add model metadata
-    model_metas = joint_table["model_name"].map(mteb.get_model_meta)
+    model_metas = joint_table["model_name"].map(get_model_meta)
     joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
 
@@ -369,7 +369,7 @@ def _create_summary_table_mean_public_private(
     joint_table = joint_table.reset_index()
 
     # Add model metadata
-    model_metas = joint_table["model_name"].map(mteb.get_model_meta)
+    model_metas = joint_table["model_name"].map(get_model_meta)
     joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
 
@@ -490,7 +490,7 @@ def _create_summary_table_mean_subset(
     joint_table = joint_table.reset_index()
 
     # Add model metadata
-    model_metas = joint_table["model_name"].map(mteb.get_model_meta)
+    model_metas = joint_table["model_name"].map(get_model_meta)
     joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
 
@@ -610,7 +610,7 @@ def _create_summary_table_mean_task_type(
     joint_table = joint_table.reset_index()
 
     # Add model metadata
-    model_metas = joint_table["model_name"].map(mteb.get_model_meta)
+    model_metas = joint_table["model_name"].map(get_model_meta)
     joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
 

@@ -12,6 +12,7 @@ lint:
 	uv run --no-sync ruff format . 			# running ruff formatting
 	uv run --no-sync ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
 	uv run --no-sync typos
+	uv run --no-sync python scripts/check_circular_imports.py
 
 lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
@@ -19,6 +20,7 @@ lint-check:
 	uv run --no-sync ruff format . --check
 	uv run --no-sync ruff check .
 	uv run --no-sync typos --diff
+	uv run --no-sync python scripts/check_circular_imports.py
 
 test:
 	@echo "--- 🧪 Running tests ---"
