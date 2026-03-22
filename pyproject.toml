@@ -68,7 +68,7 @@ audio = [
 ]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
-    "gradio==6.0.1",
+    "gradio==6.9.0",
     "plotly>=5.24.0,<6.0.0",
     "cachetools>=5.2.0",
     "matplotlib>=3.9.4",

@@ -195,7 +195,6 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         {
             **dict.fromkeys(score_columns, "{:.2f}"),
             rank_column: "{:.0f}",
-            "Memory Usage (MB)": "{:.0f}",
             "Embedding Dimensions": "{:.0f}",
             "Max Tokens": "{:.0f}",
             "Total Parameters (B)": lambda x: _style_number_of_parameters(x),
@@ -240,7 +239,6 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         column_widths[0] = "100px"
     if len(column_widths) > 1:
         column_widths[1] = "250px"
-
     return gr.DataFrame(
         joint_table_style,
         datatype=column_types,
