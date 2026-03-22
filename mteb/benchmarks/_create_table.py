@@ -3,16 +3,46 @@ from __future__ import annotations
 import re
 from collections import defaultdict
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Literal, cast
 
 import numpy as np
 import pandas as pd
 
 import mteb
+from mteb.abstasks.abstask import AbsTask
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.get_tasks import get_task, get_tasks
 
 if TYPE_CHECKING:
     from mteb.results.benchmark_results import BenchmarkResults
+
+
+def _leaf_tasks_from_benchmark(benchmark: Benchmark) -> list[AbsTask]:
+    out: list[AbsTask] = []
+    for task in benchmark.tasks:
+        if task.is_aggregate:
+            out.extend(cast(AbsTaskAggregate, task).tasks)
+        else:
+            out.append(task)
+    return out
+
+
+def _all_benchmark_task_names(benchmark: Benchmark) -> list[str]:
+    return [t.metadata.name for t in _leaf_tasks_from_benchmark(benchmark)]
+
+
+def _align_per_task_to_benchmark(
+    per_task: pd.DataFrame,
+    benchmark: Benchmark | None,
+) -> pd.DataFrame:
+    """Reindex so every benchmark task is a column; missing results are NaN."""
+    if benchmark is None:
+        return per_task
+    names = _all_benchmark_task_names(benchmark)
+    if not names:
+        return per_task
+    return per_task.reindex(columns=names)
 
 
 def _borda_count(scores: pd.Series) -> pd.Series:
@@ -81,7 +111,7 @@ def _get_means_per_types(per_task: pd.DataFrame):
                 dict(
                     model_name=model_name,
                     task_type=task_type,
-                    score=scores[tasks].mean(skipna=True),
+                    score=scores[tasks].mean(skipna=False),
                 )
             )
     return pd.DataFrame.from_records(records)
@@ -122,6 +152,8 @@ def _create_summary_table_from_benchmark_results(
 
     models_to_remove = list(per_task[to_remove].index)
     per_task = per_task.drop(models_to_remove, axis=0)
+
+    per_task = _align_per_task_to_benchmark(per_task, benchmark_results.benchmark)
 
     # Calculate means by task type
     mean_per_type = _get_means_per_types(per_task)
@@ -172,7 +204,11 @@ def _create_summary_table_from_benchmark_results(
     )
 
     # Add zero-shot percentage
-    tasks = get_tasks(tasks=list(data["task_name"].unique()))
+    if benchmark_results.benchmark is not None:
+        zs_task_names = _all_benchmark_task_names(benchmark_results.benchmark)
+    else:
+        zs_task_names = list(data["task_name"].unique())
+    tasks = get_tasks(tasks=zs_task_names)
     joint_table.insert(
         1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
     )
@@ -242,6 +278,8 @@ def _create_per_task_table_from_benchmark_results(
 
     models_to_remove = list(per_task[to_remove].index)
     per_task = per_task.drop(models_to_remove, axis=0)
+
+    per_task = _align_per_task_to_benchmark(per_task, benchmark_results.benchmark)
 
     # Add borda rank and sort
     per_task["borda_rank"] = _get_borda_rank(per_task)
@@ -344,8 +382,6 @@ def _create_summary_table_mean_public_private(
             {"No results": ["You can try relaxing your criteria"]}
         )
         return no_results_frame
-    public_task_name = benchmark_results._filter_tasks(is_public=True).task_names
-    private_task_name = benchmark_results._filter_tasks(is_public=False).task_names
     # Convert to DataFrame and pivot
     per_task = data.pivot(index="model_name", columns="task_name", values="score")
 
@@ -360,6 +396,16 @@ def _create_summary_table_mean_public_private(
     models_to_remove = list(per_task[to_remove].index)
     per_task = per_task.drop(models_to_remove, axis=0)
 
+    per_task = _align_per_task_to_benchmark(per_task, benchmark_results.benchmark)
+
+    if benchmark_results.benchmark is not None:
+        leaf = _leaf_tasks_from_benchmark(benchmark_results.benchmark)
+        public_task_name = [t.metadata.name for t in leaf if t.metadata.is_public]
+        private_task_name = [t.metadata.name for t in leaf if not t.metadata.is_public]
+    else:
+        public_task_name = benchmark_results._filter_tasks(is_public=True).task_names
+        private_task_name = benchmark_results._filter_tasks(is_public=False).task_names
+
     # Calculate means by task type
     mean_per_type = _get_means_per_types(per_task)
     mean_per_type = mean_per_type.pivot(
@@ -370,15 +416,21 @@ def _create_summary_table_mean_public_private(
     ]
 
     # Calculate overall means
-    public_mean = per_task[public_task_name].mean(skipna=False, axis=1)
-    private_mean = per_task[private_task_name].mean(skipna=False, axis=1)
+    if public_task_name:
+        public_mean = per_task[public_task_name].mean(skipna=False, axis=1)
+    else:
+        public_mean = pd.Series(np.nan, index=per_task.index)
+    if private_task_name:
+        private_mean = per_task[private_task_name].mean(skipna=False, axis=1)
+    else:
+        private_mean = pd.Series(np.nan, index=per_task.index)
 
     # Build joint table
     joint_table = mean_per_type.copy()
     joint_table.insert(0, "mean(public)", public_mean)
     joint_table.insert(1, "mean(private)", private_mean)
     if exclude_private_from_borda:
-        borda_per_task = per_task[public_task_name]
+        borda_per_task = per_task[public_task_name] if public_task_name else per_task
     else:
         borda_per_task = per_task
     joint_table["borda_rank"] = _get_borda_rank(borda_per_task)
@@ -478,6 +530,8 @@ def _create_summary_table_mean_subset(
     models_to_remove = list(per_task[to_remove].index)
     per_task = per_task.drop(models_to_remove, axis=0)
 
+    per_task = _align_per_task_to_benchmark(per_task, benchmark_results.benchmark)
+
     # Calculate means by task type
     mean_per_type = _get_means_per_types(per_task)
     mean_per_type = mean_per_type.pivot(
@@ -531,7 +585,11 @@ def _create_summary_table_mean_subset(
         model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
     )
     # Add zero-shot percentage
-    tasks = get_tasks(tasks=list(data["task_name"].unique()))
+    if benchmark_results.benchmark is not None:
+        zs_task_names = _all_benchmark_task_names(benchmark_results.benchmark)
+    else:
+        zs_task_names = list(data["task_name"].unique())
+    tasks = get_tasks(tasks=zs_task_names)
     joint_table.insert(
         1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
     )
@@ -601,6 +659,8 @@ def _create_summary_table_mean_task_type(
     models_to_remove = list(per_task[to_remove].index)
     per_task = per_task.drop(models_to_remove, axis=0)
 
+    per_task = _align_per_task_to_benchmark(per_task, benchmark_results.benchmark)
+
     # Calculate means by task type
     mean_per_type = _get_means_per_types(per_task)
     mean_per_type = mean_per_type.pivot(
@@ -647,7 +707,11 @@ def _create_summary_table_mean_task_type(
     )
 
     # Add zero-shot percentage
-    tasks = get_tasks(tasks=list(data["task_name"].unique()))
+    if benchmark_results.benchmark is not None:
+        zs_task_names = _all_benchmark_task_names(benchmark_results.benchmark)
+    else:
+        zs_task_names = list(data["task_name"].unique())
+    tasks = get_tasks(tasks=zs_task_names)
     joint_table.insert(
         1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
     )
