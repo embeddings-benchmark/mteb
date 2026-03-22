@@ -14,11 +14,11 @@ Typically, it only requires that you fill in metadata about the model and add it
 
 ??? example "Adding a ModelMeta object"
     ```python
-    from mteb.models import ModelMeta, sentence_transformers_loader
+    from mteb.models import ModelMeta, SentenceTransformerEncoderWrapper
 
     my_model = ModelMeta(
         name="model_name",
-        loader=sentence_transformers_loader,
+        loader=SentenceTransformerEncoderWrapper,
         languages=["eng-Latn"], # follows ISO 639-3 and BCP-47
         open_weights=True,
         revision="5617a9f61b028005a4858fdac845db406aefb181",
@@ -89,7 +89,7 @@ However, you can also add these directly to the model configuration:
 
 ```python
 model = ModelMeta(
-    loader=sentence_transformers_loader
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts={
            "query": "query: ",

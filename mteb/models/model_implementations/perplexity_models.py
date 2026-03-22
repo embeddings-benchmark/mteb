@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 langs = [
     "afr-Latn",
@@ -92,7 +92,7 @@ PERPLEXITY_CITATION = """@misc{eslami2026diffusionpretraineddensecontextualembed
 }"""
 
 pplx_embed_v1_0_6b = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="perplexity-ai/pplx-embed-v1-0.6b",
     model_type=["dense"],
     languages=langs,
@@ -125,7 +125,7 @@ pplx_embed_v1_0_6b = ModelMeta(
 )
 
 pplx_embed_v1_4b = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="perplexity-ai/pplx-embed-v1-4b",
     model_type=["dense"],
     languages=langs,

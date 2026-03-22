@@ -1,8 +1,8 @@
-from mteb.models import sentence_transformers_loader
+from mteb.models import SentenceTransformerEncoderWrapper
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 sbert_swedish = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore[arg-type]
+    loader=SentenceTransformerEncoderWrapper,  # type: ignore[arg-type]
     name="KBLab/sentence-bert-swedish-cased",
     model_type=["dense"],
     languages=["swe-Latn"],
