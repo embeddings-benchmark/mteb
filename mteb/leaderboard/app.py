@@ -127,6 +127,7 @@ def _update_task_info(task_names: str) -> pd.DataFrame:
             "main_score",
             "modalities",
             "is_public",
+            "contributed_by",
         ]
     )
     df["languages"] = df["languages"].map(_format_list)
@@ -146,6 +147,7 @@ def _update_task_info(task_names: str) -> pd.DataFrame:
             "main_score": "Metric",
             "modalities": "Modality",
             "is_public": "Public",
+            "contributed_by": "Contributed By",
         }
     )
     df = df.drop(columns="reference")
