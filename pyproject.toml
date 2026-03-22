@@ -359,6 +359,7 @@ addopts = """
 
 markers = [
     "test_datasets: marks tests that tests dataset availability",
+    "test_reference_models: marks tests that verify reference model result coverage (requires downloading results repo)",
 ]
 
 [tool.uv]
@@ -451,6 +452,21 @@ extend-ignore-re = [
     "author.*",  # ignore authors in citations
     "editor.*",  # ignore authors in citations
 ]
+
+[tool.typos.default.extend-words]
+# ISO 639 language codes that look like English words
+ful = "ful"
+som = "som"
+yor = "yor"
+nd = "nd"
+fo = "fo"
+als = "als"
+bre = "bre"
+cmo = "cmo"
+mak = "mak"
+noe = "noe"
+tha = "tha"
+sme = "sme"
 
 [tool.typos.files]
 extend-exclude = [
