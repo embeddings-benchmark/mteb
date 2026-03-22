@@ -158,7 +158,7 @@ def _create_summary_table_from_benchmark_results(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: _get_embedding_size),
+        model_metas.map(lambda m: _get_embedding_size(m.embed_dim)),
     )
     joint_table.insert(
         1,
@@ -399,7 +399,7 @@ def _create_summary_table_mean_public_private(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: _get_embedding_size),
+        model_metas.map(lambda m: _get_embedding_size(m.embed_dim)),
     )
     joint_table.insert(
         1,
@@ -518,7 +518,7 @@ def _create_summary_table_mean_subset(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: _get_embedding_size),
+        model_metas.map(lambda m: _get_embedding_size(m.embed_dim)),
     )
     joint_table.insert(
         1,
@@ -633,7 +633,7 @@ def _create_summary_table_mean_task_type(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: _get_embedding_size),
+        model_metas.map(lambda m: _get_embedding_size(m.embed_dim)),
     )
     joint_table.insert(
         1,
