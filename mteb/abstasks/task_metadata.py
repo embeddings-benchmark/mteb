@@ -20,7 +20,6 @@ from pydantic import (
 )
 from typing_extensions import Required, TypedDict  # noqa: TC002
 
-import mteb
 from mteb.languages import check_language_code
 from mteb.types import (
     Languages,
@@ -588,6 +587,8 @@ class TaskMetadata(BaseModel):
             multilinguality = "translated"
 
         if self.adapted_from is not None:
+            import mteb
+
             source_datasets = [
                 task.metadata.dataset["path"]
                 for task in mteb.get_tasks(self.adapted_from)
