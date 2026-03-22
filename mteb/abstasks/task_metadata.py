@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from collections.abc import Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
@@ -272,6 +273,30 @@ TaskCategory = Literal[
 20. at2at: audio+text to audio+text
 21. v2t: video to text
 """
+
+CATEGORY_DESCRIPTIONS: dict[str, str] = {
+    "t2t": "text-to-text",
+    "t2c": "text-to-category",
+    "i2i": "image-to-image",
+    "i2c": "image-to-category",
+    "i2t": "image-to-text",
+    "t2i": "text-to-image",
+    "it2t": "image+text-to-text",
+    "it2i": "image+text-to-image",
+    "i2it": "image-to-image+text",
+    "t2it": "text-to-image+text",
+    "it2it": "image+text-to-image+text",
+    "a2a": "audio-to-audio",
+    "a2c": "audio-to-category",
+    "a2t": "audio-to-text",
+    "t2a": "text-to-audio",
+    "at2t": "audio+text-to-text",
+    "at2a": "audio+text-to-audio",
+    "a2at": "audio-to-audio+text",
+    "t2at": "text-to-audio+text",
+    "at2at": "audio+text-to-audio+text",
+    "v2t": "video-to-text",
+}
 
 AnnotatorType = Literal[
     "expert-annotated",
@@ -623,19 +648,49 @@ class TaskMetadata(BaseModel):
             )
         )
 
+        # Format category as "{type} ({description})" e.g. "Retrieval (text-to-text)"
+        if self.category is not None:
+            category_desc = CATEGORY_DESCRIPTIONS.get(self.category, self.category)
+            formatted_category = f"{self.type} ({category_desc})"
+        else:
+            formatted_category = str(self.type)
+
+        # Format reference with paper title from BibTeX when available
+        formatted_reference = self._format_reference()
+
         return (
             DatasetCardData(**dataset_card_data_params),
             # parameters for readme generation
             dict(
                 citation=self.bibtex_citation,
                 dataset_description=self.description,
-                dataset_reference=self.reference,
+                dataset_reference=formatted_reference,
                 descriptive_stats=descriptive_stats,
                 dataset_task_name=self.name,
-                category=self.category,
+                category=formatted_category,
                 domains=", ".join(self.domains) if self.domains else None,
             ),
         )
+
+    @staticmethod
+    def _extract_bibtex_title(bibtex_citation: str) -> str | None:
+        """Extract the title from a BibTeX citation string."""
+        match = re.search(r"title\s*=\s*\{([^}]+)\}", bibtex_citation)
+        if match:
+            return match.group(1).strip()
+        return None
+
+    def _format_reference(self) -> str | None:
+        """Format the reference as a markdown link with the paper title from BibTeX."""
+        title = None
+        if self.bibtex_citation:
+            title = self._extract_bibtex_title(self.bibtex_citation)
+
+        if title and self.reference:
+            return f"[{title}]({self.reference})"
+        if self.reference:
+            return str(self.reference)
+        return None
 
     def generate_dataset_card(
         self,
