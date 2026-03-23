@@ -368,3 +368,4 @@ def test_get_model_metas_without_modality_filter_returns_more_models():
     text_models = mteb.get_model_metas(modalities=["text"])
 
     assert len(all_models) > len(text_models)
+
