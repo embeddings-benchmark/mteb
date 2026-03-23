@@ -6,6 +6,7 @@ import pytest
 
 import mteb
 from mteb import ResultCache
+from mteb.abstasks import AbsTaskRetrieval
 
 logging.basicConfig(level=logging.INFO)
 
@@ -117,7 +118,9 @@ def _get_expected_task_names(benchmark, model_name):
             continue
         if not _is_text_only_task(task):
             continue
-        if model_name in RETRIEVAL_ONLY_MODELS and task.metadata.type != "Retrieval":
+        if model_name in RETRIEVAL_ONLY_MODELS and not isinstance(
+            task, AbsTaskRetrieval
+        ):
             continue
         task_names.append(task.metadata.name)
     return task_names
