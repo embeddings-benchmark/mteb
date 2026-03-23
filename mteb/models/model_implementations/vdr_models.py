@@ -1,27 +1,170 @@
 from __future__ import annotations
 
+import math
 from typing import TYPE_CHECKING, Any
 
 import torch
-from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
+
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from PIL.Image import Image
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types import Array, BatchedInput
 
 
-def instruction_template(
-    instruction: str, prompt_type: PromptType | None = None
-) -> str:
-    return "{instruction}"
+class VDRModel(AbsEncoder):
+    """Transformers-based wrapper for vdr-2b-multi-v1 text/image encoding."""
 
+    document_prompt = (
+        "<|im_start|>system\nYou are a helpful assistant.<|im_end|>\n"
+        "<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>"
+        "What is shown in this image?<|im_end|>\n<|endoftext|>"
+    )
+    query_prompt = (
+        "<|im_start|>system\nYou are a helpful assistant.<|im_end|>\n"
+        "<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>"
+        "Query: %s<|im_end|>\n<|endoftext|>"
+    )
 
-class VDRModel(InstructSentenceTransformerModel):
-    """SentenceTransformer wrapper with image/text support for VDR."""
+    def __init__(
+        self,
+        model_name: str,
+        revision: str,
+        device: str | None = None,
+        trust_remote_code: bool = True,
+        max_pixels: int = 768 * 28 * 28,
+        min_pixels: int = 1 * 28 * 28,
+        apply_instruction_to_passages: bool = True,
+        **kwargs: Any,
+    ):
+        from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
+
+        self.max_pixels = max_pixels
+        self.min_pixels = min_pixels
+        self.apply_instruction_to_passages = apply_instruction_to_passages
+        self.device = device or (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
+        )
+
+        self.model = Qwen2VLForConditionalGeneration.from_pretrained(
+            model_name,
+            revision=revision,
+            trust_remote_code=trust_remote_code,
+            **kwargs,
+        ).to(self.device)
+        self.model.eval()
+        self.processor = AutoProcessor.from_pretrained(
+            model_name,
+            revision=revision,
+            min_pixels=min_pixels,
+            max_pixels=max_pixels,
+            trust_remote_code=trust_remote_code,
+        )
+        self.model.padding_side = "left"
+        if getattr(self.processor, "tokenizer", None):
+            self.processor.tokenizer.padding_side = "left"
+
+    @staticmethod
+    def _round_by_factor(number: float, factor: int) -> int:
+        return round(number / factor) * factor
+
+    @staticmethod
+    def _ceil_by_factor(number: float, factor: int) -> int:
+        return math.ceil(number / factor) * factor
+
+    @staticmethod
+    def _floor_by_factor(number: float, factor: int) -> int:
+        return math.floor(number / factor) * factor
+
+    def _smart_resize(self, height: int, width: int) -> tuple[int, int]:
+        h_bar = max(28, self._round_by_factor(height, 28))
+        w_bar = max(28, self._round_by_factor(width, 28))
+        if h_bar * w_bar > self.max_pixels:
+            beta = math.sqrt((height * width) / self.max_pixels)
+            h_bar = self._floor_by_factor(height / beta, 28)
+            w_bar = self._floor_by_factor(width / beta, 28)
+        elif h_bar * w_bar < self.min_pixels:
+            beta = math.sqrt(self.min_pixels / (height * width))
+            h_bar = self._ceil_by_factor(height * beta, 28)
+            w_bar = self._ceil_by_factor(width * beta, 28)
+        return w_bar, h_bar
+
+    def _resize(self, image: Image) -> Image:
+        new_size = self._smart_resize(image.height, image.width)
+        return image.resize(new_size)
+
+    def _move_to_device(self, processed: dict[str, Any]) -> dict[str, Any]:
+        out = {}
+        for key, value in processed.items():
+            if isinstance(value, torch.Tensor):
+                out[key] = value.to(self.device)
+            else:
+                out[key] = value
+        return out
+
+    @torch.no_grad()
+    def _encode(
+        self,
+        *,
+        texts: list[str],
+        images: list[Any],
+    ) -> Array:
+        processed = self.processor(
+            text=texts,
+            images=images,
+            videos=None,
+            padding="longest",
+            return_tensors="pt",
+        )
+        processed = self._move_to_device(processed)
+        cache_position = torch.arange(0, len(texts)).to(self.device)
+        processed = self.model.prepare_inputs_for_generation(
+            **processed,
+            cache_position=cache_position,
+            use_cache=False,
+        )
+        output = self.model(
+            **processed,
+            return_dict=True,
+            output_hidden_states=True,
+        )
+        embeddings = output.hidden_states[-1][:, -1]
+        if isinstance(embeddings, torch.Tensor):
+            embeddings = embeddings.cpu().detach().float().numpy()
+        return embeddings
+
+    def get_text_embeddings(
+        self,
+        inputs: DataLoader[BatchedInput],
+    ) -> Array:
+        texts = [text for batch in inputs for text in batch["text"]]
+        try:
+            from PIL import Image
+
+            dummy_images = [Image.new("RGB", (56, 56)) for _ in texts]
+        except ImportError:
+            # Unit tests can run without image dependencies by using placeholders.
+            dummy_images = [None for _ in texts]
+        query_texts = [self.query_prompt % text for text in texts]
+        return self._encode(texts=query_texts, images=dummy_images)
+
+    def get_image_embeddings(
+        self,
+        inputs: DataLoader[BatchedInput],
+    ) -> Array:
+        images = [image for batch in inputs for image in batch["image"]]
+        resized_images = [self._resize(image) for image in images]
+        prompts = [self.document_prompt] * len(resized_images)
+        return self._encode(texts=prompts, images=resized_images)
 
     def encode(
         self,
@@ -33,34 +176,17 @@ class VDRModel(InstructSentenceTransformerModel):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        instruction = self.get_task_instruction(task_metadata, prompt_type)
-        if (
-            not self.apply_instruction_to_passages
-            and prompt_type == PromptType.document
-        ):
-            instruction = None
-
         text_embeddings = None
         image_embeddings = None
 
         if "text" in inputs.dataset.features:
-            texts = [text for batch in inputs for text in batch["text"]]
-            text_embeddings = self.model.encode(texts, prompt=instruction, **kwargs)
-
+            text_embeddings = self.get_text_embeddings(inputs)
         if "image" in inputs.dataset.features:
-            images = [image for batch in inputs for image in batch["image"]]
-            image_embeddings = self.model.encode(images, **kwargs)
-
-        if isinstance(text_embeddings, torch.Tensor):
-            text_embeddings = text_embeddings.cpu().detach().float().numpy()
-        if isinstance(image_embeddings, torch.Tensor):
-            image_embeddings = image_embeddings.cpu().detach().float().numpy()
+            image_embeddings = self.get_image_embeddings(inputs)
 
         if text_embeddings is not None and image_embeddings is not None:
             if len(text_embeddings) != len(image_embeddings):
-                raise ValueError(
-                    "The number of texts and images must have the same length"
-                )
+                raise ValueError("The number of texts and images must have the same length")
             return text_embeddings + image_embeddings
         if text_embeddings is not None:
             return text_embeddings
@@ -80,9 +206,9 @@ vdr_languages = [
 vdr_2b_multi_v1 = ModelMeta(
     loader=VDRModel,
     loader_kwargs=dict(
-        instruction_template=instruction_template,
-        max_seq_length=32768,
         apply_instruction_to_passages=True,
+        trust_remote_code=True,
+        torch_dtype=torch.bfloat16,
     ),
     name="llamaindex/vdr-2b-multi-v1",
     model_type=["dense"],

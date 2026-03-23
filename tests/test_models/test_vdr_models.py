@@ -9,31 +9,49 @@ import torch
 
 import mteb
 from mteb.models.model_implementations.vdr_models import VDRModel
-from mteb.types import PromptType
 
 
-class _FakeSentenceTransformer:
+class _FakeProcessor:
     def __init__(self, *args, **kwargs):
         self.calls = []
-        self.max_seq_length = kwargs.get("max_seq_length", None)
+        self.tokenizer = types.SimpleNamespace(padding_side="right")
 
-    def set_pooling_include_prompt(self, include_prompt: bool):
-        return None
+    @classmethod
+    def from_pretrained(cls, *args, **kwargs):
+        return cls()
 
-    def encode(self, items, **kwargs):
-        self.calls.append((items, kwargs))
-        n = len(items)
-        if n == 0:
-            return np.zeros((0, 2), dtype=np.float32)
-        if isinstance(items[0], str):
-            return np.ones((n, 2), dtype=np.float32)
-        return np.full((n, 2), 2.0, dtype=np.float32)
+    def __call__(self, text=None, images=None, videos=None, padding=None, return_tensors=None):
+        self.calls.append({"text": text, "images": images})
+        batch_size = len(text)
+        mode_value = 1.0 if text and "Query:" in text[0] else 2.0
+        return {
+            "input_ids": torch.zeros(batch_size, 3, dtype=torch.long),
+            "attention_mask": torch.ones(batch_size, 3, dtype=torch.long),
+            "mode": torch.full((batch_size, 1), mode_value, dtype=torch.float32),
+        }
 
 
-class _TensorSentenceTransformer(_FakeSentenceTransformer):
-    def encode(self, items, **kwargs):
-        arr = super().encode(items, **kwargs)
-        return torch.tensor(arr)
+class _FakeModel:
+    def __init__(self):
+        self.padding_side = "right"
+
+    @classmethod
+    def from_pretrained(cls, *args, **kwargs):
+        return cls()
+
+    def to(self, device):
+        return self
+
+    def eval(self):
+        return self
+
+    def prepare_inputs_for_generation(self, **kwargs):
+        return kwargs
+
+    def __call__(self, **kwargs):
+        mode = kwargs["mode"]
+        hidden = torch.cat([mode, mode], dim=1).unsqueeze(1)
+        return types.SimpleNamespace(hidden_states=[hidden, hidden])
 
 
 class _FakeLoader:
@@ -45,8 +63,25 @@ class _FakeLoader:
         return iter(self._batches)
 
 
+class _FakeImage:
+    def __init__(self, height: int = 56, width: int = 56):
+        self.height = height
+        self.width = width
+
+    def resize(self, size):
+        self.width, self.height = size
+        return self
+
+
 def _task_metadata():
     return mteb.get_task("STS12").metadata
+
+
+def _mock_transformers(monkeypatch):
+    fake_tf_module = types.ModuleType("transformers")
+    fake_tf_module.AutoProcessor = _FakeProcessor
+    fake_tf_module.Qwen2VLForConditionalGeneration = _FakeModel
+    monkeypatch.setitem(sys.modules, "transformers", fake_tf_module)
 
 
 def test_vdr_meta_includes_image_modality():
@@ -55,17 +90,12 @@ def test_vdr_meta_includes_image_modality():
     assert set(meta.modalities) == {"text", "image"}
 
 
-def test_vdr_encode_text_and_image(monkeypatch):
-    fake_st_module = types.ModuleType("sentence_transformers")
-    fake_st_module.SentenceTransformer = _FakeSentenceTransformer
-    monkeypatch.setitem(sys.modules, "sentence_transformers", fake_st_module)
-
+def test_multimodal_wrapper_encode_text_and_image(monkeypatch):
+    _mock_transformers(monkeypatch)
     model = VDRModel(
         model_name="llamaindex/vdr-2b-multi-v1",
         revision="dummy",
-        instruction_template="{instruction}",
     )
-    task_metadata = _task_metadata()
 
     text_loader = _FakeLoader(
         batches=[{"text": ["q1", "q2"]}],
@@ -73,26 +103,22 @@ def test_vdr_encode_text_and_image(monkeypatch):
     )
     text_embeddings = model.encode(
         text_loader,
-        task_metadata=task_metadata,
+        task_metadata=_task_metadata(),
         hf_split="test",
         hf_subset="default",
-        prompt_type=PromptType.query,
     )
     assert text_embeddings.shape == (2, 2)
     assert np.allclose(text_embeddings, 1.0)
-    _, text_kwargs = model.model.calls[-1]
-    assert "prompt" in text_kwargs
 
     image_loader = _FakeLoader(
-        batches=[{"image": [object(), object()]}],
+        batches=[{"image": [_FakeImage(), _FakeImage()]}],
         features={"image": object()},
     )
     image_embeddings = model.encode(
         image_loader,
-        task_metadata=task_metadata,
+        task_metadata=_task_metadata(),
         hf_split="test",
         hf_subset="default",
-        prompt_type=PromptType.document,
     )
     assert image_embeddings.shape == (2, 2)
     assert np.allclose(image_embeddings, 2.0)
@@ -101,53 +127,45 @@ def test_vdr_encode_text_and_image(monkeypatch):
         batches=[
             {
                 "text": ["q1", "q2"],
-                "image": [object(), object()],
+                "image": [_FakeImage(), _FakeImage()],
             }
         ],
         features={"text": object(), "image": object()},
     )
     mixed_embeddings = model.encode(
         mixed_loader,
-        task_metadata=task_metadata,
+        task_metadata=_task_metadata(),
         hf_split="test",
         hf_subset="default",
-        prompt_type=PromptType.query,
     )
     assert mixed_embeddings.shape == (2, 2)
     assert np.allclose(mixed_embeddings, 3.0)
 
 
-def test_vdr_raises_on_mismatched_text_image_lengths(monkeypatch):
-    fake_st_module = types.ModuleType("sentence_transformers")
-    fake_st_module.SentenceTransformer = _FakeSentenceTransformer
-    monkeypatch.setitem(sys.modules, "sentence_transformers", fake_st_module)
+def test_multimodal_wrapper_raises_on_mismatched_text_image_lengths(monkeypatch):
+    _mock_transformers(monkeypatch)
     model = VDRModel(
         model_name="llamaindex/vdr-2b-multi-v1",
         revision="dummy",
-        instruction_template="{instruction}",
     )
 
     with pytest.raises(ValueError, match="same length"):
         model.encode(
             _FakeLoader(
-                batches=[{"text": ["q1"], "image": [object(), object()]}],
+                batches=[{"text": ["q1"], "image": [_FakeImage(), _FakeImage()]}],
                 features={"text": object(), "image": object()},
             ),
             task_metadata=_task_metadata(),
             hf_split="test",
             hf_subset="default",
-            prompt_type=PromptType.query,
         )
 
 
-def test_vdr_raises_on_unsupported_empty_features(monkeypatch):
-    fake_st_module = types.ModuleType("sentence_transformers")
-    fake_st_module.SentenceTransformer = _FakeSentenceTransformer
-    monkeypatch.setitem(sys.modules, "sentence_transformers", fake_st_module)
+def test_multimodal_wrapper_raises_on_unsupported_empty_features(monkeypatch):
+    _mock_transformers(monkeypatch)
     model = VDRModel(
         model_name="llamaindex/vdr-2b-multi-v1",
         revision="dummy",
-        instruction_template="{instruction}",
     )
 
     with pytest.raises(ValueError, match="No text or image features"):
@@ -156,18 +174,14 @@ def test_vdr_raises_on_unsupported_empty_features(monkeypatch):
             task_metadata=_task_metadata(),
             hf_split="test",
             hf_subset="default",
-            prompt_type=PromptType.query,
         )
 
 
-def test_vdr_converts_tensor_outputs_to_numpy(monkeypatch):
-    fake_st_module = types.ModuleType("sentence_transformers")
-    fake_st_module.SentenceTransformer = _TensorSentenceTransformer
-    monkeypatch.setitem(sys.modules, "sentence_transformers", fake_st_module)
+def test_multimodal_wrapper_outputs_numpy(monkeypatch):
+    _mock_transformers(monkeypatch)
     model = VDRModel(
         model_name="llamaindex/vdr-2b-multi-v1",
         revision="dummy",
-        instruction_template="{instruction}",
     )
 
     emb = model.encode(
@@ -178,32 +192,6 @@ def test_vdr_converts_tensor_outputs_to_numpy(monkeypatch):
         task_metadata=_task_metadata(),
         hf_split="test",
         hf_subset="default",
-        prompt_type=PromptType.query,
     )
     assert isinstance(emb, np.ndarray)
     assert emb.shape == (2, 2)
-
-
-def test_vdr_no_prompt_on_document_when_disabled(monkeypatch):
-    fake_st_module = types.ModuleType("sentence_transformers")
-    fake_st_module.SentenceTransformer = _FakeSentenceTransformer
-    monkeypatch.setitem(sys.modules, "sentence_transformers", fake_st_module)
-    model = VDRModel(
-        model_name="llamaindex/vdr-2b-multi-v1",
-        revision="dummy",
-        instruction_template="{instruction}",
-        apply_instruction_to_passages=False,
-    )
-
-    model.encode(
-        _FakeLoader(
-            batches=[{"text": ["doc1"]}],
-            features={"text": object()},
-        ),
-        task_metadata=_task_metadata(),
-        hf_split="test",
-        hf_subset="default",
-        prompt_type=PromptType.document,
-    )
-    _, kwargs = model.model.calls[-1]
-    assert kwargs.get("prompt") is None
