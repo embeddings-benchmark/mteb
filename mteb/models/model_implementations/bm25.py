@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 def bm25_loader(model_name, **kwargs) -> SearchProtocol:
-    requires_package(bm25_loader, "bm25s", model_name, "pip install mteb[bm25s]")
+    requires_package(bm25_loader, "bm25s", model_name, "pip install 'mteb[bm25s]'")
     import bm25s
     import Stemmer
 
