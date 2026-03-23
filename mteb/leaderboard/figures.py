@@ -190,6 +190,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
             "Max Tokens": True,
             "Embedding Dimensions": True,
             "Number of Active Parameters": True,
+            "_x_display": False,
             "Mean (Task)": True,
             rank_column: True,
             "Log(Tokens)": False,
