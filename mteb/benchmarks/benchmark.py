@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
+from functools import lru_cache
 from typing import TYPE_CHECKING, Literal, cast
 
 import huggingface_hub
@@ -13,6 +14,32 @@ from mteb.types import StrURL
 if TYPE_CHECKING:
     from mteb.abstasks.aggregated_task import AbsTaskAggregate
     from mteb.results import BenchmarkResults
+
+
+@lru_cache
+def _get_benchmarks_on_leaderboard() -> set[str]:
+    from mteb.leaderboard.benchmark_selector import (
+        GP_BENCHMARK_ENTRIES,
+        R_BENCHMARK_ENTRIES,
+        MenuEntry,
+    )
+
+    entries = GP_BENCHMARK_ENTRIES + R_BENCHMARK_ENTRIES
+
+    def __extract_benchmarks(
+        entries: Sequence[Benchmark | MenuEntry],
+    ) -> list[Benchmark]:
+        benchmarks = []
+        for entry in entries:
+            if isinstance(entry, Benchmark):
+                benchmarks.append(entry)
+            else:
+                benchmarks.extend(__extract_benchmarks(entry.benchmarks))
+        return benchmarks
+
+    names = {benchmark.name for benchmark in __extract_benchmarks(entries)}
+
+    return names
 
 
 @dataclass
@@ -46,10 +73,15 @@ class Benchmark:
     reference: StrURL | None = None
     citation: str | None = None
     contacts: list[str] | None = None
-    display_on_leaderboard: bool = True
     icon: str | None = None
     display_name: str | None = None
     language_view: list[str] | Literal["all"] = field(default_factory=list)
+
+    @property
+    def display_on_leaderboard(self) -> bool:
+        """Whether the benchmark should be displayed on the leaderboard."""
+        benchmarks_on_leaderboard = _get_benchmarks_on_leaderboard()
+        return self.name in benchmarks_on_leaderboard
 
     def __iter__(self) -> Iterator[AbsTask]:
         return iter(self.tasks)
