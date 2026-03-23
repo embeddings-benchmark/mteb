@@ -519,7 +519,7 @@ def get_leaderboard_app(
 
     logger.info("Step 5/7: Generating tables...")
     table_start = time.time()
-    summary_table = apply_summary_styling_from_benchmark(
+    summary_table, summary_raw = apply_summary_styling_from_benchmark(
         default_benchmark, filtered_benchmark_results
     )
     per_task_table = apply_per_task_styling_from_benchmark(
@@ -664,6 +664,7 @@ def get_leaderboard_app(
 
         scores = gr.State(default_scores)
         models = gr.State(filtered_models)
+        summary_data = gr.State(summary_raw)
         with gr.Row():
             with gr.Column(scale=1):
                 description = gr.Markdown(
@@ -780,28 +781,28 @@ def get_leaderboard_app(
                 gr.Markdown(FAQ)
 
         with gr.Tab("Performance per Model Size") as plot_tab:
-            plot = gr.Plot(_performance_size_plot, inputs=[summary_table])
+            plot = gr.Plot(_performance_size_plot, inputs=[summary_data])
             plot_tab.select(
-                _performance_size_plot, inputs=[summary_table], outputs=[plot]
+                _performance_size_plot, inputs=[summary_data], outputs=[plot]
             )
 
         with gr.Tab("Performance over Time") as timeline_tab:
-            timeline_plot = gr.Plot(_performance_over_time_plot, inputs=[summary_table])
+            timeline_plot = gr.Plot(_performance_over_time_plot, inputs=[summary_data])
             timeline_tab.select(
                 _performance_over_time_plot,
-                inputs=[summary_table],
+                inputs=[summary_data],
                 outputs=[timeline_plot],
             )
 
         with gr.Tab(
             "Performance per Task Type", visible=display_radar_chart
         ) as radar_plot_tab:
-            radar_plot = gr.Plot(_radar_chart, inputs=[summary_table])
+            radar_plot = gr.Plot(_radar_chart, inputs=[summary_data])
             gr.Markdown(
                 "*We only display TOP 5 models that have been run on all task types in the benchmark*"
             )
             radar_plot_tab.select(
-                _radar_chart, inputs=[summary_table], outputs=[radar_plot]
+                _radar_chart, inputs=[summary_data], outputs=[radar_plot]
             )
 
         with gr.Tab("Performance per task"):
@@ -1265,7 +1266,7 @@ def get_leaderboard_app(
                 languages=languages,
             )
 
-            summary = apply_summary_styling_from_benchmark(
+            summary, summary_raw = apply_summary_styling_from_benchmark(
                 benchmark, filtered_benchmark_results
             )
             per_task = apply_per_task_styling_from_benchmark(
@@ -1279,6 +1280,7 @@ def get_leaderboard_app(
             logger.debug(f"update_tables callback: {elapsed}s")
             return (
                 summary,
+                summary_raw,
                 per_task,
                 per_language,
                 gr.update(visible=len(benchmark.language_view) > 0),
@@ -1293,6 +1295,7 @@ def get_leaderboard_app(
                 inputs=[scores, task_select, models, benchmark_select, lang_select],
                 outputs=[
                     summary_table,
+                    summary_data,
                     per_task_table,
                     per_language_table,
                     language_tab,

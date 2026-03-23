@@ -67,7 +67,7 @@ def _create_light_green_cmap():
 
 def apply_summary_styling_from_benchmark(
     benchmark_instance: Benchmark, benchmark_results: BenchmarkResults
-) -> gr.DataFrame:
+) -> tuple[gr.DataFrame, pd.DataFrame]:
     """Apply styling to summary table created by the benchmark instance's _create_summary_table method.
 
     This supports polymorphism - different benchmark classes can have different table generation logic.
@@ -77,17 +77,18 @@ def apply_summary_styling_from_benchmark(
         benchmark_results: BenchmarkResults object containing model results (may be pre-filtered)
 
     Returns:
-        Styled gr.DataFrame ready for display in the leaderboard
+        Tuple of (styled gr.DataFrame for display, raw pd.DataFrame with metadata for plots)
     """
     # Use the instance method to support polymorphism
     summary_df = benchmark_instance._create_summary_table(benchmark_results)
 
     # If it's a no-results DataFrame, return it as-is
     if "No results" in summary_df.columns:
-        return gr.DataFrame(summary_df)
+        return gr.DataFrame(summary_df), summary_df
 
-    # Apply the styling
-    return _apply_summary_table_styling(summary_df)
+    # Keep full data for plots, drop metadata columns from display
+    display_df = summary_df.drop(columns=["Release Date"], errors="ignore")
+    return _apply_summary_table_styling(display_df), summary_df
 
 
 def apply_per_task_styling_from_benchmark(
@@ -163,7 +164,6 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         "Active Parameters (B)",
         "Embedding Dimensions",
         "Max Tokens",
-        "Release Date",
     ]
 
     gradient_columns = [
