@@ -37,6 +37,7 @@ from .bright_v1_1_retrieval import (
     BrightTheoremQAQuestionsRetrieval,
     BrightTheoremQATheoremsRetrieval,
 )
+from .browse_comp_plus_retrieval import BrowseCompPlusRetrieval
 from .built_bench_retrieval import BuiltBenchRetrieval
 from .chat_doctor_retrieval import ChatDoctorRetrieval
 from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval
@@ -303,6 +304,7 @@ __all__ = [
     "BrightSustainableLivingRetrieval",
     "BrightTheoremQAQuestionsRetrieval",
     "BrightTheoremQATheoremsRetrieval",
+    "BrowseCompPlusRetrieval",
     "BuiltBenchRetrieval",
     "CIRRIT2IRetrieval",
     "CMUArcticA2TRetrieval",
