@@ -299,7 +299,7 @@ def test_model_to_python():
     superseded_by=None,
     modalities=['text'],
     model_type=['dense'],
-    citation=\'@inproceedings{reimers-2019-sentence-bert,\\n    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",\\n    author = "Reimers, Nils and Gurevych, Iryna",\\n    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",\\n    month = "11",\\n    year = "2019",\\n    publisher = "Association for Computational Linguistics",\\n    url = "http://arxiv.org/abs/1908.10084",\\n}\\n\',
+    citation='@inproceedings{reimers-2019-sentence-bert,\\n    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",\\n    author = "Reimers, Nils and Gurevych, Iryna",\\n    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",\\n    month = "11",\\n    year = "2019",\\n    publisher = "Association for Computational Linguistics",\\n    url = "http://arxiv.org/abs/1908.10084",\\n}\\n',
     contacts=None,
 )"""
     )
@@ -345,3 +345,26 @@ def test_load_model_with_experiments():
         model2.mteb_model_meta.experiment_name
         == model_from_meta2.mteb_model_meta.experiment_name
     )
+
+
+def test_get_model_metas_modalities_subset():
+    models = mteb.get_model_metas(modalities=["text"])
+
+    assert len(models) > 0
+    for model in models:
+        assert "text" in model.modalities
+
+
+def test_get_model_metas_modalities_exact():
+    models = mteb.get_model_metas(modalities=["text"], exclusive_modality_filter=True)
+
+    assert len(models) > 0
+    for model in models:
+        assert set(model.modalities) == {"text"}
+
+
+def test_get_model_metas_without_modality_filter_returns_more_models():
+    all_models = mteb.get_model_metas()
+    text_models = mteb.get_model_metas(modalities=["text"])
+
+    assert len(all_models) > len(text_models)
