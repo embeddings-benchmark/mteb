@@ -15,7 +15,7 @@ task = mteb.get_task("NanoArguAnaRetrieval")
 # stage 1 model:
 encoder = mteb.get_model("sentence-transformers/static-similarity-mrl-multilingual-v1")
 # stage 2 model:
-cross_encoder = mteb.get_model("cross-encoder/ms-marco-TinyBERT-L-2-v2") # (1)!
+cross_encoder = mteb.get_model("cross-encoder/ms-marco-TinyBERT-L2-v2") # (1)!
 ```
 
 1.  You can also directly use `CrossEncoder` from [sentence transformers](https://www.sbert.net/).

@@ -313,7 +313,7 @@ def test_model_meta_local_path():
 
 def test_load_cross_encoder_via_get_model_meta():
     """Test loading cross-encoder via get_model_meta() with automatic detection."""
-    model_meta = mteb.get_model_meta("cross-encoder/ms-marco-TinyBERT-L-2-v2")
+    model_meta = mteb.get_model_meta("cross-encoder/ms-marco-TinyBERT-L2-v2")
 
     assert model_meta.model_type == ["cross-encoder"]
     assert model_meta.is_cross_encoder
