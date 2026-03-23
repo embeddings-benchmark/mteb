@@ -309,6 +309,7 @@ class ModelMeta(BaseModel):
                     f"Requested embedding dimension {embed_dim} is not in the model's supported embedding dimensions {self.embed_dim}."
                 )
             self.embed_dim = embed_dim
+            kwargs["embed_dim"] = embed_dim
             if self.experiment_kwargs is None:
                 self.experiment_kwargs = {"embed_dim": embed_dim}
             else:
@@ -329,7 +330,6 @@ class ModelMeta(BaseModel):
         model: MTEBModels = self.loader(
             self.name,
             revision=self.revision,
-            embed_dim=embed_dim,
             **_kwargs,
         )
         model.mteb_model_meta = self  # type: ignore[misc]
