@@ -587,11 +587,10 @@ class TaskMetadata(BaseModel):
             multilinguality = "translated"
 
         if self.adapted_from is not None:
-            import mteb
+            from mteb.get_tasks import get_tasks
 
             source_datasets = [
-                task.metadata.dataset["path"]
-                for task in mteb.get_tasks(self.adapted_from)
+                task.metadata.dataset["path"] for task in get_tasks(self.adapted_from)
             ]
             source_datasets.append(self.dataset["path"])
         else:

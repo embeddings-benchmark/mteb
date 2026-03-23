@@ -6,6 +6,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Literal, cast, get_args, overload
 
 from mteb.abstasks.task_metadata import TaskType
+from mteb.get_tasks import get_task
 from mteb.similarity_functions import (
     cos_sim,
     dot_score,
@@ -165,8 +166,6 @@ class AbsEncoder(ABC):
 
             if task_name not in task_types and task_name not in prompt_types:
                 try:
-                    from mteb.get_tasks import get_task
-
                     get_task(task_name=task_name)
                 except KeyError:
                     msg = f"Task name {task_name} is not valid. {valid_keys_msg}"
@@ -224,8 +223,6 @@ class AbsEncoder(ABC):
 
         if prompt:
             return prompt
-
-        from mteb.get_tasks import get_task
 
         abstask = get_task(task_name=task_metadata.name)
         return abstask.abstask_prompt
