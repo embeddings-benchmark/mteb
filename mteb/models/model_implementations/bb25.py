@@ -54,7 +54,7 @@ def _composite_prior(
 
 
 def bb25_loader(model_name, **kwargs) -> SearchProtocol:
-    requires_package(bb25_loader, "bm25s", model_name, "pip install mteb[bm25s]")
+    requires_package(bb25_loader, "bm25s", model_name, "pip install 'mteb[bm25s]'")
     import bm25s
     import Stemmer
 

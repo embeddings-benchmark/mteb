@@ -112,7 +112,9 @@ def get_model(
     Returns:
         A model object
     """
-    meta = get_model_meta(model_name, revision).model_copy(deep=True)
+    meta = get_model_meta(model_name, revision, fetch_from_hf=True).model_copy(
+        deep=True
+    )
     model = meta.load_model(device=device, embed_dim=embed_dim, **kwargs)
 
     if kwargs:
@@ -138,7 +140,7 @@ _MODEL_RENAMES: dict[str, str] = {
 def get_model_meta(
     model_name: str,
     revision: str | None = None,
-    fetch_from_hf: bool = True,
+    fetch_from_hf: bool = False,
     fill_missing: bool = False,
     experiment_kwargs: Mapping[str, Any] | None = None,
 ) -> ModelMeta:
