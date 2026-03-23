@@ -62,13 +62,29 @@ class VDRModel(AbsEncoder):
             **kwargs,
         ).to(self.device)
         self.model.eval()
-        self.processor = AutoProcessor.from_pretrained(
-            model_name,
-            revision=revision,
-            min_pixels=min_pixels,
-            max_pixels=max_pixels,
-            trust_remote_code=trust_remote_code,
-        )
+        try:
+            self.processor = AutoProcessor.from_pretrained(
+                model_name,
+                revision=revision,
+                trust_remote_code=trust_remote_code,
+            )
+        except ValueError as e:
+            if (
+                "shortest_edge" in str(e)
+                and "longest_edge" in str(e)
+            ):
+                longest_edge = max(56, int(math.sqrt(self.max_pixels)))
+                self.processor = AutoProcessor.from_pretrained(
+                    model_name,
+                    revision=revision,
+                    trust_remote_code=trust_remote_code,
+                    size={
+                        "shortest_edge": 56,
+                        "longest_edge": longest_edge,
+                    },
+                )
+            else:
+                raise
         self.model.padding_side = "left"
         if getattr(self.processor, "tokenizer", None):
             self.processor.tokenizer.padding_side = "left"
