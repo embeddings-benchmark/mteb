@@ -178,6 +178,11 @@ def _create_summary_table_from_benchmark_results(
     )
     joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
 
+    # Add release date from model metadata
+    joint_table["Release Date"] = model_metas.map(
+        lambda m: str(m.release_date) if m.release_date else None
+    )
+
     # Clean up model names (remove HF organization)
     joint_table["model_name"] = joint_table["model_name"].map(
         lambda name: name.split("/")[-1]
@@ -412,6 +417,11 @@ def _create_summary_table_mean_public_private(
         model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
     )
 
+    # Add release date from model metadata
+    joint_table["Release Date"] = model_metas.map(
+        lambda m: str(m.release_date) if m.release_date else None
+    )
+
     # Clean up model names (remove HF organization)
     joint_table["model_name"] = joint_table["model_name"].map(
         lambda name: name.split("/")[-1]
@@ -537,6 +547,11 @@ def _create_summary_table_mean_subset(
     )
     joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
 
+    # Add release date from model metadata
+    joint_table["Release Date"] = model_metas.map(
+        lambda m: str(m.release_date) if m.release_date else None
+    )
+
     # Clean up model names (remove HF organization)
     joint_table["model_name"] = joint_table["model_name"].map(
         lambda name: name.split("/")[-1]
@@ -652,6 +667,11 @@ def _create_summary_table_mean_task_type(
         1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
     )
     joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
+
+    # Add release date from model metadata
+    joint_table["Release Date"] = model_metas.map(
+        lambda m: str(m.release_date) if m.release_date else None
+    )
 
     # Clean up model names (remove HF organization)
     joint_table["model_name"] = joint_table["model_name"].map(

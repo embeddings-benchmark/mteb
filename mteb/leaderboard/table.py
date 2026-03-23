@@ -163,6 +163,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         "Active Parameters (B)",
         "Embedding Dimensions",
         "Max Tokens",
+        "Release Date",
     ]
 
     gradient_columns = [

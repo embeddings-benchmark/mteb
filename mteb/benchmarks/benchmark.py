@@ -330,6 +330,11 @@ class VidoreBenchmark(Benchmark):
             ),
         )
 
+        # Add release date from model metadata
+        joint_table["Release Date"] = model_metas.map(
+            lambda m: str(m.release_date) if m.release_date else None
+        )
+
         # Clean up model names (remove HF organization)
         joint_table["model_name"] = joint_table["model_name"].map(
             lambda name: name.split("/")[-1]

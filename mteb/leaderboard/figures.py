@@ -1,14 +1,11 @@
 import logging
-import re
 from typing import get_args
-from urllib.parse import urlparse
 
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-import mteb
 from mteb.abstasks.task_metadata import TaskType
 
 logger = logging.getLogger(__name__)
@@ -67,72 +64,6 @@ def _process_max_tokens(x):
     if pd.isna(x) or x is None or np.isinf(x):
         return "Unknown"
     return str(int(x))
-
-
-def _parse_markdown_model_cell(model_cell: str) -> tuple[str, str | None]:
-    if model_cell is None or pd.isna(model_cell):
-        return "", None
-    model_cell = str(model_cell).strip()
-    match = re.fullmatch(r"\[([^\]]+)\]\(([^)]+)\)", model_cell)
-    if match is None:
-        return model_cell, None
-    return match.group(1), match.group(2)
-
-
-def _extract_hf_model_name(model_url: str | None) -> str | None:
-    if model_url is None or "huggingface" not in model_url:
-        return None
-    parsed = urlparse(model_url)
-    path_parts = [part for part in parsed.path.split("/") if part]
-    if len(path_parts) < 2:
-        return None
-    return f"{path_parts[0]}/{path_parts[1]}"
-
-
-def _build_model_meta_lookups() -> tuple[
-    dict[str, object], dict[tuple[str, str], object], dict[str, object]
-]:
-    """Build lookup structures for resolving model metas from display names and URLs.
-
-    Returns:
-        Tuple of (by_full_name, by_ref_and_display_name, by_display_name) dicts.
-    """
-    all_metas = mteb.get_model_metas()
-    by_name: dict[str, object] = {}
-    by_ref_and_display: dict[tuple[str, str], object] = {}
-    by_display: dict[str, object] = {}
-    for meta in all_metas:
-        if meta.name:
-            by_name[meta.name] = meta
-            short_name = meta.name.split("/")[-1]
-            if meta.reference:
-                by_ref_and_display[(str(meta.reference), short_name)] = meta
-            by_display[short_name] = meta
-    return by_name, by_ref_and_display, by_display
-
-
-def _resolve_model_meta(
-    model_cell: str,
-    meta_by_name: dict,
-    meta_by_ref_and_display: dict,
-    meta_by_display: dict,
-) -> tuple[str, str | None]:
-    display_name, model_url = _parse_markdown_model_cell(model_cell)
-
-    # Try matching by HuggingFace URL (extracts org/model from URL path)
-    hf_name = _extract_hf_model_name(model_url)
-    model_meta = meta_by_name.get(hf_name) if hf_name else None
-
-    # Fallback: match by reference URL + display name
-    if model_meta is None and model_url and display_name:
-        model_meta = meta_by_ref_and_display.get((model_url, display_name))
-
-    # Fallback: match by display name alone
-    if model_meta is None and display_name:
-        model_meta = meta_by_display.get(display_name)
-
-    release_date = model_meta.release_date if model_meta is not None else None
-    return display_name, release_date
 
 
 models_to_annotate = [
@@ -276,14 +207,7 @@ def _performance_over_time_plot(df: pd.DataFrame) -> go.Figure:
             "Couldn't produce timeline plot. Required columns are missing."
         )
 
-    meta_by_name, meta_by_ref_and_display, meta_by_display = _build_model_meta_lookups()
-    model_release_info = df["Model"].map(
-        lambda cell: _resolve_model_meta(
-            cell, meta_by_name, meta_by_ref_and_display, meta_by_display
-        )
-    )
-    df["Model"] = model_release_info.map(lambda x: x[0])
-    df["Release Date"] = model_release_info.map(lambda x: x[1])
+    df["Model"] = df["Model"].map(_parse_model_name)
     df["Release Date"] = pd.to_datetime(df["Release Date"], errors="coerce")
     df[score_column] = df[score_column].map(_parse_float)
 
