@@ -26,7 +26,9 @@ def _get_benchmarks_on_leaderboard() -> set[str]:
 
     entries = GP_BENCHMARK_ENTRIES + R_BENCHMARK_ENTRIES
 
-    def __extract_benchmarks(entries: list[Benchmark | MenuEntry]) -> list[Benchmark]:
+    def __extract_benchmarks(
+        entries: Sequence[Benchmark | MenuEntry],
+    ) -> list[Benchmark]:
         benchmarks = []
         for entry in entries:
             if isinstance(entry, Benchmark):
