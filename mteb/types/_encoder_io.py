@@ -197,7 +197,7 @@ class OutputDType(str, Enum):
             return torch.int8
         elif self == OutputDType.BINARY:
             return torch.bool
-        return getattr(torch, self)
+        return getattr(torch, self.value)
 
 
 BatchedInput = (

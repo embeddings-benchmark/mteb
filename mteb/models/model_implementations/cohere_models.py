@@ -410,7 +410,7 @@ cohere_mult_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 cohere_eng_3 = ModelMeta(
@@ -437,7 +437,7 @@ cohere_eng_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 cohere_mult_light_3 = ModelMeta(
@@ -464,7 +464,7 @@ cohere_mult_light_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 cohere_eng_light_3 = ModelMeta(
@@ -491,5 +491,5 @@ cohere_eng_light_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )

@@ -20,41 +20,49 @@ logger = logging.getLogger(__name__)
 
 
 class CompressionWrapper:
-    """Wraps a model to quantize the embeddings and compute results on the compressed vectors instead."""
+    """Wraps a model to quantize the embeddings and compute results on the compressed vectors instead.
+
+    Examples:
+        >>> import mteb
+        >>> from mteb.models import CompressionWrapper
+        >>> from mteb.types import OutputDType
+        >>> model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
+        >>> compression_model = CompressionWrapper(model, OutputDType.INT8)
+        >>> task = mteb.get_task("NanoArguAnaRetrieval")
+        >>> mteb.evaluate(compression_model, task)
+    """
 
     def __init__(
         self,
         model: EncoderProtocol,
-        quantization_level: OutputDType = OutputDType.FLOAT8_E4M3FN,
+        output_dtype: OutputDType = OutputDType.FLOAT8_E4M3FN,
         clipping_margin: tuple[float, float] | None = None,
     ) -> None:
         """Instantiates the wrapper with an embedding model and sets the quantization level.
 
         Args:
             model: The model to produce quantized embeddings.
-            quantization_level: The quantization level to use. Has to be supported by the quantize_embeddings method.
+            output_dtype: The output data type to compress to. Has to be supported by the quantize_embeddings method.
             clipping_margin: Optional lower and upper percentiles to crop embeddings before integer quantization.
         """
         self.model = model
-        self._quantization_level = quantization_level
+        self._quantization_level = output_dtype
         self.clipping_margin = None
         self.min_embeds = 10_000
-        embed_types = model.mteb_model_meta.embedding_types
-        model.mteb_model_meta.experiment_kwargs = {
-            "precision": quantization_level.value
-        }
-        model.mteb_model_meta.embedding_types = [quantization_level]
+        embed_types = model.mteb_model_meta.output_dtypes
+        model.mteb_model_meta.experiment_kwargs = {"precision": output_dtype.value}
+        model.mteb_model_meta.output_dtypes = [output_dtype]
         if clipping_margin is not None:
             assert 0 < clipping_margin[0] < clipping_margin[1] < 1
             self.clipping_margin = torch.tensor(clipping_margin)
-        if embed_types and quantization_level in embed_types:
+        if embed_types and output_dtype in embed_types:
             logger.warning(
                 f"The model {model.mteb_model_meta.name} internally supports quantization to "
-                f"{quantization_level.value}, which might lead to better results."
+                f"{output_dtype.value}, which might lead to better results."
             )
             warnings.warn(
                 f"The model {model.mteb_model_meta.name} internally supports quantization to "
-                f"{quantization_level.value}, which might lead to better results."
+                f"{output_dtype.value}, which might lead to better results."
             )
         logger.info("Initialized CompressionWrapper.")
 
@@ -74,7 +82,11 @@ class CompressionWrapper:
         batch_size: int = 32,
         **kwargs: Any,
     ) -> Array:
-        """Encodes the given sentences using the encoder, then quantizes the embeddings.
+        """Encodes the given inputs using the encoder, then quantizes the embeddings.
+
+        Generates embeddings for the given inputs, then compresses them based on the specified output dtype. While
+        embeddings returned by this function are compressed to the value range determined by the output type, it returns
+        32- or 16-bit floats to avoid issues with potential downstream calculations and array conversions.
 
         Args:
             inputs: Batch of inputs to encode.
@@ -111,9 +123,7 @@ class CompressionWrapper:
         """Compresses embeddings to represent each dimension with lower bit-precision.
 
         Takes full-precision embeddings as input and quantizes them to the chosen bit range. When quantizing to
-        integers, the minimum and maximum values per dimension need to be estimated first. For retrieval tasks, this
-        should be done on document embeddings, so the same thresholds can be applied to queries, meaning that (a batch
-        of) documents need to be embedded first.
+        integers, the minimum and maximum values per dimension need to be estimated first.
 
         Args:
             embeddings: The embeddings to quantize.
@@ -171,9 +181,9 @@ class CompressionWrapper:
     ) -> tuple[torch.Tensor, torch.Tensor]:
         """Computes thresholds for integer quantization.
 
-        Calculates the minimum and maximum values per embedding dimension and returns these. If the prompt type is
-        query, then the pre-calculated values are returned instead. If no pre-calculated values exist, an error is
-        raised.
+        Calculates the minimum and maximum values per embedding dimension and returns these. The values are used to
+        estimate the bin boundaries used to map floating points to discrete integer values. If the number of passed
+        embeddings is small, a warning is raised that the calculated values might be unstable.
 
         Args:
             embeddings: The embeddings for which minima and maxima should be calculated.

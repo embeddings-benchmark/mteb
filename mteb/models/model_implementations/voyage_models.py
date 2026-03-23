@@ -323,7 +323,7 @@ voyage_4_large_2048d = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 voyage_4 = ModelMeta(
@@ -350,7 +350,7 @@ voyage_4 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 voyage_4_lite = ModelMeta(
@@ -377,7 +377,7 @@ voyage_4_lite = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 voyage_4_large = ModelMeta(
@@ -404,7 +404,7 @@ voyage_4_large = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 voyage_3_large = ModelMeta(
@@ -433,7 +433,7 @@ voyage_3_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     superseded_by="voyageai/voyage-4-large",
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 
@@ -463,7 +463,7 @@ voyage_3_5 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     superseded_by="voyageai/voyage-4",
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 voyage_3_5_int8 = ModelMeta(
@@ -492,7 +492,7 @@ voyage_3_5_int8 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     adapted_from="voyageai/voyage-3.5",
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 voyage_3_5_binary = ModelMeta(
@@ -521,7 +521,7 @@ voyage_3_5_binary = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     adapted_from="voyageai/voyage-3.5",
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 voyage_large_2_instruct = ModelMeta(
@@ -657,7 +657,7 @@ voyage_code_3 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,  # src: private communication with Voyage
     public_training_code=None,
     public_training_data=None,
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 

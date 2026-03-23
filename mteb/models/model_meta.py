@@ -139,7 +139,7 @@ class ModelMeta(BaseModel):
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
         experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
-        embedding_types: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float embeddings.
+        output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float embeddings.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -173,7 +173,7 @@ class ModelMeta(BaseModel):
     citation: str | None = None
     contacts: list[str] | None = None
     experiment_kwargs: Mapping[str, Any] | None = None
-    embedding_types: OutputDType | list[OutputDType] | None = None
+    output_dtypes: OutputDType | list[OutputDType] | None = None
 
     @model_validator(mode="before")
     @classmethod

@@ -412,7 +412,7 @@ cohere_mult_3 = ModelMeta(
     reference="https://huggingface.co/Cohere/Cohere-embed-multilingual-v3.0",
     use_instructions=False,
     training_datasets=None,
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 cohere_eng_3 = ModelMeta(
@@ -438,7 +438,7 @@ cohere_eng_3 = ModelMeta(
     reference="https://huggingface.co/Cohere/Cohere-embed-english-v3.0",
     use_instructions=False,
     training_datasets=None,
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 cohere_embed_v4_multimodal = ModelMeta(
@@ -464,7 +464,7 @@ cohere_embed_v4_multimodal = ModelMeta(
     reference="https://docs.cohere.com/docs/cohere-embed",
     use_instructions=False,
     training_datasets=None,
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 cohere_embed_v4_multimodal_binary = ModelMeta(
@@ -491,7 +491,7 @@ cohere_embed_v4_multimodal_binary = ModelMeta(
     use_instructions=False,
     training_datasets=None,
     adapted_from="Cohere/Cohere-embed-v4.0",
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 cohere_embed_v4_multimodal_int8 = ModelMeta(
@@ -518,5 +518,5 @@ cohere_embed_v4_multimodal_int8 = ModelMeta(
     use_instructions=False,
     training_datasets=None,
     adapted_from="Cohere/Cohere-embed-v4.0",
-    embedding_types=OUTPUT_TYPES,
+    output_dtypes=OUTPUT_TYPES,
 )
