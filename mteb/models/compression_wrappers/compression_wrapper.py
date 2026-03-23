@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 
-from mteb.types import QuantizationLevel
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -25,28 +25,28 @@ class CompressionWrapper:
     def __init__(
         self,
         model: EncoderProtocol,
-        quantization_level: QuantizationLevel = QuantizationLevel.FLOAT8_E4M3FN,
-        quantiles: tuple[float, float] | None = None,
+        quantization_level: OutputDType = OutputDType.FLOAT8_E4M3FN,
+        clipping_margin: tuple[float, float] | None = None,
     ) -> None:
         """Instantiates the wrapper with an embedding model and sets the quantization level.
 
         Args:
             model: The model to produce quantized embeddings.
             quantization_level: The quantization level to use. Has to be supported by the quantize_embeddings method.
-            quantiles: Optional lower and upper percentiles to crop embeddings before integer quantization.
+            clipping_margin: Optional lower and upper percentiles to crop embeddings before integer quantization.
         """
         self.model = model
         self._quantization_level = quantization_level
-        self.quantiles = None
+        self.clipping_margin = None
         self.min_embeds = 10_000
         embed_types = model.mteb_model_meta.embedding_types
         model.mteb_model_meta.experiment_kwargs = {
             "precision": quantization_level.value
         }
         model.mteb_model_meta.embedding_types = [quantization_level]
-        if quantiles is not None:
-            assert 0 < quantiles[0] < quantiles[1] < 1
-            self.quantiles = torch.tensor(quantiles)
+        if clipping_margin is not None:
+            assert 0 < clipping_margin[0] < clipping_margin[1] < 1
+            self.clipping_margin = torch.tensor(clipping_margin)
         if embed_types and quantization_level in embed_types:
             logger.warning(
                 f"The model {model.mteb_model_meta.name} internally supports quantization to "
@@ -121,34 +121,43 @@ class CompressionWrapper:
         Returns:
             The quantized embeddings.
         """
+        torch_dtype = self._quantization_level.get_dtype()
         if self._quantization_level in [
-            QuantizationLevel.FLOAT8_E4M3FN,
-            QuantizationLevel.FLOAT8_E5M2,
-            QuantizationLevel.FLOAT8_E8M0FNU,
-            QuantizationLevel.FLOAT8_E4M3FNUZ,
-            QuantizationLevel.FLOAT8_E5M2FNUZ,
-            QuantizationLevel.FLOAT16,
+            OutputDType.FLOAT8_E4M3FN,
+            OutputDType.FLOAT8_E5M2,
+            OutputDType.FLOAT8_E8M0FNU,
+            OutputDType.FLOAT8_E4M3FNUZ,
+            OutputDType.FLOAT8_E5M2FNUZ,
+            OutputDType.FLOAT16,
         ]:
             # Cast to float8, then back to float16 using PyTorch as numpy doesn't support float8
-            float_type = getattr(torch, self._quantization_level)
-            quantized = embeddings.type(float_type).type(torch.float16)
-        elif self._quantization_level == QuantizationLevel.BF16:
+            quantized = embeddings.type(torch_dtype).type(torch.float16)
+        elif self._quantization_level == OutputDType.BF16:
             # Cast to bf16, then back to float32 using PyTorch as numpy doesn't support bf16
-            quantized = embeddings.type(torch.bfloat16).float()
+            quantized = embeddings.type(torch_dtype).float()
         elif self._quantization_level in [
-            QuantizationLevel.INT8,
-            QuantizationLevel.INT4,
+            OutputDType.INT8,
+            OutputDType.UINT8,
+            OutputDType.INT4,
+            OutputDType.UINT4,
         ]:
-            num_bits = 8 if self._quantization_level == QuantizationLevel.INT8 else 4
-            if self.quantiles is not None:
-                cutoffs = torch.quantile(embeddings, self.quantiles, dim=0)
+            num_bits = (
+                8
+                if self._quantization_level in [OutputDType.INT8, OutputDType.UINT8]
+                else 4
+            )
+            if self.clipping_margin is not None:
+                cutoffs = torch.quantile(embeddings, self.clipping_margin, dim=0)
                 embeddings = torch.clip(embeddings, cutoffs[0], cutoffs[1])
             mins, maxs = self._get_min_max_per_dim(embeddings)
             steps = (maxs - mins) / (2**num_bits - 1)
-            quantized = torch.floor((embeddings - mins) / steps) - int(
-                2**num_bits * 0.5
+            subtract = (
+                0
+                if self._quantization_level in [OutputDType.UINT8, OutputDType.UINT4]
+                else int(2**num_bits * 0.5)
             )
-        elif self._quantization_level == QuantizationLevel.BINARY:
+            quantized = torch.floor((embeddings - mins) / steps) - subtract
+        elif self._quantization_level == OutputDType.BINARY:
             quantized = torch.where(embeddings > 0, 1.0, 0.0)
         else:
             raise ValueError(

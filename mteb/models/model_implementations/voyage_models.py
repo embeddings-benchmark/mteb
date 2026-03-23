@@ -11,7 +11,7 @@ from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
-from mteb.types import PromptType, QuantizationLevel
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -128,9 +128,9 @@ VOYAGE_TOTAL_TOKEN_LIMITS = {
 }
 
 OUTPUT_TYPES = [
-    QuantizationLevel.INT8,
-    QuantizationLevel.UINT8,
-    QuantizationLevel.BINARY,
+    OutputDType.INT8,
+    OutputDType.UINT8,
+    OutputDType.BINARY,
 ]
 
 

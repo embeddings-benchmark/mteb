@@ -18,7 +18,7 @@ from mteb.models.model_implementations.cohere_models import (
     retry_with_rate_limit,
 )
 from mteb.models.model_meta import ScoringFunction
-from mteb.types import QuantizationLevel
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -175,9 +175,9 @@ EmbeddingType = Literal[
 ]
 
 OUTPUT_TYPES = [
-    QuantizationLevel.INT8,
-    QuantizationLevel.UINT8,
-    QuantizationLevel.BINARY,
+    OutputDType.INT8,
+    OutputDType.UINT8,
+    OutputDType.BINARY,
 ]
 
 

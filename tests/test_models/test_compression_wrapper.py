@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 import mteb
 from mteb import AbsTask, EncoderProtocol, TaskMetadata
 from mteb.models import CompressionWrapper
-from mteb.types import QuantizationLevel
+from mteb.types import OutputDType
 from tests.task_grid import MOCK_TASK_TEST_GRID_MONOLINGUAL
 
 task_metadata = TaskMetadata(
@@ -34,15 +34,15 @@ task_texts = DataLoader(
 @pytest.mark.parametrize(
     "level",
     [
-        QuantizationLevel.FLOAT8_E4M3FNUZ,
-        QuantizationLevel.FLOAT8_E5M2,
-        QuantizationLevel.FLOAT8_E5M2FNUZ,
-        QuantizationLevel.FLOAT8_E8M0FNU,
-        QuantizationLevel.FLOAT8_E4M3FN,
-        QuantizationLevel.FLOAT16,
+        OutputDType.FLOAT8_E4M3FNUZ,
+        OutputDType.FLOAT8_E5M2,
+        OutputDType.FLOAT8_E5M2FNUZ,
+        OutputDType.FLOAT8_E8M0FNU,
+        OutputDType.FLOAT8_E4M3FN,
+        OutputDType.FLOAT16,
     ],
 )
-def test_float_compression(level: QuantizationLevel):
+def test_float_compression(level: OutputDType):
     model = mteb.get_model("mteb/baseline-random-encoder")
     wrapper = CompressionWrapper(model, level)
     embeddings = wrapper.encode(
@@ -56,20 +56,19 @@ def test_float_compression(level: QuantizationLevel):
 
 def test_bf16_compression():
     model = mteb.get_model("mteb/baseline-random-encoder")
-    wrapper = CompressionWrapper(model, QuantizationLevel.BF16)
+    wrapper = CompressionWrapper(model, OutputDType.BF16)
     embeddings = wrapper.encode(
         task_texts,
         task_metadata=task_metadata,
         hf_split="test",
         hf_subset="test",
     )
+    # Cast to bf16, then back to float32 using PyTorch as numpy doesn't support bf16
     assert embeddings.dtype == torch.float32
 
 
-@pytest.mark.parametrize(
-    "level, bits", [(QuantizationLevel.INT8, 8), (QuantizationLevel.INT4, 4)]
-)
-def test_int_compression(level: QuantizationLevel, bits: int):
+@pytest.mark.parametrize("level, bits", [(OutputDType.INT8, 8), (OutputDType.INT4, 4)])
+def test_int_compression(level: OutputDType, bits: int):
     model = mteb.get_model("mteb/baseline-random-encoder")
     wrapper = CompressionWrapper(model, level)
     embeddings = wrapper.encode(
@@ -83,9 +82,24 @@ def test_int_compression(level: QuantizationLevel, bits: int):
     )
 
 
+@pytest.mark.parametrize(
+    "level, bits", [(OutputDType.UINT8, 8), (OutputDType.UINT4, 4)]
+)
+def test_uint_compression(level: OutputDType, bits: int):
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    wrapper = CompressionWrapper(model, level)
+    embeddings = wrapper.encode(
+        task_texts,
+        task_metadata=task_metadata,
+        hf_split="test",
+        hf_subset="test",
+    )
+    assert torch.max(embeddings) <= 2**bits and torch.min(embeddings) >= 0
+
+
 def test_binary_compression():
     model = mteb.get_model("mteb/baseline-random-encoder")
-    wrapper = CompressionWrapper(model, QuantizationLevel.BINARY)
+    wrapper = CompressionWrapper(model, OutputDType.BINARY)
     embeddings = wrapper.encode(
         task_texts,
         task_metadata=task_metadata,
@@ -93,19 +107,6 @@ def test_binary_compression():
         hf_subset="test",
     )
     assert torch.max(embeddings) <= 1 and torch.min(embeddings) >= 0
-
-
-def test_invalid_compression():
-    model = mteb.get_model("mteb/baseline-random-encoder")
-    wrapper = CompressionWrapper(model, QuantizationLevel.UINT8)
-    with pytest.raises(ValueError) as e:
-        wrapper.encode(
-            task_texts,
-            task_metadata=task_metadata,
-            hf_split="test",
-            hf_subset="test",
-        )
-    print(e)
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID_MONOLINGUAL)
@@ -126,5 +127,5 @@ def test_invalid_compression():
     ],
 )
 def test_encoder_dtype_on_task(task: AbsTask, model: EncoderProtocol):
-    wrapper = CompressionWrapper(model, QuantizationLevel.FLOAT8_E4M3FN)
+    wrapper = CompressionWrapper(model, OutputDType.FLOAT8_E4M3FN)
     mteb.evaluate(wrapper, task, cache=None)

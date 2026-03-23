@@ -12,7 +12,7 @@ from tqdm.auto import tqdm
 from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType, QuantizationLevel
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -144,9 +144,9 @@ EmbeddingType = Literal[
 ]
 
 OUTPUT_TYPES = [
-    QuantizationLevel.INT8,
-    QuantizationLevel.UINT8,
-    QuantizationLevel.BINARY,
+    OutputDType.INT8,
+    OutputDType.UINT8,
+    OutputDType.BINARY,
 ]
 
 # Cohere API limits

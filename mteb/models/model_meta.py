@@ -38,7 +38,7 @@ from mteb.types import (
     ISOLanguageScript,
     Licenses,
     Modalities,
-    QuantizationLevel,
+    OutputDType,
     StrDate,
     StrURL,
 )
@@ -173,7 +173,7 @@ class ModelMeta(BaseModel):
     citation: str | None = None
     contacts: list[str] | None = None
     experiment_kwargs: Mapping[str, Any] | None = None
-    embedding_types: list[QuantizationLevel] | None = None
+    embedding_types: OutputDType | list[OutputDType] | None = None
 
     @model_validator(mode="before")
     @classmethod
