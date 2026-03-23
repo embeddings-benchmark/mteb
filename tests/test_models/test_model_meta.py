@@ -2,7 +2,6 @@ import pytest
 
 import mteb
 from mteb.models.model_meta import ModelMeta
-from mteb.types import Modalities
 
 # Historic models with n_embedding_parameters=None. Do NOT add new models to this list.
 _MISSING_N_EMBEDDING_MODELS = [
@@ -362,3 +361,10 @@ def test_get_model_metas_modalities_exact():
     assert len(models) > 0
     for model in models:
         assert set(model.modalities) == {"text"}
+
+
+def test_get_model_metas_without_modality_filter_returns_more_models():
+    all_models = mteb.get_model_metas()
+    text_models = mteb.get_model_metas(modalities=["text"])
+
+    assert len(all_models) > len(text_models)
