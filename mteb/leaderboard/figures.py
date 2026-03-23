@@ -156,7 +156,6 @@ def _add_size_guide(fig: go.Figure):
 def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df = df.copy()
     df["Number of Active Parameters"] = df["Active Parameters (B)"].map(_parse_n_params)
-    df["Number of Active Parameters"] = df["Number of Active Parameters"].replace(0, 1)
     df["Model"] = df["Model"].map(_parse_model_name)
     df["model_text"] = df["Model"].where(df["Model"].isin(models_to_annotate), "")
     df["Embedding Dimensions"] = df["Embedding Dimensions"].map(_parse_float)
@@ -172,10 +171,14 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df["sqrt(dim)"] = np.sqrt(df["Embedding Dimensions"])
     df["Max Tokens"] = df["Max Tokens"].apply(lambda x: _process_max_tokens(x))
     rank_column = "Rank (Borda)" if "Rank (Borda)" in df.columns else "Rank (Mean Task)"
+    df["_x_display"] = df["Number of Active Parameters"].replace(0, 1)
     fig = px.scatter(
         df,
-        x="Number of Active Parameters",
+        x="_x_display",
         y="Mean (Task)",
+        labels={
+            "_x_display": "Number of Active Parameters (B)",
+        },
         log_x=True,
         template="plotly_white",
         text="model_text",
