@@ -201,31 +201,7 @@ def test_filled_metadata_is_filled():
     )
 
 
-def test_full_description_without_contributor():
-    my_task = TaskMetadata(
-        name="MyTask",
-        dataset={"path": "test/dataset", "revision": "1.0"},
-        description="A test dataset.",
-        reference=None,
-        type="Classification",
-        category="t2t",
-        modalities=["text"],
-        eval_splits=["test"],
-        eval_langs=["eng-Latn"],
-        main_score="map_at_1000",
-        date=None,
-        domains=None,
-        license=None,
-        task_subtypes=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
-        bibtex_citation="",
-    )
-    assert my_task.full_description == "A test dataset."
-
-
-def test_full_description_with_contributor():
+def test_contributed_by_field():
     my_task = TaskMetadata(
         name="MyTask",
         dataset={"path": "test/dataset", "revision": "1.0"},
@@ -247,10 +223,7 @@ def test_full_description_with_contributor():
         bibtex_citation="",
         contributed_by="Acme Corp",
     )
-    assert (
-        my_task.full_description
-        == "A test dataset. This dataset was contributed by Acme Corp."
-    )
+    assert my_task.contributed_by == "Acme Corp"
 
 
 def test_task_hf_config():

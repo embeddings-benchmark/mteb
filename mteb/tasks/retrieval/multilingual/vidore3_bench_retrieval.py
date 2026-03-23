@@ -46,6 +46,7 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3FinanceEnRetrieval.v2",
     )
 
@@ -86,6 +87,7 @@ class Vidore3FinanceEnRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         adapted_from=["Vidore3FinanceEnRetrieval"],
+        contributed_by="Illuin Technology",
     )
 
 
@@ -124,6 +126,7 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3FinanceFrRetrieval.v2",
     )
 
@@ -164,6 +167,7 @@ class Vidore3FinanceFrRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3FinanceFrRetrieval"],
     )
 
@@ -203,6 +207,7 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3IndustrialRetrieval.v2",
     )
 
@@ -243,6 +248,7 @@ class Vidore3IndustrialRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3IndustrialRetrieval"],
     )
 
@@ -282,6 +288,7 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3PharmaceuticalsRetrieval.v2",
     )
 
@@ -322,6 +329,7 @@ class Vidore3PharmaceuticalsRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3PharmaceuticalsRetrieval"],
     )
 
@@ -361,6 +369,7 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3ComputerScienceRetrieval.v2",
     )
 
@@ -401,6 +410,7 @@ class Vidore3ComputerScienceRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3ComputerScienceRetrieval"],
     )
 
@@ -440,6 +450,7 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3HrRetrieval.v2",
     )
 
@@ -480,6 +491,7 @@ class Vidore3HrRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3HrRetrieval"],
     )
 
@@ -519,6 +531,7 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3EnergyRetrieval.v2",
     )
 
@@ -559,6 +572,7 @@ class Vidore3EnergyRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3EnergyRetrieval"],
     )
 
@@ -598,6 +612,7 @@ class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3PhysicsRetrieval.v2",
     )
 
@@ -638,6 +653,7 @@ class Vidore3PhysicsRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3PhysicsRetrieval"],
     )
 
@@ -677,6 +693,7 @@ class Vidore3NuclearRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3NuclearRetrieval.v2",
     )
 
@@ -716,6 +733,7 @@ class Vidore3TelecomRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3TelecomRetrieval.v2",
     )
 
@@ -756,6 +774,7 @@ class Vidore3TelecomRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3TelecomRetrieval"],
     )
 
@@ -796,5 +815,6 @@ class Vidore3NuclearRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3NuclearRetrieval"],
     )

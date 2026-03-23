@@ -386,13 +386,6 @@ class TaskMetadata(BaseModel):
     contributed_by: str | None = None
     superseded_by: str | None = None
 
-    @property
-    def full_description(self) -> str:
-        """Returns the description with contributor info appended if available."""
-        if self.contributed_by:
-            return f"{self.description} This dataset was contributed by {self.contributed_by}."
-        return self.description
-
     def _validate_metadata(self) -> None:
         self._eval_langs_are_valid(self.eval_langs)
 
@@ -639,12 +632,13 @@ class TaskMetadata(BaseModel):
             # parameters for readme generation
             dict(
                 citation=self.bibtex_citation,
-                dataset_description=self.full_description,
+                dataset_description=self.description,
                 dataset_reference=self.reference,
                 descriptive_stats=descriptive_stats,
                 dataset_task_name=self.name,
                 category=self.category,
                 domains=", ".join(self.domains) if self.domains else None,
+                contributed_by=self.contributed_by,
             ),
         )
 
