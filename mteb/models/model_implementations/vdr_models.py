@@ -3,6 +3,7 @@ from __future__ import annotations
 import math
 from typing import TYPE_CHECKING, Any
 
+import numpy as np
 import torch
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -133,34 +134,44 @@ class VDRModel(AbsEncoder):
         *,
         texts: list[str],
         images: list[Any],
+        batch_size: int = 1,
     ) -> Array:
-        processed = self.processor(
-            text=texts,
-            images=images,
-            videos=None,
-            padding="longest",
-            return_tensors="pt",
-        )
-        processed = self._move_to_device(processed)
-        cache_position = torch.arange(0, len(texts)).to(self.device)
-        processed = self.model.prepare_inputs_for_generation(
-            **processed,
-            cache_position=cache_position,
-            use_cache=False,
-        )
-        output = self.model(
-            **processed,
-            return_dict=True,
-            output_hidden_states=True,
-        )
-        embeddings = output.hidden_states[-1][:, -1]
-        if isinstance(embeddings, torch.Tensor):
-            embeddings = embeddings.cpu().detach().float().numpy()
-        return embeddings
+        all_embeddings: list[np.ndarray] = []
+        for start in range(0, len(texts), batch_size):
+            end = start + batch_size
+            batch_texts = texts[start:end]
+            batch_images = images[start:end]
+            processed = self.processor(
+                text=batch_texts,
+                images=batch_images,
+                videos=None,
+                padding="longest",
+                return_tensors="pt",
+            )
+            processed = self._move_to_device(processed)
+            cache_position = torch.arange(0, len(batch_texts)).to(self.device)
+            processed = self.model.prepare_inputs_for_generation(
+                **processed,
+                cache_position=cache_position,
+                use_cache=False,
+            )
+            output = self.model(
+                **processed,
+                return_dict=True,
+                output_hidden_states=True,
+            )
+            embeddings = output.hidden_states[-1][:, -1]
+            if isinstance(embeddings, torch.Tensor):
+                embeddings = embeddings.cpu().detach().float().numpy()
+            all_embeddings.append(embeddings)
+        if not all_embeddings:
+            return np.zeros((0, 0), dtype=np.float32)
+        return np.concatenate(all_embeddings, axis=0)
 
     def get_text_embeddings(
         self,
         inputs: DataLoader[BatchedInput],
+        batch_size: int = 1,
     ) -> Array:
         texts = [text for batch in inputs for text in batch["text"]]
         try:
@@ -171,16 +182,17 @@ class VDRModel(AbsEncoder):
             # Unit tests can run without image dependencies by using placeholders.
             dummy_images = [None for _ in texts]
         query_texts = [self.query_prompt % text for text in texts]
-        return self._encode(texts=query_texts, images=dummy_images)
+        return self._encode(texts=query_texts, images=dummy_images, batch_size=batch_size)
 
     def get_image_embeddings(
         self,
         inputs: DataLoader[BatchedInput],
+        batch_size: int = 1,
     ) -> Array:
         images = [image for batch in inputs for image in batch["image"]]
         resized_images = [self._resize(image) for image in images]
         prompts = [self.document_prompt] * len(resized_images)
-        return self._encode(texts=prompts, images=resized_images)
+        return self._encode(texts=prompts, images=resized_images, batch_size=batch_size)
 
     def encode(
         self,
@@ -192,13 +204,14 @@ class VDRModel(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        batch_size = kwargs.get("batch_size", 1)
         text_embeddings = None
         image_embeddings = None
 
         if "text" in inputs.dataset.features:
-            text_embeddings = self.get_text_embeddings(inputs)
+            text_embeddings = self.get_text_embeddings(inputs, batch_size=batch_size)
         if "image" in inputs.dataset.features:
-            image_embeddings = self.get_image_embeddings(inputs)
+            image_embeddings = self.get_image_embeddings(inputs, batch_size=batch_size)
 
         if text_embeddings is not None and image_embeddings is not None:
             if len(text_embeddings) != len(image_embeddings):
