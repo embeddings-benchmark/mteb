@@ -45,10 +45,5 @@ zhinao_chinesemodernbert_embedding = ModelMeta(
     superseded_by=None,
     modalities=['text'],
     model_type=['dense'],
-    citation="""@misc{zhinao-chinesemodernbert,
-  title={Zhinao-ChineseModernBert: Chinese Foundation & Vector Embedding Model for High-Throughput, Low-Memory Scenarios},
-  author={zhinao team},
-  year={2026},
-  howpublished={\url{https://github.com/your-repo/zhinao-chinesemodernbert}},
-}""",
+    citation=None,
 )
