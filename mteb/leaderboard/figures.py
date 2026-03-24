@@ -127,7 +127,7 @@ models_to_annotate = [
 def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df = df.copy()
 
-    CLIP_EMBED_SIZE = 4096  # The largest embedding size that has been observed in the leaderboard, used for scaling the point sizes.
+    clip_embed_size = 4096  # The largest embedding size that has been observed in the leaderboard, used for scaling the point sizes.
 
     df["Number of Active Parameters"] = df["Active Parameters (B)"].map(_parse_n_params)
     df["Model"] = df["Model"].map(_parse_model_name)
@@ -142,7 +142,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     if not len(df.index):
         return go.Figure()
     min_score, max_score = df["Mean (Task)"].min(), df["Mean (Task)"].max()
-    df["sqrt(dim)"] = np.sqrt(df["Embedding Dimensions"].clip(upper=CLIP_EMBED_SIZE))
+    df["sqrt(dim)"] = np.sqrt(df["Embedding Dimensions"].clip(upper=clip_embed_size))
     df["Max Tokens"] = df["Max Tokens"].apply(lambda x: _process_max_tokens(x))
     rank_column = "Rank (Borda)" if "Rank (Borda)" in df.columns else "Rank (Mean Task)"
     df["_x_display"] = df["Number of Active Parameters"].replace(0, 1)
@@ -176,7 +176,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     )
     # Note: it's important that this comes before setting the size mode
     desired_max_diameter = 40  # pixels
-    max_sqrt_dim = np.sqrt(CLIP_EMBED_SIZE)
+    max_sqrt_dim = np.sqrt(clip_embed_size)
 
     fig.update_traces(
         marker=dict(
