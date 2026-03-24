@@ -16,7 +16,7 @@ class UkrSedUASmallSTSv1(AbsTaskSTS):
         main_score="cosine_spearman",
         dataset={
             "path": "mteb/UkrSedUASmallSTSv1",
-            "revision": "4b557186a1fb8f84f282cd62278bf27ce7b0429b",
+            "revision": "d83d1c605ce02b53f03112349d7966ab692590b1",
         },
         date=("2025-03-24", "2025-03-24"),
         domains=["Constructed"],
