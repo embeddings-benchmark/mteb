@@ -1,6 +1,6 @@
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
 
 SARASHINA_V2_INSTRUCTIONS = {
@@ -143,7 +143,7 @@ sbintuitions_sarashina_embedding_v2_1b = ModelMeta(
 )
 
 sbintuitions_sarashina_embedding_v1_1b = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sbintuitions/sarashina-embedding-v1-1b",
     model_type=["dense"],
     languages=["jpn-Jpan"],
