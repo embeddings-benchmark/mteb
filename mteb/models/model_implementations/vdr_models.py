@@ -8,14 +8,13 @@ import torch
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from PIL.Image import Image
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
+    from mteb.types import Array, BatchedInput, PromptType
 
 
 class VDRModel(AbsEncoder):
