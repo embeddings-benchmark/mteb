@@ -107,7 +107,7 @@ class ModelMeta(BaseModel):
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
-          If annotated as list this will be treated as a range of possible embedding dimensions (Matryoshka).
+            If annotated as list this will be treated as a range of possible embedding dimensions (Matryoshka).
         revision: The revision number of the model. If None, it is assumed that the metadata (including the loader) is valid for all revisions of the model.
         release_date: The date the model's revision was released. If None, then release date will be added based on 1st commit in hf repository of model.
         license: The license under which the model is released. Required if open_weights is True.
