@@ -1,6 +1,12 @@
+<style>
+.nowrap-table th {
+  white-space: nowrap;
+}
+</style>
+
 ## Pair Classification
 
-<!-- The following section is auto-generated, please edit the construction script -->
+<!-- The following sections are auto-generated, please edit the construction script -->
 
 <!-- START-TASKS -->
 
