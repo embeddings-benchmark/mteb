@@ -5,7 +5,7 @@ RUN useradd -m -u 1000 user
 ENV PATH="/home/user/.local/bin:$PATH"
 
 # Install uv
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.10-debian /uv /usr/local/bin/uv
 
 # Copy the current directory contents into the container
 COPY --chown=user:user . /mteb
