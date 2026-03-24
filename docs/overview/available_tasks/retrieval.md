@@ -1,3 +1,8 @@
+---
+icon: lucide/search
+title: "Retrieval"
+---
+
 <style>
 .nowrap-table th {
   white-space: nowrap;

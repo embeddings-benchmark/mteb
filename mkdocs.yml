@@ -103,34 +103,11 @@ nav:
         - Audio Text: overview/available_models/audio_text.md
         - Multimodal: overview/available_models/multimodal.md
       - Tasks:
-        - overview/available_tasks/retrieval.md
-        - overview/available_tasks/audiopairclassification.md
-        - overview/available_tasks/summarization.md
-        - overview/available_tasks/documentunderstanding.md
-        - overview/available_tasks/compositionality.md
-        - overview/available_tasks/multilabelclassification.md
-        - overview/available_tasks/reranking.md
-        - overview/available_tasks/any2anymultilingualretrieval.md
-        - overview/available_tasks/pairclassification.md
-        - overview/available_tasks/bitextmining.md
-        - overview/available_tasks/audiomultilabelclassification.md
-        - overview/available_tasks/visualsts(eng).md
-        - overview/available_tasks/clustering.md
-        - overview/available_tasks/any2anyretrieval.md
-        - overview/available_tasks/regression.md
         - overview/available_tasks/classification.md
-        - overview/available_tasks/audiozeroshotclassification.md
-        - overview/available_tasks/visualsts(multi).md
-        - overview/available_tasks/visioncentricqa.md
-        - overview/available_tasks/sts.md
-        - overview/available_tasks/audioclassification.md
-        - overview/available_tasks/zeroshotclassification.md
-        - overview/available_tasks/imageclustering.md
-        - overview/available_tasks/audioclustering.md
-        - overview/available_tasks/instructionretrieval.md
-        - overview/available_tasks/audioreranking.md
-        - overview/available_tasks/instructionreranking.md
-        - overview/available_tasks/imageclassification.md
+        - overview/available_tasks/clustering.md
+        - overview/available_tasks/pair-classification.md
+        - overview/available_tasks/retrieval.md
+        - overview/available_tasks/semantic-similarity.md
   - API:
       - Overview: api/index.md
       - Evaluation: api/evaluation.md

@@ -1,3 +1,8 @@
+---
+icon: lucide/chart-network
+title: "Clustering"
+---
+
 <style>
 .nowrap-table th {
   white-space: nowrap;

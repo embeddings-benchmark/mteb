@@ -1,3 +1,8 @@
+---
+icon: lucide/spline
+title: "Semantic Similarity"
+---
+
 <style>
 .nowrap-table th {
   white-space: nowrap;

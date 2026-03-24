@@ -1,3 +1,9 @@
+---
+icon: lucide/shapes
+title: "Classification"
+---
+
+
 <style>
 .nowrap-table th {
   white-space: nowrap;

@@ -1,3 +1,8 @@
+---
+icon: lucide/git-compare
+title: "Pair Classification"
+---
+
 <style>
 .nowrap-table th {
   white-space: nowrap;
