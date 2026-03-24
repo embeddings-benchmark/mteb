@@ -29,7 +29,6 @@ class UkrNLITranslatedStandford(AbsTaskPairClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{dementieva-etal-2025-cross,
-  abstract = {Despite the extensive amount of labeled datasets in the NLP text classification field, the persistent imbalance in data availability across various languages remains evident. To support further fair development of NLP models, exploring the possibilities of effective knowledge transfer to new languages is crucial. Ukrainian, in particular, stands as a language that still can benefit from the continued refinement of cross-lingual methodologies. Due to our knowledge, there is a tremendous lack of Ukrainian corpora for typical text classification tasks, i.e., different types of style, or harmful speech, or texts relationships. However, the amount of resources required for such corpora collection from scratch is understandable. In this work, we leverage the state-of-the-art advances in NLP, exploring cross-lingual knowledge transfer methods avoiding manual data curation: large multilingual encoders and translation systems, LLMs, and language adapters. We test the approaches on three text classification tasks{---}toxicity classification, formality classification, and natural language inference (NLI){---}providing the {\textquotedblleft}recipe{\textquotedblright} for the optimal setups for each task.},
   address = {Abu Dhabi, UAE},
   author = {Dementieva, Daryna  and
 Khylenko, Valeriia  and
