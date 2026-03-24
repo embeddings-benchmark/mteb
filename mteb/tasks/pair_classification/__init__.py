@@ -16,3 +16,4 @@ from .rus import *
 from .vie import *
 from .zho import *
 from .zxx import *
+from .ukr import *
