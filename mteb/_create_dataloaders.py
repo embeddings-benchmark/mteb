@@ -13,10 +13,10 @@ from mteb.types import (
     ConversationTurn,
     PromptType,
 )
-from mteb.types._encoder_io import AudioInputItem, VideoInputItem
+from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Sequence
 
     from torchcodec.decoders import VideoDecoder  # type: ignore[import-untyped]
 
@@ -32,6 +32,8 @@ if TYPE_CHECKING:
         ImageInput,
         QueryInput,
         TextInput,
+        VideoInput,
+        VideoInputItem,
     )
 
 logger = logging.getLogger(__name__)
@@ -273,13 +275,14 @@ def _convert_images_to_rgb(
 
 def _prepare_image_dataset(
     dataset: Dataset,
-    image_column_name: str | None = None,
+    image_column_name: str | Sequence[str] | None = None,
     transform: Callable[[Any], Any] | None = None,
     num_proc: int | None = None,
 ) -> Dataset:
     """Prepare the image dataset by converting images to RGB and applying transformations."""
     if (
         image_column_name
+        and isinstance(image_column_name, str)
         and image_column_name in dataset.column_names
         and "image" not in dataset.column_names
     ):
@@ -313,7 +316,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
             "image",  # images can be with different sizes
             "conversation",  # conversations are lists of varying lengths
             "audio",  # audio can have different lengths
-            "video",  # video VideoDecoder objects can't be collated
+            "video",  # video can have different lengths
         ):
             collated[key] = [item[key] for item in batch]
         else:
@@ -325,7 +328,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
 
 def _create_image_dataloader(
     dataset: Dataset,
-    image_column_name: str | None = None,
+    image_column_name: str | Sequence[str] | None = None,
     batch_size: int = 32,
     transform: Callable[[Any], Any] | None = None,
     collate_fn: Callable[[list[dict[str, Any]]], BatchedInput] = _custom_collate_fn,
@@ -380,10 +383,10 @@ def _create_text_queries_dataloader(
 def _create_queries_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
-    input_column: str | None = None,
+    input_column: str | Sequence[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
-) -> DataLoader[QueryInput | ImageInput | AudioInput]:
+) -> DataLoader[QueryInput | ImageInput | AudioInput | VideoInput]:
     """Create a dataloader for queries."""
     queries_type = task_metadata.get_modalities(PromptType.query)
     if queries_type == ["text"]:  # text only
@@ -421,10 +424,10 @@ def _create_queries_dataloader(
 def _create_document_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
-    input_column: str | None = None,
+    input_column: str | Sequence[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
-) -> DataLoader[CorpusInput | ImageInput | AudioInput]:
+) -> DataLoader[CorpusInput | ImageInput | AudioInput | VideoInput]:
     """Create a dataloader for documents.
 
     Args:
@@ -473,7 +476,7 @@ def _create_document_dataloader(
 def _create_audio_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
-    input_column: str | None = None,
+    input_column: str | Sequence[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
 ) -> DataLoader[AudioInput]:
@@ -491,6 +494,7 @@ def _create_audio_dataloader(
     """
     if (
         input_column
+        and isinstance(input_column, str)
         and input_column in dataset.column_names
         and "audio" not in dataset.column_names
     ):
@@ -508,24 +512,25 @@ def _create_audio_dataloader(
 def _create_video_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
-    input_column: str | None = None,
+    input_column: str | Sequence[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
-) -> DataLoader[AudioInput]:
+) -> DataLoader[VideoInput]:
     """Create a dataloader for video.
 
     Args:
-        dataset: The dataset containing the audio.
-        task_metadata: Metadata of the task to determine the audio type.
-        input_column: The column to use as input. If None, it will use the first column that matches the audio.
+        dataset: The dataset containing the video.
+        task_metadata: Metadata of the task to determine the video type.
+        input_column: The column to use as input. If None, it will use the first column that matches the video.
         batch_size: Batch size for the dataloader.
         num_proc: The number of workers for the dataloader.
 
     Returns:
-        A DataLoader with the audio dataset.
+        A DataLoader with the video dataset.
     """
     if (
         input_column
+        and isinstance(input_column, str)
         and input_column in dataset.column_names
         and "video" not in dataset.column_names
     ):
@@ -544,7 +549,7 @@ def create_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
-    input_column: str | None = None,
+    input_column: str | Sequence[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
     **kwargs: Any,
@@ -590,6 +595,14 @@ def create_dataloader(
             batch_size=batch_size,
             num_proc=num_proc,
         )
+    if "video" in task_metadata.modalities:
+        return _create_video_dataloader(
+            dataset,
+            task_metadata,
+            input_column=input_column,
+            batch_size=batch_size,
+            num_proc=num_proc,
+        )
     if "audio" in task_metadata.modalities:
         return _create_audio_dataloader(
             dataset,
@@ -607,8 +620,17 @@ def create_dataloader(
             num_proc=num_proc,
         )
     if "text" in task_metadata.modalities and input_column is not None:
+        if isinstance(input_column, str):
+            text_data = dataset[input_column]
+        elif "text" in input_column and "text" in dataset.column_names:
+            text_data = dataset["text"]
+        else:
+            raise ValueError(
+                "Cannot determine which column to use for text evaluation. "
+                "Please include 'text' in input_column_name or use a single string."
+            )
         return _create_dataloader_from_texts(
-            dataset[input_column],
+            text_data,
             batch_size=batch_size,
         )
     return DataLoader(
@@ -742,25 +764,26 @@ class VideoCollator:
 
         collated_inputs = []
         for row in inputs:
-            videos = row.pop("video")
-            video_inputs = []
-            for video in videos:
-                frames = self.resample_video(video["frames"], self.max_frames)
+            video = row.pop("video")
+            frames = self.resample_video(video["frames"], self.max_frames)
+
+            audio_data = None
+            if "audio" in video and video["audio"] is not None:
                 audio = self.audio_collator.resample_audio(
                     video,
                     target_sampling_rate=self.audio_collator.target_sampling_rate,
                     max_samples=self.audio_collator.max_samples,
                 )
-                video_inputs.append(
-                    VideoInputItem(
-                        frames=frames,
-                        audio=AudioInputItem(
-                            array=audio,
-                            sampling_rate=self.audio_collator.target_sampling_rate,
-                        ),
-                    )
+                audio_data = AudioInputItem(
+                    array=audio,
+                    sampling_rate=self.audio_collator.target_sampling_rate,
                 )
-            row["video"] = video_inputs
+
+            video_input_item: VideoInputItem = {
+                "frames": frames,
+                "audio": audio_data,
+            }
+            row["video"] = video_input_item
             collated_inputs.append(row)
 
         return cast(
@@ -794,3 +817,41 @@ class VideoCollator:
             else list(range(video_frames))
         )
         return video.get_frames_at(selected_frames).data
+
+
+class MultimodalCollator:
+    """Collator that handles any combination of video and audio modalities.
+
+    Delegates to VideoCollator when video is present (which also handles audio
+    embedded in VideoInputItem), and falls back to AudioCollator for audio-only.
+    """
+
+    def __init__(
+        self,
+        target_sampling_rate: int,
+        max_frames: int = 16,
+        max_samples: int | None = None,
+    ) -> None:
+        """Initialize the collator.
+
+        Args:
+            target_sampling_rate: The sampling rate to resample audio to.
+            max_frames: Maximum number of frames to keep per video.
+            max_samples: Maximum number of audio samples to keep. If None, no truncation.
+        """
+        self.video_collator = VideoCollator(
+            max_frames=max_frames,
+            target_sampling_rate=target_sampling_rate,
+            max_samples=max_samples,
+        )
+        self.audio_collator = AudioCollator(
+            target_sampling_rate=target_sampling_rate,
+            max_samples=max_samples,
+        )
+
+    def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
+        if "video" in inputs[0]:
+            return self.video_collator(inputs)
+        if "audio" in inputs[0]:
+            return self.audio_collator(inputs)
+        return cast("BatchedInput", _custom_collate_fn(inputs))

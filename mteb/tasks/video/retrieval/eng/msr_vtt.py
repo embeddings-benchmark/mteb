@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import ClassVar
+
 from datasets import Features, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -19,8 +23,8 @@ class MSRVTTV2T(AbsTaskRetrieval):
         eval_splits=["test"],
         main_score="ndcg_at_10",
         reference=None,
-        category="v2t",
-        modalities=["video", "text"],
+        category="va2t",
+        modalities=["audio", "video", "text"],
         date=None,
         domains=None,
         task_subtypes=None,
@@ -30,6 +34,8 @@ class MSRVTTV2T(AbsTaskRetrieval):
         sample_creation=None,
         bibtex_citation=None,
     )
+
+    input_column_name: ClassVar[str | list[str]] = "video"
 
     def load_data(self, num_proc: int | None = None, **kwargs) -> None:
         """Load the MSRVTT dataset."""
@@ -41,17 +47,17 @@ class MSRVTTV2T(AbsTaskRetrieval):
             split=self.metadata.eval_splits[0],
         )
         dataset = dataset.add_column("id", [str(i) for i in range(len(dataset))])
-        query = dataset.select_columns(["id", "video", "audio"])
 
-        def _combine_modalities(example: dict) -> dict:
+        def _combine_modalities(example):
             example["video"] = VideoInputItem(
                 frames=example["video"],
                 audio=example.pop("audio"),
             )
-
             return example
 
-        query_features = query.features
+        query = dataset.select_columns(["id", "video", "audio"])
+        query_features = dataset.features.copy()
+
         query = query.map(
             _combine_modalities,
             features=Features(
@@ -63,6 +69,7 @@ class MSRVTTV2T(AbsTaskRetrieval):
                     },
                 }
             ),
+            remove_columns=["audio"],
         )
         corpus = dataset.select_columns(["id", "caption"]).rename_column(
             "caption", "text"

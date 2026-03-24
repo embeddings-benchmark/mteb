@@ -14,6 +14,8 @@ from mteb.similarity_functions import similarity
 from .evaluator import Evaluator
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from datasets import Dataset
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -27,7 +29,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
     def __init__(
         self,
         dataset: Dataset,
-        input_column_name: str,
+        input_column_name: str | Sequence[str],
         candidate_labels: list[str],
         task_metadata: TaskMetadata,
         hf_split: str,
