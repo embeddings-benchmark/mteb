@@ -125,7 +125,7 @@ MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.o
   title = {MTEB: Massive Text Embedding Benchmark},
   publisher = {arXiv},
   journal={arXiv preprint arXiv:2210.07316},
-  year = {2022}
+  year = {2022},
   url = {https://arxiv.org/abs/2210.07316},
   doi = {10.48550/ARXIV.2210.07316},
 }
