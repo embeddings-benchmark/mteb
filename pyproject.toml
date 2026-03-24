@@ -428,7 +428,7 @@ disable_error_code = ["index"]
 binary = false
 locale = "en"
 extend-ignore-words-re = [
-    "BulgarianStoreReviewSentimentClassfication", # misspelled task name 
+    "Classfication", # misspelled task name 
     "nd", # license
     # authors
     "Stap",
@@ -449,6 +449,7 @@ extend-ignore-words-re = [
     "Accademia",
     "dementieva",
     "Expresso",
+    "expresso",
     "Iz",
     "Allo",
     "Soler",
@@ -457,6 +458,7 @@ extend-ignore-words-re = [
     "yor",
     "als",
     "bre",
+    "thi",
     # ISO 15924 script codes
     "Beng",  # Bengali script
 
