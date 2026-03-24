@@ -15,19 +15,22 @@ title: "Pair Classification"
 
 <!-- START-TASKS -->
 
+
 ## AudioPairClassification
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 5
 
-#### CREMADPairClassification
+#### `CREMADPairClassification` { .model-copy }
 
 Classifying pairs as having same or different emotions in actor's voice recordings of text spoken in 6 different emotions
 
 **Dataset:** [`mteb/CREMADPairClassification`](https://huggingface.co/datasets/mteb/CREMADPairClassification) • **License:** http://opendatacommons.org/licenses/odbl/1.0/ • [Learn more →](https://pmc.ncbi.nlm.nih.gov/articles/PMC4313618/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | max_ap | eng | Spoken | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | eng | Spoken | human-annotated | created | max_ap |
 
 
 
@@ -58,15 +61,15 @@ Classifying pairs as having same or different emotions in actor's voice recordin
 
 
 
-#### ESC50PairClassification
+#### `ESC50PairClassification` { .model-copy }
 
 Environmental Sound Classification Dataset.
 
 **Dataset:** [`mteb/ESC50PairClassification`](https://huggingface.co/datasets/mteb/ESC50PairClassification) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://huggingface.co/datasets/ashraq/esc50)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | max_ap | zxx | Encyclopaedic | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | zxx | Encyclopaedic | human-annotated | found | max_ap |
 
 
 
@@ -93,15 +96,15 @@ Environmental Sound Classification Dataset.
 
 
 
-#### NMSQAPairClassification
+#### `NMSQAPairClassification` { .model-copy }
 
 A textless Q&A dataset. Given a pair of audio question and audio answer, is the answer relevant to the question?
 
 **Dataset:** [`mteb/NMSQAPairClassification`](https://huggingface.co/datasets/mteb/NMSQAPairClassification) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.researchgate.net/publication/311458869_FMA_A_Dataset_For_Music_Analysis)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | max_ap | eng | Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | eng | Spoken | human-annotated | found | max_ap |
 
 
 
@@ -125,15 +128,15 @@ A textless Q&A dataset. Given a pair of audio question and audio answer, is the 
 
 
 
-#### VocalSoundPairClassification
+#### `VocalSoundPairClassification` { .model-copy }
 
 Recognizing whether two audio clips are the same human vocal expression (laughing, sighing, etc.)
 
 **Dataset:** [`mteb/VocalSoundPairClassification`](https://huggingface.co/datasets/mteb/VocalSoundPairClassification) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.researchgate.net/publication/360793875_Vocalsound_A_Dataset_for_Improving_Human_Vocal_Sounds_Recognition/citations)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | max_ap | eng | Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | eng | Spoken | human-annotated | found | max_ap |
 
 
 
@@ -158,15 +161,15 @@ Recognizing whether two audio clips are the same human vocal expression (laughin
 
 
 
-#### VoxPopuliAccentPairClassification
+#### `VoxPopuliAccentPairClassification` { .model-copy }
 
 Classifying same or different regional accent of English (Empty Audio Samples filtered out)
 
 **Dataset:** [`mteb/VoxPopuliAccentPairClassificationFiltered`](https://huggingface.co/datasets/mteb/VoxPopuliAccentPairClassificationFiltered) • **License:** cc0-1.0 • [Learn more →](https://aclanthology.org/2021.acl-long.80/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | max_ap | eng | Spoken | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | eng | Spoken | human-annotated | created | max_ap |
 
 
 
@@ -204,19 +207,22 @@ Classifying same or different regional accent of English (Empty Audio Samples fi
 
 
 
+
 ## Compositionality
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 7
 
-#### AROCocoOrder
+#### `AROCocoOrder` { .model-copy }
 
 Compositionality Evaluation of images to their captions.Each capation has four hard negatives created by order permutations.
 
 **Dataset:** [`mteb/ARO-COCO-order`](https://huggingface.co/datasets/mteb/ARO-COCO-order) • **License:** mit • [Learn more →](https://openreview.net/forum?id=KRLUvxh8uaX)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | text_acc | eng | Encyclopaedic | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Encyclopaedic | expert-annotated | created | text_acc |
 
 
 
@@ -237,15 +243,15 @@ Compositionality Evaluation of images to their captions.Each capation has four h
 
 
 
-#### AROFlickrOrder
+#### `AROFlickrOrder` { .model-copy }
 
 Compositionality Evaluation of images to their captions.Each capation has four hard negatives created by order permutations.
 
 **Dataset:** [`mteb/ARO-Flickr-Order`](https://huggingface.co/datasets/mteb/ARO-Flickr-Order) • **License:** mit • [Learn more →](https://openreview.net/forum?id=KRLUvxh8uaX)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | text_acc | eng | Encyclopaedic | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Encyclopaedic | expert-annotated | created | text_acc |
 
 
 
@@ -266,15 +272,15 @@ Compositionality Evaluation of images to their captions.Each capation has four h
 
 
 
-#### AROVisualAttribution
+#### `AROVisualAttribution` { .model-copy }
 
 Compositionality Evaluation of images to their captions.
 
 **Dataset:** [`mteb/ARO-Visual-Attribution`](https://huggingface.co/datasets/mteb/ARO-Visual-Attribution) • **License:** mit • [Learn more →](https://openreview.net/forum?id=KRLUvxh8uaX)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | text_acc | eng | Encyclopaedic | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Encyclopaedic | expert-annotated | created | text_acc |
 
 
 
@@ -295,15 +301,15 @@ Compositionality Evaluation of images to their captions.
 
 
 
-#### AROVisualRelation
+#### `AROVisualRelation` { .model-copy }
 
 Compositionality Evaluation of images to their captions.
 
 **Dataset:** [`mteb/ARO-Visual-Relation`](https://huggingface.co/datasets/mteb/ARO-Visual-Relation) • **License:** mit • [Learn more →](https://openreview.net/forum?id=KRLUvxh8uaX)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | text_acc | eng | Encyclopaedic | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Encyclopaedic | expert-annotated | created | text_acc |
 
 
 
@@ -324,15 +330,15 @@ Compositionality Evaluation of images to their captions.
 
 
 
-#### ImageCoDe
+#### `ImageCoDe` { .model-copy }
 
 Identify the correct image from a set of similar images based on a precise caption.
 
 **Dataset:** [`mteb/imagecode-multi`](https://huggingface.co/datasets/mteb/imagecode-multi) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2022.acl-long.241.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to image (it2i) | image_acc | eng | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to image (it2i) | eng | Web, Written | derived | found | image_acc |
 
 
 
@@ -353,15 +359,15 @@ Identify the correct image from a set of similar images based on a precise capti
 
 
 
-#### SugarCrepe
+#### `SugarCrepe` { .model-copy }
 
 Compositionality Evaluation of images to their captions.
 
 **Dataset:** [`mteb/SUGARCREPE_fmt`](https://huggingface.co/datasets/mteb/SUGARCREPE_fmt) • **License:** mit • [Learn more →](https://proceedings.neurips.cc/paper_files/paper/2023/hash/63461de0b4cb760fc498e85b18a7fe81-Abstract-Datasets_and_Benchmarks.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | text_acc | eng | Encyclopaedic | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Encyclopaedic | expert-annotated | created | text_acc |
 
 
 
@@ -383,15 +389,15 @@ Compositionality Evaluation of images to their captions.
 
 
 
-#### Winoground
+#### `Winoground` { .model-copy }
 
 Compositionality Evaluation of images to their captions.
 
 **Dataset:** [`facebook/winoground`](https://huggingface.co/datasets/facebook/winoground) • **License:** https://huggingface.co/datasets/facebook/winoground/blob/main/license_agreement.txt • [Learn more →](https://openaccess.thecvf.com/content/CVPR2022/html/Thrush_Winoground_Probing_Vision_and_Language_Models_for_Visio-Linguistic_Compositionality_CVPR_2022_paper)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | accuracy | eng | Social | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Social | expert-annotated | created | accuracy |
 
 
 
@@ -414,19 +420,22 @@ Compositionality Evaluation of images to their captions.
 
 
 
+
 ## PairClassification
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 47
 
-#### ArEntail
+#### `ArEntail` { .model-copy }
 
 A manually-curated Arabic natural language inference dataset from news headlines.
 
 **Dataset:** [`arbml/ArEntail`](https://huggingface.co/datasets/arbml/ArEntail) • **License:** not specified • [Learn more →](https://link.springer.com/article/10.1007/s10579-024-09731-1)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | ara | News, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara | News, Written | human-annotated | found | max_ap |
 
 
 
@@ -449,15 +458,15 @@ A manually-curated Arabic natural language inference dataset from news headlines
 
 
 
-#### ArmenianParaphrasePC
+#### `ArmenianParaphrasePC` { .model-copy }
 
 asparius/Armenian-Paraphrase-PC
 
 **Dataset:** [`mteb/ArmenianParaphrasePC`](https://huggingface.co/datasets/mteb/ArmenianParaphrasePC) • **License:** apache-2.0 • [Learn more →](https://github.com/ivannikov-lab/arpa-paraphrase-corpus)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | hye | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | hye | News, Written | derived | found | max_ap |
 
 
 
@@ -480,15 +489,15 @@ asparius/Armenian-Paraphrase-PC
 
 
 
-#### Assin2RTE
+#### `Assin2RTE` { .model-copy }
 
 Recognizing Textual Entailment part of the ASSIN 2, an evaluation shared task collocated with STIL 2019.
 
 **Dataset:** [`nilc-nlp/assin2`](https://huggingface.co/datasets/nilc-nlp/assin2) • **License:** not specified • [Learn more →](https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | por | Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | por | Written | human-annotated | found | max_ap |
 
 
 
@@ -511,15 +520,15 @@ Recognizing Textual Entailment part of the ASSIN 2, an evaluation shared task co
 
 
 
-#### CDSC-E
+#### `CDSC-E` { .model-copy }
 
 Compositional Distributional Semantics Corpus for textual entailment.
 
 **Dataset:** [`PL-MTEB/cdsce-pairclassification`](https://huggingface.co/datasets/PL-MTEB/cdsce-pairclassification) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://aclanthology.org/P17-1073.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | pol | Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Written | human-annotated | found | max_ap |
 
 
 
@@ -549,15 +558,15 @@ Compositional Distributional Semantics Corpus for textual entailment.
 
 
 
-#### CExaPPC
+#### `CExaPPC` { .model-copy }
 
 ExaPPC is a large paraphrase corpus consisting of monolingual sentence-level paraphrases using different sources.
 
 **Dataset:** [`PNLPhub/C-ExaPPC`](https://huggingface.co/datasets/PNLPhub/C-ExaPPC) • **License:** not specified • [Learn more →](https://github.com/exaco/exappc)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | fas | Social, Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Social, Web | derived | found | max_ap |
 
 
 
@@ -583,15 +592,15 @@ ExaPPC is a large paraphrase corpus consisting of monolingual sentence-level par
 
 
 
-#### CTKFactsNLI
+#### `CTKFactsNLI` { .model-copy }
 
 Czech Natural Language Inference dataset of around 3K evidence-claim pairs labelled with SUPPORTS, REFUTES or NOT ENOUGH INFO veracity labels. Extracted from a round of fact-checking experiments.
 
 **Dataset:** [`mteb/CTKFactsNLI`](https://huggingface.co/datasets/mteb/CTKFactsNLI) • **License:** cc-by-sa-3.0 • [Learn more →](https://arxiv.org/abs/2201.11115)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | ces | News, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ces | News, Written | human-annotated | found | max_ap |
 
 
 
@@ -616,15 +625,15 @@ Czech Natural Language Inference dataset of around 3K evidence-claim pairs label
 
 
 
-#### Cmnli
+#### `Cmnli` { .model-copy }
 
 Chinese Multi-Genre NLI
 
 **Dataset:** [`C-MTEB/CMNLI`](https://huggingface.co/datasets/C-MTEB/CMNLI) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/clue/viewer/cmnli)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_accuracy | cmn | Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Web, Written | human-annotated | found | max_accuracy |
 
 
 
@@ -682,15 +691,15 @@ Chinese Multi-Genre NLI
 
 
 
-#### DisCoTexPairClassification
+#### `DisCoTexPairClassification` { .model-copy }
 
 The DisCoTEX dataset aims at assessing discourse coherence in Italian texts. This dataset focuses on Italian real-world texts and provides resources to model coherence in natural language.
 
 **Dataset:** [`MattiaSangermano/DisCoTex-last-sentence`](https://huggingface.co/datasets/MattiaSangermano/DisCoTex-last-sentence) • **License:** not specified • [Learn more →](https://github.com/davidecolla/DisCoTex)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | ita | Social, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ita | Social, Written | derived | found | max_ap |
 
 
 
@@ -714,15 +723,15 @@ The DisCoTEX dataset aims at assessing discourse coherence in Italian texts. Thi
 
 
 
-#### FalseFriendsGermanEnglish
+#### `FalseFriendsGermanEnglish` { .model-copy }
 
 A dataset to identify False Friends / false cognates between English and German. A generally challenging task for multilingual models.
 
 **Dataset:** [`aari1995/false_friends_de_en_mteb`](https://huggingface.co/datasets/aari1995/false_friends_de_en_mteb) • **License:** mit • [Learn more →](https://drive.google.com/file/d/1jgq0nBnV-UiYNxbKNrrr2gxDEHm-DMKH/view?usp=share_link)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | deu | Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu | Written | human-annotated | created | max_ap |
 
 
 
@@ -743,15 +752,15 @@ A dataset to identify False Friends / false cognates between English and German.
 
 
 
-#### FarsTail
+#### `FarsTail` { .model-copy }
 
 This dataset, named FarsTail, includes 10,367 samples which are provided in both the Persian language as well as the indexed format to be useful for non-Persian researchers. The samples are generated from 3,539 multiple-choice questions with the least amount of annotator interventions in a way similar to the SciTail dataset
 
 **Dataset:** [`mteb/FarsTail`](https://huggingface.co/datasets/mteb/FarsTail) • **License:** not specified • [Learn more →](https://link.springer.com/article/10.1007/s00500-023-08959-3)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | fas | Academic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Academic, Written | human-annotated | found | max_ap |
 
 
 
@@ -774,15 +783,15 @@ This dataset, named FarsTail, includes 10,367 samples which are provided in both
 
 
 
-#### FarsiParaphraseDetection
+#### `FarsiParaphraseDetection` { .model-copy }
 
 Farsi Paraphrase Detection
 
 **Dataset:** [`alighasemi/farsi_paraphrase_detection`](https://huggingface.co/datasets/alighasemi/farsi_paraphrase_detection) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/alighasemi/farsi_paraphrase_detection)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | fas | not specified | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | not specified | derived | found | max_ap |
 
 
 
@@ -796,15 +805,15 @@ Farsi Paraphrase Detection
 
 
 
-#### IndicXnliPairClassification
+#### `IndicXnliPairClassification` { .model-copy }
 
 INDICXNLI is similar to existing XNLI dataset in shape/form, but focuses on Indic language family. The train (392,702), validation (2,490), and evaluation sets (5,010) of English XNLI were translated from English into each of the eleven Indic languages. IndicTrans is a large Transformer-based sequence to sequence model. It is trained on Samanantar dataset (Ramesh et al., 2021), which is the largest parallel multi- lingual corpus over eleven Indic languages.
 
 **Dataset:** [`mteb/IndicXnliPairClassification`](https://huggingface.co/datasets/mteb/IndicXnliPairClassification) • **License:** cc-by-4.0 • [Learn more →](https://gem-benchmark.com/data_cards/opusparcus)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | asm, ben, guj, hin, kan, ... (11) | Fiction, Government, Non-fiction, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | asm, ben, guj, hin, kan, ... (11) | Fiction, Government, Non-fiction, Written | derived | machine-translated | max_ap |
 
 
 
@@ -828,15 +837,15 @@ INDICXNLI is similar to existing XNLI dataset in shape/form, but focuses on Indi
 
 
 
-#### KLUE-NLI
+#### `KLUE-NLI` { .model-copy }
 
 Textual Entailment between a hypothesis sentence and a premise sentence. Part of the Korean Language Understanding Evaluation (KLUE).
 
 **Dataset:** [`klue/klue`](https://huggingface.co/datasets/klue/klue) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2105.09680)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | kor | Encyclopaedic, News, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | kor | Encyclopaedic, News, Written | human-annotated | found | max_ap |
 
 
 
@@ -859,15 +868,15 @@ Textual Entailment between a hypothesis sentence and a premise sentence. Part of
 
 
 
-#### LegalBenchPC
+#### `LegalBenchPC` { .model-copy }
 
 This LegalBench pair classification task is a combination of the following datasets: - Citation Prediction Classification: Given a legal statement and a case citation, determine if the citation is supportive of the legal statement. - Consumer Contracts QA: The task consists of 400 yes/no questions relating to consumer contracts (specifically, online terms of service) and is relevant to the legal skill of contract interpretation. - Contract QA: Answer yes/no questions about whether contractual clauses discuss particular issues like confidentiality requirements, BIPA consent, PII data breaches, breach of contract etc. - Hearsay: Classify if a particular piece of evidence qualifies as hearsay. Each sample in the dataset describes (1) an issue being litigated or an assertion a party wishes to prove, and (2) a piece of evidence a party wishes to introduce. The goal is to determine if—as it relates to the issue—the evidence would be considered hearsay under the definition provided above. - Privacy Policy Entailment: Given a privacy policy clause and a description of the clause, determine if the description is correct. This is a binary classification task in which the LLM is provided with a clause from a privacy policy, and a description of that clause (e.g., “The policy describes collection of the user’s HTTP cookies, flash cookies, pixel tags, or similar identifiers by a party to the contract.”). - Privacy Policy QA: Given a question and a clause from a privacy policy, determine if the clause contains enough information to answer the question. This is a binary classification task in which the LLM is provided with a question (e.g., “do you publish my data”) and a clause from a privacy policy. The LLM must determine if the clause contains an answer to the question, and classify the question-clause pair.
 
 **Dataset:** [`mteb/LegalBenchPC`](https://huggingface.co/datasets/mteb/LegalBenchPC) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/nguha/legalbench)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_accuracy | eng | Legal, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Legal, Written | expert-annotated | found | max_accuracy |
 
 
 
@@ -916,15 +925,15 @@ This LegalBench pair classification task is a combination of the following datas
 
 
 
-#### Ocnli
+#### `Ocnli` { .model-copy }
 
 Original Chinese Natural Language Inference dataset
 
 **Dataset:** [`C-MTEB/OCNLI`](https://huggingface.co/datasets/C-MTEB/OCNLI) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2010.05444)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_accuracy | cmn | Web, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Web, Written | human-annotated | created | max_accuracy |
 
 
 
@@ -947,15 +956,15 @@ Original Chinese Natural Language Inference dataset
 
 
 
-#### OpusparcusPC
+#### `OpusparcusPC` { .model-copy }
 
 Opusparcus is a paraphrase corpus for six European language: German, English, Finnish, French, Russian, and Swedish. The paraphrases consist of subtitles from movies and TV shows.
 
 **Dataset:** [`mteb/OpusparcusPC`](https://huggingface.co/datasets/mteb/OpusparcusPC) • **License:** cc-by-nc-4.0 • [Learn more →](https://gem-benchmark.com/data_cards/opusparcus)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | deu, eng, fin, fra, rus, ... (6) | Spoken, Spoken | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu, eng, fin, fra, rus, ... (6) | Spoken, Spoken | human-annotated | created | max_ap |
 
 
 
@@ -978,15 +987,15 @@ Opusparcus is a paraphrase corpus for six European language: German, English, Fi
 
 
 
-#### PSC
+#### `PSC` { .model-copy }
 
 Polish Summaries Corpus
 
 **Dataset:** [`PL-MTEB/psc-pairclassification`](https://huggingface.co/datasets/PL-MTEB/psc-pairclassification) • **License:** cc-by-3.0 • [Learn more →](http://www.lrec-conf.org/proceedings/lrec2014/pdf/1211_Paper.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | pol | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | News, Written | derived | found | max_ap |
 
 
 
@@ -1022,15 +1031,15 @@ Polish Summaries Corpus
 
 
 
-#### ParsinluEntail
+#### `ParsinluEntail` { .model-copy }
 
 A Persian textual entailment task (deciding sent1 entails sent2). The questions are partially translated from the SNLI dataset and partially generated by expert annotators.
 
 **Dataset:** [`mteb/ParsinluEntail`](https://huggingface.co/datasets/mteb/ParsinluEntail) • **License:** not specified • [Learn more →](https://github.com/persiannlp/parsinlu)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | fas | Reviews, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Reviews, Written | derived | found | max_ap |
 
 
 
@@ -1054,15 +1063,15 @@ A Persian textual entailment task (deciding sent1 entails sent2). The questions 
 
 
 
-#### ParsinluQueryParaphPC
+#### `ParsinluQueryParaphPC` { .model-copy }
 
 A Persian query paraphrasng task (deciding whether two questions are paraphrases of each other). The questions are partially generated from Google auto-complete, and partially translated from the Quora paraphrasing dataset.
 
 **Dataset:** [`mteb/ParsinluQueryParaphPC`](https://huggingface.co/datasets/mteb/ParsinluQueryParaphPC) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/persiannlp/parsinlu_query_paraphrasing)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | fas | Reviews, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Reviews, Written | derived | found | max_ap |
 
 
 
@@ -1086,15 +1095,15 @@ A Persian query paraphrasng task (deciding whether two questions are paraphrases
 
 
 
-#### PawsXPairClassification
+#### `PawsXPairClassification` { .model-copy }
 
 PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification
 
 **Dataset:** [`mteb/PawsXPairClassification`](https://huggingface.co/datasets/mteb/PawsXPairClassification) • **License:** https://huggingface.co/datasets/google-research-datasets/paws-x#licensing-information • [Learn more →](https://arxiv.org/abs/1908.11828)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | cmn, deu, eng, fra, jpn, ... (7) | Encyclopaedic, Web, Written | human-annotated | human-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn, deu, eng, fra, jpn, ... (7) | Encyclopaedic, Web, Written | human-annotated | human-translated | max_ap |
 
 
 
@@ -1117,15 +1126,15 @@ PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification
 
 
 
-#### PpcPC
+#### `PpcPC` { .model-copy }
 
 Polish Paraphrase Corpus
 
 **Dataset:** [`mteb/PpcPC`](https://huggingface.co/datasets/mteb/PpcPC) • **License:** gpl-3.0 • [Learn more →](https://arxiv.org/pdf/2207.12759.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | pol | Fiction, News, Non-fiction, Social, Spoken, ... (7) | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Fiction, News, Non-fiction, Social, Spoken, ... (7) | derived | found | max_ap |
 
 
 
@@ -1148,15 +1157,15 @@ Polish Paraphrase Corpus
 
 
 
-#### PubChemAISentenceParaphrasePC
+#### `PubChemAISentenceParaphrasePC` { .model-copy }
 
 ChemTEB evaluates the performance of text embedding models on chemical domain data.
 
 **Dataset:** [`BASF-AI/PubChemAISentenceParaphrasePC`](https://huggingface.co/datasets/BASF-AI/PubChemAISentenceParaphrasePC) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2412.00532)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | eng | Chemistry | LM-generated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry | LM-generated | created | max_ap |
 
 
 
@@ -1188,15 +1197,15 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 
 
-#### PubChemSMILESPC
+#### `PubChemSMILESPC` { .model-copy }
 
 ChemTEB evaluates the performance of text embedding models on chemical domain data.
 
 **Dataset:** [`BASF-AI/PubChemSMILESPairClassification`](https://huggingface.co/datasets/BASF-AI/PubChemSMILESPairClassification) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2412.00532)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | eng | Chemistry | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry | derived | created | max_ap |
 
 
 
@@ -1228,15 +1237,15 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 
 
-#### PubChemSynonymPC
+#### `PubChemSynonymPC` { .model-copy }
 
 ChemTEB evaluates the performance of text embedding models on chemical domain data.
 
 **Dataset:** [`BASF-AI/PubChemSynonymPC`](https://huggingface.co/datasets/BASF-AI/PubChemSynonymPC) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2412.00532)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | eng | Chemistry | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry | derived | created | max_ap |
 
 
 
@@ -1268,15 +1277,15 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 
 
-#### PubChemWikiPairClassification
+#### `PubChemWikiPairClassification` { .model-copy }
 
 ChemTEB evaluates the performance of text embedding models on chemical domain data.
 
 **Dataset:** [`BASF-AI/PubChemWikiMultilingualPC`](https://huggingface.co/datasets/BASF-AI/PubChemWikiMultilingualPC) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2412.00532)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | ces, deu, eng, fra, hin, ... (13) | Chemistry | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ces, deu, eng, fra, hin, ... (13) | Chemistry | derived | created | max_ap |
 
 
 
@@ -1308,15 +1317,15 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 
 
-#### PubChemWikiParagraphsPC
+#### `PubChemWikiParagraphsPC` { .model-copy }
 
 ChemTEB evaluates the performance of text embedding models on chemical domain data.
 
 **Dataset:** [`BASF-AI/PubChemWikiParagraphsPC`](https://huggingface.co/datasets/BASF-AI/PubChemWikiParagraphsPC) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2412.00532)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | eng | Chemistry | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry | derived | created | max_ap |
 
 
 
@@ -1348,15 +1357,15 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 
 
-#### RTE3
+#### `RTE3` { .model-copy }
 
 Recognising Textual Entailment Challenge (RTE-3) aim to provide the NLP community with a benchmark to test progress in recognizing textual entailment
 
 **Dataset:** [`mteb/RTE3`](https://huggingface.co/datasets/mteb/RTE3) • **License:** cc-by-4.0 • [Learn more →](https://aclanthology.org/W07-1401/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | deu, eng, fra, ita | Encyclopaedic, News, Web, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu, eng, fra, ita | Encyclopaedic, News, Web, Written | expert-annotated | found | max_ap |
 
 
 
@@ -1385,15 +1394,15 @@ Recognising Textual Entailment Challenge (RTE-3) aim to provide the NLP communit
 
 
 
-#### SICK-BR-PC
+#### `SICK-BR-PC` { .model-copy }
 
 SICK-BR is a Portuguese inference corpus, human translated from SICK
 
 **Dataset:** [`eduagarcia/sick-br`](https://huggingface.co/datasets/eduagarcia/sick-br) • **License:** not specified • [Learn more →](https://linux.ime.usp.br/~thalen/SICK_PT.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | por | Web, Written | human-annotated | human-translated and localized |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | por | Web, Written | human-annotated | human-translated and localized | max_ap |
 
 
 
@@ -1427,15 +1436,15 @@ SICK-BR is a Portuguese inference corpus, human translated from SICK
 
 
 
-#### SICK-E-PL
+#### `SICK-E-PL` { .model-copy }
 
 Polish version of SICK dataset for textual entailment.
 
 **Dataset:** [`PL-MTEB/sicke-pl-pairclassification`](https://huggingface.co/datasets/PL-MTEB/sicke-pl-pairclassification) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://aclanthology.org/2020.lrec-1.207)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | pol | Reviews, Written | human-annotated | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Reviews, Written | human-annotated | machine-translated | max_ap |
 
 
 
@@ -1479,15 +1488,15 @@ Polish version of SICK dataset for textual entailment.
 
 
 
-#### SICKNLPairClassification
+#### `SICKNLPairClassification` { .model-copy }
 
 SICK-NL is a Dutch translation of SICK 
 
 **Dataset:** [`clips/mteb-nl-sick-pcls-pr`](https://huggingface.co/datasets/clips/mteb-nl-sick-pcls-pr) • **License:** mit • [Learn more →](https://aclanthology.org/2021.eacl-main.126/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | nld | Web, Written | human-annotated | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Web, Written | human-annotated | machine-translated and verified | max_ap |
 
 
 
@@ -1509,15 +1518,15 @@ SICK-NL is a Dutch translation of SICK
 
 
 
-#### SprintDuplicateQuestions
+#### `SprintDuplicateQuestions` { .model-copy }
 
 Duplicate questions from the Sprint community.
 
 **Dataset:** [`mteb/sprintduplicatequestions-pairclassification`](https://huggingface.co/datasets/mteb/sprintduplicatequestions-pairclassification) • **License:** not specified • [Learn more →](https://www.aclweb.org/anthology/D18-1131/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | eng | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Programming, Written | derived | found | max_ap |
 
 
 
@@ -1552,15 +1561,15 @@ Duplicate questions from the Sprint community.
 
 
 
-#### SprintDuplicateQuestions-VN
+#### `SprintDuplicateQuestions-VN` { .model-copy }
 
 A translated dataset from Duplicate questions from the Sprint community. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/sprintduplicatequestions-pairclassification-vn`](https://huggingface.co/datasets/GreenNode/sprintduplicatequestions-pairclassification-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.aclweb.org/anthology/D18-1131/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | max_ap | vie | Programming, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | vie | Programming, Written | derived | machine-translated and LM verified | max_ap |
 
 
 
@@ -1584,15 +1593,15 @@ A translated dataset from Duplicate questions from the Sprint community. The pro
 
 
 
-#### SynPerChatbotRAGFAQPC
+#### `SynPerChatbotRAGFAQPC` { .model-copy }
 
 Synthetic Persian Chatbot RAG FAQ Pair Classification
 
 **Dataset:** [`MCINext/synthetic-persian-chatbot-rag-faq-pair-classification`](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-faq-pair-classification) • **License:** not specified • [Learn more →](https://mcinext.com/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | fas | Spoken | LM-generated | LM-generated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Spoken | LM-generated | LM-generated and verified | max_ap |
 
 
 
@@ -1606,15 +1615,15 @@ Synthetic Persian Chatbot RAG FAQ Pair Classification
 
 
 
-#### SynPerQAPC
+#### `SynPerQAPC` { .model-copy }
 
 Synthetic Persian QA Pair Classification
 
 **Dataset:** [`MCINext/synthetic-persian-qa-pair-classification`](https://huggingface.co/datasets/MCINext/synthetic-persian-qa-pair-classification) • **License:** not specified • [Learn more →](https://mcinext.com/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | fas | Blog, News, Religious, Web | LM-generated | LM-generated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Blog, News, Religious, Web | LM-generated | LM-generated and verified | max_ap |
 
 
 
@@ -1628,15 +1637,15 @@ Synthetic Persian QA Pair Classification
 
 
 
-#### SynPerTextKeywordsPC
+#### `SynPerTextKeywordsPC` { .model-copy }
 
 Synthetic Persian Text Keywords Pair Classification
 
 **Dataset:** [`MCINext/synthetic-persian-text-keyword-pair-classification`](https://huggingface.co/datasets/MCINext/synthetic-persian-text-keyword-pair-classification) • **License:** not specified • [Learn more →](https://mcinext.com/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | fas | Blog, News, Religious, Web | LM-generated | LM-generated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Blog, News, Religious, Web | LM-generated | LM-generated and verified | max_ap |
 
 
 
@@ -1650,15 +1659,15 @@ Synthetic Persian Text Keywords Pair Classification
 
 
 
-#### TERRa
+#### `TERRa` { .model-copy }
 
 Textual Entailment Recognition for Russian. This task requires to recognize, given two text fragments, whether the meaning of one text is entailed (can be inferred) from the other text.
 
 **Dataset:** [`mteb/TERRa`](https://huggingface.co/datasets/mteb/TERRa) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2010.15925)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | rus | News, Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | rus | News, Web, Written | human-annotated | found | max_ap |
 
 
 
@@ -1688,15 +1697,15 @@ Textual Entailment Recognition for Russian. This task requires to recognize, giv
 
 
 
-#### TERRa.V2
+#### `TERRa.V2` { .model-copy }
 
 Textual Entailment Recognition for Russian. This task requires to recognize, given two text fragments, whether the meaning of one text is entailed (can be inferred) from the other text. Version 2 uses different prompt types for the two inputs.
 
 **Dataset:** [`mteb/TERRa`](https://huggingface.co/datasets/mteb/TERRa) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2010.15925)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | rus | News, Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | rus | News, Web, Written | human-annotated | found | max_ap |
 
 
 
@@ -1726,15 +1735,15 @@ Textual Entailment Recognition for Russian. This task requires to recognize, giv
 
 
 
-#### TalemaaderPC
+#### `TalemaaderPC` { .model-copy }
 
 \ The Danish Language and Literature Society has developed a dataset for evaluating language models in Danish. The dataset contains a total of 1000 Danish idioms and fixed expressions with transferred meanings based on the Danish Dictionary's collection of fixed expressions with associated definitions. For each of the 1000 idioms and fixed expressions, three false definitions have also been prepared. The dataset can be used to test the performance of language models in identifying correct definitions for Danish idioms and fixed expressions.
 
 **Dataset:** [`mteb/talemaader_pc`](https://huggingface.co/datasets/mteb/talemaader_pc) • **License:** cc-by-4.0 • [Learn more →](https://sprogteknologi.dk/dataset/1000-talemader-evalueringsdatasaet)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_accuracy | dan | Academic, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | dan | Academic, Written | derived | created | max_accuracy |
 
 
 
@@ -1759,15 +1768,15 @@ Textual Entailment Recognition for Russian. This task requires to recognize, giv
 
 
 
-#### TwitterSemEval2015
+#### `TwitterSemEval2015` { .model-copy }
 
 Paraphrase-Pairs of Tweets from the SemEval 2015 workshop.
 
 **Dataset:** [`mteb/twittersemeval2015-pairclassification`](https://huggingface.co/datasets/mteb/twittersemeval2015-pairclassification) • **License:** not specified • [Learn more →](https://alt.qcri.org/semeval2015/task1/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | eng | Social, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Social, Written | human-annotated | found | max_ap |
 
 
 
@@ -1800,15 +1809,15 @@ Paraphrase-Pairs of Tweets from the SemEval 2015 workshop.
 
 
 
-#### TwitterSemEval2015-VN
+#### `TwitterSemEval2015-VN` { .model-copy }
 
 A translated dataset from Paraphrase-Pairs of Tweets from the SemEval 2015 workshop. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/twittersemeval2015-pairclassification-vn`](https://huggingface.co/datasets/GreenNode/twittersemeval2015-pairclassification-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://alt.qcri.org/semeval2015/task1/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | max_ap | vie | Social, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | vie | Social, Written | derived | machine-translated and LM verified | max_ap |
 
 
 
@@ -1832,15 +1841,15 @@ A translated dataset from Paraphrase-Pairs of Tweets from the SemEval 2015 works
 
 
 
-#### TwitterURLCorpus
+#### `TwitterURLCorpus` { .model-copy }
 
 Paraphrase-Pairs of Tweets.
 
 **Dataset:** [`mteb/twitterurlcorpus-pairclassification`](https://huggingface.co/datasets/mteb/twitterurlcorpus-pairclassification) • **License:** not specified • [Learn more →](https://languagenet.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | eng | Social, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Social, Written | derived | found | max_ap |
 
 
 
@@ -1873,15 +1882,15 @@ Paraphrase-Pairs of Tweets.
 
 
 
-#### TwitterURLCorpus-VN
+#### `TwitterURLCorpus-VN` { .model-copy }
 
 A translated dataset from Paraphrase-Pairs of Tweets. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/twitterurlcorpus-pairclassification-vn`](https://huggingface.co/datasets/GreenNode/twitterurlcorpus-pairclassification-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://languagenet.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | max_ap | vie | Social, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | vie | Social, Written | derived | machine-translated and LM verified | max_ap |
 
 
 
@@ -1905,15 +1914,15 @@ A translated dataset from Paraphrase-Pairs of Tweets. The process of creating th
 
 
 
-#### XLWICNLPairClassification
+#### `XLWICNLPairClassification` { .model-copy }
 
 The Word-in-Context dataset (WiC) addresses the dependence on sense inventories by reformulating the standard disambiguation task as a binary classification problem; but, it is limited to the English language. We put forward a large multilingual benchmark, XL-WiC, featuring gold standards in 12 new languages from varied language families and with different degrees of resource availability, opening room for evaluation scenarios such as zero-shot cross-lingual transfer. 
 
 **Dataset:** [`clips/mteb-nl-xlwic`](https://huggingface.co/datasets/clips/mteb-nl-xlwic) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://aclanthology.org/2020.emnlp-main.584.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | nld | Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Written | derived | created | max_ap |
 
 
 
@@ -1936,15 +1945,15 @@ The Word-in-Context dataset (WiC) addresses the dependence on sense inventories 
 
 
 
-#### XNLI
+#### `XNLI` { .model-copy }
 
 
 
 **Dataset:** [`mteb/xnli`](https://huggingface.co/datasets/mteb/xnli) • **License:** not specified • [Learn more →](https://aclanthology.org/D18-1269/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | ara, bul, deu, ell, eng, ... (14) | Fiction, Government, Non-fiction, Written | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, bul, deu, ell, eng, ... (14) | Fiction, Government, Non-fiction, Written | expert-annotated | created | max_ap |
 
 
 
@@ -1974,15 +1983,15 @@ The Word-in-Context dataset (WiC) addresses the dependence on sense inventories 
 
 
 
-#### XNLIV2
+#### `XNLIV2` { .model-copy }
 
 This is subset of 'XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding' with languages that were not part of the original XNLI plus three (verified) languages that are not strongly covered in MTEB
 
 **Dataset:** [`mteb/XNLIV2`](https://huggingface.co/datasets/mteb/XNLIV2) • **License:** not specified • [Learn more →](https://arxiv.org/pdf/2301.06527)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | asm, ben, bho, ell, guj, ... (13) | Fiction, Government, Non-fiction, Written | expert-annotated | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | asm, ben, bho, ell, guj, ... (13) | Fiction, Government, Non-fiction, Written | expert-annotated | machine-translated and verified | max_ap |
 
 
 
@@ -2005,15 +2014,15 @@ This is subset of 'XNLI 2.0: Improving XNLI dataset and performance on Cross Lin
 
 
 
-#### XStance
+#### `XStance` { .model-copy }
 
 A Multilingual Multi-Target Dataset for Stance Detection in French, German, and Italian.
 
 **Dataset:** [`mteb/XStance`](https://huggingface.co/datasets/mteb/XStance) • **License:** cc-by-nc-4.0 • [Learn more →](https://github.com/ZurichNLP/xstance)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | deu, fra, ita | Social, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu, fra, ita | Social, Written | human-annotated | created | max_ap |
 
 
 
@@ -2037,15 +2046,15 @@ A Multilingual Multi-Target Dataset for Stance Detection in French, German, and 
 
 
 
-#### indonli
+#### `indonli` { .model-copy }
 
 IndoNLI is the first human-elicited Natural Language Inference (NLI) dataset for Indonesian. IndoNLI is annotated by both crowd workers and experts.
 
 **Dataset:** [`mteb/indonli`](https://huggingface.co/datasets/mteb/indonli) • **License:** cc-by-sa-4.0 • [Learn more →](https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_ap | ind | Encyclopaedic, News, Web, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ind | Encyclopaedic, News, Web, Written | expert-annotated | found | max_ap |
 
 
 

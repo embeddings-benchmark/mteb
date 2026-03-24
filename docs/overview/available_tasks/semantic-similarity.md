@@ -15,19 +15,22 @@ title: "Semantic Similarity"
 
 <!-- START-TASKS -->
 
+
 ## BitextMining
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 31
 
-#### BUCC
+#### `BUCC` { .model-copy }
 
 BUCC bitext mining dataset train split.
 
 **Dataset:** [`mteb/BUCC`](https://huggingface.co/datasets/mteb/BUCC) • **License:** not specified • [Learn more →](https://comparable.limsi.fr/bucc2018/bucc2018-task.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | cmn, deu, eng, fra, rus | Written | human-annotated | human-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn, deu, eng, fra, rus | Written | human-annotated | human-translated | f1 |
 
 
 
@@ -59,15 +62,15 @@ BUCC bitext mining dataset train split.
 
 
 
-#### BUCC.v2
+#### `BUCC.v2` { .model-copy }
 
 BUCC bitext mining dataset train split, gold set only.
 
 **Dataset:** [`mteb/bucc-bitext-mining`](https://huggingface.co/datasets/mteb/bucc-bitext-mining) • **License:** not specified • [Learn more →](https://comparable.limsi.fr/bucc2018/bucc2018-task.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | cmn, deu, eng, fra, rus | Written | human-annotated | human-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn, deu, eng, fra, rus | Written | human-annotated | human-translated | f1 |
 
 
 
@@ -99,15 +102,15 @@ BUCC bitext mining dataset train split, gold set only.
 
 
 
-#### BibleNLPBitextMining
+#### `BibleNLPBitextMining` { .model-copy }
 
 Partial Bible translations in 829 languages, aligned by verse.
 
 **Dataset:** [`mteb/biblenlp-corpus`](https://huggingface.co/datasets/mteb/biblenlp-corpus) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2304.09919)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | aai, aak, aau, aaz, abt, ... (829) | Religious, Written | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | aai, aak, aau, aaz, abt, ... (829) | Religious, Written | expert-annotated | created | f1 |
 
 
 
@@ -128,15 +131,15 @@ Partial Bible translations in 829 languages, aligned by verse.
 
 
 
-#### BornholmBitextMining
+#### `BornholmBitextMining` { .model-copy }
 
 Danish Bornholmsk Parallel Corpus. Bornholmsk is a Danish dialect spoken on the island of Bornholm, Denmark. Historically it is a part of east Danish which was also spoken in Scania and Halland, Sweden.
 
 **Dataset:** [`mteb/BornholmBitextMining`](https://huggingface.co/datasets/mteb/BornholmBitextMining) • **License:** cc-by-4.0 • [Learn more →](https://aclanthology.org/W19-6138/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | dan | Fiction, Social, Web, Written | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | dan | Fiction, Social, Web, Written | expert-annotated | created | f1 |
 
 
 
@@ -163,15 +166,15 @@ Danish Bornholmsk Parallel Corpus. Bornholmsk is a Danish dialect spoken on the 
 
 
 
-#### DanishMedicinesAgencyBitextMining
+#### `DanishMedicinesAgencyBitextMining` { .model-copy }
 
 A Bilingual English-Danish parallel corpus from The Danish Medicines Agency.
 
 **Dataset:** [`mteb/english-danish-parallel-corpus`](https://huggingface.co/datasets/mteb/english-danish-parallel-corpus) • **License:** https://opendefinition.org/od/2.1/en/ • [Learn more →](https://sprogteknologi.dk/dataset/bilingual-english-danish-parallel-corpus-from-the-danish-medicines-agency)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | dan, eng | Medical, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | dan, eng | Medical, Written | human-annotated | found | f1 |
 
 
 
@@ -195,15 +198,15 @@ A Bilingual English-Danish parallel corpus from The Danish Medicines Agency.
 
 
 
-#### DiaBlaBitextMining
+#### `DiaBlaBitextMining` { .model-copy }
 
 English-French Parallel Corpus. DiaBLa is an English-French dataset for the evaluation of Machine Translation (MT) for informal, written bilingual dialogue.
 
 **Dataset:** [`mteb/DiaBlaBitextMining`](https://huggingface.co/datasets/mteb/DiaBlaBitextMining) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://inria.hal.science/hal-03021633)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | eng, fra | Social, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, fra | Social, Written | human-annotated | created | f1 |
 
 
 
@@ -225,15 +228,15 @@ English-French Parallel Corpus. DiaBLa is an English-French dataset for the eval
 
 
 
-#### FloresBitextMining
+#### `FloresBitextMining` { .model-copy }
 
 FLORES is a benchmark dataset for machine translation between English and low-resource languages.
 
 **Dataset:** [`mteb/FloresBitextMining`](https://huggingface.co/datasets/mteb/FloresBitextMining) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/facebook/flores)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | ace, acm, acq, aeb, afr, ... (196) | Encyclopaedic, Non-fiction, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ace, acm, acq, aeb, afr, ... (196) | Encyclopaedic, Non-fiction, Written | human-annotated | created | f1 |
 
 
 
@@ -255,15 +258,15 @@ FLORES is a benchmark dataset for machine translation between English and low-re
 
 
 
-#### IN22ConvBitextMining
+#### `IN22ConvBitextMining` { .model-copy }
 
 IN22-Conv is a n-way parallel conversation domain benchmark dataset for machine translation spanning English and 22 Indic languages.
 
 **Dataset:** [`mteb/IN22ConvBitextMining`](https://huggingface.co/datasets/mteb/IN22ConvBitextMining) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/ai4bharat/IN22-Conv)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | asm, ben, brx, doi, eng, ... (23) | Fiction, Social, Spoken, Spoken | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | asm, ben, brx, doi, eng, ... (23) | Fiction, Social, Spoken, Spoken | expert-annotated | created | f1 |
 
 
 
@@ -287,15 +290,15 @@ IN22-Conv is a n-way parallel conversation domain benchmark dataset for machine 
 
 
 
-#### IN22GenBitextMining
+#### `IN22GenBitextMining` { .model-copy }
 
 IN22-Gen is a n-way parallel general-purpose multi-domain benchmark dataset for machine translation spanning English and 22 Indic languages.
 
 **Dataset:** [`mteb/IN22GenBitextMining`](https://huggingface.co/datasets/mteb/IN22GenBitextMining) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/ai4bharat/IN22-Gen)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | asm, ben, brx, doi, eng, ... (23) | Government, Legal, News, Non-fiction, Religious, ... (7) | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | asm, ben, brx, doi, eng, ... (23) | Government, Legal, News, Non-fiction, Religious, ... (7) | expert-annotated | created | f1 |
 
 
 
@@ -319,15 +322,15 @@ IN22-Gen is a n-way parallel general-purpose multi-domain benchmark dataset for 
 
 
 
-#### IWSLT2017BitextMining
+#### `IWSLT2017BitextMining` { .model-copy }
 
 The IWSLT 2017 Multilingual Task addresses text translation, including zero-shot translation, with a single MT system across all directions including English, German, Dutch, Italian and Romanian.
 
 **Dataset:** [`mteb/IWSLT2017BitextMining`](https://huggingface.co/datasets/mteb/IWSLT2017BitextMining) • **License:** cc-by-nc-nd-4.0 • [Learn more →](https://aclanthology.org/2017.iwslt-1.1/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | ara, cmn, deu, eng, fra, ... (10) | Fiction, Non-fiction, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, cmn, deu, eng, fra, ... (10) | Fiction, Non-fiction, Written | expert-annotated | found | f1 |
 
 
 
@@ -362,15 +365,15 @@ The IWSLT 2017 Multilingual Task addresses text translation, including zero-shot
 
 
 
-#### IndicGenBenchFloresBitextMining
+#### `IndicGenBenchFloresBitextMining` { .model-copy }
 
 Flores-IN dataset is an extension of Flores dataset released as a part of the IndicGenBench by Google
 
 **Dataset:** [`mteb/IndicGenBenchFloresBitextMining`](https://huggingface.co/datasets/mteb/IndicGenBenchFloresBitextMining) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/google-research-datasets/indic-gen-bench/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | asm, awa, ben, bgc, bho, ... (30) | News, Web, Written | expert-annotated | human-translated and localized |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | asm, awa, ben, bgc, bho, ... (30) | News, Web, Written | expert-annotated | human-translated and localized | f1 |
 
 
 
@@ -393,15 +396,15 @@ Flores-IN dataset is an extension of Flores dataset released as a part of the In
 
 
 
-#### LinceMTBitextMining
+#### `LinceMTBitextMining` { .model-copy }
 
 LinceMT is a parallel corpus for machine translation pairing code-mixed Hinglish (a fusion of Hindi and English commonly used in modern India) with human-generated English translations.
 
 **Dataset:** [`gentaiscool/bitext_lincemt_miners`](https://huggingface.co/datasets/gentaiscool/bitext_lincemt_miners) • **License:** not specified • [Learn more →](https://ritual.uh.edu/lince/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | eng, hin | Social, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, hin | Social, Written | human-annotated | found | f1 |
 
 
 
@@ -423,15 +426,15 @@ LinceMT is a parallel corpus for machine translation pairing code-mixed Hinglish
 
 
 
-#### NTREXBitextMining
+#### `NTREXBitextMining` { .model-copy }
 
 NTREX is a News Test References dataset for Machine Translation Evaluation, covering translation from English into 128 languages. We select language pairs according to the M2M-100 language grouping strategy, resulting in 1916 directions.
 
 **Dataset:** [`mteb/NTREXBitextMining`](https://huggingface.co/datasets/mteb/NTREXBitextMining) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/davidstap/NTREX)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | afr, amh, arb, aze, bak, ... (119) | News, Written | expert-annotated | human-translated and localized |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | afr, amh, arb, aze, bak, ... (119) | News, Written | expert-annotated | human-translated and localized | f1 |
 
 
 
@@ -457,15 +460,15 @@ NTREX is a News Test References dataset for Machine Translation Evaluation, cove
 
 
 
-#### NollySentiBitextMining
+#### `NollySentiBitextMining` { .model-copy }
 
 NollySenti is Nollywood movie reviews for five languages widely spoken in Nigeria (English, Hausa, Igbo, Nigerian-Pidgin, and Yoruba.
 
 **Dataset:** [`mteb/NollySentiBitextMining`](https://huggingface.co/datasets/mteb/NollySentiBitextMining) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/IyanuSh/NollySenti)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | eng, hau, ibo, pcm, yor | Reviews, Social, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, hau, ibo, pcm, yor | Reviews, Social, Written | human-annotated | found | f1 |
 
 
 
@@ -487,15 +490,15 @@ NollySenti is Nollywood movie reviews for five languages widely spoken in Nigeri
 
 
 
-#### NorwegianCourtsBitextMining
+#### `NorwegianCourtsBitextMining` { .model-copy }
 
 Nynorsk and Bokmål parallel corpus from Norwegian courts. Norwegian courts have two standardised written languages. Bokmål is a variant closer to Danish, while Nynorsk was created to resemble regional dialects of Norwegian.
 
 **Dataset:** [`mteb/NorwegianCourtsBitextMining`](https://huggingface.co/datasets/mteb/NorwegianCourtsBitextMining) • **License:** cc-by-4.0 • [Learn more →](https://opus.nlpl.eu/index.php)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | nno, nob | Legal, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nno, nob | Legal, Written | human-annotated | found | f1 |
 
 
 
@@ -516,15 +519,15 @@ Nynorsk and Bokmål parallel corpus from Norwegian courts. Norwegian courts have
 
 
 
-#### NusaTranslationBitextMining
+#### `NusaTranslationBitextMining` { .model-copy }
 
 NusaTranslation is a parallel dataset for machine translation on 11 Indonesia languages and English.
 
 **Dataset:** [`mteb/NusaTranslationBitextMining`](https://huggingface.co/datasets/mteb/NusaTranslationBitextMining) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/indonlp/nusatranslation_mt)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | abs, bbc, bew, bhp, ind, ... (12) | Social, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | abs, bbc, bew, bhp, ind, ... (12) | Social, Written | human-annotated | created | f1 |
 
 
 
@@ -551,15 +554,15 @@ NusaTranslation is a parallel dataset for machine translation on 11 Indonesia la
 
 
 
-#### NusaXBitextMining
+#### `NusaXBitextMining` { .model-copy }
 
 NusaX is a parallel dataset for machine translation and sentiment analysis on 11 Indonesia languages and English.
 
 **Dataset:** [`mteb/NusaXBitextMining`](https://huggingface.co/datasets/mteb/NusaXBitextMining) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/indonlp/NusaX-senti/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | ace, ban, bbc, bjn, bug, ... (12) | Reviews, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ace, ban, bbc, bjn, bug, ... (12) | Reviews, Written | human-annotated | created | f1 |
 
 
 
@@ -590,15 +593,15 @@ NusaX is a parallel dataset for machine translation and sentiment analysis on 11
 
 
 
-#### PhincBitextMining
+#### `PhincBitextMining` { .model-copy }
 
 Phinc is a parallel corpus for machine translation pairing code-mixed Hinglish (a fusion of Hindi and English commonly used in modern India) with human-generated English translations.
 
 **Dataset:** [`gentaiscool/bitext_phinc_miners`](https://huggingface.co/datasets/gentaiscool/bitext_phinc_miners) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/veezbo/phinc)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | eng, hin | Social, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, hin | Social, Written | human-annotated | found | f1 |
 
 
 
@@ -620,15 +623,15 @@ Phinc is a parallel corpus for machine translation pairing code-mixed Hinglish (
 
 
 
-#### PubChemSMILESBitextMining
+#### `PubChemSMILESBitextMining` { .model-copy }
 
 ChemTEB evaluates the performance of text embedding models on chemical domain data.
 
 **Dataset:** [`BASF-AI/PubChemSMILESBitextMining`](https://huggingface.co/datasets/BASF-AI/PubChemSMILESBitextMining) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2412.00532)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | eng | Chemistry | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry | derived | created | f1 |
 
 
 
@@ -660,27 +663,27 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 
 
-#### RomaTalesBitextMining
+#### `RomaTalesBitextMining` { .model-copy }
 
 Parallel corpus of Roma Tales in Lovari with Hungarian translations.
 
 **Dataset:** [`kardosdrur/roma-tales`](https://huggingface.co/datasets/kardosdrur/roma-tales) • **License:** not specified • [Learn more →](https://idoc.pub/documents/idocpub-zpnxm9g35ylv)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | hun, rom | Fiction, Written | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | hun, rom | Fiction, Written | expert-annotated | created | f1 |
 
 
 
-#### RuSciBenchBitextMining
+#### `RuSciBenchBitextMining` { .model-copy }
 
 This task focuses on finding translations of scientific articles. The dataset is sourced from eLibrary, Russia's largest electronic library of scientific publications. Russian authors often provide English translations for their abstracts and titles, and the data consists of these paired titles and abstracts. The task evaluates a model's ability to match an article's Russian title and abstract to its English counterpart, or vice versa.
 
 **Dataset:** [`mlsa-iai-msu-lab/ru_sci_bench_bitext_mining`](https://huggingface.co/datasets/mlsa-iai-msu-lab/ru_sci_bench_bitext_mining) • **License:** not specified • [Learn more →](https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | f1 | eng, rus | Academic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng, rus | Academic, Non-fiction, Written | derived | found | f1 |
 
 
 
@@ -708,15 +711,15 @@ This task focuses on finding translations of scientific articles. The dataset is
 
 
 
-#### RuSciBenchBitextMining.v2
+#### `RuSciBenchBitextMining.v2` { .model-copy }
 
 This task focuses on finding translations of scientific articles. The dataset is sourced from eLibrary, Russia's largest electronic library of scientific publications. Russian authors often provide English translations for their abstracts and titles, and the data consists of these paired titles and abstracts. The task evaluates a model's ability to match an article's Russian title and abstract to its English counterpart, or vice versa. Compared to the previous version, 6 erroneous examples have been removed.
 
 **Dataset:** [`mlsa-iai-msu-lab/ru_sci_bench_bitext_mining`](https://huggingface.co/datasets/mlsa-iai-msu-lab/ru_sci_bench_bitext_mining) • **License:** not specified • [Learn more →](https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | f1 | eng, rus | Academic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng, rus | Academic, Non-fiction, Written | derived | found | f1 |
 
 
 
@@ -744,27 +747,27 @@ This task focuses on finding translations of scientific articles. The dataset is
 
 
 
-#### SAMSumFa
+#### `SAMSumFa` { .model-copy }
 
 Translated Version of SAMSum Dataset for summary retrieval.
 
 **Dataset:** [`MCINext/samsum-fa`](https://huggingface.co/datasets/MCINext/samsum-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/samsum-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | fas | Spoken | LM-generated | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Spoken | LM-generated | machine-translated | f1 |
 
 
 
-#### SRNCorpusBitextMining
+#### `SRNCorpusBitextMining` { .model-copy }
 
 SRNCorpus is a machine translation corpus for creole language Sranantongo and Dutch.
 
 **Dataset:** [`mteb/SRNCorpusBitextMining`](https://huggingface.co/datasets/mteb/SRNCorpusBitextMining) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2212.06383)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | nld, srn | Social, Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld, srn | Social, Web, Written | human-annotated | found | f1 |
 
 
 
@@ -785,15 +788,15 @@ SRNCorpus is a machine translation corpus for creole language Sranantongo and Du
 
 
 
-#### SynPerChatbotRAGSumSRetrieval
+#### `SynPerChatbotRAGSumSRetrieval` { .model-copy }
 
 Synthetic Persian Chatbot RAG Summary Dataset for summary retrieval.
 
 **Dataset:** [`MCINext/synthetic-persian-chatbot-rag-summary-retrieval`](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-summary-retrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-summary-retrieval)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | fas | Spoken | LM-generated | LM-generated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Spoken | LM-generated | LM-generated and verified | f1 |
 
 
 
@@ -807,15 +810,15 @@ Synthetic Persian Chatbot RAG Summary Dataset for summary retrieval.
 
 
 
-#### SynPerChatbotSumSRetrieval
+#### `SynPerChatbotSumSRetrieval` { .model-copy }
 
 Synthetic Persian Chatbot Summary Dataset for summary retrieval.
 
 **Dataset:** [`MCINext/synthetic-persian-chatbot-summary-retrieval`](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-summary-retrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-summary-retrieval)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | fas | Spoken | LM-generated | LM-generated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Spoken | LM-generated | LM-generated and verified | f1 |
 
 
 
@@ -829,15 +832,15 @@ Synthetic Persian Chatbot Summary Dataset for summary retrieval.
 
 
 
-#### Tatoeba
+#### `Tatoeba` { .model-copy }
 
 1,000 English-aligned sentence pairs for each language based on the Tatoeba corpus
 
 **Dataset:** [`mteb/tatoeba-bitext-mining`](https://huggingface.co/datasets/mteb/tatoeba-bitext-mining) • **License:** cc-by-2.0 • [Learn more →](https://github.com/facebookresearch/LASER/tree/main/data/tatoeba/v1)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | afr, amh, ang, ara, arq, ... (113) | Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | afr, amh, ang, ara, arq, ... (113) | Written | human-annotated | found | f1 |
 
 
 
@@ -857,27 +860,27 @@ Synthetic Persian Chatbot Summary Dataset for summary retrieval.
 
 
 
-#### TbilisiCityHallBitextMining
+#### `TbilisiCityHallBitextMining` { .model-copy }
 
 Parallel news titles from the Tbilisi City Hall website (https://tbilisi.gov.ge/).
 
 **Dataset:** [`jupyterjazz/tbilisi-city-hall-titles`](https://huggingface.co/datasets/jupyterjazz/tbilisi-city-hall-titles) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/jupyterjazz/tbilisi-city-hall-titles)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | eng, kat | News, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, kat | News, Written | derived | created | f1 |
 
 
 
-#### VieMedEVBitextMining
+#### `VieMedEVBitextMining` { .model-copy }
 
 A high-quality Vietnamese-English parallel data from the medical domain for machine translation
 
 **Dataset:** [`mteb/VieMedEVBitextMining`](https://huggingface.co/datasets/mteb/VieMedEVBitextMining) • **License:** cc-by-nc-4.0 • [Learn more →](https://aclanthology.org/2015.iwslt-evaluation.11/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | eng, vie | Medical, Written | expert-annotated | human-translated and localized |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, vie | Medical, Written | expert-annotated | human-translated and localized | f1 |
 
 
 
@@ -898,15 +901,15 @@ A high-quality Vietnamese-English parallel data from the medical domain for mach
 
 
 
-#### WebFAQBitextMiningQAs
+#### `WebFAQBitextMiningQAs` { .model-copy }
 
 The WebFAQ Bitext Dataset consists of natural FAQ-style Question-Answer pairs that align across languages. A sentence in the "WebFAQBitextMiningQAs" task is a concatenation of a question and its corresponding answer. The dataset is sourced from FAQ pages on the web.
 
 **Dataset:** [`PaDaS-Lab/webfaq-bitexts`](https://huggingface.co/datasets/PaDaS-Lab/webfaq-bitexts) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/PaDaS-Lab)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | ara, aze, ben, bul, cat, ... (49) | Web, Written | human-annotated | human-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, aze, ben, bul, cat, ... (49) | Web, Written | human-annotated | human-translated | f1 |
 
 
 
@@ -930,15 +933,15 @@ The WebFAQ Bitext Dataset consists of natural FAQ-style Question-Answer pairs th
 
 
 
-#### WebFAQBitextMiningQuestions
+#### `WebFAQBitextMiningQuestions` { .model-copy }
 
 The WebFAQ Bitext Dataset consists of natural FAQ-style Question-Answer pairs that align across languages. A sentence in the "WebFAQBitextMiningQuestions" task is the question originating from an aligned QA. The dataset is sourced from FAQ pages on the web.
 
 **Dataset:** [`PaDaS-Lab/webfaq-bitexts`](https://huggingface.co/datasets/PaDaS-Lab/webfaq-bitexts) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/PaDaS-Lab)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | ara, aze, ben, bul, cat, ... (49) | Web, Written | human-annotated | human-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, aze, ben, bul, cat, ... (49) | Web, Written | human-annotated | human-translated | f1 |
 
 
 
@@ -961,19 +964,22 @@ The WebFAQ Bitext Dataset consists of natural FAQ-style Question-Answer pairs th
 
 
 
+
 ## STS
 
-- **Number of tasks:** 48
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-#### AFQMC
+- **Number of tasks:** 49
+
+#### `AFQMC` { .model-copy }
 
 A Chinese dataset for textual relatedness
 
 **Dataset:** [`C-MTEB/AFQMC`](https://huggingface.co/datasets/C-MTEB/AFQMC) • **License:** not specified • [Learn more →](https://aclanthology.org/2021.emnlp-main.357)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | cmn | Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Web, Written | human-annotated | found | cosine_spearman |
 
 
 
@@ -1007,15 +1013,15 @@ A Chinese dataset for textual relatedness
 
 
 
-#### ATEC
+#### `ATEC` { .model-copy }
 
 A Chinese dataset for textual relatedness
 
 **Dataset:** [`C-MTEB/ATEC`](https://huggingface.co/datasets/C-MTEB/ATEC) • **License:** not specified • [Learn more →](https://aclanthology.org/2021.emnlp-main.357)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | cmn | Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Web, Written | human-annotated | found | cosine_spearman |
 
 
 
@@ -1049,15 +1055,15 @@ A Chinese dataset for textual relatedness
 
 
 
-#### Assin2STS
+#### `Assin2STS` { .model-copy }
 
 Semantic Textual Similarity part of the ASSIN 2, an evaluation shared task collocated with STIL 2019.
 
 **Dataset:** [`nilc-nlp/assin2`](https://huggingface.co/datasets/nilc-nlp/assin2) • **License:** not specified • [Learn more →](https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | por | Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | por | Written | human-annotated | found | cosine_spearman |
 
 
 
@@ -1080,15 +1086,15 @@ Semantic Textual Similarity part of the ASSIN 2, an evaluation shared task collo
 
 
 
-#### BIOSSES
+#### `BIOSSES` { .model-copy }
 
 Biomedical Semantic Similarity Estimation.
 
 **Dataset:** [`mteb/biosses-sts`](https://huggingface.co/datasets/mteb/biosses-sts) • **License:** not specified • [Learn more →](https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | eng | Medical | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Medical | derived | found | cosine_spearman |
 
 
 
@@ -1117,15 +1123,15 @@ Biomedical Semantic Similarity Estimation.
 
 
 
-#### BIOSSES-VN
+#### `BIOSSES-VN` { .model-copy }
 
 A translated dataset from Biomedical Semantic Similarity Estimation. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/biosses-sts-vn`](https://huggingface.co/datasets/GreenNode/biosses-sts-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | cosine_spearman | vie | Medical | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | vie | Medical | derived | machine-translated and LM verified | cosine_spearman |
 
 
 
@@ -1149,15 +1155,15 @@ A translated dataset from Biomedical Semantic Similarity Estimation. The process
 
 
 
-#### BQ
+#### `BQ` { .model-copy }
 
 A Chinese dataset for textual relatedness
 
 **Dataset:** [`C-MTEB/BQ`](https://huggingface.co/datasets/C-MTEB/BQ) • **License:** not specified • [Learn more →](https://aclanthology.org/2021.emnlp-main.357)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | cmn | Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Web, Written | human-annotated | found | cosine_spearman |
 
 
 
@@ -1181,15 +1187,15 @@ A Chinese dataset for textual relatedness
 
 
 
-#### CDSC-R
+#### `CDSC-R` { .model-copy }
 
 Compositional Distributional Semantics Corpus for textual relatedness.
 
 **Dataset:** [`PL-MTEB/cdscr-sts`](https://huggingface.co/datasets/PL-MTEB/cdscr-sts) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://aclanthology.org/P17-1073.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | pol | Web, Written | human-annotated | human-translated and localized |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Web, Written | human-annotated | human-translated and localized | cosine_spearman |
 
 
 
@@ -1219,15 +1225,15 @@ Compositional Distributional Semantics Corpus for textual relatedness.
 
 
 
-#### FaroeseSTS
+#### `FaroeseSTS` { .model-copy }
 
 Semantic Text Similarity (STS) corpus for Faroese.
 
 **Dataset:** [`mteb/FaroeseSTS`](https://huggingface.co/datasets/mteb/FaroeseSTS) • **License:** cc-by-4.0 • [Learn more →](https://aclanthology.org/2023.nodalida-1.74.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | fao | News, Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fao | News, Web, Written | human-annotated | found | cosine_spearman |
 
 
 
@@ -1254,15 +1260,15 @@ Semantic Text Similarity (STS) corpus for Faroese.
 
 
 
-#### Farsick
+#### `Farsick` { .model-copy }
 
 A Persian Semantic Textual Similarity And Natural Language Inference Dataset
 
 **Dataset:** [`MCINext/farsick-sts`](https://huggingface.co/datasets/MCINext/farsick-sts) • **License:** not specified • [Learn more →](https://github.com/ZahraGhasemi-AI/FarSick)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | fas | not specified | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | not specified | derived | found | cosine_spearman |
 
 
 
@@ -1276,15 +1282,15 @@ A Persian Semantic Textual Similarity And Natural Language Inference Dataset
 
 
 
-#### FinParaSTS
+#### `FinParaSTS` { .model-copy }
 
 Finnish paraphrase-based semantic similarity corpus
 
 **Dataset:** [`mteb/FinParaSTS`](https://huggingface.co/datasets/mteb/FinParaSTS) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/TurkuNLP/turku_paraphrase_corpus)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | fin | News, Subtitles, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fin | News, Subtitles, Written | expert-annotated | found | cosine_spearman |
 
 
 
@@ -1321,15 +1327,15 @@ Finnish paraphrase-based semantic similarity corpus
 
 
 
-#### GermanSTSBenchmark
+#### `GermanSTSBenchmark` { .model-copy }
 
 Semantic Textual Similarity Benchmark (STSbenchmark) dataset translated into German. Translations were originally done by T-Systems on site services GmbH.
 
 **Dataset:** [`mteb/GermanSTSBenchmark`](https://huggingface.co/datasets/mteb/GermanSTSBenchmark) • **License:** cc-by-sa-3.0 • [Learn more →](https://github.com/t-systems-on-site-services-gmbh/german-STSbenchmark)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | deu | News, Web, Written | human-annotated | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu | News, Web, Written | human-annotated | machine-translated | cosine_spearman |
 
 
 
@@ -1350,15 +1356,15 @@ Semantic Textual Similarity Benchmark (STSbenchmark) dataset translated into Ger
 
 
 
-#### HUMESICK-R
+#### `HUMESICK-R` { .model-copy }
 
 Human evaluation subset of Semantic Textual Similarity SICK-R dataset
 
 **Dataset:** [`mteb/mteb-human-sickr-sts`](https://huggingface.co/datasets/mteb/mteb-human-sickr-sts) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://aclanthology.org/L14-1314/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | eng | Web, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Web, Written | human-annotated | created | cosine_spearman |
 
 
 
@@ -1398,15 +1404,15 @@ Human evaluation subset of Semantic Textual Similarity SICK-R dataset
 
 
 
-#### HUMESTS12
+#### `HUMESTS12` { .model-copy }
 
 Human evaluation subset of SemEval-2012 Task 6.
 
 **Dataset:** [`mteb/mteb-human-sts12-sts`](https://huggingface.co/datasets/mteb/mteb-human-sts12-sts) • **License:** not specified • [Learn more →](https://www.aclweb.org/anthology/S12-1051.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | eng | Encyclopaedic, News, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, News, Written | human-annotated | created | cosine_spearman |
 
 
 
@@ -1433,15 +1439,15 @@ Human evaluation subset of SemEval-2012 Task 6.
 
 
 
-#### HUMESTS22
+#### `HUMESTS22` { .model-copy }
 
 Human evaluation subset of SemEval 2022 Task 8: Multilingual News Article Similarity
 
 **Dataset:** [`mteb/mteb-human-sts22-sts`](https://huggingface.co/datasets/mteb/mteb-human-sts22-sts) • **License:** not specified • [Learn more →](https://competitions.codalab.org/competitions/33835)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | ara, eng, fra, rus | News, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, eng, fra, rus | News, Written | human-annotated | found | cosine_spearman |
 
 
 
@@ -1484,15 +1490,15 @@ Human evaluation subset of SemEval 2022 Task 8: Multilingual News Article Simila
 
 
 
-#### HUMESTSBenchmark
+#### `HUMESTSBenchmark` { .model-copy }
 
 Human evaluation subset of Semantic Textual Similarity Benchmark (STSbenchmark) dataset.
 
 **Dataset:** [`mteb/mteb-human-stsbenchmark-sts`](https://huggingface.co/datasets/mteb/mteb-human-stsbenchmark-sts) • **License:** not specified • [Learn more →](https://github.com/PhilipMay/stsb-multi-mt/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | eng | Blog, News, Written | human-annotated | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Blog, News, Written | human-annotated | machine-translated and verified | cosine_spearman |
 
 
 
@@ -1513,15 +1519,15 @@ Human evaluation subset of Semantic Textual Similarity Benchmark (STSbenchmark) 
 
 
 
-#### IndicCrosslingualSTS
+#### `IndicCrosslingualSTS` { .model-copy }
 
 This is a Semantic Textual Similarity testset between English and 12 high-resource Indic languages.
 
 **Dataset:** [`mteb/IndicCrosslingualSTS`](https://huggingface.co/datasets/mteb/IndicCrosslingualSTS) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/jaygala24/indic_sts)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | asm, ben, eng, guj, hin, ... (13) | Government, News, Non-fiction, Spoken, Spoken, ... (7) | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | asm, ben, eng, guj, hin, ... (13) | Government, News, Non-fiction, Spoken, Spoken, ... (7) | expert-annotated | created | cosine_spearman |
 
 
 
@@ -1549,15 +1555,15 @@ This is a Semantic Textual Similarity testset between English and 12 high-resour
 
 
 
-#### JSICK
+#### `JSICK` { .model-copy }
 
 JSICK is the Japanese NLI and STS dataset by manually translating the English dataset SICK (Marelli et al., 2014) into Japanese.
 
 **Dataset:** [`mteb/JSICK`](https://huggingface.co/datasets/mteb/JSICK) • **License:** cc-by-4.0 • [Learn more →](https://github.com/sbintuitions/JMTEB)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | jpn | Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Web, Written | human-annotated | found | cosine_spearman |
 
 
 
@@ -1581,15 +1587,15 @@ JSICK is the Japanese NLI and STS dataset by manually translating the English da
 
 
 
-#### JSTS
+#### `JSTS` { .model-copy }
 
 Japanese Semantic Textual Similarity Benchmark dataset construct from YJ Image Captions Dataset (Miyazaki and Shimizu, 2016) and annotated by crowdsource annotators.
 
 **Dataset:** [`mteb/JSTS`](https://huggingface.co/datasets/mteb/JSTS) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2022.lrec-1.317.pdf#page=2.00)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | jpn | Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Web, Written | human-annotated | found | cosine_spearman |
 
 
 
@@ -1630,15 +1636,15 @@ Japanese Semantic Textual Similarity Benchmark dataset construct from YJ Image C
 
 
 
-#### KLUE-STS
+#### `KLUE-STS` { .model-copy }
 
 Human-annotated STS dataset of Korean reviews, news, and spoken word sets. Part of the Korean Language Understanding Evaluation (KLUE).
 
 **Dataset:** [`klue/klue`](https://huggingface.co/datasets/klue/klue) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2105.09680)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | kor | News, Reviews, Spoken, Spoken, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | kor | News, Reviews, Spoken, Spoken, Written | human-annotated | found | cosine_spearman |
 
 
 
@@ -1661,15 +1667,15 @@ Human-annotated STS dataset of Korean reviews, news, and spoken word sets. Part 
 
 
 
-#### KorSTS
+#### `KorSTS` { .model-copy }
 
 Benchmark dataset for STS in Korean. Created by machine translation and human post editing of the STS-B dataset.
 
 **Dataset:** [`dkoterwa/kor-sts`](https://huggingface.co/datasets/dkoterwa/kor-sts) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2004.03289)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | kor | News, Web | human-annotated | machine-translated and localized |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | kor | News, Web | human-annotated | machine-translated and localized | cosine_spearman |
 
 
 
@@ -1690,15 +1696,15 @@ Benchmark dataset for STS in Korean. Created by machine translation and human po
 
 
 
-#### LCQMC
+#### `LCQMC` { .model-copy }
 
 A Chinese dataset for textual relatedness
 
 **Dataset:** [`C-MTEB/LCQMC`](https://huggingface.co/datasets/C-MTEB/LCQMC) • **License:** not specified • [Learn more →](https://aclanthology.org/2021.emnlp-main.357)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | cmn | Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Web, Written | human-annotated | found | cosine_spearman |
 
 
 
@@ -1722,15 +1728,15 @@ A Chinese dataset for textual relatedness
 
 
 
-#### PAWSX
+#### `PAWSX` { .model-copy }
 
 A Chinese dataset for textual relatedness
 
 **Dataset:** [`mteb/PAWSX`](https://huggingface.co/datasets/mteb/PAWSX) • **License:** not specified • [Learn more →](https://aclanthology.org/2021.emnlp-main.357)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | cmn | Encyclopaedic, Web, Written | human-annotated | human-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Encyclopaedic, Web, Written | human-annotated | human-translated | cosine_spearman |
 
 
 
@@ -1754,15 +1760,15 @@ A Chinese dataset for textual relatedness
 
 
 
-#### QBQTC
+#### `QBQTC` { .model-copy }
 
 A Chinese question bank question title similarity dataset
 
 **Dataset:** [`C-MTEB/QBQTC`](https://huggingface.co/datasets/C-MTEB/QBQTC) • **License:** not specified • [Learn more →](https://github.com/CLUEbenchmark/QBQTC/tree/main/dataset)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | cmn | Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Web, Written | human-annotated | found | cosine_spearman |
 
 
 
@@ -1783,15 +1789,15 @@ A Chinese question bank question title similarity dataset
 
 
 
-#### Query2Query
+#### `Query2Query` { .model-copy }
 
 Query to Query Datasets.
 
 **Dataset:** [`MCINext/query-to-query-sts`](https://huggingface.co/datasets/MCINext/query-to-query-sts) • **License:** not specified • [Learn more →](https://mcinext.com/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | fas | not specified | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | not specified | derived | found | cosine_spearman |
 
 
 
@@ -1805,15 +1811,15 @@ Query to Query Datasets.
 
 
 
-#### RUParaPhraserSTS
+#### `RUParaPhraserSTS` { .model-copy }
 
 ParaPhraser is a news headlines corpus with precise, near and non-paraphrases.
 
 **Dataset:** [`merionum/ru_paraphraser`](https://huggingface.co/datasets/merionum/ru_paraphraser) • **License:** mit • [Learn more →](https://aclanthology.org/2020.ngt-1.6)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | rus | News, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | rus | News, Written | human-annotated | found | cosine_spearman |
 
 
 
@@ -1851,15 +1857,15 @@ ParaPhraser is a news headlines corpus with precise, near and non-paraphrases.
 
 
 
-#### RonSTS
+#### `RonSTS` { .model-copy }
 
 High-quality Romanian translation of STSBenchmark.
 
 **Dataset:** [`mteb/RonSTS`](https://huggingface.co/datasets/mteb/RonSTS) • **License:** cc-by-4.0 • [Learn more →](https://openreview.net/forum?id=JH61CD7afTv)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | ron | News, Social, Web, Written | human-annotated | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ron | News, Social, Web, Written | human-annotated | machine-translated and verified | cosine_spearman |
 
 
 
@@ -1880,15 +1886,15 @@ High-quality Romanian translation of STSBenchmark.
 
 
 
-#### RuSTSBenchmarkSTS
+#### `RuSTSBenchmarkSTS` { .model-copy }
 
 Semantic Textual Similarity Benchmark (STSbenchmark) dataset translated into Russian and verified. The dataset was checked with RuCOLA model to ensure that the translation is good and filtered.
 
 **Dataset:** [`ai-forever/ru-stsbenchmark-sts`](https://huggingface.co/datasets/ai-forever/ru-stsbenchmark-sts) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/PhilipMay/stsb-multi-mt/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | rus | News, Social, Web, Written | human-annotated | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | rus | News, Social, Web, Written | human-annotated | machine-translated and verified | cosine_spearman |
 
 
 
@@ -1909,15 +1915,15 @@ Semantic Textual Similarity Benchmark (STSbenchmark) dataset translated into Rus
 
 
 
-#### SICK-BR-STS
+#### `SICK-BR-STS` { .model-copy }
 
 SICK-BR is a Portuguese inference corpus, human translated from SICK
 
 **Dataset:** [`eduagarcia/sick-br`](https://huggingface.co/datasets/eduagarcia/sick-br) • **License:** not specified • [Learn more →](https://linux.ime.usp.br/~thalen/SICK_PT.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | por | Web, Written | human-annotated | human-translated and localized |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | por | Web, Written | human-annotated | human-translated and localized | cosine_spearman |
 
 
 
@@ -1951,15 +1957,15 @@ SICK-BR is a Portuguese inference corpus, human translated from SICK
 
 
 
-#### SICK-NL-STS
+#### `SICK-NL-STS` { .model-copy }
 
 SICK-NL (read: signal), a dataset targeting Natural Language Inference in Dutch. SICK-NL is obtained by translating the SICK dataset of (Marelli et al., 2014) from English into Dutch.
 
 **Dataset:** [`clips/mteb-nl-sick-sts-pr`](https://huggingface.co/datasets/clips/mteb-nl-sick-sts-pr) • **License:** mit • [Learn more →](https://aclanthology.org/2021.eacl-main.126/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | nld | News, Social, Spoken, Web, Written | human-annotated | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | News, Social, Spoken, Web, Written | human-annotated | machine-translated | cosine_spearman |
 
 
 
@@ -1981,15 +1987,15 @@ SICK-NL (read: signal), a dataset targeting Natural Language Inference in Dutch.
 
 
 
-#### SICK-R
+#### `SICK-R` { .model-copy }
 
 Semantic Textual Similarity SICK-R dataset
 
 **Dataset:** [`mteb/sickr-sts`](https://huggingface.co/datasets/mteb/sickr-sts) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://aclanthology.org/L14-1314/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | eng | Web, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Web, Written | human-annotated | created | cosine_spearman |
 
 
 
@@ -2029,15 +2035,15 @@ Semantic Textual Similarity SICK-R dataset
 
 
 
-#### SICK-R-PL
+#### `SICK-R-PL` { .model-copy }
 
 Polish version of SICK dataset for textual relatedness.
 
 **Dataset:** [`PL-MTEB/sickr-pl-sts`](https://huggingface.co/datasets/PL-MTEB/sickr-pl-sts) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://aclanthology.org/2020.lrec-1.207)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | pol | Web, Written | human-annotated | human-translated and localized |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Web, Written | human-annotated | human-translated and localized | cosine_spearman |
 
 
 
@@ -2081,15 +2087,15 @@ Polish version of SICK dataset for textual relatedness.
 
 
 
-#### SICK-R-VN
+#### `SICK-R-VN` { .model-copy }
 
 A translated dataset from Semantic Textual Similarity SICK-R dataset as described here: The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/sickr-sts-vn`](https://huggingface.co/datasets/GreenNode/sickr-sts-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2020.lrec-1.207)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | cosine_spearman | vie | Web, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | vie | Web, Written | derived | machine-translated and LM verified | cosine_spearman |
 
 
 
@@ -2113,15 +2119,15 @@ A translated dataset from Semantic Textual Similarity SICK-R dataset as describe
 
 
 
-#### SICKFr
+#### `SICKFr` { .model-copy }
 
 SICK dataset french version
 
 **Dataset:** [`Lajavaness/SICK-fr`](https://huggingface.co/datasets/Lajavaness/SICK-fr) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://huggingface.co/datasets/Lajavaness/SICK-fr)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | fra | Web, Written | human-annotated | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fra | Web, Written | human-annotated | machine-translated | cosine_spearman |
 
 
 
@@ -2152,15 +2158,15 @@ SICK dataset french version
 
 
 
-#### STS12
+#### `STS12` { .model-copy }
 
 SemEval-2012 Task 6.
 
 **Dataset:** [`mteb/sts12-sts`](https://huggingface.co/datasets/mteb/sts12-sts) • **License:** not specified • [Learn more →](https://www.aclweb.org/anthology/S12-1051.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | eng | Encyclopaedic, News, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, News, Written | human-annotated | created | cosine_spearman |
 
 
 
@@ -2187,15 +2193,15 @@ SemEval-2012 Task 6.
 
 
 
-#### STS13
+#### `STS13` { .model-copy }
 
 SemEval STS 2013 dataset.
 
 **Dataset:** [`mteb/sts13-sts`](https://huggingface.co/datasets/mteb/sts13-sts) • **License:** not specified • [Learn more →](https://www.aclweb.org/anthology/S13-1004/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | eng | News, Non-fiction, Web, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | News, Non-fiction, Web, Written | human-annotated | created | cosine_spearman |
 
 
 
@@ -2217,15 +2223,15 @@ SemEval STS 2013 dataset.
 
 
 
-#### STS14
+#### `STS14` { .model-copy }
 
 SemEval STS 2014 dataset. Currently only the English dataset
 
 **Dataset:** [`mteb/sts14-sts`](https://huggingface.co/datasets/mteb/sts14-sts) • **License:** not specified • [Learn more →](https://www.aclweb.org/anthology/S14-1002)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | eng | Blog, Spoken, Web | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Blog, Spoken, Web | derived | created | cosine_spearman |
 
 
 
@@ -2258,15 +2264,15 @@ SemEval STS 2014 dataset. Currently only the English dataset
 
 
 
-#### STS15
+#### `STS15` { .model-copy }
 
 SemEval STS 2015 dataset
 
 **Dataset:** [`mteb/sts15-sts`](https://huggingface.co/datasets/mteb/sts15-sts) • **License:** not specified • [Learn more →](https://www.aclweb.org/anthology/S15-2010)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | eng | Blog, News, Spoken, Web, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Blog, News, Spoken, Web, Written | human-annotated | created | cosine_spearman |
 
 
 
@@ -2297,15 +2303,15 @@ SemEval STS 2015 dataset
 
 
 
-#### STS16
+#### `STS16` { .model-copy }
 
 SemEval-2016 Task 4
 
 **Dataset:** [`mteb/sts16-sts`](https://huggingface.co/datasets/mteb/sts16-sts) • **License:** not specified • [Learn more →](https://www.aclweb.org/anthology/S16-1001)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | eng | Blog, Spoken, Web | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Blog, Spoken, Web | human-annotated | created | cosine_spearman |
 
 
 
@@ -2342,15 +2348,15 @@ SemEval-2016 Task 4
 
 
 
-#### STS17
+#### `STS17` { .model-copy }
 
 Semeval-2017 task 1: Semantic textual similarity-multilingual and cross-lingual focused evaluation
 
 **Dataset:** [`mteb/sts17-crosslingual-sts`](https://huggingface.co/datasets/mteb/sts17-crosslingual-sts) • **License:** not specified • [Learn more →](https://alt.qcri.org/semeval2017/task1/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | ara, deu, eng, fra, ita, ... (9) | News, Web, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, deu, eng, fra, ita, ... (9) | News, Web, Written | human-annotated | created | cosine_spearman |
 
 
 
@@ -2387,15 +2393,15 @@ Semeval-2017 task 1: Semantic textual similarity-multilingual and cross-lingual 
 
 
 
-#### STS22
+#### `STS22` { .model-copy }
 
 SemEval 2022 Task 8: Multilingual News Article Similarity
 
 **Dataset:** [`mteb/sts22-crosslingual-sts`](https://huggingface.co/datasets/mteb/sts22-crosslingual-sts) • **License:** not specified • [Learn more →](https://competitions.codalab.org/competitions/33835)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | ara, cmn, deu, eng, fra, ... (10) | News, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, cmn, deu, eng, fra, ... (10) | News, Written | human-annotated | found | cosine_spearman |
 
 
 
@@ -2438,15 +2444,15 @@ SemEval 2022 Task 8: Multilingual News Article Similarity
 
 
 
-#### STS22.v2
+#### `STS22.v2` { .model-copy }
 
 SemEval 2022 Task 8: Multilingual News Article Similarity. Version 2 filters updated on STS22 by removing pairs where one of entries contain empty sentences.
 
 **Dataset:** [`mteb/sts22-crosslingual-sts`](https://huggingface.co/datasets/mteb/sts22-crosslingual-sts) • **License:** not specified • [Learn more →](https://competitions.codalab.org/competitions/33835)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | ara, cmn, deu, eng, fra, ... (10) | News, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, cmn, deu, eng, fra, ... (10) | News, Written | human-annotated | found | cosine_spearman |
 
 
 
@@ -2489,15 +2495,15 @@ SemEval 2022 Task 8: Multilingual News Article Similarity. Version 2 filters upd
 
 
 
-#### STSB
+#### `STSB` { .model-copy }
 
 A Chinese dataset for textual relatedness
 
 **Dataset:** [`mteb/STSB`](https://huggingface.co/datasets/mteb/STSB) • **License:** not specified • [Learn more →](https://aclanthology.org/2021.emnlp-main.357)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | cmn | News, Web, Written | human-annotated | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | News, Web, Written | human-annotated | machine-translated | cosine_spearman |
 
 
 
@@ -2521,15 +2527,15 @@ A Chinese dataset for textual relatedness
 
 
 
-#### STSBenchmark
+#### `STSBenchmark` { .model-copy }
 
 Semantic Textual Similarity Benchmark (STSbenchmark) dataset.
 
 **Dataset:** [`mteb/stsbenchmark-sts`](https://huggingface.co/datasets/mteb/stsbenchmark-sts) • **License:** not specified • [Learn more →](https://github.com/PhilipMay/stsb-multi-mt/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | eng | Blog, News, Written | human-annotated | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Blog, News, Written | human-annotated | machine-translated and verified | cosine_spearman |
 
 
 
@@ -2550,15 +2556,15 @@ Semantic Textual Similarity Benchmark (STSbenchmark) dataset.
 
 
 
-#### STSBenchmark-VN
+#### `STSBenchmark-VN` { .model-copy }
 
 A translated dataset from Semantic Textual Similarity Benchmark (STSbenchmark) dataset. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/stsbenchmark-sts-vn`](https://huggingface.co/datasets/GreenNode/stsbenchmark-sts-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/PhilipMay/stsb-multi-mt/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | cosine_spearman | vie | Blog, News, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | vie | Blog, News, Written | derived | machine-translated and LM verified | cosine_spearman |
 
 
 
@@ -2582,15 +2588,15 @@ A translated dataset from Semantic Textual Similarity Benchmark (STSbenchmark) d
 
 
 
-#### STSBenchmarkMultilingualSTS
+#### `STSBenchmarkMultilingualSTS` { .model-copy }
 
 Semantic Textual Similarity Benchmark (STSbenchmark) dataset, but translated using DeepL API.
 
 **Dataset:** [`mteb/stsb_multi_mt`](https://huggingface.co/datasets/mteb/stsb_multi_mt) • **License:** not specified • [Learn more →](https://github.com/PhilipMay/stsb-multi-mt/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | cmn, deu, eng, fra, ita, ... (10) | News, Social, Spoken, Web, Written | human-annotated | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn, deu, eng, fra, ita, ... (10) | News, Social, Spoken, Web, Written | human-annotated | machine-translated | cosine_spearman |
 
 
 
@@ -2611,15 +2617,15 @@ Semantic Textual Similarity Benchmark (STSbenchmark) dataset, but translated usi
 
 
 
-#### STSES
+#### `STSES` { .model-copy }
 
 Spanish test sets from SemEval-2014 (Agirre et al., 2014) and SemEval-2015 (Agirre et al., 2015)
 
 **Dataset:** [`mteb/STSES`](https://huggingface.co/datasets/mteb/STSES) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/PlanTL-GOB-ES/sts-es)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | spa | News, Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | spa | News, Web, Written | human-annotated | found | cosine_spearman |
 
 
 
@@ -2649,15 +2655,15 @@ Spanish test sets from SemEval-2014 (Agirre et al., 2014) and SemEval-2015 (Agir
 
 
 
-#### SemRel24STS
+#### `SemRel24STS` { .model-copy }
 
 SemRel2024 is a collection of Semantic Textual Relatedness (STR) datasets for 14 languages, including African and Asian languages. The datasets are composed of sentence pairs, each assigned a relatedness score between 0 (completely) unrelated and 1 (maximally related) with a large range of expected relatedness values.
 
 **Dataset:** [`mteb/SemRel24STS`](https://huggingface.co/datasets/mteb/SemRel24STS) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/SemRel/SemRel2024)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | afr, amh, arb, arq, ary, ... (12) | Spoken, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | afr, amh, arb, arq, ary, ... (12) | Spoken, Written | human-annotated | created | cosine_spearman |
 
 
 
@@ -2685,15 +2691,15 @@ SemRel2024 is a collection of Semantic Textual Relatedness (STR) datasets for 14
 
 
 
-#### SynPerSTS
+#### `SynPerSTS` { .model-copy }
 
 Synthetic Persian Semantic Textual Similarity Dataset
 
 **Dataset:** [`MCINext/synthetic-persian-sts`](https://huggingface.co/datasets/MCINext/synthetic-persian-sts) • **License:** not specified • [Learn more →](https://mcinext.com/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | fas | Blog, News, Religious, Web | LM-generated | LM-generated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Blog, News, Religious, Web | LM-generated | LM-generated and verified | cosine_spearman |
 
 
 
@@ -2703,22 +2709,58 @@ Synthetic Persian Semantic Textual Similarity Dataset
     ```bibtex
      
     ```
+    
+
+
+
+#### `UkrSedUASmallSTSv1` { .model-copy }
+
+Small (100k+) synthetic dataset for fine-tuning text embedding models for Ukrainian language (STS task)
+
+**Dataset:** [`mteb/UkrSedUASmallSTSv1`](https://huggingface.co/datasets/mteb/UkrSedUASmallSTSv1) • **License:** bsd-3-clause • [Learn more →](https://huggingface.co/datasets/suntez13/sed-ua-small-sts-v1)
+
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ukr | Constructed | derived | found | cosine_spearman |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @proceedings{SED-UA-small2025,
+      author = {Oleksandr Mediakov and Dmytro Martjanov and Vasyl Lytvyn},
+      booktitle = {Proceedings of the Information Systems and Networks (SISN), Volume 17},
+      doi = {10.23939/sisn2025.17.403},
+      pages = {403--410},
+      publisher = {Lviv Polytechnic National University},
+      title = {SED-UA-Small: Ukrainian Synthetic Dataset for Text Embedding Models},
+      url = {https://science.lpnu.ua/sisn/all-volumes-and-issues/volume-17-2025/sed-ua-small-ukrainian-synthetic-dataset-text-embedding},
+      year = {2025},
+    }
+    
+    ```
+
 
 
 
 ## Summarization
 
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
+
 - **Number of tasks:** 4
 
-#### SummEval
+#### `SummEval` { .model-copy }
 
 News Article Summary Semantic Similarity Estimation.
 
 **Dataset:** [`mteb/summeval`](https://huggingface.co/datasets/mteb/summeval) • **License:** mit • [Learn more →](https://github.com/Yale-LILY/SummEval)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | eng | News, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | News, Written | human-annotated | created | cosine_spearman |
 
 
 
@@ -2739,15 +2781,15 @@ News Article Summary Semantic Similarity Estimation.
 
 
 
-#### SummEvalFr
+#### `SummEvalFr` { .model-copy }
 
 News Article Summary Semantic Similarity Estimation translated from english to french with DeepL.
 
 **Dataset:** [`lyon-nlp/summarization-summeval-fr-p2p`](https://huggingface.co/datasets/lyon-nlp/summarization-summeval-fr-p2p) • **License:** mit • [Learn more →](https://github.com/Yale-LILY/SummEval)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | fra | News, Written | human-annotated | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fra | News, Written | human-annotated | machine-translated | cosine_spearman |
 
 
 
@@ -2768,15 +2810,15 @@ News Article Summary Semantic Similarity Estimation translated from english to f
 
 
 
-#### SummEvalFrSummarization.v2
+#### `SummEvalFrSummarization.v2` { .model-copy }
 
 News Article Summary Semantic Similarity Estimation translated from english to french with DeepL. This version fixes a bug in the evaluation script that caused the main score to be computed incorrectly.
 
 **Dataset:** [`lyon-nlp/summarization-summeval-fr-p2p`](https://huggingface.co/datasets/lyon-nlp/summarization-summeval-fr-p2p) • **License:** mit • [Learn more →](https://github.com/Yale-LILY/SummEval)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | fra | News, Written | human-annotated | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fra | News, Written | human-annotated | machine-translated | cosine_spearman |
 
 
 
@@ -2797,15 +2839,15 @@ News Article Summary Semantic Similarity Estimation translated from english to f
 
 
 
-#### SummEvalSummarization.v2
+#### `SummEvalSummarization.v2` { .model-copy }
 
 News Article Summary Semantic Similarity Estimation. This version fixes a bug in the evaluation script that caused the main score to be computed incorrectly.
 
 **Dataset:** [`mteb/summeval`](https://huggingface.co/datasets/mteb/summeval) • **License:** mit • [Learn more →](https://github.com/Yale-LILY/SummEval)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | cosine_spearman | eng | News, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | News, Written | human-annotated | created | cosine_spearman |
 
 
 
@@ -2825,19 +2867,22 @@ News Article Summary Semantic Similarity Estimation. This version fixes a bug in
 
 
 
+
 ## VisualSTS(eng)
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 7
 
-#### STS12VisualSTS
+#### `STS12VisualSTS` { .model-copy }
 
 SemEval-2012 Task 6.then rendered into images.
 
 **Dataset:** [`mteb/rendered-sts12`](https://huggingface.co/datasets/mteb/rendered-sts12) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2402.08183/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | cosine_spearman | eng | Encyclopaedic, News, Written | human-annotated | rendered |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Encyclopaedic, News, Written | human-annotated | rendered | cosine_spearman |
 
 
 
@@ -2858,15 +2903,15 @@ SemEval-2012 Task 6.then rendered into images.
 
 
 
-#### STS13VisualSTS
+#### `STS13VisualSTS` { .model-copy }
 
 SemEval STS 2013 dataset.then rendered into images.
 
 **Dataset:** [`mteb/rendered-sts13`](https://huggingface.co/datasets/mteb/rendered-sts13) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2402.08183/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | cosine_spearman | eng | News, Non-fiction, Web, Written | human-annotated | rendered |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | News, Non-fiction, Web, Written | human-annotated | rendered | cosine_spearman |
 
 
 
@@ -2887,15 +2932,15 @@ SemEval STS 2013 dataset.then rendered into images.
 
 
 
-#### STS14VisualSTS
+#### `STS14VisualSTS` { .model-copy }
 
 SemEval STS 2014 dataset. Currently only the English dataset.rendered into images.
 
 **Dataset:** [`mteb/rendered-sts14`](https://huggingface.co/datasets/mteb/rendered-sts14) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2402.08183/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | cosine_spearman | eng | Blog, Spoken, Web | derived | rendered |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Blog, Spoken, Web | derived | rendered | cosine_spearman |
 
 
 
@@ -2916,15 +2961,15 @@ SemEval STS 2014 dataset. Currently only the English dataset.rendered into image
 
 
 
-#### STS15VisualSTS
+#### `STS15VisualSTS` { .model-copy }
 
 SemEval STS 2015 datasetrendered into images.
 
 **Dataset:** [`mteb/rendered-sts15`](https://huggingface.co/datasets/mteb/rendered-sts15) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2402.08183/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | cosine_spearman | eng | Blog, News, Spoken, Web, Written | human-annotated | rendered |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Blog, News, Spoken, Web, Written | human-annotated | rendered | cosine_spearman |
 
 
 
@@ -2945,15 +2990,15 @@ SemEval STS 2015 datasetrendered into images.
 
 
 
-#### STS16VisualSTS
+#### `STS16VisualSTS` { .model-copy }
 
 SemEval STS 2016 datasetrendered into images.
 
 **Dataset:** [`mteb/rendered-sts16`](https://huggingface.co/datasets/mteb/rendered-sts16) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2402.08183/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | cosine_spearman | eng | Blog, Spoken, Web | human-annotated | rendered |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Blog, Spoken, Web | human-annotated | rendered | cosine_spearman |
 
 
 
@@ -2974,15 +3019,15 @@ SemEval STS 2016 datasetrendered into images.
 
 
 
-#### VisualSTS-b-Eng
+#### `VisualSTS-b-Eng` { .model-copy }
 
 STSBenchmarkMultilingualVisualSTS English only.
 
 **License:** not specified • [Learn more →](https://arxiv.org/abs/2402.08183/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | cosine_spearman | eng | News, Social, Spoken, Web, Written | human-annotated | rendered |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | News, Social, Spoken, Web, Written | human-annotated | rendered | cosine_spearman |
 
 
 
@@ -3009,15 +3054,15 @@ STSBenchmarkMultilingualVisualSTS English only.
     | [STSBenchmarkMultilingualVisualSTS](./visualsts(multi).md#stsbenchmarkmultilingualvisualsts) | VisualSTS(multi) | image        | cmn, deu, eng, fra, ita, ... (10) |
 
 
-#### VisualSTS17Eng
+#### `VisualSTS17Eng` { .model-copy }
 
 STS17MultilingualVisualSTS English only.
 
 **License:** not specified • [Learn more →](https://arxiv.org/abs/2402.08183/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | cosine_spearman | eng | News, Social, Spoken, Web, Written | human-annotated | rendered |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | News, Social, Spoken, Web, Written | human-annotated | rendered | cosine_spearman |
 
 
 
@@ -3045,19 +3090,22 @@ STS17MultilingualVisualSTS English only.
 
 
 
+
 ## VisualSTS(multi)
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 4
 
-#### STS17MultilingualVisualSTS
+#### `STS17MultilingualVisualSTS` { .model-copy }
 
 Semantic Textual Similarity 17 (STS-17) dataset, rendered into images.
 
 **Dataset:** [`Pixel-Linguist/rendered-sts17`](https://huggingface.co/datasets/Pixel-Linguist/rendered-sts17) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2402.08183/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | cosine_spearman | ara, deu, eng, fra, ita, ... (9) | News, Social, Spoken, Web, Written | human-annotated | rendered |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | ara, deu, eng, fra, ita, ... (9) | News, Social, Spoken, Web, Written | human-annotated | rendered | cosine_spearman |
 
 
 
@@ -3078,15 +3126,15 @@ Semantic Textual Similarity 17 (STS-17) dataset, rendered into images.
 
 
 
-#### STSBenchmarkMultilingualVisualSTS
+#### `STSBenchmarkMultilingualVisualSTS` { .model-copy }
 
 Semantic Textual Similarity Benchmark (STSbenchmark) dataset, translated into target languages using DeepL API,then rendered into images.built upon multi-sts created by Philip May
 
 **Dataset:** [`Pixel-Linguist/rendered-stsb`](https://huggingface.co/datasets/Pixel-Linguist/rendered-stsb) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2402.08183/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | cosine_spearman | cmn, deu, eng, fra, ita, ... (10) | News, Social, Spoken, Web, Written | human-annotated | rendered |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | cmn, deu, eng, fra, ita, ... (10) | News, Social, Spoken, Web, Written | human-annotated | rendered | cosine_spearman |
 
 
 
@@ -3107,15 +3155,15 @@ Semantic Textual Similarity Benchmark (STSbenchmark) dataset, translated into ta
 
 
 
-#### VisualSTS-b-Multilingual
+#### `VisualSTS-b-Multilingual` { .model-copy }
 
 STSBenchmarkMultilingualVisualSTS multilingual.
 
 **License:** not specified • [Learn more →](https://arxiv.org/abs/2402.08183/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | cosine_spearman | cmn, deu, fra, ita, nld, ... (9) | News, Social, Spoken, Web, Written | human-annotated | rendered |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | cmn, deu, fra, ita, nld, ... (9) | News, Social, Spoken, Web, Written | human-annotated | rendered | cosine_spearman |
 
 
 
@@ -3142,15 +3190,15 @@ STSBenchmarkMultilingualVisualSTS multilingual.
     | [STSBenchmarkMultilingualVisualSTS](./visualsts(multi).md#stsbenchmarkmultilingualvisualsts) | VisualSTS(multi) | image        | cmn, deu, eng, fra, ita, ... (10) |
 
 
-#### VisualSTS17Multilingual
+#### `VisualSTS17Multilingual` { .model-copy }
 
 STS17MultilingualVisualSTS multilingual.
 
 **License:** not specified • [Learn more →](https://arxiv.org/abs/2402.08183/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | cosine_spearman | ara, deu, eng, fra, ita, ... (9) | News, Social, Spoken, Web, Written | human-annotated | rendered |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | ara, deu, eng, fra, ita, ... (9) | News, Social, Spoken, Web, Written | human-annotated | rendered | cosine_spearman |
 
 
 

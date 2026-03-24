@@ -2805,7 +2805,7 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
     }
 
     metadata = TaskMetadata(
-        type="VisionCentricQA", # TODO: Is this correct?
+        type="VisionCentricQA",  # TODO: Is this correct?
         name="MockVisionCentricQA",
         main_score="accuracy",
         **general_args,
@@ -3820,7 +3820,7 @@ class MockMultilingualImageMultilabelClassificationTask(
     }
 
     metadata = TaskMetadata(
-        type="ImageMultilabelClassification", # TODO: here is not task with this type should we remove the test? (we already have a multilingual test for multilabel classification with text modality))
+        type="ImageMultilabelClassification",  # TODO: here is not task with this type should we remove the test? (we already have a multilingual test for multilabel classification with text modality))
         name="MockMultilingualImageMultilabelClassification",
         main_score="accuracy",
         **general_args,

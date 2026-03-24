@@ -15,19 +15,22 @@ title: "Retrieval"
 
 <!-- START-TASKS -->
 
+
 ## Any2AnyMultilingualRetrieval
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 3
 
-#### WITT2IRetrieval
+#### `WITT2IRetrieval` { .model-copy }
 
 Retrieve images based on multilingual descriptions.
 
 **Dataset:** [`mteb/wit`](https://huggingface.co/datasets/mteb/wit) • **License:** cc-by-sa-4.0 • [Learn more →](https://proceedings.mlr.press/v162/bugliarello22a/bugliarello22a.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | ara, bul, dan, ell, eng, ... (11) | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | ara, bul, dan, ell, eng, ... (11) | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -50,15 +53,15 @@ Retrieve images based on multilingual descriptions.
 
 
 
-#### XFlickr30kCoT2IRetrieval
+#### `XFlickr30kCoT2IRetrieval` { .model-copy }
 
 Retrieve images based on multilingual descriptions.
 
 **Dataset:** [`mteb/xflickrco`](https://huggingface.co/datasets/mteb/xflickrco) • **License:** cc-by-sa-4.0 • [Learn more →](https://proceedings.mlr.press/v162/bugliarello22a/bugliarello22a.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | deu, eng, ind, jpn, rus, ... (8) | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu, eng, ind, jpn, rus, ... (8) | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -81,15 +84,15 @@ Retrieve images based on multilingual descriptions.
 
 
 
-#### XM3600T2IRetrieval
+#### `XM3600T2IRetrieval` { .model-copy }
 
 Retrieve images based on multilingual descriptions.
 
 **Dataset:** [`mteb/xm3600`](https://huggingface.co/datasets/mteb/xm3600) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2022.emnlp-main.45/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | ara, ben, ces, dan, deu, ... (38) | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | ara, ben, ces, dan, deu, ... (38) | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -110,19 +113,22 @@ Retrieve images based on multilingual descriptions.
 
 
 
+
 ## Any2AnyRetrieval
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 89
 
-#### AudioCapsA2TRetrieval
+#### `AudioCapsA2TRetrieval` { .model-copy }
 
 Natural language description for any kind of audio in the wild.
 
 **Dataset:** [`mteb/audiocaps_a2t`](https://huggingface.co/datasets/mteb/audiocaps_a2t) • **License:** mit • [Learn more →](https://audiocaps.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | eng, zxx | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | eng, zxx | Encyclopaedic, Written | derived | found | hit_rate_at_5 |
 
 
 
@@ -144,15 +150,15 @@ Natural language description for any kind of audio in the wild.
 
 
 
-#### AudioCapsT2ARetrieval
+#### `AudioCapsT2ARetrieval` { .model-copy }
 
 Natural language description for any kind of audio in the wild.
 
 **Dataset:** [`mteb/audiocaps_t2a`](https://huggingface.co/datasets/mteb/audiocaps_t2a) • **License:** mit • [Learn more →](https://audiocaps.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | eng, zxx | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | eng, zxx | Encyclopaedic, Written | derived | found | hit_rate_at_5 |
 
 
 
@@ -174,15 +180,15 @@ Natural language description for any kind of audio in the wild.
 
 
 
-#### AudioSetStrongA2TRetrieval
+#### `AudioSetStrongA2TRetrieval` { .model-copy }
 
 Retrieve all temporally-strong labeled events within 10s audio clips from the AudioSet Strongly-Labeled subset.
 
 **Dataset:** [`mteb/audioset_strong_a2t`](https://huggingface.co/datasets/mteb/audioset_strong_a2t) • **License:** cc-by-4.0 • [Learn more →](https://research.google.com/audioset/download_strong.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | eng | AudioScene | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | eng | AudioScene | derived | found | hit_rate_at_5 |
 
 
 
@@ -206,15 +212,15 @@ Retrieve all temporally-strong labeled events within 10s audio clips from the Au
 
 
 
-#### AudioSetStrongT2ARetrieval
+#### `AudioSetStrongT2ARetrieval` { .model-copy }
 
 Retrieve audio segments corresponding to a given sound event label from the AudioSet Strongly-Labeled 10s clips.
 
 **Dataset:** [`mteb/audioset_strong_t2a`](https://huggingface.co/datasets/mteb/audioset_strong_t2a) • **License:** cc-by-4.0 • [Learn more →](https://research.google.com/audioset/download_strong.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | eng | AudioScene | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | eng | AudioScene | derived | found | hit_rate_at_5 |
 
 
 
@@ -238,15 +244,15 @@ Retrieve audio segments corresponding to a given sound event label from the Audi
 
 
 
-#### BLINKIT2IRetrieval
+#### `BLINKIT2IRetrieval` { .model-copy }
 
 Retrieve images based on images and specific retrieval instructions.
 
 **Dataset:** [`mteb/blink-it2i`](https://huggingface.co/datasets/mteb/blink-it2i) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2404.12390)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to image (it2i) | hit_rate_at_1 | eng | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to image (it2i) | eng | Encyclopaedic | derived | found | hit_rate_at_1 |
 
 
 
@@ -267,15 +273,15 @@ Retrieve images based on images and specific retrieval instructions.
 
 
 
-#### BLINKIT2TRetrieval
+#### `BLINKIT2TRetrieval` { .model-copy }
 
 Retrieve images based on images and specific retrieval instructions.
 
 **Dataset:** [`mteb/blink-it2t`](https://huggingface.co/datasets/mteb/blink-it2t) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2404.12390)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to text (it2t) | hit_rate_at_1 | eng | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to text (it2t) | eng | Encyclopaedic | derived | found | hit_rate_at_1 |
 
 
 
@@ -296,15 +302,15 @@ Retrieve images based on images and specific retrieval instructions.
 
 
 
-#### CIRRIT2IRetrieval
+#### `CIRRIT2IRetrieval` { .model-copy }
 
 Retrieve images based on texts and images.
 
 **Dataset:** [`mteb/mbeir_cirr_task7`](https://huggingface.co/datasets/mteb/mbeir_cirr_task7) • **License:** cc-by-sa-4.0 • [Learn more →](https://openaccess.thecvf.com/content/ICCV2021/html/Liu_Image_Retrieval_on_Real-Life_Images_With_Pre-Trained_Vision-and-Language_Models_ICCV_2021_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to image (it2i) | ndcg_at_10 | eng | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to image (it2i) | eng | Encyclopaedic | derived | found | ndcg_at_10 |
 
 
 
@@ -326,15 +332,15 @@ Retrieve images based on texts and images.
 
 
 
-#### CMUArcticA2TRetrieval
+#### `CMUArcticA2TRetrieval` { .model-copy }
 
 Retrieve the correct transcription for an English speech segment. The dataset is derived from the phonetically balanced CMU Arctic single-speaker TTS corpora. The corpora contains 1150 samples based on read-aloud segments from books, which are out of copyright and derived from the Gutenberg project.
 
 **Dataset:** [`mteb/CMU_Arctic_a2t`](https://huggingface.co/datasets/mteb/CMU_Arctic_a2t) • **License:** cc0-1.0 • [Learn more →](http://festvox.org/cmu_arctic/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | eng | Spoken | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | eng | Spoken | derived | found | hit_rate_at_5 |
 
 
 
@@ -356,15 +362,15 @@ Retrieve the correct transcription for an English speech segment. The dataset is
 
 
 
-#### CMUArcticT2ARetrieval
+#### `CMUArcticT2ARetrieval` { .model-copy }
 
 Retrieve the correct audio segment for an English transcription. The dataset is derived from the phonetically balanced CMU Arctic single-speaker TTS corpora. The corpora contains 1150 audio-text pairs based on read-aloud segments from public domain books originally sourced from the Gutenberg project.
 
 **Dataset:** [`mteb/CMU_Arctic_t2a`](https://huggingface.co/datasets/mteb/CMU_Arctic_t2a) • **License:** cc0-1.0 • [Learn more →](http://festvox.org/cmu_arctic/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | eng | Spoken | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | eng | Spoken | derived | found | hit_rate_at_5 |
 
 
 
@@ -386,15 +392,15 @@ Retrieve the correct audio segment for an English transcription. The dataset is 
 
 
 
-#### CUB200I2IRetrieval
+#### `CUB200I2IRetrieval` { .model-copy }
 
 Retrieve bird images from 200 classes.
 
 **Dataset:** [`mteb/cub200_retrieval`](https://huggingface.co/datasets/mteb/cub200_retrieval) • **License:** not specified • [Learn more →](https://www.florian-schroff.de/publications/CUB-200.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | hit_rate_at_1 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Encyclopaedic | derived | created | hit_rate_at_1 |
 
 
 
@@ -416,15 +422,15 @@ Retrieve bird images from 200 classes.
 
 
 
-#### ClothoA2TRetrieval
+#### `ClothoA2TRetrieval` { .model-copy }
 
 An audio captioning datasetst containing audio clips and their corresponding captions.
 
 **Dataset:** [`mteb/Clotho`](https://huggingface.co/datasets/mteb/Clotho) • **License:** mit • [Learn more →](https://github.com/audio-captioning/clotho-dataset)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | eng | Encyclopaedic, Written | derived | found | hit_rate_at_5 |
 
 
 
@@ -448,15 +454,15 @@ An audio captioning datasetst containing audio clips and their corresponding cap
 
 
 
-#### ClothoT2ARetrieval
+#### `ClothoT2ARetrieval` { .model-copy }
 
 An audio captioning datasetst containing audio clips from the Freesound platform and their corresponding captions.
 
 **Dataset:** [`mteb/Clotho`](https://huggingface.co/datasets/mteb/Clotho) • **License:** mit • [Learn more →](https://github.com/audio-captioning/clotho-dataset)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | eng | Encyclopaedic, Written | derived | found | hit_rate_at_5 |
 
 
 
@@ -480,15 +486,15 @@ An audio captioning datasetst containing audio clips from the Freesound platform
 
 
 
-#### CommonVoiceMini17A2TRetrieval
+#### `CommonVoiceMini17A2TRetrieval` { .model-copy }
 
 Speech recordings with corresponding text transcriptions from CommonVoice dataset.
 
 **Dataset:** [`mteb/common_voice_17_0_mini`](https://huggingface.co/datasets/mteb/common_voice_17_0_mini) • **License:** cc0-1.0 • [Learn more →](https://commonvoice.mozilla.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | ara, ast, bel, ben, bre, ... (50) | Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | ara, ast, bel, ben, bre, ... (50) | Spoken | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -509,15 +515,15 @@ Speech recordings with corresponding text transcriptions from CommonVoice datase
 
 
 
-#### CommonVoiceMini17T2ARetrieval
+#### `CommonVoiceMini17T2ARetrieval` { .model-copy }
 
 Speech recordings with corresponding text transcriptions from CommonVoice dataset.
 
 **Dataset:** [`mteb/common_voice_17_0_mini`](https://huggingface.co/datasets/mteb/common_voice_17_0_mini) • **License:** cc0-1.0 • [Learn more →](https://commonvoice.mozilla.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | ara, ast, bel, ben, bre, ... (50) | Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | ara, ast, bel, ben, bre, ... (50) | Spoken | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -538,15 +544,15 @@ Speech recordings with corresponding text transcriptions from CommonVoice datase
 
 
 
-#### CommonVoiceMini21A2TRetrieval
+#### `CommonVoiceMini21A2TRetrieval` { .model-copy }
 
 Speech recordings with corresponding text transcriptions from CommonVoice dataset.
 
 **Dataset:** [`mteb/common_voice_21_0_mini`](https://huggingface.co/datasets/mteb/common_voice_21_0_mini) • **License:** cc0-1.0 • [Learn more →](https://commonvoice.mozilla.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | abk, afr, amh, ara, asm, ... (114) | Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | abk, afr, amh, ara, asm, ... (114) | Spoken | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -567,15 +573,15 @@ Speech recordings with corresponding text transcriptions from CommonVoice datase
 
 
 
-#### CommonVoiceMini21T2ARetrieval
+#### `CommonVoiceMini21T2ARetrieval` { .model-copy }
 
 Speech recordings with corresponding text transcriptions from CommonVoice dataset.
 
 **Dataset:** [`mteb/common_voice_21_0_mini`](https://huggingface.co/datasets/mteb/common_voice_21_0_mini) • **License:** cc0-1.0 • [Learn more →](https://commonvoice.mozilla.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | abk, afr, amh, ara, asm, ... (114) | Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | abk, afr, amh, ara, asm, ... (114) | Spoken | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -596,15 +602,15 @@ Speech recordings with corresponding text transcriptions from CommonVoice datase
 
 
 
-#### EDIST2ITRetrieval
+#### `EDIST2ITRetrieval` { .model-copy }
 
 Retrieve news images and titles based on news content.
 
 **Dataset:** [`mteb/mbeir_edis_task2`](https://huggingface.co/datasets/mteb/mbeir_edis_task2) • **License:** apache-2.0 • [Learn more →](https://aclanthology.org/2023.emnlp-main.297/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image, text (t2it) | ndcg_at_10 | eng | News | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image, text (t2it) | eng | News | derived | created | ndcg_at_10 |
 
 
 
@@ -626,15 +632,15 @@ Retrieve news images and titles based on news content.
 
 
 
-#### EmoVDBA2TRetrieval
+#### `EmoVDBA2TRetrieval` { .model-copy }
 
 Natural language emotional captions for speech segments from the EmoV-DB emotional voices database.
 
 **Dataset:** [`mteb/EmoV_DB_a2t`](https://huggingface.co/datasets/mteb/EmoV_DB_a2t) • **License:** https://github.com/numediart/EmoV-DB/blob/master/LICENSE.md • [Learn more →](https://github.com/numediart/EmoV-DB?tab=readme-ov-file)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | eng | Spoken | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | eng | Spoken | derived | found | hit_rate_at_5 |
 
 
 
@@ -658,15 +664,15 @@ Natural language emotional captions for speech segments from the EmoV-DB emotion
 
 
 
-#### EmoVDBT2ARetrieval
+#### `EmoVDBT2ARetrieval` { .model-copy }
 
 Natural language emotional captions for speech segments from the EmoV-DB emotional voices database.
 
 **Dataset:** [`mteb/EmoV_DB_t2a`](https://huggingface.co/datasets/mteb/EmoV_DB_t2a) • **License:** https://github.com/numediart/EmoV-DB/blob/master/LICENSE.md • [Learn more →](https://github.com/numediart/EmoV-DB?tab=readme-ov-file)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | eng | Spoken | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | eng | Spoken | derived | found | hit_rate_at_5 |
 
 
 
@@ -690,15 +696,15 @@ Natural language emotional captions for speech segments from the EmoV-DB emotion
 
 
 
-#### EncyclopediaVQAIT2ITRetrieval
+#### `EncyclopediaVQAIT2ITRetrieval` { .model-copy }
 
 Retrieval Wiki passage and image and passage to answer query about an image.
 
 **Dataset:** [`izhx/UMRB-EncyclopediaVQA`](https://huggingface.co/datasets/izhx/UMRB-EncyclopediaVQA) • **License:** cc-by-4.0 • [Learn more →](https://github.com/google-research/google-research/tree/master/encyclopedic_vqa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to image, text (it2it) | hit_rate_at_5 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to image, text (it2it) | eng | Encyclopaedic | derived | created | hit_rate_at_5 |
 
 
 
@@ -720,15 +726,15 @@ Retrieval Wiki passage and image and passage to answer query about an image.
 
 
 
-#### FORBI2IRetrieval
+#### `FORBI2IRetrieval` { .model-copy }
 
 Retrieve flat object images from 8 classes.
 
 **Dataset:** [`mteb/forb_retrieval`](https://huggingface.co/datasets/mteb/forb_retrieval) • **License:** not specified • [Learn more →](https://github.com/pxiangwu/FORB)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | hit_rate_at_1 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Encyclopaedic | derived | created | hit_rate_at_1 |
 
 
 
@@ -752,15 +758,15 @@ Retrieve flat object images from 8 classes.
 
 
 
-#### Fashion200kI2TRetrieval
+#### `Fashion200kI2TRetrieval` { .model-copy }
 
 Retrieve clothes based on descriptions.
 
 **Dataset:** [`mteb/mbeir_fashion200k_task3`](https://huggingface.co/datasets/mteb/mbeir_fashion200k_task3) • **License:** apache-2.0 • [Learn more →](https://openaccess.thecvf.com/content_iccv_2017/html/Han_Automatic_Spatially-Aware_Fashion_ICCV_2017_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | ndcg_at_10 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Encyclopaedic | derived | created | ndcg_at_10 |
 
 
 
@@ -782,15 +788,15 @@ Retrieve clothes based on descriptions.
 
 
 
-#### Fashion200kT2IRetrieval
+#### `Fashion200kT2IRetrieval` { .model-copy }
 
 Retrieve clothes based on descriptions.
 
 **Dataset:** [`mteb/mbeir_fashion200k_task0`](https://huggingface.co/datasets/mteb/mbeir_fashion200k_task0) • **License:** apache-2.0 • [Learn more →](https://openaccess.thecvf.com/content_iccv_2017/html/Han_Automatic_Spatially-Aware_Fashion_ICCV_2017_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Encyclopaedic | derived | created | ndcg_at_10 |
 
 
 
@@ -812,15 +818,15 @@ Retrieve clothes based on descriptions.
 
 
 
-#### FashionIQIT2IRetrieval
+#### `FashionIQIT2IRetrieval` { .model-copy }
 
 Retrieve clothes based on descriptions.
 
 **Dataset:** [`mteb/mbeir_fashioniq_task7`](https://huggingface.co/datasets/mteb/mbeir_fashioniq_task7) • **License:** apache-2.0 • [Learn more →](https://openaccess.thecvf.com/content/CVPR2021/html/Wu_Fashion_IQ_A_New_Dataset_Towards_Retrieving_Images_by_Natural_CVPR_2021_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to image (it2i) | ndcg_at_10 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to image (it2i) | eng | Encyclopaedic | derived | created | ndcg_at_10 |
 
 
 
@@ -842,15 +848,15 @@ Retrieve clothes based on descriptions.
 
 
 
-#### FleursA2TRetrieval
+#### `FleursA2TRetrieval` { .model-copy }
 
 Speech recordings with corresponding text transcriptions from the FLEURS dataset.
 
 **Dataset:** [`mteb/fleurs`](https://huggingface.co/datasets/mteb/fleurs) • **License:** apache-2.0 • [Learn more →](https://github.com/google-research-datasets/fleurs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | afr, amh, ara, asm, ast, ... (102) | Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | afr, amh, ara, asm, ast, ... (102) | Spoken | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -873,15 +879,15 @@ Speech recordings with corresponding text transcriptions from the FLEURS dataset
 
 
 
-#### FleursT2ARetrieval
+#### `FleursT2ARetrieval` { .model-copy }
 
 Speech recordings with corresponding text transcriptions from the FLEURS dataset.
 
 **Dataset:** [`mteb/fleurs`](https://huggingface.co/datasets/mteb/fleurs) • **License:** apache-2.0 • [Learn more →](https://github.com/google-research-datasets/fleurs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | afr, amh, ara, asm, ast, ... (102) | Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | afr, amh, ara, asm, ast, ... (102) | Spoken | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -904,15 +910,15 @@ Speech recordings with corresponding text transcriptions from the FLEURS dataset
 
 
 
-#### Flickr30kI2TRetrieval
+#### `Flickr30kI2TRetrieval` { .model-copy }
 
 Retrieve captions based on images.
 
 **Dataset:** [`mteb/flickr30ki2t`](https://huggingface.co/datasets/mteb/flickr30ki2t) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.semanticscholar.org/paper/From-image-descriptions-to-visual-denotations%3A-New-Young-Lai/44040913380206991b1991daf1192942e038fe31)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | ndcg_at_10 | eng | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -936,15 +942,15 @@ Retrieve captions based on images.
 
 
 
-#### Flickr30kT2IRetrieval
+#### `Flickr30kT2IRetrieval` { .model-copy }
 
 Retrieve images based on captions.
 
 **Dataset:** [`mteb/flickr30kt2i`](https://huggingface.co/datasets/mteb/flickr30kt2i) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.semanticscholar.org/paper/From-image-descriptions-to-visual-denotations%3A-New-Young-Lai/44040913380206991b1991daf1192942e038fe31)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | eng | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -968,15 +974,15 @@ Retrieve images based on captions.
 
 
 
-#### GLDv2I2IRetrieval
+#### `GLDv2I2IRetrieval` { .model-copy }
 
 Retrieve names of landmarks based on their image.
 
 **Dataset:** [`mteb/gld-v2`](https://huggingface.co/datasets/mteb/gld-v2) • **License:** apache-2.0 • [Learn more →](https://openaccess.thecvf.com/content_CVPR_2020/html/Weyand_Google_Landmarks_Dataset_v2_-_A_Large-Scale_Benchmark_for_Instance-Level_CVPR_2020_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | ndcg_at_10 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Encyclopaedic | derived | created | ndcg_at_10 |
 
 
 
@@ -998,15 +1004,15 @@ Retrieve names of landmarks based on their image.
 
 
 
-#### GLDv2I2TRetrieval
+#### `GLDv2I2TRetrieval` { .model-copy }
 
 Retrieve names of landmarks based on their image.
 
 **Dataset:** [`mteb/gld-v2-i2t`](https://huggingface.co/datasets/mteb/gld-v2-i2t) • **License:** apache-2.0 • [Learn more →](https://openaccess.thecvf.com/content_CVPR_2020/html/Weyand_Google_Landmarks_Dataset_v2_-_A_Large-Scale_Benchmark_for_Instance-Level_CVPR_2020_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | ndcg_at_10 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Encyclopaedic | derived | created | ndcg_at_10 |
 
 
 
@@ -1028,15 +1034,15 @@ Retrieve names of landmarks based on their image.
 
 
 
-#### GigaSpeechA2TRetrieval
+#### `GigaSpeechA2TRetrieval` { .model-copy }
 
 Given an English speech segment, retrieve its correct transcription. Audio comes from the 10 000‑hour training subset of GigaSpeech, which originates from ≈40 000 hours of transcribed audiobooks, podcasts, and YouTube.
 
 **Dataset:** [`mteb/gigaspeech_a2t`](https://huggingface.co/datasets/mteb/gigaspeech_a2t) • **License:** https://github.com/SpeechColab/GigaSpeech/blob/main/LICENSE • [Learn more →](https://github.com/SpeechColab/GigaSpeech)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | eng | Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | eng | Spoken | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -1057,15 +1063,15 @@ Given an English speech segment, retrieve its correct transcription. Audio comes
 
 
 
-#### GigaSpeechT2ARetrieval
+#### `GigaSpeechT2ARetrieval` { .model-copy }
 
 Given an English transcription, retrieve its corresponding audio segment. Audio comes from the 10 000‑hour training subset of GigaSpeech, sourced from ≈40 000 hours of transcribed audiobooks, podcasts, and YouTube.
 
 **Dataset:** [`mteb/gigaspeech_t2a`](https://huggingface.co/datasets/mteb/gigaspeech_t2a) • **License:** https://github.com/SpeechColab/GigaSpeech/blob/main/LICENSE • [Learn more →](https://github.com/SpeechColab/GigaSpeech)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | eng | Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | eng | Spoken | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -1086,15 +1092,15 @@ Given an English transcription, retrieve its corresponding audio segment. Audio 
 
 
 
-#### GoogleSVQA2TRetrieval
+#### `GoogleSVQA2TRetrieval` { .model-copy }
 
 Multilingual audio-to-text retrieval using the Simple Voice Questions (SVQ) dataset. Given an audio query, retrieve the corresponding text transcription.
 
 **Dataset:** [`mteb/svq`](https://huggingface.co/datasets/mteb/svq) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/google/svq)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | acm, apc, arq, arz, ben, ... (20) | Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | acm, apc, arq, arz, ben, ... (20) | Spoken | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -1116,15 +1122,15 @@ Multilingual audio-to-text retrieval using the Simple Voice Questions (SVQ) data
 
 
 
-#### GoogleSVQT2ARetrieval
+#### `GoogleSVQT2ARetrieval` { .model-copy }
 
 Multilingual text-to-audio retrieval using the Simple Voice Questions (SVQ) dataset. Given a text query, retrieve the corresponding audio recording.
 
 **Dataset:** [`mteb/svq`](https://huggingface.co/datasets/mteb/svq) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/google/svq)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | acm, apc, arq, arz, ben, ... (20) | Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | acm, apc, arq, arz, ben, ... (20) | Spoken | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -1146,15 +1152,15 @@ Multilingual text-to-audio retrieval using the Simple Voice Questions (SVQ) data
 
 
 
-#### HatefulMemesI2TRetrieval
+#### `HatefulMemesI2TRetrieval` { .model-copy }
 
 Retrieve captions based on memes to assess OCR abilities.
 
 **Dataset:** [`mteb/MMSoc_HatefulMemes`](https://huggingface.co/datasets/mteb/MMSoc_HatefulMemes) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2005.04790)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | ndcg_at_10 | eng | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Encyclopaedic | derived | found | ndcg_at_10 |
 
 
 
@@ -1177,15 +1183,15 @@ Retrieve captions based on memes to assess OCR abilities.
 
 
 
-#### HatefulMemesT2IRetrieval
+#### `HatefulMemesT2IRetrieval` { .model-copy }
 
 Retrieve captions based on memes to assess OCR abilities.
 
 **Dataset:** [`mteb/MMSoc_HatefulMemes`](https://huggingface.co/datasets/mteb/MMSoc_HatefulMemes) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2005.04790)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | eng | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Encyclopaedic | derived | found | ndcg_at_10 |
 
 
 
@@ -1208,15 +1214,15 @@ Retrieve captions based on memes to assess OCR abilities.
 
 
 
-#### HiFiTTSA2TRetrieval
+#### `HiFiTTSA2TRetrieval` { .model-copy }
 
 Sentence-level text captions aligned to 44.1 kHz audiobook speech segments from the Hi‑Fi Multi‑Speaker English TTS dataset. Dataset is based on public audiobooks from LibriVox and texts from Project Gutenberg.
 
 **Dataset:** [`mteb/hifi-tts_a2t`](https://huggingface.co/datasets/mteb/hifi-tts_a2t) • **License:** cc-by-4.0 • [Learn more →](https://openslr.org/109/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | eng | Spoken | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | eng | Spoken | derived | found | hit_rate_at_5 |
 
 
 
@@ -1237,15 +1243,15 @@ Sentence-level text captions aligned to 44.1 kHz audiobook speech segments fro
 
 
 
-#### HiFiTTST2ARetrieval
+#### `HiFiTTST2ARetrieval` { .model-copy }
 
 Sentence-level text captions aligned to 44.1 kHz audiobook speech segments from the Hi‑Fi Multi‑Speaker English TTS dataset. Dataset is based on public audiobooks from LibriVox and texts from Project Gutenberg.
 
 **Dataset:** [`mteb/hifi-tts_t2a`](https://huggingface.co/datasets/mteb/hifi-tts_t2a) • **License:** cc-by-4.0 • [Learn more →](https://openslr.org/109/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | eng | Spoken | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | eng | Spoken | derived | found | hit_rate_at_5 |
 
 
 
@@ -1266,15 +1272,15 @@ Sentence-level text captions aligned to 44.1 kHz audiobook speech segments fro
 
 
 
-#### ImageCoDeT2IRetrieval
+#### `ImageCoDeT2IRetrieval` { .model-copy }
 
 Retrieve a specific video frame based on a precise caption.
 
 **Dataset:** [`mteb/imagecode`](https://huggingface.co/datasets/mteb/imagecode) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2022.acl-long.241.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | hit_rate_at_3 | eng | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web, Written | derived | found | hit_rate_at_3 |
 
 
 
@@ -1295,15 +1301,15 @@ Retrieve a specific video frame based on a precise caption.
 
 
 
-#### InfoSeekIT2ITRetrieval
+#### `InfoSeekIT2ITRetrieval` { .model-copy }
 
 Retrieve source text and image information to answer questions about images.
 
 **Dataset:** [`mteb/InfoSeekIT2ITRetrieval`](https://huggingface.co/datasets/mteb/InfoSeekIT2ITRetrieval) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2023.emnlp-main.925)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to image, text (it2it) | ndcg_at_10 | eng | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to image, text (it2it) | eng | Encyclopaedic | derived | found | ndcg_at_10 |
 
 
 
@@ -1325,15 +1331,15 @@ Retrieve source text and image information to answer questions about images.
 
 
 
-#### InfoSeekIT2TRetrieval
+#### `InfoSeekIT2TRetrieval` { .model-copy }
 
 Retrieve source information to answer questions about images.
 
 **Dataset:** [`mteb/mbeir_infoseek_task6`](https://huggingface.co/datasets/mteb/mbeir_infoseek_task6) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2023.emnlp-main.925)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to text (it2t) | ndcg_at_10 | eng | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to text (it2t) | eng | Encyclopaedic | derived | found | ndcg_at_10 |
 
 
 
@@ -1355,15 +1361,15 @@ Retrieve source information to answer questions about images.
 
 
 
-#### JLCorpusA2TRetrieval
+#### `JLCorpusA2TRetrieval` { .model-copy }
 
 Emotional speech segments from the JL-Corpus, balanced over long vowels and annotated for primary and secondary emotions.
 
 **Dataset:** [`mteb/jl_corpus_a2t`](https://huggingface.co/datasets/mteb/jl_corpus_a2t) • **License:** cc0-1.0 • [Learn more →](https://www.kaggle.com/tli725/jl-corpus)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | eng | Spoken | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | eng | Spoken | derived | found | hit_rate_at_5 |
 
 
 
@@ -1384,15 +1390,15 @@ Emotional speech segments from the JL-Corpus, balanced over long vowels and anno
 
 
 
-#### JLCorpusT2ARetrieval
+#### `JLCorpusT2ARetrieval` { .model-copy }
 
 Emotional speech segments from the JL-Corpus, balanced over long vowels and annotated for primary and secondary emotions.
 
 **Dataset:** [`mteb/jl_corpus_t2a`](https://huggingface.co/datasets/mteb/jl_corpus_t2a) • **License:** cc0-1.0 • [Learn more →](https://www.kaggle.com/tli725/jl-corpus)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | eng | Spoken | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | eng | Spoken | derived | found | hit_rate_at_5 |
 
 
 
@@ -1413,15 +1419,15 @@ Emotional speech segments from the JL-Corpus, balanced over long vowels and anno
 
 
 
-#### JamAltArtistA2ARetrieval
+#### `JamAltArtistA2ARetrieval` { .model-copy }
 
 Given audio clip of a song (query), retrieve all songs from the same artist in the Jam-Alt-Lines dataset
 
 **Dataset:** [`mteb/jam-alt-lines`](https://huggingface.co/datasets/mteb/jam-alt-lines) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://huggingface.co/datasets/jamendolyrics/jam-alt-lines)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | ndcg_at_10 | deu, eng, fra, spa | Music | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | deu, eng, fra, spa | Music | derived | found | ndcg_at_10 |
 
 
 
@@ -1450,15 +1456,15 @@ Given audio clip of a song (query), retrieve all songs from the same artist in t
 
 
 
-#### JamAltLyricA2TRetrieval
+#### `JamAltLyricA2TRetrieval` { .model-copy }
 
 From audio clips of songs (query), retrieve corresponding textual lyric from the Jam-Alt-Lines dataset
 
 **Dataset:** [`mteb/jam-alt-lines`](https://huggingface.co/datasets/mteb/jam-alt-lines) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://huggingface.co/datasets/jamendolyrics/jam-alt-lines)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | ndcg_at_10 | deu, eng, fra, spa | Music | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | deu, eng, fra, spa | Music | derived | found | ndcg_at_10 |
 
 
 
@@ -1487,15 +1493,15 @@ From audio clips of songs (query), retrieve corresponding textual lyric from the
 
 
 
-#### JamAltLyricT2ARetrieval
+#### `JamAltLyricT2ARetrieval` { .model-copy }
 
 From textual lyrics (query), retrieve corresponding audio clips of songs from the Jam-Alt-Lines dataset
 
 **Dataset:** [`mteb/jam-alt-lines`](https://huggingface.co/datasets/mteb/jam-alt-lines) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://huggingface.co/datasets/jamendolyrics/jam-alt-lines)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | ndcg_at_10 | deu, eng, fra, spa | Music | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | deu, eng, fra, spa | Music | derived | found | ndcg_at_10 |
 
 
 
@@ -1524,15 +1530,15 @@ From textual lyrics (query), retrieve corresponding audio clips of songs from th
 
 
 
-#### LASSA2TRetrieval
+#### `LASSA2TRetrieval` { .model-copy }
 
 Language-Queried Audio Source Separation (LASS) dataset for audio-to-text retrieval. Retrieve text descriptions/captions for audio clips using natural language queries.The original dataset is based on the AudioCaps dataset.The source audio has been synthesized by mixing two audio with their labelled snr ratio as indicated in the dataset.
 
 **Dataset:** [`mteb/lass-synth-a2t`](https://huggingface.co/datasets/mteb/lass-synth-a2t) • **License:** mit • [Learn more →](https://dcase.community/challenge2024/task-language-queried-audio-source-separation)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | eng | AudioScene | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | eng | AudioScene | derived | found | hit_rate_at_5 |
 
 
 
@@ -1553,15 +1559,15 @@ Language-Queried Audio Source Separation (LASS) dataset for audio-to-text retrie
 
 
 
-#### LASST2ARetrieval
+#### `LASST2ARetrieval` { .model-copy }
 
 Language-Queried Audio Source Separation (LASS) dataset for text-to-audio retrieval. Retrieve audio clips corresponding to natural language text descriptions/captions.The original dataset is based on the AudioCaps dataset.The source audio has been synthesized by mixing two audio with their labelled snr ratio as indicated in the dataset.
 
 **Dataset:** [`mteb/lass-synth-t2a`](https://huggingface.co/datasets/mteb/lass-synth-t2a) • **License:** mit • [Learn more →](https://dcase.community/challenge2024/task-language-queried-audio-source-separation)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | eng | AudioScene | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | eng | AudioScene | derived | found | hit_rate_at_5 |
 
 
 
@@ -1582,15 +1588,15 @@ Language-Queried Audio Source Separation (LASS) dataset for text-to-audio retrie
 
 
 
-#### LLaVAIT2TRetrieval
+#### `LLaVAIT2TRetrieval` { .model-copy }
 
 Retrieve responses to answer questions about images.
 
 **Dataset:** [`izhx/UMRB-LLaVA`](https://huggingface.co/datasets/izhx/UMRB-LLaVA) • **License:** cc-by-4.0 • [Learn more →](https://github.com/LinWeizheDragon/FLMR/blob/main/docs/Datasets.md)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to text (it2t) | hit_rate_at_5 | eng | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to text (it2t) | eng | Encyclopaedic | derived | found | hit_rate_at_5 |
 
 
 
@@ -1623,15 +1629,15 @@ Retrieve responses to answer questions about images.
 
 
 
-#### LibriTTSA2TRetrieval
+#### `LibriTTSA2TRetrieval` { .model-copy }
 
 Given audiobook speech segments from the multi‑speaker LibriTTS corpus, retrieve the correct text transcription. LibriTTS is a 585‑hour, 24 kHz, multi‑speaker English TTS corpus derived from LibriVox (audio) and Project Gutenberg (text).
 
 **Dataset:** [`mteb/LibriTTS_a2t`](https://huggingface.co/datasets/mteb/LibriTTS_a2t) • **License:** cc-by-4.0 • [Learn more →](https://www.openslr.org/60/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | eng | Spoken | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | eng | Spoken | derived | found | hit_rate_at_5 |
 
 
 
@@ -1655,15 +1661,15 @@ Given audiobook speech segments from the multi‑speaker LibriTTS corpus, retrie
 
 
 
-#### LibriTTST2ARetrieval
+#### `LibriTTST2ARetrieval` { .model-copy }
 
 Given an English text transcription, retrieve its corresponding audiobook speech segment from the multi‑speaker LibriTTS corpus. LibriTTS is a 585‑hour, 24 kHz, multi‑speaker English TTS corpus derived from LibriVox and Project Gutenberg.
 
 **Dataset:** [`mteb/LibriTTS_t2a`](https://huggingface.co/datasets/mteb/LibriTTS_t2a) • **License:** cc-by-4.0 • [Learn more →](https://www.openslr.org/60/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | eng | Spoken | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | eng | Spoken | derived | found | hit_rate_at_5 |
 
 
 
@@ -1687,15 +1693,15 @@ Given an English text transcription, retrieve its corresponding audiobook speech
 
 
 
-#### MACSA2TRetrieval
+#### `MACSA2TRetrieval` { .model-copy }
 
 Audio captions and tags for urban acoustic scenes in TAU Urban Acoustic Scenes 2019 development dataset.
 
 **Dataset:** [`mteb/MACS_a2t`](https://huggingface.co/datasets/mteb/MACS_a2t) • **License:** https://zenodo.org/records/5114771 • [Learn more →](https://zenodo.org/records/5114771)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | eng | AudioScene | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | eng | AudioScene | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -1719,15 +1725,15 @@ Audio captions and tags for urban acoustic scenes in TAU Urban Acoustic Scenes 2
 
 
 
-#### MACST2ARetrieval
+#### `MACST2ARetrieval` { .model-copy }
 
 Audio captions and tags for urban acoustic scenes in TAU Urban Acoustic Scenes 2019 development dataset.
 
 **Dataset:** [`mteb/MACS_t2a`](https://huggingface.co/datasets/mteb/MACS_t2a) • **License:** https://zenodo.org/records/5114771 • [Learn more →](https://zenodo.org/records/5114771)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | eng | AudioScene | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | eng | AudioScene | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -1751,15 +1757,15 @@ Audio captions and tags for urban acoustic scenes in TAU Urban Acoustic Scenes 2
 
 
 
-#### METI2IRetrieval
+#### `METI2IRetrieval` { .model-copy }
 
 Retrieve photos of more than 224k artworks.
 
 **Dataset:** [`mteb/met`](https://huggingface.co/datasets/mteb/met) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2202.01747)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | hit_rate_at_1 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Encyclopaedic | derived | created | hit_rate_at_1 |
 
 
 
@@ -1780,15 +1786,15 @@ Retrieve photos of more than 224k artworks.
 
 
 
-#### MSCOCOI2TRetrieval
+#### `MSCOCOI2TRetrieval` { .model-copy }
 
 Retrieve captions based on images.
 
 **Dataset:** [`mteb/mbeir_mscoco_task3`](https://huggingface.co/datasets/mteb/mbeir_mscoco_task3) • **License:** cc-by-sa-4.0 • [Learn more →](https://link.springer.com/chapter/10.1007/978-3-319-10602-1_48)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | ndcg_at_10 | eng | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Encyclopaedic | derived | found | ndcg_at_10 |
 
 
 
@@ -1811,15 +1817,15 @@ Retrieve captions based on images.
 
 
 
-#### MSCOCOT2IRetrieval
+#### `MSCOCOT2IRetrieval` { .model-copy }
 
 Retrieve images based on captions.
 
 **Dataset:** [`mteb/mbeir_mscoco_task0`](https://huggingface.co/datasets/mteb/mbeir_mscoco_task0) • **License:** cc-by-sa-4.0 • [Learn more →](https://link.springer.com/chapter/10.1007/978-3-319-10602-1_48)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | eng | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Encyclopaedic | derived | found | ndcg_at_10 |
 
 
 
@@ -1842,15 +1848,15 @@ Retrieve images based on captions.
 
 
 
-#### MemotionI2TRetrieval
+#### `MemotionI2TRetrieval` { .model-copy }
 
 Retrieve captions based on memes.
 
 **Dataset:** [`mteb/MMSoc_Memotion`](https://huggingface.co/datasets/mteb/MMSoc_Memotion) • **License:** mit • [Learn more →](https://aclanthology.org/2020.semeval-1.99/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | ndcg_at_10 | eng | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Encyclopaedic | derived | found | ndcg_at_10 |
 
 
 
@@ -1872,15 +1878,15 @@ Retrieve captions based on memes.
 
 
 
-#### MemotionT2IRetrieval
+#### `MemotionT2IRetrieval` { .model-copy }
 
 Retrieve memes based on captions.
 
 **Dataset:** [`mteb/MMSoc_Memotion`](https://huggingface.co/datasets/mteb/MMSoc_Memotion) • **License:** mit • [Learn more →](https://aclanthology.org/2020.semeval-1.99/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | eng | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Encyclopaedic | derived | found | ndcg_at_10 |
 
 
 
@@ -1902,15 +1908,15 @@ Retrieve memes based on captions.
 
 
 
-#### MusicCapsA2TRetrieval
+#### `MusicCapsA2TRetrieval` { .model-copy }
 
 Natural language description for music audio.
 
 **Dataset:** [`mteb/MusicCaps_a2t`](https://huggingface.co/datasets/mteb/MusicCaps_a2t) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/nateraw/download-musiccaps-dataset)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | zxx | Music | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | zxx | Music | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -1934,15 +1940,15 @@ Natural language description for music audio.
 
 
 
-#### MusicCapsT2ARetrieval
+#### `MusicCapsT2ARetrieval` { .model-copy }
 
 Natural language description for music audio.
 
 **Dataset:** [`mteb/MusicCaps_t2a`](https://huggingface.co/datasets/mteb/MusicCaps_t2a) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/nateraw/download-musiccaps-dataset)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | zxx | Music | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | zxx | Music | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -1966,15 +1972,15 @@ Natural language description for music audio.
 
 
 
-#### NIGHTSI2IRetrieval
+#### `NIGHTSI2IRetrieval` { .model-copy }
 
 Retrieval identical image to the given image.
 
 **Dataset:** [`mteb/mbeir_nights_task4`](https://huggingface.co/datasets/mteb/mbeir_nights_task4) • **License:** cc-by-sa-4.0 • [Learn more →](https://proceedings.neurips.cc/paper_files/paper/2023/hash/9f09f316a3eaf59d9ced5ffaefe97e0f-Abstract-Conference.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | ndcg_at_10 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Encyclopaedic | derived | created | ndcg_at_10 |
 
 
 
@@ -1996,15 +2002,15 @@ Retrieval identical image to the given image.
 
 
 
-#### OKVQAIT2TRetrieval
+#### `OKVQAIT2TRetrieval` { .model-copy }
 
 Retrieval a Wiki passage to answer query about an image.
 
 **Dataset:** [`izhx/UMRB-OKVQA`](https://huggingface.co/datasets/izhx/UMRB-OKVQA) • **License:** cc-by-4.0 • [Learn more →](https://okvqa.allenai.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to text (it2t) | hit_rate_at_10 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to text (it2t) | eng | Encyclopaedic | derived | created | hit_rate_at_10 |
 
 
 
@@ -2026,15 +2032,15 @@ Retrieval a Wiki passage to answer query about an image.
 
 
 
-#### OVENIT2ITRetrieval
+#### `OVENIT2ITRetrieval` { .model-copy }
 
 Retrieval a Wiki image and passage to answer query about an image.
 
 **Dataset:** [`mteb/mbeir_oven_task8`](https://huggingface.co/datasets/mteb/mbeir_oven_task8) • **License:** cc-by-sa-4.0 • [Learn more →](https://openaccess.thecvf.com/content/ICCV2023/html/Hu_Open-domain_Visual_Entity_Recognition_Towards_Recognizing_Millions_of_Wikipedia_Entities_ICCV_2023_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to image, text (it2it) | ndcg_at_10 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to image, text (it2it) | eng | Encyclopaedic | derived | created | ndcg_at_10 |
 
 
 
@@ -2056,15 +2062,15 @@ Retrieval a Wiki image and passage to answer query about an image.
 
 
 
-#### OVENIT2TRetrieval
+#### `OVENIT2TRetrieval` { .model-copy }
 
 Retrieval a Wiki passage to answer query about an image.
 
 **Dataset:** [`mteb/mbeir_oven_task6`](https://huggingface.co/datasets/mteb/mbeir_oven_task6) • **License:** cc-by-sa-4.0 • [Learn more →](https://openaccess.thecvf.com/content/ICCV2023/html/Hu_Open-domain_Visual_Entity_Recognition_Towards_Recognizing_Millions_of_Wikipedia_Entities_ICCV_2023_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to text (it2t) | ndcg_at_10 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to text (it2t) | eng | Encyclopaedic | derived | created | ndcg_at_10 |
 
 
 
@@ -2086,15 +2092,15 @@ Retrieval a Wiki passage to answer query about an image.
 
 
 
-#### ROxfordEasyI2IRetrieval
+#### `ROxfordEasyI2IRetrieval` { .model-copy }
 
 Retrieve photos of landmarks in Oxford, UK.
 
 **Dataset:** [`mteb/r-oxford-easy-multi`](https://huggingface.co/datasets/mteb/r-oxford-easy-multi) • **License:** not specified • [Learn more →](https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | map_at_5 | eng | Web | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Web | derived | created | map_at_5 |
 
 
 
@@ -2116,15 +2122,15 @@ Retrieve photos of landmarks in Oxford, UK.
 
 
 
-#### ROxfordHardI2IRetrieval
+#### `ROxfordHardI2IRetrieval` { .model-copy }
 
 Retrieve photos of landmarks in Oxford, UK.
 
 **Dataset:** [`mteb/r-oxford-hard-multi`](https://huggingface.co/datasets/mteb/r-oxford-hard-multi) • **License:** not specified • [Learn more →](https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | map_at_5 | eng | Web | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Web | derived | created | map_at_5 |
 
 
 
@@ -2146,15 +2152,15 @@ Retrieve photos of landmarks in Oxford, UK.
 
 
 
-#### ROxfordMediumI2IRetrieval
+#### `ROxfordMediumI2IRetrieval` { .model-copy }
 
 Retrieve photos of landmarks in Oxford, UK.
 
 **Dataset:** [`mteb/r-oxford-medium-multi`](https://huggingface.co/datasets/mteb/r-oxford-medium-multi) • **License:** not specified • [Learn more →](https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | map_at_5 | eng | Web | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Web | derived | created | map_at_5 |
 
 
 
@@ -2176,15 +2182,15 @@ Retrieve photos of landmarks in Oxford, UK.
 
 
 
-#### RP2kI2IRetrieval
+#### `RP2kI2IRetrieval` { .model-copy }
 
 Retrieve photos of 39457 products.
 
 **Dataset:** [`mteb/rp2k`](https://huggingface.co/datasets/mteb/rp2k) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2006.12634)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | hit_rate_at_1 | eng | Web | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Web | derived | created | hit_rate_at_1 |
 
 
 
@@ -2205,15 +2211,15 @@ Retrieve photos of 39457 products.
 
 
 
-#### RParisEasyI2IRetrieval
+#### `RParisEasyI2IRetrieval` { .model-copy }
 
 Retrieve photos of landmarks in Paris, UK.
 
 **Dataset:** [`mteb/r-paris-easy-multi`](https://huggingface.co/datasets/mteb/r-paris-easy-multi) • **License:** not specified • [Learn more →](https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | map_at_5 | eng | Web | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Web | derived | created | map_at_5 |
 
 
 
@@ -2235,15 +2241,15 @@ Retrieve photos of landmarks in Paris, UK.
 
 
 
-#### RParisHardI2IRetrieval
+#### `RParisHardI2IRetrieval` { .model-copy }
 
 Retrieve photos of landmarks in Paris, UK.
 
 **Dataset:** [`mteb/r-paris-hard-multi`](https://huggingface.co/datasets/mteb/r-paris-hard-multi) • **License:** not specified • [Learn more →](https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | map_at_5 | eng | Web | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Web | derived | created | map_at_5 |
 
 
 
@@ -2265,15 +2271,15 @@ Retrieve photos of landmarks in Paris, UK.
 
 
 
-#### RParisMediumI2IRetrieval
+#### `RParisMediumI2IRetrieval` { .model-copy }
 
 Retrieve photos of landmarks in Paris, UK.
 
 **Dataset:** [`mteb/r-paris-medium-multi`](https://huggingface.co/datasets/mteb/r-paris-medium-multi) • **License:** not specified • [Learn more →](https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | map_at_5 | eng | Web | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Web | derived | created | map_at_5 |
 
 
 
@@ -2295,15 +2301,15 @@ Retrieve photos of landmarks in Paris, UK.
 
 
 
-#### ReMuQIT2TRetrieval
+#### `ReMuQIT2TRetrieval` { .model-copy }
 
 Retrieval of a Wiki passage to answer a query about an image.
 
 **Dataset:** [`izhx/UMRB-ReMuQ`](https://huggingface.co/datasets/izhx/UMRB-ReMuQ) • **License:** cc0-1.0 • [Learn more →](https://github.com/luomancs/ReMuQ)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to text (it2t) | hit_rate_at_5 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to text (it2t) | eng | Encyclopaedic | derived | created | hit_rate_at_5 |
 
 
 
@@ -2337,15 +2343,15 @@ Retrieval of a Wiki passage to answer a query about an image.
 
 
 
-#### SOPI2IRetrieval
+#### `SOPI2IRetrieval` { .model-copy }
 
 Retrieve product photos of 22634 online products.
 
 **Dataset:** [`mteb/stanford-online-products`](https://huggingface.co/datasets/mteb/stanford-online-products) • **License:** not specified • [Learn more →](https://paperswithcode.com/dataset/stanford-online-products)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | hit_rate_at_1 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Encyclopaedic | derived | created | hit_rate_at_1 |
 
 
 
@@ -2367,15 +2373,15 @@ Retrieve product photos of 22634 online products.
 
 
 
-#### SciMMIRI2TRetrieval
+#### `SciMMIRI2TRetrieval` { .model-copy }
 
 Retrieve captions based on figures and tables.
 
 **Dataset:** [`mteb/SciMMIR`](https://huggingface.co/datasets/mteb/SciMMIR) • **License:** mit • [Learn more →](https://aclanthology.org/2024.findings-acl.746/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | ndcg_at_10 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Academic | derived | found | ndcg_at_10 |
 
 
 
@@ -2399,15 +2405,15 @@ Retrieve captions based on figures and tables.
 
 
 
-#### SciMMIRT2IRetrieval
+#### `SciMMIRT2IRetrieval` { .model-copy }
 
 Retrieve figures and tables based on captions.
 
 **Dataset:** [`mteb/SciMMIR`](https://huggingface.co/datasets/mteb/SciMMIR) • **License:** mit • [Learn more →](https://aclanthology.org/2024.findings-acl.746/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_10 |
 
 
 
@@ -2431,15 +2437,15 @@ Retrieve figures and tables based on captions.
 
 
 
-#### SketchyI2IRetrieval
+#### `SketchyI2IRetrieval` { .model-copy }
 
 Retrieve photos from sketches.
 
 **Dataset:** [`mteb/sketchy`](https://huggingface.co/datasets/mteb/sketchy) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2202.01747)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | hit_rate_at_1 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Encyclopaedic | derived | created | hit_rate_at_1 |
 
 
 
@@ -2460,15 +2466,15 @@ Retrieve photos from sketches.
 
 
 
-#### SoundDescsA2TRetrieval
+#### `SoundDescsA2TRetrieval` { .model-copy }
 
 Natural language description for different audio sources from the BBC Sound Effects webpage.
 
 **Dataset:** [`mteb/sounddescs_a2t`](https://huggingface.co/datasets/mteb/sounddescs_a2t) • **License:** apache-2.0 • [Learn more →](https://github.com/akoepke/audio-retrieval-benchmark)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | zxx | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | zxx | Encyclopaedic, Written | derived | found | hit_rate_at_5 |
 
 
 
@@ -2489,15 +2495,15 @@ Natural language description for different audio sources from the BBC Sound Effe
 
 
 
-#### SoundDescsT2ARetrieval
+#### `SoundDescsT2ARetrieval` { .model-copy }
 
 Natural language description for different audio sources from the BBC Sound Effects webpage.
 
 **Dataset:** [`mteb/sounddescs_t2a`](https://huggingface.co/datasets/mteb/sounddescs_t2a) • **License:** apache-2.0 • [Learn more →](https://github.com/akoepke/audio-retrieval-benchmark)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | zxx | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | zxx | Encyclopaedic, Written | derived | found | hit_rate_at_5 |
 
 
 
@@ -2518,15 +2524,15 @@ Natural language description for different audio sources from the BBC Sound Effe
 
 
 
-#### SpokenSQuADT2ARetrieval
+#### `SpokenSQuADT2ARetrieval` { .model-copy }
 
 Text-to-audio retrieval task based on SpokenSQuAD dataset. Given a text question, retrieve relevant audio segments that contain the answer. Questions are derived from SQuAD reading comprehension dataset with corresponding spoken passages.
 
 **Dataset:** [`mteb/spoken-squad-t2a`](https://huggingface.co/datasets/mteb/spoken-squad-t2a) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/chiuwy/Spoken-SQuAD)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | eng | Academic, Encyclopaedic, Non-fiction | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | eng | Academic, Encyclopaedic, Non-fiction | derived | found | hit_rate_at_5 |
 
 
 
@@ -2548,15 +2554,15 @@ Text-to-audio retrieval task based on SpokenSQuAD dataset. Given a text question
 
 
 
-#### StanfordCarsI2IRetrieval
+#### `StanfordCarsI2IRetrieval` { .model-copy }
 
 Retrieve car images from 196 makes.
 
 **Dataset:** [`mteb/stanford_cars_retrieval`](https://huggingface.co/datasets/mteb/stanford_cars_retrieval) • **License:** not specified • [Learn more →](https://pure.mpg.de/rest/items/item_2029263/component/file_2029262/content)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to image (i2i) | hit_rate_at_1 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to image (i2i) | eng | Encyclopaedic | derived | created | hit_rate_at_1 |
 
 
 
@@ -2577,15 +2583,15 @@ Retrieve car images from 196 makes.
 
 
 
-#### TUBerlinT2IRetrieval
+#### `TUBerlinT2IRetrieval` { .model-copy }
 
 Retrieve sketch images based on text descriptions.
 
 **Dataset:** [`mteb/tu-berlin`](https://huggingface.co/datasets/mteb/tu-berlin) • **License:** cc-by-sa-4.0 • [Learn more →](https://dl.acm.org/doi/pdf/10.1145/2185520.2185540)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | eng | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Encyclopaedic | derived | found | ndcg_at_10 |
 
 
 
@@ -2610,15 +2616,15 @@ Retrieve sketch images based on text descriptions.
 
 
 
-#### UrbanSound8KA2TRetrieval
+#### `UrbanSound8KA2TRetrieval` { .model-copy }
 
 UrbanSound8K: Audio-to-text retrieval of urban sound events.
 
 **Dataset:** [`mteb/Urbansound8K_a2t`](https://huggingface.co/datasets/mteb/Urbansound8K_a2t) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://huggingface.co/datasets/CLAPv2/Urbansound8K)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to text (a2t) | hit_rate_at_5 | zxx | AudioScene | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to text (a2t) | zxx | AudioScene | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -2641,15 +2647,15 @@ UrbanSound8K: Audio-to-text retrieval of urban sound events.
 
 
 
-#### UrbanSound8KT2ARetrieval
+#### `UrbanSound8KT2ARetrieval` { .model-copy }
 
 UrbanSound8K: Text-to-audio retrieval of urban sound events.
 
 **Dataset:** [`mteb/Urbansound8K_t2a`](https://huggingface.co/datasets/mteb/Urbansound8K_t2a) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://huggingface.co/datasets/CLAPv2/Urbansound8K)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to audio (t2a) | hit_rate_at_5 | zxx | AudioScene | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to audio (t2a) | zxx | AudioScene | human-annotated | found | hit_rate_at_5 |
 
 
 
@@ -2672,15 +2678,15 @@ UrbanSound8K: Text-to-audio retrieval of urban sound events.
 
 
 
-#### VQA2IT2TRetrieval
+#### `VQA2IT2TRetrieval` { .model-copy }
 
 Retrieve the correct answer for a question about an image.
 
 **Dataset:** [`mteb/vqa-2`](https://huggingface.co/datasets/mteb/vqa-2) • **License:** cc-by-sa-4.0 • [Learn more →](https://openaccess.thecvf.com/content_cvpr_2017/html/Goyal_Making_the_v_CVPR_2017_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to text (it2t) | ndcg_at_10 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to text (it2t) | eng | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -2702,15 +2708,15 @@ Retrieve the correct answer for a question about an image.
 
 
 
-#### VisualNewsI2TRetrieval
+#### `VisualNewsI2TRetrieval` { .model-copy }
 
 Retrieval entity-rich captions for news images.
 
 **Dataset:** [`mteb/mbeir_visualnews_task3`](https://huggingface.co/datasets/mteb/mbeir_visualnews_task3) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2021.emnlp-main.542/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | ndcg_at_10 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Encyclopaedic | derived | created | ndcg_at_10 |
 
 
 
@@ -2732,15 +2738,15 @@ Retrieval entity-rich captions for news images.
 
 
 
-#### VisualNewsT2IRetrieval
+#### `VisualNewsT2IRetrieval` { .model-copy }
 
 Retrieve news images with captions.
 
 **Dataset:** [`mteb/mbeir_visualnews_task0`](https://huggingface.co/datasets/mteb/mbeir_visualnews_task0) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2021.emnlp-main.542/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Encyclopaedic | derived | created | ndcg_at_10 |
 
 
 
@@ -2762,15 +2768,15 @@ Retrieve news images with captions.
 
 
 
-#### VizWizIT2TRetrieval
+#### `VizWizIT2TRetrieval` { .model-copy }
 
 Retrieve the correct answer for a question about an image.
 
 **Dataset:** [`mteb/vizwiz`](https://huggingface.co/datasets/mteb/vizwiz) • **License:** cc-by-sa-4.0 • [Learn more →](https://openaccess.thecvf.com/content_cvpr_2018/papers/Gurari_VizWiz_Grand_Challenge_CVPR_2018_paper.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to text (it2t) | ndcg_at_10 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to text (it2t) | eng | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -2792,15 +2798,15 @@ Retrieve the correct answer for a question about an image.
 
 
 
-#### WebQAT2ITRetrieval
+#### `WebQAT2ITRetrieval` { .model-copy }
 
 Retrieve sources of information based on questions.
 
 **Dataset:** [`mteb/mbeir_webqa_task2`](https://huggingface.co/datasets/mteb/mbeir_webqa_task2) • **License:** cc-by-sa-4.0 • [Learn more →](https://openaccess.thecvf.com/content/CVPR2022/html/Chang_WebQA_Multihop_and_Multimodal_QA_CVPR_2022_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image, text (t2it) | ndcg_at_10 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image, text (t2it) | eng | Encyclopaedic | derived | created | ndcg_at_10 |
 
 
 
@@ -2822,15 +2828,15 @@ Retrieve sources of information based on questions.
 
 
 
-#### WebQAT2TRetrieval
+#### `WebQAT2TRetrieval` { .model-copy }
 
 Retrieve sources of information based on questions.
 
 **Dataset:** [`mteb/mbeir_webqa_task1`](https://huggingface.co/datasets/mteb/mbeir_webqa_task1) • **License:** cc-by-sa-4.0 • [Learn more →](https://openaccess.thecvf.com/content/CVPR2022/html/Chang_WebQA_Multihop_and_Multimodal_QA_CVPR_2022_paper.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic | derived | created | ndcg_at_10 |
 
 
 
@@ -2851,19 +2857,22 @@ Retrieve sources of information based on questions.
 
 
 
+
 ## AudioReranking
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 5
 
-#### ESC50AudioReranking
+#### `ESC50AudioReranking` { .model-copy }
 
 ESC-50 environmental sound dataset adapted for audio reranking. Given a query audio of environmental sounds, rank 5 relevant audio samples higher than 16 irrelevant ones from different sound classes. Contains 200 queries across 50 environmental sound categories for robust evaluation.
 
 **Dataset:** [`mteb/ESC50AudioReranking`](https://huggingface.co/datasets/mteb/ESC50AudioReranking) • **License:** cc-by-3.0 • [Learn more →](https://github.com/karolpiczak/ESC-50)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | map_at_1000 | zxx | AudioScene | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | zxx | AudioScene | expert-annotated | found | map_at_1000 |
 
 
 
@@ -2890,15 +2899,15 @@ ESC-50 environmental sound dataset adapted for audio reranking. Given a query au
 
 
 
-#### FSDnoisy18kAudioReranking
+#### `FSDnoisy18kAudioReranking` { .model-copy }
 
 FSDnoisy18k sound event dataset adapted for audio reranking. Given a query audio with potential label noise, rank 4 relevant audio samples higher than 16 irrelevant ones from different sound classes. Contains 200 queries across 20 sound event categories.
 
 **Dataset:** [`mteb/FSDnoisy18kAudioReranking`](https://huggingface.co/datasets/mteb/FSDnoisy18kAudioReranking) • **License:** cc-by-4.0 • [Learn more →](https://zenodo.org/record/2529934)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | map_at_1000 | eng | AudioScene | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | eng | AudioScene | human-annotated | found | map_at_1000 |
 
 
 
@@ -2921,15 +2930,15 @@ FSDnoisy18k sound event dataset adapted for audio reranking. Given a query audio
 
 
 
-#### GTZANAudioReranking
+#### `GTZANAudioReranking` { .model-copy }
 
 GTZAN music genre dataset adapted for audio reranking. Given a query audio from one of 10 music genres, rank 3 relevant audio samples higher than 10 irrelevant ones from different genres. Contains 100 queries across 10 music genres for comprehensive evaluation.
 
 **Dataset:** [`mteb/GTZANAudioReranking`](https://huggingface.co/datasets/mteb/GTZANAudioReranking) • **License:** not specified • [Learn more →](https://www.kaggle.com/datasets/andradaolteanu/gtzan-dataset-music-genre-classification)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | map_at_1000 | zxx | Music | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | zxx | Music | human-annotated | found | map_at_1000 |
 
 
 
@@ -2955,15 +2964,15 @@ GTZAN music genre dataset adapted for audio reranking. Given a query audio from 
 
 
 
-#### UrbanSound8KAudioReranking
+#### `UrbanSound8KAudioReranking` { .model-copy }
 
 UrbanSound8K urban sound dataset adapted for audio reranking. Given a query audio of urban sounds, rank 4 relevant audio samples higher than 16 irrelevant ones from different urban sound classes. Contains 200 queries across 10 urban sound categories for comprehensive evaluation.
 
 **Dataset:** [`mteb/UrbanSound8KAudioReranking`](https://huggingface.co/datasets/mteb/UrbanSound8KAudioReranking) • **License:** cc-by-4.0 • [Learn more →](https://urbansounddataset.weebly.com/urbansound8k.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | map_at_1000 | zxx | Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | zxx | Spoken | human-annotated | found | map_at_1000 |
 
 
 
@@ -2986,15 +2995,15 @@ UrbanSound8K urban sound dataset adapted for audio reranking. Given a query audi
 
 
 
-#### VocalSoundAudioReranking
+#### `VocalSoundAudioReranking` { .model-copy }
 
 VocalSound dataset adapted for audio reranking. Given a query vocal sound from one of 6 categories, rank 4 relevant vocal samples higher than 16 irrelevant ones from different vocal sound types. Contains 198 queries across 6 vocal sound categories for robust evaluation.
 
 **Dataset:** [`mteb/VocalSoundAudioReranking`](https://huggingface.co/datasets/mteb/VocalSoundAudioReranking) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.researchgate.net/publication/360793875_Vocalsound_A_Dataset_for_Improving_Human_Vocal_Sounds_Recognition/citations)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | map_at_1000 | eng | Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | eng | Spoken | human-annotated | found | map_at_1000 |
 
 
 
@@ -3018,19 +3027,86 @@ VocalSound dataset adapted for audio reranking. Given a query vocal sound from o
 
 
 
+
 ## DocumentUnderstanding
 
-- **Number of tasks:** 82
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-#### JinaVDRAirbnbSyntheticRetrieval
+- **Number of tasks:** 86
+
+#### `IRPapersT2IRetrieval` { .model-copy }
+
+IRPAPERS is a collection of 166 Information Retrieval papers spanning 3,230 pages. Each page in the dataset is jointly represented as a base64 encoded string of the page image as well as an OCR-derived text transcription. IRPAPERS also contains 180 needle-in-the-haystack queries.
+
+**Dataset:** [`mteb/IRPapersRetrieval`](https://huggingface.co/datasets/mteb/IRPapersRetrieval) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2602.17687)
+
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | recall_at_5 |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{shorten2026,
+      archiveprefix = {arXiv},
+      author = {Connor Shorten and Augustas Skaburskas and Daniel M. Jones and Charles Pierse and Roberto Esposito and John Trengrove and Etienne Dilocker and Bob van Luijt},
+      eprint = {2602.17687},
+      primaryclass = {cs.IR},
+      title = {IRPAPERS: A Visual Document Benchmark for Scientific Retrieval and Question Answering},
+      url = {https://arxiv.org/pdf/2602.17687},
+      year = {2026},
+    }
+    
+    ```
+    
+
+
+
+#### `IRPapersT2ITRetrieval` { .model-copy }
+
+IRPAPERS is a collection of 166 Information Retrieval papers spanning 3,230 pages. Each page in the dataset is jointly represented as a base64 encoded string of the page image as well as an OCR-derived text transcription. IRPAPERS also contains 180 needle-in-the-haystack queries.
+
+**Dataset:** [`mteb/IRPapersRetrieval`](https://huggingface.co/datasets/mteb/IRPapersRetrieval) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2602.17687)
+
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image, text (t2it) | eng | Academic | derived | found | recall_at_5 |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{shorten2026,
+      archiveprefix = {arXiv},
+      author = {Connor Shorten and Augustas Skaburskas and Daniel M. Jones and Charles Pierse and Roberto Esposito and John Trengrove and Etienne Dilocker and Bob van Luijt},
+      eprint = {2602.17687},
+      primaryclass = {cs.IR},
+      title = {IRPAPERS: A Visual Document Benchmark for Scientific Retrieval and Question Answering},
+      url = {https://arxiv.org/pdf/2602.17687},
+      year = {2026},
+    }
+    
+    ```
+    
+
+
+
+#### `JinaVDRAirbnbSyntheticRetrieval` { .model-copy }
 
 Retrieve rendered tables from Airbnb listings based on templated queries. This dataset is created from the original Kaggle [New York City Airbnb Open Data dataset](https://www.kaggle.com/datasets/dgomonov/new-york-city-airbnb-open-data).
 
 **Dataset:** [`jinaai/airbnb-synthetic-retrieval_beir`](https://huggingface.co/datasets/jinaai/airbnb-synthetic-retrieval_beir) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/jinaai/airbnb-synthetic-retrieval_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | ara, deu, eng, fra, hin, ... (10) | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | ara, deu, eng, fra, hin, ... (10) | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -3052,15 +3128,15 @@ Retrieve rendered tables from Airbnb listings based on templated queries. This d
 
 
 
-#### JinaVDRArabicChartQARetrieval
+#### `JinaVDRArabicChartQARetrieval` { .model-copy }
 
 Retrieve Arabic charts based on queries. This dataset is derived from the [Arabic ChartQA dataset](https://huggingface.co/datasets/ahmedheakl/arabic_chartqa), reformatting the train split as a test split with modified field names such that it is compatible with the ViDoRe evaluation benchmark.
 
 **Dataset:** [`jinaai/arabic_chartqa_ar_beir`](https://huggingface.co/datasets/jinaai/arabic_chartqa_ar_beir) • **License:** mit • [Learn more →](https://huggingface.co/datasets/jinaai/arabic_chartqa_ar_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | ara | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | ara | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -3082,15 +3158,15 @@ Retrieve Arabic charts based on queries. This dataset is derived from the [Arabi
 
 
 
-#### JinaVDRArabicInfographicsVQARetrieval
+#### `JinaVDRArabicInfographicsVQARetrieval` { .model-copy }
 
 Retrieve Arabic infographics based on queries. This dataset is derived from the [Arabic Infographics VQA dataset](https://huggingface.co/datasets/ahmedheakl/arabic_infographicsvqa), reformatting the train split as a test split with modified field names so it can be used in the ViDoRe evaluation benchmark.
 
 **Dataset:** [`jinaai/arabic_infographicsvqa_ar_beir`](https://huggingface.co/datasets/jinaai/arabic_infographicsvqa_ar_beir) • **License:** mit • [Learn more →](https://huggingface.co/datasets/jinaai/arabic_infographicsvqa_ar_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | ara | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | ara | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -3112,15 +3188,15 @@ Retrieve Arabic infographics based on queries. This dataset is derived from the 
 
 
 
-#### JinaVDRArxivQARetrieval
+#### `JinaVDRArxivQARetrieval` { .model-copy }
 
 Retrieve figures from scientific papers from arXiv based on LLM generated queries. This dataset is build upon the corresponding dataset from the [ViDoRe Benchmark](https://huggingface.co/collections/vidore/vidore-benchmark-667173f98e70a1c0fa4db00d).
 
 **Dataset:** [`jinaai/arxivqa_beir`](https://huggingface.co/datasets/jinaai/arxivqa_beir) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/jinaai/arxivqa_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Web | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | LM-generated | found | ndcg_at_5 |
 
 
 
@@ -3142,15 +3218,15 @@ Retrieve figures from scientific papers from arXiv based on LLM generated querie
 
 
 
-#### JinaVDRAutomobileCatelogRetrieval
+#### `JinaVDRAutomobileCatelogRetrieval` { .model-copy }
 
 Retrieve automobile marketing documents based on LLM generated queries. Marketing document from Toyota Japanese website featuring [RAV4](https://toyota.jp/pages/contents/request/webcatalog/rav4/rav4_special1_202310.pdf) and [Corolla](https://toyota.jp/pages/contents/request/webcatalog/corolla/corolla_special1_202407.pdf). The `text_description` column contains OCR text extracted from the images using EasyOCR.
 
 **Dataset:** [`jinaai/automobile_catalogue_jp_beir`](https://huggingface.co/datasets/jinaai/automobile_catalogue_jp_beir) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/jinaai/automobile_catalogue_jp_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | jpn | Engineering, Web | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | jpn | Engineering, Web | LM-generated | found | ndcg_at_5 |
 
 
 
@@ -3172,15 +3248,15 @@ Retrieve automobile marketing documents based on LLM generated queries. Marketin
 
 
 
-#### JinaVDRBeveragesCatalogueRetrieval
+#### `JinaVDRBeveragesCatalogueRetrieval` { .model-copy }
 
 Retrieve beverages marketing documents based on LLM generated queries. This dataset was self-curated by searching beverage catalogs on Google search and downloading PDFs.
 
 **Dataset:** [`jinaai/beverages_catalogue_ru_beir`](https://huggingface.co/datasets/jinaai/beverages_catalogue_ru_beir) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/jinaai/beverages_catalogue_ru_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | rus | Web | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | rus | Web | LM-generated | found | ndcg_at_5 |
 
 
 
@@ -3202,15 +3278,15 @@ Retrieve beverages marketing documents based on LLM generated queries. This data
 
 
 
-#### JinaVDRCharXivOCRRetrieval
+#### `JinaVDRCharXivOCRRetrieval` { .model-copy }
 
 Retrieve charts from scientific papers based on human annotated queries. This dataset is derived from the [CharXiv dataset](https://huggingface.co/datasets/princeton-nlp/CharXiv), reformatting the test split with modified field names, so that it can be used in the ViDoRe benchmark.
 
 **Dataset:** [`jinaai/CharXiv-en_beir`](https://huggingface.co/datasets/jinaai/CharXiv-en_beir) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/jinaai/CharXiv-en_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -3232,15 +3308,15 @@ Retrieve charts from scientific papers based on human annotated queries. This da
 
 
 
-#### JinaVDRChartQARetrieval
+#### `JinaVDRChartQARetrieval` { .model-copy }
 
 Retrieve charts based on LLM generated queries. Source datasets https://huggingface.co/datasets/HuggingFaceM4/ChartQA
 
 **Dataset:** [`jinaai/ChartQA_beir`](https://huggingface.co/datasets/jinaai/ChartQA_beir) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/jinaai/ChartQA_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -3262,15 +3338,15 @@ Retrieve charts based on LLM generated queries. Source datasets https://huggingf
 
 
 
-#### JinaVDRDocQAAI
+#### `JinaVDRDocQAAI` { .model-copy }
 
 Retrieve AI documents based on LLM generated queries. This dataset is build upon the corresponding dataset from the [ViDoRe Benchmark](https://huggingface.co/collections/vidore/vidore-benchmark-667173f98e70a1c0fa4db00d).
 
 **Dataset:** [`jinaai/docqa_artificial_intelligence_beir`](https://huggingface.co/datasets/jinaai/docqa_artificial_intelligence_beir) • **License:** mit • [Learn more →](https://huggingface.co/datasets/jinaai/docqa_artificial_intelligence_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -3292,15 +3368,15 @@ Retrieve AI documents based on LLM generated queries. This dataset is build upon
 
 
 
-#### JinaVDRDocQAEnergyRetrieval
+#### `JinaVDRDocQAEnergyRetrieval` { .model-copy }
 
 Retrieve energy industry documents based on LLM generated queries. This dataset is build upon the corresponding dataset from the [ViDoRe Benchmark](https://huggingface.co/collections/vidore/vidore-benchmark-667173f98e70a1c0fa4db00d).
 
 **Dataset:** [`jinaai/docqa_energy_beir`](https://huggingface.co/datasets/jinaai/docqa_energy_beir) • **License:** mit • [Learn more →](https://huggingface.co/datasets/jinaai/docqa_energy_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -3322,15 +3398,15 @@ Retrieve energy industry documents based on LLM generated queries. This dataset 
 
 
 
-#### JinaVDRDocQAGovReportRetrieval
+#### `JinaVDRDocQAGovReportRetrieval` { .model-copy }
 
 Retrieve government reports based on LLM generated queries. This dataset is build upon the corresponding dataset from the [ViDoRe Benchmark](https://huggingface.co/collections/vidore/vidore-benchmark-667173f98e70a1c0fa4db00d).
 
 **Dataset:** [`jinaai/docqa_gov_report_beir`](https://huggingface.co/datasets/jinaai/docqa_gov_report_beir) • **License:** mit • [Learn more →](https://huggingface.co/datasets/jinaai/docqa_gov_report_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Government | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Government | derived | found | ndcg_at_5 |
 
 
 
@@ -3352,15 +3428,15 @@ Retrieve government reports based on LLM generated queries. This dataset is buil
 
 
 
-#### JinaVDRDocQAHealthcareIndustryRetrieval
+#### `JinaVDRDocQAHealthcareIndustryRetrieval` { .model-copy }
 
 Retrieve healthcare industry documents based on LLM generated queries. This dataset is build upon the corresponding dataset from the [ViDoRe Benchmark](https://huggingface.co/collections/vidore/vidore-benchmark-667173f98e70a1c0fa4db00d). For more information regarding the filtering please read [our paper](https://arxiv.org/abs/2506.18902) or [this discussion on github](https://github.com/embeddings-benchmark/mteb/pull/2942#discussion_r2240711654).
 
 **Dataset:** [`jinaai/docqa_healthcare_industry_beir`](https://huggingface.co/datasets/jinaai/docqa_healthcare_industry_beir) • **License:** mit • [Learn more →](https://huggingface.co/datasets/jinaai/docqa_healthcare_industry_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Medical | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Medical | derived | found | ndcg_at_5 |
 
 
 
@@ -3382,15 +3458,15 @@ Retrieve healthcare industry documents based on LLM generated queries. This data
 
 
 
-#### JinaVDRDocVQARetrieval
+#### `JinaVDRDocVQARetrieval` { .model-copy }
 
 Retrieve industry documents based on human annotated queries. This dataset is build upon the corresponding dataset from the [ViDoRe Benchmark](https://huggingface.co/collections/vidore/vidore-benchmark-667173f98e70a1c0fa4db00d).
 
 **Dataset:** [`jinaai/docvqa_beir`](https://huggingface.co/datasets/jinaai/docvqa_beir) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/jinaai/docvqa_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Web | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | LM-generated | found | ndcg_at_5 |
 
 
 
@@ -3412,15 +3488,15 @@ Retrieve industry documents based on human annotated queries. This dataset is bu
 
 
 
-#### JinaVDRDonutVQAISynHMPRetrieval
+#### `JinaVDRDonutVQAISynHMPRetrieval` { .model-copy }
 
 Retrieve medical records based on templated queries. Source dataset https://huggingface.co/datasets/warshakhan/donut_vqa_ISynHMP
 
 **Dataset:** [`jinaai/donut_vqa_beir`](https://huggingface.co/datasets/jinaai/donut_vqa_beir) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/jinaai/donut_vqa_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Medical | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Medical | derived | found | ndcg_at_5 |
 
 
 
@@ -3442,15 +3518,15 @@ Retrieve medical records based on templated queries. Source dataset https://hugg
 
 
 
-#### JinaVDREuropeanaDeNewsRetrieval
+#### `JinaVDREuropeanaDeNewsRetrieval` { .model-copy }
 
 Retrieve German news articles based on LLM generated queries. This dataset was created from records of the [Europeana](https://europeana.eu/) online collection by selecting scans of German news articles
 
 **Dataset:** [`jinaai/europeana-de-news_beir`](https://huggingface.co/datasets/jinaai/europeana-de-news_beir) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/jinaai/europeana-de-news_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | deu | News | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu | News | LM-generated | found | ndcg_at_5 |
 
 
 
@@ -3472,15 +3548,15 @@ Retrieve German news articles based on LLM generated queries. This dataset was c
 
 
 
-#### JinaVDREuropeanaEsNewsRetrieval
+#### `JinaVDREuropeanaEsNewsRetrieval` { .model-copy }
 
 Retrieve Spanish news articles based on LLM generated queries. This dataset was created from records of the [Europeana](https://europeana.eu/) online collection by selecting scans of Spanish news articles
 
 **Dataset:** [`jinaai/europeana-es-news_beir`](https://huggingface.co/datasets/jinaai/europeana-es-news_beir) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/jinaai/europeana-es-news_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | spa | News | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | spa | News | LM-generated | found | ndcg_at_5 |
 
 
 
@@ -3502,15 +3578,15 @@ Retrieve Spanish news articles based on LLM generated queries. This dataset was 
 
 
 
-#### JinaVDREuropeanaFrNewsRetrieval
+#### `JinaVDREuropeanaFrNewsRetrieval` { .model-copy }
 
 Retrieve French news articles from Europeana based on LLM generated queries. This dataset was created from records of the [Europeana online collection](https://europeana.eu) by selecting scans of French news articles.
 
 **Dataset:** [`jinaai/europeana-fr-news_beir`](https://huggingface.co/datasets/jinaai/europeana-fr-news_beir) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/jinaai/europeana-fr-news_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | fra | News | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | fra | News | LM-generated | found | ndcg_at_5 |
 
 
 
@@ -3532,15 +3608,15 @@ Retrieve French news articles from Europeana based on LLM generated queries. Thi
 
 
 
-#### JinaVDREuropeanaItScansRetrieval
+#### `JinaVDREuropeanaItScansRetrieval` { .model-copy }
 
 Retrieve Italian historical articles based on LLM generated queries. This dataset was created from records of the [Europeana](https://europeana.eu/) online collection by selecting scans of Italian news articles
 
 **Dataset:** [`jinaai/europeana-it-scans_beir`](https://huggingface.co/datasets/jinaai/europeana-it-scans_beir) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/jinaai/europeana-it-scans_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | ita | News | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | ita | News | LM-generated | found | ndcg_at_5 |
 
 
 
@@ -3562,15 +3638,15 @@ Retrieve Italian historical articles based on LLM generated queries. This datase
 
 
 
-#### JinaVDREuropeanaNlLegalRetrieval
+#### `JinaVDREuropeanaNlLegalRetrieval` { .model-copy }
 
 Retrieve Dutch historical legal documents based on LLM generated queries.  This dataset was created from records of the [Europeana](https://europeana.eu/) online collection by selecting scans of Dutch news articles
 
 **Dataset:** [`jinaai/europeana-nl-legal_beir`](https://huggingface.co/datasets/jinaai/europeana-nl-legal_beir) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/jinaai/europeana-nl-legal_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | nld | Legal | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | nld | Legal | LM-generated | found | ndcg_at_5 |
 
 
 
@@ -3592,15 +3668,15 @@ Retrieve Dutch historical legal documents based on LLM generated queries.  This 
 
 
 
-#### JinaVDRGitHubReadmeRetrieval
+#### `JinaVDRGitHubReadmeRetrieval` { .model-copy }
 
 Retrieve GitHub readme files based their description. This dataset consists of rendered GitHub readmes in a variety of different languages, together with their accompanying descriptions as queries and their license in the `license_type` and `license_text` columns. This particular dataset is a subsample of 1000 random rows per language from the full dataset which can be found [here](https://huggingface.co/datasets/jinaai/github-readme-retrieval-ml-filtered).
 
 **Dataset:** [`jinaai/github-readme-retrieval-multilingual_beir`](https://huggingface.co/datasets/jinaai/github-readme-retrieval-multilingual_beir) • **License:** multiple • [Learn more →](https://huggingface.co/datasets/jinaai/github-readme-retrieval-multilingual_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | ara, ben, deu, eng, fra, ... (17) | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | ara, ben, deu, eng, fra, ... (17) | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -3622,15 +3698,15 @@ Retrieve GitHub readme files based their description. This dataset consists of r
 
 
 
-#### JinaVDRHindiGovVQARetrieval
+#### `JinaVDRHindiGovVQARetrieval` { .model-copy }
 
 Retrieve Hindi government documents based on LLM generated queries.
 
 **Dataset:** [`jinaai/hindi-gov-vqa_beir`](https://huggingface.co/datasets/jinaai/hindi-gov-vqa_beir) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/jinaai/hindi-gov-vqa_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | hin | Government | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | hin | Government | LM-generated | found | ndcg_at_5 |
 
 
 
@@ -3652,15 +3728,15 @@ Retrieve Hindi government documents based on LLM generated queries.
 
 
 
-#### JinaVDRHungarianDocQARetrieval
+#### `JinaVDRHungarianDocQARetrieval` { .model-copy }
 
 Retrieve Hungarian documents in various formats based on human annotated queries. Document Question answering from [Hungurian doc qa dataset](https://huggingface.co/datasets/jlli/HungarianDocQA-OCR), test split.
 
 **Dataset:** [`jinaai/hungarian_doc_qa_beir`](https://huggingface.co/datasets/jinaai/hungarian_doc_qa_beir) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/jinaai/hungarian_doc_qa_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | hun | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | hun | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -3682,15 +3758,15 @@ Retrieve Hungarian documents in various formats based on human annotated queries
 
 
 
-#### JinaVDRInfovqaRetrieval
+#### `JinaVDRInfovqaRetrieval` { .model-copy }
 
 Retrieve infographics based on human annotated queries. This dataset is build upon the corresponding dataset from the [ViDoRe Benchmark](https://huggingface.co/collections/vidore/vidore-benchmark-667173f98e70a1c0fa4db00d).
 
 **Dataset:** [`jinaai/infovqa_beir`](https://huggingface.co/datasets/jinaai/infovqa_beir) • **License:** mit • [Learn more →](https://huggingface.co/datasets/jinaai/infovqa_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -3712,15 +3788,15 @@ Retrieve infographics based on human annotated queries. This dataset is build up
 
 
 
-#### JinaVDRJDocQARetrieval
+#### `JinaVDRJDocQARetrieval` { .model-copy }
 
 Retrieve Japanese documents in various formats based on human annotated queries. Document Question answering from [JDocQAJP dataset](https://huggingface.co/datasets/jlli/JDocQA-nonbinary), test split.
 
 **Dataset:** [`jinaai/jdocqa_beir`](https://huggingface.co/datasets/jinaai/jdocqa_beir) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/jinaai/jdocqa_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | jpn | Web | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | jpn | Web | LM-generated | found | ndcg_at_5 |
 
 
 
@@ -3742,15 +3818,15 @@ Retrieve Japanese documents in various formats based on human annotated queries.
 
 
 
-#### JinaVDRJina2024YearlyBookRetrieval
+#### `JinaVDRJina2024YearlyBookRetrieval` { .model-copy }
 
 Retrieve pages from the 2024 Jina yearbook based on human annotated questions. 75 human annotated questions created from digital version of Jina AI yearly book 2024, 166 pages in total. 
 
 **Dataset:** [`jinaai/jina_2024_yearly_book_beir`](https://huggingface.co/datasets/jinaai/jina_2024_yearly_book_beir) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/jinaai/jina_2024_yearly_book_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -3772,15 +3848,15 @@ Retrieve pages from the 2024 Jina yearbook based on human annotated questions. 7
 
 
 
-#### JinaVDRMMTabRetrieval
+#### `JinaVDRMMTabRetrieval` { .model-copy }
 
 Retrieve tables from the MMTab dataset based on queries. This dataset is a copy of the original test split from MMTab, taking only items where an 'original_query' is present, and removing the 'input' and 'output' columns, as they are unnecessary for retrieval tasks.
 
 **Dataset:** [`jinaai/MMTab_beir`](https://huggingface.co/datasets/jinaai/MMTab_beir) • **License:** mit • [Learn more →](https://huggingface.co/datasets/jinaai/MMTab_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -3802,15 +3878,15 @@ Retrieve tables from the MMTab dataset based on queries. This dataset is a copy 
 
 
 
-#### JinaVDRMPMQARetrieval
+#### `JinaVDRMPMQARetrieval` { .model-copy }
 
 Retrieve product manuals based on human annotated queries. 155 questions and 782 document images cleaned from [jinaai/MPMQA](https://huggingface.co/datasets/jinaai/MPMQA), test set.
 
 **Dataset:** [`jinaai/mpmqa_small_beir`](https://huggingface.co/datasets/jinaai/mpmqa_small_beir) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/jinaai/mpmqa_small_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Web | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | human-annotated | found | ndcg_at_5 |
 
 
 
@@ -3832,15 +3908,15 @@ Retrieve product manuals based on human annotated queries. 155 questions and 782
 
 
 
-#### JinaVDRMedicalPrescriptionsRetrieval
+#### `JinaVDRMedicalPrescriptionsRetrieval` { .model-copy }
 
 Retrieve medical prescriptions based on templated queries. Source dataset https://huggingface.co/datasets/Technoculture/medical-prescriptions
 
 **Dataset:** [`jinaai/medical-prescriptions_beir`](https://huggingface.co/datasets/jinaai/medical-prescriptions_beir) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/jinaai/medical-prescriptions_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Medical | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Medical | derived | found | ndcg_at_5 |
 
 
 
@@ -3862,15 +3938,15 @@ Retrieve medical prescriptions based on templated queries. Source dataset https:
 
 
 
-#### JinaVDROWIDChartsRetrieval
+#### `JinaVDROWIDChartsRetrieval` { .model-copy }
 
 Retrieve charts from the OWID dataset based on accompanied text snippets. We sampled a set of ~5k charts and articles from [Our World In Data](https://ourworldindata.org) to produce this evaluation set. This particular dataset is a subsample of 1000 random charts from the full dataset which can be found [here](https://huggingface.co/datasets/jjinaai/owid_charts).
 
 **Dataset:** [`jinaai/owid_charts_en_beir`](https://huggingface.co/datasets/jinaai/owid_charts_en_beir) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/jinaai/owid_charts_en_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -3892,15 +3968,15 @@ Retrieve charts from the OWID dataset based on accompanied text snippets. We sam
 
 
 
-#### JinaVDROpenAINewsRetrieval
+#### `JinaVDROpenAINewsRetrieval` { .model-copy }
 
 Retrieve news articles from the OpenAI news website based on human annotated queries. News taken from https://openai.com/news/
 
 **Dataset:** [`jinaai/openai-news_beir`](https://huggingface.co/datasets/jinaai/openai-news_beir) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/jinaai/openai-news_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | News, Web | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | News, Web | human-annotated | found | ndcg_at_5 |
 
 
 
@@ -3922,15 +3998,15 @@ Retrieve news articles from the OpenAI news website based on human annotated que
 
 
 
-#### JinaVDRPlotQARetrieval
+#### `JinaVDRPlotQARetrieval` { .model-copy }
 
 Retrieve plots from the PlotQA dataset based on LLM generated queries. Questions subsampled from [PlotQA](https://github.com/NiteshMethani/PlotQA) test set. It is following a subsample + LLM-based classification process, using LLM to verify the question quality, e.g. queries like `How many different coloured dotlines are there` will be filtered out.
 
 **Dataset:** [`jinaai/plotqa_beir`](https://huggingface.co/datasets/jinaai/plotqa_beir) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/jinaai/plotqa_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -3952,15 +4028,15 @@ Retrieve plots from the PlotQA dataset based on LLM generated queries. Questions
 
 
 
-#### JinaVDRRamensBenchmarkRetrieval
+#### `JinaVDRRamensBenchmarkRetrieval` { .model-copy }
 
 Retrieve ramen restaurant marketing documents based on LLM generated queries. Marketing document from Ramen [restaurants](https://www.city.niigata.lg.jp/kanko/kanko/oshirase/ramen.files/guidebook.pdf).
 
 **Dataset:** [`jinaai/ramen_benchmark_jp_beir`](https://huggingface.co/datasets/jinaai/ramen_benchmark_jp_beir) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/jinaai/ramen_benchmark_jp_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | jpn | Web | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | jpn | Web | LM-generated | found | ndcg_at_5 |
 
 
 
@@ -3982,15 +4058,15 @@ Retrieve ramen restaurant marketing documents based on LLM generated queries. Ma
 
 
 
-#### JinaVDRShanghaiMasterPlanRetrieval
+#### `JinaVDRShanghaiMasterPlanRetrieval` { .model-copy }
 
 Retrieve pages from the Shanghai Master Plan based on human annotated queries. The master plan document is taken from [here](https://www.shanghai.gov.cn/newshanghai/xxgkfj/2035004.pdf).
 
 **Dataset:** [`jinaai/shanghai_master_plan_beir`](https://huggingface.co/datasets/jinaai/shanghai_master_plan_beir) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/jinaai/shanghai_master_plan_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | zho | Web | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | zho | Web | human-annotated | found | ndcg_at_5 |
 
 
 
@@ -4012,15 +4088,15 @@ Retrieve pages from the Shanghai Master Plan based on human annotated queries. T
 
 
 
-#### JinaVDRShiftProjectRetrieval
+#### `JinaVDRShiftProjectRetrieval` { .model-copy }
 
 Retrieve documents with graphs from the Shift Project based on LLM generated queries. This dataset is build upon the corresponding dataset from the [ViDoRe Benchmark](https://huggingface.co/collections/vidore/vidore-benchmark-667173f98e70a1c0fa4db00d).
 
 **Dataset:** [`jinaai/shiftproject_beir`](https://huggingface.co/datasets/jinaai/shiftproject_beir) • **License:** mit • [Learn more →](https://huggingface.co/datasets/jinaai/shiftproject_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -4042,15 +4118,15 @@ Retrieve documents with graphs from the Shift Project based on LLM generated que
 
 
 
-#### JinaVDRStanfordSlideRetrieval
+#### `JinaVDRStanfordSlideRetrieval` { .model-copy }
 
 Retrieve scientific and engineering slides based on human annotated queries. Source dataset https://exhibits.stanford.edu/data/catalog/mv327tb8364
 
 **Dataset:** [`jinaai/stanford_slide_beir`](https://huggingface.co/datasets/jinaai/stanford_slide_beir) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/jinaai/stanford_slide_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | human-annotated | found | ndcg_at_5 |
 
 
 
@@ -4072,15 +4148,15 @@ Retrieve scientific and engineering slides based on human annotated queries. Sou
 
 
 
-#### JinaVDRStudentEnrollmentSyntheticRetrieval
+#### `JinaVDRStudentEnrollmentSyntheticRetrieval` { .model-copy }
 
 Retrieve student enrollment data based on templated queries. This dataset is created from the original Kaggle [Delaware Student Enrollment](https://www.kaggle.com/datasets/noeyislearning/delaware-student-enrollment) dataset. The charts are rendered and queries created using templates.
 
 **Dataset:** [`jinaai/student-enrollment_beir`](https://huggingface.co/datasets/jinaai/student-enrollment_beir) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/jinaai/student-enrollment_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -4102,15 +4178,15 @@ Retrieve student enrollment data based on templated queries. This dataset is cre
 
 
 
-#### JinaVDRTQARetrieval
+#### `JinaVDRTQARetrieval` { .model-copy }
 
 Retrieve textbook pages (images and text) based on LLM generated queries from the text. Source datasets https://prior.allenai.org/projects/tqa
 
 **Dataset:** [`jinaai/tqa_beir`](https://huggingface.co/datasets/jinaai/tqa_beir) • **License:** cc-by-nc-3.0 • [Learn more →](https://huggingface.co/datasets/jinaai/tqa_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -4132,15 +4208,15 @@ Retrieve textbook pages (images and text) based on LLM generated queries from th
 
 
 
-#### JinaVDRTabFQuadRetrieval
+#### `JinaVDRTabFQuadRetrieval` { .model-copy }
 
 Retrieve tables from industry documents based on LLM generated queries. This dataset is build upon the corresponding dataset from the [ViDoRe Benchmark](https://huggingface.co/collections/vidore/vidore-benchmark-667173f98e70a1c0fa4db00d).
 
 **Dataset:** [`jinaai/tabfquad_beir`](https://huggingface.co/datasets/jinaai/tabfquad_beir) • **License:** mit • [Learn more →](https://huggingface.co/datasets/jinaai/tabfquad_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -4162,15 +4238,15 @@ Retrieve tables from industry documents based on LLM generated queries. This dat
 
 
 
-#### JinaVDRTableVQARetrieval
+#### `JinaVDRTableVQARetrieval` { .model-copy }
 
 Retrieve scientific tables based on LLM generated queries. Source datasets https://huggingface.co/datasets/HuggingFaceM4/ChartQA or https://huggingface.co/datasets/cmarkea/aftdb
 
 **Dataset:** [`jinaai/table-vqa_beir`](https://huggingface.co/datasets/jinaai/table-vqa_beir) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/jinaai/table-vqa_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -4192,15 +4268,15 @@ Retrieve scientific tables based on LLM generated queries. Source datasets https
 
 
 
-#### JinaVDRTatQARetrieval
+#### `JinaVDRTatQARetrieval` { .model-copy }
 
 Retrieve financial reports based on human annotated queries. This dataset is build upon the corresponding dataset from the [ViDoRe Benchmark](https://huggingface.co/collections/vidore/vidore-benchmark-667173f98e70a1c0fa4db00d).
 
 **Dataset:** [`jinaai/tatqa_beir`](https://huggingface.co/datasets/jinaai/tatqa_beir) • **License:** mit • [Learn more →](https://huggingface.co/datasets/jinaai/tatqa_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -4222,15 +4298,15 @@ Retrieve financial reports based on human annotated queries. This dataset is bui
 
 
 
-#### JinaVDRTweetStockSyntheticsRetrieval
+#### `JinaVDRTweetStockSyntheticsRetrieval` { .model-copy }
 
 Retrieve rendered tables of stock prices based on templated queries. This dataset is created from the original Kaggle [Tweet Sentiment's Impact on Stock Returns](https://www.kaggle.com/datasets/thedevastator/tweet-sentiment-s-impact-on-stock-returns) dataset.
 
 **Dataset:** [`jinaai/tweet-stock-synthetic-retrieval_beir`](https://huggingface.co/datasets/jinaai/tweet-stock-synthetic-retrieval_beir) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/jinaai/tweet-stock-synthetic-retrieval_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | ara, deu, eng, fra, hin, ... (10) | Social | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | ara, deu, eng, fra, hin, ... (10) | Social | derived | found | ndcg_at_5 |
 
 
 
@@ -4252,15 +4328,15 @@ Retrieve rendered tables of stock prices based on templated queries. This datase
 
 
 
-#### JinaVDRWikimediaCommonsDocumentsRetrieval
+#### `JinaVDRWikimediaCommonsDocumentsRetrieval` { .model-copy }
 
 Retrieve historical documents from Wikimedia Commons based on their description. Wikimedia Commons Documents. It contains images of (mostly historic) documents which should be identified based on their description. We extracted those descriptions from Wikimedia Commons. We have included the license type and a link (`license_text`) to the original Wikimedia Commons page for each extracted image.
 
 **Dataset:** [`jinaai/wikimedia-commons-documents-ml_beir`](https://huggingface.co/datasets/jinaai/wikimedia-commons-documents-ml_beir) • **License:** multiple • [Learn more →](https://huggingface.co/datasets/jinaai/wikimedia-commons-documents-ml_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | ara, ben, deu, eng, fra, ... (20) | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | ara, ben, deu, eng, fra, ... (20) | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -4282,15 +4358,15 @@ Retrieve historical documents from Wikimedia Commons based on their description.
 
 
 
-#### JinaVDRWikimediaCommonsMapsRetrieval
+#### `JinaVDRWikimediaCommonsMapsRetrieval` { .model-copy }
 
 Retrieve maps from Wikimedia Commons based on their description. It contains images of (mostly historic) maps which should be identified based on their description. We extracted those descriptions from [Wikimedia Commons](https://commons.wikimedia.org/). We have included the license type and a link (license_text) to the original Wikimedia Commons page for each extracted image.
 
 **Dataset:** [`jinaai/wikimedia-commons-maps_beir`](https://huggingface.co/datasets/jinaai/wikimedia-commons-maps_beir) • **License:** multiple • [Learn more →](https://huggingface.co/datasets/jinaai/wikimedia-commons-maps_beir)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | derived | found | ndcg_at_5 |
 
 
 
@@ -4312,15 +4388,15 @@ Retrieve maps from Wikimedia Commons based on their description. It contains ima
 
 
 
-#### KoVidore2CybersecurityRetrieval
+#### `KoVidore2CybersecurityRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions. This dataset, Cybersecurity, is a corpus of technical reports on cyber threat trends and security incident responses in Korea, intended for complex-document understanding tasks.
 
 **Dataset:** [`whybe-choi/kovidore-v2-cybersecurity-mteb`](https://huggingface.co/datasets/whybe-choi/kovidore-v2-cybersecurity-mteb) • **License:** cc-by-4.0 • [Learn more →](https://github.com/whybe-choi/kovidore-data-generator)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | kor | Social | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | kor | Social | derived | created | ndcg_at_10 |
 
 
 
@@ -4342,15 +4418,15 @@ Retrieve associated pages according to questions. This dataset, Cybersecurity, i
 
 
 
-#### KoVidore2EconomicRetrieval
+#### `KoVidore2EconomicRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions. This dataset, Economic trends, is a corpus of periodic reports on major economic indicators in Korea, intended for complex-document understanding tasks.
 
 **Dataset:** [`whybe-choi/kovidore-v2-economic-mteb`](https://huggingface.co/datasets/whybe-choi/kovidore-v2-economic-mteb) • **License:** cc-by-4.0 • [Learn more →](https://github.com/whybe-choi/kovidore-data-generator)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | kor | Social | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | kor | Social | derived | created | ndcg_at_10 |
 
 
 
@@ -4372,15 +4448,15 @@ Retrieve associated pages according to questions. This dataset, Economic trends,
 
 
 
-#### KoVidore2EnergyRetrieval
+#### `KoVidore2EnergyRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions. This dataset, Energy, is a corpus of reports on energy market trends, policy planning, and industry statistics, intended for complex-document understanding tasks.
 
 **Dataset:** [`whybe-choi/kovidore-v2-energy-mteb`](https://huggingface.co/datasets/whybe-choi/kovidore-v2-energy-mteb) • **License:** cc-by-4.0 • [Learn more →](https://github.com/whybe-choi/kovidore-data-generator)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | kor | Social | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | kor | Social | derived | created | ndcg_at_10 |
 
 
 
@@ -4402,15 +4478,15 @@ Retrieve associated pages according to questions. This dataset, Energy, is a cor
 
 
 
-#### KoVidore2HrRetrieval
+#### `KoVidore2HrRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports on workforce outlook and employment policy in korea, intended for complex-document understanding tasks.
 
 **Dataset:** [`whybe-choi/kovidore-v2-hr-mteb`](https://huggingface.co/datasets/whybe-choi/kovidore-v2-hr-mteb) • **License:** cc-by-4.0 • [Learn more →](https://github.com/whybe-choi/kovidore-data-generator)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | kor | Social | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | kor | Social | derived | created | ndcg_at_10 |
 
 
 
@@ -4432,15 +4508,15 @@ Retrieve associated pages according to questions. This dataset, HR, is a corpus 
 
 
 
-#### MIRACLVisionRetrieval
+#### `MIRACLVisionRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions.
 
 **Dataset:** [`nvidia/miracl-vision`](https://huggingface.co/datasets/nvidia/miracl-vision) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2505.11651)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | ara, ben, deu, eng, fas, ... (18) | Encyclopaedic | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | ara, ben, deu, eng, fas, ... (18) | Encyclopaedic | derived | created | ndcg_at_5 |
 
 
 
@@ -4463,15 +4539,79 @@ Retrieve associated pages according to questions.
 
 
 
-#### Vidore2BioMedicalLecturesRetrieval
+#### `MMDocIRT2IRetrieval` { .model-copy }
+
+MMDocIR evaluation set includes 313 long documents averaging 65.1 pages, categorized into ten main domains: research reports, administration&industry, tutorials&workshops, academic papers, brochures, financial reports, guidebooks, government documents, laws, and news articles. Different domains feature distinct distributions of multi-modal information. Overall, the modality distribution is: Text (60.4%), Image (18.8%), Table (16.7%), and other modalities (4.1%).
+
+**Dataset:** [`mteb/MMDocIRT2ITRetrieval`](https://huggingface.co/datasets/mteb/MMDocIRT2ITRetrieval) • **License:** apache-2.0 • [Learn more →](https://arxiv.org/abs/2501.08828)
+
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic, Government, Legal, News, Non-fiction | derived | found | recall_at_5 |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{dong2025mmdocirbenchmarkingmultimodalretrieval,
+      archiveprefix = {arXiv},
+      author = {Kuicai Dong and Yujing Chang and Xin Deik Goh and Dexun Li and Ruiming Tang and Yong Liu},
+      eprint = {2501.08828},
+      primaryclass = {cs.IR},
+      title = {MMDocIR: Benchmarking Multi-Modal Retrieval for Long Documents},
+      url = {https://arxiv.org/abs/2501.08828},
+      year = {2025},
+    }
+    
+    ```
+    
+
+
+
+#### `MMDocIRT2ITRetrieval` { .model-copy }
+
+MMDocIR evaluation set includes 313 long documents averaging 65.1 pages, categorized into ten main domains: research reports, administration&industry, tutorials&workshops, academic papers, brochures, financial reports, guidebooks, government documents, laws, and news articles. Different domains feature distinct distributions of multi-modal information. Overall, the modality distribution is: Text (60.4%), Image (18.8%), Table (16.7%), and other modalities (4.1%).
+
+**Dataset:** [`mteb/MMDocIRT2ITRetrieval`](https://huggingface.co/datasets/mteb/MMDocIRT2ITRetrieval) • **License:** apache-2.0 • [Learn more →](https://arxiv.org/abs/2501.08828)
+
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image, text (t2it) | eng | Academic, Government, Legal, News, Non-fiction | derived | found | recall_at_5 |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{dong2025mmdocirbenchmarkingmultimodalretrieval,
+      archiveprefix = {arXiv},
+      author = {Kuicai Dong and Yujing Chang and Xin Deik Goh and Dexun Li and Ruiming Tang and Yong Liu},
+      eprint = {2501.08828},
+      primaryclass = {cs.IR},
+      title = {MMDocIR: Benchmarking Multi-Modal Retrieval for Long Documents},
+      url = {https://arxiv.org/abs/2501.08828},
+      year = {2025},
+    }
+    
+    ```
+    
+
+
+
+#### `Vidore2BioMedicalLecturesRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions.
 
 **Dataset:** [`vidore/biomedical_lectures_v2`](https://huggingface.co/datasets/vidore/biomedical_lectures_v2) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2407.01449)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | deu, eng, fra, spa | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu, eng, fra, spa | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -4492,15 +4632,15 @@ Retrieve associated pages according to questions.
 
 
 
-#### Vidore2ESGReportsHLRetrieval
+#### `Vidore2ESGReportsHLRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions.
 
 **Dataset:** [`vidore/esg_reports_human_labeled_v2`](https://huggingface.co/datasets/vidore/esg_reports_human_labeled_v2) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2407.01449)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -4521,15 +4661,15 @@ Retrieve associated pages according to questions.
 
 
 
-#### Vidore2ESGReportsRetrieval
+#### `Vidore2ESGReportsRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions.
 
 **Dataset:** [`vidore/esg_reports_v2`](https://huggingface.co/datasets/vidore/esg_reports_v2) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2407.01449)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | deu, eng, fra, spa | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu, eng, fra, spa | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -4550,15 +4690,15 @@ Retrieve associated pages according to questions.
 
 
 
-#### Vidore2EconomicsReportsRetrieval
+#### `Vidore2EconomicsReportsRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions.
 
 **Dataset:** [`vidore/economics_reports_v2`](https://huggingface.co/datasets/vidore/economics_reports_v2) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2407.01449)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | deu, eng, fra, spa | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu, eng, fra, spa | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -4579,15 +4719,15 @@ Retrieve associated pages according to questions.
 
 
 
-#### Vidore3ComputerScienceRetrieval
+#### `Vidore3ComputerScienceRetrieval` { .model-copy }
 
-Retrieve associated pages according to questions. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.
+Retrieve associated pages according to questions. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish. Contributed by Illuin Technology.
 
 **Dataset:** [`vidore/vidore_v3_computer_science_mteb_format`](https://huggingface.co/datasets/vidore/vidore_v3_computer_science_mteb_format) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Engineering, Programming | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu, eng, fra, ita, por, ... (6) | Engineering, Programming | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -4611,15 +4751,15 @@ Retrieve associated pages according to questions. This dataset, Computer Science
 
 
 
-#### Vidore3ComputerScienceRetrieval.v2
+#### `Vidore3ComputerScienceRetrieval.v2` { .model-copy }
 
-Retrieve associated pages according to questions. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.
+Retrieve associated pages according to questions. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Contributed by Illuin Technology.
 
 **Dataset:** [`mteb/Vidore3ComputerScienceOCRRetrieval`](https://huggingface.co/datasets/mteb/Vidore3ComputerScienceOCRRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image, text (t2it) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Engineering, Programming | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image, text (t2it) | deu, eng, fra, ita, por, ... (6) | Engineering, Programming | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -4643,15 +4783,15 @@ Retrieve associated pages according to questions. This dataset, Computer Science
 
 
 
-#### Vidore3EnergyRetrieval
+#### `Vidore3EnergyRetrieval` { .model-copy }
 
-Retrieve associated pages according to questions. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.
+Retrieve associated pages according to questions. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish. Contributed by Illuin Technology.
 
 **Dataset:** [`vidore/vidore_v3_energy_mteb_format`](https://huggingface.co/datasets/vidore/vidore_v3_energy_mteb_format) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Academic, Chemistry, Engineering | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu, eng, fra, ita, por, ... (6) | Academic, Chemistry, Engineering | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -4675,15 +4815,15 @@ Retrieve associated pages according to questions. This dataset, Energy Fr, is a 
 
 
 
-#### Vidore3EnergyRetrieval.v2
+#### `Vidore3EnergyRetrieval.v2` { .model-copy }
 
-Retrieve associated pages according to questions. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.
+Retrieve associated pages according to questions. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Contributed by Illuin Technology.
 
 **Dataset:** [`mteb/Vidore3EnergyOCRRetrieval`](https://huggingface.co/datasets/mteb/Vidore3EnergyOCRRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image, text (t2it) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Academic, Chemistry, Engineering | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image, text (t2it) | deu, eng, fra, ita, por, ... (6) | Academic, Chemistry, Engineering | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -4707,15 +4847,15 @@ Retrieve associated pages according to questions. This dataset, Energy Fr, is a 
 
 
 
-#### Vidore3FinanceEnRetrieval
+#### `Vidore3FinanceEnRetrieval` { .model-copy }
 
-Retrieve associated pages according to questions. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.
+Retrieve associated pages according to questions. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish. Contributed by Illuin Technology.
 
 **Dataset:** [`vidore/vidore_v3_finance_en_mteb_format`](https://huggingface.co/datasets/vidore/vidore_v3_finance_en_mteb_format) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Financial | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu, eng, fra, ita, por, ... (6) | Financial | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -4739,15 +4879,15 @@ Retrieve associated pages according to questions. This task, Finance - EN, is a 
 
 
 
-#### Vidore3FinanceEnRetrieval.v2
+#### `Vidore3FinanceEnRetrieval.v2` { .model-copy }
 
-Retrieve associated pages according to questions. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.
+Retrieve associated pages according to questions. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Contributed by Illuin Technology.
 
 **Dataset:** [`mteb/Vidore3FinanceEnOCRRetrieval`](https://huggingface.co/datasets/mteb/Vidore3FinanceEnOCRRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image, text (t2it) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Financial | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image, text (t2it) | deu, eng, fra, ita, por, ... (6) | Financial | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -4771,15 +4911,15 @@ Retrieve associated pages according to questions. This task, Finance - EN, is a 
 
 
 
-#### Vidore3FinanceFrRetrieval
+#### `Vidore3FinanceFrRetrieval` { .model-copy }
 
-Retrieve associated pages according to questions. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.
+Retrieve associated pages according to questions. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish. Contributed by Illuin Technology.
 
 **Dataset:** [`vidore/vidore_v3_finance_fr_mteb_format`](https://huggingface.co/datasets/vidore/vidore_v3_finance_fr_mteb_format) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Financial | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu, eng, fra, ita, por, ... (6) | Financial | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -4803,15 +4943,15 @@ Retrieve associated pages according to questions. This task, Finance - FR, is a 
 
 
 
-#### Vidore3FinanceFrRetrieval.v2
+#### `Vidore3FinanceFrRetrieval.v2` { .model-copy }
 
-Retrieve associated pages according to questions. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.
+Retrieve associated pages according to questions. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Contributed by Illuin Technology.
 
 **Dataset:** [`mteb/Vidore3FinanceFrOCRRetrieval`](https://huggingface.co/datasets/mteb/Vidore3FinanceFrOCRRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image, text (t2it) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Financial | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image, text (t2it) | deu, eng, fra, ita, por, ... (6) | Financial | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -4835,15 +4975,15 @@ Retrieve associated pages according to questions. This task, Finance - FR, is a 
 
 
 
-#### Vidore3HrRetrieval
+#### `Vidore3HrRetrieval` { .model-copy }
 
-Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.
+Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish. Contributed by Illuin Technology.
 
 **Dataset:** [`vidore/vidore_v3_hr_mteb_format`](https://huggingface.co/datasets/vidore/vidore_v3_hr_mteb_format) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Social | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu, eng, fra, ita, por, ... (6) | Social | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -4867,15 +5007,15 @@ Retrieve associated pages according to questions. This dataset, HR, is a corpus 
 
 
 
-#### Vidore3HrRetrieval.v2
+#### `Vidore3HrRetrieval.v2` { .model-copy }
 
-Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.
+Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Contributed by Illuin Technology.
 
 **Dataset:** [`mteb/Vidore3HrOCRRetrieval`](https://huggingface.co/datasets/mteb/Vidore3HrOCRRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image, text (t2it) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Social | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image, text (t2it) | deu, eng, fra, ita, por, ... (6) | Social | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -4899,15 +5039,15 @@ Retrieve associated pages according to questions. This dataset, HR, is a corpus 
 
 
 
-#### Vidore3IndustrialRetrieval
+#### `Vidore3IndustrialRetrieval` { .model-copy }
 
-Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.
+Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish. Contributed by Illuin Technology.
 
 **Dataset:** [`vidore/vidore_v3_industrial_mteb_format`](https://huggingface.co/datasets/vidore/vidore_v3_industrial_mteb_format) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Engineering | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu, eng, fra, ita, por, ... (6) | Engineering | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -4931,15 +5071,15 @@ Retrieve associated pages according to questions. This dataset, Industrial repor
 
 
 
-#### Vidore3IndustrialRetrieval.v2
+#### `Vidore3IndustrialRetrieval.v2` { .model-copy }
 
-Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.
+Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Contributed by Illuin Technology.
 
 **Dataset:** [`mteb/Vidore3IndustrialOCRRetrieval`](https://huggingface.co/datasets/mteb/Vidore3IndustrialOCRRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image, text (t2it) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Engineering | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image, text (t2it) | deu, eng, fra, ita, por, ... (6) | Engineering | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -4963,15 +5103,15 @@ Retrieve associated pages according to questions. This dataset, Industrial repor
 
 
 
-#### Vidore3NuclearRetrieval
+#### `Vidore3NuclearRetrieval` { .model-copy }
 
-Retrieve associated pages according to questions.
+Retrieve associated pages according to questions. Contributed by Illuin Technology.
 
 **Dataset:** [`mteb-private/Vidore3NuclearRetrieval`](https://huggingface.co/datasets/mteb-private/Vidore3NuclearRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Chemistry, Engineering | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu, eng, fra, ita, por, ... (6) | Chemistry, Engineering | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -4995,15 +5135,15 @@ Retrieve associated pages according to questions.
 
 
 
-#### Vidore3NuclearRetrieval.v2
+#### `Vidore3NuclearRetrieval.v2` { .model-copy }
 
-Retrieve associated pages according to questions.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.
+Retrieve associated pages according to questions.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Contributed by Illuin Technology.
 
 **Dataset:** [`mteb-private/Vidore3NuclearOCRRetrieval`](https://huggingface.co/datasets/mteb-private/Vidore3NuclearOCRRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image, text (t2it) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Chemistry, Engineering | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image, text (t2it) | deu, eng, fra, ita, por, ... (6) | Chemistry, Engineering | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -5027,15 +5167,15 @@ Retrieve associated pages according to questions.This version add the OCR'ed mar
 
 
 
-#### Vidore3PharmaceuticalsRetrieval
+#### `Vidore3PharmaceuticalsRetrieval` { .model-copy }
 
-Retrieve associated pages according to questions. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.
+Retrieve associated pages according to questions. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish. Contributed by Illuin Technology.
 
 **Dataset:** [`vidore/vidore_v3_pharmaceuticals_mteb_format`](https://huggingface.co/datasets/vidore/vidore_v3_pharmaceuticals_mteb_format) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Medical | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu, eng, fra, ita, por, ... (6) | Medical | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -5059,15 +5199,15 @@ Retrieve associated pages according to questions. This dataset, Pharmaceutical, 
 
 
 
-#### Vidore3PharmaceuticalsRetrieval.v2
+#### `Vidore3PharmaceuticalsRetrieval.v2` { .model-copy }
 
-Retrieve associated pages according to questions. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.
+Retrieve associated pages according to questions. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Contributed by Illuin Technology.
 
 **Dataset:** [`mteb/Vidore3PharmaceuticalsOCRRetrieval`](https://huggingface.co/datasets/mteb/Vidore3PharmaceuticalsOCRRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image, text (t2it) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Medical | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image, text (t2it) | deu, eng, fra, ita, por, ... (6) | Medical | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -5091,15 +5231,15 @@ Retrieve associated pages according to questions. This dataset, Pharmaceutical, 
 
 
 
-#### Vidore3PhysicsRetrieval
+#### `Vidore3PhysicsRetrieval` { .model-copy }
 
-Retrieve associated pages according to questions. This dataset, Physics, is a corpus of course slides on french bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.
+Retrieve associated pages according to questions. This dataset, Physics, is a corpus of course slides on french bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish. Contributed by Illuin Technology.
 
 **Dataset:** [`vidore/vidore_v3_physics_mteb_format`](https://huggingface.co/datasets/vidore/vidore_v3_physics_mteb_format) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Academic, Engineering | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu, eng, fra, ita, por, ... (6) | Academic, Engineering | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -5123,15 +5263,15 @@ Retrieve associated pages according to questions. This dataset, Physics, is a co
 
 
 
-#### Vidore3PhysicsRetrieval.v2
+#### `Vidore3PhysicsRetrieval.v2` { .model-copy }
 
-Retrieve associated pages according to questions. This dataset, Physics, is a corpus of course slides on french bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.
+Retrieve associated pages according to questions. This dataset, Physics, is a corpus of course slides on french bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Contributed by Illuin Technology.
 
 **Dataset:** [`mteb/Vidore3PhysicsOCRRetrieval`](https://huggingface.co/datasets/mteb/Vidore3PhysicsOCRRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image, text (t2it) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Academic, Engineering | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image, text (t2it) | deu, eng, fra, ita, por, ... (6) | Academic, Engineering | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -5155,15 +5295,15 @@ Retrieve associated pages according to questions. This dataset, Physics, is a co
 
 
 
-#### Vidore3TelecomRetrieval
+#### `Vidore3TelecomRetrieval` { .model-copy }
 
-Retrieve associated pages according to questions.
+Retrieve associated pages according to questions. Contributed by Illuin Technology.
 
 **Dataset:** [`mteb-private/Vidore3TelecomRetrieval`](https://huggingface.co/datasets/mteb-private/Vidore3TelecomRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Engineering, Programming | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu, eng, fra, ita, por, ... (6) | Engineering, Programming | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -5187,15 +5327,15 @@ Retrieve associated pages according to questions.
 
 
 
-#### Vidore3TelecomRetrieval.v2
+#### `Vidore3TelecomRetrieval.v2` { .model-copy }
 
-Retrieve associated pages according to questions.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.
+Retrieve associated pages according to questions.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Contributed by Illuin Technology.
 
 **Dataset:** [`mteb-private/Vidore3TelecomOCRRetrieval`](https://huggingface.co/datasets/mteb-private/Vidore3TelecomOCRRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2601.08620)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image, text (t2it) | ndcg_at_10 | deu, eng, fra, ita, por, ... (6) | Engineering, Programming | derived | created and machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image, text (t2it) | deu, eng, fra, ita, por, ... (6) | Engineering, Programming | derived | created and machine-translated | ndcg_at_10 |
 
 
 
@@ -5219,15 +5359,15 @@ Retrieve associated pages according to questions.This version add the OCR'ed mar
 
 
 
-#### VidoreArxivQARetrieval
+#### `VidoreArxivQARetrieval` { .model-copy }
 
 Retrieve associated pages according to questions.
 
 **Dataset:** [`mteb/arxivqa_test_subsampled_beir`](https://huggingface.co/datasets/mteb/arxivqa_test_subsampled_beir) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2407.01449)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -5248,15 +5388,15 @@ Retrieve associated pages according to questions.
 
 
 
-#### VidoreDocVQARetrieval
+#### `VidoreDocVQARetrieval` { .model-copy }
 
 Retrieve associated pages according to questions.
 
 **Dataset:** [`mteb/docvqa_test_subsampled_beir`](https://huggingface.co/datasets/mteb/docvqa_test_subsampled_beir) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2407.01449)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -5277,15 +5417,15 @@ Retrieve associated pages according to questions.
 
 
 
-#### VidoreInfoVQARetrieval
+#### `VidoreInfoVQARetrieval` { .model-copy }
 
 Retrieve associated pages according to questions.
 
 **Dataset:** [`mteb/infovqa_test_subsampled_beir`](https://huggingface.co/datasets/mteb/infovqa_test_subsampled_beir) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2407.01449)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -5306,15 +5446,15 @@ Retrieve associated pages according to questions.
 
 
 
-#### VidoreShiftProjectRetrieval
+#### `VidoreShiftProjectRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions.
 
 **Dataset:** [`mteb/shiftproject_test_beir`](https://huggingface.co/datasets/mteb/shiftproject_test_beir) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2407.01449)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -5335,15 +5475,15 @@ Retrieve associated pages according to questions.
 
 
 
-#### VidoreSyntheticDocQAAIRetrieval
+#### `VidoreSyntheticDocQAAIRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions.
 
 **Dataset:** [`mteb/syntheticDocQA_artificial_intelligence_test_beir`](https://huggingface.co/datasets/mteb/syntheticDocQA_artificial_intelligence_test_beir) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2407.01449)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -5364,15 +5504,15 @@ Retrieve associated pages according to questions.
 
 
 
-#### VidoreSyntheticDocQAEnergyRetrieval
+#### `VidoreSyntheticDocQAEnergyRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions.
 
 **Dataset:** [`mteb/syntheticDocQA_energy_test_beir`](https://huggingface.co/datasets/mteb/syntheticDocQA_energy_test_beir) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2407.01449)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -5393,15 +5533,15 @@ Retrieve associated pages according to questions.
 
 
 
-#### VidoreSyntheticDocQAGovernmentReportsRetrieval
+#### `VidoreSyntheticDocQAGovernmentReportsRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions.
 
 **Dataset:** [`mteb/syntheticDocQA_government_reports_test_beir`](https://huggingface.co/datasets/mteb/syntheticDocQA_government_reports_test_beir) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2407.01449)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -5422,15 +5562,15 @@ Retrieve associated pages according to questions.
 
 
 
-#### VidoreSyntheticDocQAHealthcareIndustryRetrieval
+#### `VidoreSyntheticDocQAHealthcareIndustryRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions.
 
 **Dataset:** [`mteb/syntheticDocQA_healthcare_industry_test_beir`](https://huggingface.co/datasets/mteb/syntheticDocQA_healthcare_industry_test_beir) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2407.01449)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -5451,15 +5591,15 @@ Retrieve associated pages according to questions.
 
 
 
-#### VidoreTabfquadRetrieval
+#### `VidoreTabfquadRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions.
 
 **Dataset:** [`mteb/tabfquad_test_subsampled_beir`](https://huggingface.co/datasets/mteb/tabfquad_test_subsampled_beir) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2407.01449)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -5480,15 +5620,15 @@ Retrieve associated pages according to questions.
 
 
 
-#### VidoreTatdqaRetrieval
+#### `VidoreTatdqaRetrieval` { .model-copy }
 
 Retrieve associated pages according to questions.
 
 **Dataset:** [`mteb/tatdqa_test_beir`](https://huggingface.co/datasets/mteb/tatdqa_test_beir) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2407.01449)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic | derived | found | ndcg_at_5 |
 
 
 
@@ -5508,19 +5648,22 @@ Retrieve associated pages according to questions.
 
 
 
+
 ## InstructionReranking
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 5
 
-#### Core17InstructionRetrieval
+#### `Core17InstructionRetrieval` { .model-copy }
 
 Measuring retrieval instruction following ability on Core17 narratives for the FollowIR benchmark.
 
 **Dataset:** [`mteb/Core17InstructionRetrieval`](https://huggingface.co/datasets/mteb/Core17InstructionRetrieval) • **License:** mit • [Learn more →](https://arxiv.org/abs/2403.15246)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | p-MRR | eng | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | News, Written | derived | found | p-MRR |
 
 
 
@@ -5543,15 +5686,15 @@ Measuring retrieval instruction following ability on Core17 narratives for the F
 
 
 
-#### News21InstructionRetrieval
+#### `News21InstructionRetrieval` { .model-copy }
 
 Measuring retrieval instruction following ability on News21 narratives for the FollowIR benchmark.
 
 **Dataset:** [`mteb/News21InstructionRetrieval`](https://huggingface.co/datasets/mteb/News21InstructionRetrieval) • **License:** mit • [Learn more →](https://arxiv.org/abs/2403.15246)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | p-MRR | eng | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | News, Written | derived | found | p-MRR |
 
 
 
@@ -5574,15 +5717,15 @@ Measuring retrieval instruction following ability on News21 narratives for the F
 
 
 
-#### Robust04InstructionRetrieval
+#### `Robust04InstructionRetrieval` { .model-copy }
 
 Measuring retrieval instruction following ability on Robust04 narratives for the FollowIR benchmark.
 
 **Dataset:** [`mteb/Robust04InstructionRetrieval`](https://huggingface.co/datasets/mteb/Robust04InstructionRetrieval) • **License:** mit • [Learn more →](https://arxiv.org/abs/2403.15246)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | p-MRR | eng | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | News, Written | derived | found | p-MRR |
 
 
 
@@ -5605,15 +5748,15 @@ Measuring retrieval instruction following ability on Robust04 narratives for the
 
 
 
-#### mFollowIR
+#### `mFollowIR` { .model-copy }
 
 This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages.
 
 **Dataset:** [`jhu-clsp/mFollowIR-parquet-mteb`](https://huggingface.co/datasets/jhu-clsp/mFollowIR-parquet-mteb) • **License:** odc-by • [Learn more →](https://neuclir.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | p-MRR | fas, rus, zho | News, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas, rus, zho | News, Written | expert-annotated | found | p-MRR |
 
 
 
@@ -5634,15 +5777,15 @@ This tasks measures retrieval instruction following ability on NeuCLIR narrative
 
 
 
-#### mFollowIRCrossLingual
+#### `mFollowIRCrossLingual` { .model-copy }
 
 This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages with English queries/instructions.
 
 **Dataset:** [`jhu-clsp/mFollowIR-cross-lingual-parquet-mteb`](https://huggingface.co/datasets/jhu-clsp/mFollowIR-cross-lingual-parquet-mteb) • **License:** odc-by • [Learn more →](https://neuclir.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | p-MRR | eng, fas, rus, zho | News, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, fas, rus, zho | News, Written | expert-annotated | found | p-MRR |
 
 
 
@@ -5662,19 +5805,22 @@ This tasks measures retrieval instruction following ability on NeuCLIR narrative
 
 
 
+
 ## InstructionRetrieval
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 8
 
-#### IFIRAila
+#### `IFIRAila` { .model-copy }
 
 Benchmark aila subset in aila within instruction following abilities. The instructions simulate lawyers' or legal assistants' nuanced queries to retrieve relevant legal documents. 
 
 **Dataset:** [`if-ir/aila`](https://huggingface.co/datasets/if-ir/aila) • **License:** mit • [Learn more →](https://arxiv.org/abs/2503.04644)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_20 | eng | Legal, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Legal, Written | human-annotated | found | ndcg_at_20 |
 
 
 
@@ -5696,15 +5842,15 @@ Benchmark aila subset in aila within instruction following abilities. The instru
 
 
 
-#### IFIRCds
+#### `IFIRCds` { .model-copy }
 
 Benchmark IFIR cds subset within instruction following abilities. The instructions simulate a doctor's nuanced queries to retrieve suitable clinical trails, treatment and diagnosis information. 
 
 **Dataset:** [`if-ir/cds`](https://huggingface.co/datasets/if-ir/cds) • **License:** mit • [Learn more →](https://arxiv.org/abs/2503.04644)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_20 | eng | Medical, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Medical, Written | human-annotated | found | ndcg_at_20 |
 
 
 
@@ -5726,15 +5872,15 @@ Benchmark IFIR cds subset within instruction following abilities. The instructio
 
 
 
-#### IFIRFiQA
+#### `IFIRFiQA` { .model-copy }
 
 Benchmark IFIR fiqa subset within instruction following abilities. The instructions simulate people's daily life queries to retrieve suitable financial suggestions. 
 
 **Dataset:** [`if-ir/fiqa`](https://huggingface.co/datasets/if-ir/fiqa) • **License:** mit • [Learn more →](https://arxiv.org/abs/2503.04644)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_20 | eng | Financial, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Financial, Written | human-annotated | created | ndcg_at_20 |
 
 
 
@@ -5756,15 +5902,15 @@ Benchmark IFIR fiqa subset within instruction following abilities. The instructi
 
 
 
-#### IFIRFire
+#### `IFIRFire` { .model-copy }
 
 Benchmark IFIR fire subset within instruction following abilities. The instructions simulate lawyers' or legal assistants' nuanced queries to retrieve relevant legal documents. 
 
 **Dataset:** [`if-ir/fire`](https://huggingface.co/datasets/if-ir/fire) • **License:** mit • [Learn more →](https://arxiv.org/abs/2503.04644)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_20 | eng | Legal, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Legal, Written | human-annotated | found | ndcg_at_20 |
 
 
 
@@ -5786,15 +5932,15 @@ Benchmark IFIR fire subset within instruction following abilities. The instructi
 
 
 
-#### IFIRNFCorpus
+#### `IFIRNFCorpus` { .model-copy }
 
 Benchmark IFIR nfcorpus subset within instruction following abilities. The instructions in this dataset simulate nuanced queries from students or researchers to retrieve relevant science literature in the medical and biological domains. 
 
 **Dataset:** [`if-ir/nfcorpus`](https://huggingface.co/datasets/if-ir/nfcorpus) • **License:** mit • [Learn more →](https://arxiv.org/abs/2503.04644)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_20 | eng | Academic, Medical, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Medical, Written | human-annotated | found | ndcg_at_20 |
 
 
 
@@ -5816,15 +5962,15 @@ Benchmark IFIR nfcorpus subset within instruction following abilities. The instr
 
 
 
-#### IFIRPm
+#### `IFIRPm` { .model-copy }
 
 Benchmark IFIR pm subset within instruction following abilities. The instructions simulate a doctor's nuanced queries to retrieve suitable clinical trails, treatment and diagnosis information. 
 
 **Dataset:** [`if-ir/pm`](https://huggingface.co/datasets/if-ir/pm) • **License:** mit • [Learn more →](https://arxiv.org/abs/2503.04644)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_20 | eng | Medical, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Medical, Written | human-annotated | found | ndcg_at_20 |
 
 
 
@@ -5846,15 +5992,15 @@ Benchmark IFIR pm subset within instruction following abilities. The instruction
 
 
 
-#### IFIRScifact
+#### `IFIRScifact` { .model-copy }
 
 Benchmark IFIR scifact_open subset within instruction following abilities. The instructions in this dataset simulate nuanced queries from students or researchers to retrieve relevant science literature. 
 
 **Dataset:** [`if-ir/scifact_open`](https://huggingface.co/datasets/if-ir/scifact_open) • **License:** mit • [Learn more →](https://arxiv.org/abs/2503.04644)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_20 | eng | Academic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Written | human-annotated | found | ndcg_at_20 |
 
 
 
@@ -5876,15 +6022,15 @@ Benchmark IFIR scifact_open subset within instruction following abilities. The i
 
 
 
-#### InstructIR
+#### `InstructIR` { .model-copy }
 
 A benchmark specifically designed to evaluate the instruction following ability in information retrieval models. Our approach focuses on user-aligned instructions tailored to each query instance, reflecting the diverse characteristics inherent in real-world search scenarios. **NOTE**: scores on this may differ unless you include instruction first, then "[SEP]" and then the query via redefining `combine_query_and_instruction` in your model.
 
 **Dataset:** [`mteb/InstructIR-mteb`](https://huggingface.co/datasets/mteb/InstructIR-mteb) • **License:** mit • [Learn more →](https://github.com/kaistAI/InstructIR/tree/main)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | robustness_at_10 | eng | Web | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Web | human-annotated | created | robustness_at_10 |
 
 
 
@@ -5906,19 +6052,22 @@ A benchmark specifically designed to evaluate the instruction following ability 
 
 
 
+
 ## Reranking
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 43
 
-#### AlloprofReranking
+#### `AlloprofReranking` { .model-copy }
 
 This dataset was provided by AlloProf, an organisation in Quebec, Canada offering resources and a help forum curated by a large number of teachers to students on all subjects taught from in primary and secondary school
 
 **Dataset:** [`mteb/AlloprofReranking`](https://huggingface.co/datasets/mteb/AlloprofReranking) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://huggingface.co/datasets/antoinelb7/alloprof)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | fra | Academic, Web, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fra | Academic, Web, Written | expert-annotated | found | map_at_1000 |
 
 
 
@@ -5943,15 +6092,15 @@ This dataset was provided by AlloProf, an organisation in Quebec, Canada offerin
 
 
 
-#### AskUbuntuDupQuestions
+#### `AskUbuntuDupQuestions` { .model-copy }
 
 AskUbuntu Question Dataset - Questions from AskUbuntu with manual annotations marking pairs of questions as similar or non-similar
 
 **Dataset:** [`mteb/AskUbuntuDupQuestions`](https://huggingface.co/datasets/mteb/AskUbuntuDupQuestions) • **License:** cc-by-sa-3.0 • [Learn more →](https://github.com/taolei87/askubuntu)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | eng | Programming, Web | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Programming, Web | human-annotated | found | map_at_1000 |
 
 
 
@@ -5974,15 +6123,15 @@ AskUbuntu Question Dataset - Questions from AskUbuntu with manual annotations ma
 
 
 
-#### AskUbuntuDupQuestions-VN
+#### `AskUbuntuDupQuestions-VN` { .model-copy }
 
 A translated dataset from AskUbuntu Question Dataset - Questions from AskUbuntu with manual annotations marking pairs of questions as similar or non-similar The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`mteb/AskUbuntuDupQuestions-VN`](https://huggingface.co/datasets/mteb/AskUbuntuDupQuestions-VN) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/taolei87/askubuntu)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | vie | Programming, Web | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Programming, Web | derived | machine-translated and LM verified | map_at_1000 |
 
 
 
@@ -6006,15 +6155,15 @@ A translated dataset from AskUbuntu Question Dataset - Questions from AskUbuntu 
 
 
 
-#### BuiltBenchReranking
+#### `BuiltBenchReranking` { .model-copy }
 
 Reranking of built asset entity type/class descriptions given a query describing an entity as represented in well-established industry classification systems such as Uniclass, IFC, etc.
 
 **Dataset:** [`mteb/BuiltBenchReranking`](https://huggingface.co/datasets/mteb/BuiltBenchReranking) • **License:** cc-by-nd-4.0 • [Learn more →](https://arxiv.org/abs/2411.12056)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | eng | Engineering, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Engineering, Written | derived | created | map_at_1000 |
 
 
 
@@ -6035,15 +6184,15 @@ Reranking of built asset entity type/class descriptions given a query describing
 
 
 
-#### CMedQAv1-reranking
+#### `CMedQAv1-reranking` { .model-copy }
 
 Chinese community medical question answering
 
 **Dataset:** [`mteb/CMedQAv1-reranking`](https://huggingface.co/datasets/mteb/CMedQAv1-reranking) • **License:** not specified • [Learn more →](https://github.com/zhangsheng93/cMedQA)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | cmn | Medical, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Medical, Written | expert-annotated | found | map_at_1000 |
 
 
 
@@ -6068,15 +6217,15 @@ Chinese community medical question answering
 
 
 
-#### CMedQAv2-reranking
+#### `CMedQAv2-reranking` { .model-copy }
 
 Chinese community medical question answering
 
 **Dataset:** [`mteb/CMedQAv2-reranking`](https://huggingface.co/datasets/mteb/CMedQAv2-reranking) • **License:** not specified • [Learn more →](https://github.com/zhangsheng93/cMedQA2)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | cmn | Medical, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Medical, Written | expert-annotated | found | map_at_1000 |
 
 
 
@@ -6104,15 +6253,15 @@ Chinese community medical question answering
 
 
 
-#### CodeRAGLibraryDocumentationSolutions
+#### `CodeRAGLibraryDocumentationSolutions` { .model-copy }
 
 Evaluation of code library documentation retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant Python library documentation sections given code-related queries.
 
 **Dataset:** [`code-rag-bench/library-documentation`](https://huggingface.co/datasets/code-rag-bench/library-documentation) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/pdf/2406.14497)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | python | Programming | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | python | Programming | derived | found | ndcg_at_10 |
 
 
 
@@ -6136,15 +6285,15 @@ Evaluation of code library documentation retrieval using CodeRAG-Bench. Tests th
 
 
 
-#### CodeRAGOnlineTutorials
+#### `CodeRAGOnlineTutorials` { .model-copy }
 
 Evaluation of online programming tutorial retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant tutorials from online platforms given code-related queries.
 
 **Dataset:** [`code-rag-bench/online-tutorials`](https://huggingface.co/datasets/code-rag-bench/online-tutorials) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/pdf/2406.14497)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | python | Programming | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | python | Programming | derived | found | ndcg_at_10 |
 
 
 
@@ -6168,15 +6317,15 @@ Evaluation of online programming tutorial retrieval using CodeRAG-Bench. Tests t
 
 
 
-#### CodeRAGProgrammingSolutions
+#### `CodeRAGProgrammingSolutions` { .model-copy }
 
 Evaluation of programming solution retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant programming solutions given code-related queries.
 
 **Dataset:** [`code-rag-bench/programming-solutions`](https://huggingface.co/datasets/code-rag-bench/programming-solutions) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/pdf/2406.14497)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | python | Programming | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | python | Programming | derived | found | ndcg_at_10 |
 
 
 
@@ -6200,15 +6349,15 @@ Evaluation of programming solution retrieval using CodeRAG-Bench. Tests the abil
 
 
 
-#### CodeRAGStackoverflowPosts
+#### `CodeRAGStackoverflowPosts` { .model-copy }
 
 Evaluation of StackOverflow post retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant StackOverflow posts given code-related queries.
 
 **Dataset:** [`code-rag-bench/stackoverflow-posts`](https://huggingface.co/datasets/code-rag-bench/stackoverflow-posts) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/pdf/2406.14497)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | python | Programming | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | python | Programming | derived | found | ndcg_at_10 |
 
 
 
@@ -6232,7 +6381,7 @@ Evaluation of StackOverflow post retrieval using CodeRAG-Bench. Tests the abilit
 
 
 
-#### ERESSReranking
+#### `ERESSReranking` { .model-copy }
 
 ERESS is a comprehensive e-commerce reranking dataset designed for holistic
     evaluation of reranking models. It includes diverse query intents including
@@ -6241,9 +6390,9 @@ ERESS is a comprehensive e-commerce reranking dataset designed for holistic
 
 **Dataset:** [`thebajajra/ERESSReranking`](https://huggingface.co/datasets/thebajajra/ERESSReranking) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/thebajajra/ERESSReranking)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_5 | eng | E-commerce, Web | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | E-commerce, Web | LM-generated | found | ndcg_at_5 |
 
 
 
@@ -6267,15 +6416,15 @@ ERESS is a comprehensive e-commerce reranking dataset designed for holistic
 
 
 
-#### ESCIReranking
+#### `ESCIReranking` { .model-copy }
 
 
 
 **Dataset:** [`mteb/ESCIReranking`](https://huggingface.co/datasets/mteb/ESCIReranking) • **License:** apache-2.0 • [Learn more →](https://github.com/amazon-science/esci-data/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | eng, jpn, spa | Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, jpn, spa | Written | derived | created | map_at_1000 |
 
 
 
@@ -6295,15 +6444,15 @@ ERESS is a comprehensive e-commerce reranking dataset designed for holistic
 
 
 
-#### HUMECore17InstructionReranking
+#### `HUMECore17InstructionReranking` { .model-copy }
 
 Human evaluation subset of Core17 instruction retrieval dataset for reranking evaluation.
 
 **Dataset:** [`mteb/HUMECore17InstructionReranking`](https://huggingface.co/datasets/mteb/HUMECore17InstructionReranking) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2403.15246)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | eng | News, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | News, Written | human-annotated | found | map_at_1000 |
 
 
 
@@ -6326,15 +6475,15 @@ Human evaluation subset of Core17 instruction retrieval dataset for reranking ev
 
 
 
-#### HUMENews21InstructionReranking
+#### `HUMENews21InstructionReranking` { .model-copy }
 
 Human evaluation subset of News21 instruction retrieval dataset for reranking evaluation.
 
 **Dataset:** [`mteb/HUMENews21InstructionReranking`](https://huggingface.co/datasets/mteb/HUMENews21InstructionReranking) • **License:** not specified • [Learn more →](https://trec.nist.gov/data/news2021.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | eng | News, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | News, Written | human-annotated | found | map_at_1000 |
 
 
 
@@ -6355,15 +6504,15 @@ Human evaluation subset of News21 instruction retrieval dataset for reranking ev
 
 
 
-#### HUMERobust04InstructionReranking
+#### `HUMERobust04InstructionReranking` { .model-copy }
 
 Human evaluation subset of Robust04 instruction retrieval dataset for reranking evaluation.
 
 **Dataset:** [`mteb/HUMERobust04InstructionReranking`](https://huggingface.co/datasets/mteb/HUMERobust04InstructionReranking) • **License:** not specified • [Learn more →](https://trec.nist.gov/data/robust/04.guidelines.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | eng | News, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | News, Written | human-annotated | found | map_at_1000 |
 
 
 
@@ -6384,15 +6533,15 @@ Human evaluation subset of Robust04 instruction retrieval dataset for reranking 
 
 
 
-#### HUMEWikipediaRerankingMultilingual
+#### `HUMEWikipediaRerankingMultilingual` { .model-copy }
 
 Human evaluation subset of Wikipedia reranking dataset across multiple languages.
 
 **Dataset:** [`mteb/HUMEWikipediaRerankingMultilingual`](https://huggingface.co/datasets/mteb/HUMEWikipediaRerankingMultilingual) • **License:** cc-by-sa-3.0 • [Learn more →](https://github.com/ellamind/wikipedia-2023-11-reranking-multilingual)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | dan, eng, nob | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | dan, eng, nob | Encyclopaedic, Written | derived | found | map_at_1000 |
 
 
 
@@ -6413,15 +6562,15 @@ Human evaluation subset of Wikipedia reranking dataset across multiple languages
 
 
 
-#### JQaRAReranking
+#### `JQaRAReranking` { .model-copy }
 
 JQaRA: Japanese Question Answering with Retrieval Augmentation  - 検索拡張(RAG)評価のための日本語 Q&A データセット. JQaRA is an information retrieval task for questions against 100 candidate data (including one or more correct answers).
 
 **Dataset:** [`mteb/JQaRAReranking`](https://huggingface.co/datasets/mteb/JQaRAReranking) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/hotchpotch/JQaRA)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | jpn | Encyclopaedic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Encyclopaedic, Non-fiction, Written | derived | found | map_at_1000 |
 
 
 
@@ -6441,15 +6590,15 @@ JQaRA: Japanese Question Answering with Retrieval Augmentation  - 検索拡張(R
 
 
 
-#### JQaRARerankingLite
+#### `JQaRARerankingLite` { .model-copy }
 
 JQaRA (Japanese Question Answering with Retrieval Augmentation) is a reranking dataset consisting of questions from JAQKET and corpus from Japanese Wikipedia. This is the lightweight version with a reduced corpus (172,897 documents) constructed using hard negatives from 5 high-performance models.
 
 **Dataset:** [`mteb/JQaRARerankingLite`](https://huggingface.co/datasets/mteb/JQaRARerankingLite) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/hotchpotch/JQaRA)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Encyclopaedic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Encyclopaedic, Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -6478,15 +6627,15 @@ JQaRA (Japanese Question Answering with Retrieval Augmentation) is a reranking d
 
 
 
-#### JaCWIRReranking
+#### `JaCWIRReranking` { .model-copy }
 
 JaCWIR is a small-scale Japanese information retrieval evaluation dataset consisting of 5000 question texts and approximately 500k web page titles and web page introductions or summaries (meta descriptions, etc.). The question texts are created based on one of the 500k web pages, and that data is used as a positive example for the question text.
 
 **Dataset:** [`mteb/JaCWIRReranking`](https://huggingface.co/datasets/mteb/JaCWIRReranking) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/hotchpotch/JaCWIR)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | jpn | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Web, Written | derived | found | map_at_1000 |
 
 
 
@@ -6506,15 +6655,15 @@ JaCWIR is a small-scale Japanese information retrieval evaluation dataset consis
 
 
 
-#### JaCWIRRerankingLite
+#### `JaCWIRRerankingLite` { .model-copy }
 
 JaCWIR (Japanese Casual Web IR) is a dataset consisting of questions and webpage meta descriptions collected from Hatena Bookmark. This is the lightweight reranking version with a reduced corpus (188,033 documents) constructed using hard negatives from 5 high-performance models.
 
 **Dataset:** [`mteb/JaCWIRRerankingLite`](https://huggingface.co/datasets/mteb/JaCWIRRerankingLite) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/hotchpotch/JaCWIR)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -6542,15 +6691,15 @@ JaCWIR (Japanese Casual Web IR) is a dataset consisting of questions and webpage
 
 
 
-#### LocBenchRR
+#### `LocBenchRR` { .model-copy }
 
 Software Issue Localization.
 
 **Dataset:** [`mteb/LocBenchRR`](https://huggingface.co/datasets/mteb/LocBenchRR) • **License:** mit • [Learn more →](https://arxiv.org/abs/2503.09089)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_10 | eng, python | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, python | Programming, Written | derived | found | recall_at_10 |
 
 
 
@@ -6574,15 +6723,15 @@ Software Issue Localization.
 
 
 
-#### MIRACLReranking
+#### `MIRACLReranking` { .model-copy }
 
 MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.
 
 **Dataset:** [`mteb/MIRACLReranking`](https://huggingface.co/datasets/mteb/MIRACLReranking) • **License:** cc-by-sa-4.0 • [Learn more →](https://project-miracl.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ara, ben, deu, eng, fas, ... (18) | Encyclopaedic, Written | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, ben, deu, eng, fas, ... (18) | Encyclopaedic, Written | expert-annotated | created | ndcg_at_10 |
 
 
 
@@ -6606,15 +6755,15 @@ MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a
 
 
 
-#### MMarcoReranking
+#### `MMarcoReranking` { .model-copy }
 
 mMARCO is a multilingual version of the MS MARCO passage ranking dataset
 
 **Dataset:** [`mteb/MMarcoReranking`](https://huggingface.co/datasets/mteb/MMarcoReranking) • **License:** not specified • [Learn more →](https://github.com/unicamp-dl/mMARCO)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | cmn | Web, Written | human-annotated | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Web, Written | human-annotated | machine-translated | map_at_1000 |
 
 
 
@@ -6645,15 +6794,15 @@ mMARCO is a multilingual version of the MS MARCO passage ranking dataset
 
 
 
-#### MindSmallReranking
+#### `MindSmallReranking` { .model-copy }
 
 Microsoft News Dataset: A Large-Scale English Dataset for News Recommendation Research
 
 **Dataset:** [`mteb/MindSmallReranking`](https://huggingface.co/datasets/mteb/MindSmallReranking) • **License:** https://github.com/msnews/MIND/blob/master/MSR%20License_Data.pdf • [Learn more →](https://msnews.github.io/assets/doc/ACL2020_MIND.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | max_over_subqueries_map_at_1000 | eng | News, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | News, Written | expert-annotated | found | max_over_subqueries_map_at_1000 |
 
 
 
@@ -6683,15 +6832,15 @@ Microsoft News Dataset: A Large-Scale English Dataset for News Recommendation Re
 
 
 
-#### MultiLongDocReranking
+#### `MultiLongDocReranking` { .model-copy }
 
 Reranking version of MultiLongDocRetrieval (MLDR). MLDR is a Multilingual Long-Document Retrieval dataset built on Wikipedia, Wudao and mC4, covering 13 typologically diverse languages. Specifically, we sample lengthy articles from Wikipedia, Wudao and mC4 datasets and randomly choose paragraphs from them. Then we use GPT-3.5 to generate questions based on these paragraphs. The generated question and the sampled article constitute a new text pair to the dataset.
 
 **Dataset:** [`mteb/MultiLongDocReranking`](https://huggingface.co/datasets/mteb/MultiLongDocReranking) • **License:** mit • [Learn more →](https://huggingface.co/datasets/Shitao/MLDR)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ara, deu, eng, fra, hin, ... (13) | Encyclopaedic, Fiction, Non-fiction, Web, Written | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, deu, eng, fra, hin, ... (13) | Encyclopaedic, Fiction, Non-fiction, Web, Written | LM-generated | found | ndcg_at_10 |
 
 
 
@@ -6714,15 +6863,15 @@ Reranking version of MultiLongDocRetrieval (MLDR). MLDR is a Multilingual Long-D
 
 
 
-#### MultiSWEbenchRR
+#### `MultiSWEbenchRR` { .model-copy }
 
 Multilingual Software Issue Localization.
 
 **Dataset:** [`mteb/MultiSWEbenchRR`](https://huggingface.co/datasets/mteb/MultiSWEbenchRR) • **License:** mit • [Learn more →](https://multi-swe-bench.github.io/#/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_10 | eng, python | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, python | Programming, Written | derived | found | recall_at_10 |
 
 
 
@@ -6746,15 +6895,15 @@ Multilingual Software Issue Localization.
 
 
 
-#### NamaaMrTydiReranking
+#### `NamaaMrTydiReranking` { .model-copy }
 
 Mr. TyDi is a multi-lingual benchmark dataset built on TyDi, covering eleven typologically diverse languages. It is designed for monolingual retrieval, specifically to evaluate ranking with learned dense representations. This dataset adapts the arabic test split for Reranking evaluation purposes by the addition of multiple (Hard) Negatives to each query and positive
 
 **Dataset:** [`mteb/NamaaMrTydiReranking`](https://huggingface.co/datasets/mteb/NamaaMrTydiReranking) • **License:** cc-by-sa-3.0 • [Learn more →](https://huggingface.co/NAMAA-Space)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | ara | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara | Encyclopaedic, Written | human-annotated | found | map_at_1000 |
 
 
 
@@ -6778,15 +6927,15 @@ Mr. TyDi is a multi-lingual benchmark dataset built on TyDi, covering eleven typ
 
 
 
-#### NevIR
+#### `NevIR` { .model-copy }
 
 Paired evaluation of real world negation in retrieval, with questions and passages. Since models generally prefer one passage over the other always, there are two questions that the model must get right to understand the negation (hence the `paired_accuracy` metric).
 
 **Dataset:** [`orionweller/NevIR-mteb`](https://huggingface.co/datasets/orionweller/NevIR-mteb) • **License:** mit • [Learn more →](https://github.com/orionw/NevIR)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | paired_accuracy | eng | Web | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Web | human-annotated | created | paired_accuracy |
 
 
 
@@ -6808,15 +6957,15 @@ Paired evaluation of real world negation in retrieval, with questions and passag
 
 
 
-#### RuBQReranking
+#### `RuBQReranking` { .model-copy }
 
 Paragraph reranking based on RuBQ 2.0. Give paragraphs that answer the question higher scores.
 
 **Dataset:** [`mteb/RuBQReranking`](https://huggingface.co/datasets/mteb/RuBQReranking) • **License:** cc-by-sa-4.0 • [Learn more →](https://openreview.net/pdf?id=P5UQFFoQ4PJ)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | rus | Encyclopaedic, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | rus | Encyclopaedic, Written | human-annotated | created | map_at_1000 |
 
 
 
@@ -6838,15 +6987,15 @@ Paragraph reranking based on RuBQ 2.0. Give paragraphs that answer the question 
 
 
 
-#### SWEPolyBenchRR
+#### `SWEPolyBenchRR` { .model-copy }
 
 Multilingual Software Issue Localization.
 
 **Dataset:** [`mteb/SWEPolyBenchRR`](https://huggingface.co/datasets/mteb/SWEPolyBenchRR) • **License:** mit • [Learn more →](https://amazon-science.github.io/SWE-PolyBench/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_10 | eng, python | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, python | Programming, Written | derived | found | recall_at_10 |
 
 
 
@@ -6870,15 +7019,15 @@ Multilingual Software Issue Localization.
 
 
 
-#### SWEbenchLiteRR
+#### `SWEbenchLiteRR` { .model-copy }
 
 Software Issue Localization.
 
 **Dataset:** [`mteb/SWEbenchLiteRR`](https://huggingface.co/datasets/mteb/SWEbenchLiteRR) • **License:** mit • [Learn more →](https://www.swebench.com/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_10 | eng, python | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, python | Programming, Written | derived | found | recall_at_10 |
 
 
 
@@ -6902,15 +7051,15 @@ Software Issue Localization.
 
 
 
-#### SWEbenchMultilingualRR
+#### `SWEbenchMultilingualRR` { .model-copy }
 
 Multilingual Software Issue Localization.
 
 **Dataset:** [`mteb/SWEbenchMultilingualRR`](https://huggingface.co/datasets/mteb/SWEbenchMultilingualRR) • **License:** mit • [Learn more →](https://www.swebench.com/multilingual.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_10 | eng, python | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, python | Programming, Written | derived | found | recall_at_10 |
 
 
 
@@ -6934,15 +7083,15 @@ Multilingual Software Issue Localization.
 
 
 
-#### SWEbenchVerifiedRR
+#### `SWEbenchVerifiedRR` { .model-copy }
 
 Software Issue Localization for SWE-bench Verified
 
 **Dataset:** [`mteb/SWEbenchVerifiedRR`](https://huggingface.co/datasets/mteb/SWEbenchVerifiedRR) • **License:** mit • [Learn more →](https://openai.com/index/introducing-swe-bench-verified/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_10 | eng, python | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, python | Programming, Written | derived | found | recall_at_10 |
 
 
 
@@ -6963,15 +7112,15 @@ Software Issue Localization for SWE-bench Verified
 
 
 
-#### SciDocsRR
+#### `SciDocsRR` { .model-copy }
 
 Ranking of related scientific papers based on their title.
 
 **Dataset:** [`mteb/SciDocsRR`](https://huggingface.co/datasets/mteb/SciDocsRR) • **License:** cc-by-4.0 • [Learn more →](https://allenai.org/data/scidocs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | eng | Academic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Non-fiction, Written | derived | found | map_at_1000 |
 
 
 
@@ -6992,15 +7141,15 @@ Ranking of related scientific papers based on their title.
 
 
 
-#### SciDocsRR-VN
+#### `SciDocsRR-VN` { .model-copy }
 
 A translated dataset from Ranking of related scientific papers based on their title. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`mteb/SciDocsRR-VN`](https://huggingface.co/datasets/mteb/SciDocsRR-VN) • **License:** cc-by-sa-4.0 • [Learn more →](https://allenai.org/data/scidocs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | vie | Academic, Non-fiction, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Academic, Non-fiction, Written | derived | machine-translated and LM verified | map_at_1000 |
 
 
 
@@ -7024,15 +7173,15 @@ A translated dataset from Ranking of related scientific papers based on their ti
 
 
 
-#### StackOverflowDupQuestions
+#### `StackOverflowDupQuestions` { .model-copy }
 
 Stack Overflow Duplicate Questions Task for questions with the tags Java, JavaScript and Python
 
 **Dataset:** [`mteb/StackOverflowDupQuestions`](https://huggingface.co/datasets/mteb/StackOverflowDupQuestions) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | eng | Blog, Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Blog, Programming, Written | derived | found | map_at_1000 |
 
 
 
@@ -7054,15 +7203,15 @@ Stack Overflow Duplicate Questions Task for questions with the tags Java, JavaSc
 
 
 
-#### StackOverflowDupQuestions-VN
+#### `StackOverflowDupQuestions-VN` { .model-copy }
 
 A translated dataset from Stack Overflow Duplicate Questions Task for questions with the tags Java, JavaScript and Python The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`mteb/StackOverflowDupQuestions-VN`](https://huggingface.co/datasets/mteb/StackOverflowDupQuestions-VN) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | vie | Academic, Non-fiction, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Academic, Non-fiction, Written | derived | machine-translated and LM verified | map_at_1000 |
 
 
 
@@ -7086,15 +7235,15 @@ A translated dataset from Stack Overflow Duplicate Questions Task for questions 
 
 
 
-#### SyntecReranking
+#### `SyntecReranking` { .model-copy }
 
 This dataset has been built from the Syntec Collective bargaining agreement.
 
 **Dataset:** [`mteb/SyntecReranking`](https://huggingface.co/datasets/mteb/SyntecReranking) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://huggingface.co/datasets/lyon-nlp/mteb-fr-reranking-syntec-s2p)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | fra | Legal, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fra | Legal, Written | human-annotated | found | map_at_1000 |
 
 
 
@@ -7117,15 +7266,15 @@ This dataset has been built from the Syntec Collective bargaining agreement.
 
 
 
-#### T2Reranking
+#### `T2Reranking` { .model-copy }
 
 T2Ranking: A large-scale Chinese Benchmark for Passage Ranking
 
 **Dataset:** [`mteb/T2Reranking`](https://huggingface.co/datasets/mteb/T2Reranking) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2304.03679)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | cmn | Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Web, Written | human-annotated | found | map_at_1000 |
 
 
 
@@ -7148,15 +7297,15 @@ T2Ranking: A large-scale Chinese Benchmark for Passage Ranking
 
 
 
-#### VoyageMMarcoReranking
+#### `VoyageMMarcoReranking` { .model-copy }
 
 a hard-negative augmented version of the Japanese MMARCO dataset as used in Voyage AI Evaluation Suite
 
 **Dataset:** [`mteb/VoyageMMarcoReranking`](https://huggingface.co/datasets/mteb/VoyageMMarcoReranking) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2312.16144)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | jpn | Academic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Academic, Non-fiction, Written | derived | found | map_at_1000 |
 
 
 
@@ -7178,15 +7327,15 @@ a hard-negative augmented version of the Japanese MMARCO dataset as used in Voya
 
 
 
-#### WebLINXCandidatesReranking
+#### `WebLINXCandidatesReranking` { .model-copy }
 
 WebLINX is a large-scale benchmark of 100K interactions across 2300 expert demonstrations of conversational web navigation. The reranking task focuses on finding relevant elements at every given step in the trajectory.
 
 **Dataset:** [`mteb/WebLINXCandidatesReranking`](https://huggingface.co/datasets/mteb/WebLINXCandidatesReranking) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://mcgill-nlp.github.io/weblinx)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | mrr_at_10 | eng | Academic, Web, Written | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Web, Written | expert-annotated | created | mrr_at_10 |
 
 
 
@@ -7209,15 +7358,15 @@ WebLINX is a large-scale benchmark of 100K interactions across 2300 expert demon
 
 
 
-#### WikipediaRerankingMultilingual
+#### `WikipediaRerankingMultilingual` { .model-copy }
 
 The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.
 
 **Dataset:** [`mteb/WikipediaRerankingMultilingual`](https://huggingface.co/datasets/mteb/WikipediaRerankingMultilingual) • **License:** cc-by-sa-3.0 • [Learn more →](https://huggingface.co/datasets/ellamind/wikipedia-2023-11-reranking-multilingual)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | ben, bul, ces, dan, deu, ... (18) | Encyclopaedic, Written | LM-generated and reviewed | LM-generated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ben, bul, ces, dan, deu, ... (18) | Encyclopaedic, Written | LM-generated and reviewed | LM-generated and verified | map_at_1000 |
 
 
 
@@ -7237,15 +7386,15 @@ The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synt
 
 
 
-#### XGlueWPRReranking
+#### `XGlueWPRReranking` { .model-copy }
 
 XGLUE is a new benchmark dataset to evaluate the performance of cross-lingual pre-trained models with respect to cross-lingual natural language understanding and generation. XGLUE is composed of 11 tasks spans 19 languages.
 
 **Dataset:** [`mteb/XGlueWPRReranking`](https://huggingface.co/datasets/mteb/XGlueWPRReranking) • **License:** http://hdl.handle.net/11234/1-3105 • [Learn more →](https://github.com/microsoft/XGLUE)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | map_at_1000 | deu, eng, fra, ita, por, ... (7) | Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu, eng, fra, ita, por, ... (7) | Written | human-annotated | found | map_at_1000 |
 
 
 
@@ -7324,19 +7473,22 @@ XGLUE is a new benchmark dataset to evaluate the performance of cross-lingual pr
 
 
 
+
 ## Retrieval
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 431
 
-#### AILACasedocs
+#### `AILACasedocs` { .model-copy }
 
 The task is to retrieve the case document that most closely matches or is most relevant to the scenario described in the provided query.
 
 **Dataset:** [`mteb/AILA_casedocs`](https://huggingface.co/datasets/mteb/AILA_casedocs) • **License:** cc-by-4.0 • [Learn more →](https://zenodo.org/records/4063986)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Legal, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Legal, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -7366,15 +7518,15 @@ The task is to retrieve the case document that most closely matches or is most r
 
 
 
-#### AILAStatutes
+#### `AILAStatutes` { .model-copy }
 
 This dataset is structured for the task of identifying the most relevant statutes for a given situation.
 
 **Dataset:** [`mteb/AILA_statutes`](https://huggingface.co/datasets/mteb/AILA_statutes) • **License:** cc-by-4.0 • [Learn more →](https://zenodo.org/records/4063986)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Legal, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Legal, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -7404,15 +7556,15 @@ This dataset is structured for the task of identifying the most relevant statute
 
 
 
-#### ARCChallenge
+#### `ARCChallenge` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on ARC-Challenge.
 
 **Dataset:** [`mteb/ARCChallenge`](https://huggingface.co/datasets/mteb/ARCChallenge) • **License:** cc-by-sa-4.0 • [Learn more →](https://allenai.org/data/arc)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -7440,15 +7592,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### AlloprofRetrieval
+#### `AlloprofRetrieval` { .model-copy }
 
 This dataset was provided by AlloProf, an organisation in Quebec, Canada offering resources and a help forum curated by a large number of teachers to students on all subjects taught from in primary and secondary school
 
 **Dataset:** [`mteb/AlloprofRetrieval`](https://huggingface.co/datasets/mteb/AlloprofRetrieval) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://huggingface.co/datasets/antoinelb7/alloprof)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fra | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fra | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -7473,15 +7625,15 @@ This dataset was provided by AlloProf, an organisation in Quebec, Canada offerin
 
 
 
-#### AlphaNLI
+#### `AlphaNLI` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on AlphaNLI.
 
 **Dataset:** [`mteb/AlphaNLI`](https://huggingface.co/datasets/mteb/AlphaNLI) • **License:** cc-by-nc-4.0 • [Learn more →](https://leaderboard.allenai.org/anli/submissions/get-started)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -7509,15 +7661,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### AppsRetrieval
+#### `AppsRetrieval` { .model-copy }
 
 The dataset is a collection of natural language queries and their corresponding code snippets. The task is to retrieve the most relevant code snippet for a given query.
 
 **Dataset:** [`CoIR-Retrieval/apps`](https://huggingface.co/datasets/CoIR-Retrieval/apps) • **License:** mit • [Learn more →](https://arxiv.org/abs/2105.09938)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng, python | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, python | Programming, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -7538,15 +7690,15 @@ The dataset is a collection of natural language queries and their corresponding 
 
 
 
-#### ArguAna
+#### `ArguAna` { .model-copy }
 
 ArguAna: Retrieval of the Best Counterargument without Prior Topic Knowledge
 
 **Dataset:** [`mteb/arguana`](https://huggingface.co/datasets/mteb/arguana) • **License:** cc-by-sa-4.0 • [Learn more →](http://argumentation.bplaced.net/arguana/data)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Social, Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Social, Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -7567,15 +7719,15 @@ ArguAna: Retrieval of the Best Counterargument without Prior Topic Knowledge
 
 
 
-#### ArguAna-Fa
+#### `ArguAna-Fa` { .model-copy }
 
 ArguAna-Fa
 
 **Dataset:** [`MCINext/arguana-fa`](https://huggingface.co/datasets/MCINext/arguana-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/arguana-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Blog | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Blog | derived | found | ndcg_at_10 |
 
 
 
@@ -7594,15 +7746,15 @@ ArguAna-Fa
 
 
 
-#### ArguAna-Fa.v2
+#### `ArguAna-Fa.v2` { .model-copy }
 
 ArguAna-Fa.v2
 
 **Dataset:** [`MCINext/arguana-fa-v2`](https://huggingface.co/datasets/MCINext/arguana-fa-v2) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/arguana-fa-v2)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Blog | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Blog | derived | found | ndcg_at_10 |
 
 
 
@@ -7621,15 +7773,15 @@ ArguAna-Fa.v2
 
 
 
-#### ArguAna-NL
+#### `ArguAna-NL` { .model-copy }
 
 ArguAna involves the task of retrieval of the best counterargument to an argument. ArguAna-NL is a Dutch translation.
 
 **Dataset:** [`clips/beir-nl-arguana`](https://huggingface.co/datasets/clips/beir-nl-arguana) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-arguana)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -7653,15 +7805,15 @@ ArguAna involves the task of retrieval of the best counterargument to an argumen
 
 
 
-#### ArguAna-NL.v2
+#### `ArguAna-NL.v2` { .model-copy }
 
 ArguAna involves the task of retrieval of the best counterargument to an argument. ArguAna-NL is a Dutch translation. This version adds a Dutch prompt to the dataset.
 
 **Dataset:** [`clips/beir-nl-arguana`](https://huggingface.co/datasets/clips/beir-nl-arguana) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-arguana)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -7685,15 +7837,15 @@ ArguAna involves the task of retrieval of the best counterargument to an argumen
 
 
 
-#### ArguAna-PL
+#### `ArguAna-PL` { .model-copy }
 
 ArguAna-PL
 
 **Dataset:** [`mteb/ArguAna-PL`](https://huggingface.co/datasets/mteb/ArguAna-PL) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/clarin-knext/arguana-pl)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Medical, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Medical, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -7716,15 +7868,15 @@ ArguAna-PL
 
 
 
-#### ArguAna-VN
+#### `ArguAna-VN` { .model-copy }
 
 A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/arguana-vn`](https://huggingface.co/datasets/GreenNode/arguana-vn) • **License:** cc-by-sa-4.0 • [Learn more →](http://argumentation.bplaced.net/arguana/data)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Medical, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Medical, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -7748,15 +7900,15 @@ A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Med
 
 
 
-#### AutoRAGRetrieval
+#### `AutoRAGRetrieval` { .model-copy }
 
 This dataset enables the evaluation of Korean RAG performance across various domains—finance, public sector, healthcare, legal, and commerce—by providing publicly accessible documents, questions, and answers.
 
 **Dataset:** [`yjoonjang/markers_bm`](https://huggingface.co/datasets/yjoonjang/markers_bm) • **License:** mit • [Learn more →](https://arxiv.org/abs/2410.20878)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | kor | Financial, Government, Legal, Medical, Social | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | kor | Financial, Government, Legal, Medical, Social | human-annotated | created | ndcg_at_10 |
 
 
 
@@ -7780,15 +7932,15 @@ This dataset enables the evaluation of Korean RAG performance across various dom
 
 
 
-#### BIRCO-ArguAna
+#### `BIRCO-ArguAna` { .model-copy }
 
 Retrieval task using the ArguAna dataset from BIRCO. This dataset contains 100 queries where both queries and passages are complex one-paragraph arguments about current affairs. The objective is to retrieve the counter-argument that directly refutes the query’s stance.
 
 **Dataset:** [`mteb/BIRCO-ArguAna-Test`](https://huggingface.co/datasets/mteb/BIRCO-ArguAna-Test) • **License:** cc-by-4.0 • [Learn more →](https://github.com/BIRCO-benchmark/BIRCO)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Written | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -7812,15 +7964,15 @@ Retrieval task using the ArguAna dataset from BIRCO. This dataset contains 100 q
 
 
 
-#### BIRCO-ClinicalTrial
+#### `BIRCO-ClinicalTrial` { .model-copy }
 
 Retrieval task using the Clinical-Trial dataset from BIRCO. This dataset contains 50 queries that are patient case reports. Each query has a candidate pool comprising 30-110 clinical trial descriptions. Relevance is graded (0, 1, 2), where 1 and 2 are considered relevant.
 
 **Dataset:** [`mteb/BIRCO-ClinicalTrial-Test`](https://huggingface.co/datasets/mteb/BIRCO-ClinicalTrial-Test) • **License:** cc-by-4.0 • [Learn more →](https://github.com/BIRCO-benchmark/BIRCO)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Medical | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Medical | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -7844,15 +7996,15 @@ Retrieval task using the Clinical-Trial dataset from BIRCO. This dataset contain
 
 
 
-#### BIRCO-DorisMae
+#### `BIRCO-DorisMae` { .model-copy }
 
 Retrieval task using the DORIS-MAE dataset from BIRCO. This dataset contains 60 queries that are complex research questions from computer scientists. Each query has a candidate pool of approximately 110 abstracts. Relevance is graded from 0 to 2 (scores of 1 and 2 are considered relevant).
 
 **Dataset:** [`mteb/BIRCO-DorisMae-Test`](https://huggingface.co/datasets/mteb/BIRCO-DorisMae-Test) • **License:** cc-by-4.0 • [Learn more →](https://github.com/BIRCO-benchmark/BIRCO)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -7876,15 +8028,15 @@ Retrieval task using the DORIS-MAE dataset from BIRCO. This dataset contains 60 
 
 
 
-#### BIRCO-Relic
+#### `BIRCO-Relic` { .model-copy }
 
 Retrieval task using the RELIC dataset from BIRCO. This dataset contains 100 queries which are excerpts from literary analyses with a missing quotation (indicated by [masked sentence(s)]). Each query has a candidate pool of 50 passages. The objective is to retrieve the passage that best completes the literary analysis.
 
 **Dataset:** [`mteb/BIRCO-Relic-Test`](https://huggingface.co/datasets/mteb/BIRCO-Relic-Test) • **License:** cc-by-4.0 • [Learn more →](https://github.com/BIRCO-benchmark/BIRCO)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Fiction | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Fiction | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -7908,15 +8060,15 @@ Retrieval task using the RELIC dataset from BIRCO. This dataset contains 100 que
 
 
 
-#### BIRCO-WTB
+#### `BIRCO-WTB` { .model-copy }
 
 Retrieval task using the WhatsThatBook dataset from BIRCO. This dataset contains 100 queries where each query is an ambiguous description of a book. Each query has a candidate pool of 50 book descriptions. The objective is to retrieve the correct book description.
 
 **Dataset:** [`mteb/BIRCO-WTB-Test`](https://huggingface.co/datasets/mteb/BIRCO-WTB-Test) • **License:** cc-by-4.0 • [Learn more →](https://github.com/BIRCO-benchmark/BIRCO)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Fiction | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Fiction | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -7940,15 +8092,15 @@ Retrieval task using the WhatsThatBook dataset from BIRCO. This dataset contains
 
 
 
-#### BSARDRetrieval
+#### `BSARDRetrieval` { .model-copy }
 
 The Belgian Statutory Article Retrieval Dataset (BSARD) is a French native dataset for studying legal information retrieval. BSARD consists of more than 22,600 statutory articles from Belgian law and about 1,100 legal questions posed by Belgian citizens and labeled by experienced jurists with relevant articles from the corpus.
 
 **Dataset:** [`mteb/BSARDRetrieval`](https://huggingface.co/datasets/mteb/BSARDRetrieval) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://huggingface.co/datasets/maastrichtlawtech/bsard)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_100 | fra | Legal, Spoken | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fra | Legal, Spoken | expert-annotated | found | recall_at_100 |
 
 
 
@@ -7975,15 +8127,15 @@ The Belgian Statutory Article Retrieval Dataset (BSARD) is a French native datas
 
 
 
-#### BSARDRetrieval.v2
+#### `BSARDRetrieval.v2` { .model-copy }
 
 BSARD is a French native dataset for legal information retrieval. BSARDRetrieval.v2 covers multi-article queries, fixing issues (#2906) with the previous data loading. 
 
 **Dataset:** [`mteb/BSARDRetrieval.v2`](https://huggingface.co/datasets/mteb/BSARDRetrieval.v2) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://huggingface.co/datasets/maastrichtlawtech/bsard)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_100 | fra | Legal, Spoken | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fra | Legal, Spoken | expert-annotated | found | recall_at_100 |
 
 
 
@@ -8010,15 +8162,15 @@ BSARD is a French native dataset for legal information retrieval. BSARDRetrieval
 
 
 
-#### BarExamQA
+#### `BarExamQA` { .model-copy }
 
 A benchmark for retrieving legal provisions that answer US bar exam questions.
 
 **Dataset:** [`isaacus/mteb-barexam-qa`](https://huggingface.co/datasets/isaacus/mteb-barexam-qa) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/reglab/barexam_qa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Legal | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Legal | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -8047,15 +8199,15 @@ A benchmark for retrieving legal provisions that answer US bar exam questions.
 
 
 
-#### BelebeleRetrieval
+#### `BelebeleRetrieval` { .model-copy }
 
 Belebele is a multiple-choice machine reading comprehension (MRC) dataset spanning 122 language variants (including 115 distinct languages and their scripts)
 
 **Dataset:** [`mteb/belebele`](https://huggingface.co/datasets/mteb/belebele) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2308.16884)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | acm, afr, als, amh, apc, ... (115) | News, Web, Written | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | acm, afr, als, amh, apc, ... (115) | News, Web, Written | expert-annotated | created | ndcg_at_10 |
 
 
 
@@ -8076,15 +8228,15 @@ Belebele is a multiple-choice machine reading comprehension (MRC) dataset spanni
 
 
 
-#### BillSumCA
+#### `BillSumCA` { .model-copy }
 
 A benchmark for retrieving Californian bills based on their summaries.
 
 **Dataset:** [`isaacus/mteb-BillSumCA`](https://huggingface.co/datasets/isaacus/mteb-BillSumCA) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/FiscalNote/billsum)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Government, Legal | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Government, Legal | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -8109,15 +8261,15 @@ A benchmark for retrieving Californian bills based on their summaries.
 
 
 
-#### BillSumUS
+#### `BillSumUS` { .model-copy }
 
 A benchmark for retrieving US federal bills based on their summaries.
 
 **Dataset:** [`isaacus/mteb-BillSumUS`](https://huggingface.co/datasets/isaacus/mteb-BillSumUS) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/FiscalNote/billsum)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Government, Legal | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Government, Legal | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -8142,15 +8294,15 @@ A benchmark for retrieving US federal bills based on their summaries.
 
 
 
-#### BrightAopsRetrieval
+#### `BrightAopsRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of similar Math Olympiad problems from Art of Problem Solving.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -8171,15 +8323,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of sim
 
 
 
-#### BrightBiologyLongRetrieval
+#### `BrightBiologyLongRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Biology StackExchange answers with long documents.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_1 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | recall_at_1 |
 
 
 
@@ -8200,15 +8352,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web
 
 
 
-#### BrightBiologyRetrieval
+#### `BrightBiologyRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Biology StackExchange answers.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -8229,15 +8381,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web
 
 
 
-#### BrightEarthScienceLongRetrieval
+#### `BrightEarthScienceLongRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Earth Science StackExchange answers with long documents.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_1 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | recall_at_1 |
 
 
 
@@ -8258,15 +8410,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web
 
 
 
-#### BrightEarthScienceRetrieval
+#### `BrightEarthScienceRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Earth Science StackExchange answers.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -8287,15 +8439,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web
 
 
 
-#### BrightEconomicsLongRetrieval
+#### `BrightEconomicsLongRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Economics StackExchange answers with long documents.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_1 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | recall_at_1 |
 
 
 
@@ -8316,15 +8468,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web
 
 
 
-#### BrightEconomicsRetrieval
+#### `BrightEconomicsRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Economics StackExchange answers.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -8345,15 +8497,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web
 
 
 
-#### BrightLeetcodeRetrieval
+#### `BrightLeetcodeRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of similar algorithmic problems based on shared solution techniques.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -8374,15 +8526,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of sim
 
 
 
-#### BrightLongRetrieval
+#### `BrightLongRetrieval` { .model-copy }
 
 Bright retrieval dataset with long documents.
 
 **Dataset:** [`xlangai/BRIGHT`](https://huggingface.co/datasets/xlangai/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -8403,15 +8555,15 @@ Bright retrieval dataset with long documents.
 
 
 
-#### BrightPonyLongRetrieval
+#### `BrightPonyLongRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of Pony programming language syntax documentation with long documents.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_1 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | recall_at_1 |
 
 
 
@@ -8432,15 +8584,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of Pon
 
 
 
-#### BrightPonyRetrieval
+#### `BrightPonyRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of Pony programming language syntax documentation.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -8461,15 +8613,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of Pon
 
 
 
-#### BrightPsychologyLongRetrieval
+#### `BrightPsychologyLongRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Psychology StackExchange answers with long documents.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_1 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | recall_at_1 |
 
 
 
@@ -8490,15 +8642,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web
 
 
 
-#### BrightPsychologyRetrieval
+#### `BrightPsychologyRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Psychology StackExchange answers.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -8519,15 +8671,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web
 
 
 
-#### BrightRetrieval
+#### `BrightRetrieval` { .model-copy }
 
 BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval
 
 **Dataset:** [`xlangai/BRIGHT`](https://huggingface.co/datasets/xlangai/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -8548,15 +8700,15 @@ BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval
 
 
 
-#### BrightRoboticsLongRetrieval
+#### `BrightRoboticsLongRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Robotics StackExchange answers with long documents.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_1 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | recall_at_1 |
 
 
 
@@ -8577,15 +8729,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web
 
 
 
-#### BrightRoboticsRetrieval
+#### `BrightRoboticsRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Robotics StackExchange answers.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -8606,15 +8758,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web
 
 
 
-#### BrightStackoverflowLongRetrieval
+#### `BrightStackoverflowLongRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Stack Overflow answers with long documents.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_1 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | recall_at_1 |
 
 
 
@@ -8635,15 +8787,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web
 
 
 
-#### BrightStackoverflowRetrieval
+#### `BrightStackoverflowRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Stack Overflow answers.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -8664,15 +8816,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web
 
 
 
-#### BrightSustainableLivingLongRetrieval
+#### `BrightSustainableLivingLongRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Sustainable Living StackExchange answers with long documents.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_1 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | recall_at_1 |
 
 
 
@@ -8693,15 +8845,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web
 
 
 
-#### BrightSustainableLivingRetrieval
+#### `BrightSustainableLivingRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Sustainable Living StackExchange answers.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -8722,15 +8874,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web
 
 
 
-#### BrightTheoremQAQuestionsRetrieval
+#### `BrightTheoremQAQuestionsRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of theorem definitions from ProofWiki given questions rephrased as real-world scenarios.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -8751,15 +8903,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of the
 
 
 
-#### BrightTheoremQATheoremsRetrieval
+#### `BrightTheoremQATheoremsRetrieval` { .model-copy }
 
 Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of theorem definitions and proofs from ProofWiki.
 
 **Dataset:** [`mteb/BRIGHT`](https://huggingface.co/datasets/mteb/BRIGHT) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/xlangai/BRIGHT)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -8780,15 +8932,15 @@ Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of the
 
 
 
-#### BuiltBenchRetrieval
+#### `BuiltBenchRetrieval` { .model-copy }
 
 Retrieval of built asset entity type/class descriptions given a query describing an entity as represented in well-established industry classification systems such as Uniclass, IFC, etc.
 
 **Dataset:** [`mteb/BuiltBenchRetrieval`](https://huggingface.co/datasets/mteb/BuiltBenchRetrieval) • **License:** cc-by-nd-4.0 • [Learn more →](https://arxiv.org/abs/2411.12056)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Engineering, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Engineering, Written | derived | created | ndcg_at_10 |
 
 
 
@@ -8809,15 +8961,15 @@ Retrieval of built asset entity type/class descriptions given a query describing
 
 
 
-#### COIRCodeSearchNetRetrieval
+#### `COIRCodeSearchNetRetrieval` { .model-copy }
 
 The dataset is a collection of code snippets and their corresponding natural language queries. The task is to retrieve the most relevant code summary given a code snippet.
 
 **Dataset:** [`CoIR-Retrieval/CodeSearchNet`](https://huggingface.co/datasets/CoIR-Retrieval/CodeSearchNet) • **License:** mit • [Learn more →](https://huggingface.co/datasets/code_search_net/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | go, java, javascript, php, python, ... (6) | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | go, java, javascript, php, python, ... (6) | Programming, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -8838,15 +8990,15 @@ The dataset is a collection of code snippets and their corresponding natural lan
 
 
 
-#### CQADupstack-Android-PL
+#### `CQADupstack-Android-PL` { .model-copy }
 
 CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 **Dataset:** [`mteb/CQADupstack-Android-PL`](https://huggingface.co/datasets/mteb/CQADupstack-Android-PL) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/clarin-knext/cqadupstack-android-pl)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Non-fiction, Programming, Web, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Non-fiction, Programming, Web, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -8869,15 +9021,15 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 
 
-#### CQADupstack-English-PL
+#### `CQADupstack-English-PL` { .model-copy }
 
 CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 **Dataset:** [`mteb/CQADupstack-English-PL`](https://huggingface.co/datasets/mteb/CQADupstack-English-PL) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/clarin-knext/cqadupstack-english-pl)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -8900,15 +9052,15 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 
 
-#### CQADupstack-Gaming-PL
+#### `CQADupstack-Gaming-PL` { .model-copy }
 
 CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 **Dataset:** [`mteb/CQADupstack-Gaming-PL`](https://huggingface.co/datasets/mteb/CQADupstack-Gaming-PL) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/clarin-knext/cqadupstack-gaming-pl)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Web, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Web, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -8931,15 +9083,15 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 
 
-#### CQADupstack-Gis-PL
+#### `CQADupstack-Gis-PL` { .model-copy }
 
 CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 **Dataset:** [`mteb/CQADupstack-Gis-PL`](https://huggingface.co/datasets/mteb/CQADupstack-Gis-PL) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/clarin-knext/cqadupstack-gis-pl)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Academic, Non-fiction, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Academic, Non-fiction, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -8962,15 +9114,15 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 
 
-#### CQADupstack-Mathematica-PL
+#### `CQADupstack-Mathematica-PL` { .model-copy }
 
 CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 **Dataset:** [`mteb/CQADupstack-Mathematica-PL`](https://huggingface.co/datasets/mteb/CQADupstack-Mathematica-PL) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/clarin-knext/cqadupstack-mathematica-pl)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Academic, Non-fiction, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Academic, Non-fiction, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -8993,15 +9145,15 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 
 
-#### CQADupstack-NL
+#### `CQADupstack-NL` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research. This a Dutch-translated version.
 
 **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-cqadupstack)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -9042,15 +9194,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
     | [CQADupstackWordpress-NL](./retrieval.md#cqadupstackwordpress-nl)     | Retrieval | text         | nld         |
 
 
-#### CQADupstack-Physics-PL
+#### `CQADupstack-Physics-PL` { .model-copy }
 
 CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 **Dataset:** [`mteb/CQADupstack-Physics-PL`](https://huggingface.co/datasets/mteb/CQADupstack-Physics-PL) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/clarin-knext/cqadupstack-physics-pl)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Academic, Non-fiction, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Academic, Non-fiction, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -9073,15 +9225,15 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 
 
-#### CQADupstack-Programmers-PL
+#### `CQADupstack-Programmers-PL` { .model-copy }
 
 CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 **Dataset:** [`mteb/CQADupstack-Programmers-PL`](https://huggingface.co/datasets/mteb/CQADupstack-Programmers-PL) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/clarin-knext/cqadupstack-programmers-pl)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Non-fiction, Programming, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Non-fiction, Programming, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -9104,15 +9256,15 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 
 
-#### CQADupstack-Stats-PL
+#### `CQADupstack-Stats-PL` { .model-copy }
 
 CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 **Dataset:** [`mteb/CQADupstack-Stats-PL`](https://huggingface.co/datasets/mteb/CQADupstack-Stats-PL) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/clarin-knext/cqadupstack-stats-pl)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Academic, Non-fiction, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Academic, Non-fiction, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -9135,15 +9287,15 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 
 
-#### CQADupstack-Tex-PL
+#### `CQADupstack-Tex-PL` { .model-copy }
 
 CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 **Dataset:** [`mteb/CQADupstack-Tex-PL`](https://huggingface.co/datasets/mteb/CQADupstack-Tex-PL) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/clarin-knext/cqadupstack-tex-pl)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Non-fiction, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Non-fiction, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -9166,15 +9318,15 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 
 
-#### CQADupstack-Unix-PL
+#### `CQADupstack-Unix-PL` { .model-copy }
 
 CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 **Dataset:** [`mteb/CQADupstack-Unix-PL`](https://huggingface.co/datasets/mteb/CQADupstack-Unix-PL) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/clarin-knext/cqadupstack-unix-pl)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Programming, Web, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Programming, Web, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -9197,15 +9349,15 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 
 
-#### CQADupstack-Webmasters-PL
+#### `CQADupstack-Webmasters-PL` { .model-copy }
 
 CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 **Dataset:** [`mteb/CQADupstack-Webmasters-PL`](https://huggingface.co/datasets/mteb/CQADupstack-Webmasters-PL) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/clarin-knext/cqadupstack-webmasters-pl)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Web, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Web, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -9228,15 +9380,15 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 
 
-#### CQADupstack-Wordpress-PL
+#### `CQADupstack-Wordpress-PL` { .model-copy }
 
 CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 **Dataset:** [`mteb/CQADupstack-Wordpress-PL`](https://huggingface.co/datasets/mteb/CQADupstack-Wordpress-PL) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/clarin-knext/cqadupstack-wordpress-pl)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Programming, Web, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Programming, Web, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -9259,15 +9411,15 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 
 
-#### CQADupstackAndroid-NL
+#### `CQADupstackAndroid-NL` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research. This a Dutch-translated version.
 
 **Dataset:** [`clips/beir-nl-cqadupstack`](https://huggingface.co/datasets/clips/beir-nl-cqadupstack) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-cqadupstack)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -9291,15 +9443,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 
 
-#### CQADupstackAndroid-VN
+#### `CQADupstackAndroid-VN` { .model-copy }
 
 A translated dataset from CQADupStack: A Benchmark Data Set for Community Question-Answering Research The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/cqadupstack-android-vn`](https://huggingface.co/datasets/GreenNode/cqadupstack-android-vn) • **License:** cc-by-sa-4.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Non-fiction, Programming, Web, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Non-fiction, Programming, Web, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -9323,15 +9475,15 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 
 
-#### CQADupstackAndroidRetrieval
+#### `CQADupstackAndroidRetrieval` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 **Dataset:** [`mteb/CQADupstackAndroidRetrieval`](https://huggingface.co/datasets/mteb/CQADupstackAndroidRetrieval) • **License:** apache-2.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Programming, Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Programming, Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -9363,15 +9515,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 
 
-#### CQADupstackAndroidRetrieval-Fa
+#### `CQADupstackAndroidRetrieval-Fa` { .model-copy }
 
 CQADupstackAndroidRetrieval-Fa
 
 **Dataset:** [`MCINext/cqadupstack-android-fa`](https://huggingface.co/datasets/MCINext/cqadupstack-android-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/cqadupstack-android-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -9390,15 +9542,15 @@ CQADupstackAndroidRetrieval-Fa
 
 
 
-#### CQADupstackEnglish-NL
+#### `CQADupstackEnglish-NL` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research. This a Dutch-translated version.
 
 **Dataset:** [`clips/beir-nl-cqadupstack`](https://huggingface.co/datasets/clips/beir-nl-cqadupstack) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-cqadupstack)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -9422,15 +9574,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 
 
-#### CQADupstackEnglishRetrieval
+#### `CQADupstackEnglishRetrieval` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 **Dataset:** [`mteb/cqadupstack-english`](https://huggingface.co/datasets/mteb/cqadupstack-english) • **License:** apache-2.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Written | derived | found | ndcg_at_10 |
 
 
 
@@ -9462,15 +9614,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 
 
-#### CQADupstackEnglishRetrieval-Fa
+#### `CQADupstackEnglishRetrieval-Fa` { .model-copy }
 
 CQADupstackEnglishRetrieval-Fa
 
 **Dataset:** [`MCINext/cqadupstack-english-fa`](https://huggingface.co/datasets/MCINext/cqadupstack-english-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/cqadupstack-english-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -9489,15 +9641,15 @@ CQADupstackEnglishRetrieval-Fa
 
 
 
-#### CQADupstackGaming-NL
+#### `CQADupstackGaming-NL` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research. This a Dutch-translated version.
 
 **Dataset:** [`clips/beir-nl-cqadupstack`](https://huggingface.co/datasets/clips/beir-nl-cqadupstack) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-cqadupstack)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -9521,15 +9673,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 
 
-#### CQADupstackGamingRetrieval
+#### `CQADupstackGamingRetrieval` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 **Dataset:** [`mteb/cqadupstack-gaming`](https://huggingface.co/datasets/mteb/cqadupstack-gaming) • **License:** apache-2.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -9561,15 +9713,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 
 
-#### CQADupstackGamingRetrieval-Fa
+#### `CQADupstackGamingRetrieval-Fa` { .model-copy }
 
 CQADupstackGamingRetrieval-Fa
 
 **Dataset:** [`MCINext/cqadupstack-gaming-fa`](https://huggingface.co/datasets/MCINext/cqadupstack-gaming-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/cqadupstack-gaming-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -9588,15 +9740,15 @@ CQADupstackGamingRetrieval-Fa
 
 
 
-#### CQADupstackGis-NL
+#### `CQADupstackGis-NL` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research. This a Dutch-translated version.
 
 **Dataset:** [`clips/beir-nl-cqadupstack`](https://huggingface.co/datasets/clips/beir-nl-cqadupstack) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-cqadupstack)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -9620,15 +9772,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 
 
-#### CQADupstackGis-VN
+#### `CQADupstackGis-VN` { .model-copy }
 
 A translated dataset from CQADupStack: A Benchmark Data Set for Community Question-Answering Research The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/cqadupstack-gis-vn`](https://huggingface.co/datasets/GreenNode/cqadupstack-gis-vn) • **License:** cc-by-sa-4.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Non-fiction, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Non-fiction, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -9652,15 +9804,15 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 
 
-#### CQADupstackGisRetrieval
+#### `CQADupstackGisRetrieval` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 **Dataset:** [`mteb/cqadupstack-gis`](https://huggingface.co/datasets/mteb/cqadupstack-gis) • **License:** apache-2.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -9692,15 +9844,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 
 
-#### CQADupstackGisRetrieval-Fa
+#### `CQADupstackGisRetrieval-Fa` { .model-copy }
 
 CQADupstackGisRetrieval-Fa
 
 **Dataset:** [`MCINext/cqadupstack-gis-fa`](https://huggingface.co/datasets/MCINext/cqadupstack-gis-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/cqadupstack-gis-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -9719,15 +9871,15 @@ CQADupstackGisRetrieval-Fa
 
 
 
-#### CQADupstackMathematica-NL
+#### `CQADupstackMathematica-NL` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research. This a Dutch-translated version.
 
 **Dataset:** [`clips/beir-nl-cqadupstack`](https://huggingface.co/datasets/clips/beir-nl-cqadupstack) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-cqadupstack)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -9751,15 +9903,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 
 
-#### CQADupstackMathematica-VN
+#### `CQADupstackMathematica-VN` { .model-copy }
 
 A translated dataset from CQADupStack: A Benchmark Data Set for Community Question-Answering Research The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/cqadupstack-mathematica-vn`](https://huggingface.co/datasets/GreenNode/cqadupstack-mathematica-vn) • **License:** cc-by-sa-4.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Academic, Non-fiction, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Academic, Non-fiction, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -9783,15 +9935,15 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 
 
-#### CQADupstackMathematicaRetrieval
+#### `CQADupstackMathematicaRetrieval` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 **Dataset:** [`mteb/cqadupstack-mathematica`](https://huggingface.co/datasets/mteb/cqadupstack-mathematica) • **License:** apache-2.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -9823,15 +9975,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 
 
-#### CQADupstackMathematicaRetrieval-Fa
+#### `CQADupstackMathematicaRetrieval-Fa` { .model-copy }
 
 CQADupstackMathematicaRetrieval-Fa
 
 **Dataset:** [`MCINext/cqadupstack-mathematica-fa`](https://huggingface.co/datasets/MCINext/cqadupstack-mathematica-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/cqadupstack-mathematica-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -9850,15 +10002,15 @@ CQADupstackMathematicaRetrieval-Fa
 
 
 
-#### CQADupstackPhysics-NL
+#### `CQADupstackPhysics-NL` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research. This a Dutch-translated version.
 
 **Dataset:** [`clips/beir-nl-cqadupstack`](https://huggingface.co/datasets/clips/beir-nl-cqadupstack) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-cqadupstack)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -9882,15 +10034,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 
 
-#### CQADupstackPhysics-VN
+#### `CQADupstackPhysics-VN` { .model-copy }
 
 A translated dataset from CQADupStack: A Benchmark Data Set for Community Question-Answering Research The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/cqadupstack-physics-vn`](https://huggingface.co/datasets/GreenNode/cqadupstack-physics-vn) • **License:** cc-by-sa-4.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Academic, Non-fiction, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Academic, Non-fiction, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -9914,15 +10066,15 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 
 
-#### CQADupstackPhysicsRetrieval
+#### `CQADupstackPhysicsRetrieval` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 **Dataset:** [`mteb/cqadupstack-physics`](https://huggingface.co/datasets/mteb/cqadupstack-physics) • **License:** apache-2.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -9954,15 +10106,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 
 
-#### CQADupstackPhysicsRetrieval-Fa
+#### `CQADupstackPhysicsRetrieval-Fa` { .model-copy }
 
 CQADupstackPhysicsRetrieval-Fa
 
 **Dataset:** [`MCINext/cqadupstack-physics-fa`](https://huggingface.co/datasets/MCINext/cqadupstack-physics-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/cqadupstack-physics-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -9981,15 +10133,15 @@ CQADupstackPhysicsRetrieval-Fa
 
 
 
-#### CQADupstackProgrammers-NL
+#### `CQADupstackProgrammers-NL` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research. This a Dutch-translated version.
 
 **Dataset:** [`clips/beir-nl-cqadupstack`](https://huggingface.co/datasets/clips/beir-nl-cqadupstack) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-cqadupstack)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -10013,15 +10165,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 
 
-#### CQADupstackProgrammers-VN
+#### `CQADupstackProgrammers-VN` { .model-copy }
 
 A translated dataset from CQADupStack: A Benchmark Data Set for Community Question-Answering Research The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/cqadupstack-programmers-vn`](https://huggingface.co/datasets/GreenNode/cqadupstack-programmers-vn) • **License:** cc-by-sa-4.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Non-fiction, Programming, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Non-fiction, Programming, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -10045,15 +10197,15 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 
 
-#### CQADupstackProgrammersRetrieval
+#### `CQADupstackProgrammersRetrieval` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 **Dataset:** [`mteb/cqadupstack-programmers`](https://huggingface.co/datasets/mteb/cqadupstack-programmers) • **License:** apache-2.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Programming, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -10085,15 +10237,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 
 
-#### CQADupstackProgrammersRetrieval-Fa
+#### `CQADupstackProgrammersRetrieval-Fa` { .model-copy }
 
 CQADupstackProgrammersRetrieval-Fa
 
 **Dataset:** [`MCINext/cqadupstack-programmers-fa`](https://huggingface.co/datasets/MCINext/cqadupstack-programmers-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/cqadupstack-programmers-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -10112,15 +10264,15 @@ CQADupstackProgrammersRetrieval-Fa
 
 
 
-#### CQADupstackRetrieval
+#### `CQADupstackRetrieval` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 **License:** apache-2.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Non-fiction, Programming, Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Non-fiction, Programming, Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -10169,15 +10321,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
     | [CQADupstackWordpressRetrieval](./retrieval.md#cqadupstackwordpressretrieval)     | Retrieval | text         | eng         |
 
 
-#### CQADupstackRetrieval-Fa
+#### `CQADupstackRetrieval-Fa` { .model-copy }
 
 CQADupstackRetrieval-Fa
 
-**License:** not specified • Learn more → not specified
+**License:** not specified
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -10208,15 +10360,15 @@ CQADupstackRetrieval-Fa
     | [CQADupstackWordpressRetrieval-Fa](./retrieval.md#cqadupstackwordpressretrieval-fa)     | Retrieval | text         | fas         |
 
 
-#### CQADupstackRetrieval-PL
+#### `CQADupstackRetrieval-PL` { .model-copy }
 
 CQADupstackRetrieval-PL
 
-**License:** not specified • Learn more → not specified
+**License:** not specified
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Academic, Non-fiction, Programming, Web, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Academic, Non-fiction, Programming, Web, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -10256,15 +10408,15 @@ CQADupstackRetrieval-PL
     | [CQADupstack-Wordpress-PL](./retrieval.md#cqadupstack-wordpress-pl)     | Retrieval | text         | pol         |
 
 
-#### CQADupstackStats-NL
+#### `CQADupstackStats-NL` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research. This a Dutch-translated version.
 
 **Dataset:** [`clips/beir-nl-cqadupstack`](https://huggingface.co/datasets/clips/beir-nl-cqadupstack) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-cqadupstack)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -10288,15 +10440,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 
 
-#### CQADupstackStats-VN
+#### `CQADupstackStats-VN` { .model-copy }
 
 A translated dataset from CQADupStack: A Benchmark Data Set for Community Question-Answering Research The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/cqadupstack-stats-vn`](https://huggingface.co/datasets/GreenNode/cqadupstack-stats-vn) • **License:** cc-by-sa-4.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Academic, Non-fiction, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Academic, Non-fiction, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -10320,15 +10472,15 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 
 
-#### CQADupstackStatsRetrieval
+#### `CQADupstackStatsRetrieval` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 **Dataset:** [`mteb/cqadupstack-stats`](https://huggingface.co/datasets/mteb/cqadupstack-stats) • **License:** apache-2.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -10360,15 +10512,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 
 
-#### CQADupstackStatsRetrieval-Fa
+#### `CQADupstackStatsRetrieval-Fa` { .model-copy }
 
 CQADupstackStatsRetrieval-Fa
 
 **Dataset:** [`MCINext/cqadupstack-stats-fa`](https://huggingface.co/datasets/MCINext/cqadupstack-stats-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/cqadupstack-stats-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -10387,15 +10539,15 @@ CQADupstackStatsRetrieval-Fa
 
 
 
-#### CQADupstackTex-NL
+#### `CQADupstackTex-NL` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research. This a Dutch-translated version.
 
 **Dataset:** [`clips/beir-nl-cqadupstack`](https://huggingface.co/datasets/clips/beir-nl-cqadupstack) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-cqadupstack)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -10419,15 +10571,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 
 
-#### CQADupstackTex-VN
+#### `CQADupstackTex-VN` { .model-copy }
 
 A translated dataset from CQADupStack: A Benchmark Data Set for Community Question-Answering Research The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/cqadupstack-tex-vn`](https://huggingface.co/datasets/GreenNode/cqadupstack-tex-vn) • **License:** cc-by-sa-4.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Non-fiction, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Non-fiction, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -10451,15 +10603,15 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 
 
-#### CQADupstackTexRetrieval
+#### `CQADupstackTexRetrieval` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 **Dataset:** [`mteb/cqadupstack-tex`](https://huggingface.co/datasets/mteb/cqadupstack-tex) • **License:** apache-2.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -10491,15 +10643,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 
 
-#### CQADupstackTexRetrieval-Fa
+#### `CQADupstackTexRetrieval-Fa` { .model-copy }
 
 CQADupstackTexRetrieval-Fa
 
 **Dataset:** [`MCINext/cqadupstack-tex-fa`](https://huggingface.co/datasets/MCINext/cqadupstack-tex-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/cqadupstack-tex-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -10518,15 +10670,15 @@ CQADupstackTexRetrieval-Fa
 
 
 
-#### CQADupstackUnix-NL
+#### `CQADupstackUnix-NL` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research. This a Dutch-translated version.
 
 **Dataset:** [`clips/beir-nl-cqadupstack`](https://huggingface.co/datasets/clips/beir-nl-cqadupstack) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-cqadupstack)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -10550,15 +10702,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 
 
-#### CQADupstackUnix-VN
+#### `CQADupstackUnix-VN` { .model-copy }
 
 A translated dataset from CQADupStack: A Benchmark Data Set for Community Question-Answering Research The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/cqadupstack-unix-vn`](https://huggingface.co/datasets/GreenNode/cqadupstack-unix-vn) • **License:** cc-by-sa-4.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Programming, Web, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Programming, Web, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -10582,15 +10734,15 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 
 
-#### CQADupstackUnixRetrieval
+#### `CQADupstackUnixRetrieval` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 **Dataset:** [`mteb/cqadupstack-unix`](https://huggingface.co/datasets/mteb/cqadupstack-unix) • **License:** apache-2.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Programming, Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Programming, Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -10622,15 +10774,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 
 
-#### CQADupstackUnixRetrieval-Fa
+#### `CQADupstackUnixRetrieval-Fa` { .model-copy }
 
 CQADupstackUnixRetrieval-Fa
 
 **Dataset:** [`MCINext/cqadupstack-unix-fa`](https://huggingface.co/datasets/MCINext/cqadupstack-unix-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/cqadupstack-unix-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -10649,15 +10801,15 @@ CQADupstackUnixRetrieval-Fa
 
 
 
-#### CQADupstackWebmasters-NL
+#### `CQADupstackWebmasters-NL` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research. This a Dutch-translated version.
 
 **Dataset:** [`clips/beir-nl-cqadupstack`](https://huggingface.co/datasets/clips/beir-nl-cqadupstack) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-cqadupstack)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -10681,15 +10833,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 
 
-#### CQADupstackWebmasters-VN
+#### `CQADupstackWebmasters-VN` { .model-copy }
 
 A translated dataset from CQADupStack: A Benchmark Data Set for Community Question-Answering Research The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/cqadupstack-webmasters-vn`](https://huggingface.co/datasets/GreenNode/cqadupstack-webmasters-vn) • **License:** cc-by-sa-4.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Web, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Web, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -10713,15 +10865,15 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 
 
-#### CQADupstackWebmastersRetrieval
+#### `CQADupstackWebmastersRetrieval` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 **Dataset:** [`mteb/cqadupstack-webmasters`](https://huggingface.co/datasets/mteb/cqadupstack-webmasters) • **License:** apache-2.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -10753,15 +10905,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 
 
-#### CQADupstackWebmastersRetrieval-Fa
+#### `CQADupstackWebmastersRetrieval-Fa` { .model-copy }
 
 CQADupstackWebmastersRetrieval-Fa
 
 **Dataset:** [`MCINext/cqadupstack-webmasters-fa`](https://huggingface.co/datasets/MCINext/cqadupstack-webmasters-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/cqadupstack-webmasters-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -10780,15 +10932,15 @@ CQADupstackWebmastersRetrieval-Fa
 
 
 
-#### CQADupstackWordpress-NL
+#### `CQADupstackWordpress-NL` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research. This a Dutch-translated version.
 
 **Dataset:** [`clips/beir-nl-cqadupstack`](https://huggingface.co/datasets/clips/beir-nl-cqadupstack) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-cqadupstack)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -10812,15 +10964,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 
 
-#### CQADupstackWordpress-VN
+#### `CQADupstackWordpress-VN` { .model-copy }
 
 A translated dataset from CQADupStack: A Benchmark Data Set for Community Question-Answering Research The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/cqadupstack-wordpress-vn`](https://huggingface.co/datasets/GreenNode/cqadupstack-wordpress-vn) • **License:** cc-by-sa-4.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Programming, Web, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Programming, Web, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -10844,15 +10996,15 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 
 
-#### CQADupstackWordpressRetrieval
+#### `CQADupstackWordpressRetrieval` { .model-copy }
 
 CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 **Dataset:** [`mteb/cqadupstack-wordpress`](https://huggingface.co/datasets/mteb/cqadupstack-wordpress) • **License:** apache-2.0 • [Learn more →](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Programming, Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Programming, Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -10884,15 +11036,15 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 
 
-#### CQADupstackWordpressRetrieval-Fa
+#### `CQADupstackWordpressRetrieval-Fa` { .model-copy }
 
 CQADupstackWordpressRetrieval-Fa
 
 **Dataset:** [`MCINext/cqadupstack-wordpress-fa`](https://huggingface.co/datasets/MCINext/cqadupstack-wordpress-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/cqadupstack-wordpress-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -10911,27 +11063,27 @@ CQADupstackWordpressRetrieval-Fa
 
 
 
-#### CUREv1
+#### `CUREv1` { .model-copy }
 
 Collection of query-passage pairs curated by medical professionals, across 10 disciplines and 3 cross-lingual settings.
 
 **Dataset:** [`clinia/CUREv1`](https://huggingface.co/datasets/clinia/CUREv1) • **License:** cc-by-nc-4.0 • [Learn more →](https://huggingface.co/datasets/clinia/CUREv1)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng, fra, spa | Academic, Medical, Written | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, fra, spa | Academic, Medical, Written | expert-annotated | created | ndcg_at_10 |
 
 
 
-#### ChatDoctorRetrieval
+#### `ChatDoctorRetrieval` { .model-copy }
 
 A medical retrieval task based on ChatDoctor_HealthCareMagic dataset containing 112,000 real-world medical question-and-answer pairs. Each query is a medical question from patients (e.g., 'What are the symptoms of diabetes?'), and the corpus contains medical responses and healthcare information. The task is to retrieve the correct medical information that answers the patient's question. The dataset includes grammatical inconsistencies which help separate strong healthcare retrieval models from weak ones. Queries are patient medical questions while the corpus contains relevant medical responses, diagnoses, and treatment information from healthcare professionals.
 
 **Dataset:** [`embedding-benchmark/ChatDoctor_HealthCareMagic`](https://huggingface.co/datasets/embedding-benchmark/ChatDoctor_HealthCareMagic) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/embedding-benchmark/ChatDoctor_HealthCareMagic)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Medical | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Medical | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -10951,15 +11103,15 @@ A medical retrieval task based on ChatDoctor_HealthCareMagic dataset containing 
 
 
 
-#### ChemHotpotQARetrieval
+#### `ChemHotpotQARetrieval` { .model-copy }
 
 ChemTEB evaluates the performance of text embedding models on chemical domain data.
 
 **Dataset:** [`BASF-AI/ChemHotpotQARetrieval`](https://huggingface.co/datasets/BASF-AI/ChemHotpotQARetrieval) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2412.00532)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Chemistry | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry | derived | found | ndcg_at_10 |
 
 
 
@@ -11003,15 +11155,15 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 
 
-#### ChemNQRetrieval
+#### `ChemNQRetrieval` { .model-copy }
 
 ChemTEB evaluates the performance of text embedding models on chemical domain data.
 
 **Dataset:** [`BASF-AI/ChemNQRetrieval`](https://huggingface.co/datasets/BASF-AI/ChemNQRetrieval) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2412.00532)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Chemistry | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry | derived | found | ndcg_at_10 |
 
 
 
@@ -11042,15 +11194,15 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 
 
-#### ChemRxivRetrieval
+#### `ChemRxivRetrieval` { .model-copy }
 
 A retrieval task based on ChemRxiv papers where queries are LLM-synthesized to match specific paragraphs.
 
 **Dataset:** [`BASF-AI/ChemRxivRetrieval`](https://huggingface.co/datasets/BASF-AI/ChemRxivRetrieval) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2508.01643)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Chemistry | LM-generated and reviewed | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry | LM-generated and reviewed | found | ndcg_at_10 |
 
 
 
@@ -11069,15 +11221,15 @@ A retrieval task based on ChemRxiv papers where queries are LLM-synthesized to m
 
 
 
-#### ClimateFEVER
+#### `ClimateFEVER` { .model-copy }
 
 CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims (queries) regarding climate-change. The underlying corpus is the same as FEVER.
 
 **Dataset:** [`mteb/climate-fever`](https://huggingface.co/datasets/mteb/climate-fever) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -11100,15 +11252,15 @@ CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535
 
 
 
-#### ClimateFEVER-Fa
+#### `ClimateFEVER-Fa` { .model-copy }
 
 ClimateFEVER-Fa
 
 **Dataset:** [`MCINext/climate-fever-fa`](https://huggingface.co/datasets/MCINext/climate-fever-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/climate-fever-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -11127,15 +11279,15 @@ ClimateFEVER-Fa
 
 
 
-#### ClimateFEVER-NL
+#### `ClimateFEVER-NL` { .model-copy }
 
 CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. ClimateFEVER-NL is a Dutch translation.
 
 **Dataset:** [`clips/beir-nl-climate-fever`](https://huggingface.co/datasets/clips/beir-nl-climate-fever) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-climate-fever)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Encyclopaedic, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Encyclopaedic, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -11159,15 +11311,15 @@ CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535
 
 
 
-#### ClimateFEVER-VN
+#### `ClimateFEVER-VN` { .model-copy }
 
 A translated dataset from CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/climate-fever-vn`](https://huggingface.co/datasets/GreenNode/climate-fever-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Encyclopaedic, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Encyclopaedic, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -11191,15 +11343,15 @@ A translated dataset from CLIMATE-FEVER is a dataset adopting the FEVER methodol
 
 
 
-#### ClimateFEVER.v2
+#### `ClimateFEVER.v2` { .model-copy }
 
 CLIMATE-FEVER is a dataset following the FEVER methodology, containing 1,535 real-world climate change claims. This updated version addresses corpus mismatches and qrel inconsistencies in MTEB, restoring labels while refining corpus-query alignment for better accuracy.
 
 **Dataset:** [`mteb/climate-fever-v2`](https://huggingface.co/datasets/mteb/climate-fever-v2) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -11222,15 +11374,15 @@ CLIMATE-FEVER is a dataset following the FEVER methodology, containing 1,535 rea
 
 
 
-#### ClimateFEVERHardNegatives
+#### `ClimateFEVERHardNegatives` { .model-copy }
 
 CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/ClimateFEVER_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/mteb/ClimateFEVER_test_top_250_only_w_correct-v2) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -11253,15 +11405,15 @@ CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535
 
 
 
-#### ClimateFEVERHardNegatives.v2
+#### `ClimateFEVERHardNegatives.v2` { .model-copy }
 
 CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct. V2 uses a more appropriate prompt rather than the default prompt for retrieval. You can get more information on the effect of different prompt in the [PR](https://github.com/embeddings-benchmark/mteb/pull/3469#issuecomment-3436467106)
 
 **Dataset:** [`mteb/ClimateFEVER_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/mteb/ClimateFEVER_test_top_250_only_w_correct-v2) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -11284,15 +11436,15 @@ CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535
 
 
 
-#### CmedqaRetrieval
+#### `CmedqaRetrieval` { .model-copy }
 
 Online medical consultation text. Used the CMedQAv2 as its underlying dataset.
 
 **Dataset:** [`mteb/CmedqaRetrieval`](https://huggingface.co/datasets/mteb/CmedqaRetrieval) • **License:** not specified • [Learn more →](https://aclanthology.org/2022.emnlp-main.357.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | cmn | Medical, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Medical, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -11316,27 +11468,27 @@ Online medical consultation text. Used the CMedQAv2 as its underlying dataset.
 
 
 
-#### Code1Retrieval
+#### `Code1Retrieval` { .model-copy }
 
-Code retrieval dataset with programming questions paired with C/Python/Go/Ruby code snippets for multi-language code retrieval evaluation.
+Code retrieval dataset with programming questions paired with C/Python/Go/Ruby code snippets for multi-language code retrieval evaluation. Contributed by Voyage AI.
 
 **Dataset:** [`mteb-private/Code1Retrieval`](https://huggingface.co/datasets/mteb-private/Code1Retrieval) • **License:** bsd-3-clause • [Learn more →](https://huggingface.co/datasets/mteb-private/Code1Retrieval-sample)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Programming, Written | derived | found | ndcg_at_10 |
 
 
 
-#### CodeEditSearchRetrieval
+#### `CodeEditSearchRetrieval` { .model-copy }
 
 The dataset is a collection of unified diffs of code changes, paired with a short instruction that describes the change. The dataset is derived from the CommitPackFT dataset.
 
 **Dataset:** [`cassanof/CodeEditSearch`](https://huggingface.co/datasets/cassanof/CodeEditSearch) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/cassanof/CodeEditSearch/viewer)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | c, c++, go, java, javascript, ... (13) | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | c, c++, go, java, javascript, ... (13) | Programming, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -11357,15 +11509,15 @@ The dataset is a collection of unified diffs of code changes, paired with a shor
 
 
 
-#### CodeFeedbackMT
+#### `CodeFeedbackMT` { .model-copy }
 
 The dataset is a collection of user queries and assistant responses. The task is to retrieve the most relevant response for a given query.
 
 **Dataset:** [`CoIR-Retrieval/codefeedback-mt`](https://huggingface.co/datasets/CoIR-Retrieval/codefeedback-mt) • **License:** mit • [Learn more →](https://arxiv.org/abs/2402.14658)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Programming, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -11389,15 +11541,15 @@ The dataset is a collection of user queries and assistant responses. The task is
 
 
 
-#### CodeFeedbackST
+#### `CodeFeedbackST` { .model-copy }
 
 The dataset is a collection of user queries and assistant responses. The task is to retrieve the most relevant response for a given query.
 
 **Dataset:** [`CoIR-Retrieval/codefeedback-st`](https://huggingface.co/datasets/CoIR-Retrieval/codefeedback-st) • **License:** mit • [Learn more →](https://arxiv.org/abs/2407.02883)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Programming, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -11421,15 +11573,15 @@ The dataset is a collection of user queries and assistant responses. The task is
 
 
 
-#### CodeSearchNetCCRetrieval
+#### `CodeSearchNetCCRetrieval` { .model-copy }
 
 The dataset is a collection of code snippets. The task is to retrieve the most relevant code snippet for a given code snippet.
 
 **Dataset:** [`CoIR-Retrieval/CodeSearchNet-ccr`](https://huggingface.co/datasets/CoIR-Retrieval/CodeSearchNet-ccr) • **License:** mit • [Learn more →](https://arxiv.org/abs/2407.02883)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | go, java, javascript, php, python, ... (6) | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | go, java, javascript, php, python, ... (6) | Programming, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -11453,15 +11605,15 @@ The dataset is a collection of code snippets. The task is to retrieve the most r
 
 
 
-#### CodeSearchNetRetrieval
+#### `CodeSearchNetRetrieval` { .model-copy }
 
 The dataset is a collection of code snippets and their corresponding natural language queries. The task is to retrieve the most relevant code snippet for a given query.
 
 **Dataset:** [`mteb/CodeSearchNetRetrieval`](https://huggingface.co/datasets/mteb/CodeSearchNetRetrieval) • **License:** mit • [Learn more →](https://huggingface.co/datasets/code_search_net/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | go, java, javascript, php, python, ... (6) | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | go, java, javascript, php, python, ... (6) | Programming, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -11482,15 +11634,15 @@ The dataset is a collection of code snippets and their corresponding natural lan
 
 
 
-#### CodeTransOceanContest
+#### `CodeTransOceanContest` { .model-copy }
 
 The dataset is a collection of code snippets and their corresponding natural language queries. The task is to retrieve the most relevant code snippet
 
 **Dataset:** [`CoIR-Retrieval/codetrans-contest`](https://huggingface.co/datasets/CoIR-Retrieval/codetrans-contest) • **License:** apache-2.0 • [Learn more →](https://arxiv.org/abs/2310.04951)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | c++, python | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | c++, python | Programming, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -11514,15 +11666,15 @@ The dataset is a collection of code snippets and their corresponding natural lan
 
 
 
-#### CodeTransOceanDL
+#### `CodeTransOceanDL` { .model-copy }
 
 The dataset is a collection of equivalent Python Deep Learning code snippets written in different machine learning framework. The task is to retrieve the equivalent code snippet in another framework, given a query code snippet from one framework.
 
 **Dataset:** [`CoIR-Retrieval/codetrans-dl`](https://huggingface.co/datasets/CoIR-Retrieval/codetrans-dl) • **License:** apache-2.0 • [Learn more →](https://arxiv.org/abs/2310.04951)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | python | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | python | Programming, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -11546,15 +11698,15 @@ The dataset is a collection of equivalent Python Deep Learning code snippets wri
 
 
 
-#### CosQA
+#### `CosQA` { .model-copy }
 
 The dataset is a collection of natural language queries and their corresponding code snippets. The task is to retrieve the most relevant code snippet for a given query.
 
 **Dataset:** [`CoIR-Retrieval/cosqa`](https://huggingface.co/datasets/CoIR-Retrieval/cosqa) • **License:** mit • [Learn more →](https://arxiv.org/abs/2105.13239)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng, python | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, python | Programming, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -11578,15 +11730,15 @@ The dataset is a collection of natural language queries and their corresponding 
 
 
 
-#### CovidRetrieval
+#### `CovidRetrieval` { .model-copy }
 
 COVID-19 news articles
 
 **Dataset:** [`mteb/CovidRetrieval`](https://huggingface.co/datasets/mteb/CovidRetrieval) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2203.03367)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | cmn | Entertainment, Medical | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Entertainment, Medical | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -11610,39 +11762,39 @@ COVID-19 news articles
 
 
 
-#### CrossLingualSemanticDiscriminationWMT19
+#### `CrossLingualSemanticDiscriminationWMT19` { .model-copy }
 
 Evaluate a multilingual embedding model based on its ability to discriminate against the original parallel pair against challenging distractors - spawning from WMT19 DE-FR test set
 
 **Dataset:** [`Andrianos/clsd_wmt19_21`](https://huggingface.co/datasets/Andrianos/clsd_wmt19_21) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/Andrianos/clsd_wmt19_21)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_1 | deu, fra | News, Written | derived | LM-generated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu, fra | News, Written | derived | LM-generated and verified | recall_at_1 |
 
 
 
-#### CrossLingualSemanticDiscriminationWMT21
+#### `CrossLingualSemanticDiscriminationWMT21` { .model-copy }
 
 Evaluate a multilingual embedding model based on its ability to discriminate against the original parallel pair against challenging distractors - spawning from WMT21 DE-FR test set
 
 **Dataset:** [`Andrianos/clsd_wmt19_21`](https://huggingface.co/datasets/Andrianos/clsd_wmt19_21) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/Andrianos/clsd_wmt19_21)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_1 | deu, fra | News, Written | derived | LM-generated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu, fra | News, Written | derived | LM-generated and verified | recall_at_1 |
 
 
 
-#### DAPFAMAllTitlAbsClmToFullTextRetrieval
+#### `DAPFAMAllTitlAbsClmToFullTextRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, and target patent families are represented by Title, Abstract, Claims, and Description. Relevant target families have a citation link (cited or citing) with the query family. Additionally, no International Patent Classification-based filtering is applied. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to evaluate retrieval performance using Claims-augmented query patent family representations full-text target patent family representations across all technical domains.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -11664,15 +11816,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval
+#### `DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, and target patent families are represented by Title, Abstract, and Claims. Relevant target families have a citation link (cited or citing) with the query family. Additionally, no International Patent Classification-based filtering is applied. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to evaluate retrieval when both query and target patent families use Claims-augmented representations across all technical domains.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -11694,15 +11846,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMAllTitlAbsClmToTitlAbsRetrieval
+#### `DAPFAMAllTitlAbsClmToTitlAbsRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, and target patent families are represented by Title and Abstract. Relevant target families have a citation link (cited or citing) with the query family. Additionally, no International Patent Classification-based filtering is applied. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to measure the effect of Claims-augmented query patent family representations when targets are limited to Title and Abstract across all technical domains.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -11724,15 +11876,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMAllTitlAbsToFullTextRetrieval
+#### `DAPFAMAllTitlAbsToFullTextRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title and Abstract, and target patent families are represented by Title, Abstract, Claims, and Description. Relevant target families have a citation link (cited or citing) with the query family. Additionally, no International Patent Classification-based filtering is applied. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to evaluate retrieval performance using Title and Abstract query patent family representations and full-text target patent family representations across all technical domains.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -11754,15 +11906,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMAllTitlAbsToTitlAbsClmRetrieval
+#### `DAPFAMAllTitlAbsToTitlAbsClmRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title and Abstract, and target patent families are represented by Title, Abstract, and Claims. Relevant target families have a citation link (cited or citing) with the query family. Additionally, no International Patent Classification-based filtering is applied. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to assess how adding Claims text to target patent family representations improves retrieval of citation-linked patent families across all technical domains.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -11784,15 +11936,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMAllTitlAbsToTitlAbsRetrieval
+#### `DAPFAMAllTitlAbsToTitlAbsRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title and Abstract, and target patent families are represented by Title and Abstract. Relevant target families have a citation link (cited or citing) with the query family. Additionally, no International Patent Classification-based filtering is applied. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to retrieve citation-linked patent families using query and target patent family representations of Title and Abstract across all technical domains.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -11814,15 +11966,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMInTitlAbsClmToFullTextRetrieval
+#### `DAPFAMInTitlAbsClmToFullTextRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, and target patent families are represented by Title, Abstract, Claims, and Description. Relevant target families have a citation link (cited or citing) with the query family. Additionally, only targets sharing at least one three-character International Patent Classification code with the query family. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to evaluate retrieval performance using Claims-augmented query patent family representations full-text target patent family representations within the same technical domain.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -11844,15 +11996,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMInTitlAbsClmToTitlAbsClmRetrieval
+#### `DAPFAMInTitlAbsClmToTitlAbsClmRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, and target patent families are represented by Title, Abstract, and Claims. Relevant target families have a citation link (cited or citing) with the query family. Additionally, only targets sharing at least one three-character International Patent Classification code with the query family. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to evaluate retrieval when both query and target patent families use Claims-augmented representations within the same technical domain.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -11874,15 +12026,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMInTitlAbsClmToTitlAbsRetrieval
+#### `DAPFAMInTitlAbsClmToTitlAbsRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, and target patent families are represented by Title and Abstract. Relevant target families have a citation link (cited or citing) with the query family. Additionally, only targets sharing at least one three-character International Patent Classification code with the query family. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to measure the effect of Claims-augmented query patent family representations when targets are limited to Title and Abstract within the same technical domain.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -11904,15 +12056,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMInTitlAbsToFullTextRetrieval
+#### `DAPFAMInTitlAbsToFullTextRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title and Abstract, and target patent families are represented by Title, Abstract, Claims, and Description. Relevant target families have a citation link (cited or citing) with the query family. Additionally, only targets sharing at least one three-character International Patent Classification code with the query family. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to evaluate retrieval performance using Title and Abstract query patent family representations and full-text target patent family representations within the same technical domain.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -11934,15 +12086,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMInTitlAbsToTitlAbsClmRetrieval
+#### `DAPFAMInTitlAbsToTitlAbsClmRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title and Abstract, and target patent families are represented by Title, Abstract, and Claims. Relevant target families have a citation link (cited or citing) with the query family. Additionally, only targets sharing at least one three-character International Patent Classification code with the query family. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to assess how adding Claims text to target patent family representations improves retrieval of citation-linked patent families within the same technical domain.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -11964,15 +12116,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMInTitlAbsToTitlAbsRetrieval
+#### `DAPFAMInTitlAbsToTitlAbsRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title and Abstract, and target patent families are represented by Title and Abstract. Relevant target families have a citation link (cited or citing) with the query family. Additionally, only targets sharing at least one three-character International Patent Classification code with the query family. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to retrieve citation-linked patent families using query and target patent family representations of Title and Abstract within the same technical domain.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -11994,15 +12146,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMOutTitlAbsClmToFullTextRetrieval
+#### `DAPFAMOutTitlAbsClmToFullTextRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, and target patent families are represented by Title, Abstract, Claims, and Description. Relevant target families have a citation link (cited or citing) with the query family. Additionally, only targets sharing no three-character International Patent Classification code with the query family. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to evaluate retrieval performance using Claims-augmented query patent family representations full-text target patent family representations across different technical domains.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -12024,15 +12176,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMOutTitlAbsClmToTitlAbsClmRetrieval
+#### `DAPFAMOutTitlAbsClmToTitlAbsClmRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, and target patent families are represented by Title, Abstract, and Claims. Relevant target families have a citation link (cited or citing) with the query family. Additionally, only targets sharing no three-character International Patent Classification code with the query family. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to evaluate retrieval when both query and target patent families use Claims-augmented representations across different technical domains.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -12054,15 +12206,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMOutTitlAbsClmToTitlAbsRetrieval
+#### `DAPFAMOutTitlAbsClmToTitlAbsRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, and target patent families are represented by Title and Abstract. Relevant target families have a citation link (cited or citing) with the query family. Additionally, only targets sharing no three-character International Patent Classification code with the query family. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to measure the effect of Claims-augmented query patent family representations when targets are limited to Title and Abstract across different technical domains.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -12084,15 +12236,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMOutTitlAbsToFullTextRetrieval
+#### `DAPFAMOutTitlAbsToFullTextRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title and Abstract, and target patent families are represented by Title, Abstract, Claims, and Description. Relevant target families have a citation link (cited or citing) with the query family. Additionally, only targets sharing no three-character International Patent Classification code with the query family. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to evaluate retrieval performance using Title and Abstract query patent family representations and full-text target patent family representations across different technical domains.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -12114,15 +12266,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMOutTitlAbsToTitlAbsClmRetrieval
+#### `DAPFAMOutTitlAbsToTitlAbsClmRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title and Abstract, and target patent families are represented by Title, Abstract, and Claims. Relevant target families have a citation link (cited or citing) with the query family. Additionally, only targets sharing no three-character International Patent Classification code with the query family. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to assess how adding Claims text to target patent family representations improves retrieval of citation-linked patent families across different technical domains.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -12144,15 +12296,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DAPFAMOutTitlAbsToTitlAbsRetrieval
+#### `DAPFAMOutTitlAbsToTitlAbsRetrieval` { .model-copy }
 
 In this patent family retrieval task, query patent families are represented by Title and Abstract, and target patent families are represented by Title and Abstract. Relevant target families have a citation link (cited or citing) with the query family. Additionally, only targets sharing no three-character International Patent Classification code with the query family. Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141.Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. The goal of the task is to retrieve citation-linked patent families using query and target patent family representations of Title and Abstract across different technical domains.
 
 **Dataset:** [`datalyes/DAPFAM_patent`](https://huggingface.co/datasets/datalyes/DAPFAM_patent) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2506.22141)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_100 | eng | Chemistry, Engineering, Legal | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Chemistry, Engineering, Legal | derived | created | ndcg_at_100 |
 
 
 
@@ -12174,15 +12326,15 @@ In this patent family retrieval task, query patent families are represented by T
 
 
 
-#### DBPedia
+#### `DBPedia` { .model-copy }
 
 DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base
 
 **Dataset:** [`mteb/dbpedia`](https://huggingface.co/datasets/mteb/dbpedia) • **License:** mit • [Learn more →](https://github.com/iai-group/DBpedia-Entity/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -12207,15 +12359,15 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
 
 
 
-#### DBPedia-Fa
+#### `DBPedia-Fa` { .model-copy }
 
 DBPedia-Fa
 
 **Dataset:** [`MCINext/dbpedia-fa`](https://huggingface.co/datasets/MCINext/dbpedia-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/dbpedia-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Encyclopaedic | derived | found | ndcg_at_10 |
 
 
 
@@ -12234,15 +12386,15 @@ DBPedia-Fa
 
 
 
-#### DBPedia-NL
+#### `DBPedia-NL` { .model-copy }
 
 DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base. DBPedia-NL is a Dutch translation.
 
 **Dataset:** [`clips/beir-nl-dbpedia-entity`](https://huggingface.co/datasets/clips/beir-nl-dbpedia-entity) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-dbpedia-entity)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Encyclopaedic, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Encyclopaedic, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -12266,15 +12418,15 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
 
 
 
-#### DBPedia-PL
+#### `DBPedia-PL` { .model-copy }
 
 DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base
 
 **Dataset:** [`mteb/DBPedia-PL`](https://huggingface.co/datasets/mteb/DBPedia-PL) • **License:** mit • [Learn more →](https://github.com/iai-group/DBpedia-Entity/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Encyclopaedic, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Encyclopaedic, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -12299,15 +12451,15 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
 
 
 
-#### DBPedia-PLHardNegatives
+#### `DBPedia-PLHardNegatives` { .model-copy }
 
 DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/DBPedia-PLHardNegatives`](https://huggingface.co/datasets/mteb/DBPedia-PLHardNegatives) • **License:** mit • [Learn more →](https://github.com/iai-group/DBpedia-Entity/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Encyclopaedic, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Encyclopaedic, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -12332,15 +12484,15 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
 
 
 
-#### DBPedia-VN
+#### `DBPedia-VN` { .model-copy }
 
 A translated dataset from DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/dbpedia-vn`](https://huggingface.co/datasets/GreenNode/dbpedia-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/iai-group/DBpedia-Entity/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Encyclopaedic, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Encyclopaedic, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -12364,15 +12516,15 @@ A translated dataset from DBpedia-Entity is a standard test collection for entit
 
 
 
-#### DBPediaHardNegatives
+#### `DBPediaHardNegatives` { .model-copy }
 
 DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/DBPedia_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/mteb/DBPedia_test_top_250_only_w_correct-v2) • **License:** mit • [Learn more →](https://github.com/iai-group/DBpedia-Entity/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -12397,15 +12549,15 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
 
 
 
-#### DBPediaHardNegatives.v2
+#### `DBPediaHardNegatives.v2` { .model-copy }
 
 DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct. V2 uses a more appropriate prompt rather than the default prompt for retrieval. You can get more information on the effect of different prompt in the [PR](https://github.com/embeddings-benchmark/mteb/pull/3469#issuecomment-3436467106)
 
 **Dataset:** [`mteb/DBPedia_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/mteb/DBPedia_test_top_250_only_w_correct-v2) • **License:** mit • [Learn more →](https://github.com/iai-group/DBpedia-Entity/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -12430,15 +12582,15 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
 
 
 
-#### DS1000Retrieval
+#### `DS1000Retrieval` { .model-copy }
 
 A code retrieval task based on 1,000 data science programming problems from DS-1000. Each query is a natural language description of a data science task (e.g., 'Create a scatter plot of column A vs column B with matplotlib'), and the corpus contains Python code implementations using libraries like pandas, numpy, matplotlib, scikit-learn, and scipy. The task is to retrieve the correct code snippet that solves the described problem. Queries are problem descriptions while the corpus contains Python function implementations focused on data science workflows.
 
 **Dataset:** [`embedding-benchmark/DS1000`](https://huggingface.co/datasets/embedding-benchmark/DS1000) • **License:** mit • [Learn more →](https://huggingface.co/datasets/embedding-benchmark/DS1000)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng, python | Programming | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, python | Programming | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -12459,15 +12611,15 @@ A code retrieval task based on 1,000 data science programming problems from DS-1
 
 
 
-#### DanFEVER
+#### `DanFEVER` { .model-copy }
 
 A Danish dataset intended for misinformation research. It follows the same format as the English FEVER dataset.
 
 **Dataset:** [`mteb/DanFEVER`](https://huggingface.co/datasets/mteb/DanFEVER) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2021.nodalida-main.47/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | dan | Encyclopaedic, Non-fiction, Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | dan | Encyclopaedic, Non-fiction, Spoken | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -12496,15 +12648,15 @@ A Danish dataset intended for misinformation research. It follows the same forma
 
 
 
-#### DanFeverRetrieval
+#### `DanFeverRetrieval` { .model-copy }
 
 A Danish dataset intended for misinformation research. It follows the same format as the English FEVER dataset. DanFeverRetrieval fixed an issue in DanFever where some corpus entries were incorrectly removed.
 
 **Dataset:** [`strombergnlp/danfever`](https://huggingface.co/datasets/strombergnlp/danfever) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2021.nodalida-main.47/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | dan | Encyclopaedic, Non-fiction, Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | dan | Encyclopaedic, Non-fiction, Spoken | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -12533,15 +12685,15 @@ A Danish dataset intended for misinformation research. It follows the same forma
 
 
 
-#### DuRetrieval
+#### `DuRetrieval` { .model-copy }
 
 A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine
 
 **Dataset:** [`mteb/DuRetrieval`](https://huggingface.co/datasets/mteb/DuRetrieval) • **License:** apache-2.0 • [Learn more →](https://aclanthology.org/2022.emnlp-main.357.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | cmn | Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Web, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -12565,27 +12717,27 @@ A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine
 
 
 
-#### DutchNewsArticlesRetrieval
+#### `DutchNewsArticlesRetrieval` { .model-copy }
 
 This dataset contains all the articles published by the NOS as of the 1st of January 2010. The data is obtained by scraping the NOS website. The NOS is one of the biggest (online) news organizations in the Netherlands.
 
 **Dataset:** [`clips/mteb-nl-news-articles-ret`](https://huggingface.co/datasets/clips/mteb-nl-news-articles-ret) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://www.kaggle.com/datasets/maxscheijen/dutch-news-articles)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | News, Written | derived | found | ndcg_at_10 |
 
 
 
-#### EcomRetrieval
+#### `EcomRetrieval` { .model-copy }
 
 EcomRetrieval
 
 **Dataset:** [`mteb/EcomRetrieval`](https://huggingface.co/datasets/mteb/EcomRetrieval) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2203.03367)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | cmn | Reviews, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Reviews, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -12609,75 +12761,75 @@ EcomRetrieval
 
 
 
-#### EnglishFinance1Retrieval
+#### `EnglishFinance1Retrieval` { .model-copy }
 
-Financial document retrieval dataset with queries about stock compensation, corporate governance, and SEC filing content.
+Financial document retrieval dataset with queries about stock compensation, corporate governance, and SEC filing content. Contributed by Voyage AI.
 
 **Dataset:** [`mteb-private/EnglishFinance1Retrieval`](https://huggingface.co/datasets/mteb-private/EnglishFinance1Retrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/mteb-private/EnglishFinance1Retrieval-sample)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
-#### EnglishFinance2Retrieval
+#### `EnglishFinance2Retrieval` { .model-copy }
 
-Financial performance retrieval dataset with queries about stock performance, S&P 500 comparisons, and railroad industry metrics.
+Financial performance retrieval dataset with queries about stock performance, S&P 500 comparisons, and railroad industry metrics. Contributed by Voyage AI.
 
 **Dataset:** [`mteb-private/EnglishFinance2Retrieval`](https://huggingface.co/datasets/mteb-private/EnglishFinance2Retrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/mteb-private/EnglishFinance2Retrieval-sample)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
-#### EnglishFinance3Retrieval
+#### `EnglishFinance3Retrieval` { .model-copy }
 
-Personal finance Q&A retrieval dataset with questions about tax codes, business expenses, and financial advice.
+Personal finance Q&A retrieval dataset with questions about tax codes, business expenses, and financial advice. Contributed by Voyage AI.
 
 **Dataset:** [`mteb-private/EnglishFinance3Retrieval`](https://huggingface.co/datasets/mteb-private/EnglishFinance3Retrieval) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/mteb-private/EnglishFinance3Retrieval-sample)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
-#### EnglishFinance4Retrieval
+#### `EnglishFinance4Retrieval` { .model-copy }
 
-Personal finance advice retrieval dataset with questions about car financing, investment strategies, and financial planning.
+Personal finance advice retrieval dataset with questions about car financing, investment strategies, and financial planning. Contributed by Voyage AI.
 
 **Dataset:** [`mteb-private/EnglishFinance4Retrieval`](https://huggingface.co/datasets/mteb-private/EnglishFinance4Retrieval) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/mteb-private/EnglishFinance4Retrieval-sample)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
-#### EnglishHealthcare1Retrieval
+#### `EnglishHealthcare1Retrieval` { .model-copy }
 
-Medical research retrieval dataset with queries about HIV transmission, genetic variants, and biomedical research findings.
+Medical research retrieval dataset with queries about HIV transmission, genetic variants, and biomedical research findings. Contributed by Voyage AI.
 
 **Dataset:** [`mteb-private/EnglishHealthcare1Retrieval`](https://huggingface.co/datasets/mteb-private/EnglishHealthcare1Retrieval) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/mteb-private/EnglishHealthcare1Retrieval-sample)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Medical, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Medical, Written | derived | found | ndcg_at_10 |
 
 
 
-#### EstQA
+#### `EstQA` { .model-copy }
 
 EstQA is an Estonian question answering dataset based on Wikipedia.
 
 **Dataset:** [`kardosdrur/estonian-qa`](https://huggingface.co/datasets/kardosdrur/estonian-qa) • **License:** not specified • [Learn more →](https://www.semanticscholar.org/paper/Extractive-Question-Answering-for-Estonian-Language-182912IAPM-Alum%C3%A4e/ea4f60ab36cadca059c880678bc4c51e293a85d6?utm_source=direct_link)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | est | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | est | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -12698,15 +12850,15 @@ EstQA is an Estonian question answering dataset based on Wikipedia.
 
 
 
-#### EuroPIRQRetrieval
+#### `EuroPIRQRetrieval` { .model-copy }
 
 The EuroPIRQ retrieval dataset is a multilingual collection designed for evaluating retrieval and cross-lingual retrieval tasks. Dataset contains 10,000 parallel passages & 100 parallel queries (synthetic) in three languages: English, Portuguese, and Finnish, constructed from the European Union's DGT-Acquis corpus.
 
 **Dataset:** [`eherra/EuroPIRQ-retrieval`](https://huggingface.co/datasets/eherra/EuroPIRQ-retrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/eherra/EuroPIRQ-retrieval)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng, fin, por | Legal | LM-generated and reviewed | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, fin, por | Legal | LM-generated and reviewed | found | ndcg_at_10 |
 
 
 
@@ -12728,15 +12880,15 @@ The EuroPIRQ retrieval dataset is a multilingual collection designed for evaluat
 
 
 
-#### FEVER
+#### `FEVER` { .model-copy }
 
 FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by altering sentences extracted from Wikipedia and subsequently verified without knowledge of the sentence they were derived from.
 
 **Dataset:** [`mteb/fever`](https://huggingface.co/datasets/mteb/fever) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://fever.ai/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -12769,15 +12921,15 @@ FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by
 
 
 
-#### FEVER-FaHardNegatives
+#### `FEVER-FaHardNegatives` { .model-copy }
 
 FEVER-FaHardNegatives
 
 **Dataset:** [`MCINext/FEVER_FA_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/MCINext/FEVER_FA_test_top_250_only_w_correct-v2) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/FEVER_FA_test_top_250_only_w_correct-v2)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -12796,15 +12948,15 @@ FEVER-FaHardNegatives
 
 
 
-#### FEVER-NL
+#### `FEVER-NL` { .model-copy }
 
 FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by altering sentences extracted from Wikipedia and subsequently verified without knowledge of the sentence they were derived from. FEVER-NL is a Dutch translation.
 
 **Dataset:** [`clips/beir-nl-fever`](https://huggingface.co/datasets/clips/beir-nl-fever) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-fever)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Encyclopaedic, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Encyclopaedic, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -12828,15 +12980,15 @@ FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by
 
 
 
-#### FEVER-VN
+#### `FEVER-VN` { .model-copy }
 
 A translated dataset from FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by altering sentences extracted from Wikipedia and subsequently verified without knowledge of the sentence they were derived from. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/fever-vn`](https://huggingface.co/datasets/GreenNode/fever-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://fever.ai/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Encyclopaedic, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Encyclopaedic, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -12860,15 +13012,15 @@ A translated dataset from FEVER (Fact Extraction and VERification) consists of 1
 
 
 
-#### FEVERHardNegatives
+#### `FEVERHardNegatives` { .model-copy }
 
 FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by altering sentences extracted from Wikipedia and subsequently verified without knowledge of the sentence they were derived from. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/FEVER_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/mteb/FEVER_test_top_250_only_w_correct-v2) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://fever.ai/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -12901,15 +13053,15 @@ FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by
 
 
 
-#### FEVERHardNegatives.v2
+#### `FEVERHardNegatives.v2` { .model-copy }
 
 FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by altering sentences extracted from Wikipedia and subsequently verified without knowledge of the sentence they were derived from. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct. V2 uses a more appropriate prompt rather than the default prompt for retrieval. You can get more information on the effect of different prompt in the [PR](https://github.com/embeddings-benchmark/mteb/pull/3469#issuecomment-3436467106)
 
 **Dataset:** [`mteb/FEVER_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/mteb/FEVER_test_top_250_only_w_correct-v2) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://fever.ai/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -12942,15 +13094,15 @@ FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by
 
 
 
-#### FQuADRetrieval
+#### `FQuADRetrieval` { .model-copy }
 
 This dataset has been built from the French SQuad dataset.
 
 **Dataset:** [`manu/fquad2_test`](https://huggingface.co/datasets/manu/fquad2_test) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/manu/fquad2_test)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fra | Encyclopaedic, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fra | Encyclopaedic, Written | human-annotated | created | ndcg_at_10 |
 
 
 
@@ -12984,15 +13136,15 @@ This dataset has been built from the French SQuad dataset.
 
 
 
-#### FaithDial
+#### `FaithDial` { .model-copy }
 
 FaithDial is a faithful knowledge-grounded dialogue benchmark.It was curated by asking annotators to amend hallucinated utterances in Wizard of Wikipedia (WoW). It consists of conversation histories along with manually labelled relevant passage. For the purpose of retrieval, we only consider the instances marked as 'Edification' in the VRM field, as the gold passage associated with these instances is non-ambiguous.
 
 **Dataset:** [`mteb/FaithDial`](https://huggingface.co/datasets/mteb/FaithDial) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://mcgill-nlp.github.io/FaithDial)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -13018,15 +13170,15 @@ FaithDial is a faithful knowledge-grounded dialogue benchmark.It was curated by 
 
 
 
-#### FeedbackQARetrieval
+#### `FeedbackQARetrieval` { .model-copy }
 
 Using Interactive Feedback to Improve the Accuracy and Explainability of Question Answering Systems Post-Deployment
 
 **Dataset:** [`mteb/FeedbackQARetrieval`](https://huggingface.co/datasets/mteb/FeedbackQARetrieval) • **License:** apache-2.0 • [Learn more →](https://arxiv.org/abs/2204.03025)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | precision_at_1 | eng | Government, Medical, Web, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Government, Medical, Web, Written | human-annotated | created | precision_at_1 |
 
 
 
@@ -13060,15 +13212,15 @@ Using Interactive Feedback to Improve the Accuracy and Explainability of Questio
 
 
 
-#### FiQA-PL
+#### `FiQA-PL` { .model-copy }
 
 Financial Opinion Mining and Question Answering
 
 **Dataset:** [`mteb/FiQA-PL`](https://huggingface.co/datasets/mteb/FiQA-PL) • **License:** not specified • [Learn more →](https://sites.google.com/view/fiqa/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Financial, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Financial, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -13090,15 +13242,15 @@ Financial Opinion Mining and Question Answering
 
 
 
-#### FiQA2018
+#### `FiQA2018` { .model-copy }
 
 Financial Opinion Mining and Question Answering
 
 **Dataset:** [`mteb/fiqa`](https://huggingface.co/datasets/mteb/fiqa) • **License:** not specified • [Learn more →](https://sites.google.com/view/fiqa/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Financial, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Financial, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -13120,15 +13272,15 @@ Financial Opinion Mining and Question Answering
 
 
 
-#### FiQA2018-Fa
+#### `FiQA2018-Fa` { .model-copy }
 
 FiQA2018-Fa
 
 **Dataset:** [`MCINext/fiqa-fa`](https://huggingface.co/datasets/MCINext/fiqa-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/fiqa-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -13147,15 +13299,15 @@ FiQA2018-Fa
 
 
 
-#### FiQA2018-Fa.v2
+#### `FiQA2018-Fa.v2` { .model-copy }
 
 FiQA2018-Fa.v2
 
 **Dataset:** [`MCINext/fiqa-fa-v2`](https://huggingface.co/datasets/MCINext/fiqa-fa-v2) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/fiqa-fa-v2)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -13174,15 +13326,15 @@ FiQA2018-Fa.v2
 
 
 
-#### FiQA2018-NL
+#### `FiQA2018-NL` { .model-copy }
 
 Financial Opinion Mining and Question Answering. FiQA2018-NL is a Dutch translation
 
 **Dataset:** [`clips/beir-nl-fiqa`](https://huggingface.co/datasets/clips/beir-nl-fiqa) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-fiqa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -13206,15 +13358,15 @@ Financial Opinion Mining and Question Answering. FiQA2018-NL is a Dutch translat
 
 
 
-#### FiQA2018-VN
+#### `FiQA2018-VN` { .model-copy }
 
 A translated dataset from Financial Opinion Mining and Question Answering The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/fiqa-vn`](https://huggingface.co/datasets/GreenNode/fiqa-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://sites.google.com/view/fiqa/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Financial, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Financial, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -13238,15 +13390,15 @@ A translated dataset from Financial Opinion Mining and Question Answering The pr
 
 
 
-#### FinQARetrieval
+#### `FinQARetrieval` { .model-copy }
 
 A financial retrieval task based on FinQA dataset containing numerical reasoning questions over financial documents. Each query is a financial question requiring numerical computation (e.g., 'What is the percentage change in operating expenses from 2019 to 2020?'), and the corpus contains financial document text with tables and numerical data. The task is to retrieve the correct financial information that enables answering the numerical question. Queries are numerical reasoning questions while the corpus contains financial text passages with embedded tables, figures, and quantitative financial data from earnings reports.
 
 **Dataset:** [`embedding-benchmark/FinQA`](https://huggingface.co/datasets/embedding-benchmark/FinQA) • **License:** mit • [Learn more →](https://huggingface.co/datasets/embedding-benchmark/FinQA)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Financial | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Financial | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -13267,15 +13419,15 @@ A financial retrieval task based on FinQA dataset containing numerical reasoning
 
 
 
-#### FinanceBenchRetrieval
+#### `FinanceBenchRetrieval` { .model-copy }
 
 A financial retrieval task based on FinanceBench dataset containing financial questions and answers. Each query is a financial question (e.g., 'What was the total revenue in Q3 2023?'), and the corpus contains financial document excerpts and annual reports. The task is to retrieve the correct financial information that answers the question. Queries are financial questions while the corpus contains relevant excerpts from financial documents, earnings reports, and SEC filings with detailed financial data and metrics.
 
 **Dataset:** [`embedding-benchmark/FinanceBench`](https://huggingface.co/datasets/embedding-benchmark/FinanceBench) • **License:** mit • [Learn more →](https://huggingface.co/datasets/embedding-benchmark/FinanceBench)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Financial | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Financial | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -13296,39 +13448,39 @@ A financial retrieval task based on FinanceBench dataset containing financial qu
 
 
 
-#### French1Retrieval
+#### `French1Retrieval` { .model-copy }
 
-French general knowledge retrieval dataset with queries about celebrities, historical figures, and cultural topics.
+French general knowledge retrieval dataset with queries about celebrities, historical figures, and cultural topics. Contributed by Voyage AI.
 
 **Dataset:** [`mteb-private/French1Retrieval`](https://huggingface.co/datasets/mteb-private/French1Retrieval) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/mteb-private/French1Retrieval-sample)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fra | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fra | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
-#### FrenchLegal1Retrieval
+#### `FrenchLegal1Retrieval` { .model-copy }
 
-French legal document retrieval dataset with queries about administrative law, court decisions, and legal proceedings.
+French legal document retrieval dataset with queries about administrative law, court decisions, and legal proceedings. Contributed by Voyage AI.
 
 **Dataset:** [`mteb-private/FrenchLegal1Retrieval`](https://huggingface.co/datasets/mteb-private/FrenchLegal1Retrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/mteb-private/FrenchLegal1Retrieval-sample)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fra | Legal, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fra | Legal, Written | derived | found | ndcg_at_10 |
 
 
 
-#### FreshStackRetrieval
+#### `FreshStackRetrieval` { .model-copy }
 
 A code retrieval task based on FreshStack dataset containing programming problems across multiple languages. Each query is a natural language description of a programming task (e.g., 'Write a function to reverse a string using recursion'), and the corpus contains code implementations in Python, JavaScript, and Go. The task is to retrieve the correct code snippet that solves the described problem. Queries are problem descriptions while the corpus contains function implementations with proper syntax and logic across different programming languages.
 
 **Dataset:** [`embedding-benchmark/FreshStack_mteb`](https://huggingface.co/datasets/embedding-benchmark/FreshStack_mteb) • **License:** mit • [Learn more →](https://huggingface.co/datasets/embedding-benchmark/FreshStack_mteb)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng, go, javascript, python | Programming | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, go, javascript, python | Programming | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -13352,27 +13504,27 @@ A code retrieval task based on FreshStack dataset containing programming problem
 
 
 
-#### GeorgianFAQRetrieval
+#### `GeorgianFAQRetrieval` { .model-copy }
 
 Frequently asked questions (FAQs) and answers mined from Georgian websites via Common Crawl.
 
 **Dataset:** [`jupyterjazz/georgian-faq`](https://huggingface.co/datasets/jupyterjazz/georgian-faq) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/jupyterjazz/georgian-faq)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | kat | Web, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | kat | Web, Written | derived | created | ndcg_at_10 |
 
 
 
-#### GerDaLIR
+#### `GerDaLIR` { .model-copy }
 
 GerDaLIR is a legal information retrieval dataset created from the Open Legal Data platform.
 
 **Dataset:** [`mteb/GerDaLIR`](https://huggingface.co/datasets/mteb/GerDaLIR) • **License:** mit • [Learn more →](https://github.com/lavis-nlp/GerDaLIR)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | deu | Legal, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu | Legal, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -13399,15 +13551,15 @@ GerDaLIR is a legal information retrieval dataset created from the Open Legal Da
 
 
 
-#### GerDaLIRSmall
+#### `GerDaLIRSmall` { .model-copy }
 
 The dataset consists of documents, passages and relevance labels in German. In contrast to the original dataset, only documents that have corresponding queries in the query set are chosen to create a smaller corpus for evaluation purposes.
 
 **Dataset:** [`mteb/GerDaLIRSmall`](https://huggingface.co/datasets/mteb/GerDaLIRSmall) • **License:** mit • [Learn more →](https://github.com/lavis-nlp/GerDaLIR)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | deu | Legal, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu | Legal, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -13434,27 +13586,27 @@ The dataset consists of documents, passages and relevance labels in German. In c
 
 
 
-#### German1Retrieval
+#### `German1Retrieval` { .model-copy }
 
-German dialogue retrieval dataset with business conversations and workplace communication scenarios.
+German dialogue retrieval dataset with business conversations and workplace communication scenarios. Contributed by Voyage AI.
 
 **Dataset:** [`mteb-private/German1Retrieval`](https://huggingface.co/datasets/mteb-private/German1Retrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/mteb-private/German1Retrieval-sample)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | deu | Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu | Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
-#### GermanDPR
+#### `GermanDPR` { .model-copy }
 
 GermanDPR is a German Question Answering dataset for open-domain QA. It associates questions with a textual context containing the answer
 
 **Dataset:** [`mteb/GermanDPR`](https://huggingface.co/datasets/mteb/GermanDPR) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/deepset/germandpr)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | deu | Non-fiction, Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu | Non-fiction, Web, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -13477,15 +13629,15 @@ GermanDPR is a German Question Answering dataset for open-domain QA. It associat
 
 
 
-#### GermanGovServiceRetrieval
+#### `GermanGovServiceRetrieval` { .model-copy }
 
 LHM-Dienstleistungen-QA is a German question answering dataset for government services of the Munich city administration. It associates questions with a textual context containing the answer
 
 **Dataset:** [`it-at-m/LHM-Dienstleistungen-QA`](https://huggingface.co/datasets/it-at-m/LHM-Dienstleistungen-QA) • **License:** mit • [Learn more →](https://huggingface.co/datasets/it-at-m/LHM-Dienstleistungen-QA)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_5 | deu | Government, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu | Government, Written | derived | found | ndcg_at_5 |
 
 
 
@@ -13512,39 +13664,39 @@ LHM-Dienstleistungen-QA is a German question answering dataset for government se
 
 
 
-#### GermanHealthcare1Retrieval
+#### `GermanHealthcare1Retrieval` { .model-copy }
 
-German medical consultation retrieval dataset with patient questions and doctor responses about various health conditions.
+German medical consultation retrieval dataset with patient questions and doctor responses about various health conditions. Contributed by Voyage AI.
 
 **Dataset:** [`mteb-private/GermanHealthcare1Retrieval`](https://huggingface.co/datasets/mteb-private/GermanHealthcare1Retrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/mteb-private/GermanHealthcare1Retrieval-sample)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | deu | Medical, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu | Medical, Written | derived | found | ndcg_at_10 |
 
 
 
-#### GermanLegal1Retrieval
+#### `GermanLegal1Retrieval` { .model-copy }
 
-German educational regulation retrieval dataset with queries about university capacity calculations and academic administration.
+German educational regulation retrieval dataset with queries about university capacity calculations and academic administration. Contributed by Voyage AI.
 
 **Dataset:** [`mteb-private/GermanLegal1Retrieval`](https://huggingface.co/datasets/mteb-private/GermanLegal1Retrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/mteb-private/GermanLegal1Retrieval-sample)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | deu | Legal, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu | Legal, Written | derived | found | ndcg_at_10 |
 
 
 
-#### GermanQuAD-Retrieval
+#### `GermanQuAD-Retrieval` { .model-copy }
 
 Context Retrieval for German Question Answering
 
 **Dataset:** [`mteb/germanquad-retrieval`](https://huggingface.co/datasets/mteb/germanquad-retrieval) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/deepset/germanquad)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | mrr_at_5 | deu | Non-fiction, Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu | Non-fiction, Web, Written | human-annotated | found | mrr_at_5 |
 
 
 
@@ -13567,15 +13719,15 @@ Context Retrieval for German Question Answering
 
 
 
-#### GovReport
+#### `GovReport` { .model-copy }
 
 A dataset for evaluating the ability of information retrieval models to retrieve lengthy US government reports from their summaries.
 
 **Dataset:** [`isaacus/mteb-GovReport`](https://huggingface.co/datasets/isaacus/mteb-GovReport) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/launch/gov_report)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Government, Legal | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Government, Legal | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -13607,27 +13759,27 @@ A dataset for evaluating the ability of information retrieval models to retrieve
 
 
 
-#### GreekCivicsQA
+#### `GreekCivicsQA` { .model-copy }
 
 This dataset was provided by AlloProf, an organisation in Quebec, Canada offering resources and a help forum curated by a large number of teachers to students on all subjects taught from in primary and secondary school
 
 **Dataset:** [`ilsp/greek_civics_qa`](https://huggingface.co/datasets/ilsp/greek_civics_qa) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://huggingface.co/datasets/antoinelb7/alloprof)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ell | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ell | Academic, Written | derived | found | ndcg_at_10 |
 
 
 
-#### GreenNodeTableMarkdownRetrieval
+#### `GreenNodeTableMarkdownRetrieval` { .model-copy }
 
 GreenNodeTable documents
 
 **Dataset:** [`GreenNode/GreenNode-Table-Markdown-Retrieval-VN`](https://huggingface.co/datasets/GreenNode/GreenNode-Table-Markdown-Retrieval-VN) • **License:** mit • [Learn more →](https://huggingface.co/GreenNode)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Encyclopaedic, Financial, Non-fiction | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Encyclopaedic, Financial, Non-fiction | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -13656,15 +13808,15 @@ GreenNodeTable documents
 
 
 
-#### HC3FinanceRetrieval
+#### `HC3FinanceRetrieval` { .model-copy }
 
 A financial retrieval task based on HC3 Finance dataset containing human vs AI-generated financial text detection. Each query is a financial question or prompt (e.g., 'Explain the impact of interest rate changes on bond prices'), and the corpus contains both human-written and AI-generated financial responses. The task is to retrieve the most relevant and accurate financial content that addresses the query. Queries are financial questions while the corpus contains detailed financial explanations, analysis, and educational content covering various financial concepts and market dynamics.
 
 **Dataset:** [`embedding-benchmark/HC3Finance`](https://huggingface.co/datasets/embedding-benchmark/HC3Finance) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/embedding-benchmark/HC3Finance)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Financial | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Financial | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -13685,15 +13837,15 @@ A financial retrieval task based on HC3 Finance dataset containing human vs AI-g
 
 
 
-#### HagridRetrieval
+#### `HagridRetrieval` { .model-copy }
 
 HAGRID (Human-in-the-loop Attributable Generative Retrieval for Information-seeking Dataset)is a dataset for generative information-seeking scenarios. It consists of queriesalong with a set of manually labelled relevant passages
 
 **Dataset:** [`mteb/HagridRetrieval`](https://huggingface.co/datasets/mteb/HagridRetrieval) • **License:** apache-2.0 • [Learn more →](https://github.com/project-miracl/hagrid)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -13714,15 +13866,15 @@ HAGRID (Human-in-the-loop Attributable Generative Retrieval for Information-seek
 
 
 
-#### HellaSwag
+#### `HellaSwag` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on HellaSwag.
 
 **Dataset:** [`mteb/HellaSwag`](https://huggingface.co/datasets/mteb/HellaSwag) • **License:** mit • [Learn more →](https://rowanzellers.com/hellaswag/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -13750,15 +13902,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### HotpotQA
+#### `HotpotQA` { .model-copy }
 
 HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems.
 
 **Dataset:** [`mteb/hotpotqa`](https://huggingface.co/datasets/mteb/hotpotqa) • **License:** cc-by-sa-4.0 • [Learn more →](https://hotpotqa.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Web, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -13795,15 +13947,15 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
 
 
 
-#### HotpotQA-Fa
+#### `HotpotQA-Fa` { .model-copy }
 
 HotpotQA-Fa
 
 **Dataset:** [`MCINext/hotpotqa-fa`](https://huggingface.co/datasets/MCINext/hotpotqa-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/hotpotqa-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Encyclopaedic | derived | found | ndcg_at_10 |
 
 
 
@@ -13822,15 +13974,15 @@ HotpotQA-Fa
 
 
 
-#### HotpotQA-FaHardNegatives
+#### `HotpotQA-FaHardNegatives` { .model-copy }
 
 HotpotQA-FaHardNegatives
 
 **Dataset:** [`MCINext/HotpotQA_FA_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/MCINext/HotpotQA_FA_test_top_250_only_w_correct-v2) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/HotpotQA_FA_test_top_250_only_w_correct-v2)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Encyclopaedic | derived | found | ndcg_at_10 |
 
 
 
@@ -13849,15 +14001,15 @@ HotpotQA-FaHardNegatives
 
 
 
-#### HotpotQA-NL
+#### `HotpotQA-NL` { .model-copy }
 
 HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strongsupervision for supporting facts to enable more explainable question answering systems. HotpotQA-NL is a Dutch translation. 
 
 **Dataset:** [`clips/beir-nl-hotpotqa`](https://huggingface.co/datasets/clips/beir-nl-hotpotqa) • **License:** cc-by-sa-4.0 • [Learn more →](https://hotpotqa.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Web, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Web, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -13881,15 +14033,15 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
 
 
 
-#### HotpotQA-PL
+#### `HotpotQA-PL` { .model-copy }
 
 HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems.
 
 **Dataset:** [`mteb/HotpotQA-PL`](https://huggingface.co/datasets/mteb/HotpotQA-PL) • **License:** cc-by-sa-4.0 • [Learn more →](https://hotpotqa.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Web, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Web, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -13912,15 +14064,15 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
 
 
 
-#### HotpotQA-PLHardNegatives
+#### `HotpotQA-PLHardNegatives` { .model-copy }
 
 HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/HotpotQA-PLHardNegatives`](https://huggingface.co/datasets/mteb/HotpotQA-PLHardNegatives) • **License:** cc-by-sa-4.0 • [Learn more →](https://hotpotqa.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Web, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Web, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -13943,15 +14095,15 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
 
 
 
-#### HotpotQA-VN
+#### `HotpotQA-VN` { .model-copy }
 
 A translated dataset from HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/hotpotqa-vn`](https://huggingface.co/datasets/GreenNode/hotpotqa-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://hotpotqa.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Web, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Web, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -13975,15 +14127,15 @@ A translated dataset from HotpotQA is a question answering dataset featuring nat
 
 
 
-#### HotpotQAHardNegatives
+#### `HotpotQAHardNegatives` { .model-copy }
 
 HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/HotpotQA_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/mteb/HotpotQA_test_top_250_only_w_correct-v2) • **License:** cc-by-sa-4.0 • [Learn more →](https://hotpotqa.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Web, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -14020,15 +14172,15 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
 
 
 
-#### HotpotQAHardNegatives.v2
+#### `HotpotQAHardNegatives.v2` { .model-copy }
 
 HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.V2 uses a more appropriate prompt rather than the default prompt for retrieval. You can get more information on the effect of different prompt in the [PR](https://github.com/embeddings-benchmark/mteb/pull/3469#issuecomment-3436467106)
 
 **Dataset:** [`mteb/HotpotQA_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/mteb/HotpotQA_test_top_250_only_w_correct-v2) • **License:** cc-by-sa-4.0 • [Learn more →](https://hotpotqa.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Web, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -14065,15 +14217,15 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
 
 
 
-#### HumanEvalRetrieval
+#### `HumanEvalRetrieval` { .model-copy }
 
 A code retrieval task based on 164 Python programming problems from HumanEval. Each query is a natural language description of a programming task (e.g., 'Check if in given list of numbers, are any two numbers closer to each other than given threshold'), and the corpus contains Python code implementations. The task is to retrieve the correct code snippet that solves the described problem. Queries are problem descriptions while the corpus contains Python function implementations with proper indentation and logic.
 
 **Dataset:** [`embedding-benchmark/HumanEval`](https://huggingface.co/datasets/embedding-benchmark/HumanEval) • **License:** mit • [Learn more →](https://huggingface.co/datasets/embedding-benchmark/HumanEval)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng, python | Programming | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, python | Programming | derived | found | ndcg_at_10 |
 
 
 
@@ -14094,15 +14246,15 @@ A code retrieval task based on 164 Python programming problems from HumanEval. E
 
 
 
-#### HunSum2AbstractiveRetrieval
+#### `HunSum2AbstractiveRetrieval` { .model-copy }
 
 HunSum-2-abstractive is a Hungarian dataset containing news articles along with lead, titles and metadata.
 
 **Dataset:** [`SZTAKI-HLT/HunSum-2-abstractive`](https://huggingface.co/datasets/SZTAKI-HLT/HunSum-2-abstractive) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2404.03555)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_1 | hun | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | hun | News, Written | derived | found | ndcg_at_1 |
 
 
 
@@ -14125,15 +14277,15 @@ HunSum-2-abstractive is a Hungarian dataset containing news articles along with 
 
 
 
-#### IndicQARetrieval
+#### `IndicQARetrieval` { .model-copy }
 
 IndicQA is a manually curated cloze-style reading comprehension dataset that can be used for evaluating question-answering models in 11 Indic languages. It is repurposed retrieving relevant context for each question.
 
 **Dataset:** [`mteb/IndicQARetrieval`](https://huggingface.co/datasets/mteb/IndicQARetrieval) • **License:** cc0-1.0 • [Learn more →](https://arxiv.org/abs/2212.05409)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | asm, ben, guj, hin, kan, ... (11) | Web, Written | human-annotated | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | asm, ben, guj, hin, kan, ... (11) | Web, Written | human-annotated | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -14155,15 +14307,15 @@ IndicQA is a manually curated cloze-style reading comprehension dataset that can
 
 
 
-#### JaCWIRRetrieval
+#### `JaCWIRRetrieval` { .model-copy }
 
 JaCWIR is a small-scale Japanese information retrieval evaluation dataset consisting of 5000 question texts and approximately 500k web page titles and web page introductions or summaries (meta descriptions, etc.). The question texts are created based on one of the 500k web pages, and that data is used as a positive example for the question text.
 
 **Dataset:** [`mteb/JaCWIRRetrieval`](https://huggingface.co/datasets/mteb/JaCWIRRetrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/hotchpotch/JaCWIR)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -14183,15 +14335,15 @@ JaCWIR is a small-scale Japanese information retrieval evaluation dataset consis
 
 
 
-#### JaCWIRRetrievalLite
+#### `JaCWIRRetrievalLite` { .model-copy }
 
 JaCWIR (Japanese Casual Web IR) is a dataset consisting of questions and webpage meta descriptions collected from Hatena Bookmark. This is the lightweight version with a reduced corpus (302,638 documents) constructed using hard negatives from 5 high-performance models.
 
 **Dataset:** [`mteb/JaCWIRRetrievalLite`](https://huggingface.co/datasets/mteb/JaCWIRRetrievalLite) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/hotchpotch/JaCWIR)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -14219,27 +14371,27 @@ JaCWIR (Japanese Casual Web IR) is a dataset consisting of questions and webpage
 
 
 
-#### JaGovFaqsRetrieval
+#### `JaGovFaqsRetrieval` { .model-copy }
 
 JaGovFaqs is a dataset consisting of FAQs manually extracted from the website of Japanese bureaus. The dataset consists of 22k FAQs, where the queries (questions) and corpus (answers) have been shuffled, and the goal is to match the answer with the question.
 
 **Dataset:** [`mteb/JaGovFaqsRetrieval`](https://huggingface.co/datasets/mteb/JaGovFaqsRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://github.com/sbintuitions/JMTEB)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Web, Written | derived | found | ndcg_at_10 |
 
 
 
-#### JaQuADRetrieval
+#### `JaQuADRetrieval` { .model-copy }
 
 Human-annotated question-answer pairs for Japanese wikipedia pages.
 
 **Dataset:** [`mteb/JaQuADRetrieval`](https://huggingface.co/datasets/mteb/JaQuADRetrieval) • **License:** cc-by-sa-3.0 • [Learn more →](https://arxiv.org/abs/2202.01764)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Encyclopaedic, Non-fiction, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Encyclopaedic, Non-fiction, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -14262,39 +14414,39 @@ Human-annotated question-answer pairs for Japanese wikipedia pages.
 
 
 
-#### JapaneseCode1Retrieval
+#### `JapaneseCode1Retrieval` { .model-copy }
 
-Japanese code retrieval dataset. Japanese natural language queries paired with Python code snippets for cross-lingual code retrieval evaluation.
+Japanese code retrieval dataset. Japanese natural language queries paired with Python code snippets for cross-lingual code retrieval evaluation. Contributed by Voyage AI.
 
 **Dataset:** [`mteb-private/JapaneseCode1Retrieval`](https://huggingface.co/datasets/mteb-private/JapaneseCode1Retrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/mteb-private/JapaneseCode1Retrieval-sample)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Programming, Written | derived | found | ndcg_at_10 |
 
 
 
-#### JapaneseLegal1Retrieval
+#### `JapaneseLegal1Retrieval` { .model-copy }
 
-Japanese legal regulation retrieval dataset with queries about government regulations, ministry ordinances, and administrative law.
+Japanese legal regulation retrieval dataset with queries about government regulations, ministry ordinances, and administrative law. Contributed by Voyage AI.
 
 **Dataset:** [`mteb-private/JapaneseLegal1Retrieval`](https://huggingface.co/datasets/mteb-private/JapaneseLegal1Retrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/mteb-private/JapaneseLegal1Retrieval-sample)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Legal, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Legal, Written | derived | found | ndcg_at_10 |
 
 
 
-#### JaqketRetrieval
+#### `JaqketRetrieval` { .model-copy }
 
 JAQKET (JApanese Questions on Knowledge of EnTities) is a QA dataset that is created based on quiz questions.
 
 **Dataset:** [`mteb/jaqket`](https://huggingface.co/datasets/mteb/jaqket) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/kumapo/JAQKET-dataset)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Encyclopaedic, Non-fiction, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Encyclopaedic, Non-fiction, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -14317,15 +14469,15 @@ JAQKET (JApanese Questions on Knowledge of EnTities) is a QA dataset that is cre
 
 
 
-#### JaqketRetrievalLite
+#### `JaqketRetrievalLite` { .model-copy }
 
 JAQKET (JApanese Questions on Knowledge of EnTities) is a QA dataset created based on quiz questions. This is the lightweight version with a reduced corpus (65,802 documents) constructed using hard negatives from 5 high-performance models.
 
 **Dataset:** [`mteb/JaqketRetrievalLite`](https://huggingface.co/datasets/mteb/JaqketRetrievalLite) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/kumapo/JAQKET-dataset)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Encyclopaedic, Non-fiction, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Encyclopaedic, Non-fiction, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -14356,15 +14508,15 @@ JAQKET (JApanese Questions on Knowledge of EnTities) is a QA dataset created bas
 
 
 
-#### Ko-StrategyQA
+#### `Ko-StrategyQA` { .model-copy }
 
 Ko-StrategyQA
 
 **Dataset:** [`taeminlee/Ko-StrategyQA`](https://huggingface.co/datasets/taeminlee/Ko-StrategyQA) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2101.02235)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | kor | Encyclopaedic, Written | human-annotated | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | kor | Encyclopaedic, Written | human-annotated | machine-translated | ndcg_at_10 |
 
 
 
@@ -14385,15 +14537,15 @@ Ko-StrategyQA
 
 
 
-#### LEMBNarrativeQARetrieval
+#### `LEMBNarrativeQARetrieval` { .model-copy }
 
 narrativeqa subset of dwzhu/LongEmbed dataset.
 
 **Dataset:** [`dwzhu/LongEmbed`](https://huggingface.co/datasets/dwzhu/LongEmbed) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/dwzhu/LongEmbed)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Fiction, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Fiction, Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -14430,15 +14582,15 @@ narrativeqa subset of dwzhu/LongEmbed dataset.
 
 
 
-#### LEMBNeedleRetrieval
+#### `LEMBNeedleRetrieval` { .model-copy }
 
 needle subset of dwzhu/LongEmbed dataset.
 
 **Dataset:** [`dwzhu/LongEmbed`](https://huggingface.co/datasets/dwzhu/LongEmbed) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/dwzhu/LongEmbed)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_1 | eng | Academic, Blog, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Blog, Written | derived | found | ndcg_at_1 |
 
 
 
@@ -14459,15 +14611,15 @@ needle subset of dwzhu/LongEmbed dataset.
 
 
 
-#### LEMBPasskeyRetrieval
+#### `LEMBPasskeyRetrieval` { .model-copy }
 
 passkey subset of dwzhu/LongEmbed dataset.
 
 **Dataset:** [`mteb/LEMBPasskeyRetrieval`](https://huggingface.co/datasets/mteb/LEMBPasskeyRetrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/dwzhu/LongEmbed)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_1 | eng | Fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Fiction, Written | derived | found | ndcg_at_1 |
 
 
 
@@ -14488,15 +14640,15 @@ passkey subset of dwzhu/LongEmbed dataset.
 
 
 
-#### LEMBQMSumRetrieval
+#### `LEMBQMSumRetrieval` { .model-copy }
 
 qmsum subset of dwzhu/LongEmbed dataset.
 
 **Dataset:** [`dwzhu/LongEmbed`](https://huggingface.co/datasets/dwzhu/LongEmbed) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/dwzhu/LongEmbed)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Spoken, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Spoken, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -14542,15 +14694,15 @@ qmsum subset of dwzhu/LongEmbed dataset.
 
 
 
-#### LEMBSummScreenFDRetrieval
+#### `LEMBSummScreenFDRetrieval` { .model-copy }
 
 summ_screen_fd subset of dwzhu/LongEmbed dataset.
 
 **Dataset:** [`dwzhu/LongEmbed`](https://huggingface.co/datasets/dwzhu/LongEmbed) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/dwzhu/LongEmbed)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Spoken, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Spoken, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -14583,15 +14735,15 @@ summ_screen_fd subset of dwzhu/LongEmbed dataset.
 
 
 
-#### LEMBWikimQARetrieval
+#### `LEMBWikimQARetrieval` { .model-copy }
 
 2wikimqa subset of dwzhu/LongEmbed dataset.
 
 **Dataset:** [`dwzhu/LongEmbed`](https://huggingface.co/datasets/dwzhu/LongEmbed) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/dwzhu/LongEmbed)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -14613,15 +14765,15 @@ summ_screen_fd subset of dwzhu/LongEmbed dataset.
 
 
 
-#### LIMITRetrieval
+#### `LIMITRetrieval` { .model-copy }
 
 A simple retrieval task designed to test all combinations of top-2 documents. This version includes all 50k docs.
 
 **Dataset:** [`orionweller/LIMIT`](https://huggingface.co/datasets/orionweller/LIMIT) • **License:** apache-2.0 • [Learn more →](https://github.com/google-deepmind/limit)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_2 | eng | Fiction | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Fiction | human-annotated | created | recall_at_2 |
 
 
 
@@ -14644,15 +14796,15 @@ A simple retrieval task designed to test all combinations of top-2 documents. Th
 
 
 
-#### LIMITSmallRetrieval
+#### `LIMITSmallRetrieval` { .model-copy }
 
 A simple retrieval task designed to test all combinations of top-2 documents. This version only includes the 46 documents that are relevant to the 1000 queries.
 
 **Dataset:** [`orionweller/LIMIT-small`](https://huggingface.co/datasets/orionweller/LIMIT-small) • **License:** apache-2.0 • [Learn more →](https://github.com/google-deepmind/limit)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_2 | eng | Fiction | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Fiction | human-annotated | created | recall_at_2 |
 
 
 
@@ -14675,15 +14827,15 @@ A simple retrieval task designed to test all combinations of top-2 documents. Th
 
 
 
-#### LawIRKo
+#### `LawIRKo` { .model-copy }
 
 This dataset assesses a model's ability to retrieve relevant legal articles from queries referencing specific Korean laws and provisions. The corpus comprises official legal texts including statutes, acts, and regulations, with each document representing a single article. Queries are derived from law titles paired and article identifiers. For instance the law title might be "건축법" (Building Act) and the article name "기술적 기준" (Technical Standards), which would become "건축법에 명시된 법률 중에 '기술적 기준'에 대해 설명하고 있는 세부 항목은 무엇입니까?" ("Which specific articles in the Building Act explain the 'technical standards'?").
 
 **Dataset:** [`on-and-on/lawgov_ir-ko`](https://huggingface.co/datasets/on-and-on/lawgov_ir-ko) • **License:** mit • [Learn more →](https://huggingface.co/datasets/on-and-on/lawgov_ir-ko)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | kor | Legal, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | kor | Legal, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -14704,15 +14856,15 @@ This dataset assesses a model's ability to retrieve relevant legal articles from
 
 
 
-#### LeCaRDv2
+#### `LeCaRDv2` { .model-copy }
 
 The task involves identifying and retrieving the case document that best matches or is most relevant to the scenario described in each of the provided queries.
 
 **Dataset:** [`mteb/LeCaRDv2`](https://huggingface.co/datasets/mteb/LeCaRDv2) • **License:** mit • [Learn more →](https://github.com/THUIR/LeCaRDv2)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | zho | Legal, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | zho | Legal, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -14735,15 +14887,15 @@ The task involves identifying and retrieving the case document that best matches
 
 
 
-#### LegalBenchConsumerContractsQA
+#### `LegalBenchConsumerContractsQA` { .model-copy }
 
 The dataset includes questions and answers related to contracts.
 
 **Dataset:** [`mteb/legalbench_consumer_contracts_qa`](https://huggingface.co/datasets/mteb/legalbench_consumer_contracts_qa) • **License:** cc-by-nc-4.0 • [Learn more →](https://huggingface.co/datasets/nguha/legalbench/viewer/consumer_contracts_qa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Legal, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Legal, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -14771,15 +14923,15 @@ The dataset includes questions and answers related to contracts.
 
 
 
-#### LegalBenchCorporateLobbying
+#### `LegalBenchCorporateLobbying` { .model-copy }
 
 The dataset includes bill titles and bill summaries related to corporate lobbying.
 
 **Dataset:** [`mteb/legalbench_corporate_lobbying`](https://huggingface.co/datasets/mteb/legalbench_corporate_lobbying) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/nguha/legalbench/viewer/corporate_lobbying)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Legal, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Legal, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -14872,15 +15024,15 @@ The dataset includes bill titles and bill summaries related to corporate lobbyin
 
 
 
-#### LegalQANLRetrieval
+#### `LegalQANLRetrieval` { .model-copy }
 
 To this end, we create and publish a Dutch legal QA dataset, consisting of question-answer pairs with attributions to Dutch law articles.
 
 **Dataset:** [`clips/mteb-nl-legalqa-pr`](https://huggingface.co/datasets/clips/mteb-nl-legalqa-pr) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://aclanthology.org/2024.nllp-1.12/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Legal, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Legal, Written | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -14902,15 +15054,15 @@ To this end, we create and publish a Dutch legal QA dataset, consisting of quest
 
 
 
-#### LegalQuAD
+#### `LegalQuAD` { .model-copy }
 
 The dataset consists of questions and legal documents in German.
 
 **Dataset:** [`mteb/LegalQuAD`](https://huggingface.co/datasets/mteb/LegalQuAD) • **License:** cc-by-4.0 • [Learn more →](https://github.com/Christoph911/AIKE2021_Appendix)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | deu | Legal, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu | Legal, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -14936,15 +15088,15 @@ The dataset consists of questions and legal documents in German.
 
 
 
-#### LegalSummarization
+#### `LegalSummarization` { .model-copy }
 
 The dataset consists of 439 pairs of contracts and their summarizations from https://tldrlegal.com and https://tosdr.org/.
 
 **Dataset:** [`mteb/legal_summarization`](https://huggingface.co/datasets/mteb/legal_summarization) • **License:** apache-2.0 • [Learn more →](https://github.com/lauramanor/legal_summarization)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Legal, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Legal, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -14971,15 +15123,15 @@ The dataset consists of 439 pairs of contracts and their summarizations from htt
 
 
 
-#### LitSearchRetrieval
+#### `LitSearchRetrieval` { .model-copy }
 
 The dataset contains the query set and retrieval corpus for the paper LitSearch: A Retrieval Benchmark for Scientific Literature Search. It introduces LitSearch, a retrieval benchmark comprising 597 realistic literature search queries about recent ML and NLP papers. LitSearch is constructed using a combination of (1) questions generated by GPT-4 based on paragraphs containing inline citations from research papers and (2) questions about recently published papers, manually written by their authors. All LitSearch questions were manually examined or edited by experts to ensure high quality.
 
 **Dataset:** [`princeton-nlp/LitSearch`](https://huggingface.co/datasets/princeton-nlp/LitSearch) • **License:** mit • [Learn more →](https://github.com/princeton-nlp/LitSearch)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Non-fiction, Written | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Non-fiction, Written | LM-generated | found | ndcg_at_10 |
 
 
 
@@ -14999,15 +15151,15 @@ The dataset contains the query set and retrieval corpus for the paper LitSearch:
 
 
 
-#### LoTTE
+#### `LoTTE` { .model-copy }
 
 LoTTE (Long-Tail Topic-stratified Evaluation for IR) is designed to evaluate retrieval models on underrepresented, long-tail topics. Unlike MSMARCO or BEIR, LoTTE features domain-specific queries and passages from StackExchange (covering writing, recreation, science, technology, and lifestyle), providing a challenging out-of-domain generalization benchmark.
 
 **Dataset:** [`mteb/LoTTE`](https://huggingface.co/datasets/mteb/LoTTE) • **License:** mit • [Learn more →](https://github.com/stanford-futuredata/ColBERT/blob/main/LoTTE.md)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | hit_rate_at_5 | eng | Academic, Social, Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Social, Web | derived | found | hit_rate_at_5 |
 
 
 
@@ -15041,15 +15193,15 @@ LoTTE (Long-Tail Topic-stratified Evaluation for IR) is designed to evaluate ret
 
 
 
-#### MBPPRetrieval
+#### `MBPPRetrieval` { .model-copy }
 
 A code retrieval task based on 378 Python programming problems from MBPP (Mostly Basic Python Programming). Each query is a natural language description of a programming task (e.g., 'Write a function to find the shared elements from the given two lists'), and the corpus contains Python code implementations. The task is to retrieve the correct code snippet that solves the described problem. Queries are problem descriptions while the corpus contains Python function implementations with proper syntax and logic.
 
 **Dataset:** [`embedding-benchmark/MBPP`](https://huggingface.co/datasets/embedding-benchmark/MBPP) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/embedding-benchmark/MBPP)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng, python | Programming | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, python | Programming | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -15070,15 +15222,15 @@ A code retrieval task based on 378 Python programming problems from MBPP (Mostly
 
 
 
-#### MIRACLJaRetrievalLite
+#### `MIRACLJaRetrievalLite` { .model-copy }
 
 MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset. This is the lightweight Japanese version with a reduced corpus (105,064 documents) constructed using hard negatives from 5 high-performance models.
 
 **Dataset:** [`mteb/MIRACLJaRetrievalLite`](https://huggingface.co/datasets/mteb/MIRACLJaRetrievalLite) • **License:** apache-2.0 • [Learn more →](https://project-miracl.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Encyclopaedic, Written | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Encyclopaedic, Written | expert-annotated | created | ndcg_at_10 |
 
 
 
@@ -15111,15 +15263,15 @@ MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a
 
 
 
-#### MIRACLRetrieval
+#### `MIRACLRetrieval` { .model-copy }
 
 MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.
 
 **Dataset:** [`mteb/MIRACLRetrieval`](https://huggingface.co/datasets/mteb/MIRACLRetrieval) • **License:** cc-by-sa-4.0 • [Learn more →](http://miracl.ai/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ara, ben, deu, eng, fas, ... (18) | Encyclopaedic, Written | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, ben, deu, eng, fas, ... (18) | Encyclopaedic, Written | expert-annotated | created | ndcg_at_10 |
 
 
 
@@ -15147,15 +15299,15 @@ MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a
 
 
 
-#### MIRACLRetrievalHardNegatives
+#### `MIRACLRetrievalHardNegatives` { .model-copy }
 
 MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/MIRACLRetrievalHardNegatives`](https://huggingface.co/datasets/mteb/MIRACLRetrievalHardNegatives) • **License:** cc-by-sa-4.0 • [Learn more →](http://miracl.ai/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ara, ben, deu, eng, fas, ... (18) | Encyclopaedic, Written | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, ben, deu, eng, fas, ... (18) | Encyclopaedic, Written | expert-annotated | created | ndcg_at_10 |
 
 
 
@@ -15183,15 +15335,15 @@ MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a
 
 
 
-#### MIRACLRetrievalHardNegatives.v2
+#### `MIRACLRetrievalHardNegatives.v2` { .model-copy }
 
 MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.V2 uses a more appropriate prompt rather than the default prompt for retrieval. You can get more information on the effect of different prompt in the [PR](https://github.com/embeddings-benchmark/mteb/pull/3469#issuecomment-3436467106)
 
 **Dataset:** [`mteb/MIRACLRetrievalHardNegatives`](https://huggingface.co/datasets/mteb/MIRACLRetrievalHardNegatives) • **License:** cc-by-sa-4.0 • [Learn more →](http://miracl.ai/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ara, ben, deu, eng, fas, ... (18) | Encyclopaedic, Written | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, ben, deu, eng, fas, ... (18) | Encyclopaedic, Written | expert-annotated | created | ndcg_at_10 |
 
 
 
@@ -15219,15 +15371,15 @@ MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a
 
 
 
-#### MKQARetrieval
+#### `MKQARetrieval` { .model-copy }
 
 Multilingual Knowledge Questions & Answers (MKQA)contains 10,000 queries sampled from the Google Natural Questions dataset. For each query we collect new passage-independent answers. These queries and answers are then human translated into 25 Non-English languages.
 
 **Dataset:** [`mteb/MKQARetrieval`](https://huggingface.co/datasets/mteb/MKQARetrieval) • **License:** cc-by-3.0 • [Learn more →](https://github.com/apple/ml-mkqa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ara, dan, deu, eng, fin, ... (26) | Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, dan, deu, eng, fin, ... (26) | Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -15248,15 +15400,15 @@ Multilingual Knowledge Questions & Answers (MKQA)contains 10,000 queries sampled
 
 
 
-#### MLQARetrieval
+#### `MLQARetrieval` { .model-copy }
 
 MLQA (MultiLingual Question Answering) is a benchmark dataset for evaluating cross-lingual question answering performance. MLQA consists of over 5K extractive QA instances (12K in English) in SQuAD format in seven languages - English, Arabic, German, Spanish, Hindi, Vietnamese and Simplified Chinese. MLQA is highly parallel, with QA instances parallel between 4 different languages on average.
 
 **Dataset:** [`mteb/MLQARetrieval`](https://huggingface.co/datasets/mteb/MLQARetrieval) • **License:** cc-by-sa-3.0 • [Learn more →](https://huggingface.co/datasets/mlqa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ara, deu, eng, hin, spa, ... (7) | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, deu, eng, hin, spa, ... (7) | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -15278,15 +15430,15 @@ MLQA (MultiLingual Question Answering) is a benchmark dataset for evaluating cro
 
 
 
-#### MLQuestions
+#### `MLQuestions` { .model-copy }
 
 MLQuestions is a domain adaptation dataset for the machine learning domainIt consists of ML questions along with passages from Wikipedia machine learning pages (https://en.wikipedia.org/wiki/Category:Machine_learning)
 
 **Dataset:** [`McGill-NLP/mlquestions`](https://huggingface.co/datasets/McGill-NLP/mlquestions) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://github.com/McGill-NLP/MLQuestions)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -15315,15 +15467,15 @@ MLQuestions is a domain adaptation dataset for the machine learning domainIt con
 
 
 
-#### MMarcoRetrieval
+#### `MMarcoRetrieval` { .model-copy }
 
 MMarcoRetrieval
 
 **Dataset:** [`mteb/MMarcoRetrieval`](https://huggingface.co/datasets/mteb/MMarcoRetrieval) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2309.07597)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | cmn | Web, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Web, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -15347,15 +15499,15 @@ MMarcoRetrieval
 
 
 
-#### MSMARCO
+#### `MSMARCO` { .model-copy }
 
 MS MARCO is a collection of datasets focused on deep learning in search
 
 **Dataset:** [`mteb/msmarco`](https://huggingface.co/datasets/mteb/msmarco) • **License:** msr-la-nc • [Learn more →](https://microsoft.github.io/msmarco/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Blog, Encyclopaedic, Government, Medical, ... (10) | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Blog, Encyclopaedic, Government, Medical, ... (10) | derived | found | ndcg_at_10 |
 
 
 
@@ -15389,15 +15541,15 @@ MS MARCO is a collection of datasets focused on deep learning in search
 
 
 
-#### MSMARCO-Fa
+#### `MSMARCO-Fa` { .model-copy }
 
 MSMARCO-Fa
 
 **Dataset:** [`MCINext/msmarco-fa`](https://huggingface.co/datasets/MCINext/msmarco-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/msmarco-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -15416,15 +15568,15 @@ MSMARCO-Fa
 
 
 
-#### MSMARCO-FaHardNegatives
+#### `MSMARCO-FaHardNegatives` { .model-copy }
 
 MSMARCO-FaHardNegatives
 
 **Dataset:** [`MCINext/MSMARCO_FA_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/MCINext/MSMARCO_FA_test_top_250_only_w_correct-v2) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/MSMARCO_FA_test_top_250_only_w_correct-v2)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -15443,15 +15595,15 @@ MSMARCO-FaHardNegatives
 
 
 
-#### MSMARCO-PL
+#### `MSMARCO-PL` { .model-copy }
 
 MS MARCO is a collection of datasets focused on deep learning in search
 
 **Dataset:** [`mteb/MSMARCO-PL`](https://huggingface.co/datasets/mteb/MSMARCO-PL) • **License:** https://microsoft.github.io/msmarco/ • [Learn more →](https://microsoft.github.io/msmarco/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Web, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Web, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -15474,15 +15626,15 @@ MS MARCO is a collection of datasets focused on deep learning in search
 
 
 
-#### MSMARCO-PLHardNegatives
+#### `MSMARCO-PLHardNegatives` { .model-copy }
 
 MS MARCO is a collection of datasets focused on deep learning in search. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/MSMARCO-PLHardNegatives`](https://huggingface.co/datasets/mteb/MSMARCO-PLHardNegatives) • **License:** https://microsoft.github.io/msmarco/ • [Learn more →](https://microsoft.github.io/msmarco/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Web, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Web, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -15505,15 +15657,15 @@ MS MARCO is a collection of datasets focused on deep learning in search. The har
 
 
 
-#### MSMARCO-VN
+#### `MSMARCO-VN` { .model-copy }
 
 A translated dataset from MS MARCO is a collection of datasets focused on deep learning in search The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/msmarco-vn`](https://huggingface.co/datasets/GreenNode/msmarco-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://microsoft.github.io/msmarco/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Academic, Blog, Encyclopaedic, Government, Medical, ... (10) | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Academic, Blog, Encyclopaedic, Government, Medical, ... (10) | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -15537,15 +15689,15 @@ A translated dataset from MS MARCO is a collection of datasets focused on deep l
 
 
 
-#### MSMARCOHardNegatives
+#### `MSMARCOHardNegatives` { .model-copy }
 
 MS MARCO is a collection of datasets focused on deep learning in search. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/MSMARCO_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/mteb/MSMARCO_test_top_250_only_w_correct-v2) • **License:** msr-la-nc • [Learn more →](https://microsoft.github.io/msmarco/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Blog, Encyclopaedic, Government, Medical, ... (10) | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Blog, Encyclopaedic, Government, Medical, ... (10) | derived | found | ndcg_at_10 |
 
 
 
@@ -15579,15 +15731,15 @@ MS MARCO is a collection of datasets focused on deep learning in search. The har
 
 
 
-#### MSMARCOv2
+#### `MSMARCOv2` { .model-copy }
 
 MS MARCO is a collection of datasets focused on deep learning in search. This version is derived from BEIR
 
 **Dataset:** [`mteb/msmarco-v2`](https://huggingface.co/datasets/mteb/msmarco-v2) • **License:** msr-la-nc • [Learn more →](https://microsoft.github.io/msmarco/TREC-Deep-Learning.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Blog, Encyclopaedic, Government, Medical, ... (10) | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Blog, Encyclopaedic, Government, Medical, ... (10) | derived | found | ndcg_at_10 |
 
 
 
@@ -15621,15 +15773,15 @@ MS MARCO is a collection of datasets focused on deep learning in search. This ve
 
 
 
-#### MedicalQARetrieval
+#### `MedicalQARetrieval` { .model-copy }
 
 The dataset consists 2048 medical question and answer pairs.
 
 **Dataset:** [`mteb/medical_qa`](https://huggingface.co/datasets/mteb/medical_qa) • **License:** cc0-1.0 • [Learn more →](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-019-3119-4)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Medical, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Medical, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -15654,15 +15806,15 @@ The dataset consists 2048 medical question and answer pairs.
 
 
 
-#### MedicalRetrieval
+#### `MedicalRetrieval` { .model-copy }
 
 MedicalRetrieval
 
 **Dataset:** [`mteb/MedicalRetrieval`](https://huggingface.co/datasets/mteb/MedicalRetrieval) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2203.03367)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | cmn | Medical, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Medical, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -15686,15 +15838,15 @@ MedicalRetrieval
 
 
 
-#### MintakaRetrieval
+#### `MintakaRetrieval` { .model-copy }
 
 We introduce Mintaka, a complex, natural, and multilingual dataset designed for experimenting with end-to-end question-answering models. Mintaka is composed of 20,000 question-answer pairs collected in English, annotated with Wikidata entities, and translated into Arabic, French, German, Hindi, Italian, Japanese, Portuguese, and Spanish for a total of 180,000 samples. Mintaka includes 8 types of complex questions, including superlative, intersection, and multi-hop questions, which were naturally elicited from crowd workers. 
 
 **Dataset:** [`mteb/MintakaRetrieval`](https://huggingface.co/datasets/mteb/MintakaRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://aclanthology.org/2022.coling-1.138)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ara, deu, fra, hin, ita, ... (8) | Encyclopaedic, Written | derived | human-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, deu, fra, hin, ita, ... (8) | Encyclopaedic, Written | derived | human-translated | ndcg_at_10 |
 
 
 
@@ -15722,15 +15874,15 @@ We introduce Mintaka, a complex, natural, and multilingual dataset designed for 
 
 
 
-#### MrTidyRetrieval
+#### `MrTidyRetrieval` { .model-copy }
 
 Mr. TyDi is a multi-lingual benchmark dataset built on TyDi, covering eleven typologically diverse languages. It is designed for monolingual retrieval, specifically to evaluate ranking with learned dense representations.
 
 **Dataset:** [`mteb/mrtidy`](https://huggingface.co/datasets/mteb/mrtidy) • **License:** cc-by-sa-3.0 • [Learn more →](https://huggingface.co/datasets/castorini/mr-tydi)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ara, ben, eng, fin, ind, ... (11) | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, ben, eng, fin, ind, ... (11) | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -15751,15 +15903,15 @@ Mr. TyDi is a multi-lingual benchmark dataset built on TyDi, covering eleven typ
 
 
 
-#### MrTyDiJaRetrievalLite
+#### `MrTyDiJaRetrievalLite` { .model-copy }
 
 Mr.TyDi is a multilingual benchmark dataset built on TyDi for document retrieval tasks. This is the lightweight Japanese version with a reduced corpus (93,382 documents) constructed using hard negatives from 5 high-performance models.
 
 **Dataset:** [`mteb/MrTyDiJaRetrievalLite`](https://huggingface.co/datasets/mteb/MrTyDiJaRetrievalLite) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/castorini/mr-tydi)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Encyclopaedic, Non-fiction, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Encyclopaedic, Non-fiction, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -15788,15 +15940,15 @@ Mr.TyDi is a multilingual benchmark dataset built on TyDi for document retrieval
 
 
 
-#### MultiLongDocRetrieval
+#### `MultiLongDocRetrieval` { .model-copy }
 
 Multi Long Doc Retrieval (MLDR) 'is curated by the multilingual articles from Wikipedia, Wudao and mC4 (see Table 7), and NarrativeQA (Kocˇisky ́ et al., 2018; Gu ̈nther et al., 2023), which is only for English.' (Chen et al., 2024). It is constructed by sampling lengthy articles from Wikipedia, Wudao and mC4 datasets and randomly choose paragraphs from them. Then we use GPT-3.5 to generate questions based on these paragraphs. The generated question and the sampled article constitute a new text pair to the dataset.
 
 **Dataset:** [`mteb/MultiLongDocRetrieval`](https://huggingface.co/datasets/mteb/MultiLongDocRetrieval) • **License:** mit • [Learn more →](https://arxiv.org/abs/2402.03216)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ara, cmn, deu, eng, fra, ... (13) | Encyclopaedic, Fiction, Non-fiction, Web, Written | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, cmn, deu, eng, fra, ... (13) | Encyclopaedic, Fiction, Non-fiction, Web, Written | LM-generated | found | ndcg_at_10 |
 
 
 
@@ -15819,15 +15971,15 @@ Multi Long Doc Retrieval (MLDR) 'is curated by the multilingual articles from Wi
 
 
 
-#### NFCorpus
+#### `NFCorpus` { .model-copy }
 
 NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
 
 **Dataset:** [`mteb/nfcorpus`](https://huggingface.co/datasets/mteb/nfcorpus) • **License:** not specified • [Learn more →](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Medical, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Medical, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -15852,15 +16004,15 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
 
 
 
-#### NFCorpus-Fa
+#### `NFCorpus-Fa` { .model-copy }
 
 NFCorpus-Fa
 
 **Dataset:** [`MCINext/nfcorpus-fa`](https://huggingface.co/datasets/MCINext/nfcorpus-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/nfcorpus-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Medical | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Medical | derived | found | ndcg_at_10 |
 
 
 
@@ -15879,15 +16031,15 @@ NFCorpus-Fa
 
 
 
-#### NFCorpus-NL
+#### `NFCorpus-NL` { .model-copy }
 
 NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval. NFCorpus-NL is a Dutch translation.
 
 **Dataset:** [`clips/beir-nl-nfcorpus`](https://huggingface.co/datasets/clips/beir-nl-nfcorpus) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-nfcorpus)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Academic, Medical, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Academic, Medical, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -15911,15 +16063,15 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
 
 
 
-#### NFCorpus-NL.v2
+#### `NFCorpus-NL.v2` { .model-copy }
 
 NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval. NFCorpus-NL is a Dutch translation. This version adds a Dutch prompt to the dataset.
 
 **Dataset:** [`clips/beir-nl-nfcorpus`](https://huggingface.co/datasets/clips/beir-nl-nfcorpus) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-nfcorpus)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Academic, Medical, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Academic, Medical, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -15943,15 +16095,15 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
 
 
 
-#### NFCorpus-PL
+#### `NFCorpus-PL` { .model-copy }
 
 NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
 
 **Dataset:** [`mteb/NFCorpus-PL`](https://huggingface.co/datasets/mteb/NFCorpus-PL) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Medical, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Medical, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -15974,15 +16126,15 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
 
 
 
-#### NFCorpus-VN
+#### `NFCorpus-VN` { .model-copy }
 
 A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/nfcorpus-vn`](https://huggingface.co/datasets/GreenNode/nfcorpus-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Academic, Medical, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Academic, Medical, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -16006,15 +16158,15 @@ A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Med
 
 
 
-#### NLPJournalAbsArticleRetrieval
+#### `NLPJournalAbsArticleRetrieval` { .model-copy }
 
 This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles, abstracts and introductions of the academic papers were shuffled. The goal is to find the corresponding full article with the given abstract. This is the V1 dataset (last updated 2020-06-15).
 
 **Dataset:** [`mteb/NLPJournalAbsArticleRetrieval`](https://huggingface.co/datasets/mteb/NLPJournalAbsArticleRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/sbintuitions/JMTEB)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Academic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -16035,15 +16187,15 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 
 
-#### NLPJournalAbsArticleRetrieval.V2
+#### `NLPJournalAbsArticleRetrieval.V2` { .model-copy }
 
 This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles, abstracts and introductions of the academic papers were shuffled. The goal is to find the corresponding full article with the given abstract. This is the V2 dataset (last updated 2025-06-15).
 
 **Dataset:** [`mteb/NLPJournalAbsArticleRetrieval.V2`](https://huggingface.co/datasets/mteb/NLPJournalAbsArticleRetrieval.V2) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/sbintuitions/JMTEB)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Academic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -16064,15 +16216,15 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 
 
-#### NLPJournalAbsIntroRetrieval
+#### `NLPJournalAbsIntroRetrieval` { .model-copy }
 
 This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles, abstracts and introductions of the academic papers were shuffled. The goal is to find the corresponding introduction with the given abstract. This is the V1 dataset (last update 2020-06-15).
 
 **Dataset:** [`mteb/NLPJournalAbsIntroRetrieval`](https://huggingface.co/datasets/mteb/NLPJournalAbsIntroRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/sbintuitions/JMTEB)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Academic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -16093,15 +16245,15 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 
 
-#### NLPJournalAbsIntroRetrieval.V2
+#### `NLPJournalAbsIntroRetrieval.V2` { .model-copy }
 
 This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles, abstracts and introductions of the academic papers were shuffled. The goal is to find the corresponding introduction with the given abstract. This is the V2 dataset (last update 2025-06-15).
 
 **Dataset:** [`mteb/NLPJournalAbsIntroRetrieval.V2`](https://huggingface.co/datasets/mteb/NLPJournalAbsIntroRetrieval.V2) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/sbintuitions/JMTEB)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Academic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -16122,15 +16274,15 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 
 
-#### NLPJournalTitleAbsRetrieval
+#### `NLPJournalTitleAbsRetrieval` { .model-copy }
 
 This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles, abstracts and introductions of the academic papers were shuffled. The goal is to find the corresponding abstract with the given title. This is the V1 dataset (last updated 2020-06-15).
 
 **Dataset:** [`mteb/NLPJournalTitleAbsRetrieval`](https://huggingface.co/datasets/mteb/NLPJournalTitleAbsRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/sbintuitions/JMTEB)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Academic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -16151,15 +16303,15 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 
 
-#### NLPJournalTitleAbsRetrieval.V2
+#### `NLPJournalTitleAbsRetrieval.V2` { .model-copy }
 
 This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles, abstracts and introductions of the academic papers were shuffled. The goal is to find the corresponding abstract with the given title. This is the V2 dataset (last updated 2025-06-15).
 
 **Dataset:** [`mteb/NLPJournalTitleAbsRetrieval.V2`](https://huggingface.co/datasets/mteb/NLPJournalTitleAbsRetrieval.V2) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/sbintuitions/JMTEB)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Academic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -16180,15 +16332,15 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 
 
-#### NLPJournalTitleIntroRetrieval
+#### `NLPJournalTitleIntroRetrieval` { .model-copy }
 
 This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles, abstracts and introductions of the academic papers were shuffled. The goal is to find the corresponding introduction with the given title. This is the V1 dataset (last updated 2020-06-15).
 
 **Dataset:** [`mteb/NLPJournalTitleIntroRetrieval`](https://huggingface.co/datasets/mteb/NLPJournalTitleIntroRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/sbintuitions/JMTEB)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Academic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -16209,15 +16361,15 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 
 
-#### NLPJournalTitleIntroRetrieval.V2
+#### `NLPJournalTitleIntroRetrieval.V2` { .model-copy }
 
 This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles, abstracts and introductions of the academic papers were shuffled. The goal is to find the corresponding introduction with the given title. This is the V2 dataset (last updated 2025-06-15).
 
 **Dataset:** [`mteb/NLPJournalTitleIntroRetrieval.V2`](https://huggingface.co/datasets/mteb/NLPJournalTitleIntroRetrieval.V2) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/sbintuitions/JMTEB)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | jpn | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | jpn | Academic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -16238,15 +16390,15 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 
 
-#### NQ
+#### `NQ` { .model-copy }
 
 NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
 
 **Dataset:** [`mteb/nq`](https://huggingface.co/datasets/mteb/nq) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://ai.google.com/research/NaturalQuestions/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -16271,15 +16423,15 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
 
 
 
-#### NQ-Fa
+#### `NQ-Fa` { .model-copy }
 
 NQ-Fa
 
 **Dataset:** [`MCINext/nq-fa`](https://huggingface.co/datasets/MCINext/nq-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/nq-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Encyclopaedic | derived | found | ndcg_at_10 |
 
 
 
@@ -16298,15 +16450,15 @@ NQ-Fa
 
 
 
-#### NQ-FaHardNegatives
+#### `NQ-FaHardNegatives` { .model-copy }
 
 NQ-FaHardNegatives
 
 **Dataset:** [`MCINext/NQ_FA_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/MCINext/NQ_FA_test_top_250_only_w_correct-v2) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/NQ_FA_test_top_250_only_w_correct-v2)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Encyclopaedic | derived | found | ndcg_at_10 |
 
 
 
@@ -16325,15 +16477,15 @@ NQ-FaHardNegatives
 
 
 
-#### NQ-NL
+#### `NQ-NL` { .model-copy }
 
 NQ-NL is a translation of NQ
 
 **Dataset:** [`clips/beir-nl-nq`](https://huggingface.co/datasets/clips/beir-nl-nq) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-nq)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Encyclopaedic, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Encyclopaedic, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -16357,15 +16509,15 @@ NQ-NL is a translation of NQ
 
 
 
-#### NQ-PL
+#### `NQ-PL` { .model-copy }
 
 Natural Questions: A Benchmark for Question Answering Research
 
 **Dataset:** [`mteb/NQ-PL`](https://huggingface.co/datasets/mteb/NQ-PL) • **License:** cc-by-sa-4.0 • [Learn more →](https://ai.google.com/research/NaturalQuestions/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Encyclopaedic, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Encyclopaedic, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -16388,15 +16540,15 @@ Natural Questions: A Benchmark for Question Answering Research
 
 
 
-#### NQ-PLHardNegatives
+#### `NQ-PLHardNegatives` { .model-copy }
 
 Natural Questions: A Benchmark for Question Answering Research. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/NQ-PLHardNegatives`](https://huggingface.co/datasets/mteb/NQ-PLHardNegatives) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://ai.google.com/research/NaturalQuestions/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Encyclopaedic, Written | human-annotated | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Encyclopaedic, Written | human-annotated | machine-translated | ndcg_at_10 |
 
 
 
@@ -16419,15 +16571,15 @@ Natural Questions: A Benchmark for Question Answering Research. The hard negativ
 
 
 
-#### NQ-VN
+#### `NQ-VN` { .model-copy }
 
 A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/nq-vn`](https://huggingface.co/datasets/GreenNode/nq-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://ai.google.com/research/NaturalQuestions/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Encyclopaedic, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Encyclopaedic, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -16451,15 +16603,15 @@ A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Med
 
 
 
-#### NQHardNegatives
+#### `NQHardNegatives` { .model-copy }
 
 NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/NQ_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/mteb/NQ_test_top_250_only_w_correct-v2) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://ai.google.com/research/NaturalQuestions/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -16484,15 +16636,15 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
 
 
 
-#### NanoArguAnaRetrieval
+#### `NanoArguAnaRetrieval` { .model-copy }
 
 NanoArguAna is a smaller subset of ArguAna, a dataset for argument retrieval in debate contexts.
 
 **Dataset:** [`zeta-alpha-ai/NanoArguAna`](https://huggingface.co/datasets/zeta-alpha-ai/NanoArguAna) • **License:** cc-by-4.0 • [Learn more →](http://argumentation.bplaced.net/arguana/data)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Social, Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Social, Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -16513,15 +16665,15 @@ NanoArguAna is a smaller subset of ArguAna, a dataset for argument retrieval in 
 
 
 
-#### NanoClimateFEVER-VN
+#### `NanoClimateFEVER-VN` { .model-copy }
 
 NanoClimateFEVERVN is a small version of A translated dataset from CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/nano-climate-fever-vn`](https://huggingface.co/datasets/GreenNode/nano-climate-fever-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Encyclopaedic, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Encyclopaedic, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -16545,15 +16697,15 @@ NanoClimateFEVERVN is a small version of A translated dataset from CLIMATE-FEVER
 
 
 
-#### NanoClimateFeverRetrieval
+#### `NanoClimateFeverRetrieval` { .model-copy }
 
 NanoClimateFever is a small version of the BEIR dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change.
 
 **Dataset:** [`zeta-alpha-ai/NanoClimateFEVER`](https://huggingface.co/datasets/zeta-alpha-ai/NanoClimateFEVER) • **License:** cc-by-4.0 • [Learn more →](https://arxiv.org/abs/2012.00614)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, News, Non-fiction | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, News, Non-fiction | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -16576,15 +16728,15 @@ NanoClimateFever is a small version of the BEIR dataset adopting the FEVER metho
 
 
 
-#### NanoDBPedia-VN
+#### `NanoDBPedia-VN` { .model-copy }
 
 NanoDBPediaVN is a small version of A translated dataset from DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/nano-dbpedia-vn`](https://huggingface.co/datasets/GreenNode/nano-dbpedia-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/iai-group/DBpedia-Entity/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Encyclopaedic, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Encyclopaedic, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -16608,15 +16760,15 @@ NanoDBPediaVN is a small version of A translated dataset from DBpedia-Entity is 
 
 
 
-#### NanoDBPediaRetrieval
+#### `NanoDBPediaRetrieval` { .model-copy }
 
 NanoDBPediaRetrieval is a small version of the standard test collection for entity search over the DBpedia knowledge base.
 
 **Dataset:** [`zeta-alpha-ai/NanoDBPedia`](https://huggingface.co/datasets/zeta-alpha-ai/NanoDBPedia) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/zeta-alpha-ai/NanoDBPedia)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -16637,15 +16789,15 @@ NanoDBPediaRetrieval is a small version of the standard test collection for enti
 
 
 
-#### NanoFEVER-VN
+#### `NanoFEVER-VN` { .model-copy }
 
 NanoFEVERVN is a small version of A translated dataset from FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by altering sentences extracted from Wikipedia and subsequently verified without knowledge of the sentence they were derived from. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/nano-fever-vn`](https://huggingface.co/datasets/GreenNode/nano-fever-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://fever.ai/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Encyclopaedic, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Encyclopaedic, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -16669,15 +16821,15 @@ NanoFEVERVN is a small version of A translated dataset from FEVER (Fact Extracti
 
 
 
-#### NanoFEVERRetrieval
+#### `NanoFEVERRetrieval` { .model-copy }
 
 NanoFEVER is a smaller version of FEVER (Fact Extraction and VERification), which consists of 185,445 claims generated by altering sentences extracted from Wikipedia and subsequently verified without knowledge of the sentence they were derived from.
 
 **Dataset:** [`zeta-alpha-ai/NanoFEVER`](https://huggingface.co/datasets/zeta-alpha-ai/NanoFEVER) • **License:** cc-by-4.0 • [Learn more →](https://fever.ai/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Encyclopaedic | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Encyclopaedic | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -16710,15 +16862,15 @@ NanoFEVER is a smaller version of FEVER (Fact Extraction and VERification), whic
 
 
 
-#### NanoFiQA2018Retrieval
+#### `NanoFiQA2018Retrieval` { .model-copy }
 
 NanoFiQA2018 is a smaller subset of the Financial Opinion Mining and Question Answering dataset.
 
 **Dataset:** [`zeta-alpha-ai/NanoFiQA2018`](https://huggingface.co/datasets/zeta-alpha-ai/NanoFiQA2018) • **License:** cc-by-4.0 • [Learn more →](https://sites.google.com/view/fiqa/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Social | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Social | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -16740,15 +16892,15 @@ NanoFiQA2018 is a smaller subset of the Financial Opinion Mining and Question An
 
 
 
-#### NanoHotpotQA-VN
+#### `NanoHotpotQA-VN` { .model-copy }
 
 NanoHotpotQAVN is a small version of A translated dataset from HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/nano-hotpotqa-vn`](https://huggingface.co/datasets/GreenNode/nano-hotpotqa-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://hotpotqa.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Web, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Web, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -16772,15 +16924,15 @@ NanoHotpotQAVN is a small version of A translated dataset from HotpotQA is a que
 
 
 
-#### NanoHotpotQARetrieval
+#### `NanoHotpotQARetrieval` { .model-copy }
 
 NanoHotpotQARetrieval is a smaller subset of the HotpotQA dataset, which is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems.
 
 **Dataset:** [`zeta-alpha-ai/NanoHotpotQA`](https://huggingface.co/datasets/zeta-alpha-ai/NanoHotpotQA) • **License:** cc-by-4.0 • [Learn more →](https://hotpotqa.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Web, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -16817,15 +16969,15 @@ NanoHotpotQARetrieval is a smaller subset of the HotpotQA dataset, which is a qu
 
 
 
-#### NanoMSMARCO-VN
+#### `NanoMSMARCO-VN` { .model-copy }
 
 NanoMSMARCOVN is a small version of A translated dataset from MS MARCO is a collection of datasets focused on deep learning in search The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/nano-msmarco-vn`](https://huggingface.co/datasets/GreenNode/nano-msmarco-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://microsoft.github.io/msmarco/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Academic, Blog, Encyclopaedic, Government, Medical, ... (10) | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Academic, Blog, Encyclopaedic, Government, Medical, ... (10) | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -16849,15 +17001,15 @@ NanoMSMARCOVN is a small version of A translated dataset from MS MARCO is a coll
 
 
 
-#### NanoMSMARCORetrieval
+#### `NanoMSMARCORetrieval` { .model-copy }
 
 NanoMSMARCORetrieval is a smaller subset of MS MARCO, a collection of datasets focused on deep learning in search.
 
 **Dataset:** [`zeta-alpha-ai/NanoMSMARCO`](https://huggingface.co/datasets/zeta-alpha-ai/NanoMSMARCO) • **License:** cc-by-4.0 • [Learn more →](https://microsoft.github.io/msmarco/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Web | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Web | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -16891,15 +17043,15 @@ NanoMSMARCORetrieval is a smaller subset of MS MARCO, a collection of datasets f
 
 
 
-#### NanoNFCorpusRetrieval
+#### `NanoNFCorpusRetrieval` { .model-copy }
 
 NanoNFCorpus is a smaller subset of NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval.
 
 **Dataset:** [`zeta-alpha-ai/NanoNFCorpus`](https://huggingface.co/datasets/zeta-alpha-ai/NanoNFCorpus) • **License:** cc-by-4.0 • [Learn more →](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Medical, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Medical, Written | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -16924,15 +17076,15 @@ NanoNFCorpus is a smaller subset of NFCorpus: A Full-Text Learning to Rank Datas
 
 
 
-#### NanoNQ-VN
+#### `NanoNQ-VN` { .model-copy }
 
 NanoNQVN is a small version of A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/nano-nq-vn`](https://huggingface.co/datasets/GreenNode/nano-nq-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://ai.google.com/research/NaturalQuestions/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Encyclopaedic, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Encyclopaedic, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -16956,15 +17108,15 @@ NanoNQVN is a small version of A translated dataset from NFCorpus: A Full-Text L
 
 
 
-#### NanoNQRetrieval
+#### `NanoNQRetrieval` { .model-copy }
 
 NanoNQ is a smaller subset of a dataset which contains questions from real users, and it requires QA systems to read and comprehend an entire Wikipedia article that may or may not contain the answer to the question.
 
 **Dataset:** [`zeta-alpha-ai/NanoNQ`](https://huggingface.co/datasets/zeta-alpha-ai/NanoNQ) • **License:** cc-by-4.0 • [Learn more →](https://ai.google.com/research/NaturalQuestions)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Web | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Web | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -16989,15 +17141,15 @@ NanoNQ is a smaller subset of a dataset which contains questions from real users
 
 
 
-#### NanoQuoraRetrieval
+#### `NanoQuoraRetrieval` { .model-copy }
 
 NanoQuoraRetrieval is a smaller subset of the QuoraRetrieval dataset, which is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions.
 
 **Dataset:** [`zeta-alpha-ai/NanoQuoraRetrieval`](https://huggingface.co/datasets/zeta-alpha-ai/NanoQuoraRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Social | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Social | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -17019,15 +17171,15 @@ NanoQuoraRetrieval is a smaller subset of the QuoraRetrieval dataset, which is b
 
 
 
-#### NanoSCIDOCSRetrieval
+#### `NanoSCIDOCSRetrieval` { .model-copy }
 
 NanoFiQA2018 is a smaller subset of SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation.
 
 **Dataset:** [`zeta-alpha-ai/NanoSCIDOCS`](https://huggingface.co/datasets/zeta-alpha-ai/NanoSCIDOCS) • **License:** cc-by-4.0 • [Learn more →](https://allenai.org/data/scidocs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Non-fiction, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Non-fiction, Written | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -17048,15 +17200,15 @@ NanoFiQA2018 is a smaller subset of SciDocs, a new evaluation benchmark consisti
 
 
 
-#### NanoSciFactRetrieval
+#### `NanoSciFactRetrieval` { .model-copy }
 
 NanoSciFact is a smaller subset of SciFact, which verifies scientific claims using evidence from the research literature containing scientific paper abstracts.
 
 **Dataset:** [`zeta-alpha-ai/NanoSciFact`](https://huggingface.co/datasets/zeta-alpha-ai/NanoSciFact) • **License:** cc-by-4.0 • [Learn more →](https://github.com/allenai/scifact)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Medical, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Medical, Written | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -17077,15 +17229,15 @@ NanoSciFact is a smaller subset of SciFact, which verifies scientific claims usi
 
 
 
-#### NanoTouche2020Retrieval
+#### `NanoTouche2020Retrieval` { .model-copy }
 
 NanoTouche2020 is a smaller subset of Touché Task 1: Argument Retrieval for Controversial Questions.
 
 **Dataset:** [`zeta-alpha-ai/NanoTouche2020`](https://huggingface.co/datasets/zeta-alpha-ai/NanoTouche2020) • **License:** cc-by-4.0 • [Learn more →](https://webis.de/events/touche-20/shared-task-1.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -17117,15 +17269,15 @@ NanoTouche2020 is a smaller subset of Touché Task 1: Argument Retrieval for Con
 
 
 
-#### NarrativeQARetrieval
+#### `NarrativeQARetrieval` { .model-copy }
 
 NarrativeQA is a dataset for the task of question answering on long narratives. It consists of realistic QA instances collected from literature (fiction and non-fiction) and movie scripts. 
 
 **Dataset:** [`deepmind/narrativeqa`](https://huggingface.co/datasets/deepmind/narrativeqa) • **License:** apache-2.0 • [Learn more →](https://metatext.io/datasets/narrativeqa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Fiction, Non-fiction, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Fiction, Non-fiction, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -17162,15 +17314,15 @@ NarrativeQA is a dataset for the task of question answering on long narratives. 
 
 
 
-#### NeuCLIR2022Retrieval
+#### `NeuCLIR2022Retrieval` { .model-copy }
 
 The task involves identifying and retrieving the documents that are relevant to the queries.
 
 **Dataset:** [`mteb/NeuCLIR2022Retrieval`](https://huggingface.co/datasets/mteb/NeuCLIR2022Retrieval) • **License:** odc-by • [Learn more →](https://neuclir.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_20 | fas, rus, zho | News, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas, rus, zho | News, Written | expert-annotated | found | ndcg_at_20 |
 
 
 
@@ -17191,15 +17343,15 @@ The task involves identifying and retrieving the documents that are relevant to 
 
 
 
-#### NeuCLIR2022RetrievalHardNegatives
+#### `NeuCLIR2022RetrievalHardNegatives` { .model-copy }
 
 The task involves identifying and retrieving the documents that are relevant to the queries. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/NeuCLIR2022RetrievalHardNegatives`](https://huggingface.co/datasets/mteb/NeuCLIR2022RetrievalHardNegatives) • **License:** odc-by • [Learn more →](https://neuclir.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_20 | fas, rus, zho | News, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas, rus, zho | News, Written | expert-annotated | found | ndcg_at_20 |
 
 
 
@@ -17220,15 +17372,15 @@ The task involves identifying and retrieving the documents that are relevant to 
 
 
 
-#### NeuCLIR2023Retrieval
+#### `NeuCLIR2023Retrieval` { .model-copy }
 
 The task involves identifying and retrieving the documents that are relevant to the queries.
 
 **Dataset:** [`mteb/NeuCLIR2022Retrieval`](https://huggingface.co/datasets/mteb/NeuCLIR2022Retrieval) • **License:** odc-by • [Learn more →](https://neuclir.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_20 | fas, rus, zho | News, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas, rus, zho | News, Written | expert-annotated | found | ndcg_at_20 |
 
 
 
@@ -17251,15 +17403,15 @@ The task involves identifying and retrieving the documents that are relevant to 
 
 
 
-#### NeuCLIR2023RetrievalHardNegatives
+#### `NeuCLIR2023RetrievalHardNegatives` { .model-copy }
 
 The task involves identifying and retrieving the documents that are relevant to the queries. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/NeuCLIR2023RetrievalHardNegatives`](https://huggingface.co/datasets/mteb/NeuCLIR2023RetrievalHardNegatives) • **License:** odc-by • [Learn more →](https://neuclir.github.io/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_20 | fas, rus, zho | News, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas, rus, zho | News, Written | expert-annotated | found | ndcg_at_20 |
 
 
 
@@ -17282,15 +17434,15 @@ The task involves identifying and retrieving the documents that are relevant to 
 
 
 
-#### NorQuadRetrieval
+#### `NorQuadRetrieval` { .model-copy }
 
 Human-created question for Norwegian wikipedia passages.
 
 **Dataset:** [`mteb/norquad_retrieval`](https://huggingface.co/datasets/mteb/norquad_retrieval) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2023.nodalida-1.17/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nob | Encyclopaedic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nob | Encyclopaedic, Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -17322,15 +17474,15 @@ Human-created question for Norwegian wikipedia passages.
 
 
 
-#### OpenTenderRetrieval
+#### `OpenTenderRetrieval` { .model-copy }
 
 This dataset contains Belgian and Dutch tender calls from OpenTender in Dutch
 
 **Dataset:** [`clips/mteb-nl-opentender-ret`](https://huggingface.co/datasets/clips/mteb-nl-opentender-ret) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2509.12340)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Government, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Government, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -17354,15 +17506,15 @@ This dataset contains Belgian and Dutch tender calls from OpenTender in Dutch
 
 
 
-#### PIQA
+#### `PIQA` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on PIQA.
 
 **Dataset:** [`mteb/PIQA`](https://huggingface.co/datasets/mteb/PIQA) • **License:** afl-3.0 • [Learn more →](https://arxiv.org/abs/1911.11641)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -17393,15 +17545,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### PUGGRetrieval
+#### `PUGGRetrieval` { .model-copy }
 
 Information Retrieval PUGG dataset for the Polish language.
 
 **Dataset:** [`clarin-pl/PUGG_IR`](https://huggingface.co/datasets/clarin-pl/PUGG_IR) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2024.findings-acl.652/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Web | human-annotated | multiple |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Web | human-annotated | multiple | ndcg_at_10 |
 
 
 
@@ -17437,15 +17589,15 @@ Information Retrieval PUGG dataset for the Polish language.
 
 
 
-#### PersianWebDocumentRetrieval
+#### `PersianWebDocumentRetrieval` { .model-copy }
 
 Persian dataset designed specifically for the task of text information retrieval through the web.
 
 **Dataset:** [`MCINext/persian-web-document-retrieval`](https://huggingface.co/datasets/MCINext/persian-web-document-retrieval) • **License:** not specified • [Learn more →](https://ieeexplore.ieee.org/document/10553090)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -17464,15 +17616,15 @@ Persian dataset designed specifically for the task of text information retrieval
 
 
 
-#### PublicHealthQA
+#### `PublicHealthQA` { .model-copy }
 
 A multilingual dataset for public health question answering, based on FAQ sourced from CDC and WHO.
 
 **Dataset:** [`xhluca/publichealth-qa`](https://huggingface.co/datasets/xhluca/publichealth-qa) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://huggingface.co/datasets/xhluca/publichealth-qa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ara, eng, fra, kor, rus, ... (8) | Government, Medical, Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, eng, fra, kor, rus, ... (8) | Government, Medical, Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -17495,15 +17647,15 @@ A multilingual dataset for public health question answering, based on FAQ source
 
 
 
-#### Quail
+#### `Quail` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on Quail.
 
 **Dataset:** [`mteb/Quail`](https://huggingface.co/datasets/mteb/Quail) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://text-machine.cs.uml.edu/lab2/projects/quail/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -17534,15 +17686,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### Quora-NL
+#### `Quora-NL` { .model-copy }
 
 QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions. QuoraRetrieval-NL is a Dutch translation.
 
 **Dataset:** [`clips/beir-nl-quora`](https://huggingface.co/datasets/clips/beir-nl-quora) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-quora)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -17566,15 +17718,15 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
 
 
 
-#### Quora-PL
+#### `Quora-PL` { .model-copy }
 
 QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions.
 
 **Dataset:** [`mteb/Quora-PL`](https://huggingface.co/datasets/mteb/Quora-PL) • **License:** cc-by-sa-4.0 • [Learn more →](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Web, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Web, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -17597,15 +17749,15 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
 
 
 
-#### Quora-PLHardNegatives
+#### `Quora-PLHardNegatives` { .model-copy }
 
 QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/Quora-PLHardNegatives`](https://huggingface.co/datasets/mteb/Quora-PLHardNegatives) • **License:** cc-by-sa-4.0 • [Learn more →](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Web, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Web, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -17628,15 +17780,15 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
 
 
 
-#### Quora-VN
+#### `Quora-VN` { .model-copy }
 
 A translated dataset from QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/quora-vn`](https://huggingface.co/datasets/GreenNode/quora-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Blog, Web, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Blog, Web, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -17660,15 +17812,15 @@ A translated dataset from QuoraRetrieval is based on questions that are marked a
 
 
 
-#### QuoraRetrieval
+#### `QuoraRetrieval` { .model-copy }
 
 QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions.
 
 **Dataset:** [`mteb/quora`](https://huggingface.co/datasets/mteb/quora) • **License:** not specified • [Learn more →](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Blog, Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Blog, Web, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -17690,15 +17842,15 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
 
 
 
-#### QuoraRetrieval-Fa
+#### `QuoraRetrieval-Fa` { .model-copy }
 
 QuoraRetrieval-Fa
 
 **Dataset:** [`MCINext/quora-fa`](https://huggingface.co/datasets/MCINext/quora-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/quora-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -17717,15 +17869,15 @@ QuoraRetrieval-Fa
 
 
 
-#### QuoraRetrieval-Fa.v2
+#### `QuoraRetrieval-Fa.v2` { .model-copy }
 
 QuoraRetrieval-Fa.v2
 
 **Dataset:** [`MCINext/quora-fa-v2`](https://huggingface.co/datasets/MCINext/quora-fa-v2) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/quora-fa-v2)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | derived | found | ndcg_at_10 |
 
 
 
@@ -17744,15 +17896,15 @@ QuoraRetrieval-Fa.v2
 
 
 
-#### QuoraRetrievalHardNegatives
+#### `QuoraRetrievalHardNegatives` { .model-copy }
 
 QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/QuoraRetrieval_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/mteb/QuoraRetrieval_test_top_250_only_w_correct-v2) • **License:** not specified • [Learn more →](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Blog, Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Blog, Web, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -17774,15 +17926,15 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
 
 
 
-#### QuoraRetrievalHardNegatives.v2
+#### `QuoraRetrievalHardNegatives.v2` { .model-copy }
 
 QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.V2 uses a more appropriate prompt rather than the default prompt for retrieval. You can get more information on the effect of different prompt in the [PR](https://github.com/embeddings-benchmark/mteb/pull/3469#issuecomment-3436467106)
 
 **Dataset:** [`mteb/QuoraRetrieval_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/mteb/QuoraRetrieval_test_top_250_only_w_correct-v2) • **License:** not specified • [Learn more →](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Blog, Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Blog, Web, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -17804,15 +17956,15 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
 
 
 
-#### R2MEDBioinformaticsRetrieval
+#### `R2MEDBioinformaticsRetrieval` { .model-copy }
 
 Bioinformatics retrieval dataset.
 
 **Dataset:** [`R2MED/Bioinformatics`](https://huggingface.co/datasets/R2MED/Bioinformatics) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/R2MED/Bioinformatics)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Medical | LM-generated and reviewed | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Medical | LM-generated and reviewed | found | ndcg_at_10 |
 
 
 
@@ -17833,15 +17985,15 @@ Bioinformatics retrieval dataset.
 
 
 
-#### R2MEDBiologyRetrieval
+#### `R2MEDBiologyRetrieval` { .model-copy }
 
 Biology retrieval dataset.
 
 **Dataset:** [`R2MED/Biology`](https://huggingface.co/datasets/R2MED/Biology) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/R2MED/Biology)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Medical | LM-generated and reviewed | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Medical | LM-generated and reviewed | found | ndcg_at_10 |
 
 
 
@@ -17862,15 +18014,15 @@ Biology retrieval dataset.
 
 
 
-#### R2MEDIIYiClinicalRetrieval
+#### `R2MEDIIYiClinicalRetrieval` { .model-copy }
 
 IIYi-Clinical retrieval dataset.
 
 **Dataset:** [`R2MED/IIYi-Clinical`](https://huggingface.co/datasets/R2MED/IIYi-Clinical) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/R2MED/IIYi-Clinical)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Medical | LM-generated and reviewed | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Medical | LM-generated and reviewed | found | ndcg_at_10 |
 
 
 
@@ -17891,15 +18043,15 @@ IIYi-Clinical retrieval dataset.
 
 
 
-#### R2MEDMedQADiagRetrieval
+#### `R2MEDMedQADiagRetrieval` { .model-copy }
 
 MedQA-Diag retrieval dataset.
 
 **Dataset:** [`R2MED/MedQA-Diag`](https://huggingface.co/datasets/R2MED/MedQA-Diag) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/R2MED/MedQA-Diag)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Medical | LM-generated and reviewed | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Medical | LM-generated and reviewed | found | ndcg_at_10 |
 
 
 
@@ -17920,15 +18072,15 @@ MedQA-Diag retrieval dataset.
 
 
 
-#### R2MEDMedXpertQAExamRetrieval
+#### `R2MEDMedXpertQAExamRetrieval` { .model-copy }
 
 MedXpertQA-Exam retrieval dataset.
 
 **Dataset:** [`R2MED/MedXpertQA-Exam`](https://huggingface.co/datasets/R2MED/MedXpertQA-Exam) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/R2MED/MedXpertQA-Exam)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Medical | LM-generated and reviewed | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Medical | LM-generated and reviewed | found | ndcg_at_10 |
 
 
 
@@ -17949,15 +18101,15 @@ MedXpertQA-Exam retrieval dataset.
 
 
 
-#### R2MEDMedicalSciencesRetrieval
+#### `R2MEDMedicalSciencesRetrieval` { .model-copy }
 
 Medical-Sciences retrieval dataset.
 
 **Dataset:** [`R2MED/Medical-Sciences`](https://huggingface.co/datasets/R2MED/Medical-Sciences) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/R2MED/Medical-Sciences)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Medical | LM-generated and reviewed | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Medical | LM-generated and reviewed | found | ndcg_at_10 |
 
 
 
@@ -17978,15 +18130,15 @@ Medical-Sciences retrieval dataset.
 
 
 
-#### R2MEDPMCClinicalRetrieval
+#### `R2MEDPMCClinicalRetrieval` { .model-copy }
 
 PMC-Clinical retrieval dataset.
 
 **Dataset:** [`R2MED/PMC-Clinical`](https://huggingface.co/datasets/R2MED/PMC-Clinical) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/R2MED/PMC-Clinical)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Medical | LM-generated and reviewed | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Medical | LM-generated and reviewed | found | ndcg_at_10 |
 
 
 
@@ -18007,15 +18159,15 @@ PMC-Clinical retrieval dataset.
 
 
 
-#### R2MEDPMCTreatmentRetrieval
+#### `R2MEDPMCTreatmentRetrieval` { .model-copy }
 
 PMC-Treatment retrieval dataset.
 
 **Dataset:** [`R2MED/PMC-Treatment`](https://huggingface.co/datasets/R2MED/PMC-Treatment) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/R2MED/PMC-Treatment)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Medical | LM-generated and reviewed | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Medical | LM-generated and reviewed | found | ndcg_at_10 |
 
 
 
@@ -18036,15 +18188,15 @@ PMC-Treatment retrieval dataset.
 
 
 
-#### RARbCode
+#### `RARbCode` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on RAR-b code-pooled dataset.
 
 **Dataset:** [`mteb/RARbCode`](https://huggingface.co/datasets/mteb/RARbCode) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2404.06347)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Programming, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -18079,15 +18231,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### RARbMath
+#### `RARbMath` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on RAR-b math-pooled dataset.
 
 **Dataset:** [`mteb/RARbMath`](https://huggingface.co/datasets/mteb/RARbMath) • **License:** mit • [Learn more →](https://arxiv.org/abs/2404.06347)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -18129,15 +18281,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### RiaNewsRetrieval
+#### `RiaNewsRetrieval` { .model-copy }
 
 News article retrieval by headline. Based on Rossiya Segodnya dataset.
 
 **Dataset:** [`ai-forever/ria-news-retrieval`](https://huggingface.co/datasets/ai-forever/ria-news-retrieval) • **License:** cc-by-nc-nd-4.0 • [Learn more →](https://arxiv.org/abs/1901.07786)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | rus | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | rus | News, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -18158,15 +18310,15 @@ News article retrieval by headline. Based on Rossiya Segodnya dataset.
 
 
 
-#### RiaNewsRetrievalHardNegatives
+#### `RiaNewsRetrievalHardNegatives` { .model-copy }
 
 News article retrieval by headline. Based on Rossiya Segodnya dataset. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/RiaNewsRetrieval_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/mteb/RiaNewsRetrieval_test_top_250_only_w_correct-v2) • **License:** cc-by-nc-nd-4.0 • [Learn more →](https://arxiv.org/abs/1901.07786)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | rus | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | rus | News, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -18187,15 +18339,15 @@ News article retrieval by headline. Based on Rossiya Segodnya dataset. The hard 
 
 
 
-#### RiaNewsRetrievalHardNegatives.v2
+#### `RiaNewsRetrievalHardNegatives.v2` { .model-copy }
 
 News article retrieval by headline. Based on Rossiya Segodnya dataset. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.V2 uses a more appropriate prompt rather than the default prompt for retrieval. You can get more information on the effect of different prompt in the [PR](https://github.com/embeddings-benchmark/mteb/pull/3469#issuecomment-3436467106)
 
 **Dataset:** [`mteb/RiaNewsRetrieval_test_top_250_only_w_correct-v2`](https://huggingface.co/datasets/mteb/RiaNewsRetrieval_test_top_250_only_w_correct-v2) • **License:** cc-by-nc-nd-4.0 • [Learn more →](https://arxiv.org/abs/1901.07786)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | rus | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | rus | News, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -18216,15 +18368,15 @@ News article retrieval by headline. Based on Rossiya Segodnya dataset. The hard 
 
 
 
-#### RuBQRetrieval
+#### `RuBQRetrieval` { .model-copy }
 
 Paragraph retrieval based on RuBQ 2.0. Retrieve paragraphs from Wikipedia that answer the question.
 
 **Dataset:** [`ai-forever/rubq-retrieval`](https://huggingface.co/datasets/ai-forever/rubq-retrieval) • **License:** cc-by-sa-4.0 • [Learn more →](https://openreview.net/pdf?id=P5UQFFoQ4PJ)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | rus | Encyclopaedic, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | rus | Encyclopaedic, Written | human-annotated | created | ndcg_at_10 |
 
 
 
@@ -18246,15 +18398,15 @@ Paragraph retrieval based on RuBQ 2.0. Retrieve paragraphs from Wikipedia that a
 
 
 
-#### RuSciBenchCiteRetrieval
+#### `RuSciBenchCiteRetrieval` { .model-copy }
 
 This task is focused on Direct Citation Prediction for scientific papers from eLibrary, Russia's largest electronic library of scientific publications. Given a query paper (title and abstract), the goal is to retrieve papers that are directly cited by it from a larger corpus of papers. The dataset for this task consists of 3,000 query papers, 15,000 relevant (cited) papers, and 75,000 irrelevant papers. The task is available for both Russian and English scientific texts.
 
 **Dataset:** [`mlsa-iai-msu-lab/ru_sci_bench_cite_retrieval`](https://huggingface.co/datasets/mlsa-iai-msu-lab/ru_sci_bench_cite_retrieval) • **License:** mit • [Learn more →](https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng, rus | Academic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, rus | Academic, Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -18282,15 +18434,15 @@ This task is focused on Direct Citation Prediction for scientific papers from eL
 
 
 
-#### RuSciBenchCociteRetrieval
+#### `RuSciBenchCociteRetrieval` { .model-copy }
 
 This task focuses on Co-citation Prediction for scientific papers from eLibrary, Russia's largest electronic library of scientific publications. Given a query paper (title and abstract), the goal is to retrieve other papers that are co-cited with it. Two papers are considered co-cited if they are both cited by at least 5 of the same other papers. Similar to the Direct Citation task, this task employs a retrieval setup: for a given query paper, all other papers in the corpus that are not co-cited with it are considered negative examples. The task is available for both Russian and English scientific texts.
 
 **Dataset:** [`mlsa-iai-msu-lab/ru_sci_bench_cocite_retrieval`](https://huggingface.co/datasets/mlsa-iai-msu-lab/ru_sci_bench_cocite_retrieval) • **License:** mit • [Learn more →](https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng, rus | Academic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, rus | Academic, Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -18318,15 +18470,15 @@ This task focuses on Co-citation Prediction for scientific papers from eLibrary,
 
 
 
-#### SCIDOCS
+#### `SCIDOCS` { .model-copy }
 
 SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation.
 
 **Dataset:** [`mteb/scidocs`](https://huggingface.co/datasets/mteb/scidocs) • **License:** cc-by-sa-4.0 • [Learn more →](https://allenai.org/data/scidocs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -18347,15 +18499,15 @@ SciDocs, a new evaluation benchmark consisting of seven document-level tasks ran
 
 
 
-#### SCIDOCS-Fa
+#### `SCIDOCS-Fa` { .model-copy }
 
 SCIDOCS-Fa
 
 **Dataset:** [`MCINext/scidocs-fa`](https://huggingface.co/datasets/MCINext/scidocs-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/scidocs-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Academic | derived | found | ndcg_at_10 |
 
 
 
@@ -18374,15 +18526,15 @@ SCIDOCS-Fa
 
 
 
-#### SCIDOCS-Fa.v2
+#### `SCIDOCS-Fa.v2` { .model-copy }
 
 SCIDOCS-Fa.v2
 
 **Dataset:** [`MCINext/scidocs-fa-v2`](https://huggingface.co/datasets/MCINext/scidocs-fa-v2) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/scidocs-fa-v2)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Academic | derived | found | ndcg_at_10 |
 
 
 
@@ -18401,15 +18553,15 @@ SCIDOCS-Fa.v2
 
 
 
-#### SCIDOCS-NL
+#### `SCIDOCS-NL` { .model-copy }
 
 SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation. SciDocs-NL is a Dutch translation.
 
 **Dataset:** [`clips/beir-nl-scidocs`](https://huggingface.co/datasets/clips/beir-nl-scidocs) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-scidocs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Academic, Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Academic, Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -18433,15 +18585,15 @@ SciDocs, a new evaluation benchmark consisting of seven document-level tasks ran
 
 
 
-#### SCIDOCS-NL.v2
+#### `SCIDOCS-NL.v2` { .model-copy }
 
 SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation. SciDocs-NL is a Dutch translation. This version adds a Dutch prompt to the dataset.
 
 **Dataset:** [`clips/beir-nl-scidocs`](https://huggingface.co/datasets/clips/beir-nl-scidocs) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-scidocs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Academic, Non-fiction, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Academic, Non-fiction, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -18465,15 +18617,15 @@ SciDocs, a new evaluation benchmark consisting of seven document-level tasks ran
 
 
 
-#### SCIDOCS-PL
+#### `SCIDOCS-PL` { .model-copy }
 
 SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation.
 
 **Dataset:** [`mteb/SCIDOCS-PL`](https://huggingface.co/datasets/mteb/SCIDOCS-PL) • **License:** cc-by-sa-4.0 • [Learn more →](https://allenai.org/data/scidocs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Academic, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Academic, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -18496,15 +18648,15 @@ SciDocs, a new evaluation benchmark consisting of seven document-level tasks ran
 
 
 
-#### SCIDOCS-VN
+#### `SCIDOCS-VN` { .model-copy }
 
 A translated dataset from SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/scidocs-vn`](https://huggingface.co/datasets/GreenNode/scidocs-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://allenai.org/data/scidocs)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Academic, Non-fiction, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Academic, Non-fiction, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -18528,15 +18680,15 @@ A translated dataset from SciDocs, a new evaluation benchmark consisting of seve
 
 
 
-#### SIQA
+#### `SIQA` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on SIQA.
 
 **Dataset:** [`mteb/SIQA`](https://huggingface.co/datasets/mteb/SIQA) • **License:** not specified • [Learn more →](https://leaderboard.allenai.org/socialiqa/submissions/get-started)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -18564,27 +18716,27 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### SKQuadRetrieval
+#### `SKQuadRetrieval` { .model-copy }
 
 Retrieval SK Quad evaluates Slovak search performance using questions and answers derived from the SK-QuAD dataset. It measures relevance with scores assigned to answers based on their relevancy to corresponding questions, which is vital for improving Slovak language search systems.
 
 **Dataset:** [`TUKE-KEMT/retrieval-skquad`](https://huggingface.co/datasets/TUKE-KEMT/retrieval-skquad) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://huggingface.co/datasets/TUKE-KEMT/retrieval-skquad)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | slk | Encyclopaedic | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | slk | Encyclopaedic | human-annotated | found | ndcg_at_10 |
 
 
 
-#### SNLRetrieval
+#### `SNLRetrieval` { .model-copy }
 
 Webscrabed articles and ingresses from the Norwegian lexicon 'Det Store Norske Leksikon'.
 
 **Dataset:** [`adrlau/navjordj-SNL_summarization_copy`](https://huggingface.co/datasets/adrlau/navjordj-SNL_summarization_copy) • **License:** cc-by-nc-4.0 • [Learn more →](https://huggingface.co/datasets/mteb/SNLRetrieval)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nob | Encyclopaedic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nob | Encyclopaedic, Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -18605,15 +18757,15 @@ Webscrabed articles and ingresses from the Norwegian lexicon 'Det Store Norske L
 
 
 
-#### SQuADKorV1Retrieval
+#### `SQuADKorV1Retrieval` { .model-copy }
 
 Korean translation of SQuAD v1.0 dataset for retrieval task, based on Korean Wikipedia articles.
 
 **Dataset:** [`yjoonjang/squad_kor_v1`](https://huggingface.co/datasets/yjoonjang/squad_kor_v1) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/yjoonjang/squad_kor_v1)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | kor | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | kor | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -18646,15 +18798,15 @@ Korean translation of SQuAD v1.0 dataset for retrieval task, based on Korean Wik
 
 
 
-#### SadeemQuestionRetrieval
+#### `SadeemQuestionRetrieval` { .model-copy }
 
 SadeemQuestion: A Benchmark Data Set for Community Question-Retrieval Research
 
 **Dataset:** [`sadeem-ai/sadeem-ar-eval-retrieval-questions`](https://huggingface.co/datasets/sadeem-ai/sadeem-ar-eval-retrieval-questions) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/sadeem-ai/sadeem-ar-eval-retrieval-questions)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ara | Written, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara | Written, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -18673,15 +18825,15 @@ SadeemQuestion: A Benchmark Data Set for Community Question-Retrieval Research
 
 
 
-#### SciFact
+#### `SciFact` { .model-copy }
 
 SciFact verifies scientific claims using evidence from the research literature containing scientific paper abstracts.
 
 **Dataset:** [`mteb/scifact`](https://huggingface.co/datasets/mteb/scifact) • **License:** cc-by-nc-4.0 • [Learn more →](https://github.com/allenai/scifact)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Medical, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Medical, Written | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -18702,15 +18854,15 @@ SciFact verifies scientific claims using evidence from the research literature c
 
 
 
-#### SciFact-Fa
+#### `SciFact-Fa` { .model-copy }
 
 SciFact-Fa
 
 **Dataset:** [`MCINext/scifact-fa`](https://huggingface.co/datasets/MCINext/scifact-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/scifact-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Academic | derived | found | ndcg_at_10 |
 
 
 
@@ -18729,15 +18881,15 @@ SciFact-Fa
 
 
 
-#### SciFact-Fa.v2
+#### `SciFact-Fa.v2` { .model-copy }
 
 SciFact-Fa.v2
 
 **Dataset:** [`MCINext/scifact-fa-v2`](https://huggingface.co/datasets/MCINext/scifact-fa-v2) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/scifact-fa-v2)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Academic | derived | found | ndcg_at_10 |
 
 
 
@@ -18756,15 +18908,15 @@ SciFact-Fa.v2
 
 
 
-#### SciFact-NL
+#### `SciFact-NL` { .model-copy }
 
 SciFactNL verifies scientific claims in Dutch using evidence from the research literature containing scientific paper abstracts.
 
 **Dataset:** [`clips/beir-nl-scifact`](https://huggingface.co/datasets/clips/beir-nl-scifact) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-scifact)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Academic, Medical, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Academic, Medical, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -18788,15 +18940,15 @@ SciFactNL verifies scientific claims in Dutch using evidence from the research l
 
 
 
-#### SciFact-NL.v2
+#### `SciFact-NL.v2` { .model-copy }
 
 SciFactNL verifies scientific claims in Dutch using evidence from the research literature containing scientific paper abstracts. This version adds a Dutch prompt to the dataset.
 
 **Dataset:** [`clips/beir-nl-scifact`](https://huggingface.co/datasets/clips/beir-nl-scifact) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-scifact)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Academic, Medical, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Academic, Medical, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -18820,15 +18972,15 @@ SciFactNL verifies scientific claims in Dutch using evidence from the research l
 
 
 
-#### SciFact-PL
+#### `SciFact-PL` { .model-copy }
 
 SciFact verifies scientific claims using evidence from the research literature containing scientific paper abstracts.
 
 **Dataset:** [`mteb/SciFact-PL`](https://huggingface.co/datasets/mteb/SciFact-PL) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/allenai/scifact)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Academic, Medical, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Academic, Medical, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -18851,15 +19003,15 @@ SciFact verifies scientific claims using evidence from the research literature c
 
 
 
-#### SciFact-VN
+#### `SciFact-VN` { .model-copy }
 
 A translated dataset from SciFact verifies scientific claims using evidence from the research literature containing scientific paper abstracts. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/scifact-vn`](https://huggingface.co/datasets/GreenNode/scifact-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/allenai/scifact)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Academic, Medical, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Academic, Medical, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -18883,15 +19035,15 @@ A translated dataset from SciFact verifies scientific claims using evidence from
 
 
 
-#### SlovakSumRetrieval
+#### `SlovakSumRetrieval` { .model-copy }
 
 SlovakSum, a Slovak news summarization dataset consisting of over 200 thousand news articles with titles and short abstracts obtained from multiple Slovak newspapers. Originally intended as a summarization task, but since no human annotations were provided here reformulated to a retrieval task.
 
 **Dataset:** [`NaiveNeuron/slovaksum`](https://huggingface.co/datasets/NaiveNeuron/slovaksum) • **License:** openrail • [Learn more →](https://huggingface.co/datasets/NaiveNeuron/slovaksum)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | slk | News, Social, Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | slk | News, Social, Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -18912,15 +19064,15 @@ SlovakSum, a Slovak news summarization dataset consisting of over 200 thousand n
 
 
 
-#### SpanishPassageRetrievalS2P
+#### `SpanishPassageRetrievalS2P` { .model-copy }
 
 Test collection for passage retrieval from health-related Web resources in Spanish.
 
 **Dataset:** [`mteb/SpanishPassageRetrievalS2P`](https://huggingface.co/datasets/mteb/SpanishPassageRetrievalS2P) • **License:** not specified • [Learn more →](https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | spa | Medical, Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | spa | Medical, Web, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -18956,15 +19108,15 @@ Test collection for passage retrieval from health-related Web resources in Spani
 
 
 
-#### SpanishPassageRetrievalS2S
+#### `SpanishPassageRetrievalS2S` { .model-copy }
 
 Test collection for passage retrieval from health-related Web resources in Spanish.
 
 **Dataset:** [`mteb/SpanishPassageRetrievalS2S`](https://huggingface.co/datasets/mteb/SpanishPassageRetrievalS2S) • **License:** not specified • [Learn more →](https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | spa | Medical, Web, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | spa | Medical, Web, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -19000,15 +19152,15 @@ Test collection for passage retrieval from health-related Web resources in Spani
 
 
 
-#### SpartQA
+#### `SpartQA` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on SpartQA.
 
 **Dataset:** [`mteb/SpartQA`](https://huggingface.co/datasets/mteb/SpartQA) • **License:** mit • [Learn more →](https://github.com/HLR/SpartQA_generation)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -19036,15 +19188,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### StackOverflowQA
+#### `StackOverflowQA` { .model-copy }
 
 The dataset is a collection of natural language queries and their corresponding response which may include some text mixed with code snippets. The task is to retrieve the most relevant response for a given query.
 
 **Dataset:** [`mteb/StackOverflowQA`](https://huggingface.co/datasets/mteb/StackOverflowQA) • **License:** mit • [Learn more →](https://arxiv.org/abs/2407.02883)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Programming, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -19068,15 +19220,15 @@ The dataset is a collection of natural language queries and their corresponding 
 
 
 
-#### StatcanDialogueDatasetRetrieval
+#### `StatcanDialogueDatasetRetrieval` { .model-copy }
 
 A Dataset for Retrieving Data Tables through Conversations with Genuine Intents, available in English and French.
 
 **Dataset:** [`mteb/StatcanDialogueDatasetRetrieval`](https://huggingface.co/datasets/mteb/StatcanDialogueDatasetRetrieval) • **License:** https://huggingface.co/datasets/McGill-NLP/statcan-dialogue-dataset-retrieval/blob/main/LICENSE.md • [Learn more →](https://mcgill-nlp.github.io/statcan-dialogue-dataset/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | recall_at_10 | eng, fra | Government, Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, fra | Government, Web, Written | derived | found | recall_at_10 |
 
 
 
@@ -19104,15 +19256,15 @@ A Dataset for Retrieving Data Tables through Conversations with Genuine Intents,
 
 
 
-#### SweFaqRetrieval
+#### `SweFaqRetrieval` { .model-copy }
 
 A Swedish QA dataset derived from FAQ
 
 **Dataset:** [`mteb/SweFaqRetrieval`](https://huggingface.co/datasets/mteb/SweFaqRetrieval) • **License:** cc-by-sa-4.0 • [Learn more →](https://spraakbanken.gu.se/en/resources/superlim)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | swe | Government, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | swe | Government, Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -19134,15 +19286,15 @@ A Swedish QA dataset derived from FAQ
 
 
 
-#### SwednRetrieval
+#### `SwednRetrieval` { .model-copy }
 
 The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper Dagens Nyheter (DN) during the years 2000--2020. The articles are filtered to resemble the CNN/DailyMail dataset both regarding textual structure
 
 **Dataset:** [`mteb/SwednRetrieval`](https://huggingface.co/datasets/mteb/SwednRetrieval) • **License:** cc-by-sa-4.0 • [Learn more →](https://spraakbanken.gu.se/en/resources/swedn)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | swe | News, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | swe | News, Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -19163,15 +19315,15 @@ The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper
 
 
 
-#### SynPerChatbotRAGFAQRetrieval
+#### `SynPerChatbotRAGFAQRetrieval` { .model-copy }
 
 Synthetic Persian Chatbot RAG FAQ Retrieval
 
 **Dataset:** [`MCINext/synthetic-persian-chatbot-rag-faq-retrieval`](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-faq-retrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-faq-retrieval)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Spoken | LM-generated | LM-generated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Spoken | LM-generated | LM-generated and verified | ndcg_at_10 |
 
 
 
@@ -19190,15 +19342,15 @@ Synthetic Persian Chatbot RAG FAQ Retrieval
 
 
 
-#### SynPerChatbotRAGTopicsRetrieval
+#### `SynPerChatbotRAGTopicsRetrieval` { .model-copy }
 
 Synthetic Persian Chatbot RAG Topics Retrieval
 
 **Dataset:** [`MCINext/synthetic-persian-chatbot-rag-topics-retrieval`](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-topics-retrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-topics-retrieval)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Spoken | LM-generated | LM-generated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Spoken | LM-generated | LM-generated and verified | ndcg_at_10 |
 
 
 
@@ -19217,15 +19369,15 @@ Synthetic Persian Chatbot RAG Topics Retrieval
 
 
 
-#### SynPerChatbotTopicsRetrieval
+#### `SynPerChatbotTopicsRetrieval` { .model-copy }
 
 Synthetic Persian Chatbot Topics Retrieval
 
 **Dataset:** [`MCINext/synthetic-persian-chatbot-topics-retrieval`](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-topics-retrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-topics-retrieval)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Spoken | LM-generated | LM-generated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Spoken | LM-generated | LM-generated and verified | ndcg_at_10 |
 
 
 
@@ -19244,15 +19396,15 @@ Synthetic Persian Chatbot Topics Retrieval
 
 
 
-#### SynPerQARetrieval
+#### `SynPerQARetrieval` { .model-copy }
 
 Synthetic Persian QA Retrieval
 
 **Dataset:** [`MCINext/synthetic-persian-qa-retrieval`](https://huggingface.co/datasets/MCINext/synthetic-persian-qa-retrieval) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/synthetic-persian-qa-retrieval/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Web | LM-generated | LM-generated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Web | LM-generated | LM-generated and verified | ndcg_at_10 |
 
 
 
@@ -19271,15 +19423,15 @@ Synthetic Persian QA Retrieval
 
 
 
-#### SyntecRetrieval
+#### `SyntecRetrieval` { .model-copy }
 
 This dataset has been built from the Syntec Collective bargaining agreement.
 
 **Dataset:** [`lyon-nlp/mteb-fr-retrieval-syntec-s2p`](https://huggingface.co/datasets/lyon-nlp/mteb-fr-retrieval-syntec-s2p) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/lyon-nlp/mteb-fr-retrieval-syntec-s2p)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fra | Legal, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fra | Legal, Written | human-annotated | created | ndcg_at_10 |
 
 
 
@@ -19302,15 +19454,15 @@ This dataset has been built from the Syntec Collective bargaining agreement.
 
 
 
-#### SyntheticText2SQL
+#### `SyntheticText2SQL` { .model-copy }
 
 The dataset is a collection of natural language queries and their corresponding sql snippets. The task is to retrieve the most relevant code snippet for a given query.
 
 **Dataset:** [`CoIR-Retrieval/synthetic-text2sql`](https://huggingface.co/datasets/CoIR-Retrieval/synthetic-text2sql) • **License:** mit • [Learn more →](https://huggingface.co/datasets/gretelai/synthetic_text_to_sql)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng, sql | Programming, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, sql | Programming, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -19332,15 +19484,15 @@ The dataset is a collection of natural language queries and their corresponding 
 
 
 
-#### T2Retrieval
+#### `T2Retrieval` { .model-copy }
 
 T2Ranking: A large-scale Chinese Benchmark for Passage Ranking
 
 **Dataset:** [`mteb/T2Retrieval`](https://huggingface.co/datasets/mteb/T2Retrieval) • **License:** apache-2.0 • [Learn more →](https://arxiv.org/abs/2304.03679)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | cmn | Academic, Financial, Government, Medical, Non-fiction | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Academic, Financial, Government, Medical, Non-fiction | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -19363,15 +19515,15 @@ T2Ranking: A large-scale Chinese Benchmark for Passage Ranking
 
 
 
-#### TRECCOVID
+#### `TRECCOVID` { .model-copy }
 
 TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing scientific articles related to the COVID-19 pandemic.
 
 **Dataset:** [`mteb/trec-covid`](https://huggingface.co/datasets/mteb/trec-covid) • **License:** not specified • [Learn more →](https://ir.nist.gov/covidSubmit/index.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Medical, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Medical, Written | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -19394,15 +19546,15 @@ TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing
 
 
 
-#### TRECCOVID-Fa
+#### `TRECCOVID-Fa` { .model-copy }
 
 TRECCOVID-Fa
 
 **Dataset:** [`MCINext/trec-covid-fa`](https://huggingface.co/datasets/MCINext/trec-covid-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/trec-covid-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Medical | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Medical | derived | found | ndcg_at_10 |
 
 
 
@@ -19421,15 +19573,15 @@ TRECCOVID-Fa
 
 
 
-#### TRECCOVID-Fa.v2
+#### `TRECCOVID-Fa.v2` { .model-copy }
 
 TRECCOVID-Fa.v2
 
 **Dataset:** [`MCINext/trec-covid-fa-v2`](https://huggingface.co/datasets/MCINext/trec-covid-fa-v2) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/trec-covid-fa-v2)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Medical | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Medical | derived | found | ndcg_at_10 |
 
 
 
@@ -19448,15 +19600,15 @@ TRECCOVID-Fa.v2
 
 
 
-#### TRECCOVID-NL
+#### `TRECCOVID-NL` { .model-copy }
 
 TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing scientific articles related to the COVID-19 pandemic. TRECCOVID-NL is a Dutch translation. 
 
 **Dataset:** [`clips/beir-nl-trec-covid`](https://huggingface.co/datasets/clips/beir-nl-trec-covid) • **License:** cc-by-4.0 • [Learn more →](https://colab.research.google.com/drive/1R99rjeAGt8S9IfAIRR3wS052sNu3Bjo-#scrollTo=4HduGW6xHnrZ)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Academic, Medical, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Academic, Medical, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -19480,15 +19632,15 @@ TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing
 
 
 
-#### TRECCOVID-PL
+#### `TRECCOVID-PL` { .model-copy }
 
 TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing scientific articles related to the COVID-19 pandemic.
 
 **Dataset:** [`mteb/TRECCOVID-PL`](https://huggingface.co/datasets/mteb/TRECCOVID-PL) • **License:** not specified • [Learn more →](https://ir.nist.gov/covidSubmit/index.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Academic, Medical, Non-fiction, Written | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Academic, Medical, Non-fiction, Written | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -19511,15 +19663,15 @@ TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing
 
 
 
-#### TRECCOVID-VN
+#### `TRECCOVID-VN` { .model-copy }
 
 A translated dataset from TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing scientific articles related to the COVID-19 pandemic. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/trec-covid-vn`](https://huggingface.co/datasets/GreenNode/trec-covid-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://ir.nist.gov/covidSubmit/index.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Academic, Medical, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Academic, Medical, Written | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -19543,15 +19695,15 @@ A translated dataset from TRECCOVID is an ad-hoc search challenge based on the C
 
 
 
-#### TRECDL2019
+#### `TRECDL2019` { .model-copy }
 
 TREC Deep Learning Track 2019 passage ranking task. The task involves retrieving relevant passages from the MS MARCO collection given web search queries. Queries have multi-graded relevance judgments.
 
 **Dataset:** [`whybe-choi/trec-dl-2019`](https://huggingface.co/datasets/whybe-choi/trec-dl-2019) • **License:** msr-la-nc • [Learn more →](https://microsoft.github.io/msmarco/TREC-Deep-Learning-2019)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Blog, Encyclopaedic, Government, Medical, ... (10) | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Blog, Encyclopaedic, Government, Medical, ... (10) | derived | found | ndcg_at_10 |
 
 
 
@@ -19593,15 +19745,15 @@ TREC Deep Learning Track 2019 passage ranking task. The task involves retrieving
 
 
 
-#### TRECDL2020
+#### `TRECDL2020` { .model-copy }
 
 TREC Deep Learning Track 2020 passage ranking task. The task involves retrieving relevant passages from the MS MARCO collection given web search queries. Queries have multi-graded relevance judgments.
 
 **Dataset:** [`whybe-choi/trec-dl-2020`](https://huggingface.co/datasets/whybe-choi/trec-dl-2020) • **License:** msr-la-nc • [Learn more →](https://microsoft.github.io/msmarco/TREC-Deep-Learning-2020)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic, Blog, Encyclopaedic, Government, Medical, ... (10) | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Blog, Encyclopaedic, Government, Medical, ... (10) | derived | found | ndcg_at_10 |
 
 
 
@@ -19643,15 +19795,15 @@ TREC Deep Learning Track 2020 passage ranking task. The task involves retrieving
 
 
 
-#### TV2Nordretrieval
+#### `TV2Nordretrieval` { .model-copy }
 
 News Article and corresponding summaries extracted from the Danish newspaper TV2 Nord.
 
 **Dataset:** [`alexandrainst/nordjylland-news-summarization`](https://huggingface.co/datasets/alexandrainst/nordjylland-news-summarization) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/alexandrainst/nordjylland-news-summarization)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | dan | News, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | dan | News, Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -19693,15 +19845,15 @@ News Article and corresponding summaries extracted from the Danish newspaper TV2
 
 
 
-#### TVPLRetrieval
+#### `TVPLRetrieval` { .model-copy }
 
 A Vietnamese dataset for evaluating legal text retrieval. From Thu vien phap luat (TVPL) dataset: Optimizing Answer Generator in Vietnamese Legal Question Answering Systems Using Language Models.
 
 **Dataset:** [`GreenNode/TVPL-Retrieval-VN`](https://huggingface.co/datasets/GreenNode/TVPL-Retrieval-VN) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2020.coling-main.233.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Legal | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Legal | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -19727,15 +19879,15 @@ A Vietnamese dataset for evaluating legal text retrieval. From Thu vien phap lua
 
 
 
-#### TempReasonL1
+#### `TempReasonL1` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on TempReason l1.
 
 **Dataset:** [`mteb/TempReasonL1`](https://huggingface.co/datasets/mteb/TempReasonL1) • **License:** cc-by-sa-3.0 • [Learn more →](https://github.com/DAMO-NLP-SG/TempReason)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -19763,15 +19915,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### TempReasonL2Context
+#### `TempReasonL2Context` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on TempReason l2-context.
 
 **Dataset:** [`mteb/TempReasonL2Context`](https://huggingface.co/datasets/mteb/TempReasonL2Context) • **License:** cc-by-sa-3.0 • [Learn more →](https://github.com/DAMO-NLP-SG/TempReason)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -19799,15 +19951,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### TempReasonL2Fact
+#### `TempReasonL2Fact` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on TempReason l2-fact.
 
 **Dataset:** [`mteb/TempReasonL2Fact`](https://huggingface.co/datasets/mteb/TempReasonL2Fact) • **License:** cc-by-sa-3.0 • [Learn more →](https://github.com/DAMO-NLP-SG/TempReason)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -19835,15 +19987,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### TempReasonL2Pure
+#### `TempReasonL2Pure` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on TempReason l2-pure.
 
 **Dataset:** [`mteb/TempReasonL2Pure`](https://huggingface.co/datasets/mteb/TempReasonL2Pure) • **License:** cc-by-sa-3.0 • [Learn more →](https://github.com/DAMO-NLP-SG/TempReason)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -19871,15 +20023,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### TempReasonL3Context
+#### `TempReasonL3Context` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on TempReason l3-context.
 
 **Dataset:** [`mteb/TempReasonL3Context`](https://huggingface.co/datasets/mteb/TempReasonL3Context) • **License:** cc-by-sa-3.0 • [Learn more →](https://github.com/DAMO-NLP-SG/TempReason)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -19907,15 +20059,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### TempReasonL3Fact
+#### `TempReasonL3Fact` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on TempReason l3-fact.
 
 **Dataset:** [`mteb/TempReasonL3Fact`](https://huggingface.co/datasets/mteb/TempReasonL3Fact) • **License:** cc-by-sa-3.0 • [Learn more →](https://github.com/DAMO-NLP-SG/TempReason)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -19943,15 +20095,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### TempReasonL3Pure
+#### `TempReasonL3Pure` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on TempReason l3-pure.
 
 **Dataset:** [`mteb/TempReasonL3Pure`](https://huggingface.co/datasets/mteb/TempReasonL3Pure) • **License:** cc-by-sa-3.0 • [Learn more →](https://github.com/DAMO-NLP-SG/TempReason)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -19979,15 +20131,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### TopiOCQA
+#### `TopiOCQA` { .model-copy }
 
 TopiOCQA (Human-in-the-loop Attributable Generative Retrieval for Information-seeking Dataset) is information-seeking conversational dataset with challenging topic switching phenomena. It consists of conversation histories along with manually labelled relevant/gold passage.
 
 **Dataset:** [`mteb/TopiOCQA`](https://huggingface.co/datasets/mteb/TopiOCQA) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://mcgill-nlp.github.io/topiocqa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -20010,15 +20162,15 @@ TopiOCQA (Human-in-the-loop Attributable Generative Retrieval for Information-se
 
 
 
-#### TopiOCQAHardNegatives
+#### `TopiOCQAHardNegatives` { .model-copy }
 
 TopiOCQA (Human-in-the-loop Attributable Generative Retrieval for Information-seeking Dataset) is information-seeking conversational dataset with challenging topic switching phenomena. It consists of conversation histories along with manually labelled relevant/gold passage. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.
 
 **Dataset:** [`mteb/TopiOCQA_validation_top_250_only_w_correct-v2`](https://huggingface.co/datasets/mteb/TopiOCQA_validation_top_250_only_w_correct-v2) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://mcgill-nlp.github.io/topiocqa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -20041,15 +20193,15 @@ TopiOCQA (Human-in-the-loop Attributable Generative Retrieval for Information-se
 
 
 
-#### Touche2020
+#### `Touche2020` { .model-copy }
 
 Touché Task 1: Argument Retrieval for Controversial Questions
 
 **Dataset:** [`mteb/touche2020`](https://huggingface.co/datasets/mteb/touche2020) • **License:** cc-by-sa-4.0 • [Learn more →](https://webis.de/events/touche-20/shared-task-1.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -20081,15 +20233,15 @@ Touché Task 1: Argument Retrieval for Controversial Questions
 
 
 
-#### Touche2020-Fa
+#### `Touche2020-Fa` { .model-copy }
 
 Touche2020-Fa
 
 **Dataset:** [`MCINext/touche2020-fa`](https://huggingface.co/datasets/MCINext/touche2020-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/touche2020-fa)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Spoken | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Spoken | derived | found | ndcg_at_10 |
 
 
 
@@ -20108,15 +20260,15 @@ Touche2020-Fa
 
 
 
-#### Touche2020-Fa.v2
+#### `Touche2020-Fa.v2` { .model-copy }
 
 Touche2020-Fa.v2
 
 **Dataset:** [`MCINext/webis-touche2020-v3-fa`](https://huggingface.co/datasets/MCINext/webis-touche2020-v3-fa) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/MCINext/touche2020-fa-v2)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | fas | Spoken | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | fas | Spoken | derived | found | ndcg_at_10 |
 
 
 
@@ -20135,15 +20287,15 @@ Touche2020-Fa.v2
 
 
 
-#### Touche2020-NL
+#### `Touche2020-NL` { .model-copy }
 
 Touché Task 1: Argument Retrieval for Controversial Questions. Touche2020-NL is a Dutch translation.
 
 **Dataset:** [`clips/beir-nl-webis-touche2020`](https://huggingface.co/datasets/clips/beir-nl-webis-touche2020) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/clips/beir-nl-webis-touche2020)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Academic, Non-fiction | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Academic, Non-fiction | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -20167,15 +20319,15 @@ Touché Task 1: Argument Retrieval for Controversial Questions. Touche2020-NL is
 
 
 
-#### Touche2020-PL
+#### `Touche2020-PL` { .model-copy }
 
 Touché Task 1: Argument Retrieval for Controversial Questions
 
 **Dataset:** [`mteb/Touche2020-PL`](https://huggingface.co/datasets/mteb/Touche2020-PL) • **License:** not specified • [Learn more →](https://webis.de/events/touche-20/shared-task-1.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | pol | Academic | derived | machine-translated |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | pol | Academic | derived | machine-translated | ndcg_at_10 |
 
 
 
@@ -20198,15 +20350,15 @@ Touché Task 1: Argument Retrieval for Controversial Questions
 
 
 
-#### Touche2020-VN
+#### `Touche2020-VN` { .model-copy }
 
 A translated dataset from Touché Task 1: Argument Retrieval for Controversial Questions The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/webis-touche2020-vn`](https://huggingface.co/datasets/GreenNode/webis-touche2020-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://webis.de/events/touche-20/shared-task-1.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Academic | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Academic | derived | machine-translated and LM verified | ndcg_at_10 |
 
 
 
@@ -20230,15 +20382,15 @@ A translated dataset from Touché Task 1: Argument Retrieval for Controversial Q
 
 
 
-#### Touche2020Retrieval.v3
+#### `Touche2020Retrieval.v3` { .model-copy }
 
 Touché Task 1: Argument Retrieval for Controversial Questions
 
 **Dataset:** [`mteb/webis-touche2020-v3`](https://huggingface.co/datasets/mteb/webis-touche2020-v3) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/castorini/touche-error-analysis)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Academic | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -20260,15 +20412,15 @@ Touché Task 1: Argument Retrieval for Controversial Questions
 
 
 
-#### TurHistQuadRetrieval
+#### `TurHistQuadRetrieval` { .model-copy }
 
 Question Answering dataset on Ottoman History in Turkish
 
 **Dataset:** [`asparius/TurHistQuAD`](https://huggingface.co/datasets/asparius/TurHistQuAD) • **License:** mit • [Learn more →](https://github.com/okanvk/Turkish-Reading-Comprehension-Question-Answering-Dataset)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | tur | Academic, Encyclopaedic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | tur | Academic, Encyclopaedic, Non-fiction, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -20294,15 +20446,15 @@ Question Answering dataset on Ottoman History in Turkish
 
 
 
-#### TwitterHjerneRetrieval
+#### `TwitterHjerneRetrieval` { .model-copy }
 
 Danish question asked on Twitter with the Hashtag #Twitterhjerne ('Twitter brain') and their corresponding answer.
 
 **Dataset:** [`mteb/TwitterHjerneRetrieval`](https://huggingface.co/datasets/mteb/TwitterHjerneRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/sorenmulli/da-hashtag-twitterhjerne)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | dan | Social, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | dan | Social, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -20322,15 +20474,15 @@ Danish question asked on Twitter with the Hashtag #Twitterhjerne ('Twitter brain
 
 
 
-#### VABBRetrieval
+#### `VABBRetrieval` { .model-copy }
 
 This dataset contains the fourteenth edition of the Flemish Academic Bibliography for the Social Sciences and Humanities (VABB-SHW), a database of academic publications from the social sciences and humanities authored by researchers affiliated to Flemish universities (more information). Publications in the database are used as one of the parameters of the Flemish performance-based research funding system
 
 **Dataset:** [`clips/mteb-nl-vabb-ret`](https://huggingface.co/datasets/clips/mteb-nl-vabb-ret) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://zenodo.org/records/14214806)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Academic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -20353,15 +20505,15 @@ This dataset contains the fourteenth edition of the Flemish Academic Bibliograph
 
 
 
-#### VDRMultilingualRetrieval
+#### `VDRMultilingualRetrieval` { .model-copy }
 
 Multilingual Visual Document retrieval Dataset covering 5 languages: Italian, Spanish, English, French and German
 
 **Dataset:** [`llamaindex/vdr-multilingual-test`](https://huggingface.co/datasets/llamaindex/vdr-multilingual-test) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/llamaindex/vdr-multilingual-test)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_5 | deu, eng, fra, ita, spa | Web | LM-generated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | deu, eng, fra, ita, spa | Web | LM-generated | found | ndcg_at_5 |
 
 
 
@@ -20382,15 +20534,15 @@ Multilingual Visual Document retrieval Dataset covering 5 languages: Italian, Sp
 
 
 
-#### VideoRetrieval
+#### `VideoRetrieval` { .model-copy }
 
 VideoRetrieval
 
 **Dataset:** [`mteb/VideoRetrieval`](https://huggingface.co/datasets/mteb/VideoRetrieval) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2203.03367)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | cmn | Entertainment, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | cmn | Entertainment, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -20414,15 +20566,15 @@ VideoRetrieval
 
 
 
-#### VieQuADRetrieval
+#### `VieQuADRetrieval` { .model-copy }
 
 A Vietnamese dataset for evaluating Machine Reading Comprehension from Wikipedia articles.
 
 **Dataset:** [`taidng/UIT-ViQuAD2.0`](https://huggingface.co/datasets/taidng/UIT-ViQuAD2.0) • **License:** mit • [Learn more →](https://aclanthology.org/2020.coling-main.233.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Encyclopaedic, Non-fiction, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Encyclopaedic, Non-fiction, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -20455,15 +20607,15 @@ A Vietnamese dataset for evaluating Machine Reading Comprehension from Wikipedia
 
 
 
-#### VisRAGRetArxivQA
+#### `VisRAGRetArxivQA` { .model-copy }
 
 evaluate vision-based retrieval and generation on scientific figures and their surrounding context to preserve complex layouts and mathematical notations.
 
 **Dataset:** [`mteb/VisRAGRetArxivQA`](https://huggingface.co/datasets/mteb/VisRAGRetArxivQA) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2403.00231)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | recall_at_10 | eng | Academic, Non-fiction | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Academic, Non-fiction | derived | found | recall_at_10 |
 
 
 
@@ -20485,15 +20637,15 @@ evaluate vision-based retrieval and generation on scientific figures and their s
 
 
 
-#### VisRAGRetChartQA
+#### `VisRAGRetChartQA` { .model-copy }
 
 Assess end-to-end vision-based RAG performance on real-world charts requiring complex logical and visual reasoning from retrieved images.
 
 **Dataset:** [`mteb/VisRAGRetChartQA`](https://huggingface.co/datasets/mteb/VisRAGRetChartQA) • **License:** gpl-3.0 • [Learn more →](https://arxiv.org/abs/2203.10244)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | recall_at_10 | eng | Non-fiction, Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Non-fiction, Web | derived | found | recall_at_10 |
 
 
 
@@ -20515,15 +20667,15 @@ Assess end-to-end vision-based RAG performance on real-world charts requiring co
 
 
 
-#### VisRAGRetInfoVQA
+#### `VisRAGRetInfoVQA` { .model-copy }
 
 Evaluate the retrieval and understanding of complex infographics where layout and graphical elements are essential for cross-modal question answering.
 
 **Dataset:** [`mteb/VisRAGRetInfoVQA`](https://huggingface.co/datasets/mteb/VisRAGRetInfoVQA) • **License:** mit • [Learn more →](https://arxiv.org/abs/2104.12756)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | recall_at_10 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | derived | found | recall_at_10 |
 
 
 
@@ -20545,15 +20697,15 @@ Evaluate the retrieval and understanding of complex infographics where layout an
 
 
 
-#### VisRAGRetMPDocVQA
+#### `VisRAGRetMPDocVQA` { .model-copy }
 
 Benchmark the ability to retrieve specific relevant pages from multi-page documents and generate answers based on visual evidence.
 
 **Dataset:** [`mteb/VisRAGRetMPDocVQA`](https://huggingface.co/datasets/mteb/VisRAGRetMPDocVQA) • **License:** mit • [Learn more →](https://arxiv.org/abs/2212.05935)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | recall_at_10 | eng | Non-fiction, Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Non-fiction, Web | derived | found | recall_at_10 |
 
 
 
@@ -20575,15 +20727,15 @@ Benchmark the ability to retrieve specific relevant pages from multi-page docume
 
 
 
-#### VisRAGRetPlotQA
+#### `VisRAGRetPlotQA` { .model-copy }
 
 Execute vision-based retrieval and numerical reasoning over scientific plots to answer questions without relying on structured data parsing.
 
 **Dataset:** [`mteb/VisRAGRetPlotQA`](https://huggingface.co/datasets/mteb/VisRAGRetPlotQA) • **License:** mit • [Learn more →](https://arxiv.org/abs/1909.00997)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | recall_at_10 | eng | Non-fiction, Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Non-fiction, Web | derived | found | recall_at_10 |
 
 
 
@@ -20605,15 +20757,15 @@ Execute vision-based retrieval and numerical reasoning over scientific plots to 
 
 
 
-#### VisRAGRetSlideVQA
+#### `VisRAGRetSlideVQA` { .model-copy }
 
 Retrieve and reason across multiple slide images within a deck to answer multi-hop questions in a vision-centric retrieval-augmented generation pipeline.
 
 **Dataset:** [`mteb/VisRAGRetSlideVQA`](https://huggingface.co/datasets/mteb/VisRAGRetSlideVQA) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2301.04883)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | recall_at_10 | eng | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to image (t2i) | eng | Web | derived | found | recall_at_10 |
 
 
 
@@ -20635,15 +20787,15 @@ Retrieve and reason across multiple slide images within a deck to answer multi-h
 
 
 
-#### WebFAQRetrieval
+#### `WebFAQRetrieval` { .model-copy }
 
 WebFAQ is a broad-coverage corpus of natural question-answer pairs in 75 languages, gathered from FAQ pages on the web.
 
 **Dataset:** [`mteb/WebFAQRetrieval`](https://huggingface.co/datasets/mteb/WebFAQRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/PaDaS-Lab)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ara, aze, ben, bul, cat, ... (51) | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, aze, ben, bul, cat, ... (51) | Web, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -20667,15 +20819,15 @@ WebFAQ is a broad-coverage corpus of natural question-answer pairs in 75 languag
 
 
 
-#### WikiSQLRetrieval
+#### `WikiSQLRetrieval` { .model-copy }
 
 A code retrieval task based on WikiSQL dataset with natural language questions and corresponding SQL queries. Each query is a natural language question (e.g., 'What is the name of the team that has scored the most goals?'), and the corpus contains SQL query implementations. The task is to retrieve the correct SQL query that answers the natural language question. Queries are natural language questions while the corpus contains SQL SELECT statements with proper syntax and logic for querying database tables.
 
 **Dataset:** [`embedding-benchmark/WikiSQL_mteb`](https://huggingface.co/datasets/embedding-benchmark/WikiSQL_mteb) • **License:** bsd-3-clause • [Learn more →](https://huggingface.co/datasets/embedding-benchmark/WikiSQL_mteb)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng, sql | Programming | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng, sql | Programming | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -20698,27 +20850,27 @@ A code retrieval task based on WikiSQL dataset with natural language questions a
 
 
 
-#### WikipediaRetrievalMultilingual
+#### `WikipediaRetrievalMultilingual` { .model-copy }
 
 The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.
 
 **Dataset:** [`mteb/WikipediaRetrievalMultilingual`](https://huggingface.co/datasets/mteb/WikipediaRetrievalMultilingual) • **License:** cc-by-sa-3.0 • [Learn more →](https://huggingface.co/datasets/ellamind/wikipedia-2023-11-retrieval-multilingual-queries)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ben, bul, ces, dan, deu, ... (16) | Encyclopaedic, Written | LM-generated and reviewed | LM-generated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ben, bul, ces, dan, deu, ... (16) | Encyclopaedic, Written | LM-generated and reviewed | LM-generated and verified | ndcg_at_10 |
 
 
 
-#### WinoGrande
+#### `WinoGrande` { .model-copy }
 
 Measuring the ability to retrieve the groundtruth answers to reasoning task queries on winogrande.
 
 **Dataset:** [`mteb/WinoGrande`](https://huggingface.co/datasets/mteb/WinoGrande) • **License:** not specified • [Learn more →](https://winogrande.allenai.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -20750,15 +20902,15 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 
 
-#### XMarket
+#### `XMarket` { .model-copy }
 
 XMarket
 
 **Dataset:** [`mteb/XMarket`](https://huggingface.co/datasets/mteb/XMarket) • **License:** not specified • [Learn more →](http://dx.doi.org/10.1145/3459637.3482493)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | deu, eng, spa | Reviews, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | deu, eng, spa | Reviews, Written | derived | found | ndcg_at_10 |
 
 
 
@@ -20785,15 +20937,15 @@ XMarket
 
 
 
-#### XPQARetrieval
+#### `XPQARetrieval` { .model-copy }
 
 XPQARetrieval
 
 **Dataset:** [`mteb/XPQARetrieval`](https://huggingface.co/datasets/mteb/XPQARetrieval) • **License:** cdla-sharing-1.0 • [Learn more →](https://arxiv.org/abs/2305.09249)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | ara, cmn, deu, eng, fra, ... (13) | Reviews, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, cmn, deu, eng, fra, ... (13) | Reviews, Written | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -20815,15 +20967,15 @@ XPQARetrieval
 
 
 
-#### XQuADRetrieval
+#### `XQuADRetrieval` { .model-copy }
 
 XQuAD is a benchmark dataset for evaluating cross-lingual question answering performance. It is repurposed retrieving relevant context for each question.
 
 **Dataset:** [`google/xquad`](https://huggingface.co/datasets/google/xquad) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/xquad)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | arb, deu, ell, eng, hin, ... (12) | Web, Written | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | arb, deu, ell, eng, hin, ... (12) | Web, Written | human-annotated | created | ndcg_at_10 |
 
 
 
@@ -20855,15 +21007,15 @@ XQuAD is a benchmark dataset for evaluating cross-lingual question answering per
 
 
 
-#### ZacLegalTextRetrieval
+#### `ZacLegalTextRetrieval` { .model-copy }
 
 Zalo Legal Text documents
 
 **Dataset:** [`GreenNode/zalo-ai-legal-text-retrieval-vn`](https://huggingface.co/datasets/GreenNode/zalo-ai-legal-text-retrieval-vn) • **License:** mit • [Learn more →](https://challenge.zalo.ai/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | vie | Legal | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | vie | Legal | human-annotated | found | ndcg_at_10 |
 
 
 
@@ -20891,15 +21043,15 @@ Zalo Legal Text documents
 
 
 
-#### bBSARDNLRetrieval
+#### `bBSARDNLRetrieval` { .model-copy }
 
 Building on the Belgian Statutory Article Retrieval Dataset (BSARD) in French, we introduce the bilingual version of this dataset, bBSARD. The dataset contains parallel Belgian statutory articles in both French and Dutch, along with legal questions from BSARD and their Dutch translation.
 
 **Dataset:** [`clips/mteb-nl-bbsard`](https://huggingface.co/datasets/clips/mteb-nl-bbsard) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://aclanthology.org/2025.regnlp-1.3.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Legal, Written | expert-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Legal, Written | expert-annotated | found | ndcg_at_10 |
 
 
 
@@ -20921,15 +21073,15 @@ Building on the Belgian Statutory Article Retrieval Dataset (BSARD) in French, w
 
 
 
-#### mMARCO-NL
+#### `mMARCO-NL` { .model-copy }
 
 mMARCO is a multi-lingual (translated) collection of datasets focused on deep learning in search
 
 **Dataset:** [`clips/beir-nl-mmarco`](https://huggingface.co/datasets/clips/beir-nl-mmarco) • **License:** apache-2.0 • [Learn more →](https://github.com/unicamp-dl/mMARCO)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | ndcg_at_10 | nld | Web, Written | derived | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | nld | Web, Written | derived | machine-translated and verified | ndcg_at_10 |
 
 
 
@@ -20959,19 +21111,22 @@ mMARCO is a multi-lingual (translated) collection of datasets focused on deep le
 
 
 
+
 ## VisionCentricQA
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 6
 
-#### BLINKIT2IMultiChoice
+#### `BLINKIT2IMultiChoice` { .model-copy }
 
 Retrieve images based on images and specific retrieval instructions.
 
 **Dataset:** [`mteb/blink-it2i-multi`](https://huggingface.co/datasets/mteb/blink-it2i-multi) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2404.12390)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to image (it2i) | accuracy | eng | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to image (it2i) | eng | Encyclopaedic | derived | found | accuracy |
 
 
 
@@ -20992,15 +21147,15 @@ Retrieve images based on images and specific retrieval instructions.
 
 
 
-#### BLINKIT2TMultiChoice
+#### `BLINKIT2TMultiChoice` { .model-copy }
 
 Retrieve the correct text answer based on images and specific retrieval instructions.
 
 **Dataset:** [`mteb/blink-it2t-multi`](https://huggingface.co/datasets/mteb/blink-it2t-multi) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2404.12390)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to text (it2t) | accuracy | eng | Encyclopaedic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to text (it2t) | eng | Encyclopaedic | derived | found | accuracy |
 
 
 
@@ -21021,15 +21176,15 @@ Retrieve the correct text answer based on images and specific retrieval instruct
 
 
 
-#### CVBenchCount
+#### `CVBenchCount` { .model-copy }
 
 count the number of objects in the image.
 
 **Dataset:** [`mteb/CV-Bench`](https://huggingface.co/datasets/mteb/CV-Bench) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2406.16860)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to text (it2t) | accuracy | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to text (it2t) | eng | Academic | derived | found | accuracy |
 
 
 
@@ -21050,15 +21205,15 @@ count the number of objects in the image.
 
 
 
-#### CVBenchDepth
+#### `CVBenchDepth` { .model-copy }
 
 judge the depth of the objects in the image with similarity matching.
 
 **Dataset:** [`mteb/CV-Bench`](https://huggingface.co/datasets/mteb/CV-Bench) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2406.16860)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to text (it2t) | accuracy | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to text (it2t) | eng | Academic | derived | found | accuracy |
 
 
 
@@ -21079,15 +21234,15 @@ judge the depth of the objects in the image with similarity matching.
 
 
 
-#### CVBenchDistance
+#### `CVBenchDistance` { .model-copy }
 
 judge the distance of the objects in the image with similarity matching.
 
 **Dataset:** [`mteb/CV-Bench`](https://huggingface.co/datasets/mteb/CV-Bench) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2406.16860)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to text (it2t) | accuracy | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to text (it2t) | eng | Academic | derived | found | accuracy |
 
 
 
@@ -21108,15 +21263,15 @@ judge the distance of the objects in the image with similarity matching.
 
 
 
-#### CVBenchRelation
+#### `CVBenchRelation` { .model-copy }
 
 decide the relation of the objects in the image.
 
 **Dataset:** [`mteb/CV-Bench`](https://huggingface.co/datasets/mteb/CV-Bench) • **License:** mit • [Learn more →](https://arxiv.org/pdf/2406.16860)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image, text to text (it2t) | accuracy | eng | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image, text to text (it2t) | eng | Academic | derived | found | accuracy |
 
 
 

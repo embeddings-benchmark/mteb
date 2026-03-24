@@ -8,6 +8,7 @@ title: "Clustering"
   white-space: nowrap;
 }
 </style>
+<div class="nowrap-table" markdown>
 
 # Clustering
 
@@ -15,19 +16,22 @@ title: "Clustering"
 
 <!-- START-TASKS -->
 
+
 ## AudioClustering
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 10
 
-#### AmbientAcousticContextClustering
+#### `AmbientAcousticContextClustering` { .model-copy }
 
 Clustering task based on a subset of the Ambient Acoustic Context dataset containing 1-second segments for workplace activities.
 
 **Dataset:** [`mteb/ambient-acoustic-context-small`](https://huggingface.co/datasets/mteb/ambient-acoustic-context-small) • **License:** not specified • [Learn more →](https://dl.acm.org/doi/10.1145/3379503.3403535)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | v_measure | eng | Speech, Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | eng | Speech, Spoken | human-annotated | found | v_measure |
 
 
 
@@ -58,15 +62,15 @@ Clustering task based on a subset of the Ambient Acoustic Context dataset contai
 
 
 
-#### CREMA_DClustering
+#### `CREMA_DClustering` { .model-copy }
 
 Emotion clustering task with audio data for 6 emotions: Anger, Disgust, Fear, Happy, Neutral, Sad.
 
 **Dataset:** [`mteb/crema-d`](https://huggingface.co/datasets/mteb/crema-d) • **License:** http://opendatacommons.org/licenses/odbl/1.0/ • [Learn more →](https://ieeexplore.ieee.org/document/6849440)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | v_measure | eng | Speech | human-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | eng | Speech | human-annotated | created | v_measure |
 
 
 
@@ -97,15 +101,15 @@ Emotion clustering task with audio data for 6 emotions: Anger, Disgust, Fear, Ha
 
 
 
-#### ESC50Clustering
+#### `ESC50Clustering` { .model-copy }
 
 The ESC-50 dataset contains 2,000 labeled environmental audio recordings evenly distributed across 50 classes (40 clips per class). These classes are organized into 5 broad categories: animal sounds, natural soundscapes & water sounds, human (non-speech) sounds, interior/domestic sounds, and exterior/urban noises. This task evaluates unsupervised clustering performance on environmental audio recordings.
 
 **Dataset:** [`mteb/esc50`](https://huggingface.co/datasets/mteb/esc50) • **License:** cc-by-nc-sa-3.0 • [Learn more →](https://huggingface.co/datasets/ashraq/esc50)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | v_measure | zxx | Speech, Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | zxx | Speech, Spoken | human-annotated | found | v_measure |
 
 
 
@@ -132,15 +136,15 @@ The ESC-50 dataset contains 2,000 labeled environmental audio recordings evenly 
 
 
 
-#### GTZANGenreClustering
+#### `GTZANGenreClustering` { .model-copy }
 
 Music genre clustering task based on GTZAN dataset with 10 music genres.
 
 **Dataset:** [`mteb/gtzan-genre`](https://huggingface.co/datasets/mteb/gtzan-genre) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/silky1708/GTZAN-Genre)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | v_measure | zxx | Music | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | zxx | Music | human-annotated | found | v_measure |
 
 
 
@@ -166,15 +170,15 @@ Music genre clustering task based on GTZAN dataset with 10 music genres.
 
 
 
-#### MusicGenreClustering
+#### `MusicGenreClustering` { .model-copy }
 
 Clustering music recordings in 9 different genres.
 
 **Dataset:** [`mteb/music-genre`](https://huggingface.co/datasets/mteb/music-genre) • **License:** not specified • [Learn more →](https://www-ai.cs.tu-dortmund.de/audio.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | v_measure | zxx | Music | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | zxx | Music | human-annotated | found | v_measure |
 
 
 
@@ -197,15 +201,15 @@ Clustering music recordings in 9 different genres.
 
 
 
-#### VehicleSoundClustering
+#### `VehicleSoundClustering` { .model-copy }
 
 Clustering vehicle sounds recorded from smartphones (0 (car class), 1 (truck, bus and van class), 2 (motorcycle class))
 
 **Dataset:** [`mteb/Vehicle_sounds_classification_dataset`](https://huggingface.co/datasets/mteb/Vehicle_sounds_classification_dataset) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/DynamicSuperb/Vehicle_sounds_classification_dataset)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | v_measure | zxx | Scene | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | zxx | Scene | derived | created | v_measure |
 
 
 
@@ -227,15 +231,15 @@ Clustering vehicle sounds recorded from smartphones (0 (car class), 1 (truck, bu
 
 
 
-#### VoiceGenderClustering
+#### `VoiceGenderClustering` { .model-copy }
 
 Clustering audio recordings based on gender (male vs female).
 
 **Dataset:** [`mteb/VoiceGenderClustering`](https://huggingface.co/datasets/mteb/VoiceGenderClustering) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/mmn3690/voice-gender-clustering)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | v_measure | eng | Spoken | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | eng | Spoken | derived | found | v_measure |
 
 
 
@@ -256,15 +260,15 @@ Clustering audio recordings based on gender (male vs female).
 
 
 
-#### VoxCelebClustering
+#### `VoxCelebClustering` { .model-copy }
 
 Clustering task based on the VoxCeleb dataset for sentiment analysis, clustering by positive/negative sentiment.
 
 **Dataset:** [`mteb/Sentiment_Analysis_SLUE-VoxCeleb`](https://huggingface.co/datasets/mteb/Sentiment_Analysis_SLUE-VoxCeleb) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/DynamicSuperb/Sentiment_Analysis_SLUE-VoxCeleb)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | v_measure | eng | Speech, Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | eng | Speech, Spoken | human-annotated | found | v_measure |
 
 
 
@@ -288,15 +292,15 @@ Clustering task based on the VoxCeleb dataset for sentiment analysis, clustering
 
 
 
-#### VoxPopuliAccentClustering
+#### `VoxPopuliAccentClustering` { .model-copy }
 
 Clustering English speech samples by non-native accent from European Parliament recordings.
 
 **Dataset:** [`mteb/voxpopuli-accent-clustering`](https://huggingface.co/datasets/mteb/voxpopuli-accent-clustering) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/facebook/voxpopuli)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | v_measure | eng | Speech, Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | eng | Speech, Spoken | human-annotated | found | v_measure |
 
 
 
@@ -331,15 +335,15 @@ Clustering English speech samples by non-native accent from European Parliament 
 
 
 
-#### VoxPopuliGenderClustering
+#### `VoxPopuliGenderClustering` { .model-copy }
 
 Subsampled Dataset for clustering speech samples by speaker gender (male/female) from European Parliament recordings.
 
 **Dataset:** [`mteb/mini-voxpopuli`](https://huggingface.co/datasets/mteb/mini-voxpopuli) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/facebook/voxpopuli)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| audio to audio (a2a) | v_measure | deu, eng, fra, pol, spa | Speech, Spoken | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| audio to audio (a2a) | deu, eng, fra, pol, spa | Speech, Spoken | human-annotated | found | v_measure |
 
 
 
@@ -373,19 +377,22 @@ Subsampled Dataset for clustering speech samples by speaker gender (male/female)
 
 
 
+
 ## Clustering
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 109
 
-#### AlloProfClusteringP2P
+#### `AlloProfClusteringP2P` { .model-copy }
 
 Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic.
 
 **Dataset:** [`mteb/AlloProfClusteringP2P`](https://huggingface.co/datasets/mteb/AlloProfClusteringP2P) • **License:** mit • [Learn more →](https://huggingface.co/datasets/lyon-nlp/alloprof)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | fra | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | fra | Encyclopaedic, Written | human-annotated | found | v_measure |
 
 
 
@@ -410,15 +417,15 @@ Clustering of document titles and descriptions from Allo Prof dataset. Clusterin
 
 
 
-#### AlloProfClusteringP2P.v2
+#### `AlloProfClusteringP2P.v2` { .model-copy }
 
 Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic.
 
 **Dataset:** [`mteb/AlloProfClusteringP2P.v2`](https://huggingface.co/datasets/mteb/AlloProfClusteringP2P.v2) • **License:** mit • [Learn more →](https://huggingface.co/datasets/lyon-nlp/alloprof)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | fra | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | fra | Encyclopaedic, Written | human-annotated | found | v_measure |
 
 
 
@@ -443,15 +450,15 @@ Clustering of document titles and descriptions from Allo Prof dataset. Clusterin
 
 
 
-#### AlloProfClusteringS2S
+#### `AlloProfClusteringS2S` { .model-copy }
 
 Clustering of document titles from Allo Prof dataset. Clustering of 10 sets on the document topic.
 
 **Dataset:** [`mteb/AlloProfClusteringS2S`](https://huggingface.co/datasets/mteb/AlloProfClusteringS2S) • **License:** mit • [Learn more →](https://huggingface.co/datasets/lyon-nlp/alloprof)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | fra | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | fra | Encyclopaedic, Written | human-annotated | found | v_measure |
 
 
 
@@ -476,15 +483,15 @@ Clustering of document titles from Allo Prof dataset. Clustering of 10 sets on t
 
 
 
-#### AlloProfClusteringS2S.v2
+#### `AlloProfClusteringS2S.v2` { .model-copy }
 
 Clustering of document titles from Allo Prof dataset. Clustering of 10 sets on the document topic.
 
 **Dataset:** [`mteb/AlloProfClusteringS2S.v2`](https://huggingface.co/datasets/mteb/AlloProfClusteringS2S.v2) • **License:** mit • [Learn more →](https://huggingface.co/datasets/lyon-nlp/alloprof)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | fra | Encyclopaedic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | fra | Encyclopaedic, Written | human-annotated | found | v_measure |
 
 
 
@@ -509,39 +516,39 @@ Clustering of document titles from Allo Prof dataset. Clustering of 10 sets on t
 
 
 
-#### ArXivHierarchicalClusteringP2P
+#### `ArXivHierarchicalClusteringP2P` { .model-copy }
 
 Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category
 
 **Dataset:** [`mteb/arxiv-clustering-p2p`](https://huggingface.co/datasets/mteb/arxiv-clustering-p2p) • **License:** cc0-1.0 • [Learn more →](https://www.kaggle.com/Cornell-University/arxiv)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Academic, Written | derived | found | v_measure |
 
 
 
-#### ArXivHierarchicalClusteringS2S
+#### `ArXivHierarchicalClusteringS2S` { .model-copy }
 
 Clustering of titles from arxiv. Clustering of 30 sets, either on the main or secondary category
 
 **Dataset:** [`mteb/arxiv-clustering-s2s`](https://huggingface.co/datasets/mteb/arxiv-clustering-s2s) • **License:** cc0-1.0 • [Learn more →](https://www.kaggle.com/Cornell-University/arxiv)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Academic, Written | derived | found | v_measure |
 
 
 
-#### ArxivClusteringP2P
+#### `ArxivClusteringP2P` { .model-copy }
 
 Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category
 
 **Dataset:** [`mteb/arxiv-clustering-p2p`](https://huggingface.co/datasets/mteb/arxiv-clustering-p2p) • **License:** cc0-1.0 • [Learn more →](https://www.kaggle.com/Cornell-University/arxiv)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Academic, Written | derived | found | v_measure |
 
 
 
@@ -564,15 +571,15 @@ Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the m
 
 
 
-#### ArxivClusteringP2P.v2
+#### `ArxivClusteringP2P.v2` { .model-copy }
 
 Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category
 
 **Dataset:** [`mteb/arxiv-clustering-p2p`](https://huggingface.co/datasets/mteb/arxiv-clustering-p2p) • **License:** cc0-1.0 • [Learn more →](https://www.kaggle.com/Cornell-University/arxiv)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Academic, Written | derived | found | v_measure |
 
 
 
@@ -595,15 +602,15 @@ Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the m
 
 
 
-#### ArxivClusteringS2S
+#### `ArxivClusteringS2S` { .model-copy }
 
 Clustering of titles from arxiv. Clustering of 30 sets, either on the main or secondary category
 
 **Dataset:** [`mteb/arxiv-clustering-s2s`](https://huggingface.co/datasets/mteb/arxiv-clustering-s2s) • **License:** cc0-1.0 • [Learn more →](https://www.kaggle.com/Cornell-University/arxiv)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Academic, Written | derived | found | v_measure |
 
 
 
@@ -626,15 +633,15 @@ Clustering of titles from arxiv. Clustering of 30 sets, either on the main or se
 
 
 
-#### BeytooteClustering
+#### `BeytooteClustering` { .model-copy }
 
 Beytoote Website Articles Clustering
 
 **Dataset:** [`MCINext/beytoote-clustering`](https://huggingface.co/datasets/MCINext/beytoote-clustering) • **License:** not specified • [Learn more →](https://mcinext.com/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | fas | News | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | fas | News | derived | found | v_measure |
 
 
 
@@ -648,15 +655,15 @@ Beytoote Website Articles Clustering
 
 
 
-#### BigPatentClustering
+#### `BigPatentClustering` { .model-copy }
 
 Clustering of documents from the Big Patent dataset. Test set only includes documents belonging to a single category, with a total of 9 categories.
 
 **Dataset:** [`jinaai/big-patent-clustering`](https://huggingface.co/datasets/jinaai/big-patent-clustering) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/NortheasternUniversity/big_patent)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Legal, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Legal, Written | derived | found | v_measure |
 
 
 
@@ -686,15 +693,15 @@ Clustering of documents from the Big Patent dataset. Test set only includes docu
 
 
 
-#### BigPatentClustering.v2
+#### `BigPatentClustering.v2` { .model-copy }
 
 Clustering of documents from the Big Patent dataset. Test set only includes documents belonging to a single category, with a total of 9 categories.
 
 **Dataset:** [`mteb/big-patent`](https://huggingface.co/datasets/mteb/big-patent) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/NortheasternUniversity/big_patent)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Legal, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Legal, Written | derived | found | v_measure |
 
 
 
@@ -724,93 +731,63 @@ Clustering of documents from the Big Patent dataset. Test set only includes docu
 
 
 
-#### BiorxivClusteringP2P
+#### `BiorxivClusteringP2P` { .model-copy }
 
 Clustering of titles+abstract from biorxiv. Clustering of 10 sets, based on the main category.
 
 **Dataset:** [`mteb/biorxiv-clustering-p2p`](https://huggingface.co/datasets/mteb/biorxiv-clustering-p2p) • **License:** https://www.biorxiv.org/content/about-biorxiv • [Learn more →](https://api.biorxiv.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Academic, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Academic, Written | derived | created | v_measure |
 
 
 
-#### BiorxivClusteringP2P.v2
+#### `BiorxivClusteringP2P.v2` { .model-copy }
 
 Clustering of titles+abstract from biorxiv across 26 categories.
 
 **Dataset:** [`mteb/biorxiv-clustering-p2p`](https://huggingface.co/datasets/mteb/biorxiv-clustering-p2p) • **License:** https://www.biorxiv.org/content/about-biorxiv • [Learn more →](https://api.biorxiv.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Academic, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Academic, Written | derived | created | v_measure |
 
 
 
-#### BiorxivClusteringS2S
+#### `BiorxivClusteringS2S` { .model-copy }
 
 Clustering of titles from biorxiv. Clustering of 10 sets, based on the main category.
 
 **Dataset:** [`mteb/biorxiv-clustering-s2s`](https://huggingface.co/datasets/mteb/biorxiv-clustering-s2s) • **License:** https://www.biorxiv.org/content/about-biorxiv • [Learn more →](https://api.biorxiv.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Academic, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Academic, Written | derived | created | v_measure |
 
 
 
-#### BiorxivClusteringS2S.v2
+#### `BiorxivClusteringS2S.v2` { .model-copy }
 
 Clustering of titles from biorxiv across 26 categories.
 
 **Dataset:** [`mteb/biorxiv-clustering-s2s`](https://huggingface.co/datasets/mteb/biorxiv-clustering-s2s) • **License:** https://www.biorxiv.org/content/about-biorxiv • [Learn more →](https://api.biorxiv.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Academic, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Academic, Written | derived | created | v_measure |
 
 
 
-#### BlurbsClusteringP2P
-
-Clustering of book titles+blurbs. Clustering of 28 sets, either on the main or secondary genre.
-
-**Dataset:** [`slvnwhrl/blurbs-clustering-p2p`](https://huggingface.co/datasets/slvnwhrl/blurbs-clustering-p2p) • **License:** cc-by-nc-4.0 • [Learn more →](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html)
-
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | deu | Fiction, Written | derived | found |
-
-
-
-??? quote "Citation"
-
-    
-    ```bibtex
-    
-    @inproceedings{Remus2019GermEval2T,
-      author = {Steffen Remus and Rami Aly and Chris Biemann},
-      booktitle = {Conference on Natural Language Processing},
-      title = {GermEval 2019 Task 1: Hierarchical Classification of Blurbs},
-      url = {https://api.semanticscholar.org/CorpusID:208334484},
-      year = {2019},
-    }
-    
-    ```
-    
-
-
-
-#### BlurbsClusteringP2P.v2
+#### `BlurbsClusteringP2P` { .model-copy }
 
 Clustering of book titles+blurbs. Clustering of 28 sets, either on the main or secondary genre.
 
 **Dataset:** [`slvnwhrl/blurbs-clustering-p2p`](https://huggingface.co/datasets/slvnwhrl/blurbs-clustering-p2p) • **License:** cc-by-nc-4.0 • [Learn more →](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | deu | Fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | deu | Fiction, Written | derived | found | v_measure |
 
 
 
@@ -832,15 +809,45 @@ Clustering of book titles+blurbs. Clustering of 28 sets, either on the main or s
 
 
 
-#### BlurbsClusteringS2S
+#### `BlurbsClusteringP2P.v2` { .model-copy }
+
+Clustering of book titles+blurbs. Clustering of 28 sets, either on the main or secondary genre.
+
+**Dataset:** [`slvnwhrl/blurbs-clustering-p2p`](https://huggingface.co/datasets/slvnwhrl/blurbs-clustering-p2p) • **License:** cc-by-nc-4.0 • [Learn more →](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html)
+
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | deu | Fiction, Written | derived | found | v_measure |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{Remus2019GermEval2T,
+      author = {Steffen Remus and Rami Aly and Chris Biemann},
+      booktitle = {Conference on Natural Language Processing},
+      title = {GermEval 2019 Task 1: Hierarchical Classification of Blurbs},
+      url = {https://api.semanticscholar.org/CorpusID:208334484},
+      year = {2019},
+    }
+    
+    ```
+    
+
+
+
+#### `BlurbsClusteringS2S` { .model-copy }
 
 Clustering of book titles. Clustering of 28 sets, either on the main or secondary genre.
 
 **Dataset:** [`slvnwhrl/blurbs-clustering-s2s`](https://huggingface.co/datasets/slvnwhrl/blurbs-clustering-s2s) • **License:** cc-by-nc-4.0 • [Learn more →](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | deu | Fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | deu | Fiction, Written | derived | found | v_measure |
 
 
 
@@ -862,15 +869,15 @@ Clustering of book titles. Clustering of 28 sets, either on the main or secondar
 
 
 
-#### BlurbsClusteringS2S.v2
+#### `BlurbsClusteringS2S.v2` { .model-copy }
 
 Clustering of book titles. Clustering of 28 sets, either on the main or secondary genre.
 
 **Dataset:** [`slvnwhrl/blurbs-clustering-s2s`](https://huggingface.co/datasets/slvnwhrl/blurbs-clustering-s2s) • **License:** cc-by-nc-4.0 • [Learn more →](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | deu | Fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | deu | Fiction, Written | derived | found | v_measure |
 
 
 
@@ -892,15 +899,15 @@ Clustering of book titles. Clustering of 28 sets, either on the main or secondar
 
 
 
-#### BuiltBenchClusteringP2P
+#### `BuiltBenchClusteringP2P` { .model-copy }
 
 Clustering of built asset item descriptions based on categories identified within industry classification systems such as IFC, Uniclass, etc.
 
 **Dataset:** [`mehrzad-shahin/BuiltBench-clustering-p2p`](https://huggingface.co/datasets/mehrzad-shahin/BuiltBench-clustering-p2p) • **License:** cc-by-nd-4.0 • [Learn more →](https://arxiv.org/abs/2411.12056)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Engineering, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Engineering, Written | derived | created | v_measure |
 
 
 
@@ -921,15 +928,15 @@ Clustering of built asset item descriptions based on categories identified withi
 
 
 
-#### BuiltBenchClusteringS2S
+#### `BuiltBenchClusteringS2S` { .model-copy }
 
 Clustering of built asset names/titles based on categories identified within industry classification systems such as IFC, Uniclass, etc.
 
 **Dataset:** [`mehrzad-shahin/BuiltBench-clustering-s2s`](https://huggingface.co/datasets/mehrzad-shahin/BuiltBench-clustering-s2s) • **License:** cc-by-nd-4.0 • [Learn more →](https://arxiv.org/abs/2411.12056)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Engineering, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Engineering, Written | derived | created | v_measure |
 
 
 
@@ -950,15 +957,15 @@ Clustering of built asset names/titles based on categories identified within ind
 
 
 
-#### CLSClusteringP2P
+#### `CLSClusteringP2P` { .model-copy }
 
 Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the main category.
 
 **Dataset:** [`C-MTEB/CLSClusteringP2P`](https://huggingface.co/datasets/C-MTEB/CLSClusteringP2P) • **License:** apache-2.0 • [Learn more →](https://arxiv.org/abs/2209.05034)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | cmn | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | cmn | Academic, Written | derived | found | v_measure |
 
 
 
@@ -979,15 +986,15 @@ Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the m
 
 
 
-#### CLSClusteringP2P.v2
+#### `CLSClusteringP2P.v2` { .model-copy }
 
 Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the main category.
 
 **Dataset:** [`mteb/CLSClusteringP2P.v2`](https://huggingface.co/datasets/mteb/CLSClusteringP2P.v2) • **License:** apache-2.0 • [Learn more →](https://arxiv.org/abs/2209.05034)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | cmn | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | cmn | Academic, Written | derived | found | v_measure |
 
 
 
@@ -1010,15 +1017,15 @@ Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the m
 
 
 
-#### CLSClusteringS2S
+#### `CLSClusteringS2S` { .model-copy }
 
 Clustering of titles from CLS dataset. Clustering of 13 sets on the main category.
 
 **Dataset:** [`C-MTEB/CLSClusteringS2S`](https://huggingface.co/datasets/C-MTEB/CLSClusteringS2S) • **License:** apache-2.0 • [Learn more →](https://arxiv.org/abs/2209.05034)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | cmn | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | cmn | Academic, Written | derived | found | v_measure |
 
 
 
@@ -1039,15 +1046,15 @@ Clustering of titles from CLS dataset. Clustering of 13 sets on the main categor
 
 
 
-#### CLSClusteringS2S.v2
+#### `CLSClusteringS2S.v2` { .model-copy }
 
 Clustering of titles from CLS dataset. Clustering of 13 sets on the main category.
 
 **Dataset:** [`C-MTEB/CLSClusteringS2S`](https://huggingface.co/datasets/C-MTEB/CLSClusteringS2S) • **License:** apache-2.0 • [Learn more →](https://arxiv.org/abs/2209.05034)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | cmn | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | cmn | Academic, Written | derived | found | v_measure |
 
 
 
@@ -1070,15 +1077,15 @@ Clustering of titles from CLS dataset. Clustering of 13 sets on the main categor
 
 
 
-#### ClusTREC-Covid
+#### `ClusTREC-Covid` { .model-copy }
 
 A Topical Clustering Benchmark for COVID-19 Scientific Research across 50 covid-19 related topics.
 
 **Dataset:** [`Uri-ka/ClusTREC-Covid`](https://huggingface.co/datasets/Uri-ka/ClusTREC-Covid) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/katzurik/Knowledge_Navigator/tree/main/Benchmarks/CLUSTREC%20COVID)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Academic, Medical, Written | expert-annotated | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Academic, Medical, Written | expert-annotated | created | v_measure |
 
 
 
@@ -1106,15 +1113,15 @@ A Topical Clustering Benchmark for COVID-19 Scientific Research across 50 covid-
 
 
 
-#### DigikalamagClustering
+#### `DigikalamagClustering` { .model-copy }
 
 A total of 8,515 articles scraped from Digikala Online Magazine. This dataset includes seven different classes.
 
 **Dataset:** [`mteb/DigikalamagClustering`](https://huggingface.co/datasets/mteb/DigikalamagClustering) • **License:** not specified • [Learn more →](https://hooshvare.github.io/docs/datasets/tc)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | fas | Web | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | fas | Web | derived | found | v_measure |
 
 
 
@@ -1128,39 +1135,39 @@ A total of 8,515 articles scraped from Digikala Online Magazine. This dataset in
 
 
 
-#### DutchNewsArticlesClusteringP2P
+#### `DutchNewsArticlesClusteringP2P` { .model-copy }
 
 This dataset contains all the articles published by the NOS as of the 1st of January 2010. The data is obtained by scraping the NOS website. The NOS is one of the biggest (online) news organizations in the Netherlands.
 
 **Dataset:** [`clips/mteb-nl-news-articles-cls`](https://huggingface.co/datasets/clips/mteb-nl-news-articles-cls) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://www.kaggle.com/datasets/maxscheijen/dutch-news-articles)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | nld | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | nld | News, Written | derived | found | v_measure |
 
 
 
-#### DutchNewsArticlesClusteringS2S
+#### `DutchNewsArticlesClusteringS2S` { .model-copy }
 
 This dataset contains all the articles published by the NOS as of the 1st of January 2010. The data is obtained by scraping the NOS website. The NOS is one of the biggest (online) news organizations in the Netherlands.
 
 **Dataset:** [`clips/mteb-nl-news-articles-cls`](https://huggingface.co/datasets/clips/mteb-nl-news-articles-cls) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://www.kaggle.com/datasets/maxscheijen/dutch-news-articles)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | nld | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | nld | News, Written | derived | found | v_measure |
 
 
 
-#### EightTagsClustering
+#### `EightTagsClustering` { .model-copy }
 
 Clustering of headlines from social media posts in Polish belonging to 8 categories: film, history, food, medicine, motorization, work, sport and technology.
 
 **Dataset:** [`PL-MTEB/8tags-clustering`](https://huggingface.co/datasets/PL-MTEB/8tags-clustering) • **License:** gpl-3.0 • [Learn more →](https://aclanthology.org/2020.lrec-1.207.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | pol | Social, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | pol | Social, Written | derived | found | v_measure |
 
 
 
@@ -1204,15 +1211,15 @@ Clustering of headlines from social media posts in Polish belonging to 8 categor
 
 
 
-#### EightTagsClustering.v2
+#### `EightTagsClustering.v2` { .model-copy }
 
 Clustering of headlines from social media posts in Polish belonging to 8 categories: film, history, food, medicine, motorization, work, sport and technology.
 
 **Dataset:** [`PL-MTEB/8tags-clustering`](https://huggingface.co/datasets/PL-MTEB/8tags-clustering) • **License:** gpl-3.0 • [Learn more →](https://aclanthology.org/2020.lrec-1.207.pdf)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | pol | Social, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | pol | Social, Written | derived | found | v_measure |
 
 
 
@@ -1256,27 +1263,27 @@ Clustering of headlines from social media posts in Polish belonging to 8 categor
 
 
 
-#### GeoreviewClusteringP2P
+#### `GeoreviewClusteringP2P` { .model-copy }
 
 Review clustering based on Yandex Georeview dataset
 
 **Dataset:** [`ai-forever/georeview-clustering-p2p`](https://huggingface.co/datasets/ai-forever/georeview-clustering-p2p) • **License:** mit • [Learn more →](https://github.com/yandex/geo-reviews-dataset-2023)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | rus | Reviews, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | rus | Reviews, Written | derived | found | v_measure |
 
 
 
-#### HALClusteringS2S
+#### `HALClusteringS2S` { .model-copy }
 
 Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s)
 
 **Dataset:** [`lyon-nlp/clustering-hal-s2s`](https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | fra | Academic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | fra | Academic, Written | human-annotated | found | v_measure |
 
 
 
@@ -1299,15 +1306,15 @@ Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clusteri
 
 
 
-#### HALClusteringS2S.v2
+#### `HALClusteringS2S.v2` { .model-copy }
 
 Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s)
 
 **Dataset:** [`mteb/HALClusteringS2S.v2`](https://huggingface.co/datasets/mteb/HALClusteringS2S.v2) • **License:** apache-2.0 • [Learn more →](https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | fra | Academic, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | fra | Academic, Written | human-annotated | found | v_measure |
 
 
 
@@ -1330,15 +1337,15 @@ Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clusteri
 
 
 
-#### HUMEArxivClusteringP2P
+#### `HUMEArxivClusteringP2P` { .model-copy }
 
 Human evaluation subset of Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category
 
 **Dataset:** [`mteb/mteb-human-arxiv-clustering`](https://huggingface.co/datasets/mteb/mteb-human-arxiv-clustering) • **License:** cc0-1.0 • [Learn more →](https://www.kaggle.com/Cornell-University/arxiv)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | v_measure | eng | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Academic, Written | derived | found | v_measure |
 
 
 
@@ -1361,15 +1368,15 @@ Human evaluation subset of Clustering of titles+abstract from arxiv. Clustering 
 
 
 
-#### HUMERedditClusteringP2P
+#### `HUMERedditClusteringP2P` { .model-copy }
 
 Human evaluation subset of Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs.
 
 **Dataset:** [`mteb/mteb-human-reddit-clustering`](https://huggingface.co/datasets/mteb/mteb-human-reddit-clustering) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2104.07081)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | v_measure | eng | Social, Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Social, Web, Written | derived | found | v_measure |
 
 
 
@@ -1397,15 +1404,15 @@ Human evaluation subset of Clustering of title+posts from reddit. Clustering of 
 
 
 
-#### HUMESIB200ClusteringS2S
+#### `HUMESIB200ClusteringS2S` { .model-copy }
 
 Human evaluation subset of Clustering of news article headlines from SIB-200. Clustering of 10 sets, each with 8 categories and 10 texts per category.
 
 **Dataset:** [`mteb/mteb-human-sib200-clustering`](https://huggingface.co/datasets/mteb/mteb-human-sib200-clustering) • **License:** cc-by-4.0 • [Learn more →](https://github.com/dadelani/sib-200)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | v_measure | ara, dan, eng, fra, rus | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | ara, dan, eng, fra, rus | News, Written | derived | found | v_measure |
 
 
 
@@ -1436,15 +1443,15 @@ Human evaluation subset of Clustering of news article headlines from SIB-200. Cl
 
 
 
-#### HUMEWikiCitiesClustering
+#### `HUMEWikiCitiesClustering` { .model-copy }
 
 Human evaluation subset of Clustering of Wikipedia articles of cities by country from https://huggingface.co/datasets/wikipedia. Test set includes 126 countries, and a total of 3531 cities.
 
 **Dataset:** [`mteb/mteb-human-wikicities-clustering`](https://huggingface.co/datasets/mteb/mteb-human-wikicities-clustering) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/wikipedia)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | v_measure | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | eng | Encyclopaedic, Written | derived | found | v_measure |
 
 
 
@@ -1464,15 +1471,15 @@ Human evaluation subset of Clustering of Wikipedia articles of cities by country
 
 
 
-#### HamshahriClustring
+#### `HamshahriClustring` { .model-copy }
 
 These datasets have been extracted from the RSS feed of two Farsi news agency websites.
 
 **Dataset:** [`community-datasets/farsi_news`](https://huggingface.co/datasets/community-datasets/farsi_news) • **License:** not specified • [Learn more →](https://github.com/mallahyari/Farsi-datasets)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | fas | News | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | fas | News | derived | found | v_measure |
 
 
 
@@ -1486,15 +1493,15 @@ These datasets have been extracted from the RSS feed of two Farsi news agency we
 
 
 
-#### IconclassClusteringS2S
+#### `IconclassClusteringS2S` { .model-copy }
 
 Iconclass is an iconographic thesaurus, which is widely used in the digital heritage domain to describe subjects depicted in artworks. The task is to classify the first layer of Iconclass
 
 **Dataset:** [`clips/mteb-nl-iconclass-cls`](https://huggingface.co/datasets/clips/mteb-nl-iconclass-cls) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://dl.acm.org/doi/pdf/10.1145/3575865)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | nld | Fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | nld | Fiction, Written | derived | found | v_measure |
 
 
 
@@ -1519,15 +1526,15 @@ Iconclass is an iconographic thesaurus, which is widely used in the digital heri
 
 
 
-#### IndicReviewsClusteringP2P
+#### `IndicReviewsClusteringP2P` { .model-copy }
 
 Clustering of reviews from IndicSentiment dataset. Clustering of 14 sets on the generic categories label.
 
 **Dataset:** [`mteb/IndicReviewsClusteringP2P`](https://huggingface.co/datasets/mteb/IndicReviewsClusteringP2P) • **License:** cc0-1.0 • [Learn more →](https://arxiv.org/abs/2212.05409)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | asm, ben, brx, guj, hin, ... (13) | Reviews, Written | human-annotated | machine-translated and verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | asm, ben, brx, guj, hin, ... (13) | Reviews, Written | human-annotated | machine-translated and verified | v_measure |
 
 
 
@@ -1549,15 +1556,15 @@ Clustering of reviews from IndicSentiment dataset. Clustering of 14 sets on the 
 
 
 
-#### KlueMrcDomainClustering
+#### `KlueMrcDomainClustering` { .model-copy }
 
 this dataset is a processed and redistributed version of the KLUE-MRC dataset. Domain: Game / Media / Automotive / Finance / Real Estate / Education
 
 **Dataset:** [`mteb/KlueMrcDomainClustering`](https://huggingface.co/datasets/mteb/KlueMrcDomainClustering) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/on-and-on/clustering_klue_mrc_context_domain)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | kor | News, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | kor | News, Written | human-annotated | found | v_measure |
 
 
 
@@ -1580,15 +1587,15 @@ this dataset is a processed and redistributed version of the KLUE-MRC dataset. D
 
 
 
-#### KlueYnatMrcCategoryClustering
+#### `KlueYnatMrcCategoryClustering` { .model-copy }
 
 this dataset is a processed and redistributed version of the KLUE-Ynat & KLUE-MRC  dataset. News_category: IT/Science, Sports, Media/Culture, Ecomomy/Finance, Real Estate
 
 **Dataset:** [`mteb/KlueYnatMrcCategoryClustering`](https://huggingface.co/datasets/mteb/KlueYnatMrcCategoryClustering) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/on-and-on/clustering_klue_mrc_ynat_title)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | v_measure | kor | News, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to text (t2t) | kor | News, Written | human-annotated | found | v_measure |
 
 
 
@@ -1611,39 +1618,39 @@ this dataset is a processed and redistributed version of the KLUE-Ynat & KLUE-MR
 
 
 
-#### LivedoorNewsClustering
+#### `LivedoorNewsClustering` { .model-copy }
 
 Clustering of the news reports of a Japanese news site, Livedoor News by RONDHUIT Co, Ltd. in 2012. It contains over 7,000 news report texts across 9 categories (topics).
 
 **Dataset:** [`mteb/LivedoorNewsClustering`](https://huggingface.co/datasets/mteb/LivedoorNewsClustering) • **License:** cc-by-nd-2.1-jp • [Learn more →](https://github.com/sbintuitions/JMTEB)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | jpn | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | jpn | News, Written | derived | found | v_measure |
 
 
 
-#### LivedoorNewsClustering.v2
+#### `LivedoorNewsClustering.v2` { .model-copy }
 
 Clustering of the news reports of a Japanese news site, Livedoor News by RONDHUIT Co, Ltd. in 2012. It contains over 7,000 news report texts across 9 categories (topics). Version 2 updated on LivedoorNewsClustering by removing pairs where one of entries contain an empty sentences.
 
 **Dataset:** [`mteb/LivedoorNewsClustering.v2`](https://huggingface.co/datasets/mteb/LivedoorNewsClustering.v2) • **License:** cc-by-nd-2.1-jp • [Learn more →](https://github.com/sbintuitions/JMTEB)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | jpn | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | jpn | News, Written | derived | found | v_measure |
 
 
 
-#### MLSUMClusteringP2P
+#### `MLSUMClusteringP2P` { .model-copy }
 
 Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.
 
 **Dataset:** [`mteb/mlsum`](https://huggingface.co/datasets/mteb/mlsum) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/mteb/mlsum)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | deu, fra, rus, spa | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | deu, fra, rus, spa | News, Written | derived | found | v_measure |
 
 
 
@@ -1664,15 +1671,15 @@ Clustering of newspaper article contents and titles from MLSUM dataset. Clusteri
 
 
 
-#### MLSUMClusteringP2P.v2
+#### `MLSUMClusteringP2P.v2` { .model-copy }
 
 Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.
 
 **Dataset:** [`mteb/mlsum`](https://huggingface.co/datasets/mteb/mlsum) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/mteb/mlsum)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | deu, fra, rus, spa | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | deu, fra, rus, spa | News, Written | derived | found | v_measure |
 
 
 
@@ -1693,15 +1700,15 @@ Clustering of newspaper article contents and titles from MLSUM dataset. Clusteri
 
 
 
-#### MLSUMClusteringS2S
+#### `MLSUMClusteringS2S` { .model-copy }
 
 Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.
 
 **Dataset:** [`mteb/mlsum`](https://huggingface.co/datasets/mteb/mlsum) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/mteb/mlsum)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | deu, fra, rus, spa | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | deu, fra, rus, spa | News, Written | derived | found | v_measure |
 
 
 
@@ -1722,15 +1729,15 @@ Clustering of newspaper article contents and titles from MLSUM dataset. Clusteri
 
 
 
-#### MLSUMClusteringS2S.v2
+#### `MLSUMClusteringS2S.v2` { .model-copy }
 
 Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.
 
 **Dataset:** [`mteb/mlsum`](https://huggingface.co/datasets/mteb/mlsum) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/mteb/mlsum)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | deu, fra, rus, spa | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | deu, fra, rus, spa | News, Written | derived | found | v_measure |
 
 
 
@@ -1751,15 +1758,15 @@ Clustering of newspaper article contents and titles from MLSUM dataset. Clusteri
 
 
 
-#### MasakhaNEWSClusteringP2P
+#### `MasakhaNEWSClusteringP2P` { .model-copy }
 
 Clustering of news article headlines and texts from MasakhaNEWS dataset. Clustering of 10 sets on the news article label.
 
 **Dataset:** [`mteb/MasakhaNEWSClusteringP2P`](https://huggingface.co/datasets/mteb/MasakhaNEWSClusteringP2P) • **License:** afl-3.0 • [Learn more →](https://huggingface.co/datasets/masakhane/masakhanews)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | amh, eng, fra, hau, ibo, ... (16) | News, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | amh, eng, fra, hau, ibo, ... (16) | News, Non-fiction, Written | derived | found | v_measure |
 
 
 
@@ -1781,15 +1788,15 @@ Clustering of news article headlines and texts from MasakhaNEWS dataset. Cluster
 
 
 
-#### MasakhaNEWSClusteringS2S
+#### `MasakhaNEWSClusteringS2S` { .model-copy }
 
 Clustering of news article headlines from MasakhaNEWS dataset. Clustering of 10 sets on the news article label.
 
 **Dataset:** [`mteb/MasakhaNEWSClusteringS2S`](https://huggingface.co/datasets/mteb/MasakhaNEWSClusteringS2S) • **License:** afl-3.0 • [Learn more →](https://huggingface.co/datasets/masakhane/masakhanews)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | amh, eng, fra, hau, ibo, ... (16) | News, Written | human-annotated | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | amh, eng, fra, hau, ibo, ... (16) | News, Written | human-annotated | found | v_measure |
 
 
 
@@ -1811,63 +1818,63 @@ Clustering of news article headlines from MasakhaNEWS dataset. Clustering of 10 
 
 
 
-#### MedrxivClusteringP2P
+#### `MedrxivClusteringP2P` { .model-copy }
 
 Clustering of titles+abstract from medrxiv. Clustering of 10 sets, based on the main category.
 
 **Dataset:** [`mteb/medrxiv-clustering-p2p`](https://huggingface.co/datasets/mteb/medrxiv-clustering-p2p) • **License:** https://www.medrxiv.org/content/about-medrxiv • [Learn more →](https://api.medrxiv.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Academic, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Academic, Written | derived | created | v_measure |
 
 
 
-#### MedrxivClusteringP2P.v2
+#### `MedrxivClusteringP2P.v2` { .model-copy }
 
 Clustering of titles+abstract from medrxiv across 51 categories.
 
 **Dataset:** [`mteb/medrxiv-clustering-p2p`](https://huggingface.co/datasets/mteb/medrxiv-clustering-p2p) • **License:** https://www.medrxiv.org/content/about-medrxiv • [Learn more →](https://api.medrxiv.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Academic, Medical, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Academic, Medical, Written | derived | created | v_measure |
 
 
 
-#### MedrxivClusteringS2S
+#### `MedrxivClusteringS2S` { .model-copy }
 
 Clustering of titles from medrxiv. Clustering of 10 sets, based on the main category.
 
 **Dataset:** [`mteb/medrxiv-clustering-s2s`](https://huggingface.co/datasets/mteb/medrxiv-clustering-s2s) • **License:** https://www.medrxiv.org/content/about-medrxiv • [Learn more →](https://api.medrxiv.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Academic, Medical, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Academic, Medical, Written | derived | created | v_measure |
 
 
 
-#### MedrxivClusteringS2S.v2
+#### `MedrxivClusteringS2S.v2` { .model-copy }
 
 Clustering of titles from medrxiv across 51 categories.
 
 **Dataset:** [`mteb/medrxiv-clustering-s2s`](https://huggingface.co/datasets/mteb/medrxiv-clustering-s2s) • **License:** https://www.medrxiv.org/content/about-medrxiv • [Learn more →](https://api.medrxiv.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Academic, Medical, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Academic, Medical, Written | derived | created | v_measure |
 
 
 
-#### MewsC16JaClustering
+#### `MewsC16JaClustering` { .model-copy }
 
 MewsC-16 (Multilingual Short Text Clustering Dataset for News in 16 languages) is constructed from Wikinews. This dataset is the Japanese split of MewsC-16, containing topic sentences from Wikinews articles in 12 categories. More detailed information is available in the Appendix E of the citation.
 
 **Dataset:** [`mteb/MewsC16JaClustering`](https://huggingface.co/datasets/mteb/MewsC16JaClustering) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/sbintuitions/JMTEB)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | jpn | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | jpn | News, Written | derived | found | v_measure |
 
 
 
@@ -1897,15 +1904,15 @@ MewsC-16 (Multilingual Short Text Clustering Dataset for News in 16 languages) i
 
 
 
-#### NLPTwitterAnalysisClustering
+#### `NLPTwitterAnalysisClustering` { .model-copy }
 
 Clustering of tweets from twitter across 26 categories.
 
 **Dataset:** [`hamedhf/nlp_twitter_analysis`](https://huggingface.co/datasets/hamedhf/nlp_twitter_analysis) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/hamedhf/nlp_twitter_analysis/commits/main)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | fas | Social | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | fas | Social | derived | found | v_measure |
 
 
 
@@ -1919,15 +1926,15 @@ Clustering of tweets from twitter across 26 categories.
 
 
 
-#### OpenTenderClusteringP2P
+#### `OpenTenderClusteringP2P` { .model-copy }
 
 This dataset contains all the articles published by the NOS as of the 1st of January 2010. The data is obtained by scraping the NOS website. The NOS is one of the biggest (online) news organizations in the Netherlands.
 
 **Dataset:** [`clips/mteb-nl-opentender-cls-pr`](https://huggingface.co/datasets/clips/mteb-nl-opentender-cls-pr) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2509.12340)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | nld | Government, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | nld | Government, Written | derived | found | v_measure |
 
 
 
@@ -1951,15 +1958,15 @@ This dataset contains all the articles published by the NOS as of the 1st of Jan
 
 
 
-#### OpenTenderClusteringS2S
+#### `OpenTenderClusteringS2S` { .model-copy }
 
 This dataset contains all the articles published by the NOS as of the 1st of January 2010. The data is obtained by scraping the NOS website. The NOS is one of the biggest (online) news organizations in the Netherlands.
 
 **Dataset:** [`clips/mteb-nl-opentender-clst-s2s-pr`](https://huggingface.co/datasets/clips/mteb-nl-opentender-clst-s2s-pr) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2509.12340)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | nld | Government, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | nld | Government, Written | derived | found | v_measure |
 
 
 
@@ -1983,63 +1990,63 @@ This dataset contains all the articles published by the NOS as of the 1st of Jan
 
 
 
-#### PlscClusteringP2P
+#### `PlscClusteringP2P` { .model-copy }
 
 Clustering of Polish article titles+abstracts from Library of Science (https://bibliotekanauki.pl/), either on the scientific field or discipline.
 
 **Dataset:** [`PL-MTEB/plsc-clustering-p2p`](https://huggingface.co/datasets/PL-MTEB/plsc-clustering-p2p) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/rafalposwiata/plsc)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | pol | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | pol | Academic, Written | derived | found | v_measure |
 
 
 
-#### PlscClusteringP2P.v2
+#### `PlscClusteringP2P.v2` { .model-copy }
 
 Clustering of Polish article titles+abstracts from Library of Science (https://bibliotekanauki.pl/), either on the scientific field or discipline.
 
 **Dataset:** [`mteb/PlscClusteringP2P.v2`](https://huggingface.co/datasets/mteb/PlscClusteringP2P.v2) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/rafalposwiata/plsc)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | pol | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | pol | Academic, Written | derived | found | v_measure |
 
 
 
-#### PlscClusteringS2S
-
-Clustering of Polish article titles from Library of Science (https://bibliotekanauki.pl/), either on the scientific field or discipline.
-
-**Dataset:** [`PL-MTEB/plsc-clustering-s2s`](https://huggingface.co/datasets/PL-MTEB/plsc-clustering-s2s) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/rafalposwiata/plsc)
-
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | pol | Academic, Written | derived | found |
-
-
-
-#### PlscClusteringS2S.v2
+#### `PlscClusteringS2S` { .model-copy }
 
 Clustering of Polish article titles from Library of Science (https://bibliotekanauki.pl/), either on the scientific field or discipline.
 
 **Dataset:** [`PL-MTEB/plsc-clustering-s2s`](https://huggingface.co/datasets/PL-MTEB/plsc-clustering-s2s) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/rafalposwiata/plsc)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | pol | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | pol | Academic, Written | derived | found | v_measure |
 
 
 
-#### RedditClustering
+#### `PlscClusteringS2S.v2` { .model-copy }
+
+Clustering of Polish article titles from Library of Science (https://bibliotekanauki.pl/), either on the scientific field or discipline.
+
+**Dataset:** [`PL-MTEB/plsc-clustering-s2s`](https://huggingface.co/datasets/PL-MTEB/plsc-clustering-s2s) • **License:** cc0-1.0 • [Learn more →](https://huggingface.co/datasets/rafalposwiata/plsc)
+
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | pol | Academic, Written | derived | found | v_measure |
+
+
+
+#### `RedditClustering` { .model-copy }
 
 Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.
 
 **Dataset:** [`mteb/reddit-clustering`](https://huggingface.co/datasets/mteb/reddit-clustering) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2104.07081)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Social, Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Social, Web, Written | derived | found | v_measure |
 
 
 
@@ -2067,15 +2074,15 @@ Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50
 
 
 
-#### RedditClustering-VN
+#### `RedditClustering-VN` { .model-copy }
 
 A translated dataset from Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/reddit-clustering-vn`](https://huggingface.co/datasets/GreenNode/reddit-clustering-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2104.07081)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | vie | Social, Web, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | vie | Social, Web, Written | derived | machine-translated and LM verified | v_measure |
 
 
 
@@ -2099,15 +2106,15 @@ A translated dataset from Clustering of titles from 199 subreddits. Clustering o
 
 
 
-#### RedditClustering.v2
+#### `RedditClustering.v2` { .model-copy }
 
 Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.
 
 **Dataset:** [`mteb/reddit-clustering`](https://huggingface.co/datasets/mteb/reddit-clustering) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2104.07081)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Social, Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Social, Web, Written | derived | found | v_measure |
 
 
 
@@ -2135,15 +2142,15 @@ Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50
 
 
 
-#### RedditClusteringP2P
+#### `RedditClusteringP2P` { .model-copy }
 
 Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs.
 
 **Dataset:** [`mteb/reddit-clustering-p2p`](https://huggingface.co/datasets/mteb/reddit-clustering-p2p) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2104.07081)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Social, Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Social, Web, Written | derived | found | v_measure |
 
 
 
@@ -2171,15 +2178,15 @@ Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs a
 
 
 
-#### RedditClusteringP2P-VN
+#### `RedditClusteringP2P-VN` { .model-copy }
 
 A translated dataset from Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/reddit-clustering-p2p-vn`](https://huggingface.co/datasets/GreenNode/reddit-clustering-p2p-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2104.07081)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | vie | Social, Web, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | vie | Social, Web, Written | derived | machine-translated and LM verified | v_measure |
 
 
 
@@ -2203,15 +2210,15 @@ A translated dataset from Clustering of title+posts from reddit. Clustering of 1
 
 
 
-#### RedditClusteringP2P.v2
+#### `RedditClusteringP2P.v2` { .model-copy }
 
 Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs.
 
 **Dataset:** [`mteb/reddit-clustering-p2p`](https://huggingface.co/datasets/mteb/reddit-clustering-p2p) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2104.07081)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Social, Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Social, Web, Written | derived | found | v_measure |
 
 
 
@@ -2239,51 +2246,51 @@ Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs a
 
 
 
-#### RomaniBibleClustering
+#### `RomaniBibleClustering` { .model-copy }
 
 Clustering verses from the Bible in Kalderash Romani by book.
 
 **Dataset:** [`mteb/RomaniBibleClustering`](https://huggingface.co/datasets/mteb/RomaniBibleClustering) • **License:** mit • [Learn more →](https://romani.global.bible/info)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | rom | Religious, Written | derived | human-translated and localized |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | rom | Religious, Written | derived | human-translated and localized | v_measure |
 
 
 
-#### RuSciBenchGRNTIClusteringP2P
+#### `RuSciBenchGRNTIClusteringP2P` { .model-copy }
 
 Clustering of scientific papers (title+abstract) by rubric
 
 **Dataset:** [`ai-forever/ru-scibench-grnti-classification`](https://huggingface.co/datasets/ai-forever/ru-scibench-grnti-classification) • **License:** not specified • [Learn more →](https://github.com/mlsa-iai-msu-lab/ru_sci_bench/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | rus | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | rus | Academic, Written | derived | found | v_measure |
 
 
 
-#### RuSciBenchOECDClusteringP2P
+#### `RuSciBenchOECDClusteringP2P` { .model-copy }
 
 Clustering of scientific papers (title+abstract) by rubric
 
 **Dataset:** [`ai-forever/ru-scibench-oecd-classification`](https://huggingface.co/datasets/ai-forever/ru-scibench-oecd-classification) • **License:** not specified • [Learn more →](https://github.com/mlsa-iai-msu-lab/ru_sci_bench/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | rus | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | rus | Academic, Written | derived | found | v_measure |
 
 
 
-#### SIB200ClusteringS2S
+#### `SIB200ClusteringS2S` { .model-copy }
 
 SIB-200 is the largest publicly available topic classification dataset based on Flores-200 covering 205 languages and dialects annotated. The dataset is annotated in English for the topics, science/technology, travel, politics, sports, health, entertainment, and geography. The labels are then transferred to the other languages in Flores-200 which are human-translated.
 
 **Dataset:** [`mteb/sib200`](https://huggingface.co/datasets/mteb/sib200) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2309.07445)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | ace, acm, acq, aeb, afr, ... (197) | News, Written | expert-annotated | human-translated and localized |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | ace, acm, acq, aeb, afr, ... (197) | News, Written | expert-annotated | human-translated and localized | v_measure |
 
 
 
@@ -2304,15 +2311,15 @@ SIB-200 is the largest publicly available topic classification dataset based on 
 
 
 
-#### SIDClustring
+#### `SIDClustring` { .model-copy }
 
 Clustering of summariesfrom SIDClustring across categories.
 
 **Dataset:** [`MCINext/sid-clustering`](https://huggingface.co/datasets/MCINext/sid-clustering) • **License:** not specified • [Learn more →](https://www.sid.com/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | fas | Academic | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | fas | Academic | derived | found | v_measure |
 
 
 
@@ -2326,15 +2333,15 @@ Clustering of summariesfrom SIDClustring across categories.
 
 
 
-#### SNLClustering
+#### `SNLClustering` { .model-copy }
 
 Webscraped articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.
 
 **Dataset:** [`adrlau/navjordj-SNL_summarization_copy`](https://huggingface.co/datasets/adrlau/navjordj-SNL_summarization_copy) • **License:** cc-by-nc-4.0 • [Learn more →](https://huggingface.co/datasets/mteb/SNLRetrieval)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | nob | Encyclopaedic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | nob | Encyclopaedic, Non-fiction, Written | derived | found | v_measure |
 
 
 
@@ -2355,15 +2362,15 @@ Webscraped articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses
 
 
 
-#### SNLHierarchicalClusteringP2P
+#### `SNLHierarchicalClusteringP2P` { .model-copy }
 
 Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.
 
 **Dataset:** [`mteb/SNLHierarchicalClusteringP2P`](https://huggingface.co/datasets/mteb/SNLHierarchicalClusteringP2P) • **License:** cc-by-nc-4.0 • [Learn more →](https://huggingface.co/datasets/mteb/SNLHierarchicalClusteringP2P)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | nob | Encyclopaedic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | nob | Encyclopaedic, Non-fiction, Written | derived | found | v_measure |
 
 
 
@@ -2384,15 +2391,15 @@ Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses
 
 
 
-#### SNLHierarchicalClusteringS2S
+#### `SNLHierarchicalClusteringS2S` { .model-copy }
 
 Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.
 
 **Dataset:** [`mteb/SNLHierarchicalClusteringS2S`](https://huggingface.co/datasets/mteb/SNLHierarchicalClusteringS2S) • **License:** cc-by-nc-4.0 • [Learn more →](https://huggingface.co/datasets/mteb/SNLHierarchicalClusteringS2S)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | nob | Encyclopaedic, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | nob | Encyclopaedic, Non-fiction, Written | derived | found | v_measure |
 
 
 
@@ -2413,15 +2420,15 @@ Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses
 
 
 
-#### SpanishNewsClusteringP2P
+#### `SpanishNewsClusteringP2P` { .model-copy }
 
 Clustering of news articles, 7 topics in total.
 
 **Dataset:** [`jinaai/spanish_news_clustering`](https://huggingface.co/datasets/jinaai/spanish_news_clustering) • **License:** cc-by-4.0 • [Learn more →](https://www.kaggle.com/datasets/kevinmorgado/spanish-news-classification)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | spa | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | spa | News, Written | derived | found | v_measure |
 
 
 
@@ -2443,15 +2450,15 @@ Clustering of news articles, 7 topics in total.
 
 
 
-#### StackExchangeClustering
+#### `StackExchangeClustering` { .model-copy }
 
 Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.
 
 **Dataset:** [`mteb/stackexchange-clustering`](https://huggingface.co/datasets/mteb/stackexchange-clustering) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2104.07081)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Web, Written | derived | found | v_measure |
 
 
 
@@ -2479,15 +2486,15 @@ Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 1
 
 
 
-#### StackExchangeClustering-VN
+#### `StackExchangeClustering-VN` { .model-copy }
 
 A translated dataset from Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/stackexchange-clustering-vn`](https://huggingface.co/datasets/GreenNode/stackexchange-clustering-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2104.07081)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | vie | Web, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | vie | Web, Written | derived | machine-translated and LM verified | v_measure |
 
 
 
@@ -2511,15 +2518,15 @@ A translated dataset from Clustering of titles from 121 stackexchanges. Clusteri
 
 
 
-#### StackExchangeClustering.v2
+#### `StackExchangeClustering.v2` { .model-copy }
 
 Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.
 
 **Dataset:** [`mteb/stackexchange-clustering`](https://huggingface.co/datasets/mteb/stackexchange-clustering) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2104.07081)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Web, Written | derived | found | v_measure |
 
 
 
@@ -2547,15 +2554,15 @@ Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 1
 
 
 
-#### StackExchangeClusteringP2P
+#### `StackExchangeClusteringP2P` { .model-copy }
 
 Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragraphs and 5 sets of 5k paragraphs.
 
 **Dataset:** [`mteb/stackexchange-clustering-p2p`](https://huggingface.co/datasets/mteb/stackexchange-clustering-p2p) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2104.07081)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Web, Written | derived | found | v_measure |
 
 
 
@@ -2583,15 +2590,15 @@ Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragra
 
 
 
-#### StackExchangeClusteringP2P-VN
+#### `StackExchangeClusteringP2P-VN` { .model-copy }
 
 A translated Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragraphs and 5 sets of 5k paragraphs. The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/stackexchange-clustering-p2p-vn`](https://huggingface.co/datasets/GreenNode/stackexchange-clustering-p2p-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2104.07081)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | vie | Web, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | vie | Web, Written | derived | machine-translated and LM verified | v_measure |
 
 
 
@@ -2615,15 +2622,15 @@ A translated Clustering of title+body from stackexchange. Clustering of 5 sets o
 
 
 
-#### StackExchangeClusteringP2P.v2
+#### `StackExchangeClusteringP2P.v2` { .model-copy }
 
 Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragraphs and 5 sets of 5k paragraphs.
 
 **Dataset:** [`mteb/stackexchange-clustering-p2p`](https://huggingface.co/datasets/mteb/stackexchange-clustering-p2p) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2104.07081)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Web, Written | derived | found | v_measure |
 
 
 
@@ -2651,15 +2658,15 @@ Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragra
 
 
 
-#### SwednClustering
+#### `SwednClustering` { .model-copy }
 
 The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper Dagens Nyheter (DN) during the years 2000--2020. The articles are filtered to resemble the CNN/DailyMail dataset both regarding textual structure. This dataset uses the category labels as clusters.
 
 **Dataset:** [`mteb/SwednClustering`](https://huggingface.co/datasets/mteb/SwednClustering) • **License:** cc-by-4.0 • [Learn more →](https://spraakbanken.gu.se/en/resources/swedn)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | swe | News, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | swe | News, Non-fiction, Written | derived | found | v_measure |
 
 
 
@@ -2680,15 +2687,15 @@ The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper
 
 
 
-#### SwednClusteringP2P
+#### `SwednClusteringP2P` { .model-copy }
 
 The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper Dagens Nyheter (DN) during the years 2000--2020. The articles are filtered to resemble the CNN/DailyMail dataset both regarding textual structure. This dataset uses the category labels as clusters.
 
 **Dataset:** [`mteb/SwednClusteringP2P`](https://huggingface.co/datasets/mteb/SwednClusteringP2P) • **License:** cc-by-4.0 • [Learn more →](https://spraakbanken.gu.se/en/resources/swedn)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | swe | News, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | swe | News, Non-fiction, Written | derived | found | v_measure |
 
 
 
@@ -2709,15 +2716,15 @@ The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper
 
 
 
-#### SwednClusteringS2S
+#### `SwednClusteringS2S` { .model-copy }
 
 The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper Dagens Nyheter (DN) during the years 2000--2020. The articles are filtered to resemble the CNN/DailyMail dataset both regarding textual structure. This dataset uses the category labels as clusters.
 
 **Dataset:** [`mteb/SwednClusteringS2S`](https://huggingface.co/datasets/mteb/SwednClusteringS2S) • **License:** cc-by-4.0 • [Learn more →](https://spraakbanken.gu.se/en/resources/swedn)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | swe | News, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | swe | News, Non-fiction, Written | derived | found | v_measure |
 
 
 
@@ -2738,63 +2745,63 @@ The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper
 
 
 
-#### TenKGnadClusteringP2P
+#### `TenKGnadClusteringP2P` { .model-copy }
 
 Clustering of news article titles+subheadings+texts. Clustering of 10 splits on the news article category.
 
 **Dataset:** [`slvnwhrl/tenkgnad-clustering-p2p`](https://huggingface.co/datasets/slvnwhrl/tenkgnad-clustering-p2p) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://tblock.github.io/10kGNAD/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | deu | Web, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | deu | Web, Written | derived | found | v_measure |
 
 
 
-#### TenKGnadClusteringP2P.v2
+#### `TenKGnadClusteringP2P.v2` { .model-copy }
 
 Clustering of news article titles+subheadings+texts. Clustering of 10 splits on the news article category. v2 uses a faster evaluation method used in the MMTEB paper, which allow for notably faster evaluation.
 
 **Dataset:** [`slvnwhrl/tenkgnad-clustering-p2p`](https://huggingface.co/datasets/slvnwhrl/tenkgnad-clustering-p2p) • **License:** cc-by-sa-4.0 • [Learn more →](https://tblock.github.io/10kGNAD/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | deu | News, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | deu | News, Non-fiction, Written | derived | found | v_measure |
 
 
 
-#### TenKGnadClusteringS2S
+#### `TenKGnadClusteringS2S` { .model-copy }
 
 Clustering of news article titles. Clustering of 10 splits on the news article category.
 
 **Dataset:** [`slvnwhrl/tenkgnad-clustering-s2s`](https://huggingface.co/datasets/slvnwhrl/tenkgnad-clustering-s2s) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://tblock.github.io/10kGNAD/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | deu | News, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | deu | News, Non-fiction, Written | derived | found | v_measure |
 
 
 
-#### TenKGnadClusteringS2S.v2
+#### `TenKGnadClusteringS2S.v2` { .model-copy }
 
 Clustering of news article titles. Clustering of 10 splits on the news article category. v2 uses a faster evaluation method used in the MMTEB paper, which allow for notably faster evaluation.
 
 **Dataset:** [`slvnwhrl/tenkgnad-clustering-s2s`](https://huggingface.co/datasets/slvnwhrl/tenkgnad-clustering-s2s) • **License:** cc-by-sa-4.0 • [Learn more →](https://tblock.github.io/10kGNAD/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | deu | News, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | deu | News, Non-fiction, Written | derived | found | v_measure |
 
 
 
-#### ThuNewsClusteringP2P
+#### `ThuNewsClusteringP2P` { .model-copy }
 
 Clustering of titles + abstracts from the THUCNews dataset
 
 **Dataset:** [`C-MTEB/ThuNewsClusteringP2P`](https://huggingface.co/datasets/C-MTEB/ThuNewsClusteringP2P) • **License:** not specified • [Learn more →](http://thuctc.thunlp.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | cmn | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | cmn | News, Written | derived | found | v_measure |
 
 
 
@@ -2823,15 +2830,15 @@ Clustering of titles + abstracts from the THUCNews dataset
 
 
 
-#### ThuNewsClusteringP2P.v2
+#### `ThuNewsClusteringP2P.v2` { .model-copy }
 
 Clustering of titles + abstracts from the THUCNews dataset
 
 **Dataset:** [`C-MTEB/ThuNewsClusteringP2P`](https://huggingface.co/datasets/C-MTEB/ThuNewsClusteringP2P) • **License:** not specified • [Learn more →](http://thuctc.thunlp.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | cmn | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | cmn | News, Written | derived | found | v_measure |
 
 
 
@@ -2854,15 +2861,15 @@ Clustering of titles + abstracts from the THUCNews dataset
 
 
 
-#### ThuNewsClusteringS2S
+#### `ThuNewsClusteringS2S` { .model-copy }
 
 Clustering of titles from the THUCNews dataset
 
 **Dataset:** [`C-MTEB/ThuNewsClusteringS2S`](https://huggingface.co/datasets/C-MTEB/ThuNewsClusteringS2S) • **License:** not specified • [Learn more →](http://thuctc.thunlp.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | cmn | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | cmn | News, Written | derived | found | v_measure |
 
 
 
@@ -2891,15 +2898,15 @@ Clustering of titles from the THUCNews dataset
 
 
 
-#### ThuNewsClusteringS2S.v2
+#### `ThuNewsClusteringS2S.v2` { .model-copy }
 
 Clustering of titles from the THUCNews dataset
 
 **Dataset:** [`C-MTEB/ThuNewsClusteringS2S`](https://huggingface.co/datasets/C-MTEB/ThuNewsClusteringS2S) • **License:** not specified • [Learn more →](http://thuctc.thunlp.org/)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | cmn | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | cmn | News, Written | derived | found | v_measure |
 
 
 
@@ -2922,15 +2929,15 @@ Clustering of titles from the THUCNews dataset
 
 
 
-#### TwentyNewsgroupsClustering
+#### `TwentyNewsgroupsClustering` { .model-copy }
 
 Clustering of the 20 Newsgroups dataset (subject only).
 
 **Dataset:** [`mteb/twentynewsgroups-clustering`](https://huggingface.co/datasets/mteb/twentynewsgroups-clustering) • **License:** not specified • [Learn more →](https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | News, Written | derived | found | v_measure |
 
 
 
@@ -2958,15 +2965,15 @@ Clustering of the 20 Newsgroups dataset (subject only).
 
 
 
-#### TwentyNewsgroupsClustering-VN
+#### `TwentyNewsgroupsClustering-VN` { .model-copy }
 
 A translated dataset from Clustering of the 20 Newsgroups dataset (subject only). The process of creating the VN-MTEB (Vietnamese Massive Text Embedding Benchmark) from English samples involves a new automated system: - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation. - Applies advanced embedding models to filter the translations. - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
 **Dataset:** [`GreenNode/twentynewsgroups-clustering-vn`](https://huggingface.co/datasets/GreenNode/twentynewsgroups-clustering-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | vie | News, Written | derived | machine-translated and LM verified |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | vie | News, Written | derived | machine-translated and LM verified | v_measure |
 
 
 
@@ -2990,15 +2997,15 @@ A translated dataset from Clustering of the 20 Newsgroups dataset (subject only)
 
 
 
-#### TwentyNewsgroupsClustering.v2
+#### `TwentyNewsgroupsClustering.v2` { .model-copy }
 
 Clustering of the 20 Newsgroups dataset (subject only).
 
 **Dataset:** [`mteb/twentynewsgroups-clustering`](https://huggingface.co/datasets/mteb/twentynewsgroups-clustering) • **License:** not specified • [Learn more →](https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | News, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | News, Written | derived | found | v_measure |
 
 
 
@@ -3026,15 +3033,15 @@ Clustering of the 20 Newsgroups dataset (subject only).
 
 
 
-#### VABBClusteringP2P
+#### `VABBClusteringP2P` { .model-copy }
 
 This dataset contains the fourteenth edition of the Flemish Academic Bibliography for the Social Sciences and Humanities (VABB-SHW), a database of academic publications from the social sciences and humanities authored by researchers affiliated to Flemish universities (more information). Publications in the database are used as one of the parameters of the Flemish performance-based research funding system
 
 **Dataset:** [`clips/mteb-nl-vabb-cls`](https://huggingface.co/datasets/clips/mteb-nl-vabb-cls) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://zenodo.org/records/14214806)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | nld | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | nld | Academic, Written | derived | found | v_measure |
 
 
 
@@ -3057,15 +3064,15 @@ This dataset contains the fourteenth edition of the Flemish Academic Bibliograph
 
 
 
-#### VABBClusteringS2S
+#### `VABBClusteringS2S` { .model-copy }
 
 This dataset contains the fourteenth edition of the Flemish Academic Bibliography for the Social Sciences and Humanities (VABB-SHW), a database of academic publications from the social sciences and humanities authored by researchers affiliated to Flemish universities (more information). Publications in the database are used as one of the parameters of the Flemish performance-based research funding system
 
 **Dataset:** [`clips/mteb-nl-vabb-cls`](https://huggingface.co/datasets/clips/mteb-nl-vabb-cls) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://zenodo.org/records/14214806)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | nld | Academic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | nld | Academic, Written | derived | found | v_measure |
 
 
 
@@ -3088,15 +3095,15 @@ This dataset contains the fourteenth edition of the Flemish Academic Bibliograph
 
 
 
-#### VGClustering
+#### `VGClustering` { .model-copy }
 
 Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.
 
 **Dataset:** [`navjordj/VG_summarization`](https://huggingface.co/datasets/navjordj/VG_summarization) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/navjordj/VG_summarization)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | nob | News, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | nob | News, Non-fiction, Written | derived | found | v_measure |
 
 
 
@@ -3117,15 +3124,15 @@ Articles and their classes (e.g. sports) from VG news articles extracted from No
 
 
 
-#### VGHierarchicalClusteringP2P
+#### `VGHierarchicalClusteringP2P` { .model-copy }
 
 Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.
 
 **Dataset:** [`navjordj/VG_summarization`](https://huggingface.co/datasets/navjordj/VG_summarization) • **License:** cc-by-nc-4.0 • [Learn more →](https://huggingface.co/datasets/navjordj/VG_summarization)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | nob | News, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | nob | News, Non-fiction, Written | derived | found | v_measure |
 
 
 
@@ -3146,15 +3153,15 @@ Articles and their classes (e.g. sports) from VG news articles extracted from No
 
 
 
-#### VGHierarchicalClusteringS2S
+#### `VGHierarchicalClusteringS2S` { .model-copy }
 
 Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.
 
 **Dataset:** [`navjordj/VG_summarization`](https://huggingface.co/datasets/navjordj/VG_summarization) • **License:** cc-by-nc-4.0 • [Learn more →](https://huggingface.co/datasets/navjordj/VG_summarization)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | nob | News, Non-fiction, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | nob | News, Non-fiction, Written | derived | found | v_measure |
 
 
 
@@ -3175,15 +3182,15 @@ Articles and their classes (e.g. sports) from VG news articles extracted from No
 
 
 
-#### WikiCitiesClustering
+#### `WikiCitiesClustering` { .model-copy }
 
 Clustering of Wikipedia articles of cities by country from https://huggingface.co/datasets/wikipedia. Test set includes 126 countries, and a total of 3531 cities.
 
 **Dataset:** [`mteb/WikiCitiesClustering`](https://huggingface.co/datasets/mteb/WikiCitiesClustering) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/wikipedia)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Encyclopaedic, Written | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Encyclopaedic, Written | derived | found | v_measure |
 
 
 
@@ -3203,39 +3210,39 @@ Clustering of Wikipedia articles of cities by country from https://huggingface.c
 
 
 
-#### WikiClusteringP2P
+#### `WikiClusteringP2P` { .model-copy }
 
 Clustering of wikipedia articles inspired by BlubrbsClusteringP2P. Labels are taken from top-level categories of the respective languages (e.g., https://lv.wikipedia.org/wiki/Kategorija:Pamatkategorijas).
 
 **Dataset:** [`ryzzlestrizzle/multi-wiki-clustering-p2p`](https://huggingface.co/datasets/ryzzlestrizzle/multi-wiki-clustering-p2p) • **License:** cc-by-sa-3.0 • [Learn more →](https://github.com/Rysias/wiki-clustering)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | bos, cat, ces, dan, eus, ... (14) | Encyclopaedic, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | bos, cat, ces, dan, eus, ... (14) | Encyclopaedic, Written | derived | created | v_measure |
 
 
 
-#### WikiClusteringP2P.v2
+#### `WikiClusteringP2P.v2` { .model-copy }
 
 Clustering of wikipedia articles inspired by BlubrbsClusteringP2P. Labels are taken from top-level categories of the respective languages (e.g., https://lv.wikipedia.org/wiki/Kategorija:Pamatkategorijas).
 
 **Dataset:** [`mteb/WikiClusteringP2P.v2`](https://huggingface.co/datasets/mteb/WikiClusteringP2P.v2) • **License:** cc-by-sa-3.0 • [Learn more →](https://github.com/Rysias/wiki-clustering)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | bos, cat, ces, dan, eus, ... (14) | Encyclopaedic, Written | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | bos, cat, ces, dan, eus, ... (14) | Encyclopaedic, Written | derived | created | v_measure |
 
 
 
-#### WikipediaChemistryTopicsClustering
+#### `WikipediaChemistryTopicsClustering` { .model-copy }
 
 ChemTEB evaluates the performance of text embedding models on chemical domain data.
 
 **Dataset:** [`BASF-AI/WikipediaEasy10Clustering`](https://huggingface.co/datasets/BASF-AI/WikipediaEasy10Clustering) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2412.00532)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Chemistry | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Chemistry | derived | created | v_measure |
 
 
 
@@ -3256,15 +3263,15 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 
 
-#### WikipediaSpecialtiesInChemistryClustering
+#### `WikipediaSpecialtiesInChemistryClustering` { .model-copy }
 
 ChemTEB evaluates the performance of text embedding models on chemical domain data.
 
 **Dataset:** [`BASF-AI/WikipediaMedium5Clustering`](https://huggingface.co/datasets/BASF-AI/WikipediaMedium5Clustering) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://arxiv.org/abs/2412.00532)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | v_measure | eng | Chemistry | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| text to category (t2c) | eng | Chemistry | derived | created | v_measure |
 
 
 
@@ -3284,19 +3291,22 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 
 
+
 ## ImageClustering
+
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** 5
 
-#### CIFAR100Clustering
+#### `CIFAR100Clustering` { .model-copy }
 
 Clustering images from 100 classes.
 
 **Dataset:** [`mteb/cifar100`](https://huggingface.co/datasets/mteb/cifar100) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/uoft-cs/cifar100)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | nmi | eng | Web | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Web | derived | created | nmi |
 
 
 
@@ -3317,15 +3327,15 @@ Clustering images from 100 classes.
 
 
 
-#### CIFAR10Clustering
+#### `CIFAR10Clustering` { .model-copy }
 
 Clustering images from 10 classes.
 
 **Dataset:** [`mteb/cifar10`](https://huggingface.co/datasets/mteb/cifar10) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/uoft-cs/cifar10)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to category (i2c) | nmi | eng | Web | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to category (i2c) | eng | Web | derived | created | nmi |
 
 
 
@@ -3346,15 +3356,15 @@ Clustering images from 10 classes.
 
 
 
-#### ImageNet10Clustering
+#### `ImageNet10Clustering` { .model-copy }
 
 Clustering images from an 10-class subset of ImageNet which are generally easy to distinguish.
 
 **Dataset:** [`mteb/imagenet-10`](https://huggingface.co/datasets/mteb/imagenet-10) • **License:** not specified • [Learn more →](https://www.kaggle.com/datasets/liusha249/imagenet10)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to text (i2t) | nmi | eng | Web | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to text (i2t) | eng | Web | derived | created | nmi |
 
 
 
@@ -3380,15 +3390,15 @@ Clustering images from an 10-class subset of ImageNet which are generally easy t
 
 
 
-#### ImageNetDog15Clustering
+#### `ImageNetDog15Clustering` { .model-copy }
 
 Clustering images from a 15-class dogs-only subset of the dog classes in ImageNet.
 
 **Dataset:** [`mteb/imagenet-dog-15`](https://huggingface.co/datasets/mteb/imagenet-dog-15) • **License:** not specified • [Learn more →](http://vision.stanford.edu/aditya86/ImageNetDogs/main.html)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to category (i2c) | nmi | eng | Web | derived | created |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to category (i2c) | eng | Web | derived | created | nmi |
 
 
 
@@ -3414,14 +3424,14 @@ Clustering images from a 15-class dogs-only subset of the dog classes in ImageNe
 
 
 
-#### TinyImageNetClustering
+#### `TinyImageNetClustering` { .model-copy }
 
 Clustering over 200 classes.
 
 **Dataset:** [`mteb/tiny-imagenet`](https://huggingface.co/datasets/mteb/tiny-imagenet) • **License:** not specified • [Learn more →](https://huggingface.co/datasets/zh-plus/tiny-imagenet/viewer/default/valid)
 
-| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
-|-------|-------|-------|-------|-------|-------|
-| image to category (i2c) | nmi | eng | Reviews | derived | found |
+| :lucide-tag: Category | :lucide-languages: Languages | :lucide-book-open: Domains | :lucide-users: Annotations | :lucide-plus-circle: Creation | :lucide-gauge: Score |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| image to category (i2c) | eng | Reviews | derived | found | nmi |
 
 <!-- END-TASKS -->

@@ -31,8 +31,6 @@ aggregated_tasks_section = """
 
 task_type_section = """
 
-<div class="nowrap-table" markdown>
-
 ## {task_type}
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
@@ -41,7 +39,6 @@ task_type_section = """
 
 {tasks_md}
 """
-
 
 
 citation_admonition = """

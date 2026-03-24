@@ -296,9 +296,15 @@ Attributes:
 """
 
 
-SimplifiedTaskType = Literal["retrieval", "clustering", "classification", "semantic-similarity", "pair-classification"]
+SimplifiedTaskType = Literal[
+    "retrieval",
+    "clustering",
+    "classification",
+    "semantic-similarity",
+    "pair-classification",
+]
 
-_TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType]  = {
+_TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
     "Any2AnyRetrieval": "retrieval",
     "Any2AnyMultilingualRetrieval": "retrieval",
     "VisionCentricQA": "retrieval",
@@ -447,7 +453,7 @@ class TaskMetadata(BaseModel):
     def simplified_task_type(self) -> str:
         """A simplified task type compared to metadata.type. E.g. converts AudioClustering and ImageClustering to simply Clustering.
 
-        This performs a rought seperation into the following categories:
+        This performs a rought separation into the following categories:
 
         - **retrieval**: Tasks that (generally) require asymmetric matching between a query and a corpus, where the
             query and passage embeddings may occupy different regions of the embedding space.
@@ -460,7 +466,7 @@ class TaskMetadata(BaseModel):
         - **pair-classification**: Tasks that require embeddings to capture the relationship between a pair
             of items, such as entailment or paraphrase.
 
-        These categories are compatible with task seperation such as that of Jina v3, though not not an exact match.
+        These categories are compatible with task separation such as that of Jina v3, though not not an exact match.
         """
         return _TASKTYPE2SIMPLIFIEDTASKTYPE[self.type]
 
