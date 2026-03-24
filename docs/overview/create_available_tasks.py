@@ -42,18 +42,6 @@ task_type_section = """
 {tasks_md}
 """
 
-task_index_section = """---
-title: "Available Tasks"
----
-
-# Available Tasks
-
-<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
-
-Browse tasks by category:
-
-{task_types_md}
-"""
 
 
 citation_admonition = """

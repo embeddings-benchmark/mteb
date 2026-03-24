@@ -9,7 +9,7 @@ title: "Pair Classification"
 }
 </style>
 
-## Pair Classification
+# Pair Classification
 
 <!-- The following sections are auto-generated, please edit the construction script -->
 

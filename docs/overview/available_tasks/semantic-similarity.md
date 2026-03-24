@@ -9,7 +9,7 @@ title: "Semantic Similarity"
 }
 </style>
 
-## Semantic Similarity
+# Semantic Similarity
 
 <!-- The following sections are auto-generated, please edit the construction script -->
 
