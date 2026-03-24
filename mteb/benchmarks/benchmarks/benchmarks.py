@@ -1982,7 +1982,7 @@ MIEB_common_tasks = [
     "STL10",  # coarse
     "SUN397",  # fine
     "UCF101",  # fine
-    # ImageMultiLabelClassification
+    # MultiLabelClassification
     "VOC2007",  # coarse
     # Clustering
     "CIFAR10Clustering",
