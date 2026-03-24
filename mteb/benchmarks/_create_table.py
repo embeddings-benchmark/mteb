@@ -8,8 +8,8 @@ from typing import TYPE_CHECKING, Literal
 import numpy as np
 import pandas as pd
 
-import mteb
 from mteb.get_tasks import get_task, get_tasks
+from mteb.models.get_model_meta import get_model_meta
 
 if TYPE_CHECKING:
     from mteb.results.benchmark_results import BenchmarkResults
@@ -145,7 +145,7 @@ def _create_summary_table_from_benchmark_results(
     joint_table = joint_table.reset_index()
 
     # Add model metadata
-    model_metas = joint_table["model_name"].map(mteb.get_model_meta)
+    model_metas = joint_table["model_name"].map(get_model_meta)
     joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
 
@@ -177,6 +177,11 @@ def _create_summary_table_from_benchmark_results(
         1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
     )
     joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
+
+    # Add release date from model metadata
+    joint_table["Release Date"] = model_metas.map(
+        lambda m: str(m.release_date) if m.release_date else None
+    )
 
     # Clean up model names (remove HF organization)
     joint_table["model_name"] = joint_table["model_name"].map(
@@ -386,7 +391,7 @@ def _create_summary_table_mean_public_private(
     joint_table = joint_table.reset_index()
 
     # Add model metadata
-    model_metas = joint_table["model_name"].map(mteb.get_model_meta)
+    model_metas = joint_table["model_name"].map(get_model_meta)
     joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
 
@@ -410,6 +415,11 @@ def _create_summary_table_mean_public_private(
         1,
         "Active Parameters (B)",
         model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
+    )
+
+    # Add release date from model metadata
+    joint_table["Release Date"] = model_metas.map(
+        lambda m: str(m.release_date) if m.release_date else None
     )
 
     # Clean up model names (remove HF organization)
@@ -505,7 +515,7 @@ def _create_summary_table_mean_subset(
     joint_table = joint_table.reset_index()
 
     # Add model metadata
-    model_metas = joint_table["model_name"].map(mteb.get_model_meta)
+    model_metas = joint_table["model_name"].map(get_model_meta)
     joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
 
@@ -536,6 +546,11 @@ def _create_summary_table_mean_subset(
         1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
     )
     joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
+
+    # Add release date from model metadata
+    joint_table["Release Date"] = model_metas.map(
+        lambda m: str(m.release_date) if m.release_date else None
+    )
 
     # Clean up model names (remove HF organization)
     joint_table["model_name"] = joint_table["model_name"].map(
@@ -622,7 +637,7 @@ def _create_summary_table_mean_task_type(
     joint_table = joint_table.reset_index()
 
     # Add model metadata
-    model_metas = joint_table["model_name"].map(mteb.get_model_meta)
+    model_metas = joint_table["model_name"].map(get_model_meta)
     joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
 
@@ -652,6 +667,11 @@ def _create_summary_table_mean_task_type(
         1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
     )
     joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
+
+    # Add release date from model metadata
+    joint_table["Release Date"] = model_metas.map(
+        lambda m: str(m.release_date) if m.release_date else None
+    )
 
     # Clean up model names (remove HF organization)
     joint_table["model_name"] = joint_table["model_name"].map(

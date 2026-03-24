@@ -8,7 +8,7 @@ from tqdm.auto import tqdm
 from transformers import __version__ as transformers_version
 
 from mteb._requires_package import requires_package
-from mteb.models import sentence_transformers_loader
+from mteb.models import SentenceTransformerEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
@@ -264,7 +264,7 @@ def gemma_embedding_loader(model_name: str, revision: str, **kwargs):
             f"version {min_transformers_version} to run `{model_name}`"
         )
 
-    return sentence_transformers_loader(model_name, revision, **kwargs)
+    return SentenceTransformerEncoderWrapper(model_name, revision, **kwargs)
 
 
 embedding_gemma_300m = ModelMeta(

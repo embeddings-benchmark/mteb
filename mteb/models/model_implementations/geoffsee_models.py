@@ -1,8 +1,8 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 auto_g_embed_st = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="geoffsee/auto-g-embed-st",
     model_type=["dense"],
     revision="3e0bf6004ec386dea06d55dda4efe38fd96b5f7b",

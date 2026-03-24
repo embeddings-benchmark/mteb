@@ -7,7 +7,7 @@ import torch
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
@@ -802,7 +802,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta(
 )
 
 HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="HIT-TMG/KaLM-embedding-multilingual-mini-v1",
     model_type=["dense"],
     revision="8a82a0cd2b322b91723e252486f7cce6fd8ac9d3",

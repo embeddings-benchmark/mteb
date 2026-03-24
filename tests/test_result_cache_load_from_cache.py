@@ -98,7 +98,7 @@ class TestRebuildFromFullRepository:
         with (
             patch.object(cache, "download_from_remote") as mock_download,
             patch.object(cache, "load_results") as mock_load_results,
-            patch("mteb.get_model_metas") as mock_get_model_metas,
+            patch("mteb.cache.get_model_metas") as mock_get_model_metas,
         ):
             # Mock model metas - None names should be filtered
             meta1 = MagicMock()
@@ -138,7 +138,7 @@ class TestRebuildFromFullRepository:
         with (
             patch.object(cache, "download_from_remote"),
             patch.object(cache, "load_results") as mock_load_results,
-            patch("mteb.get_model_metas") as mock_get_model_metas,
+            patch("mteb.cache.get_model_metas") as mock_get_model_metas,
         ):
             meta = MagicMock()
             meta.name = "model1"

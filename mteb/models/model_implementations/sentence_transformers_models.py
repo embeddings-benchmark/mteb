@@ -3,10 +3,7 @@
 import numpy as np
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerEncoderWrapper,
-    sentence_transformers_loader,
-)
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 paraphrase_langs = [
     "ara-Arab",
@@ -113,7 +110,7 @@ sent_trf_training_dataset = {
 }
 
 all_minilm_l6_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/all-MiniLM-L6-v2",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -145,7 +142,7 @@ all_minilm_l6_v2 = ModelMeta(
 )
 
 all_minilm_l12_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/all-MiniLM-L12-v2",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -177,7 +174,7 @@ all_minilm_l12_v2 = ModelMeta(
 )
 
 paraphrase_multilingual_minilm_l12_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     model_type=["dense"],
     languages=paraphrase_langs,
@@ -209,7 +206,7 @@ paraphrase_multilingual_minilm_l12_v2 = ModelMeta(
 )
 
 paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     model_type=["dense"],
     languages=paraphrase_langs,
@@ -252,7 +249,7 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
 )
 
 labse = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/LaBSE",
     model_type=["dense"],
     languages=paraphrase_langs,
@@ -291,7 +288,7 @@ labse = ModelMeta(
 )
 
 multi_qa_minilm_l6_cos_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/multi-qa-MiniLM-L6-cos-v1",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -323,7 +320,7 @@ multi_qa_minilm_l6_cos_v1 = ModelMeta(
 )
 
 all_mpnet_base_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/all-mpnet-base-v2",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -499,7 +496,7 @@ contriever = ModelMeta(
 )
 
 microllama_text_embedding = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="keeeeenw/MicroLlama-text-embedding",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -546,7 +543,7 @@ SENTENCE_T5_CITATION = """
 }
 """
 sentence_t5_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/sentence-t5-base",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -570,7 +567,7 @@ sentence_t5_base = ModelMeta(
 )
 
 sentence_t5_large = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/sentence-t5-large",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -594,7 +591,7 @@ sentence_t5_large = ModelMeta(
 )
 
 sentence_t5_xl = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/sentence-t5-xl",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -618,7 +615,7 @@ sentence_t5_xl = ModelMeta(
 )
 
 sentence_t5_xxl = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/sentence-t5-xxl",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -652,7 +649,7 @@ GTR_CITATION = """
 }
 """
 gtr_t5_large = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/gtr-t5-large",
     model_type=["dense"],
     languages=["eng-Latn"],  # in format eng-Latn
@@ -688,7 +685,7 @@ gtr_t5_large = ModelMeta(
 )
 
 gtr_t5_xl = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/gtr-t5-xl",
     model_type=["dense"],
     languages=["eng-Latn"],  # in format eng-Latn
@@ -723,7 +720,7 @@ gtr_t5_xl = ModelMeta(
     citation=GTR_CITATION,
 )
 gtr_t5_xxl = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/gtr-t5-xxl",
     model_type=["dense"],
     languages=["eng-Latn"],  # in format eng-Latn
@@ -759,7 +756,7 @@ gtr_t5_xxl = ModelMeta(
 )
 
 gtr_t5_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/gtr-t5-base",
     model_type=["dense"],
     languages=["eng-Latn"],  # in format eng-Latn
@@ -795,7 +792,7 @@ gtr_t5_base = ModelMeta(
 )
 
 static_retrieval_mrl_en_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/static-retrieval-mrl-en-v1",
     revision="f60985c706f192d45d218078e49e5a8b6f15283a",
     release_date="2024-10-24",
@@ -832,7 +829,7 @@ static_retrieval_mrl_en_v1 = ModelMeta(
 )
 
 multi_qa_mpnet_base_dot_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/multi-qa-mpnet-base-dot-v1",
     revision="3af7c6da5b3e1bea796ef6c97fe237538cbe6e7f",
     release_date="2021-08-23",
