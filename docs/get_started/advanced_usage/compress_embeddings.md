@@ -5,17 +5,16 @@ icon: lucide/minimize-2
 
 ## Compressing Embeddings
 
-Storing dense embeddings for later re-use, i.e. as an index to enable retrieval, requires significant amounts of storage, especially for large corpora. An easy way to alleviate this issue is to compress the embeddings by representing each embedding dimension with a lower number of bits, i.e. going from 32 bits to 8, which will consume four times less storage. While reducing storage consumption, however, embedding compression can lead to reduced performance. You can evaluate the performance of compressed embeddings for a model by using the `CompressionWrapper` class:
+Storing dense embeddings for later re-use, i.e. as an index to enable retrieval, requires significant amounts of storage, especially for large corpora. An easy way to alleviate this issue is to compress the embeddings by representing each embedding dimension with a lower number of bits, i.e. going from 32 bits to 8, which will consume four times less storage. While reducing storage consumption, however, embedding compression can lead to reduced performance. You can evaluate the performance of compressed embeddings for a model by using the [`CompressionWrapper`][mteb.models.compression_wrappers.compression_wrapper.CompressionWrapper] class:
 
 ```python
 import mteb
+from mteb.models import CompressionWrapper
+from mteb.types import OutputDType
 
 # define your task(s) and model above as normal
 task = mteb.get_task("AILACasedocs")
 model = mteb.get_model("intfloat/multilingual-e5-large-instruct")
-
-from mteb.models import CompressionWrapper
-from mteb.types import OutputDType
 
 # wrap the model with the compression wrapper
 model_with_compression = CompressionWrapper(model, output_dtype=OutputDType.INT8)
@@ -23,7 +22,7 @@ model_with_compression = CompressionWrapper(model, output_dtype=OutputDType.INT8
 results = mteb.evaluate(model_with_compression, tasks=[task])
 ```
 
-The `output_dtype` parameter determines the value range to which embeddings are compressed. Consult the `OutputDType` class for a full overview of valid compression levels.
+The `output_dtype` parameter determines the value range to which embeddings are compressed. Consult the [`OutputDType`][mteb.types.OutputDType] class for a full overview of valid compression levels.
 
 ### Threshold Estimation
 

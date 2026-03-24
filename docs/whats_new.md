@@ -12,7 +12,7 @@ This section is an overview of releases for more information check out the autog
 
 MTEB v2.12 adds support for evaluating model performance on compressed embeddings, i.e. quantized to int8. Models that internally support compressed output embeddings can now specify them as part of the model's metadata using the `output_dtype` field.
 
-To generate compressed embeddings, the model is needs to be wrapped in the `CompressionWrapper` class as follows:
+To generate compressed embeddings, the model is needs to be wrapped in the [`CompressionWrapper`][mteb.models.compression_wrappers.compression_wrapper.CompressionWrapper] class as follows:
 
 ```python
 import mteb
@@ -29,6 +29,8 @@ model_with_compression = CompressionWrapper(model, output_dtype=OutputDType.INT8
 # evaluate as normal
 results = mteb.evaluate(model_with_compression, tasks=[task])
 ```
+
+To learn more about how to evaluate compressed embedding see [related documentation](./get_started/advanced_usage/compress_embeddings.md).
 
 ## New in v2.11
 ### Support for Matryoshka embeddings
