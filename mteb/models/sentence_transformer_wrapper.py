@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import sys
 import warnings
 from typing import TYPE_CHECKING, Any
 
@@ -13,6 +14,11 @@ from mteb.models import ModelMeta
 from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder
+
+if sys.version_info >= (3, 13):
+    from warnings import deprecated
+else:
+    from typing_extensions import deprecated
 
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder, SentenceTransformer
@@ -27,6 +33,9 @@ logger = logging.getLogger(__name__)
 SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
 
 
+@deprecated(
+    "sentence_transformers_loader is deprecated, use SentenceTransformerEncoderWrapper directly instead."
+)
 def sentence_transformers_loader(
     model_name: str, revision: str | None = None, device: str | None = None, **kwargs
 ) -> SentenceTransformerEncoderWrapper:
@@ -41,11 +50,6 @@ def sentence_transformers_loader(
         device: The device used to load the model.
         kwargs: Additional arguments to pass to the SentenceTransformer model.
     """
-    warnings.warn(
-        "sentence_transformers_loader is deprecated, use SentenceTransformerEncoderWrapper directly instead.",
-        DeprecationWarning,
-        stacklevel=2,
-    )
     return SentenceTransformerEncoderWrapper(
         model=model_name, revision=revision, device=device, **kwargs
     )
