@@ -49,7 +49,7 @@ build-docs-overview:
 
 serve-docs:
 	@echo "--- 📚 Serving documentation ---"
-	uv run --no-sync --group docs python -m mkdocs serve
+	uv run --no-sync --group docs python -m zensical serve
 
 
 model-load-test:

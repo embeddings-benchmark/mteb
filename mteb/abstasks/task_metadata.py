@@ -176,13 +176,11 @@ SampleCreationMethod = Literal[
 """How the text was created. It can be an important factor for understanding the quality of a dataset. E.g. used to filter out machine-translated datasets."""
 
 MIEB_TASK_TYPE = (
-    "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
     "Any2AnyMultilingualRetrieval",
     "VisionCentricQA",
     "ImageClustering",
     "ImageClassification",
-    "ImageMultilabelClassification",
     "DocumentUnderstanding",
     "VisualSTS(eng)",
     "VisualSTS(multi)",
@@ -298,6 +296,38 @@ Attributes:
 """
 
 
+_TASKTYPE2SIMPLIFIEDTASKTYPE = {
+    "Any2AnyRetrieval": "retrieval",
+    "Any2AnyMultilingualRetrieval": "retrieval",
+    "VisionCentricQA": "retrieval",
+    "DocumentUnderstanding": "retrieval",
+    "AudioReranking": "retrieval",
+    "Reranking": "retrieval",
+    "Retrieval": "retrieval",
+    "InstructionRetrieval": "retrieval",
+    "InstructionReranking": "retrieval",
+    "Clustering": "clustering",
+    "ImageClustering": "clustering",
+    "AudioClustering": "clustering",
+    "AudioMultilabelClassification": "classification",
+    "AudioZeroshotClassification": "classification",
+    "AudioClassification": "classification",
+    "ImageClassification": "classification",
+    "ZeroShotClassification": "classification",
+    "MultilabelClassification": "classification",
+    "Classification": "classification",
+    "Regression": "classification",
+    "VisualSTS(eng)": "semantic-similarity",
+    "VisualSTS(multi)": "semantic-similarity",
+    "STS": "semantic-similarity",
+    "Summarization": "semantic-similarity",
+    "BitextMining": "semantic-similarity",
+    "Compositionality": "pair-classification",
+    "AudioPairClassification": "pair-classification",
+    "PairClassification": "pair-classification",
+}
+
+
 class MetadataDatasetDict(TypedDict, total=False):
     """A dictionary containing the dataset path and revision.
 
@@ -409,7 +439,7 @@ class TaskMetadata(BaseModel):
                 check_language_code(code)
 
     @property
-    def task_type(self) -> str:
+    def simplified_task_type(self) -> str:
         """A simplified task type compared to metadata.type. E.g. converts AudioClustering and ImageClustering to simply Clustering.
 
         This performs a rought seperation into the following categories:
@@ -420,62 +450,14 @@ class TaskMetadata(BaseModel):
             items in the embedding space reflects their semantic grouping.
         - **classification**: Tasks that require embeddings to be linearly separable by category in the
             embedding space. Typically these task utilize classifier or regression probe fit on the embeddings.
-        - **semantic similarity**: Tasks that require embeddings to preserve fine-grained similarity
+        - **semantic-similarity**: Tasks that require embeddings to preserve fine-grained similarity
             between pairs of items, such that cosine similarity reflects human judgments.
         - **pair-classification**: Tasks that require embeddings to capture the relationship between a pair
             of items, such as entailment or paraphrase.
 
         These categories are compatible with task seperation such as that of Jina v3, though not not an exact match.
         """
-        # TODO implement smarter and add test to ensure that all tasks are represented - this is just to show the categories
-        tasktype2types = {
-            "retrieval": [
-                "Any2AnyMultiChoice",
-                "Any2AnyRetrieval",
-                "Any2AnyMultilingualRetrieval",
-                "VisionCentricQA",
-                "DocumentUnderstanding",
-                "AudioReranking",
-                "Any2AnyRetrieval",
-                "Reranking",
-                "Retrieval",
-                "InstructionRetrieval",
-                "InstructionReranking",
-            ],
-            "clustering": [
-                "Clustering",
-                "ImageClustering",
-                "AudioClustering",
-            ],
-            "classification": [
-                "AudioMultilabelClassification",
-                "AudioZeroshotClassification",
-                "AudioClassification",
-                "ImageClassification",
-                "ImageMultilabelClassification",
-                "ZeroShotClassification",
-                "MultilabelClassification",
-                "Classification",
-                "Regression",
-            ],
-            "semantic-similarity": [
-                "VisualSTS(eng)",
-                "VisualSTS(multi)",
-                "STS",
-                "SummarizationBitextMining",
-            ],
-            "pair-classification": [
-                "Compositionality",
-                "AudioPairClassification",
-                "PairClassification",
-            ],
-        }
-        task2tasktypes = {
-            _type: tasktype
-            for tasktype, _types in tasktype2types.items()
-            for _type in _types
-        }
-        return task2tasktypes.get(self.type, "other")
+        return _TASKTYPE2SIMPLIFIEDTASKTYPE[self.type]
 
     @property
     def bcp47_codes(self) -> list[ISOLanguageScript]:
@@ -865,7 +847,6 @@ class TaskMetadata(BaseModel):
             "VisionCentricQA": ["visual-question-answering"],
             "ImageClustering": ["image-feature-extraction"],
             "ImageClassification": ["image-classification"],
-            "ImageMultilabelClassification": ["image-classification"],
             "DocumentUnderstanding": ["visual-document-retrieval"],
             "VisualSTS(eng)": ["other"],
             "VisualSTS(multi)": ["other"],
