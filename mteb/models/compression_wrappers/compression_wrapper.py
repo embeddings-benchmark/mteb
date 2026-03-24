@@ -50,7 +50,7 @@ class CompressionWrapper:
         self.clipping_margin = None
         self.min_embeds = 10_000
         embed_types = model.mteb_model_meta.output_dtypes
-        model.mteb_model_meta.experiment_kwargs = {"precision": output_dtype.value}
+        model.mteb_model_meta.experiment_kwargs = {"output_dtypes": output_dtype.value}
         model.mteb_model_meta.output_dtypes = [output_dtype]
         if clipping_margin is not None:
             assert 0 < clipping_margin[0] < clipping_margin[1] < 1
