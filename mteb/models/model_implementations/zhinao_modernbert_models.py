@@ -46,4 +46,5 @@ zhinao_chinesemodernbert_embedding = ModelMeta(
     modalities=["text"],
     model_type=["dense"],
     citation=None,
+    contacts=["gitabtion"]
 )
