@@ -378,6 +378,8 @@ class TaskMetadata(BaseModel):
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
         adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
         is_public: Whether the dataset is publicly available. If False (closed/private), a HuggingFace token is required to run the datasets.
+        contributed_by: The name of the organization or individual who contributed the dataset. This is especially useful for private datasets
+            where it may be harder to gather information about the source.
         superseded_by: Denotes the task that this task is superseded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
     """
@@ -410,6 +412,7 @@ class TaskMetadata(BaseModel):
     bibtex_citation: str | None = None
     adapted_from: Sequence[str] | None = None
     is_public: bool = True
+    contributed_by: str | None = None
     superseded_by: str | None = None
 
     def _validate_metadata(self) -> None:
@@ -503,7 +506,8 @@ class TaskMetadata(BaseModel):
         return all(
             getattr(self, field_name) is not None
             for field_name in self.model_fields
-            if field_name not in ["prompt", "adapted_from", "superseded_by"]
+            if field_name
+            not in ["prompt", "adapted_from", "contributed_by", "superseded_by"]
         )
 
     @property
@@ -684,6 +688,7 @@ class TaskMetadata(BaseModel):
                 dataset_task_name=self.name,
                 category=self.category,
                 domains=", ".join(self.domains) if self.domains else None,
+                contributed_by=self.contributed_by,
             ),
         )
 

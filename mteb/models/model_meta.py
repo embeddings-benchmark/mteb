@@ -4,7 +4,7 @@ import hashlib
 import json
 import logging
 import warnings
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import field
 from enum import Enum
 from functools import partial
@@ -37,8 +37,6 @@ from mteb.models.models_protocols import MTEBModels
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
-
     from huggingface_hub import (
         ModelCardData,
     )
@@ -57,6 +55,7 @@ FRAMEWORKS = Literal[
     "GritLM",
     "LLM2Vec",
     "TensorFlow",
+    "JAX",
     "API",
     "Tevatron",
     "NumPy",
@@ -66,6 +65,7 @@ FRAMEWORKS = Literal[
     "GGUF",
     "safetensors",
     "ONNX",
+    "OpenVINO",
     "Transformers",
 ]
 
@@ -107,6 +107,7 @@ class ModelMeta(BaseModel):
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
+          If annotated as list this will be treated as a range of possible embedding dimensions (Matryoshka).
         revision: The revision number of the model. If None, it is assumed that the metadata (including the loader) is valid for all revisions of the model.
         release_date: The date the model's revision was released. If None, then release date will be added based on 1st commit in hf repository of model.
         license: The license under which the model is released. Required if open_weights is True.
@@ -146,7 +147,7 @@ class ModelMeta(BaseModel):
     n_embedding_parameters: int | None = None
     memory_usage_mb: float | None
     max_tokens: float | None
-    embed_dim: int | None
+    embed_dim: int | Sequence[int] | None
     license: Licenses | StrURL | None
     open_weights: bool | None
     public_training_code: str | None
@@ -240,7 +241,10 @@ class ModelMeta(BaseModel):
 
     def to_dict(self):
         """Returns a dictionary representation of the model metadata."""
-        dict_repr = self.model_dump()
+        meta = self.model_copy(deep=True)
+        if isinstance(meta.embed_dim, Sequence):
+            meta.embed_dim = max(meta.embed_dim)
+        dict_repr = meta.model_dump()
         loader = dict_repr.pop("loader", None)
         dict_repr["training_datasets"] = (
             list(dict_repr["training_datasets"])
@@ -274,7 +278,13 @@ class ModelMeta(BaseModel):
             )
         return v
 
-    def load_model(self, device: str | None = None, **kwargs: Any) -> MTEBModels:
+    def load_model(
+        self,
+        device: str | None = None,
+        *,
+        embed_dim: int | None = None,
+        **kwargs: Any,
+    ) -> MTEBModels:
         """Loads the model using the specified loader function."""
         if self.loader is None:
             raise NotImplementedError(
@@ -282,6 +292,28 @@ class ModelMeta(BaseModel):
             )
         if self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
+
+        if embed_dim is not None:
+            if (
+                self.embed_dim is not None
+                and isinstance(self.embed_dim, int)
+                and self.embed_dim != embed_dim
+            ):
+                raise ValueError(
+                    f"Requested embedding dimension {embed_dim} does not match the model's embedding dimension {self.embed_dim}. "
+                    "Model does not support loading with a different embedding dimension. "
+                    "You can change supported embedding dimensions in `meta.embed_dim`."
+                )
+            elif isinstance(self.embed_dim, list) and embed_dim not in self.embed_dim:
+                raise ValueError(
+                    f"Requested embedding dimension {embed_dim} is not in the model's supported embedding dimensions {self.embed_dim}."
+                )
+            self.embed_dim = embed_dim
+            kwargs["embed_dim"] = embed_dim
+            if self.experiment_kwargs is None:
+                self.experiment_kwargs = {"embed_dim": embed_dim}
+            else:
+                self.experiment_kwargs["embed_dim"] = embed_dim  # type: ignore[index]
 
         if self.experiment_kwargs is None:
             self.experiment_kwargs = kwargs if len(kwargs) > 0 else None
@@ -295,7 +327,11 @@ class ModelMeta(BaseModel):
         if device is not None:
             _kwargs["device"] = device
 
-        model: MTEBModels = self.loader(self.name, revision=self.revision, **_kwargs)
+        model: MTEBModels = self.loader(
+            self.name,
+            revision=self.revision,
+            **_kwargs,
+        )
         model.mteb_model_meta = self  # type: ignore[misc]
         return model
 
@@ -1081,6 +1117,10 @@ class ModelMeta(BaseModel):
     def _get_frameworks_from_hf_tags(model_name: str) -> list[FRAMEWORKS]:
         """Extract frameworks supported by the model from HuggingFace model tags.
 
+        HuggingFace derives tags like ``pytorch``, ``tf``, ``jax``, ``onnx``,
+        ``safetensors``, ``gguf``, and ``openvino`` from the files present in a
+        repository. This method maps those tags to MTEB framework names.
+
         Args:
             model_name: HuggingFace model name
 
@@ -1097,22 +1137,25 @@ class ModelMeta(BaseModel):
             )
             return []
 
-        # Mapping from HuggingFace tags to MTEB framework names
+        # Mapping from HuggingFace tags to MTEB framework names.
+        # Order determines the order of the returned list.
         tag_to_framework: dict[str, FRAMEWORKS] = {
             "sentence-transformers": "Sentence Transformers",
+            "pytorch": "PyTorch",
+            "tf": "TensorFlow",
+            "jax": "JAX",
             "transformers": "Transformers",
             "onnx": "ONNX",
             "safetensors": "safetensors",
             "gguf": "GGUF",
+            "openvino": "OpenVINO",
         }
 
-        # Assume PyTorch support by default
-        # TODO: could be detected from repo as well: https://github.com/embeddings-benchmark/mteb/issues/4104
-        frameworks: list[FRAMEWORKS] = ["PyTorch"]
+        frameworks: list[FRAMEWORKS] = []
 
-        for framework_tag in tag_to_framework.keys():
+        for framework_tag, framework_name in tag_to_framework.items():
             if framework_tag in info.tags:
-                frameworks.append(tag_to_framework[framework_tag])
+                frameworks.append(framework_name)
 
         return frameworks
 

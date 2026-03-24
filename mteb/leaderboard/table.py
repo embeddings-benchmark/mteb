@@ -159,10 +159,10 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         "Rank (Mean Task)",
         "Rank",
         "Model",
-        "Number of Parameters (B)",
+        "Total Parameters (B)",
+        "Active Parameters (B)",
         "Embedding Dimensions",
         "Max Tokens",
-        "Memory Usage (MB)",
     ]
 
     gradient_columns = [
@@ -195,10 +195,10 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         {
             **dict.fromkeys(score_columns, "{:.2f}"),
             rank_column: "{:.0f}",
-            "Memory Usage (MB)": "{:.0f}",
             "Embedding Dimensions": "{:.0f}",
             "Max Tokens": "{:.0f}",
-            "Number of Parameters (B)": lambda x: _style_number_of_parameters(x),
+            "Total Parameters (B)": lambda x: _style_number_of_parameters(x),
+            "Active Parameters (B)": lambda x: _style_number_of_parameters(x),
         },
         na_rep="",
     )
@@ -239,7 +239,6 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         column_widths[0] = "100px"
     if len(column_widths) > 1:
         column_widths[1] = "250px"
-
     return gr.DataFrame(
         joint_table_style,
         datatype=column_types,

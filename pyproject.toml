@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.10.8"
+version = "2.11.7"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -101,13 +101,14 @@ open_clip_torch = ["open_clip_torch==2.31.0"]
 nomic = ["einops>=0.8.1"]
 ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
 colpali_engine = ["colpali_engine>=0.3.12; python_full_version < '3.14'"]
-colqwen3 = ["transformers>=4.57", "torchvision>=0.22.1"]
+colqwen3 = ["transformers>=4.57.0", "torchvision>=0.22.1"]
 sauerkrautlm-colpali = ["sauerkrautlm-colpali>=0.1.0; python_full_version < '3.14'"]
 xet = ["huggingface_hub>=0.32.0"]
 youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lkeap>=3.0.1451"]
 llama-embed-nemotron = ["transformers==4.51.0"]
 llama-nemotron-colembed-vl = ["transformers[torch]==4.49.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 nemotron-colembed-vl-v2 = ["transformers[torch]==5.0.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
+llama-nemotron-embed-vl-1b-v2 = ["transformers[torch]>=4.56.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 faiss-cpu = ["faiss-cpu>=1.12.0"]
 eager_embed = ["qwen_vl_utils>=0.0.14"]
 speechbrain = ["speechbrain>=0.5.12"]
@@ -116,6 +117,8 @@ wav2clip = ["wav2clip==0.1.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
 mctct = ["transformers<5"]  # mctct was removed in transformers 5
+siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]  
+qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"] 
 
 [dependency-groups]
 lint = [
@@ -134,12 +137,8 @@ test = [
     "tabulate>=0.9.0",
 ]
 docs = [
-    "mkdocs>=1.6.1",
-    "mkdocs-material>=9.5.47",
+    "zensical>=0.0.11",
     "mkdocstrings-python>=1.18.2",
-    "mkdocs-bibtex>=2.16.2",
-    "mkdocs-exclude>=1.0.2",
-    "mkdocs-include-dir-to-nav>=1.2.0",
     "tabulate>=0.9.0",
 ]
 typing = [
@@ -377,6 +376,7 @@ conflicts = [
         { extra = "llama-embed-nemotron" }, # conflicting versions of transformers
         { extra = "llama-nemotron-colembed-vl" }, # conflicting versions of transformers
         { extra = "nemotron-colembed-vl-v2" }, # conflicting versions of transformers
+        { extra = "llama-nemotron-embed-vl-1b-v2" }, # conflicting versions of transformers
         { extra = "colpali_engine" },
         { extra = "colqwen3" },
         { extra = "jina-v4" },
@@ -386,6 +386,7 @@ conflicts = [
         { extra = "msclap" },
         { extra = "muq" },
         { extra = "mctct" },
+        { extra = "qwen-vl" },
     ],
 ]
 
@@ -516,3 +517,4 @@ matche = "matche"
 expresso = "expresso"
 Expresso = "Expresso"
 NIFE = "NIFE"
+thw = "thw"

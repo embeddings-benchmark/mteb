@@ -201,6 +201,7 @@ yamnet = ModelMeta(
     release_date="2020-10-06",
     max_tokens=float("inf"),
     n_parameters=3_751_369,
+    n_embedding_parameters=0,
     memory_usage_mb=14,
     embed_dim=1024,
     license="apache-2.0",
