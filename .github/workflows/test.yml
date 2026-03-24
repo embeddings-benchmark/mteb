@@ -60,6 +60,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
+          version: "0.10.12"
 
       # required for evaluation the audio subset
       - name: Install FFmpeg (Ubuntu)
