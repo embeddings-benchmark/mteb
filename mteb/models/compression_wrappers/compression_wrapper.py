@@ -50,20 +50,24 @@ class CompressionWrapper:
         self.clipping_margin = None
         self.min_embeds = 10_000
         embed_types = model.mteb_model_meta.output_dtypes
-        model.mteb_model_meta.experiment_kwargs = {"output_dtypes": output_dtype.value}
         model.mteb_model_meta.output_dtypes = [output_dtype]
+        if model.mteb_model_meta.experiment_kwargs is None:
+            model.mteb_model_meta.experiment_kwargs = {}
+        model.mteb_model_meta.experiment_kwargs["output_dtypes"] = output_dtype.value
+
         if clipping_margin is not None:
             assert 0 < clipping_margin[0] < clipping_margin[1] < 1
             self.clipping_margin = torch.tensor(clipping_margin)
+            model.mteb_model_meta.experiment_kwargs["clipping_margin"] = list(
+                clipping_margin
+            )
         if embed_types and output_dtype in embed_types:
-            logger.warning(
+            msg = (
                 f"The model {model.mteb_model_meta.name} internally supports quantization to "
                 f"{output_dtype.value}, which might lead to better results."
             )
-            warnings.warn(
-                f"The model {model.mteb_model_meta.name} internally supports quantization to "
-                f"{output_dtype.value}, which might lead to better results."
-            )
+            logger.warning(msg)
+            warnings.warn(msg)
         logger.info("Initialized CompressionWrapper.")
 
     @property
