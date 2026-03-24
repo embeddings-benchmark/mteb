@@ -296,7 +296,9 @@ Attributes:
 """
 
 
-_TASKTYPE2SIMPLIFIEDTASKTYPE = {
+SimplifiedTaskType = Literal["retrieval", "clustering", "classification", ""semantic-similarity", "pair-classification"]
+
+_TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType]  = {
     "Any2AnyRetrieval": "retrieval",
     "Any2AnyMultilingualRetrieval": "retrieval",
     "VisionCentricQA": "retrieval",
