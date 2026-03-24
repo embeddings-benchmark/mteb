@@ -151,7 +151,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
         x="_x_display",
         y="Mean (Task)",
         labels={
-            "_x_display": "Number of Active Parameters (B)",
+            "_x_display": "Number of Active Parameters",
         },
         log_x=True,
         template="plotly_white",
@@ -182,7 +182,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
         marker=dict(
             sizemode="diameter",
             sizeref=max_sqrt_dim / desired_max_diameter,
-            sizemin=1,
+            sizemin=0,
         )
     )
     fig.add_annotation(x=1e9, y=10, text="Model size:")
