@@ -414,7 +414,7 @@ def _leaderboard(args: argparse.Namespace) -> None:
     except ImportError as e:
         raise ImportError(
             "Seems like some dependencies are not installed. "
-            + "You can likely install these using: `pip install mteb[leaderboard]`. "
+            + "You can likely install these using: `pip install 'mteb[leaderboard]'`. "
             + f"{e}"
         )
 

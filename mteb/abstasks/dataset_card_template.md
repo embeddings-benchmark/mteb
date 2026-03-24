@@ -18,6 +18,9 @@
 | Task category | {{ category }}                              |
 | Domains       | {{ domains }}                               |
 | Reference     | {{ dataset_reference | default("", true) }} |
+{%- if contributed_by %}
+| Contributed by| {{ contributed_by }}                        |
+{%- endif %}
 
 Source datasets:
 {%- for dataset in source_datasets %}
