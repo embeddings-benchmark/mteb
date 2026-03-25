@@ -56,15 +56,21 @@ class CompressionWrapper:
         model.mteb_model_meta.experiment_kwargs["output_dtypes"] = output_dtype.value  # type: ignore[index]
 
         if clipping_margin is not None:
-            assert 0 < clipping_margin[0] < clipping_margin[1] < 1
+            if not 0 < clipping_margin[0] < clipping_margin[1] < 1:
+                raise ValueError(
+                    f"Clipping margin must be between 0 and 1 with lower bound {clipping_margin[0]} < "
+                    f"upper bound {clipping_margin[1]}, but got {clipping_margin}."
+                )
             self.clipping_margin = torch.tensor(clipping_margin)
             model.mteb_model_meta.experiment_kwargs["clipping_margin"] = list(  # type: ignore[index]
                 clipping_margin
             )
         if embed_types and output_dtype in embed_types:
             msg = (
-                f"The model {model.mteb_model_meta.name} internally supports quantization to "
-                f"{output_dtype.value}, which might lead to better results."
+                f"The model {model.mteb_model_meta.name} natively supports quantization to {output_dtype.value} and "
+                f"can be configured to return a compressed embedding vector without using the wrapper. Please note "
+                f"that performance on compressed embedding might be better when using compressed embeddings returned "
+                f"directly by the model."
             )
             logger.warning(msg)
             warnings.warn(msg)
@@ -196,14 +202,12 @@ class CompressionWrapper:
             The minimum and maximum values per embedding dimension.
         """
         if len(embeddings) < self.min_embeds:
-            logger.warning(
+            msg = (
                 f"Estimating quantization parameters on less than {self.min_embeds} embeddings (only "
                 f"{len(embeddings)}). Parameters are likely unstable and results might not generalize."
             )
-            warnings.warn(
-                f"Estimating quantization parameters on less than {self.min_embeds} embeddings (only "
-                f"{len(embeddings)}). Parameters are likely unstable and results might not generalize."
-            )
+            logger.warning(msg)
+            warnings.warn(msg)
 
         mins, maxs = (
             torch.min(embeddings, dim=0).values,

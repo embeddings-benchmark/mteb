@@ -1,3 +1,4 @@
+
 import pytest
 import torch
 from datasets import Dataset
@@ -107,6 +108,13 @@ def test_binary_compression():
         hf_subset="test",
     )
     assert torch.max(embeddings) <= 1 and torch.min(embeddings) >= 0
+
+
+@pytest.mark.parametrize("margins", [(-0.1, 0.7), (0.1, 1.3), (0.2, 0.1)])
+def test_invalid_clipping_margin(margins: tuple[float, float]):
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    with pytest.raises(ValueError):
+        CompressionWrapper(model, OutputDType.INT8, margins)
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID_MONOLINGUAL)
