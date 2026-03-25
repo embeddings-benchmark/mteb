@@ -51,6 +51,11 @@ length, valid frameworks, license, and degree of openness.
 :::mteb.models.cache_wrappers.cache_backends.FaissCache
 
 
+## Compression Wrapper
+
+:::mteb.models.CompressionWrapper
+
+
 ## Search Index Backends
 
 :::mteb.models.search_encoder_index.search_backend_protocol.IndexEncoderSearchProtocol
