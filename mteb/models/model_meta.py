@@ -4,7 +4,7 @@ import hashlib
 import json
 import logging
 import warnings
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import field
 from enum import Enum
 from functools import partial
@@ -37,8 +37,6 @@ from mteb.models.models_protocols import MTEBModels
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
-
     from huggingface_hub import (
         ModelCardData,
     )
@@ -109,6 +107,7 @@ class ModelMeta(BaseModel):
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
+          If annotated as list this will be treated as a range of possible embedding dimensions (Matryoshka).
         revision: The revision number of the model. If None, it is assumed that the metadata (including the loader) is valid for all revisions of the model.
         release_date: The date the model's revision was released. If None, then release date will be added based on 1st commit in hf repository of model.
         license: The license under which the model is released. Required if open_weights is True.
@@ -148,7 +147,7 @@ class ModelMeta(BaseModel):
     n_embedding_parameters: int | None = None
     memory_usage_mb: float | None
     max_tokens: float | None
-    embed_dim: int | None
+    embed_dim: int | Sequence[int] | None
     license: Licenses | StrURL | None
     open_weights: bool | None
     public_training_code: str | None
@@ -242,7 +241,10 @@ class ModelMeta(BaseModel):
 
     def to_dict(self):
         """Returns a dictionary representation of the model metadata."""
-        dict_repr = self.model_dump()
+        meta = self.model_copy(deep=True)
+        if isinstance(meta.embed_dim, Sequence):
+            meta.embed_dim = max(meta.embed_dim)
+        dict_repr = meta.model_dump()
         loader = dict_repr.pop("loader", None)
         dict_repr["training_datasets"] = (
             list(dict_repr["training_datasets"])
@@ -276,7 +278,13 @@ class ModelMeta(BaseModel):
             )
         return v
 
-    def load_model(self, device: str | None = None, **kwargs: Any) -> MTEBModels:
+    def load_model(
+        self,
+        device: str | None = None,
+        *,
+        embed_dim: int | None = None,
+        **kwargs: Any,
+    ) -> MTEBModels:
         """Loads the model using the specified loader function."""
         if self.loader is None:
             raise NotImplementedError(
@@ -284,6 +292,28 @@ class ModelMeta(BaseModel):
             )
         if self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
+
+        if embed_dim is not None:
+            if (
+                self.embed_dim is not None
+                and isinstance(self.embed_dim, int)
+                and self.embed_dim != embed_dim
+            ):
+                raise ValueError(
+                    f"Requested embedding dimension {embed_dim} does not match the model's embedding dimension {self.embed_dim}. "
+                    "Model does not support loading with a different embedding dimension. "
+                    "You can change supported embedding dimensions in `meta.embed_dim`."
+                )
+            elif isinstance(self.embed_dim, list) and embed_dim not in self.embed_dim:
+                raise ValueError(
+                    f"Requested embedding dimension {embed_dim} is not in the model's supported embedding dimensions {self.embed_dim}."
+                )
+            self.embed_dim = embed_dim
+            kwargs["embed_dim"] = embed_dim
+            if self.experiment_kwargs is None:
+                self.experiment_kwargs = {"embed_dim": embed_dim}
+            else:
+                self.experiment_kwargs["embed_dim"] = embed_dim  # type: ignore[index]
 
         if self.experiment_kwargs is None:
             self.experiment_kwargs = kwargs if len(kwargs) > 0 else None
@@ -297,7 +327,11 @@ class ModelMeta(BaseModel):
         if device is not None:
             _kwargs["device"] = device
 
-        model: MTEBModels = self.loader(self.name, revision=self.revision, **_kwargs)
+        model: MTEBModels = self.loader(
+            self.name,
+            revision=self.revision,
+            **_kwargs,
+        )
         model.mteb_model_meta = self  # type: ignore[misc]
         return model
 
@@ -345,7 +379,7 @@ class ModelMeta(BaseModel):
         model_name: str,
         revision: str | None,
         config: dict[str, Any] | None,
-        sentence_transformers_loader: Callable[..., MTEBModels],
+        encoder_loader: Callable[..., MTEBModels],
         cross_encoder_loader: Callable[..., MTEBModels],
     ) -> tuple[Callable[..., MTEBModels] | None, MODEL_TYPES]:
         """Detect if model is CrossEncoder or default to dense."""
@@ -354,7 +388,7 @@ class ModelMeta(BaseModel):
                 f"Could not load config.json for {model_name}. "
                 "Defaulting to SentenceTransformer loader."
             )
-            return sentence_transformers_loader, "dense"
+            return encoder_loader, "dense"
 
         architectures = config.get("architectures", [])
 
@@ -371,7 +405,7 @@ class ModelMeta(BaseModel):
             f"Model {model_name} does not have modules.json or recognized architecture. "
             "Defaulting to SentenceTransformer loader."
         )
-        return sentence_transformers_loader, "dense"
+        return encoder_loader, "dense"
 
     @staticmethod
     def _is_causal_lm_reranker(
@@ -424,7 +458,10 @@ class ModelMeta(BaseModel):
             - loader_function: A callable that returns MTEBModels, or None if model doesn't exist
             - model_type: One of "dense", "cross-encoder", or "late-interaction"
         """
-        from mteb.models import CrossEncoderWrapper, sentence_transformers_loader
+        from mteb.models import (
+            CrossEncoderWrapper,
+            SentenceTransformerEncoderWrapper,
+        )
 
         try:
             modules_config = _get_json_from_hub(
@@ -434,13 +471,13 @@ class ModelMeta(BaseModel):
             if (
                 modules_config
             ):  # SentenceTransformer/SparseEncoder (Not support for now)
-                return sentence_transformers_loader, "dense"
+                return SentenceTransformerEncoderWrapper, "dense"
             else:
                 return cls._detect_cross_encoder_or_dense(
                     model_name,
                     revision,
                     config,
-                    sentence_transformers_loader,
+                    SentenceTransformerEncoderWrapper,
                     cross_encoder_loader=CrossEncoderWrapper,
                 )
 
@@ -450,7 +487,7 @@ class ModelMeta(BaseModel):
                 "Defaulting to SentenceTransformer loader."
             )
 
-        return sentence_transformers_loader, "dense"
+        return SentenceTransformerEncoderWrapper, "dense"
 
     @classmethod
     def create_empty(cls, overwrites: dict[str, Any] | None = None) -> Self:
@@ -528,7 +565,7 @@ class ModelMeta(BaseModel):
     @classmethod
     def _from_sentence_transformer_model(cls, model: SentenceTransformer) -> Self:
         """Generates a ModelMeta from only a SentenceTransformer model, without fetching any additional metadata from HuggingFace Hub."""
-        from mteb.models import sentence_transformers_loader
+        from mteb.models import SentenceTransformerEncoderWrapper
 
         name: str | None = (
             model.model_card_data.model_name
@@ -542,7 +579,7 @@ class ModelMeta(BaseModel):
             overwrites=dict(
                 name=name,
                 revision=model.model_card_data.base_model_revision,
-                loader=sentence_transformers_loader,
+                loader=SentenceTransformerEncoderWrapper,
                 max_tokens=model.max_seq_length,
                 embed_dim=model.get_sentence_embedding_dimension(),
                 similarity_fn_name=ScoringFunction.from_str(model.similarity_fn_name),

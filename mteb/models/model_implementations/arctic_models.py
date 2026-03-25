@@ -2,7 +2,7 @@ from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 ARCTIC_V1_CITATION = """@article{merrick2024embedding,
       title={Embedding And Clustering Your Data Can Improve Contrastive Pretraining},
@@ -138,7 +138,7 @@ arctic_v2_training_datasets = {
 } | arctic_v1_training_datasets
 
 arctic_embed_xs = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Snowflake/snowflake-arctic-embed-xs",
     model_type=["dense"],
     revision="742da4f66e1823b5b4dbe6c320a1375a1fd85f9e",
@@ -165,7 +165,7 @@ arctic_embed_xs = ModelMeta(
 
 
 arctic_embed_s = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Snowflake/snowflake-arctic-embed-s",
     model_type=["dense"],
     revision="d3c1d2d433dd0fdc8e9ca01331a5f225639e798f",
@@ -192,7 +192,7 @@ arctic_embed_s = ModelMeta(
 
 
 arctic_embed_m = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Snowflake/snowflake-arctic-embed-m",
     model_type=["dense"],
     revision="cc17beacbac32366782584c8752220405a0f3f40",
@@ -218,7 +218,7 @@ arctic_embed_m = ModelMeta(
 )
 
 arctic_embed_m_long = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={"trust_remote_code": True},
     name="Snowflake/snowflake-arctic-embed-m-long",
     model_type=["dense"],
@@ -245,7 +245,7 @@ arctic_embed_m_long = ModelMeta(
 )
 
 arctic_embed_l = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Snowflake/snowflake-arctic-embed-l",
     model_type=["dense"],
     revision="9a9e5834d2e89cdd8bb72b64111dde496e4fe78c",
@@ -271,7 +271,7 @@ arctic_embed_l = ModelMeta(
 )
 
 arctic_embed_m_v1_5 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts={
             "query": "Represent this sentence for searching relevant passages: "
@@ -302,7 +302,7 @@ arctic_embed_m_v1_5 = ModelMeta(
 )
 
 arctic_embed_m_v2_0 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={"trust_remote_code": True},
     name="Snowflake/snowflake-arctic-embed-m-v2.0",
     model_type=["dense"],
@@ -329,7 +329,7 @@ arctic_embed_m_v2_0 = ModelMeta(
 )
 
 arctic_embed_l_v2_0 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Snowflake/snowflake-arctic-embed-l-v2.0",
     model_type=["dense"],
     revision="edc2df7b6c25794b340229ca082e7c78782e6374",

@@ -7,7 +7,7 @@ from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 PIXIE_RUNE_V1_CITATION = """@misc{TelePIX-PIXIE-Rune-v1.0,
   title        = {PIXIE-Rune-v1.0},
@@ -28,7 +28,7 @@ pixie_rune_v1_training_datasets = set(arctic_v2_training_datasets) | {
 }
 
 pixie_rune_v1_0 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={
         "model_prompts": PIXIE_RUNE_V1_PROMPTS,
     },

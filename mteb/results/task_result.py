@@ -15,8 +15,6 @@ from packaging.version import Version
 from pydantic import BaseModel, field_validator
 from typing_extensions import deprecated
 
-import mteb
-from mteb import TaskMetadata
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb._hf_integration.eval_result_model import (
     HFEvalResult,
@@ -26,6 +24,7 @@ from mteb._hf_integration.eval_result_model import (
 )
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.abstask import AbsTask
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
 from mteb.types import (
@@ -909,7 +908,9 @@ class TaskResult(BaseModel):
         return results
 
     def _to_hf_benchmark_result(self, user: str | None = None) -> HFEvalResults:
-        task_metadata = mteb.get_task(self.task_name).metadata
+        from mteb.get_tasks import get_task
+
+        task_metadata = get_task(self.task_name).metadata
         dataset_id = task_metadata.dataset["path"]
         dataset_revision = task_metadata.dataset["revision"]
         eval_results = []

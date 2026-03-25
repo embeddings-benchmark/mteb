@@ -1,14 +1,11 @@
 import logging
-import re
 from typing import get_args
-from urllib.parse import urlparse
 
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-import mteb
 from mteb.abstasks.task_metadata import TaskType
 
 logger = logging.getLogger(__name__)
@@ -69,36 +66,6 @@ def _process_max_tokens(x):
     return str(int(x))
 
 
-def _parse_markdown_model_cell(model_cell: str) -> tuple[str, str | None]:
-    if model_cell is None or pd.isna(model_cell):
-        return "", None
-    model_cell = str(model_cell).strip()
-    match = re.fullmatch(r"\[([^\]]+)\]\(([^)]+)\)", model_cell)
-    if match is None:
-        return model_cell, None
-    return match.group(1), match.group(2)
-
-
-def _extract_hf_model_name(model_url: str | None) -> str | None:
-    if model_url is None or "huggingface" not in model_url:
-        return None
-    parsed = urlparse(model_url)
-    path_parts = [part for part in parsed.path.split("/") if part]
-    if len(path_parts) < 2:
-        return None
-    return f"{path_parts[0]}/{path_parts[1]}"
-
-
-def _extract_model_name_and_release_date(model_cell: str) -> tuple[str, str | None]:
-    display_name, model_url = _parse_markdown_model_cell(model_cell)
-    model_name = _extract_hf_model_name(model_url)
-    model_metas = {meta.name: meta for meta in mteb.get_model_metas()}
-
-    model_meta = model_metas.get(model_name) if model_name else None
-    release_date = model_meta.release_date if model_meta is not None else None
-    return display_name, release_date
-
-
 models_to_annotate = [
     "all-MiniLM-L6-v2",
     "clap-htsat-fused",
@@ -155,7 +122,7 @@ def _add_size_guide(fig: go.Figure):
 @_failsafe_plot
 def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df = df.copy()
-    df["Number of Parameters"] = df["Number of Parameters (B)"].map(_parse_n_params)
+    df["Number of Active Parameters"] = df["Active Parameters (B)"].map(_parse_n_params)
     df["Model"] = df["Model"].map(_parse_model_name)
     df["model_text"] = df["Model"].where(df["Model"].isin(models_to_annotate), "")
     df["Embedding Dimensions"] = df["Embedding Dimensions"].map(_parse_float)
@@ -163,7 +130,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df["Log(Tokens)"] = np.log10(df["Max Tokens"])
     df["Mean (Task)"] = df["Mean (Task)"].map(_parse_float)
     df = df.dropna(
-        subset=["Mean (Task)", "Number of Parameters", "Embedding Dimensions"]
+        subset=["Mean (Task)", "Number of Active Parameters", "Embedding Dimensions"]
     )
     if not len(df.index):
         return go.Figure()
@@ -173,7 +140,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
     rank_column = "Rank (Borda)" if "Rank (Borda)" in df.columns else "Rank (Mean Task)"
     fig = px.scatter(
         df,
-        x="Number of Parameters",
+        x="Number of Active Parameters",
         y="Mean (Task)",
         log_x=True,
         template="plotly_white",
@@ -185,7 +152,7 @@ def _performance_size_plot(df: pd.DataFrame) -> go.Figure:
         hover_data={
             "Max Tokens": True,
             "Embedding Dimensions": True,
-            "Number of Parameters": True,
+            "Number of Active Parameters": True,
             "Mean (Task)": True,
             rank_column: True,
             "Log(Tokens)": False,
@@ -240,9 +207,7 @@ def _performance_over_time_plot(df: pd.DataFrame) -> go.Figure:
             "Couldn't produce timeline plot. Required columns are missing."
         )
 
-    model_release_info = df["Model"].map(_extract_model_name_and_release_date)
-    df["Model"] = model_release_info.map(lambda x: x[0])
-    df["Release Date"] = model_release_info.map(lambda x: x[1])
+    df["Model"] = df["Model"].map(_parse_model_name)
     df["Release Date"] = pd.to_datetime(df["Release Date"], errors="coerce")
     df[score_column] = df[score_column].map(_parse_float)
 

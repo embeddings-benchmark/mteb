@@ -1,5 +1,5 @@
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 greennode_embedding_large_vn_v1_training_data = {
     "GreenNodeTableMarkdownRetrieval",
@@ -13,7 +13,7 @@ greennode_embedding_large_vn_v1 = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     open_weights=True,
     n_parameters=567754752,
     n_embedding_parameters=256_002_048,
@@ -39,7 +39,7 @@ greennode_embedding_large_vn_mixed_v1 = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     open_weights=True,
     n_parameters=567754752,
     n_embedding_parameters=256_002_048,
@@ -65,7 +65,7 @@ greennode_embedding_kalm_mini_instruct_vn_v1 = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     open_weights=True,
     n_parameters=494032768,
     n_embedding_parameters=136_134_656,
@@ -91,7 +91,7 @@ greennode_embedding_e5_large_vn_v1 = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     open_weights=True,
     n_parameters=560_000_000,
     n_embedding_parameters=256_002_048,
@@ -117,7 +117,7 @@ aiteamvn_vietnamese_embeddings = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     open_weights=True,
     n_parameters=567754752,
     n_embedding_parameters=256_002_048,
@@ -150,7 +150,7 @@ contextboxai_halong_embedding = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     use_instructions=False,
     open_weights=True,
     n_parameters=278043648,
@@ -182,7 +182,7 @@ sup_simcse_vietnamese_phobert_base_ = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     use_instructions=False,
     open_weights=True,
     n_parameters=134998272,
@@ -221,7 +221,7 @@ bkai_foundation_models_vietnamese_bi_encoder = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     use_instructions=False,
     open_weights=True,
     n_parameters=134998272,
