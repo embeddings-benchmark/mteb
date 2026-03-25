@@ -53,12 +53,12 @@ class CompressionWrapper:
         model.mteb_model_meta.output_dtypes = [output_dtype]
         if model.mteb_model_meta.experiment_kwargs is None:
             model.mteb_model_meta.experiment_kwargs = {}
-        model.mteb_model_meta.experiment_kwargs["output_dtypes"] = output_dtype.value
+        model.mteb_model_meta.experiment_kwargs["output_dtypes"] = output_dtype.value  # type: ignore[index]
 
         if clipping_margin is not None:
             assert 0 < clipping_margin[0] < clipping_margin[1] < 1
             self.clipping_margin = torch.tensor(clipping_margin)
-            model.mteb_model_meta.experiment_kwargs["clipping_margin"] = list(
+            model.mteb_model_meta.experiment_kwargs["clipping_margin"] = list(  # type: ignore[index]
                 clipping_margin
             )
         if embed_types and output_dtype in embed_types:
