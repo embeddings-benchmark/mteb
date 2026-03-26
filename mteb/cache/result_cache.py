@@ -1477,7 +1477,6 @@ class ResultCache:
                     "gh",
                     "repo",
                     "fork",
-                    upstream_repo_name,
                     "--remote",
                     "--remote-name",
                     "fork",
