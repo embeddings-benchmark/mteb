@@ -27,7 +27,7 @@ from mteb.cache._git_actions import (
     CopyResultsAction,
     CreateBranchAction,
 )
-from mteb.cache._reversible_workflow import ReversibleWorkflow
+from mteb.cache._reversible_workflow import ReversibleAction, ReversibleWorkflow
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
@@ -1263,7 +1263,7 @@ class ResultCache:
             # Capture original branch before making any changes
             original_branch = self._get_current_branch(remote_path)
 
-            actions = []
+            actions : list[ReversibleAction] = []
 
             copy_action = CopyResultsAction(unsubmitted, self.remote_results_path)
             actions.append(copy_action)
