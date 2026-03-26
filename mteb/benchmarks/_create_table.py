@@ -2,13 +2,14 @@ from __future__ import annotations
 
 import re
 from collections import defaultdict
+from collections.abc import Sequence
 from typing import TYPE_CHECKING, Literal
 
 import numpy as np
 import pandas as pd
 
-import mteb
 from mteb.get_tasks import get_task, get_tasks
+from mteb.models.get_model_meta import get_model_meta
 
 if TYPE_CHECKING:
     from mteb.results.benchmark_results import BenchmarkResults
@@ -44,10 +45,28 @@ def _format_n_parameters(n_parameters) -> float | None:
     return None
 
 
+def _format_n_active_parameters(n_active_parameters) -> float | None:
+    """Format n_active_parameters to be in billions with decimals down to 1 million. I.e. 7M -> 0.007B, 1.5B -> 1.5B, None -> None"""
+    if n_active_parameters is not None:
+        n_active_parameters = float(n_active_parameters)
+        return round(n_active_parameters / 1e9, 3)
+    return None
+
+
 def _format_max_tokens(max_tokens: float | None) -> float | None:
     if max_tokens is None or max_tokens == np.inf:
         return None
     return float(max_tokens)
+
+
+def _get_embedding_size(embed_dim: int | list[int] | None) -> int | None:
+    if embed_dim is None:
+        return None
+    if isinstance(embed_dim, int):
+        return int(embed_dim)
+    if isinstance(embed_dim, Sequence) and len(embed_dim) > 0:
+        return int(max(embed_dim))
+    return None
 
 
 def _get_means_per_types(per_task: pd.DataFrame):
@@ -62,7 +81,7 @@ def _get_means_per_types(per_task: pd.DataFrame):
                 dict(
                     model_name=model_name,
                     task_type=task_type,
-                    score=scores[tasks].mean(skipna=True),
+                    score=scores[tasks].mean(skipna=False),
                 )
             )
     return pd.DataFrame.from_records(records)
@@ -126,7 +145,7 @@ def _create_summary_table_from_benchmark_results(
     joint_table = joint_table.reset_index()
 
     # Add model metadata
-    model_metas = joint_table["model_name"].map(mteb.get_model_meta)
+    model_metas = joint_table["model_name"].map(get_model_meta)
     joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
 
@@ -139,19 +158,17 @@ def _create_summary_table_from_benchmark_results(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
+        model_metas.map(lambda m: _get_embedding_size(m.embed_dim)),
     )
     joint_table.insert(
         1,
-        "Number of Parameters (B)",
+        "Total Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(
         1,
-        "Memory Usage (MB)",
-        model_metas.map(
-            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
-        ),
+        "Active Parameters (B)",
+        model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
     )
 
     # Add zero-shot percentage
@@ -160,6 +177,11 @@ def _create_summary_table_from_benchmark_results(
         1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
     )
     joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
+
+    # Add release date from model metadata
+    joint_table["Release Date"] = model_metas.map(
+        lambda m: str(m.release_date) if m.release_date else None
+    )
 
     # Clean up model names (remove HF organization)
     joint_table["model_name"] = joint_table["model_name"].map(
@@ -369,7 +391,7 @@ def _create_summary_table_mean_public_private(
     joint_table = joint_table.reset_index()
 
     # Add model metadata
-    model_metas = joint_table["model_name"].map(mteb.get_model_meta)
+    model_metas = joint_table["model_name"].map(get_model_meta)
     joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
 
@@ -382,19 +404,22 @@ def _create_summary_table_mean_public_private(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
+        model_metas.map(lambda m: _get_embedding_size(m.embed_dim)),
     )
     joint_table.insert(
         1,
-        "Number of Parameters (B)",
+        "Total Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(
         1,
-        "Memory Usage (MB)",
-        model_metas.map(
-            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
-        ),
+        "Active Parameters (B)",
+        model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
+    )
+
+    # Add release date from model metadata
+    joint_table["Release Date"] = model_metas.map(
+        lambda m: str(m.release_date) if m.release_date else None
     )
 
     # Clean up model names (remove HF organization)
@@ -490,7 +515,7 @@ def _create_summary_table_mean_subset(
     joint_table = joint_table.reset_index()
 
     # Add model metadata
-    model_metas = joint_table["model_name"].map(mteb.get_model_meta)
+    model_metas = joint_table["model_name"].map(get_model_meta)
     joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
 
@@ -503,27 +528,29 @@ def _create_summary_table_mean_subset(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
+        model_metas.map(lambda m: _get_embedding_size(m.embed_dim)),
     )
     joint_table.insert(
         1,
-        "Number of Parameters (B)",
+        "Total Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(
         1,
-        "Memory Usage (MB)",
-        model_metas.map(
-            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
-        ),
+        "Active Parameters (B)",
+        model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
     )
-
     # Add zero-shot percentage
     tasks = get_tasks(tasks=list(data["task_name"].unique()))
     joint_table.insert(
         1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
     )
     joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
+
+    # Add release date from model metadata
+    joint_table["Release Date"] = model_metas.map(
+        lambda m: str(m.release_date) if m.release_date else None
+    )
 
     # Clean up model names (remove HF organization)
     joint_table["model_name"] = joint_table["model_name"].map(
@@ -610,7 +637,7 @@ def _create_summary_table_mean_task_type(
     joint_table = joint_table.reset_index()
 
     # Add model metadata
-    model_metas = joint_table["model_name"].map(mteb.get_model_meta)
+    model_metas = joint_table["model_name"].map(get_model_meta)
     joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
 
@@ -621,19 +648,17 @@ def _create_summary_table_mean_task_type(
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
+        model_metas.map(lambda m: _get_embedding_size(m.embed_dim)),
     )
     joint_table.insert(
         1,
-        "Number of Parameters (B)",
+        "Total Parameters (B)",
         model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
     )
     joint_table.insert(
         1,
-        "Memory Usage (MB)",
-        model_metas.map(
-            lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
-        ),
+        "Active Parameters (B)",
+        model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
     )
 
     # Add zero-shot percentage
@@ -642,6 +667,11 @@ def _create_summary_table_mean_task_type(
         1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
     )
     joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
+
+    # Add release date from model metadata
+    joint_table["Release Date"] = model_metas.map(
+        lambda m: str(m.release_date) if m.release_date else None
+    )
 
     # Clean up model names (remove HF organization)
     joint_table["model_name"] = joint_table["model_name"].map(

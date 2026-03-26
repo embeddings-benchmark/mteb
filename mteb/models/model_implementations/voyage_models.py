@@ -10,8 +10,10 @@ from tqdm.auto import tqdm
 from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
-from mteb.types import PromptType
+from mteb.models.sentence_transformer_wrapper import (
+    SentenceTransformerEncoderWrapper,
+)
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -126,6 +128,12 @@ VOYAGE_TOTAL_TOKEN_LIMITS = {
     "voyage-code-2": 120_000,
     "voyage-3-m-exp": 120_000,
 }
+
+OUTPUT_TYPES = [
+    OutputDType.INT8,
+    OutputDType.UINT8,
+    OutputDType.BINARY,
+]
 
 
 def token_limit(max_tpm: int, interval: int = 60):
@@ -317,6 +325,7 @@ voyage_4_large_2048d = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 voyage_4 = ModelMeta(
@@ -343,6 +352,7 @@ voyage_4 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 voyage_4_lite = ModelMeta(
@@ -369,6 +379,7 @@ voyage_4_lite = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 voyage_4_large = ModelMeta(
@@ -395,6 +406,7 @@ voyage_4_large = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 voyage_3_large = ModelMeta(
@@ -423,6 +435,7 @@ voyage_3_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     superseded_by="voyageai/voyage-4-large",
+    output_dtypes=OUTPUT_TYPES,
 )
 
 
@@ -452,6 +465,7 @@ voyage_3_5 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     superseded_by="voyageai/voyage-4",
+    output_dtypes=OUTPUT_TYPES,
 )
 
 voyage_3_5_int8 = ModelMeta(
@@ -480,6 +494,7 @@ voyage_3_5_int8 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     adapted_from="voyageai/voyage-3.5",
+    output_dtypes=OUTPUT_TYPES,
 )
 
 voyage_3_5_binary = ModelMeta(
@@ -508,6 +523,7 @@ voyage_3_5_binary = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     adapted_from="voyageai/voyage-3.5",
+    output_dtypes=OUTPUT_TYPES,
 )
 
 voyage_large_2_instruct = ModelMeta(
@@ -643,6 +659,7 @@ voyage_code_3 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,  # src: private communication with Voyage
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OUTPUT_TYPES,
 )
 
 
@@ -699,6 +716,7 @@ voyage_2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
 )
+
 voyage_multilingual_2 = ModelMeta(
     name="voyageai/voyage-multilingual-2",
     model_type=["dense"],
@@ -871,7 +889,7 @@ voyage_3_exp = ModelMeta(
 )
 
 voyage_4_nano = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={"trust_remote_code": True},
     name="voyageai/voyage-4-nano",
     model_type=["dense"],

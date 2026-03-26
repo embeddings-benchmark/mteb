@@ -39,6 +39,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
+          version: "0.10.12"
 
       - name: Set up Python
         uses: actions/setup-python@v6

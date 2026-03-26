@@ -116,6 +116,14 @@ class AbsTaskClusteringLegacy(AbsTask):
                 logger.info(
                     f"Running clustering on cluster ({i + 1}/{len(data_split)})"
                 )
+                labels = cluster_set[self.label_column_name]
+                if len(set(labels)) <= 1:
+                    logger.warning(
+                        f"Cluster set {i} has {len(set(labels))} unique label(s), "
+                        "skipping encode step — v_measure is always 1.0."
+                    )
+                    all_metrics.append(ClusteringMetrics(v_measure=1.0))
+                    continue
                 clustering_dataset = Dataset.from_dict(cluster_set).select_columns(
                     [self.input_column_name, self.label_column_name]
                 )

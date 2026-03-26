@@ -114,7 +114,6 @@ _common_mock_metadata = dict(
     release_date=None,
     n_parameters=0,
     memory_usage_mb=0,
-    embed_dim=_EMBEDDING_DIM,
     license="mit",
     max_tokens=np.inf,
     reference=None,
@@ -212,11 +211,11 @@ class RandomEncoderBaseline:
         revision: str | None,
         array_framework: Literal["numpy", "torch"] = "numpy",
         dtype: torch.dtype | np.floating = np.float32,
-        embed_dim: int = _EMBEDDING_DIM,
+        embed_dim: int | None = None,
         **kwargs: Any,
     ) -> None:
         self.rng_state = np.random.default_rng(42)
-        self.embedding_dim = embed_dim
+        self.embedding_dim = embed_dim or _EMBEDDING_DIM
         self.array_framework = array_framework
         self.dtype = dtype
 
@@ -276,6 +275,7 @@ random_encoder_baseline = ModelMeta(
     loader=RandomEncoderBaseline,
     name="mteb/baseline-random-encoder",
     model_type=["dense"],
+    embed_dim=[_EMBEDDING_DIM, 10],
     **_common_mock_metadata,
 )
 
@@ -320,5 +320,6 @@ random_cross_encoder_baseline = ModelMeta(
     loader=RandomCrossEncoderBaseline,
     name="mteb/baseline-random-cross-encoder",
     model_type=["cross-encoder"],
+    embed_dim=None,
     **_common_mock_metadata,
 )

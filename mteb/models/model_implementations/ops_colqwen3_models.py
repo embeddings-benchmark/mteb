@@ -252,6 +252,7 @@ ops_colqwen3_4b = ModelMeta(
     release_date="2026-01-24",
     modalities=["image", "text"],
     n_parameters=4_800_000_000,
+    n_embedding_parameters=388956160,
     memory_usage_mb=9206,
     max_tokens=32768,
     embed_dim=2560,

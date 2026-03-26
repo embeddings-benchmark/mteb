@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from collections.abc import Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
@@ -20,7 +21,6 @@ from pydantic import (
 )
 from typing_extensions import Required, TypedDict  # noqa: TC002
 
-import mteb
 from mteb.languages import check_language_code
 from mteb.types import (
     Languages,
@@ -273,6 +273,14 @@ TaskCategory = Literal[
 21. v2t: video to text
 """
 
+_MODALITY_CODES: dict[str, str] = {
+    "t": "text",
+    "i": "image",
+    "a": "audio",
+    "v": "video",
+    "c": "category",
+}
+
 AnnotatorType = Literal[
     "expert-annotated",
     "human-annotated",
@@ -349,6 +357,8 @@ class TaskMetadata(BaseModel):
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
         adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
         is_public: Whether the dataset is publicly available. If False (closed/private), a HuggingFace token is required to run the datasets.
+        contributed_by: The name of the organization or individual who contributed the dataset. This is especially useful for private datasets
+            where it may be harder to gather information about the source.
         superseded_by: Denotes the task that this task is superseded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
     """
@@ -381,6 +391,7 @@ class TaskMetadata(BaseModel):
     bibtex_citation: str | None = None
     adapted_from: Sequence[str] | None = None
     is_public: bool = True
+    contributed_by: str | None = None
     superseded_by: str | None = None
 
     def _validate_metadata(self) -> None:
@@ -453,7 +464,8 @@ class TaskMetadata(BaseModel):
         return all(
             getattr(self, field_name) is not None
             for field_name in self.model_fields
-            if field_name not in ["prompt", "adapted_from", "superseded_by"]
+            if field_name
+            not in ["prompt", "adapted_from", "contributed_by", "superseded_by"]
         )
 
     @property
@@ -588,9 +600,10 @@ class TaskMetadata(BaseModel):
             multilinguality = "translated"
 
         if self.adapted_from is not None:
+            from mteb.get_tasks import get_tasks
+
             source_datasets = [
-                task.metadata.dataset["path"]
-                for task in mteb.get_tasks(self.adapted_from)
+                task.metadata.dataset["path"] for task in get_tasks(self.adapted_from)
             ]
             source_datasets.append(self.dataset["path"])
         else:
@@ -623,19 +636,60 @@ class TaskMetadata(BaseModel):
             )
         )
 
+        # Format category as "{type} ({description})" e.g. "Retrieval (text-to-text)"
+        if self.category is not None:
+            category_desc = self._category_description(self.category)
+            formatted_category = f"{self.type} ({category_desc})"
+        else:
+            formatted_category = str(self.type)
+
+        # Format reference with paper title from BibTeX when available
+        formatted_reference = self._format_reference()
+
         return (
             DatasetCardData(**dataset_card_data_params),
             # parameters for readme generation
             dict(
                 citation=self.bibtex_citation,
                 dataset_description=self.description,
-                dataset_reference=self.reference,
+                dataset_reference=formatted_reference,
                 descriptive_stats=descriptive_stats,
                 dataset_task_name=self.name,
-                category=self.category,
+                category=formatted_category,
                 domains=", ".join(self.domains) if self.domains else None,
+                contributed_by=self.contributed_by,
             ),
         )
+
+    @staticmethod
+    def _category_description(category: str) -> str:
+        """Convert category code like 'it2t' to 'image+text-to-text'."""
+        parts = category.split("2", 1)
+        if len(parts) != 2:
+            return category
+        query = "+".join(_MODALITY_CODES.get(c, c) for c in parts[0])
+        doc = "+".join(_MODALITY_CODES.get(c, c) for c in parts[1])
+        return f"{query}-to-{doc}"
+
+    @staticmethod
+    def _extract_bibtex_title(bibtex_citation: str) -> str | None:
+        """Extract the title from a BibTeX citation string."""
+        match = re.search(r"title\s*=\s*\{([^}]+)\}", bibtex_citation)
+        if match:
+            return match.group(1).strip()
+        return None
+
+    def _format_reference(self) -> str | None:
+        """Format the reference as a markdown link with the paper title from BibTeX."""
+        title = None
+        if self.bibtex_citation:
+            title = self._extract_bibtex_title(self.bibtex_citation)
+
+        if title and self.reference:
+            return f"[{title}]({self.reference})"
+        if self.reference:
+            return str(self.reference)
+        return None
 
     def generate_dataset_card(
         self,

@@ -1,8 +1,8 @@
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 codemodernbert_crow_meta = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Shuu12121/CodeSearch-ModernBERT-Crow-Plus",
     model_type=["dense"],
     languages=["eng-Latn"],

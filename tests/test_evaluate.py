@@ -1,3 +1,4 @@
+import json
 import logging
 from copy import copy
 from pathlib import Path
@@ -8,6 +9,7 @@ from datasets.exceptions import DatasetNotFoundError
 import mteb
 from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
+from mteb.models import ModelMeta
 from mteb.models.models_protocols import EncoderProtocol
 from tests.mock_models import MockSentenceTransformer
 from tests.mock_tasks import (
@@ -314,10 +316,54 @@ def test_evaluate_experiment(tmp_path):
 
     expected_path = (
         Path("results")
-        / "mteb__baseline-random-encoder"
-        / "1"
+        / model.mteb_model_meta.model_name_as_path()
+        / model.mteb_model_meta.revision
         / "experiments"
         / "test_param_123__test_param2_abc"
         / "MockClassificationTask.json"
     )
     assert (tmp_path / expected_path).exists()
+
+
+@pytest.mark.parametrize("embed_dim", [None, 10])
+def test_evaluate_mrl(tmp_path, embed_dim):
+    """Test that evaluate() can be used in an experiment context."""
+    model = mteb.get_model(
+        "mteb/baseline-random-encoder",
+        embed_dim=embed_dim,
+    )
+    task = MockRetrievalTask()
+    cache = ResultCache(tmp_path)
+    mteb.evaluate(model, task, cache=cache)
+
+    model_meta_path = (
+        tmp_path
+        / "results"
+        / model.mteb_model_meta.model_name_as_path()
+        / model.mteb_model_meta.revision
+    )
+    if embed_dim is not None:
+        model_meta_path = model_meta_path / "experiments" / "embed_dim_10"
+    model_meta_path = model_meta_path / "model_meta.json"
+    with model_meta_path.open() as f:
+        model_meta_json = json.load(f)
+    model_meta_json["loader"] = None  # otherwise meta won't be validated
+    model_meta = ModelMeta.model_validate(model_meta_json)
+    assert isinstance(model_meta.embed_dim, int)
+
+
+def test_mrl_unsupported_dim():
+    """Test that passing unsupported mrl dim raises an error."""
+    # try to load model with mrl, but wrong dim
+    with pytest.raises(ValueError):
+        mteb.get_model(
+            "mteb/baseline-random-encoder",
+            embed_dim=100,
+        )
+
+    # try to load model that don't support mrl
+    with pytest.raises(ValueError):
+        mteb.get_model(
+            "intfloat/multilingual-e5-small",
+            embed_dim=100,
+        )

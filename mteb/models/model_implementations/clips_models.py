@@ -2,7 +2,7 @@ from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 from .e5_models import ME5_TRAINING_DATA, model_prompts
 
@@ -19,7 +19,7 @@ E5_NL_CITATION = """
 """
 
 e5_nl_small = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -47,7 +47,7 @@ e5_nl_small = ModelMeta(
 )
 
 e5_nl_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -75,7 +75,7 @@ e5_nl_base = ModelMeta(
 )
 
 e5_nl_large = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),

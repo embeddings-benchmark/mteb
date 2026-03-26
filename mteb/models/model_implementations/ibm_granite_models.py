@@ -2,7 +2,7 @@ from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 GRANITE_EMBEDDING_CITATION = """@article{awasthy2025graniteembedding,
   title={Granite Embedding Models},
@@ -92,7 +92,7 @@ granite_training_data = {
 }
 
 granite_107m_multilingual = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="ibm-granite/granite-embedding-107m-multilingual",
     model_type=["dense"],
     languages=GRANITE_LANGUAGES,
@@ -124,7 +124,7 @@ granite_107m_multilingual = ModelMeta(
 )
 
 granite_278m_multilingual = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="ibm-granite/granite-embedding-278m-multilingual",
     model_type=["dense"],
     languages=GRANITE_LANGUAGES,
@@ -156,7 +156,7 @@ granite_278m_multilingual = ModelMeta(
 )
 
 granite_30m_english = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="ibm-granite/granite-embedding-30m-english",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -188,7 +188,7 @@ granite_30m_english = ModelMeta(
 )
 
 granite_125m_english = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="ibm-granite/granite-embedding-125m-english",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -221,7 +221,7 @@ granite_125m_english = ModelMeta(
 
 
 granite_english_r2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="ibm-granite/granite-embedding-english-r2",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -247,7 +247,7 @@ granite_english_r2 = ModelMeta(
 )
 
 granite_small_english_r2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="ibm-granite/granite-embedding-small-english-r2",
     model_type=["dense"],
     languages=["eng-Latn"],

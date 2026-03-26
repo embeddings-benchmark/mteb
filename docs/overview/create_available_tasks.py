@@ -28,9 +28,7 @@ aggregated_tasks_section = """
 {task_table}
 """
 
-task_type_section = """---
-title: "{task_type}"
----
+task_type_section = """
 
 <div class="nowrap-table" markdown>
 
@@ -116,6 +114,8 @@ def create_aggregate_table(task: AbsTaskAggregate) -> str:
 
 def format_task_entry(task: mteb.AbsTask) -> str:
     description = task.metadata.description
+    if task.metadata.contributed_by:
+        description += f" Contributed by {task.metadata.contributed_by}."
     license = task.metadata.license or "not specified"
     reference = task.metadata.reference
     dataset_name = task.metadata.dataset["path"]
