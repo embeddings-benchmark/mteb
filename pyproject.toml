@@ -75,7 +75,7 @@ leaderboard = [
     "pymongo>=4.15.5",
 ]
 video = ["torchcodec"]
-pygithub = ["PyGithub>=1.60,<2.7.0"]
+pygithub = ["PyGithub>=1.60"]
 
 # model specific optional dependencies:
 peft = ["peft>=0.11.0"]

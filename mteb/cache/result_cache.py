@@ -22,6 +22,12 @@ import mteb
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks import AbsTask
 from mteb.benchmarks.benchmark import Benchmark
+from mteb.cache._git_actions import (
+    CommitAction,
+    CopyResultsAction,
+    CreateBranchAction,
+)
+from mteb.cache._reversible_workflow import ReversibleWorkflow
 from mteb.models import ModelMeta
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
@@ -939,198 +945,19 @@ class ResultCache:
 
         return normalized
 
-    def _get_current_branch(self) -> str:
-        """Get the current branch name in the remote repository.
-
-        Returns:
-            The current branch name (e.g., "main", "develop").
-
-        Raises:
-            RuntimeError: If unable to determine current branch.
-        """
-        remote_path = self.cache_path / "remote"
-        if not remote_path.exists():
-            return "main"
-
-        try:
-            result = subprocess.run(
-                ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-                cwd=remote_path,
-                check=True,
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-            return result.stdout.strip()
-        except subprocess.CalledProcessError as e:
-            raise RuntimeError(
-                f"Failed to get current branch: {e.stderr or e.stdout}"
-            ) from e
-
-    def _checkout_branch(self, branch_name: str) -> None:
-        """Checkout a git branch in the remote repository.
-
-        Args:
-            branch_name: The branch name to checkout (e.g., "main").
-
-        Raises:
-            RuntimeError: If checkout fails.
-        """
-        remote_path = self.cache_path / "remote"
-
-        try:
-            subprocess.run(
-                ["git", "checkout", branch_name],
-                cwd=remote_path,
-                check=True,
-                capture_output=True,
-                text=True,
-                timeout=30,
-            )
-            logger.info(f"Checked out branch: {branch_name}")
-        except subprocess.CalledProcessError as e:
-            raise RuntimeError(
-                f"Failed to checkout branch '{branch_name}': {e.stderr or e.stdout}"
-            ) from e
-
-    def _reset_to_commit(self, commit_sha: str) -> None:
-        """Hard reset the remote repository to a specific commit.
-
-        WARNING: This discards all uncommitted changes in the remote directory.
-
-        Args:
-            commit_sha: The commit hash to reset to.
-
-        Raises:
-            RuntimeError: If reset fails.
-        """
-        remote_path = self.cache_path / "remote"
-
-        try:
-            subprocess.run(
-                ["git", "reset", "--hard", commit_sha],
-                cwd=remote_path,
-                check=True,
-                capture_output=True,
-                text=True,
-                timeout=30,
-            )
-            logger.info(f"Reset to commit: {commit_sha}")
-        except subprocess.CalledProcessError as e:
-            raise RuntimeError(
-                f"Failed to reset to commit {commit_sha}: {e.stderr or e.stdout}"
-            ) from e
-
-    def _delete_branch(self, branch_name: str, force: bool = False) -> None:
-        """Delete a git branch in the remote repository.
-
-        Args:
-            branch_name: The branch name to delete.
-            force: If True, use -D (force delete). If False, use -d (safe delete).
-
-        Raises:
-            RuntimeError: If deletion fails.
-        """
-        remote_path = self.cache_path / "remote"
-
-        try:
-            flag = "-D" if force else "-d"
-            subprocess.run(
-                ["git", "branch", flag, branch_name],
-                cwd=remote_path,
-                check=True,
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-            logger.info(f"Deleted branch: {branch_name}")
-        except subprocess.CalledProcessError as e:
-            logger.warning(
-                f"Failed to delete branch '{branch_name}' "
-                f"(this is non-critical): {e.stderr or e.stdout}"
-            )
-
-    def _save_remote_state(self) -> dict[str, Any]:
-        """Save the current state of the remote repository for rollback.
-
-        Returns:
-            Dictionary containing state info:
-            - current_branch: current git branch
-            - head_commit: current HEAD commit SHA
-
-        Raises:
-            RuntimeError: If unable to get current state.
-        """
-        remote_path = self.cache_path / "remote"
-
-        if not remote_path.exists():
-            return {"current_branch": "main", "head_commit": None}
-
-        try:
-            current_branch = self._get_current_branch()
-            result = subprocess.run(
-                ["git", "rev-parse", "HEAD"],
-                cwd=remote_path,
-                check=True,
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-            head_commit = result.stdout.strip()
-
-            return {
-                "current_branch": current_branch,
-                "head_commit": head_commit,
-            }
-        except Exception as e:
-            logger.warning(f"Failed to save remote state: {e}")
-            return {"current_branch": "main", "head_commit": None}
-
-    def _rollback_remote_state(
-        self,
-        original_state: dict[str, Any],
-        branch_to_delete: str | None = None,
-    ) -> None:
-        """Rollback the remote repository to its original state.
-
-        Args:
-            original_state: State dict from _save_remote_state().
-            branch_to_delete: Optional branch name to delete (e.g., temp branch).
-        """
-        remote_path = self.cache_path / "remote"
-
-        if not remote_path.exists():
-            return
-
-        try:
-            if branch_to_delete:
-                self._delete_branch(branch_to_delete, force=True)
-
-            if original_state.get("head_commit"):
-                self._reset_to_commit(original_state["head_commit"])
-
-            self._checkout_branch(original_state.get("current_branch", "main"))
-            logger.info("Rolled back remote repository to original state")
-        except Exception as e:
-            logger.error(
-                f"Warning: Failed to fully rollback remote state: {e}. "
-                f"Remote repository may be in an inconsistent state. "
-                f"Manual cleanup may be needed."
-            )
-
     def _get_unsubmitted_results(
         self,
         models: list[ModelMeta],
-    ) -> dict[tuple[str, str], list[Path]]:
+    ) -> dict[ModelMeta, list[Path]]:
         """Find unsubmitted results by comparing local vs remote.
 
         Args:
             models: List of ModelMeta objects.
 
         Returns:
-            Dict mapping (model_name, revision) to list of unsubmitted result file paths.
+            Dict mapping ModelMeta to list of unsubmitted result file paths.
         """
-        unsubmitted: dict[tuple[str, str], list[Path]] = {}
+        unsubmitted: dict[ModelMeta, list[Path]] = {}
 
         local_paths = self.get_cache_paths(
             models=models,
@@ -1162,106 +989,29 @@ class ResultCache:
             relative_path = local_path.name
 
             if relative_path not in remote_files_set:
-                key = (model_name, revision)
-                if key not in unsubmitted:
-                    unsubmitted[key] = []
-                unsubmitted[key].append(local_path)
+                model_meta = None
+                for m in models:
+                    if m.name == model_name and m.revision == revision:
+                        model_meta = m
+                        break
+
+                if model_meta is not None:
+                    if model_meta not in unsubmitted:
+                        unsubmitted[model_meta] = []
+                    unsubmitted[model_meta].append(local_path)
 
         return unsubmitted
-
-    def _copy_results_to_remote(
-        self,
-        unsubmitted: dict[tuple[str, str], list[Path]],
-    ) -> None:
-        """Copy unsubmitted results to remote directory.
-
-        Args:
-            unsubmitted: Dict of (model_name, revision) -> list of result file paths.
-        """
-        for (model_name, revision), result_files in unsubmitted.items():
-            model_name_path = model_name.replace("/", "__").replace(" ", "_")
-            remote_model_dir = self.remote_results_path / model_name_path / revision
-
-            remote_model_dir.mkdir(parents=True, exist_ok=True)
-            for local_file in result_files:
-                remote_file = remote_model_dir / local_file.name
-                shutil.copy2(local_file, remote_file)
-
-            if result_files:
-                local_meta_path = result_files[0].parent / "model_meta.json"
-                if local_meta_path.exists():
-                    remote_meta_path = remote_model_dir / "model_meta.json"
-                    shutil.copy2(local_meta_path, remote_meta_path)
-
-    def _create_commit(
-        self,
-        unsubmitted: dict[tuple[str, str], list[Path]],
-        models: list[ModelMeta],
-    ) -> str:
-        """Create a git commit in the remote repository.
-
-        Args:
-            unsubmitted: Dict of (model_name, revision) -> list of result file paths.
-            models: List of ModelMeta objects.
-
-        Returns:
-            The commit SHA hash.
-
-        Raises:
-            RuntimeError: If git commit fails.
-        """
-        remote_path = self.cache_path / "remote"
-
-        if not remote_path.exists():
-            raise RuntimeError(
-                "Remote repository not found. Call download_from_remote() first."
-            )
-
-        subprocess.run(
-            ["git", "add", "-A"],
-            cwd=remote_path,
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-
-        model_str = ", ".join(model.name for model in models if model.name)
-        result_count = sum(len(files) for files in unsubmitted.values())
-        commit_message = (
-            f"Add MTEB evaluation results for {model_str}\n\n"
-            f"Models: {model_str}\n"
-            f"Total results: {result_count}\n"
-            f"Submitted by MTEB ResultCache"
-        )
-
-        subprocess.run(
-            ["git", "commit", "-m", commit_message],
-            cwd=remote_path,
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-
-        commit_sha = subprocess.run(
-            ["git", "rev-parse", "HEAD"],
-            cwd=remote_path,
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-
-        return commit_sha
 
     def _prepare_pr_body(
         self,
         models: list[ModelMeta],
-        unsubmitted: dict[tuple[str, str], list[Path]],
+        unsubmitted: dict[ModelMeta, list[Path]],
     ) -> str:
         """Prepare the pull request body with results summary.
 
         Args:
             models: List of ModelMeta objects.
-            unsubmitted: Dict of unsubmitted results.
+            unsubmitted: Dict mapping ModelMeta to list of result file paths.
 
         Returns:
             Formatted PR body string.
@@ -1270,13 +1020,11 @@ class ResultCache:
         total_results = 0
 
         for model in models:
-            model_name = model.name
-            revision = model.revision
-            if model_name and revision and (model_name, revision) in unsubmitted:
-                result_count = len(unsubmitted[(model_name, revision)])
+            if model in unsubmitted:
+                result_count = len(unsubmitted[model])
                 total_results += result_count
                 model_details.append(
-                    f"- **{model_name}** (revision: `{revision}`): {result_count} results"
+                    f"- **{model.name}** (revision: `{model.revision}`): {result_count} results"
                 )
 
         model_details_str = "\n".join(model_details)
@@ -1303,6 +1051,143 @@ class ResultCache:
         *This PR was created automatically. Please check the results carefully before merging.*
         """)
         return body.strip()
+
+    def _check_uncommitted_changes(self, repo_path: Path) -> None:
+        """Detect staged/uncommitted changes that would corrupt result submission."""
+        try:
+            result = subprocess.run(
+                ["git", "status", "--porcelain"],
+                cwd=repo_path,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            if result.stdout.strip():
+                raise RuntimeError(
+                    f"Repository has uncommitted changes:\n{result.stdout.strip()}\n"
+                    "Please commit or clean these changes before submitting."
+                )
+        except subprocess.CalledProcessError as e:
+            logger.warning(f"Could not check uncommitted changes: {e}")
+
+    def _check_detached_head(self, repo_path: Path) -> None:
+        """Check if repository is in detached HEAD state.
+
+        In detached HEAD state, branch operations fail and state is confusing.
+
+        Args:
+            repo_path: Path to the git repository.
+
+        Raises:
+            RuntimeError: If in detached HEAD state.
+        """
+        try:
+            result = subprocess.run(
+                ["git", "symbolic-ref", "-q", "HEAD"],
+                cwd=repo_path,
+                capture_output=True,
+                text=True,
+            )
+
+            if result.returncode != 0:
+                # Non-zero return = detached HEAD
+                raise RuntimeError(
+                    "Repository is in detached HEAD state. "
+                    "Please checkout a branch before submitting results:\n"
+                    "  git checkout main    # Checkout main branch\n"
+                    "  OR\n"
+                    "  git checkout -b my-branch  # Create new branch"
+                )
+        except subprocess.CalledProcessError as e:
+            logger.warning(f"Could not check HEAD state: {e}")
+
+    def _run_preflight_checks(self, repo_path: Path) -> None:
+        """Run all pre-flight validations before submission workflow.
+
+        These checks prevent common issues like uncommitted changes or detached HEAD
+        that would corrupt the repository or cause the workflow to fail mid-way without proper rollback.
+
+        Args:
+            repo_path: Path to the git repository.
+
+        Raises:
+            RuntimeError: If any validation fails.
+        """
+        logger.info("Running pre-flight checks...")
+        self._check_uncommitted_changes(repo_path)
+        self._check_detached_head(repo_path)
+        logger.info("Pre-flight checks passed ✓")
+
+    def _get_current_branch(self, repo_path: Path) -> str:
+        """Get the current branch name.
+
+        Args:
+            repo_path: Path to the git repository.
+
+        Returns:
+            Current branch name.
+
+        Raises:
+            RuntimeError: If unable to determine current branch.
+        """
+        try:
+            result = subprocess.run(
+                ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+                cwd=repo_path,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            branch = result.stdout.strip()
+            logger.debug(f"Current branch: {branch}")
+            return branch
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(f"Failed to get current branch: {e}")
+
+    def _restore_branch(self, repo_path: Path, original_branch: str) -> None:
+        """Restore to the original branch after successful PR creation.
+
+        Args:
+            repo_path: Path to the git repository.
+            original_branch: Name of the branch to restore to.
+
+        Raises:
+            RuntimeError: If restoration fails.
+        """
+        try:
+            subprocess.run(
+                ["git", "checkout", original_branch],
+                cwd=repo_path,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            logger.info(f"Restored to original branch '{original_branch}'")
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(f"Failed to restore to branch '{original_branch}': {e}")
+
+    def _delete_branch(self, repo_path: Path, branch_name: str) -> None:
+        """Delete a git branch to clean up after failed PR creation.
+
+        Args:
+            repo_path: Path to the git repository.
+            branch_name: Name of the branch to delete.
+        """
+        try:
+            subprocess.run(
+                ["git", "branch", "-D", branch_name],
+                cwd=repo_path,
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            logger.info(f"Deleted temporary branch '{branch_name}'")
+        except subprocess.CalledProcessError as e:
+            logger.warning(f"Failed to delete temporary branch '{branch_name}': {e}")
 
     def submit_results(
         self,
@@ -1356,7 +1241,6 @@ class ResultCache:
         branch_name = (
             f"mteb-results-{int(datetime.now().timestamp())}" if push else None
         )
-        remote_state_before = self._save_remote_state() if push else {}
         try:
             normalized_models = self._normalize_models(models)
             self.download_from_remote()
@@ -1372,12 +1256,44 @@ class ResultCache:
                     "result_count": 0,
                 }
 
-            self._copy_results_to_remote(unsubmitted)
-            commit_sha = self._create_commit(unsubmitted, normalized_models)
+            remote_path = self.cache_path / "remote"
+            self._run_preflight_checks(remote_path)
+
+            # Capture original branch before making any changes
+            original_branch = self._get_current_branch(remote_path)
+
+            actions = []
+
+            copy_action = CopyResultsAction(unsubmitted, self.remote_results_path)
+            actions.append(copy_action)
+
+            model_str = ", ".join(
+                model.name for model in normalized_models if model.name
+            )
             result_count = sum(len(files) for files in unsubmitted.values())
+            commit_message = (
+                f"Add MTEB evaluation results for {model_str}\n\n"
+                f"Models: {model_str}\n"
+                f"Total results: {result_count}\n"
+                f"Submitted by MTEB ResultCache"
+            )
+
+            commit_action = CommitAction(remote_path, commit_message)
+            actions.append(commit_action)
+
+            if push and branch_name:
+                actions.append(
+                    CreateBranchAction(remote_path, branch_name, original_branch)
+                )
+
+            workflow = ReversibleWorkflow(steps=actions)
+            workflow.run()
+
+            commit_sha = commit_action.commit_sha
+            if not commit_sha:
+                raise RuntimeError("Failed to create commit: commit_sha is None")
 
             if not push:
-                remote_path = self.cache_path / "remote"
                 logger.info("\n" + "=" * 80)
                 logger.info(
                     f"✓ Commit created with {result_count} results for {len(normalized_models)} model(s)"
@@ -1417,24 +1333,42 @@ class ResultCache:
                 }
 
             else:
-                return self._create_pull_request(
-                    commit_sha,
-                    normalized_models,
-                    unsubmitted,
-                    result_count,
-                    branch_name=branch_name,
-                    remote_state_before=remote_state_before,
-                )
-        except Exception as e:
-            # On error, rollback changes if we're in push mode
-            if push and remote_state_before and branch_name:
-                logger.error(f"Error during submit_results, rolling back: {e}")
                 try:
-                    self._rollback_remote_state(
-                        remote_state_before, branch_to_delete=branch_name
+                    result = self._create_pull_request(
+                        commit_sha,
+                        normalized_models,
+                        unsubmitted,
+                        result_count,
+                        branch_name=branch_name,
                     )
-                except Exception as rollback_error:
-                    logger.error(f"Rollback also failed: {rollback_error}")
+                    # After successful PR, restore to original branch
+                    self._restore_branch(remote_path, original_branch)
+                    return result
+                except Exception as e:
+                    # PR creation failed, but workflow.run() already completed
+                    # Restore to original branch and delete temporary branch to clean up
+                    logger.error(f"PR creation failed: {e}")
+
+                    try:
+                        self._restore_branch(remote_path, original_branch)
+                    except Exception as restore_error:
+                        logger.error(
+                            f"Failed to restore branch on error: {restore_error}"
+                        )
+                        logger.warning(
+                            f"You may be on branch '{branch_name}'. "
+                            f"To restore, run: git checkout {original_branch}"
+                        )
+
+                    if branch_name:
+                        self._delete_branch(remote_path, branch_name)
+
+                    raise
+        except RuntimeError as e:
+            logger.error(f"Workflow error during submit_results: {e}")
+            raise
+        except Exception as e:
+            logger.error(f"Error during submit_results: {e}")
             raise
 
     def _get_github_token(self) -> str:
@@ -1486,20 +1420,18 @@ class ResultCache:
         self,
         commit_sha: str,
         models: list[ModelMeta],
-        unsubmitted: dict[tuple[str, str], list[Path]],
+        unsubmitted: dict[ModelMeta, list[Path]],
         result_count: int,
         branch_name: str | None,
-        remote_state_before: dict[str, Any],
     ) -> dict[str, Any]:
         """Create a pull request on GitHub using PyGithub.
 
         Args:
             commit_sha: The commit SHA to reference.
-            models: List of (model_name, revision) tuples.
-            unsubmitted: Dict of unsubmitted results.
+            models: List of ModelMeta objects.
+            unsubmitted: Dict mapping ModelMeta to list of result file paths.
             result_count: Total number of results.
             branch_name: Name of the branch to create.
-            remote_state_before: Original state of the remote repository before submission for rollback.
 
         Returns:
             Dictionary with PR information.
@@ -1620,14 +1552,6 @@ class ResultCache:
                 head=f"{user.login}:{branch_name}",
                 base="main",
             )
-
-            # Restore original branch in remote repository after PR creation success
-            try:
-                original_branch = remote_state_before.get("current_branch", "main")
-                self._checkout_branch(original_branch)
-                logger.info(f"Restored to original branch: {original_branch}")
-            except Exception as e:
-                logger.warning(f"Failed to restore original branch: {e}")
 
             logger.info("\n" + "=" * 80)
             logger.info("✓ Pull request created successfully!")

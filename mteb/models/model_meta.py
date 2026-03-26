@@ -274,6 +274,23 @@ class ModelMeta(BaseModel):
             )
         return v
 
+    def __hash__(self) -> int:
+        """Make ModelMeta hashable based on name and revision.
+
+        This allows ModelMeta instances to be used as dictionary keys.
+        Two ModelMeta instances with the same name and revision will have the same hash.
+        """
+        return hash((self.name, self.revision))
+
+    def __eq__(self, other: object) -> bool:
+        """Check equality based on name and revision.
+
+        Two ModelMeta instances are equal if they have the same name and revision.
+        """
+        if not isinstance(other, ModelMeta):
+            return NotImplemented
+        return self.name == other.name and self.revision == other.revision
+
     def load_model(self, device: str | None = None, **kwargs: Any) -> MTEBModels:
         """Loads the model using the specified loader function."""
         if self.loader is None:
