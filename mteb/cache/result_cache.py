@@ -11,7 +11,7 @@ import textwrap
 import warnings
 from collections import defaultdict
 from collections.abc import Mapping
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
@@ -1040,17 +1040,12 @@ class ResultCache:
 
         ---
 
-        ### Details
-        - **Submitted by:** MTEB ResultCache
-        f"- **Timestamp:** {datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")}"
-        - **Submission method:** Automated via `ResultCache.submit_results()`
-
         ### Instructions for Reviewers
         Please review the results files and ensure they meet the MTEB submission format requirements.
 
         ---
 
-        *This PR was created automatically. Please check the results carefully before merging.*
+        *This PR was created automatically using `ResultCache.submit_results()`. Please check the results carefully before merging.*
         """)
         return body.strip()
 
