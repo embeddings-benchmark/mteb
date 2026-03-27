@@ -332,7 +332,7 @@ class ModelMeta(BaseModel):
 
         # Allow overwrites
         _kwargs = self.loader_kwargs.copy()
-        _kwargs.update(kwargs)
+        _kwargs.update(self.experiment_kwargs)
         if device is not None:
             _kwargs["device"] = device
 
