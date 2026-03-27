@@ -226,3 +226,4 @@ def get_model_meta(
             suggestion = f" Did you mean: '{close_matches[0]}'?"
 
     raise KeyError(not_found_msg + suggestion)
+
