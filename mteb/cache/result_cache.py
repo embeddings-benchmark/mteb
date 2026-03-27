@@ -1040,11 +1040,6 @@ class ResultCache:
 
         ---
 
-        ### Instructions for Reviewers
-        Please review the results files and ensure they meet the MTEB submission format requirements.
-
-        ---
-
         *This PR was created automatically using `ResultCache.submit_results()`. Please check the results carefully before merging.*
         """)
         return body.strip()
