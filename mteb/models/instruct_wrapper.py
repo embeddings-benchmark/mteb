@@ -144,6 +144,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
+        *,
         device: str | None = None,
         instruction_template: str
         | Callable[[str, PromptType | None], str]
@@ -154,7 +155,6 @@ class InstructSentenceTransformerModel(AbsEncoder):
         add_eos_token: bool = False,
         prompts_dict: dict[str, str] | None = None,
         include_prompt: bool = True,
-        *,
         embed_dim: int | None = None,
         **kwargs: Any,
     ):

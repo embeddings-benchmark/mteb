@@ -120,8 +120,8 @@ class AbsTaskPairClassification(AbsTask):
             )
         evaluator = PairClassificationEvaluator(
             data_split,
-            self.input1_column_name,
-            self.input2_column_name,
+            input1_column_name=self.input1_column_name,
+            input2_column_name=self.input2_column_name,
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,

@@ -198,10 +198,9 @@ class ModelMeta(BaseModel):
                 if is_cross_encoder_value:
                     if "cross-encoder" not in model_type:
                         data["model_type"] = ["cross-encoder"]
-                else:
-                    if "cross-encoder" in model_type:
-                        model_type = [t for t in model_type if t != "cross-encoder"]
-                        data["model_type"] = model_type if model_type else ["dense"]
+                elif "cross-encoder" in model_type:
+                    model_type = [t for t in model_type if t != "cross-encoder"]
+                    data["model_type"] = model_type if model_type else ["dense"]
 
         return data
 

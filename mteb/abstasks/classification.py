@@ -296,7 +296,7 @@ class AbsTaskClassification(AbsTask):
         all_predictions = []
         dataloader_train = create_dataloader(
             ds,
-            self.metadata,
+            task_metadata=self.metadata,
             input_column=self.input_column_name,
             num_proc=num_proc,
             **encode_kwargs,
@@ -351,10 +351,10 @@ class AbsTaskClassification(AbsTask):
         model: EncoderProtocol,
         train_split: Dataset,
         eval_split: Dataset,
+        *,
         experiment_num: int,
         idxs: list[int] | None,
         test_cache: Array | None,
-        *,
         encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,
@@ -373,8 +373,8 @@ class AbsTaskClassification(AbsTask):
         evaluator = self.evaluator(
             train_dataset,
             eval_split,
-            self.input_column_name,
-            self.label_column_name,
+            values_column_name=self.input_column_name,
+            label_column_name=self.label_column_name,
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,

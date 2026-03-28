@@ -51,10 +51,9 @@ def _downsample_image(
         if width > 10000:
             logger.error("Processing extremely wide images.")
             return image.resize((10000, height), Resampling.LANCZOS)
-    else:
-        if height > 10000:
-            logger.error("Processing extremely high images.")
-            return image.resize((width, 10000), Resampling.LANCZOS)
+    elif height > 10000:
+        logger.error("Processing extremely high images.")
+        return image.resize((width, 10000), Resampling.LANCZOS)
     return image
 
 

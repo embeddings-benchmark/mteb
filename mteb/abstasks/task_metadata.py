@@ -492,7 +492,7 @@ class TaskMetadata(BaseModel):
         """Return the languages of the dataset as iso639-3 codes."""
 
         def get_lang(lang: str) -> str:
-            return lang.split("-")[0]
+            return lang.split("-", maxsplit=1)[0]
 
         if isinstance(self.eval_langs, dict):
             return sorted(
@@ -533,7 +533,6 @@ class TaskMetadata(BaseModel):
             return self.eval_langs
         return {"default": cast("list[str]", self.eval_langs)}
 
-    @property
     def intext_citation(self, include_cite: bool = True) -> str:
         """Create an in-text citation for the dataset."""
         cite = ""

@@ -32,6 +32,7 @@ class RetrievalEvaluator(Evaluator):
         self,
         corpus: CorpusDatasetType,
         queries: QueryDatasetType,
+        *,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
@@ -94,7 +95,7 @@ class RetrievalEvaluator(Evaluator):
             for qid, rels in results.items():
                 for pid in list(rels):
                     if qid == pid:
-                        results[qid].pop(pid)
+                        rels.pop(pid)
         else:
             logger.debug(
                 "For evaluation, we DO NOT ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=True`` to ignore this."

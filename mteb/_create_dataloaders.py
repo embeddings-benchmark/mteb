@@ -291,6 +291,7 @@ def _prepare_dataset(
 
 def create_dataloader(
     dataset: Dataset,
+    *,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
     input_column: str | None = None,

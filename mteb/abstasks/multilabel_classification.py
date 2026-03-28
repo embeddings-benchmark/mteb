@@ -126,7 +126,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         )
         dataloader_train = create_dataloader(
             unique_train_dataset,
-            self.metadata,
+            task_metadata=self.metadata,
             input_column=self.input_column_name,
             num_proc=num_proc,
             **encode_kwargs,
@@ -156,7 +156,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
 
         dataloader_test = create_dataloader(
             test_dataset.select_columns(self.input_column_name),
-            self.metadata,
+            task_metadata=self.metadata,
             input_column=self.input_column_name,
             **encode_kwargs,
         )

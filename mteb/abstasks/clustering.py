@@ -47,6 +47,7 @@ MultilingualDataset = dict[HFSubset, DatasetDict]
 def _evaluate_clustering_bootstrapped(
     embeddings: Array,
     labels: list[list[str]],
+    *,
     n_clusters: int,
     cluster_size: int,
     kmean_batch_size: int,
@@ -216,7 +217,7 @@ class AbsTaskClustering(AbsTask):
         embeddings = model.encode(
             create_dataloader(
                 downsampled_dataset,
-                self.metadata,
+                task_metadata=self.metadata,
                 input_column=self.input_column_name,
                 num_proc=num_proc,
                 **encode_kwargs,

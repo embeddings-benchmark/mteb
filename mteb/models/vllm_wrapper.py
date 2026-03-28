@@ -178,6 +178,7 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
         self,
         model: str | ModelMeta,
         revision: str | None = None,
+        *,
         prompt_dict: dict[str, str] | None = None,
         use_instructions: bool = False,
         instruction_template: (

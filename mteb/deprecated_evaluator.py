@@ -96,7 +96,7 @@ class MTEB:
         from rich.console import Console
 
         # disable logging for other ranks
-        if int(os.getenv("RANK", 0)) != 0:
+        if int(os.getenv("RANK", "0")) != 0:
             return
 
         console = Console()
@@ -260,6 +260,7 @@ class MTEB:
     def run(
         self,
         model: MTEBModels | CrossEncoder | SentenceTransformer,
+        *,
         verbosity: int = 1,
         output_folder: str | None = "results",
         eval_splits: list[str] | None = None,

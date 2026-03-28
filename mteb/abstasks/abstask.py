@@ -285,6 +285,7 @@ class AbsTask(ABC):
     @staticmethod
     def stratified_subsampling(
         dataset_dict: DatasetDict,
+        *,
         seed: int,
         splits: list[str] = ["test"],
         label: str = "label",

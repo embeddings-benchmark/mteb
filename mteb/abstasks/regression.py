@@ -142,6 +142,7 @@ class AbsTaskRegression(AbsTaskClassification):
     @staticmethod
     def stratified_subsampling(
         dataset_dict: datasets.DatasetDict,
+        *,
         seed: int,
         splits: list[str] = ["test"],
         label: str = "value",

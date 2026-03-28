@@ -130,6 +130,7 @@ class AbsTaskSTS(AbsTask):
         self,
         model: MTEBModels,
         data_split: Dataset,
+        *,
         encode_kwargs: EncodeKwargs,
         hf_split: str,
         hf_subset: str,

@@ -247,7 +247,7 @@ def test_generate_model_card_with_table_and_benchmarks(
                     # Normalize whitespace in table rows
                     normalized = "|".join(cell.strip() for cell in line.split("|"))
                     table_rows.append(normalized)
-                elif line.strip() == "":
+                elif not line.strip():
                     # Empty line might signal end of table
                     if table_rows:
                         break

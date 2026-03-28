@@ -77,7 +77,7 @@ class SearchEncoderWrapper:
             all_doc_embeddings = self.model.encode(
                 create_dataloader(
                     corpus,
-                    task_metadata,
+                    task_metadata=task_metadata,
                     prompt_type=PromptType.document,
                     num_proc=num_proc,
                     **encode_kwargs,
@@ -124,7 +124,7 @@ class SearchEncoderWrapper:
 
         queries_dataloader = create_dataloader(
             queries,
-            task_metadata,
+            task_metadata=task_metadata,
             prompt_type=PromptType.query,
             num_proc=num_proc,
             **encode_kwargs,
@@ -223,6 +223,7 @@ class SearchEncoderWrapper:
 
     def _full_corpus_search(
         self,
+        *,
         query_idx_to_id: dict[int, str],
         query_embeddings: Array,
         task_metadata: TaskMetadata,
@@ -253,7 +254,7 @@ class SearchEncoderWrapper:
             sub_corpus_embeddings = self.model.encode(
                 create_dataloader(
                     sub_corpus,
-                    task_metadata,
+                    task_metadata=task_metadata,
                     prompt_type=PromptType.document,
                     **encode_kwargs,
                 ),
@@ -295,6 +296,7 @@ class SearchEncoderWrapper:
 
     def _sort_full_corpus_results(
         self,
+        *,
         result_heaps: dict[str, list[tuple[float, str]]],
         query_idx_to_id: dict[int, str],
         query_embeddings: Array,
@@ -325,6 +327,7 @@ class SearchEncoderWrapper:
 
     def _rerank_documents(
         self,
+        *,
         query_idx_to_id: dict[int, str],
         query_embeddings: Array,
         top_ranked: TopRankedDocumentsType,
@@ -349,7 +352,7 @@ class SearchEncoderWrapper:
         all_doc_embeddings = self.model.encode(
             create_dataloader(
                 self.task_corpus,
-                task_metadata,
+                task_metadata=task_metadata,
                 prompt_type=PromptType.document,
                 **encode_kwargs,
             ),
@@ -554,14 +557,14 @@ class SearchCrossEncoderWrapper:
 
         queries_loader = create_dataloader(
             Dataset.from_list(total_queries),
-            task_metadata,
+            task_metadata=task_metadata,
             prompt_type=PromptType.document,
             num_proc=num_proc,
             **encode_kwargs,
         )
         corpus_loader = create_dataloader(
             Dataset.from_list(total_docs),
-            task_metadata,
+            task_metadata=task_metadata,
             prompt_type=PromptType.document,
             num_proc=num_proc,
             **encode_kwargs,

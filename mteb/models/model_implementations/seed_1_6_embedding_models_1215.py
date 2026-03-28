@@ -178,22 +178,19 @@ class Seed16EmbeddingWrapper(AbsEncoder):
                     "Target_modality:Text.\n Instruction:" + instruction + "\n Query:"
                 )
                 input_text = texts[i]
+            elif texts[i] != "" and images_base64[i] is not None:
+                instruction = (
+                    "Instruction: Compress the text and image into one word.\n Query:"
+                )
+                input_text = texts[i]
+            elif texts[i] != "":
+                instruction = "Instruction: Compress the text into one word.\n Query:"
+                input_text = texts[i]
+            elif images_base64[i] is not None:
+                instruction = "Instruction: Compress the image into one word.\n Query:"
+                input_text = None
             else:
-                if texts[i] != "" and images_base64[i] is not None:
-                    instruction = "Instruction: Compress the text and image into one word.\n Query:"
-                    input_text = texts[i]
-                elif texts[i] != "":
-                    instruction = (
-                        "Instruction: Compress the text into one word.\n Query:"
-                    )
-                    input_text = texts[i]
-                elif images_base64[i] is not None:
-                    instruction = (
-                        "Instruction: Compress the image into one word.\n Query:"
-                    )
-                    input_text = None
-                else:
-                    raise ValueError("image and text are both None")
+                raise ValueError("image and text are both None")
 
             resp = multimodal_embedding(
                 instruction=instruction,

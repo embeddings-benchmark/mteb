@@ -69,6 +69,7 @@ class SummarizationEvaluator(Evaluator):
         machine_summaries: list[list[str]],
         texts: list[str],
         gold_scores: list[list[float]],
+        *,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,

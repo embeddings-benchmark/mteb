@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 # Create task registry
 def _gather_tasks() -> tuple[type[AbsTask], ...]:
-    import mteb.tasks as tasks
+    from mteb import tasks
 
     return tuple(
         t
@@ -282,8 +282,8 @@ def get_tasks(
         _tasks = [
             get_task(
                 task,
-                languages,
-                script,
+                languages=languages,
+                script=script,
                 eval_splits=eval_splits,
                 exclusive_language_filter=exclusive_language_filter,
             )
@@ -317,6 +317,7 @@ _TASK_RENAMES = {"PersianTextTone": "SynPerTextToneClassification"}
 
 def get_task(
     task_name: str,
+    *,
     languages: Sequence[str] | None = None,
     script: Sequence[str] | None = None,
     eval_splits: Sequence[str] | None = None,

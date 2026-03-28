@@ -117,8 +117,8 @@ wav2clip = ["wav2clip==0.1.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
 mctct = ["transformers<5"]  # mctct was removed in transformers 5
-siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]  
-qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"] 
+siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
+qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
 
 [dependency-groups]
 lint = [
@@ -254,6 +254,7 @@ select = [
     "PGH",     # pygrep-hooks Use specific rule codes when ignoring type issues
     "LOG",     # logging
     "TC",      # type-checking
+    "PL",  # pylint
 ]
 
 ignore = [
@@ -265,9 +266,28 @@ ignore = [
     "D107",     # Missing docstring in __init__
     "D415",     # First line should end with a period
     "C408",     # don't use unecc. collection call, e.g. dict over {}
+    "PLR2004",   # magic value comparison
+    "PLC0415",   # import outside of top-level
+    "PLR0912",  # too many branches
+    "PLR0915",  # too many statements
+    "PLR0913",  # too many arguments
+    "PLR0911",  # too many return statements
+    "PLW2901",  # redefined loop name
+    "PLR1704",  # redefined argument name from local
+    # preview
+    "PLR1702",
+    "PLR6201",
+    "PLC2701",
+    "PLR6301",
+    "PLW0108",
+    "PLR0914",
+    "PLW1514",
+    "PLR0904",
+    "PLR6104",
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
+preview = true
 
 
 [tool.ruff.lint.per-file-ignores]
@@ -281,10 +301,22 @@ typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
     "D",
     "DOC",
     "TC",
+    "PLR2004",
+    "PLR0913",
+    # preview
+    "PLR0917",
 ]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
-"mteb/tasks/*" = ["D", "DOC"]
-"mteb/models/model_implementations/*" = ["D", "DOC"]
+"mteb/tasks/*" = [
+    "D",
+    "DOC",
+    "PL",
+]
+"mteb/models/model_implementations/*" = [
+    "D",
+    "DOC",
+    "PL",
+]
 "mteb/benchmarks/benchmark.py" = [
     # pydantic would try to validate fields in Benchmark class
     "TC",
@@ -293,6 +325,7 @@ typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
     # gradio would try to validate typehints
     "TC002",
     "TC001",
+    "PLR0917",
 ]
 
 
@@ -428,7 +461,7 @@ disable_error_code = ["index"]
 binary = false
 locale = "en"
 extend-ignore-words-re = [
-    "Classfication", # misspelled task name 
+    "Classfication", # misspelled task name
     "nd", # license
     # authors
     "Stap",
