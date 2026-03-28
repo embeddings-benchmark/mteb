@@ -399,7 +399,7 @@ class TaskMetadata(BaseModel):
     name: str
     description: str
     prompt: str | PromptDict | None = None
-    type: TaskType # type: ignore[valid-type]
+    type: TaskType  # type: ignore[valid-type]
     modalities: list[Modalities] = ["text"]
     category: TaskCategory | None = None
     reference: StrURL | None = None
