@@ -287,6 +287,34 @@ class ModelMeta(BaseModel):
             )
         return v
 
+    def __hash__(self) -> int:
+        """Make ModelMeta hashable based on name, revision, experiment_kwargs and embed_dim.
+
+        This allows ModelMeta instances to be used as dictionary keys.
+        Two ModelMeta instances with the same name, revision, experiment_kwargs and embed_dim will have the same hash.
+        """
+        # Convert experiment_kwargs to a hashable form (frozenset of items)
+        exp_kwargs_hash = (
+            frozenset(self.experiment_kwargs.items())
+            if self.experiment_kwargs
+            else None
+        )
+        return hash((self.name, self.revision, exp_kwargs_hash, self.embed_dim))
+
+    def __eq__(self, other: object) -> bool:
+        """Check equality based on name, revision, experiment_kwargs and embed_dim.
+
+        Two ModelMeta instances are equal if they have the same name, revision, experiment_kwargs and embed_dim.
+        """
+        if not isinstance(other, ModelMeta):
+            return NotImplemented
+        return (
+            self.name == other.name
+            and self.revision == other.revision
+            and self.experiment_kwargs == other.experiment_kwargs
+            and self.embed_dim == other.embed_dim
+        )
+
     def load_model(
         self,
         device: str | None = None,
