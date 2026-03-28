@@ -51,6 +51,16 @@ This section provides an overview of available tasks, models and benchmarks in M
 
     [:lucide-corner-down-right: See text models](./available_models/text.md)
 
+
+-   :lucide-layers: __Multimodal__
+
+    ---
+
+    Models that encode more than two modalities.
+
+    [:lucide-corner-down-right: See multimodal models](./available_models/multimodal.md)
+
+
 -   :lucide-image: __Image__
 
     ---
@@ -59,7 +69,7 @@ This section provides an overview of available tasks, models and benchmarks in M
 
     [:lucide-corner-down-right: See image models](./available_models/image.md)
 
--   :lucide-layout: __Image Text__
+-   :lucide-layers: __Image Text__
 
     ---
 
@@ -83,14 +93,6 @@ This section provides an overview of available tasks, models and benchmarks in M
 
     [:lucide-corner-down-right: See audio text models](./available_models/audio_text.md)
 
--   :lucide-combine: __Multimodal__
-
-    ---
-
-    Models that encode more than two modalities.
-
-    [:lucide-corner-down-right: See multimodal models](./available_models/multimodal.md)
-
 </div>
 
 
@@ -99,6 +101,15 @@ This section provides an overview of available tasks, models and benchmarks in M
 While MTEB covers multiple task types, we categorize them into 5 broad categories based on the type of evaluation they require, these categories are not mutually exclusive but provide a useful way to navigate the large collection of tasks in MTEB.
 
 <div class="grid cards" style="grid-template-columns: repeat(3, 1fr);" markdown>
+
+-   :lucide-search: __Retrieval__
+
+    ---
+
+    Asymmetric matching between queries and a corpus across different embedding regions.
+
+    [:lucide-corner-down-right: See tasks](./available_tasks/retrieval.md)
+
 
 -   :lucide-shapes: __Classification__
 
@@ -116,22 +127,6 @@ While MTEB covers multiple task types, we categorize them into 5 broad categorie
 
     [:lucide-corner-down-right: See tasks](./available_tasks/clustering.md)
 
--   :lucide-git-compare: __Pair classification__
-
-    ---
-
-    Embeddings capturing relationships between item pairs, such as entailment or paraphrase.
-
-    [:lucide-corner-down-right: See tasks](./available_tasks/pair-classification.md)
-
--   :lucide-search: __Retrieval__
-
-    ---
-
-    Asymmetric matching between queries and a corpus across different embedding regions.
-
-    [:lucide-corner-down-right: See tasks](./available_tasks/retrieval.md)
-
 -   :lucide-spline: __Semantic similarity__
 
     ---
@@ -139,5 +134,14 @@ While MTEB covers multiple task types, we categorize them into 5 broad categorie
     Fine-grained similarity between item pairs, where cosine similarity reflects human judgments.
 
     [:lucide-corner-down-right: See tasks](./available_tasks/semantic-similarity.md)
+
+
+-   :lucide-git-compare: __Pair classification__
+
+    ---
+
+    Embeddings capturing relationships between item pairs, such as entailment or paraphrase.
+
+    [:lucide-corner-down-right: See tasks](./available_tasks/pair-classification.md)
 
 </div>
