@@ -161,11 +161,10 @@ def test_model_meta_hashable():
         experiment_kwargs={"param1": "value1"},
     )
 
-    assert hash(model1) != hash(model2)
     assert hash(model1) == hash(model3)
 
-    assert model1 != model2
-    assert model1 == model3
+    assert len({model1, model2}) == 2
+    assert len({model1, model3}) == 1
 
 
 @pytest.mark.parametrize(

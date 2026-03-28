@@ -293,13 +293,13 @@ class ModelMeta(BaseModel):
         This allows ModelMeta instances to be used as dictionary keys.
         Two ModelMeta instances with the same name, revision, experiment_kwargs and embed_dim will have the same hash.
         """
-        # Convert experiment_kwargs to a hashable form (frozenset of items)
-        exp_kwargs_hash = (
-            frozenset(self.experiment_kwargs.items())
+        # Serialize experiment_kwargs to a deterministic, hashable representation
+        exp_kwargs_repr = (
+            _serialize_experiment_kwargs_to_name(self.experiment_kwargs)
             if self.experiment_kwargs
             else None
         )
-        return hash((self.name, self.revision, exp_kwargs_hash, self.embed_dim))
+        return hash((self.name, self.revision, exp_kwargs_repr, self.embed_dim))
 
     def __eq__(self, other: object) -> bool:
         """Check equality based on name, revision, experiment_kwargs and embed_dim.
