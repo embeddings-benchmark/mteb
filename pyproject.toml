@@ -428,6 +428,8 @@ disable_error_code = ["index"]
 binary = false
 locale = "en"
 extend-ignore-words-re = [
+    "Classfication", # misspelled task name 
+    "nd", # license
     # authors
     "Stap",
     "Asai",
@@ -441,11 +443,25 @@ extend-ignore-words-re = [
     "Mehta",
     "Parth",
     # languages/bibtext artifacts
+    "SHW",
     "ba",
     "creen",
     "Accademia",
+    "dementieva",
+    "Expresso",
+    "expresso",
+    "Iz",
+    "Allo",
+    "Soler",
+    # language keys:
+    "tha",
+    "yor",
+    "als",
+    "bre",
+    "thi",
     # ISO 15924 script codes
     "Beng",  # Bengali script
+
 ]
 extend-ignore-re = [
     "author.*",  # ignore authors in citations
@@ -496,8 +512,7 @@ BulgarianStoreReviewSentimentClassfication = "BulgarianStoreReviewSentimentClass
 
 [tool.typos.type.py.extend-words]
 wdth = "wdth"
-Allo = "Allo"   # AlloProfClusteringS2S.v2
-# langs/splits
+Allo = "Allo"
 som = "som"
 yor = "yor"
 Beng = "Beng"
@@ -518,3 +533,5 @@ expresso = "expresso"
 Expresso = "Expresso"
 NIFE = "NIFE"
 thw = "thw"
+shw = "SHW"
+nd = "nd"
