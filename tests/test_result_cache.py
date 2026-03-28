@@ -605,6 +605,13 @@ def _setup_fake_remote(tmp_path: Path) -> tuple[Path, Path]:
     remote_path.mkdir(parents=True)
 
     subprocess.run(["git", "init"], cwd=remote_path, check=True, capture_output=True)
+    # Explicitly set the default branch to 'main' (not 'master')
+    subprocess.run(
+        ["git", "checkout", "-b", "main"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
     subprocess.run(
         ["git", "config", "user.email", "test@mteb.com"],
         cwd=remote_path,
