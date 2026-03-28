@@ -299,7 +299,14 @@ class ModelMeta(BaseModel):
             if self.experiment_kwargs
             else None
         )
-        return hash((self.name, self.revision, exp_kwargs_repr, self.embed_dim))
+
+        if isinstance(self.embed_dim, Sequence) and not isinstance(
+            self.embed_dim, (str, bytes)
+        ):
+            embed_dim_hash = tuple(self.embed_dim)
+        else:
+            embed_dim_hash = self.embed_dim
+        return hash((self.name, self.revision, exp_kwargs_repr, embed_dim_hash))
 
     def __eq__(self, other: object) -> bool:
         """Check equality based on name, revision, experiment_kwargs and embed_dim.
