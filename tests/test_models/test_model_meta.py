@@ -89,76 +89,31 @@ _MISSING_N_EMBEDDING_MODELS = [
 
 def test_model_meta_hashable():
     """Test that ModelMeta is hashable and considers experiment_kwargs in hash/equality."""
-    model1 = ModelMeta(
-        name="test/test_model",
-        revision="test_rev",
-        release_date=None,
-        languages=None,
-        loader=None,
-        n_parameters=None,
-        memory_usage_mb=None,
-        max_tokens=None,
-        embed_dim=384,
-        license=None,
-        open_weights=None,
-        public_training_code=None,
-        public_training_data=None,
-        framework=[],
-        reference=None,
-        similarity_fn_name=None,
-        use_instructions=None,
-        training_datasets=None,
-        adapted_from=None,
-        superseded_by=None,
-        experiment_kwargs={"param1": "value1"},
+    model1 = ModelMeta.create_empty(
+        overwrites=dict(
+            name="test/test_model",
+            revision="test_rev",
+            embed_dim=384,
+            experiment_kwargs={"param1": "value1"},
+        )
     )
 
-    model2 = ModelMeta(
-        name="test/test_model2",
-        revision="test_rev2",
-        release_date=None,
-        languages=None,
-        loader=None,
-        n_parameters=None,
-        memory_usage_mb=None,
-        max_tokens=None,
-        embed_dim=512,
-        license=None,
-        open_weights=None,
-        public_training_code=None,
-        public_training_data=None,
-        framework=[],
-        reference=None,
-        similarity_fn_name=None,
-        use_instructions=None,
-        training_datasets=None,
-        adapted_from=None,
-        superseded_by=None,
-        experiment_kwargs={"param1": "value2"},
+    model2 = ModelMeta.create_empty(
+        overwrites=dict(
+            name="test/test_model2",
+            revision="test_rev2",
+            embed_dim=512,
+            experiment_kwargs={"param1": "value2"},
+        )
     )
 
-    model3 = ModelMeta(
-        name="test/test_model",
-        revision="test_rev",
-        release_date=None,
-        languages=None,
-        loader=None,
-        n_parameters=None,
-        memory_usage_mb=None,
-        max_tokens=None,
-        embed_dim=384,
-        license=None,
-        open_weights=None,
-        public_training_code=None,
-        public_training_data=None,
-        framework=[],
-        reference=None,
-        similarity_fn_name=None,
-        use_instructions=None,
-        training_datasets=None,
-        adapted_from=None,
-        superseded_by=None,
-        experiment_kwargs={"param1": "value1"},
+    model3 = ModelMeta.create_empty(
+        overwrites=dict(
+            name="test/test_model",
+            revision="test_rev",
+            embed_dim=384,
+            experiment_kwargs={"param1": "value1"},
+        )
     )
 
     assert hash(model1) == hash(model3)
