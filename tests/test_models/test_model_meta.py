@@ -225,7 +225,7 @@ def test_ensure_experiments_kwargs_passed():
     https://github.com/embeddings-benchmark/mteb/issues/4307
     """
     experiment = {"array_framework": "pytorch"}
-    # should be passed when
+    # should be passed when in all the following cases:
     model1 = mteb.get_model("mteb/baseline-random-encoder", **experiment)  # type: ignore[call-arg]
 
     meta = mteb.get_model_meta(

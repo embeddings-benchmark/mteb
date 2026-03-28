@@ -125,18 +125,8 @@ def get_model(
     Returns:
         A model object
     """
-    meta = get_model_meta(model_name, revision, fetch_from_hf=True).model_copy(
-        deep=True
-    )
+    meta = get_model_meta(model_name, revision, fetch_from_hf=True)
     model = meta.load_model(device=device, embed_dim=embed_dim, **kwargs)
-
-    if kwargs:
-        logger.info(
-            f"Model '{model_name}' loaded with additional arguments: {list(kwargs.keys())}"
-        )
-        meta.loader_kwargs |= kwargs
-
-    model.mteb_model_meta = meta  # type: ignore[misc]
     return model
 
 
