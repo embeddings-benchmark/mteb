@@ -304,7 +304,7 @@ SimplifiedTaskType = Literal[
     "pair-classification",
 ]
 
-_TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
+_TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {  # type: ignore[type-arg]
     "Any2AnyRetrieval": "retrieval",
     "Any2AnyMultilingualRetrieval": "retrieval",
     "VisionCentricQA": "retrieval",
@@ -399,7 +399,7 @@ class TaskMetadata(BaseModel):
     name: str
     description: str
     prompt: str | PromptDict | None = None
-    type: TaskType
+    type: TaskType # type: ignore[valid-type]
     modalities: list[Modalities] = ["text"]
     category: TaskCategory | None = None
     reference: StrURL | None = None
@@ -450,7 +450,7 @@ class TaskMetadata(BaseModel):
                 check_language_code(code)
 
     @property
-    def simplified_task_type(self) -> str:
+    def simplified_task_type(self) -> SimplifiedTaskType:
         """A simplified task type compared to metadata.type. E.g. converts AudioClustering and ImageClustering to simply Clustering.
 
         This performs a rought separation into the following categories:

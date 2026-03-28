@@ -33,7 +33,7 @@ This section provides an overview of available tasks, models and benchmarks in M
 
     Our comprehensive collection of tasks for evaluating embeddings
 
-    [:lucide-corner-down-right: See tasks](./available_tasks/index.md)
+    [:lucide-corner-down-right: See tasks](./available_tasks/retrieval.md)
 
 
 
@@ -122,7 +122,7 @@ While MTEB covers multiple task types, we categorize them into 5 broad categorie
 
     Embeddings capturing relationships between item pairs, such as entailment or paraphrase.
 
-    [:lucide-corner-down-right: See tasks](./available_tasks/pair_classification.md)
+    [:lucide-corner-down-right: See tasks](./available_tasks/pair-classification.md)
 
 -   :lucide-search: __Retrieval__
 
@@ -138,6 +138,6 @@ While MTEB covers multiple task types, we categorize them into 5 broad categorie
 
     Fine-grained similarity between item pairs, where cosine similarity reflects human judgments.
 
-    [:lucide-corner-down-right: See tasks](./available_tasks/semantic_similarity.md)
+    [:lucide-corner-down-right: See tasks](./available_tasks/semantic-similarity.md)
 
 </div>
