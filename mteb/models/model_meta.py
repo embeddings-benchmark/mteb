@@ -346,6 +346,7 @@ class ModelMeta(BaseModel):
             revision=_self.revision,
             **_kwargs,
         )
+        _self.loader_kwargs = _kwargs
         model.mteb_model_meta = _self  # type: ignore[misc]
         return model
 
