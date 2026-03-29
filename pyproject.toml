@@ -254,7 +254,7 @@ select = [
     "PGH",     # pygrep-hooks Use specific rule codes when ignoring type issues
     "LOG",     # logging
     "TC",      # type-checking
-    "T20",  # flake8-print
+    "T20",  # don't allow print
 ]
 
 ignore = [
