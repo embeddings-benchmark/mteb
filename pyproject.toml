@@ -117,8 +117,8 @@ wav2clip = ["wav2clip==0.1.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
 mctct = ["transformers<5"]  # mctct was removed in transformers 5
-siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]  
-qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"] 
+siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
+qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
 
 [dependency-groups]
 lint = [
@@ -254,6 +254,7 @@ select = [
     "PGH",     # pygrep-hooks Use specific rule codes when ignoring type issues
     "LOG",     # logging
     "TC",      # type-checking
+    "T20",  # don't allow print
 ]
 
 ignore = [
@@ -428,7 +429,7 @@ disable_error_code = ["index"]
 binary = false
 locale = "en"
 extend-ignore-words-re = [
-    "Classfication", # misspelled task name 
+    "Classfication", # misspelled task name
     "nd", # license
     # authors
     "Stap",
