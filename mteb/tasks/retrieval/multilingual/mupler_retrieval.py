@@ -97,21 +97,21 @@ class MuPLeRRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         is_public=True,
         bibtex_citation=r"""
-@article{
-  title = {An Overview of the {{European Union}}'s Highly Multilingual Parallel Corpora},
+@article{steinberger2014overview,
   author = {Steinberger, Ralf and Ebrahim, Mohamed and Poulis, Alexandros and {Carrasco-Benitez}, Manuel and Schl{\"u}ter, Patrick and Przybyszewski, Marek and Gilbro, Signe},
-  year = 2014,
-  month = dec,
-  journal = {Language Resources and Evaluation},
-  volume = {48},
-  number = {4},
-  pages = {679--707},
-  issn = {1574-0218},
   doi = {10.1007/s10579-014-9277-0},
-  urldate = {2026-03-29},
+  issn = {1574-0218},
+  journal = {Language Resources and Evaluation},
+  keywords = {DCEP,DGT-Acquis,DGT-TM,EAC-TM,ECDC-TM,Eur-Lex,European Union,EuroVoc,Highly multilingual,JRC EuroVoc Indexer JEX,JRC-Acquis,Linguistic resources,Parallel corpora,Translation memory},
   langid = {english},
   language = {en},
-  keywords = {DCEP,DGT-Acquis,DGT-TM,EAC-TM,ECDC-TM,Eur-Lex,European Union,EuroVoc,Highly multilingual,JRC EuroVoc Indexer JEX,JRC-Acquis,Linguistic resources,Parallel corpora,Translation memory}
+  month = dec,
+  number = {4},
+  pages = {679--707},
+  title = {An Overview of the {{European Union}}'s Highly Multilingual Parallel Corpora},
+  urldate = {2026-03-29},
+  volume = {48},
+  year = {2014},
 }
 """,
     )
