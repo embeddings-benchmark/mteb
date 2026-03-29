@@ -181,9 +181,10 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
                 else:
                     texts = None
                 if contains_both:
-                    assert len(imgs) == len(texts), (
-                        f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
-                    )
+                    if len(imgs) != len(texts):
+                        raise ValueError(
+                            f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
+                        )
 
                 if contains_image:
                     imgs = [img.convert("RGB") for img in imgs]
@@ -314,9 +315,10 @@ class ColQwen3Wrapper(AbsEncoder):
                 else:
                     texts = None
                 if contains_both:
-                    assert len(imgs) == len(texts), (
-                        f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
-                    )
+                    if len(imgs) != len(texts):
+                        raise ValueError(
+                            f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
+                        )
 
                 inputs = self.processor(images=imgs, text=texts)
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
