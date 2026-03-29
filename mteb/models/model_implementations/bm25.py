@@ -46,7 +46,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
                 Stemmer.Stemmer(stemmer_language) if stemmer_language else None
             )
 
-        def index(  # noqa: PLR0913
+        def index(
             self,
             corpus: CorpusDatasetType,
             *,
@@ -71,7 +71,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
             self.retriever.index(encoded_corpus)
             self.corpus_idx_to_id = {i: row["id"] for i, row in enumerate(corpus)}
 
-        def search(  # noqa: PLR0913
+        def search(
             self,
             queries: QueryDatasetType,
             *,

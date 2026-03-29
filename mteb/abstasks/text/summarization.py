@@ -85,7 +85,7 @@ class AbsTaskSummarization(AbsTask):
     machine_summaries_column_name: str = "machine_summaries"
     relevancy_column_name: str = "relevance"
 
-    def _evaluate_subset(  # noqa: PLR0913
+    def _evaluate_subset(
         self,
         model: MTEBModels,
         data_split: Dataset,

@@ -51,7 +51,7 @@ class SearchEncoderWrapper:
         self.corpus_chunk_size = corpus_chunk_size
         self.index_backend = index_backend
 
-    def index(  # noqa: PLR0913
+    def index(
         self,
         corpus: CorpusDatasetType,
         *,
@@ -91,7 +91,7 @@ class SearchEncoderWrapper:
 
             self.index_backend.add_documents(all_doc_embeddings, corpus["id"])
 
-    def search(  # noqa: PLR0913
+    def search(
         self,
         queries: QueryDatasetType,
         *,
@@ -221,7 +221,7 @@ class SearchEncoderWrapper:
 
         return results
 
-    def _full_corpus_search(  # noqa: PLR0913
+    def _full_corpus_search(
         self,
         *,
         query_idx_to_id: dict[int, str],
@@ -294,7 +294,7 @@ class SearchEncoderWrapper:
             )
         return result_heaps
 
-    def _sort_full_corpus_results(  # noqa: PLR0913, PLR6301
+    def _sort_full_corpus_results(  # noqa: PLR6301
         self,
         *,
         result_heaps: dict[str, list[tuple[float, str]]],
@@ -325,7 +325,7 @@ class SearchEncoderWrapper:
                     heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
         return result_heaps
 
-    def _rerank_documents(  # noqa: PLR0913
+    def _rerank_documents(
         self,
         *,
         query_idx_to_id: dict[int, str],
@@ -480,7 +480,7 @@ class SearchCrossEncoderWrapper:
         self.task_corpus = None
         self.mteb_model_meta = model.mteb_model_meta
 
-    def index(  # noqa: PLR0913
+    def index(
         self,
         corpus: CorpusDatasetType,
         *,
@@ -502,7 +502,7 @@ class SearchCrossEncoderWrapper:
         """
         self.task_corpus = corpus
 
-    def search(  # noqa: PLR0913
+    def search(
         self,
         queries: QueryDatasetType,
         *,

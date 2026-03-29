@@ -417,7 +417,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                             hf_subset_scores.pop(key)  # type: ignore[attr-defined]
 
     @classmethod
-    def _convert_from_before_v1_11_0(cls, data: dict) -> TaskResult:  # noqa: PLR0912
+    def _convert_from_before_v1_11_0(cls, data: dict) -> TaskResult:
         from mteb.get_tasks import _TASKS_REGISTRY
 
         # in case the task name is not found in the registry, try to find a lower case version
@@ -634,7 +634,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         new_res = {**self.to_dict(), "scores": new_scores}
         return TaskResult.from_validated(**new_res)
 
-    def validate_and_filter_scores(  # noqa: PLR0912
+    def validate_and_filter_scores(
         self,
         task: AbsTask | None = None,
     ) -> TaskResult:

@@ -80,7 +80,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
     def __hash__(self) -> int:
         return id(self)
 
-    def _filter_tasks(  # noqa: PLR0913
+    def _filter_tasks(
         self,
         task_names: list[str] | None = None,
         *,
@@ -162,7 +162,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
         return type(self).model_construct(model_results=models_res)
 
-    def _filter_models(  # noqa: PLR0913
+    def _filter_models(
         self,
         model_names: Iterable[str] | None = None,
         *,
@@ -279,7 +279,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             model_results.append(model_result)
         return BenchmarkResults.model_construct(model_results=model_results)
 
-    def _get_scores(  # noqa: PLR0913
+    def _get_scores(
         self,
         *,
         splits: list[SplitName] | None = None,

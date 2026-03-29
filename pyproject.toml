@@ -268,8 +268,8 @@ ignore = [
     "C408",     # don't use unecc. collection call, e.g. dict over {}
     "PLR2004",   # magic value comparison
     "PLC0415",   # import outside of top-level
-#    "PLR0912",  # too many branches
-#    "PLR0915",  # too many statements
+    "PLR0912",  # too many branches
+    "PLR0915",  # too many statements
 #    "PLR0913",  # too many arguments
 #    "PLR0911",  # too many return statements
 #    "PLW2901",  # redefined loop name
@@ -301,20 +301,15 @@ preview = true
     "D",
     "DOC",
     "TC",
-#    "PLR0913",
-    # preview
-#    "PLR0917",
 ]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = [
     "D",
     "DOC",
-#    "PL",
 ]
 "mteb/models/model_implementations/*" = [
     "D",
     "DOC",
-#    "PL",
 ]
 "mteb/benchmarks/benchmark.py" = [
     # pydantic would try to validate fields in Benchmark class
@@ -351,6 +346,9 @@ runtime-evaluated-base-classes = [
     "pydantic.BaseModel",
     "mteb.abstasks.task_metadata.TaskMetadata",  # https://github.com/astral-sh/ruff/issues/7866
 ]
+
+[tool.ruff.lint.pylint]
+max-args = 10
 
 [tool.semantic_release]
 branch = "main"

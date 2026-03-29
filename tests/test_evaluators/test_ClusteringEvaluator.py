@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 class TestClusteringEvaluator:
     def test_clustering_v_measure(self):  # noqa: PLR6301
         class Model:
-            def encode(  # noqa: PLR0913, PLR0917, PLR6301
+            def encode(  # noqa: PLR6301
                 self,
                 sentences: DataLoader,
                 task_metadata,

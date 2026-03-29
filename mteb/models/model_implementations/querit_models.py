@@ -105,7 +105,7 @@ class QueritWrapper(RerankerWrapper):
         return {"input_ids": input_ids, "attention_mask": attention_mask}
 
     @torch.inference_mode()
-    def predict(  # noqa: PLR0913
+    def predict(
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],

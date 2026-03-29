@@ -41,7 +41,7 @@ class STSEvaluatorScores(TypedDict):
 
 
 class AnySTSEvaluator(Evaluator):
-    def __init__(  # noqa: PLR0913
+    def __init__(
         self,
         dataset: Dataset,
         sentences_column_names: tuple[str, str],

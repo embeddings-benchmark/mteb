@@ -96,7 +96,7 @@ def _build_qwen3_vl_for_embedding_class():
         def visual(self):
             return self.model.visual
 
-        def forward(  # noqa: PLR0913, PLR0917
+        def forward(
             self,
             input_ids: torch.LongTensor | None = None,
             attention_mask: torch.Tensor | None = None,
@@ -144,7 +144,7 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
     to ensure identical results.
     """
 
-    def __init__(  # noqa: PLR0913, PLR0917
+    def __init__(
         self,
         model_name: str,
         revision: str | None = None,
@@ -312,7 +312,7 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
                 result.append(tv_functional.to_pil_image(img.cpu()))
         return result
 
-    def encode(  # noqa: PLR0913
+    def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,

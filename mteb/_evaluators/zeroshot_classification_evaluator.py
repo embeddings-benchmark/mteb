@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 class ZeroShotClassificationEvaluator(Evaluator):
-    def __init__(  # noqa: PLR0913
+    def __init__(
         self,
         dataset: Dataset,
         input_column_name: str,

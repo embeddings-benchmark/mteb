@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 class SearchProtocol(Protocol):
     """Interface for searching models."""
 
-    def index(  # noqa: PLR0913
+    def index(
         self,
         corpus: CorpusDatasetType,
         *,
@@ -46,7 +46,7 @@ class SearchProtocol(Protocol):
         """
         ...
 
-    def search(  # noqa: PLR0913
+    def search(
         self,
         queries: QueryDatasetType,
         *,
@@ -213,7 +213,7 @@ class CrossEncoderProtocol(Protocol):
         """
         ...
 
-    def predict(  # noqa: PLR0913
+    def predict(
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],

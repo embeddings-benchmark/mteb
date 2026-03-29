@@ -48,7 +48,7 @@ class Encoder(torch.nn.Module):
         self.processor.tokenizer.padding_side = "right"
         self.default_instruction = "You are a helpful assistant."
 
-    def forward(  # noqa: PLR0913, PLR0917
+    def forward(
         self,
         input_ids: torch.LongTensor | None = None,
         attention_mask: torch.Tensor | None = None,
@@ -140,7 +140,7 @@ class Encoder(torch.nn.Module):
 
 
 class GmeQwen2VL(AbsEncoder):
-    def __init__(  # noqa: PLR0913, PLR0917
+    def __init__(
         self,
         model_name: str,
         revision: str,
@@ -171,7 +171,7 @@ class GmeQwen2VL(AbsEncoder):
         self.device = device
         self.sep = " "
 
-    def encode(  # noqa: PLR0913
+    def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,

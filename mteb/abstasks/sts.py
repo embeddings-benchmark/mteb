@@ -126,7 +126,7 @@ class AbsTaskSTS(AbsTask):
     input1_prompt_type: PromptType | None = None
     input2_prompt_type: PromptType | None = None
 
-    def _evaluate_subset(  # noqa: PLR0913
+    def _evaluate_subset(
         self,
         model: MTEBModels,
         data_split: Dataset,

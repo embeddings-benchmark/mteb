@@ -156,7 +156,7 @@ def _update_task_info(task_names: str) -> pd.DataFrame:
 MIN_MODEL_SIZE, MAX_MODEL_SIZE = 0, 100_000
 
 
-def _filter_models(  # noqa: PLR0913, PLR0917
+def _filter_models(
     model_names: list[str],
     task_select: list[str],
     availability: bool | None,
@@ -429,7 +429,7 @@ def on_page_load(session_data_json: str, request: gr.Request):
     return json.dumps(session_data), session_id
 
 
-def get_leaderboard_app(  # noqa: PLR0914, PLR0915
+def get_leaderboard_app(  # noqa: PLR0914
     cache: ResultCache = ResultCache(), rebuild: bool = False
 ) -> gr.Blocks:
     """Returns a Gradio Blocks app for the MTEB leaderboard.
@@ -921,7 +921,7 @@ def get_leaderboard_app(  # noqa: PLR0914, PLR0915
             preprocess=False,
         )
 
-        def update_task_list(  # noqa: PLR0913, PLR0917
+        def update_task_list(
             benchmark_name,
             type_select,
             domain_select,
@@ -1024,7 +1024,7 @@ def get_leaderboard_app(  # noqa: PLR0914, PLR0915
                 )
             ),
         )
-        def update_models(  # noqa: PLR0913, PLR0917
+        def update_models(
             scores: list[dict],
             tasks: list[str],
             availability: bool | None,

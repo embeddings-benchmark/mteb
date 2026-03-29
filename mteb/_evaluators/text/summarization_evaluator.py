@@ -63,7 +63,7 @@ class SummarizationMetrics(TypedDict):
 
 
 class SummarizationEvaluator(Evaluator):
-    def __init__(  # noqa: PLR0913
+    def __init__(
         self,
         human_summaries: list[list[str]],
         machine_summaries: list[list[str]],

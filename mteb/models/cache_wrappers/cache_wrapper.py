@@ -66,7 +66,7 @@ class CachedEmbeddingWrapper:
         """Return wrapped model meta data."""
         return self._model.mteb_model_meta
 
-    def encode(  # noqa: PLR0913
+    def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,

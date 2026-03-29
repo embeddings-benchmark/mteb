@@ -224,9 +224,8 @@ class MTEBTasks(tuple[AbsTask]):
         return df.to_latex()
 
 
-def get_tasks(  # noqa: PLR0913
+def get_tasks(  # noqa: PLR0913, PLR0917
     tasks: Sequence[str] | None = None,
-    *,
     languages: Sequence[str] | None = None,
     script: Sequence[str] | None = None,
     domains: Sequence[TaskDomain] | None = None,
@@ -315,7 +314,7 @@ def get_tasks(  # noqa: PLR0913
 _TASK_RENAMES = {"PersianTextTone": "SynPerTextToneClassification"}
 
 
-def get_task(  # noqa: PLR0913
+def get_task(
     task_name: str,
     *,
     languages: Sequence[str] | None = None,

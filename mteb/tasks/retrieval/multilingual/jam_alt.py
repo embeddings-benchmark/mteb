@@ -11,7 +11,7 @@ _EVAL_LANGS = {
 }
 
 
-def _load_jam_alt_data(  # noqa: PLR0913, PLR0917
+def _load_jam_alt_data(
     splits,
     langs,
     dataset_args,

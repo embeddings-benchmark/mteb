@@ -121,7 +121,7 @@ class ModelResult(BaseModel):
         ]
         return cls.model_construct(**data)  # type: ignore[arg-type]
 
-    def _filter_tasks(  # noqa: PLR0913
+    def _filter_tasks(
         self,
         task_names: list[str] | None = None,
         *,
@@ -202,7 +202,7 @@ class ModelResult(BaseModel):
         format: Literal["long"] = "long",
     ) -> list: ...
 
-    def _get_scores(  # noqa: PLR0913
+    def _get_scores(
         self,
         *,
         splits: list[SplitName] | None = None,

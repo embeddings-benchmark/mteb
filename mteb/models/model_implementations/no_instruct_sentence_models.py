@@ -53,7 +53,7 @@ class NoInstructModel(AbsEncoder):
             model_name, revision=revision, **kwargs
         )
 
-    def encode(  # noqa: PLR0913
+    def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,

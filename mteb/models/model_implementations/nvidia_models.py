@@ -123,7 +123,7 @@ nvidia_training_datasets = {
 class _NVEmbedWrapper(InstructSentenceTransformerModel):
     """Inherited, because nvembed requires `sbert==2`, but it doesn't have tokenizers kwargs"""
 
-    def __init__(  # noqa: PLR0913, PLR0917
+    def __init__(
         self,
         model_name: str,
         revision: str,

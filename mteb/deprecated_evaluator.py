@@ -257,7 +257,7 @@ class MTEB:
             merged[score["hf_subset"]] = score
         return list(merged.values())
 
-    def run(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
+    def run(  # noqa: PLR0914
         self,
         model: MTEBModels | CrossEncoder | SentenceTransformer,
         *,

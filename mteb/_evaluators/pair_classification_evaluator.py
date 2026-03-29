@@ -59,7 +59,7 @@ class PairClassificationEvaluator(Evaluator):
         batch_size: Batch size used to compute embeddings
     """
 
-    def __init__(  # noqa: PLR0913
+    def __init__(
         self,
         dataset: Dataset,
         *,

@@ -142,7 +142,7 @@ class ColPaliEngineWrapper(AbsEncoder):
         )
         return padded
 
-    def get_fused_embeddings(  # noqa: PLR0913
+    def get_fused_embeddings(
         self,
         texts: list[str] | None = None,
         images: list[Image.Image] | DataLoader | None = None,

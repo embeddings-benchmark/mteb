@@ -150,7 +150,7 @@ doubao_embedding_training_data = (
 
 
 class Seed16EmbeddingWrapper(AbsEncoder):
-    def __init__(  # noqa: PLR0913, PLR0917
+    def __init__(
         self,
         model_name: str,
         revision: str,

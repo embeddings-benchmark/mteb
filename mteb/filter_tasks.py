@@ -71,7 +71,7 @@ def filter_tasks(
 ) -> list[type[AbsTask]]: ...
 
 
-def filter_tasks(  # noqa: PLR0912, PLR0913
+def filter_tasks(  # noqa: PLR0913
     tasks: Iterable[AbsTask] | Iterable[type[AbsTask]],
     *,
     languages: Sequence[str] | None = None,

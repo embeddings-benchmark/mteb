@@ -279,7 +279,7 @@ class JinaRerankerV3Wrapper(CrossEncoderWrapper):
         self.model.to(device)
         self.model.eval()
 
-    def predict(  # noqa: PLR0913
+    def predict(
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],
@@ -391,7 +391,7 @@ class JinaV4Wrapper(AbsEncoder):
 
     SUPPORTED_VECTOR_TYPES: ClassVar[set[str]] = {"single_vector", "multi_vector"}
 
-    def __init__(  # noqa: PLR0913, PLR0917
+    def __init__(
         self,
         model: str,
         revision: str | None = None,

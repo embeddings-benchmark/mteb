@@ -133,7 +133,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         """
         pass
 
-    def evaluate(  # noqa: PLR0913
+    def evaluate(
         self,
         model: MTEBModels,
         split: str = "test",
@@ -215,7 +215,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         return scores
 
     @abstractmethod
-    def _evaluate_subset(  # noqa: PLR0913
+    def _evaluate_subset(
         self,
         model: MTEBModels,
         data_split: Dataset,

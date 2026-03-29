@@ -145,7 +145,7 @@ class AbsTaskClassification(AbsTask):
     is_cross_validation: bool = False
     n_splits = 5
 
-    def evaluate(  # noqa: PLR0913
+    def evaluate(
         self,
         model: MTEBModels,
         split: str = "test",
@@ -212,7 +212,7 @@ class AbsTaskClassification(AbsTask):
 
         return scores  # type: ignore[return-value]
 
-    def _evaluate_subset(  # noqa: PLR0913
+    def _evaluate_subset(
         self,
         model: MTEBModels,
         data_split: DatasetDict,
@@ -265,7 +265,7 @@ class AbsTaskClassification(AbsTask):
 
         return self._calculate_avg_scores(scores)
 
-    def _evaluate_subset_cross_validation(  # noqa: PLR0913
+    def _evaluate_subset_cross_validation(
         self,
         model: EncoderProtocol,
         data_split: DatasetDict,

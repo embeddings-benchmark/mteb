@@ -308,7 +308,7 @@ class AbsTaskRetrieval(AbsTask):
         self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
-    def evaluate(  # noqa: PLR0913
+    def evaluate(
         self,
         model: MTEBModels,
         split: str = "test",
@@ -349,7 +349,7 @@ class AbsTaskRetrieval(AbsTask):
             **kwargs,
         )
 
-    def _evaluate_subset(  # noqa: PLR0913
+    def _evaluate_subset(
         self,
         model: MTEBModels,
         data_split: RetrievalSplitData,
@@ -484,7 +484,7 @@ class AbsTaskRetrieval(AbsTask):
         """
         return {}
 
-    def _calculate_descriptive_statistics_from_split(  # noqa: PLR0912, PLR0914, PLR0915
+    def _calculate_descriptive_statistics_from_split(  # noqa: PLR0914
         self,
         split: str,
         hf_subset: str | None = None,

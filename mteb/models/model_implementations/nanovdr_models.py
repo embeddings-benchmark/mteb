@@ -237,7 +237,7 @@ class NanoVDRWrapper(AbsEncoder):
 
         return torch.cat(all_embeddings, dim=0)
 
-    def encode(  # noqa: PLR0913
+    def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,

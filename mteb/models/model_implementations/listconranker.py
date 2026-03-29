@@ -43,7 +43,7 @@ class ListConRanker(RerankerWrapper):
         self.model.eval()
 
     @torch.inference_mode()
-    def predict(  # noqa: PLR0913
+    def predict(
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],

@@ -166,7 +166,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         else:
             raise ValueError("images and texts cannot be None at the same time")
 
-        def process_item(  # noqa: PLR0913, PLR0917
+        def process_item(
             i, prompt_type, task_name, texts, images_base64, multimodal_embedding
         ):
             if (

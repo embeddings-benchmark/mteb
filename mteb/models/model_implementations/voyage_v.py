@@ -147,7 +147,7 @@ def voyage_v_loader(model_name, **kwargs):
             all_image_embeddings = torch.vstack(all_image_embeddings)
             return all_image_embeddings
 
-        def encode(  # noqa: PLR0913
+        def encode(
             self,
             inputs: DataLoader[BatchedInput],
             *,

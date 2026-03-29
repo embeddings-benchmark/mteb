@@ -136,7 +136,7 @@ class AbsTaskZeroShotClassification(AbsTask):
             candidates_labels_text_statistics=candidate_lens,
         )
 
-    def _evaluate_subset(  # noqa: PLR0913
+    def _evaluate_subset(
         self,
         model: MTEBModels,
         data_split: Dataset,

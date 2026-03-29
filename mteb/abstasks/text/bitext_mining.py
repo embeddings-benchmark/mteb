@@ -74,7 +74,7 @@ class AbsTaskBitextMining(AbsTask):
     abstask_prompt = "Retrieve parallel sentences."
     _DEFAULT_PAIR: ClassVar[list[tuple[str, str]]] = [("sentence1", "sentence2")]
 
-    def evaluate(  # noqa: PLR0913
+    def evaluate(
         self,
         model: MTEBModels,
         split: str = "test",
@@ -145,7 +145,7 @@ class AbsTaskBitextMining(AbsTask):
             pairs = [langpair.split("-") for langpair in self.hf_subsets]  # type: ignore[misc]
         return pairs
 
-    def _evaluate_subset(  # type: ignore[override]  # noqa: PLR0913
+    def _evaluate_subset(  # type: ignore[override]
         self,
         model: EncoderProtocol,
         data_split: Dataset,

@@ -188,7 +188,7 @@ def rate_limit(max_rpm: int, interval: int = 60):
 
 
 class VoyageModel(AbsEncoder):
-    def __init__(  # noqa: PLR0913, PLR0917
+    def __init__(
         self,
         model_name: str,
         max_retries: int = 5,
@@ -214,7 +214,7 @@ class VoyageModel(AbsEncoder):
             self._model_name, 120_000
         )
 
-    def encode(  # noqa: PLR0913
+    def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,

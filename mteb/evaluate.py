@@ -83,7 +83,7 @@ def _sanitize_model(
     return wrapped_model, meta, model_name, model_revision
 
 
-def _evaluate_task(  # noqa: PLR0913
+def _evaluate_task(
     model: MTEBModels,
     task: AbsTask,
     *,
@@ -188,7 +188,7 @@ def _evaluate_task(  # noqa: PLR0913
     return result
 
 
-def _check_model_modalities(  # noqa: PLR0912
+def _check_model_modalities(
     model: ModelMeta,
     tasks: AbsTask | Iterable[AbsTask],
 ) -> None:
@@ -272,7 +272,7 @@ def _requires_merge(task: AbsTask, existing_results: TaskResult) -> bool:
     return False
 
 
-def evaluate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
+def evaluate(  # noqa: PLR0913, PLR0914
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
     tasks: AbsTask | Iterable[AbsTask],
     *,

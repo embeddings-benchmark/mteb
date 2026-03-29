@@ -289,7 +289,7 @@ def _prepare_dataset(
     return dataset
 
 
-def create_dataloader(  # noqa: PLR0913
+def create_dataloader(
     dataset: Dataset,
     *,
     task_metadata: TaskMetadata,

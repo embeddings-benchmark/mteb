@@ -44,7 +44,7 @@ logger = logging.getLogger(__name__)
 MultilingualDataset = dict[HFSubset, DatasetDict]
 
 
-def _evaluate_clustering_bootstrapped(  # noqa: PLR0913
+def _evaluate_clustering_bootstrapped(
     embeddings: Array,
     labels: list[list[str]],
     *,
@@ -165,7 +165,7 @@ class AbsTaskClustering(AbsTask):
     input_column_name: str = "sentences"
     label_column_name: str = "labels"
 
-    def _evaluate_subset(  # noqa: PLR0913
+    def _evaluate_subset(
         self,
         model: MTEBModels,
         data_split: Dataset,

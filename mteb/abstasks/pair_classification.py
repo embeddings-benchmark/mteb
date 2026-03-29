@@ -98,7 +98,7 @@ class AbsTaskPairClassification(AbsTask):
     input1_prompt_type: PromptType | None = None
     input2_prompt_type: PromptType | None = None
 
-    def _evaluate_subset(  # noqa: PLR0913
+    def _evaluate_subset(
         self,
         model: MTEBModels,
         data_split: Dataset,
@@ -183,7 +183,7 @@ class AbsTaskPairClassification(AbsTask):
                 output_scores[f"max_{metric}"] = max(max_scores[metric])
         return output_scores
 
-    def _calculate_descriptive_statistics_from_split(  # noqa: PLR0912, PLR0914, PLR0915
+    def _calculate_descriptive_statistics_from_split(  # noqa: PLR0914
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> PairClassificationDescriptiveStatistics:
         if hf_subset:

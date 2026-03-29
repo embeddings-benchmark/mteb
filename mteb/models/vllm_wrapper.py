@@ -174,7 +174,7 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
 
     convert = "embed"
 
-    def __init__(  # noqa: PLR0913
+    def __init__(
         self,
         model: str | ModelMeta,
         revision: str | None = None,
@@ -286,7 +286,7 @@ class VllmCrossEncoderWrapper(VllmWrapperBase):
         self.query_prefix = query_prefix
         self.document_prefix = document_prefix
 
-    def predict(  # noqa: PLR0913
+    def predict(
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],

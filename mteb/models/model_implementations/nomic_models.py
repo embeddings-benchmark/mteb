@@ -51,7 +51,7 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
     def to(self, device: torch.device) -> None:
         self.model.to(device)
 
-    def encode(  # noqa: PLR0913
+    def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,

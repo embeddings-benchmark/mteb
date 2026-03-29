@@ -42,7 +42,7 @@ class PylateSearchEncoder:
     task_corpus: CorpusDatasetType | None = None
     index_kwargs: dict[str, Any] = {}  # noqa: RUF012
 
-    def index(  # noqa: PLR0913
+    def index(
         self,
         corpus: CorpusDatasetType,
         *,
@@ -76,7 +76,7 @@ class PylateSearchEncoder:
         if self._index_name is None:
             self._index_name = "index"
 
-    def search(  # noqa: PLR0913
+    def search(
         self,
         queries: QueryDatasetType,
         *,
@@ -138,7 +138,7 @@ class PylateSearchEncoder:
 
         return results
 
-    def _pylate_full_corpus_search(  # noqa: PLR0913, PLR0917
+    def _pylate_full_corpus_search(
         self,
         query_idx_to_id: dict[int, str],
         query_embeddings: Array,
@@ -203,7 +203,7 @@ class PylateSearchEncoder:
                 )
         return result_heaps
 
-    def _pylate_rerank_documents(  # noqa: PLR0913, PLR0917
+    def _pylate_rerank_documents(
         self,
         query_idx_to_id: dict[int, str],
         query_embeddings: Array,
@@ -286,7 +286,7 @@ class PylateSearchEncoder:
 class MultiVectorModel(PylateSearchEncoder):
     task_corpus: CorpusDatasetType | None = None
 
-    def __init__(  # noqa: PLR0913, PLR0917
+    def __init__(
         self,
         model_name: str,
         revision: str | None = None,

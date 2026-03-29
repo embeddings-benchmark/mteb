@@ -416,7 +416,7 @@ def robustness_at_10(
     return sum(robustness_scores) / len(robustness_scores)
 
 
-def make_score_dict(  # noqa: PLR0913
+def make_score_dict(
     *,
     ndcg: dict[str, float],
     _map: dict[str, float],

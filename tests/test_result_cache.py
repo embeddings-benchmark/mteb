@@ -511,7 +511,7 @@ class TestDownloadCachedResultsFromBranch:
         ],
     )
     @patch("requests.get")
-    def test_content_type_handling(  # noqa: PLR0913, PLR0917, PLR6301
+    def test_content_type_handling(  # noqa: PLR6301
         self,
         mock_get,
         tmp_path,
@@ -550,7 +550,7 @@ class TestDownloadCachedResultsFromBranch:
         ],
     )
     @patch("requests.get")
-    def test_file_size_validation(  # noqa: PLR0913, PLR0917, PLR6301
+    def test_file_size_validation(  # noqa: PLR6301
         self,
         mock_get,
         tmp_path,

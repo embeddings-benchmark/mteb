@@ -60,7 +60,7 @@ def run_leaderboard_app():
 
 @pytest.mark.timeout(TIMEOUT)
 @pytest.mark.leaderboard_stability
-def test_leaderboard_app_does_not_crash():  # noqa: PLR0912, PLR0915
+def test_leaderboard_app_does_not_crash():
     """Test to ensure the leaderboard app does not crash within the first 5 minutes."""
     # Set up logging for the main test process
     logging.basicConfig(

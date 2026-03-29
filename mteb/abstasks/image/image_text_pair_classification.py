@@ -125,7 +125,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
             image_statistics=calculate_image_statistics(images),
         )
 
-    def _evaluate_subset(  # noqa: PLR0913
+    def _evaluate_subset(
         self,
         model: MTEBModels,
         data_split: Dataset,

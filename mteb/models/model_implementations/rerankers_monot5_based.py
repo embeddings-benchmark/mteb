@@ -111,7 +111,7 @@ class MonoT5Reranker(RerankerWrapper):
             return token_false_id, token_true_id
 
     @torch.inference_mode()
-    def predict(  # noqa: PLR0913
+    def predict(
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],
@@ -215,7 +215,7 @@ Relevant: """
         self.model.eval()
 
     @torch.inference_mode()
-    def predict(  # noqa: PLR0913
+    def predict(
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],
