@@ -3,7 +3,6 @@ import pytest
 import mteb
 from mteb._evaluators import PairClassificationEvaluator
 from tests.mock_tasks import (
-    MockClassificationTask,
     MockPairClassificationTask,
 )
 
@@ -16,11 +15,11 @@ class TestPairClassificationEvaluator:
         task.load_data()
         evaluator = PairClassificationEvaluator(
             task.dataset["test"],
-            "sentence1",
-            "sentence2",
-            MockClassificationTask.metadata,
-            "test",
-            "test",
+            input1_column_name="sentence1",
+            input2_column_name="sentence2",
+            task_metadata=task.metadata,
+            hf_split="test",
+            hf_subset="test",
             input1_prompt_type=None,
             input2_prompt_type=None,
         )
