@@ -270,6 +270,7 @@ ignore = [
     "S311",     # standard pseudo-random generators are fine for non-crypto use
     "S104",     # allow binding to all interfaces in tests
     "S607",     # start a process with partial path
+    "S603",   # allow subprocess calls with shell=True
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]

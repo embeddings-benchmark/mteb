@@ -294,7 +294,7 @@ class ResultCache:
 
             if revision:
                 logger.info(f"Checking out revision '{revision}'")
-                subprocess.run(  # noqa: S603
+                subprocess.run(
                     ["git", "checkout", revision],
                     cwd=results_directory,
                     check=True,
@@ -312,7 +312,7 @@ class ResultCache:
             clone_cmd.append(f"--revision={revision}")
         clone_cmd.extend([remote, "remote"])
 
-        subprocess.run(  # noqa: S603
+        subprocess.run(
             clone_cmd,
             cwd=self.cache_path,
             check=True,
