@@ -227,7 +227,7 @@ def test_leaderboard_help():
         (None, "127.0.0.1", 7860, False, "default cache path"),
     ],
 )
-def test_leaderboard_cache_paths(
+def test_leaderboard_cache_paths(  # noqa: PLR0913, PLR0917
     tmp_path: Path, cache_path_input, host, port, share, test_description
 ):
     """Test leaderboard with different cache path configurations."""

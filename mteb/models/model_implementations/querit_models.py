@@ -83,16 +83,16 @@ class QueritWrapper(RerankerWrapper):
 
         for ids in enc["input_ids"]:
             # Append [CLS] token
-            ids = ids + [self.cls_token_id]
+            ids = ids + [self.cls_token_id]  # noqa: PLR6104, PLW2901
             block_types = [1] * (len(ids) - 1) + [2]  # content + CLS
 
             # Pad or truncate
             if len(ids) < self.max_length:
                 pad_len = self.max_length - len(ids)
-                ids = [self.pad_token_id] * pad_len + ids
+                ids = [self.pad_token_id] * pad_len + ids  # noqa: PLW2901
                 block_types = [0] * pad_len + block_types
             else:
-                ids = ids[-self.max_length :]
+                ids = ids[-self.max_length :]  # noqa: PLW2901
                 block_types = block_types[-self.max_length :]
 
             attn = self.compute_mask_content_cls(block_types)
@@ -105,7 +105,7 @@ class QueritWrapper(RerankerWrapper):
         return {"input_ids": input_ids, "attention_mask": attention_mask}
 
     @torch.inference_mode()
-    def predict(
+    def predict(  # noqa: PLR0913
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],

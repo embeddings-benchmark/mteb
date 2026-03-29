@@ -50,7 +50,7 @@ class CNN14Wrapper(AbsEncoder):
         # SpeechBrain uses a 16kHz sampling rate for audio
         self.sampling_rate = 16_000
 
-    def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:
+    def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:  # noqa: PLR6301
         max_len = max(w.shape[0] for w in batch)
         padded = [torch.nn.functional.pad(w, (0, max_len - w.shape[0])) for w in batch]
         return torch.stack(padded)

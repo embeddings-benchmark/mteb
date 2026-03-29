@@ -104,7 +104,7 @@ class GraniteVisionEmbeddingWrapper:
         )
         return padded
 
-    def get_fused_embeddings(
+    def get_fused_embeddings(  # noqa: PLR0913
         self,
         texts: list[str] | None = None,
         images: list[Image.Image] | DataLoader | None = None,

@@ -69,7 +69,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         self._embed_dim = embed_dim
         self._available_embed_dims = [2048, 1024]
 
-    def pil_to_base64(self, image, format="jpeg"):
+    def pil_to_base64(self, image, format="jpeg"):  # noqa: PLR6301
         if image is None:
             return None
         buffer = BytesIO()
@@ -166,7 +166,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         else:
             raise ValueError("images and texts cannot be None at the same time")
 
-        def process_item(
+        def process_item(  # noqa: PLR0913, PLR0917
             i, prompt_type, task_name, texts, images_base64, multimodal_embedding
         ):
             if (
@@ -178,12 +178,12 @@ class Seed16EmbeddingWrapper(AbsEncoder):
                     "Target_modality:Text.\n Instruction:" + instruction + "\n Query:"
                 )
                 input_text = texts[i]
-            elif texts[i] != "" and images_base64[i] is not None:
+            elif texts[i] != "" and images_base64[i] is not None:  # noqa: PLC1901
                 instruction = (
                     "Instruction: Compress the text and image into one word.\n Query:"
                 )
                 input_text = texts[i]
-            elif texts[i] != "":
+            elif texts[i] != "":  # noqa: PLC1901
                 instruction = "Instruction: Compress the text into one word.\n Query:"
                 input_text = texts[i]
             elif images_base64[i] is not None:

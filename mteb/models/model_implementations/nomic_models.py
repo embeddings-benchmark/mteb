@@ -51,7 +51,7 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
     def to(self, device: torch.device) -> None:
         self.model.to(device)
 
-    def encode(
+    def encode(  # noqa: PLR0913
         self,
         inputs: DataLoader[BatchedInput],
         *,
@@ -71,7 +71,7 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
 
         # normalization not applied to classification
         # https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/eval/mteb_eval/eval_mteb.py#L172
-        normalize = task_metadata not in (
+        normalize = task_metadata not in (  # noqa: PLR6201
             "Classification",
             "MultilabelClassification",
             "PairClassification",

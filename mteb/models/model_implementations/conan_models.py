@@ -97,7 +97,7 @@ class Client:
         self.timeout = timeout
         self.rate_limiter = RateLimiter(qps=5, max_retries=3)
 
-    def _random_password(self, size=40, chars=None):
+    def _random_password(self, size=40, chars=None):  # noqa: PLR6301
         if chars is None:
             chars = string.ascii_uppercase + string.ascii_lowercase + string.digits
         random_chars = random.SystemRandom().choice

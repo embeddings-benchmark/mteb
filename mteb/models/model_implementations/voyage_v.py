@@ -81,7 +81,7 @@ def voyage_v_loader(model_name, **kwargs):
         ):
             requires_image_dependencies()
 
-            self.model_name = model_name.split("/")[-1]
+            self.model_name = model_name.split("/")[-1]  # noqa: PLC0207
             self.vo = voyageai.Client()
 
         @retry(
@@ -147,7 +147,7 @@ def voyage_v_loader(model_name, **kwargs):
             all_image_embeddings = torch.vstack(all_image_embeddings)
             return all_image_embeddings
 
-        def encode(
+        def encode(  # noqa: PLR0913
             self,
             inputs: DataLoader[BatchedInput],
             *,

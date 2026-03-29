@@ -59,7 +59,7 @@ def vista_loader(model_name, **kwargs):
         ```
         """
 
-        def __init__(
+        def __init__(  # noqa: PLR0913, PLR0917
             self,
             model_name_bge: str | None = None,
             model_weight=None,
@@ -184,7 +184,7 @@ def vista_loader(model_name, **kwargs):
                     all_image_embeddings.append(batch_embeddings.cpu())
             return torch.cat(all_image_embeddings, dim=0)
 
-        def encode(
+        def encode(  # noqa: PLR0913
             self,
             inputs: DataLoader[BatchedInput],
             *,

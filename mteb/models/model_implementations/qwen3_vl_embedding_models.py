@@ -96,7 +96,7 @@ def _build_qwen3_vl_for_embedding_class():
         def visual(self):
             return self.model.visual
 
-        def forward(
+        def forward(  # noqa: PLR0913, PLR0917
             self,
             input_ids: torch.LongTensor | None = None,
             attention_mask: torch.Tensor | None = None,
@@ -144,7 +144,7 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
     to ensure identical results.
     """
 
-    def __init__(
+    def __init__(  # noqa: PLR0913, PLR0917
         self,
         model_name: str,
         revision: str | None = None,
@@ -207,7 +207,7 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
         instruction = instruction.strip()
         # Checks if the last character is not punctuation and appends "." then
         if instruction and not unicodedata.category(instruction[-1]).startswith("P"):
-            instruction = instruction + "."
+            instruction = instruction + "."  # noqa: PLR6104
 
         content: list[dict[str, Any]] = []
         conversation = [
@@ -312,7 +312,7 @@ class Qwen3VLEmbeddingWrapper(AbsEncoder):
                 result.append(tv_functional.to_pil_image(img.cpu()))
         return result
 
-    def encode(
+    def encode(  # noqa: PLR0913
         self,
         inputs: DataLoader[BatchedInput],
         *,

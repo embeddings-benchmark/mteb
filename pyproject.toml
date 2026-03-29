@@ -301,21 +301,20 @@ preview = true
     "D",
     "DOC",
     "TC",
-    "PLR2004",
-    "PLR0913",
+#    "PLR0913",
     # preview
-    "PLR0917",
+#    "PLR0917",
 ]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = [
     "D",
     "DOC",
-    "PL",
+#    "PL",
 ]
 "mteb/models/model_implementations/*" = [
     "D",
     "DOC",
-    "PL",
+#    "PL",
 ]
 "mteb/benchmarks/benchmark.py" = [
     # pydantic would try to validate fields in Benchmark class
@@ -325,7 +324,6 @@ preview = true
     # gradio would try to validate typehints
     "TC002",
     "TC001",
-    "PLR0917",
 ]
 
 

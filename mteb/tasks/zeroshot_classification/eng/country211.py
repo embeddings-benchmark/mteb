@@ -44,7 +44,7 @@ class Country211ZeroShotClassification(AbsTaskZeroShotClassification):
     input_column_name: str = "jpg"
     label_column_name: str = "cls"
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         path = Path(__file__).parent / "templates" / "Country211_labels.txt"
         with path.open() as f:
             labels = f.readlines()

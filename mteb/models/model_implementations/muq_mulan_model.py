@@ -60,7 +60,7 @@ class MuQMuLanWrapper(AbsEncoder):
             for array in audio_array:
                 # Apply audio truncation (30 seconds max)
                 if array.shape[-1] > self.max_length_samples:
-                    array = array[..., : self.max_length_samples]
+                    array = array[..., : self.max_length_samples]  # noqa: PLW2901
                 audio_arrays.append(array)
 
             # Find max length and pad all tensors

@@ -48,7 +48,7 @@ class Encoder(torch.nn.Module):
         self.processor.tokenizer.padding_side = "right"
         self.default_instruction = "You are a helpful assistant."
 
-    def forward(
+    def forward(  # noqa: PLR0913, PLR0917
         self,
         input_ids: torch.LongTensor | None = None,
         attention_mask: torch.Tensor | None = None,
@@ -119,7 +119,7 @@ class Encoder(torch.nn.Module):
                 input_images = None  # All examples in the same batch are consistent
             else:
                 input_str += "<|vision_start|><|image_pad|><|vision_end|>"
-                i = fetch_image(i)
+                i = fetch_image(i)  # noqa: PLW2901
                 input_images.append(i)
             if t is not None:
                 input_str += t
@@ -140,7 +140,7 @@ class Encoder(torch.nn.Module):
 
 
 class GmeQwen2VL(AbsEncoder):
-    def __init__(
+    def __init__(  # noqa: PLR0913, PLR0917
         self,
         model_name: str,
         revision: str,
@@ -171,7 +171,7 @@ class GmeQwen2VL(AbsEncoder):
         self.device = device
         self.sep = " "
 
-    def encode(
+    def encode(  # noqa: PLR0913
         self,
         inputs: DataLoader[BatchedInput],
         *,

@@ -57,7 +57,7 @@ class MockSentenceTransformer(SentenceTransformer):
         self._modules = {}
         pass
 
-    def encode(  # noqa: PLR6301
+    def encode(  # noqa: PLR0913, PLR0917, PLR6301
         self,
         sentences: list[str],
         prompt_name: str | None = None,
@@ -93,7 +93,7 @@ class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
         name="mock/MockSentenceTransformersbf16Encoder", **empty_metadata_kwargs
     )
 
-    def encode(  # noqa: PLR6301
+    def encode(  # noqa: PLR0913, PLR0917, PLR6301
         self,
         sentences: str | list[str],
         prompt_name: str | None = None,

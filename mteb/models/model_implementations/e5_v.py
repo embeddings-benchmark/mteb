@@ -123,7 +123,7 @@ class E5VModel(AbsEncoder):
                 all_image_embeddings.append(image_outputs.cpu())
         return torch.cat(all_image_embeddings, dim=0)
 
-    def encode(
+    def encode(  # noqa: PLR0913
         self,
         inputs: DataLoader[BatchedInput],
         *,

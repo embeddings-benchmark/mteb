@@ -63,7 +63,7 @@ _TRANSFORMERS_CONSTRAINTS: dict[str, str] = {
 class NemotronColEmbedVL(AbsEncoder):
     """Encoder for the NemotronColEmbedVL family of models."""
 
-    def __init__(
+    def __init__(  # noqa: PLR0913, PLR0917
         self,
         model_name_or_path: str,
         revision: str,
@@ -356,7 +356,7 @@ nemotron_colembed_vl_8b_v2 = ModelMeta(
 
 
 class LlamaNemotronEmbedVL(AbsEncoder):
-    def __init__(
+    def __init__(  # noqa: PLR0913, PLR0917
         self,
         model_name_or_path: str,
         revision: str,
@@ -410,7 +410,7 @@ class LlamaNemotronEmbedVL(AbsEncoder):
         # Sets the number of tiles the image can be split into
         self.model.processor.max_input_tiles = 4
 
-    def encode(
+    def encode(  # noqa: PLR0913
         self,
         inputs: DataLoader[BatchedInput],
         *,
@@ -450,7 +450,7 @@ class LlamaNemotronEmbedVL(AbsEncoder):
                         )
 
                 embeddings = normalize(embeddings, dim=-1)
-                assert torch.sum(embeddings).float().item() not in [
+                assert torch.sum(embeddings).float().item() not in [  # noqa: PLR6201
                     0.0,
                     float("inf"),
                 ]

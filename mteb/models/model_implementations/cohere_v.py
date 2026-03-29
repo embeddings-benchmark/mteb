@@ -45,7 +45,7 @@ def _post_process_embeddings(
                     unpacked.append(1.0 if bit_val else -1.0)
             unpacked_embeddings.append(unpacked)
         return torch.tensor(unpacked_embeddings, dtype=torch.float32)
-    elif embedding_type in ["int8", "uint8"]:
+    elif embedding_type in ["int8", "uint8"]:  # noqa: PLR6201
         # Convert int8/uint8 embeddings to float32
         return embeddings_array.float()
     else:
@@ -315,7 +315,7 @@ def cohere_v_loader(model_name, **kwargs):
                 for image in batch:
                     # cohere only supports 1 image per call
                     buffered = io.BytesIO()
-                    image = self.transform(image)
+                    image = self.transform(image)  # noqa: PLW2901
                     image.save(buffered, format=self.image_format)
                     image_bytes = buffered.getvalue()
                     stringified_buffer = base64.b64encode(image_bytes).decode("utf-8")

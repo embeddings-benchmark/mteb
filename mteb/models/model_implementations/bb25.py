@@ -86,7 +86,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
         retriever: bm25s.BM25
         corpus_idx_to_id: dict[int, str]
 
-        def __init__(
+        def __init__(  # noqa: PLR0913, PLR0917
             self,
             previous_results: str | None = None,
             stopwords: str = "en",
@@ -110,7 +110,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
             """Tokenize texts using bm25s. Not to be confused with EncoderProtocol.encode()."""
             return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
 
-        def index(
+        def index(  # noqa: PLR0913
             self,
             corpus: CorpusDatasetType,
             *,
@@ -151,7 +151,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
 
             logger.info(f"Indexed {len(self.corpus_idx_to_id):,} documents")
 
-        def search(
+        def search(  # noqa: PLR0913, PLR0914
             self,
             queries: QueryDatasetType,
             *,

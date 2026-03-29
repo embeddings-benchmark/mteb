@@ -118,7 +118,7 @@ class NanoVDRWrapper(AbsEncoder):
             convert_to_numpy=False,
         )
 
-    def _encode_documents(
+    def _encode_documents(  # noqa: PLR0914
         self,
         inputs: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
@@ -135,7 +135,7 @@ class NanoVDRWrapper(AbsEncoder):
 
         instruction = QUERY_INSTRUCTION.strip()
         if instruction and not unicodedata.category(instruction[-1]).startswith("P"):
-            instruction = instruction + "."
+            instruction = instruction + "."  # noqa: PLR6104
 
         all_embeddings: list[torch.Tensor] = []
         with torch.no_grad():
@@ -237,7 +237,7 @@ class NanoVDRWrapper(AbsEncoder):
 
         return torch.cat(all_embeddings, dim=0)
 
-    def encode(
+    def encode(  # noqa: PLR0913
         self,
         inputs: DataLoader[BatchedInput],
         *,
@@ -253,7 +253,7 @@ class NanoVDRWrapper(AbsEncoder):
         # Validate: reject tasks where queries contain images.
         # NanoVDR only supports text-query → image-document retrieval.
         if (
-            prompt_type in (PromptType.query, None)
+            prompt_type in (PromptType.query, None)  # noqa: PLR6201
             and "image" in inputs.dataset.features
         ):
             raise ValueError(

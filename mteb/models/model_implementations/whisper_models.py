@@ -40,7 +40,7 @@ class WhisperAudioWrapper(AbsEncoder):
         self.processor = WhisperProcessor.from_pretrained(model_name, revision=revision)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         hidden_layer: float = 1.0,

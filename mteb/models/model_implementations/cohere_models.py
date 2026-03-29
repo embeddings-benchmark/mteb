@@ -222,7 +222,7 @@ def retry_with_rate_limit(
 
 # Implementation follows https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/main/src/seb/registered_models/cohere_models.py
 class CohereTextEmbeddingModel(AbsEncoder):
-    def __init__(
+    def __init__(  # noqa: PLR0913, PLR0917
         self,
         model_name: str,
         revision: str,
@@ -253,7 +253,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
         """Call Cohere embed API with retry and rate limiting."""
         return self._client.embed(**kwargs)
 
-    def _embed(
+    def _embed(  # noqa: PLR0912
         self,
         sentences: list[str],
         cohere_task_type: str,
@@ -341,7 +341,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
                         unpacked.append(1.0 if bit_val else -1.0)
                 unpacked_embeddings.append(unpacked)
             embeddings_array = np.array(unpacked_embeddings, dtype=np.float32)
-        elif primary_embedding_type in ["int8", "uint8"]:
+        elif primary_embedding_type in ["int8", "uint8"]:  # noqa: PLR6201
             # Convert int8/uint8 embeddings to float32
             embeddings_array = embeddings_array.astype(np.float32)
 

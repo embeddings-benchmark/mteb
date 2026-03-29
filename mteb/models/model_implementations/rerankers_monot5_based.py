@@ -91,7 +91,7 @@ class MonoT5Reranker(RerankerWrapper):
 
         self.model.eval()
 
-    def get_prediction_tokens(
+    def get_prediction_tokens(  # noqa: PLR6301
         self, model_name_or_path, tokenizer, token_false=None, token_true=None
     ):
         if not (token_false and token_true):
@@ -111,7 +111,7 @@ class MonoT5Reranker(RerankerWrapper):
             return token_false_id, token_true_id
 
     @torch.inference_mode()
-    def predict(
+    def predict(  # noqa: PLR0913
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],
@@ -215,7 +215,7 @@ Relevant: """
         self.model.eval()
 
     @torch.inference_mode()
-    def predict(
+    def predict(  # noqa: PLR0913
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],

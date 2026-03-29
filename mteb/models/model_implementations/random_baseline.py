@@ -293,7 +293,7 @@ class RandomCrossEncoderBaseline:
         self.rng_state = np.random.default_rng(42)
         self.embedding_dim = _EMBEDDING_DIM
 
-    def predict(
+    def predict(  # noqa: PLR0913
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],

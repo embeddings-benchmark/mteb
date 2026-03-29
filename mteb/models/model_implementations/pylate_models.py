@@ -42,7 +42,7 @@ class PylateSearchEncoder:
     task_corpus: CorpusDatasetType | None = None
     index_kwargs: dict[str, Any] = {}  # noqa: RUF012
 
-    def index(
+    def index(  # noqa: PLR0913
         self,
         corpus: CorpusDatasetType,
         *,
@@ -76,7 +76,7 @@ class PylateSearchEncoder:
         if self._index_name is None:
             self._index_name = "index"
 
-    def search(
+    def search(  # noqa: PLR0913
         self,
         queries: QueryDatasetType,
         *,
@@ -138,7 +138,7 @@ class PylateSearchEncoder:
 
         return results
 
-    def _pylate_full_corpus_search(
+    def _pylate_full_corpus_search(  # noqa: PLR0913, PLR0917
         self,
         query_idx_to_id: dict[int, str],
         query_embeddings: Array,
@@ -203,7 +203,7 @@ class PylateSearchEncoder:
                 )
         return result_heaps
 
-    def _pylate_rerank_documents(
+    def _pylate_rerank_documents(  # noqa: PLR0913, PLR0917
         self,
         query_idx_to_id: dict[int, str],
         query_embeddings: Array,
@@ -286,7 +286,7 @@ class PylateSearchEncoder:
 class MultiVectorModel(PylateSearchEncoder):
     task_corpus: CorpusDatasetType | None = None
 
-    def __init__(
+    def __init__(  # noqa: PLR0913, PLR0917
         self,
         model_name: str,
         revision: str | None = None,
@@ -748,13 +748,13 @@ nomic_embed_supervised_data = {
     "NanoHotpotQARetrieval",
 }
 colbert_zero_citation = """@misc{chaffin2026colbertzeropretrainpretraincolbert,
-  title         = {ColBERT-Zero: To Pre-train Or Not To Pre-train ColBERT models}, 
+  title         = {ColBERT-Zero: To Pre-train Or Not To Pre-train ColBERT models},
   author        = {Antoine Chaffin and Luca Arnaboldi and Amélie Chatelain and Florent Krzakala},
   year          = {2026},
   eprint        = {2602.16609},
   archivePrefix = {arXiv},
   primaryClass  = {cs.CL},
-  url           = {https://arxiv.org/abs/2602.16609}, 
+  url           = {https://arxiv.org/abs/2602.16609},
 }"""
 lightonai__colbert_zero_unsupervised = ModelMeta(
     loader=MultiVectorModel,

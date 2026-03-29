@@ -74,7 +74,7 @@ class BGEReranker(RerankerWrapper):
         self.model = FlagReranker(model_name_or_path, use_fp16=True)
 
     @torch.inference_mode()
-    def predict(
+    def predict(  # noqa: PLR0913
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],
@@ -129,7 +129,7 @@ class JinaReranker(RerankerWrapper):
         )
 
     @torch.inference_mode()
-    def predict(
+    def predict(  # noqa: PLR0913
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],

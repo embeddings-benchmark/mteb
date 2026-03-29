@@ -70,7 +70,7 @@ class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval):
             return
         queries, corpus, relevant_docs = {}, {}, {}
         dataset_raw = {}
-        for split in self.metadata.eval_splits:
+        for split in self.metadata.eval_splits:  # noqa: PLR1702
             for hf_subset, langs in _LANGUAGES.items():
                 lang_pair = _build_lang_pair(langs)
                 dataset_raw[lang_pair] = datasets.load_dataset(

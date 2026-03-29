@@ -68,7 +68,7 @@ class ClapZeroShotWrapper(AbsEncoder):
                 audio_features = self.model.get_audio_features(**features)
                 if isinstance(audio_features, BaseModelOutputWithPooling):
                     audio_features = audio_features.pooler_output
-                audio_features = audio_features / audio_features.norm(
+                audio_features = audio_features / audio_features.norm(  # noqa: PLR6104
                     dim=-1, keepdim=True
                 )
                 all_features.append(audio_features.cpu().detach().numpy())
@@ -96,7 +96,7 @@ class ClapZeroShotWrapper(AbsEncoder):
 
             text_features = self.model.get_text_features(**inputs)
             # Normalize embeddings
-            text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+            text_features = text_features / text_features.norm(dim=-1, keepdim=True)  # noqa: PLR6104
             text_embeddings.append(text_features.cpu().detach().numpy())
 
         return np.vstack(text_embeddings)

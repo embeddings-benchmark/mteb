@@ -126,7 +126,7 @@ class ColPaliEngineWrapper(AbsEncoder):
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(texts, desc="Encoding texts"):
-                batch = [
+                batch = [  # noqa: PLW2901
                     self.processor.query_prefix
                     + t
                     + self.processor.query_augmentation_token * 10
@@ -142,7 +142,7 @@ class ColPaliEngineWrapper(AbsEncoder):
         )
         return padded
 
-    def get_fused_embeddings(
+    def get_fused_embeddings(  # noqa: PLR0913
         self,
         texts: list[str] | None = None,
         images: list[Image.Image] | DataLoader | None = None,
