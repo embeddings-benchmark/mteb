@@ -63,12 +63,12 @@ class CompressionWrapper:
             self.clipping_margin = torch.tensor(clipping_margin)
             exp_kwargs["clipping_margin"] = list(clipping_margin)
 
-        model.mteb_model_meta = meta.model_copy(
+        model.mteb_model_meta = meta.model_copy(  # type: ignore[misc]
             update={
                 "output_dtypes": [output_dtype],
                 "experiment_kwargs": exp_kwargs,
             }
-        )  # type: ignore[misc]
+        )
         if embed_types and output_dtype in embed_types:
             msg = (
                 f"The model {model.mteb_model_meta.name} natively supports quantization to {output_dtype.value} and "
