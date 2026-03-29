@@ -244,3 +244,87 @@ class SIB200Classification(AbsTaskClassification):
                 {"category": "label"}
             )
             self.dataset[lang] = self.dataset[lang].remove_columns(["index_id"])
+
+
+_TOPICS = [
+    "travel",
+    "politics",
+    "science",
+    "sports",
+    "technology",
+    "health",
+    "nature",
+    "entertainment",
+    "geography",
+    "business",
+    "disasters",
+    "crime",
+    "education",
+    "religion",
+]
+_TOPIC2ID = {name: idx for idx, name in enumerate(_TOPICS)}
+
+
+class SIB20014Classes(AbsTaskClassification):
+    """SIB‑200 (14 topics) multilingual classification benchmark."""
+
+    metadata = TaskMetadata(
+        name="SIB200-14Classes",
+        description=(
+            "SIB‑200 14‑class edition for multilingual topic classification. "
+            "It covers the full 205 Flores‑200 languages and provides only 5 "
+            "training examples per language to enable few‑shot evaluation."
+        ),
+        reference="https://arxiv.org/abs/2309.07445",
+        dataset={
+            "path": "Davlan/sib200_14classes",
+            "revision": "9a9b57434ee6eac80271059112704ccfcad83402",
+        },
+        type="Classification",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="accuracy",
+        date=("2023-09-14", "2024-01-27"),
+        domains=["News", "Written"],
+        task_subtypes=["Topic classification"],
+        license="cc-by-4.0",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        sample_creation="human-translated and localized",
+        bibtex_citation=r"""
+@article{adelani2023sib,
+  author = {Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
+  journal = {arXiv preprint arXiv:2309.07445},
+  title = {SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
+  year = {2023},
+}
+""",
+    )
+
+    def dataset_transform(self, **kwargs) -> None:
+        """
+        Convert each split to the MTEB format:
+        * text: str
+        * label: int
+        """
+        for lang in self.dataset:
+            for split in self.dataset[lang]:
+                ds = self.dataset[lang][split]
+
+                cols = ds.column_names
+                text_col = next(
+                    c for c in ("text", "sentence", "utterance") if c in cols
+                )
+                lab_col = next(c for c in ("label", "labels", "category") if c in cols)
+
+                def to_mteb(example):
+                    raw_label = example[lab_col]
+                    if isinstance(raw_label, str):
+                        label = _TOPIC2ID[raw_label]
+                    else:
+                        label = int(raw_label)
+                    return {"text": example[text_col], "label": label}
+
+                self.dataset[lang][split] = ds.map(to_mteb, remove_columns=cols)
