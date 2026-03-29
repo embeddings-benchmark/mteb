@@ -77,7 +77,7 @@ class MuPLeRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MuPLeR-retrieval",
         description="MuPLeR-retrieval is a multilingual, parallel legal dataset designed for evaluating retrieval and cross-lingual retrieval tasks. Dataset contains 10,000 human-curated parallel passages (from the European Union's DGT-Acquis corpus) & 200 parallel queries (synthetic) across 14 European languages.",
-        reference="https://huggingface.co/datasets/eherra/MuPLeR-retrieval",
+        reference="https://link.springer.com/article/10.1007/s10579-014-9277-0",
         dataset={
             "path": "eherra/MuPLeR-retrieval",
             "revision": "f3b6f21062a54c7ea2b2aaea6ff404dc64eed075",
