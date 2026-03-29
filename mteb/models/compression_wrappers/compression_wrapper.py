@@ -49,11 +49,10 @@ class CompressionWrapper:
         self._quantization_level = output_dtype
         self.clipping_margin = None
         self.min_embeds = 10_000
-        embed_types = model.mteb_model_meta.output_dtypes
-        model.mteb_model_meta.output_dtypes = [output_dtype]
-        if model.mteb_model_meta.experiment_kwargs is None:
-            model.mteb_model_meta.experiment_kwargs = {}
-        model.mteb_model_meta.experiment_kwargs["output_dtypes"] = output_dtype.value  # type: ignore[index]
+        meta = model.mteb_model_meta
+        embed_types = meta.output_dtypes
+        exp_kwargs = dict(meta.experiment_kwargs) if meta.experiment_kwargs else {}
+        exp_kwargs["output_dtypes"] = output_dtype.value
 
         if clipping_margin is not None:
             if not 0 < clipping_margin[0] < clipping_margin[1] < 1:
@@ -62,9 +61,14 @@ class CompressionWrapper:
                     f"upper bound {clipping_margin[1]}, but got {clipping_margin}."
                 )
             self.clipping_margin = torch.tensor(clipping_margin)
-            model.mteb_model_meta.experiment_kwargs["clipping_margin"] = list(  # type: ignore[index]
-                clipping_margin
-            )
+            exp_kwargs["clipping_margin"] = list(clipping_margin)
+
+        model.mteb_model_meta = meta.model_copy(
+            update={
+                "output_dtypes": [output_dtype],
+                "experiment_kwargs": exp_kwargs,
+            }
+        )
         if embed_types and output_dtype in embed_types:
             msg = (
                 f"The model {model.mteb_model_meta.name} natively supports quantization to {output_dtype.value} and "

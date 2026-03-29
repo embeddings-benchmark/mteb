@@ -141,7 +141,7 @@ class ModelMeta(BaseModel):
         output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float embeddings.
     """
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", frozen=True)
 
     # loaders
     loader: Callable[..., MTEBModels] | None
@@ -251,9 +251,9 @@ class ModelMeta(BaseModel):
     def to_dict(self):
         """Returns a dictionary representation of the model metadata."""
         meta = self.model_copy(deep=True)
-        if isinstance(meta.embed_dim, Sequence):
-            meta.embed_dim = max(meta.embed_dim)
         dict_repr = meta.model_dump()
+        if isinstance(meta.embed_dim, Sequence):
+            dict_repr["embed_dim"] = max(meta.embed_dim)
         loader = dict_repr.pop("loader", None)
         dict_repr["training_datasets"] = (
             list(dict_repr["training_datasets"])
@@ -342,6 +342,11 @@ class ModelMeta(BaseModel):
         if _self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
 
+        updates: dict[str, Any] = {}
+        base_exp_kwargs = (
+            dict(_self.experiment_kwargs) if _self.experiment_kwargs else {}
+        )
+
         if embed_dim is not None:
             if (
                 _self.embed_dim is not None
@@ -357,33 +362,25 @@ class ModelMeta(BaseModel):
                 raise ValueError(
                     f"Requested embedding dimension {embed_dim} is not in the model's supported embedding dimensions {_self.embed_dim}."
                 )
-            _self.embed_dim = embed_dim
+            updates["embed_dim"] = embed_dim
             kwargs["embed_dim"] = embed_dim
-            if _self.experiment_kwargs is None:
-                _self.experiment_kwargs = {"embed_dim": embed_dim}
-            else:
-                _self.experiment_kwargs["embed_dim"] = embed_dim  # type: ignore[index]
 
-        if _self.experiment_kwargs is None:
-            _self.experiment_kwargs = kwargs if len(kwargs) > 0 else None
-        elif len(kwargs) > 0 and _self.experiment_kwargs is not None:
-            kwargs |= _self.experiment_kwargs
-            _self.experiment_kwargs = kwargs
+        merged_exp_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
+        updates["experiment_kwargs"] = merged_exp_kwargs or None
 
         # Allow overwrites
         _kwargs = _self.loader_kwargs.copy()
-        _kwargs.update(
-            _self.experiment_kwargs if _self.experiment_kwargs is not None else {}
-        )
+        _kwargs.update(merged_exp_kwargs)
         if device is not None:
             _kwargs["device"] = device
 
+        updates["loader_kwargs"] = _kwargs
+        _self = _self.model_copy(update=updates)
         model: MTEBModels = _self.loader(
             _self.name,
             revision=_self.revision,
             **_kwargs,
         )
-        _self.loader_kwargs = _kwargs
         model.mteb_model_meta = _self  # type: ignore[misc]
         return model
 
@@ -572,10 +569,13 @@ class ModelMeta(BaseModel):
         if overwrites:
             empty_model = empty_model.model_copy(update=overwrites)
 
+        updates: dict[str, Any] = {}
         if empty_model.name is None:
-            empty_model.name = "no_model_name/available"
+            updates["name"] = "no_model_name/available"
         if empty_model.revision is None:
-            empty_model.revision = "no_revision_available"
+            updates["revision"] = "no_revision_available"
+        if updates:
+            empty_model = empty_model.model_copy(update=updates)
 
         return empty_model
 
