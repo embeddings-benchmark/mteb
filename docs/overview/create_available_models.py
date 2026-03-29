@@ -34,7 +34,7 @@ title: "{modalities} Model"
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-:lucide/bot: {num_models} Models
+{num_models} Models
 
 {models_md}
 """
