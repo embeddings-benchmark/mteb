@@ -270,20 +270,6 @@ ignore = [
     "PLC0415",   # import outside of top-level
     "PLR0912",  # too many branches
     "PLR0915",  # too many statements
-#    "PLR0913",  # too many arguments
-#    "PLR0911",  # too many return statements
-#    "PLW2901",  # redefined loop name
-#    "PLR1704",  # redefined argument name from local
-#    # preview
-#    "PLR1702",
-#    "PLR6201",
-#    "PLC2701",
-#    "PLR6301",
-#    "PLW0108",
-#    "PLR0914",
-#    "PLW1514",
-#    "PLR0904",
-#    "PLR6104",
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
