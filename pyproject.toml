@@ -255,7 +255,6 @@ select = [
     "LOG",     # logging
     "TC",      # type-checking
     "T20",  # flake8-print
-    "LOG",   # logging
 ]
 
 ignore = [
