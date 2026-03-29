@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -18,6 +19,8 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
+
+logger = logging.getLogger(__name__)
 
 MULTILINGUAL_EVALUATED_LANGUAGES = [
     "arb-Arab",
@@ -116,7 +119,7 @@ class GoogleTextEmbeddingModel(AbsEncoder):
                 embeddings_batch = model.get_embeddings(batch, **kwargs)
             # Except the very rare google.api_core.exceptions.InternalServerError
             except Exception as e:
-                print("Retrying once after error:", e)
+                logger.info("Retrying once after error: %s", e)
                 embeddings_batch = model.get_embeddings(batch, **kwargs)
 
             all_embeddings.extend([embedding.values for embedding in embeddings_batch])

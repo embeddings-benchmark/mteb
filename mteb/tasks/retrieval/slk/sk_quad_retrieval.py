@@ -1,7 +1,11 @@
+import logging
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+logger = logging.getLogger(__name__)
 
 
 class SKQuadRetrieval(AbsTaskRetrieval):
@@ -61,6 +65,6 @@ class SKQuadRetrieval(AbsTaskRetrieval):
                     row["corpus-id"]
                 ] = int(row["score"])
 
-            print(
+            logger.info(
                 f"Data Loaded:\n- Corpus size: {len(self.corpus['test'])}\n- Query size: {len(self.queries['test'])}\n- Relevance entries: {len(self.relevant_docs['test'])}"
             )

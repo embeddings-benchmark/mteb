@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.12.3"
+version = "2.12.4"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -254,7 +254,8 @@ select = [
     "PGH",     # pygrep-hooks Use specific rule codes when ignoring type issues
     "LOG",     # logging
     "TC",      # type-checking
-    "PL",  # pylint
+    "T20",     # don't allow print
+    "PL",      # pylint
 ]
 
 ignore = [

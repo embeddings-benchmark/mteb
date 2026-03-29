@@ -2080,7 +2080,7 @@ conan_embedding = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     framework=["PyTorch", "Sentence Transformers", "safetensors"],
-    reference="https://huggingface.co/Classical/Yinka",
+    reference="https://huggingface.co/TencentBAC/Conan-embedding-v1",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     # source: https://arxiv.org/pdf/2408.15710

@@ -65,7 +65,6 @@ and de Paiva, Valeria},
         )
 
         for split in self.metadata.eval_splits:
-            print(self.dataset[split]["entailment_label"])
             # keep labels 0=entailment and 2=contradiction, and map them as 1 and 0 for binary classification
             hf_dataset = self.dataset[split].filter(
                 lambda x: x["entailment_label"] in [0, 2]  # noqa: PLR6201
