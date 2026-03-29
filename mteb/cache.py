@@ -265,7 +265,7 @@ class ResultCache:
         if results_directory.exists():
             # check repository in the directory is the same as the remote
             remote_url = subprocess.run(
-                ["git", "config", "--get", "remote.origin.url"],  # noqa: S607
+                ["git", "config", "--get", "remote.origin.url"],
                 cwd=results_directory,
                 capture_output=True,
                 text=True,
@@ -282,7 +282,7 @@ class ResultCache:
                     f"remote repository already exists in {results_directory}, fetching updates"
                 )
                 subprocess.run(
-                    ["git", "fetch", "--all", "--tags"],  # noqa: S607
+                    ["git", "fetch", "--all", "--tags"],
                     cwd=results_directory,
                     check=True,
                 )
@@ -295,7 +295,7 @@ class ResultCache:
             if revision:
                 logger.info(f"Checking out revision '{revision}'")
                 subprocess.run(  # noqa: S603
-                    ["git", "checkout", revision],  # noqa: S607
+                    ["git", "checkout", revision],
                     cwd=results_directory,
                     check=True,
                 )
