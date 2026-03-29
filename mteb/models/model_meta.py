@@ -317,12 +317,9 @@ class ModelMeta(BaseModel):
         """
         if not isinstance(other, ModelMeta):
             return NotImplemented
-        return (
-            self.name == other.name
-            and self.revision == other.revision
-            and self.experiment_kwargs == other.experiment_kwargs
-            and self.embed_dim == other.embed_dim
-        )
+        self_dict = self.model_dump()
+        other_dict = other.model_dump()
+        return self_dict == other_dict
 
     def load_model(
         self,
