@@ -22,7 +22,6 @@ logger = logging.getLogger(__name__)
 
 def get_model_metas(
     model_names: Iterable[str] | None = None,
-    *,
     languages: Iterable[str] | None = None,
     open_weights: bool | None = None,
     frameworks: Iterable[str] | None = None,

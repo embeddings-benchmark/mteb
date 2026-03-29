@@ -146,7 +146,6 @@ class ResultCache:
         self,
         task_name: str,
         model_name: str | ModelMeta,
-        *,
         model_revision: str | None = None,
         raise_if_not_found: bool = False,
         prioritize_remote: bool = False,

@@ -316,7 +316,6 @@ _TASK_RENAMES = {"PersianTextTone": "SynPerTextToneClassification"}
 
 def get_task(
     task_name: str,
-    *,
     languages: Sequence[str] | None = None,
     script: Sequence[str] | None = None,
     eval_splits: Sequence[str] | None = None,

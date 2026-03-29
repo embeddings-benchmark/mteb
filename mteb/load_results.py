@@ -49,7 +49,6 @@ def _model_name_and_revision(
     + "Please use the `ResultCache`'s `.load_results` method instead."
 )
 def load_results(  # noqa: PLR0914
-    *,
     results_repo: str = "https://github.com/embeddings-benchmark/results",
     download_latest: bool = True,
     models: Iterable[ModelMeta] | Sequence[str] | None = None,
