@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def clean_dataset(
+def clean_dataset(  # noqa: PLR0913
     ds: DatasetDict,
     metadata: TaskMetadata,
     *,

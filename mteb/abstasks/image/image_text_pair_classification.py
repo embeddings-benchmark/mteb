@@ -125,7 +125,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
             image_statistics=calculate_image_statistics(images),
         )
 
-    def _evaluate_subset(
+    def _evaluate_subset(  # noqa: PLR0913
         self,
         model: MTEBModels,
         data_split: Dataset,
@@ -186,7 +186,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
             num_texts_per_sample,
         )
 
-    def _compute_metrics(
+    def _compute_metrics(  # noqa: PLR6301
         self,
         scores: list[torch.Tensor],
         num_images_per_sample: int,

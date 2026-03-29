@@ -447,7 +447,7 @@ class TaskMetadata(BaseModel):
                     )
         return prompt
 
-    def _eval_langs_are_valid(self, eval_langs: Languages) -> None:
+    def _eval_langs_are_valid(self, eval_langs: Languages) -> None:  # noqa: PLR6301
         """This method checks that the eval_langs are specified as a list of languages."""
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
@@ -523,7 +523,7 @@ class TaskMetadata(BaseModel):
             getattr(self, field_name) is not None
             for field_name in self.model_fields
             if field_name
-            not in ["prompt", "adapted_from", "contributed_by", "superseded_by"]
+            not in ["prompt", "adapted_from", "contributed_by", "superseded_by"]  # noqa: PLR6201
         )
 
     @property
@@ -559,7 +559,7 @@ class TaskMetadata(BaseModel):
         """Return the path to the descriptive statistics file."""
         descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
         if self.type in MIEB_TASK_TYPE:
-            descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"
+            descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"  # noqa: PLR6104
         task_type_dir = descriptive_stat_base_dir / self.type
         if not descriptive_stat_base_dir.exists():
             descriptive_stat_base_dir.mkdir()
@@ -935,15 +935,15 @@ class TaskMetadata(BaseModel):
 
     def _hf_task_category(self) -> list[str]:
         dataset_type = []
-        if self.category in ["i2i", "it2i", "i2it", "it2it"]:
+        if self.category in ["i2i", "it2i", "i2it", "it2it"]:  # noqa: PLR6201
             dataset_type.append("image-to-image")
-        if self.category in ["i2t", "t2i", "it2t", "it2i", "t2it", "i2it", "it2it"]:
+        if self.category in ["i2t", "t2i", "it2t", "it2i", "t2it", "i2it", "it2it"]:  # noqa: PLR6201
             dataset_type.extend(["image-to-text", "text-to-image"])
-        if self.category in ["it2t", "it2i", "t2it", "i2it", "it2it"]:
+        if self.category in ["it2t", "it2i", "t2it", "i2it", "it2it"]:  # noqa: PLR6201
             dataset_type.extend(["image-text-to-text"])
-        if self.category in ["a2a", "at2a", "a2at", "at2at"]:
+        if self.category in ["a2a", "at2a", "a2at", "at2at"]:  # noqa: PLR6201
             dataset_type.append("audio-to-audio")
-        if self.category in ["a2t", "t2a", "at2t", "t2at", "at2at", "a2at"]:
+        if self.category in ["a2t", "t2a", "at2t", "t2at", "at2at", "a2at"]:  # noqa: PLR6201
             dataset_type.extend(["text-to-audio"])
         return dataset_type
 

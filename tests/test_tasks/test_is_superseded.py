@@ -3,7 +3,7 @@
 import logging
 
 import mteb
-from mteb.get_tasks import _TASKS_REGISTRY
+from mteb.get_tasks import _TASKS_REGISTRY  # noqa: PLC2701
 
 logging.basicConfig(level=logging.INFO)
 

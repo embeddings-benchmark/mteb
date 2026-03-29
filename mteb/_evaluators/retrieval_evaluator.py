@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 class RetrievalEvaluator(Evaluator):
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         corpus: CorpusDatasetType,
         queries: QueryDatasetType,
@@ -79,7 +79,7 @@ class RetrievalEvaluator(Evaluator):
             num_proc=num_proc,
         )
 
-    def evaluate(
+    def evaluate(  # noqa: PLR6301
         self,
         qrels: RelevantDocumentsType,
         results: dict[str, dict[str, float]],

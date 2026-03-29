@@ -134,7 +134,7 @@ def _normalize_title_for_comparison(title: str) -> str:
     return " ".join(title.lower().strip().split())
 
 
-def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:
+def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:  # noqa: PLR0912
     """Same paper under different bibtex ids -> (task1, task2, id1, id2, raw_title_1, raw_title_2)."""
     by_title: dict[str, list[tuple[str, str, str]]] = defaultdict(list)
     for task_cls in mteb.get_tasks():
@@ -179,7 +179,7 @@ def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:
 
     all_titles = set(by_title.keys())
     for title, items in by_title.items():
-        if items[0][2] in (
+        if items[0][2] in (  # noqa: PLR6201
             "BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language",
             "BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language",
             "Introduction to the CoNLL-2002 Shared Task: Language-Independent Named Entity Recognition",

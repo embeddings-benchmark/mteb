@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class ClusteringEvaluator(Evaluator):
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         dataset: Dataset,
         *,

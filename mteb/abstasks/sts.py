@@ -126,7 +126,7 @@ class AbsTaskSTS(AbsTask):
     input1_prompt_type: PromptType | None = None
     input2_prompt_type: PromptType | None = None
 
-    def _evaluate_subset(
+    def _evaluate_subset(  # noqa: PLR0913
         self,
         model: MTEBModels,
         data_split: Dataset,
@@ -171,7 +171,7 @@ class AbsTaskSTS(AbsTask):
 
         return self._calculate_scores(scores, normalized_scores)
 
-    def _calculate_scores(
+    def _calculate_scores(  # noqa: PLR6301
         self, scores: STSEvaluatorScores, normalized_scores: list[float]
     ) -> STSMetrics:
         def compute_corr(x: list[float], y: list[float]) -> tuple[float, float]:
@@ -223,7 +223,7 @@ class AbsTaskSTS(AbsTask):
             sentence1 = []
             sentence2 = []
             score = []
-            for hf_subset in self.metadata.eval_langs:
+            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 sentence1.extend(self.dataset[hf_subset][split][first_column])
                 sentence2.extend(self.dataset[hf_subset][split][second_column])
                 score.extend(self.dataset[hf_subset][split]["score"])

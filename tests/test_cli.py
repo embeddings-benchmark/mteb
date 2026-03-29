@@ -10,10 +10,10 @@ import pytest
 import yaml
 
 from mteb.cli.build_cli import (
-    _available_benchmarks,
-    _available_tasks,
-    _create_meta,
-    _leaderboard,
+    _available_benchmarks,  # noqa: PLC2701
+    _available_tasks,  # noqa: PLC2701
+    _create_meta,  # noqa: PLC2701
+    _leaderboard,  # noqa: PLC2701
     run,
 )
 
@@ -146,7 +146,7 @@ def test_create_meta(tmp_path):
         ("model_card_without_frontmatter.md", "model_card_gold_without_frontmatter.md"),
     ],
 )
-def test_create_meta_from_existing(
+def test_create_meta_from_existing(  # noqa: PLR0914
     existing_readme_name: str, gold_readme_name: str, tmp_path: Path
 ):
     """Test create_meta function directly as well as through the command line interface"""

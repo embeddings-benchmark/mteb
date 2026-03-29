@@ -121,7 +121,7 @@ class ModelResult(BaseModel):
         ]
         return cls.model_construct(**data)  # type: ignore[arg-type]
 
-    def _filter_tasks(
+    def _filter_tasks(  # noqa: PLR0913
         self,
         task_names: list[str] | None = None,
         *,
@@ -202,7 +202,7 @@ class ModelResult(BaseModel):
         format: Literal["long"] = "long",
     ) -> list: ...
 
-    def _get_scores(
+    def _get_scores(  # noqa: PLR0913
         self,
         *,
         splits: list[SplitName] | None = None,
@@ -436,7 +436,7 @@ class ModelResult(BaseModel):
         Args:
             path: The path to the file to save.
         """
-        with path.open("w") as f:
+        with path.open("w") as f:  # noqa: PLW1514
             f.write(self.model_dump_json(indent=2))
 
     @classmethod

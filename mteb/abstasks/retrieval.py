@@ -308,7 +308,7 @@ class AbsTaskRetrieval(AbsTask):
         self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
-    def evaluate(
+    def evaluate(  # noqa: PLR0913
         self,
         model: MTEBModels,
         split: str = "test",
@@ -349,7 +349,7 @@ class AbsTaskRetrieval(AbsTask):
             **kwargs,
         )
 
-    def _evaluate_subset(
+    def _evaluate_subset(  # noqa: PLR0913
         self,
         model: MTEBModels,
         data_split: RetrievalSplitData,
@@ -465,7 +465,7 @@ class AbsTaskRetrieval(AbsTask):
             previous_results_model_meta=self._previous_results_model_meta,
         )
 
-    def task_specific_scores(
+    def task_specific_scores(  # noqa: PLR6301
         self,
         scores: dict[str, dict[str, float]],
         qrels: RelevantDocumentsType,
@@ -484,7 +484,7 @@ class AbsTaskRetrieval(AbsTask):
         """
         return {}
 
-    def _calculate_descriptive_statistics_from_split(
+    def _calculate_descriptive_statistics_from_split(  # noqa: PLR0912, PLR0914, PLR0915
         self,
         split: str,
         hf_subset: str | None = None,
@@ -503,7 +503,7 @@ class AbsTaskRetrieval(AbsTask):
             corpus = None
             relevant_docs = {}
             top_ranked = {}
-            for hf_subset in self.metadata.eval_langs:
+            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 split_data = self.dataset[hf_subset][split]
                 if queries is None:
                     queries = split_data["queries"]

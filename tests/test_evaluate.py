@@ -344,7 +344,7 @@ def test_evaluate_mrl(tmp_path, embed_dim):
     )
     if embed_dim is not None:
         model_meta_path = model_meta_path / "experiments" / "embed_dim_10"
-    model_meta_path = model_meta_path / "model_meta.json"
+    model_meta_path = model_meta_path / "model_meta.json"  # noqa: PLR6104
     with model_meta_path.open() as f:
         model_meta_json = json.load(f)
     model_meta_json["loader"] = None  # otherwise meta won't be validated

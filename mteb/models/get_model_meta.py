@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def get_model_metas(
+def get_model_metas(  # noqa: PLR0912, PLR0913
     model_names: Iterable[str] | None = None,
     *,
     languages: Iterable[str] | None = None,

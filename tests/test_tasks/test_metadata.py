@@ -38,7 +38,7 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         return
 
     # TODO https://github.com/embeddings-benchmark/mteb/issues/3498
-    if task.metadata.name in (
+    if task.metadata.name in (  # noqa: PLR6201
         "FleursA2TRetrieval",
         "FleursT2ARetrieval",
         "SoundDescsA2TRetrieval",
@@ -56,7 +56,7 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
 
     if task.metadata.prompt is not None and isinstance(task.metadata.prompt, dict):
         if not (
-            isinstance(task, AbsTaskRetrieval) or task.metadata.name in ["TERRa.V2"]
+            isinstance(task, AbsTaskRetrieval) or task.metadata.name in ["TERRa.V2"]  # noqa: PLR6201
         ):
             # Retrieval tasks and TERRa.V2 have a dict prompt, but other tasks should not
             raise ValueError(

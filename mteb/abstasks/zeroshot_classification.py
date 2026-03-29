@@ -102,7 +102,7 @@ class AbsTaskZeroShotClassification(AbsTask):
             labels = self.dataset[hf_subset][split][self.label_column_name]
         elif compute_overall:
             inputs, labels = [], []
-            for hf_subset in self.metadata.eval_langs:
+            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
                 labels.extend(self.dataset[hf_subset][split][self.label_column_name])
         else:
@@ -136,7 +136,7 @@ class AbsTaskZeroShotClassification(AbsTask):
             candidates_labels_text_statistics=candidate_lens,
         )
 
-    def _evaluate_subset(
+    def _evaluate_subset(  # noqa: PLR0913
         self,
         model: MTEBModels,
         data_split: Dataset,
@@ -184,7 +184,7 @@ class AbsTaskZeroShotClassification(AbsTask):
             torch.tensor(probs).argmax(dim=1).tolist(),
         )
 
-    def _calculate_scores(
+    def _calculate_scores(  # noqa: PLR6301
         self,
         labels: list[int],
         predictions: list[float],

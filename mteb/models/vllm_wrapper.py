@@ -35,7 +35,7 @@ class VllmWrapperBase:
     convert = "auto"
     mteb_model_meta: ModelMeta | None = None
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         model: str | ModelMeta,
         revision: str | None = None,
@@ -174,7 +174,7 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
 
     convert = "embed"
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         model: str | ModelMeta,
         revision: str | None = None,
@@ -286,7 +286,7 @@ class VllmCrossEncoderWrapper(VllmWrapperBase):
         self.query_prefix = query_prefix
         self.document_prefix = document_prefix
 
-    def predict(
+    def predict(  # noqa: PLR0913
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],

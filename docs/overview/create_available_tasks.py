@@ -8,7 +8,7 @@ from slugify import slugify_anchor
 
 import mteb
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
-from mteb.abstasks.task_metadata import _TASKTYPE2SIMPLIFIEDTASKTYPE
+from mteb.abstasks.task_metadata import _TASKTYPE2SIMPLIFIEDTASKTYPE  # noqa: PLC2701
 from mteb.get_tasks import MTEBTasks
 
 task_entry = """
@@ -93,12 +93,12 @@ def create_aggregate_table(task: AbsTaskAggregate) -> str:
         ),
         axis=1,
     )
-    df["modalities"] = df["modalities"].apply(lambda x: pretty_long_list(x))
-    df["languages"] = df["languages"].apply(lambda x: pretty_long_list(x))
+    df["modalities"] = df["modalities"].apply(lambda x: pretty_long_list(x))  # noqa: PLW0108
+    df["languages"] = df["languages"].apply(lambda x: pretty_long_list(x))  # noqa: PLW0108
     return df.to_markdown(index=False)
 
 
-def format_task_entry(task: mteb.AbsTask) -> str:
+def format_task_entry(task: mteb.AbsTask) -> str:  # noqa: PLR0914
     description = task.metadata.description
     if task.metadata.contributed_by:
         description += f" Contributed by {task.metadata.contributed_by}."
@@ -171,7 +171,7 @@ def insert_content(doc_path: Path, content: str, tag: str) -> None:
     end_tag = f"<!-- END-{tag} -->"
 
     if doc_path.exists():
-        doc_content = doc_path.read_text()
+        doc_content = doc_path.read_text()  # noqa: PLW1514
         if start_tag in doc_content and end_tag in doc_content:
             before = doc_content.split(start_tag)[0]
             after = doc_content.split(end_tag)[1]
@@ -185,7 +185,7 @@ def insert_content(doc_path: Path, content: str, tag: str) -> None:
         # Create new file with content between tags
         new_content = start_tag + "\n" + content + "\n" + end_tag
 
-    doc_path.write_text(new_content)
+    doc_path.write_text(new_content)  # noqa: PLW1514
 
 
 def main(folder: Path) -> None:
@@ -214,7 +214,7 @@ def main(folder: Path) -> None:
         # For each simplified task type, combine the markdown entries of the corresponding task types, each consisting of the tasks of that type.
         mds = []
 
-        for tt in sorted(tt):
+        for tt in sorted(tt):  # noqa: PLW2901
             tt_tasks = task_types2tasks[tt]
             if not tt_tasks:
                 raise ValueError(f"No tasks found for task type {tt}")

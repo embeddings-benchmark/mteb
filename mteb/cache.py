@@ -142,7 +142,7 @@ class ResultCache:
             )
         return model_path / model_revision / f"{task_name}.json"
 
-    def load_task_result(
+    def load_task_result(  # noqa: PLR0913
         self,
         task_name: str,
         model_name: str | ModelMeta,
@@ -322,7 +322,7 @@ class ResultCache:
 
         return results_directory
 
-    def _download_cached_results_from_branch(
+    def _download_cached_results_from_branch(  # noqa: PLR0913
         self,
         *,
         branch: str = "cached-data",
@@ -823,7 +823,7 @@ class ResultCache:
             paths = [p for p in paths if p.stem in task_names]
         return paths
 
-    def load_results(
+    def load_results(  # noqa: PLR0912, PLR0913
         self,
         models: Sequence[str] | Iterable[ModelMeta] | None = None,
         tasks: Sequence[str] | Iterable[AbsTask] | Benchmark | str | None = None,

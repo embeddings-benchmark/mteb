@@ -173,7 +173,7 @@ def calculate_pmrr(original_run, new_run, changed_qrels):
 
     # we now have a DF of [qid, doc_id, change] to run our calculations with
     changes_df = pd.DataFrame(changes)
-    changes_df["p-MRR"] = changes_df.apply(lambda x: rank_score(x), axis=1)
+    changes_df["p-MRR"] = changes_df.apply(lambda x: rank_score(x), axis=1)  # noqa: PLW0108
     qid_wise = changes_df.groupby("qid").agg({"p-MRR": "mean"})
     return qid_wise["p-MRR"].mean()
 
@@ -416,7 +416,7 @@ def robustness_at_10(
     return sum(robustness_scores) / len(robustness_scores)
 
 
-def make_score_dict(
+def make_score_dict(  # noqa: PLR0913
     *,
     ndcg: dict[str, float],
     _map: dict[str, float],
@@ -560,7 +560,7 @@ def max_over_subqueries(
     return {"max_over_subqueries_" + k: v for k, v in score_dict.items()}
 
 
-def calculate_retrieval_scores(
+def calculate_retrieval_scores(  # noqa: PLR0914
     results: Mapping[str, Mapping[str, float]],
     qrels: RelevantDocumentsType,
     k_values: list[int],

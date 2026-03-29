@@ -86,7 +86,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
     label_column_name: str = "label"
 
     @override
-    def _evaluate_subset(  # type: ignore[override]
+    def _evaluate_subset(  # type: ignore[override]  # noqa: PLR0914
         self,
         model: MTEBModels,
         data_split: DatasetDict,
@@ -208,7 +208,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             **avg_scores,  # type: ignore[typeddict-item]
         )
 
-    def _calculate_scores(  # type: ignore[override]
+    def _calculate_scores(  # type: ignore[override]  # noqa: PLR6301
         self,
         y_test: NDArray[np.integer],
         y_pred: NDArray[np.integer | np.floating],

@@ -34,7 +34,7 @@ class SklearnModelProtocol(Protocol):
 
 
 class SklearnEvaluator(Evaluator):
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         train_dataset: Dataset,
         eval_dataset: Dataset,

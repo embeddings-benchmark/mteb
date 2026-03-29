@@ -223,7 +223,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     """
     collated = {}
     for key in batch[0]:
-        if key in (
+        if key in (  # noqa: PLR6201
             "image",  # images can be with different sizes
             "conversation",  # conversations are lists of varying lengths
             "audio",  # audio can have different lengths
@@ -289,7 +289,7 @@ def _prepare_dataset(
     return dataset
 
 
-def create_dataloader(
+def create_dataloader(  # noqa: PLR0913
     dataset: Dataset,
     *,
     task_metadata: TaskMetadata,

@@ -567,7 +567,7 @@ class ModelMeta(BaseModel):
                 and self.revision != "no_revision_available"
             ):
                 continue  # skip overwriting revision if overwrite has no revision available
-            if key in ["framework", "model_type"]:
+            if key in ["framework", "model_type"]:  # noqa: PLR6201
                 # Combine lists and remove duplicates
                 merged_list = set(merged_data.get(key, [])) | set(value or [])
                 merged_data[key] = list(merged_list)
@@ -656,7 +656,7 @@ class ModelMeta(BaseModel):
         )
 
     @classmethod
-    def _from_hub(
+    def _from_hub(  # noqa: PLR0914
         cls,
         model_name: str,
         revision: str | None = None,
@@ -1252,7 +1252,7 @@ def _pydantic_instance_to_code(
     return "\n".join(lines)
 
 
-def _value_to_code(value: Any, indent: int) -> str:
+def _value_to_code(value: Any, indent: int) -> str:  # noqa: PLR0911
     """Convert a Python value into valid Python source code."""
     if isinstance(value, BaseModel):
         return _pydantic_instance_to_code(value, indent, only_set_fields=True)

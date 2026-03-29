@@ -75,7 +75,7 @@ def _multilabel_subsampling(
     return dataset_dict
 
 
-class AbsTask(ABC):
+class AbsTask(ABC):  # noqa: PLR0904
     """The abstract class for the tasks. All tasks in `mteb` inherit from this class.
 
     Attributes:
@@ -133,7 +133,7 @@ class AbsTask(ABC):
         """
         pass
 
-    def evaluate(
+    def evaluate(  # noqa: PLR0913
         self,
         model: MTEBModels,
         split: str = "test",
@@ -215,7 +215,7 @@ class AbsTask(ABC):
         return scores
 
     @abstractmethod
-    def _evaluate_subset(
+    def _evaluate_subset(  # noqa: PLR0913
         self,
         model: MTEBModels,
         data_split: Dataset,
@@ -651,14 +651,14 @@ class AbsTask(ABC):
         # handle multiple tasks in one repo (e.g. MIRACLRetrievalHardNegatives, MIRACLRetrievalHardNegativesV2)
         existing_eval = None
         if existing_eval_path is not None:
-            with Path(existing_eval_path).open() as f:
+            with Path(existing_eval_path).open() as f:  # noqa: PLW1514
                 existing_eval_dict = yaml.safe_load(f)
             if existing_eval_dict is not None:
                 existing_eval = HFEvalMeta.model_validate(existing_eval_dict)
 
         task_config = self._create_task_hf_config(existing_eval)
 
-        with tempfile.NamedTemporaryFile(mode="w") as tmp_file:
+        with tempfile.NamedTemporaryFile(mode="w") as tmp_file:  # noqa: PLW1514
             tmp_file.write(task_config.to_yaml())
             tmp_file.flush()
 

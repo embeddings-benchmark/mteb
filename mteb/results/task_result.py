@@ -124,7 +124,7 @@ renamed_tasks = {
 }
 
 
-class TaskResult(BaseModel):
+class TaskResult(BaseModel):  # noqa: PLR0904
     """A class to represent the MTEB result.
 
     Attributes:
@@ -340,7 +340,7 @@ class TaskResult(BaseModel):
         json_obj["date"] = self.date.timestamp() if self.date else None
         self._round_scores(json_obj["scores"], 6)
 
-        with path.open("w") as f:
+        with path.open("w") as f:  # noqa: PLW1514
             json.dump(json_obj, f, indent=2)
 
     @classmethod
@@ -406,7 +406,7 @@ class TaskResult(BaseModel):
         else:
             task = get_task(obj.task_name)
 
-        if task.metadata.type == "PairClassification":
+        if task.metadata.type == "PairClassification":  # noqa: PLR1702
             for split, split_scores in obj.scores.items():
                 for hf_subset_scores in split_scores:
                     # concatenate score e.g. ["max"]["ap"] -> ["max_ap"]
@@ -417,7 +417,7 @@ class TaskResult(BaseModel):
                             hf_subset_scores.pop(key)  # type: ignore[attr-defined]
 
     @classmethod
-    def _convert_from_before_v1_11_0(cls, data: dict) -> TaskResult:
+    def _convert_from_before_v1_11_0(cls, data: dict) -> TaskResult:  # noqa: PLR0912
         from mteb.get_tasks import _TASKS_REGISTRY
 
         # in case the task name is not found in the registry, try to find a lower case version
@@ -488,12 +488,12 @@ class TaskResult(BaseModel):
                         hf_subset_scores["main_score"] = None
 
         # specific fixes:
-        if task_name == "MLSUMClusteringP2P" and mteb_version in [
+        if task_name == "MLSUMClusteringP2P" and mteb_version in [  # noqa: PLR6201
             "1.1.2.dev0",
             "1.1.3.dev0",
         ]:  # back then it was only the french subsection which was implemented
             scores["test"]["fr"] = scores["test"].pop("default")
-        if task_name == "MLSUMClusteringS2S" and mteb_version in [
+        if task_name == "MLSUMClusteringS2S" and mteb_version in [  # noqa: PLR6201
             "1.1.2.dev0",
             "1.1.3.dev0",
         ]:
@@ -634,7 +634,7 @@ class TaskResult(BaseModel):
         new_res = {**self.to_dict(), "scores": new_scores}
         return TaskResult.from_validated(**new_res)
 
-    def validate_and_filter_scores(
+    def validate_and_filter_scores(  # noqa: PLR0912
         self,
         task: AbsTask | None = None,
     ) -> TaskResult:

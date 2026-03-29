@@ -190,7 +190,7 @@ class EventLogger:
         )
         self.log(event)
 
-    def log_filter_change(
+    def log_filter_change(  # noqa: PLR0913
         self,
         session_id: str,
         filter_name: str,

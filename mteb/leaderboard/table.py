@@ -198,8 +198,8 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
             rank_column: "{:.0f}",
             "Embedding Dimensions": "{:.0f}",
             "Max Tokens": "{:.0f}",
-            "Total Parameters (B)": lambda x: _style_number_of_parameters(x),
-            "Active Parameters (B)": lambda x: _style_number_of_parameters(x),
+            "Total Parameters (B)": lambda x: _style_number_of_parameters(x),  # noqa: PLW0108
+            "Active Parameters (B)": lambda x: _style_number_of_parameters(x),  # noqa: PLW0108
         },
         na_rep="",
     )

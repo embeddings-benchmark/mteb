@@ -140,7 +140,7 @@ def instruct_wrapper(
 class InstructSentenceTransformerModel(AbsEncoder):
     """Instruction wrapper for Sentence Transformer models."""
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         model_name: str,
         revision: str,

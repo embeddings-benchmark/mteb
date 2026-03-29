@@ -257,7 +257,7 @@ class MTEB:
             merged[score["hf_subset"]] = score
         return list(merged.values())
 
-    def run(
+    def run(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
         self,
         model: MTEBModels | CrossEncoder | SentenceTransformer,
         *,
@@ -344,7 +344,7 @@ class MTEB:
         # To evaluate missing splits, we keep track of the task name and the corresponding splits.
         self._last_evaluated_splits = {}
 
-        while len(self.tasks) > 0:
+        while len(self.tasks) > 0:  # noqa: PLR1702
             task = self.tasks[0]
             logger.info(
                 f"\n\n********************** Evaluating {task.metadata.name} **********************"
@@ -581,7 +581,7 @@ class MTEB:
 
         return meta
 
-    def _create_output_folder(
+    def _create_output_folder(  # noqa: PLR6301
         self, model_meta: ModelMeta, output_folder: str | None
     ) -> Path | None:
         """Create output folder for the results.

@@ -3,7 +3,7 @@ import pytest
 from sklearn.linear_model import LogisticRegression
 
 import mteb
-from mteb._evaluators import SklearnEvaluator
+from mteb._evaluators import SklearnEvaluator  # noqa: PLC2701
 from tests.mock_tasks import MockClassificationTask
 
 

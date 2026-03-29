@@ -97,7 +97,7 @@ if __name__ == "__main__":
         all_model_names = []
         model_name_file = Path(args.model_name_file)
         if model_name_file.exists():
-            with model_name_file.open() as f:
+            with model_name_file.open() as f:  # noqa: PLW1514
                 all_model_names = f.read().strip().split()
         else:
             logger.warning(

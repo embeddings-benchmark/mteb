@@ -329,7 +329,7 @@ class CrossEncoderWrapper:
         self.query_prefix = query_prefix
         self.passage_prefix = passage_prefix
 
-    def predict(
+    def predict(  # noqa: PLR0913
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],

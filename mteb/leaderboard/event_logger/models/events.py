@@ -75,7 +75,7 @@ class FilterChangeEvent(BaseEvent):
     )
 
     @classmethod
-    def create(
+    def create(  # noqa: PLR0913
         cls,
         session_id: str,
         filter_name: str,

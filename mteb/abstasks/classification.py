@@ -145,7 +145,7 @@ class AbsTaskClassification(AbsTask):
     is_cross_validation: bool = False
     n_splits = 5
 
-    def evaluate(
+    def evaluate(  # noqa: PLR0913
         self,
         model: MTEBModels,
         split: str = "test",
@@ -212,7 +212,7 @@ class AbsTaskClassification(AbsTask):
 
         return scores  # type: ignore[return-value]
 
-    def _evaluate_subset(
+    def _evaluate_subset(  # noqa: PLR0913
         self,
         model: MTEBModels,
         data_split: DatasetDict,
@@ -265,7 +265,7 @@ class AbsTaskClassification(AbsTask):
 
         return self._calculate_avg_scores(scores)
 
-    def _evaluate_subset_cross_validation(
+    def _evaluate_subset_cross_validation(  # noqa: PLR0913
         self,
         model: EncoderProtocol,
         data_split: DatasetDict,
@@ -346,7 +346,7 @@ class AbsTaskClassification(AbsTask):
             )
         return self._calculate_avg_scores(scores)
 
-    def _run_experiment(
+    def _run_experiment(  # noqa: PLR0913
         self,
         model: EncoderProtocol,
         train_split: Dataset,
@@ -408,7 +408,7 @@ class AbsTaskClassification(AbsTask):
             **avg_scores,  # type: ignore[typeddict-item]
         )
 
-    def _calculate_scores(
+    def _calculate_scores(  # noqa: PLR6301
         self,
         y_test: NDArray[np.integer] | list[int],
         y_pred: NDArray[np.integer | np.floating] | list[int],
@@ -481,7 +481,7 @@ class AbsTaskClassification(AbsTask):
         elif compute_overall:
             inputs = []
             label = []
-            for hf_subset in self.metadata.eval_langs:
+            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
                 label.extend(self.dataset[hf_subset][split][self.label_column_name])
                 if split != self.train_split:

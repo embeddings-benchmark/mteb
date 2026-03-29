@@ -1,7 +1,7 @@
 import pytest
 
 import mteb
-from mteb._evaluators import PairClassificationEvaluator
+from mteb._evaluators import PairClassificationEvaluator  # noqa: PLC2701
 from tests.mock_tasks import (
     MockPairClassificationTask,
 )
@@ -10,7 +10,7 @@ TOL = 0.0001
 
 
 class TestPairClassificationEvaluator:
-    def test_accuracy(self):
+    def test_accuracy(self):  # noqa: PLR6301
         task = MockPairClassificationTask()
         task.load_data()
         evaluator = PairClassificationEvaluator(

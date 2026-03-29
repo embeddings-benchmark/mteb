@@ -48,7 +48,7 @@ def _model_name_and_revision(
     "`load_results` is deprecated and will be removed in future versions. "
     + "Please use the `ResultCache`'s `.load_results` method instead."
 )
-def load_results(
+def load_results(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
     *,
     results_repo: str = "https://github.com/embeddings-benchmark/results",
     download_latest: bool = True,
@@ -107,7 +107,7 @@ def load_results(
                 task_names[task_] = None
 
     model_results = []
-    for model_path in model_paths:
+    for model_path in model_paths:  # noqa: PLR1702
         model_revisions = model_path.glob("*")
 
         for revision_path in model_revisions:
@@ -147,7 +147,7 @@ def load_results(
                             task = task_names[r.task_name]
                         else:
                             task = None
-                        r = r.validate_and_filter_scores(task=task)
+                        r = r.validate_and_filter_scores(task=task)  # noqa: PLW2901
                         filtered_results.append(r)
                     except Exception as e:
                         logger.info(
