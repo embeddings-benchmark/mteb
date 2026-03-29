@@ -68,7 +68,7 @@ class CompressionWrapper:
                 "output_dtypes": [output_dtype],
                 "experiment_kwargs": exp_kwargs,
             }
-        )
+        )  # type: ignore[misc]
         if embed_types and output_dtype in embed_types:
             msg = (
                 f"The model {model.mteb_model_meta.name} natively supports quantization to {output_dtype.value} and "

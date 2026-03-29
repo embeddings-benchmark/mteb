@@ -342,6 +342,9 @@ class ModelMeta(BaseModel):
         if _self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
 
+        loader = _self.loader
+        name = _self.name
+        revision = _self.revision
         updates: dict[str, Any] = {}
         base_exp_kwargs = (
             dict(_self.experiment_kwargs) if _self.experiment_kwargs else {}
@@ -376,9 +379,9 @@ class ModelMeta(BaseModel):
 
         updates["loader_kwargs"] = _kwargs
         _self = _self.model_copy(update=updates)
-        model: MTEBModels = _self.loader(
-            _self.name,
-            revision=_self.revision,
+        model: MTEBModels = loader(
+            name,
+            revision=revision,
             **_kwargs,
         )
         model.mteb_model_meta = _self  # type: ignore[misc]
