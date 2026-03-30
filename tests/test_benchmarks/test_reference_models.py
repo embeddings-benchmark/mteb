@@ -29,8 +29,7 @@ def _get_target_benchmarks():
     Task-level filtering (text-only, retrieval-only) is handled in
     _get_expected_task_names, so no benchmark-level exclusions are needed.
     """
-    all_benchmarks = mteb.get_benchmarks(display_on_leaderboard=True)
-    return [b.name for b in all_benchmarks]
+    return mteb.get_benchmarks(display_on_leaderboard=True)
 
 
 def _is_text_only_task(task):
@@ -68,10 +67,9 @@ TARGET_BENCHMARKS = _get_target_benchmarks()
 
 
 @pytest.mark.test_reference_models
-@pytest.mark.parametrize("benchmark_name", TARGET_BENCHMARKS)
+@pytest.mark.parametrize("benchmark", TARGET_BENCHMARKS, ids=lambda b: b.name)
 @pytest.mark.parametrize("model_name", REFERENCE_MODELS)
-def test_reference_model_coverage(result_cache, benchmark_name, model_name):
-    benchmark = mteb.get_benchmark(benchmark_name=benchmark_name)
+def test_reference_model_coverage(result_cache, benchmark, model_name):
     expected = _get_expected_task_names(benchmark, model_name)
     results = result_cache.load_results(models=[model_name])
     available = set(results.task_names)
@@ -79,5 +77,5 @@ def test_reference_model_coverage(result_cache, benchmark_name, model_name):
     if missing:
         pytest.fail(
             f"'{model_name}' missing {len(missing)}/{len(expected)} tasks "
-            f"in '{benchmark_name}':\n" + "\n".join(f"  - {t}" for t in missing)
+            f"in '{benchmark.name}':\n" + "\n".join(f"  - {t}" for t in missing)
         )
