@@ -10,7 +10,7 @@ from mteb.cache import ResultCache
 class TestIntegrationScenarios:
     """Test integration scenarios that use ResultCache method."""
 
-    @patch("mteb.cache.requests.get")
+    @patch("mteb.cache.result_cache.requests.get")
     def test_full_caching_workflow_success(
         self, mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
     ):
@@ -37,7 +37,7 @@ class TestIntegrationScenarios:
         mock_get.assert_called_once()
         mock_response.raise_for_status.assert_called_once()
 
-    @patch("mteb.cache.requests.get")
+    @patch("mteb.cache.result_cache.requests.get")
     def test_download_failure_handling(self, mock_get, tmp_path):
         """Test that download failures are properly handled in the workflow."""
         cache = ResultCache(cache_path=tmp_path)
