@@ -145,6 +145,7 @@ docs = [
 typing = [
     {include-group = "github"},
     "mypy==1.19.1",
+    "PyGithub>=1.60",
     "types-cachetools>=6.2.0.20250827",
     "types-pysocks>=1.7.1.20250828",
     "types-pyyaml>=6.0.12.20250822",
