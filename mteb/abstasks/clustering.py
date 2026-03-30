@@ -355,9 +355,10 @@ def _convert_to_fast(
 
             # check that it is the same distribution
             row_label_set = set(lab)
-            assert row_label_set.issubset(all_labels_set), (
-                "The clusters are not sampled from the same distribution as they have different labels."
-            )
+            if not row_label_set.issubset(all_labels_set):
+                raise ValueError(
+                    "The clusters are not sampled from the same distribution as they have different labels."
+                )
 
             for l, s in zip(lab, sents):
                 if s not in sent_set:
@@ -398,6 +399,7 @@ def _check_label_distribution(
 
         # check that it is the same distribution
         row_label_set = set(lab)
-        assert row_label_set.issubset(all_labels_set), (
-            "The clusters are not sampled from the same distribution as they have different labels."
-        )
+        if not row_label_set.issubset(all_labels_set):
+            raise ValueError(
+                "The clusters are not sampled from the same distribution as they have different labels."
+            )

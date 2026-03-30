@@ -106,7 +106,7 @@ class Client:
     def __signature(self, random_str, time_stamp):
         params_str = f"{self.ak}:{time_stamp}:{random_str}:{self.sk}"
         encoded_params_str = params_str.encode("utf-8")
-        return hashlib.md5(encoded_params_str).hexdigest()
+        return hashlib.md5(encoded_params_str, usedforsecurity=False).hexdigest()
 
     def get_signature(self):
         timestamp = int(time.time())

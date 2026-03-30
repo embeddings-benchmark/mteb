@@ -280,10 +280,6 @@ def fetch_image(image: Image.Image, size_factor: int = IMAGE_FACTOR) -> Image.Im
     image_obj = None
     if isinstance(image, Image.Image):
         image_obj = image
-    elif image.startswith("http://") or image.startswith("https://"):
-        import requests
-
-        image_obj = Image.open(requests.get(image, stream=True).raw)
     elif image.startswith("file://"):
         image_obj = Image.open(image[7:])
     elif image.startswith("data:image"):

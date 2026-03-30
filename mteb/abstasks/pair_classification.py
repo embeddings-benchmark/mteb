@@ -249,7 +249,7 @@ class AbsTaskPairClassification(AbsTask):
                 hashes = set()
                 for img in inputs:
                     img_bytes = img.tobytes()
-                    img_hash = hashlib.md5(img_bytes).hexdigest()
+                    img_hash = hashlib.md5(img_bytes, usedforsecurity=False).hexdigest()
                     hashes.add(img_hash)
                 return list(hashes)
 
@@ -266,7 +266,9 @@ class AbsTaskPairClassification(AbsTask):
                 for audio in inputs:
                     array = audio["array"]
                     audio_bytes = array.tobytes()
-                    audio_hash = hashlib.md5(audio_bytes).hexdigest()
+                    audio_hash = hashlib.md5(
+                        audio_bytes, usedforsecurity=False
+                    ).hexdigest()
                     hashes.add(audio_hash)
                 return list(hashes)
 
