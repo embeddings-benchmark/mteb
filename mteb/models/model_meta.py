@@ -141,7 +141,7 @@ class ModelMeta(BaseModel):
         output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float embeddings.
     """
 
-    model_config = ConfigDict(extra="forbid", frozen=True)
+    model_config = ConfigDict(extra="forbid")
 
     # loaders
     loader: Callable[..., MTEBModels] | None
@@ -173,6 +173,16 @@ class ModelMeta(BaseModel):
     contacts: list[str] | None = None
     experiment_kwargs: Mapping[str, Any] | None = None
     output_dtypes: OutputDType | list[OutputDType] | None = None
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        """Deprecation warning for direct attribute mutation. Use model_copy(update={...}) instead."""
+        warnings.warn(
+            f"Mutating '{name}' is deprecated and will be removed in future versions. "
+            "Use .model_copy(update={...}) instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        super().__setattr__(name, value)
 
     @model_validator(mode="before")
     @classmethod
