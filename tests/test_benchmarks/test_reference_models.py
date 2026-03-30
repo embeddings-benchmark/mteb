@@ -5,13 +5,8 @@ import logging
 import pytest
 
 import mteb
-from mteb import Benchmark, ResultCache
+from mteb import ResultCache
 from mteb.abstasks import AbsTaskRetrieval
-from mteb.leaderboard.benchmark_selector import (
-    GP_BENCHMARK_ENTRIES,
-    R_BENCHMARK_ENTRIES,
-    MenuEntry,
-)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -25,35 +20,17 @@ REFERENCE_MODELS = [
 # Models that can only run retrieval tasks
 RETRIEVAL_ONLY_MODELS = {"mteb/baseline-bm25s"}
 
-# Benchmarks excluded from reference model testing.
-# These are benchmarks displayed on the leaderboard (in benchmark_selector.py)
-# for which reference models do not yet have results.
-# When adding a new benchmark to the leaderboard, ensure reference models
-# have results for it, or add it to this exclusion list.
-# Task-level filtering (text-only, retrieval-only) is handled in
-# _get_expected_task_names, so multimodal benchmarks don't need exclusion.
-EXCLUDED_BENCHMARKS: set[str] = set()
-
-
-def _collect_benchmarks(entries):
-    """Recursively extract Benchmark objects from menu entries."""
-    benchmarks = []
-    for item in entries:
-        if isinstance(item, Benchmark):
-            benchmarks.append(item)
-        elif isinstance(item, MenuEntry):
-            benchmarks.extend(_collect_benchmarks(item.benchmarks))
-    return benchmarks
-
 
 def _get_target_benchmarks():
-    """Get all benchmarks shown on the leaderboard minus excluded ones.
+    """Get all benchmarks displayed on the leaderboard.
 
-    Uses benchmark_selector.py as the source of truth for which benchmarks
-    are displayed on the leaderboard, rather than display_on_leaderboard flag.
+    Uses display_on_leaderboard flag, which is kept in sync with
+    benchmark_selector.py (see PR #4288).
+    Task-level filtering (text-only, retrieval-only) is handled in
+    _get_expected_task_names, so no benchmark-level exclusions are needed.
     """
-    all_benchmarks = _collect_benchmarks(GP_BENCHMARK_ENTRIES + R_BENCHMARK_ENTRIES)
-    return [b.name for b in all_benchmarks if b.name not in EXCLUDED_BENCHMARKS]
+    all_benchmarks = mteb.get_benchmarks(display_on_leaderboard=True)
+    return [b.name for b in all_benchmarks]
 
 
 def _is_text_only_task(task):
