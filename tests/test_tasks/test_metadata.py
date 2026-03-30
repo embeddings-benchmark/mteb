@@ -30,6 +30,9 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         f"Dataset {task.metadata.name} should not trust remote code"
     )
 
+    # --- Check simplifiedtasktypes is valid ---
+    assert isinstance(task.metadata.simplified_task_type, str)
+
     # --- Test is descriptive stats are present for all datasets ---
     if task.is_aggregate:  # aggregate tasks do not have descriptive stats
         return

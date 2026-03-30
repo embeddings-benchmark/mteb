@@ -114,7 +114,7 @@ class ModelMeta(BaseModel):
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
-          If annotated as list this will be treated as a range of possible embedding dimensions (Matryoshka).
+            If annotated as list this will be treated as a range of possible embedding dimensions (Matryoshka).
         revision: The revision number of the model. If None, it is assumed that the metadata (including the loader) is valid for all revisions of the model.
         release_date: The date the model's revision was released. If None, then release date will be added based on 1st commit in hf repository of model.
         license: The license under which the model is released. Required if open_weights is True.
@@ -295,53 +295,59 @@ class ModelMeta(BaseModel):
         **kwargs: Any,
     ) -> MTEBModels:
         """Loads the model using the specified loader function."""
-        if self.loader is None:
+        # create a copy so that changing the model meta on the model does not influence the original meta
+        _self = self.model_copy(deep=True)
+
+        if _self.loader is None:
             raise NotImplementedError(
                 "No model implementation is available for this model."
             )
-        if self.name is None:
+        if _self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
 
         if embed_dim is not None:
             if (
-                self.embed_dim is not None
-                and isinstance(self.embed_dim, int)
-                and self.embed_dim != embed_dim
+                _self.embed_dim is not None
+                and isinstance(_self.embed_dim, int)
+                and _self.embed_dim != embed_dim
             ):
                 raise ValueError(
-                    f"Requested embedding dimension {embed_dim} does not match the model's embedding dimension {self.embed_dim}. "
+                    f"Requested embedding dimension {embed_dim} does not match the model's embedding dimension {_self.embed_dim}. "
                     "Model does not support loading with a different embedding dimension. "
                     "You can change supported embedding dimensions in `meta.embed_dim`."
                 )
-            elif isinstance(self.embed_dim, list) and embed_dim not in self.embed_dim:
+            elif isinstance(_self.embed_dim, list) and embed_dim not in _self.embed_dim:
                 raise ValueError(
-                    f"Requested embedding dimension {embed_dim} is not in the model's supported embedding dimensions {self.embed_dim}."
+                    f"Requested embedding dimension {embed_dim} is not in the model's supported embedding dimensions {_self.embed_dim}."
                 )
-            self.embed_dim = embed_dim
+            _self.embed_dim = embed_dim
             kwargs["embed_dim"] = embed_dim
-            if self.experiment_kwargs is None:
-                self.experiment_kwargs = {"embed_dim": embed_dim}
+            if _self.experiment_kwargs is None:
+                _self.experiment_kwargs = {"embed_dim": embed_dim}
             else:
-                self.experiment_kwargs["embed_dim"] = embed_dim  # type: ignore[index]
+                _self.experiment_kwargs["embed_dim"] = embed_dim  # type: ignore[index]
 
-        if self.experiment_kwargs is None:
-            self.experiment_kwargs = kwargs if len(kwargs) > 0 else None
-        elif len(kwargs) > 0 and self.experiment_kwargs is not None:
-            kwargs |= self.experiment_kwargs
-            self.experiment_kwargs = kwargs
+        if _self.experiment_kwargs is None:
+            _self.experiment_kwargs = kwargs if len(kwargs) > 0 else None
+        elif len(kwargs) > 0 and _self.experiment_kwargs is not None:
+            kwargs |= _self.experiment_kwargs
+            _self.experiment_kwargs = kwargs
 
         # Allow overwrites
-        _kwargs = self.loader_kwargs.copy()
-        _kwargs.update(kwargs)
+        _kwargs = _self.loader_kwargs.copy()
+        _kwargs.update(
+            _self.experiment_kwargs if _self.experiment_kwargs is not None else {}
+        )
         if device is not None:
             _kwargs["device"] = device
 
-        model: MTEBModels = self.loader(
-            self.name,
-            revision=self.revision,
+        model: MTEBModels = _self.loader(
+            _self.name,
+            revision=_self.revision,
             **_kwargs,
         )
-        model.mteb_model_meta = self  # type: ignore[misc]
+        _self.loader_kwargs = _kwargs
+        model.mteb_model_meta = _self  # type: ignore[misc]
         return model
 
     def model_name_as_path(self) -> str:
