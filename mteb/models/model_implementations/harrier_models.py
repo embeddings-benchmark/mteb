@@ -205,10 +205,7 @@ def instruction_template(
     if not instruction or prompt_type == PromptType.document:
         return ""
     if isinstance(instruction, dict):
-        if prompt_type is None:
-            instruction = next(iter(instruction.values()))
-        else:
-            instruction = instruction[prompt_type]
+        instruction = instruction[prompt_type]
     return f"Instruct: {instruction}\nQuery:"
 
 
