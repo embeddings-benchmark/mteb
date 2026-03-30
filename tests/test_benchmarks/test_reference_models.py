@@ -30,19 +30,9 @@ RETRIEVAL_ONLY_MODELS = {"mteb/baseline-bm25s"}
 # for which reference models do not yet have results.
 # When adding a new benchmark to the leaderboard, ensure reference models
 # have results for it, or add it to this exclusion list.
-EXCLUDED_BENCHMARKS = {
-    # Multimodal benchmarks — reference models are text-only
-    "HUME(v1)",
-    "JinaVDR",
-    "MAEB(beta)",
-    "MAEB(beta, audio-only)",
-    "MIEB(eng)",
-    "MIEB(Img)",
-    "MIEB(lite)",
-    "MIEB(Multilingual)",
-    "ViDoRe(v3)",
-    "ViDoRe(v1&v2)",
-}
+# Task-level filtering (text-only, retrieval-only) is handled in
+# _get_expected_task_names, so multimodal benchmarks don't need exclusion.
+EXCLUDED_BENCHMARKS: set[str] = set()
 
 
 def _collect_benchmarks(entries):
