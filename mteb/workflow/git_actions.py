@@ -1,5 +1,3 @@
-"""Concrete reversible actions for git operations in the submit_results workflow."""
-
 from __future__ import annotations
 
 import logging

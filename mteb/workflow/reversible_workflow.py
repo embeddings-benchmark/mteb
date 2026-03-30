@@ -1,5 +1,3 @@
-"""Reversible workflow infrastructure for managing sequences of reversible actions with automatic rollback."""
-
 from __future__ import annotations
 
 import logging
