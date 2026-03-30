@@ -6,7 +6,6 @@ from mteb.types import PromptType
 
 from .facebookai import XLMR_LANGUAGES
 
-
 harrier_training_data = {
     # also pre-training data from a variety of sources (wikipedia, nllb, stackexchange, semantic scholar, reddit, CC, synthetic data...)
     "AlphaNLI",
@@ -14,7 +13,6 @@ harrier_training_data = {
     "BornholmBitextMining",
     "CSFDSKMovieReviewSentimentClassification",
     "CataloniaTweetClassification",
-
     # From COIR
     "AppsRetrieval",
     "COIRCodeSearchNetRetrieval",
@@ -27,7 +25,6 @@ harrier_training_data = {
     "CosQARetrieval",
     "StackOverflowQARetrieval",
     "SyntheticText2SQLRetrieval",
-
     "CyrillicTurkicLangClassification",
     "CzechProductReviewSentimentClassification",
     "DBpediaClassification",
