@@ -210,7 +210,7 @@ class CommitAction(ReversibleAction):
 
 
 class PushToForkAction(ReversibleAction):
-    """Push commits to a fork remote. Undo by force-pushing origin branch or deleting remote branch."""
+    """Push commits to a fork remote. Undo by force-pushing origin branch back to rewind the remote branch."""
 
     def __init__(
         self,
@@ -245,7 +245,7 @@ class PushToForkAction(ReversibleAction):
         logger.info(f"Pushed to {self.fork_remote}/{self.branch_name}")
 
     def undo(self) -> None:
-        """Force-push origin branch to delete the remote branch."""
+        """Rewind the remote branch by force-pushing origin_branch to branch_name."""
         try:
             subprocess.run(
                 [
