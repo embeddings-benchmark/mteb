@@ -96,7 +96,7 @@ def _build_qwen3_vl_for_embedding_class():
         def visual(self):
             return self.model.visual
 
-        def forward(
+        def forward(  # noqa: PLR0913, PLR0917
             self,
             input_ids: torch.LongTensor | None = None,
             attention_mask: torch.Tensor | None = None,

@@ -335,7 +335,7 @@ runtime-evaluated-base-classes = [
 ]
 
 [tool.ruff.lint.pylint]
-max-args = 10
+max-args = 9
 
 [tool.semantic_release]
 branch = "main"
