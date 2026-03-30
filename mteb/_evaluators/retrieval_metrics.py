@@ -268,6 +268,9 @@ def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
             - `std`: Standard deviation of similarity scores
             - `diff1`: Difference between highest and second highest similarity scores
     """
+    if not sim_scores:
+        return {"max": 0.0, "std": 0.0, "diff1": 0.0}
+
     sim_scores_sorted = sorted(sim_scores)[::-1]
 
     cs_max = sim_scores_sorted[0]
