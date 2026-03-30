@@ -83,18 +83,20 @@ class ReversibleWorkflow:
 
     Attributes:
         context: Shared mutable dict that steps can use to pass data to other steps.
-                 For example: step1 computes commit_sha and stores in context["commit_sha"],
-                 step2 retrieves it via self.context["commit_sha"].
+                 Steps should accept context via their constructor and store it as an instance
+                 variable to access shared data. For example:
+                 - step1 computes a value and stores in context["key"] = value
+                 - step2 retrieves it via self.context["key"]
 
     Examples:
-        >>> workflow = ReversibleWorkflow(
-        ...     steps=[step1, step2, step3],
-        ...     context={}
-        ... )
+        >>> context = {}
+        >>> step1 = MyAction(context=context)
+        >>> step2 = OtherAction(context=context)
+        >>> workflow = ReversibleWorkflow(steps=[step1, step2], context=context)
         >>> try:
         ...     workflow.run()
-        ... except RuntimeError as e:
-        ...     print(f"Workflow failed and rolled back: {e}")
+        ... except WorkflowFailureError as e:
+        ...     print(f"Workflow failed at {e.step_name}: {e.original_exception}")
     """
 
     def __init__(
