@@ -13,6 +13,7 @@ from .nld import *
 from .pol import *
 from .por import *
 from .rus import *
+from .ukr import *
 from .vie import *
 from .zho import *
 from .zxx import *
