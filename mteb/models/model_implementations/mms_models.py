@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -21,6 +22,9 @@ if TYPE_CHECKING:
     from mteb import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
     from mteb.types._encoder_io import AudioInput
+
+
+logger = logging.getLogger(__name__)
 
 
 class MMSWrapper(AbsEncoder):
@@ -54,7 +58,9 @@ class MMSWrapper(AbsEncoder):
         try:
             self.model.load_adapter(target_lang)
         except Exception:
-            pass
+            logger.debug(
+                "Failed to load adapter for language '%s'", target_lang, exc_info=True
+            )
 
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate

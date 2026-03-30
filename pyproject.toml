@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.12.4"
+version = "2.12.5"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -256,6 +256,7 @@ select = [
     "TC",      # type-checking
     "T20",     # don't allow print
     "PL",      # pylint
+    "S",       # flake8-bandit
 ]
 
 ignore = [
@@ -267,6 +268,11 @@ ignore = [
     "D107",     # Missing docstring in __init__
     "D415",     # First line should end with a period
     "C408",     # don't use unecc. collection call, e.g. dict over {}
+    "S404",    # subprocess import insecure
+    "S311",     # standard pseudo-random generators are fine for non-crypto use
+    "S104",     # allow binding to all interfaces in tests
+    "S607",     # start a process with partial path
+    "S603",   # allow subprocess calls with shell=True
     "PLR2004",   # magic value comparison
     "PLC0415",   # import outside of top-level
     "PLR0912",  # too many branches
@@ -282,12 +288,16 @@ preview = true
 "docs/*" = [
     "D",
     "DOC",
+    "S101"
 ]
 "tests/*" = [
     "RUF012",
     "D",
     "DOC",
     "TC",
+    "S101",  # allow asserts in tests
+    "S602",  # allow shell=True in tests
+    "S603",  # allow subprocess calls in tests
 ]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = [

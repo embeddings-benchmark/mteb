@@ -92,7 +92,8 @@ Purwarianti, Ayu},
                     documents.append(text)
                     labels.append(class_labels.index(label))
 
-            assert len(documents) == len(labels)
+            if len(documents) != len(labels):
+                raise ValueError(f"Expected {len(documents)} labels, got {len(labels)}")
 
             ds[split] = datasets.Dataset.from_dict(
                 {

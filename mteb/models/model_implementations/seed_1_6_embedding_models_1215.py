@@ -147,14 +147,17 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        assert (
-            self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
+        if (
+            self._embed_dim is not None
+            and self._embed_dim not in self._available_embed_dims
+        ):
+            raise ValueError(
+                f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
+            )
 
         if images is not None and texts is not None:
-            assert len(texts) == len(images)
+            if len(texts) != len(images):
+                raise ValueError(f"Expected {len(texts)} images, got {len(images)}")
             batch_len = len(texts)
             images_base64 = [self.pil_to_base64(image) for image in images]
         elif images is None:
