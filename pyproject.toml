@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.11.10"
+version = "2.12.6"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -117,8 +117,8 @@ wav2clip = ["wav2clip==0.1.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
 mctct = ["transformers<5"]  # mctct was removed in transformers 5
-siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]  
-qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"] 
+siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
+qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
 
 [dependency-groups]
 lint = [
@@ -254,6 +254,8 @@ select = [
     "PGH",     # pygrep-hooks Use specific rule codes when ignoring type issues
     "LOG",     # logging
     "TC",      # type-checking
+    "T20",  # don't allow print
+    "S",       # flake8-bandit
 ]
 
 ignore = [
@@ -265,6 +267,10 @@ ignore = [
     "D107",     # Missing docstring in __init__
     "D415",     # First line should end with a period
     "C408",     # don't use unecc. collection call, e.g. dict over {}
+    "S311",     # standard pseudo-random generators are fine for non-crypto use
+    "S104",     # allow binding to all interfaces in tests
+    "S607",     # start a process with partial path
+    "S603",   # allow subprocess calls with shell=True
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
@@ -275,12 +281,16 @@ typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
 "docs/*" = [
     "D",
     "DOC",
+    "S101"
 ]
 "tests/*" = [
     "RUF012",
     "D",
     "DOC",
     "TC",
+    "S101",  # allow asserts in tests
+    "S602",  # allow shell=True in tests
+    "S603",  # allow subprocess calls in tests
 ]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = ["D", "DOC"]
@@ -428,6 +438,8 @@ disable_error_code = ["index"]
 binary = false
 locale = "en"
 extend-ignore-words-re = [
+    "Classfication", # misspelled task name
+    "nd", # license
     # authors
     "Stap",
     "Asai",
@@ -441,11 +453,25 @@ extend-ignore-words-re = [
     "Mehta",
     "Parth",
     # languages/bibtext artifacts
+    "SHW",
     "ba",
     "creen",
     "Accademia",
+    "dementieva",
+    "Expresso",
+    "expresso",
+    "Iz",
+    "Allo",
+    "Soler",
+    # language keys:
+    "tha",
+    "yor",
+    "als",
+    "bre",
+    "thi",
     # ISO 15924 script codes
     "Beng",  # Bengali script
+
 ]
 extend-ignore-re = [
     "author.*",  # ignore authors in citations
@@ -496,8 +522,7 @@ BulgarianStoreReviewSentimentClassfication = "BulgarianStoreReviewSentimentClass
 
 [tool.typos.type.py.extend-words]
 wdth = "wdth"
-Allo = "Allo"   # AlloProfClusteringS2S.v2
-# langs/splits
+Allo = "Allo"
 som = "som"
 yor = "yor"
 Beng = "Beng"
@@ -518,3 +543,5 @@ expresso = "expresso"
 Expresso = "Expresso"
 NIFE = "NIFE"
 thw = "thw"
+shw = "SHW"
+nd = "nd"

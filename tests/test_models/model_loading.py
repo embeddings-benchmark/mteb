@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 def teardown_function(revision: str):
     """Teardown function to delete the model revision from the cache."""
     delete_strategy = scan_cache_dir().delete_revisions(revision)
-    print("Will free " + delete_strategy.expected_freed_size_str)
+    logger.info("Will free " + delete_strategy.expected_freed_size_str)
     delete_strategy.execute()
 
 

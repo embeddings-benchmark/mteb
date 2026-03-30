@@ -151,7 +151,7 @@ class VllmWrapperBase:
         try:
             self.cleanup()
         except Exception:
-            pass
+            logger.debug("Failed to cleanup vllm wrapper", exc_info=True)
 
 
 class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):

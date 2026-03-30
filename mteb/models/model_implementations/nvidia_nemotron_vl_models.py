@@ -450,10 +450,8 @@ class LlamaNemotronEmbedVL(AbsEncoder):
                         )
 
                 embeddings = normalize(embeddings, dim=-1)
-                assert torch.sum(embeddings).float().item() not in [
-                    0.0,
-                    float("inf"),
-                ]
+                if torch.sum(embeddings).float().item() in [0.0, float("inf")]:
+                    raise ValueError("Embeddings sum is invalid (0.0 or inf)")
                 embeddings_list.append(embeddings)
 
             concatenated_embeddings = torch.vstack(embeddings_list)

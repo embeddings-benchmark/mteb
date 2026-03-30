@@ -92,15 +92,18 @@ class BGEReranker(RerankerWrapper):
         passages = [text for batch in inputs2 for text in batch["text"]]
 
         if instructions is not None and instructions[0] is not None:
-            assert len(instructions) == len(queries)
+            if len(instructions) != len(queries):
+                raise ValueError(
+                    f"Expected {len(queries)} instructions, got {len(instructions)}"
+                )
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
 
-        assert len(queries) == len(passages)
+        if len(queries) != len(passages):
+            raise ValueError(f"Expected {len(queries)} passages, got {len(passages)}")
         query_passage_tuples = list(zip(queries, passages))
         scores = self.model.compute_score(query_passage_tuples, normalize=True)
-        assert len(scores) == len(queries), (
-            f"Expected {len(queries)} scores, got {len(scores)}"
-        )
+        if len(scores) != len(queries):
+            raise ValueError(f"Expected {len(queries)} scores, got {len(scores)}")
         return scores
 
 

@@ -219,6 +219,34 @@ def test_get_model_metas_each_model_type(model_type):
         assert model_type in model.model_type
 
 
+def test_ensure_experiments_kwargs_passed():
+    """
+    Regression test to ensure that experiment kwargs are passed
+    https://github.com/embeddings-benchmark/mteb/issues/4307
+    """
+    experiment = {"array_framework": "pytorch"}
+    # should be passed when in all the following cases:
+    model1 = mteb.get_model("mteb/baseline-random-encoder", **experiment)  # type: ignore[call-arg]
+
+    meta = mteb.get_model_meta(
+        "mteb/baseline-random-encoder",
+        experiment_kwargs=experiment,
+    )
+    model2 = meta.load_model()
+
+    meta = mteb.get_model_meta(
+        "mteb/baseline-random-encoder",
+    )
+    model3 = meta.load_model(**experiment)  # type: ignore[call-arg]
+    assert model1.array_framework == "pytorch"  # type: ignore[attr-defined]
+    assert model2.array_framework == "pytorch"  # type: ignore[attr-defined]
+    assert model3.array_framework == "pytorch"  # type: ignore[attr-defined]
+
+    assert model1.mteb_model_meta.experiment_kwargs == experiment
+    assert model2.mteb_model_meta.experiment_kwargs == experiment
+    assert model3.mteb_model_meta.experiment_kwargs == experiment
+
+
 def test_loader_kwargs_persisted_in_metadata():
     model = mteb.get_model(
         "mteb/baseline-random-encoder",
@@ -301,6 +329,7 @@ def test_model_to_python():
     model_type=['dense'],
     citation='@inproceedings{reimers-2019-sentence-bert,\\n    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",\\n    author = "Reimers, Nils and Gurevych, Iryna",\\n    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",\\n    month = "11",\\n    year = "2019",\\n    publisher = "Association for Computational Linguistics",\\n    url = "http://arxiv.org/abs/1908.10084",\\n}\\n',
     contacts=None,
+    output_dtypes=None,
 )"""
     )
 
