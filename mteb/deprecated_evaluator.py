@@ -575,8 +575,12 @@ class MTEB:
 
         # create a copy of the meta to avoid modifying the original object
         meta = deepcopy(meta)
-        meta.revision = meta.revision or "no_revision_available"
-        meta.name = meta.name or "no_model_name_available"
+        meta = meta.model_copy(
+            update={
+                "revision": meta.revision or "no_revision_available",
+                "name": meta.name or "no_model_name_available",
+            }
+        )
 
         return meta
 

@@ -87,6 +87,41 @@ _MISSING_N_EMBEDDING_MODELS = [
 ]
 
 
+def test_model_meta_hashable():
+    """Test that ModelMeta is hashable and considers experiment_kwargs in hash/equality."""
+    model1 = ModelMeta.create_empty(
+        overwrites=dict(
+            name="test/test_model",
+            revision="test_rev",
+            embed_dim=384,
+            experiment_kwargs={"param1": "value1"},
+        )
+    )
+
+    model2 = ModelMeta.create_empty(
+        overwrites=dict(
+            name="test/test_model2",
+            revision="test_rev2",
+            embed_dim=512,
+            experiment_kwargs={"param1": "value2"},
+        )
+    )
+
+    model3 = ModelMeta.create_empty(
+        overwrites=dict(
+            name="test/test_model",
+            revision="test_rev",
+            embed_dim=384,
+            experiment_kwargs={"param1": "value1"},
+        )
+    )
+
+    assert hash(model1) == hash(model3)
+
+    assert len({model1, model2}) == 2
+    assert len({model1, model3}) == 1
+
+
 @pytest.mark.parametrize(
     "training_datasets",
     [
