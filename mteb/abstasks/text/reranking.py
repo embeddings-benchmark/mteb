@@ -45,7 +45,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
             # use AbsTaskRetrieval default to load the data
             return super().load_data(num_proc=num_proc)
 
-    def _process_example(self, example: dict, split: str, query_idx: int) -> dict:
+    def _process_example(self, example: dict, split: str, query_idx: int) -> dict:  # noqa: PLR6301
         """Process a single example from the dataset.
 
         Args:

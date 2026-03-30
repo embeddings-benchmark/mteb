@@ -173,7 +173,7 @@ def calculate_pmrr(original_run, new_run, changed_qrels):
 
     # we now have a DF of [qid, doc_id, change] to run our calculations with
     changes_df = pd.DataFrame(changes)
-    changes_df["p-MRR"] = changes_df.apply(lambda x: rank_score(x), axis=1)
+    changes_df["p-MRR"] = changes_df.apply(lambda x: rank_score(x), axis=1)  # noqa: PLW0108
     qid_wise = changes_df.groupby("qid").agg({"p-MRR": "mean"})
     return qid_wise["p-MRR"].mean()
 
@@ -233,15 +233,15 @@ def evaluate_p_mrr_change(
         ) = calculate_retrieval_scores(group, qrels_sep[name], k_values)
         # add these to the followir_scores with name prefix
         scores_dict = make_score_dict(
-            ndcg,
-            _map,
-            recall,
-            precision,
-            naucs,
-            avg_mrr,
-            naucs_mrr,
-            hit_rate,
-            {},
+            ndcg=ndcg,
+            _map=_map,
+            recall=recall,
+            precision=precision,
+            naucs=naucs,
+            mrr=avg_mrr,
+            naucs_mrr=naucs_mrr,
+            hit_rate=hit_rate,
+            task_scores={},
         )
         for key, value in scores_dict.items():
             followir_scores[name][key] = value  # type: ignore[index]
@@ -417,6 +417,7 @@ def robustness_at_10(
 
 
 def make_score_dict(
+    *,
     ndcg: dict[str, float],
     _map: dict[str, float],
     recall: dict[str, float],
@@ -546,12 +547,20 @@ def max_over_subqueries(
         calculate_retrieval_scores(new_results, new_qrels, k_values)
     )
     score_dict = make_score_dict(
-        ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, hit_rate, {}
+        ndcg=ndcg,
+        _map=_map,
+        recall=recall,
+        precision=precision,
+        naucs=naucs,
+        mrr=mrr,
+        naucs_mrr=naucs_mrr,
+        hit_rate=hit_rate,
+        task_scores={},
     )
     return {"max_over_subqueries_" + k: v for k, v in score_dict.items()}
 
 
-def calculate_retrieval_scores(
+def calculate_retrieval_scores(  # noqa: PLR0914
     results: Mapping[str, Mapping[str, float]],
     qrels: RelevantDocumentsType,
     k_values: list[int],

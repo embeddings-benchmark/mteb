@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 # Create task registry
 def _gather_tasks() -> tuple[type[AbsTask], ...]:
-    import mteb.tasks as tasks
+    from mteb import tasks
 
     return tuple(
         t
@@ -224,9 +224,8 @@ class MTEBTasks(tuple[AbsTask]):
         return df.to_latex()
 
 
-def get_tasks(
+def get_tasks(  # noqa: PLR0913, PLR0917
     tasks: Sequence[str] | None = None,
-    *,
     languages: Sequence[str] | None = None,
     script: Sequence[str] | None = None,
     domains: Sequence[TaskDomain] | None = None,
@@ -282,8 +281,8 @@ def get_tasks(
         _tasks = [
             get_task(
                 task,
-                languages,
-                script,
+                languages=languages,
+                script=script,
                 eval_splits=eval_splits,
                 exclusive_language_filter=exclusive_language_filter,
             )

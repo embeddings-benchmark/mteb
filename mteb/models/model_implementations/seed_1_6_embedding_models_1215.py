@@ -69,7 +69,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         self._embed_dim = embed_dim
         self._available_embed_dims = [2048, 1024]
 
-    def pil_to_base64(self, image, format="jpeg"):
+    def pil_to_base64(self, image, format="jpeg"):  # noqa: PLR6301
         if image is None:
             return None
         buffer = BytesIO()
@@ -181,22 +181,19 @@ class Seed16EmbeddingWrapper(AbsEncoder):
                     "Target_modality:Text.\n Instruction:" + instruction + "\n Query:"
                 )
                 input_text = texts[i]
+            elif texts[i] != "" and images_base64[i] is not None:  # noqa: PLC1901
+                instruction = (
+                    "Instruction: Compress the text and image into one word.\n Query:"
+                )
+                input_text = texts[i]
+            elif texts[i] != "":  # noqa: PLC1901
+                instruction = "Instruction: Compress the text into one word.\n Query:"
+                input_text = texts[i]
+            elif images_base64[i] is not None:
+                instruction = "Instruction: Compress the image into one word.\n Query:"
+                input_text = None
             else:
-                if texts[i] != "" and images_base64[i] is not None:
-                    instruction = "Instruction: Compress the text and image into one word.\n Query:"
-                    input_text = texts[i]
-                elif texts[i] != "":
-                    instruction = (
-                        "Instruction: Compress the text into one word.\n Query:"
-                    )
-                    input_text = texts[i]
-                elif images_base64[i] is not None:
-                    instruction = (
-                        "Instruction: Compress the image into one word.\n Query:"
-                    )
-                    input_text = None
-                else:
-                    raise ValueError("image and text are both None")
+                raise ValueError("image and text are both None")
 
             resp = multimodal_embedding(
                 instruction=instruction,

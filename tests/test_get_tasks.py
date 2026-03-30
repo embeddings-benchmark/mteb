@@ -179,7 +179,7 @@ def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:
 
     all_titles = set(by_title.keys())
     for title, items in by_title.items():
-        if items[0][2] in (
+        if items[0][2] in (  # noqa: PLR6201
             "BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language",
             "BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language",
             "Introduction to the CoNLL-2002 Shared Task: Language-Independent Named Entity Recognition",

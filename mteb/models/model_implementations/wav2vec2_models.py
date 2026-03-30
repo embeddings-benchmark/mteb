@@ -111,7 +111,7 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,

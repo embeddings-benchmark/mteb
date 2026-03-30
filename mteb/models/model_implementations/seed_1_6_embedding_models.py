@@ -260,7 +260,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
             images_base64 = [pil_to_base64(image) for image in images]
         outputs = []
         for image in images_base64:
-            if instruction == "":
+            if instruction == "":  # noqa: PLC1901
                 resp = multimodal_embedding(image_base64=[image])
             else:
                 resp = multimodal_embedding(

@@ -172,11 +172,11 @@ def _filter_models(
         lower = None
     else:
         # Multiplying by millions
-        lower = lower * 1e6
+        lower = lower * 1e6  # noqa: PLR6104
     if (upper == MAX_MODEL_SIZE) or (upper is None):
         upper = None
     else:
-        upper = upper * 1e6
+        upper = upper * 1e6  # noqa: PLR6104
     model_metas = mteb.get_model_metas(
         model_names=model_names,
         open_weights=availability,
@@ -190,7 +190,7 @@ def _filter_models(
     for model_meta in model_metas:
         is_model_zero_shot = model_meta.is_zero_shot_on(task_select)
         if is_model_zero_shot is None:
-            if zero_shot_setting in ["remove_unknown", "only_zero_shot"]:
+            if zero_shot_setting in ["remove_unknown", "only_zero_shot"]:  # noqa: PLR6201
                 continue
         elif not is_model_zero_shot:
             if zero_shot_setting == "only_zero_shot":
@@ -429,7 +429,7 @@ def on_page_load(session_data_json: str, request: gr.Request):
     return json.dumps(session_data), session_id
 
 
-def get_leaderboard_app(
+def get_leaderboard_app(  # noqa: PLR0914
     cache: ResultCache = ResultCache(), rebuild: bool = False
 ) -> gr.Blocks:
     """Returns a Gradio Blocks app for the MTEB leaderboard.
@@ -584,7 +584,7 @@ def get_leaderboard_app(
 
     logger.info("Step 7/7: Building Gradio interface and callbacks...")
     interface_start = time.time()
-    with gr.Blocks(
+    with gr.Blocks(  # noqa: PLR1702
         title="MTEB Leaderboard",
         fill_width=True,
     ) as demo:

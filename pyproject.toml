@@ -254,7 +254,8 @@ select = [
     "PGH",     # pygrep-hooks Use specific rule codes when ignoring type issues
     "LOG",     # logging
     "TC",      # type-checking
-    "T20",  # don't allow print
+    "T20",     # don't allow print
+    "PL",      # pylint
     "S",       # flake8-bandit
 ]
 
@@ -267,13 +268,19 @@ ignore = [
     "D107",     # Missing docstring in __init__
     "D415",     # First line should end with a period
     "C408",     # don't use unecc. collection call, e.g. dict over {}
+    "S404",    # subprocess import insecure
     "S311",     # standard pseudo-random generators are fine for non-crypto use
     "S104",     # allow binding to all interfaces in tests
     "S607",     # start a process with partial path
     "S603",   # allow subprocess calls with shell=True
+    "PLR2004",   # magic value comparison
+    "PLC0415",   # import outside of top-level
+    "PLR0912",  # too many branches
+    "PLR0915",  # too many statements
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
+preview = true
 
 
 [tool.ruff.lint.per-file-ignores]
@@ -293,8 +300,14 @@ typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
     "S603",  # allow subprocess calls in tests
 ]
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
-"mteb/tasks/*" = ["D", "DOC"]
-"mteb/models/model_implementations/*" = ["D", "DOC"]
+"mteb/tasks/*" = [
+    "D",
+    "DOC",
+]
+"mteb/models/model_implementations/*" = [
+    "D",
+    "DOC",
+]
 "mteb/benchmarks/benchmark.py" = [
     # pydantic would try to validate fields in Benchmark class
     "TC",
@@ -330,6 +343,9 @@ runtime-evaluated-base-classes = [
     "pydantic.BaseModel",
     "mteb.abstasks.task_metadata.TaskMetadata",  # https://github.com/astral-sh/ruff/issues/7866
 ]
+
+[tool.ruff.lint.pylint]
+max-args = 9
 
 [tool.semantic_release]
 branch = "main"

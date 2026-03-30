@@ -538,11 +538,11 @@ class LlamaEmbedNemotron(AbsEncoder):
             return ""
 
         # Override for STS and PairClassification tasks
-        if task_type in ["STS", "PairClassification"]:
+        if task_type in ["STS", "PairClassification"]:  # noqa: PLR6201
             return "Retrieve semantically similar text"
 
         # Override for BitextMining tasks
-        if task_type in ["BitextMining"]:
+        if task_type in ["BitextMining"]:  # noqa: PLR6201
             return "Retrieve parallel sentences"
 
         return instruction

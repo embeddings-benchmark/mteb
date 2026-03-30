@@ -64,7 +64,7 @@ class MLSUMClusteringP2P(AbsTaskClusteringLegacy):
             self.dataset_transform(lang)
         self.data_loaded = True
 
-    def _create_description(self, example):
+    def _create_description(self, example):  # noqa: PLR6301
         example["text"] = example["title"] + " " + example["text"]
         return example
 
@@ -137,7 +137,7 @@ class MLSUMClusteringP2PFast(AbsTaskClustering):
             self.dataset_transform(lang)
         self.data_loaded = True
 
-    def _create_description(self, example):
+    def _create_description(self, example):  # noqa: PLR6301
         example["text"] = example["title"] + " " + example["text"]
         return example
 

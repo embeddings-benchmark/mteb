@@ -53,7 +53,7 @@ class LCOEmbedding(AbsEncoder):
         # Pre-calculate max samples once
         self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
-    def encode(
+    def encode(  # noqa: PLR0914
         self,
         inputs: DataLoader[BatchedInput],
         *,

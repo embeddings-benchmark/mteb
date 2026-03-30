@@ -1,6 +1,6 @@
 import pytest
 
-from mteb._evaluators import RetrievalEvaluator
+from mteb._evaluators import RetrievalEvaluator  # noqa: PLC2701
 from mteb.abstasks.task_metadata import TaskMetadata
 from tests.mock_tasks import general_args
 
