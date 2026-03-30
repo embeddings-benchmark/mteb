@@ -84,15 +84,6 @@ EXCLUDED_BENCHMARKS = {
     # Older versions of included benchmarks
     "MTEB(eng, v1)",
     "MTEB(Multilingual, v1)",
-    # RTEB variants (all covered by RTEB(beta))
-    "RTEB(Code, beta)",
-    "RTEB(eng, beta)",
-    "RTEB(fin, beta)",
-    "RTEB(fra, beta)",
-    "RTEB(deu, beta)",
-    "RTEB(Health, beta)",
-    "RTEB(jpn, beta)",
-    "RTEB(Law, beta)",
 }
 
 
