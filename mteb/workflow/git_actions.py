@@ -299,7 +299,7 @@ class CreatePRAction(ReversibleAction):
     def do(self) -> None:
         """Create the pull request."""
         try:
-            from github import GithubException  # type: ignore[import-not-found]
+            from github import GithubException
         except ImportError:
             raise ImportError("PyGithub is required for CreatePRAction")
 
