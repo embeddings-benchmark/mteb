@@ -70,10 +70,7 @@ class CreateBranchAction(ReversibleAction):
 
 
 class CopyResultsAction(ReversibleAction):
-    """Copy result files to the remote directory. Undo by deleting copied files.
-
-    Handles all JSON files including model_meta.json and task result files.
-    """
+    """Copy selected result files and optional model metadata files to the remote repo."""
 
     def __init__(
         self, unsubmitted: dict[ModelMeta, list[Path]], remote_path: Path
@@ -89,12 +86,7 @@ class CopyResultsAction(ReversibleAction):
         self.copied_files: list[Path] = []
 
     def do(self) -> None:
-        """Copy result files to remote.
-
-        Copies all JSON files from the source directories including:
-        - Task result files (*.json)
-        - model_meta.json
-        """
+        """Copy listed json result files and optional model_meta.json to remote paths."""
         for model_meta, result_files in self.unsubmitted.items():
             if model_meta.name is None or model_meta.revision is None:
                 logger.warning(
@@ -126,7 +118,7 @@ class CopyResultsAction(ReversibleAction):
         logger.info(f"Copied {len(self.copied_files)} files to remote")
 
     def undo(self) -> None:
-        """Delete copied files."""
+        """Deletion of files copied during do()."""
         for file_path in self.copied_files:
             try:
                 file_path.unlink()
