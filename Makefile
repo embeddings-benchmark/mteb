@@ -1,6 +1,6 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
-	uv sync --extra image --group dev
+	uv sync --extra image --group dev github
 
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"

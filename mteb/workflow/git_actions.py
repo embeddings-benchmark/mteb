@@ -10,7 +10,7 @@ from mteb.workflow.reversible_workflow import ReversibleAction
 if TYPE_CHECKING:
     from pathlib import Path
 
-    from github.github import Github
+    from github import Github
 
     from mteb.models import ModelMeta
 

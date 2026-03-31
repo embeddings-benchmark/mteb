@@ -414,6 +414,8 @@ module = [
     "datasets.exceptions",
     "sklearn",
     "sklearn.*",
+    "github",
+    "github.*",
     "faiss",
     "vllm",
     "torchaudio",
