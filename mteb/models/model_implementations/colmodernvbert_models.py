@@ -1,24 +1,16 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import torch
-from tqdm.auto import tqdm
 
 from mteb._requires_package import (
     requires_image_dependencies,
     requires_package,
 )
-from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 from .colpali_models import ColPaliEngineWrapper, COLPALI_TRAINING_DATA
-
-if TYPE_CHECKING:
-    from torch.utils.data import DataLoader
-
-    from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, PromptType
 
 class ColModernVBertWrapper(ColPaliEngineWrapper):
     """Wrapper for ColModernVBert model."""
@@ -48,31 +40,6 @@ class ColModernVBertWrapper(ColPaliEngineWrapper):
         if "torch_dtype" in kwargs:
             self.mdl.to(kwargs["torch_dtype"])
 
-    def get_text_embeddings(
-        self,
-        texts,
-        batch_size: int = 32,
-        **kwargs,
-    ):
-        all_embeds = []
-        with torch.no_grad():
-            for batch in tqdm(texts, desc="Encoding texts"):
-                batch = [
-                    self.processor.query_prefix
-                    + t
-                    + self.processor.query_augmentation_token * 10
-                    for t in batch["text"]
-                ]
-                inputs = self.processor.process_texts(batch)
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                outs = self.encode_input(inputs)
-                all_embeds.extend(outs.cpu().to(torch.float32))
-
-        padded = torch.nn.utils.rnn.pad_sequence(
-            all_embeds, batch_first=True, padding_value=0
-        )
-        return padded
-
 class BiModernVBertWrapper(ColPaliEngineWrapper):
     """Wrapper for BiModernVBERT models."""
 
@@ -100,31 +67,6 @@ class BiModernVBertWrapper(ColPaliEngineWrapper):
 
         if "torch_dtype" in kwargs:
             self.mdl.to(kwargs["torch_dtype"])
-
-    def get_text_embeddings(
-        self,
-        texts,
-        batch_size: int = 32,
-        **kwargs,
-    ):
-        all_embeds = []
-        with torch.no_grad():
-            for batch in tqdm(texts, desc="Encoding texts"):
-                batch = [
-                    self.processor.query_prefix
-                    + t
-                    + self.processor.query_augmentation_token * 10
-                    for t in batch["text"]
-                ]
-                inputs = self.processor.process_texts(batch)
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                outs = self.encode_input(inputs)
-                all_embeds.extend(outs.cpu().to(torch.float32))
-
-        padded = torch.nn.utils.rnn.pad_sequence(
-            all_embeds, batch_first=True, padding_value=0
-        )
-        return padded
 
 COLMODERNVBERT_CITATION = """
 @misc{teiletche2025modernvbertsmallervisualdocument,
