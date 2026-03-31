@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import torch
+from tqdm.auto import tqdm
 
 from mteb._requires_package import (
     requires_image_dependencies,
@@ -47,6 +48,31 @@ class ColModernVBertWrapper(ColPaliEngineWrapper):
         if "torch_dtype" in kwargs:
             self.mdl.to(kwargs["torch_dtype"])
 
+    def get_text_embeddings(
+        self,
+        texts,
+        batch_size: int = 32,
+        **kwargs,
+    ):
+        all_embeds = []
+        with torch.no_grad():
+            for batch in tqdm(texts, desc="Encoding texts"):
+                batch = [
+                    self.processor.query_prefix
+                    + t
+                    + self.processor.query_augmentation_token * 10
+                    for t in batch["text"]
+                ]
+                inputs = self.processor.process_texts(batch)
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                outs = self.encode_input(inputs)
+                all_embeds.extend(outs.cpu().to(torch.float32))
+
+        padded = torch.nn.utils.rnn.pad_sequence(
+            all_embeds, batch_first=True, padding_value=0
+        )
+        return padded
+
 class BiModernVBertWrapper(ColPaliEngineWrapper):
     """Wrapper for BiModernVBERT models."""
 
@@ -75,35 +101,30 @@ class BiModernVBertWrapper(ColPaliEngineWrapper):
         if "torch_dtype" in kwargs:
             self.mdl.to(kwargs["torch_dtype"])
 
-
-class BiModernVBertWrapper(ColPaliEngineWrapper):
-    """Wrapper for BiModernVBERT models."""
-
-    def __init__(
+    def get_text_embeddings(
         self,
-        model_name: str = "ModernVBERT/bimodernvbert",
-        revision: str | None = None,
-        device: str | None = None,
-        **kwargs: Any,
-    ) -> None:
-        requires_image_dependencies()
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
+        texts,
+        batch_size: int = 32,
+        **kwargs,
+    ):
+        all_embeds = []
+        with torch.no_grad():
+            for batch in tqdm(texts, desc="Encoding texts"):
+                batch = [
+                    self.processor.query_prefix
+                    + t
+                    + self.processor.query_augmentation_token * 10
+                    for t in batch["text"]
+                ]
+                inputs = self.processor.process_texts(batch)
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                outs = self.encode_input(inputs)
+                all_embeds.extend(outs.cpu().to(torch.float32))
+
+        padded = torch.nn.utils.rnn.pad_sequence(
+            all_embeds, batch_first=True, padding_value=0
         )
-        from colpali_engine.models import BiModernVBert, BiModernVBertProcessor
-
-        super().__init__(
-            model_name=model_name,
-            model_class=BiModernVBert,
-            processor_class=BiModernVBertProcessor,
-            revision=revision,
-            device=device,
-            **kwargs,
-        )
-
-        if "torch_dtype" in kwargs:
-            self.mdl.to(kwargs["torch_dtype"])
-
+        return padded
 
 COLMODERNVBERT_CITATION = """
 @misc{teiletche2025modernvbertsmallervisualdocument,
