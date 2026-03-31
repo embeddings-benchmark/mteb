@@ -10,7 +10,8 @@ from mteb._requires_package import (
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
-from .colpali_models import ColPaliEngineWrapper, COLPALI_TRAINING_DATA
+from .colpali_models import COLPALI_TRAINING_DATA, ColPaliEngineWrapper
+
 
 class ColModernVBertWrapper(ColPaliEngineWrapper):
     """Wrapper for ColModernVBert model."""
@@ -40,6 +41,7 @@ class ColModernVBertWrapper(ColPaliEngineWrapper):
         if "torch_dtype" in kwargs:
             self.mdl.to(kwargs["torch_dtype"])
 
+
 class BiModernVBertWrapper(ColPaliEngineWrapper):
     """Wrapper for BiModernVBERT models."""
 
@@ -67,6 +69,7 @@ class BiModernVBertWrapper(ColPaliEngineWrapper):
 
         if "torch_dtype" in kwargs:
             self.mdl.to(kwargs["torch_dtype"])
+
 
 COLMODERNVBERT_CITATION = """
 @misc{teiletche2025modernvbertsmallervisualdocument,
