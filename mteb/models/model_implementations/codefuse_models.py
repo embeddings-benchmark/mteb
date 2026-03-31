@@ -443,6 +443,9 @@ f2llmv2_prompts_dict.update(
         "SciDocsRR-VN": "Given a title of a scientific paper, retrieve the titles of other relevant papers.",
         "AskUbuntuDupQuestions-VN": "Retrieve duplicate questions from AskUbuntu forum.",
         "StackOverflowDupQuestions-VN": "Retrieve duplicate questions from StackOverflow forum.",
+        "MKQARetrieval": "Given a question, retrieve the answer.",
+        "WisesightSentimentClassification.v2": "Classify the sentiment of the given text.",
+        "SpanishSentimentClassification.v2": "Classify the sentiment of the given text.",
     }
 )
 
