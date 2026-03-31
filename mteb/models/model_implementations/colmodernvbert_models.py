@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput, PromptType
 
 class ColModernVBertWrapper(ColPaliEngineWrapper):
-    """Wrapper for ColModernVBERT models."""
+    """Wrapper for ColModernVBert model."""
 
     def __init__(
         self,
@@ -35,61 +35,19 @@ class ColModernVBertWrapper(ColPaliEngineWrapper):
         )
         from colpali_engine.models import ColModernVBert, ColModernVBertProcessor
 
-        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
-
-        self.mdl = ColModernVBert.from_pretrained(
-            model_name,
-            device_map=self.device,
-            adapter_kwargs={"revision": revision},
-            **kwargs,
-        )
-        self.mdl.eval()
-
-        self.processor = ColModernVBertProcessor.from_pretrained(
-            model_name,
+        super().__init__(
+            model_name=model_name,
+            model_class=ColModernVBert,
+            processor_class=ColModernVBertProcessor,
             revision=revision,
-        )
-
-    def get_text_embeddings(
-        self,
-        texts: DataLoader,
-        batch_size: int = 32,
-        **kwargs: Any,
-    ) -> torch.Tensor:
-        all_embeds = []
-        with torch.no_grad():
-            for batch in texts:
-                inputs = self.processor.process_texts(batch["text"])
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                outs = self.encode_input(inputs)
-                all_embeds.extend(outs.cpu().to(torch.float32))
-
-        padded = torch.nn.utils.rnn.pad_sequence(
-            all_embeds, batch_first=True, padding_value=0
-        )
-        return padded
-
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        return super().encode(
-            inputs,
-            task_metadata=task_metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            prompt_type=prompt_type,
+            device=device,
             **kwargs,
         )
 
+        if "torch_dtype" in kwargs:
+            self.mdl.to(kwargs["torch_dtype"])
 
-class BiModernVBertWrapper(AbsEncoder):
+class BiModernVBertWrapper(ColPaliEngineWrapper):
     """Wrapper for BiModernVBERT models."""
 
     def __init__(
@@ -105,83 +63,46 @@ class BiModernVBertWrapper(AbsEncoder):
         )
         from colpali_engine.models import BiModernVBert, BiModernVBertProcessor
 
-        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
-
-        self.mdl = BiModernVBert.from_pretrained(
-            model_name,
-            device_map=self.device,
+        super().__init__(
+            model_name=model_name,
+            model_class=BiModernVBert,
+            processor_class=BiModernVBertProcessor,
             revision=revision,
+            device=device,
             **kwargs,
         )
-        self.mdl.eval()
 
-        self.processor = BiModernVBertProcessor.from_pretrained(model_name, revision=revision)
+        if "torch_dtype" in kwargs:
+            self.mdl.to(kwargs["torch_dtype"])
 
-    def encode(
+
+class BiModernVBertWrapper(ColPaliEngineWrapper):
+    """Wrapper for BiModernVBERT models."""
+
+    def __init__(
         self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
+        model_name: str = "ModernVBERT/bimodernvbert",
+        revision: str | None = None,
+        device: str | None = None,
         **kwargs: Any,
-    ) -> Array:
-        text_embeddings = None
-        image_embeddings = None
-        if "text" in inputs.dataset.features:
-            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
-        if "image" in inputs.dataset.features:
-            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
+    ) -> None:
+        requires_image_dependencies()
+        requires_package(
+            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
+        )
+        from colpali_engine.models import BiModernVBert, BiModernVBertProcessor
 
-        if text_embeddings is not None and image_embeddings is not None:
-            if len(text_embeddings) != len(image_embeddings):
-                raise ValueError(
-                    "The number of texts and images must have the same length"
-                )
-            return text_embeddings + image_embeddings
-        if text_embeddings is not None:
-            return text_embeddings
-        if image_embeddings is not None:
-            return image_embeddings
-        raise ValueError("No text or image inputs found")
-
-    def get_text_embeddings(
-        self,
-        texts: DataLoader,
-        batch_size: int = 32,
-        **kwargs: Any,
-    ) -> torch.Tensor:
-        all_embeds = []
-        with torch.no_grad():
-            for batch in texts:
-                inputs = self.processor.process_texts(batch["text"])
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                outs = self.mdl(**inputs)
-                all_embeds.extend(outs.cpu().to(torch.float32))
-        return torch.nn.utils.rnn.pad_sequence(
-            all_embeds, batch_first=True, padding_value=0
+        super().__init__(
+            model_name=model_name,
+            model_class=BiModernVBert,
+            processor_class=BiModernVBertProcessor,
+            revision=revision,
+            device=device,
+            **kwargs,
         )
 
-    def get_image_embeddings(
-        self,
-        images: DataLoader,
-        batch_size: int = 32,
-        **kwargs: Any,
-    ) -> torch.Tensor:
-        all_embeds = []
-        with torch.no_grad():
-            for batch in images:
-                inputs = self.processor.process_images(batch["image"])
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                outs = self.mdl(**inputs)
-                all_embeds.extend(outs.cpu().to(torch.float32))
-        return torch.nn.utils.rnn.pad_sequence(
-            all_embeds, batch_first=True, padding_value=0
-        )
-
-    def similarity(self, a, b):
-        return self.processor.score(a, b, device=self.device)
+        if "torch_dtype" in kwargs:
+            self.mdl.to(kwargs["torch_dtype"])
 
 
 COLMODERNVBERT_CITATION = """
