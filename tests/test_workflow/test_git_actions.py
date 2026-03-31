@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import sys
 from pathlib import Path
-from types import SimpleNamespace
 
 from mteb.workflow.git_actions import (
     CommitAction,
@@ -138,9 +136,6 @@ def test_push_to_fork_action_do_and_undo(monkeypatch, tmp_path: Path) -> None:
 
 
 def test_create_pr_action_do_and_undo(monkeypatch) -> None:
-    class FakeGithubError(Exception):
-        pass
-
     class FakePR:
         def __init__(self):
             self.number = 7
@@ -166,12 +161,6 @@ def test_create_pr_action_do_and_undo(monkeypatch) -> None:
 
         def get_repo(self, _name: str):
             return self.repo
-
-    monkeypatch.setitem(
-        sys.modules,
-        "github",
-        SimpleNamespace(GithubException=FakeGithubError),
-    )
 
     gh = FakeGh()
     action = CreatePRAction(

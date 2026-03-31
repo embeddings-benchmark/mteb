@@ -301,7 +301,9 @@ class CreatePRAction(ReversibleAction):
         try:
             from github import GithubException
         except ImportError:
-            raise ImportError("PyGithub is required for CreatePRAction")
+            raise ImportError(
+                "PyGithub is required for CreatePRAction. To install it run `pip install mteb[github]`"
+            )
 
         try:
             upstream = self.gh.get_repo(self.upstream_repo_name)
