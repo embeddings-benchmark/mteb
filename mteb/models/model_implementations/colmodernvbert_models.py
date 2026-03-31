@@ -11,14 +11,13 @@ from mteb._requires_package import (
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
+from .colpali_models import ColPaliEngineWrapper, COLPALI_TRAINING_DATA
+
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
-
-from .colpali_models import ColPaliEngineWrapper
-
 
 class ColModernVBertWrapper(ColPaliEngineWrapper):
     """Wrapper for ColModernVBERT models."""
@@ -36,13 +35,19 @@ class ColModernVBertWrapper(ColPaliEngineWrapper):
         )
         from colpali_engine.models import ColModernVBert, ColModernVBertProcessor
 
-        super().__init__(
-            model_name=model_name,
-            model_class=ColModernVBert,
-            processor_class=ColModernVBertProcessor,
-            revision=revision,
-            device=device,
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+
+        self.mdl = ColModernVBert.from_pretrained(
+            model_name,
+            device_map=self.device,
+            adapter_kwargs={"revision": revision},
             **kwargs,
+        )
+        self.mdl.eval()
+
+        self.processor = ColModernVBertProcessor.from_pretrained(
+            model_name,
+            revision=revision,
         )
 
     def get_text_embeddings(
@@ -105,12 +110,12 @@ class BiModernVBertWrapper(AbsEncoder):
         self.mdl = BiModernVBert.from_pretrained(
             model_name,
             device_map=self.device,
-            adapter_kwargs={"revision": revision},
+            revision=revision,
             **kwargs,
         )
         self.mdl.eval()
 
-        self.processor = BiModernVBertProcessor.from_pretrained(model_name)
+        self.processor = BiModernVBertProcessor.from_pretrained(model_name, revision=revision)
 
     def encode(
         self,
@@ -196,28 +201,27 @@ colmodernvbert = ModelMeta(
     loader=ColModernVBertWrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float32,
-        trust_remote_code=True,
     ),
     name="ModernVBERT/colmodernvbert",
     model_type=["late-interaction"],
     languages=["eng-Latn"],
-    revision="e1e601df2542530091ade8a7b43c0bee99b58432",
-    release_date="2025-10-02",
+    revision="9052fc0ef8acf9fb764681ce0315a7f89ea7d276",
+    release_date="2025-10-01",
     modalities=["image", "text"],
-    n_parameters=250_000_000,
-    n_embedding_parameters=None,
-    memory_usage_mb=None,
+    n_parameters=252_002_304,
+    n_embedding_parameters=38_713_344,
+    memory_usage_mb=961,
     max_tokens=8192,
     embed_dim=128,
     license="mit",
     open_weights=True,
-    public_training_code="https://github.com/illuin-tech/colpali",
-    public_training_data=None,
+    public_training_code="https://github.com/illuin-tech/modernvbert",
+    public_training_data="https://huggingface.co/collections/ModernVBERT/colmodernvbert",
     framework=["ColPali", "safetensors"],
     reference="https://huggingface.co/ModernVBERT/colmodernvbert",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=COLPALI_TRAINING_DATA,
     citation=COLMODERNVBERT_CITATION,
 )
 
@@ -226,27 +230,26 @@ bimodernvbert = ModelMeta(
     loader=BiModernVBertWrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float32,
-        trust_remote_code=True,
     ),
     name="ModernVBERT/bimodernvbert",
     model_type=["dense"],
     languages=["eng-Latn"],
-    revision=None,
-    release_date="2025-10-02",
+    revision="09ed8566839b68207c76e4869f1bb4406edc2fcd",
+    release_date="2025-10-01",
     modalities=["image", "text"],
-    n_parameters=250_000_000,
-    n_embedding_parameters=None,
-    memory_usage_mb=None,
+    n_parameters=252_002_304,
+    n_embedding_parameters=38_713_344,
+    memory_usage_mb=961,
     max_tokens=8192,
     embed_dim=None,
     license="mit",
     open_weights=True,
-    public_training_code="https://github.com/illuin-tech/colpali",
-    public_training_data=None,
+    public_training_code="https://github.com/illuin-tech/modernvbert",
+    public_training_data="https://huggingface.co/collections/ModernVBERT/colmodernvbert",
     framework=["ColPali", "safetensors"],
     reference="https://huggingface.co/ModernVBERT/bimodernvbert",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=COLPALI_TRAINING_DATA,
     citation=COLMODERNVBERT_CITATION,
 )
