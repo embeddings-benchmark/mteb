@@ -329,7 +329,6 @@ strict = true
 runtime-evaluated-base-classes = [
     "pydantic.BaseModel",
     "mteb.abstasks.task_metadata.TaskMetadata",  # https://github.com/astral-sh/ruff/issues/7866
-    "mteb.benchmarks.leaderboard_menu.MenuEntry",
 ]
 
 [tool.semantic_release]

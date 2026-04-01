@@ -1,10 +1,15 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 import mteb
-from mteb.benchmarks import Benchmark  # noqa: TC001
 from mteb.benchmarks.benchmarks import MTEB_multilingual_v2
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from mteb.benchmarks import Benchmark
 
 DEFAULT_BENCHMARK_NAME = MTEB_multilingual_v2.name
 
@@ -22,7 +27,7 @@ class MenuEntry:
     """
 
     name: str | None
-    benchmarks: list[Benchmark | MenuEntry]
+    benchmarks: Sequence[Benchmark | MenuEntry]
     description: str | None = None
     open: bool = False
     size: str = "sm"
