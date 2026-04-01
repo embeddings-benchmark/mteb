@@ -96,7 +96,7 @@ class BGEVLModel(AbsEncoder):
             for img in images:
                 if isinstance(img, Image.Image):
                     bytes_io = io.BytesIO()
-                    img.save(bytes_io, format="RGB")
+                    img.save(bytes_io, format="PNG")
                     bytes_io.seek(0)
                     converted_images.append(bytes_io)
                 else:
@@ -122,7 +122,7 @@ class BGEVLModel(AbsEncoder):
             for img in images:
                 if isinstance(img, Image.Image):
                     bytes_io = io.BytesIO()
-                    img.save(bytes_io, format="RGB")
+                    img.save(bytes_io, format="PNG")
                     bytes_io.seek(0)
                     converted_images.append(bytes_io)
                 else:
