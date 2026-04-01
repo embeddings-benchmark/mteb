@@ -40,11 +40,14 @@ def _is_text_only_task(task):
 def _get_expected_task_names(benchmark, model_name):
     """Get public task names, filtering by model capabilities."""
     task_names = []
-    for task in benchmark:
-        if not task.metadata.is_public:
-            continue
+    benchmark_tasks = []
+    for task in benchmark.tasks:
         if task.is_aggregate:
-            task_names.append(task.metadata.name)
+            benchmark_tasks.extend(task.metadata.tasks)
+        else:
+            benchmark_tasks.append(task)
+    for task in benchmark_tasks:
+        if not task.metadata.is_public:
             continue
         if not _is_text_only_task(task):
             continue
