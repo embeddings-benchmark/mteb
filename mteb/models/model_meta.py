@@ -1177,8 +1177,7 @@ class ModelMeta(BaseModel):
         token: str | None = None,
         push_to_hub: bool = False,
         push_eval_results: bool = False,
-        push_eval_results_user: str | None = None,
-        push_eval_results_create_pr: bool = False,
+        create_pr: bool = False,
     ) -> None:
         """Generate or update a model card with evaluation results from MTEB.
 
@@ -1193,8 +1192,7 @@ class ModelMeta(BaseModel):
             token: Optional token for pushing to Hugging Face Hub.
             push_to_hub: Whether to push the updated model card to the Hub if it exists there.
             push_eval_results: Whether to also push eval results to the Hub.
-            push_eval_results_user: The user or organization of results source for pushing eval results.
-            push_eval_results_create_pr: Whether to create a pull request when pushing eval results.
+            create_pr: Whether to create a pull request when pushing eval results.
         """
         from mteb.cache import ResultCache
 
@@ -1216,31 +1214,8 @@ class ModelMeta(BaseModel):
             for b in benchmarks:
                 all_tasks.extend(b.tasks)
 
-        benchmark_results = results_cache.load_results(
-            [self.name], all_tasks if all_tasks else None, only_main_score=True
-        )
-        eval_results = []
-        for models_results in benchmark_results.model_results:
-            for task_result in models_results.task_results:
-                eval_results.extend(task_result.get_hf_eval_results())
-
         existing_model_card_data: ModelCardData = (
             existing_model_card.data if existing_model_card else ModelCardData()  # type: ignore[assignment]
-        )
-
-        if existing_model_card_data.eval_results is None:
-            existing_model_card_data.model_name = (
-                existing_model_card_data.model_name or self.name
-            )
-        else:
-            unique_eval_results = {
-                eval_result.unique_identifier: eval_result
-                for eval_result in existing_model_card_data.eval_results + eval_results
-            }
-            eval_results = list(unique_eval_results.values())
-
-        existing_model_card_data.eval_results = sorted(
-            eval_results, key=lambda x: x.unique_identifier
         )
 
         if existing_model_card_data.tags is None:
@@ -1263,11 +1238,16 @@ class ModelMeta(BaseModel):
                 benchmarks or [],
             )
 
+        model_repo_exist = repo_exists(
+            existing_model_card_id_or_path, repo_type="model"
+        )
         if push_to_hub and existing_model_card_id_or_path:
             existing_model_card_id_or_path = str(existing_model_card_id_or_path)
-            if repo_exists(existing_model_card_id_or_path):
+            if model_repo_exist:
                 existing_model_card.push_to_hub(
-                    existing_model_card_id_or_path, token=token
+                    existing_model_card_id_or_path,
+                    token=token,
+                    create_pr=create_pr,
                 )
             else:
                 msg = f"Repository {existing_model_card_id_or_path} does not exist on the Hub. Skipping push to hub."
@@ -1275,12 +1255,12 @@ class ModelMeta(BaseModel):
                 warnings.warn(msg)
         existing_model_card.save(output_path)
 
-        if push_eval_results:
+        if push_eval_results and existing_model_card_id_or_path and model_repo_exist:
             self.push_eval_results(
-                user=push_eval_results_user,
+                str(existing_model_card_id_or_path),
                 tasks=tasks,
                 cache=results_cache,
-                create_pr=push_eval_results_create_pr,
+                create_pr=create_pr,
             )
 
     def push_eval_results(
