@@ -140,7 +140,7 @@ class AbsTaskRegression(AbsTaskClassification):
         )
 
     @staticmethod
-    def stratified_subsampling(
+    def stratified_subsampling(  # type: ignore[override]
         dataset_dict: datasets.DatasetDict,
         *,
         seed: int,
