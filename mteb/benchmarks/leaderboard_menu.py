@@ -4,14 +4,11 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 import mteb
-from mteb.benchmarks.benchmarks import MTEB_multilingual_v2
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
     from mteb.benchmarks import Benchmark
-
-DEFAULT_BENCHMARK_NAME = MTEB_multilingual_v2.name
 
 
 @dataclass

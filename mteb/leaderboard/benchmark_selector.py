@@ -5,14 +5,12 @@ from typing import TYPE_CHECKING
 import gradio as gr
 
 from mteb import Benchmark
-from mteb.benchmarks.leaderboard_menu import (
-    DEFAULT_BENCHMARK_NAME,
-    GP_BENCHMARK_ENTRIES,
-    MenuEntry,
-)
+from mteb.benchmarks.benchmarks import MTEB_multilingual_v2
 
 if TYPE_CHECKING:
     from mteb.benchmarks.leaderboard_menu import MenuEntry
+
+DEFAULT_BENCHMARK_NAME = MTEB_multilingual_v2.name
 
 
 def _create_button(
@@ -110,9 +108,3 @@ def _render_benchmark_item(
             )
 
     return button_counter
-
-
-if __name__ == "__main__":
-    with gr.Blocks() as b:
-        selector = _make_selector(GP_BENCHMARK_ENTRIES)
-    b.launch()
