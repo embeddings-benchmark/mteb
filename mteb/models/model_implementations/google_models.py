@@ -61,6 +61,147 @@ GECKO_TRAINING_DATA = {
     "MIRACLRetrievalHardNegatives",
 }
 
+# Per-task prompt mapping for Gemini Embedding 2, from issue #4260.
+# Values are Google API task type constants translated from Google's recommendations.
+GEMINI_EMBEDDING_2_PROMPTS = {
+    # Per-task overrides (priority 2 in get_prompt_name resolution)
+    "AILAStatutes": "CLASSIFICATION",
+    "AfriSentiClassification": "CLASSIFICATION",
+    "AlloProfClusteringS2S.v2": "CLUSTERING",
+    "AlloprofReranking": "RETRIEVAL_DOCUMENT",
+    "AmazonCounterfactualClassification": "CLASSIFICATION",
+    "ArXivHierarchicalClusteringP2P": "RETRIEVAL_DOCUMENT",
+    "ArXivHierarchicalClusteringS2S": "CLUSTERING",
+    "ArguAna": "FACT_VERIFICATION",
+    "ArmenianParaphrasePC": "FACT_VERIFICATION",
+    "BUCC.v2": "QUESTION_ANSWERING",
+    "BelebeleRetrieval": "RETRIEVAL_DOCUMENT",
+    "BibleNLPBitextMining": "SEMANTIC_SIMILARITY",
+    "BigPatentClustering.v2": "CLUSTERING",
+    "BiorxivClusteringP2P.v2": "CLASSIFICATION",
+    "BornholmBitextMining": "SEMANTIC_SIMILARITY",
+    "BrazilianToxicTweetsClassification": "CLASSIFICATION",
+    "BulgarianStoreReviewSentimentClassfication": "CLASSIFICATION",
+    "CEDRClassification": "CLASSIFICATION",
+    "CLSClusteringP2P.v2": "CLUSTERING",
+    "CSFDSKMovieReviewSentimentClassification": "CLASSIFICATION",
+    "CTKFactsNLI": "CLASSIFICATION",
+    "CataloniaTweetClassification": "CLUSTERING",
+    "Core17InstructionRetrieval": "QUESTION_ANSWERING",
+    "CovidRetrieval": "RETRIEVAL_DOCUMENT",
+    "CyrillicTurkicLangClassification": "CLUSTERING",
+    "CzechProductReviewSentimentClassification": "CLASSIFICATION",
+    "DBpediaClassification": "CLASSIFICATION",
+    "DalajClassification": "FACT_VERIFICATION",
+    "DiaBlaBitextMining": "SEMANTIC_SIMILARITY",
+    "EstonianValenceClassification": "CLASSIFICATION",
+    "FaroeseSTS": "SEMANTIC_SIMILARITY",
+    "FilipinoShopeeReviewsClassification": "CLASSIFICATION",
+    "FinParaSTS": "RETRIEVAL_DOCUMENT",
+    "FinancialPhrasebankClassification": "SEMANTIC_SIMILARITY",
+    "FloresBitextMining": "SEMANTIC_SIMILARITY",
+    "GermanSTSBenchmark": "SEMANTIC_SIMILARITY",
+    "GreekLegalCodeClassification": "CLUSTERING",
+    "GujaratiNewsClassification": "CLUSTERING",
+    "HALClusteringS2S.v2": "CLUSTERING",
+    "HagridRetrieval": "SEMANTIC_SIMILARITY",
+    "IN22GenBitextMining": "SEMANTIC_SIMILARITY",
+    "IndicCrosslingualSTS": "RETRIEVAL_DOCUMENT",
+    "IndicGenBenchFloresBitextMining": "SEMANTIC_SIMILARITY",
+    "IndicLangClassification": "CLUSTERING",
+    "IndonesianIdClickbaitClassification": "CLASSIFICATION",
+    "IsiZuluNewsClassification": "QUESTION_ANSWERING",
+    "ItaCaseholdClassification": "CLASSIFICATION",
+    "JSICK": "FACT_VERIFICATION",
+    "KorHateSpeechMLClassification": "CLASSIFICATION",
+    "KorSarcasmClassification": "CLASSIFICATION",
+    "KurdishSentimentClassification": "CLASSIFICATION",
+    "LEMBPasskeyRetrieval": "CLUSTERING",
+    "LegalBenchCorporateLobbying": "RETRIEVAL_DOCUMENT",
+    "MIRACLRetrievalHardNegatives": "RETRIEVAL_DOCUMENT",
+    "MLQARetrieval": "QUESTION_ANSWERING",
+    "MacedonianTweetSentimentClassification": "CLASSIFICATION",
+    "MalteseNewsClassification": "CLUSTERING",
+    "MasakhaNEWSClassification": "CLUSTERING",
+    "MasakhaNEWSClusteringS2S": "CLUSTERING",
+    "MassiveIntentClassification": "CLASSIFICATION",
+    "MedrxivClusteringP2P.v2": "CLUSTERING",
+    "MultiEURLEXMultilabelClassification": "CLUSTERING",
+    "MultiHateClassification": "CLASSIFICATION",
+    "NTREXBitextMining": "SEMANTIC_SIMILARITY",
+    "NepaliNewsClassification": "CLUSTERING",
+    "News21InstructionRetrieval": "CLASSIFICATION",
+    "NollySentiBitextMining": "FACT_VERIFICATION",
+    "NordicLangClassification": "CLUSTERING",
+    "NorwegianCourtsBitextMining": "FACT_VERIFICATION",
+    "NusaParagraphEmotionClassification": "CLASSIFICATION",
+    "NusaTranslationBitextMining": "QUESTION_ANSWERING",
+    "NusaX-senti": "CLASSIFICATION",
+    "NusaXBitextMining": "QUESTION_ANSWERING",
+    "OdiaNewsClassification": "CLUSTERING",
+    "OpusparcusPC": "SEMANTIC_SIMILARITY",
+    "PAC": "FACT_VERIFICATION",
+    "PawsXPairClassification": "FACT_VERIFICATION",
+    "PlscClusteringP2P.v2": "CLUSTERING",
+    "PoemSentimentClassification": "SEMANTIC_SIMILARITY",
+    "PolEmo2.0-OUT": "CLASSIFICATION",
+    "PpcPC": "CLASSIFICATION",
+    "PunjabiNewsClassification": "FACT_VERIFICATION",
+    "RTE3": "CLASSIFICATION",
+    "Robust04InstructionRetrieval": "QUESTION_ANSWERING",
+    "RomaniBibleClustering": "SEMANTIC_SIMILARITY",
+    "RuBQReranking": "CLASSIFICATION",
+    "SCIDOCS": "FACT_VERIFICATION",
+    "SIB200ClusteringS2S": "CLUSTERING",
+    "SICK-R": "SEMANTIC_SIMILARITY",
+    "SNLHierarchicalClusteringP2P": "CLUSTERING",
+    "STS12": "SEMANTIC_SIMILARITY",
+    "STS13": "SEMANTIC_SIMILARITY",
+    "STS14": "SEMANTIC_SIMILARITY",
+    "STS15": "SEMANTIC_SIMILARITY",
+    "STS17": "SEMANTIC_SIMILARITY",
+    "STS22.v2": "SEMANTIC_SIMILARITY",
+    "STSB": "SEMANTIC_SIMILARITY",
+    "STSBenchmark": "SEMANTIC_SIMILARITY",
+    "STSES": "QUESTION_ANSWERING",
+    "ScalaClassification": "FACT_VERIFICATION",
+    "SemRel24STS": "QUESTION_ANSWERING",
+    "SentimentAnalysisHindi": "CLASSIFICATION",
+    "SinhalaNewsClassification": "CLUSTERING",
+    "SiswatiNewsClassification": "QUESTION_ANSWERING",
+    "SlovakMovieReviewSentimentClassification": "CLASSIFICATION",
+    "SpartQA": "SEMANTIC_SIMILARITY",
+    "SprintDuplicateQuestions": "SEMANTIC_SIMILARITY",
+    "StackExchangeClustering.v2": "CLUSTERING",
+    "StackOverflowQA": "QUESTION_ANSWERING",
+    "StatcanDialogueDatasetRetrieval": "RETRIEVAL_DOCUMENT",
+    "SwahiliNewsClassification": "CLUSTERING",
+    "SwednClusteringP2P": "CLUSTERING",
+    "SwissJudgementClassification": "RETRIEVAL_DOCUMENT",
+    "T2Reranking": "CLASSIFICATION",
+    "TERRa": "CLASSIFICATION",
+    "TRECCOVID": "FACT_VERIFICATION",
+    "Tatoeba": "SEMANTIC_SIMILARITY",
+    "TempReasonL1": "SEMANTIC_SIMILARITY",
+    "ToxicConversationsClassification": "CLASSIFICATION",
+    "TswanaNewsClassification": "CLUSTERING",
+    "TweetTopicSingleClassification": "CLUSTERING",
+    "TwitterHjerneRetrieval": "RETRIEVAL_DOCUMENT",
+    "TwitterURLCorpus": "SEMANTIC_SIMILARITY",
+    "VoyageMMarcoReranking": "SEMANTIC_SIMILARITY",
+    "WebLINXCandidatesReranking": "CLASSIFICATION",
+    "WikiCitiesClustering": "CLUSTERING",
+    "WikiClusteringP2P.v2": "CLUSTERING",
+    "WikipediaRerankingMultilingual": "RETRIEVAL_DOCUMENT",
+    "WikipediaRetrievalMultilingual": "FACT_VERIFICATION",
+    "WinoGrande": "QUESTION_ANSWERING",
+    "XNLI": "SEMANTIC_SIMILARITY",
+    "indonli": "CLASSIFICATION",
+    # Fallbacks for tasks not in the per-task mapping
+    PromptType.query.value: "RETRIEVAL_QUERY",
+    PromptType.document.value: "RETRIEVAL_DOCUMENT",
+}
+
 
 class GoogleTextEmbeddingModel(AbsEncoder):
     def __init__(
@@ -151,6 +292,106 @@ class GoogleTextEmbeddingModel(AbsEncoder):
             google_task_type=google_task_type,
             show_progress_bar=show_progress_bar,
         )
+
+
+class GoogleGeminiEmbeddingModel(AbsEncoder):
+    def __init__(
+        self,
+        model_name: str,
+        sep: str = " ",
+        model_prompts: dict[str, str] | None = None,
+        **kwargs,
+    ) -> None:
+        requires_package(
+            self, "google.genai", model_name, "pip install 'mteb[google_genai]'"
+        )
+        from google import genai
+
+        self.model_name = model_name
+        self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
+        self.client = genai.Client()
+
+    def _embed(
+        self,
+        contents: list,
+        google_task_type: str | None = None,
+        show_progress_bar: bool = False,
+        dimensionality: int | None = 3072,
+    ) -> np.ndarray:
+        from google.genai.types import EmbedContentConfig
+
+        config = EmbedContentConfig(
+            taskType=google_task_type,
+            outputDimensionality=dimensionality,
+        )
+
+        max_batch_size = 16
+        batches = [
+            contents[i : i + max_batch_size]
+            for i in range(0, len(contents), max_batch_size)
+        ]
+
+        all_embeddings = []
+        for batch in tqdm(batches, leave=False, disable=not show_progress_bar):
+            try:
+                response = self.client.models.embed_content(
+                    model=self.model_name, contents=batch, config=config
+                )
+            except Exception as e:
+                print("Retrying once after error:", e)
+                response = self.client.models.embed_content(
+                    model=self.model_name, contents=batch, config=config
+                )
+            all_embeddings.extend(
+                [embedding.values for embedding in response.embeddings]
+            )
+
+        return np.asarray(all_embeddings)
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+        google_task_type = self.model_prompts.get(prompt_name)
+
+        show_progress_bar = (
+            False
+            if "show_progress_bar" not in kwargs
+            else kwargs.pop("show_progress_bar")
+        )
+
+        if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
+            contents = []
+            for batch in inputs:
+                for text, image in zip(batch["text"], batch["image"]):
+                    contents.append([text, image])
+            return self._embed(
+                contents,
+                google_task_type=google_task_type,
+                show_progress_bar=show_progress_bar,
+            )
+        elif "text" in inputs.dataset.features:
+            texts = [text for batch in inputs for text in batch["text"]]
+            return self._embed(
+                texts,
+                google_task_type=google_task_type,
+                show_progress_bar=show_progress_bar,
+            )
+        elif "image" in inputs.dataset.features:
+            images = [img for batch in inputs for img in batch["image"]]
+            return self._embed(
+                images,
+                google_task_type=google_task_type,
+                show_progress_bar=show_progress_bar,
+            )
+        raise ValueError("No text or image features found in inputs")
 
 
 google_text_emb_004 = ModelMeta(
@@ -258,16 +499,17 @@ google_gemini_embedding_001 = ModelMeta(
 )
 
 google_gemini_embedding_2_preview = ModelMeta(
-    loader=GoogleTextEmbeddingModel,  # type: ignore[call-arg]
+    loader=GoogleGeminiEmbeddingModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
-        model_prompts=MODEL_PROMPTS,
+        model_prompts=GEMINI_EMBEDDING_2_PROMPTS,
     ),
     name="google/gemini-embedding-2-preview",
     model_type=["dense"],
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
+    modalities=["image", "text"],
     open_weights=False,
     revision="1",
-    release_date=None,
+    release_date="2025-03-25",
     n_parameters=None,
     n_embedding_parameters=None,
     memory_usage_mb=None,
