@@ -201,6 +201,13 @@ class BGEVLModel(AbsEncoder):
                 texts = list(batch["text"]) if contains_text else None
                 images = batch["image"] if contains_image else None
 
+                # Some multimodal corpora are image-only and keep a nullable text column.
+                if texts is not None:
+                    if all(text is None for text in texts):
+                        texts = None
+                    elif any(text is None for text in texts):
+                        texts = ["" if text is None else text for text in texts]
+
                 if texts is not None and len(texts) != batch_size:
                     raise ValueError("Mismatch between batch size and text field size.")
 

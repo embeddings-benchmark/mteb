@@ -224,6 +224,7 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     collated = {}
     for key in batch[0]:
         if key in (
+            "text",  # some multimodal corpora have optional text fields
             "image",  # images can be with different sizes
             "conversation",  # conversations are lists of varying lengths
             "audio",  # audio can have different lengths
