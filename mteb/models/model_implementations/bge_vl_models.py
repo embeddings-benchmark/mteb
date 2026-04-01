@@ -169,9 +169,7 @@ class BGEVLModel(AbsEncoder):
             for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
                 batch_size = len(batch["text"] if contains_text else batch["image"])
                 texts = list(batch["text"]) if contains_text else None
-                images = (
-                    self._prepare_images(batch["image"]) if contains_image else None
-                )
+                images = batch["image"] if contains_image else None
 
                 if texts is not None and len(texts) != batch_size:
                     raise ValueError("Mismatch between batch size and text field size.")
