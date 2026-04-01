@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import io
 from typing import TYPE_CHECKING, Any
 
 import torch
 import torch.nn.functional as F
+from PIL import Image
 from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_image_dependencies
@@ -12,7 +14,6 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
-    from PIL import Image
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -90,6 +91,18 @@ class BGEVLModel(AbsEncoder):
         text: list[str] | None,
         images: list[Image.Image] | None,
     ) -> torch.Tensor:
+        if images is not None:
+            converted_images = []
+            for img in images:
+                if isinstance(img, Image.Image):
+                    bytes_io = io.BytesIO()
+                    img.save(bytes_io, format="RGB")
+                    bytes_io.seek(0)
+                    converted_images.append(bytes_io)
+                else:
+                    converted_images.append(img)
+            images = converted_images
+
         return self.model.encode(images=images, text=text)
 
     def _encode_with_mllm_api(
@@ -99,6 +112,23 @@ class BGEVLModel(AbsEncoder):
         images: list[Image.Image] | None,
         task_instruction: str,
     ) -> torch.Tensor:
+        import io
+
+        from PIL import Image
+
+        # Convert PIL Images to BytesIO objects so Image.open() works in data_process
+        if images is not None:
+            converted_images = []
+            for img in images:
+                if isinstance(img, Image.Image):
+                    bytes_io = io.BytesIO()
+                    img.save(bytes_io, format="RGB")
+                    bytes_io.seek(0)
+                    converted_images.append(bytes_io)
+                else:
+                    converted_images.append(img)
+            images = converted_images
+
         if images is not None and text is not None:
             query_inputs = self.model.data_process(
                 text=text,
