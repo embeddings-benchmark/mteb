@@ -325,7 +325,8 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
         )
         from google import genai
 
-        self.model_name = model_name
+        # Strip org prefix — the Gemini API expects bare model names
+        self.model_name = model_name.split("/", 1)[-1]
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
         self.client = genai.Client()
 
