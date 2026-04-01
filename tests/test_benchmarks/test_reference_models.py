@@ -5,7 +5,7 @@ import logging
 import pytest
 
 import mteb
-from mteb import ResultCache
+from mteb import BenchmarkResults, ResultCache
 from mteb.abstasks import AbsTaskRetrieval
 
 logging.basicConfig(level=logging.INFO)
@@ -57,10 +57,11 @@ def _get_expected_task_names(benchmark, model_name):
 
 
 @pytest.fixture(scope="module")
-def result_cache():
+def result_cache() -> BenchmarkResults:
     cache = ResultCache()
     cache.download_from_remote()
-    return cache
+    results_cache = cache.load_results(models=REFERENCE_MODELS)
+    return results_cache
 
 
 TARGET_BENCHMARKS = _get_target_benchmarks()
@@ -71,7 +72,9 @@ TARGET_BENCHMARKS = _get_target_benchmarks()
 @pytest.mark.parametrize("model_name", REFERENCE_MODELS)
 def test_reference_model_coverage(result_cache, benchmark, model_name):
     expected = _get_expected_task_names(benchmark, model_name)
-    results = result_cache.load_results(models=[model_name])
+    results = result_cache._filter_models(model_names=[model_name])._filter_tasks(
+        expected
+    )
     available = set(results.task_names)
     missing = sorted(set(expected) - available)
     if missing:
