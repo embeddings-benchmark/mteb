@@ -294,6 +294,24 @@ class GoogleTextEmbeddingModel(AbsEncoder):
         )
 
 
+def _audio_to_wav_bytes(audio_item: dict) -> bytes:
+    """Convert an AudioInputItem (numpy array + sampling_rate) to WAV bytes."""
+    import io
+    import wave
+
+    array = audio_item["array"]
+    sampling_rate = audio_item["sampling_rate"]
+    # Convert float audio to 16-bit PCM
+    pcm = (array * 32767).astype(np.int16)
+    buf = io.BytesIO()
+    with wave.open(buf, "wb") as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(2)
+        wf.setframerate(sampling_rate)
+        wf.writeframes(pcm.tobytes())
+    return buf.getvalue()
+
+
 class GoogleGeminiEmbeddingModel(AbsEncoder):
     def __init__(
         self,
@@ -358,6 +376,8 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        from google.genai.types import Part
+
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         google_task_type = self.model_prompts.get(prompt_name)
 
@@ -391,7 +411,20 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
                 google_task_type=google_task_type,
                 show_progress_bar=show_progress_bar,
             )
-        raise ValueError("No text or image features found in inputs")
+        elif "audio" in inputs.dataset.features:
+            contents = []
+            for batch in inputs:
+                for audio_item in batch["audio"]:
+                    wav_bytes = _audio_to_wav_bytes(audio_item)
+                    contents.append(
+                        Part.from_bytes(data=wav_bytes, mime_type="audio/wav")
+                    )
+            return self._embed(
+                contents,
+                google_task_type=google_task_type,
+                show_progress_bar=show_progress_bar,
+            )
+        raise ValueError("No text, image, or audio features found in inputs")
 
 
 google_text_emb_004 = ModelMeta(
@@ -506,7 +539,7 @@ google_gemini_embedding_2_preview = ModelMeta(
     name="google/gemini-embedding-2-preview",
     model_type=["dense"],
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
-    modalities=["image", "text"],
+    modalities=["audio", "image", "text"],
     open_weights=False,
     revision="1",
     release_date="2025-03-25",
