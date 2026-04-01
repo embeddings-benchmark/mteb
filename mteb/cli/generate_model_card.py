@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from mteb.cache import ResultCache
-from mteb.models.model_meta import ModelMeta
+from mteb.models.get_model_meta import get_model_meta
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -22,6 +22,7 @@ def generate_model_card(
     output_path: Path = Path("model_card.md"),
     add_table_to_model_card: bool = False,
     models_to_compare: Sequence[str] | None = None,
+    *,
     token: str | None = None,
     push_to_hub: bool = False,
     push_eval_results: bool = False,
@@ -47,7 +48,7 @@ def generate_model_card(
     """
     if results_cache is None:
         results_cache = ResultCache()
-    meta = ModelMeta.create_empty(overwrites={"name": model_name})
+    meta = get_model_meta(model_name)
     meta.generate_model_card(
         tasks=tasks,
         benchmarks=benchmarks,

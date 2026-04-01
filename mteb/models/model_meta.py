@@ -1173,6 +1173,7 @@ class ModelMeta(BaseModel):
         output_path: Path = Path("model_card.md"),
         add_table_to_model_card: bool = False,
         models_to_compare: Sequence[str] | None = None,
+        *,
         token: str | None = None,
         push_to_hub: bool = False,
         push_eval_results: bool = False,
