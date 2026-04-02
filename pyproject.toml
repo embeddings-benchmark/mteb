@@ -117,8 +117,8 @@ wav2clip = ["wav2clip==0.1.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
 mctct = ["transformers<5"]  # mctct was removed in transformers 5
-siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]  
-qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"] 
+siglip = ["sentencepiece>=0.2.0","protobuf>=3.0.0"]
+qwen-vl = ["transformers>=4.57.0", "qwen-vl-utils>=0.0.14"]
 
 [dependency-groups]
 lint = [
@@ -451,21 +451,6 @@ extend-ignore-re = [
     "author.*",  # ignore authors in citations
     "editor.*",  # ignore authors in citations
 ]
-
-[tool.typos.default.extend-words]
-# ISO 639 language codes that look like English words
-ful = "ful"
-som = "som"
-yor = "yor"
-nd = "nd"
-fo = "fo"
-als = "als"
-bre = "bre"
-cmo = "cmo"
-mak = "mak"
-noe = "noe"
-tha = "tha"
-sme = "sme"
 
 [tool.typos.files]
 extend-exclude = [
