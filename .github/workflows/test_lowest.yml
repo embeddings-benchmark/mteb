@@ -55,6 +55,7 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
+          uv venv --python 3.10
           uv pip install -e . --resolution lowest --group test
 
       - name: Run tests
