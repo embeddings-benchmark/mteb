@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 @lru_cache
 def _get_benchmarks_on_leaderboard() -> set[str]:
-    from mteb.benchmarks.leaderboard_menu import (
+    from mteb.benchmarks._leaderboard_menu import (
         GP_BENCHMARK_ENTRIES,
         R_BENCHMARK_ENTRIES,
         MenuEntry,

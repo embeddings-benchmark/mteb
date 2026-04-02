@@ -8,7 +8,7 @@ from mteb import Benchmark
 from mteb.benchmarks.benchmarks import MTEB_multilingual_v2
 
 if TYPE_CHECKING:
-    from mteb.benchmarks.leaderboard_menu import MenuEntry
+    from mteb.benchmarks._leaderboard_menu import MenuEntry
 
 DEFAULT_BENCHMARK_NAME = MTEB_multilingual_v2.name
 
