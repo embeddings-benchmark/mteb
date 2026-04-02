@@ -45,7 +45,7 @@ task_texts = DataLoader(
 )
 def test_float_compression(level: OutputDType):
     if Version(torch.__version__) < Version("2.10.0"):
-        pytest.skip("requires PyTorch")
+        pytest.skip("PyTorch <2.10 don't support extended float types")
     model = mteb.get_model("mteb/baseline-random-encoder")
     wrapper = CompressionWrapper(model, level)
     embeddings = wrapper.encode(
