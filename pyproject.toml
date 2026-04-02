@@ -35,16 +35,16 @@ dependencies = [
     "numpy>=1.23.0,<3.0.0",
     "requests>=2.26.0",
     "scikit-learn>=1.4.0",
-    "scipy>=1.9.0",
+    "scipy>=1.14.0",
     "sentence_transformers>=3.0.0",
     "transformers>=4.40.0,<6.0.0",
     "typing-extensions>=4.5.0",
     "torch>=2.0.0",
     "tqdm>1.0.0",
-    "rich>=0.0.0",
+    "rich>=13.0.0",
     "pytrec-eval-terrier>=0.5.6",
     "pydantic>=2.11.0",
-    "polars>=0.20.22",
+    "polars>=1.0.0",
 ]
 
 
