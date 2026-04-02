@@ -579,6 +579,119 @@ def _create_summary_table_mean_subset(
     return joint_table
 
 
+def _create_summary_table_bright(
+    benchmark_results: BenchmarkResults,
+) -> pd.DataFrame:
+    """Create summary table for BRIGHT benchmark with Short and Long mean columns.
+
+    Tasks with "long" (case-insensitive) in their name are grouped into the
+    "Mean (Long)" column; remaining tasks go into "Mean (Short)".
+
+    Args:
+        benchmark_results: BenchmarkResults object containing model results
+
+    Returns:
+        DataFrame with model summaries including Short and Long mean columns.
+    """
+    data = benchmark_results.to_dataframe(format="long")
+
+    if data.empty:
+        return pd.DataFrame({"No results": ["You can try relaxing your criteria"]})
+
+    per_task = data.pivot(index="model_name", columns="task_name", values="score")
+
+    to_remove = per_task.isna().all(axis="columns")
+    if to_remove.all():
+        return pd.DataFrame({"No results": ["You can try relaxing your criteria"]})
+
+    models_to_remove = list(per_task[to_remove].index)
+    per_task = per_task.drop(models_to_remove, axis=0)
+
+    long_tasks = [col for col in per_task.columns if "long" in col.lower()]
+    short_tasks = [col for col in per_task.columns if "long" not in col.lower()]
+
+    overall_mean = per_task.mean(skipna=False, axis=1)
+    short_mean = (
+        per_task[short_tasks].mean(skipna=False, axis=1)
+        if short_tasks
+        else pd.Series(dtype=float)
+    )
+    long_mean = (
+        per_task[long_tasks].mean(skipna=False, axis=1)
+        if long_tasks
+        else pd.Series(dtype=float)
+    )
+
+    joint_table = pd.DataFrame(index=per_task.index)
+    joint_table["mean"] = overall_mean
+    joint_table["mean_short"] = short_mean
+    joint_table["mean_long"] = long_mean
+    joint_table["borda_rank"] = _get_borda_rank(per_task)
+    joint_table = joint_table.sort_values("borda_rank", ascending=True)
+    joint_table = joint_table.reset_index()
+
+    model_metas = joint_table["model_name"].map(get_model_meta)
+    joint_table = joint_table[model_metas.notna()]
+    model_metas = joint_table["model_name"].map(get_model_meta)
+    joint_table["model_link"] = model_metas.map(lambda m: m.reference)
+
+    joint_table.insert(
+        1,
+        "Max Tokens",
+        model_metas.map(lambda m: _format_max_tokens(m.max_tokens)),
+    )
+    joint_table.insert(
+        1,
+        "Embedding Dimensions",
+        model_metas.map(lambda m: _get_embedding_size(m.embed_dim)),
+    )
+    joint_table.insert(
+        1,
+        "Total Parameters (B)",
+        model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
+    )
+    joint_table.insert(
+        1,
+        "Active Parameters (B)",
+        model_metas.map(lambda m: _format_n_active_parameters(m.n_active_parameters)),
+    )
+
+    tasks = get_tasks(tasks=list(data["task_name"].unique()))
+    joint_table.insert(
+        1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
+    )
+    joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
+
+    joint_table["Release Date"] = model_metas.map(
+        lambda m: str(m.release_date) if m.release_date else None
+    )
+
+    joint_table["model_name"] = joint_table["model_name"].map(
+        lambda name: name.split("/")[-1]
+    )
+
+    name_w_link = (
+        "[" + joint_table["model_name"] + "](" + joint_table["model_link"] + ")"
+    )
+    joint_table["model_name"] = joint_table["model_name"].mask(
+        joint_table["model_link"].notna(), name_w_link
+    )
+    joint_table = joint_table.drop(columns=["model_link"])
+
+    joint_table = joint_table.rename(
+        columns={
+            "model_name": "Model",
+            "mean": "Mean (Task)",
+            "mean_short": "Mean (Short)",
+            "mean_long": "Mean (Long)",
+        }
+    )
+
+    joint_table.insert(0, "Rank (Borda)", joint_table.pop("borda_rank"))
+
+    return joint_table
+
+
 def _create_summary_table_mean_task_type(
     benchmark_results: BenchmarkResults, mean_column_name: str = "Mean (TaskType)"
 ) -> pd.DataFrame:

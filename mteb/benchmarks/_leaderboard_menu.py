@@ -147,7 +147,7 @@ R_BENCHMARK_ENTRIES = [
                     mteb.get_benchmark("RTEB(Health, beta)"),
                     mteb.get_benchmark("FollowIR"),
                     mteb.get_benchmark("LongEmbed"),
-                    mteb.get_benchmark("BRIGHT"),
+                    mteb.get_benchmark("BRIGHT(v1.1)"),
                 ],
             ),
             MenuEntry(
@@ -167,6 +167,7 @@ R_BENCHMARK_ENTRIES = [
                 mteb.get_benchmarks(
                     [
                         "NanoBEIR",
+                        "BRIGHT",
                         "BRIGHT (long)",
                         "RAR-b",
                     ]

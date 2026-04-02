@@ -406,3 +406,21 @@ class VidoreBenchmark(Benchmark):
             columns={"Document Understanding": "Mean (Task)"}
         )
         return joint_table
+
+
+class BRIGHTBenchmark(Benchmark):
+    """Wrapper for BRIGHT benchmark."""
+
+    def _create_summary_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        """Create summary table. Called by the leaderboard app.
+
+        Returns:
+            A pandas DataFrame representing the summary results, with
+            additional "Mean (Short)" and "Mean (Long)" columns splitting
+            tasks by whether "long" appears in the task name.
+        """
+        from mteb.benchmarks._create_table import _create_summary_table_bright
+
+        return _create_summary_table_bright(benchmark_results)
