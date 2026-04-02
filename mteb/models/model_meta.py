@@ -100,7 +100,7 @@ def _get_loader_name(
     return loader.__name__
 
 
-class ModelMeta(BaseModel):
+class ModelMeta(BaseModel):  # noqa: PLR0904
     """The model metadata object.
 
     Attributes:
