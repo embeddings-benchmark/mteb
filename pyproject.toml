@@ -37,7 +37,7 @@ dependencies = [
     "scikit-learn>=1.4.0",
     "scipy>=1.9.0",
     "sentence_transformers>=3.0.0",
-    "transformers>=4.49.0,<6.0.0",
+    "transformers>=4.40.0,<6.0.0",
     "typing-extensions>=4.5.0",
     "torch>=2.0.0",
     "tqdm>1.0.0",
