@@ -1412,6 +1412,7 @@ BRIGHT_V1_1 = Benchmark(
   year = {2024},
 }
 """,
+    benchmark_hf_repo="mteb/BRIGHT",
 )
 
 

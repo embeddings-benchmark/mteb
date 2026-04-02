@@ -44,12 +44,15 @@ from mteb.types import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from huggingface_hub import (
         ModelCardData,
     )
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
+    from mteb.benchmarks.benchmark import Benchmark
     from mteb.cache import ResultCache
     from mteb.models.models_protocols import EncoderProtocol
 
@@ -1232,7 +1235,7 @@ class ModelMeta(BaseModel):
         self,
         user: str | None = None,
         *,
-        tasks: Sequence[AbsTask] | Sequence[str] | None = None,
+        tasks: Iterable[AbsTask] | Sequence[str] | Benchmark | None = None,
         cache: ResultCache | None = None,
         create_pr: bool = False,
     ) -> None:
@@ -1244,6 +1247,7 @@ class ModelMeta(BaseModel):
             cache: The ResultCache containing the evaluation results to push.
             create_pr: Whether to create a pull request for the model card update if the model card already exists on the HuggingFace Hub. If False, the model card will be updated directly without a pull request.
         """
+        from mteb.benchmarks.benchmark import Benchmark
         from mteb.cache import ResultCache
 
         if cache is None:
@@ -1254,9 +1258,11 @@ class ModelMeta(BaseModel):
             tasks=tasks,
         )
         model_result = benchmark_result.model_results[0]
+
         model_result.push_model_results(
             user=user,
             create_pr=create_pr,
+            benchmark=tasks if isinstance(tasks, Benchmark) else None,
         )
 
 

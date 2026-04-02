@@ -625,24 +625,22 @@ class AbsTask(ABC):
         # dataset repo not creating when pushing card
         self.metadata.push_dataset_card_to_hub(repo_name)
         if push_eval:
-            self.push_eval_to_hub(repo_name)
+            self.push_eval_to_hub()
 
     def push_eval_to_hub(
         self,
-        repo_name: str,
         *,
         create_pr: bool = False,
     ) -> None:
         """Push `eval.yaml` to the HuggingFace Hub
 
         Args:
-            repo_name: repository name
             create_pr: Whether to create the PR
         """
         eval_file_name = "eval.yaml"
 
         existing_eval_path = _get_file_on_hub(
-            repo_id=repo_name,
+            repo_id=self.metadata.dataset["name"],
             file_name=eval_file_name,
             repo_type="dataset",
         )
@@ -664,7 +662,7 @@ class AbsTask(ABC):
             huggingface_hub.upload_file(
                 path_or_fileobj=tmp_file.name,
                 path_in_repo=eval_file_name,
-                repo_id=repo_name,
+                repo_id=self.metadata.dataset["name"],
                 repo_type="dataset",
                 commit_message="Add eval config",
                 create_pr=create_pr,

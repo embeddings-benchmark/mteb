@@ -1,13 +1,18 @@
 from __future__ import annotations
 
+import tempfile
 from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
 from functools import lru_cache
+from pathlib import Path
 from typing import TYPE_CHECKING, Literal, cast
 
 import huggingface_hub
 import pandas as pd
+import yaml
 
+from mteb._hf_integration.eval_model import HFEvalMeta, HFEvalTaskConfig
+from mteb._hf_integration.hf_hub_utils import _get_file_on_hub
 from mteb.abstasks.abstask import AbsTask
 from mteb.types import StrURL
 
@@ -76,6 +81,7 @@ class Benchmark:
     icon: str | None = None
     display_name: str | None = None
     language_view: list[str] | Literal["all"] = field(default_factory=list)
+    benchmark_hf_repo: str | None = None
 
     @property
     def display_on_leaderboard(self) -> bool:
@@ -204,6 +210,68 @@ class Benchmark:
         desc = self.description if self.description else ""
         desc = f"'{desc[:max_len]}..." if len(desc) > max_len else f"'{desc}'"
         return f"{self.__class__.__name__}(name='{self.name}', description={desc}, tasks=[...] (#{n_tasks}), ...)"
+
+    def push_eval_to_hub(
+        self,
+        *,
+        create_pr: bool = False,
+    ) -> None:
+        """Push `eval.yaml` to the HuggingFace Hub
+
+        Args:
+            create_pr: Whether to create the PR
+        """
+        eval_file_name = "eval.yaml"
+
+        if self.benchmark_hf_repo is None:
+            raise ValueError(
+                "`benchmark_hf_repo` must be set to push eval config to the hub."
+            )
+
+        existing_eval_path = _get_file_on_hub(
+            repo_id=self.benchmark_hf_repo,
+            file_name=eval_file_name,
+            repo_type="dataset",
+        )
+
+        # handle multiple tasks in one repo (e.g. BRIGHT)
+        existing_eval = None
+        if existing_eval_path is not None:
+            with Path(existing_eval_path).open() as f:
+                existing_eval_dict = yaml.safe_load(f)
+            if existing_eval_dict is not None:
+                existing_eval = HFEvalMeta.model_validate(existing_eval_dict)
+
+        benchmark_config = self._to_hf_eval_config()
+        benchmark_config = (
+            benchmark_config.merge(existing_eval) if existing_eval else benchmark_config
+        )
+
+        with tempfile.NamedTemporaryFile(mode="w") as tmp_file:
+            tmp_file.write(benchmark_config.to_yaml())
+            tmp_file.flush()
+
+            huggingface_hub.upload_file(
+                path_or_fileobj=tmp_file.name,
+                path_in_repo=eval_file_name,
+                repo_id=self.benchmark_hf_repo,
+                repo_type="dataset",
+                commit_message="Add eval config",
+                create_pr=create_pr,
+            )
+
+    def _to_hf_eval_config(self) -> HFEvalMeta:
+        return HFEvalMeta(
+            name=self.name,
+            description=self.description,
+            tasks=[
+                HFEvalTaskConfig(
+                    id=self.name,
+                    config=None,
+                    split=None,
+                )
+            ],
+        )
 
 
 class RtebBenchmark(Benchmark):
