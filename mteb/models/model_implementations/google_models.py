@@ -352,15 +352,26 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
 
         all_embeddings = []
         for batch in tqdm(batches, leave=False, disable=not show_progress_bar):
-            try:
-                response = self.client.models.embed_content(
-                    model=self.model_name, contents=batch, config=config
-                )
-            except Exception as e:
-                print("Retrying once after error:", e)
-                response = self.client.models.embed_content(
-                    model=self.model_name, contents=batch, config=config
-                )
+            wait_time = 60
+            for attempt in range(10):
+                try:
+                    response = self.client.models.embed_content(
+                        model=self.model_name, contents=batch, config=config
+                    )
+                    break
+                except Exception as e:
+                    if "429" in str(e) and attempt < 9:
+                        import time
+
+                        print(
+                            f"Rate limited, waiting {wait_time}s (attempt {attempt + 1}/10): {e}"
+                        )
+                        time.sleep(wait_time)
+                        wait_time = min(wait_time * 2, 600)
+                    elif attempt < 9:
+                        print(f"Retrying after error (attempt {attempt + 1}/10): {e}")
+                    else:
+                        raise
             all_embeddings.extend(
                 [embedding.values for embedding in response.embeddings]
             )
