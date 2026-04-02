@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.12.5"
+version = "2.12.9"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -559,5 +559,6 @@ expresso = "expresso"
 Expresso = "Expresso"
 NIFE = "NIFE"
 thw = "thw"
+ist = "ist" # spelling error in prompt for harrier-oss-v1
 shw = "SHW"
 nd = "nd"

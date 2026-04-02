@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 from tqdm.auto import tqdm
-from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
 
 from mteb._create_dataloaders import AudioCollator
 from mteb._requires_package import requires_audio_dependencies
@@ -31,6 +30,8 @@ class Qwen2AudioWrapper(AbsEncoder):
         **kwargs: Any,
     ):
         requires_audio_dependencies()
+        from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds

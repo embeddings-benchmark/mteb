@@ -174,6 +174,16 @@ class ModelMeta(BaseModel):
     experiment_kwargs: Mapping[str, Any] | None = None
     output_dtypes: OutputDType | list[OutputDType] | None = None
 
+    def __setattr__(self, name: str, value: Any) -> None:
+        """Deprecation warning for direct attribute mutation. Use model_copy(update={...}) instead."""
+        warnings.warn(
+            f"Mutating '{name}' is deprecated and will be removed in future versions. "
+            "Use .model_copy(update={...}) instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        super().__setattr__(name, value)
+
     @model_validator(mode="before")
     @classmethod
     def _handle_legacy_is_cross_encoder(cls, data: Any) -> Any:
@@ -250,9 +260,9 @@ class ModelMeta(BaseModel):
     def to_dict(self):
         """Returns a dictionary representation of the model metadata."""
         meta = self.model_copy(deep=True)
-        if isinstance(meta.embed_dim, Sequence):
-            meta.embed_dim = max(meta.embed_dim)
         dict_repr = meta.model_dump()
+        if isinstance(meta.embed_dim, Sequence):
+            dict_repr["embed_dim"] = max(meta.embed_dim)
         loader = dict_repr.pop("loader", None)
         dict_repr["training_datasets"] = (
             list(dict_repr["training_datasets"])
@@ -286,6 +296,40 @@ class ModelMeta(BaseModel):
             )
         return v
 
+    def __hash__(self) -> int:
+        """Make ModelMeta hashable based on name, revision, experiment_kwargs and embed_dim.
+
+        This allows ModelMeta instances to be used as dictionary keys.
+        Two ModelMeta instances with the same name, revision, experiment_kwargs and embed_dim will have the same hash.
+        """
+        # Serialize experiment_kwargs to a deterministic, hashable representation
+        exp_kwargs_repr = (
+            _serialize_experiment_kwargs_to_name(self.experiment_kwargs)
+            if self.experiment_kwargs
+            else None
+        )
+        return hash(
+            (
+                self.name,
+                self.revision,
+                exp_kwargs_repr,
+                tuple(self.embed_dim)
+                if isinstance(self.embed_dim, Sequence)
+                else self.embed_dim,
+            )
+        )
+
+    def __eq__(self, other: object) -> bool:
+        """Check equality based on name, revision, experiment_kwargs and embed_dim.
+
+        Two ModelMeta instances are equal if they have the same name, revision, experiment_kwargs and embed_dim.
+        """
+        if not isinstance(other, ModelMeta):
+            return NotImplemented
+        self_dict = self.model_dump()
+        other_dict = other.model_dump()
+        return self_dict == other_dict
+
     def load_model(
         self,
         device: str | None = None,
@@ -304,6 +348,14 @@ class ModelMeta(BaseModel):
         if _self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
 
+        loader = _self.loader
+        name = _self.name
+        revision = _self.revision
+        updates: dict[str, Any] = {}
+        base_exp_kwargs = (
+            dict(_self.experiment_kwargs) if _self.experiment_kwargs else {}
+        )
+
         if embed_dim is not None:
             if (
                 _self.embed_dim is not None
@@ -319,33 +371,25 @@ class ModelMeta(BaseModel):
                 raise ValueError(
                     f"Requested embedding dimension {embed_dim} is not in the model's supported embedding dimensions {_self.embed_dim}."
                 )
-            _self.embed_dim = embed_dim
+            updates["embed_dim"] = embed_dim
             kwargs["embed_dim"] = embed_dim
-            if _self.experiment_kwargs is None:
-                _self.experiment_kwargs = {"embed_dim": embed_dim}
-            else:
-                _self.experiment_kwargs["embed_dim"] = embed_dim  # type: ignore[index]
 
-        if _self.experiment_kwargs is None:
-            _self.experiment_kwargs = kwargs if len(kwargs) > 0 else None
-        elif len(kwargs) > 0 and _self.experiment_kwargs is not None:
-            kwargs |= _self.experiment_kwargs
-            _self.experiment_kwargs = kwargs
+        merged_exp_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
+        updates["experiment_kwargs"] = merged_exp_kwargs or None
 
         # Allow overwrites
         _kwargs = _self.loader_kwargs.copy()
-        _kwargs.update(
-            _self.experiment_kwargs if _self.experiment_kwargs is not None else {}
-        )
+        _kwargs.update(merged_exp_kwargs)
         if device is not None:
             _kwargs["device"] = device
 
-        model: MTEBModels = _self.loader(
-            _self.name,
-            revision=_self.revision,
+        updates["loader_kwargs"] = _kwargs
+        _self = _self.model_copy(update=updates)
+        model: MTEBModels = loader(
+            name,
+            revision=revision,
             **_kwargs,
         )
-        _self.loader_kwargs = _kwargs
         model.mteb_model_meta = _self  # type: ignore[misc]
         return model
 
@@ -534,10 +578,13 @@ class ModelMeta(BaseModel):
         if overwrites:
             empty_model = empty_model.model_copy(update=overwrites)
 
+        updates: dict[str, Any] = {}
         if empty_model.name is None:
-            empty_model.name = "no_model_name/available"
+            updates["name"] = "no_model_name/available"
         if empty_model.revision is None:
-            empty_model.revision = "no_revision_available"
+            updates["revision"] = "no_revision_available"
+        if updates:
+            empty_model = empty_model.model_copy(update=updates)
 
         return empty_model
 
