@@ -17,12 +17,11 @@ import pandas as pd
 
 import mteb
 from mteb import BenchmarkResults
+from mteb.benchmarks._leaderboard_menu import GP_BENCHMARK_ENTRIES, R_BENCHMARK_ENTRIES
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.cache import ResultCache
 from mteb.leaderboard.benchmark_selector import (
     DEFAULT_BENCHMARK_NAME,
-    GP_BENCHMARK_ENTRIES,
-    R_BENCHMARK_ENTRIES,
     _make_selector,
 )
 from mteb.leaderboard.event_logger import EventLogger
