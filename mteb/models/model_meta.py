@@ -644,7 +644,7 @@ class ModelMeta(BaseModel):
                 loader=SentenceTransformerEncoderWrapper,
                 max_tokens=model.max_seq_length,
                 embed_dim=model.get_sentence_embedding_dimension(),
-                similarity_fn_name=ScoringFunction.from_str(model.similarity_fn_name),
+                similarity_fn_name=ScoringFunction.from_str(model.similarity_fn_name) if model.similarity_fn_name else None,
                 framework=["Sentence Transformers", "PyTorch"],
                 n_embedding_parameters=n_embedding_parameters,
             )

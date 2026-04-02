@@ -123,6 +123,8 @@ from tests.mock_tasks import (
 )
 def test_predictions(tmp_path: Path, task, expected):
     """Run evaluation for each mock task and check predictions."""
+    if "image" in task.metadata.modalities:
+        pytest.importorskip("torchvision", reason="torchvision is required for image tasks")
     model = mteb.get_model_meta("mteb/baseline-random-encoder")
     mteb.evaluate(model, task, prediction_folder=tmp_path, cache=None)
 

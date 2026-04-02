@@ -35,7 +35,7 @@ class CompressionWrapper:
     def __init__(
         self,
         model: EncoderProtocol,
-        output_dtype: OutputDType = OutputDType.FLOAT8_E4M3FN,
+        output_dtype: OutputDType = OutputDType.INT8,
         clipping_margin: tuple[float, float] | None = None,
     ) -> None:
         """Instantiates the wrapper with an embedding model and sets the quantization level.
