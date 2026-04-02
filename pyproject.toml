@@ -39,7 +39,7 @@ dependencies = [
     "sentence_transformers>=3.0.0",
     "transformers>=4.49.0,<6.0.0",
     "typing-extensions>=4.5.0",
-    "torch>1.0.0",
+    "torch>=2.0.0",
     "tqdm>1.0.0",
     "rich>=0.0.0",
     "pytrec-eval-terrier>=0.5.6",
