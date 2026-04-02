@@ -1378,7 +1378,7 @@ This is the long version of the benchmark, which only filter longer documents.
 
 BRIGHT_V1_1 = BRIGHTBenchmark(
     name="BRIGHT(v1.1)",
-    display_name="Reasoning Retrieval",
+    display_name="Reasoning Retrieval v1.1",
     tasks=get_tasks(
         tasks=[
             "BrightBiologyRetrieval",
