@@ -56,7 +56,7 @@ jobs:
         shell: bash
         run: |
           uv venv --python 3.10
-          uv pip install -e . --resolution lowest --group test
+          uv pip install -e . --resolution lowest-direct --group test
 
       - name: Run tests
         shell: bash
