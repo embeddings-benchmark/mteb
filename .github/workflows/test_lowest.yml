@@ -55,7 +55,7 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          uv sync --group test --resolution lowest
+          uv pip install -e . --resolution lowest --group test
 
       - name: Run tests
         shell: bash
