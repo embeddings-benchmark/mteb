@@ -2,7 +2,7 @@
 # 1) install Python dependencies
 # 2) run make test
 
-name: Test
+name: Test lowest dependencies
 on:
   push:
     branches: [main]
