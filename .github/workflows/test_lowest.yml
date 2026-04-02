@@ -56,6 +56,7 @@ jobs:
         shell: bash
         run: |
           uv venv --python 3.10
+          # with uv sync conflict with flash-attn
           uv pip install -e . --resolution lowest-direct --group test
 
       - name: Run tests
