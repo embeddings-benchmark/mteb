@@ -140,7 +140,12 @@ encodec_24khz = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/encodec",
     public_training_data=None,
-    training_datasets=None,  # ["AudioSet", "VCTK", "DNS-Challenge"],
+    training_datasets={
+        "FSD50K",
+        "CommonVoiceMini17A2TRetrieval",
+        "AudioSetMini",
+        # DNS Challenge 4, Jamendo (not in MTEB)
+    },
     modalities=["audio"],
     citation="""
 @misc{défossez2022highfidelityneuralaudio,

@@ -186,7 +186,16 @@ ms_clap_2022 = ModelMeta(
     reference="https://github.com/microsoft/CLAP",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=set(),
+    training_datasets={
+        "ESC50",
+        "FSD50K",
+        "AudioCapsA2TRetrieval",
+        "AudioSetMini",
+        "GTZANGenre",
+        "UrbanSound8k",
+        "ClothoA2TRetrieval",
+        # FreeMusic (not in MTEB)
+    },
     citation="""
 @inproceedings{CLAP2022,
   title={Clap learning audio concepts from natural language supervision},
@@ -218,7 +227,11 @@ ms_clap_2023 = ModelMeta(
     reference="https://github.com/microsoft/CLAP",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=set(),
+    training_datasets={
+        "FSD50K",
+        "ClothoA2TRetrieval",
+        "AudioCapsA2TRetrieval",
+    },
     citation="""
 @misc{CLAP2023,
       title={Natural Language Supervision for General-Purpose Audio Representations},
