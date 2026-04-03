@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import tempfile
+from collections import defaultdict
 from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
 from functools import lru_cache
@@ -8,9 +9,11 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Literal, cast
 
 import huggingface_hub
+import numpy as np
 import pandas as pd
 import yaml
 
+from mteb._helpful_enum import HelpfulStrEnum
 from mteb._hf_integration.eval_model import HFEvalMeta, HFEvalTaskConfig
 from mteb._hf_integration.hf_hub_utils import _get_file_on_hub
 from mteb.abstasks.abstask import AbsTask
@@ -18,7 +21,7 @@ from mteb.types import StrURL
 
 if TYPE_CHECKING:
     from mteb.abstasks.aggregated_task import AbsTaskAggregate
-    from mteb.results import BenchmarkResults
+    from mteb.results import BenchmarkResults, ModelResult
 
 
 @lru_cache
@@ -45,6 +48,15 @@ def _get_benchmarks_on_leaderboard() -> set[str]:
     names = {benchmark.name for benchmark in __extract_benchmarks(entries)}
 
     return names
+
+
+class AggregationLevel(HelpfulStrEnum):
+    """Aggregation levels for benchmarks."""
+
+    mean_per_task = "mean_per_task"
+    """Aggregation level for each task."""
+    mean_per_task_type = "mean_per_task_type"
+    """Aggregation level for each task type (e.g. classification, retrieval, etc.)."""
 
 
 @dataclass
@@ -272,6 +284,67 @@ class Benchmark:
                 )
             ],
         )
+
+    def get_scores(
+        self,
+        scores: BenchmarkResults,
+        *,
+        aggregation_level: AggregationLevel | str = AggregationLevel.mean_per_task,
+    ) -> dict[str, float | None]:
+        """Get the mean score for each model on the benchmark from a BenchmarkResults object."""
+        return {
+            model_results.model_name: self.get_score(
+                model_results,
+                aggregation_level=aggregation_level,
+            )
+            for model_results in scores.model_results
+        }
+
+    def get_score(
+        self,
+        scores: ModelResult,
+        *,
+        aggregation_level: AggregationLevel | str = AggregationLevel.mean_per_task,
+    ) -> float | None:
+        """Get the score for the benchmark from a BenchmarkResults or ModelResult object.
+
+        Args:
+            scores: A BenchmarkResults or ModelResult object containing the scores for the benchmark.
+            aggregation_level: The type of aggregation to perform on the scores. "mean_per_task" will return the mean score for each task, while "mean_per_type" will return the mean score for each task type.
+        """
+        if isinstance(aggregation_level, str):
+            aggregation_level = AggregationLevel.from_str(aggregation_level)
+
+        filtered_scores = scores.select_tasks(self.tasks)
+        if aggregation_level is AggregationLevel.mean_per_task:
+            all_scores = [
+                task_result.get_score() for task_result in filtered_scores.task_results
+            ]
+            if any(score is None or np.isnan(score) for score in all_scores):
+                return None
+            return sum(all_scores) / len(all_scores) if all_scores else 0.0
+        elif aggregation_level is AggregationLevel.mean_per_task_type:
+            type_to_scores = defaultdict(list)
+            for task_result in filtered_scores.task_results:
+                task_type = task_result.task.metadata.type
+                score = task_result.get_score()
+                if score is None or np.isnan(score):
+                    return None
+                type_to_scores[task_type].append(score)
+            mean_per_type = {
+                task_type: sum(scores) / len(scores) if scores else 0.0
+                for task_type, scores in type_to_scores.items()
+            }
+
+            return (
+                sum(mean_per_type.values()) / len(mean_per_type)
+                if mean_per_type
+                else 0.0
+            )
+        else:
+            raise ValueError(
+                f"Invalid aggregation type. Must be {','.join(AggregationLevel)}."
+            )
 
 
 class RtebBenchmark(Benchmark):

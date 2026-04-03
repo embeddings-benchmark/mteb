@@ -471,14 +471,7 @@ class ModelResult(BaseModel):
         """
         benchmark_result = None
         if benchmark is not None:
-            benchmark_score = sum(
-                [task_res.get_score() for task_res in self.task_results]
-            )
-            benchmark_score = (
-                round(benchmark_score / len(self.task_results), 2)
-                if self.task_results
-                else None
-            )
+            benchmark_score = benchmark.get_score(self)
             benchmark_result = HFEvalResult(
                 dataset=HFEvalResultDataset(
                     id=benchmark.benchmark_hf_repo,
