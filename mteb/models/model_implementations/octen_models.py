@@ -20,6 +20,21 @@ def instruction_template(
     return f"Instruct: {instruction}\nQuery:"
 
 
+def instruction_template_8b_int8(
+    instruction: str, prompt_type: PromptType | None = None
+) -> str:
+    if prompt_type == PromptType.document:
+        return "- "
+    if not instruction:
+        return ""
+    if isinstance(instruction, dict):
+        if prompt_type is None:
+            instruction = next(iter(instruction.values()))  # TODO
+        else:
+            instruction = instruction[prompt_type]
+    return f"Instruct: {instruction}\nQuery:"
+
+
 multilingual_langs = [
     "afr-Latn",
     "ara-Arab",
@@ -267,7 +282,6 @@ Octen_Embedding_4B_INT8_dim_1024 = ModelMeta(
         prompts_dict=_PREDEFINED_PROMPTS,
         max_seq_length=18480,
         embed_dim=1024,
-        model_kwargs={"torch_dtype": "bfloat16"},
     ),
     name="Octen/Octen-Embedding-4B-INT8",
     languages=multilingual_langs,
@@ -288,19 +302,18 @@ Octen_Embedding_4B_INT8_dim_1024 = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=OCTEN_CITATION,
-    output_dtypes=[OutputDType.BF16],
+    output_dtypes=[OutputDType.FLOAT16],
     adapted_from="Qwen/Qwen3-Embedding-4B",
 )
 
 Octen_Embedding_8B_INT8_dim_1024 = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
-        instruction_template=instruction_template,
+        instruction_template=instruction_template_8b_int8,
         apply_instruction_to_passages=True,
         prompts_dict=_PREDEFINED_PROMPTS,
         max_seq_length=18480,
         embed_dim=1024,
-        model_kwargs={"torch_dtype": "bfloat16"},
     ),
     name="Octen/Octen-Embedding-8B-INT8",
     languages=multilingual_langs,
@@ -321,6 +334,6 @@ Octen_Embedding_8B_INT8_dim_1024 = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=OCTEN_CITATION,
-    output_dtypes=[OutputDType.BF16],
+    output_dtypes=[OutputDType.FLOAT16],
     adapted_from="Qwen/Qwen3-Embedding-8B",
 )
