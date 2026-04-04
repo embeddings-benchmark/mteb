@@ -206,7 +206,7 @@ Octen_Embedding_0B6 = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=OCTEN_CITATION,
-    output_dtypes=[OutputDType.BF16],
+    output_dtypes=OutputDType.BF16,
     adapted_from="Qwen/Qwen3-Embedding-0.6B",
 )
 
@@ -238,7 +238,7 @@ Octen_Embedding_4B = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=OCTEN_CITATION,
-    output_dtypes=[OutputDType.BF16],
+    output_dtypes=OutputDType.BF16,
     adapted_from="Qwen/Qwen3-Embedding-4B",
 )
 
@@ -270,7 +270,7 @@ Octen_Embedding_8B = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=OCTEN_CITATION,
-    output_dtypes=[OutputDType.BF16],
+    output_dtypes=OutputDType.BF16,
     adapted_from="Qwen/Qwen3-Embedding-8B",
 )
 
@@ -302,7 +302,7 @@ Octen_Embedding_4B_INT8_dim_1024 = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=OCTEN_CITATION,
-    output_dtypes=[OutputDType.FLOAT16],
+    output_dtypes=OutputDType.FLOAT16,
     adapted_from="Qwen/Qwen3-Embedding-4B",
 )
 
@@ -334,6 +334,6 @@ Octen_Embedding_8B_INT8_dim_1024 = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=OCTEN_CITATION,
-    output_dtypes=[OutputDType.FLOAT16],
+    output_dtypes=OutputDType.FLOAT16,
     adapted_from="Qwen/Qwen3-Embedding-8B",
 )
