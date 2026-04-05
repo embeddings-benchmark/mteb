@@ -28,7 +28,6 @@ def _load_data(
     )
 
     corpus_ds = corpus_ds.select_columns(["id", "text", "image"])
-    corpus_ds = corpus_ds.map(lambda x: {"modality": "image, text"}, num_proc=num_proc)
 
     qa_ds = qa_ds.map(
         lambda example, idx: {
