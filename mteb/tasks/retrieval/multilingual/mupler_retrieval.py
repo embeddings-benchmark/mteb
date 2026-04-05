@@ -25,8 +25,8 @@ class MuPLeRRetrieval(AbsTaskRetrieval):
         description="MuPLeR-retrieval is a multilingual, parallel legal dataset designed for evaluating retrieval and cross-lingual retrieval tasks. Dataset contains 10,000 human-translated parallel passages (derived from the European Union's DGT-Acquis corpus) & 200 parallel queries (synthetic) across 14 European languages.",
         reference="https://link.springer.com/article/10.1007/s10579-014-9277-0",
         dataset={
-            "path": "eherra/MuPLeR-retrieval",
-            "revision": "c89e9cfadd5bc1a76a528881f7c85d4aa4159fd5",
+            "path": "mteb/MuPLeR-retrieval",
+            "revision": "43dff1bca775c1298511f6776f0ac1d5cc144ccb",
         },
         type="Retrieval",
         category="t2t",
