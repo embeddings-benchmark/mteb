@@ -172,7 +172,7 @@ class BEATsWrapper(AbsEncoder):
 _common_meta = dict(
     languages=["eng-Latn"],
     open_weights=True,
-    revision=None,
+    revision="1",
     release_date="2022-12-18",
     max_tokens=None,
     n_parameters=90_000_000,
