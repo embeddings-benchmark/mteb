@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 import pytest
-from mteb.workflow._reversible_workflow import ReversibleWorkflow, WorkflowFailureError
+
+from mteb._reversible_workflow.reversible_workflow import (
+    ReversibleWorkflow,
+    WorkflowFailureError,
+)
 
 
 class _DummyAction:
