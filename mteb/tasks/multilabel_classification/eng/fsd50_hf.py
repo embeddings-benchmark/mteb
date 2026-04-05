@@ -18,7 +18,7 @@ class FSD50HFMultilingualClassification(AbsTaskMultilabelClassification):
         category="a2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
+        main_score="lrap",
         date=(
             "2020-01-01",
             "2020-01-30",
