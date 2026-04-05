@@ -855,6 +855,9 @@ def get_leaderboard_app(
                 if task_type != "InstructionRetrieval"
             }
             display_radar = len(eligible_task_types) > 1
+            _, summary_raw = apply_summary_styling_from_benchmark(
+                mteb.get_benchmark(benchmark_name), benchmark_results
+            )
             return (
                 gr.update(choices=languages, value=languages),
                 gr.update(choices=domains, value=domains),
@@ -865,6 +868,10 @@ def get_leaderboard_app(
                 gr.update(visible=show_zero_shot),
                 initial_models,
                 gr.update(visible=display_radar),
+                gr.update(value=summary_raw),
+                _performance_size_plot(summary_raw),
+                _performance_over_time_plot(summary_raw),
+                _radar_chart(summary_raw),
             )
 
         benchmark_select.change(
@@ -880,6 +887,10 @@ def get_leaderboard_app(
                 zero_shot,
                 models,
                 radar_plot_tab,
+                summary_data,
+                plot,
+                timeline_plot,
+                radar_plot,
             ],
         )
         for trigger in [lang_select, type_select, domain_select]:
@@ -1320,6 +1331,10 @@ def get_leaderboard_app(
             zero_shot,
             bench_initial_models,
             display_radar,
+            summary_raw,
+            perf_size_plot,
+            perf_time_plot,
+            radar_chart_plot,
         ) = on_benchmark_select(benchmark.name)
         # Call update_tables to populate cache (simulating models.change trigger)
         update_tables(
