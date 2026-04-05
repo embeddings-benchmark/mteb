@@ -3,6 +3,8 @@
 import logging
 
 import pytest
+import sentence_transformers
+from packaging.version import Version
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
@@ -56,10 +58,11 @@ def test_model_meta_load_sentence_transformer_metadata_from_model():
     assert meta.revision is not None
     assert meta.max_tokens == 256
     assert meta.embed_dim == 384
-    assert (
-        meta.similarity_fn_name is not None
-        and meta.similarity_fn_name.value == "cosine"
-    )
+    if Version(sentence_transformers.__version__) >= Version("4.0.0"):
+        assert (
+            meta.similarity_fn_name is not None
+            and meta.similarity_fn_name.value == "cosine"
+        )
 
 
 @pytest.mark.parametrize("model_name", ["sentence-transformers/all-MiniLM-L6-v2"])
