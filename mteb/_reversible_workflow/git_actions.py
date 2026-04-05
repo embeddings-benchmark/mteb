@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-import shutil
 import subprocess
 from typing import TYPE_CHECKING, Any
 
@@ -12,7 +11,6 @@ if TYPE_CHECKING:
 
     from github import Github
 
-    from mteb.models import ModelMeta
 
 logger = logging.getLogger(__name__)
 
@@ -67,66 +65,6 @@ class CreateBranchAction(ReversibleAction):
             )
         except subprocess.CalledProcessError as e:
             logger.warning(f"Failed to cleanup branch '{self.branch_name}': {e}")
-
-
-class CopyResultsAction(ReversibleAction):
-    """Copy selected result files and optional model metadata files to the remote repo."""
-
-    def __init__(
-        self, unsubmitted: dict[ModelMeta, list[Path]], remote_path: Path
-    ) -> None:
-        """Initialize the action.
-
-        Args:
-            unsubmitted: Dict mapping ModelMeta to list of result file paths.
-            remote_path: Path to the remote repository.
-        """
-        self.unsubmitted = unsubmitted
-        self.remote_path = remote_path
-        self.copied_files: list[Path] = []
-
-    def do(self) -> None:
-        """Copy listed json result files and optional model_meta.json to remote paths."""
-        for model_meta, result_files in self.unsubmitted.items():
-            if model_meta.name is None or model_meta.revision is None:
-                logger.warning(
-                    f"Skipping model with None name or revision: {model_meta}"
-                )
-                continue
-
-            model_name_path = model_meta.model_name_as_path()
-            revision = model_meta.revision
-            dest_dir = self.remote_path / model_name_path / revision
-            dest_dir.mkdir(parents=True, exist_ok=True)
-
-            for result_file in result_files:
-                dest_file = dest_dir / result_file.name
-                shutil.copy2(result_file, dest_file)
-                self.copied_files.append(dest_file)
-                logger.debug(f"Copied {result_file} to {dest_file}")
-
-            # Copy model_meta.json if it exists in the source directory
-            source_model_dir = result_files[0].parent if result_files else None
-            if source_model_dir and source_model_dir.exists():
-                model_meta_file = source_model_dir / "model_meta.json"
-                if model_meta_file.exists():
-                    dest_model_meta = dest_dir / "model_meta.json"
-                    shutil.copy2(model_meta_file, dest_model_meta)
-                    self.copied_files.append(dest_model_meta)
-                    logger.debug(f"Copied {model_meta_file} to {dest_model_meta}")
-
-        logger.info(f"Copied {len(self.copied_files)} files to remote")
-
-    def undo(self) -> None:
-        """Deletion of files copied during do()."""
-        for file_path in self.copied_files:
-            try:
-                file_path.unlink()
-                logger.debug(f"Deleted {file_path}")
-            except Exception as e:
-                logger.warning(f"Failed to delete {file_path}: {e}")
-
-        logger.info(f"Reverted the copy of {len(self.copied_files)} files")
 
 
 class CommitAction(ReversibleAction):

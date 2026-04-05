@@ -4,7 +4,6 @@ from pathlib import Path
 
 from mteb.workflow._git_actions import (
     CommitAction,
-    CopyResultsAction,
     CreateBranchAction,
     CreatePRAction,
     PushToForkAction,
@@ -39,42 +38,6 @@ def test_create_branch_action_do_and_undo(monkeypatch, tmp_path: Path) -> None:
         ["git", "checkout", "main"],
         ["git", "branch", "-D", "feature-1"],
     ]
-
-
-def test_copy_results_action_copies_results_and_model_meta(tmp_path) -> None:
-    source = tmp_path / "source"
-    source.mkdir()
-    result_file = source / "TaskA.json"
-    result_file.write_text("{}")
-    model_meta_file = source / "model_meta.json"
-    model_meta_file.write_text('{"name":"demo"}')
-
-    remote = tmp_path / "remote"
-
-    class _ModelMetaStub:
-        def __init__(self) -> None:
-            self.name = "org/model"
-            self.revision = "v1"
-
-        def model_name_as_path(self) -> str:
-            return "org__model"
-
-    model_meta = _ModelMetaStub()
-    action = CopyResultsAction(
-        unsubmitted={model_meta: [result_file]}, remote_path=remote
-    )
-
-    action.do()
-
-    copied_task = remote / "org__model" / "v1" / "TaskA.json"
-    copied_model_meta = remote / "org__model" / "v1" / "model_meta.json"
-    assert copied_task.exists()
-    assert copied_model_meta.exists()
-
-    action.undo()
-
-    assert not copied_task.exists()
-    assert not copied_model_meta.exists()
 
 
 def test_commit_action_saves_shas_and_undo_resets(monkeypatch, tmp_path: Path) -> None:
