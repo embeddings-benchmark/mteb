@@ -12,39 +12,22 @@ class WorkflowFailureError(RuntimeError):
     Attributes:
         step_name: Name of the step where the workflow failed.
         original_exception: The exception that caused the workflow to fail.
-        failed_undo_steps: List of step names whose undo() calls failed during rollback.
     """
 
     def __init__(
         self,
         step_name: str,
         original_exception: Exception,
-        failed_undo_steps: list[str] | None = None,
     ) -> None:
         """Initialize the exception with structured failure information.
 
         Args:
             step_name: Name of the step where the workflow failed.
             original_exception: The exception that triggered the rollback.
-            failed_undo_steps: Optional list of step names that failed to undo.
         """
         self.step_name = step_name
         self.original_exception = original_exception
-        self.failed_undo_steps = failed_undo_steps or []
-
-        # Build message
-        if self.failed_undo_steps:
-            message = (
-                f"Workflow failed at {step_name}. "
-                f"Rollback attempted but {len(self.failed_undo_steps)} undo step(s) failed: "
-                f"{', '.join(self.failed_undo_steps)}. Manual cleanup may be required."
-            )
-        else:
-            message = (
-                f"Workflow failed at {step_name}. "
-                f"All completed steps have been rolled back."
-            )
-
+        message = f"Workflow failed at {step_name}. Rollback failed during undo of steps. Manual cleanup required."
         super().__init__(message)
 
 
@@ -70,7 +53,8 @@ class ReversibleAction(Protocol):
         to what it was before do() was called.
 
         Raises:
-            Exception: If undo fails. Logged but doesn't prevent undoing other steps.
+            Exception: If undo fails, the exception will immediately stop rollback
+                and propagate to the caller. Manual cleanup may be required.
         """
         ...
 
@@ -128,7 +112,6 @@ class ReversibleWorkflow:
                          Message indicates whether rollback was fully successful or partially failed.
         """
         completed: list[ReversibleAction] = []
-        failed_undo_steps: list[str] = []
 
         for step in self.steps:
             step_name = type(step).__name__
@@ -141,23 +124,14 @@ class ReversibleWorkflow:
                 logger.error(f"Failed at {step_name}: {e}")
                 logger.debug(f"Rolling back {len(completed)} completed step(s)...")
 
-                # Rollback in reverse order
+                # Rollback in reverse order and stop rollback if any undo fails
                 for rollback_step in reversed(completed):
                     rollback_name = type(rollback_step).__name__
-                    try:
-                        logger.debug(f"Undoing {rollback_name}...")
-                        rollback_step.undo()
-                        logger.debug(f"{rollback_name} undo completed")
-                    except Exception as undo_error:
-                        failed_undo_steps.append(rollback_name)
-                        logger.error(
-                            f"Undo for {rollback_name} also failed: {undo_error}. "
-                            f"Manual cleanup may be required."
-                        )
-
+                    logger.debug(f"Undoing {rollback_name}...")
+                    rollback_step.undo()
+                    logger.debug(f"{rollback_name} undo completed")
                 logger.error("Rollback completed. Raising WorkflowFailureError...")
                 raise WorkflowFailureError(
                     step_name=step_name,
                     original_exception=e,
-                    failed_undo_steps=failed_undo_steps,
                 ) from e
