@@ -5,7 +5,7 @@ import shutil
 import subprocess
 from typing import TYPE_CHECKING, Any
 
-from mteb.workflow.reversible_workflow import ReversibleAction
+from mteb.workflow._reversible_workflow import ReversibleAction
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -126,7 +126,7 @@ class CopyResultsAction(ReversibleAction):
             except Exception as e:
                 logger.warning(f"Failed to delete {file_path}: {e}")
 
-        logger.info(f"Deleted {len(self.copied_files)} copied files")
+        logger.info(f"Reverted the copy of {len(self.copied_files)} files")
 
 
 class CommitAction(ReversibleAction):
