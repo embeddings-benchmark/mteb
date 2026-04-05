@@ -137,7 +137,9 @@ data2vec_audio_base = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/data2vec",
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
-    training_datasets=set(),  # "LibriSpeech": ["train"]},
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{baevski2022data2vecgeneralframeworkselfsupervised,
@@ -170,7 +172,9 @@ data2vec_audio_large = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/data2vec",
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
-    training_datasets=set(),  # "LibriSpeech": ["train"]},
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{baevski2022data2vecgeneralframeworkselfsupervised,

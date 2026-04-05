@@ -212,7 +212,7 @@ yamnet = ModelMeta(
     public_training_code="https://github.com/tensorflow/models/tree/master/research/audioset/yamnet",
     public_training_data="https://research.google.com/audioset/",
     training_datasets={
-        "AudioSet",
+        "AudioSetMini",
     },
     modalities=["audio"],
     citation="""

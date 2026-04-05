@@ -169,9 +169,7 @@ wav2clip_zero = ModelMeta(
     public_training_code="https://github.com/descriptinc/lyrebird-wav2clip",
     public_training_data="https://github.com/descriptinc/lyrebird-wav2clip#data",
     training_datasets=set(
-        # "AudioSet": ["https://research.google.com/audioset/"],
-        # "FreeSound": ["https://freesound.org/"],
-        # "BBC Sound Effects": ["https://sound-effects.bbcrewind.co.uk/"],
+        # VGGSound (not in MTEB)
     ),
     citation="""
 @misc{wu2022wav2cliplearningrobustaudio,

@@ -155,7 +155,7 @@ clap_htsat_fused = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(
-        # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
+        # LAION-Audio-630K (not in MTEB)
     ),
     citation="""
 @misc{wu2024largescalecontrastivelanguageaudiopretraining,
@@ -192,7 +192,7 @@ clap_htsat_unfused = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(
-        # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
+        # LAION-Audio-630K (not in MTEB)
     ),
     citation="""
 @misc{wu2024largescalecontrastivelanguageaudiopretraining,
@@ -227,8 +227,8 @@ larger_clap_general = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(
-        # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
-    ),  # Additional finetuning over music dataset but not specified what the exact dataset is
+        # LAION-Audio-630K (not in MTEB)
+    ),
     citation="""
 @misc{wu2024largescalecontrastivelanguageaudiopretraining,
       title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
@@ -262,8 +262,8 @@ larger_clap_music = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(
-        # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
-    ),  # Additional finetuning over music dataset but not specified what the exact dataset is
+        # LAION-Audio-630K (not in MTEB)
+    ),
     citation="""
 @misc{wu2024largescalecontrastivelanguageaudiopretraining,
       title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
@@ -297,8 +297,8 @@ larger_clap_music_and_speech = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(
-        # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
-    ),  # Additional finetuning over music dataset but not specified what the exact dataset is
+        # LAION-Audio-630K (not in MTEB)
+    ),
     citation="""
 @misc{wu2024largescalecontrastivelanguageaudiopretraining,
       title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},

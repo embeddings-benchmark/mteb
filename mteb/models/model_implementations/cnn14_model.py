@@ -136,7 +136,10 @@ cnn14_esc50 = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/speechbrain/speechbrain",
     public_training_data=None,
-    training_datasets=None,  # ["ESC-50", "VGGSound"],
+    training_datasets={
+        "ESC50",
+        # "VGGSound",  # not in MTEB
+    },
     modalities=["audio"],
     citation="""
 @inproceedings{wang2022CRL,

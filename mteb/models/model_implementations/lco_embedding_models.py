@@ -150,7 +150,9 @@ lco_3b = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # SeaDoc (not in MTEB)
+    ),
     modalities=["audio", "text"],
     citation="""
 @misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
@@ -183,7 +185,9 @@ lco_7b = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # SeaDoc (not in MTEB)
+    ),
     modalities=["audio", "text"],
     citation="""
 @misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
